@@ -95,7 +95,10 @@ public class SweepCommand extends Command {
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 							Sweeper.sweep(guildTrashBin, memberTrashBin);
 							ms.editMessage(Helper.ACCEPT + " | Entradas limpas com sucesso!").queue();
-						}), true, 1, TimeUnit.MINUTES, (u) -> u.getId().equals(author.getId()))
+						}), true, 1, TimeUnit.MINUTES, (u) -> u.getId().equals(author.getId()), ms -> {
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+						})
 				);
 			} else s.editMessage(Helper.ACCEPT + " | Não há entradas para serem limpas.").queue();
 		});

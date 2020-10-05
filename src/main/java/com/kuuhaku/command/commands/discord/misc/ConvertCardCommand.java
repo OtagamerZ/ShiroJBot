@@ -119,7 +119,10 @@ public class ConvertCardCommand extends Command {
 					KawaiponDAO.saveKawaipon(kp);
 					s.delete().queue();
 					channel.sendMessage("Conversão realizada com sucesso!").queue();
-				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
+					ShiroInfo.getHashes().remove(hash);
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
+				})
 		);
 	}
 }

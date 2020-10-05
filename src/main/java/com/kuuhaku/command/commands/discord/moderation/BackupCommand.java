@@ -96,7 +96,10 @@ public class BackupCommand extends Command {
 						if (!ShiroInfo.getHashes().remove(hash)) return;
 						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						data.restore(guild);
-					}), true, 30, TimeUnit.SECONDS, u -> u.getId().equals(author.getId())));
+					}), true, 30, TimeUnit.SECONDS, u -> u.getId().equals(author.getId())), ms -> {
+				ShiroInfo.getHashes().remove(hash);
+				Main.getInfo().getConfirmationPending().invalidate(author.getId());
+			});
 		}
 	}
 }

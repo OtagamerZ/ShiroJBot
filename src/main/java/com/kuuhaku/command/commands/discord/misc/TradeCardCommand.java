@@ -135,7 +135,10 @@ public class TradeCardCommand extends Command {
 						AccountDAO.saveAccount(tacc);
 
 						s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
-					}), true, 1, TimeUnit.MINUTES, u -> Helper.equalsAny(u.getId(), author.getId(), other.getId())));
+					}), true, 1, TimeUnit.MINUTES, u -> Helper.equalsAny(u.getId(), author.getId(), other.getId())), ms -> {
+						ShiroInfo.getHashes().remove(hash);
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
+					});
 		} else if (StringUtils.isNumeric(args[3])) {
 			int price = Integer.parseInt(args[3]);
 			Card tc = CardDAO.getCard(args[1], false);
@@ -195,7 +198,10 @@ public class TradeCardCommand extends Command {
 						AccountDAO.saveAccount(tacc);
 
 						s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
-					}), true, 1, TimeUnit.MINUTES, u -> Helper.equalsAny(u.getId(), author.getId(), other.getId())));
+					}), true, 1, TimeUnit.MINUTES, u -> Helper.equalsAny(u.getId(), author.getId(), other.getId())), ms -> {
+						ShiroInfo.getHashes().remove(hash);
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
+					});
 		} else {
 			if (args.length < 5) {
 				channel.sendMessage("❌ | Você precisa mencionar uma carta, o tipo, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada) para realizar a troca.").queue();
@@ -264,7 +270,10 @@ public class TradeCardCommand extends Command {
 						KawaiponDAO.saveKawaipon(target);
 
 						s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
-					}), true, 1, TimeUnit.MINUTES, u -> Helper.equalsAny(u.getId(), author.getId(), other.getId())));
+					}), true, 1, TimeUnit.MINUTES, u -> Helper.equalsAny(u.getId(), author.getId(), other.getId())), ms -> {
+						ShiroInfo.getHashes().remove(hash);
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
+					});
 		}
 	}
 }
