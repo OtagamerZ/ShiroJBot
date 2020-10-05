@@ -241,4 +241,17 @@ public class CardDAO {
 			em.close();
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Equipment> getEquipments() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT e FROM Equipment e", Equipment.class);
+
+		try {
+			return (List<Equipment>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
 }
