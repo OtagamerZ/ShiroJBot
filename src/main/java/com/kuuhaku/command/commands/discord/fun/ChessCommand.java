@@ -112,6 +112,9 @@ public class ChessCommand extends Command {
 						s.delete().queue(null, Helper::doNothing);
 						t.start();
 					}
-				}), true, 1, TimeUnit.MINUTES));
+				}), true, 1, TimeUnit.MINUTES), ms -> {
+					ShiroInfo.getHashes().remove(hash);
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
+				});
 	}
 }

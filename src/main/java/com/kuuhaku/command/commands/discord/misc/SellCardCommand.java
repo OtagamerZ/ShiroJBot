@@ -118,7 +118,10 @@ public class SellCardCommand extends Command {
 
 						s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Carta anunciada com sucesso!")).queue();
 					}
-				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()));
+				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
+					ShiroInfo.getHashes().remove(hash);
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
+				});
 			});
 		} catch (NumberFormatException e) {
 			channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
