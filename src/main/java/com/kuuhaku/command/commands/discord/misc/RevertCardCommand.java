@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -97,8 +98,11 @@ public class RevertCardCommand extends Command {
 		eb.setDescription("Sua carta senshi " + kc.getName() + " será convertida para carta kawaipon e será adicionada à sua coleção, por favor clique no botão abaixo para confirmar a conversão.");
 		eb.setImage("attachment://card.png");
 
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
 		channel.sendMessage(eb.build()).addFile(Helper.getBytes(kc.getCard().drawCard(false), "png"), "card.png").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+					if (!ShiroInfo.getHashes().remove(hash)) return;
 					kp.addCard(kc);
 					kp.removeChampion(c);
 					KawaiponDAO.saveKawaipon(kp);
