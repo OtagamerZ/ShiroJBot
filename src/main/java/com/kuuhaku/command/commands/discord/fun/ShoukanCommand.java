@@ -85,11 +85,11 @@ public class ShoukanCommand extends Command {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Kawaipon target = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
 
-		if (kp.getChampions().size() < 40) {
-			channel.sendMessage("❌ | É necessário ter ao menos 40 cartas no deck para poder jogar Shoukan.").queue();
+		if (kp.getChampions().size() < 36) {
+			channel.sendMessage("❌ | É necessário ter ao menos 36 cartas no deck para poder jogar Shoukan.").queue();
 			return;
-		} else if (target.getChampions().size() < 40) {
-			channel.sendMessage("❌ | " + message.getMentionedUsers().get(0).getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 25 cartas para poder jogar Shoukan.").queue();
+		} else if (target.getChampions().size() < 36) {
+			channel.sendMessage("❌ | " + message.getMentionedUsers().get(0).getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 36 cartas para poder jogar Shoukan.").queue();
 			return;
 		}
 
