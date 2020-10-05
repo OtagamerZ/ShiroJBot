@@ -14,23 +14,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_Pagination_Utils_1_2_5b.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_Pagination_Utils_1_2_4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SweepCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SweepCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedLeaveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedLeaveCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ChessCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ChessCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CrissCrossCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CrissCrossCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ReversiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ReversiCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LoanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LoanCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LotteryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LotteryCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RedeemCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RedeemCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RevertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RevertCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/BackupCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/BackupCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/music/YoutubeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/music/YoutubeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -757,14 +747,7 @@
       <workItem from="1601671002838" duration="265000" />
       <workItem from="1601671736743" duration="53000" />
       <workItem from="1601672210212" duration="87000" />
-      <workItem from="1601899714363" duration="6672000" />
-    </task>
-    <task id="LOCAL-02507" summary="Correção pequena">
-      <created>1600783660416</created>
-      <option name="number" value="02507" />
-      <option name="presentableId" value="LOCAL-02507" />
-      <option name="project" value="LOCAL" />
-      <updated>1600783660416</updated>
+      <workItem from="1601899714363" duration="10061000" />
     </task>
     <task id="LOCAL-02508" summary="Modificação para compatibilidade com módulo em desenvolvimento">
       <created>1600870994778</created>
@@ -1102,7 +1085,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601905560377</updated>
     </task>
-    <option name="localTasksCounter" value="2556" />
+    <task id="LOCAL-02556" summary="Correção do bug que permitia vários comandos com confirmação de serem executados ao mesmo tempo">
+      <created>1601906448567</created>
+      <option name="number" value="02556" />
+      <option name="presentableId" value="LOCAL-02556" />
+      <option name="project" value="LOCAL" />
+      <updated>1601906448567</updated>
+    </task>
+    <option name="localTasksCounter" value="2557" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1168,7 +1158,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Remoção da randomização por anime das cartas e implementação de peso por raridade na geração" />
     <MESSAGE value="Aumentada a chance de aparecer cartas lendárias" />
     <MESSAGE value="Retorno do comando de gráfico de valor de cartas no mercado" />
     <MESSAGE value="Correção do gráfico de valores" />
@@ -1193,7 +1182,8 @@
     <MESSAGE value="Re-implementação do jogo Shoukan" />
     <MESSAGE value="Novos comandos referentes ao módulo Shoukan" />
     <MESSAGE value="Correção do problema de multi-clique nos botões de confirmação" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção do problema de multi-clique nos botões de confirmação" />
+    <MESSAGE value="Correção do bug que permitia vários comandos com confirmação de serem executados ao mesmo tempo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção do bug que permitia vários comandos com confirmação de serem executados ao mesmo tempo" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1247,11 +1237,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1601905557189">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1601906445727">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1601905557189" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1601906445727" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1264,22 +1254,22 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1391" height="316" key="GridCell.Tab.0.bottom" timestamp="1601905246634">
+    <state width="1391" height="316" key="GridCell.Tab.0.bottom" timestamp="1601909719000">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1601905246634" />
-    <state width="1391" height="316" key="GridCell.Tab.0.center" timestamp="1601905246634">
+    <state width="1391" height="316" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1601909719000" />
+    <state width="1391" height="316" key="GridCell.Tab.0.center" timestamp="1601909718999">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1601905246634" />
-    <state width="1391" height="316" key="GridCell.Tab.0.left" timestamp="1601905246634">
+    <state width="1391" height="316" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1601909718999" />
+    <state width="1391" height="316" key="GridCell.Tab.0.left" timestamp="1601909718999">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1601905246634" />
-    <state width="1391" height="316" key="GridCell.Tab.0.right" timestamp="1601905246634">
+    <state width="1391" height="316" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1601909718999" />
+    <state width="1391" height="316" key="GridCell.Tab.0.right" timestamp="1601909719000">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1601905246634" />
+    <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1601909719000" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1308,11 +1298,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1601905561766">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1601906450339">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1601905561766" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1601906450339" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1374,10 +1364,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1600440986950" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1601899799079">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1601908843433">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1601899799079" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1601908843433" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

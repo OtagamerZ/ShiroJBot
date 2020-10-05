@@ -87,7 +87,10 @@ public class ExceedLeaveCommand extends Command {
 						s.delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Você saiu da " + name + " com sucesso!").queue();
 					}
-				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
+					ShiroInfo.getHashes().remove(hash);
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
+				})
 		);
 	}
 }
