@@ -21,14 +21,11 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.ShoukanDeck;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -37,8 +34,6 @@ import org.jetbrains.annotations.NonNls;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ShoukanDeckCommand extends Command {
 
@@ -64,12 +59,6 @@ public class ShoukanDeckCommand extends Command {
 			try {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-				Set<KawaiponCard> collection = new HashSet<>();
-				for (AnimeName anime : AnimeName.validValues()) {
-					if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
-						collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
-				}
-
 				ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
 				BufferedImage cards = kb.view(kp.getChampions(), kp.getEquipments());
 
@@ -80,7 +69,7 @@ public class ShoukanDeckCommand extends Command {
 				eb.setImage("attachment://deck.png");
 
 				m.delete().queue();
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "deck.png").queue();
+				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg").queue();
 			} catch (IOException | InterruptedException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);

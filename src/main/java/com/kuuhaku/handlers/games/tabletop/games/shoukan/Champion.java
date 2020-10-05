@@ -48,13 +48,13 @@ public class Champion implements Drawable, Cloneable {
 	@Enumerated(EnumType.STRING)
 	private Race race;
 
-	@Column(columnDefinition = "INTEGER NOT NULL DEFAULT 0")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int mana;
 
-	@Column(columnDefinition = "INTEGER NOT NULL DEFAULT 0")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int atk;
 
-	@Column(columnDefinition = "INTEGER NOT NULL DEFAULT 0")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int def;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")

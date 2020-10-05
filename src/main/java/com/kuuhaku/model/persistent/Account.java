@@ -78,7 +78,7 @@ public class Account {
 	private String buffs = "{}";
 
 	@Enumerated(value = EnumType.STRING)
-	private FrameColor frame;
+	private FrameColor frame = FrameColor.PINK;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String ultimate = "";
