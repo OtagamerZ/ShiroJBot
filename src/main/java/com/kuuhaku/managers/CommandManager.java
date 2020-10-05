@@ -502,7 +502,7 @@ public class CommandManager {
 			put(ReversiCommand.class, new Argument(
 					"reversi", new String[]{"othello"}, REQ_MENTION_BET, "cmd_reversi", FUN, true
 			));
-			put(ReversiCommand.class, new Argument(
+			put(ShoukanCommand.class, new Argument(
 					"shoukan", new String[]{"duelcards"}, REQ_MENTION_BET, "cmd_shoukan", FUN, true
 			));
 			put(CatchKawaiponCommand.class, new Argument(
