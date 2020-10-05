@@ -66,7 +66,7 @@ public class ShoukanDeckCommand extends Command {
 				eb.setTitle("\uD83D\uDD30 | Deck de " + author.getName());
 				eb.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 40", true);
 				eb.addField(":shield: | Cartas EvoGear:", kp.getEquipments().size() + " de 18", true);
-				eb.setImage("attachment://deck.png");
+				eb.setImage("attachment://deck.jpg");
 
 				m.delete().queue();
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg").queue();
