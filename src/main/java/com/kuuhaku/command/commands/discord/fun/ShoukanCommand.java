@@ -23,34 +23,35 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
-import com.kuuhaku.handlers.games.tabletop.games.crisscross.CrissCross;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class CrissCrossCommand extends Command {
+public class ShoukanCommand extends Command {
 
-	public CrissCrossCommand(String name, String description, Category category, boolean requiresMM) {
+	public ShoukanCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public CrissCrossCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+	public ShoukanCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public CrissCrossCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public ShoukanCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public CrissCrossCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public ShoukanCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
@@ -66,7 +67,7 @@ public class CrissCrossCommand extends Command {
 
 		Account uacc = AccountDAO.getAccount(author.getId());
 		Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
-		int bet = 0;
+		/*int bet = 0;
 		if (args.length > 1 && StringUtils.isNumeric(args[1])) {
 			bet = Integer.parseInt(args[1]);
 			if (bet < 0) {
@@ -79,6 +80,17 @@ public class CrissCrossCommand extends Command {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
 				return;
 			}
+		}*/
+
+		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon target = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
+
+		if (kp.getChampions().size() < 40) {
+			channel.sendMessage("❌ | É necessário ter ao menos 40 cartas no deck para poder jogar Shoukan.").queue();
+			return;
+		} else if (target.getChampions().size() < 40) {
+			channel.sendMessage("❌ | " + message.getMentionedUsers().get(0).getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 25 cartas para poder jogar Shoukan.").queue();
+			return;
 		}
 
 		String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
@@ -97,8 +109,8 @@ public class CrissCrossCommand extends Command {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		Game t = new CrissCross(Main.getInfo().getAPI(), (TextChannel) channel, bet, author, message.getMentionedUsers().get(0));
-		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Jogo da Velha, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
+		Game t = new Shoukan(Main.getInfo().getAPI(), (TextChannel) channel, 0, author, message.getMentionedUsers().get(0));
+		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
 					Main.getInfo().getConfirmationPending().invalidate(author.getId());

@@ -67,7 +67,7 @@ public class YoutubeCommand extends Command {
 			channel.sendMessage("❌ | Você precisa digitar um nome para pesquisar.").queue();
 			return;
 		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-a antes de usar este comando novamente.").queue();
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
 		}
 
