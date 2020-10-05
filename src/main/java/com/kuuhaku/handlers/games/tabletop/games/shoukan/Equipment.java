@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
@@ -39,11 +40,14 @@ public class Equipment implements Drawable, Cloneable {
 	@OneToOne(fetch = FetchType.EAGER)
 	private Card card;
 
-	@Column(columnDefinition = "INTEGER NOT NULL DEFAULT 0")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int atk;
 
-	@Column(columnDefinition = "INTEGER NOT NULL DEFAULT 0")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int def;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int tier;
 
 	private transient boolean flipped = false;
 	private transient boolean available = true;
@@ -74,6 +78,37 @@ public class Equipment implements Drawable, Cloneable {
 			g2d.setColor(Color.green);
 			Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
 		}
+
+		if (!available) {
+			g2d.setColor(new Color(0, 0, 0, 150));
+			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+		}
+
+		g2d.dispose();
+
+		return bi;
+	}
+
+	public BufferedImage drawCard() {
+		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
+
+		if (linkedTo != null) {
+			g2d.drawImage(linkedTo.getRight().drawCardNoBorder(), 20, 52, 60, 93, null);
+			g2d.setClip(null);
+		}
+
+		g2d.drawImage(FrameColor.PINK.getFrontEquipment(), 0, 0, null);
+		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+
+		Profile.drawOutlinedText(card.getName(), 13, 32, g2d);
+
+		g2d.setColor(Color.red);
+		Profile.drawOutlinedText(String.valueOf(atk), 45, 316, g2d);
+
+		g2d.setColor(Color.green);
+		Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
 
 		if (!available) {
 			g2d.setColor(new Color(0, 0, 0, 150));
@@ -124,6 +159,10 @@ public class Equipment implements Drawable, Cloneable {
 
 	public int getDef() {
 		return def;
+	}
+
+	public int getTier() {
+		return tier;
 	}
 
 	@Override

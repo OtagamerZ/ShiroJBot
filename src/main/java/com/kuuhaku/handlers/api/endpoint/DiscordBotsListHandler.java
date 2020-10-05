@@ -83,7 +83,7 @@ public class DiscordBotsListHandler {
 		} catch (RuntimeException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		} finally {
-			UpvoteDAO.voted(u);
+			if (u != null) UpvoteDAO.voted(u);
 		}
 	}
 }
