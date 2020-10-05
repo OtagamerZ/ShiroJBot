@@ -24,6 +24,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -57,8 +58,11 @@ public class RedeemCommand extends Command {
 			return;
 		}
 
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
 		channel.sendMessage("Deseja realmente trocar seu acúmulo de 7 votos por uma gema?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (m, ms) -> {
+					if (!ShiroInfo.getHashes().remove(hash)) return;
 					if (m.getId().equals(author.getId())) {
 						acc.setStreak(0);
 						acc.addGem();

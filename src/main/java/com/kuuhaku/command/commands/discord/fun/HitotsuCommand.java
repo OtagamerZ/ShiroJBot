@@ -134,8 +134,11 @@ public class HitotsuCommand extends Command {
 		else
 			msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : "");
 
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
 		channel.sendMessage(msg)
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					if (!ShiroInfo.getHashes().remove(hash)) return;
 					if (players.contains(mb.getUser())) {
 						if (Main.getInfo().gameInProgress(mb.getId())) {
 							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();

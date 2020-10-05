@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -96,8 +97,11 @@ public class LoanCommand extends Command {
 
 		CreditLoan cl = CreditLoan.getById(loan);
 
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
 		channel.sendMessage("Você está prestes a obter __**" + cl.getLoan() + " créditos**__ a um juros de __" + Helper.round(cl.getInterest(ex) * 100 - 100, 1) + "%__ (__**" + Math.round(cl.getLoan() * cl.getInterest(ex)) + " de dívida**__), deseja confirmar?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					if (!ShiroInfo.getHashes().remove(hash)) return;
 					Account finalAcc = AccountDAO.getAccount(author.getId());
 					cl.sign(finalAcc);
 

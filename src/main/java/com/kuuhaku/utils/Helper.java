@@ -1327,4 +1327,8 @@ public class Helper {
 			files.remove(0).getLeft().delete();
 		}
 	}
+
+	public static String generateHash(Guild guild, User user) {
+		return hash((guild.getId() + user.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-256");
+	}
 }
