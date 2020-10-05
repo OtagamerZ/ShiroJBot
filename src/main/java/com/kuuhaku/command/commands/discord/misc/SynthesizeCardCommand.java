@@ -93,8 +93,8 @@ public class SynthesizeCardCommand extends Command {
 
 		int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum();
 		double tier1 = (15 - score) * 0.75 / 12;
-		double tier2 = (6 - Math.abs(9 - score)) * 0.5 / 6;
-		double tier3 = 12 * 0.75 / (15 - score);
+		double tier2 = 0.25 + (6 - Math.abs(9 - score)) * 0.25 / 6;
+		double tier3 = 0.75 - tier1;
 
 		List<Equipment> equips = CardDAO.getEquipments();
 		List<Equipment> chosenTier = new EnumeratedDistribution<>(List.of(
