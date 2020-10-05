@@ -65,7 +65,8 @@ public class FrameColorCommand extends Command {
 				eb.clear();
 				eb.setTitle(":flower_playing_cards: | Cor " + fc.toString().toLowerCase());
 				eb.setDescription(fc.getDescription());
-				eb.setImage("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/card_back_" + fc.name().toLowerCase() + ".png");
+				eb.setThumbnail("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/card_back_" + fc.name().toLowerCase() + ".png");
+				eb.setImage("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/card_front_" + fc.name().toLowerCase() + ".png");
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 

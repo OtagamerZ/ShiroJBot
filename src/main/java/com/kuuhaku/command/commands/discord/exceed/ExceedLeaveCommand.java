@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -59,9 +60,12 @@ public class ExceedLeaveCommand extends Command {
 			return;
 		}
 
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
 		String name = em.getExceed();
 		channel.sendMessage(":warning: | Sair da " + name + " além de reduzir seu XP pela metade fará com que você não possa escolher outro Exceed até o próximo mês. Deseja confirmar sua escolha?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					if (!ShiroInfo.getHashes().remove(hash)) return;
 					if (mb.getId().equals(author.getId())) {
 						List<com.kuuhaku.model.persistent.Member> mbs = MemberDAO.getMemberByMid(mb.getId());
 						mbs.forEach(m -> {

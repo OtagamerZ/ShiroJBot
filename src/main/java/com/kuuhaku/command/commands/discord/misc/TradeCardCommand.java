@@ -112,8 +112,11 @@ public class TradeCardCommand extends Command {
 				return;
 			}
 
+			String hash = Helper.generateHash(guild, author);
+			ShiroInfo.getHashes().add(hash);
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar sua carta `" + card.getName() + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
+						if (!ShiroInfo.getHashes().remove(hash)) return;
 						if (!member1.getId().equals(other.getId())) return;
 						acc.removeCredit(price, this.getClass());
 						target.removeCard(card);
@@ -167,8 +170,11 @@ public class TradeCardCommand extends Command {
 				return;
 			}
 
+			String hash = Helper.generateHash(guild, author);
+			ShiroInfo.getHashes().add(hash);
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja vender a carta `" + card.getName() + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
+						if (!ShiroInfo.getHashes().remove(hash)) return;
 						if (!member1.getId().equals(other.getId())) return;
 						tacc.removeCredit(price, this.getClass());
 						kp.removeCard(card);
@@ -233,8 +239,11 @@ public class TradeCardCommand extends Command {
 				return;
 			}
 
+			String hash = Helper.generateHash(guild, author);
+			ShiroInfo.getHashes().add(hash);
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja trocar a carta `" + yourCard.getName() + "` pela sua carta `" + hisCard.getName() + "`, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
+						if (!ShiroInfo.getHashes().remove(hash)) return;
 						if (!member1.getId().equals(other.getId())) return;
 						kp.removeCard(yourCard);
 						target.removeCard(hisCard);

@@ -27,6 +27,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -79,14 +80,17 @@ public class SweepCommand extends Command {
 				}
 			});
 
-			if (guildTrashBin.size() + memberTrashBin.size() > 0)
+			if (guildTrashBin.size() + memberTrashBin.size() > 0) {
+				String hash = Helper.generateHash(guild, author);
+				ShiroInfo.getHashes().add(hash);
 				s.editMessage(":warning: | Foram encontrados " + guildTrashBin.size() + " índices de servidores e " + memberTrashBin + " membros inexistentes, deseja executar a limpeza?").queue(m ->
 						Pages.buttonize(m, Map.of(Helper.ACCEPT, (mb, ms) -> {
+							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Sweeper.sweep(guildTrashBin, memberTrashBin);
 							ms.editMessage(Helper.ACCEPT + " | Entradas limpas com sucesso!").queue();
 						}), true, 1, TimeUnit.MINUTES, (u) -> u.getId().equals(author.getId()))
 				);
-			else s.editMessage(Helper.ACCEPT + " | Não há entradas para serem limpas.").queue();
+			} else s.editMessage(Helper.ACCEPT + " | Não há entradas para serem limpas.").queue();
 		});
 	}
 }

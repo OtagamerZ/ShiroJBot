@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.CardMarket;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -97,8 +98,11 @@ public class SellCardCommand extends Command {
 				return;
 			}
 
+			String hash = Helper.generateHash(guild, author);
+			ShiroInfo.getHashes().add(hash);
 			channel.sendMessage("Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?").queue(s -> {
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
+					if (!ShiroInfo.getHashes().remove(hash)) return;
 					if (member1.getId().equals(author.getId())) {
 						kp.removeCard(card);
 						KawaiponDAO.saveKawaipon(kp);

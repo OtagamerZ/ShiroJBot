@@ -82,8 +82,11 @@ public class LotteryCommand extends Command {
 			return;
 		}
 
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
 		channel.sendMessage("Você está prestes a comprar um bilhete de loteria com as dezenas `" + args[0].replace(",", " ") + "` por " + cost + " créditos, deseja confirmar?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					if (!ShiroInfo.getHashes().remove(hash)) return;
 					acc.removeCredit(cost, this.getClass());
 					AccountDAO.saveAccount(acc);
 					LotteryDAO.saveLottery(new Lottery(author.getId(), args[0]));

@@ -82,8 +82,13 @@ public class BackupCommand extends Command {
 		} else if (data.getLastRestored().toLocalDateTime().plusDays(7).until(LocalDateTime.now(), ChronoUnit.DAYS) < 7) {
 			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_backup-ratelimit"), 7 - data.getLastRestored().toLocalDateTime().plusDays(7).until(LocalDateTime.now(), ChronoUnit.DAYS))).queue();
 		} else {
+			String hash = Helper.generateHash(guild, author);
+			ShiroInfo.getHashes().add(hash);
 			channel.sendMessage("**Restaurar um backup irá limpar todas as mensagens do servidor, inclusive aquelas fixadas**\n\nPor favor, confirme esta operação clicando no botão abaixo.").queue(s ->
-					Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> data.restore(guild)), true, 30, TimeUnit.SECONDS, u -> u.getId().equals(author.getId())));
+					Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
+						if (!ShiroInfo.getHashes().remove(hash)) return;
+						data.restore(guild);
+					}), true, 30, TimeUnit.SECONDS, u -> u.getId().equals(author.getId())));
 		}
 	}
 }
