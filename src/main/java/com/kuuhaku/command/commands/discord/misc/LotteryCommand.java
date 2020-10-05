@@ -102,7 +102,10 @@ public class LotteryCommand extends Command {
 					LotteryDAO.saveLotteryValue(lv);
 
 					s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Bilhete comprado com sucesso!")).queue();
-				}), true, 1, TimeUnit.MINUTES)
+				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
+					ShiroInfo.getHashes().remove(hash);
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
+				})
 		);
 	}
 }

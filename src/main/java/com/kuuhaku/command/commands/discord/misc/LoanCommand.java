@@ -114,7 +114,10 @@ public class LoanCommand extends Command {
 					cl.sign(finalAcc);
 
 					s.delete().flatMap(d -> channel.sendMessage("Obrigada por ser mais um cliente do Shiro Empréstimos LTDA! Você não receberá mais créditos até que termine de pagar sua dívida.")).queue();
-				}), true, 1, TimeUnit.MINUTES)
+				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
+					ShiroInfo.getHashes().remove(hash);
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
+				})
 		);
 	}
 

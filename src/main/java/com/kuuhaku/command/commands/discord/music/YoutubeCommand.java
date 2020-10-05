@@ -111,7 +111,10 @@ public class YoutubeCommand extends Command {
 										msg.delete().queue(null, Helper::doNothing);
 									} catch (ErrorResponseException ignore) {
 									}
-								}), true, 1, TimeUnit.MINUTES);
+								}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
+									ShiroInfo.getHashes().remove(hash);
+									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								});
 							}
 						});
 					} else m.editMessage("❌ | Nenhum vídeo encontrado").queue();
