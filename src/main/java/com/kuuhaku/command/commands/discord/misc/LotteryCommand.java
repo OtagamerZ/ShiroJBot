@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -62,6 +63,9 @@ public class LotteryCommand extends Command {
 		} else if (args[0].split(",").length != 6 || args[0].length() != 17) {
 			channel.sendMessage("❌ | Você precisa informar 6 dezenas separadas por vírgula.").queue();
 			return;
+		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-a antes de usar este comando novamente.").queue();
+			return;
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
@@ -84,9 +88,11 @@ public class LotteryCommand extends Command {
 
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Você está prestes a comprar um bilhete de loteria com as dezenas `" + args[0].replace(",", " ") + "` por " + cost + " créditos, deseja confirmar?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					acc.removeCredit(cost, this.getClass());
 					AccountDAO.saveAccount(acc);
 					LotteryDAO.saveLottery(new Lottery(author.getId(), args[0]));

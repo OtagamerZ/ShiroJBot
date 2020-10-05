@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.music;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Youtube;
@@ -62,10 +63,13 @@ public class YoutubeCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (args.length < 1) {
-            channel.sendMessage("❌ | Você precisa digitar um nome para pesquisar.").queue();
-            return;
-        }
+		if (args.length < 1) {
+			channel.sendMessage("❌ | Você precisa digitar um nome para pesquisar.").queue();
+			return;
+		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-a antes de usar este comando novamente.").queue();
+			return;
+		}
 
         channel.sendMessage("<a:loading:697879726630502401> Buscando videos...").queue(m -> {
             try {
@@ -88,11 +92,13 @@ public class YoutubeCommand extends Command {
 
 						String hash = Helper.generateHash(guild, author);
 						ShiroInfo.getHashes().add(hash);
+						Main.getInfo().getConfirmationPending().put(author.getId(), true);
 						channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
 							Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
 							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
 								Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
 									if (!ShiroInfo.getHashes().remove(hash)) return;
+									Main.getInfo().getConfirmationPending().invalidate(author.getId());
 									try {
 										String url = Objects.requireNonNull(ms.getEmbeds().get(0).getFooter()).getIconUrl();
 										assert url != null;

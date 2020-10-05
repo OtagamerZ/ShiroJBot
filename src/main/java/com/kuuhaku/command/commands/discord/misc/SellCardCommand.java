@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -67,6 +68,9 @@ public class SellCardCommand extends Command {
 		} else if (!Helper.equalsAny(args[1], "N", "C")) {
 			channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja vender (`N` = normal, `C` = cromada).").queue();
 			return;
+		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-a antes de usar este comando novamente.").queue();
+			return;
 		}
 
 		Card c = CardDAO.getCard(args[0], false);
@@ -100,9 +104,11 @@ public class SellCardCommand extends Command {
 
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?").queue(s -> {
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					if (member1.getId().equals(author.getId())) {
 						kp.removeCard(card);
 						KawaiponDAO.saveKawaipon(kp);
