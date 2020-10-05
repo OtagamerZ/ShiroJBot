@@ -29,6 +29,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -85,10 +86,13 @@ public class YoutubeCommand extends Command {
 							pages.add(new Page(PageType.EMBED, eb.build()));
 						}
 
+						String hash = Helper.generateHash(guild, author);
+						ShiroInfo.getHashes().add(hash);
 						channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
 							Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
 							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
 								Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
+									if (!ShiroInfo.getHashes().remove(hash)) return;
 									try {
 										String url = Objects.requireNonNull(ms.getEmbeds().get(0).getFooter()).getIconUrl();
 										assert url != null;

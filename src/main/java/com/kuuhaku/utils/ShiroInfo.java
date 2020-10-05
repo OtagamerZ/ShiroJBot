@@ -99,6 +99,7 @@ public class ShiroInfo {
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
 	private static final LambdaFactory LFactory = LambdaFactory.get();
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
+	private static final HashSet<String> hashes = new HashSet<>();
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -157,6 +158,10 @@ public class ShiroInfo {
 
 	public static HttpClientBuilder getHttpBuilder() {
 		return httpBuilder;
+	}
+
+	public static HashSet<String> getHashes() {
+		return hashes;
 	}
 
 	public static String getShiro() {
