@@ -97,8 +97,8 @@ public class ConvertCardCommand extends Command {
 		} else if (kp.getChampions().stream().filter(c::equals).count() == 3) {
 			channel.sendMessage("❌ | Você só pode ter no máximo 3 cópias de cada carta no seu deck.").queue();
 			return;
-		} else if (kp.getChampions().size() == 40) {
-			channel.sendMessage("❌ | Você só pode ter no máximo 40 cartas senshi no seu deck.").queue();
+		} else if (kp.getChampions().size() == 36) {
+			channel.sendMessage("❌ | Você só pode ter no máximo 36 cartas senshi no seu deck.").queue();
 			return;
 		}
 
