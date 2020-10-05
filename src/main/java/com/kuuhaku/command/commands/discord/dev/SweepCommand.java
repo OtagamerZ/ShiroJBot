@@ -56,6 +56,11 @@ public class SweepCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-a antes de usar este comando novamente.").queue();
+			return;
+		}
+
 		channel.sendMessage("<a:loading:697879726630502401> | Comparando índices...").queue(s -> {
 			Set<GuildConfig> gds = new HashSet<>(GuildDAO.getAllGuilds());
 			Set<com.kuuhaku.model.persistent.Member> mbs = new HashSet<>(MemberDAO.getAllMembers());
@@ -83,9 +88,11 @@ public class SweepCommand extends Command {
 			if (guildTrashBin.size() + memberTrashBin.size() > 0) {
 				String hash = Helper.generateHash(guild, author);
 				ShiroInfo.getHashes().add(hash);
+				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				s.editMessage(":warning: | Foram encontrados " + guildTrashBin.size() + " índices de servidores e " + memberTrashBin + " membros inexistentes, deseja executar a limpeza?").queue(m ->
 						Pages.buttonize(m, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 							Sweeper.sweep(guildTrashBin, memberTrashBin);
 							ms.editMessage(Helper.ACCEPT + " | Entradas limpas com sucesso!").queue();
 						}), true, 1, TimeUnit.MINUTES, (u) -> u.getId().equals(author.getId()))

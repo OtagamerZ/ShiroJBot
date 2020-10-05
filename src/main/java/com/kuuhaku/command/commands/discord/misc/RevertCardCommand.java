@@ -19,14 +19,13 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
@@ -59,7 +58,11 @@ public class RevertCardCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-a antes de usar este comando novamente.").queue();
+			return;
+		}
+
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 		if (args.length == 0) {
@@ -100,9 +103,11 @@ public class RevertCardCommand extends Command {
 
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(eb.build()).addFile(Helper.getBytes(kc.getCard().drawCard(false), "png"), "card.png").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					kp.addCard(kc);
 					kp.removeChampion(c);
 					KawaiponDAO.saveKawaipon(kp);
