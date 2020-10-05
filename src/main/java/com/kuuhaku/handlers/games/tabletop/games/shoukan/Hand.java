@@ -37,7 +37,7 @@ public class Hand {
 	private final LinkedList<Drawable> deque;
 	private final List<Drawable> cards = new ArrayList<>();
 	private final Side side;
-	private int mana = 999;
+	private int mana = 0;
 	private int hp = 5000;
 
 	public Hand(User user, List<Drawable> deque, Side side) {
