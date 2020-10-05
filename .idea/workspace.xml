@@ -13,12 +13,18 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Corre">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RevertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RevertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ShoukanDeckCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ShoukanDeckCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,8 +152,8 @@
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.command.commands.discord.fun" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
+      <recent name="com.kuuhaku.command.commands.discord.fun" />
       <recent name="com.kuuhaku.command.commands.discord.information" />
       <recent name="com.kuuhaku.model.common" />
       <recent name="com.kuuhaku.handlers.games.tabletop.games.shoukan" />
@@ -745,14 +751,7 @@
       <workItem from="1601671002838" duration="265000" />
       <workItem from="1601671736743" duration="53000" />
       <workItem from="1601672210212" duration="87000" />
-      <workItem from="1601899714363" duration="12165000" />
-    </task>
-    <task id="LOCAL-02511" summary="Implementação do jogo Shoukan (duelo de cartas), mas sem a possibilidade de jogar ainda">
-      <created>1601056567361</created>
-      <option name="number" value="02511" />
-      <option name="presentableId" value="LOCAL-02511" />
-      <option name="project" value="LOCAL" />
-      <updated>1601056567361</updated>
+      <workItem from="1601899714363" duration="17708000" />
     </task>
     <task id="LOCAL-02512" summary="Implementação do jogo Shoukan (duelo de cartas), mas sem a possibilidade de jogar ainda">
       <created>1601057178526</created>
@@ -1090,7 +1089,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601914531712</updated>
     </task>
-    <option name="localTasksCounter" value="2560" />
+    <task id="LOCAL-02560" summary="Adição do comando para jogar Shoukan">
+      <created>1601915734914</created>
+      <option name="number" value="02560" />
+      <option name="presentableId" value="LOCAL-02560" />
+      <option name="project" value="LOCAL" />
+      <updated>1601915734914</updated>
+    </task>
+    <option name="localTasksCounter" value="2561" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1206,11 +1212,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1600973622351" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1601905913958">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1601917913588">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1593920634856" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1601905913958" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1601917913588" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1599135337715">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1235,11 +1241,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1601914529051">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1601921092006">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1601914529051" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1601921092006" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1252,22 +1258,22 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1391" height="316" key="GridCell.Tab.0.bottom" timestamp="1601909719000">
+    <state width="1391" height="316" key="GridCell.Tab.0.bottom" timestamp="1601917708190">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1601909719000" />
-    <state width="1391" height="316" key="GridCell.Tab.0.center" timestamp="1601909718999">
+    <state width="1391" height="316" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1601917708190" />
+    <state width="1391" height="316" key="GridCell.Tab.0.center" timestamp="1601917708190">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1601909718999" />
-    <state width="1391" height="316" key="GridCell.Tab.0.left" timestamp="1601909718999">
+    <state width="1391" height="316" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1601917708190" />
+    <state width="1391" height="316" key="GridCell.Tab.0.left" timestamp="1601917708190">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1601909718999" />
-    <state width="1391" height="316" key="GridCell.Tab.0.right" timestamp="1601909719000">
+    <state width="1391" height="316" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1601917708190" />
+    <state width="1391" height="316" key="GridCell.Tab.0.right" timestamp="1601917708190">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1601909719000" />
+    <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1601917708190" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1296,11 +1302,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1601914533387">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1601915739593">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1601914533387" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1601915739593" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1325,11 +1331,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1680.1010@0.0.1680.1010" timestamp="1598041461186" />
-    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1601646500886">
+    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1601916941700">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="254" y="43" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1366.768@0.0.1366.768" timestamp="1593921071276" />
-    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1601646500886" />
+    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1601916941700" />
     <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1601648967281">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1362,10 +1368,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1600440986950" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1601908843433">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1601918160165">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1601908843433" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1601918160165" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
