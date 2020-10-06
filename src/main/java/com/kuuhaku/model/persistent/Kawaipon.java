@@ -43,11 +43,11 @@ public class Kawaipon {
 	private Set<KawaiponCard> cards = new HashSet<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	private List<Champion> champions = new ArrayList<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	private List<Equipment> equipments = new ArrayList<>();
 
 	public String getUid() {
