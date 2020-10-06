@@ -129,7 +129,7 @@ public class GuildEvents extends ListenerAdapter {
 			} catch (InsufficientPermissionException | ErrorResponseException ignore) {
 			}*/
 
-			if (GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
+			if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) && GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
 				if (GuildDAO.getGuildById(guild.getId()).isHardAntispam()) {
 					channel.getHistory().retrievePast(20).queue(h -> {
 						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
