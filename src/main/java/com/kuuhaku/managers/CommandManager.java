@@ -323,9 +323,9 @@ public class CommandManager {
 			put(ReverseCommand.class, new Argument(
 					"reverse", new String[]{"inverter"}, REQ_TEXT, "cmd_reverse", MISC, false
 			));
-			put(SayCommand.class, new Argument(
+			/*put(SayCommand.class, new Argument(
 					"say", new String[]{"diga", "repetir"}, REQ_MESSAGE, "cmd_repeat", MISC, true
-			));
+			));*/
 			put(CustomAnswerCommand.class, new Argument(
 					"fale", "req_trigger-response", "cmd_custom-answer", MISC, false
 			));
