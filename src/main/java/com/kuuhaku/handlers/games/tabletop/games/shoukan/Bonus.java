@@ -18,9 +18,12 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import org.json.JSONObject;
+
 public class Bonus {
 	private int atk = 0;
 	private int def = 0;
+	private final JSONObject specialData = new JSONObject();
 
 	public int getAtk() {
 		return atk;
@@ -52,5 +55,9 @@ public class Bonus {
 
 	public void removeDef(int def) {
 		this.def -= def;
+	}
+
+	public JSONObject getSpecialData() {
+		return specialData;
 	}
 }
