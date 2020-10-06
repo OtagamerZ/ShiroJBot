@@ -23,14 +23,12 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -70,19 +68,14 @@ public class ExceedLeaveCommand extends Command {
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		String name = em.getExceed();
-		channel.sendMessage(":warning: | Sair da " + name + " além de reduzir seu XP pela metade fará com que você não possa escolher outro Exceed até o próximo mês. Deseja confirmar sua escolha?").queue(s ->
+		channel.sendMessage(":warning: | Sair da " + name + " irá zerar seus pontos de contribuição e fará com que você não possa escolher outro Exceed até o próximo mês. Deseja confirmar sua escolha?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
 					Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					if (mb.getId().equals(author.getId())) {
-						List<com.kuuhaku.model.persistent.Member> mbs = MemberDAO.getMemberByMid(mb.getId());
-						mbs.forEach(m -> {
-							m.halfXpKeepLevel();
-							com.kuuhaku.controller.postgresql.MemberDAO.saveMemberToBD(m);
-							MemberDAO.updateMemberConfigs(m);
-						});
 						em.setBlocked(true);
 						em.setExceed("");
+						em.resetContribution();
 						ExceedDAO.saveExceedMember(em);
 						s.delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Você saiu da " + name + " com sucesso!").queue();
