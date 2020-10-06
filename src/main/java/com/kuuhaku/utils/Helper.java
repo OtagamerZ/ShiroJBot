@@ -526,7 +526,7 @@ public class Helper {
 				JSONObject jo = ja.getJSONObject(k);
 				Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 
-				TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
+				TextChannel channel = jo.has("canalId") ? g.getTextChannelById(jo.getString("canalId")) : null;
 
 				if (channel == null) {
 					JSONObject newJa = new JSONObject(ja.toString());
