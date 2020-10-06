@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
@@ -69,6 +70,15 @@ public class Hand {
 	public void drawEquipment() {
 		try {
 			Drawable dr = deque.stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow().copy();
+			deque.remove(dr);
+			cards.add(dr);
+		} catch (NoSuchElementException ignore) {
+		}
+	}
+
+	public void drawRace(Race race) {
+		try {
+			Drawable dr = deque.stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow().copy();
 			deque.remove(dr);
 			cards.add(dr);
 		} catch (NoSuchElementException ignore) {
