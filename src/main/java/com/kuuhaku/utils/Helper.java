@@ -1067,9 +1067,11 @@ public class Helper {
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
+		List<Card> cds = CardDAO.getCardsByAnime(anime);
 
 		KawaiponRarity kr = new EnumeratedDistribution<>(
-				Arrays.stream(KawaiponRarity.validValues())
+				cds.stream()
+						.map(Card::getRarity)
 						.filter(r -> r != KawaiponRarity.ULTIMATE)
 						.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
 						.collect(Collectors.toList())
@@ -1077,7 +1079,7 @@ public class Helper {
 
 		List<Card> cards;
 		if (anime != null)
-			cards = CardDAO.getCardsByAnime(anime).stream().filter(c -> c.getRarity() == kr).collect(Collectors.toList());
+			cards = cds.stream().filter(c -> c.getRarity() == kr).collect(Collectors.toList());
 		else cards = CardDAO.getCardsByRarity(kr);
 
 		Card c = cards.get(Helper.rng(cards.size(), true));
