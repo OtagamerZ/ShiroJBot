@@ -1067,20 +1067,30 @@ public class Helper {
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
-		List<Card> cds = CardDAO.getCardsByAnime(anime);
-
-		KawaiponRarity kr = new EnumeratedDistribution<>(
-				cds.stream()
-						.map(Card::getRarity)
-						.filter(r -> r != KawaiponRarity.ULTIMATE)
-						.map(r -> Pair.create(r, 1 + (7 - r.getIndex()) / 12d))
-						.collect(Collectors.toList())
-		).sample();
-
+		KawaiponRarity kr;
 		List<Card> cards;
-		if (anime != null)
+		if (anime != null) {
+			List<Card> cds = CardDAO.getCardsByAnime(anime);
+
+			kr = new EnumeratedDistribution<>(
+					cds.stream()
+							.map(Card::getRarity)
+							.filter(r -> r != KawaiponRarity.ULTIMATE)
+							.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
+							.collect(Collectors.toList())
+			).sample();
+
 			cards = cds.stream().filter(c -> c.getRarity() == kr).collect(Collectors.toList());
-		else cards = CardDAO.getCardsByRarity(kr);
+		} else {
+			kr = new EnumeratedDistribution<>(
+					Arrays.stream(KawaiponRarity.validValues())
+							.filter(r -> r != KawaiponRarity.ULTIMATE)
+							.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
+							.collect(Collectors.toList())
+			).sample();
+
+			cards = CardDAO.getCardsByRarity(kr);
+		}
 
 		Card c = cards.get(Helper.rng(cards.size(), true));
 		boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
