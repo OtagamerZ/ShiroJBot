@@ -92,6 +92,7 @@ public class BroadcastCommand extends Command {
 
 					for (GuildConfig gc : gs) {
 						Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+						if (g == null) continue;
 						try {
 							TextChannel c = g.getTextChannelById(gc.getCanalAvisos());
 							if (c != null && c.canTalk()) {
