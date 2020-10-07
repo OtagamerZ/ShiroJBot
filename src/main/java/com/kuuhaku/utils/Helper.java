@@ -1073,7 +1073,7 @@ public class Helper {
 				cds.stream()
 						.map(Card::getRarity)
 						.filter(r -> r != KawaiponRarity.ULTIMATE)
-						.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
+						.map(r -> Pair.create(r, 1 + (7 - r.getIndex()) / 12d))
 						.collect(Collectors.toList())
 		).sample();
 
