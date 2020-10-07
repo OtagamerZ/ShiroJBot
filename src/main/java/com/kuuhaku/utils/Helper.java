@@ -516,20 +516,21 @@ public class Helper {
 	}
 
 	public static void refreshButtons(GuildConfig gc) {
-		JSONObject ja = gc.getButtonConfigs();
+		JSONObject source = gc.getButtonConfigs();
+		JSONObject btns = gc.getButtonConfigs();
 
-		if (ja.isEmpty()) return;
+		if (btns.isEmpty()) return;
 
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 		if (g != null)
-			ja.keySet().forEach(k -> {
-				JSONObject jo = ja.getJSONObject(k);
+			source.keySet().forEach(k -> {
+				JSONObject jo = btns.getJSONObject(k);
 				Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 
-				TextChannel channel = jo.has("canalId") ? g.getTextChannelById(jo.getString("canalId")) : null;
+				TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 
 				if (channel == null) {
-					JSONObject newJa = new JSONObject(ja.toString());
+					JSONObject newJa = new JSONObject(btns.toString());
 					if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
 					else newJa.remove(jo.getString("canalId"));
 					gc.setButtonConfigs(newJa);
@@ -556,7 +557,7 @@ public class Helper {
 						Pages.buttonize(msg, buttons, true);
 					}
 				} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
-					JSONObject newJa = new JSONObject(ja.toString());
+					JSONObject newJa = new JSONObject(btns.toString());
 					if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
 					else newJa.remove(jo.getString("msgId"));
 					gc.setButtonConfigs(newJa);
