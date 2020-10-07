@@ -69,7 +69,8 @@ public enum AnimeName {
 	HUNTER_X_HUNTER,
 	BLACK_ROCK_SHOOTER,
 	FATE_STAY_NIGHT,
-	OVERFLOW;
+	OVERFLOW,
+	GENSHIN_IMPACT;
 
 	public static AnimeName[] validValues() {
 		return Arrays.stream(values()).filter(an -> an != HIDDEN).toArray(AnimeName[]::new);
