@@ -484,7 +484,7 @@ public class GuildConfig {
 	}
 
 	public JSONObject getButtonConfigs() {
-		if (buttonConfigs == null || buttonConfigs.isEmpty()) return new JSONObject();
+		if (buttonConfigs == null || buttonConfigs.isBlank()) return new JSONObject();
 		else return new JSONObject(buttonConfigs);
 	}
 
