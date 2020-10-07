@@ -68,7 +68,8 @@ public enum AnimeName {
 	SHINGEKI_NO_KYOJIN,
 	HUNTER_X_HUNTER,
 	BLACK_ROCK_SHOOTER,
-	FATE_STAY_NIGHT;
+	FATE_STAY_NIGHT,
+	OVERFLOW;
 
 	public static AnimeName[] validValues() {
 		return Arrays.stream(values()).filter(an -> an != HIDDEN).toArray(AnimeName[]::new);
