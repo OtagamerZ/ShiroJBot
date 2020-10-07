@@ -14,8 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/AnimeName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/AnimeName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -735,21 +734,7 @@
       <workItem from="1602005431072" duration="4517000" />
       <workItem from="1602015336763" duration="1843000" />
       <workItem from="1602073656929" duration="2157000" />
-      <workItem from="1602086724508" duration="2959000" />
-    </task>
-    <task id="LOCAL-02526" summary="Correções gerais">
-      <created>1601646604540</created>
-      <option name="number" value="02526" />
-      <option name="presentableId" value="LOCAL-02526" />
-      <option name="project" value="LOCAL" />
-      <updated>1601646604540</updated>
-    </task>
-    <task id="LOCAL-02527" summary="Correções gerais">
-      <created>1601646745871</created>
-      <option name="number" value="02527" />
-      <option name="presentableId" value="LOCAL-02527" />
-      <option name="project" value="LOCAL" />
-      <updated>1601646745871</updated>
+      <workItem from="1602086724508" duration="3337000" />
     </task>
     <task id="LOCAL-02528" summary="Correções gerais">
       <created>1601647163519</created>
@@ -1080,7 +1065,21 @@
       <option name="project" value="LOCAL" />
       <updated>1602087812709</updated>
     </task>
-    <option name="localTasksCounter" value="2575" />
+    <task id="LOCAL-02575" summary="Novas cartas: Genshin Impact (sim, tem mangá oficial)">
+      <created>1602100096398</created>
+      <option name="number" value="02575" />
+      <option name="presentableId" value="LOCAL-02575" />
+      <option name="project" value="LOCAL" />
+      <updated>1602100096398</updated>
+    </task>
+    <task id="LOCAL-02576" summary="Novas cartas: Genshin Impact (sim, tem mangá oficial)">
+      <created>1602100270636</created>
+      <option name="number" value="02576" />
+      <option name="presentableId" value="LOCAL-02576" />
+      <option name="project" value="LOCAL" />
+      <updated>1602100270636</updated>
+    </task>
+    <option name="localTasksCounter" value="2577" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1146,7 +1145,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Removida checagem automatica da Jibril, agora é um comando separado" />
     <MESSAGE value="Descarte de buffers após a geração das linhas da coleção de cartas" />
     <MESSAGE value="Aumento na compressão da imagem da coleção de cartas" />
     <MESSAGE value="Agora a coleção de cartas usa o CDN da Shiro" />
@@ -1171,7 +1169,8 @@
     <MESSAGE value="Sair do Exceed não remove mais metade dos seus pontos de XP" />
     <MESSAGE value="Correção no refresh dos botões de reação" />
     <MESSAGE value="Novas cartas: Overflow" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novas cartas: Overflow" />
+    <MESSAGE value="Novas cartas: Genshin Impact (sim, tem mangá oficial)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Novas cartas: Genshin Impact (sim, tem mangá oficial)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1225,11 +1224,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602087810021">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602100267986">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602087810021" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602100267986" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1286,11 +1285,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602087814119">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602100272014">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602087814119" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602100272014" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
