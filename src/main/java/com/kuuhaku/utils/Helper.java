@@ -64,6 +64,7 @@ import org.apache.commons.math3.util.Pair;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
@@ -524,44 +525,48 @@ public class Helper {
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 		if (g != null)
 			source.keySet().forEach(k -> {
-				JSONObject jo = btns.getJSONObject(k);
-				Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+				try {
+					JSONObject jo = btns.getJSONObject(k);
+					Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 
-				TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
+					TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 
-				if (channel == null) {
-					JSONObject newJa = new JSONObject(btns.toString());
-					if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
-					else newJa.remove(jo.getString("canalId"));
-					gc.setButtonConfigs(newJa);
-					GuildDAO.updateGuildSettings(gc);
-				} else try {
-					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
-					resolveButton(g, jo, buttons);
+					if (channel == null) {
+						JSONObject newJa = new JSONObject(btns.toString());
+						if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
+						else newJa.remove(jo.getString("canalId"));
+						gc.setButtonConfigs(newJa);
+						GuildDAO.updateGuildSettings(gc);
+					} else try {
+						Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
+						resolveButton(g, jo, buttons);
 
-					if (k.equals("gatekeeper")) {
-						buttons.put("\uD83D\uDEAA", (m, v) -> m.kick("Não aceitou as regras.").queue(null, Helper::doNothing));
+						if (k.equals("gatekeeper")) {
+							buttons.put("\uD83D\uDEAA", (m, v) -> m.kick("Não aceitou as regras.").queue(null, Helper::doNothing));
 
-						Pages.buttonize(msg, buttons, false);
-					} else {
-						buttons.put(CANCEL, (m, ms) -> {
-							if (m.getUser().getId().equals(jo.getString("author"))) {
-								JSONObject gcjo = gc.getButtonConfigs();
-								gcjo.remove(jo.getString("msgId"));
-								gc.setButtonConfigs(gcjo);
-								GuildDAO.updateGuildSettings(gc);
-								ms.clearReactions().queue();
-							}
-						});
+							Pages.buttonize(msg, buttons, false);
+						} else {
+							buttons.put(CANCEL, (m, ms) -> {
+								if (m.getUser().getId().equals(jo.getString("author"))) {
+									JSONObject gcjo = gc.getButtonConfigs();
+									gcjo.remove(jo.getString("msgId"));
+									gc.setButtonConfigs(gcjo);
+									GuildDAO.updateGuildSettings(gc);
+									ms.clearReactions().queue();
+								}
+							});
 
-						Pages.buttonize(msg, buttons, true);
+							Pages.buttonize(msg, buttons, true);
+						}
+					} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
+						JSONObject newJa = new JSONObject(btns.toString());
+						if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
+						else newJa.remove(jo.getString("msgId"));
+						gc.setButtonConfigs(newJa);
+						GuildDAO.updateGuildSettings(gc);
 					}
-				} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
-					JSONObject newJa = new JSONObject(btns.toString());
-					if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
-					else newJa.remove(jo.getString("msgId"));
-					gc.setButtonConfigs(newJa);
-					GuildDAO.updateGuildSettings(gc);
+				} catch (JSONException e) {
+					logger(Helper.class).info("Error in buttons JSON: " + source.toString());
 				}
 			});
 	}
