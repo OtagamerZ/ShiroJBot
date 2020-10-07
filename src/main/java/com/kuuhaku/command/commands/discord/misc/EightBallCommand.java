@@ -20,9 +20,11 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class EightBallCommand extends Command {
@@ -51,10 +53,11 @@ public class EightBallCommand extends Command {
 		}
 
 		String[] res = new String[]{"Sim", "Não", "Provavelmente sim", "Provavelmente não", "Talvez", "Prefiro não responder"};
-		long seed = 0;
 		String question = String.join(" ", args);
 
-		for (char c : question.toLowerCase().toCharArray()) {
+		String preSeed = Helper.hash((question + author.getId()).getBytes(StandardCharsets.UTF_8), "SHA-1");
+		long seed = 0;
+		for (char c : preSeed.toCharArray()) {
 			seed += (int) c;
 		}
 
