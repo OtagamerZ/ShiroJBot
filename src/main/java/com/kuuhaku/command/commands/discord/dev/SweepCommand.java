@@ -78,8 +78,16 @@ public class SweepCommand extends Command {
 				if (guildTrashBin.contains(mb.getSid()) || Main.getInfo().getGuildByID(mb.getSid()) == null)
 					memberTrashBin.add(mb.getId());
 				else try {
-					if (Main.getInfo().getGuildByID(mb.getSid()).retrieveMemberById(mb.getMid()).submit().get() == null)
-						memberTrashBin.add(mb.getId());
+					Member m = Main.getInfo().getGuildByID(mb.getSid())
+							.retrieveMemberById(mb.getMid())
+							.submit()
+							.exceptionally(e -> {
+								memberTrashBin.add(mb.getId());
+								return null;
+							})
+							.get();
+
+					if (m == null) memberTrashBin.add(mb.getId());
 				} catch (InterruptedException | ExecutionException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
