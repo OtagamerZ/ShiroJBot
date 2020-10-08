@@ -385,7 +385,7 @@ public class Shoukan extends Game {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `S` ou `N` para definir se a carta estará virada para baixo ou não.").queue();
 						return;
 					} else if (h.getMana() < ((Champion) d).getMana()) {
-						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno com `finalizar` ou jogue cartas de equipamento.").queue();
+						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento.").queue();
 						return;
 					}
 
