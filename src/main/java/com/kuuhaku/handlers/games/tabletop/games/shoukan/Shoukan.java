@@ -287,7 +287,7 @@ public class Shoukan extends Game {
 		if (phase == Phase.PLAN) {
 			try {
 				List<SlotColumn<Drawable, Drawable>> slots = arena.getSlots().get(h.getSide());
-				if (args.length == 1 && StringUtils.isNumeric(args[0])) {
+				if (args.length == 1) {
 					if (index < 0 || index >= slots.size()) {
 						channel.sendMessage("❌ | Índice inválido.").queue();
 						return;
@@ -468,7 +468,7 @@ public class Shoukan extends Game {
 						if (slt.getTop() == null) {
 							slt.setTop(aFusion.copy());
 							if (aFusion.hasEffect() && !aFusion.isFlipped())
-								aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, Integer.parseInt(args[1]), h.getSide(), Duelists.of(aFusion, null)));
+								aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, Integer.parseInt(args[1]) - 1, h.getSide(), Duelists.of(aFusion, null)));
 							break;
 						}
 					}
@@ -496,7 +496,7 @@ public class Shoukan extends Game {
 				List<SlotColumn<Drawable, Drawable>> hisSide = arena.getSlots().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
 
 				if (args.length == 1) {
-					if (is[0] < 1 || is[0] > yourSide.size()) {
+					if (is[0] < 0 || is[0] >= yourSide.size()) {
 						channel.sendMessage("❌ | Índice inválido.").queue();
 						return;
 					}
@@ -529,9 +529,10 @@ public class Shoukan extends Game {
 					c.setAvailable(false);
 
 					if (this.message != null) this.message.delete().queue();
-					this.message = channel.sendMessage("Você atacou o diretamente o inimigo.")
+					this.message = channel.sendMessage("Você atacou diretamente o inimigo.")
 							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 					Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
+					postCombat();
 					return;
 				}
 
@@ -548,7 +549,7 @@ public class Shoukan extends Game {
 					channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue();
 					return;
 				} else if (yours.isDefending()) {
-					channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixoem modo de defesa.").queue();
+					channel.sendMessage("❌ | Você não pode atacar com cartas em modo de defesa.").queue();
 					return;
 				}
 
@@ -605,20 +606,12 @@ public class Shoukan extends Game {
 				}
 
 				Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
+				postCombat();
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue();
 			} catch (NumberFormatException e) {
 				channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser uma casa com uma carta no seu lado do tabuleiro e o segundo deve ser uma casa com uma carta no lado do inimigo.").queue();
 			}
-		}
-
-		if (getHandById(getBoard().getPlayers().get(1).getId()).getHp() <= 0) {
-			if (this.message != null) this.message.delete().queue();
-			this.message = channel.sendMessage(getCurrent().getAsMention() + " zerou os pontos de vida de " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
-					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
-
-			getBoard().awardWinner(this, getCurrent().getId());
-			close();
 		}
 	}
 
@@ -672,6 +665,17 @@ public class Shoukan extends Game {
 				return slot;
 		}
 		return null;
+	}
+
+	public void postCombat() {
+		if (getHandById(getBoard().getPlayers().get(1).getId()).getHp() <= 0) {
+			if (this.message != null) this.message.delete().queue();
+			this.message = channel.sendMessage(getCurrent().getAsMention() + " zerou os pontos de vida de " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
+					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
+
+			getBoard().awardWinner(this, getCurrent().getId());
+			close();
+		}
 	}
 
 	@Override
