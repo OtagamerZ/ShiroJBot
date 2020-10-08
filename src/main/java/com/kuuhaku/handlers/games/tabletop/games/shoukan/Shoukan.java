@@ -496,12 +496,12 @@ public class Shoukan extends Game {
 				List<SlotColumn<Drawable, Drawable>> hisSide = arena.getSlots().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
 
 				if (args.length == 1) {
-					if (is[0] < 0 || is[0] >= yourSide.size()) {
+					if (is[0] < 1 || is[0] > yourSide.size()) {
 						channel.sendMessage("❌ | Índice inválido.").queue();
 						return;
 					}
 
-					Champion c = (Champion) yourSide.get(Integer.parseInt(args[0])).getTop();
+					Champion c = (Champion) yourSide.get(is[0]).getTop();
 
 					if (c == null) {
 						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue();
