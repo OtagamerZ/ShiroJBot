@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NonNls;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class SweepCommand extends Command {
@@ -76,8 +77,12 @@ public class SweepCommand extends Command {
 			mbs.forEach(mb -> {
 				if (guildTrashBin.contains(mb.getSid()) || Main.getInfo().getGuildByID(mb.getSid()) == null)
 					memberTrashBin.add(mb.getId());
-				else if (Main.getInfo().getGuildByID(mb.getSid()).retrieveMemberById(mb.getMid()).complete() == null)
-					memberTrashBin.add(mb.getId());
+				else try {
+					if (Main.getInfo().getGuildByID(mb.getSid()).retrieveMemberById(mb.getMid()).submit().get() == null)
+						memberTrashBin.add(mb.getId());
+				} catch (InterruptedException | ExecutionException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
 			});
 
 			if (guildTrashBin.size() + memberTrashBin.size() > 0) {
