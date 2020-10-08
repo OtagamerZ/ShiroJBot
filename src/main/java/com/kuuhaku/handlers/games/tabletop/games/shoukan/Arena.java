@@ -23,6 +23,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.Helper;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -70,8 +71,8 @@ public class Arena {
 
 	public BufferedImage render(Map<Side, Hand> hands) {
 		try {
-			BufferedImage bg = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("arena.jpg")));
-			BufferedImage frames = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("frames.png")));
+			BufferedImage bg = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/arena.jpg")));
+			BufferedImage frames = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/frames.png")));
 
 			Graphics2D g2d = bg.createGraphics();
 
@@ -139,6 +140,7 @@ public class Arena {
 
 			return bg;
 		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
 	}
