@@ -118,8 +118,7 @@ public class Chess extends Game {
 
 		return condition
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
-				.and(e -> e.getMessage().getContentRaw().length() == 4)
-				.or(e -> e.getMessage().getContentRaw().equalsIgnoreCase("ff"))
+				.and(e -> e.getMessage().getContentRaw().length() == 4 || e.getMessage().getContentRaw().equalsIgnoreCase("ff"))
 				.and(e -> {
 					char[] chars = e.getMessage().getContentRaw().toCharArray();
 					if (e.getMessage().getContentRaw().equalsIgnoreCase("ff")) return true;
