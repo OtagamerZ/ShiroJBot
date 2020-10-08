@@ -98,7 +98,7 @@ public class SweepCommand extends Command {
 				List<List<String>> chunks = Helper.chunkify(e.getValue(), 100);
 				for (List<String> ids : chunks) {
 					foundIds.addAll(
-							g.retrieveMembersByIds(ids.toArray(String[]::new)).get()
+							g.retrieveMembersByIds(false, ids.toArray(String[]::new)).get()
 									.stream()
 									.map(Member::getId)
 									.collect(Collectors.toList())
