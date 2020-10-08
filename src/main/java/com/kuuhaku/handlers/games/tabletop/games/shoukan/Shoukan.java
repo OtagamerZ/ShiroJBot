@@ -264,7 +264,7 @@ public class Shoukan extends Game {
 
 			hd.draw();
 			hd.showHand();
-			remaining = 5 - h.getCards().size();
+			remaining = 5 - hd.getCards().size();
 			if (this.message != null) this.message.delete().queue();
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
