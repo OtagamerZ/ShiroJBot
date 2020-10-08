@@ -69,20 +69,15 @@ public class SweepCommand extends Command {
 			Set<String> memberTrashBin = new HashSet<>();
 
 			gds.forEach(gd -> {
-				try {
-					assert Main.getInfo().getGuildByID(gd.getGuildID()) != null;
-				} catch (AssertionError e) {
+				if (Main.getInfo().getGuildByID(gd.getGuildID()) == null)
 					guildTrashBin.add(gd.getGuildID());
-				}
 			});
 
 			mbs.forEach(mb -> {
-				if (guildTrashBin.contains(mb.getSid())) memberTrashBin.add(mb.getId());
-				else try {
-					assert Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getMid()) != null;
-				} catch (AssertionError e) {
+				if (guildTrashBin.contains(mb.getSid()))
 					memberTrashBin.add(mb.getId());
-				}
+				else if (Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getMid()) == null)
+					memberTrashBin.add(mb.getId());
 			});
 
 			if (guildTrashBin.size() + memberTrashBin.size() > 0) {
