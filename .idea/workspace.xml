@@ -747,21 +747,7 @@
       <workItem from="1602015336763" duration="1843000" />
       <workItem from="1602073656929" duration="2157000" />
       <workItem from="1602086724508" duration="4335000" />
-      <workItem from="1602158485227" duration="5761000" />
-    </task>
-    <task id="LOCAL-02541" summary="Novos comandos referentes ao módulo Shoukan">
-      <created>1601665402275</created>
-      <option name="number" value="02541" />
-      <option name="presentableId" value="LOCAL-02541" />
-      <option name="project" value="LOCAL" />
-      <updated>1601665402275</updated>
-    </task>
-    <task id="LOCAL-02542" summary="Novos comandos referentes ao módulo Shoukan">
-      <created>1601666290334</created>
-      <option name="number" value="02542" />
-      <option name="presentableId" value="LOCAL-02542" />
-      <option name="project" value="LOCAL" />
-      <updated>1601666290335</updated>
+      <workItem from="1602158485227" duration="6419000" />
     </task>
     <task id="LOCAL-02543" summary="Novos comandos referentes ao módulo Shoukan">
       <created>1601667821171</created>
@@ -1092,7 +1078,21 @@
       <option name="project" value="LOCAL" />
       <updated>1602163912026</updated>
     </task>
-    <option name="localTasksCounter" value="2590" />
+    <task id="LOCAL-02590" summary="Correção no sweeper">
+      <created>1602164464342</created>
+      <option name="number" value="02590" />
+      <option name="presentableId" value="LOCAL-02590" />
+      <option name="project" value="LOCAL" />
+      <updated>1602164464342</updated>
+    </task>
+    <task id="LOCAL-02591" summary="Correção no sweeper">
+      <created>1602164691674</created>
+      <option name="number" value="02591" />
+      <option name="presentableId" value="LOCAL-02591" />
+      <option name="project" value="LOCAL" />
+      <updated>1602164691674</updated>
+    </task>
+    <option name="localTasksCounter" value="2592" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1237,11 +1237,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602163909287">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602164688963">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602163909287" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602164688963" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1298,11 +1298,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602163913312">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602164693458">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602163913312" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602164693458" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
