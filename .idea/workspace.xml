@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -737,14 +735,7 @@
       <workItem from="1602086724508" duration="4335000" />
       <workItem from="1602158485227" duration="7076000" />
       <workItem from="1602172964154" duration="7997000" />
-      <workItem from="1602183189239" duration="2310000" />
-    </task>
-    <task id="LOCAL-02554" summary="Novos comandos referentes ao módulo Shoukan">
-      <created>1601672272408</created>
-      <option name="number" value="02554" />
-      <option name="presentableId" value="LOCAL-02554" />
-      <option name="project" value="LOCAL" />
-      <updated>1601672272408</updated>
+      <workItem from="1602183189239" duration="2620000" />
     </task>
     <task id="LOCAL-02555" summary="Correção do problema de multi-clique nos botões de confirmação">
       <created>1601905560376</created>
@@ -1082,7 +1073,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602184721929</updated>
     </task>
-    <option name="localTasksCounter" value="2603" />
+    <task id="LOCAL-02603" summary="Correções menores">
+      <created>1602185827491</created>
+      <option name="number" value="02603" />
+      <option name="presentableId" value="LOCAL-02603" />
+      <option name="project" value="LOCAL" />
+      <updated>1602185827491</updated>
+    </task>
+    <option name="localTasksCounter" value="2604" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1227,11 +1225,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602184719205">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602185824578">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602184719205" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602185824578" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1288,11 +1286,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602184733154">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602185838899">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602184733154" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602185838899" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1317,11 +1315,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1680.1010@0.0.1680.1010" timestamp="1598041461186" />
-    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1601916941700">
+    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1602185652186">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="254" y="43" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1366.768@0.0.1366.768" timestamp="1593921071276" />
-    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1601916941700" />
+    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602185652186" />
     <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1601648967281">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
