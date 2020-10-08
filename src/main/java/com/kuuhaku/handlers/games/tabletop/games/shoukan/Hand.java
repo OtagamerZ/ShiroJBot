@@ -125,7 +125,7 @@ public class Hand {
 
 		user.openPrivateChannel().complete()
 				.sendMessage("Escolha uma carta para jogar ou use os botões na mensagem enviada para render-se, comprar uma carta ou mudar de turno.")
-				.addFile(Helper.getBytes(bi), "hand.png")
+				.addFile(Helper.getBytes(bi, "png"), "hand.png")
 				.queue();
 	}
 
