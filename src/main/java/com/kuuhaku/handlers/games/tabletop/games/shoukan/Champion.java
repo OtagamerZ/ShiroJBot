@@ -135,7 +135,7 @@ public class Champion implements Drawable, Cloneable {
 
 		if (defending) {
 			try {
-				BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("defense_mode.png")));
+				BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/defense_mode.png")));
 				g2d.drawImage(dm, 0, 0, null);
 			} catch (IOException ignore) {
 			}

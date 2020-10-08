@@ -177,7 +177,6 @@ public class Shoukan extends Game {
 				.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 		Pages.buttonize(message, buttons, false, 3, TimeUnit.MINUTES, u -> u.getId().equals(getCurrent().getId()));
 		getHandler().addEventListener(listener);
-		System.out.println("Added listener");
 		h.showHand();
 	}
 
