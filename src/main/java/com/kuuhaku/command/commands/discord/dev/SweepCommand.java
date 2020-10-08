@@ -74,9 +74,9 @@ public class SweepCommand extends Command {
 			});
 
 			mbs.forEach(mb -> {
-				if (guildTrashBin.contains(mb.getSid()))
+				if (guildTrashBin.contains(mb.getSid()) || Main.getInfo().getGuildByID(mb.getSid()) == null)
 					memberTrashBin.add(mb.getId());
-				else if (Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getMid()) == null)
+				else if (Main.getInfo().getGuildByID(mb.getSid()).retrieveMemberById(mb.getMid()).complete() == null)
 					memberTrashBin.add(mb.getId());
 			});
 
