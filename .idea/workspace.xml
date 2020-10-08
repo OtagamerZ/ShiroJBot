@@ -13,7 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -733,14 +737,7 @@
       <workItem from="1602015336763" duration="1843000" />
       <workItem from="1602073656929" duration="2157000" />
       <workItem from="1602086724508" duration="4335000" />
-      <workItem from="1602158485227" duration="1835000" />
-    </task>
-    <task id="LOCAL-02532" summary="Correções gerais">
-      <created>1601648069951</created>
-      <option name="number" value="02532" />
-      <option name="presentableId" value="LOCAL-02532" />
-      <option name="project" value="LOCAL" />
-      <updated>1601648069951</updated>
+      <workItem from="1602158485227" duration="2141000" />
     </task>
     <task id="LOCAL-02533" summary="Correções gerais">
       <created>1601648175428</created>
@@ -1078,7 +1075,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602160464193</updated>
     </task>
-    <option name="localTasksCounter" value="2581" />
+    <task id="LOCAL-02581" summary="Correção no sweeper">
+      <created>1602160808206</created>
+      <option name="number" value="02581" />
+      <option name="presentableId" value="LOCAL-02581" />
+      <option name="project" value="LOCAL" />
+      <updated>1602160808206</updated>
+    </task>
+    <option name="localTasksCounter" value="2582" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
