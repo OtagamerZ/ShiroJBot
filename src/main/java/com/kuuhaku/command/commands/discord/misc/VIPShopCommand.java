@@ -57,7 +57,7 @@ public class VIPShopCommand extends Command {
 		if (args.length == 0) {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setTitle(":diamonds: | Loja VIP");
-			eb.setDescription("Gemas podem ser obtidos ao resgatar um acúmulo de 7 votos seguidos com o comando `" + prefix + "resgatar`. Para utilizar as gemas basta usar `" + prefix + "vip ID`!\n\n" +
+			eb.setDescription("Gemas podem ser obtidas ao resgatar um acúmulo de 7 votos seguidos com o comando `" + prefix + "resgatar`. Para utilizar as gemas basta usar `" + prefix + "vip ID`!\n\n" +
 							  "Muito obrigada por me apoiar!"
 			);
 			for (VipItem v : VipItem.values()) eb.addField(v.getField());
