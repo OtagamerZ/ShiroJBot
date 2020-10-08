@@ -164,19 +164,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -750,14 +737,8 @@
       <workItem from="1602073656929" duration="2157000" />
       <workItem from="1602086724508" duration="4335000" />
       <workItem from="1602158485227" duration="7076000" />
-      <workItem from="1602172964154" duration="5169000" />
-    </task>
-    <task id="LOCAL-02551" summary="Novos comandos referentes ao módulo Shoukan">
-      <created>1601669972899</created>
-      <option name="number" value="02551" />
-      <option name="presentableId" value="LOCAL-02551" />
-      <option name="project" value="LOCAL" />
-      <updated>1601669972899</updated>
+      <workItem from="1602172964154" duration="7997000" />
+      <workItem from="1602183189239" duration="498000" />
     </task>
     <task id="LOCAL-02552" summary="Novos comandos referentes ao módulo Shoukan">
       <created>1601671252424</created>
@@ -1095,7 +1076,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602176770647</updated>
     </task>
-    <option name="localTasksCounter" value="2600" />
+    <task id="LOCAL-02600" summary="Correção nos argumentos do Shoukan">
+      <created>1602178245595</created>
+      <option name="number" value="02600" />
+      <option name="presentableId" value="LOCAL-02600" />
+      <option name="project" value="LOCAL" />
+      <updated>1602178245595</updated>
+    </task>
+    <option name="localTasksCounter" value="2601" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1301,11 +1289,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602176772260">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602178253270">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602176772260" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602178253270" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
