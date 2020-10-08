@@ -85,13 +85,13 @@ public class ShoukanCommand extends Command {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Kawaipon target = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
 
-		if (kp.getChampions().size() < 36) {
+		/*if (kp.getChampions().size() < 36) {
 			channel.sendMessage("❌ | É necessário ter ao menos 36 cartas no deck para poder jogar Shoukan.").queue();
 			return;
 		} else if (target.getChampions().size() < 36) {
 			channel.sendMessage("❌ | " + message.getMentionedUsers().get(0).getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 36 cartas para poder jogar Shoukan.").queue();
 			return;
-		}
+		}*/
 
 		String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
 
@@ -109,7 +109,7 @@ public class ShoukanCommand extends Command {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		Game t = new Shoukan(Main.getInfo().getAPI(), (TextChannel) channel, 0, author, message.getMentionedUsers().get(0));
+		Game t = new Shoukan(Main.getInfo().getAPI(), (TextChannel) channel, 0, message.getMentionedUsers().get(0), author);
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
