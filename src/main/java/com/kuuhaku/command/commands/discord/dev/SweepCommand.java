@@ -85,6 +85,8 @@ public class SweepCommand extends Command {
 			Set<String> foundIds = new HashSet<>();
 			int total = mbs.size();
 			int processed = 0;
+			int percent;
+			int lastPercent = 0;
 			for (Map.Entry<String, List<String>> e : members.entrySet()) {
 				if (guildTrashBin.contains(e.getKey())) {
 					memberTrashBin.addAll(e.getValue());
@@ -102,8 +104,13 @@ public class SweepCommand extends Command {
 									.collect(Collectors.toList())
 					);
 				}
+
 				processed += e.getValue().size();
-				s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + total + " membros | " + Helper.prcntToInt(processed, total) + "%)").queue();
+				percent = Helper.prcntToInt(processed, total);
+				if (percent > lastPercent) {
+					s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + total + " membros | " + percent + "%)").queue();
+					lastPercent = percent;
+				}
 			}
 
 			memberTrashBin.addAll(
