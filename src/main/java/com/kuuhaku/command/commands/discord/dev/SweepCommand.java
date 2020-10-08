@@ -96,12 +96,9 @@ public class SweepCommand extends Command {
 
 				Guild g = Main.getInfo().getGuildByID(e.getKey());
 				List<List<String>> chunks = Helper.chunkify(e.getValue(), 100);
-				for (int i = 0; i < chunks.size(); i++) {
-					if (chunks.size() > 1)
-						Helper.logger(this.getClass()).info("GID " + e.getKey() + " | Processing chunk " + (i + 1) + " of " + chunks.size());
-
+				for (List<String> chunk : chunks) {
 					foundIds.addAll(
-							g.retrieveMembersByIds(false, chunks.get(i).toArray(String[]::new)).get()
+							g.retrieveMembersByIds(false, chunk.toArray(String[]::new)).get()
 									.stream()
 									.map(Member::getId)
 									.collect(Collectors.toList())
