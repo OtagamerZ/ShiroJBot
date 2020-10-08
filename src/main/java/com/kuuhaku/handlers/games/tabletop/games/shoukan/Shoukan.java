@@ -92,6 +92,7 @@ public class Shoukan extends Game {
 	public void start() {
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("▶️", (mb, ms) -> {
+			getHandById(getCurrent().getId()).getCards().removeIf(d -> !d.isAvailable());
 			if (getRound() < 1 || phase == Phase.ATTACK) {
 				User u = getCurrent();
 				resetTimer();
@@ -129,7 +130,6 @@ public class Shoukan extends Game {
 
 			channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue();
 			phase = Phase.ATTACK;
-			getHandById(getCurrent().getId()).getCards().removeIf(d -> !d.isAvailable());
 			resetTimerKeepTurn();
 		});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
@@ -198,6 +198,7 @@ public class Shoukan extends Game {
 
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("▶️", (mb, ms) -> {
+			getHandById(getCurrent().getId()).getCards().removeIf(d -> !d.isAvailable());
 			if (getRound() < 1 || phase == Phase.ATTACK) {
 				User u = getCurrent();
 				resetTimer();
@@ -235,7 +236,6 @@ public class Shoukan extends Game {
 
 			channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue();
 			phase = Phase.ATTACK;
-			getHandById(getCurrent().getId()).getCards().removeIf(d -> !d.isAvailable());
 			resetTimerKeepTurn();
 		});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
