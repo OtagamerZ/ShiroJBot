@@ -20,19 +20,22 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-public abstract class Duelists extends Pair<Champion, Champion> {
-	private Duelists() {
+public class Duelists {
+	private final Pair<Champion, Champion> duelists;
+
+	private Duelists(Champion attacker, Champion defender) {
+		this.duelists = Pair.of(attacker, defender);
 	}
 
 	public static Duelists of(Champion attacker, Champion defender) {
-		return (Duelists) Pair.of(attacker, defender);
+		return new Duelists(attacker, defender);
 	}
 
 	public Champion getAttacker() {
-		return getLeft();
+		return duelists.getLeft();
 	}
 
 	public Champion getDefender() {
-		return getRight();
+		return duelists.getRight();
 	}
 }
