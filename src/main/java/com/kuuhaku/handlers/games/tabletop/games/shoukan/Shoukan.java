@@ -118,7 +118,7 @@ public class Shoukan extends Game {
 
 				if (this.message != null) this.message.delete().queue();
 				this.message = channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
-						.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 				Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				hd.showHand();
 				for (int i = 0; i < 5; i++) {
@@ -150,7 +150,7 @@ public class Shoukan extends Game {
 			if (h.getDeque().size() == 0) {
 				if (this.message != null) this.message.delete().queue();
 				this.message = channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
-						.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
 				getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 				close();
@@ -161,7 +161,7 @@ public class Shoukan extends Game {
 			remaining = 5 - h.getCards().size();
 			if (this.message != null) this.message.delete().queue();
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")")
-					.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 			Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 			resetTimerKeepTurn();
 		});
@@ -170,13 +170,11 @@ public class Shoukan extends Game {
 			getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 			close();
 		});
-		System.out.println("Created buttons");
 
 		Hand h = getHandById(getCurrent().getId());
 		h.addMana(5);
-		System.out.println("Initialized first player hand");
 		message = channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
-				.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+				.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 		Pages.buttonize(message, buttons, false, 3, TimeUnit.MINUTES, u -> u.getId().equals(getCurrent().getId()));
 		getHandler().addEventListener(listener);
 		System.out.println("Added listener");
@@ -227,7 +225,7 @@ public class Shoukan extends Game {
 
 				if (this.message != null) this.message.delete().queue();
 				this.message = channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
-						.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 				Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				hd.showHand();
 				for (int i = 0; i < 5; i++) {
@@ -259,7 +257,7 @@ public class Shoukan extends Game {
 			if (hd.getDeque().size() == 0) {
 				if (this.message != null) this.message.delete().queue();
 				this.message = channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
-						.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
 				getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 				close();
@@ -270,7 +268,7 @@ public class Shoukan extends Game {
 			remaining = 5 - h.getCards().size();
 			if (this.message != null) this.message.delete().queue();
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")")
-					.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 			Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 			resetTimerKeepTurn();
 		});
@@ -316,19 +314,19 @@ public class Shoukan extends Game {
 
 						if (this.message != null) this.message.delete().queue();
 						this.message = channel.sendMessage("Carta virada para cima em modo de defesa.")
-								.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 						Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
 						changed[index] = true;
 					} else if (!c.isDefending()) {
 						if (this.message != null) this.message.delete().queue();
 						this.message = channel.sendMessage("Carta trocada para modo de ataque.")
-								.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 						Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
 						changed[index] = true;
 					} else {
 						if (this.message != null) this.message.delete().queue();
 						this.message = channel.sendMessage("Carta trocada para modo de defesa.")
-								.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 						Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
 						changed[index] = true;
 					}
@@ -533,7 +531,7 @@ public class Shoukan extends Game {
 
 					if (this.message != null) this.message.delete().queue();
 					this.message = channel.sendMessage("Você atacou o diretamente o inimigo.")
-							.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 					Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
 					return;
 				}
@@ -586,7 +584,7 @@ public class Shoukan extends Game {
 
 					if (this.message != null) this.message.delete().queue();
 					this.message = channel.sendMessage("Sua carta derrotou a carta inimiga! (" + yPower + " > " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 				} else if (yPower < hPower) {
 					his.resetAttribs();
 					if (yours.hasEffect())
@@ -597,14 +595,14 @@ public class Shoukan extends Game {
 
 					if (this.message != null) this.message.delete().queue();
 					this.message = channel.sendMessage("Sua carta foi derrotada pela carta inimiga! (" + yPower + " < " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 				} else {
 					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1], hisSide);
 					killCard(h.getSide(), is[0], yourSide);
 
 					if (this.message != null) this.message.delete().queue();
 					this.message = channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 				}
 
 				Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
@@ -618,7 +616,7 @@ public class Shoukan extends Game {
 		if (getHandById(getBoard().getPlayers().get(1).getId()).getHp() <= 0) {
 			if (this.message != null) this.message.delete().queue();
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " zerou os pontos de vida de " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
-					.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
+					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
 			getBoard().awardWinner(this, getCurrent().getId());
 			close();
