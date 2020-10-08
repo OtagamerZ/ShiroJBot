@@ -31,11 +31,9 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class SweepCommand extends Command {
 
@@ -69,29 +67,46 @@ public class SweepCommand extends Command {
 			Set<String> guildTrashBin = new HashSet<>();
 			Set<String> memberTrashBin = new HashSet<>();
 
+			s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + gds.size() + " guilds)").queue();
+
 			gds.forEach(gd -> {
 				if (Main.getInfo().getGuildByID(gd.getGuildID()) == null)
 					guildTrashBin.add(gd.getGuildID());
 			});
 
-			mbs.forEach(mb -> {
-				if (guildTrashBin.contains(mb.getSid()) || Main.getInfo().getGuildByID(mb.getSid()) == null)
-					memberTrashBin.add(mb.getId());
-				else try {
-					Member m = Main.getInfo().getGuildByID(mb.getSid())
-							.retrieveMemberById(mb.getMid())
-							.submit()
-							.exceptionally(e -> {
-								memberTrashBin.add(mb.getId());
-								return null;
-							})
-							.get();
+			s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + mbs.size() + " membros)").queue();
 
-					if (m == null) memberTrashBin.add(mb.getId());
-				} catch (InterruptedException | ExecutionException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-				}
+			Map<String, List<String>> members = new HashMap<>();
+			mbs.forEach(mb -> {
+				members.putIfAbsent(mb.getSid(), new ArrayList<>());
+				members.get(mb.getSid()).add(mb.getMid());
 			});
+
+			Set<String> foundIds = new HashSet<>();
+			for (Map.Entry<String, List<String>> e : members.entrySet()) {
+				if (guildTrashBin.contains(e.getKey())) {
+					memberTrashBin.addAll(e.getValue());
+					continue;
+				}
+
+				Guild g = Main.getInfo().getGuildByID(e.getKey());
+				List<List<String>> chunks = Helper.chunkify(e.getValue(), 100);
+				for (List<String> ids : chunks) {
+					foundIds.addAll(
+							g.retrieveMembersByIds(ids.toArray(String[]::new)).get()
+									.stream()
+									.map(Member::getId)
+									.collect(Collectors.toList())
+					);
+				}
+			}
+
+			memberTrashBin.addAll(
+					mbs.stream()
+							.map(com.kuuhaku.model.persistent.Member::getSid)
+							.filter(id -> !foundIds.contains(id))
+							.collect(Collectors.toList())
+			);
 
 			if (guildTrashBin.size() + memberTrashBin.size() > 0) {
 				String hash = Helper.generateHash(guild, author);
