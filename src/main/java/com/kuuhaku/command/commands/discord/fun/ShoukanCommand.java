@@ -109,7 +109,7 @@ public class ShoukanCommand extends Command {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		Game t = new Shoukan(Main.getInfo().getAPI(), (TextChannel) channel, 0, message.getMentionedUsers().get(0), author);
+		Game t = new Shoukan(Main.getInfo().getAPI(), (TextChannel) channel, 0, author, message.getMentionedUsers().get(0));
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
