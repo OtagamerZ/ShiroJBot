@@ -61,7 +61,7 @@ public class Shoukan extends Game {
 	};
 	private Message message = null;
 	private Phase phase = Phase.PLAN;
-	private List<Champion> ultimates = CardDAO.getFusions();
+	private final List<Champion> ultimates = CardDAO.getFusions();
 	private final boolean[] changed = {false, false, false, false, false};
 
 	public Shoukan(JDA handler, TextChannel channel, int bet, User... players) {
@@ -170,13 +170,16 @@ public class Shoukan extends Game {
 			getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 			close();
 		});
+		System.out.println("Created buttons");
 
 		Hand h = getHandById(getCurrent().getId());
 		h.addMana(5);
+		System.out.println("Initialized first player hand");
 		message = channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
 				.addFile(Helper.getBytes(arena.render(hands), "png"), "board.jpg").complete();
 		Pages.buttonize(message, buttons, false, 3, TimeUnit.MINUTES, u -> u.getId().equals(getCurrent().getId()));
 		getHandler().addEventListener(listener);
+		System.out.println("Added listener");
 		h.showHand();
 	}
 
