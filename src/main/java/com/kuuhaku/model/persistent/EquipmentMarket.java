@@ -30,7 +30,7 @@ import java.util.Date;
 @Table(name = "equipmentmarket")
 public class EquipmentMarket {
 	@Id
-	@SequenceGenerator(name = "equipmentmarket_id_seq", sequenceName = "cardmarket_id_seq")
+	@SequenceGenerator(name = "equipmentmarket_id_seq", sequenceName = "cardmarket_id_seq", allocationSize = 1)
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
