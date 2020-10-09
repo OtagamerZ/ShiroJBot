@@ -96,14 +96,19 @@ public class SweepCommand extends Command {
 
 				Guild g = Main.getInfo().getGuildByID(e.getKey());
 				if (g == null) {
-					System.out.println("Guild " + e.getKey() + " is null");
-				} else
+					guildTrashBin.add(e.getKey());
+					memberTrashBin.addAll(e.getValue());
+					total -= e.getValue().size();
+					continue;
+				} else {
+					List<Member> membrs = g.loadMembers().get();
 					foundIds.addAll(
-							g.loadMembers().get()
-									.stream()
+							membrs.stream()
 									.map(Member::getId)
 									.collect(Collectors.toList())
 					);
+					System.out.println("GID " + e.getKey() + ": Loaded " + membrs.size() + " members");
+				}
 
 				processed += e.getValue().size();
 				percent = Helper.prcntToInt(processed, total);
@@ -124,7 +129,7 @@ public class SweepCommand extends Command {
 				String hash = Helper.generateHash(guild, author);
 				ShiroInfo.getHashes().add(hash);
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				s.editMessage(":warning: | Foram encontrados " + guildTrashBin.size() + " índices de servidores e " + memberTrashBin + " membros inexistentes, deseja executar a limpeza?").queue(m ->
+				s.editMessage(":warning: | Foram encontrados " + guildTrashBin.size() + " índices de servidores e " + memberTrashBin.size() + " membros inexistentes, deseja executar a limpeza?").queue(m ->
 						Pages.buttonize(m, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
