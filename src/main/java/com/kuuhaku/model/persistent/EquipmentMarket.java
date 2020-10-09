@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ *  
  * You should have received a copy of the GNU General Public License
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
@@ -30,7 +30,7 @@ import java.util.Date;
 @Table(name = "equipmentmarket")
 public class EquipmentMarket {
 	@Id
-	@SequenceGenerator(name = "cardmarket_id_seq")
+	@SequenceGenerator(name = "equipmentmarket_id_seq", sequenceName = "cardmarket_id_seq")
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
