@@ -27,6 +27,7 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
@@ -35,6 +36,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NonNls;
@@ -107,9 +109,9 @@ public class SynthesizeCardCommand extends Command {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Possíveis resultados")
-				.addField("Equipamento tier 1", "Chance de " + (Helper.round(tier1 * 100, 1)) + "%", false)
-				.addField("Equipamento tier 2", "Chance de " + (Helper.round(tier2 * 100, 1)) + "%", false)
-				.addField("Equipamento tier 3", "Chance de " + (Helper.round(tier3 * 100, 1)) + "%", false);
+				.addField(KawaiponRarity.COMMON.getEmote() + " | Equipamento tier 1 (\uD83D\uDFCA)", "Chance de " + (Helper.round(tier1 * 100, 1)) + "%", false)
+				.addField(KawaiponRarity.RARE.getEmote() + " | Equipamento tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier2 * 100, 1)) + "%", false)
+				.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Equipamento tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier3 * 100, 1)) + "%", false);
 
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
@@ -136,9 +138,11 @@ public class SynthesizeCardCommand extends Command {
 							}
 
 							kp.addEquipment(e);
+							tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
 							KawaiponDAO.saveKawaipon(kp);
 
-							channel.sendMessage("Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**!").queue();
+							String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
+							channel.sendMessage("Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
 						}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
 							ShiroInfo.getHashes().remove(hash);
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
