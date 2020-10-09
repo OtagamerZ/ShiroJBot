@@ -23,6 +23,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.persistence.*;
@@ -70,7 +71,7 @@ public class Equipment implements Drawable, Cloneable {
 			g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);
 			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
-			Profile.drawOutlinedText(card.getName(), 13, 32, g2d);
+			Profile.drawOutlinedText("(" + StringUtils.repeat("\uD83D\uDFCA", tier) + ") " + card.getName(), 13, 32, g2d);
 
 			g2d.setColor(Color.red);
 			Profile.drawOutlinedText(String.valueOf(atk), 45, 316, g2d);
