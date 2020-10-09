@@ -269,7 +269,7 @@ public class CardDAO {
 	public static Champion getChampion(String name) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id = :card", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id = UPPER(:card)", Champion.class);
 		q.setParameter("card", name);
 
 		try {
@@ -299,7 +299,7 @@ public class CardDAO {
 	public static Equipment getEquipment(String name) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT e FROM Equipment e WHERE card.id = :card", Equipment.class);
+		Query q = em.createQuery("SELECT e FROM Equipment e WHERE card.id = UPPER(:card)", Equipment.class);
 		q.setParameter("card", name);
 
 		try {
