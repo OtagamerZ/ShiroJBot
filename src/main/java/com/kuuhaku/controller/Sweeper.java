@@ -20,6 +20,7 @@ package com.kuuhaku.controller;
 
 import com.kuuhaku.controller.postgresql.Manager;
 import com.kuuhaku.utils.Helper;
+import org.intellij.lang.annotations.Language;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -31,36 +32,28 @@ public class Sweeper {
 		EntityManager pem = Manager.getEntityManager();
 		EntityManager sem = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
 
-		Query qServer;
-		Query qLocal;
-		sem.getTransaction().begin();
-		pem.getTransaction().begin();
 		List<List<String>> gids = Helper.chunkify(guildIDs, 1000);
-		qServer = sem.createQuery("DELETE FROM GuildConfig WHERE guildID IN :ids");
-		qLocal = pem.createQuery("DELETE FROM GuildConfig WHERE guildID IN :ids");
-
-		for (List<String> ids : gids) {
-			qServer.setParameter("ids", ids);
-			qLocal.setParameter("ids", ids);
-			qServer.executeUpdate();
-			qLocal.executeUpdate();
-		}
-
 		List<List<String>> mids = Helper.chunkify(memberIDs, 1000);
-		qServer = sem.createQuery("DELETE FROM Member WHERE id IN :ids");
-		qLocal = pem.createQuery("DELETE FROM Member WHERE id IN :ids");
 
-		for (List<String> ids : mids) {
-			qServer.setParameter("ids", ids);
-			qLocal.setParameter("ids", ids);
-			qServer.executeUpdate();
-			qLocal.executeUpdate();
-		}
-
-		pem.getTransaction().commit();
-		sem.getTransaction().commit();
+		executeSweep(pem, gids, "DELETE FROM GuildConfig WHERE guildID IN :ids");
+		executeSweep(pem, mids, "DELETE FROM Member WHERE id IN :ids");
+		executeSweep(sem, gids, "DELETE FROM GuildConfig WHERE guildID IN :ids");
+		executeSweep(sem, mids, "DELETE FROM Member WHERE id IN :ids");
 
 		sem.close();
 		pem.close();
+	}
+
+	private static void executeSweep(EntityManager em, List<List<String>> chunks, @Language("JPAQL") String query) {
+		em.getTransaction().begin();
+
+		Query q = em.createQuery(query);
+		for (List<String> ids : chunks) {
+			q.setParameter("ids", ids);
+			q.executeUpdate();
+		}
+
+		em.getTransaction().commit();
+		em.close();
 	}
 }

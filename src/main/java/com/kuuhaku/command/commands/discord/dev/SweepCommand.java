@@ -94,7 +94,7 @@ public class SweepCommand extends Command {
 				Guild g = Main.getInfo().getGuildByID(e.getKey());
 				if (g == null) {
 					guildTrashBin.add(e.getKey());
-					memberTrashBin.addAll(e.getValue());
+					memberTrashBin.addAll(e.getValue().stream().map(id -> id + e.getKey()).collect(Collectors.toList()));
 					Helper.logger(this.getClass()).debug("GID " + e.getKey() + " is null, added to trash bin");
 				} else {
 					List<Member> membrs = g.loadMembers().get();
@@ -123,7 +123,9 @@ public class SweepCommand extends Command {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 							Sweeper.sweep(guildTrashBin, memberTrashBin);
-							ms.editMessage(Helper.ACCEPT + " | Entradas limpas com sucesso!").queue();
+
+							m.delete().queue(null, Helper::doNothing);
+							channel.sendMessage(Helper.ACCEPT + " | Entradas limpas com sucesso!").queue();
 						}), true, 1, TimeUnit.MINUTES, (u) -> u.getId().equals(author.getId()), ms -> {
 							ShiroInfo.getHashes().remove(hash);
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
