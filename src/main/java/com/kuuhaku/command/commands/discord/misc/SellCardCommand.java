@@ -61,15 +61,14 @@ public class SellCardCommand extends Command {
 			channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada) e o preço dela. Se for vender um equipamento, basta informar a carta e o preço dela.").queue();
 			return;
 		} else if (args.length == 2) {
-			Card c = CardDAO.getCard(args[0]);
+			Equipment eq = CardDAO.getEquipment(args[0]);
 
-			if (c == null) {
+			if (eq == null) {
 				channel.sendMessage("❌ | Esse equipamento não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
 				return;
 			}
 
-			Equipment eq = kp.getEquipment(c);
-			if (eq == null) {
+			if (!kp.getEquipments().contains(eq)) {
 				channel.sendMessage("❌ | Você não pode vender um equipamento que não possui!").queue();
 				return;
 			}
