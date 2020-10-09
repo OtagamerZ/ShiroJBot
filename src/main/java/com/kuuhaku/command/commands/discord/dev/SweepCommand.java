@@ -95,12 +95,15 @@ public class SweepCommand extends Command {
 				}
 
 				Guild g = Main.getInfo().getGuildByID(e.getKey());
-				foundIds.addAll(
-						g.loadMembers().get()
-								.stream()
-								.map(Member::getId)
-								.collect(Collectors.toList())
-				);
+				if (g == null) {
+					System.out.println("Guild " + e.getKey() + " is null");
+				} else
+					foundIds.addAll(
+							g.loadMembers().get()
+									.stream()
+									.map(Member::getId)
+									.collect(Collectors.toList())
+					);
 
 				processed += e.getValue().size();
 				percent = Helper.prcntToInt(processed, total);
