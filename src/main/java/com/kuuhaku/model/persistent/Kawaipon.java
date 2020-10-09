@@ -20,6 +20,8 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import org.apache.commons.collections4.ListUtils;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -116,5 +118,9 @@ public class Kawaipon {
 
 	public void removeEquipment(Equipment equipment) {
 		this.equipments.remove(equipment);
+	}
+
+	public List<Drawable> getDrawables() {
+		return ListUtils.union(champions, equipments);
 	}
 }
