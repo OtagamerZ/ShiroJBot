@@ -13,16 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/EquipmentMarketDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/EquipmentMarket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -747,20 +738,6 @@
       <workItem from="1602183189239" duration="4230000" />
       <workItem from="1602246134413" duration="8721000" />
     </task>
-    <task id="LOCAL-02570" summary="Novas cartas: Overflow">
-      <created>1602081657310</created>
-      <option name="number" value="02570" />
-      <option name="presentableId" value="LOCAL-02570" />
-      <option name="project" value="LOCAL" />
-      <updated>1602081657311</updated>
-    </task>
-    <task id="LOCAL-02571" summary="Novas cartas: Overflow">
-      <created>1602082768460</created>
-      <option name="number" value="02571" />
-      <option name="presentableId" value="LOCAL-02571" />
-      <option name="project" value="LOCAL" />
-      <updated>1602082768460</updated>
-    </task>
     <task id="LOCAL-02572" summary="Novas cartas: Overflow">
       <created>1602082847742</created>
       <option name="number" value="02572" />
@@ -1090,7 +1067,21 @@
       <option name="project" value="LOCAL" />
       <updated>1602253556504</updated>
     </task>
-    <option name="localTasksCounter" value="2619" />
+    <task id="LOCAL-02619" summary="Adição de compra/venda de equipamentos na loja de cartas">
+      <created>1602262604462</created>
+      <option name="number" value="02619" />
+      <option name="presentableId" value="LOCAL-02619" />
+      <option name="project" value="LOCAL" />
+      <updated>1602262604462</updated>
+    </task>
+    <task id="LOCAL-02620" summary="Adição de compra/venda de equipamentos na loja de cartas">
+      <created>1602262851573</created>
+      <option name="number" value="02620" />
+      <option name="presentableId" value="LOCAL-02620" />
+      <option name="project" value="LOCAL" />
+      <updated>1602262851574</updated>
+    </task>
+    <option name="localTasksCounter" value="2621" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1156,7 +1147,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Implementação do jogo Shoukan (duelo de cartas), mas sem a possibilidade de jogar ainda" />
     <MESSAGE value="Correção no designador automático de cargos de Exceed" />
     <MESSAGE value="Correção na busca por anime na loja global de cartas" />
     <MESSAGE value="Correção geral nas mensagens de confirmação" />
@@ -1181,7 +1171,8 @@
     <MESSAGE value="Correção nos efeitos das cartas Shoukan" />
     <MESSAGE value="Correção nos argumentos do Shoukan" />
     <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Adição de compra/venda de equipamentos na loja de cartas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de compra/venda de equipamentos na loja de cartas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1235,11 +1226,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602254620544">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602262848888">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602254620544" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602262848888" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1296,11 +1287,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602253557574">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602262853921">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602253557574" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602262853921" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
