@@ -131,9 +131,9 @@ public class BuyCardCommand extends Command {
 			eb.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 			List<Page> pages = new ArrayList<>();
-			List<Object> cards = new ArrayList<>();
+			List<Object> cards;
 			if (onlyEquip.get())
-				EquipmentMarketDAO.getCards().stream()
+				cards = EquipmentMarketDAO.getCards().stream()
 						.filter(em -> byName.get() == null || StringUtils.containsIgnoreCase(em.getCard().getCard().getName(), byName.get()))
 						.filter(em -> onlyMine.get() ? em.getSeller().equals(author.getId()) : em.getPrice() <= (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50))
 						.sorted(Comparator
@@ -141,7 +141,7 @@ public class BuyCardCommand extends Command {
 								.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER))
 						.collect(Collectors.toList());
 			else
-				CardMarketDAO.getCards().stream()
+				cards = CardMarketDAO.getCards().stream()
 						.filter(cm -> byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get()))
 						.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
 						.filter(cm -> byAnime.get() == null || ArrayUtils.contains(byAnime.get(), cm.getCard().getCard().getAnime()))
