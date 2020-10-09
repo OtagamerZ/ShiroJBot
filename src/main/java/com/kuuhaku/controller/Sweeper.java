@@ -54,6 +54,5 @@ public class Sweeper {
 		}
 
 		em.getTransaction().commit();
-		em.close();
 	}
 }
