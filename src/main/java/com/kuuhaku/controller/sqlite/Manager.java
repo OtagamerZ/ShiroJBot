@@ -49,7 +49,7 @@ public class Manager {
 			if (emf == null) connect();
 			return emf.createEntityManager();
 		} catch (IOException e) {
-			Helper.logger(Manager.class).fatal("Não foi possível gerar o banco de dados local. Por favor contate um dos desenvolvedores.");
+			Helper.logger(Manager.class).fatal("Não foi possível encontrar o banco de dados local. Por favor contate um dos desenvolvedores.");
 			System.exit(1);
 			return null;
 		}

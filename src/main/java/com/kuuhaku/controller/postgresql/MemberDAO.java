@@ -89,4 +89,16 @@ public class MemberDAO {
 
 		em.close();
 	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Member> getAllMembers() {
+		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		Query gc = em.createQuery("SELECT m FROM Member m", Member.class);
+		List<Member> gcs = (List<Member>) gc.getResultList();
+
+		em.close();
+
+		return gcs;
+	}
 }
