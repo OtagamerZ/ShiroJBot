@@ -30,7 +30,7 @@ import java.util.Date;
 @Table(name = "equipmentmarket")
 public class EquipmentMarket {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cardmarket_id_seq")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT NEXTVAL('shiro.cardmarket_id_seq')")
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
