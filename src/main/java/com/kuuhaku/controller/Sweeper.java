@@ -19,9 +19,11 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.controller.postgresql.Manager;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.List;
 import java.util.Set;
 
 public class Sweeper {
@@ -29,26 +31,34 @@ public class Sweeper {
 		EntityManager pem = Manager.getEntityManager();
 		EntityManager sem = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
 
-		Query q;
+		Query qServer;
+		Query qLocal;
 		sem.getTransaction().begin();
-		q = sem.createQuery("DELETE FROM GuildConfig WHERE guildID IN :ids");
-		q.setParameter("ids", guildIDs);
-		q.executeUpdate();
-
-		q = sem.createQuery("DELETE FROM Member WHERE id IN :ids");
-		q.setParameter("ids", memberIDs);
-		q.executeUpdate();
-		sem.getTransaction().commit();
-
 		pem.getTransaction().begin();
-		q = pem.createQuery("DELETE FROM GuildConfig WHERE guildID IN :ids");
-		q.setParameter("ids", guildIDs);
-		q.executeUpdate();
+		List<List<String>> gids = Helper.chunkify(guildIDs, 1000);
+		qServer = sem.createQuery("DELETE FROM GuildConfig WHERE guildID IN :ids");
+		qLocal = pem.createQuery("DELETE FROM GuildConfig WHERE guildID IN :ids");
 
-		q = pem.createQuery("DELETE FROM Member WHERE id IN :ids");
-		q.setParameter("ids", memberIDs);
-		q.executeUpdate();
+		for (List<String> ids : gids) {
+			qServer.setParameter("ids", ids);
+			qLocal.setParameter("ids", ids);
+			qServer.executeUpdate();
+			qLocal.executeUpdate();
+		}
+
+		List<List<String>> mids = Helper.chunkify(memberIDs, 1000);
+		qServer = sem.createQuery("DELETE FROM Member WHERE id IN :ids");
+		qLocal = pem.createQuery("DELETE FROM Member WHERE id IN :ids");
+
+		for (List<String> ids : mids) {
+			qServer.setParameter("ids", ids);
+			qLocal.setParameter("ids", ids);
+			qServer.executeUpdate();
+			qLocal.executeUpdate();
+		}
+
 		pem.getTransaction().commit();
+		sem.getTransaction().commit();
 
 		sem.close();
 		pem.close();
