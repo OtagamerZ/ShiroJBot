@@ -35,14 +35,15 @@ public class Sweeper {
 		List<List<String>> gids = Helper.chunkify(guildIDs, 1000);
 		List<List<String>> mids = Helper.chunkify(memberIDs, 1000);
 
-		if (gids.size() > 0)
+		if (gids.size() > 0) {
 			executeSweep(pem, gids, "DELETE FROM GuildConfig WHERE guildID IN :ids");
-		if (mids.size() > 0)
-			executeSweep(pem, mids, "DELETE FROM Member WHERE id IN :ids");
-		if (gids.size() > 0)
 			executeSweep(sem, gids, "DELETE FROM GuildConfig WHERE guildID IN :ids");
-		if (mids.size() > 0)
+		}
+
+		if (mids.size() > 0) {
+			executeSweep(pem, mids, "DELETE FROM Member WHERE id IN :ids");
 			executeSweep(sem, mids, "DELETE FROM Member WHERE id IN :ids");
+		}
 
 		sem.close();
 		pem.close();
@@ -53,6 +54,7 @@ public class Sweeper {
 
 		Query q = em.createQuery(query);
 		for (List<String> ids : chunks) {
+			if (ids.size() == 0) break;
 			q.setParameter("ids", ids);
 			q.executeUpdate();
 		}
