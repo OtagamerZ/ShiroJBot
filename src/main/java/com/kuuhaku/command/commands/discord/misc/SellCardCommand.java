@@ -110,6 +110,7 @@ public class SellCardCommand extends Command {
 			} catch (NumberFormatException e) {
 				channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
 			}
+			return;
 		} else if (!StringUtils.isNumeric(args[2])) {
 			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
 			return;
