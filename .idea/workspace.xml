@@ -738,14 +738,7 @@
       <workItem from="1602158485227" duration="7076000" />
       <workItem from="1602172964154" duration="7997000" />
       <workItem from="1602183189239" duration="4230000" />
-      <workItem from="1602246134413" duration="1182000" />
-    </task>
-    <task id="LOCAL-02559" summary="Adição do comando para jogar Shoukan">
-      <created>1601914531712</created>
-      <option name="number" value="02559" />
-      <option name="presentableId" value="LOCAL-02559" />
-      <option name="project" value="LOCAL" />
-      <updated>1601914531712</updated>
+      <workItem from="1602246134413" duration="1554000" />
     </task>
     <task id="LOCAL-02560" summary="Adição do comando para jogar Shoukan">
       <created>1601915734914</created>
@@ -1083,7 +1076,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602247194045</updated>
     </task>
-    <option name="localTasksCounter" value="2608" />
+    <task id="LOCAL-02608" summary="Correções menores">
+      <created>1602247501191</created>
+      <option name="number" value="02608" />
+      <option name="presentableId" value="LOCAL-02608" />
+      <option name="project" value="LOCAL" />
+      <updated>1602247501192</updated>
+    </task>
+    <option name="localTasksCounter" value="2609" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1228,11 +1228,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602247191389">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602247498541">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602247191389" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602247498541" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1289,11 +1289,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602247195952">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602247502535">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602247195952" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602247502535" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

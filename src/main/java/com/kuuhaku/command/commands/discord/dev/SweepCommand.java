@@ -70,8 +70,10 @@ public class SweepCommand extends Command {
 			s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + gds.size() + " guilds)").queue();
 
 			gds.forEach(gd -> {
-				if (Main.getInfo().getGuildByID(gd.getGuildID()) == null)
+				if (Main.getInfo().getGuildByID(gd.getGuildID()) == null) {
 					guildTrashBin.add(gd.getGuildID());
+					Helper.logger(this.getClass()).info(gd.getName() + " is null, added to trash bin");
+				}
 			});
 
 			s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + mbs.size() + " membros)").queue();
@@ -83,14 +85,9 @@ public class SweepCommand extends Command {
 			});
 
 			Set<String> foundIds = new HashSet<>();
-			int total = mbs.size();
-			int processed = 0;
-			int percent;
-			int lastPercent = 0;
 			for (Map.Entry<String, List<String>> e : members.entrySet()) {
 				if (guildTrashBin.contains(e.getKey())) {
 					memberTrashBin.addAll(e.getValue());
-					total -= e.getValue().size();
 					continue;
 				}
 
@@ -98,8 +95,7 @@ public class SweepCommand extends Command {
 				if (g == null) {
 					guildTrashBin.add(e.getKey());
 					memberTrashBin.addAll(e.getValue());
-					total -= e.getValue().size();
-					continue;
+					Helper.logger(this.getClass()).info("GID " + e.getKey() + " is null, added to trash bin");
 				} else {
 					List<Member> membrs = g.loadMembers().get();
 					foundIds.addAll(
@@ -107,14 +103,7 @@ public class SweepCommand extends Command {
 									.map(Member::getId)
 									.collect(Collectors.toList())
 					);
-					System.out.println("GID " + e.getKey() + ": Loaded " + membrs.size() + " members");
-				}
-
-				processed += e.getValue().size();
-				percent = Helper.prcntToInt(processed, total);
-				if (percent > lastPercent) {
-					s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + total + " membros | " + percent + "%)").queue();
-					lastPercent = percent;
+					Helper.logger(this.getClass()).info(g.getName() + ": Loaded " + membrs.size() + " members");
 				}
 			}
 
