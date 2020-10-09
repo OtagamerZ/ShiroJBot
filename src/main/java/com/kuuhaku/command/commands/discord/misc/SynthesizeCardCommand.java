@@ -142,6 +142,7 @@ public class SynthesizeCardCommand extends Command {
 							KawaiponDAO.saveKawaipon(kp);
 
 							String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
+							s.delete().queue(null, Helper::doNothing);
 							channel.sendMessage("Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
 						}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
 							ShiroInfo.getHashes().remove(hash);

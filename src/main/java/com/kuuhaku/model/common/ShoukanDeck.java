@@ -60,8 +60,8 @@ public class ShoukanDeck {
 		}
 
 		for (int i = 0, y = 0; i < equips.size(); i++, y = i / 3) {
-			g2d.drawImage(equips.get(i).drawCard(acc, false), 2022 + 279 * (i - 6 * y), 350 + 420 * y, null);
-			Profile.printCenteredString(StringUtils.abbreviate(equips.get(i).getCard().getName(), 15), 225, 2022 + 279 * (i - 6 * y), 740 + 420 * y, g2d);
+			g2d.drawImage(equips.get(i).drawCard(acc, false), 2022 + 279 * (i - 3 * y), 350 + 420 * y, null);
+			Profile.printCenteredString(StringUtils.abbreviate(equips.get(i).getCard().getName(), 15), 225, 2022 + 279 * (i - 3 * y), 740 + 420 * y, g2d);
 		}
 
 		return deck;
