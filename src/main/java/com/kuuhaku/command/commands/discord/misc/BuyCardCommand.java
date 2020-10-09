@@ -26,6 +26,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardMarketDAO;
+import com.kuuhaku.controller.postgresql.EquipmentMarketDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.AnimeName;
@@ -33,6 +34,7 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.CardMarket;
+import com.kuuhaku.model.persistent.EquipmentMarket;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -78,6 +80,7 @@ public class BuyCardCommand extends Command {
 			AtomicReference<AnimeName[]> byAnime = new AtomicReference<>(null);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
 			AtomicBoolean onlyMine = new AtomicBoolean();
+			AtomicBoolean onlyEquip = new AtomicBoolean();
 
 			if (args.length > 0) {
 				List<String> params = List.of(args);
@@ -108,6 +111,8 @@ public class BuyCardCommand extends Command {
 				onlyFoil.set(params.stream().anyMatch("-c"::equalsIgnoreCase));
 
 				onlyMine.set(params.stream().anyMatch("-m"::equalsIgnoreCase));
+
+				onlyEquip.set(params.stream().anyMatch("-e"::equalsIgnoreCase));
 			}
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -119,36 +124,60 @@ public class BuyCardCommand extends Command {
 					"`-r` - Busca cartas por raridade\n" +
 					"`-a` - Busca cartas por anime\n" +
 					"`-c` - Busca apenas cartas cromadas\n" +
+					"`-e` - Busca apenas cartas-equipamento\n" +
 					"`-m` - Busca apenas suas cartas anunciadas\n\n" +
-							"Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`."
+					"Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`."
 			);
 			eb.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 			List<Page> pages = new ArrayList<>();
-			List<CardMarket> cards = CardMarketDAO.getCards().stream()
-					.filter(cm -> byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get()))
-					.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
-					.filter(cm -> byAnime.get() == null || ArrayUtils.contains(byAnime.get(), cm.getCard().getCard().getAnime()))
-					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
-					.filter(cm -> onlyMine.get() ? cm.getSeller().equals(author.getId()) : cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)))
-					.sorted(Comparator
-							.comparingInt(CardMarket::getPrice)
-							.thenComparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
-							.thenComparing(k -> k.getCard().getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
-							.thenComparing(k -> k.getCard().getCard().getAnime(), Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
-							.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER))
-					.collect(Collectors.toList());
+			List<Object> cards = new ArrayList<>();
+			if (onlyEquip.get())
+				EquipmentMarketDAO.getCards().stream()
+						.filter(em -> byName.get() == null || StringUtils.containsIgnoreCase(em.getCard().getCard().getName(), byName.get()))
+						.filter(em -> onlyMine.get() ? em.getSeller().equals(author.getId()) : em.getPrice() <= (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50))
+						.sorted(Comparator
+								.comparingInt(EquipmentMarket::getPrice)
+								.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER))
+						.collect(Collectors.toList());
+			else
+				CardMarketDAO.getCards().stream()
+						.filter(cm -> byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get()))
+						.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
+						.filter(cm -> byAnime.get() == null || ArrayUtils.contains(byAnime.get(), cm.getCard().getCard().getAnime()))
+						.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
+						.filter(cm -> onlyMine.get() ? cm.getSeller().equals(author.getId()) : cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)))
+						.sorted(Comparator
+								.comparingInt(CardMarket::getPrice)
+								.thenComparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
+								.thenComparing(k -> k.getCard().getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
+								.thenComparing(k -> k.getCard().getCard().getAnime(), Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
+								.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER))
+						.collect(Collectors.toList());
+
+
 			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();
-				for (int p = i * 10; p < cards.size() && p < 10 * (i + 1); p++) {
-					CardMarket cm = cards.get(p);
-					User seller = Main.getInfo().getUserByID(cm.getSeller());
-					eb.addField(
-							"`ID: " + cm.getId() + "` | " + cm.getCard().getName() + " (" + cm.getCard().getCard().getRarity().toString() + ")",
-							"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "`valor muito alto`**" : cm.getPrice() + "** créditos"),
-							false
-					);
-				}
+				if (onlyEquip.get())
+					for (int p = i * 10; p < cards.size() && p < 10 * (i + 1); p++) {
+						EquipmentMarket em = (EquipmentMarket) cards.get(p);
+						User seller = Main.getInfo().getUserByID(em.getSeller());
+						eb.addField(
+								"`ID: " + em.getId() + "` | " + em.getCard().getCard().getName() + " (" + em.getCard().getCard().getRarity().toString() + ")",
+								"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50) ? "`valor muito alto`**" : em.getPrice() + "** créditos"),
+								false
+						);
+					}
+				else
+					for (int p = i * 10; p < cards.size() && p < 10 * (i + 1); p++) {
+						CardMarket cm = (CardMarket) cards.get(p);
+						User seller = Main.getInfo().getUserByID(cm.getSeller());
+						eb.addField(
+								"`ID: " + cm.getId() + "` | " + cm.getCard().getName() + " (" + cm.getCard().getCard().getRarity().toString() + ")",
+								"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "`valor muito alto`**" : cm.getPrice() + "** créditos"),
+								false
+						);
+					}
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 
@@ -160,9 +189,63 @@ public class BuyCardCommand extends Command {
 		}
 
 		CardMarket cm = CardMarketDAO.getCard(Integer.parseInt(args[0]));
+		EquipmentMarket em = EquipmentMarketDAO.getCard(Integer.parseInt(args[0]));
 
 		if (cm == null) {
-			channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+			if (em == null) {
+				channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+				return;
+			}
+
+			Account seller = AccountDAO.getAccount(em.getSeller());
+			if (!seller.getUserId().equals(author.getId())) {
+				if (buyer.getBalance() < em.getPrice()) {
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+					return;
+				}
+
+				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+
+				if (kp.getEquipments().contains(em.getCard())) {
+					channel.sendMessage("❌ | Parece que você já possui esse equipamento!").queue();
+					return;
+				}
+
+				kp.addEquipment(em.getCard());
+				KawaiponDAO.saveKawaipon(kp);
+
+				seller.addCredit(em.getPrice(), this.getClass());
+				buyer.removeCredit(em.getPrice(), this.getClass());
+
+				AccountDAO.saveAccount(seller);
+				AccountDAO.saveAccount(buyer);
+
+				em.setBuyer(author.getId());
+				CardMarketDAO.saveCard(cm);
+
+				User sellerU = Main.getInfo().getUserByID(em.getSeller());
+				User buyerU = Main.getInfo().getUserByID(em.getBuyer());
+				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+								c.sendMessage(":white_check_mark: | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + cm.getPrice() + " créditos.").queue(),
+						Helper::doNothing
+				);
+				channel.sendMessage(":white_check_mark: | Equipamento comprado com sucesso!").queue();
+			} else {
+				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+
+				if (kp.getEquipments().contains(em.getCard())) {
+					channel.sendMessage("❌ | Parece que você já possui esse equipamento!").queue();
+					return;
+				}
+
+				kp.addEquipment(em.getCard());
+				KawaiponDAO.saveKawaipon(kp);
+
+				em.setBuyer(author.getId());
+				EquipmentMarketDAO.saveCard(em);
+
+				channel.sendMessage(":white_check_mark: | Equipamento retirado com sucesso!").queue();
+			}
 			return;
 		}
 

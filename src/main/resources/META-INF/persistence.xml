@@ -70,6 +70,7 @@
         <class>com.kuuhaku.model.persistent.ExceedScore</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment</class>
+        <class>com.kuuhaku.model.persistent.EquipmentMarket</class>
 
         <properties>
             <!-- dados da conexao -->
