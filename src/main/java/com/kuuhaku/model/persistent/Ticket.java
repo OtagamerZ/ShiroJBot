@@ -36,7 +36,7 @@ public class Ticket {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String requestedBy = "";
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '[]'")
+	@Column(columnDefinition = "TEXT")
 	private String msgId = "{}";
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
