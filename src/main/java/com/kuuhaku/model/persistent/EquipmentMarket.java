@@ -27,7 +27,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 @Entity
-@Table(name = "cardmarket")
+@Table(name = "equipmentmarket")
 public class EquipmentMarket {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
