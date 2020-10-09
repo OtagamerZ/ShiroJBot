@@ -14,6 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SweepCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SweepCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Sweeper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Sweeper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -738,14 +740,7 @@
       <workItem from="1602158485227" duration="7076000" />
       <workItem from="1602172964154" duration="7997000" />
       <workItem from="1602183189239" duration="4230000" />
-      <workItem from="1602246134413" duration="4162000" />
-    </task>
-    <task id="LOCAL-02564" summary="Correção no deck e adição de comando para sintetizar evogears">
-      <created>1601922259183</created>
-      <option name="number" value="02564" />
-      <option name="presentableId" value="LOCAL-02564" />
-      <option name="project" value="LOCAL" />
-      <updated>1601922259183</updated>
+      <workItem from="1602246134413" duration="5327000" />
     </task>
     <task id="LOCAL-02565" summary="Remoção temporária do comando Say">
       <created>1602010745957</created>
@@ -1083,7 +1078,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602250189966</updated>
     </task>
-    <option name="localTasksCounter" value="2613" />
+    <task id="LOCAL-02613" summary="Correções menores">
+      <created>1602250310042</created>
+      <option name="number" value="02613" />
+      <option name="presentableId" value="LOCAL-02613" />
+      <option name="project" value="LOCAL" />
+      <updated>1602250310042</updated>
+    </task>
+    <option name="localTasksCounter" value="2614" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1228,11 +1230,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602250187201">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602250307347">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602250187201" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602250307347" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1289,11 +1291,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602250191846">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602250316539">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602250191846" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602250316539" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1355,10 +1357,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1600440986950" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1602250088865">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1602251286158">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1602250088865" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1602251286158" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
