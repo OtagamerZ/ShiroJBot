@@ -22,13 +22,15 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class Duelists {
 	private final Pair<Champion, Champion> duelists;
+	private final Pair<Integer, Integer> positions;
 
-	private Duelists(Champion attacker, Champion defender) {
+	private Duelists(Champion attacker, int yourPos, Champion defender, int hisPos) {
 		this.duelists = Pair.of(attacker, defender);
+		this.positions = Pair.of(yourPos, hisPos);
 	}
 
-	public static Duelists of(Champion attacker, Champion defender) {
-		return new Duelists(attacker, defender);
+	public static Duelists of(Champion attacker, int yourPos, Champion defender, int hisPos) {
+		return new Duelists(attacker, yourPos, defender, hisPos);
 	}
 
 	public Champion getAttacker() {
@@ -37,5 +39,13 @@ public class Duelists {
 
 	public Champion getDefender() {
 		return duelists.getRight();
+	}
+
+	public int getAttackerPos() {
+		return positions.getLeft();
+	}
+
+	public int getDefenderPos() {
+		return positions.getRight();
 	}
 }
