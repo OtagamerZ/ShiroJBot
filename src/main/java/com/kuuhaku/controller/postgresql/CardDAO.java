@@ -118,8 +118,7 @@ public class CardDAO {
 	public static List<String> getAllEquipmentNames() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes AND rarity = 'EQUIPMENT'", String.class);
-		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+		Query q = em.createQuery("SELECT e.card.id FROM Equipment e", String.class);
 		List<String> c = (List<String>) q.getResultList();
 
 		em.close();
@@ -260,6 +259,21 @@ public class CardDAO {
 
 		Query q = em.createQuery("SELECT e FROM Equipment e WHERE card = :card", Equipment.class);
 		q.setParameter("card", c);
+
+		try {
+			return (Equipment) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Equipment getEquipment(String name) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT e FROM Equipment e WHERE card.id = :card", Equipment.class);
+		q.setParameter("card", name);
 
 		try {
 			return (Equipment) q.getSingleResult();
