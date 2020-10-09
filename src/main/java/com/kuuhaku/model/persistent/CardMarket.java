@@ -28,8 +28,7 @@ import java.util.Date;
 @Table(name = "cardmarket")
 public class CardMarket {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@SequenceGenerator(name = "cardmarket_id_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cardmarket_id_seq")
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
