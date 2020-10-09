@@ -20,22 +20,30 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.RarityColorsDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.KawaiponRarity;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -64,54 +72,80 @@ public class SeeCardCommand extends Command {
 			return;
 		}
 
+		Account acc = AccountDAO.getAccount(author.getId());
 		Card tc = CardDAO.getCard(args[0], true);
-		try {
-			if (tc == null) {
-				channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
-				return;
-			} else if (args.length < 2 && tc.getRarity() != KawaiponRarity.ULTIMATE) {
-				channel.sendMessage("❌ | Você também precisa informar o tipo dela (`N` = normal, `C` = cromada).").queue();
-				return;
-			} else if (!Helper.equalsAny(args[1], "N", "C")) {
-				channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja ver (`N` = normal, `C` = cromada).").queue();
-				return;
-			}
-		} catch (ArrayIndexOutOfBoundsException e) {
-			channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja ver (`N` = normal, `C` = cromada).").queue();
+
+		if (tc == null) {
+			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], ArrayUtils.addAll(CardDAO.getAllCardNames().toArray(String[]::new), CardDAO.getAllEquipmentNames().toArray(String[]::new))) + "`?").queue();
 			return;
 		}
 
-		boolean foil = tc.getRarity() != KawaiponRarity.ULTIMATE && args[1].equalsIgnoreCase("C");
-		KawaiponCard card = new KawaiponCard(tc, foil);
+		boolean foil = args.length > 1 && tc.getRarity() != KawaiponRarity.ULTIMATE && args[1].equalsIgnoreCase("C");
+		boolean shoukan = args.length > 1 && args[1].equalsIgnoreCase("S");
+
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		Set<KawaiponCard> cards = kp.getCards();
-		for (AnimeName anime : AnimeName.validValues()) {
-			if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
-				cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
-		}
+		if (shoukan) {
+			Champion ch = CardDAO.getChampion(tc);
+			Equipment eq = CardDAO.getEquipment(tc);
 
-		EmbedBuilder eb = new EmbedBuilder();
+			if (ch == null && eq == null) {
+				channel.sendMessage("❌ | Esse equipamento ou campeão não existe, você não quis dizer `" + Helper.didYouMean(args[0], ArrayUtils.addAll(CardDAO.getAllChampionNames().toArray(String[]::new), CardDAO.getAllEquipmentNames().toArray(String[]::new))) + "`?").queue();
+				return;
+			}
 
-		eb.setTitle((foil ? ":star2:" : ":flower_playing_cards:") + " | " + card.getName());
-		eb.setColor(RarityColorsDAO.getColor(tc.getRarity()).getPrimary());
-		eb.addField("Obtida:", cards.contains(card) ? "Sim" : "Não", true);
-		eb.addField("Elegível:", CardDAO.getChampion(card.getCard()) != null ? "Sim" : "Não", true);
-		eb.addField("Raridade:", tc.getRarity().toString(), true);
-		eb.addField("Tipo:", tc.getRarity() == KawaiponRarity.ULTIMATE ? "Única" : (card.isFoil() ? "Cromada" : "Normal"), true);
-		eb.addField("Anime:", tc.getAnime().toString(), true);
-		eb.setImage("attachment://kawaipon." + (cards.contains(card) ? "png" : "jpg"));
+			List<Drawable> cards = kp.getDrawables();
+			Drawable d = ch == null ? eq : ch;
 
-		try {
-			BufferedImage bi = (ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/missing.jpg"))));
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-			if (cards.contains(card))
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(tc.drawCard(foil), "png"), "kawaipon.png").queue();
-			else
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(bi), "kawaipon.jpg").queue();
-		} catch (IOException e) {
-			channel.sendMessage("❌ | Deu um pequeno erro aqui na hora de mostrar a carta, logo logo um dos meus desenvolvedores irá corrigi-lo!").queue();
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			eb.setTitle((ch == null ? ":shield:" : ":crossed_swords:") + " | " + d.getCard().getName());
+			eb.addField("Obtida:", cards.contains(d) ? "Sim" : "Não", true);
+			eb.addField("Tipo:", d instanceof Champion ? "Campeão Senshi" : "Equipamento EvoGear", true);
+			eb.setImage("attachment://kawaipon." + (cards.contains(d) ? "png" : "jpg"));
+
+			try {
+				BufferedImage bi = (ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/missing.jpg"))));
+
+				if (cards.contains(d))
+					channel.sendMessage(eb.build()).addFile(Helper.getBytes(d.drawCard(acc, false), "png"), "kawaipon.png").queue();
+				else
+					channel.sendMessage(eb.build()).addFile(Helper.getBytes(bi), "kawaipon.jpg").queue();
+			} catch (IOException e) {
+				channel.sendMessage("❌ | Deu um pequeno erro aqui na hora de mostrar a carta, logo logo um dos meus desenvolvedores irá corrigi-lo!").queue();
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			}
+		} else {
+			KawaiponCard card = new KawaiponCard(tc, foil);
+
+			Set<KawaiponCard> cards = kp.getCards();
+			for (AnimeName anime : AnimeName.validValues()) {
+				if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
+					cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
+			}
+
+			EmbedBuilder eb = new EmbedBuilder();
+
+			eb.setTitle((foil ? ":star2:" : ":flower_playing_cards:") + " | " + card.getName());
+			eb.setColor(RarityColorsDAO.getColor(tc.getRarity()).getPrimary());
+			eb.addField("Obtida:", cards.contains(card) ? "Sim" : "Não", true);
+			eb.addField("Elegível:", CardDAO.getChampion(card.getCard()) != null ? "Sim" : "Não", true);
+			eb.addField("Raridade:", tc.getRarity().toString(), true);
+			eb.addField("Tipo:", tc.getRarity() == KawaiponRarity.ULTIMATE ? "Única" : (card.isFoil() ? "Cromada" : "Normal"), true);
+			eb.addField("Anime:", tc.getAnime().toString(), true);
+			eb.setImage("attachment://kawaipon." + (cards.contains(card) ? "png" : "jpg"));
+
+			try {
+				BufferedImage bi = (ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/missing.jpg"))));
+
+				if (cards.contains(card))
+					channel.sendMessage(eb.build()).addFile(Helper.getBytes(tc.drawCard(foil), "png"), "kawaipon.png").queue();
+				else
+					channel.sendMessage(eb.build()).addFile(Helper.getBytes(bi), "kawaipon.jpg").queue();
+			} catch (IOException e) {
+				channel.sendMessage("❌ | Deu um pequeno erro aqui na hora de mostrar a carta, logo logo um dos meus desenvolvedores irá corrigi-lo!").queue();
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			}
 		}
 	}
 }
