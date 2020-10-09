@@ -78,6 +78,10 @@ public class Kawaipon {
 		this.cards.remove(card);
 	}
 
+	public Champion getChampion(Card card) {
+		return champions.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
+	}
+
 	public List<Champion> getChampions() {
 		return champions;
 	}
@@ -92,6 +96,10 @@ public class Kawaipon {
 
 	public void removeChampion(Champion champion) {
 		this.champions.remove(champion);
+	}
+
+	public Equipment getEquipment(Card card) {
+		return equipments.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
 	}
 
 	public List<Equipment> getEquipments() {

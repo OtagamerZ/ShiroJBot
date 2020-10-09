@@ -31,6 +31,21 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class CardDAO {
+	public static Card getCard(String name) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity = 'EQUIPMENT'", Card.class);
+		q.setParameter("name", name);
+
+		try {
+			return (Card) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	public static Card getCard(String name, boolean withUltimate) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -91,6 +106,19 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", String.class);
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+		List<String> c = (List<String>) q.getResultList();
+
+		em.close();
+
+		return c;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getAllEquipmentNames() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes AND rarity = 'EQUIPMENT'", String.class);
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 		List<String> c = (List<String>) q.getResultList();
 
