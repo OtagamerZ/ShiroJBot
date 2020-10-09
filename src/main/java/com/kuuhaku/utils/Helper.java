@@ -485,6 +485,20 @@ public class Helper {
 		return chunks;
 	}
 
+	public static <T> List<List<T>> chunkify(Set<T> set, int chunkSize) {
+		List<T> list = new ArrayList<>(set);
+		int overflow = list.size() % chunkSize;
+		List<List<T>> chunks = new ArrayList<>();
+
+		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
+			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
+		}
+
+		chunks.add(list.subList(list.size() - overflow, list.size()));
+
+		return chunks;
+	}
+
 	public static void nonBetaAlert(User author, Member member, MessageChannel channel, String s, String link) {
 		try {
 			if (!TagDAO.getTagById(author.getId()).isBeta() && !hasPermission(member, PrivilegeLevel.DEV)) {
