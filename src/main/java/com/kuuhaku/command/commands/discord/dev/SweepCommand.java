@@ -85,34 +85,43 @@ public class SweepCommand extends Command {
 			});
 
 			Set<String> foundIds = new HashSet<>();
+			Map<String, Set<String>> missingIds = new HashMap<>();
 			for (Map.Entry<String, List<String>> e : members.entrySet()) {
 				if (guildTrashBin.contains(e.getKey())) {
-					memberTrashBin.addAll(e.getValue());
+					missingIds.putIfAbsent(e.getKey(), new HashSet<>());
+					missingIds.get(e.getKey()).addAll(e.getValue());
 					continue;
 				}
 
 				Guild g = Main.getInfo().getGuildByID(e.getKey());
 				if (g == null) {
 					guildTrashBin.add(e.getKey());
-					memberTrashBin.addAll(e.getValue().stream().map(id -> id + e.getKey()).collect(Collectors.toList()));
+					missingIds.putIfAbsent(e.getKey(), new HashSet<>());
+					missingIds.get(e.getKey()).addAll(e.getValue().stream().map(id -> id + e.getKey()).collect(Collectors.toList()));
 					Helper.logger(this.getClass()).debug("GID " + e.getKey() + " is null, added to trash bin");
 				} else {
 					List<Member> membrs = g.loadMembers().get();
 					foundIds.addAll(
 							membrs.stream()
-									.map(Member::getId)
+									.map(m -> m.getId() + e.getKey())
 									.collect(Collectors.toList())
 					);
 					Helper.logger(this.getClass()).debug(g.getName() + ": Loaded " + membrs.size() + " members");
 				}
 			}
 
-			memberTrashBin.addAll(
-					mbs.stream()
-							.map(com.kuuhaku.model.persistent.Member::getSid)
-							.filter(id -> !foundIds.contains(id))
-							.collect(Collectors.toList())
-			);
+			mbs.stream()
+					.filter(mb -> !foundIds.contains(mb.getId()))
+					.forEach(mb -> {
+						missingIds.putIfAbsent(mb.getSid(), new HashSet<>());
+						missingIds.get(mb.getSid()).add(mb.getMid());
+					});
+
+			missingIds.forEach((k, v) -> {
+				for (String id : v) {
+					memberTrashBin.add(id + k);
+				}
+			});
 
 			if (guildTrashBin.size() + memberTrashBin.size() > 0) {
 				String hash = Helper.generateHash(guild, author);
