@@ -32,7 +32,6 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -95,20 +94,13 @@ public class SweepCommand extends Command {
 					continue;
 				}
 
-				List<List<String>> chunks = Helper.chunkify(e.getValue(), 100);
-				for (List<String> chunk : chunks) {
-					for (String id : chunk) {
-						try {
-							User u = Main.getInfo().getAPI().retrieveUserById(id).submit().exceptionally(t -> null).get();
-							if (u != null) {
-								boolean isInGuild = u.getMutualGuilds().stream().map(Guild::getId).anyMatch(e.getKey()::equals);
-								if (isInGuild) foundIds.add(id);
-							}
-						} catch (InterruptedException | ExecutionException ex) {
-							Helper.logger(this.getClass()).error(ex + " | " + ex.getStackTrace()[0]);
-						}
-					}
-				}
+				Guild g = Main.getInfo().getGuildByID(e.getKey());
+				foundIds.addAll(
+						g.loadMembers().get()
+								.stream()
+								.map(Member::getId)
+								.collect(Collectors.toList())
+				);
 
 				processed += e.getValue().size();
 				percent = Helper.prcntToInt(processed, total);
