@@ -72,7 +72,7 @@ public class SweepCommand extends Command {
 			gds.forEach(gd -> {
 				if (Main.getInfo().getGuildByID(gd.getGuildID()) == null) {
 					guildTrashBin.add(gd.getGuildID());
-					Helper.logger(this.getClass()).info(gd.getName() + " is null, added to trash bin");
+					Helper.logger(this.getClass()).debug(gd.getName() + " is null, added to trash bin");
 				}
 			});
 
@@ -95,7 +95,7 @@ public class SweepCommand extends Command {
 				if (g == null) {
 					guildTrashBin.add(e.getKey());
 					memberTrashBin.addAll(e.getValue());
-					Helper.logger(this.getClass()).info("GID " + e.getKey() + " is null, added to trash bin");
+					Helper.logger(this.getClass()).debug("GID " + e.getKey() + " is null, added to trash bin");
 				} else {
 					List<Member> membrs = g.loadMembers().get();
 					foundIds.addAll(
@@ -103,7 +103,7 @@ public class SweepCommand extends Command {
 									.map(Member::getId)
 									.collect(Collectors.toList())
 					);
-					Helper.logger(this.getClass()).info(g.getName() + ": Loaded " + membrs.size() + " members");
+					Helper.logger(this.getClass()).debug(g.getName() + ": Loaded " + membrs.size() + " members");
 				}
 			}
 
