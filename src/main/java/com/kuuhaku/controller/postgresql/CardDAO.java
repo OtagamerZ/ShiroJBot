@@ -127,6 +127,18 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<String> getAllChampionNames() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c.card.id FROM Champion c", String.class);
+		List<String> c = (List<String>) q.getResultList();
+
+		em.close();
+
+		return c;
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<Card> getCardsByAnime(AnimeName anime) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -244,6 +256,21 @@ public class CardDAO {
 
 		Query q = em.createQuery("SELECT c FROM Champion c WHERE card = :card", Champion.class);
 		q.setParameter("card", c);
+
+		try {
+			return (Champion) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Champion getChampion(String name) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id = :card", Champion.class);
+		q.setParameter("card", name);
 
 		try {
 			return (Champion) q.getSingleResult();
