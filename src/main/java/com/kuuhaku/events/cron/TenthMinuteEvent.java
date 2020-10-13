@@ -35,7 +35,6 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.quartz.Job;
@@ -82,6 +81,7 @@ public class TenthMinuteEvent implements Job {
 			Map<String, List<Role>> roles = new HashMap<>();
 			List<Pair<String, Role>> addRoles = guild.getRoles()
 					.stream()
+					.filter(r -> r.getPosition() < guild.getSelfMember().getRoles().get(0).getPosition())
 					.filter(r -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase().replace("-", "")), exNames))
 					.map(r -> {
 						String name = Arrays.stream(exNames).filter(s -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase().replace("-", "")), s)).findFirst().orElse(null);
@@ -108,12 +108,7 @@ public class TenthMinuteEvent implements Job {
 							.flatMap(List::stream)
 							.collect(Collectors.toList());
 
-					List<Role> finalRoles = mb.getRoles()
-							.stream()
-							.filter(r -> !invalidRoles.contains(r) && !validRoles.contains(r))
-							.collect(Collectors.toList());
-
-					guild.modifyMemberRoles(mb, ListUtils.union(finalRoles, validRoles)).queue();
+					guild.modifyMemberRoles(mb, validRoles, invalidRoles).queue();
 				}
 			});
 		}
