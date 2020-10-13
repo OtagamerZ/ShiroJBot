@@ -43,7 +43,10 @@ public class ShoukanDeck {
 				.comparing(Champion::getMana).reversed()
 				.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 		);
-		equips.sort(Comparator.comparing(e -> e.getCard().getName()));
+		equips.sort(Comparator
+				.comparing(Equipment::getTier).reversed()
+				.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+		);
 
 		BufferedImage deck = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/deck.jpg")));
 
