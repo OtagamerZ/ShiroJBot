@@ -124,7 +124,7 @@ public class Hand {
 		g2d.dispose();
 
 		user.openPrivateChannel().complete()
-				.sendMessage("Escolha uma carta para jogar ou use os botões na mensagem enviada para render-se, comprar uma carta ou mudar de turno.")
+				.sendMessage("Escolha uma carta para jogar (digite a posição da carta na mão, no campo e se ela é virada para baixo (`s`) ou não (`n`). Ex: `0,0,n`), mude a postura de uma carta (digite apenas a posição da carta no campo) ou use os botões na mensagem enviada para render-se, comprar uma carta ou mudar de turno.")
 				.addFile(Helper.getBytes(bi, "png"), "hand.png")
 				.queue();
 	}
