@@ -480,6 +480,7 @@ public class Shoukan extends Game {
 				this.message = channel.sendFile(Helper.getBytes(arena.render(hands), "jpg"), "board.jpg").complete();
 				Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
 				h.showHand();
+				resetTimerKeepTurn();
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue();
 			} catch (NumberFormatException e) {
