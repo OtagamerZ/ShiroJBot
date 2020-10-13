@@ -15,9 +15,10 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Duelists.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Duelists.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyTagsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatusCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildBuff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildBuff.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,6 +167,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -742,13 +754,9 @@
       <workItem from="1602172964154" duration="7997000" />
       <workItem from="1602183189239" duration="4230000" />
       <workItem from="1602246134413" duration="8721000" />
-    </task>
-    <task id="LOCAL-02590" summary="Correção no sweeper">
-      <created>1602164464342</created>
-      <option name="number" value="02590" />
-      <option name="presentableId" value="LOCAL-02590" />
-      <option name="project" value="LOCAL" />
-      <updated>1602164464342</updated>
+      <workItem from="1602590930328" duration="352000" />
+      <workItem from="1602591418568" duration="609000" />
+      <workItem from="1602599066051" duration="2629000" />
     </task>
     <task id="LOCAL-02591" summary="Correção no sweeper">
       <created>1602164691674</created>
@@ -1086,7 +1094,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602269280267</updated>
     </task>
-    <option name="localTasksCounter" value="2639" />
+    <task id="LOCAL-02639" summary="Novos campeões senshi: Kill La Kill">
+      <created>1602275964636</created>
+      <option name="number" value="02639" />
+      <option name="presentableId" value="LOCAL-02639" />
+      <option name="project" value="LOCAL" />
+      <updated>1602275964636</updated>
+    </task>
+    <option name="localTasksCounter" value="2640" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1152,7 +1167,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção na busca por anime na loja global de cartas" />
     <MESSAGE value="Correção geral nas mensagens de confirmação" />
     <MESSAGE value="Correção na busca por anime" />
     <MESSAGE value="Correções gerais" />
@@ -1177,7 +1191,8 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Adição de compra/venda de equipamentos na loja de cartas" />
     <MESSAGE value="Comando See agora mostra cartas Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Comando See agora mostra cartas Shoukan" />
+    <MESSAGE value="Novos campeões senshi: Kill La Kill" />
+    <option name="LAST_COMMIT_MESSAGE" value="Novos campeões senshi: Kill La Kill" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1205,12 +1220,11 @@
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1602275085580">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1593920634856" />
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1602275085580" />
-    <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1599135337715">
+    <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1599135337715" />
+    <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602590942509" />
     <state x="636" y="391" width="433" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1602015480726">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1231,11 +1245,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602269277474">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602275961878">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602269277474" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602275961878" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1292,11 +1306,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602269282218">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602275974217">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602269282218" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602275974217" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1324,7 +1338,6 @@
     <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1602269469841">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="254" y="43" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1366.768@0.0.1366.768" timestamp="1593921071276" />
     <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602269469841" />
     <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1601648967281">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1358,10 +1371,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1600440986950" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1602251286158">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1602600604922">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1602251286158" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1602600604922" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
