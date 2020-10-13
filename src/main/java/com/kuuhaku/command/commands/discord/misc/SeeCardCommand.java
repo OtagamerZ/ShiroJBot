@@ -102,7 +102,7 @@ public class SeeCardCommand extends Command {
 			eb.setTitle((ch == null ? ":shield:" : ":crossed_swords:") + " | " + d.getCard().getName());
 			eb.addField("Obtida:", cards.contains(d) ? "Sim" : "Não", true);
 			eb.addField("Tipo:", d instanceof Champion ? "Campeão Senshi" : "Equipamento EvoGear", true);
-			eb.setImage("attachment://kawaipon." + (cards.contains(d) ? "png" : "jpg"));
+			eb.setImage("attachment://kawaipon.png");
 
 			channel.sendMessage(eb.build()).addFile(Helper.getBytes(d.drawCard(acc, false), "png"), "kawaipon.png").queue();
 		} else {
