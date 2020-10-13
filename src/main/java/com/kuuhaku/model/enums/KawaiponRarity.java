@@ -88,7 +88,7 @@ public enum KawaiponRarity {
 				return ULTRA_RARE;
 			case "lendaria":
 				return LEGENDARY;
-			case "equipamento"
+			case "equipamento":
 				return EQUIPMENT;
 			default:
 				return null;
