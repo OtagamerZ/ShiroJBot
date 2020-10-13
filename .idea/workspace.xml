@@ -15,10 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyTagsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatusCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildBuff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildBuff.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -756,14 +753,7 @@
       <workItem from="1602246134413" duration="8721000" />
       <workItem from="1602590930328" duration="352000" />
       <workItem from="1602591418568" duration="609000" />
-      <workItem from="1602599066051" duration="2629000" />
-    </task>
-    <task id="LOCAL-02591" summary="Correção no sweeper">
-      <created>1602164691674</created>
-      <option name="number" value="02591" />
-      <option name="presentableId" value="LOCAL-02591" />
-      <option name="project" value="LOCAL" />
-      <updated>1602164691674</updated>
+      <workItem from="1602599066051" duration="3560000" />
     </task>
     <task id="LOCAL-02592" summary="Correção no sweeper">
       <created>1602165120698</created>
@@ -1101,7 +1091,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602275964636</updated>
     </task>
-    <option name="localTasksCounter" value="2640" />
+    <task id="LOCAL-02640" summary="MyTags foi trocado para MyStats (agora mostra informações sobre os multiplicadores de XP e spawns)">
+      <created>1602605657816</created>
+      <option name="number" value="02640" />
+      <option name="presentableId" value="LOCAL-02640" />
+      <option name="project" value="LOCAL" />
+      <updated>1602605657817</updated>
+    </task>
+    <option name="localTasksCounter" value="2641" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1167,7 +1164,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção geral nas mensagens de confirmação" />
     <MESSAGE value="Correção na busca por anime" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Re-implementação do jogo Shoukan" />
@@ -1192,7 +1188,8 @@
     <MESSAGE value="Adição de compra/venda de equipamentos na loja de cartas" />
     <MESSAGE value="Comando See agora mostra cartas Shoukan" />
     <MESSAGE value="Novos campeões senshi: Kill La Kill" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novos campeões senshi: Kill La Kill" />
+    <MESSAGE value="MyTags foi trocado para MyStats (agora mostra informações sobre os multiplicadores de XP e spawns)" />
+    <option name="LAST_COMMIT_MESSAGE" value="MyTags foi trocado para MyStats (agora mostra informações sobre os multiplicadores de XP e spawns)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1245,11 +1242,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602275961878">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602605654337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602275961878" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602605654337" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1306,11 +1303,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602275974217">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602605660344">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602275974217" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602605660344" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
