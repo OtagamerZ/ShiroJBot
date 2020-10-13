@@ -68,6 +68,8 @@ public enum KawaiponRarity {
 				return "Lendária";
 			case ULTIMATE:
 				return "Ultimate";
+			case EQUIPMENT:
+				return "Equipamento";
 			default:
 				throw new InvalidStateException();
 		}
@@ -86,6 +88,8 @@ public enum KawaiponRarity {
 				return ULTRA_RARE;
 			case "lendaria":
 				return LEGENDARY;
+			case "equipamento":
+				return EQUIPMENT;
 			default:
 				return null;
 		}
