@@ -104,17 +104,7 @@ public class SeeCardCommand extends Command {
 			eb.addField("Tipo:", d instanceof Champion ? "Campeão Senshi" : "Equipamento EvoGear", true);
 			eb.setImage("attachment://kawaipon." + (cards.contains(d) ? "png" : "jpg"));
 
-			try {
-				BufferedImage bi = (ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/missing.jpg"))));
-
-				if (cards.contains(d))
-					channel.sendMessage(eb.build()).addFile(Helper.getBytes(d.drawCard(acc, false), "png"), "kawaipon.png").queue();
-				else
-					channel.sendMessage(eb.build()).addFile(Helper.getBytes(bi), "kawaipon.jpg").queue();
-			} catch (IOException e) {
-				channel.sendMessage("❌ | Deu um pequeno erro aqui na hora de mostrar a carta, logo logo um dos meus desenvolvedores irá corrigi-lo!").queue();
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-			}
+			channel.sendMessage(eb.build()).addFile(Helper.getBytes(d.drawCard(acc, false), "png"), "kawaipon.png").queue();
 		} else {
 			KawaiponCard card = new KawaiponCard(tc, foil);
 
