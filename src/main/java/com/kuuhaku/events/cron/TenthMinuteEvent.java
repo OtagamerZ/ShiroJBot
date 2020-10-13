@@ -23,17 +23,21 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.enums.ExceedEnum;
-import com.kuuhaku.model.enums.ExceedRole;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.ExceedMember;
+import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -41,9 +45,7 @@ import org.quartz.JobExecutionContext;
 import javax.persistence.NoResultException;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TenthMinuteEvent implements Job {
@@ -64,39 +66,57 @@ public class TenthMinuteEvent implements Job {
 			}
 		}
 
-		List<ExceedMember> ems = ExceedDAO.getExceedMembers();
-		List<Member> mbs = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID()).getMembers()
-				.stream()
-				.filter(mb -> ems.stream().anyMatch(em -> em.getId().equals(mb.getId())))
-				.collect(Collectors.toList());
+		List<GuildConfig> guilds = GuildDAO.getAllGuildsWithExceedRoles();
+		List<ExceedMember> ems = ExceedDAO.getExceedMembers().stream().filter(em -> !em.getExceed().isBlank()).collect(Collectors.toList());
+		String[] exNames = {"imanity", "ex-machina", "flugel", "werebeast", "elf", "seiren"};
 
-		Guild support = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
+		for (GuildConfig gc : guilds) {
+			Guild guild = Main.getInfo().getGuildByID(gc.getGuildID());
+			if (guild == null) continue;
 
-		assert support != null;
-		mbs.forEach(mb -> {
-			List<Role> roles = new ArrayList<>(mb.getRoles());
-			ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
-			if (ex != null) {
-				Role exRole = support.getRoleById(ExceedRole.getByExceed(ex).getId());
+			List<Member> mbs = guild.getMembers()
+					.stream()
+					.filter(m -> m != null && ems.stream().anyMatch(em -> em.getId().equals(m.getId())))
+					.collect(Collectors.toList());
 
-				if (roles.stream().anyMatch(r -> {
-					ExceedRole role = ExceedRole.getById(r.getId());
-					return role != null && role.getExceed() != ex;
-				})) {
-					roles.removeIf(r -> {
-						ExceedRole role = ExceedRole.getById(r.getId());
-						return role != null && role.getExceed() != ex;
-					});
+			Map<String, List<Role>> roles = new HashMap<>();
+			List<Pair<String, Role>> addRoles = guild.getRoles()
+					.stream()
+					.filter(r -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase().replace("-", "")), exNames))
+					.map(r -> {
+						String name = Arrays.stream(exNames).filter(s -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase().replace("-", "")), s)).findFirst().orElse(null);
+						return Pair.of(name, r);
+					})
+					.filter(p -> p.getKey() != null)
+					.collect(Collectors.toList());
 
-					support.modifyMemberRoles(mb, roles).queue();
-				}
-
-				assert exRole != null;
-				if (roles.stream().noneMatch(r -> r.getId().equals(exRole.getId()))) {
-					support.addRoleToMember(mb, exRole).queue();
-				}
+			for (Pair<String, Role> addRole : addRoles) {
+				List<Role> rs = roles.getOrDefault(addRole.getLeft(), new ArrayList<>());
+				rs.add(addRole.getRight());
+				roles.put(addRole.getLeft(), rs);
 			}
-		});
+
+			mbs.forEach(mb -> {
+				List<Role> rs = new ArrayList<>(mb.getRoles());
+				ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
+				if (ex != null) {
+					List<Role> validRoles = roles.get(ex.getName().toLowerCase());
+					List<Role> invalidRoles = roles.entrySet()
+							.stream()
+							.filter(e -> e.getKey().equalsIgnoreCase(ex.getName()))
+							.map(Map.Entry::getValue)
+							.flatMap(List::stream)
+							.collect(Collectors.toList());
+
+					List<Role> finalRoles = mb.getRoles()
+							.stream()
+							.filter(r -> !invalidRoles.contains(r) && !validRoles.contains(r))
+							.collect(Collectors.toList());
+
+					guild.modifyMemberRoles(mb, ListUtils.union(finalRoles, validRoles)).queue();
+				}
+			});
+		}
 
 		int month = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).getMonthValue();
 		if (!DynamicParameterDAO.getParam("last_upd_month").getValue().equals(String.valueOf(month)))

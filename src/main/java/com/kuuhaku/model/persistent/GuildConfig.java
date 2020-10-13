@@ -162,6 +162,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean dropEnabled = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean exceedRolesEnabled = false;
+
 	public GuildConfig() {
 	}
 
@@ -457,12 +460,20 @@ public class GuildConfig {
 		dropEnabled = !dropEnabled;
 	}
 
+	public void toggleExceedRoles() {
+		exceedRolesEnabled = !exceedRolesEnabled;
+	}
+
 	public boolean isKawaiponEnabled() {
 		return kawaiponEnabled;
 	}
 
 	public boolean isDropEnabled() {
 		return dropEnabled;
+	}
+
+	public boolean isExceedRolesEnabled() {
+		return exceedRolesEnabled;
 	}
 
 	public List<Category> getDisabledModules() {

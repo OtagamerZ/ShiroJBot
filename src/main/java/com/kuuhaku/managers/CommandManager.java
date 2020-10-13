@@ -229,6 +229,9 @@ public class CommandManager {
 			put(UnmuteMemberCommand.class, new Argument(
 					"unmute", new String[]{"desmutar", "dessilenciar", "unsilence"}, "req_mention", "cmd_unmute", MODERACAO, false
 			));
+			put(ToggleExceedRolesCommand.class, new Argument(
+					"cargosexceed", new String[]{"exceedroles", "exroles", "cargosex"}, "cmd_toggle-exceed-roles", MODERACAO, false
+			));
 
 			//INFORMATION
 			put(ComandosCommand.class, new Argument(
