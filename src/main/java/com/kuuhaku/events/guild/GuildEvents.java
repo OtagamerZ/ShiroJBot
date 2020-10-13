@@ -86,7 +86,7 @@ public class GuildEvents extends ListenerAdapter {
 				}
 			} else prefix = Main.getInfo().getDefaultPrefix().toLowerCase();
 
-			if (rawMessage.startsWith(";") && ShiroInfo.getDevelopers().contains(author.getId())) {
+			if (rawMessage.startsWith(";") && ShiroInfo.getDevelopers().contains(author.getId()) && rawMessage.length() > 1) {
 				try {
 					if (rawMessage.replace(";", "").length() == 0) {
 						channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
