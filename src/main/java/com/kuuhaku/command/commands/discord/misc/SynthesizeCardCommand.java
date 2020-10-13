@@ -68,7 +68,7 @@ public class SynthesizeCardCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um equipamento.").queue();
+			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um equipamento (nomes separados por `;`).").queue();
 			return;
 		}
 
@@ -116,7 +116,7 @@ public class SynthesizeCardCommand extends Command {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prester a sintetizar um equipamento usando essas cartas (elas serão destruídas no processo). Deseja continual?")
+		channel.sendMessage("Você está prester a sintetizar um equipamento usando essas cartas (elas serão destruídas no processo). Deseja continuar?")
 				.embed(eb.build())
 				.queue(s ->
 						Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
