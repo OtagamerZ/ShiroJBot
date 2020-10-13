@@ -101,7 +101,7 @@ public class MyStatsCommand extends Command {
 		String mult = MessageFormat.format(multPattern,
 				xp,
 				Helper.round((2.5 + (guild.getMemberCount() * 1.5 / 5000)) * (gb.getBuff(2) != null ? gb.getBuff(2).getMult() : 1), 1),
-				Helper.round((2 + (guild.getMemberCount() / 5000)) * (gb.getBuff(3) != null ? gb.getBuff(3).getMult() : 1), 1),
+				Helper.round((2 + (guild.getMemberCount() / 5000f)) * (gb.getBuff(3) != null ? gb.getBuff(3).getMult() : 1), 1),
 				Helper.round(0.5 * (gb.getBuff(4) != null ? gb.getBuff(4).getMult() : 1), 1)
 		);
 
