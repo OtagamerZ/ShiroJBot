@@ -329,6 +329,8 @@ public class Shoukan extends Game {
 						Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
 						changed[index] = true;
 					}
+
+					resetTimerKeepTurn();
 					return;
 				}
 
@@ -533,6 +535,7 @@ public class Shoukan extends Game {
 							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 					Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
 					postCombat();
+					resetTimerKeepTurn();
 					return;
 				}
 
