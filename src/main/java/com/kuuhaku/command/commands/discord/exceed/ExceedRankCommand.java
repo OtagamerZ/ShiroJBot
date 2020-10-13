@@ -70,6 +70,42 @@ public class ExceedRankCommand extends Command {
 
 			try {
 				if (args.length == 0) {
+					List<Exceed> exceeds = new ArrayList<>();
+					List<Color> colors = new ArrayList<>();
+					for (ExceedEnum ex : ExceedEnum.values()) {
+						exceeds.add(ExceedDAO.getExceed(ex));
+						colors.add(ex.getPalette());
+					}
+
+					CategoryChart chart = new CategoryChartBuilder()
+							.width(800)
+							.height(600)
+							.title("Ranking dos Exceeds")
+							.yAxisTitle("Pontos (x1000)")
+							.build();
+
+					chart.getStyler()
+							.setPlotGridLinesColor(Color.decode("#404447"))
+							.setAxisTickLabelsColor(Color.WHITE)
+							.setAnnotationsFontColor(Color.WHITE)
+							.setChartFontColor(Color.WHITE)
+							.setHasAnnotations(true)
+							.setLegendPosition(Styler.LegendPosition.InsideNE)
+							.setSeriesColors(colors.toArray(Color[]::new))
+							.setPlotBackgroundColor(Color.decode("#202225"))
+							.setChartBackgroundColor(Color.decode("#101114"))
+							.setLegendBackgroundColor(Color.decode("#101114"));
+
+					for (Exceed ex : exceeds) {
+						chart.addSeries(ex.getExceed().getName(),
+								List.of("Exceed"),
+								List.of(Math.round(ex.getExp() / 1000d))
+						);
+					}
+
+					channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
+					m.delete().queue();
+				} else if (args[0].equalsIgnoreCase("historico")) {
 					List<List<ExceedScore>> exceeds = new ArrayList<>();
 					List<Color> colors = new ArrayList<>();
 					for (ExceedEnum ex : ExceedEnum.values()) {
@@ -117,42 +153,8 @@ public class ExceedRankCommand extends Command {
 
 					channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
 					m.delete().queue();
-				} else if (args[0].equalsIgnoreCase("atual")) {
-					List<Exceed> exceeds = new ArrayList<>();
-					List<Color> colors = new ArrayList<>();
-					for (ExceedEnum ex : ExceedEnum.values()) {
-						exceeds.add(ExceedDAO.getExceed(ex));
-						colors.add(ex.getPalette());
-					}
-
-					CategoryChart chart = new CategoryChartBuilder()
-							.width(800)
-							.height(600)
-							.title("Ranking dos Exceeds")
-							.yAxisTitle("Pontos (x1000)")
-							.build();
-
-					chart.getStyler()
-							.setPlotGridLinesColor(Color.decode("#404447"))
-							.setAxisTickLabelsColor(Color.WHITE)
-							.setAnnotationsFontColor(Color.WHITE)
-							.setChartFontColor(Color.WHITE)
-							.setHasAnnotations(true)
-							.setLegendPosition(Styler.LegendPosition.InsideNE)
-							.setSeriesColors(colors.toArray(Color[]::new))
-							.setPlotBackgroundColor(Color.decode("#202225"))
-							.setChartBackgroundColor(Color.decode("#101114"))
-							.setLegendBackgroundColor(Color.decode("#101114"));
-
-					for (Exceed ex : exceeds) {
-						chart.addSeries(ex.getExceed().getName(),
-								List.of("Exceed"),
-								List.of(Math.round(ex.getExp() / 1000d))
-						);
-					}
-
-					channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
-					m.delete().queue();
+				} else {
+					m.editMessage("❌ | Você precisa digita `historico` se deseja ver o histórico de ranking, ou não digitar nada se deseja ver o ranking atual.").queue();
 				}
 			} catch (Exception e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-rank")).queue();
