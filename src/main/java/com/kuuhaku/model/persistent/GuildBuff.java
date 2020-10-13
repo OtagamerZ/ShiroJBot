@@ -58,6 +58,11 @@ public class GuildBuff {
 		this.id = id;
 	}
 
+	public ServerBuff getBuff(int id) {
+		if (buffs == null || buffs.isBlank()) return null;
+		return getBuffs().stream().filter(b -> b.getId() == id).findFirst().orElse(null);
+	}
+
 	public Set<ServerBuff> getBuffs() {
 		if (buffs == null || buffs.isBlank()) {
 			setBuffs(new HashSet<>());
