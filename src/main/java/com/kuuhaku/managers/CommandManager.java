@@ -276,8 +276,8 @@ public class CommandManager {
 			put(TagsCommand.class, new Argument(
 					"tags", new String[]{"emblemas", "insignias"}, "cmd_tags", INFO, false
 			));
-			put(MyTagsCommand.class, new Argument(
-					"eu", new String[]{"meusemblemas", "mytags"}, "cmd_my-tags", INFO, false
+			put(MyStatsCommand.class, new Argument(
+					"eu", new String[]{"meustatus", "mystats"}, "cmd_my-stats", INFO, false
 			));
 			put(MyBuffsCommand.class, new Argument(
 					"buffs", new String[]{"meusbuffs", "xpmodifiers", "xpmodifs"}, "cmd_my-buffs", INFO, false
