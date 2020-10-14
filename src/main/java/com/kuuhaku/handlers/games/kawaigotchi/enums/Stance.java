@@ -50,21 +50,13 @@ public enum Stance {
 
 	@Override
 	public String toString() {
-		switch (this) {
-			case IDLE:
-				return "Ocioso";
-			case SLEEPING:
-				return "Dormindo";
-			case HAPPY:
-				return "Feliz";
-			case SAD:
-				return "Triste";
-			case ANGRY:
-				return "Bravo";
-			case DEAD:
-				return "Morto";
-			default:
-				return null;
-		}
+		return switch (this) {
+			case IDLE -> "Ocioso";
+			case SLEEPING -> "Dormindo";
+			case HAPPY -> "Feliz";
+			case SAD -> "Triste";
+			case ANGRY -> "Bravo";
+			case DEAD -> "Morto";
+		};
 	}
 }

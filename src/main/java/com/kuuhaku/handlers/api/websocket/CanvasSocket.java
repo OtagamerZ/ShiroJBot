@@ -63,12 +63,10 @@ public class CanvasSocket extends WebSocketServer {
 			return;
 
 		switch (jo.getString("type")) {
-			case "canvas":
+			case "canvas" -> {
 				JSONObject pixel = jo.getJSONObject("content").getJSONObject("pixel");
-
 				Token t = TokenDAO.getToken(jo.getString("token"));
 				if (t == null) return;
-
 				try {
 					PixelOperation op = new PixelOperation(
 							jo.getString("token"),
@@ -82,17 +80,13 @@ public class CanvasSocket extends WebSocketServer {
 				} catch (NullPointerException e) {
 					return;
 				}
-
 				PixelCanvas.addPixel(new int[]{pixel.getInt("x"), pixel.getInt("y")}, Color.decode(pixel.getString("color")));
-
 				notifyUpdate();
-				break;
-			case "chat":
-				clients.forEach(s -> s.send(new JSONObject() {{
-					put("type", "chat");
-					put("content", jo.getJSONObject("content"));
-				}}.toString()));
-				break;
+			}
+			case "chat" -> clients.forEach(s -> s.send(new JSONObject() {{
+				put("type", "chat");
+				put("content", jo.getJSONObject("content"));
+			}}.toString()));
 		}
 	}
 

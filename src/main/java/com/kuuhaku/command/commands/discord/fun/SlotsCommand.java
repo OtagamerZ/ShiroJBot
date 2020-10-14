@@ -253,22 +253,15 @@ public class SlotsCommand extends Command {
 	}
 
 	private String showSlots(int phase) {
-		switch (phase) {
-			case 0:
-				return "<:vertical_right:747882840569544714>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
-			case 1:
-				return "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
-			case 2:
-				return "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
-			case 3:
-				return "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + rolled.get(2) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
-			case 4:
-				return "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + rolled.get(2) + "<:vertical:747883406632943669>" + rolled.get(3) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
-			case 5:
-				return "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + rolled.get(2) + "<:vertical:747883406632943669>" + rolled.get(3) + "<:vertical:747883406632943669>" + rolled.get(4) + "<:vertical_left:747882840414486571>";
-			default:
-				return "";
-		}
+		return switch (phase) {
+			case 0 -> "<:vertical_right:747882840569544714>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
+			case 1 -> "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
+			case 2 -> "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
+			case 3 -> "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + rolled.get(2) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
+			case 4 -> "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + rolled.get(2) + "<:vertical:747883406632943669>" + rolled.get(3) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
+			case 5 -> "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + rolled.get(2) + "<:vertical:747883406632943669>" + rolled.get(3) + "<:vertical:747883406632943669>" + rolled.get(4) + "<:vertical_left:747882840414486571>";
+			default -> "";
+		};
 	}
 
 	private void rollSlots() {

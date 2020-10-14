@@ -34,21 +34,12 @@ public class Helper {
 
 	public static int[] normalize(int[] vector, RoundingMode roundingMode) {
 		double length = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
-		switch (roundingMode) {
-			case UP:
-			case CEILING:
-			case HALF_UP:
-				return new int[]{mirroredCeil(vector[0] / length), mirroredCeil(vector[1] / length)};
-			case DOWN:
-			case FLOOR:
-			case HALF_DOWN:
-				return new int[]{(int) mirroredFloor(vector[0] / length), (int) mirroredFloor(vector[1] / length)};
-			case HALF_EVEN:
-				return new int[]{(int) Math.round(vector[0] / length), (int) Math.round(vector[1] / length)};
-			case UNNECESSARY:
-			default:
-				throw new IllegalArgumentException();
-		}
+		return switch (roundingMode) {
+			case UP, CEILING, HALF_UP -> new int[]{mirroredCeil(vector[0] / length), mirroredCeil(vector[1] / length)};
+			case DOWN, FLOOR, HALF_DOWN -> new int[]{(int) mirroredFloor(vector[0] / length), (int) mirroredFloor(vector[1] / length)};
+			case HALF_EVEN -> new int[]{(int) Math.round(vector[0] / length), (int) Math.round(vector[1] / length)};
+			default -> throw new IllegalArgumentException();
+		};
 	}
 
 	public static int mirroredCeil(double value) {

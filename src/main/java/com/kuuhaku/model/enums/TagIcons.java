@@ -46,127 +46,73 @@ public enum TagIcons {
 	LEVEL;
 
 	public String getTag(int lvl) {
-		switch (this) {
-			case NIICHAN:
-				return "<:niichan:697879726018003115> ";
-			case DEV:
-				return "<:developer:697879725925990466> ";
-			case SUPPORT:
-				return "<:support:697879726047625216> ";
-			case EDITOR:
-				return "<:writer:697879725497909310> ";
-			case READER:
-				return "<:reader:697879726148288542> ";
-			case MODERATOR:
-				return "<:moderator:697879725628194878> ";
-			case VERIFIED:
-				return "<:verified:697879725887979621> ";
-			case TOXIC:
-				return "<:toxic:697879725816676442> ";
-			case MARRIED:
-				return "<:married:697879725888241684> ";
-			case RICH:
-				return "<:rich:718447753944105012> ";
-			case COLLECTION25:
-				return "<:collection_25:724662152366915636> ";
-			case COLLECTION50:
-				return "<:collection_50:724662153570812446> ";
-			case COLLECTION75:
-				return "<:collection_75:724662152602058762> ";
-			case COLLECTION100:
-				return "<:collection_100:724662152824225862> ";
-			case FOIL25:
-				return "<:foil_25:747511886186151956> ";
-			case FOIL50:
-				return "<:foil_50:747511886035026092> ";
-			case FOIL75:
-				return "<:foil_75:747511886202798192> ";
-			case FOIL100:
-				return "<:foil_100:747511886307655770> ";
-			case LEVEL:
-				return getLevelEmote(lvl).getAsMention() + " ";
-		}
-		throw new IllegalStateException();
+		return switch (this) {
+			case NIICHAN -> "<:niichan:697879726018003115> ";
+			case DEV -> "<:developer:697879725925990466> ";
+			case SUPPORT -> "<:support:697879726047625216> ";
+			case EDITOR -> "<:writer:697879725497909310> ";
+			case READER -> "<:reader:697879726148288542> ";
+			case MODERATOR -> "<:moderator:697879725628194878> ";
+			case VERIFIED -> "<:verified:697879725887979621> ";
+			case TOXIC -> "<:toxic:697879725816676442> ";
+			case MARRIED -> "<:married:697879725888241684> ";
+			case RICH -> "<:rich:718447753944105012> ";
+			case COLLECTION25 -> "<:collection_25:724662152366915636> ";
+			case COLLECTION50 -> "<:collection_50:724662153570812446> ";
+			case COLLECTION75 -> "<:collection_75:724662152602058762> ";
+			case COLLECTION100 -> "<:collection_100:724662152824225862> ";
+			case FOIL25 -> "<:foil_25:747511886186151956> ";
+			case FOIL50 -> "<:foil_50:747511886035026092> ";
+			case FOIL75 -> "<:foil_75:747511886202798192> ";
+			case FOIL100 -> "<:foil_100:747511886307655770> ";
+			case LEVEL -> getLevelEmote(lvl).getAsMention() + " ";
+		};
 	}
 
 	public String getId(int lvl) {
-		switch (this) {
-			case NIICHAN:
-				return "697879726018003115";
-			case DEV:
-				return "697879725925990466";
-			case SUPPORT:
-				return "697879726047625216";
-			case EDITOR:
-				return "697879725497909310";
-			case READER:
-				return "697879726148288542";
-			case MODERATOR:
-				return "697879725628194878";
-			case VERIFIED:
-				return "697879725887979621";
-			case TOXIC:
-				return "697879725816676442";
-			case MARRIED:
-				return "697879725888241684";
-			case RICH:
-				return "718447753944105012";
-			case COLLECTION25:
-				return "724662152366915636";
-			case COLLECTION50:
-				return "724662153570812446";
-			case COLLECTION75:
-				return "724662152602058762";
-			case COLLECTION100:
-				return "724662152824225862";
-			case FOIL25:
-				return "747511886186151956";
-			case FOIL50:
-				return "747511886035026092";
-			case FOIL75:
-				return "747511886202798192";
-			case FOIL100:
-				return "74751188630765577";
-			case LEVEL:
-				return getLevelEmote(lvl).getId();
-		}
-		throw new IllegalStateException();
+		return switch (this) {
+			case NIICHAN -> "697879726018003115";
+			case DEV -> "697879725925990466";
+			case SUPPORT -> "697879726047625216";
+			case EDITOR -> "697879725497909310";
+			case READER -> "697879726148288542";
+			case MODERATOR -> "697879725628194878";
+			case VERIFIED -> "697879725887979621";
+			case TOXIC -> "697879725816676442";
+			case MARRIED -> "697879725888241684";
+			case RICH -> "718447753944105012";
+			case COLLECTION25 -> "724662152366915636";
+			case COLLECTION50 -> "724662153570812446";
+			case COLLECTION75 -> "724662152602058762";
+			case COLLECTION100 -> "724662152824225862";
+			case FOIL25 -> "747511886186151956";
+			case FOIL50 -> "747511886035026092";
+			case FOIL75 -> "747511886202798192";
+			case FOIL100 -> "74751188630765577";
+			case LEVEL -> getLevelEmote(lvl).getId();
+		};
 	}
 
 	public static String getExceed(ExceedEnum t) {
-		switch (t) {
-			case IMANITY:
-				return "<:imanity:697879725690847324> ";
-			case SEIREN:
-				return "<:seiren:697879725640515685> ";
-			case WEREBEAST:
-				return "<:werebeast:697879725934379178> ";
-			case ELF:
-				return "<:elf:697879725661749300> ";
-			case EXMACHINA:
-				return "<:exmachina:697879725988904971> ";
-			case FLUGEL:
-				return "<:flugel:697879725967933440> ";
-		}
-		throw new IllegalStateException();
+		return switch (t) {
+			case IMANITY -> "<:imanity:697879725690847324> ";
+			case SEIREN -> "<:seiren:697879725640515685> ";
+			case WEREBEAST -> "<:werebeast:697879725934379178> ";
+			case ELF -> "<:elf:697879725661749300> ";
+			case EXMACHINA -> "<:exmachina:697879725988904971> ";
+			case FLUGEL -> "<:flugel:697879725967933440> ";
+		};
 	}
 
 	public static String getExceedId(ExceedEnum t) {
-		switch (t) {
-			case IMANITY:
-				return "697879725690847324";
-			case SEIREN:
-				return "697879725640515685";
-			case WEREBEAST:
-				return "697879725934379178";
-			case ELF:
-				return "697879725661749300";
-			case EXMACHINA:
-				return "697879725988904971";
-			case FLUGEL:
-				return "697879725967933440";
-		}
-		throw new IllegalStateException();
+		return switch (t) {
+			case IMANITY -> "697879725690847324";
+			case SEIREN -> "697879725640515685";
+			case WEREBEAST -> "697879725934379178";
+			case ELF -> "697879725661749300";
+			case EXMACHINA -> "697879725988904971";
+			case FLUGEL -> "697879725967933440";
+		};
 	}
 
 	public static Emote getLevelEmote(int lvl) {

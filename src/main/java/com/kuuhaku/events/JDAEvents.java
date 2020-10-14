@@ -131,21 +131,11 @@ public class JDAEvents extends ListenerAdapter {
 				eb.setThumbnail(event.getUser().getAvatarUrl());
 				eb.setFooter("ID do usuário: " + event.getUser().getId(), event.getGuild().getIconUrl());
 				switch ((int) (Math.random() * 5)) {
-					case 0:
-						eb.setTitle("Opa, parece que temos um novo membro?");
-						break;
-					case 1:
-						eb.setTitle("Mais um membro para nosso lindo servidor!");
-						break;
-					case 2:
-						eb.setTitle("Um novo jogador entrou na partida, pressione start 2P!");
-						break;
-					case 3:
-						eb.setTitle("Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!");
-						break;
-					case 4:
-						eb.setTitle("Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!");
-						break;
+					case 0 -> eb.setTitle("Opa, parece que temos um novo membro?");
+					case 1 -> eb.setTitle("Mais um membro para nosso lindo servidor!");
+					case 2 -> eb.setTitle("Um novo jogador entrou na partida, pressione start 2P!");
+					case 3 -> eb.setTitle("Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!");
+					case 4 -> eb.setTitle("Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!");
 				}
 
 				Objects.requireNonNull(event.getGuild().getTextChannelById(gc.getCanalBV())).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
@@ -184,21 +174,11 @@ public class JDAEvents extends ListenerAdapter {
 				eb.setDescription(gc.getMsgAdeus().replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
 				eb.setFooter("ID do usuário: " + event.getUser().getId() + "\n\nServidor gerenciado por " + Objects.requireNonNull(event.getGuild().getOwner()).getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
 				switch (rmsg) {
-					case 0:
-						eb.setTitle("Nãããoo...um membro deixou este servidor!");
-						break;
-					case 1:
-						eb.setTitle("O quê? Temos um membro a menos neste servidor!");
-						break;
-					case 2:
-						eb.setTitle("Alguém saiu do servidor, deve ter acabado a pilha, só pode!");
-						break;
-					case 3:
-						eb.setTitle("Bem, alguém não está mais neste servidor, que pena!");
-						break;
-					case 4:
-						eb.setTitle("Saíram do servidor bem no meio de uma teamfight, da pra acreditar?");
-						break;
+					case 0 -> eb.setTitle("Nãããoo...um membro deixou este servidor!");
+					case 1 -> eb.setTitle("O quê? Temos um membro a menos neste servidor!");
+					case 2 -> eb.setTitle("Alguém saiu do servidor, deve ter acabado a pilha, só pode!");
+					case 3 -> eb.setTitle("Bem, alguém não está mais neste servidor, que pena!");
+					case 4 -> eb.setTitle("Saíram do servidor bem no meio de uma teamfight, da pra acreditar?");
 				}
 
 				Objects.requireNonNull(event.getGuild().getTextChannelById(gc.getCanalAdeus())).sendMessage(eb.build()).queue();
@@ -220,49 +200,39 @@ public class JDAEvents extends ListenerAdapter {
 
 			try {
 				switch (args[0].toLowerCase()) {
-					case "send":
-					case "s":
+					case "send", "s" -> {
 						User u = Main.getInfo().getUserByID(args[1]);
-
 						if (u == null) {
 							event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
 							return;
 						}
-
 						u.openPrivateChannel().queue(c ->
 								c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
-
 						staffIds.forEach(d -> {
 							if (!d.equals(event.getAuthor().getId())) {
 								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
 										c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
 							}
 						});
-
 						event.getChannel().sendMessage("Mensagem enviada com sucesso!").queue();
-						break;
-					case "block":
-					case "b":
+					}
+					case "block", "b" -> {
 						User us = Main.getInfo().getUserByID(args[1]);
-
 						if (us == null) {
 							event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
 							return;
 						}
-
 						RelayDAO.permaBlock(new PermaBlock(args[1]));
 						us.openPrivateChannel().queue(c ->
 								c.sendMessage("Você foi bloqueado dos canais de comunicação da Shiro pela seguinte razão: `" + msgNoArgs + "`").queue());
-
 						staffIds.forEach(d -> {
 							if (!d.equals(event.getAuthor().getId())) {
 								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
 										c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
 							}
 						});
-
 						event.getChannel().sendMessage("Usuário bloqueado com sucesso!").queue();
-						break;
+					}
 				}
 			} catch (NullPointerException ignore) {
 			}
