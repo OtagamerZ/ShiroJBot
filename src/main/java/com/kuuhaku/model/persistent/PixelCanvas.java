@@ -109,23 +109,13 @@ public class PixelCanvas {
 	}
 
 	public RestAction viewSection(TextChannel channel, int number) {
-		int[] section;
-		switch (number) {
-			case 1:
-				section = new int[]{0, 0};
-				break;
-			case 2:
-				section = new int[]{512, 0};
-				break;
-			case 3:
-				section = new int[]{0, 512};
-				break;
-			case 4:
-				section = new int[]{512, 512};
-				break;
-			default:
-				throw new IllegalStateException("Unexpected value: " + number);
-		}
+		int[] section = switch (number) {
+			case 1 -> new int[]{0, 0};
+			case 2 -> new int[]{512, 0};
+			case 3 -> new int[]{0, 512};
+			case 4 -> new int[]{512, 512};
+			default -> throw new IllegalStateException("Unexpected value: " + number);
+		};
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			BufferedImage bi = new BufferedImage(CANVAS_SIZE / 2, CANVAS_SIZE / 2, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = bi.createGraphics();

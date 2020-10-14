@@ -43,36 +43,22 @@ public enum FoodType {
 
 	@Override
 	public String toString() {
-		switch (this) {
-			case RATION:
-				return "Ração";
-			case MEAT:
-				return "Carne";
-			case SWEET:
-				return "Doce";
-			case PLANT:
-				return "Vegetal";
-			case SPECIAL:
-				return "Especial";
-			default:
-				throw new RuntimeException();
-		}
+		return switch (this) {
+			case RATION -> "Ração";
+			case MEAT -> "Carne";
+			case SWEET -> "Doce";
+			case PLANT -> "Vegetal";
+			case SPECIAL -> "Especial";
+		};
 	}
 
 	public String toStrings() {
-		switch (this) {
-			case RATION:
-				return "Rações";
-			case MEAT:
-				return "Carnes";
-			case SWEET:
-				return "Doces";
-			case PLANT:
-				return "Vegetais";
-			case SPECIAL:
-				return "Especiais";
-			default:
-				throw new RuntimeException();
-		}
+		return switch (this) {
+			case RATION -> "Rações";
+			case MEAT -> "Carnes";
+			case SWEET -> "Doces";
+			case PLANT -> "Vegetais";
+			case SPECIAL -> "Especiais";
+		};
 	}
 }

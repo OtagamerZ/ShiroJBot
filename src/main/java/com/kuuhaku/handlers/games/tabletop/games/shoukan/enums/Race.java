@@ -33,31 +33,18 @@ public enum Race {
 
 	@Override
 	public String toString() {
-		switch (this) {
-			case HUMAN:
-				return "Humano";
-			case ELF:
-				return "Elfo";
-			case BESTIAL:
-				return "Bestial";
-			case UNDEAD:
-				return "Morto-vivo";
-			case MACHINE:
-				return "Máquina";
-			case ULTIMATE:
-				return "Ultimate";
-			case DIVINITY:
-				return "Divindade";
-			case MYSTICAL:
-				return "Místico";
-			case CREATURE:
-				return "Criatura";
-			case SPIRIT:
-				return "Espírito";
-			case DEMON:
-				return "Demônio";
-			default:
-				return null;
-		}
+		return switch (this) {
+			case HUMAN -> "Humano";
+			case ELF -> "Elfo";
+			case BESTIAL -> "Bestial";
+			case UNDEAD -> "Morto-vivo";
+			case MACHINE -> "Máquina";
+			case ULTIMATE -> "Ultimate";
+			case DIVINITY -> "Divindade";
+			case MYSTICAL -> "Místico";
+			case CREATURE -> "Criatura";
+			case SPIRIT -> "Espírito";
+			case DEMON -> "Demônio";
+		};
 	}
 }

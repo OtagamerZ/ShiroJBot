@@ -367,21 +367,22 @@ public class Kawaigotchi {
 		int width;
 
 		switch (tier) {
-			case CHILD:
+			case CHILD -> {
 				height = (int) (pet.getHeight(null) * 0.5);
 				width = (int) (pet.getWidth(null) * 0.5);
-				break;
-			case TEEN:
+			}
+			case TEEN -> {
 				height = (int) (pet.getHeight(null) * 0.75);
 				width = (int) (pet.getWidth(null) * 0.75);
-				break;
-			case ADULT:
+			}
+			case ADULT -> {
 				height = pet.getHeight(null);
 				width = pet.getWidth(null);
-				break;
-			default:
+			}
+			default -> {
 				height = 0;
 				width = 0;
+			}
 		}
 		g2d.drawImage(pet, pos, scn.getHeight() - height - 108, dir * width, height, null);
 

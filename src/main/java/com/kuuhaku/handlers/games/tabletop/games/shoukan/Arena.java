@@ -88,7 +88,7 @@ public class Arena {
 				for (int i = 0; i < value.size(); i++) {
 					SlotColumn<Drawable, Drawable> c = value.get(i);
 					switch (key) {
-						case TOP:
+						case TOP -> {
 							if (c.getTop() != null) {
 								Drawable d = c.getTop();
 								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 387, null);
@@ -97,7 +97,6 @@ public class Arena {
 								Drawable d = c.getBottom();
 								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 0, null);
 							}
-
 							if (grv.size() > 0)
 								g2d.drawImage(grv.peekLast().drawCard(acc, false), 1889, 193, null);
 							if (h.getDeque().size() > 0) {
@@ -105,8 +104,8 @@ public class Arena {
 								assert d != null;
 								g2d.drawImage(d.drawCard(acc, true), 137, 193, null);
 							}
-							break;
-						case BOTTOM:
+						}
+						case BOTTOM -> {
 							if (c.getTop() != null) {
 								Drawable d = c.getTop();
 								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 1013, null);
@@ -115,7 +114,6 @@ public class Arena {
 								Drawable d = c.getBottom();
 								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 1400, null);
 							}
-
 							if (grv.size() > 0)
 								g2d.drawImage(grv.peekLast().drawCard(acc, false), 137, 1206, null);
 							if (h.getDeque().size() > 0) {
@@ -123,7 +121,7 @@ public class Arena {
 								assert d != null;
 								g2d.drawImage(d.drawCard(acc, true), 1889, 1206, null);
 							}
-							break;
+						}
 					}
 
 					float prcnt = h.getHp() / 5000f;

@@ -155,10 +155,10 @@ public class SellCardCommand extends Command {
 			ShiroInfo.getHashes().add(hash);
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?").queue(s -> {
-				Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
+				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
 					Main.getInfo().getConfirmationPending().invalidate(author.getId());
-					if (member1.getId().equals(author.getId())) {
+					if (mb.getId().equals(author.getId())) {
 						kp.removeCard(card);
 						KawaiponDAO.saveKawaipon(kp);
 

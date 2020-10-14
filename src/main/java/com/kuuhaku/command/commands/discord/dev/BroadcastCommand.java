@@ -79,12 +79,10 @@ public class BroadcastCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		switch (args[0].toLowerCase()) {
-			case "geral":
+			case "geral" -> {
 				List<WebhookClient> clients = new ArrayList<>();
 				List<GuildConfig> gcs = GuildDAO.getAlertChannels();
-
 				List<List<GuildConfig>> gcPages = Helper.chunkify(gcs, 10);
-
 				for (List<GuildConfig> gs : gcPages) {
 					result.clear();
 					eb.clear();
@@ -111,21 +109,17 @@ public class BroadcastCommand extends Command {
 
 					showResult(result, sb, pages, eb);
 				}
-
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-
 				wmb.setUsername("Stephanie (Notificações Shiro)");
 				wmb.setAvatarUrl("https://i.imgur.com/mgA11Rx.png");
 				wmb.setContent(msg);
-
 				WebhookCluster cluster = new WebhookCluster(clients);
 				cluster.broadcast(wmb.build());
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
-				break;
-			case "beta":
+			}
+			case "beta" -> {
 				List<Tags> ps = TagDAO.getAllBetas();
 				List<List<Tags>> psPages = Helper.chunkify(ps, 10);
-
 				for (List<Tags> p : psPages) {
 					result.clear();
 					eb.clear();
@@ -148,11 +142,9 @@ public class BroadcastCommand extends Command {
 
 					showResult(result, sb, pages, eb);
 				}
-
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
-				break;
-			default:
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-invalid-type")).queue();
+			}
+			default -> channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-invalid-type")).queue();
 		}
 	}
 

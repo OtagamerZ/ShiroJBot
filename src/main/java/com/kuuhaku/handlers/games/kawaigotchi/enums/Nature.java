@@ -57,23 +57,14 @@ public enum Nature {
 
 	@Override
 	public String toString() {
-		switch (this) {
-			case BRAVE:
-				return "Corajoso";
-			case KIND:
-				return "Gentil";
-			case ACTIVE:
-				return "Ativo";
-			case NORMAL:
-				return "Normal";
-			case LAZY:
-				return "Preguiçoso";
-			case SLY:
-				return "Fresco";
-			case ROUGH:
-				return "Áspero";
-			default:
-				throw new RuntimeException();
-		}
+		return switch (this) {
+			case BRAVE -> "Corajoso";
+			case KIND -> "Gentil";
+			case ACTIVE -> "Ativo";
+			case NORMAL -> "Normal";
+			case LAZY -> "Preguiçoso";
+			case SLY -> "Fresco";
+			case ROUGH -> "Áspero";
+		};
 	}
 }

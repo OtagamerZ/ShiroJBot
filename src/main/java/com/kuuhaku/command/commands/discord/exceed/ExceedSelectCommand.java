@@ -83,7 +83,7 @@ public class ExceedSelectCommand extends Command {
 				}
 
 				switch (args[0].toLowerCase()) {
-					case "imanity":
+					case "imanity" -> {
 						if (ExceedDAO.getPercentage(ExceedEnum.IMANITY) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
@@ -94,8 +94,8 @@ public class ExceedSelectCommand extends Command {
 							em.setExceed(ExceedEnum.IMANITY.getName());
 							ExceedDAO.saveExceedMember(em);
 						}
-						break;
-					case "seiren":
+					}
+					case "seiren" -> {
 						if (ExceedDAO.getPercentage(ExceedEnum.SEIREN) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
@@ -106,8 +106,8 @@ public class ExceedSelectCommand extends Command {
 							em.setExceed(ExceedEnum.SEIREN.getName());
 							ExceedDAO.saveExceedMember(em);
 						}
-						break;
-					case "werebeast":
+					}
+					case "werebeast" -> {
 						if (ExceedDAO.getPercentage(ExceedEnum.WEREBEAST) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
@@ -118,8 +118,8 @@ public class ExceedSelectCommand extends Command {
 							em.setExceed(ExceedEnum.WEREBEAST.getName());
 							ExceedDAO.saveExceedMember(em);
 						}
-						break;
-					case "elf":
+					}
+					case "elf" -> {
 						if (ExceedDAO.getPercentage(ExceedEnum.ELF) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
@@ -130,8 +130,8 @@ public class ExceedSelectCommand extends Command {
 							em.setExceed(ExceedEnum.ELF.getName());
 							ExceedDAO.saveExceedMember(em);
 						}
-						break;
-					case "ex-machina":
+					}
+					case "ex-machina" -> {
 						if (ExceedDAO.getPercentage(ExceedEnum.EXMACHINA) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
@@ -142,8 +142,8 @@ public class ExceedSelectCommand extends Command {
 							em.setExceed(ExceedEnum.EXMACHINA.getName());
 							ExceedDAO.saveExceedMember(em);
 						}
-						break;
-					case "flügel":
+					}
+					case "flügel" -> {
 						if (ExceedDAO.getPercentage(ExceedEnum.FLUGEL) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
@@ -154,10 +154,11 @@ public class ExceedSelectCommand extends Command {
 							em.setExceed(ExceedEnum.FLUGEL.getName());
 							ExceedDAO.saveExceedMember(em);
 						}
-						break;
-					default:
+					}
+					default -> {
 						m.editMessage("❌ | Exceed inexistente.").queue();
 						return;
+					}
 				}
 
 				String ex = ExceedDAO.getExceed(author.getId());

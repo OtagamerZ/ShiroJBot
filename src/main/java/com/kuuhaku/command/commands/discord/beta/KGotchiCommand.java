@@ -128,53 +128,39 @@ public class KGotchiCommand extends Command {
 				EmbedBuilder eb = new EmbedBuilder();
 				Graphics2D g2d = bi.createGraphics();
 				switch (k.feed(f)) {
-					case FAILED:
+					case FAILED -> {
 						g2d.drawImage(TROUBLED.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 						eb.setTitle("Estoque vazio!");
 						eb.setDescription("Seu estoque de " + f.getName().toLowerCase() + " está vazio!");
 						eb.setColor(Color.yellow);
-						break;
-					case SUCCESS:
+					}
+					case SUCCESS -> {
 						bi = k.getRace().extract(k.getStance(), k.getSkin());
 						g2d = bi.createGraphics();
 						if (f.getType() == FoodType.SPECIAL)
 							g2d.drawImage(f.getSpecialIcon(), bi.getWidth() - 64, 0, 64, 64, null);
 						else
 							g2d.drawImage(FOOD_UP.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
-						String res = "";
-
-						switch (f.getType()) {
-							case RATION:
-								res = "não gostou muito, mas da pro gasto!";
-								break;
-							case MEAT:
-								res = "gostou bastante, e é bem nutritivo!";
-								break;
-							case SWEET:
-								res = "amou, apesar de não ser muito saudável!";
-								break;
-							case PLANT:
-								res = "gostou, e é bem saudável!";
-								break;
-							case SPECIAL:
-								res = f.getSpecialQuote();
-								break;
-						}
-
+						String res = switch (f.getType()) {
+							case RATION -> "não gostou muito, mas da pro gasto!";
+							case MEAT -> "gostou bastante, e é bem nutritivo!";
+							case SWEET -> "amou, apesar de não ser muito saudável!";
+							case PLANT -> "gostou, e é bem saudável!";
+							case SPECIAL -> f.getSpecialQuote();
+						};
 						eb.setTitle("Sucesso!");
 						eb.setDescription("Você deu " + f.getName().toLowerCase() + " para " + k.getName() + ", parece que " + res);
 						eb.setColor(Color.green);
-						break;
-					case UNABLE:
+					}
+					case UNABLE -> {
 						if (k.getStance().equals(Stance.SLEEPING))
 							g2d.drawImage(SLEEPING.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 						else
 							g2d.drawImage(TROUBLED.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
-
 						eb.setTitle("Impossibilitado.");
 						eb.setDescription("Não parece que " + k.getName() + " possa comer agora!");
 						eb.setColor(Color.red);
-						break;
+					}
 				}
 
 				g2d.dispose();
@@ -193,32 +179,30 @@ public class KGotchiCommand extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 			Graphics2D g2d = bi.createGraphics();
 			switch (k.play()) {
-				case FAILED:
+				case FAILED -> {
 					g2d.drawImage(TROUBLED.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 					eb.setTitle("Tente novamente!");
 					eb.setDescription("Ah, parece que " + k.getName() + " não quer brincar.");
 					eb.setColor(Color.yellow);
-					break;
-				case SUCCESS:
+				}
+				case SUCCESS -> {
 					bi = k.getRace().extract(k.getStance(), k.getSkin());
 					g2d = bi.createGraphics();
 					g2d.drawImage(MOOD_UP.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
-
 					eb.setTitle("Sucesso!");
 					eb.setDescription("Vocês brincaram por bastante tempo, " + k.getName() + " está mais feliz agora!");
 					eb.setColor(Color.green);
 					getPrize(channel, acc, k);
-					break;
-				case UNABLE:
+				}
+				case UNABLE -> {
 					if (k.getStance().equals(Stance.SLEEPING))
 						g2d.drawImage(SLEEPING.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 					else
 						g2d.drawImage(TROUBLED.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
-
 					eb.setTitle("Impossibilitado.");
 					eb.setDescription("Não parece que " + k.getName() + " possa brincar agora!");
 					eb.setColor(Color.red);
-					break;
+				}
 			}
 
 			g2d.dispose();
@@ -228,32 +212,30 @@ public class KGotchiCommand extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 			Graphics2D g2d = bi.createGraphics();
 			switch (k.train()) {
-				case FAILED:
+				case FAILED -> {
 					g2d.drawImage(TROUBLED.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 					eb.setTitle("Tente novamente!");
 					eb.setDescription(k.getName() + " fugiu do treino, parece que está com preguiça.");
 					eb.setColor(Color.yellow);
-					break;
-				case SUCCESS:
+				}
+				case SUCCESS -> {
 					bi = k.getRace().extract(k.getStance(), k.getSkin());
 					g2d = bi.createGraphics();
 					g2d.drawImage(XP_UP.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
-
 					eb.setTitle("Sucesso!");
 					eb.setDescription(k.getName() + " treinou muito, tá ficando monstrão!");
 					eb.setColor(Color.green);
 					getPrize(channel, acc, k);
-					break;
-				case UNABLE:
+				}
+				case UNABLE -> {
 					if (k.getStance().equals(Stance.SLEEPING))
 						g2d.drawImage(SLEEPING.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 					else
 						g2d.drawImage(TROUBLED.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
-
 					eb.setTitle("Impossibilitado.");
 					eb.setDescription("Não parece que " + k.getName() + " possa treinar agora!");
 					eb.setColor(Color.red);
-					break;
+				}
 			}
 
 			g2d.dispose();
@@ -261,7 +243,7 @@ public class KGotchiCommand extends Command {
 		} else if (Helper.equalsAny(args[0], "comprar", "buy")) {
 			if (args.length > 1 && Helper.equalsAny(args[1], "extra", "comida")) {
 				switch (args[1].toLowerCase()) {
-					case "extra":
+					case "extra" -> {
 						if (args.length < 3) {
 							EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -304,8 +286,8 @@ public class KGotchiCommand extends Command {
 
 							AccountDAO.saveAccount(acc);
 						}
-						break;
-					case "comida":
+					}
+					case "comida" -> {
 						if (args.length < 3) {
 							EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -367,7 +349,7 @@ public class KGotchiCommand extends Command {
 
 							AccountDAO.saveAccount(acc);
 						}
-						break;
+					}
 				}
 			} else {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_shop-type-required")).queue();
