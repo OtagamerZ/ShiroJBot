@@ -61,8 +61,10 @@ public class MonthlyEvent implements Job {
 					User u = Main.getInfo().getUserByID(em.getId());
 					if (u != null) u.openPrivateChannel().queue(c -> {
 						try {
-							c.sendMessage("O seu Exceed foi campeão neste mês, parabéns!\n" +
-										  "Todos da " + ex + " ganharão experiência em dobro durante 1 semana além de isenção de taxas.").queue(null, Helper::doNothing);
+							c.sendMessage("""
+									O seu Exceed foi campeão neste mês, parabéns!
+									Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas.
+									""".formatted(ex)).queue(null, Helper::doNothing);
 						} catch (Exception ignore) {
 						}
 					});
@@ -98,19 +100,22 @@ public class MonthlyEvent implements Job {
 
 		assert chn != null;
 		if (winners.size() == 0) {
-			chn.sendMessage(
-					"As dezenas sorteadas foram `" + String.join(" ", dozens) + "`.\n" +
-					"Como não houveram vencedores, o prêmio de " + value.getValue() + " créditos será acumulado para o próximo mês!"
+			chn.sendMessage("""
+					As dezenas sorteadas foram `%s`.
+					Como não houveram vencedores, o prêmio de %d créditos será acumulado para o próximo mês!
+					""".formatted(String.join(" ", dozens), value.getValue())
 			).queue();
 		} else if (winners.size() == 1) {
-			chn.sendMessage(
-					"As dezenas sorteadas foram `" + String.join(" ", dozens) + "`.\n" +
-					"O vencedor de " + value.getValue() + " créditos foi " + Main.getInfo().getUserByID(winners.get(0).getUid()).getName() + ", parabéns!"
+			chn.sendMessage("""
+					As dezenas sorteadas foram `%s`.
+					O vencedor de %d créditos foi %s, parabéns!
+					""".formatted(String.join(" ", dozens), value.getValue(), Main.getInfo().getUserByID(winners.get(0).getUid()).getName())
 			).queue();
 		} else {
-			chn.sendMessage(
-					"As dezenas sorteadas foram `" + String.join(" ", dozens) + "`.\n" +
-					"Os " + winners.size() + " vencedores dividirão em partes iguais o prêmio de " + value.getValue() + " créditos, parabéns!!"
+			chn.sendMessage("""
+					As dezenas sorteadas foram `%s`.
+					Os %d vencedores dividirão em partes iguais o prêmio de %d créditos, parabéns!!
+					""".formatted(String.join(" ", dozens), winners.size(), value.getValue())
 			).queue();
 		}
 

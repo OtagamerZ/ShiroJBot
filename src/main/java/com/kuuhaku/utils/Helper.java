@@ -442,7 +442,10 @@ public class Helper {
 				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissionsExplicit(c);
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
-							  perms.stream().map(p -> ":white_check_mark: -> " + p.getName() + "\n").sorted().collect(Collectors.joining());
+							  perms.stream()
+									  .map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+									  .sorted()
+									  .collect(Collectors.joining());
 			}
 		} catch (NoResultException ignore) {
 		}
@@ -451,7 +454,10 @@ public class Helper {
 		EnumSet<Permission> perms = shiro.getPermissionsExplicit(c);
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
-			   perms.stream().map(p -> ":white_check_mark: -> " + p.getName() + "\n").sorted().collect(Collectors.joining()) +
+			   perms.stream()
+					   .map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+					   .sorted()
+					   .collect(Collectors.joining()) +
 			   jibrilPerms;
 	}
 

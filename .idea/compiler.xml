@@ -2,9 +2,9 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="com.kuuhaku.shiro-j-bot.main" target="11" />
-      <module name="com.kuuhaku.shiro-j-bot.test" target="11" />
-      <module name="shiro-j-bot" target="11" />
+      <module name="com.kuuhaku.shiro-j-bot.main" target="15" />
+      <module name="com.kuuhaku.shiro-j-bot.test" target="15" />
+      <module name="shiro-j-bot" target="15" />
     </bytecodeTargetLevel>
   </component>
 </project>
