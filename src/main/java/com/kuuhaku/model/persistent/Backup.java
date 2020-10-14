@@ -210,14 +210,14 @@ public class Backup {
 					}
 				});
 				switch (chn.getType()) {
-					case TEXT:
+					case TEXT -> {
 						TextChannel tchannel = (TextChannel) chn;
 						channels.add(new com.kuuhaku.model.common.backup.GuildChannel(tchannel.getName(), tchannel.getTopic(), chnperms, tchannel.isNSFW()));
-						break;
-					case VOICE:
+					}
+					case VOICE -> {
 						VoiceChannel vchannel = (VoiceChannel) chn;
 						channels.add(new com.kuuhaku.model.common.backup.GuildChannel(vchannel.getName(), chnperms, vchannel.getUserLimit(), vchannel.getBitrate()));
-						break;
+					}
 				}
 			});
 			gcats.add(new GuildCategory(cat.getName(), channels, catperms));

@@ -91,25 +91,15 @@ public enum FrameColor {
 
 	@Override
 	public String toString() {
-		switch (this) {
-			case PINK:
-				return "Rosa";
-			case PURPLE:
-				return "Roxo";
-			case BLUE:
-				return "Azul";
-			case CYAN:
-				return "Ciano";
-			case GREEN:
-				return "Verde";
-			case YELLOW:
-				return "Amarelo";
-			case RED:
-				return "Vermelho";
-			case GREY:
-				return "Cinza";
-			default:
-				return null;
-		}
+		return switch (this) {
+			case PINK -> "Rosa";
+			case PURPLE -> "Roxo";
+			case BLUE -> "Azul";
+			case CYAN -> "Ciano";
+			case GREEN -> "Verde";
+			case YELLOW -> "Amarelo";
+			case RED -> "Vermelho";
+			case GREY -> "Cinza";
+		};
 	}
 }

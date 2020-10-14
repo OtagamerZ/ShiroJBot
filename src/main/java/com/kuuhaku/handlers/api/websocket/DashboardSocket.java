@@ -97,7 +97,7 @@ public class DashboardSocket extends WebSocketServer {
 			}
 
 			switch (jo.getString("type")) {
-				case "update":
+				case "update" -> {
 					if (payload.has("guildData")) {
 						JSONObject guild = payload.getJSONObject("guildData");
 
@@ -134,7 +134,6 @@ public class DashboardSocket extends WebSocketServer {
 
 						GuildDAO.updateGuildSettings(gc);
 					}
-
 					if (payload.has("profileData")) {
 						JSONObject data = payload.getJSONObject("profileData");
 						Member mb = MemberDAO.getMemberById(data.getString("id"));
@@ -144,21 +143,17 @@ public class DashboardSocket extends WebSocketServer {
 
 						MemberDAO.updateMemberConfigs(mb);
 					}
-					break;
-				case "ticket":
+				}
+				case "ticket" -> {
 					int number = TicketDAO.openTicket(payload.getString("message"), Main.getInfo().getUserByID(t.getUid()));
-
 					EmbedBuilder eb = new EmbedBuilder();
-
 					eb.setTitle("Feedback via site (Ticket Nº " + number + ")");
 					eb.addField("Enviador por:", t.getHolder(), true);
 					eb.addField("Enviado em:", Helper.dateformat.format(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
 					eb.addField("Assunto", payload.getString("subject"), false);
 					eb.addField("Mensagem:", "```" + payload.getString("message") + "```", false);
 					eb.setColor(Color.decode("#fefefe"));
-
 					Map<String, String> ids = new HashMap<>();
-
 					ShiroInfo.getStaff().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
 							.flatMap(m -> m.sendMessage(eb.build()))
 							.flatMap(m -> {
@@ -167,14 +162,12 @@ public class DashboardSocket extends WebSocketServer {
 							})
 							.complete()
 					);
-
 					TicketDAO.setIds(number, ids);
-					break;
-				case "validate":
+				}
+				case "validate" -> {
 					User u = Main.getInfo().getUserByID(t.getUid());
 					User w = Member.getWaifu(u).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u));
 					CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
-
 					List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
 					JSONObject user = new JSONObject() {{
 						put("waifu", w == null ? "" : w.getAsTag());
@@ -185,13 +178,11 @@ public class DashboardSocket extends WebSocketServer {
 						put("bonuses", Member.getBonuses(u));
 						put("badges", Tags.getUserBadges(u.getId()));
 					}};
-
 					List<Guild> g = new ArrayList<>();
 					profiles.forEach(p -> {
 						Guild gd = Main.getInfo().getGuildByID(p.getSid());
 						if (gd != null) g.add(gd);
 					});
-
 					JSONArray guilds = new JSONArray();
 					g.forEach(gd -> {
 						net.dv8tion.jda.api.entities.Member mb = gd.getMember(u);
@@ -204,10 +195,8 @@ public class DashboardSocket extends WebSocketServer {
 							guilds.put(guild);
 						}
 					});
-
 					profiles.removeIf(p -> g.stream().map(Guild::getId).noneMatch(p.getSid()::equals));
 					g.removeIf(gd -> profiles.stream().map(Member::getSid).noneMatch(gd.getId()::equals));
-
 					conn.send(new JSONObject() {{
 						put("type", "validate");
 						put("code", HttpURLConnection.HTTP_OK);
@@ -216,15 +205,14 @@ public class DashboardSocket extends WebSocketServer {
 							put("serverData", guilds);
 						}});
 					}}.toString());
-					break;
-				case "cards":
+				}
+				case "cards" -> {
 					Kawaipon kp = KawaiponDAO.getKawaipon(t.getUid());
 					Set<KawaiponCard> cards = kp.getCards();
 					for (AnimeName anime : AnimeName.validValues()) {
 						if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
 							cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 					}
-
 					for (AnimeName an : AnimeName.validValues()) {
 						List<JSONObject> data = new ArrayList<>();
 
@@ -257,6 +245,7 @@ public class DashboardSocket extends WebSocketServer {
 							}});
 						}}.toString());
 					}
+				}
 			}
 		} catch (WebsocketNotConnectedException ignore) {
 		}

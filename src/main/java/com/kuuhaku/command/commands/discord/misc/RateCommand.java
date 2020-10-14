@@ -60,17 +60,12 @@ public class RateCommand extends Command {
 		}
 
 		switch (args[1]) {
-			case "positivo":
-			case "pos":
-				VotesDAO.voteUser(guild, author, message.getMentionedUsers().get(0), true);
-				break;
-			case "negativo":
-			case "neg":
-				VotesDAO.voteUser(guild, author, message.getMentionedUsers().get(0), false);
-				break;
-			default:
+			case "positivo", "pos" -> VotesDAO.voteUser(guild, author, message.getMentionedUsers().get(0), true);
+			case "negativo", "neg" -> VotesDAO.voteUser(guild, author, message.getMentionedUsers().get(0), false);
+			default -> {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_wrong-vote")).queue();
 				return;
+			}
 		}
 
 		try {

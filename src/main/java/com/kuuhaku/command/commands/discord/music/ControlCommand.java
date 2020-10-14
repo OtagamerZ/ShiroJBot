@@ -77,31 +77,18 @@ public class ControlCommand extends Command {
 		}
 
 		switch (args[0]) {
-			case "resume":
-				Music.resumeTrack((TextChannel) channel);
-				break;
-			case "pause":
-				Music.pauseTrack((TextChannel) channel);
-				break;
-			case "clear":
-				Music.clearQueue((TextChannel) channel);
-				break;
-			case "skip":
-				Music.skipTrack((TextChannel) channel);
-				break;
-			case "volume":
+			case "resume" -> Music.resumeTrack((TextChannel) channel);
+			case "pause" -> Music.pauseTrack((TextChannel) channel);
+			case "clear" -> Music.clearQueue((TextChannel) channel);
+			case "skip" -> Music.skipTrack((TextChannel) channel);
+			case "volume" -> {
 				if (args.length > 1 && StringUtils.isNumeric(args[1]))
 					Music.setVolume((TextChannel) channel, Integer.parseInt(args[1]));
 				else channel.sendMessage("❌ | O volume deve ser um valor inteiro entre 0 e 100.").queue();
-				break;
-			case "info":
-				Music.trackInfo((TextChannel) channel);
-				break;
-			case "queue":
-				Music.queueInfo((TextChannel) channel);
-				break;
-			default:
-				channel.sendMessage("❌ | Comando de música inválido.").queue();
+			}
+			case "info" -> Music.trackInfo((TextChannel) channel);
+			case "queue" -> Music.queueInfo((TextChannel) channel);
+			default -> channel.sendMessage("❌ | Comando de música inválido.").queue();
 		}
 	}
 }

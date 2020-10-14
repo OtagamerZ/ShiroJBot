@@ -60,15 +60,10 @@ public enum Tier {
 
 	@Override
 	public String toString() {
-		switch (this) {
-			case CHILD:
-				return "Filhote";
-			case TEEN:
-				return "Adolescente";
-			case ADULT:
-				return "Adulto";
-			default:
-				throw new RuntimeException();
-		}
+		return switch (this) {
+			case CHILD -> "Filhote";
+			case TEEN -> "Adolescente";
+			case ADULT -> "Adulto";
+		};
 	}
 }

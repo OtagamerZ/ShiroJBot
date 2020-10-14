@@ -42,22 +42,14 @@ public enum Race {
 		g2d.drawImage(sheet, 0, 0, null);
 		g2d.dispose();
 
-		switch (stance) {
-			case IDLE:
-				return bi.getSubimage(size[0] * var, 0, size[0], size[1]);
-			case SLEEPING:
-				return bi.getSubimage(size[0] * var, size[1], size[0], size[1]);
-			case SAD:
-				return bi.getSubimage(size[0] * var, size[1] * 2, size[0], size[1]);
-			case HAPPY:
-				return bi.getSubimage(size[0] * var, size[1] * 3, size[0], size[1]);
-			case ANGRY:
-				return bi.getSubimage(size[0] * var, size[1] * 4, size[0], size[1]);
-			case DEAD:
-				return bi.getSubimage(size[0] * var, size[1] * 5, size[0], size[1]);
-			default:
-				throw new RuntimeException();
-		}
+		return switch (stance) {
+			case IDLE -> bi.getSubimage(size[0] * var, 0, size[0], size[1]);
+			case SLEEPING -> bi.getSubimage(size[0] * var, size[1], size[0], size[1]);
+			case SAD -> bi.getSubimage(size[0] * var, size[1] * 2, size[0], size[1]);
+			case HAPPY -> bi.getSubimage(size[0] * var, size[1] * 3, size[0], size[1]);
+			case ANGRY -> bi.getSubimage(size[0] * var, size[1] * 4, size[0], size[1]);
+			case DEAD -> bi.getSubimage(size[0] * var, size[1] * 5, size[0], size[1]);
+		};
 	}
 
 	public int[] getSize() {
@@ -66,16 +58,11 @@ public enum Race {
 
 	@Override
 	public String toString() {
-		switch (this) {
-			case PORO:
-				return "Poro";
-			case AKITA:
-				return "Akita";
-			case SNUGGET:
-				return "Snugget";
-			default:
-				throw new RuntimeException();
-		}
+		return switch (this) {
+			case PORO -> "Poro";
+			case AKITA -> "Akita";
+			case SNUGGET -> "Snugget";
+		};
 	}
 
 	private static ImageIcon getAsset(String path) {

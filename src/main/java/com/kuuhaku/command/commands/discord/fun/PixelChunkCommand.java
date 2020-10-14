@@ -71,22 +71,13 @@ public class PixelChunkCommand extends Command {
 			return;
 		}
 
-		switch (Integer.parseInt(args[0])) {
-			case 1:
-				offset = new int[]{0, 0};
-				break;
-			case 2:
-				offset = new int[]{512, 0};
-				break;
-			case 3:
-				offset = new int[]{0, 512};
-				break;
-			case 4:
-				offset = new int[]{512, 512};
-				break;
-			default:
-				throw new IllegalStateException("Unexpected value: " + opts[0]);
-		}
+		offset = switch (Integer.parseInt(args[0])) {
+			case 1 -> new int[]{0, 0};
+			case 2 -> new int[]{512, 0};
+			case 3 -> new int[]{0, 512};
+			case 4 -> new int[]{512, 512};
+			default -> throw new IllegalStateException("Unexpected value: " + opts[0]);
+		};
 
 		if (args.length < 2) {
 			Main.getInfo().getCanvas().viewSection(message.getTextChannel(), Integer.parseInt(args[0])).queue();

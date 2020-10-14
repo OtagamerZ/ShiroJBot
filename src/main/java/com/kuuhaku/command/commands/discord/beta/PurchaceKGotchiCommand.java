@@ -74,7 +74,7 @@ public class PurchaceKGotchiCommand extends Command {
 		}
 
 		switch (args[0]) {
-			/*case "escolher":
+			/*case "escolher" -> {
 				if (acc.getBalance() < 2500) {
 					channel.sendMessage("❌ | Você não possui créditos suficientes (seus créditos: " + acc.getBalance() + ")!").queue();
 					return;
@@ -130,8 +130,8 @@ public class PurchaceKGotchiCommand extends Command {
 					default:
 						channel.sendMessage("❌ | Você precisa escolher uma raça válida para seu Kawaigotchi!").queue();
 				}
-				break;*/
-			case "aleatorio":
+			}*/
+			case "aleatorio" -> {
 				if (acc.getBalance() < 500) {
 					channel.sendMessage("❌ | Você não possui créditos suficientes (seus créditos: " + acc.getBalance() + ")!").queue();
 					return;
@@ -139,23 +139,18 @@ public class PurchaceKGotchiCommand extends Command {
 					channel.sendMessage("❌ | Você precisa dar um nome ao seu Kawaigotchi!").queue();
 					return;
 				}
-
 				String nome = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-
 				if (nome.length() > 15) {
 					channel.sendMessage("❌ | Nome muito longo, escolha um nome menor!").queue();
 					return;
 				}
-
 				acc.removeCredit(500, this.getClass());
 				Kawaigotchi k = new Kawaigotchi(author.getId(), nome, Race.SNUGGET/*Race.values()[Helper.rng(2)]*/);
-
 				KGotchiDAO.saveKawaigotchi(k);
 				com.kuuhaku.controller.sqlite.KGotchiDAO.saveKawaigotchi(k);
 				AccountDAO.saveAccount(acc);
-
 				channel.sendMessage("Seu mais novo Kawaigotchi é um...**" + k.getRace() + "**!").queue();
-				break;
+			}
 		}
 	}
 }

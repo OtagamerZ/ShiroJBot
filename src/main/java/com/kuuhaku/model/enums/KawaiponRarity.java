@@ -55,43 +55,27 @@ public enum KawaiponRarity {
 
 	@Override
 	public String toString() {
-		switch (this) {
-			case COMMON:
-				return "Comum";
-			case UNCOMMON:
-				return "Incomum";
-			case RARE:
-				return "Rara";
-			case ULTRA_RARE:
-				return "Ultra Rara";
-			case LEGENDARY:
-				return "Lendária";
-			case ULTIMATE:
-				return "Ultimate";
-			case EQUIPMENT:
-				return "Equipamento";
-			default:
-				throw new InvalidStateException();
-		}
+		return switch (this) {
+			case COMMON -> "Comum";
+			case UNCOMMON -> "Incomum";
+			case RARE -> "Rara";
+			case ULTRA_RARE -> "Ultra Rara";
+			case LEGENDARY -> "Lendária";
+			case ULTIMATE -> "Ultimate";
+			case EQUIPMENT -> "Equipamento";
+			default -> throw new InvalidStateException();
+		};
 	}
 
 	public static KawaiponRarity getByName(String name) {
-		switch (StringUtils.stripAccents(name.toLowerCase())) {
-			case "comum":
-				return COMMON;
-			case "incomum":
-				return UNCOMMON;
-			case "rara":
-				return RARE;
-			case "ultra":
-			case "ultra_rara":
-				return ULTRA_RARE;
-			case "lendaria":
-				return LEGENDARY;
-			case "equipamento":
-				return EQUIPMENT;
-			default:
-				return null;
-		}
+		return switch (StringUtils.stripAccents(name.toLowerCase())) {
+			case "comum" -> COMMON;
+			case "incomum" -> UNCOMMON;
+			case "rara" -> RARE;
+			case "ultra", "ultra_rara" -> ULTRA_RARE;
+			case "lendaria" -> LEGENDARY;
+			case "equipamento" -> EQUIPMENT;
+			default -> null;
+		};
 	}
 }

@@ -22,7 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
-import com.kuuhaku.events.WaifuListener;
+import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -92,7 +92,7 @@ public class MarryCommand extends Command {
 					""".formatted(message.getMentionedUsers().get(0).getAsMention(), author.getAsMention())
 			).queue();
 
-			Main.getInfo().getAPI().addEventListener(new WaifuListener() {
+			Main.getInfo().getAPI().addEventListener(new SimpleMessageListener() {
 				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
 				private Future<?> timeout = channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
 
@@ -109,21 +109,19 @@ public class MarryCommand extends Command {
 					try {
 						Message msg = event.getMessage();
 						switch (msg.getContentRaw().toLowerCase()) {
-							case "sim":
+							case "sim" -> {
 								channel.sendMessage("Eu os declaro husbando e waifu!").queue();
-
 								WaifuDAO.saveCouple(author, message.getMentionedUsers().get(0));
-
 								success.accept(null);
 								timeout.cancel(true);
 								timeout = null;
-								break;
-							case "não":
+							}
+							case "não" -> {
 								channel.sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
 								success.accept(null);
 								timeout.cancel(true);
 								timeout = null;
-								break;
+							}
 						}
 					} catch (InsufficientPermissionException e) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-message-history-permission")).queue();
