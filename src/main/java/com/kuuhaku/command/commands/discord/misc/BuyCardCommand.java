@@ -117,16 +117,19 @@ public class BuyCardCommand extends Command {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle(":scales: | Mercado de cartas");
-			eb.setDescription(
-					"Use `" + prefix + "comprar ID` para comprar uma carta.\n\n" +
-					"**Parâmetros de pesquisa:**\n" +
-					"`-n` - Busca cartas por nome\n" +
-					"`-r` - Busca cartas por raridade\n" +
-					"`-a` - Busca cartas por anime\n" +
-					"`-c` - Busca apenas cartas cromadas\n" +
-					"`-e` - Busca apenas cartas-equipamento\n" +
-					"`-m` - Busca apenas suas cartas anunciadas\n\n" +
-					"Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`."
+			eb.setDescription("""
+					Use `%scomprar ID` para comprar uma carta.
+					       
+					**Parâmetros de pesquisa:**
+					`-n` - Busca cartas por nome
+					`-r` - Busca cartas por raridade
+					`-a` - Busca cartas por anime
+					`-c` - Busca apenas cartas cromadas
+					`-e` - Busca apenas cartas-equipamento
+					`-m` - Busca apenas suas cartas anunciadas
+					       
+					Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`.
+					""".formatted(prefix)
 			);
 			eb.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 

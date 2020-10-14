@@ -55,15 +55,29 @@ public class ExceedSelectCommand extends Command {
 					m.editMessage("❌ | Você não pode entrar em nenhum Exceed até o mês que vem.").queue();
 					return;
 				} else if (args.length == 0) {
-					channel.sendMessage("Exceed é um sistema global de clãs, onde todo mês o clã vencedor ira receber experiência em dobro por uma semana. A pontuação é baseada em diversos fatores, incluindo vitorias em minigames e experiência acumulada nos perfis dos membros, **independente do servidor**.\n\n" +
-							"Os exceeds disponíveis são:" +
-							"\n" + TagIcons.getExceed(ExceedEnum.IMANITY) + "**" + ExceedEnum.IMANITY.getName() + "** - Os engenhosos humanos." +
-							"\n" + TagIcons.getExceed(ExceedEnum.SEIREN) + "**" + ExceedEnum.SEIREN.getName() + "** - As curiosas sereias." +
-							"\n" + TagIcons.getExceed(ExceedEnum.WEREBEAST) + "**" + ExceedEnum.WEREBEAST.getName() + "** - Os sábios bestiais." +
-							"\n" + TagIcons.getExceed(ExceedEnum.ELF) + "**" + ExceedEnum.ELF.getName() + "** - Os místicos elfos." +
-							"\n" + TagIcons.getExceed(ExceedEnum.EXMACHINA) + "**" + ExceedEnum.EXMACHINA.getName() + "** - Os poderosos androides." +
-							"\n" + TagIcons.getExceed(ExceedEnum.FLUGEL) + "**" + ExceedEnum.FLUGEL.getName() + "** - Os divinos anjos." +
-							"\n\nEscolha usando `" + prefix + "exselect EXCEED`.").queue();
+					String text = """
+							Exceed é um sistema global de clãs, onde todo mês o clã vencedor irá receber experiência em dobro por uma semana. A pontuação é baseada em diversos fatores, incluindo vitorias em minigames e experiência acumulada nos perfis dos membros, **independente do servidor**.
+							Os exceeds disponíveis são:
+							%s | **%s** - Os engenhosos humanos.
+							%s | **%s** - As curiosas sereias.
+							%s | **%s** - Os sábios bestiais.
+							%s | **%s** - Os místicos elfos.
+							%s | **%s** - Os poderosos androides.
+							%s | **%s** - Os divinos anjos.
+														
+							Escolha usando `%sexselect EXCEED`.
+							"""
+							.formatted(
+									TagIcons.getExceed(ExceedEnum.IMANITY), ExceedEnum.IMANITY.getName(),
+									TagIcons.getExceed(ExceedEnum.SEIREN), ExceedEnum.SEIREN.getName(),
+									TagIcons.getExceed(ExceedEnum.WEREBEAST), ExceedEnum.WEREBEAST.getName(),
+									TagIcons.getExceed(ExceedEnum.ELF), ExceedEnum.ELF.getName(),
+									TagIcons.getExceed(ExceedEnum.EXMACHINA), ExceedEnum.EXMACHINA.getName(),
+									TagIcons.getExceed(ExceedEnum.FLUGEL), ExceedEnum.FLUGEL.getName(),
+									prefix
+							);
+
+					channel.sendMessage(text).queue();
 					m.delete().queue();
 					return;
 				}

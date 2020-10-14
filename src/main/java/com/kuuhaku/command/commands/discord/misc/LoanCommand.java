@@ -69,10 +69,12 @@ public class LoanCommand extends Command {
 
 			eb.setTitle(":bank: | Empréstimo de créditos");
 			eb.setThumbnail("https://image.flaticon.com/icons/png/512/1462/1462438.png");
-			eb.setDescription("Está precisando de créditos rápidos? Estão aparecendo muitas cartas que você deseja obter? Talvez seu Kawaigotchi esteja morrendo?\n" +
-							  "Não se preocupe, nós podemos resolver!\n\n" +
-							  "Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar a dívida mais tarde.\n\n"
-			);
+			eb.setDescription("""
+					Está precisando de créditos rápidos? Estão aparecendo muitas cartas que você deseja obter? Talvez seu Kawaigotchi esteja morrendo?
+					Não se preocupe, nós podemos resolver!
+					     
+					Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar a dívida mais tarde.
+					""");
 			eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1000 créditos (juros de " + Helper.round(CreditLoan.LOAN_1.getInterest(ex) * 100 - 100, 1) + "%)", false);
 			eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2500 créditos (juros de " + Helper.round(CreditLoan.LOAN_2.getInterest(ex) * 100 - 100, 1) + "%)", false);
 			eb.addField("Plano Bate-papo: `" + prefix + "emprestimo 3`", "5000 créditos (juros de " + Helper.round(CreditLoan.LOAN_3.getInterest(ex) * 100 - 100, 1) + "%)", false);

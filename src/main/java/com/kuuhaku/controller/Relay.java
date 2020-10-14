@@ -77,7 +77,7 @@ public class Relay {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
 		wmb.setContent(gm.getContent());
-		wmb.setAvatarUrl(RelayBlockList.checkThumb(gm.getUserId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" :gm.getAvatar());
+		wmb.setAvatarUrl(RelayBlockList.checkThumb(gm.getUserId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : gm.getAvatar());
 		wmb.setUsername(gm.getName().length() > 15 ? gm.getName().substring(0, 15) + "..." : gm.getName());
 		return wmb.build();
 	}
@@ -169,15 +169,31 @@ public class Relay {
 				Guild g = Main.getJibril().getGuildById(k);
 				assert g != null;
 				try {
-					Objects.requireNonNull(g.getOwner()).getUser().openPrivateChannel().queue(c -> c.sendMessage("❌ | Me faltam permissões para enviar mensagens globais no servidor " + g.getName() + ".\n\nPermissões que eu possuo:```" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos\n" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌") + " Gerenciar mensagens\n" +
-							(g.getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌") + " Gerenciar webhooks" +
-							"```").queue());
+					Objects.requireNonNull(g.getOwner()).getUser()
+							.openPrivateChannel()
+							.queue(c -> c.sendMessage("""
+									❌ | Me faltam permissões para enviar mensagens globais no servidor %s.
+																
+									Minhas permissões:```
+									%s Ler/Enviar mensagens
+									%s Inserir links
+									%s Anexar arquivos
+									%s Ver histórico de mensagens
+									%s Usar emojis externos
+									%s Gerenciar mensagens
+									%s Gerenciar webhooks
+									```
+									"""
+									.formatted(
+											g.getName(),
+											g.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌"
+									)).queue());
 					Helper.logger(this.getClass()).error(ex + " | Sevidor " + g.getName());
 				} catch (Exception e) {
 					Helper.logger(this.getClass()).error(ex + " | Dono " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag());
@@ -239,15 +255,31 @@ public class Relay {
 				Guild g = Main.getJibril().getGuildById(k);
 				assert g != null;
 				try {
-					Objects.requireNonNull(g.getOwner()).getUser().openPrivateChannel().queue(c -> c.sendMessage("❌ | Me faltam permissões para enviar mensagens globais no servidor " + g.getName() + ".\n\nPermissões que eu possuo:```" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos\n" +
-							(g.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌") + " Gerenciar mensagens\n" +
-							(g.getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌") + " Gerenciar webhooks" +
-							"```").queue());
+					Objects.requireNonNull(g.getOwner()).getUser()
+							.openPrivateChannel()
+							.queue(c -> c.sendMessage("""
+									❌ | Me faltam permissões para enviar mensagens globais no servidor %s.
+																		
+									Permissões que eu possuo:```
+									%s Ler/Enviar mensagens
+									%s Inserir links
+									%s Anexar arquivos
+									%s Ver histórico de mensagens
+									%s Usar emojis externos
+									%s Gerenciar mensagens
+									%s Gerenciar webhooks
+									```
+									"""
+									.formatted(
+											g.getName(),
+											g.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌",
+											g.getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌"
+									)).queue());
 					Helper.logger(this.getClass()).error(ex + " | Sevidor " + g.getName());
 				} catch (Exception e) {
 					Helper.logger(this.getClass()).error(ex + " | Dono " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag());

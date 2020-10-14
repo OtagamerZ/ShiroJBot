@@ -37,7 +37,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -93,17 +92,18 @@ public class MyStatsCommand extends Command {
 		else if (collection >= 0.5) xp *= 1.5;
 		else if (collection >= 0.25) xp *= 1.25;
 
-		String multPattern = "**XP por mensagem:** {0} (Base: 15)\n" +
-							 "**Chance de spawn de cartas:** {1}% (Base: 2.5%)\n" +
-							 "**Chance de spawn de drops:** {2}% (Base: 2%)\n" +
-							 "**Chance de spawn de cromadas:** {3}% (Base: 0.5%)";
-
-		String mult = MessageFormat.format(multPattern,
-				xp,
-				Helper.round((2.5 + (guild.getMemberCount() * 1.5 / 5000)) * (gb.getBuff(2) != null ? gb.getBuff(2).getMult() : 1), 1),
-				Helper.round((2 + (guild.getMemberCount() / 5000f)) * (gb.getBuff(3) != null ? gb.getBuff(3).getMult() : 1), 1),
-				Helper.round(0.5 * (gb.getBuff(4) != null ? gb.getBuff(4).getMult() : 1), 1)
-		);
+		String mult = """
+				**XP por mensagem:** %s (Base: 15)
+				**Chance de spawn de cartas:** %s% (Base: 2.5%)
+				**Chance de spawn de drops:** %s% (Base: 2%)
+				**Chance de spawn de cromadas:** %s% (Base: 0.5%)
+				"""
+				.formatted(
+						xp,
+						Helper.round((2.5 + (guild.getMemberCount() * 1.5 / 5000)) * (gb.getBuff(2) != null ? gb.getBuff(2).getMult() : 1), 1),
+						Helper.round((2 + (guild.getMemberCount() / 5000f)) * (gb.getBuff(3) != null ? gb.getBuff(3).getMult() : 1), 1),
+						Helper.round(0.5 * (gb.getBuff(4) != null ? gb.getBuff(4).getMult() : 1), 1)
+				);
 
 		eb.addField(":chart_with_upwards_trend: | Seus multiplicadores:", mult, false);
 
