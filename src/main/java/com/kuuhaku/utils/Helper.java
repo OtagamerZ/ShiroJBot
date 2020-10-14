@@ -104,7 +104,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Helper {
-
 	public static final String VOID = "\u200B";
 	public static final String CANCEL = "❎";
 	public static final String ACCEPT = "✅";
@@ -112,6 +111,16 @@ public class Helper {
 	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
 	public static final String HOME = "674261700366827539";
 	public static final int BASE_CARD_PRICE = 350;
+
+	public static Font HAMLIN;
+
+	static {
+		try {
+			HAMLIN = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Helper.class.getClassLoader().getResourceAsStream("font/Hamlin.ttf")));
+		} catch (FontFormatException | IOException e) {
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+		}
+	}
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (ShiroInfo.getNiiChan().equals(member.getId()))
