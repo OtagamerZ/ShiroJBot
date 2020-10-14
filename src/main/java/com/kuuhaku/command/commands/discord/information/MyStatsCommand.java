@@ -94,9 +94,9 @@ public class MyStatsCommand extends Command {
 
 		String mult = """
 				**XP por mensagem:** %s (Base: 15)
-				**Chance de spawn de cartas:** %s% (Base: 2.5%)
-				**Chance de spawn de drops:** %s% (Base: 2%)
-				**Chance de spawn de cromadas:** %s% (Base: 0.5%)
+				**Chance de spawn de cartas:** %s%% (Base: 2.5%%)
+				**Chance de spawn de drops:** %s%% (Base: 2%%)
+				**Chance de spawn de cromadas:** %s%% (Base: 0.5%%)
 				"""
 				.formatted(
 						xp,
