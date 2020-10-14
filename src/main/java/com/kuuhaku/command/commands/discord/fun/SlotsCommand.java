@@ -230,7 +230,10 @@ public class SlotsCommand extends Command {
 			Account facc = AccountDAO.getAccount(author.getId());
 			facc.addCredit(bet.get(), this.getClass());
 			AccountDAO.saveAccount(facc);
-			SlotsDAO.saveSlots(slt);
+			Slots slts = SlotsDAO.getSlots();
+			slts.addToPot(bet.get());
+			if (jackpot >= 3) slts.jackpot();
+			SlotsDAO.saveSlots(slts);
 		};
 
 		final String lowHeader = "<:blank:747876900860461118><:column_disabled_down:747875416567447592><:blank:747876900860461118><:column_enabled_down:747874903570514043><:blank:747876900860461118><:column_enabled_down:747874903570514043><:blank:747876900860461118><:column_enabled_down:747874903570514043><:blank:747876900860461118><:column_disabled_down:747875416567447592><:blank:747876900860461118>";

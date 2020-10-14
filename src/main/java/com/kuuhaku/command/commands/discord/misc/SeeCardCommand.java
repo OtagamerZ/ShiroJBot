@@ -37,7 +37,7 @@ import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
@@ -76,7 +76,7 @@ public class SeeCardCommand extends Command {
 		Card tc = CardDAO.getCard(args[0], true);
 
 		if (tc == null) {
-			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], ArrayUtils.addAll(CardDAO.getAllCardNames().toArray(String[]::new), CardDAO.getAllEquipmentNames().toArray(String[]::new))) + "`?").queue();
+			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], ListUtils.union(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames()).toArray(String[]::new)) + "`?").queue();
 			return;
 		}
 
@@ -86,11 +86,11 @@ public class SeeCardCommand extends Command {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 		if (shoukan) {
-			Champion ch = CardDAO.getChampion(tc);
-			Equipment eq = CardDAO.getEquipment(tc);
+			Champion ch = CardDAO.getChampion(args[0]);
+			Equipment eq = CardDAO.getEquipment(args[0]);
 
 			if (ch == null && eq == null) {
-				channel.sendMessage("❌ | Esse equipamento ou campeão não existe, você não quis dizer `" + Helper.didYouMean(args[0], ArrayUtils.addAll(CardDAO.getAllChampionNames().toArray(String[]::new), CardDAO.getAllEquipmentNames().toArray(String[]::new))) + "`?").queue();
+				channel.sendMessage("❌ | Esse equipamento ou campeão não existe, você não quis dizer `" + Helper.didYouMean(args[0], ListUtils.union(CardDAO.getAllChampionNames(), CardDAO.getAllEquipmentNames()).toArray(String[]::new)) + "`?").queue();
 				return;
 			}
 
