@@ -381,7 +381,7 @@ public class CommandManager {
 					"comprar", new String[]{"buy"}, REQ_ID, "cmd_buy-card", MISC, true
 			));
 			put(SellCardCommand.class, new Argument(
-					"anunciar", new String[]{"sell"}, "req_card-price-type", "cmd_sell-card", MISC, true
+					"anunciar", new String[]{"sell"}, "req_card-type-price", "cmd_sell-card", MISC, true
 			));
 			put(PseudoNameCommand.class, new Argument(
 					"pseudonimo", new String[]{"pnome", "pname"}, REQ_NAME, "cmd_pseudo-name", MISC, true
@@ -519,6 +519,9 @@ public class CommandManager {
 			));
 			put(LearnToSearchCommand.class, new Argument(
 					"pesquisar", new String[]{"search", "lts", "aap"}, "req_search", "cmd_learn-to-search", FUN, false
+			));
+			put(AuctionCommand.class, new Argument(
+					"leilão", new String[]{"auction", "leilao", "auct"}, "req_card-type-price", "cmd_auction", FUN, true
 			));
 
 			//MUSICA

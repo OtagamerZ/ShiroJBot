@@ -41,41 +41,26 @@ public enum VanityType {
 
 	@Override
 	public String toString() {
-		switch (this) {
-			case HOUSE:
-				return "Casa";
-			case FENCE:
-				return "Cerca";
-			case BOWL:
-				return "Tigela";
-			default:
-				throw new RuntimeException();
-		}
+		return switch (this) {
+			case HOUSE -> "Casa";
+			case FENCE -> "Cerca";
+			case BOWL -> "Tigela";
+		};
 	}
 
 	public String toStrings() {
-		switch (this) {
-			case HOUSE:
-				return "Casas";
-			case FENCE:
-				return "Cercas";
-			case BOWL:
-				return "Tigelas";
-			default:
-				throw new RuntimeException();
-		}
+		return switch (this) {
+			case HOUSE -> "Casas";
+			case FENCE -> "Cercas";
+			case BOWL -> "Tigelas";
+		};
 	}
 
 	public String getBonus() {
-		switch (this) {
-			case HOUSE:
-				return "Conforto";
-			case FENCE:
-				return "Segurança";
-			case BOWL:
-				return "Satisfação";
-			default:
-				throw new RuntimeException();
-		}
+		return switch (this) {
+			case HOUSE -> "Conforto";
+			case FENCE -> "Segurança";
+			case BOWL -> "Satisfação";
+		};
 	}
 }

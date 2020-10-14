@@ -52,7 +52,7 @@ public class AntispamCommand extends Command {
 
 		if (args.length > 0 && (args[0].equalsIgnoreCase("soft") || args[0].equalsIgnoreCase("hard"))) {
 			switch (args[0].toLowerCase()) {
-				case "soft":
+				case "soft" -> {
 					if (!gc.isHardAntispam()) {
 						channel.sendMessage("O modo **SOFT** já está ligado").queue();
 						return;
@@ -60,8 +60,8 @@ public class AntispamCommand extends Command {
 					gc.setHardAntispam(false);
 					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage("Modo de anti-spam trocado para **SOFT**").queue();
-					return;
-				case "hard":
+				}
+				case "hard" -> {
 					if (gc.isHardAntispam()) {
 						channel.sendMessage("O modo **HARD** já está ligado").queue();
 						return;
@@ -69,7 +69,7 @@ public class AntispamCommand extends Command {
 					gc.setHardAntispam(true);
 					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage("Modo de anti-spam trocado para **HARD**").queue();
-					return;
+				}
 			}
 			return;
 		}

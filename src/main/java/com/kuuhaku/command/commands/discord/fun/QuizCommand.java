@@ -85,22 +85,13 @@ public class QuizCommand extends Command {
 
 		String diff;
 
-		if (args.length > 0) switch (StringUtils.stripAccents(args[0].toLowerCase())) {
-			case "facil":
-			case "easy":
-				diff = "easy";
-				break;
-			case "medio":
-			case "medium":
-				diff = "medium";
-				break;
-			case "dificil":
-			case "hard":
-				diff = "hard";
-				break;
-			default:
-				diff = null;
-		}
+		if (args.length > 0)
+			diff = switch (StringUtils.stripAccents(args[0].toLowerCase())) {
+				case "facil", "easy" -> "easy";
+				case "medio", "medium" -> "medium";
+				case "dificil", "hard" -> "hard";
+				default -> null;
+			};
 		else diff = null;
 
 		JSONObject res = Helper.callApi("https://opentdb.com/api.php?amount=1&category=" + (Math.random() > 0.5 ? 15 : 31) + (diff == null ? "" : "&difficulty=" + diff) + "&type=multiple&encode=url3986");
@@ -125,20 +116,12 @@ public class QuizCommand extends Command {
 				.collect(Collectors.toList());
 		String difficulty = res.getJSONArray("results").getJSONObject(0).getString("difficulty");
 
-		int modif;
-		switch (res.getJSONArray("results").getJSONObject(0).getString("difficulty")) {
-			case "easy":
-				modif = 1;
-				break;
-			case "medium":
-				modif = 2;
-				break;
-			case "hard":
-				modif = 3;
-				break;
-			default:
-				modif = 0;
-		}
+		int modif = switch (res.getJSONArray("results").getJSONObject(0).getString("difficulty")) {
+			case "easy" -> 1;
+			case "medium" -> 2;
+			case "hard" -> 3;
+			default -> 0;
+		};
 
 		Account acc = AccountDAO.getAccount(author.getId());
 		aq.played();

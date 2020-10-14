@@ -58,24 +58,23 @@ public class BlockCommand extends Command {
 					Member m = guild.getMember(Main.getJibril().getSelfUser());
 					assert m != null;
 					switch (args[1]) {
-						case "temp":
+						case "temp" -> {
 							RelayBlockList.blockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0], reason);
 							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " bloqueado do chat global.\nRazão: " + reason, m, guild, null);
-							break;
-						case "perma":
+						}
+						case "perma" -> {
 							if (Helper.hasPermission(member, PrivilegeLevel.DEV)) {
 								RelayBlockList.permaBlockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0], reason);
 								Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " banido permanentemente do chat global.\nRazão: " + reason, m, guild, null);
 							} else {
 								channel.sendMessage("❌ | Permissões insuficientes.").queue();
 							}
-							break;
-						case "thumb":
+						}
+						case "thumb" -> {
 							RelayBlockList.blockThumb(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0]);
 							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "Avatar de <@" + args[0] + ">") + " foi censurado do chat global.", m, guild, null);
-							break;
-						default:
-							channel.sendMessage("❌ | Tipo inválido, o tipo deve ser thumb, temp ou perma.").queue();
+						}
+						default -> channel.sendMessage("❌ | Tipo inválido, o tipo deve ser thumb, temp ou perma.").queue();
 					}
 				} else {
 					channel.sendMessage("❌ | ID inválido, identificadores possuem apenas dígitos de 0 à 9.").queue();

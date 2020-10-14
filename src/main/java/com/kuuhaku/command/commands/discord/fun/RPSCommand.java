@@ -63,87 +63,58 @@ public class RPSCommand extends Command {
 		int win = 2;
 
 		switch (args[0].toLowerCase()) {
-			case "pedra":
-			case ":punch:":
-				switch (pcOption) {
-					case 1:
-						win = 0;
-						break;
-					case 2:
-						win = 1;
-						break;
-				}
-				break;
-			case "papel":
-			case ":raised_back_of_hand:":
-				switch (pcOption) {
-					case 0:
-						win = 1;
-						break;
-					case 2:
-						win = 0;
-						break;
-				}
-				break;
-			case "tesoura":
-			case ":v:":
-				switch (pcOption) {
-					case 0:
-						win = 0;
-						break;
-					case 1:
-						win = 1;
-						break;
-				}
-				break;
-			default:
+			case "pedra", ":punch:" -> win = switch (pcOption) {
+				case 1 -> 0;
+				case 2 -> 1;
+				default -> win;
+			};
+			case "papel", ":raised_back_of_hand:" -> win = switch (pcOption) {
+				case 0 -> 1;
+				case 2 -> 0;
+				default -> win;
+			};
+			case "tesoura", ":v:" -> win = switch (pcOption) {
+				case 0 -> 0;
+				case 1 -> 1;
+				default -> win;
+			};
+			default -> {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_rock-paper-scissors-invalid-arguments")).queue();
 				return;
+			}
 		}
 
-		String pcChoice = "";
-
-		switch (pcOption) {
-			case 0:
-				pcChoice = ":punch:";
-				break;
-			case 1:
-				pcChoice = ":raised_back_of_hand:";
-				break;
-			case 2:
-				pcChoice = ":v:";
-				break;
-		}
+		String pcChoice = switch (pcOption) {
+			case 0 -> ":punch:";
+			case 1 -> ":raised_back_of_hand:";
+			case 2 -> ":v:";
+			default -> "";
+		};
 
 		int finalWin = win;
-		String finalPcChoice = pcChoice;
-		channel.sendMessage("Saisho wa guu!\nJan...Ken...Pon! " + finalPcChoice)
+		channel.sendMessage("Saisho wa guu!\nJan...Ken...Pon! " + pcChoice)
 				.queue(m -> {
 					switch (finalWin) {
-						case 0:
+						case 0 -> {
 							m.editMessage(m.getContentRaw() + "\nVocê perdeu!").queue();
-
 							if (ExceedDAO.hasExceed(author.getId())) {
 								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 								ps.modifyInfluence(false);
 								PStateDAO.savePoliticalState(ps);
 							}
-							break;
-						case 1:
+						}
+						case 1 -> {
 							int crd = Math.max(10, Helper.rng(50, false));
 							acc.addCredit(crd, this.getClass());
 							AccountDAO.saveAccount(acc);
 							m.editMessage(m.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
-
 							if (ExceedDAO.hasExceed(author.getId())) {
 								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 								ps.modifyInfluence(2);
 								PStateDAO.savePoliticalState(ps);
 							}
-							break;
-						case 2:
-							m.editMessage(m.getContentRaw() + "\nEmpate!").queue();
-							break;
+						}
+						case 2 -> m.editMessage(m.getContentRaw() + "\nEmpate!").queue();
 					}
 				});
 	}

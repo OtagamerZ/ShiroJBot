@@ -111,67 +111,33 @@ public class PurchaseBuffCommand extends Command {
 
 		ServerBuff sb = null;
 		switch (args[0].toUpperCase()) {
-			case "XP":
-				switch (tier) {
-					case 1:
-						sb = new ServerBuff(tier, ServerBuff.XP_TIER_1);
-						break;
-					case 2:
-						sb = new ServerBuff(tier, ServerBuff.XP_TIER_2);
-						break;
-					case 3:
-						sb = new ServerBuff(tier, ServerBuff.XP_TIER_3);
-						break;
-				}
-				break;
-			case "CARTA":
-				switch (tier) {
-					case 1:
-						sb = new ServerBuff(tier, ServerBuff.CARD_TIER_1);
-						break;
-					case 2:
-						sb = new ServerBuff(tier, ServerBuff.CARD_TIER_2);
-						break;
-					case 3:
-						sb = new ServerBuff(tier, ServerBuff.CARD_TIER_3);
-						break;
-					case 4:
-						sb = new ServerBuff(tier, ServerBuff.CARD_TIER_U);
-						break;
-				}
-				break;
-			case "DROP":
-				switch (tier) {
-					case 1:
-						sb = new ServerBuff(tier, ServerBuff.DROP_TIER_1);
-						break;
-					case 2:
-						sb = new ServerBuff(tier, ServerBuff.DROP_TIER_2);
-						break;
-					case 3:
-						sb = new ServerBuff(tier, ServerBuff.DROP_TIER_3);
-						break;
-					case 4:
-						sb = new ServerBuff(tier, ServerBuff.DROP_TIER_U);
-						break;
-				}
-				break;
-			case "CROMADA":
-				switch (tier) {
-					case 1:
-						sb = new ServerBuff(tier, ServerBuff.FOIL_TIER_1);
-						break;
-					case 2:
-						sb = new ServerBuff(tier, ServerBuff.FOIL_TIER_2);
-						break;
-					case 3:
-						sb = new ServerBuff(tier, ServerBuff.FOIL_TIER_3);
-						break;
-					case 4:
-						sb = new ServerBuff(tier, ServerBuff.FOIL_TIER_U);
-						break;
-				}
-				break;
+			case "XP" -> sb = switch (tier) {
+				case 1 -> new ServerBuff(tier, ServerBuff.XP_TIER_1);
+				case 2 -> new ServerBuff(tier, ServerBuff.XP_TIER_2);
+				case 3 -> new ServerBuff(tier, ServerBuff.XP_TIER_3);
+				default -> null;
+			};
+			case "CARTA" -> sb = switch (tier) {
+				case 1 -> new ServerBuff(tier, ServerBuff.CARD_TIER_1);
+				case 2 -> new ServerBuff(tier, ServerBuff.CARD_TIER_2);
+				case 3 -> new ServerBuff(tier, ServerBuff.CARD_TIER_3);
+				case 4 -> new ServerBuff(tier, ServerBuff.CARD_TIER_U);
+				default -> sb;
+			};
+			case "DROP" -> sb = switch (tier) {
+				case 1 -> new ServerBuff(tier, ServerBuff.DROP_TIER_1);
+				case 2 -> new ServerBuff(tier, ServerBuff.DROP_TIER_2);
+				case 3 -> new ServerBuff(tier, ServerBuff.DROP_TIER_3);
+				case 4 -> new ServerBuff(tier, ServerBuff.DROP_TIER_U);
+				default -> sb;
+			};
+			case "CROMADA" -> sb = switch (tier) {
+				case 1 -> new ServerBuff(tier, ServerBuff.FOIL_TIER_1);
+				case 2 -> new ServerBuff(tier, ServerBuff.FOIL_TIER_2);
+				case 3 -> new ServerBuff(tier, ServerBuff.FOIL_TIER_3);
+				case 4 -> new ServerBuff(tier, ServerBuff.FOIL_TIER_U);
+				default -> sb;
+			};
 		}
 
 		if (sb == null) {
