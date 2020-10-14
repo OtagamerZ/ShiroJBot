@@ -124,14 +124,14 @@ public class Champion implements Drawable, Cloneable {
 
 			g2d.setFont(Helper.HAMLIN.deriveFont(Map.of(
 					TextAttribute.SIZE, 11,
-					TextAttribute.WEIGHT, 3
+					TextAttribute.WEIGHT, TextAttribute.WEIGHT_ULTRABOLD
 			)));
 			g2d.setColor(Color.black);
 			g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 12, 277);
 
 			g2d.setFont(Helper.HAMLIN.deriveFont(Map.of(
 					TextAttribute.SIZE, 11,
-					TextAttribute.WEIGHT, 2.5
+					TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
 			)));
 			Profile.drawStringMultiLineNO(g2d, description, 205, 12, 293);
 		}
