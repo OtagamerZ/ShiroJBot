@@ -13,7 +13,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/chess/pieces/King.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/chess/pieces/King.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -118,7 +125,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
@@ -741,6 +748,7 @@
       <workItem from="1602591418568" duration="609000" />
       <workItem from="1602599066051" duration="10498000" />
       <workItem from="1602618511816" duration="207000" />
+      <workItem from="1602641018288" duration="1377000" />
     </task>
     <task id="LOCAL-02605" summary="Correções menores">
       <created>1602190173119</created>
@@ -1193,10 +1201,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="557" y="213" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597325294333" />
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597927763665">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602641774815">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597927763665" />
+    <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1602641774815" />
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1600973622351">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1262,10 +1271,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1602269537551" />
-    <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1602268972182">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1602641755858">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1602268972182" />
+    <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1602641755858" />
     <state x="420" y="240" key="IDE.errors.dialog" timestamp="1596639332382">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1278,10 +1288,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602174556522" />
-    <state x="320" y="80" key="SettingsEditor" timestamp="1600446117161">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="366" y="82" key="SettingsEditor" timestamp="1602642283028">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1600446117161" />
+    <state x="366" y="82" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1602642283028" />
     <state x="92" y="92" width="1496" height="826" key="ShowDiffWithBranchDialog" timestamp="1601645223790">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
