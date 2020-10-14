@@ -75,13 +75,13 @@ public class SeeCardCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 		Card tc = CardDAO.getCard(args[0], true);
 
-		if (tc == null) {
+		boolean foil = args.length > 1 && tc.getRarity() != KawaiponRarity.ULTIMATE && args[1].equalsIgnoreCase("C");
+		boolean shoukan = args.length > 1 && args[1].equalsIgnoreCase("S");
+
+		if (!shoukan && tc == null) {
 			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], ListUtils.union(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames()).toArray(String[]::new)) + "`?").queue();
 			return;
 		}
-
-		boolean foil = args.length > 1 && tc.getRarity() != KawaiponRarity.ULTIMATE && args[1].equalsIgnoreCase("C");
-		boolean shoukan = args.length > 1 && args[1].equalsIgnoreCase("S");
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
