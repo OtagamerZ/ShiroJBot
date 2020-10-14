@@ -32,6 +32,10 @@ plugins {
     id "org.springframework.boot" version "2.3.4.RELEASE"
 }
 
+application {
+    mainClassName = 'com.kuuhaku/Main'
+}
+
 group 'com.kuuhaku'
 version 'STANDALONE'
 sourceCompatibility = JavaVersion.VERSION_15
