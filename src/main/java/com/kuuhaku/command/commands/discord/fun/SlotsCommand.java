@@ -279,14 +279,27 @@ public class SlotsCommand extends Command {
 	}
 
 	private String prizeTable() {
-		return Slots.LEMON + Slots.LEMON + Slots.LEMON + " -> x0.8\n" +
-				Slots.WATERMELON + Slots.WATERMELON + Slots.WATERMELON + " -> x1.5\n" +
-				Slots.CHERRY + Slots.CHERRY + Slots.CHERRY + " -> x2\n" +
-				Slots.HEART + Slots.HEART + Slots.HEART + " -> x2.75\n" +
-				Slots.BELL + Slots.BELL + Slots.BELL + " -> x4\n" +
-				Slots.BAR + Slots.BAR + Slots.BAR + " -> x7\n" +
-				Slots.HORSESHOE + Slots.HORSESHOE + Slots.HORSESHOE + " -> x12\n" +
-				Slots.DIAMOND + Slots.DIAMOND + Slots.DIAMOND + " -> x20\n" +
-				Slots.JACKPOT + Slots.JACKPOT + Slots.JACKPOT + " -> JACKPOT!\n";
+		return """
+				%s%s%s -> x0.8
+				%s%s%s -> x1.5
+				%s%s%s -> x2
+				%s%s%s -> x2.75
+				%s%s%s -> x4
+				%s%s%s -> x7
+				%s%s%s -> x12
+				%s%s%s -> x20
+				%s%s%s -> JACKPOT!
+				"""
+				.formatted(
+						Slots.LEMON, Slots.LEMON, Slots.LEMON,
+						Slots.WATERMELON, Slots.WATERMELON, Slots.WATERMELON,
+						Slots.CHERRY, Slots.CHERRY, Slots.CHERRY,
+						Slots.HEART, Slots.HEART, Slots.HEART,
+						Slots.BELL, Slots.BELL, Slots.BELL,
+						Slots.BAR, Slots.BAR, Slots.BAR,
+						Slots.HORSESHOE, Slots.HORSESHOE, Slots.HORSESHOE,
+						Slots.DIAMOND, Slots.DIAMOND, Slots.DIAMOND,
+						Slots.JACKPOT, Slots.JACKPOT, Slots.JACKPOT
+				);
 	}
 }

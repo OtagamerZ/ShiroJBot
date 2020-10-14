@@ -195,24 +195,35 @@ public class JibrilEvents extends ListenerAdapter {
 	}
 
 	private static String introMsg() {
-		return "__**Olá, sou Jibril, a gerenciadora do chat global!**__\n" +
-			   "Pera, o que? Você não sabe o que é o chat global?? Bem, vou te explicar!\n\n" +
-			   "O chat global (ou relay) é uma criação de meu mestre KuuHaKu, ele une todos os servidores em que estou em um único canal de texto. " +
-			   "Assim, todos os servidores participantes terão um fluxo de mensagens a todo momento, quebrando aquele \"gelo\" que muitos servidores pequenos possuem\n";
+		return """
+				__**Olá, sou Jibril, a administradora do chat global!**__
+				Pera, o que? Você não sabe o que é o chat global?? Bem, vou te explicar!
+				    
+				O chat global (ou relay) é uma criação de meu mestre KuuHaKu, ele une todos os servidores em que estou em um único canal de texto.\s
+				Assim, todos os servidores participantes terão um fluxo de mensagens a todo momento, quebrando aquele "gelo" que muitos servidores pequenos possuem.
+								
+				""";
 	}
 
 	private static String rulesMsg() {
-		return "__**Mas existem regras, viu?**__\n" +
-			   "Como todo chat, para mantermos um ambiente saudável e amigável são necessárias regras.\n\n" +
-			   "O chat global possue suas próprias regras, além daquelas do servidor atual, que são:\n" +
-			   "1 - SPAM ou flood é proibido, pois além de ser desnecessário faz com que eu fique lenta;\n" +
-			   "2 - Links e imagens são bloqueadas, você não será punido por elas pois elas não serão enviadas;\n" +
-			   "3 - Avatares indecentes serão bloqueados 3 vezes antes de te causar um bloqueio no chat global;\n" +
-			   "4 - Os bloqueios são temporários, todos serão desbloqueados quando eu e a Shiro formos reiniciadas. Porém, o terceiro bloqueio é permanente e você __**NÃO**__ será desbloqueado de um permanente.\n";
+		return """
+				__**Mas existem regras, viu?**__
+				Como todo chat, para mantermos um ambiente saudável e amigável são necessárias regras.
+				    
+				O chat global possue suas próprias regras, além daquelas do servidor atual, que são:
+				1 - SPAM ou flood é proibido, pois além de ser desnecessário faz com que eu fique lenta;
+				2 - Links e imagens são bloqueadas, você não será punido por elas pois elas não serão enviadas;
+				3 - Avatares indecentes serão bloqueados 3 vezes antes de te causar um bloqueio no chat global;
+				4 - Os bloqueios são temporários, todos serão desbloqueados quando eu e a Shiro formos reiniciadas. Porém, o terceiro bloqueio é permanente e você __**NÃO**__ será desbloqueado de um permanente.
+				    
+				""";
 	}
 
 	private static String finalMsg() {
-		return "__**E é isso, seja bem-vindo(a) ao grande chat global!**__\n\n" +
-			   "Se tiver dúvidas, denúncias ou sugestões, basta me enviar uma mensagem neste canal privado, ou usar os comando `bug` (feedback) ou `report` (denúncia).";
+		return """
+				__**E é isso, seja bem-vindo(a) ao grande chat global!**__
+				    
+				Se tiver dúvidas, denúncias ou sugestões, basta me enviar uma mensagem neste canal privado, ou usar os comando `bug` (feedback) ou `report` (denúncia).
+				""";
 	}
 }

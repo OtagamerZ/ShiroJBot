@@ -76,10 +76,12 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static void main(String[] args) throws Exception {
 		//Locale.setDefault(new Locale("pt", "BR"));
-		Helper.logger(Main.class).info("\nShiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)\n" +
-									   "This program comes with ABSOLUTELY NO WARRANTY\n" +
-									   "This is free software, and you are welcome to redistribute it under certain conditions\n" +
-									   "See license for more information regarding redistribution conditions");
+		Helper.logger(Main.class).info("""
+				Shiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)
+				This program comes with ABSOLUTELY NO WARRANTY 
+				This is free software, and you are welcome to redistribute it under certain conditions
+				See license for more information regarding redistribution conditions
+				""");
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
 		info = new ShiroInfo();
 		relay = new Relay();

@@ -21,7 +21,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.3.4.RELEASE")
     }
 }
 
@@ -29,17 +29,13 @@ plugins {
     id 'java'
     id 'idea'
     id 'application'
-    id "org.springframework.boot" version "2.1.6.RELEASE"
-}
-
-application {
-    mainClassName = 'com.kuuhaku/Main'
+    id "org.springframework.boot" version "2.3.4.RELEASE"
 }
 
 group 'com.kuuhaku'
 version 'STANDALONE'
-
-sourceCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
 
 repositories {
     maven { url "https://jitpack.io" }
@@ -53,62 +49,61 @@ build.mustRunAfter clean
 task copyToLib(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 stage.dependsOn(copyToLib)
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.6.RELEASE'
-    compile group: 'net.dv8tion', name: 'JDA', version: '4.2.0_204'
-    compile group: 'club.minnced', name: 'discord-webhooks', version: '0.3.1'
-    compile group: 'com.github.SvenWoltmann', name: 'color-thief-java', version: 'v1.1.2'
-    compile group: 'com.enigmabridge', name: 'hibernate4-sqlite-dialect', version: '0.1.2'
-    compile group: 'com.google.apis', name: 'google-api-services-youtube', version: 'v3-rev212-1.25.0'
-    compile group: 'com.rollbar', name: 'rollbar-java', version: '1.+'
-    compile group: 'com.github.liheyuan', name: 'simple-emoji-4j', version: 'f26d3b39be'
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
-    compile group: 'org.discordbots', name: 'DBL-Java-Library', version: '2.0.1'
-    compile group: 'com.github.gwenn', name: 'sqlite-dialect', version: '0.1.0'
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.12'
-    compile('org.springframework.boot:spring-boot-starter-data-jpa') {
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.3.4.RELEASE'
+    implementation group: 'net.dv8tion', name: 'JDA', version: '4.2.0_204'
+    implementation group: 'club.minnced', name: 'discord-webhooks', version: '0.3.1'
+    implementation group: 'com.github.SvenWoltmann', name: 'color-thief-java', version: 'v1.1.2'
+    implementation group: 'com.enigmabridge', name: 'hibernate4-sqlite-dialect', version: '0.1.2'
+    implementation group: 'com.google.apis', name: 'google-api-services-youtube', version: 'v3-rev212-1.25.0'
+    implementation group: 'com.github.liheyuan', name: 'simple-emoji-4j', version: 'f26d3b39be'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+    implementation group: 'org.discordbots', name: 'DBL-Java-Library', version: '2.0.1'
+    implementation group: 'com.github.gwenn', name: 'sqlite-dialect', version: '0.1.0'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.12'
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa') {
         exclude module: 'spring-boot-starter-logging'
     }
-    compile('org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE') {
+    implementation('org.springframework.boot:spring-boot-starter-web:2.3.4.RELEASE') {
         exclude module: 'spring-boot-starter-logging'
     }
-    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.3.50'
-    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
-    compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.1'
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
-    compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.4'
-    compile group: 'org.hibernate', name: 'hibernate-c3p0', version: '5.4.2.Final'
-    compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
-    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.27.2.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.2'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-jcl', version: '2.11.2'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.1.6.RELEASE'
-    compile group: 'org.beanshell', name: 'bsh', version: '2.0b5'
-    compile group: 'com.github.ygimenez', name: 'Pagination-Utils', version: '1.2.5b'
-    compile group: 'com.github.treeder', name: 'kitty-cache', version: '065b8d34e2'
-    compile group: 'com.github.kevinsawicki', name: 'http-request', version: '6.0'
-    compile group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
-    compile group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.5.1'
-    compile group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
-    compile group: 'org.threeten', name: 'threetenbp', version: '1.4.4'
-    compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'
-    compile group: 'org.swinglabs.swingx', name: 'swingx-graphics', version: '1.6.5-1'
-    compile group: 'com.github.twitch4j', name: 'twitch4j', version: '1.1.0'
-    compile group: 'com.github.philippheuer.events4j', name: 'events4j', version: '0.6.0'
+    implementation group: 'com.sedmelluq', name: 'lavaplayer', version: '1.3.50'
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
+    implementation group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.1'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+    implementation group: 'com.mchange', name: 'c3p0', version: '0.9.5.4'
+    implementation group: 'org.hibernate', name: 'hibernate-c3p0', version: '5.4.2.Final'
+    implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
+    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.27.2.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.2'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-jcl', version: '2.11.2'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.3.4.RELEASE'
+    implementation group: 'org.beanshell', name: 'bsh', version: '2.0b5'
+    implementation group: 'com.github.ygimenez', name: 'Pagination-Utils', version: '1.2.5b'
+    implementation group: 'com.github.treeder', name: 'kitty-cache', version: '065b8d34e2'
+    implementation group: 'com.github.kevinsawicki', name: 'http-request', version: '6.0'
+    implementation group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
+    implementation group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.5.1'
+    implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
+    implementation group: 'org.threeten', name: 'threetenbp', version: '1.4.4'
+    implementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
+    implementation group: 'org.swinglabs.swingx', name: 'swingx-graphics', version: '1.6.5-1'
+    implementation group: 'com.github.twitch4j', name: 'twitch4j', version: '1.1.0'
+    implementation group: 'com.github.philippheuer.events4j', name: 'events4j', version: '0.6.0'
     //noinspection DifferentStdlibGradleVersion
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.4.0-rc'
-    compile group: 'org.knowm.xchart', name: 'xchart', version: '3.6.5'
-    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
-    compile group: 'pl.joegreen', name: 'lambda-from-string', version: '1.6'
-    implementation 'com.graphql-java:graphql-java:2019-05-08T02-56-27-cca4316'
+    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.4.0-rc'
+    implementation group: 'org.knowm.xchart', name: 'xchart', version: '3.6.5'
+    implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+    implementation group: 'com.graphql-java', name: 'graphql-java', version: '2019-05-08T02-56-27-cca4316'
 }
 
 apply plugin: 'org.springframework.boot'
@@ -122,8 +117,9 @@ idea {
 }
 
 bootJar {
-    baseName = 'gs-rest-service'
-    version = '0.1.0'
+    archiveBaseName.set('gs-rest-service')
+    archiveVersion.set('0.1.0')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 compileJava.options.encoding = 'UTF-8'
