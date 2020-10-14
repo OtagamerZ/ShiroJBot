@@ -253,15 +253,17 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void getEffect(EffectParameters ep) {
-		String imports =
-				"import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase; " +
-				"import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race; " +
-				"import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side; " +
-				"import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger; " +
-				"import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion; " +
-				"import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment; " +
-				"import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn; " +
-				"import com.kuuhaku.controller.postgresql.CardDAO; ";
+		String imports = """
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
+				import com.kuuhaku.controller.postgresql.CardDAO;
+								
+				""";
 
 		try {
 			Interpreter i = new Interpreter();

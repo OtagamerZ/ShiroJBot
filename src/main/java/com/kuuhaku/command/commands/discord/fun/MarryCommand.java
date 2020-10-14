@@ -86,8 +86,11 @@ public class MarryCommand extends Command {
 				return;
 			}
 
-			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
-					"\nDigite « Sim » para aceitar ou « Não » para negar.").queue();
+			channel.sendMessage("""
+					%s, deseja casar-se com %s, por toda eternidade (ou não) em troca de um bônus de XP?
+					Digite « Sim » para aceitar ou « Não » para negar.
+					""".formatted(message.getMentionedUsers().get(0).getAsMention(), author.getAsMention())
+			).queue();
 
 			Main.getInfo().getAPI().addEventListener(new WaifuListener() {
 				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
