@@ -224,7 +224,7 @@ public class BuyCardCommand extends Command {
 				AccountDAO.saveAccount(buyer);
 
 				em.setBuyer(author.getId());
-				CardMarketDAO.saveCard(cm);
+				EquipmentMarketDAO.saveCard(em);
 
 				User sellerU = Main.getInfo().getUserByID(em.getSeller());
 				User buyerU = Main.getInfo().getUserByID(em.getBuyer());
