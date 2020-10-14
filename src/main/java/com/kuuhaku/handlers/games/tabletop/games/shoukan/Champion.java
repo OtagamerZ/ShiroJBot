@@ -25,11 +25,13 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
 import java.awt.*;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
@@ -120,12 +122,18 @@ public class Champion implements Drawable, Cloneable {
 				}
 			}
 
-			g2d.setFont(new Font("Arial", Font.BOLD, 11));
+			g2d.setFont(Helper.HAMLIN.deriveFont(Map.of(
+					TextAttribute.SIZE, 11,
+					TextAttribute.WEIGHT, TextAttribute.WEIGHT_EXTRABOLD
+			)));
 			g2d.setColor(Color.black);
-			g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 8, 277);
+			g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 12, 277);
 
-			g2d.setFont(new Font("Arial", Font.PLAIN, 11));
-			Profile.drawStringMultiLineNO(g2d, description, 209, 8, 293);
+			g2d.setFont(Helper.HAMLIN.deriveFont(Map.of(
+					TextAttribute.SIZE, 11,
+					TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD
+			)));
+			Profile.drawStringMultiLineNO(g2d, description, 205, 12, 293);
 		}
 
 		if (!available) {
