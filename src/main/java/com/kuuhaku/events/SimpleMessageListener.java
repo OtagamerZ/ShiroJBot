@@ -24,6 +24,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import javax.annotation.Nonnull;
 
 public abstract class SimpleMessageListener extends ListenerAdapter {
+	public final SimpleMessageListener self = this;
+
 	@Override
 	public abstract void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event);
 }
