@@ -162,7 +162,7 @@ public class AuctionCommand extends Command {
                         int offer = Integer.parseInt(raw);
 
                         if (highest.get() == null || offer > highest.get().getRight()) {
-			    Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor());
+			    Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor().getId());
 
 			    if (offerer.getCards().contains(card)) {
 				channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
