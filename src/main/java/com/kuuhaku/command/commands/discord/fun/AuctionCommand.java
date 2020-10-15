@@ -132,13 +132,16 @@ public class AuctionCommand extends Command {
                     buyer.addCard(card);
                     KawaiponDAO.saveKawaipon(buyer);
 
+		    Account oacc = AccountDAO.getAccount(evt.getAuthor().getId());
+		    oacc.removeCredits(highest.get().getRight(), this.getClass());
+		    AccountDAO.saveAccount(oacc);
+
                     Account acc = AccountDAO.getAccount(author.getId());
                     acc.addCredit(highest.get().getRight(), this.getClass());
                     AccountDAO.saveAccount(acc);
 
                     Main.getInfo().getConfirmationPending().invalidate(author.getId());
                     Main.getInfo().getAPI().removeEventListener(listener.get());
-
                 } else {
                     switch (phase.get()) {
                         case 1 -> channel.sendMessage("Dou-lhe 1...").queue();
@@ -163,9 +166,13 @@ public class AuctionCommand extends Command {
 
                         if (highest.get() == null || offer > highest.get().getRight()) {
 			    Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor().getId());
+			    Account oacc = AccountDAO.getAccount(evt.getAuthor().getId());
 
 			    if (offerer.getCards().contains(card)) {
 				channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
+				return;
+			    } else if (oacc.getBalance() < offer) {
+				channel.sendMessage("❌ | Você não possui créditos suficientes!").queue();
 				return;
 			    }
 
