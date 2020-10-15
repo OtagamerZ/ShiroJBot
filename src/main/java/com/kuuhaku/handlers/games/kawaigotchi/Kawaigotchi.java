@@ -24,9 +24,8 @@ import com.kuuhaku.handlers.games.kawaigotchi.enums.*;
 import com.kuuhaku.handlers.games.kawaigotchi.exceptions.EmptyStockException;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.api.OnlineStatus;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -133,16 +132,12 @@ public class Kawaigotchi {
 		this.race = race;
 	}
 
-	public void update(Member m) {
+	public void update(User u) {
 		int currTime = OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 		tier = Tier.tierByXp(xp);
 
-		if (stance.equals(Stance.DEAD) || (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN)) {
-			if (stance.equals(Stance.DEAD)) {
-				diedAt = diedAt == null ? LocalDateTime.now() : diedAt;
-			} else {
-				offSince = offSince == null ? LocalDateTime.now() : offSince;
-			}
+		if (stance.equals(Stance.DEAD)) {
+			diedAt = diedAt == null ? LocalDateTime.now() : diedAt;
 			KGotchiDAO.saveKawaigotchi(this);
 		} else if (!stance.equals(Stance.SLEEPING) && (Time.inRange(Time.NIGHT, currTime) || energy < 5)) {
 			stance = Stance.SLEEPING;
@@ -169,7 +164,7 @@ public class Kawaigotchi {
 				stance = Stance.SAD;
 				if (!warned) {
 					try {
-						m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está muito triste, corra ver o porquê!").queue();
+						u.openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está muito triste, corra ver o porquê!").queue();
 					} catch (RuntimeException ignore) {
 					}
 					warned = true;
@@ -178,7 +173,7 @@ public class Kawaigotchi {
 				stance = Stance.SAD;
 				if (!alerted) {
 					try {
-						m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
+						u.openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
 					} catch (RuntimeException ignore) {
 					}
 					alerted = true;
