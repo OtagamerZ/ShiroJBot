@@ -94,7 +94,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.disableIntents(GatewayIntent.GUILD_PRESENCES)
 				.setToken(info.getBotToken())
 				.setChunkingFilter(ChunkingFilter.exclude(264445053596991498L))
-				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
+				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.VOICE_STATE)
 				.setMemberCachePolicy(member -> !member.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
 				.setAudioSendFactory(new NativeAudioSendFactory())
