@@ -894,6 +894,9 @@ public class Helper {
 		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked() && command.requiresMM()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-message-manage-permission")).queue();
 			return true;
+		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_EMBED_LINKS, (TextChannel) channel)) {
+			channel.sendMessage("❌ | A permissão de criar embeds é essencial para que eu funcione, por favor adicione-a no meu cargo!").queue();
+			return true;
 		}
 
 		LogDAO.saveLog(new Log().setGuildId(guild.getId()).setGuild(guild.getName()).setUser(author.getAsTag()).setCommand(rawMessage));
