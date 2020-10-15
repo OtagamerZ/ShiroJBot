@@ -14,7 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/star.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,12 +132,11 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\frames" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\tabletop\games" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\pieces" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.command.commands.discord.fun" />
@@ -144,11 +145,12 @@
       <recent name="com.kuuhaku.model.persistent" />
       <recent name="com.kuuhaku.handlers.games.tabletop.games.shoukan" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\frames" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\tabletop\games" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\pieces" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -798,13 +800,6 @@
       <workItem from="1602726609879" duration="29000" />
       <workItem from="1602726660013" duration="2579000" />
     </task>
-    <task id="LOCAL-02629" summary="Comando See agora mostra cartas Shoukan">
-      <created>1602265105926</created>
-      <option name="number" value="02629" />
-      <option name="presentableId" value="LOCAL-02629" />
-      <option name="project" value="LOCAL" />
-      <updated>1602265105926</updated>
-    </task>
     <task id="LOCAL-02630" summary="Comando See agora mostra cartas Shoukan">
       <created>1602265616694</created>
       <option name="number" value="02630" />
@@ -1141,7 +1136,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602767575709</updated>
     </task>
-    <option name="localTasksCounter" value="2678" />
+    <task id="LOCAL-02678" summary="Adição de erro de MESSAGE_EMBED_LINKS">
+      <created>1602771611145</created>
+      <option name="number" value="02678" />
+      <option name="presentableId" value="LOCAL-02678" />
+      <option name="project" value="LOCAL" />
+      <updated>1602771611145</updated>
+    </task>
+    <option name="localTasksCounter" value="2679" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1207,7 +1209,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no refresh dos botões de reação" />
     <MESSAGE value="Novas cartas: Overflow" />
     <MESSAGE value="Novas cartas: Genshin Impact (sim, tem mangá oficial)" />
     <MESSAGE value="Correção no spawn de cartas através de consumível" />
@@ -1232,7 +1233,8 @@
     <MESSAGE value="Correção no comando MyStats" />
     <MESSAGE value="Correção nos leilões" />
     <MESSAGE value="Remoção da dependência do intent GUILD_PRESENCES" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remoção da dependência do intent GUILD_PRESENCES" />
+    <MESSAGE value="Adição de erro de MESSAGE_EMBED_LINKS" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de erro de MESSAGE_EMBED_LINKS" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1286,11 +1288,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602708322237" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602767572819">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602771608404">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602767572819" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602771608404" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1602174824119">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1345,11 +1347,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602767579460">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602771612364">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602767579460" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602771612364" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1602728582006" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
