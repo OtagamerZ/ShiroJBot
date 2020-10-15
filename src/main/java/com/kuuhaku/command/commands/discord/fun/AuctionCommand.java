@@ -166,6 +166,7 @@ public class AuctionCommand extends Command {
 
                                     Main.getInfo().getConfirmationPending().invalidate(author.getId());
                                     Main.getInfo().getAPI().removeEventListener(self);
+                                    event.get().cancel(true);
                                 } else {
                                     switch (phase.get()) {
                                         case 1 -> channel.sendMessage("Dou-lhe 1...").queue();
