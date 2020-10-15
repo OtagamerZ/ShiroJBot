@@ -187,7 +187,7 @@ public class AuctionCommand extends Command {
             String hash = Helper.generateHash(guild, author);
             ShiroInfo.getHashes().add(hash);
             Main.getInfo().getConfirmationPending().put(author.getId(), true);
-            channel.sendMessage("Esta carta será vendida para quer der o maior valor. Deseja mesmo leiloá-la?").queue(s -> {
+            channel.sendMessage("Esta carta será vendida para quem oferecer o maior valor. Deseja mesmo leiloá-la?").queue(s -> {
                 Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                     if (!ShiroInfo.getHashes().remove(hash)) return;
                     if (mb.getId().equals(author.getId())) {
