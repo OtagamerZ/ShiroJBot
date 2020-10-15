@@ -14,8 +14,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos leilões">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/AuctionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/AuctionCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -787,14 +785,7 @@
       <workItem from="1602691511297" duration="6910000" />
       <workItem from="1602703937342" duration="5062000" />
       <workItem from="1602726609879" duration="29000" />
-      <workItem from="1602726660013" duration="714000" />
-    </task>
-    <task id="LOCAL-02617" summary="Correções menores">
-      <created>1602253383595</created>
-      <option name="number" value="02617" />
-      <option name="presentableId" value="LOCAL-02617" />
-      <option name="project" value="LOCAL" />
-      <updated>1602253383595</updated>
+      <workItem from="1602726660013" duration="1033000" />
     </task>
     <task id="LOCAL-02618" summary="Correções menores">
       <created>1602253556504</created>
@@ -1132,7 +1123,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602712469490</updated>
     </task>
-    <option name="localTasksCounter" value="2666" />
+    <task id="LOCAL-02666" summary="Correção nos leilões">
+      <created>1602727469492</created>
+      <option name="number" value="02666" />
+      <option name="presentableId" value="LOCAL-02666" />
+      <option name="project" value="LOCAL" />
+      <updated>1602727469492</updated>
+    </task>
+    <option name="localTasksCounter" value="2667" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1336,12 +1334,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602712471519">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602727494114">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602704292168" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1602712471519" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1602727494114" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
