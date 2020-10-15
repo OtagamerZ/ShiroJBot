@@ -118,63 +118,25 @@ public class AuctionCommand extends Command {
             AtomicInteger phase = new AtomicInteger(1);
             AtomicReference<Pair<User, Integer>> highest = new AtomicReference<>(null);
 
-            AtomicReference<SimpleMessageListener> listener = new AtomicReference<>();
-
-            Runnable auct = () -> {
-                if (phase.get() == 4 && highest.get() != null) {
-                    channel.sendMessage("**Carta vendida** para " + highest.get().getLeft().getAsMention() + " por **" + highest.get().getRight() + "** créditos!").queue();
-
-                    Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
-                    k.removeCard(card);
-                    KawaiponDAO.saveKawaipon(k);
-
-                    Kawaipon buyer = KawaiponDAO.getKawaipon(highest.get().getLeft().getId());
-                    buyer.addCard(card);
-                    KawaiponDAO.saveKawaipon(buyer);
-
-		    Account oacc = AccountDAO.getAccount(evt.getAuthor().getId());
-		    oacc.removeCredits(highest.get().getRight(), this.getClass());
-		    AccountDAO.saveAccount(oacc);
-
-                    Account acc = AccountDAO.getAccount(author.getId());
-                    acc.addCredit(highest.get().getRight(), this.getClass());
-                    AccountDAO.saveAccount(acc);
-
-                    Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                    Main.getInfo().getAPI().removeEventListener(listener.get());
-                } else {
-                    switch (phase.get()) {
-                        case 1 -> channel.sendMessage("Dou-lhe 1...").queue();
-                        case 2 -> channel.sendMessage("""
-                                Dou-lhe 2...
-                                Vamos lá pessoal, será que eu ouvi um %s?
-                                """.formatted(highest.get().getRight() + 250)).queue();
-                        case 3 -> channel.sendMessage("Dou-lhe 3...").queue();
-                    }
-
-                    phase.getAndIncrement();
-                }
-            };
-
-            listener.set(new SimpleMessageListener() {
+            SimpleMessageListener listener = new SimpleMessageListener() {
                 @Override
                 public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent evt) {
-		    if (!evt.getChannel().getId().equals(channel.getId()) || evt.getAuthor().isBot()) return;
+                    if (!evt.getChannel().getId().equals(channel.getId()) || evt.getAuthor().isBot()) return;
                     String raw = evt.getMessage().getContentRaw();
                     if (StringUtils.isNumeric(raw)) {
                         int offer = Integer.parseInt(raw);
 
                         if (highest.get() == null || offer > highest.get().getRight()) {
-			    Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor().getId());
-			    Account oacc = AccountDAO.getAccount(evt.getAuthor().getId());
+                            Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor().getId());
+                            AtomicReference<Account> oacc = new AtomicReference<>(AccountDAO.getAccount(evt.getAuthor().getId()));
 
-			    if (offerer.getCards().contains(card)) {
-				channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
-				return;
-			    } else if (oacc.getBalance() < offer) {
-				channel.sendMessage("❌ | Você não possui créditos suficientes!").queue();
-				return;
-			    }
+                            if (offerer.getCards().contains(card)) {
+                                channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
+                                return;
+                            } else if (oacc.get().getBalance() < offer) {
+                                channel.sendMessage("❌ | Você não possui créditos suficientes!").queue();
+                                return;
+                            }
 
                             highest.set(Pair.of(evt.getAuthor(), offer));
                             phase.set(1);
@@ -182,11 +144,45 @@ public class AuctionCommand extends Command {
                             channel.sendMessage(evt.getAuthor().getAsMention() + " ofereceu **" + offer + " créditos**!").queue();
 
                             event.get().cancel(true);
-                            event.set(exec.schedule(auct, 5, TimeUnit.SECONDS));
+                            event.set(exec.schedule(() -> {
+                                if (phase.get() == 4 && highest.get() != null) {
+                                    channel.sendMessage("**Carta vendida** para " + highest.get().getLeft().getAsMention() + " por **" + highest.get().getRight() + "** créditos!").queue();
+
+                                    Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
+                                    k.removeCard(card);
+                                    KawaiponDAO.saveKawaipon(k);
+
+                                    Kawaipon buyer = KawaiponDAO.getKawaipon(highest.get().getLeft().getId());
+                                    buyer.addCard(card);
+                                    KawaiponDAO.saveKawaipon(buyer);
+
+                                    oacc.set(AccountDAO.getAccount(highest.get().getLeft().getId()));
+                                    oacc.get().removeCredit(highest.get().getRight(), this.getClass());
+                                    AccountDAO.saveAccount(oacc.get());
+
+                                    Account acc = AccountDAO.getAccount(author.getId());
+                                    acc.addCredit(highest.get().getRight(), this.getClass());
+                                    AccountDAO.saveAccount(acc);
+
+                                    Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                    Main.getInfo().getAPI().removeEventListener(self);
+                                } else {
+                                    switch (phase.get()) {
+                                        case 1 -> channel.sendMessage("Dou-lhe 1...").queue();
+                                        case 2 -> channel.sendMessage("""
+                                                Dou-lhe 2...
+                                                Vamos lá pessoal, será que eu ouvi um %s?
+                                                """.formatted(highest.get().getRight() + 250)).queue();
+                                        case 3 -> channel.sendMessage("Dou-lhe 3...").queue();
+                                    }
+
+                                    phase.getAndIncrement();
+                                }
+                            }, 5, TimeUnit.SECONDS));
                         }
                     }
                 }
-            });
+            };
 
             String hash = Helper.generateHash(guild, author);
             ShiroInfo.getHashes().add(hash);
@@ -202,7 +198,7 @@ public class AuctionCommand extends Command {
                         ));
 
                         s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Leilão aberto com sucesso, se não houver ofertas maiores que " + price + " dentro de 30 segundos irei fechá-lo!")).queue();
-                        Main.getInfo().getAPI().addEventListener(listener.get());
+                        Main.getInfo().getAPI().addEventListener(listener);
                     }
                 }), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
                     ShiroInfo.getHashes().remove(hash);
