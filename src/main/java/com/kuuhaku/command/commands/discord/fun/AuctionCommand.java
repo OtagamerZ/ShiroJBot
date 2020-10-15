@@ -130,7 +130,7 @@ public class AuctionCommand extends Command {
                             Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor().getId());
                             AtomicReference<Account> oacc = new AtomicReference<>(AccountDAO.getAccount(evt.getAuthor().getId()));
 
-                            if (offerer.getCards().contains(card)) {
+                            if (offerer.getCards().contains(card) && !evt.getAuthor().getId().equals(author.getId())) {
                                 channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
                                 return;
                             } else if (oacc.get().getBalance() < offer) {
@@ -144,7 +144,7 @@ public class AuctionCommand extends Command {
                             channel.sendMessage(evt.getAuthor().getAsMention() + " ofereceu **" + offer + " créditos**!").queue();
 
                             event.get().cancel(true);
-                            event.set(exec.schedule(() -> {
+                            event.set(exec.scheduleWithFixedDelay(() -> {
                                 if (phase.get() == 4 && highest.get() != null) {
                                     channel.sendMessage("**Carta vendida** para " + highest.get().getLeft().getAsMention() + " por **" + highest.get().getRight() + "** créditos!").queue();
 
@@ -178,7 +178,7 @@ public class AuctionCommand extends Command {
 
                                     phase.getAndIncrement();
                                 }
-                            }, 5, TimeUnit.SECONDS));
+                            }, 5, 5, TimeUnit.SECONDS));
                         }
                     }
                 }
