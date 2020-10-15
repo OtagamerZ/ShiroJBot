@@ -36,7 +36,7 @@ public class OddSecondEvent implements Job {
 
 		kgs.forEach(k -> {
 			try {
-				k.update(Main.getInfo().getMemberByID(k.getUserId()));
+				k.update(Main.getInfo().getUserByID(k.getUserId()));
 			} catch (NullPointerException ignore) {
 			}
 		});
