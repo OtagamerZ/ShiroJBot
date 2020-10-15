@@ -129,7 +129,7 @@ public class GuildEvents extends ListenerAdapter {
 			} catch (InsufficientPermissionException | ErrorResponseException ignore) {
 			}*/
 
-			if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) && GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
+			if (GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
 				if (GuildDAO.getGuildById(guild.getId()).isHardAntispam()) {
 					channel.getHistory().retrievePast(20).queue(h -> {
 						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
@@ -322,7 +322,7 @@ public class GuildEvents extends ListenerAdapter {
 	}
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
-		if (h.size() >= GuildDAO.getGuildById(guild.getId()).getNoSpamAmount() && Helper.hasRoleHigherThan(guild.getSelfMember(), member)) {
+		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) && h.size() >= GuildDAO.getGuildById(guild.getId()).getNoSpamAmount() && Helper.hasRoleHigherThan(guild.getSelfMember(), member)) {
 			((TextChannel) channel).deleteMessagesByIds(h.stream().map(Message::getId).collect(Collectors.toList())).queue(null, Helper::doNothing);
 			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(
 					msg -> msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing)
