@@ -156,11 +156,19 @@ public class AuctionCommand extends Command {
             listener.set(new SimpleMessageListener() {
                 @Override
                 public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent evt) {
+		    if (!evt.getChannel().getId().equals(channel.getId()) || evt.getAuthor().isBot()) return;
                     String raw = evt.getMessage().getContentRaw();
                     if (StringUtils.isNumeric(raw)) {
                         int offer = Integer.parseInt(raw);
 
                         if (highest.get() == null || offer > highest.get().getRight()) {
+			    Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor());
+
+			    if (offerer.getCards().contains(cm.getCard())) {
+				channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
+				return;
+			    }
+
                             highest.set(Pair.of(evt.getAuthor(), offer));
                             phase.set(1);
 
