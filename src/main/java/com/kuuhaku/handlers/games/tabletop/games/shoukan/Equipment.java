@@ -23,6 +23,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.imageio.ImageIO;
@@ -104,7 +105,7 @@ public class Equipment implements Drawable, Cloneable {
 		g2d.drawImage(FrameColor.PINK.getFrontEquipment(), 0, 0, null);
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
-		Profile.drawOutlinedText(card.getName(), 13, 32, g2d);
+		Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
 		g2d.setColor(Color.red);
 		Profile.drawOutlinedText(String.valueOf(atk), 45, 316, g2d);
@@ -115,7 +116,7 @@ public class Equipment implements Drawable, Cloneable {
 		try {
 			BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
 			for (int i = 0; i < tier; i++)
-				g2d.drawImage(star, (bi.getWidth() / 2) - ((star.getWidth() * tier / 2) + star.getWidth() * i), 42, null);
+				g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
 		} catch (IOException ignore) {
 		}
 
