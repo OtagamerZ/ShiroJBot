@@ -798,27 +798,6 @@
       <workItem from="1602726609879" duration="29000" />
       <workItem from="1602726660013" duration="2579000" />
     </task>
-    <task id="LOCAL-02624" summary="Adição de compra/venda de equipamentos na loja de cartas">
-      <created>1602263366093</created>
-      <option name="number" value="02624" />
-      <option name="presentableId" value="LOCAL-02624" />
-      <option name="project" value="LOCAL" />
-      <updated>1602263366093</updated>
-    </task>
-    <task id="LOCAL-02625" summary="Adição de compra/venda de equipamentos na loja de cartas">
-      <created>1602263424669</created>
-      <option name="number" value="02625" />
-      <option name="presentableId" value="LOCAL-02625" />
-      <option name="project" value="LOCAL" />
-      <updated>1602263424669</updated>
-    </task>
-    <task id="LOCAL-02626" summary="Adição de compra/venda de equipamentos na loja de cartas">
-      <created>1602263626002</created>
-      <option name="number" value="02626" />
-      <option name="presentableId" value="LOCAL-02626" />
-      <option name="project" value="LOCAL" />
-      <updated>1602263626002</updated>
-    </task>
     <task id="LOCAL-02627" summary="Adição de compra/venda de equipamentos na loja de cartas">
       <created>1602264046221</created>
       <option name="number" value="02627" />
@@ -1141,7 +1120,28 @@
       <option name="project" value="LOCAL" />
       <updated>1602765099673</updated>
     </task>
-    <option name="localTasksCounter" value="2673" />
+    <task id="LOCAL-02673" summary="Remoção da dependência do intent GUILD_PRESENCES">
+      <created>1602765465849</created>
+      <option name="number" value="02673" />
+      <option name="presentableId" value="LOCAL-02673" />
+      <option name="project" value="LOCAL" />
+      <updated>1602765465849</updated>
+    </task>
+    <task id="LOCAL-02674" summary="Remoção da dependência do intent GUILD_PRESENCES">
+      <created>1602765588313</created>
+      <option name="number" value="02674" />
+      <option name="presentableId" value="LOCAL-02674" />
+      <option name="project" value="LOCAL" />
+      <updated>1602765588313</updated>
+    </task>
+    <task id="LOCAL-02675" summary="Remoção da dependência do intent GUILD_PRESENCES">
+      <created>1602765637571</created>
+      <option name="number" value="02675" />
+      <option name="presentableId" value="LOCAL-02675" />
+      <option name="project" value="LOCAL" />
+      <updated>1602765637572</updated>
+    </task>
+    <option name="localTasksCounter" value="2676" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1286,11 +1286,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602708322237" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602765096952">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1602765634808">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602765096952" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1602765634808" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1602174824119">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1345,11 +1345,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602765100741">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1602765638698">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602765100741" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1602765638698" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1602728582006" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
