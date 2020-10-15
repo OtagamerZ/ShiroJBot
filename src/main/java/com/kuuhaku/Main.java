@@ -91,7 +91,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		EnumSet<GatewayIntent> intents = GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS);
 
 		api = JDABuilder.create(intents)
-				.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES)
+				.enableIntents(GatewayIntent.GUILD_MEMBERS)
 				.setToken(info.getBotToken())
 				.setChunkingFilter(ChunkingFilter.ALL)
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
