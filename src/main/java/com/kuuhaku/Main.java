@@ -93,7 +93,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api = JDABuilder.create(intents)
 				.disableIntents(GatewayIntent.GUILD_PRESENCES)
 				.setToken(info.getBotToken())
-				.setChunkingFilter(ChunkingFilter.NONE)
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(member -> !member.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
