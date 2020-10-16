@@ -895,7 +895,7 @@ public class Helper {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-message-manage-permission")).queue();
 			return true;
 		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_EMBED_LINKS, (TextChannel) channel)) {
-			channel.sendMessage("❌ | A permissão de criar embeds é essencial para que eu funcione, por favor adicione-a no meu cargo!").queue();
+			channel.sendMessage("❌ | A permissão de criar embeds é essencial para que eu funcione, por favor adicione-a ao meu cargo!").queue();
 			return true;
 		}
 
