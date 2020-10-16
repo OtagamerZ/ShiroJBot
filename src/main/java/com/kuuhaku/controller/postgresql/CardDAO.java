@@ -225,25 +225,10 @@ public class CardDAO {
 	public static List<Champion> getFusions() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE race = 'ULTIMATE'", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE requiredCards.size > 0", Champion.class);
 
 		try {
 			return (List<Champion>) q.getResultList();
-		} catch (NoResultException e) {
-			return null;
-		} finally {
-			em.close();
-		}
-	}
-
-	public static Champion getFusionByName(String name) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id = UPPER(:id)", Champion.class);
-		q.setParameter("id", name);
-
-		try {
-			return (Champion) q.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		} finally {
