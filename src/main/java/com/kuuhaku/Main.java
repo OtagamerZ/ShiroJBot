@@ -45,8 +45,6 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.utils.ChunkingFilter;
-import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -227,12 +225,12 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	public static boolean reboot() throws LoginException, InterruptedException {
-		api = JDABuilder.create(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
-				.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES)
-				.setToken(info.getBotToken())
-				.setChunkingFilter(ChunkingFilter.ALL)
+		EnumSet<GatewayIntent> intents = EnumSet.allOf(GatewayIntent.class);
+		intents.remove(GatewayIntent.GUILD_PRESENCES);
+
+		api = JDABuilder.create(info.getBotToken(), intents)
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
-				.setMemberCachePolicy(MemberCachePolicy.ALL)
+				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
 				.setAudioSendFactory(new NativeAudioSendFactory())
 				.build()
