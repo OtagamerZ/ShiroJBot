@@ -70,6 +70,9 @@ public class SynthesizeCardCommand extends Command {
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um equipamento (nomes separados por `;`).").queue();
 			return;
+		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
 		}
 
 		String[] names = args[0].split(";");
