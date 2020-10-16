@@ -40,272 +40,282 @@ import java.util.*;
 @Entity
 @Table(name = "champion")
 public class Champion implements Drawable, Cloneable {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	private Card card;
+    @OneToOne(fetch = FetchType.EAGER)
+    private Card card;
 
-	@Enumerated(EnumType.STRING)
-	private Race race;
+    @Enumerated(EnumType.STRING)
+    private Race race;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int mana;
+    @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+    private int mana;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int atk;
+    @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+    private int atk;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int def;
+    @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+    private int def;
 
-	@Column(columnDefinition = "VARCHAR(130) NOT NULL DEFAULT ''")
-	private String description;
+    @Column(columnDefinition = "VARCHAR(130) NOT NULL DEFAULT ''")
+    private String description;
 
-	@Column(columnDefinition = "TEXT")
-	private String effect = "";
+    @Column(columnDefinition = "TEXT")
+    private String effect = "";
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	private Set<String> requiredCards = new HashSet<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> requiredCards = new HashSet<>();
 
-	private transient boolean flipped = false;
-	private transient boolean available = true;
-	private transient boolean defending = false;
-	private transient List<Equipment> linkedTo = new ArrayList<>();
-	private transient Bonus bonus = new Bonus();
-	private transient int mAtk = 0;
-	private transient int mDef = 0;
+    private transient boolean flipped = false;
+    private transient boolean available = true;
+    private transient boolean defending = false;
+    private transient List<Equipment> linkedTo = new ArrayList<>();
+    private transient Bonus bonus = new Bonus();
+    private transient int mAtk = 0;
+    private transient int mDef = 0;
 
-	@Override
-	public BufferedImage drawCard(Account acc, boolean flipped) {
-		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = bi.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+    @Override
+    public BufferedImage drawCard(Account acc, boolean flipped) {
+        BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bi.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-		if (flipped) {
-			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
-		} else {
-			g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
-			g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
-			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+        if (flipped) {
+            g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
+        } else {
+            g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
+            g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
+            g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
-			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
+            Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
-			g2d.setColor(Color.cyan);
-			Profile.drawOutlinedText(String.valueOf(mana), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 66, g2d);
+            g2d.setColor(Color.cyan);
+            Profile.drawOutlinedText(String.valueOf(mana), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 66, g2d);
 
-			g2d.setColor(Color.red);
-			Profile.drawOutlinedText(String.valueOf(atk), 45, 250, g2d);
+            g2d.setColor(Color.red);
+            Profile.drawOutlinedText(String.valueOf(atk), 45, 250, g2d);
 
-			if (bonus.getAtk() != 0)
-				Profile.drawOutlinedText((bonus.getAtk() > 0 ? "+" : "") + bonus.getAtk(), 45, 225, g2d);
-			for (int i = 0, slot = bonus.getAtk() != 0 ? 2 : 1; i < linkedTo.size(); i++) {
-				int eAtk = linkedTo.get(i).getAtk();
-				if (eAtk != 0) {
-					Profile.drawOutlinedText((eAtk > 0 ? "+" : "") + eAtk, 45, 250 - (25 * slot), g2d);
-					slot++;
-				}
-			}
+            if (bonus.getAtk() != 0)
+                Profile.drawOutlinedText((bonus.getAtk() > 0 ? "+" : "") + bonus.getAtk(), 45, 225, g2d);
+            for (int i = 0, slot = bonus.getAtk() != 0 ? 2 : 1; i < linkedTo.size(); i++) {
+                int eAtk = linkedTo.get(i).getAtk();
+                if (eAtk != 0) {
+                    Profile.drawOutlinedText((eAtk > 0 ? "+" : "") + eAtk, 45, 250 - (25 * slot), g2d);
+                    slot++;
+                }
+            }
 
-			g2d.setColor(Color.green);
-			Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
+            g2d.setColor(Color.green);
+            Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
 
-			if (bonus.getDef() != 0)
-				Profile.drawOutlinedText((bonus.getDef() > 0 ? "+" : "") + bonus.getDef(), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(bonus.getDef())), 225, g2d);
-			for (int i = 0, slot = bonus.getDef() != 0 ? 2 : 1; i < linkedTo.size(); i++) {
-				int eDef = linkedTo.get(i).getDef();
-				if (eDef != 0) {
-					Profile.drawOutlinedText(eDef + (eDef > 0 ? "+" : ""), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(eDef)), 250 - (25 * slot), g2d);
-					slot++;
-				}
-			}
+            if (bonus.getDef() != 0)
+                Profile.drawOutlinedText((bonus.getDef() > 0 ? "+" : "") + bonus.getDef(), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(bonus.getDef())), 225, g2d);
+            for (int i = 0, slot = bonus.getDef() != 0 ? 2 : 1; i < linkedTo.size(); i++) {
+                int eDef = linkedTo.get(i).getDef();
+                if (eDef != 0) {
+                    Profile.drawOutlinedText(eDef + (eDef > 0 ? "+" : ""), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(eDef)), 250 - (25 * slot), g2d);
+                    slot++;
+                }
+            }
 
-			g2d.setFont(new Font("Arial", Font.BOLD, 11));
-			g2d.setColor(Color.black);
-			g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 12, 277);
+            g2d.setFont(new Font("Arial", Font.BOLD, 11));
+            g2d.setColor(Color.black);
+            g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 12, 277);
 
-			g2d.setFont(Helper.HAMLIN.deriveFont(Map.of(
-					TextAttribute.SIZE, 11,
-					TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
-			)));
-			Profile.drawStringMultiLineNO(g2d, description, 205, 12, 293);
-		}
+            g2d.setFont(Helper.HAMLIN.deriveFont(Map.of(
+                    TextAttribute.SIZE, 11,
+                    TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
+            )));
+            Profile.drawStringMultiLineNO(g2d, description, 205, 12, 293);
+        }
 
-		if (!available) {
-			g2d.setColor(new Color(0, 0, 0, 150));
-			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-		}
+        if (!available) {
+            g2d.setColor(new Color(0, 0, 0, 150));
+            g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+        }
 
-		if (defending) {
-			try {
-				BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/defense_mode.png")));
-				g2d.drawImage(dm, 0, 0, null);
-			} catch (IOException ignore) {
-			}
-		}
+        if (defending) {
+            try {
+                BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/defense_mode.png")));
+                g2d.drawImage(dm, 0, 0, null);
+            } catch (IOException ignore) {
+            }
+        }
 
-		g2d.dispose();
+        g2d.dispose();
 
-		return bi;
-	}
+        return bi;
+    }
 
-	@Override
-	public Card getCard() {
-		return card;
-	}
+    @Override
+    public Card getCard() {
+        return card;
+    }
 
-	@Override
-	public boolean isFlipped() {
-		return flipped;
-	}
+    @Override
+    public boolean isFlipped() {
+        return flipped;
+    }
 
-	@Override
-	public void setFlipped(boolean flipped) {
-		this.flipped = flipped;
-	}
+    @Override
+    public void setFlipped(boolean flipped) {
+        this.flipped = flipped;
+    }
 
-	@Override
-	public boolean isAvailable() {
-		return available;
-	}
+    @Override
+    public boolean isAvailable() {
+        return available;
+    }
 
-	@Override
-	public void setAvailable(boolean available) {
-		this.available = available;
-	}
+    @Override
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
 
-	public List<Equipment> getLinkedTo() {
-		return linkedTo;
-	}
+    public List<Equipment> getLinkedTo() {
+        return linkedTo;
+    }
 
-	public void addLinkedTo(Equipment linkedTo) {
-		this.linkedTo.add(linkedTo);
-	}
+    public void addLinkedTo(Equipment linkedTo) {
+        this.linkedTo.add(linkedTo);
+    }
 
-	public void removeLinkedTo(Equipment linkedTo) {
-		this.linkedTo.remove(linkedTo);
-	}
+    public void removeLinkedTo(Equipment linkedTo) {
+        this.linkedTo.remove(linkedTo);
+    }
 
-	public boolean isLinkedTo(String name) {
-		return linkedTo.stream().anyMatch(e -> e != null && e.getCard().getName().equalsIgnoreCase(name));
-	}
+    public boolean isLinkedTo(String name) {
+        return linkedTo.stream().anyMatch(e -> e != null && e.getCard().getName().equalsIgnoreCase(name));
+    }
 
-	public void clearLinkedTo() {
-		this.linkedTo.clear();
-	}
+    public void clearLinkedTo() {
+        this.linkedTo.clear();
+    }
 
-	public boolean isDefending() {
-		return defending;
-	}
+    public boolean isDefending() {
+        return defending;
+    }
 
-	public void setDefending(boolean defending) {
-		this.defending = defending;
-	}
+    public void setDefending(boolean defending) {
+        this.defending = defending;
+    }
 
-	public Race getRace() {
-		return race;
-	}
+    public Race getRace() {
+        return race;
+    }
 
-	public int getMana() {
-		return mana;
-	}
+    public int getMana() {
+        return mana;
+    }
 
-	public int getAtk() {
-		return atk + bonus.getAtk();
-	}
+    public int getAtk() {
+        return atk + bonus.getAtk();
+    }
 
-	public int getDef() {
-		return def + bonus.getDef();
-	}
+    public int getDef() {
+        return def + bonus.getDef();
+    }
 
-	public int getEAtk() {
-		return Math.max(0, atk + mAtk + bonus.getAtk());
-	}
+    public int getEAtk() {
+        return Math.max(0, atk + mAtk + bonus.getAtk());
+    }
 
-	public void setMAtk(int mAtk) {
-		this.mAtk = mAtk;
-	}
+    public void setMAtk(int mAtk) {
+        this.mAtk = mAtk;
+    }
 
-	public int getEDef() {
-		return Math.max(0, def + mDef + bonus.getDef());
-	}
+    public int getEDef() {
+        return Math.max(0, def + mDef + bonus.getDef());
+    }
 
-	public void setMDef(int mDef) {
-		this.mDef = mDef;
-	}
+    public void setMDef(int mDef) {
+        this.mDef = mDef;
+    }
 
-	public void resetAttribs() {
-		this.mAtk = 0;
-		this.mDef = 0;
-	}
+    public void resetAttribs() {
+        this.mAtk = 0;
+        this.mDef = 0;
+    }
 
-	public Bonus getBonus() {
-		return bonus;
-	}
+    public Bonus getBonus() {
+        return bonus;
+    }
 
-	public void clearBonus() {
-		this.bonus = new Bonus();
-	}
+    public void clearBonus() {
+        this.bonus = new Bonus();
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public boolean hasEffect() {
-		return effect != null;
-	}
+    public boolean hasEffect() {
+        return effect != null;
+    }
 
-	public void getEffect(EffectParameters ep) {
-		String imports = """
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
-				import com.kuuhaku.controller.postgresql.CardDAO;
-								
-				""";
+    public void getEffect(EffectParameters ep) {
+        String imports = """
+                import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
+                import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
+                import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+                import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
+                import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+                import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+                import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
+                import com.kuuhaku.controller.postgresql.CardDAO;
+                				
+                """;
 
-		try {
-			Interpreter i = new Interpreter();
-			i.setStrictJava(true);
-			i.set("ep", ep);
-			i.eval(imports + effect);
-		} catch (EvalError evalError) {
-			System.out.println(evalError);
-		}
-	}
+        try {
+            Interpreter i = new Interpreter();
+            i.setStrictJava(true);
+            i.set("ep", ep);
+            i.eval(imports + effect);
+        } catch (EvalError evalError) {
+            System.out.println(evalError);
+        }
+    }
 
-	public Set<String> getRequiredCards() {
-		return requiredCards;
-	}
+    public void reset() {
+        flipped = false;
+        available = true;
+        defending = false;
+        linkedTo = new ArrayList<>();
+        bonus = new Bonus();
+        mAtk = 0;
+        mDef = 0;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Champion champion = (Champion) o;
-		return id == champion.id;
-	}
+    public Set<String> getRequiredCards() {
+        return requiredCards;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Champion champion = (Champion) o;
+        return id == champion.id;
+    }
 
-	@Override
-	public Drawable copy() {
-		try {
-			Champion c = (Champion) clone();
-			c.linkedTo = new ArrayList<>();
-			c.bonus = new Bonus();
-			return c;
-		} catch (CloneNotSupportedException e) {
-			return null;
-		}
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public Drawable copy() {
+        try {
+            Champion c = (Champion) clone();
+            c.linkedTo = new ArrayList<>();
+            c.bonus = new Bonus();
+            return c;
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
 }
