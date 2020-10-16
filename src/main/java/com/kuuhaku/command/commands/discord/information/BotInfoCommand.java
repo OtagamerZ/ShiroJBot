@@ -73,13 +73,17 @@ public class BotInfoCommand extends Command {
 		eb.addField("Links:", """
 									[%s](https://discordapp.com/invite/9sgkzna)
 									[Top.GG](https://top.gg/bot/572413282653306901)
-									[Votar](https://top.gg/bot/572413282653306901/vote)
+									[%s](https://top.gg/bot/572413282653306901/vote)
 									[Github](https://github.com/OtagamerZ/ShiroJBot)
 									[%s](https://github.com/OtagamerZ/ShiroJBot/blob/master/PRIVACY_POLICY.md)
+									[Reddit](https://www.reddit.com/r/ShiroJBot/)
+									[%s](https://top.gg/bot/572413282653306901/invite)
 						"""
 						.formatted(
-								ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-link-1"),
-								ShiroInfo.getLocale(I18n.PT).getString("str_privacy-policy")
+								ShiroInfo.getLocale(I18n.PT).getString("str_support"),
+								ShiroInfo.getLocale(I18n.PT).getString("str_vote"),
+								ShiroInfo.getLocale(I18n.PT).getString("str_privacy-policy"),
+								ShiroInfo.getLocale(I18n.PT).getString("str_invite")
 						)
 				, false
 		);
