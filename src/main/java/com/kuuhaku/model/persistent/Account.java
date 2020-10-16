@@ -189,6 +189,14 @@ public class Account {
 	}
 
 	public int getStreak() {
+		try {
+			ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
+			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
+
+			if (today.isAfter(lastVote.plusHours(24))) streak = 0;
+		} catch (DateTimeParseException ignore) {
+		}
+
 		return streak;
 	}
 
