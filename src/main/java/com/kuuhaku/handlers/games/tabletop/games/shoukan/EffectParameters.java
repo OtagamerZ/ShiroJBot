@@ -20,9 +20,11 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -84,5 +86,19 @@ public class EffectParameters {
 
 	public Duelists getDuelists() {
 		return duelists;
+	}
+
+	public Map<Race, Integer> countTypesInGraveyard(Side side) {
+		Map<Race, Integer> types = new HashMap<>();
+
+		for (Race race : Race.values()) {
+			types.put(race, (int) graveyard.get(side).stream()
+					.filter(d -> d instanceof Champion)
+					.map(d -> (Champion) d)
+					.filter(c -> c.getRace() == race)
+					.count());
+		}
+
+		return types;
 	}
 }
