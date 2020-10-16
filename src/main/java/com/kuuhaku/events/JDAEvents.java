@@ -154,9 +154,9 @@ public class JDAEvents extends ListenerAdapter {
 			if (BlacklistDAO.isBlacklisted(event.getUser())) return;
 			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 
-			com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(event.getMember().getId() + event.getGuild().getId());
+			/*com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(event.getMember().getId() + event.getGuild().getId());
 			m.setMarkForDelete(true);
-			MemberDAO.updateMemberConfigs(m);
+			MemberDAO.updateMemberConfigs(m);*/
 
 			if (!gc.getMsgAdeus().equals("")) {
 				URL url = new URL(Objects.requireNonNull(event.getUser().getAvatarUrl()));
