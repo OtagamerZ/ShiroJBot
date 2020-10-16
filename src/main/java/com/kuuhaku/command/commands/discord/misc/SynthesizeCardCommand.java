@@ -122,6 +122,7 @@ public class SynthesizeCardCommand extends Command {
 						Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
 							if (kp.getEquipments().stream().filter(e::equals).count() == 3 || kp.getEquipments().size() == 18) {
 								int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
@@ -131,9 +132,9 @@ public class SynthesizeCardCommand extends Command {
 								AccountDAO.saveAccount(acc);
 
 								if (kp.getEquipments().size() == 18)
-									channel.sendMessage("❌ | Você já possui 18 equipamentos, suas cartas foram convertidas em " + change + " créditos.").queue();
+									channel.sendMessage("❌ | Você já possui 18 equipamentos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
 								else
-									channel.sendMessage("❌ | Você já possui 3 cópias desse equipamento, suas cartas foram convertidas em " + change + " créditos.").queue();
+									channel.sendMessage("❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
 								return;
 							}
 
@@ -141,7 +142,6 @@ public class SynthesizeCardCommand extends Command {
 							tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
 							KawaiponDAO.saveKawaipon(kp);
 
-							String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 							s.delete().queue(null, Helper::doNothing);
 							channel.sendMessage("Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
 						}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
