@@ -57,6 +57,11 @@ public class SellCardCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
+		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
+
 		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada) e o preço dela. Se for vender um equipamento, basta informar a carta e o preço dela.").queue();
 			return;
@@ -116,9 +121,6 @@ public class SellCardCommand extends Command {
 			return;
 		} else if (!Helper.equalsAny(args[1], "N", "C")) {
 			channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja vender (`N` = normal, `C` = cromada).").queue();
-			return;
-		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
 		}
 
