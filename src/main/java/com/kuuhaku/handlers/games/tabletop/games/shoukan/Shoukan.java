@@ -526,8 +526,7 @@ public class Shoukan extends Game {
                     this.message = channel.sendMessage("Você atacou diretamente o inimigo.")
                             .addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
                     Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
-                    postCombat();
-                    resetTimerKeepTurn();
+                    if (!postCombat()) resetTimerKeepTurn();
                     return;
                 }
 
@@ -601,7 +600,7 @@ public class Shoukan extends Game {
                 }
 
                 Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
-                postCombat();
+                if (!postCombat()) resetTimerKeepTurn();
             } catch (IndexOutOfBoundsException e) {
                 channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue();
             } catch (NumberFormatException e) {
@@ -657,15 +656,17 @@ public class Shoukan extends Game {
         return null;
     }
 
-    public void postCombat() {
-        if (getHandById(getBoard().getPlayers().get(1).getId()).getHp() <= 0) {
+    public boolean postCombat() {
+        if (getHandById(getBoard().getPlayers().get(1).getId()).getHp() == 0) {
             if (this.message != null) this.message.delete().queue();
             this.message = channel.sendMessage(getCurrent().getAsMention() + " zerou os pontos de vida de " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
                     .addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
             getBoard().awardWinner(this, getCurrent().getId());
             close();
+            return true;
         }
+        return false;
     }
 
     @Override
