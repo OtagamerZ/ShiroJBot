@@ -313,19 +313,19 @@ public class Shoukan extends Game {
                         if (this.message != null) this.message.delete().queue();
                         this.message = channel.sendMessage("Carta virada para cima em modo de defesa.")
                                 .addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
-                        Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
+                        Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
                         changed[index] = true;
                     } else if (!c.isDefending()) {
                         if (this.message != null) this.message.delete().queue();
                         this.message = channel.sendMessage("Carta trocada para modo de ataque.")
                                 .addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
-                        Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
+                        Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
                         changed[index] = true;
                     } else {
                         if (this.message != null) this.message.delete().queue();
                         this.message = channel.sendMessage("Carta trocada para modo de defesa.")
                                 .addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
-                        Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
+                        Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
                         changed[index] = true;
                     }
 
@@ -469,7 +469,7 @@ public class Shoukan extends Game {
 
                 if (this.message != null) this.message.delete().queue();
                 this.message = channel.sendFile(Helper.getBytes(arena.render(hands), "jpg"), "board.jpg").complete();
-                Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
+                Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
                 h.showHand();
                 resetTimerKeepTurn();
             } catch (IndexOutOfBoundsException e) {
@@ -525,7 +525,7 @@ public class Shoukan extends Game {
                     if (this.message != null) this.message.delete().queue();
                     this.message = channel.sendMessage("Você atacou diretamente o inimigo.")
                             .addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
-                    Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
+                    Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
                     if (!postCombat()) resetTimerKeepTurn();
                     return;
                 }
@@ -599,7 +599,7 @@ public class Shoukan extends Game {
                             .addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
                 }
 
-                Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES);
+                Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
                 if (!postCombat()) resetTimerKeepTurn();
             } catch (IndexOutOfBoundsException e) {
                 channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue();
