@@ -62,6 +62,9 @@ public class ChessCommand extends Command {
 		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
+		} else if (Main.getInfo().getConfirmationPending().getIfPresent(message.getMentionedUsers().get(0).getId()) != null) {
+			channel.sendMessage("❌ | Este usuário possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
+			return;
 		}
 
 		Account uacc = AccountDAO.getAccount(author.getId());
