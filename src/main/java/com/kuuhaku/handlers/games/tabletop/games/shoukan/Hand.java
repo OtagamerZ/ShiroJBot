@@ -138,7 +138,7 @@ public class Hand {
 	}
 
 	public void removeMana(int value) {
-		mana -= value;
+		mana = Math.max(0, mana - value);
 	}
 
 	public int getHp() {
@@ -150,6 +150,6 @@ public class Hand {
 	}
 
 	public void removeHp(int value) {
-		hp -= value;
+		hp = Math.max(0, hp - value);
 	}
 }
