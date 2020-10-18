@@ -509,15 +509,14 @@ public class Shoukan extends Game {
                     } else if (c.isFlipped()) {
                         channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue();
                         return;
+                    } else if (c.isDefending()) {
+                        channel.sendMessage("❌ | Você não pode atacar com cartas em modo de defesa.").queue();
+                        return;
                     }
 
                     Hand enemy = getHandById(getBoard().getPlayers().get(1).getId());
 
-                    int yPower;
-                    if (c.isDefending())
-                        yPower = c.getDef() + c.getLinkedTo().stream().mapToInt(Equipment::getDef).sum();
-                    else
-                        yPower = c.getAtk() + c.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum();
+                    int yPower = c.getAtk() + c.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum();
 
                     enemy.removeHp(yPower);
                     c.setAvailable(false);
@@ -626,13 +625,14 @@ public class Shoukan extends Game {
     }
 
     public void unequipCard(Side s, int index, List<SlotColumn<Drawable, Drawable>> side) {
-        Equipment ch = (Equipment) side.get(index).getBottom();
+        Equipment eq = (Equipment) side.get(index).getBottom();
 
-        ((Champion) side.get(ch.getLinkedTo().getLeft()).getTop()).removeLinkedTo(ch);
-        ch.setLinkedTo(null);
+        if (side.get(eq.getLinkedTo().getLeft()).getTop() != null)
+            ((Champion) side.get(eq.getLinkedTo().getLeft()).getTop()).removeLinkedTo(eq);
+        eq.setLinkedTo(null);
 
         SlotColumn<Drawable, Drawable> sd = side.get(index);
-        arena.getGraveyard().get(s).add(ch);
+        arena.getGraveyard().get(s).add(eq);
         sd.setBottom(null);
     }
 
@@ -654,6 +654,21 @@ public class Shoukan extends Game {
                 return slot;
         }
         return null;
+    }
+
+    public void convertCard(Champion ch, Side side, int index) {
+        Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
+        SlotColumn<Drawable, Drawable> sc = getFirstAvailableSlot(side, true);
+        if (sc != null) {
+            ch.clearLinkedTo();
+            sc.setTop(ch);
+            List<SlotColumn<Drawable, Drawable>> slts = getArena().getSlots().get(his);
+            slts.get(index).setTop(null);
+            for (int i = 0; i < slts.size(); i++) {
+                if (((Equipment) slts.get(i).getBottom()).getLinkedTo().getLeft() == index)
+                    unequipCard(his, i, slts);
+            }
+        }
     }
 
     public boolean postCombat() {
