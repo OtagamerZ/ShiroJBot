@@ -80,13 +80,13 @@ public class Equipment implements Drawable, Cloneable {
 
 			g2d.setColor(Color.green);
 			Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
-		}
 
-		try {
-			BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
-			for (int i = 0; i < tier; i++)
-				g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
-		} catch (IOException ignore) {
+			try {
+				BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
+				for (int i = 0; i < tier; i++)
+					g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
+			} catch (IOException ignore) {
+			}
 		}
 
 		if (!available) {
