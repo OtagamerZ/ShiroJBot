@@ -656,8 +656,10 @@ public class Shoukan extends Game {
 		return null;
 	}
 
-	public void convertCard(Champion ch, Side side, int index) {
+	public void convertCard(Side side, int index) {
 		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
+		Champion ch = (Champion) getArena().getSlots().get(his).get(index).getTop();
+		if (ch == null) return;
 		SlotColumn<Drawable, Drawable> sc = getFirstAvailableSlot(side, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
@@ -667,6 +669,27 @@ public class Shoukan extends Game {
 			for (int i = 0; i < slts.size(); i++) {
 				if (slts.get(i).getBottom() != null && ((Equipment) slts.get(i).getBottom()).getLinkedTo().getLeft() == index)
 					unequipCard(his, i, slts);
+			}
+		}
+	}
+
+	public void convertEquipments(Champion target, int pos, Side side, int index) {
+		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
+		Champion ch = (Champion) getArena().getSlots().get(his).get(index).getTop();
+		if (ch == null) return;
+		List<SlotColumn<Drawable, Drawable>> slts = getArena().getSlots().get(his);
+		for (int i = 0; i < 5; i++) {
+			Equipment eq = (Equipment) slts.get(i).getBottom();
+			if (eq != null && eq.getLinkedTo().getLeft() == index) {
+				SlotColumn<Drawable, Drawable> sc = getFirstAvailableSlot(side, false);
+				if (sc != null) {
+					ch.removeLinkedTo(eq);
+					slts.get(i).setBottom(null);
+
+					target.addLinkedTo(eq);
+					eq.setLinkedTo(Pair.of(pos, target.getCard()));
+					sc.setBottom(eq);
+				} else return;
 			}
 		}
 	}
