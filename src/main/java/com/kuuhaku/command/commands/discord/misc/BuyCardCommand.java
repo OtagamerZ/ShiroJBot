@@ -229,7 +229,7 @@ public class BuyCardCommand extends Command {
 				User sellerU = Main.getInfo().getUserByID(em.getSeller());
 				User buyerU = Main.getInfo().getUserByID(em.getBuyer());
 				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-								c.sendMessage(":white_check_mark: | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + cm.getPrice() + " créditos.").queue(),
+								c.sendMessage(":white_check_mark: | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + em.getPrice() + " créditos.").queue(),
 						Helper::doNothing
 				);
 				channel.sendMessage(":white_check_mark: | Equipamento comprado com sucesso!").queue();
