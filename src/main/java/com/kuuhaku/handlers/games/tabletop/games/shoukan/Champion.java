@@ -276,8 +276,8 @@ public class Champion implements Drawable, Cloneable {
             i.setStrictJava(true);
             i.set("ep", ep);
             i.eval(imports + effect);
-        } catch (EvalError evalError) {
-            System.out.println(evalError);
+        } catch (EvalError e) {
+            Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
         }
     }
 
