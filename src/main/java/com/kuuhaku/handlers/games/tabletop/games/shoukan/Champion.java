@@ -259,6 +259,7 @@ public class Champion implements Drawable, Cloneable {
 
     public void getEffect(EffectParameters ep) {
         String imports = """
+                //%s
                 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
                 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
                 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
@@ -268,7 +269,7 @@ public class Champion implements Drawable, Cloneable {
                 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
                 import com.kuuhaku.controller.postgresql.CardDAO;
                 				
-                """;
+                """.formatted(card.getName());
 
         try {
             Interpreter i = new Interpreter();
