@@ -60,7 +60,9 @@ public class Tags {
     public static List<String> getUserBadges(String id) {
         String pattern = "https://cdn.discordapp.com/emojis/{id}.png?v=1";
         String exceed = ExceedDAO.getExceed(id);
-        Member mb = MemberDAO.getMemberByMid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).get(0);
+        Member mb = MemberDAO.getMemberByMid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).stream().findFirst().orElse(null);
+
+        if (mb == null) return new ArrayList<>();
 
         List<String> badges = new ArrayList<>();
 
