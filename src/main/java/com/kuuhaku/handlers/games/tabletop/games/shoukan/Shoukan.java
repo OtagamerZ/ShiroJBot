@@ -665,7 +665,7 @@ public class Shoukan extends Game {
             List<SlotColumn<Drawable, Drawable>> slts = getArena().getSlots().get(his);
             slts.get(index).setTop(null);
             for (int i = 0; i < slts.size(); i++) {
-                if (((Equipment) slts.get(i).getBottom()).getLinkedTo().getLeft() == index)
+                if (slts.get(i) != null && ((Equipment) slts.get(i).getBottom()).getLinkedTo().getLeft() == index)
                     unequipCard(his, i, slts);
             }
         }
