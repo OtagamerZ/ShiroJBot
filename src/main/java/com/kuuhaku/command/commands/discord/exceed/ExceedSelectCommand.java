@@ -163,7 +163,7 @@ public class ExceedSelectCommand extends Command {
 
 				String ex = ExceedDAO.getExceed(author.getId());
 
-				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + ex + "**. Entre no servidor de suporte para utilizar o Tet para conversar com outros " + ex + "s!").queue(null, Helper::doNothing);
+				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + ex + "**!").queue(null, Helper::doNothing);
 				/*ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(e -> {
 							User u = Main.getInfo().getUserByID(e);
 							if (u != null) {
