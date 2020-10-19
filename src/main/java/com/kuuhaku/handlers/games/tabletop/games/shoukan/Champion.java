@@ -272,6 +272,7 @@ public class Champion implements Drawable, Cloneable {
                 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
                 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
                 import com.kuuhaku.controller.postgresql.CardDAO;
+                import com.kuuhaku.model.enums.AnimeName;
                 				
                 """.formatted(card.getName());
 
