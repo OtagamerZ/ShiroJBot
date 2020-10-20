@@ -84,6 +84,9 @@ public class RevertCardCommand extends Command {
 		if (c == null) {
 			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
 			return;
+		} else if (!kp.getChampions().contains(c)) {
+			channel.sendMessage("❌ | Você não possui essa carta.").queue();
+			return;
 		}
 
 		KawaiponCard kc = new KawaiponCard(tc, false);
