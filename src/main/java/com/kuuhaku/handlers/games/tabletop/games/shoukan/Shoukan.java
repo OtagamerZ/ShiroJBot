@@ -610,7 +610,7 @@ public class Shoukan extends Game {
 
 	public void killCard(Side s, int index, List<SlotColumn<Drawable, Drawable>> side) {
 		Champion ch = (Champion) side.get(index).getTop();
-		if (ch.getBonus().getSpecialData().optBoolean("preventDeath", false)) return;
+		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath", false)) return;
 		ch.reset();
 		if (ch.getRequiredCards().size() == 0)
 			arena.getGraveyard().get(s).add(ch);
