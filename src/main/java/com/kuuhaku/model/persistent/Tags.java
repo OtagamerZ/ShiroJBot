@@ -58,8 +58,8 @@ public class Tags {
     private boolean sponsor = false;
 
     public static List<String> getUserBadges(String id) {
-        String pattern = "https://cdn.discordapp.com/emojis/{id}.png?v=1";
-        String exceed = ExceedDAO.getExceed(id);
+        String pattern = "https://cdn.discordapp.com/emojis/%s.png?v=1";
+		String exceed = ExceedDAO.getExceed(id);
         Member mb = MemberDAO.getMemberByMid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).stream().findFirst().orElse(null);
 
         if (mb == null) return new ArrayList<>();
@@ -67,7 +67,7 @@ public class Tags {
         List<String> badges = new ArrayList<>();
 
         if (!exceed.isEmpty()) {
-            badges.add(pattern.replace("{id}", TagIcons.getExceedId(ExceedEnum.getByName(exceed))));
+			badges.add(pattern.formatted(TagIcons.getExceedId(ExceedEnum.getByName(exceed))));
         }
 
         Set<Tag> tags = Tag.getTags(Main.getInfo().getUserByID(mb.getMid()), Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getMid()));
