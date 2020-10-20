@@ -154,7 +154,7 @@ public class ExceedRankCommand extends Command {
 					channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
 					m.delete().queue();
 				} else {
-					m.editMessage("❌ | Você precisa digita `historico` se deseja ver o histórico de ranking, ou não digitar nada se deseja ver o ranking atual.").queue();
+					m.editMessage("❌ | Você precisa digitar `historico` se deseja ver o histórico de ranking, ou não digitar nada se deseja ver o ranking atual.").queue();
 				}
 			} catch (Exception e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-rank")).queue();
