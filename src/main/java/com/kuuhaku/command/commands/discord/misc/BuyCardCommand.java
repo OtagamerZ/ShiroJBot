@@ -44,10 +44,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -209,8 +206,8 @@ public class BuyCardCommand extends Command {
 
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-				if (kp.getEquipments().contains(em.getCard())) {
-					channel.sendMessage("❌ | Parece que você já possui esse equipamento!").queue();
+				if (Collections.frequency(kp.getEquipments(), em.getCard()) == 3) {
+					channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
 					return;
 				}
 
@@ -236,8 +233,8 @@ public class BuyCardCommand extends Command {
 			} else {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-				if (kp.getEquipments().contains(em.getCard())) {
-					channel.sendMessage("❌ | Parece que você já possui esse equipamento!").queue();
+				if (Collections.frequency(kp.getEquipments(), em.getCard()) == 3) {
+					channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
 					return;
 				}
 
