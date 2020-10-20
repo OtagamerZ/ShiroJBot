@@ -138,6 +138,10 @@ public class SynthesizeCardCommand extends Command {
 									channel.sendMessage("❌ | Você já possui 18 equipamentos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
 								else
 									channel.sendMessage("❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
+
+								tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
+								KawaiponDAO.saveKawaipon(kp);
+								s.delete().queue(null, Helper::doNothing);
 								return;
 							}
 
