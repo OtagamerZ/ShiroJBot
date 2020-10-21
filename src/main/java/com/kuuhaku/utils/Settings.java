@@ -424,10 +424,7 @@ public class Settings {
 			}
 			return;
 		}
-		if (message.getMentionedChannels().size() < 1) {
-			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
-			return;
-		}
+
 		if (args[1].equals("ativar") || args[1].equals("sim")) {
 			gc.setLvlNotif(true);
 			GuildDAO.updateGuildSettings(gc);
