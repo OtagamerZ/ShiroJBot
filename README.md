@@ -22,6 +22,8 @@ Pela Shiro estar em desenvolvimento constante, foram criados dois bots adicionai
 * Ter uma administração ativa, com pelo menos regras de comportamento
 * Ter ao menos 20 membros ativos \(exceto bots e contas fake\)
 * Utilizar a Shiro ativamente \(não deixar ela apenas como "mais um bot"\)
+  - O servidor deve estar entre os maiores usuários da Shiro para ser elegível (ranking oculto)
+  - Você será notificado caso preencha este requisito
 * Informar os desenvolvedores caso ocorram erros no uso da Shiro
 
 ### Para informar erros
