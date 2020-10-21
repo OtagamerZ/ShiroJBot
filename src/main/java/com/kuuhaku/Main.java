@@ -27,6 +27,7 @@ import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
+import com.kuuhaku.events.ConsoleListener;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
 import com.kuuhaku.events.TwitchEvents;
@@ -62,6 +63,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	private static ShiroInfo info;
 	private static Relay relay;
+	private static ConsoleListener console;
 	private static CommandManager cmdManager;
 	private static TwitchCommandManager tCmdManager;
 	private static JDA api;
@@ -158,12 +160,14 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			}
 		});
 
+		console = new ConsoleListener();
 		api.addEventListener(Main.getInfo().getShiroEvents());
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
 
 		Pages.activate(api);
+		console.start();
 
 		GuildDAO.getAllGuildsWithButtons().forEach(Helper::refreshButtons);
 
@@ -209,6 +213,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		SpringApplication.exit(spring);
 		jbr.shutdown();
 		api.shutdown();
+		console.close();
 		return true;
 	}
 

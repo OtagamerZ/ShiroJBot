@@ -13,8 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de listener de console">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -795,13 +796,6 @@
       <workItem from="1603123381435" duration="6891000" />
       <workItem from="1603195549453" duration="3504000" />
     </task>
-    <task id="LOCAL-02659" summary="Mudança de fonte para descrição das cartas">
-      <created>1602698645126</created>
-      <option name="number" value="02659" />
-      <option name="presentableId" value="LOCAL-02659" />
-      <option name="project" value="LOCAL" />
-      <updated>1602698645126</updated>
-    </task>
     <task id="LOCAL-02660" summary="Mudança de fonte para descrição das cartas">
       <created>1602698778306</created>
       <option name="number" value="02660" />
@@ -1138,7 +1132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1603199924976</updated>
     </task>
-    <option name="localTasksCounter" value="2708" />
+    <task id="LOCAL-02708" summary="Adição de listener de console">
+      <created>1603250773550</created>
+      <option name="number" value="02708" />
+      <option name="presentableId" value="LOCAL-02708" />
+      <option name="project" value="LOCAL" />
+      <updated>1603250773558</updated>
+    </task>
+    <option name="localTasksCounter" value="2709" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1204,7 +1205,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Cargos de Exceed automaticos para todos! (que quiserem)" />
     <MESSAGE value="Agora é possível ver cartas Senshi mesmo sem ter no deck" />
     <MESSAGE value="Correções menores mas importantes" />
     <MESSAGE value="Atualização do Gradle para a versão 6.6;&#10;Atualização da versão do JDK para 15;" />
@@ -1229,7 +1229,8 @@
     <MESSAGE value="Correção na transferência de equipamentos" />
     <MESSAGE value="Correção na compra de equipamentos" />
     <MESSAGE value="Correção na síntese de equipamentos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na síntese de equipamentos" />
+    <MESSAGE value="Adição de listener de console" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de listener de console" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1343,12 +1344,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603199926215">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603250813905">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603199926215" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1602990471336" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603250813905" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
