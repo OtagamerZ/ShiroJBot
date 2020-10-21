@@ -573,6 +573,7 @@ public class Helper {
 						if (k.equals("gatekeeper")) {
 							buttons.put("\uD83D\uDEAA", (m, v) -> m.kick("Não aceitou as regras.").queue(null, Helper::doNothing));
 
+							msg.clearReactions();
 							Pages.buttonize(msg, buttons, false);
 						} else {
 							buttons.put(CANCEL, (m, ms) -> {
@@ -585,6 +586,7 @@ public class Helper {
 								}
 							});
 
+							msg.clearReactions();
 							Pages.buttonize(msg, buttons, true);
 						}
 					} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
@@ -638,8 +640,7 @@ public class Helper {
 			Map<String, BiConsumer<Member, Message>> buttons = new HashMap<>();
 
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
-			assert channel != null;
-			channel.retrieveMessageById(jo.getString("msgId")).queue(msg -> {
+			if (channel != null) channel.retrieveMessageById(jo.getString("msgId")).queue(msg -> {
 				resolveButton(g, jo, buttons);
 
 				buttons.put("\uD83D\uDEAA", (m, v) -> {
