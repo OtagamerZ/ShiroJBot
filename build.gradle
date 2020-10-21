@@ -50,6 +50,10 @@ repositories {
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
 
+run {
+    standardInput = System.in
+}
+
 task copyToLib(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile)
