@@ -34,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
+import java.text.MessageFormat;
 
 import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
@@ -69,7 +70,7 @@ public class PixelCanvasCommand extends Command {
                 channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-arguments")).queue();
                 return;
             } else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-coordinates-out-of-bounds") + (CANVAS_SIZE / 2) + "px ou maiores que " + (CANVAS_SIZE / 2) + "px.").queue();
+				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-coordinates-out-of-bounds"), CANVAS_SIZE / 2, CANVAS_SIZE / 2)).queue();
 				return;
 			}
 		} catch (NumberFormatException e) {
