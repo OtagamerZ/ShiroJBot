@@ -211,8 +211,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		exiting = true;
 
 		SpringApplication.exit(spring);
-		jbr.shutdown();
-		api.shutdown();
+		jbr.shutdownNow();
+		api.shutdownNow();
 		console.close();
 		return true;
 	}
