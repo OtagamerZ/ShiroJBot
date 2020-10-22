@@ -70,7 +70,8 @@ public enum AnimeName {
 	BLACK_ROCK_SHOOTER,
 	FATE_STAY_NIGHT,
 	OVERFLOW,
-	GENSHIN_IMPACT;
+	GENSHIN_IMPACT,
+	MAHOU_SHOUJO_LYRICAL_NANOHA;
 
 	public static AnimeName[] validValues() {
 		return Arrays.stream(values()).filter(an -> an != HIDDEN).toArray(AnimeName[]::new);
