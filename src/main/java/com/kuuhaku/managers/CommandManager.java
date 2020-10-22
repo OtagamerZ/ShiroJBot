@@ -176,7 +176,7 @@ public class CommandManager {
 					"semlink", new String[]{"nolink", "blocklink"}, "cmd_no-link", MODERACAO, true
 			));
 			put(AntispamCommand.class, new Argument(
-					"semspam", new String[]{"nospam", "antispam"}, "req_spam-type", "cmd_no-spam", MODERACAO, true
+					"semspam", new String[]{"nospam", "antispam"}, "req_spam-type-amount", "cmd_no-spam", MODERACAO, true
 			));
 			put(AntiraidCommand.class, new Argument(
 					"semraid", new String[]{"noraid", "antiraid"}, "cmd_no-raid", MODERACAO, false
