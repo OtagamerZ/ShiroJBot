@@ -131,15 +131,15 @@ public class GuildEvents extends ListenerAdapter {
 
 			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 			if (gc.getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
-				if (gc.isHardAntispam()) {
-					if (message.getReactions().size() >= gc.getNoSpamAmount()) {
-						message.delete()
-								.flatMap(s -> channel.sendMessage(":warning: | Opa, sem spam meu amigo!"))
-								.queue(msg -> {
-									msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
-									Helper.logToChannel(member.getUser(), false, null, "Um membro estava spammando no canal " + ((TextChannel) channel).getAsMention(), guild, msg.getContentRaw());
-								}, Helper::doNothing);
-					} else channel.getHistory().retrievePast(20).queue(h -> {
+				if (message.getReactions().size() >= gc.getNoSpamAmount()) {
+					message.delete()
+							.flatMap(s -> channel.sendMessage(":warning: | Opa, sem spam meu amigo!"))
+							.queue(msg -> {
+								msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
+								Helper.logToChannel(member.getUser(), false, null, "Um membro estava spammando no canal " + ((TextChannel) channel).getAsMention(), guild, msg.getContentRaw());
+							}, Helper::doNothing);
+				} else if (gc.isHardAntispam()) {
+					channel.getHistory().retrievePast(20).queue(h -> {
 						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
 
 						countSpam(member, channel, guild, h);
