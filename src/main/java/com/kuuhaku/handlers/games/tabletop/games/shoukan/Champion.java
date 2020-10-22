@@ -264,6 +264,7 @@ public class Champion implements Drawable, Cloneable {
     public void getEffect(EffectParameters ep) {
         String imports = """
                 //%s
+		import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
                 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
                 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
                 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
