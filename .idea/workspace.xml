@@ -794,21 +794,7 @@
       <workItem from="1603038627996" duration="629000" />
       <workItem from="1603123381435" duration="6891000" />
       <workItem from="1603195549453" duration="3504000" />
-      <workItem from="1603368120906" duration="5788000" />
-    </task>
-    <task id="LOCAL-02666" summary="Correção nos leilões">
-      <created>1602727469492</created>
-      <option name="number" value="02666" />
-      <option name="presentableId" value="LOCAL-02666" />
-      <option name="project" value="LOCAL" />
-      <updated>1602727469492</updated>
-    </task>
-    <task id="LOCAL-02667" summary="Correção nos leilões">
-      <created>1602727733758</created>
-      <option name="number" value="02667" />
-      <option name="presentableId" value="LOCAL-02667" />
-      <option name="project" value="LOCAL" />
-      <updated>1602727733758</updated>
+      <workItem from="1603368120906" duration="6143000" />
     </task>
     <task id="LOCAL-02668" summary="Correção nos leilões">
       <created>1602728415902</created>
@@ -1139,7 +1125,21 @@
       <option name="project" value="LOCAL" />
       <updated>1603373818137</updated>
     </task>
-    <option name="localTasksCounter" value="2715" />
+    <task id="LOCAL-02715" summary="Correção no leilão">
+      <created>1603376187272</created>
+      <option name="number" value="02715" />
+      <option name="presentableId" value="LOCAL-02715" />
+      <option name="project" value="LOCAL" />
+      <updated>1603376187273</updated>
+    </task>
+    <task id="LOCAL-02716" summary="Correção no leilão">
+      <created>1603376219860</created>
+      <option name="number" value="02716" />
+      <option name="presentableId" value="LOCAL-02716" />
+      <option name="project" value="LOCAL" />
+      <updated>1603376219860</updated>
+    </task>
+    <option name="localTasksCounter" value="2717" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1205,7 +1205,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nos leilões" />
     <MESSAGE value="Remoção da dependência do intent GUILD_PRESENCES" />
     <MESSAGE value="Adição de erro de MESSAGE_EMBED_LINKS" />
     <MESSAGE value="Melhoria nas cartas-equipamento" />
@@ -1230,7 +1229,8 @@
     <MESSAGE value="Antispam agora notifica pelo log e considera excesso de emotes." />
     <MESSAGE value="Correção no arquivo de localização" />
     <MESSAGE value="Correção no shutdown" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no shutdown" />
+    <MESSAGE value="Correção no leilão" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no leilão" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1285,11 +1285,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602708322237" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1603373815388">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1603376217177">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1603373815388" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1603376217177" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1603112314104">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1344,11 +1344,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603373819292">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603376231762">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603373819292" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603376231762" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603250813905" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />

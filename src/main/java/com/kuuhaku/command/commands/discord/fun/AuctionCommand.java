@@ -127,7 +127,7 @@ public class AuctionCommand extends Command {
 						try {
 							int offer = Integer.parseInt(raw);
 
-							if (highest.get() == null || offer > highest.get().getRight()) {
+							if (offer >= price && (highest.get() == null || offer > highest.get().getRight())) {
 								Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor().getId());
 								AtomicReference<Account> oacc = new AtomicReference<>(AccountDAO.getAccount(evt.getAuthor().getId()));
 
@@ -158,11 +158,11 @@ public class AuctionCommand extends Command {
 										KawaiponDAO.saveKawaipon(buyer);
 
 										oacc.set(AccountDAO.getAccount(highest.get().getLeft().getId()));
-										oacc.get().removeCredit(highest.get().getRight(), this.getClass());
+										oacc.get().removeCredit(highest.get().getRight(), AuctionCommand.class);
 										AccountDAO.saveAccount(oacc.get());
 
 										Account acc = AccountDAO.getAccount(author.getId());
-										acc.addCredit(highest.get().getRight(), this.getClass());
+										acc.addCredit(highest.get().getRight(), AuctionCommand.class);
 										AccountDAO.saveAccount(acc);
 
 										Main.getInfo().getConfirmationPending().invalidate(author.getId());
