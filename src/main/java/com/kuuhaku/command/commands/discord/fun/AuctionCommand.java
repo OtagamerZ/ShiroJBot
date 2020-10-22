@@ -121,10 +121,10 @@ public class AuctionCommand extends Command {
 			SimpleMessageListener listener = new SimpleMessageListener() {
 				@Override
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent evt) {
-					try {
-						if (!evt.getChannel().getId().equals(channel.getId()) || evt.getAuthor().isBot()) return;
-						String raw = evt.getMessage().getContentRaw();
-						if (StringUtils.isNumeric(raw)) {
+					if (!evt.getChannel().getId().equals(channel.getId()) || evt.getAuthor().isBot()) return;
+					String raw = evt.getMessage().getContentRaw();
+					if (StringUtils.isNumeric(raw)) {
+						try {
 							int offer = Integer.parseInt(raw);
 
 							if (highest.get() == null || offer > highest.get().getRight()) {
@@ -182,9 +182,9 @@ public class AuctionCommand extends Command {
 									}
 								}, 5, 5, TimeUnit.SECONDS));
 							}
+						} catch (NumberFormatException e) {
+							channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
 						}
-					} catch (NumberFormatException e) {
-						channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
 					}
 				}
 			};
