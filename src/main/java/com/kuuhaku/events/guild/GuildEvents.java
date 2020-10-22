@@ -129,9 +129,17 @@ public class GuildEvents extends ListenerAdapter {
 			} catch (InsufficientPermissionException | ErrorResponseException ignore) {
 			}*/
 
-			if (GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
-				if (GuildDAO.getGuildById(guild.getId()).isHardAntispam()) {
-					channel.getHistory().retrievePast(20).queue(h -> {
+			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+			if (gc.getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
+				if (gc.isHardAntispam()) {
+					if (message.getReactions().size() >= gc.getNoSpamAmount()) {
+						message.delete()
+								.flatMap(s -> channel.sendMessage(":warning: | Opa, sem spam meu amigo!"))
+								.queue(msg -> {
+									msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
+									Helper.logToChannel(member.getUser(), false, null, "Um membro estava spammando no canal " + ((TextChannel) channel).getAsMention(), guild, msg.getContentRaw());
+								}, Helper::doNothing);
+					} else channel.getHistory().retrievePast(20).queue(h -> {
 						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
 
 						countSpam(member, channel, guild, h);
@@ -180,7 +188,7 @@ public class GuildEvents extends ListenerAdapter {
 
 			Command command = Main.getCommandManager().getCommand(commandName);
 			if (command != null) {
-				found = command.getCategory().isEnabled(GuildDAO.getGuildById(guild.getId()), guild, author);
+				found = command.getCategory().isEnabled(gc, guild, author);
 
 				if (found) {
 					if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
@@ -213,8 +221,6 @@ public class GuildEvents extends ListenerAdapter {
 			}
 
 			if (!found && !author.isBot() && !blacklisted) {
-				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-
 				Account acc = AccountDAO.getAccount(author.getId());
 				if (!acc.getTwitchId().isBlank() && channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
 					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.stripEmotesAndMentions(rawMessage));
@@ -227,16 +233,16 @@ public class GuildEvents extends ListenerAdapter {
 
 				MessageChannel lvlChannel = null;
 				try {
-					lvlChannel = guild.getTextChannelById(GuildDAO.getGuildById(guild.getId()).getCanalLvl());
+					lvlChannel = guild.getTextChannelById(gc.getCanalLvl());
 				} catch (Exception ignore) {
 				}
 				try {
-					Map<String, Object> rawLvls = GuildDAO.getGuildById(guild.getId()).getCargoslvl().entrySet().stream().filter(e -> MemberDAO.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+					Map<String, Object> rawLvls = gc.getCargoslvl().entrySet().stream().filter(e -> MemberDAO.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 					Map<Integer, Role> sortedLvls = new TreeMap<>();
 					rawLvls.forEach((k, v) -> sortedLvls.put(Integer.parseInt(k), guild.getRoleById((String) v)));
 					MessageChannel finalLvlChannel = lvlChannel;
 					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
-						if (GuildDAO.getGuildById(guild.getId()).isLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
+						if (gc.isLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
 							try {
 								if (!guild.getSelfMember().getRoles().get(0).canInteract(sortedLvls.get(i))) return;
 								guild.addRoleToMember(member, sortedLvls.get(i)).queue(s -> {
@@ -280,9 +286,10 @@ public class GuildEvents extends ListenerAdapter {
 				}
 
 				try {
-					if (GuildDAO.getGuildById(guild.getId()).getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage)) {
+					if (gc.getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage)) {
 						message.delete().reason("Mensagem possui um URL").queue();
 						channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
+						Helper.logToChannel(author, false, null, "Detectei um link no canal " + ((TextChannel) channel).getAsMention(), guild, rawMessage);
 					}
 
 					com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(member.getUser().getId() + member.getGuild().getId());
@@ -293,7 +300,7 @@ public class GuildEvents extends ListenerAdapter {
 
 					boolean lvlUp = m.addXp(guild);
 					try {
-						if (lvlUp && GuildDAO.getGuildById(guild.getId()).isLvlNotif()) {
+						if (lvlUp && gc.isLvlNotif()) {
 							Objects.requireNonNullElse(lvlChannel, channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
 						}
 					} catch (InsufficientPermissionException e) {
@@ -324,11 +331,14 @@ public class GuildEvents extends ListenerAdapter {
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
 		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) && h.size() >= GuildDAO.getGuildById(guild.getId()).getNoSpamAmount() && Helper.hasRoleHigherThan(guild.getSelfMember(), member)) {
 			((TextChannel) channel).deleteMessagesByIds(h.stream().map(Message::getId).collect(Collectors.toList())).queue(null, Helper::doNothing);
-			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(
-					msg -> msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing)
-			);
-			try {
-				Role r = guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoMute());
+			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(msg -> {
+				msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
+				Helper.logToChannel(member.getUser(), false, null, "Um membro estava spammando no canal " + ((TextChannel) channel).getAsMention(), guild, msg.getContentRaw());
+			});
+
+			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+			if (gc.getCargoMute() != null && !gc.getCargoMute().isBlank()) try {
+				Role r = guild.getRoleById(gc.getCargoMute());
 				if (r != null) {
 					JSONArray roles = new JSONArray(member.getRoles().stream().map(Role::getId).collect(Collectors.toList()));
 					guild.modifyMemberRoles(member, r).queue(null, Helper::doNothing);

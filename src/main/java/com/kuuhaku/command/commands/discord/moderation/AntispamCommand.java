@@ -72,16 +72,13 @@ public class AntispamCommand extends Command {
 				}
 			}
 			return;
-		}
-
-		for (String s : args) {
-			if (StringUtils.isNumeric(s)) {
-				if (Integer.parseInt(s) < 5) {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-message-threshold")).queue();
-					return;
-				}
-				gc.setNoSpamAmount(Integer.parseInt(s));
+		} else if (args.length > 0 && StringUtils.isNumeric(args[0])) {
+			if (Integer.parseInt(args[0]) < 5) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-message-threshold")).queue();
+				return;
 			}
+
+			gc.setNoSpamAmount(Integer.parseInt(args[0]));
 		}
 
 		if (gc.getNoSpamChannels().contains(channel.getId()))
