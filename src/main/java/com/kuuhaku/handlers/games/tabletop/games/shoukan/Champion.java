@@ -73,8 +73,11 @@ public class Champion implements Drawable, Cloneable {
     private transient boolean defending = false;
     private transient List<Equipment> linkedTo = new ArrayList<>();
     private transient Bonus bonus = new Bonus();
+    private transient int altAtk = -1;
+    private transient int altDef = -1;
     private transient int mAtk = 0;
     private transient int mDef = 0;
+
 
     @Override
     public BufferedImage drawCard(Account acc, boolean flipped) {
@@ -217,15 +220,23 @@ public class Champion implements Drawable, Cloneable {
     }
 
     public int getAtk() {
-        return atk + bonus.getAtk();
+        return Math.max(atk, altAtk) + bonus.getAtk();
     }
 
     public int getDef() {
-        return def + bonus.getDef();
+        return Math.max(def, altDef) + bonus.getDef();
+    }
+
+    public void setAltAtk(int altAtk) {
+        this.altAtk = altAtk;
+    }
+
+    public void setAltDef(int altDef) {
+        this.altDef = altDef;
     }
 
     public int getEAtk() {
-        return Math.max(0, atk + mAtk + bonus.getAtk());
+        return Math.max(0, getAtk() + mAtk + bonus.getAtk());
     }
 
     public void setMAtk(int mAtk) {
@@ -233,7 +244,7 @@ public class Champion implements Drawable, Cloneable {
     }
 
     public int getEDef() {
-        return Math.max(0, def + mDef + bonus.getDef());
+        return Math.max(0, getDef() + mDef + bonus.getDef());
     }
 
     public void setMDef(int mDef) {
@@ -295,6 +306,8 @@ public class Champion implements Drawable, Cloneable {
         bonus = new Bonus();
         mAtk = 0;
         mDef = 0;
+        altAtk = -1;
+        altDef = -1;
     }
 
     public Set<String> getRequiredCards() {
