@@ -99,6 +99,9 @@ public class Champion implements Drawable, Cloneable {
             g2d.setColor(Color.cyan);
             Profile.drawOutlinedText(String.valueOf(mana), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 66, g2d);
 
+            g2d.setColor(Color.yellow);
+            Profile.drawOutlinedText(bonus.getSpecialData().optString("write", ""), 45, 66, g2d);
+
             g2d.setColor(Color.red);
             Profile.drawOutlinedText(String.valueOf(atk), 45, 250, g2d);
 
@@ -185,6 +188,10 @@ public class Champion implements Drawable, Cloneable {
 
     public List<Equipment> getLinkedTo() {
         return linkedTo;
+    }
+
+    public boolean isEquipped(String name) {
+        return linkedTo.stream().anyMatch(e -> e.getCard().getId().equalsIgnoreCase(name));
     }
 
     public void addLinkedTo(Equipment linkedTo) {
