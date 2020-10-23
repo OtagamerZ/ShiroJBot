@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -38,15 +39,22 @@ public class Hand {
 	private final LinkedList<Drawable> deque;
 	private final List<Drawable> cards = new ArrayList<>();
 	private final Side side;
-	private int mana = 0;
-	private int hp = 5000;
+	private final int startingCount;
+	private final int manaPerTurn;
+	private int mana;
+	private int hp;
 
-	public Hand(User user, List<Drawable> deque, Side side) {
+	public Hand(Game game, User user, List<Drawable> deque, Side side) {
 		Collections.shuffle(deque);
 
 		this.user = user;
 		this.deque = new LinkedList<>(deque);
 		this.side = side;
+
+		this.mana = Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
+		this.hp = Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
+		this.startingCount = Helper.minMax(game.getCustom().optInt("stcards", 5), 1, 10);
+		this.manaPerTurn = Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
 
 		redrawHand();
 	}
@@ -86,7 +94,7 @@ public class Hand {
 	}
 
 	public void redrawHand() {
-		for (int i = 0; i < 5; i++) draw();
+		for (int i = 0; i < startingCount; i++) draw();
 	}
 
 	public User getUser() {
@@ -131,6 +139,10 @@ public class Hand {
 
 	public int getMana() {
 		return mana;
+	}
+
+	public int getManaPerTurn() {
+		return manaPerTurn;
 	}
 
 	public void addMana(int value) {

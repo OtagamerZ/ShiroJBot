@@ -40,6 +40,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -63,19 +64,19 @@ public class Shoukan extends Game {
 	private final List<Champion> ultimates = CardDAO.getFusions();
 	private final boolean[] changed = {false, false, false, false, false};
 
-	public Shoukan(JDA handler, TextChannel channel, int bet, User... players) {
-		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel);
+	public Shoukan(JDA handler, TextChannel channel, int bet, JSONObject custom, User... players) {
+		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, custom);
 		this.channel = channel;
 
 		Kawaipon p1 = KawaiponDAO.getKawaipon(players[0].getId());
 		Kawaipon p2 = KawaiponDAO.getKawaipon(players[1].getId());
 
 		this.hands = Map.of(
-				Side.TOP, new Hand(players[0], new ArrayList<>() {{
+				Side.TOP, new Hand(this, players[0], new ArrayList<>() {{
 					addAll(p1.getChampions());
 					addAll(p1.getEquipments());
 				}}, Side.TOP),
-				Side.BOTTOM, new Hand(players[1], new ArrayList<>() {{
+				Side.BOTTOM, new Hand(this, players[1], new ArrayList<>() {{
 					addAll(p2.getChampions());
 					addAll(p2.getEquipments());
 				}}, Side.BOTTOM)
@@ -114,7 +115,7 @@ public class Shoukan extends Game {
 							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_TURN, this, i, hd.getSide(), Duelists.of(c, i, null, -1)));
 					}
 				}
-				hd.addMana(5);
+				hd.addMana(hd.getManaPerTurn());
 
 				if (this.message != null) this.message.delete().queue();
 				this.message = channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
@@ -165,13 +166,14 @@ public class Shoukan extends Game {
 			resetTimerKeepTurn();
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)").queue();
+			if (this.message != null) this.message.delete().queue();
+			this.message = channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)").complete();
 			getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 			close();
 		});
 
 		Hand h = getHandById(getCurrent().getId());
-		h.addMana(5);
+		h.addMana(h.getManaPerTurn());
 		message = channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
 				.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 		Pages.buttonize(message, buttons, false, 3, TimeUnit.MINUTES, u -> u.getId().equals(getCurrent().getId()));
@@ -220,7 +222,7 @@ public class Shoukan extends Game {
 							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_TURN, this, i, hd.getSide(), Duelists.of(c, i, null, -1)));
 					}
 				}
-				hd.addMana(5);
+				hd.addMana(hd.getManaPerTurn());
 
 				if (this.message != null) this.message.delete().queue();
 				this.message = channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
@@ -271,7 +273,8 @@ public class Shoukan extends Game {
 			resetTimerKeepTurn();
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)").queue();
+			if (this.message != null) this.message.delete().queue();
+			this.message = channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)").complete();
 			getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 			close();
 		});

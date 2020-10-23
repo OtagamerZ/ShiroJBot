@@ -18,11 +18,13 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.json.JSONObject;
 
 import java.io.Closeable;
 import java.util.concurrent.Future;
@@ -33,6 +35,7 @@ public abstract class Game implements Closeable {
 	private final JDA handler;
 	private final Board board;
 	private final TextChannel channel;
+	private final JSONObject custom;
 	private Consumer<Message> onExpiration;
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
@@ -44,6 +47,15 @@ public abstract class Game implements Closeable {
 		this.board = board;
 		this.channel = channel;
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
+		this.custom = new JSONObject();
+	}
+
+	public Game(JDA handler, Board board, TextChannel channel, JSONObject custom) {
+		this.handler = handler;
+		this.board = board;
+		this.channel = channel;
+		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
+		this.custom = Helper.getOr(custom, new JSONObject());
 	}
 
 	public void setActions(Consumer<Message> onExpiration, Consumer<Message> onWO) {
@@ -108,6 +120,10 @@ public abstract class Game implements Closeable {
 
 	public User getPlayerById(String id) {
 		return handler.getUserById(id);
+	}
+
+	public JSONObject getCustom() {
+		return custom;
 	}
 
 	@Override
