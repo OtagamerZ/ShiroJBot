@@ -32,7 +32,9 @@ import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
+import org.json.JSONObject;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -70,8 +72,9 @@ public class ShoukanCommand extends Command {
 
 		Account uacc = AccountDAO.getAccount(author.getId());
 		Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
-		/*int bet = 0;
-		if (args.length > 1 && StringUtils.isNumeric(args[1])) {
+		JSONObject custom = Helper.findJson(rawCmd);
+		int bet = 0;
+		if (args.length > 1 && StringUtils.isNumeric(args[1]) && custom == null) {
 			bet = Integer.parseInt(args[1]);
 			if (bet < 0) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
@@ -83,7 +86,7 @@ public class ShoukanCommand extends Command {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
 				return;
 			}
-		}*/
+		}
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Kawaipon target = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
@@ -112,8 +115,8 @@ public class ShoukanCommand extends Command {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		Game t = new Shoukan(Main.getInfo().getAPI(), (TextChannel) channel, 0, author, message.getMentionedUsers().get(0));
-		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?")
+		Game t = new Shoukan(Main.getInfo().getAPI(), (TextChannel) channel, bet, custom, author, message.getMentionedUsers().get(0));
+		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
 					Main.getInfo().getConfirmationPending().invalidate(author.getId());
