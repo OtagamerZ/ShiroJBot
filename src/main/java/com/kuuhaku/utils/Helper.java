@@ -99,6 +99,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -158,6 +159,22 @@ public class Helper {
 
 	public static int clamp(int val, int min, int max) {
 		return Math.max(min, Math.min(val, max));
+	}
+
+	public static int minMax(int val, int min, int max) {
+		return Math.min(Math.max(min, val), max);
+	}
+
+	public static long minMax(long val, long min, long max) {
+		return Math.min(Math.max(min, val), max);
+	}
+
+	public static float minMax(float val, float min, float max) {
+		return Math.min(Math.max(min, val), max);
+	}
+
+	public static double minMax(double val, double min, double max) {
+		return Math.min(Math.max(min, val), max);
 	}
 
 	public static boolean between(int val, int from, int to) {
@@ -1385,5 +1402,19 @@ public class Helper {
 
 	public static String generateHash(Guild guild, User user) {
 		return hash((guild.getId() + user.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-256");
+	}
+
+	public static JSONObject findJson(String text) {
+		Matcher m = Pattern.compile("\\{.*}").matcher(text);
+		List<MatchResult> results = m.results().collect(Collectors.toList());
+
+		for (MatchResult mr : results) {
+			try {
+				return new JSONObject(mr.group());
+			} catch (JSONException ignore) {
+			}
+		}
+
+		return null;
 	}
 }
