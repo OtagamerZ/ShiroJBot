@@ -19,7 +19,6 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -29,12 +28,15 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
 public class Hand {
+	private final Shoukan game;
 	private final User user;
 	private final LinkedList<Drawable> deque;
 	private final List<Drawable> cards = new ArrayList<>();
@@ -44,12 +46,13 @@ public class Hand {
 	private int mana;
 	private int hp;
 
-	public Hand(Game game, User user, List<Drawable> deque, Side side) {
+	public Hand(Shoukan game, User user, List<Drawable> deque, Side side) {
 		Collections.shuffle(deque);
 
 		this.user = user;
 		this.deque = new LinkedList<>(deque);
 		this.side = side;
+		this.game = game;
 
 		this.mana = Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
 		this.hp = Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
@@ -137,6 +140,38 @@ public class Hand {
 				.queue();
 	}
 
+	public void showEnemyHand() {
+		Hand enemy = game.getHands().get(side == Side.TOP ? Side.BOTTOM : Side.TOP);
+		BufferedImage bi = new BufferedImage(Math.max(5, enemy.getCards().size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 90));
+
+		List<Drawable> cards = new ArrayList<>(enemy.getCards());
+		Account acc = AccountDAO.getAccount(enemy.getUser().getId());
+
+		for (int i = 0; i < cards.size(); i++)
+			g2d.drawImage(cards.get(i).drawCard(acc, false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+
+		try {
+			BufferedImage so = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/shinigami_overlay.png")));
+			g2d.drawImage(so, 0, 0, null);
+		} catch (IOException ignore) {
+		}
+
+		g2d.dispose();
+
+		user.openPrivateChannel().complete()
+				.sendMessage("Visualizando as cartas na mão inimiga.")
+				.addFile(Helper.getBytes(bi, "png"), "hand.png")
+				.queue();
+	}
+
+	public int sumAttack() {
+		return cards.stream().filter(d -> d instanceof Champion).mapToInt(d -> ((Champion) d).getAtk()).sum();
+	}
+
 	public int getMana() {
 		return mana;
 	}
@@ -163,5 +198,9 @@ public class Hand {
 
 	public void removeHp(int value) {
 		hp = Math.max(0, hp - value);
+	}
+
+	public void crippleHp(int value) {
+		hp = Math.max(1, hp - value);
 	}
 }
