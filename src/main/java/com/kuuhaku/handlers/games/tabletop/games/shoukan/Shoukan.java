@@ -84,7 +84,9 @@ public class Shoukan extends Game {
 
 		setActions(
 				s -> close(),
-				s -> getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId())
+				s -> {
+					if (custom == null) getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+				}
 		);
 	}
 
@@ -152,7 +154,8 @@ public class Shoukan extends Game {
 				this.message = channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
-				getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+				if (getCustom().isEmpty())
+					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 				close();
 			}
 
@@ -168,7 +171,8 @@ public class Shoukan extends Game {
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (this.message != null) this.message.delete().queue();
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)").complete();
-			getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+			if (getCustom().isEmpty())
+				getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 			close();
 		});
 
@@ -259,7 +263,8 @@ public class Shoukan extends Game {
 				this.message = channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
-				getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+				if (getCustom().isEmpty())
+					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 				close();
 			}
 
@@ -275,7 +280,8 @@ public class Shoukan extends Game {
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (this.message != null) this.message.delete().queue();
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)").complete();
-			getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+			if (getCustom().isEmpty())
+				getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 			close();
 		});
 
@@ -703,7 +709,8 @@ public class Shoukan extends Game {
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " zerou os pontos de vida de " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
-			getBoard().awardWinner(this, getCurrent().getId());
+			if (getCustom().isEmpty())
+				getBoard().awardWinner(this, getCurrent().getId());
 			close();
 			return true;
 		}
