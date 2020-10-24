@@ -78,22 +78,26 @@ public class MinuteEvent implements Job {
 
 		MemberDAO.getMutedMembers().forEach(m -> {
 			Guild g = Main.getInfo().getGuildByID(m.getGuild());
-			if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
-			Member mb = g.getMemberById(m.getUid());
-			Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoMute());
-			assert r != null;
-			assert mb != null;
-			try {
-				if (mb.getRoles().stream().filter(rol -> !rol.isPublicRole()).anyMatch(rol -> !rol.getId().equals(r.getId())) && m.isMuted()) {
-					g.modifyMemberRoles(mb, r).queue(null, Helper::doNothing);
-				} else if (!m.isMuted()) {
-					List<Role> roles = m.getRoles().toList().stream().map(rol -> g.getRoleById((String) rol)).collect(Collectors.toList());
-					g.modifyMemberRoles(mb, roles).queue(null, Helper::doNothing);
+			if (g == null) {
+				MemberDAO.removeMutedMember(m);
+			} else {
+				if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
+				Member mb = g.getMemberById(m.getUid());
+				Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoMute());
+				assert r != null;
+				assert mb != null;
+				try {
+					if (mb.getRoles().stream().filter(rol -> !rol.isPublicRole()).anyMatch(rol -> !rol.getId().equals(r.getId())) && m.isMuted()) {
+						g.modifyMemberRoles(mb, r).queue(null, Helper::doNothing);
+					} else if (!m.isMuted()) {
+						List<Role> roles = m.getRoles().toList().stream().map(rol -> g.getRoleById((String) rol)).collect(Collectors.toList());
+						g.modifyMemberRoles(mb, roles).queue(null, Helper::doNothing);
+						MemberDAO.removeMutedMember(m);
+					}
+				} catch (HierarchyException ignore) {
+				} catch (NullPointerException e) {
 					MemberDAO.removeMutedMember(m);
 				}
-			} catch (HierarchyException ignore) {
-			} catch (NullPointerException e) {
-				MemberDAO.removeMutedMember(m);
 			}
 		});
 	}
