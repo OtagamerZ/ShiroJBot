@@ -74,7 +74,7 @@ public class BotInfoCommand extends Command {
 									[%s](https://discordapp.com/invite/9sgkzna)
 									[Top.GG](https://top.gg/bot/572413282653306901)
 									[%s](https://top.gg/bot/572413282653306901/vote)
-									[Github](https://github.com/OtagamerZ/ShiroJBot)
+									[GitHub](https://github.com/OtagamerZ/ShiroJBot)
 									[%s](https://github.com/OtagamerZ/ShiroJBot/blob/master/PRIVACY_POLICY.md)
 									[Reddit](https://www.reddit.com/r/ShiroJBot/)
 									[%s](https://top.gg/bot/572413282653306901/invite)
