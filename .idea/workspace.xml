@@ -15,7 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções no Shoukan">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,19 +162,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -812,13 +799,7 @@
       <workItem from="1603382493053" duration="2837000" />
       <workItem from="1603454501237" duration="1678000" />
       <workItem from="1603470291664" duration="10042000" />
-    </task>
-    <task id="LOCAL-02679" summary="Melhoria nas cartas-equipamento">
-      <created>1602779668068</created>
-      <option name="number" value="02679" />
-      <option name="presentableId" value="LOCAL-02679" />
-      <option name="project" value="LOCAL" />
-      <updated>1602779668068</updated>
+      <workItem from="1603507830049" duration="1145000" />
     </task>
     <task id="LOCAL-02680" summary="Correção na busca por anime">
       <created>1602780226823</created>
@@ -1156,7 +1137,14 @@
       <option name="project" value="LOCAL" />
       <updated>1603503691842</updated>
     </task>
-    <option name="localTasksCounter" value="2728" />
+    <task id="LOCAL-02728" summary="Correções no Shoukan">
+      <created>1603503848158</created>
+      <option name="number" value="02728" />
+      <option name="presentableId" value="LOCAL-02728" />
+      <option name="project" value="LOCAL" />
+      <updated>1603503848158</updated>
+    </task>
+    <option name="localTasksCounter" value="2729" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1327,11 +1315,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448583" />
-    <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1602641755858">
+    <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1603507846095">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1602268972182" />
-    <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1602641755858" />
+    <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1603507846095" />
     <state x="420" y="240" key="IDE.errors.dialog" timestamp="1596639332382">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1357,12 +1345,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603503693342">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603503850605">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603472633989" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603503693342" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603503850605" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
