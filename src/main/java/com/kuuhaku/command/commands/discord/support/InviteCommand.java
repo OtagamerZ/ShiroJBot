@@ -31,6 +31,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
@@ -83,8 +84,15 @@ public class InviteCommand extends Command {
 
 			Main.getInfo().getRequests().remove(args[0]);
 			Guild guildToInvite = Main.getInfo().getGuildByID(args[0]);
-			assert guildToInvite.getDefaultChannel() != null;
-			String invite = Helper.createInvite(guildToInvite).setMaxAge((long) 30, TimeUnit.SECONDS).setMaxUses(1).complete().getUrl();
+
+			InviteAction ia = Helper.createInvite(guildToInvite);
+
+			if (ia == null) {
+				channel.sendMessage("❌ | Não encontrei nenhum canal que eu pudesse criar um convite lá.").queue();
+				return;
+			}
+
+			String invite = ia.setMaxAge((long) 30, TimeUnit.SECONDS).setMaxUses(1).complete().getUrl();
 			channel.sendMessage("Aqui está!\n" + invite).queue();
 		} catch (ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage("Escolha o servidor que devo criar um convite!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));

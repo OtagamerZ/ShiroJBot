@@ -723,7 +723,8 @@ public class Helper {
 
 			if (i.get() == null) {
 				try {
-					sb.append(Helper.createInvite(g).setMaxAge(0).setMaxUses(0).submit().get().getUrl()).append("\n");
+					InviteAction ia = Helper.createInvite(g);
+					if (ia != null) sb.append(ia.setMaxAge(0).submit().get().getUrl()).append("\n");
 				} catch (InterruptedException | ExecutionException e) {
 					Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 				}
@@ -758,14 +759,18 @@ public class Helper {
 
 	public static InviteAction createInvite(Guild guild) {
 		InviteAction i = null;
+		if (guild.getDefaultChannel() != null) {
+			return guild.getDefaultChannel().createInvite();
+		}
+
 		for (TextChannel tc : guild.getTextChannels()) {
 			try {
-				i = tc.createInvite().setMaxUses(1);
-				break;
+				return tc.createInvite();
 			} catch (InsufficientPermissionException | NullPointerException ignore) {
 			}
 		}
-		return i;
+
+		return null;
 	}
 
 	public static String didYouMean(String word, String[] array) {
