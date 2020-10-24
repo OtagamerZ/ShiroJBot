@@ -614,11 +614,6 @@ public class Settings {
 		if (message.getGuild().getIconUrl() != null) eb = new EmbedBuilder();
 		else eb = new ColorlessEmbedBuilder();
 
-		try {
-			eb.setColor(Helper.colorThief(message.getGuild().getIconUrl()));
-		} catch (IOException e) {
-			Helper.logger(Settings.class).error(e + " | " + e.getStackTrace()[0]);
-		}
 		if (message.getGuild().getIconUrl() != null) eb.setThumbnail(message.getGuild().getIconUrl());
 		eb.setTitle("⚙ | Painel de ajuda");
 		eb.setDescription("Utilize os comandos a baixo para estabelecer suas configurações.");
