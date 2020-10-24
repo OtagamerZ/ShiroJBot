@@ -73,6 +73,7 @@ public class Champion implements Drawable, Cloneable {
     private transient boolean defending = false;
     private transient List<Equipment> linkedTo = new ArrayList<>();
     private transient Bonus bonus = new Bonus();
+    private transient Champion fakeCard = null;
     private transient int altAtk = -1;
     private transient int altDef = -1;
     private transient int mAtk = 0;
@@ -112,11 +113,11 @@ public class Champion implements Drawable, Cloneable {
             Profile.drawOutlinedText(String.valueOf(atk), 45, 250, g2d);
 
             if (bonus.getAtk() != 0)
-                Profile.drawOutlinedText((bonus.getAtk() > 0 ? "+" : "") + bonus.getAtk(), 45, 225, g2d);
+                Profile.drawOutlinedText((bonus.getAtk() >= 0 ? "+" : "-") + Math.abs(bonus.getAtk()), 45, 225, g2d);
             for (int i = 0, slot = bonus.getAtk() != 0 ? 2 : 1; i < linkedTo.size(); i++) {
                 int eAtk = linkedTo.get(i).getAtk();
                 if (eAtk != 0) {
-                    Profile.drawOutlinedText((eAtk > 0 ? "+" : "") + eAtk, 45, 250 - (25 * slot), g2d);
+                    Profile.drawOutlinedText((eAtk >= 0 ? "+" : "-") + Math.abs(eAtk), 45, 250 - (25 * slot), g2d);
                     slot++;
                 }
             }
@@ -125,11 +126,11 @@ public class Champion implements Drawable, Cloneable {
             Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
 
             if (bonus.getDef() != 0)
-                Profile.drawOutlinedText((bonus.getDef() > 0 ? "+" : "") + bonus.getDef(), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(bonus.getDef())), 225, g2d);
+                Profile.drawOutlinedText((bonus.getDef() >= 0 ? "+" : "-") + Math.abs(bonus.getDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(bonus.getDef())), 225, g2d);
             for (int i = 0, slot = bonus.getDef() != 0 ? 2 : 1; i < linkedTo.size(); i++) {
                 int eDef = linkedTo.get(i).getDef();
                 if (eDef != 0) {
-                    Profile.drawOutlinedText(eDef + (eDef > 0 ? "+" : ""), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(eDef)), 250 - (25 * slot), g2d);
+                    Profile.drawOutlinedText(Math.abs(eDef) + (eDef >= 0 ? "+" : "-"), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(eDef)), 250 - (25 * slot), g2d);
                     slot++;
                 }
             }
@@ -307,12 +308,21 @@ public class Champion implements Drawable, Cloneable {
         }
     }
 
+    public Champion getFakeCard() {
+        return fakeCard;
+    }
+
+    public void setFakeCard(Champion fakeCard) {
+        this.fakeCard = fakeCard;
+    }
+
     public void reset() {
         flipped = false;
         available = true;
         defending = false;
         linkedTo = new ArrayList<>();
         bonus = new Bonus();
+        fakeCard = null;
         mAtk = 0;
         mDef = 0;
         altAtk = -1;
