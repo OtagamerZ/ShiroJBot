@@ -91,7 +91,10 @@ public class Champion implements Drawable, Cloneable {
         if (flipped) {
             g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
         } else {
-            g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
+            if (fakeCard != null)
+                g2d.drawImage(fakeCard.getCard().drawCardNoBorder(), 0, 0, null);
+            else
+                g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
             g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
             g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
@@ -110,7 +113,10 @@ public class Champion implements Drawable, Cloneable {
             g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
             g2d.setColor(Color.red);
-            Profile.drawOutlinedText(String.valueOf(atk), 45, 250, g2d);
+            if (fakeCard != null)
+                Profile.drawOutlinedText(String.valueOf(fakeCard.getAtk()), 45, 250, g2d);
+            else
+                Profile.drawOutlinedText(String.valueOf(atk), 45, 250, g2d);
 
             if (bonus.getAtk() != 0)
                 Profile.drawOutlinedText((bonus.getAtk() >= 0 ? "+" : "-") + Math.abs(bonus.getAtk()), 45, 225, g2d);
@@ -123,7 +129,10 @@ public class Champion implements Drawable, Cloneable {
             }
 
             g2d.setColor(Color.green);
-            Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
+            if (fakeCard != null)
+                Profile.drawOutlinedText(String.valueOf(fakeCard.getDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
+            else
+                Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
 
             if (bonus.getDef() != 0)
                 Profile.drawOutlinedText((bonus.getDef() >= 0 ? "+" : "-") + Math.abs(bonus.getDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(bonus.getDef())), 225, g2d);
@@ -284,19 +293,19 @@ public class Champion implements Drawable, Cloneable {
 
     public void getEffect(EffectParameters ep) {
         String imports = """
-                //%s
-		import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-                import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
-                import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
-                import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
-                import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
-                import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-                import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
-                import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
-                import com.kuuhaku.controller.postgresql.CardDAO;
-                import com.kuuhaku.model.enums.AnimeName;
-                				
-                """.formatted(card.getName());
+                              //%s
+                import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+                              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
+                              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
+                              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+                              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
+                              import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+                              import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+                              import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
+                              import com.kuuhaku.controller.postgresql.CardDAO;
+                              import com.kuuhaku.model.enums.AnimeName;
+                              				
+                              """.formatted(card.getName());
 
         try {
             Interpreter i = new Interpreter();
