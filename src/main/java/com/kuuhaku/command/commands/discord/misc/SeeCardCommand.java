@@ -99,7 +99,7 @@ public class SeeCardCommand extends Command {
 		} else {
 			Card tc = CardDAO.getCard(args[0], true);
 			if (tc == null) {
-				channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], ListUtils.union(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames()).toArray(String[]::new)) + "`?").queue();
+				channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
 				return;
 			}
 
