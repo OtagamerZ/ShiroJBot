@@ -13,9 +13,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções no Shoukan">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no gerador de convites">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +119,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
@@ -162,6 +165,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -799,14 +813,7 @@
       <workItem from="1603382493053" duration="2837000" />
       <workItem from="1603454501237" duration="1678000" />
       <workItem from="1603470291664" duration="10042000" />
-      <workItem from="1603507830049" duration="1145000" />
-    </task>
-    <task id="LOCAL-02680" summary="Correção na busca por anime">
-      <created>1602780226823</created>
-      <option name="number" value="02680" />
-      <option name="presentableId" value="LOCAL-02680" />
-      <option name="project" value="LOCAL" />
-      <updated>1602780226823</updated>
+      <workItem from="1603507830049" duration="5272000" />
     </task>
     <task id="LOCAL-02681" summary="Correção na busca por anime">
       <created>1602780989209</created>
@@ -1144,7 +1151,14 @@
       <option name="project" value="LOCAL" />
       <updated>1603503848158</updated>
     </task>
-    <option name="localTasksCounter" value="2729" />
+    <task id="LOCAL-02729" summary="Correção no gerador de convites">
+      <created>1603509255732</created>
+      <option name="number" value="02729" />
+      <option name="presentableId" value="LOCAL-02729" />
+      <option name="project" value="LOCAL" />
+      <updated>1603509255732</updated>
+    </task>
+    <option name="localTasksCounter" value="2730" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1210,7 +1224,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção na sequencia de votos" />
     <MESSAGE value="Correção nas fusões não-ultimate" />
     <MESSAGE value="Adição de contagem de tipos no cemitério" />
     <MESSAGE value="Correção de comandos sem trava de confirmação" />
@@ -1235,19 +1248,29 @@
     <MESSAGE value="Melhoria nas cartas-camaleão" />
     <MESSAGE value="Correções menores e implementação de Shoukan com regras personalizadas." />
     <MESSAGE value="Correções no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções no Shoukan" />
+    <MESSAGE value="Correção no gerador de convites" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no gerador de convites" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="338" y="58" width="348" height="217" key="#Assign_Data_Sources" timestamp="1601055738397">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="386" y="60" width="348" height="217" key="#Assign_Data_Sources" timestamp="1603511502921">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="338" y="58" width="348" height="217" key="#Assign_Data_Sources/0.0.1680.1010@0.0.1680.1010" timestamp="1601055738397" />
+    <state x="386" y="60" key="#Assign_Data_Sources/0.0.1920.1040@0.0.1920.1040" timestamp="1603511502921" />
+    <state x="586" y="198" key="#Inspections" timestamp="1603512953712">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="586" y="198" key="#Inspections/0.0.1920.1040@0.0.1920.1040" timestamp="1603512953712" />
     <state x="320" y="79" key="#Project_Structure" timestamp="1599071410447">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="79" key="#Project_Structure/0.0.1680.1010@0.0.1680.1010" timestamp="1599071410447" />
+    <state x="400" y="373" key="#SQL_Resolution_Scopes" timestamp="1603511012835">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="400" y="373" key="#SQL_Resolution_Scopes/0.0.1920.1040@0.0.1920.1040" timestamp="1603511012835" />
     <state x="557" y="213" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1603373521967">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1299,22 +1322,26 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1391" height="316" key="GridCell.Tab.0.bottom" timestamp="1602695448583">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1603511768947">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1391" height="316" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448583" />
-    <state width="1391" height="316" key="GridCell.Tab.0.center" timestamp="1602695448582">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1603511768947">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1391" height="316" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448582" />
-    <state width="1391" height="316" key="GridCell.Tab.0.left" timestamp="1602695448582">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1603511768947">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1391" height="316" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448582" />
-    <state width="1391" height="316" key="GridCell.Tab.0.right" timestamp="1602695448583">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1603511768947">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448583" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
     <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1603507846095">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1332,25 +1359,29 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1603110963022" />
-    <state x="320" y="80" key="SettingsEditor" timestamp="1603369559548">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="303" y="75" key="SettingsEditor" timestamp="1603513142180">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1603369559548" />
-    <state x="366" y="82" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1602726720558" />
+    <state x="303" y="75" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1603513142180" />
     <state x="92" y="92" width="1496" height="826" key="ShowDiffWithBranchDialog" timestamp="1601645223790">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="92" y="92" width="1496" height="826" key="ShowDiffWithBranchDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1601645223790" />
+    <state width="200" height="441" key="SqlResolveConfigurable" timestamp="1603511010647">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
     <state x="687" y="418" key="VCS.ChangelistChooser" timestamp="1597775476934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603503850605">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603509257824">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603472633989" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603503850605" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603509257824" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1367,14 +1398,16 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="636" y="331" width="408" height="355" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1599656372884" />
-    <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone" timestamp="1598041461186">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="679" y="268" key="com.intellij.database.run.ParametersPanel.Standalone" timestamp="1603511313028">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1680.1010@0.0.1680.1010" timestamp="1598041461186" />
-    <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1603119487585">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="679" y="268" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1920.1040@0.0.1920.1040" timestamp="1603511313028" />
+    <state x="349" y="165" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1603510969756">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1603119487585" />
+    <state x="349" y="165" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603510969756" />
     <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1601648967281">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
