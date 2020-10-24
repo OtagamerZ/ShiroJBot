@@ -196,10 +196,6 @@ public class Champion implements Drawable, Cloneable {
         return linkedTo;
     }
 
-    public boolean isEquipped(String name) {
-        return linkedTo.stream().anyMatch(e -> e.getCard().getId().equalsIgnoreCase(name));
-    }
-
     public void addLinkedTo(Equipment linkedTo) {
         this.linkedTo.add(linkedTo);
     }
