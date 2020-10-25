@@ -78,6 +78,16 @@ public class Hand {
 		}
 	}
 
+	public void draw(Drawable drawable) {
+		Card card = drawable.getCard();
+		try {
+			Drawable dr = deque.stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
+			deque.remove(dr);
+			cards.add(dr);
+		} catch (NoSuchElementException ignore) {
+		}
+	}
+
 	public void drawEquipment() {
 		try {
 			Drawable dr = deque.stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow().copy();
