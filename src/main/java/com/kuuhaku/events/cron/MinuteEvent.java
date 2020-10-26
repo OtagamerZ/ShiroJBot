@@ -35,6 +35,7 @@ import org.quartz.JobExecutionContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MinuteEvent implements Job {
@@ -91,7 +92,7 @@ public class MinuteEvent implements Job {
 					if (mb.getRoles().stream().filter(rol -> !rol.isPublicRole()).anyMatch(rol -> !rol.getId().equals(r.getId())) && m.isMuted()) {
 						g.modifyMemberRoles(mb, r).queue(null, Helper::doNothing);
 					} else if (!m.isMuted()) {
-						List<Role> roles = m.getRoles().toList().stream().map(rol -> g.getRoleById((String) rol)).collect(Collectors.toList());
+						List<Role> roles = m.getRoles().toList().stream().map(rol -> g.getRoleById((String) rol)).filter(Objects::nonNull).collect(Collectors.toList());
 						g.modifyMemberRoles(mb, roles).queue(null, Helper::doNothing);
 						MemberDAO.removeMutedMember(m);
 					}
