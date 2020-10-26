@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArenaField;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
@@ -37,6 +38,7 @@ import java.util.Objects;
 public class Arena {
 	private final Map<Side, List<SlotColumn<Drawable, Drawable>>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
+	private ArenaField field = ArenaField.DEFAULT;
 
 	public Arena() {
 		this.slots = Map.of(
@@ -69,12 +71,22 @@ public class Arena {
 		return graveyard;
 	}
 
+	public ArenaField getField() {
+		return field;
+	}
+
+	public void setField(ArenaField field) {
+		this.field = field;
+	}
+
 	public BufferedImage render(Map<Side, Hand> hands) {
 		try {
-			BufferedImage bg = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/arena.jpg")));
+			BufferedImage back = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/backdrop.jpg")));
+			BufferedImage arena = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/arenas/" + field.name().toLowerCase() + ".png")));
 			BufferedImage frames = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/frames.png")));
 
-			Graphics2D g2d = bg.createGraphics();
+			Graphics2D g2d = back.createGraphics();
+			g2d.drawImage(arena, 0, 0, null);
 
 			slots.forEach((key, value) -> {
 				Hand h = hands.get(key);
@@ -136,7 +148,7 @@ public class Arena {
 			g2d.drawImage(frames, 0, 0, null);
 			g2d.dispose();
 
-			return bg;
+			return back;
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;

@@ -114,8 +114,10 @@ public class Shoukan extends Game {
 				for (int i = 0; i < slots.size(); i++) {
 					if (slots.get(i).getTop() != null) {
 						Champion c = (Champion) slots.get(i).getTop();
-						if (c.hasEffect())
-							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_TURN, this, i, hd.getSide(), Duelists.of(c, i, null, -1)));
+						if (c.hasEffect()) {
+							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_TURN, this, i, hd.getSide(), Duelists.of(c, i, null, -1), channel));
+							postCombat();
+						}
 					}
 				}
 				hd.addMana(hd.getManaPerTurn());
@@ -223,8 +225,10 @@ public class Shoukan extends Game {
 				for (int i = 0; i < slots.size(); i++) {
 					if (slots.get(i).getTop() != null) {
 						Champion c = (Champion) slots.get(i).getTop();
-						if (c.hasEffect())
-							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_TURN, this, i, hd.getSide(), Duelists.of(c, i, null, -1)));
+						if (c.hasEffect()) {
+							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_TURN, this, i, hd.getSide(), Duelists.of(c, i, null, -1), channel));
+							postCombat();
+						}
 					}
 				}
 				hd.addMana(hd.getManaPerTurn());
@@ -315,7 +319,7 @@ public class Shoukan extends Game {
 					c.setDefending(c.isFlipped() || !c.isDefending());
 
 					if (c.hasEffect() && !c.isFlipped())
-						c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1)));
+						c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1), channel));
 
 					if (c.isFlipped()) {
 						c.setFlipped(false);
@@ -417,7 +421,7 @@ public class Shoukan extends Game {
 					tp.setFlipped(args[2].equalsIgnoreCase("s"));
 					slot.setTop(tp);
 					if (tp.hasEffect() && !tp.isFlipped())
-						tp.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(tp, dest, null, -1)));
+						tp.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(tp, dest, null, -1), channel));
 				}
 				d.setAvailable(false);
 				if (d instanceof Champion)
@@ -445,7 +449,7 @@ public class Shoukan extends Game {
 				Champion aFusion = ultimates
 						.stream()
 						.filter(f ->
-								f.getRequiredCards().size() > 0 && allCards.containsAll(f.getRequiredCards())
+								f.getRequiredCards().size() > 0 && allCards.containsAll(f.getRequiredCards()) && f.getMana() <= h.getMana()
 						)
 						.findFirst()
 						.orElse(null);
@@ -471,7 +475,8 @@ public class Shoukan extends Game {
 						if (slt.getTop() == null) {
 							slt.setTop(aFusion.copy());
 							if (aFusion.hasEffect() && !aFusion.isFlipped())
-								aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, Integer.parseInt(args[1]) - 1, h.getSide(), Duelists.of(aFusion, Integer.parseInt(args[1]) - 1, null, -1)));
+								aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, Integer.parseInt(args[1]) - 1, h.getSide(), Duelists.of(aFusion, Integer.parseInt(args[1]) - 1, null, -1), channel));
+							h.removeMana(aFusion.getMana());
 							break;
 						}
 					}
@@ -557,10 +562,10 @@ public class Shoukan extends Game {
 				}
 
 				if (yours.hasEffect())
-					yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1])));
+					yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
 
 				if (his.hasEffect())
-					his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEFEND, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1])));
+					his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEFEND, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
 
 				int yPower = yours.getEAtk() + yours.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum();
 
@@ -570,7 +575,7 @@ public class Shoukan extends Game {
 						his.setFlipped(false);
 						his.setDefending(true);
 						if (his.hasEffect())
-							his.getEffect(new EffectParameters(phase, EffectTrigger.ON_FLIP, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1])));
+							his.getEffect(new EffectParameters(phase, EffectTrigger.ON_FLIP, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
 					}
 					hPower = his.getEDef() + his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum();
 				} else
@@ -580,9 +585,9 @@ public class Shoukan extends Game {
 					yours.setAvailable(false);
 					yours.resetAttribs();
 					if (yours.hasEffect())
-						yours.getEffect(new EffectParameters(phase, EffectTrigger.POST_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1])));
+						yours.getEffect(new EffectParameters(phase, EffectTrigger.POST_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
 					if (his.hasEffect())
-						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1])));
+						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
 					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1], hisSide);
 
 					if (this.message != null) this.message.delete().queue();
@@ -591,9 +596,9 @@ public class Shoukan extends Game {
 				} else if (yPower < hPower) {
 					his.resetAttribs();
 					if (yours.hasEffect())
-						yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1])));
+						yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
 					if (his.hasEffect())
-						his.getEffect(new EffectParameters(phase, EffectTrigger.POST_DEFENSE, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1])));
+						his.getEffect(new EffectParameters(phase, EffectTrigger.POST_DEFENSE, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
 					killCard(h.getSide(), is[0], yourSide);
 
 					if (this.message != null) this.message.delete().queue();
