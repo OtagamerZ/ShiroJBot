@@ -716,7 +716,7 @@ public class Helper {
             spGuilds.add(Main.getInfo().getAPI()
                     .getGuilds()
                     .stream()
-                    .filter(g -> sponsors.contains(g.getOwnerId()) && g.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE))
+                    .filter(g -> g.getOwnerId().equals(sp) && g.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE))
                     .max(Comparator.comparing(Guild::getMemberCount))
                     .orElse(null));
         }
