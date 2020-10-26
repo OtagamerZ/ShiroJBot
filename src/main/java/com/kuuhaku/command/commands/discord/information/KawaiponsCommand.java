@@ -164,7 +164,7 @@ public class KawaiponsCommand extends Command {
 		eb.addField(":red_envelope: | Cartas normais:", common + " de " + l + " (" + Helper.prcntToInt(common, l) + "%)", true);
 		eb.addField(":star2: | Cartas cromadas:", foil + " de " + l + " (" + Helper.prcntToInt(foil, l) + "%)", true);
 		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
-		eb.setImage("https://api." + System.getenv("SERVER_URL") + "/card?id=" + hash);
+		eb.setImage("https://api." + System.getenv("SERVER_URL") + "/collection?id=" + hash);
 		m.delete().queue();
 
 		channel.sendMessage(eb.build()).queue();
