@@ -23,6 +23,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -60,7 +61,10 @@ public class CatchDropCommand extends Command {
 		} else if (args.length < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-captcha")).queue();
 			return;
-		} else if (!p.getCaptcha().equals(args[0])) {
+		} else if (args[0].contains(Helper.ANTICOPY)) {
+			channel.sendMessage("❌ | Espertinho né? Que tal tentarmos sem `Ctrl+C / Ctrl+V` para ficar justo?").queue();
+			return;
+		} else if (!p.getRealCaptcha().equals(args[0])) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-captcha")).queue();
 			return;
 		}
