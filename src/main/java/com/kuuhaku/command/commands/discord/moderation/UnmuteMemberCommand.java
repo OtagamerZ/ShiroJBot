@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UnmuteMemberCommand extends Command {
@@ -72,7 +73,7 @@ public class UnmuteMemberCommand extends Command {
 
 		try {
 			MutedMember m = MemberDAO.getMutedMemberById(mb.getId());
-			List<Role> roles = m.getRoles().toList().stream().map(rol -> guild.getRoleById((String) rol)).collect(Collectors.toList());
+			List<Role> roles = m.getRoles().toList().stream().map(rol -> guild.getRoleById((String) rol)).filter(Objects::nonNull).collect(Collectors.toList());
 			guild.modifyMemberRoles(mb, roles).queue(null, Helper::doNothing);
 			MemberDAO.removeMutedMember(m);
 
