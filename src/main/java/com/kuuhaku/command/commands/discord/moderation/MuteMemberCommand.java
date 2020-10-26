@@ -77,7 +77,7 @@ public class MuteMemberCommand extends Command {
 		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0))) {
 			channel.sendMessage("❌ | Você não pode silenciar membros que possuem o mesmo cargo ou maior.").queue();
 			return;
-		} else if (Helper.hasRoleHigherThan(member, guild.getSelfMember())) {
+		} else if (!Helper.hasRoleHigherThan(guild.getSelfMember(), message.getMentionedMembers().get(0))) {
 			channel.sendMessage("❌ | Não posso silenciar membros com um cargo maior que o meu.").queue();
 			return;
 		} else if (ShiroInfo.getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
