@@ -1078,6 +1078,7 @@ public class Helper {
     }
 
     public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
+        if (Main.getInfo().getRatelimit().getIfPresent("kawaipon_" + gc.getGuildID()) != null) return;
         GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
         ServerBuff cardBuff = gb.getBuffs().stream().filter(b -> b.getId() == 2).findFirst().orElse(null);
         ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
@@ -1119,6 +1120,7 @@ public class Helper {
                 }
             }
             Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
+            Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildID(), true);
         }
     }
 
@@ -1178,6 +1180,7 @@ public class Helper {
             }
         }
         Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
+        Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildID(), true);
     }
 
     public static void spawnKawaipon(EventChannel channel, TwitchChat chat) {
@@ -1202,6 +1205,7 @@ public class Helper {
     }
 
     public static void spawnDrop(GuildConfig gc, TextChannel channel) {
+        if (Main.getInfo().getRatelimit().getIfPresent("drop_" + gc.getGuildID()) != null) return;
         GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
         ServerBuff dropBuff = gb.getBuffs().stream().filter(b -> b.getId() == 3).findFirst().orElse(null);
         boolean dbUltimate = dropBuff != null && dropBuff.getTier() == 4;
@@ -1236,6 +1240,7 @@ public class Helper {
                 }
             }
             Main.getInfo().getCurrentDrop().put(channel.getGuild().getId(), drop);
+            Main.getInfo().getRatelimit().put("drop_" + gc.getGuildID(), true);
         }
     }
 
