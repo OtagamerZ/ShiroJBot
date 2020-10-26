@@ -1212,7 +1212,7 @@ public class Helper {
 
         if (dbUltimate || chance(2 + (channel.getGuild().getMemberCount() / 5000f) * (dropBuff != null ? dropBuff.getMult() : 1))) {
             int rolled = Helper.rng(100, false);
-            Prize drop = rolled > 90 ? new ItemDrop() : rolled > 75 ? new JokerDrop() : new CreditDrop();
+            Prize drop = rolled > 90 ? new ItemDrop() : rolled > 80 ? new JokerDrop() : new CreditDrop();
 
             EmbedBuilder eb = new ColorlessEmbedBuilder()
                     .setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png")

@@ -63,6 +63,9 @@ public abstract class Drop implements Prize {
 
 		add(Pair.of("Ter dívida ativa.", u ->
 				AccountDAO.getAccount(u.getId()).getLoan() > 0));
+
+		add(Pair.of("Ter conta vinculada com o [canal do meu Nii-chan](https://twitch.tv/kuuhaku_otgmz).", u ->
+				!AccountDAO.getAccount(u.getId()).getTwitchId().isBlank()));
 	}};
 	private final Pair<String, Function<User, Boolean>> chosen = condition.get(Helper.rng(condition.size(), true));
 
