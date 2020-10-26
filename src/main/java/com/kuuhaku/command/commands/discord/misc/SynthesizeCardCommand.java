@@ -99,13 +99,15 @@ public class SynthesizeCardCommand extends Command {
 		int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum();
 		double tier1 = (15 - score) * 0.75 / 12;
 		double tier2 = 0.25 + (6 - Math.abs(9 - score)) * 0.25 / 6;
-		double tier3 = 0.75 - tier1;
+		double tier3 = Math.max(0, 0.5 - tier1);
+		double tier4 = tier3 * 0.25 / 0.5;
 
 		List<Equipment> equips = CardDAO.getEquipments();
 		List<Equipment> chosenTier = new EnumeratedDistribution<>(List.of(
 				Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList()), tier1),
 				Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList()), tier2),
-				Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).collect(Collectors.toList()), tier3)
+				Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).collect(Collectors.toList()), tier3),
+				Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).collect(Collectors.toList()), tier4)
 		)).sample();
 
 		Equipment e = chosenTier.get(Helper.rng(chosenTier.size(), true));
@@ -114,7 +116,8 @@ public class SynthesizeCardCommand extends Command {
 				.setTitle("Possíveis resultados")
 				.addField(KawaiponRarity.COMMON.getEmote() + " | Equipamento tier 1 (\uD83D\uDFCA)", "Chance de " + (Helper.round(tier1 * 100, 1)) + "%", false)
 				.addField(KawaiponRarity.RARE.getEmote() + " | Equipamento tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier2 * 100, 1)) + "%", false)
-				.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Equipamento tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier3 * 100, 1)) + "%", false);
+				.addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Equipamento tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier3 * 100, 1)) + "%", false)
+				.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Equipamento tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier4 * 100, 1)) + "%", false);
 
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
