@@ -81,12 +81,13 @@ public class MinuteEvent implements Job {
 			if (g == null) {
 				MemberDAO.removeMutedMember(m);
 			} else {
-				if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
-				Member mb = g.getMemberById(m.getUid());
-				Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoMute());
-				assert r != null;
-				assert mb != null;
 				try {
+					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
+					Member mb = g.getMemberById(m.getUid());
+					Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoMute());
+					assert r != null;
+					assert mb != null;
+
 					if (mb.getRoles().stream().filter(rol -> !rol.isPublicRole()).anyMatch(rol -> !rol.getId().equals(r.getId())) && m.isMuted()) {
 						g.modifyMemberRoles(mb, r).queue(null, Helper::doNothing);
 					} else if (!m.isMuted()) {
@@ -95,7 +96,7 @@ public class MinuteEvent implements Job {
 						MemberDAO.removeMutedMember(m);
 					}
 				} catch (HierarchyException ignore) {
-				} catch (NullPointerException e) {
+				} catch (IllegalArgumentException | NullPointerException e) {
 					MemberDAO.removeMutedMember(m);
 				}
 			}
