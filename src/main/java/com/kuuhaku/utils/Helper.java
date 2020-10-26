@@ -1425,6 +1425,6 @@ public class Helper {
     }
 
     public static String noCopyPaste(String input) {
-        return StringUtils.join(input.toCharArray(), ANTICOPY);
+        return String.join(ANTICOPY, input.split(""));
     }
 }
