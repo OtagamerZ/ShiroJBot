@@ -363,7 +363,7 @@ public class Helper {
             EmbedBuilder eb = new ColorlessEmbedBuilder();
 
             eb.setAuthor("Relatório de log");
-            eb.setDescription(msg);
+            eb.setDescription(StringUtils.abbreviate(msg, 2048));
             eb.addField("Referente:", u.getAsMention(), true);
             if (isCommand) eb.addField("Comando:", gc.getPrefix() + c.getName(), true);
             eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
@@ -385,7 +385,7 @@ public class Helper {
             EmbedBuilder eb = new ColorlessEmbedBuilder();
 
             eb.setAuthor("Relatório de log");
-            eb.setDescription(msg);
+            eb.setDescription(StringUtils.abbreviate(msg, 2048));
             eb.addField("Referente:", u.getAsMention(), true);
             if (isCommand) {
                 eb.addField("Comando:", gc.getPrefix() + c.getName(), true);
