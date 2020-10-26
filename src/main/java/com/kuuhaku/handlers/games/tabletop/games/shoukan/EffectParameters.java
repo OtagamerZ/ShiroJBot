@@ -18,16 +18,25 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.Webhook;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class EffectParameters {
 	private final Phase phase;
@@ -39,8 +48,9 @@ public class EffectParameters {
 	private final Map<Side, List<SlotColumn<Drawable, Drawable>>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
 	private final Duelists duelists;
+	private final TextChannel channel;
 
-	public EffectParameters(Phase phase, EffectTrigger trigger, Shoukan shoukan, int index, Side side, Duelists duelists) {
+	public EffectParameters(Phase phase, EffectTrigger trigger, Shoukan shoukan, int index, Side side, Duelists duelists, TextChannel channel) {
 		this.phase = phase;
 		this.trigger = trigger;
 		this.shoukan = shoukan;
@@ -50,6 +60,7 @@ public class EffectParameters {
 		this.slots = shoukan.getArena().getSlots();
 		this.graveyard = shoukan.getArena().getGraveyard();
 		this.duelists = duelists;
+		this.channel = channel;
 	}
 
 	public Phase getPhase() {
@@ -100,5 +111,27 @@ public class EffectParameters {
 		}
 
 		return types;
+	}
+
+	public TextChannel getChannel() {
+		return channel;
+	}
+
+	public void sendWebhookMessage(String message) {
+		Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getInfo().getAPI());
+		Card c = duelists.getAttacker().getCard();
+
+		WebhookMessageBuilder wmb = new WebhookMessageBuilder()
+				.setContent(message)
+				.setAvatarUrl("https://api.%s/collection?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().name()))
+				.setUsername(c.getName());
+
+		try {
+			assert wh != null;
+			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
+			wc.send(wmb.build()).get();
+		} catch (InterruptedException | ExecutionException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		}
 	}
 }
