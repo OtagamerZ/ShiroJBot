@@ -89,9 +89,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		tCmdManager = new TwitchCommandManager();
 
 		EnumSet<GatewayIntent> intents = EnumSet.allOf(GatewayIntent.class);
-		intents.remove(GatewayIntent.GUILD_PRESENCES);
 
 		api = JDABuilder.create(info.getBotToken(), intents)
+				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
 				.setAudioSendFactory(new NativeAudioSendFactory())
