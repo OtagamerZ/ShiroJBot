@@ -82,88 +82,26 @@ public class ExceedSelectCommand extends Command {
 					return;
 				}
 
-				switch (args[0].toLowerCase()) {
-					case "imanity" -> {
-						if (ExceedDAO.getPercentage(ExceedEnum.IMANITY) >= 0.5f) {
-							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
-							return;
-						}
-						if (em == null)
-							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.IMANITY.getName()));
-						else {
-							em.setExceed(ExceedEnum.IMANITY.getName());
-							ExceedDAO.saveExceedMember(em);
-						}
-					}
-					case "seiren" -> {
-						if (ExceedDAO.getPercentage(ExceedEnum.SEIREN) >= 0.5f) {
-							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
-							return;
-						}
-						if (em == null)
-							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.SEIREN.getName()));
-						else {
-							em.setExceed(ExceedEnum.SEIREN.getName());
-							ExceedDAO.saveExceedMember(em);
-						}
-					}
-					case "werebeast" -> {
-						if (ExceedDAO.getPercentage(ExceedEnum.WEREBEAST) >= 0.5f) {
-							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
-							return;
-						}
-						if (em == null)
-							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.WEREBEAST.getName()));
-						else {
-							em.setExceed(ExceedEnum.WEREBEAST.getName());
-							ExceedDAO.saveExceedMember(em);
-						}
-					}
-					case "elf" -> {
-						if (ExceedDAO.getPercentage(ExceedEnum.ELF) >= 0.5f) {
-							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
-							return;
-						}
-						if (em == null)
-							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.ELF.getName()));
-						else {
-							em.setExceed(ExceedEnum.ELF.getName());
-							ExceedDAO.saveExceedMember(em);
-						}
-					}
-					case "ex-machina" -> {
-						if (ExceedDAO.getPercentage(ExceedEnum.EXMACHINA) >= 0.5f) {
-							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
-							return;
-						}
-						if (em == null)
-							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.EXMACHINA.getName()));
-						else {
-							em.setExceed(ExceedEnum.EXMACHINA.getName());
-							ExceedDAO.saveExceedMember(em);
-						}
-					}
-					case "flügel" -> {
-						if (ExceedDAO.getPercentage(ExceedEnum.FLUGEL) >= 0.5f) {
-							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
-							return;
-						}
-						if (em == null)
-							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.FLUGEL.getName()));
-						else {
-							em.setExceed(ExceedEnum.FLUGEL.getName());
-							ExceedDAO.saveExceedMember(em);
-						}
-					}
-					default -> {
-						m.editMessage("❌ | Exceed inexistente.").queue();
-						return;
-					}
+				ExceedEnum ex = ExceedEnum.getByName(args[0]);
+
+				if (ex == null) {
+					m.editMessage("❌ | Exceed inexistente.").queue();
+					return;
+				} else if (ExceedDAO.getPercentage(ex) >= 0.5f) {
+					m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+					return;
 				}
 
-				String ex = ExceedDAO.getExceed(author.getId());
+				if (em == null)
+					ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ex.getName()));
+				else {
+					em.setExceed(ex.getName());
+					ExceedDAO.saveExceedMember(em);
+				}
 
-				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + ex + "**!").queue(null, Helper::doNothing);
+				String e = ExceedDAO.getExceed(author.getId());
+
+				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + e + "**!").queue(null, Helper::doNothing);
 				/*ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(e -> {
 							User u = Main.getInfo().getUserByID(e);
 							if (u != null) {

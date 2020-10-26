@@ -20,6 +20,7 @@ package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.io.IOException;
@@ -43,11 +44,14 @@ public enum ExceedEnum {
 	}
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public static ExceedEnum getByName(String name) {
-		return Arrays.stream(ExceedEnum.values()).filter(e -> e.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+		return Arrays.stream(ExceedEnum.values())
+				.filter(e -> e.name().equalsIgnoreCase(name) || StringUtils.stripAccents(e.name).equalsIgnoreCase(StringUtils.stripAccents(name)))
+				.findFirst()
+				.orElse(null);
 	}
 
 	public Color getPalette() {
