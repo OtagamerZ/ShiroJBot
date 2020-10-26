@@ -210,6 +210,7 @@ public class GuildEvents extends ListenerAdapter {
 						return;
 					} else if (Main.getInfo().getRatelimit().getIfPresent(author.getId()) != null) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited")).queue();
+						Main.getInfo().getRatelimit().put(author.getId(), true);
 						return;
 					}
 
