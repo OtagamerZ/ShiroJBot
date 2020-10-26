@@ -135,24 +135,24 @@ public class Champion implements Drawable, Cloneable {
                 Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
 
             if (bonus.getDef() != 0)
-                Profile.drawOutlinedText((bonus.getDef() >= 0 ? "+" : "-") + Math.abs(bonus.getDef()), 178 - g2d.getFontMetrics().stringWidth(Math.abs(bonus.getDef())), 225, g2d);
+                Profile.drawOutlinedText((bonus.getDef() >= 0 ? "+" : "-") + Math.abs(bonus.getDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(Math.abs(bonus.getDef()))), 225, g2d);
             for (int i = 0, slot = bonus.getDef() != 0 ? 2 : 1; i < linkedTo.size(); i++) {
                 int eDef = linkedTo.get(i).getDef();
                 if (eDef != 0) {
-                    Profile.drawOutlinedText(Math.abs(eDef) + (eDef >= 0 ? "+" : "-"), 178 - g2d.getFontMetrics().stringWidth(Math.abs(eDef)), 250 - (25 * slot), g2d);
+                    Profile.drawOutlinedText(Math.abs(eDef) + (eDef >= 0 ? "+" : "-"), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(Math.abs(eDef))), 250 - (25 * slot), g2d);
                     slot++;
                 }
             }
 
             g2d.setFont(new Font("Arial", Font.BOLD, 11));
             g2d.setColor(Color.black);
-            g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 12, 277);
+            g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 9, 277);
 
             g2d.setFont(Helper.HAMLIN.deriveFont(Map.of(
                     TextAttribute.SIZE, 11,
                     TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
             )));
-            Profile.drawStringMultiLineNO(g2d, description, 205, 12, 293);
+            Profile.drawStringMultiLineNO(g2d, description, 205, 9, 293);
         }
 
         if (!available) {

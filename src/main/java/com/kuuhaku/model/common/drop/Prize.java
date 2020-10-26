@@ -28,6 +28,8 @@ import java.util.function.Function;
 public interface Prize {
 	String getCaptcha();
 
+	String getRealCaptcha();
+
 	void award(User u);
 
 	void award(EventUser u);
