@@ -811,21 +811,7 @@
       <workItem from="1603470291664" duration="10042000" />
       <workItem from="1603507830049" duration="5948000" />
       <workItem from="1603674213205" duration="4194000" />
-      <workItem from="1603728480662" duration="6960000" />
-    </task>
-    <task id="LOCAL-02694" summary="Correção nos botões gerais de confirmação">
-      <created>1602970977037</created>
-      <option name="number" value="02694" />
-      <option name="presentableId" value="LOCAL-02694" />
-      <option name="project" value="LOCAL" />
-      <updated>1602970977037</updated>
-    </task>
-    <task id="LOCAL-02695" summary="Correção nos comandos do Shoukan">
-      <created>1602990460532</created>
-      <option name="number" value="02695" />
-      <option name="presentableId" value="LOCAL-02695" />
-      <option name="project" value="LOCAL" />
-      <updated>1602990460532</updated>
+      <workItem from="1603728480662" duration="7734000" />
     </task>
     <task id="LOCAL-02696" summary="Correções e melhorias no debug do Shoukan">
       <created>1603111267078</created>
@@ -1156,7 +1142,21 @@
       <option name="project" value="LOCAL" />
       <updated>1603735328070</updated>
     </task>
-    <option name="localTasksCounter" value="2743" />
+    <task id="LOCAL-02743" summary="Correções">
+      <created>1603736012009</created>
+      <option name="number" value="02743" />
+      <option name="presentableId" value="LOCAL-02743" />
+      <option name="project" value="LOCAL" />
+      <updated>1603736012009</updated>
+    </task>
+    <task id="LOCAL-02744" summary="Correções">
+      <created>1603736092705</created>
+      <option name="number" value="02744" />
+      <option name="presentableId" value="LOCAL-02744" />
+      <option name="project" value="LOCAL" />
+      <updated>1603736092705</updated>
+    </task>
+    <option name="localTasksCounter" value="2745" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1222,7 +1222,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção na transferência de equipamentos" />
     <MESSAGE value="Correção na compra de equipamentos" />
     <MESSAGE value="Correção na síntese de equipamentos" />
     <MESSAGE value="Adição de listener de console" />
@@ -1247,7 +1246,8 @@
     <MESSAGE value="Atualização da funções do Shoukan para compatibilidade com novo efeito" />
     <MESSAGE value="Adição de tier 4 para equipamentos" />
     <MESSAGE value="Adição de mensagem de erro no comando Mute" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de mensagem de erro no comando Mute" />
+    <MESSAGE value="Correções" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1307,11 +1307,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602708322237" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1603735325263">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1603736089903">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1603735325263" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1603736089903" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1603112314104">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1374,11 +1374,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603735329708">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603736093666">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603735329708" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603736093666" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603676841106" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />

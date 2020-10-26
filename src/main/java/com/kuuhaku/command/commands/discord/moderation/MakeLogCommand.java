@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.jetbrains.annotations.NonNls;
@@ -58,7 +59,7 @@ public class MakeLogCommand extends Command {
 
 			guild.createTextChannel("shiro-log").queue(c -> {
 				gc.setCanalLog(c.getId());
-				channel.sendMessage("Canal de log criado com sucesso em " + c.getAsMention()).queue();
+				channel.sendMessage("Canal de log criado com sucesso em " + c.getAsMention()).queue(null, Helper::doNothing);
 				GuildDAO.updateGuildSettings(gc);
 			});
 		} catch (InsufficientPermissionException e) {
