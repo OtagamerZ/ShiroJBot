@@ -51,7 +51,7 @@ public class TwitchDrop implements Prize {
 			1 + Helper.rng((int) CardDAO.totalCards() - 1, false),
 			Helper.rng(MemberDAO.getHighestLevel() / 2, false)
 	};
-	private final int amount = 150 + Helper.rng(850, false);
+	private final int amount = 250 + Helper.rng(1000, false);
 	private final List<Pair<String, Function<EventUser, Boolean>>> requirement = new ArrayList<>() {{
 		add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais.", u ->
 						KawaiponDAO

@@ -38,7 +38,7 @@ import java.util.function.Function;
 public class JokerDrop extends Drop {
 	private final int amount = 2500 + Helper.rng(2500, false);
 	private final Consumable prize = new ArrayList<>(ConsumableShop.getAvailable().values()).get(Helper.rng(ConsumableShop.getAvailable().size(), true));
-	private final int penalty = 3750 + Helper.rng(3750, false);
+	private final int penalty = 3000 + Helper.rng(3000, false);
 	private final boolean item = Helper.rng(100, false) > 50;
 
 	@Override
