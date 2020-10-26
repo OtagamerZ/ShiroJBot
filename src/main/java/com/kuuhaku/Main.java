@@ -92,7 +92,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		intents.remove(GatewayIntent.GUILD_PRESENCES);
 
 		api = JDABuilder.create(info.getBotToken(), intents)
-				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
 				.setAudioSendFactory(new NativeAudioSendFactory())
