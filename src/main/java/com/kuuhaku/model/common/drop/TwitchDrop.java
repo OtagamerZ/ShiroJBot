@@ -95,10 +95,15 @@ public class TwitchDrop implements Prize {
 
 	@Override
 	public String getCaptcha() {
+		return Helper.noCopyPaste(getRealCaptcha());
+	}
+
+	@Override
+	public String getRealCaptcha() {
 		try {
 			return Hex.encodeHexString(MessageDigest.getInstance("MD5").digest(ByteBuffer.allocate(4).putInt(hashCode()).array())).substring(0, 5);
 		} catch (NoSuchAlgorithmException e) {
-			return String.valueOf(System.currentTimeMillis());
+			return String.valueOf(System.currentTimeMillis()).substring(0, 5);
 		}
 	}
 
