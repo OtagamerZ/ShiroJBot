@@ -28,6 +28,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.JDA;
@@ -621,7 +622,7 @@ public class Shoukan extends Game {
 		Champion ch = (Champion) side.get(index).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath", false)) return;
 		ch.reset();
-		if (ch.getRequiredCards().size() == 0)
+		if (ch.getCard().getRarity() == KawaiponRarity.FUSION)
 			arena.getGraveyard().get(s).add(ch);
 		side.get(index).setTop(null);
 		side.forEach(sd -> {
