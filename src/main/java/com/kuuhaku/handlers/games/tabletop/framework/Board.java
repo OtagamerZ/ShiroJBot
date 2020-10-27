@@ -179,6 +179,36 @@ public class Board {
 		game.close();
 	}
 
+	public void awardWinner(Game game, boolean daily, String id) {
+		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
+
+		Account wacc = AccountDAO.getAccount(id);
+		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
+		AccountDAO.saveAccount(wacc);
+
+		if (ExceedDAO.hasExceed(id)) {
+			String wex = ExceedDAO.getExceed(id);
+			PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
+			wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * (daily ? 25 : 5)));
+			PStateDAO.savePoliticalState(wps);
+		}
+
+		losers.forEach(l -> {
+			Account lacc = AccountDAO.getAccount(l.getId());
+			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
+			AccountDAO.saveAccount(lacc);
+
+			if (ExceedDAO.hasExceed(l.getId())) {
+				String lex = ExceedDAO.getExceed(l.getId());
+				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
+				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * (daily ? 25 : 5)));
+				PStateDAO.savePoliticalState(lps);
+			}
+		});
+
+		game.close();
+	}
+
 	public void awardWinners(Game game, String... ids) {
 		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).collect(Collectors.toList());
 
@@ -204,6 +234,38 @@ public class Board {
 				String lex = ExceedDAO.getExceed(l.getId());
 				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
+				PStateDAO.savePoliticalState(lps);
+			}
+		});
+
+		game.close();
+	}
+
+	public void awardWinners(Game game, boolean daily, String... ids) {
+		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).collect(Collectors.toList());
+
+		for (String id : ids) {
+			Account wacc = AccountDAO.getAccount(id);
+			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, this.getClass());
+			AccountDAO.saveAccount(wacc);
+
+			if (ExceedDAO.hasExceed(id)) {
+				String wex = ExceedDAO.getExceed(id);
+				PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
+				wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * (daily ? 25 : 5)));
+				PStateDAO.savePoliticalState(wps);
+			}
+		}
+
+		losers.forEach(l -> {
+			Account lacc = AccountDAO.getAccount(l.getId());
+			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
+			AccountDAO.saveAccount(lacc);
+
+			if (ExceedDAO.hasExceed(l.getId())) {
+				String lex = ExceedDAO.getExceed(l.getId());
+				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
+				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * (daily ? 25 : 5)));
 				PStateDAO.savePoliticalState(lps);
 			}
 		});

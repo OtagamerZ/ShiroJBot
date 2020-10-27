@@ -64,13 +64,15 @@ public class Shoukan extends Game {
 	private Phase phase = Phase.PLAN;
 	private final List<Champion> ultimates = CardDAO.getFusions();
 	private final boolean[] changed = {false, false, false, false, false};
+	private final boolean daily;
 
-	public Shoukan(JDA handler, TextChannel channel, int bet, JSONObject custom, User... players) {
+	public Shoukan(JDA handler, TextChannel channel, int bet, JSONObject custom, boolean daily, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, custom);
 		this.channel = channel;
+		this.daily = daily;
 
-		Kawaipon p1 = KawaiponDAO.getKawaipon(players[0].getId());
-		Kawaipon p2 = KawaiponDAO.getKawaipon(players[1].getId());
+		Kawaipon p1 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[0].getId());
+		Kawaipon p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[1].getId());
 
 		this.hands = Map.of(
 				Side.TOP, new Hand(this, players[0], new ArrayList<>() {{
@@ -86,7 +88,7 @@ public class Shoukan extends Game {
 		setActions(
 				s -> close(),
 				s -> {
-					if (custom == null) getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+					if (custom == null) getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 				}
 		);
 	}
@@ -158,7 +160,7 @@ public class Shoukan extends Game {
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
 				if (getCustom().isEmpty())
-					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 				close();
 			}
 
@@ -175,7 +177,7 @@ public class Shoukan extends Game {
 			if (this.message != null) this.message.delete().queue();
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)").complete();
 			if (getCustom().isEmpty())
-				getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+				getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 			close();
 		});
 
@@ -269,7 +271,7 @@ public class Shoukan extends Game {
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
 				if (getCustom().isEmpty())
-					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 				close();
 			}
 
@@ -286,7 +288,7 @@ public class Shoukan extends Game {
 			if (this.message != null) this.message.delete().queue();
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)").complete();
 			if (getCustom().isEmpty())
-				getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+				getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 			close();
 		});
 
@@ -716,7 +718,7 @@ public class Shoukan extends Game {
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
 			if (getCustom().isEmpty())
-				getBoard().awardWinner(this, getCurrent().getId());
+				getBoard().awardWinner(this, daily, getCurrent().getId());
 			close();
 			return true;
 		}
