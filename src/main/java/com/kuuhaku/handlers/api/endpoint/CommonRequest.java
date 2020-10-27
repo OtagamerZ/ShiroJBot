@@ -19,10 +19,11 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
-import org.apache.commons.io.FileUtils;
+import com.kuuhaku.utils.Helper;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class CommonRequest {
 	byte[] serveCollectionImage(@RequestParam(value = "id") String id) throws IOException {
 		File f = new File(Main.getInfo().getCollectionsFolder(), id + ".jpg");
 		if (!f.exists()) throw new FileNotFoundException();
-		return FileUtils.readFileToByteArray(f);
+		return Helper.getBytes(ImageIO.read(f));
 	}
 
 	@RequestMapping(value = "/card", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
@@ -42,6 +43,6 @@ public class CommonRequest {
 	byte[] serveCardImage(@RequestParam(value = "name") String name, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
 		File f = new File(System.getenv("CARDS_PATH") + (anime == null ? "" : "-new/" + anime), name + ".png");
 		if (!f.exists()) throw new FileNotFoundException();
-		return FileUtils.readFileToByteArray(f);
+		return Helper.getBytes(ImageIO.read(f), "png");
 	}
 }
