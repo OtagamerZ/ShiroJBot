@@ -56,23 +56,43 @@ public class ShoukanDeckCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-deck")).queue(m -> {
-			try {
-				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+			if (Helper.containsAny(args, "daily", "diario")) {
+				try {
+					Kawaipon kp = Helper.getDailyDeck();
 
-				ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
-				BufferedImage cards = kb.view(kp.getChampions(), kp.getEquipments());
+					ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+					BufferedImage cards = kb.view(kp.getChampions(), kp.getEquipments());
 
-				EmbedBuilder eb = new ColorlessEmbedBuilder();
-				eb.setTitle("\uD83D\uDD30 | Deck de " + author.getName());
-				eb.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 36", true);
-				eb.addField(":shield: | Cartas EvoGear:", kp.getEquipments().size() + " de 18", true);
-				eb.setImage("attachment://deck.jpg");
+					EmbedBuilder eb = new ColorlessEmbedBuilder()
+							.setTitle(":date: | Deck de Diário")
+							.setDescription("O deck diário será o mesmo para todos os jogadores até amanhã, e permite que usuários que não possuam 36 cartas Senshi joguem. Ganhar usando ele premiará seu Exceed com 5x mais pontos de influência (PDI).")
+							.setImage("attachment://deck.jpg");
 
-				m.delete().queue();
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg").queue();
-			} catch (IOException | InterruptedException e) {
-				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+					m.delete().queue();
+					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg").queue();
+				} catch (IOException | InterruptedException e) {
+					m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
+			} else {
+				try {
+					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+
+					ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+					BufferedImage cards = kb.view(kp.getChampions(), kp.getEquipments());
+
+					EmbedBuilder eb = new ColorlessEmbedBuilder()
+							.setTitle(":beginner: | Deck de " + author.getName())
+							.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 36", true)
+							.addField(":shield: | Cartas EvoGear:", kp.getEquipments().size() + " de 18", true)
+							.setImage("attachment://deck.jpg");
+
+					m.delete().queue();
+					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg").queue();
+				} catch (IOException | InterruptedException e) {
+					m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
 			}
 		});
 	}
