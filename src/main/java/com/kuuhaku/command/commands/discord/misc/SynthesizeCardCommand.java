@@ -37,7 +37,6 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NonNls;
 
@@ -49,115 +48,115 @@ import java.util.stream.Collectors;
 
 public class SynthesizeCardCommand extends Command {
 
-	public SynthesizeCardCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
+    public SynthesizeCardCommand(String name, String description, Category category, boolean requiresMM) {
+        super(name, description, category, requiresMM);
+    }
 
-	public SynthesizeCardCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
+    public SynthesizeCardCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+        super(name, aliases, description, category, requiresMM);
+    }
 
-	public SynthesizeCardCommand(@NonNls String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
+    public SynthesizeCardCommand(@NonNls String name, String usage, String description, Category category, boolean requiresMM) {
+        super(name, usage, description, category, requiresMM);
+    }
 
-	public SynthesizeCardCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+    public SynthesizeCardCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+        super(name, aliases, usage, description, category, requiresMM);
+    }
 
-	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length == 0) {
-			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um equipamento (nomes separados por `;`).").queue();
-			return;
-		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		}
+    @Override
+    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+        if (args.length == 0) {
+            channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um equipamento (nomes separados por `;`).").queue();
+            return;
+        } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        }
 
-		String[] names = args[0].split(";");
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+        String[] names = args[0].split(";");
+        Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		if (names.length < 3) {
-			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um equipamento.").queue();
-			return;
-		}
+        if (names.length < 3) {
+            channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um equipamento.").queue();
+            return;
+        }
 
-		List<Card> tributes = new ArrayList<>();
-		for (String name : names) {
-			Card c = CardDAO.getCard(name, false);
-			if (c == null) {
-				channel.sendMessage("❌ | A carta `" + name.toUpperCase() + "` não existe.").queue();
-				return;
-			} else if (!kp.getCards().contains(new KawaiponCard(c, false))) {
-				channel.sendMessage("❌ | Você só pode usar na síntese cartas que você tenha na coleção kawaipon.").queue();
-				return;
-			}
-			tributes.add(c);
-		}
+        List<Card> tributes = new ArrayList<>();
+        for (String name : names) {
+            Card c = CardDAO.getCard(name, false);
+            if (c == null) {
+                channel.sendMessage("❌ | A carta `" + name.toUpperCase() + "` não existe.").queue();
+                return;
+            } else if (!kp.getCards().contains(new KawaiponCard(c, false))) {
+                channel.sendMessage("❌ | Você só pode usar na síntese cartas que você tenha na coleção kawaipon.").queue();
+                return;
+            }
+            tributes.add(c);
+        }
 
-		int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum();
-		double tier1 = (15 - score) * 0.75 / 12;
-		double tier2 = 0.25 + (6 - Math.abs(9 - score)) * 0.25 / 6;
-		double tier3 = Math.max(0, 0.5 - tier1);
-		double tier4 = tier3 * 0.25 / 0.5;
+        int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum();
+        double tier1 = (15 - score) * 0.75 / 12;
+        double tier2 = 0.25 + (6 - Math.abs(9 - score)) * 0.25 / 6;
+        double tier3 = Math.max(0, 0.65 - tier1);
+        double tier4 = tier3 * 0.1 / 0.65;
 
-		List<Equipment> equips = CardDAO.getEquipments();
-		List<Equipment> chosenTier = new EnumeratedDistribution<>(List.of(
-				Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList()), tier1),
-				Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList()), tier2),
-				Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).collect(Collectors.toList()), tier3),
-				Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).collect(Collectors.toList()), tier4)
-		)).sample();
+        List<Equipment> equips = CardDAO.getEquipments();
+        List<Equipment> chosenTier = Helper.getRandom(List.of(
+                Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList()), tier1),
+                Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList()), tier2),
+                Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).collect(Collectors.toList()), tier3),
+                Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).collect(Collectors.toList()), tier4)
+        ));
 
-		Equipment e = chosenTier.get(Helper.rng(chosenTier.size(), true));
+        Equipment e = chosenTier.get(Helper.rng(chosenTier.size(), true));
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Possíveis resultados")
-				.addField(KawaiponRarity.COMMON.getEmote() + " | Equipamento tier 1 (\uD83D\uDFCA)", "Chance de " + (Helper.round(tier1 * 100, 1)) + "%", false)
-				.addField(KawaiponRarity.RARE.getEmote() + " | Equipamento tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier2 * 100, 1)) + "%", false)
-				.addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Equipamento tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier3 * 100, 1)) + "%", false)
-				.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Equipamento tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier4 * 100, 1)) + "%", false);
+        EmbedBuilder eb = new ColorlessEmbedBuilder()
+                .setTitle("Possíveis resultados")
+                .addField(KawaiponRarity.COMMON.getEmote() + " | Equipamento tier 1 (\uD83D\uDFCA)", "Chance de " + (Helper.round(tier1 * 100, 1)) + "%", false)
+                .addField(KawaiponRarity.RARE.getEmote() + " | Equipamento tier 2 (\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier2 * 100, 1)) + "%", false)
+                .addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Equipamento tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier3 * 100, 1)) + "%", false)
+                .addField(KawaiponRarity.LEGENDARY.getEmote() + " | Equipamento tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier4 * 100, 1)) + "%", false);
 
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
-		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prester a sintetizar um equipamento usando essas cartas (elas serão destruídas no processo). Deseja continuar?")
-				.embed(eb.build())
-				.queue(s ->
-						Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
-							String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
+        String hash = Helper.generateHash(guild, author);
+        ShiroInfo.getHashes().add(hash);
+        Main.getInfo().getConfirmationPending().put(author.getId(), true);
+        channel.sendMessage("Você está prester a sintetizar um equipamento usando essas cartas (elas serão destruídas no processo). Deseja continuar?")
+                .embed(eb.build())
+                .queue(s ->
+                        Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+                            if (!ShiroInfo.getHashes().remove(hash)) return;
+                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                            String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
-							if (kp.getEquipments().stream().filter(e::equals).count() == 3 || kp.getEquipments().size() == 18) {
-								int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
+                            if (kp.getEquipments().stream().filter(e::equals).count() == 3 || kp.getEquipments().size() == 18) {
+                                int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
 
-								Account acc = AccountDAO.getAccount(author.getId());
-								acc.addCredit(change, this.getClass());
-								AccountDAO.saveAccount(acc);
+                                Account acc = AccountDAO.getAccount(author.getId());
+                                acc.addCredit(change, this.getClass());
+                                AccountDAO.saveAccount(acc);
 
-								if (kp.getEquipments().size() == 18)
-									channel.sendMessage("❌ | Você já possui 18 equipamentos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
-								else
-									channel.sendMessage("❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
+                                if (kp.getEquipments().size() == 18)
+                                    channel.sendMessage("❌ | Você já possui 18 equipamentos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
+                                else
+                                    channel.sendMessage("❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
 
-								tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
-								KawaiponDAO.saveKawaipon(kp);
-								s.delete().queue(null, Helper::doNothing);
-								return;
-							}
+                                tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
+                                KawaiponDAO.saveKawaipon(kp);
+                                s.delete().queue(null, Helper::doNothing);
+                                return;
+                            }
 
-							kp.addEquipment(e);
-							tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
-							KawaiponDAO.saveKawaipon(kp);
+                            kp.addEquipment(e);
+                            tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
+                            KawaiponDAO.saveKawaipon(kp);
 
-							s.delete().queue(null, Helper::doNothing);
-							channel.sendMessage("Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
-						}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
-						})
-				);
-	}
+                            s.delete().queue(null, Helper::doNothing);
+                            channel.sendMessage("Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
+                        }), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
+                            ShiroInfo.getHashes().remove(hash);
+                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                        })
+                );
+    }
 }
