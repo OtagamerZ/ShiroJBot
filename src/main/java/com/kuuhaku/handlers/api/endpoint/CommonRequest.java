@@ -19,30 +19,32 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.utils.Helper;
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @RestController
 public class CommonRequest {
-	@RequestMapping(value = "/collection", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
-	public @ResponseBody
-	byte[] serveCollectionImage(@RequestParam(value = "id") String id) throws IOException {
-		File f = new File(Main.getInfo().getCollectionsFolder(), id + ".jpg");
-		if (!f.exists()) throw new FileNotFoundException();
-		return Helper.getBytes(ImageIO.read(f));
-	}
+    @RequestMapping(value = "/collection", method = RequestMethod.GET)
+    public @ResponseBody
+    byte[] serveCollectionImage(@RequestParam(value = "id") String id, HttpServletResponse response) throws IOException {
+        File f = new File(Main.getInfo().getCollectionsFolder(), id + ".jpg");
+        if (!f.exists()) throw new FileNotFoundException();
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        return FileUtils.readFileToByteArray(f);
+    }
 
-	@RequestMapping(value = "/card", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-	public @ResponseBody
-	byte[] serveCardImage(@RequestParam(value = "name") String name, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
-		File f = new File(System.getenv("CARDS_PATH") + (anime == null ? "" : "-new/" + anime), name + ".png");
-		if (!f.exists()) throw new FileNotFoundException();
-		return Helper.getBytes(ImageIO.read(f), "png");
-	}
+    @RequestMapping(value = "/card", method = RequestMethod.GET)
+    public @ResponseBody
+    byte[] serveCardImage(@RequestParam(value = "name") String name, @RequestParam(value = "anime", defaultValue = "") String anime, HttpServletResponse response) throws IOException {
+        File f = new File(System.getenv("CARDS_PATH") + (anime == null ? "" : "-new/" + anime), name + ".png");
+        if (!f.exists()) throw new FileNotFoundException();
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        return FileUtils.readFileToByteArray(f);
+    }
 }
