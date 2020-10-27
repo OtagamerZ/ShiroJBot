@@ -57,6 +57,7 @@ import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
@@ -438,19 +439,11 @@ public class Helper {
     }
 
     public static boolean containsAll(String[] string, String... compareWith) {
-        int matches = 0;
-        for (String compare : compareWith) {
-            matches += Arrays.stream(compareWith).map(String::toLowerCase).allMatch(compare.toLowerCase()::contains) ? 1 : 0;
-        }
-        return matches == compareWith.length;
+        return Arrays.stream(string).map(String::toLowerCase).allMatch(s -> ArrayUtils.contains(compareWith, s));
     }
 
     public static boolean containsAny(String[] string, String... compareWith) {
-        for (String compare : compareWith) {
-            if (Arrays.stream(compareWith).map(String::toLowerCase).allMatch(compare.toLowerCase()::contains))
-                return true;
-        }
-        return false;
+        return Arrays.stream(string).map(String::toLowerCase).anyMatch(s -> ArrayUtils.contains(compareWith, s));
     }
 
     public static boolean equalsAll(String string, String... compareWith) {
