@@ -1446,10 +1446,15 @@ public class Helper {
         double total = 0;
         Map<Double, T> map = new TreeMap<>(Comparator.comparingDouble(Double::doubleValue));
         for (Pair<Double, T> value : values) {
+            map.put(value.getKey() + total, value.getValue());
             total += value.getKey();
-            map.put(value.getKey(), value.getValue());
         }
 
-        return map.get(rng(total, true));
+        double finalTotal = total;
+        return map.entrySet().stream()
+                .filter(e -> e.getKey() <= rng(finalTotal, true))
+                .max(Comparator.comparingDouble(Map.Entry::getKey))
+                .orElseThrow()
+                .getValue();
     }
 }
