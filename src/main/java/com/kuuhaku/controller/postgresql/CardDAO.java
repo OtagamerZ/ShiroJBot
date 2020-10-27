@@ -127,11 +127,35 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<Equipment> getAllEquipments() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT e FROM Equipment e", Equipment.class);
+		List<Equipment> c = (List<Equipment>) q.getResultList();
+
+		em.close();
+
+		return c;
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<String> getAllChampionNames() {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT c.card.id FROM Champion c", String.class);
 		List<String> c = (List<String>) q.getResultList();
+
+		em.close();
+
+		return c;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Champion> getAllChampions() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Champion c", Champion.class);
+		List<Champion> c = (List<Champion>) q.getResultList();
 
 		em.close();
 

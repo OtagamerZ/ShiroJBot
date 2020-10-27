@@ -90,6 +90,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
@@ -251,6 +253,10 @@ public class Helper {
 
     public static int rng(int maxValue, boolean exclusive) {
         return Math.abs(new Random().nextInt(maxValue + (exclusive ? 0 : 1)));
+    }
+
+    public static int rng(int maxValue, Random random, boolean exclusive) {
+        return Math.abs(random.nextInt(maxValue + (exclusive ? 0 : 1)));
     }
 
     public static Color colorThief(String url) throws IOException {
@@ -1028,11 +1034,44 @@ public class Helper {
         List<T> aux = new ArrayList<>(array);
         List<T> out = new ArrayList<>();
 
-        for (int i = 0; i <= elements; i++) {
+        for (int i = 0; i < elements; i++) {
             int index = rng(aux.size(), true);
 
             out.add(aux.get(index));
             aux.remove(index);
+        }
+
+        return out;
+    }
+
+    public static <T> List<T> getRandomN(List<T> array, int elements, int maxInstances) {
+        List<T> aux = new ArrayList<>(array);
+        List<T> out = new ArrayList<>();
+
+        for (int i = 0; i < elements; i++) {
+            int index = rng(aux.size(), true);
+
+            T inst = aux.get(index);
+            if (Collections.frequency(out, inst) < maxInstances)
+                out.add(inst);
+            else i--;
+        }
+
+        return out;
+    }
+
+    public static <T> List<T> getRandomN(List<T> array, int elements, int maxInstances, long seed) {
+        List<T> aux = new ArrayList<>(array);
+        List<T> out = new ArrayList<>();
+        Random random = new Random(seed);
+
+        for (int i = 0; i < elements; i++) {
+            int index = rng(aux.size(), random, true);
+
+            T inst = aux.get(index);
+            if (Collections.frequency(out, inst) < maxInstances)
+                out.add(inst);
+            else i--;
         }
 
         return out;
@@ -1441,5 +1480,16 @@ public class Helper {
 
     public static String noCopyPaste(String input) {
         return String.join(ANTICOPY, input.split(""));
+    }
+
+    public static Kawaipon getDailyDeck() {
+        ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
+        long seed = Long.parseLong("" + today.getYear() + today.getMonthValue() + today.getDayOfWeek());
+        Kawaipon kp = new Kawaipon();
+
+        kp.setChampions(getRandomN(CardDAO.getAllChampions(), 36, 3, seed));
+        kp.setEquipments(getRandomN(CardDAO.getAllEquipments(), 6, 3, seed));
+
+        return kp;
     }
 }
