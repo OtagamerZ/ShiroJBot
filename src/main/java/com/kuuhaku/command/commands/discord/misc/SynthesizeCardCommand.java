@@ -129,8 +129,8 @@ public class SynthesizeCardCommand extends Command {
                             Main.getInfo().getConfirmationPending().invalidate(author.getId());
                             String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
-                            if (kp.getEquipments().stream().filter(e::equals).count() == 3 || kp.getEquipments().size() == 18) {
-                                int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
+                            if (kp.getEquipments().stream().filter(e::equals).count() == 3 || kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 || kp.getEquipments().size() == 18) {
+                                int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
 
                                 Account acc = AccountDAO.getAccount(author.getId());
                                 acc.addCredit(change, this.getClass());
@@ -138,8 +138,10 @@ public class SynthesizeCardCommand extends Command {
 
                                 if (kp.getEquipments().size() == 18)
                                     channel.sendMessage("❌ | Você já possui 18 equipamentos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
+                                else if (kp.getEquipments().stream().filter(e::equals).count() == 3)
+                                    channel.sendMessage("❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + change + " créditos.").queue();
                                 else
-                                    channel.sendMessage("❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
+                                    channel.sendMessage("❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + change + " créditos.").queue();
 
                                 tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
                                 KawaiponDAO.saveKawaipon(kp);
