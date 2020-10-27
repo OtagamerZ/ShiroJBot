@@ -154,7 +154,8 @@ public class CardDAO {
 	public static List<Champion> getAllChampions() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.rarity <> :rarity", Champion.class);
+		q.setParameter("rarity", KawaiponRarity.FUSION);
 		List<Champion> c = (List<Champion>) q.getResultList();
 
 		em.close();
