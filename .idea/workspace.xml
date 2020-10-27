@@ -13,15 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no gerador de valores aleatórios" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -806,51 +798,8 @@
       <workItem from="1603470291664" duration="10042000" />
       <workItem from="1603507830049" duration="5948000" />
       <workItem from="1603674213205" duration="4194000" />
-      <workItem from="1603728480662" duration="13606000" />
-      <workItem from="1603799984392" duration="1987000" />
-      <workItem from="1603819174336" duration="3179000" />
-    </task>
-    <task id="LOCAL-02704" summary="Correção na transferência de equipamentos">
-      <created>1603128656355</created>
-      <option name="number" value="02704" />
-      <option name="presentableId" value="LOCAL-02704" />
-      <option name="project" value="LOCAL" />
-      <updated>1603128656356</updated>
-    </task>
-    <task id="LOCAL-02705" summary="Correção na transferência de equipamentos">
-      <created>1603132958297</created>
-      <option name="number" value="02705" />
-      <option name="presentableId" value="LOCAL-02705" />
-      <option name="project" value="LOCAL" />
-      <updated>1603132958297</updated>
-    </task>
-    <task id="LOCAL-02706" summary="Correção na compra de equipamentos">
-      <created>1603197072334</created>
-      <option name="number" value="02706" />
-      <option name="presentableId" value="LOCAL-02706" />
-      <option name="project" value="LOCAL" />
-      <updated>1603197072334</updated>
-    </task>
-    <task id="LOCAL-02707" summary="Correção na síntese de equipamentos">
-      <created>1603199924976</created>
-      <option name="number" value="02707" />
-      <option name="presentableId" value="LOCAL-02707" />
-      <option name="project" value="LOCAL" />
-      <updated>1603199924976</updated>
-    </task>
-    <task id="LOCAL-02708" summary="Adição de listener de console">
-      <created>1603250773550</created>
-      <option name="number" value="02708" />
-      <option name="presentableId" value="LOCAL-02708" />
-      <option name="project" value="LOCAL" />
-      <updated>1603250773558</updated>
-    </task>
-    <task id="LOCAL-02709" summary="Correção pequena no settings">
-      <created>1603307540383</created>
-      <option name="number" value="02709" />
-      <option name="presentableId" value="LOCAL-02709" />
-      <option name="project" value="LOCAL" />
-      <updated>1603307540383</updated>
+      <workItem from="1603728480662" duration="10550000" />
+      <workItem from="1603772183237" duration="808000" />
     </task>
     <task id="LOCAL-02710" summary="Correção pequena ao mencionar a Jibril">
       <created>1603308354150</created>
@@ -1139,21 +1088,63 @@
       <option name="project" value="LOCAL" />
       <updated>1603740504502</updated>
     </task>
-    <task id="LOCAL-02751" summary="Divulgação de parceiros agora pega convite do servidor com maior contagem de membros e que a Shiro possa criar um convite">
-      <created>1603741135547</created>
+    <task id="LOCAL-02751" summary="Correção no comando Bind">
+      <created>1603765921315</created>
       <option name="number" value="02751" />
       <option name="presentableId" value="LOCAL-02751" />
       <option name="project" value="LOCAL" />
-      <updated>1603741135547</updated>
+      <updated>1603765921315</updated>
     </task>
-    <task id="LOCAL-02752" summary="Divulgação de parceiros agora pega convite do servidor com maior contagem de membros e que a Shiro possa criar um convite">
-      <created>1603741184199</created>
+    <task id="LOCAL-02752" summary="Correção no comando Bind">
+      <created>1603766657784</created>
       <option name="number" value="02752" />
       <option name="presentableId" value="LOCAL-02752" />
       <option name="project" value="LOCAL" />
-      <updated>1603741184200</updated>
+      <updated>1603766657784</updated>
     </task>
-    <option name="localTasksCounter" value="2753" />
+    <task id="LOCAL-02753" summary="Correção no gerador aleatório com peso">
+      <created>1603769816216</created>
+      <option name="number" value="02753" />
+      <option name="presentableId" value="LOCAL-02753" />
+      <option name="project" value="LOCAL" />
+      <updated>1603769816216</updated>
+    </task>
+    <task id="LOCAL-02754" summary="Correção no gerador aleatório com peso">
+      <created>1603770119016</created>
+      <option name="number" value="02754" />
+      <option name="presentableId" value="LOCAL-02754" />
+      <option name="project" value="LOCAL" />
+      <updated>1603770119016</updated>
+    </task>
+    <task id="LOCAL-02755" summary="Correção no Hitotsu multiplayer">
+      <created>1603770944194</created>
+      <option name="number" value="02755" />
+      <option name="presentableId" value="LOCAL-02755" />
+      <option name="project" value="LOCAL" />
+      <updated>1603770944194</updated>
+    </task>
+    <task id="LOCAL-02756" summary="Correção no gerador de valores aleatórios">
+      <created>1603771283704</created>
+      <option name="number" value="02756" />
+      <option name="presentableId" value="LOCAL-02756" />
+      <option name="project" value="LOCAL" />
+      <updated>1603771283704</updated>
+    </task>
+    <task id="LOCAL-02757" summary="Correção no gerador de valores aleatórios">
+      <created>1603772339389</created>
+      <option name="number" value="02757" />
+      <option name="presentableId" value="LOCAL-02757" />
+      <option name="project" value="LOCAL" />
+      <updated>1603772339389</updated>
+    </task>
+    <task id="LOCAL-02758" summary="Correção no gerador de valores aleatórios">
+      <created>1603772844742</created>
+      <option name="number" value="02758" />
+      <option name="presentableId" value="LOCAL-02758" />
+      <option name="project" value="LOCAL" />
+      <updated>1603772844742</updated>
+    </task>
+    <option name="localTasksCounter" value="2759" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1219,8 +1210,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção pequena ao mencionar a Jibril" />
-    <MESSAGE value="Adição de limpeza de reações ao recarregar os botões" />
     <MESSAGE value="Antispam agora notifica pelo log e considera excesso de emotes." />
     <MESSAGE value="Correção no arquivo de localização" />
     <MESSAGE value="Correção no shutdown" />
@@ -1242,9 +1231,11 @@
     <MESSAGE value="Correções" />
     <MESSAGE value="Nova condição de drop;&#10;Aumentado valor ganho no drop de créditos;&#10;Reduzida chance e penalidade dos drops coringa;" />
     <MESSAGE value="Correção no canal de logs" />
-    <MESSAGE value="Divulgação de parceiros agora pega convite do servidor com maior contagem de membros e que a Shiro possa criar um convite" />
-    <MESSAGE value="Adição de desafio de deck diário no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de desafio de deck diário no Shoukan" />
+    <MESSAGE value="Correção no comando Bind" />
+    <MESSAGE value="Correção no gerador aleatório com peso" />
+    <MESSAGE value="Correção no Hitotsu multiplayer" />
+    <MESSAGE value="Correção no gerador de valores aleatórios" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no gerador de valores aleatórios" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1304,10 +1295,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602708322237" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1603827683731">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1603740501869">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1603827683731" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1603740501869" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1603112314104">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1316,25 +1307,25 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1391" height="316" key="GridCell.Tab.0.bottom" timestamp="1603826505933">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1603511768947">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1603826505933" />
+    <state width="1391" height="316" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448583" />
     <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
-    <state width="1391" height="316" key="GridCell.Tab.0.center" timestamp="1603826505933">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1603511768947">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1603826505933" />
+    <state width="1391" height="316" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448582" />
     <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
-    <state width="1391" height="316" key="GridCell.Tab.0.left" timestamp="1603826505932">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1603511768947">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1603826505932" />
+    <state width="1391" height="316" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448582" />
     <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
-    <state width="1391" height="316" key="GridCell.Tab.0.right" timestamp="1603826505933">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1603511768947">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1603826505933" />
+    <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448583" />
     <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
     <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1603507846095">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1370,11 +1361,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603741185242">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603772848385">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603741185242" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603676841106" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603740505624" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603772848385" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1417,11 +1408,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1603730636407">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup" timestamp="1603769728989">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1603730636407" />
-    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1602970838043" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603769728989" />
     <state x="600" y="294" key="git4idea.ui.GitUnstashDialog" timestamp="1603112264983">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1439,10 +1430,10 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1602705975152" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603503824528" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1603827540725">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup" timestamp="1603675313001">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1603827540725" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1603483282693" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603675313001" />
   </component>
   <component name="XDebuggerManager">

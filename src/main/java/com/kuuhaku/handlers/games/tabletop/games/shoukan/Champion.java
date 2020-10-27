@@ -153,7 +153,7 @@ public class Champion implements Drawable, Cloneable {
 					TextAttribute.SIZE, 11,
 					TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
 			)));
-			Profile.drawStringMultiLineNO(g2d, description, 205, 9, 293);
+			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : description, 205, 9, 293);
 		}
 
 		if (!available) {
@@ -298,7 +298,7 @@ public class Champion implements Drawable, Cloneable {
 				              //%s
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
-				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArenaField
+				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArenaField;
 				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;

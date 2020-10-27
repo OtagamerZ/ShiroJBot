@@ -90,8 +90,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
@@ -253,6 +251,10 @@ public class Helper {
 
     public static int rng(int maxValue, boolean exclusive) {
         return Math.abs(new Random().nextInt(maxValue + (exclusive ? 0 : 1)));
+    }
+
+    public static double rng(double maxValue, boolean exclusive) {
+        return Math.abs(new Random().nextDouble() * maxValue + (exclusive ? 0 : 1));
     }
 
     public static int rng(int maxValue, Random random, boolean exclusive) {
@@ -1135,12 +1137,11 @@ public class Helper {
         boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
 
         if (cbUltimate || chance((2.5 + (channel.getGuild().getMemberCount() * 1.5 / 5000)) * (cardBuff != null ? cardBuff.getMult() : 1))) {
-            KawaiponRarity kr = new EnumeratedDistribution<>(
-                    Arrays.stream(KawaiponRarity.validValues())
-                            .filter(r -> r != KawaiponRarity.ULTIMATE)
-                            .map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
-                            .collect(Collectors.toList())
-            ).sample();
+            KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
+                    .filter(r -> r != KawaiponRarity.ULTIMATE)
+                    .map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
+                    .collect(Collectors.toList())
+            );
 
             List<Card> cards = CardDAO.getCardsByRarity(kr);
             Card c = cards.get(Helper.rng(cards.size(), true));
@@ -1183,22 +1184,20 @@ public class Helper {
         if (anime != null) {
             List<Card> cds = CardDAO.getCardsByAnime(anime);
 
-            kr = new EnumeratedDistribution<>(
-                    cds.stream()
-                            .map(Card::getRarity)
-                            .filter(r -> r != KawaiponRarity.ULTIMATE)
-                            .map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
-                            .collect(Collectors.toList())
-            ).sample();
+            kr = getRandom(cds.stream()
+                    .map(Card::getRarity)
+                    .filter(r -> r != KawaiponRarity.ULTIMATE)
+                    .map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
+                    .collect(Collectors.toList())
+            );
 
             cards = cds.stream().filter(c -> c.getRarity() == kr).collect(Collectors.toList());
         } else {
-            kr = new EnumeratedDistribution<>(
-                    Arrays.stream(KawaiponRarity.validValues())
-                            .filter(r -> r != KawaiponRarity.ULTIMATE)
-                            .map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
-                            .collect(Collectors.toList())
-            ).sample();
+            kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
+                    .filter(r -> r != KawaiponRarity.ULTIMATE)
+                    .map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
+                    .collect(Collectors.toList())
+            );
 
             cards = CardDAO.getCardsByRarity(kr);
         }
@@ -1234,12 +1233,11 @@ public class Helper {
 
     public static void spawnKawaipon(EventChannel channel, TwitchChat chat) {
         if (chance(2.5)) {
-            KawaiponRarity kr = new EnumeratedDistribution<>(
-                    Arrays.stream(KawaiponRarity.validValues())
-                            .filter(r -> r != KawaiponRarity.ULTIMATE)
-                            .map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
-                            .collect(Collectors.toList())
-            ).sample();
+            KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
+                    .filter(r -> r != KawaiponRarity.ULTIMATE)
+                    .map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
+                    .collect(Collectors.toList())
+            );
 
             List<Card> cards = CardDAO.getCardsByRarity(kr);
             Card c = cards.get(Helper.rng(cards.size(), true));
@@ -1480,6 +1478,12 @@ public class Helper {
 
     public static String noCopyPaste(String input) {
         return String.join(ANTICOPY, input.split(""));
+    }
+
+    public static <T> T getRandom(List<Pair<T, Double>> values) {
+        EnumeratedDistribution<T> ed = new EnumeratedDistribution<>(values.stream().sorted(Comparator.comparingDouble(Pair::getValue)).collect(Collectors.toList()));
+
+        return ed.sample();
     }
 
     public static Kawaipon getDailyDeck() {
