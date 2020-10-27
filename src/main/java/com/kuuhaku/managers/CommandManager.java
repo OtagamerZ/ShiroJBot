@@ -301,7 +301,7 @@ public class CommandManager {
 					"valor", new String[]{"value"}, "req_card", "cmd_card-value", INFO, false
 			));
 			put(ShoukanDeckCommand.class, new Argument(
-					"deck", "cmd_shoukan-deck", INFO, false
+					"deck", "req_daily-deck", "cmd_shoukan-deck", INFO, false
 			));
 
 			//MISC
