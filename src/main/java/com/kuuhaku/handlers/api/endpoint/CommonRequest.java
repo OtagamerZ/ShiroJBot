@@ -37,10 +37,10 @@ public class CommonRequest {
         return FileUtils.readFileToByteArray(f);
     }
 
-    @RequestMapping(value = "/card", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    @RequestMapping(value = "/card", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public @ResponseBody
     byte[] serveCardImage(@RequestParam(value = "name") String name, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
-        File f = new File(System.getenv("CARDS_PATH") + (anime == null ? "" : "-new/" + anime), name + ".png");
+        File f = new File(System.getenv("CARDS_PATH") + (anime.isBlank() ? "" : "-new/" + anime), name + ".png");
         if (!f.exists()) throw new FileNotFoundException();
         return FileUtils.readFileToByteArray(f);
     }
