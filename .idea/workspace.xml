@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no gerador aleatório com peso">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no Hitotsu multiplayer" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -815,13 +813,6 @@
       <workItem from="1603674213205" duration="4194000" />
       <workItem from="1603728480662" duration="10550000" />
     </task>
-    <task id="LOCAL-02706" summary="Correção na compra de equipamentos">
-      <created>1603197072334</created>
-      <option name="number" value="02706" />
-      <option name="presentableId" value="LOCAL-02706" />
-      <option name="project" value="LOCAL" />
-      <updated>1603197072334</updated>
-    </task>
     <task id="LOCAL-02707" summary="Correção na síntese de equipamentos">
       <created>1603199924976</created>
       <option name="number" value="02707" />
@@ -1158,7 +1149,14 @@
       <option name="project" value="LOCAL" />
       <updated>1603770119016</updated>
     </task>
-    <option name="localTasksCounter" value="2755" />
+    <task id="LOCAL-02755" summary="Correção no Hitotsu multiplayer">
+      <created>1603770944194</created>
+      <option name="number" value="02755" />
+      <option name="presentableId" value="LOCAL-02755" />
+      <option name="project" value="LOCAL" />
+      <updated>1603770944194</updated>
+    </task>
+    <option name="localTasksCounter" value="2756" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1224,7 +1222,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção pequena ao mencionar a Jibril" />
     <MESSAGE value="Adição de limpeza de reações ao recarregar os botões" />
     <MESSAGE value="Antispam agora notifica pelo log e considera excesso de emotes." />
     <MESSAGE value="Correção no arquivo de localização" />
@@ -1249,7 +1246,8 @@
     <MESSAGE value="Correção no canal de logs" />
     <MESSAGE value="Correção no comando Bind" />
     <MESSAGE value="Correção no gerador aleatório com peso" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no gerador aleatório com peso" />
+    <MESSAGE value="Correção no Hitotsu multiplayer" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no Hitotsu multiplayer" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1375,11 +1373,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603770123141">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603770947112">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603740505624" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603770123141" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603770947112" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
