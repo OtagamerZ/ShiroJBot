@@ -153,7 +153,7 @@ public class Champion implements Drawable, Cloneable {
 					TextAttribute.SIZE, 11,
 					TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
 			)));
-			Profile.drawStringMultiLineNO(g2d, description, 205, 9, 293);
+			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : description, 205, 9, 293);
 		}
 
 		if (!available) {
