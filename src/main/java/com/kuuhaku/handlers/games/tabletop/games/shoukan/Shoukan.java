@@ -629,7 +629,7 @@ public class Shoukan extends Game {
 		Champion ch = (Champion) side.get(index).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath", false)) return;
 		ch.reset();
-		if (ch.getCard().getRarity() == KawaiponRarity.FUSION)
+		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
 			arena.getGraveyard().get(s).add(ch);
 		side.get(index).setTop(null);
 		side.forEach(sd -> {

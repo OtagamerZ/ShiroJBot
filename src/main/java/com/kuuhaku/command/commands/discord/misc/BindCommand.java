@@ -35,47 +35,52 @@ import java.security.NoSuchAlgorithmException;
 
 public class BindCommand extends Command {
 
-	public BindCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
+    public BindCommand(String name, String description, Category category, boolean requiresMM) {
+        super(name, description, category, requiresMM);
+    }
 
-	public BindCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
+    public BindCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+        super(name, aliases, description, category, requiresMM);
+    }
 
-	public BindCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
+    public BindCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+        super(name, usage, description, category, requiresMM);
+    }
 
-	public BindCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+    public BindCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+        super(name, aliases, usage, description, category, requiresMM);
+    }
 
-	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+    @Override
+    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+        Account acc = AccountDAO.getAccount(author.getId());
 
-		if (!acc.getTwitchId().isBlank()) {
-			channel.sendMessage("❌ | Você já vinculou esta conta a um perfil da Twitch.").queue();
-			return;
-		}
+        if (!acc.getTwitchId().isBlank()) {
+            channel.sendMessage("❌ | Você já vinculou esta conta a um perfil da Twitch.").queue();
+            return;
+        }
 
-		try {
-			String code = Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(author.getId().getBytes(StandardCharsets.UTF_8)));
+        try {
+            String code = Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(author.getId().getBytes(StandardCharsets.UTF_8)));
+            PendingBinding pb = PendingBindingDAO.getPendingBinding(code);
 
-			if (PendingBindingDAO.getPendingBinding(code) != null) {
-				channel.sendMessage("❌ | Você já requisitou uma vinculação a esta conta, verifique suas mensagens privadas.").queue();
-				return;
-			}
+            if (pb != null) {
+                channel.sendMessage("Código e instruções reenviados nas mensagens privadas.").queue();
+            } else {
+                channel.sendMessage("Código e instruções enviados nas mensagens privadas.").queue();
+            }
 
-			PendingBinding pb = new PendingBinding(code, author.getId());
-			PendingBindingDAO.savePendingBinding(pb);
-
-			author.openPrivateChannel().queue(c -> {
-				c.sendMessage("Use este código no comando `s!vincular` no chat do canal `kuuhaku_otgmz` para vincular esta conta ao seu perfil da Twitch:\n\n`" + code + "`").queue(null, Helper::doNothing);
-			}, Helper::doNothing);
-		} catch (NoSuchAlgorithmException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-		}
-	}
+            author.openPrivateChannel().queue(c ->
+                            c.sendMessage("Use este código no comando `s!vincular` no chat do canal `kuuhaku_otgmz` para vincular esta conta ao seu perfil da Twitch:\n\n`" + (pb == null ? code : pb.getHash()) + "`")
+                                    .queue(s -> {
+                                        if (pb == null) {
+                                            PendingBinding p = new PendingBinding(code, author.getId());
+                                            PendingBindingDAO.savePendingBinding(p);
+                                        }
+                                    }, err -> channel.sendMessage("❌ | Seu canal de mensagens privadas está bloqueado para mim.").queue()),
+                    Helper::doNothing);
+        } catch (NoSuchAlgorithmException e) {
+            Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+        }
+    }
 }
