@@ -209,6 +209,9 @@ public class BuyCardCommand extends Command {
 				if (Collections.frequency(kp.getEquipments(), em.getCard()) == 3) {
 					channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
 					return;
+				} else if (kp.getEquipments().stream().filter(e -> e.getTier() == 4).count() == 1 && em.getCard().getTier() == 4) {
+					channel.sendMessage("❌ | Parece que você já possui 1 equipamento tier 4!").queue();
+					return;
 				}
 
 				kp.addEquipment(em.getCard());
