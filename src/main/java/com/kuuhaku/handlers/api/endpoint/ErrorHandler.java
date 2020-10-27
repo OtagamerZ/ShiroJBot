@@ -24,6 +24,7 @@ import com.kuuhaku.utils.Helper;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ import java.io.IOException;
 @RestController
 @ControllerAdvice
 public class ErrorHandler implements ErrorController {
-	@RequestMapping("/error")
+	@RequestMapping(value = "/error", produces = MediaType.IMAGE_JPEG_VALUE)
 	public byte[] handleError(HttpServletResponse http) throws IOException {
 		return Helper.getBytes(ImageIO.read(Helper.getImage("https://http.cat/" + http.getStatus())));
 	}
