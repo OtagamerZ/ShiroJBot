@@ -129,8 +129,8 @@ public class HitotsuCommand extends Command {
 			add(author);
 			addAll(message.getMentionedUsers());
 		}};
-		Set<User> accepted = new HashSet<>() {{
-			add(author);
+		Set<String> accepted = new HashSet<>() {{
+			add(author.getId());
 		}};
 
 		Game t = new Hitotsu(Main.getInfo().getAPI(), (TextChannel) channel, bet, players.toArray(User[]::new));
@@ -145,8 +145,6 @@ public class HitotsuCommand extends Command {
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(msg)
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-					if (!ShiroInfo.getHashes().remove(hash)) return;
-					Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					if (players.contains(mb.getUser())) {
 						if (Main.getInfo().gameInProgress(mb.getId())) {
 							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
@@ -156,12 +154,14 @@ public class HitotsuCommand extends Command {
 							return;
 						}
 
-						if (!accepted.contains(mb.getUser())) {
+						if (!accepted.contains(mb.getId())) {
 							channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
-							accepted.add(mb.getUser());
+							accepted.add(mb.getId());
 						}
 
 						if (accepted.size() == players.size()) {
+							if (!ShiroInfo.getHashes().remove(hash)) return;
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 							//Main.getInfo().getGames().put(id, t);
 							s.delete().queue(null, Helper::doNothing);
 							t.start();
