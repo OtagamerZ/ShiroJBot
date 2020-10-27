@@ -103,10 +103,10 @@ public class SynthesizeCardCommand extends Command {
 
         List<Equipment> equips = CardDAO.getEquipments();
         List<Equipment> chosenTier = Helper.getRandom(List.of(
-                Pair.create(tier1, equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList())),
-                Pair.create(tier2, equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList())),
-                Pair.create(tier3, equips.stream().filter(eq -> eq.getTier() == 3).collect(Collectors.toList())),
-                Pair.create(tier4, equips.stream().filter(eq -> eq.getTier() == 4).collect(Collectors.toList()))
+                Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList()), tier1),
+                Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList()), tier2),
+                Pair.create(equips.stream().filter(eq -> eq.getTier() == 3).collect(Collectors.toList()), tier3),
+                Pair.create(equips.stream().filter(eq -> eq.getTier() == 4).collect(Collectors.toList()), tier4)
         ));
 
         Equipment e = chosenTier.get(Helper.rng(chosenTier.size(), true));

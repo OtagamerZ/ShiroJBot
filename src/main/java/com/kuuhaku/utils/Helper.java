@@ -59,6 +59,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
+import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
@@ -1101,7 +1102,7 @@ public class Helper {
         if (cbUltimate || chance((2.5 + (channel.getGuild().getMemberCount() * 1.5 / 5000)) * (cardBuff != null ? cardBuff.getMult() : 1))) {
             KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
                     .filter(r -> r != KawaiponRarity.ULTIMATE)
-                    .map(r -> Pair.create((6 - r.getIndex()) / 12d, r))
+                    .map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
                     .collect(Collectors.toList())
             );
 
@@ -1149,7 +1150,7 @@ public class Helper {
             kr = getRandom(cds.stream()
                     .map(Card::getRarity)
                     .filter(r -> r != KawaiponRarity.ULTIMATE)
-                    .map(r -> Pair.create((7 - r.getIndex()) / 12d, r))
+                    .map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
                     .collect(Collectors.toList())
             );
 
@@ -1157,7 +1158,7 @@ public class Helper {
         } else {
             kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
                     .filter(r -> r != KawaiponRarity.ULTIMATE)
-                    .map(r -> Pair.create((7 - r.getIndex()) / 12d, r))
+                    .map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
                     .collect(Collectors.toList())
             );
 
@@ -1197,7 +1198,7 @@ public class Helper {
         if (chance(2.5)) {
             KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
                     .filter(r -> r != KawaiponRarity.ULTIMATE)
-                    .map(r -> Pair.create((7 - r.getIndex()) / 12d, r))
+                    .map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
                     .collect(Collectors.toList())
             );
 
@@ -1442,19 +1443,9 @@ public class Helper {
         return String.join(ANTICOPY, input.split(""));
     }
 
-    public static <T> T getRandom(List<Pair<Double, T>> values) {
-        double total = 0;
-        Map<Double, T> map = new TreeMap<>(Comparator.comparingDouble(Double::doubleValue));
-        for (Pair<Double, T> value : values) {
-            map.put(value.getKey() + total, value.getValue());
-            total += value.getKey();
-        }
+    public static <T> T getRandom(List<Pair<T, Double>> values) {
+        EnumeratedDistribution<T> ed = new EnumeratedDistribution<>(values.stream().sorted(Comparator.comparingDouble(Pair::getValue)).collect(Collectors.toList()));
 
-        double finalTotal = total;
-        return map.entrySet().stream()
-                .filter(e -> e.getKey() <= rng(finalTotal, true))
-                .max(Comparator.comparingDouble(Map.Entry::getKey))
-                .orElseThrow()
-                .getValue();
+        return ed.sample();
     }
 }
