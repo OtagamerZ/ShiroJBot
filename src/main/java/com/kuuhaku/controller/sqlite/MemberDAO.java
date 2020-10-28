@@ -79,6 +79,7 @@ public class MemberDAO {
 	}
 
 	public static void addMemberToDB(net.dv8tion.jda.api.entities.Member u) {
+		if (u == null) return;
 		EntityManager em = Manager.getEntityManager();
 
 		Member m = new Member();
