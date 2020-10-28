@@ -129,7 +129,7 @@ public class SynthesizeCardCommand extends Command {
                             Main.getInfo().getConfirmationPending().invalidate(author.getId());
                             String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
-                            if (kp.getEquipments().stream().filter(e::equals).count() == 3 || kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 || kp.getEquipments().size() == 18) {
+                            if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) || kp.getEquipments().size() == 18) {
                                 int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
 
                                 Account acc = AccountDAO.getAccount(author.getId());
