@@ -1486,7 +1486,7 @@ public class Helper {
         long seed = Long.parseLong("" + today.getYear() + today.getMonthValue() + today.getDayOfMonth());
         Kawaipon kp = new Kawaipon();
 
-        kp.setChampions(getRandomN(CardDAO.getAllChampions(), 36, 3, seed));
+        kp.setChampions(getRandomN(CardDAO.getAllChampions(), 30, 3, seed));
         kp.setEquipments(getRandomN(CardDAO.getAllEquipments(), 6, 3, seed));
 
         return kp;
