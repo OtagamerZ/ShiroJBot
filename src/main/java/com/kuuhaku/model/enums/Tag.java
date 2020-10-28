@@ -90,7 +90,10 @@ public enum Tag {
 			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards(), 75, 100)),
 
 	CARTAS_CROMADAS_100(TagIcons.FOIL100, "Usuário que completou 100% da coleção de Kawaipons cromados.",
-			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards() == 100);
+			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards() == 100),
+
+	EXCEED_VITORIOSO(TagIcons.EXCEED_CHAMPION, "Seu Exceed foi vitorioso neste mês.",
+			(user, member) -> ExceedDAO.hasExceed(user.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(user.getId())));
 
 	private final TagIcons emote;
 	private final String description;

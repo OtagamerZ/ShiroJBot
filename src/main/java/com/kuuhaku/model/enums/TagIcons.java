@@ -43,7 +43,8 @@ public enum TagIcons {
 	FOIL50,
 	FOIL75,
 	FOIL100,
-	LEVEL;
+	LEVEL,
+	EXCEED_CHAMPION;
 
 	public String getTag(int lvl) {
 		return switch (this) {
@@ -66,6 +67,7 @@ public enum TagIcons {
 			case FOIL75 -> "<:foil_75:747511886202798192> ";
 			case FOIL100 -> "<:foil_100:747511886307655770> ";
 			case LEVEL -> getLevelEmote(lvl).getAsMention() + " ";
+			case EXCEED_CHAMPION -> "<:exceed_champion:755126333482336326> ";
 		};
 	}
 
@@ -90,28 +92,29 @@ public enum TagIcons {
 			case FOIL75 -> "747511886202798192";
 			case FOIL100 -> "74751188630765577";
 			case LEVEL -> getLevelEmote(lvl).getId();
+			case EXCEED_CHAMPION -> "755126333482336326";
 		};
 	}
 
 	public static String getExceed(ExceedEnum t) {
 		return switch (t) {
-			case IMANITY -> "<:imanity:697879725690847324> ";
-			case SEIREN -> "<:seiren:697879725640515685> ";
-			case WEREBEAST -> "<:werebeast:697879725934379178> ";
-			case ELF -> "<:elf:697879725661749300> ";
-			case EXMACHINA -> "<:exmachina:697879725988904971> ";
-			case FLUGEL -> "<:flugel:697879725967933440> ";
+			case IMANITY -> "<:imanity:771059751018168410> "; //Old: 697879725690847324
+			case SEIREN -> "<:seiren:771059750388760596> "; //Old: 697879725640515685
+			case WEREBEAST -> "<:werebeast:771059750293078029> "; //Old: 697879725934379178
+			case ELF -> "<:elf:771059750888144916> "; //Old: 697879725661749300
+			case EXMACHINA -> "<:exmachina:771059750631768106> "; //Old: 697879725988904971
+			case FLUGEL -> "<:flugel:771059750074318919> "; //Old: 697879725967933440
 		};
 	}
 
 	public static String getExceedId(ExceedEnum t) {
 		return switch (t) {
-			case IMANITY -> "697879725690847324";
-			case SEIREN -> "697879725640515685";
-			case WEREBEAST -> "697879725934379178";
-			case ELF -> "697879725661749300";
-			case EXMACHINA -> "697879725988904971";
-			case FLUGEL -> "697879725967933440";
+			case IMANITY -> "771059751018168410";
+			case SEIREN -> "771059750388760596";
+			case WEREBEAST -> "771059750293078029";
+			case ELF -> "771059750888144916";
+			case EXMACHINA -> "771059750631768106";
+			case FLUGEL -> "771059750074318919";
 		};
 	}
 
