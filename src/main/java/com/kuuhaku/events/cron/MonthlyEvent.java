@@ -71,6 +71,10 @@ public class MonthlyEvent implements Job {
 				}
 		);
 
+		ExceedDAO.getExceedMembers().forEach(em -> {
+			if (Main.getInfo().getUserByID(em.getId()) == null) ExceedDAO.removeMember(em);
+		});
+
 		ExceedDAO.unblock();
 
 		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
