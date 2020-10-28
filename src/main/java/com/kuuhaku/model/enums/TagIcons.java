@@ -99,22 +99,22 @@ public enum TagIcons {
 	public static String getExceed(ExceedEnum t) {
 		return switch (t) {
 			case IMANITY -> "<:imanity:771059751018168410> "; //Old: 697879725690847324
-			case SEIREN -> "<:seiren:771059750388760596> "; //Old: 697879725640515685
-			case WEREBEAST -> "<:werebeast:771059750293078029> "; //Old: 697879725934379178
-			case ELF -> "<:elf:771059750888144916> "; //Old: 697879725661749300
-			case EXMACHINA -> "<:exmachina:771059750631768106> "; //Old: 697879725988904971
-			case FLUGEL -> "<:flugel:771059750074318919> "; //Old: 697879725967933440
+			case SEIREN -> "<:seiren:771059750631768106> "; //Old: 697879725640515685
+			case WEREBEAST -> "<:werebeast:771059750888144916> "; //Old: 697879725934379178
+			case ELF -> "<:elf:771059750293078029> "; //Old: 697879725661749300
+			case EXMACHINA -> "<:exmachina:771059750074318919> "; //Old: 697879725988904971
+			case FLUGEL -> "<:flugel:771059750388760596> "; //Old: 697879725967933440
 		};
 	}
 
 	public static String getExceedId(ExceedEnum t) {
 		return switch (t) {
 			case IMANITY -> "771059751018168410";
-			case SEIREN -> "771059750388760596";
-			case WEREBEAST -> "771059750293078029";
-			case ELF -> "771059750888144916";
-			case EXMACHINA -> "771059750631768106";
-			case FLUGEL -> "771059750074318919";
+			case SEIREN -> "771059750631768106";
+			case WEREBEAST -> "771059750888144916";
+			case ELF -> "771059750293078029";
+			case EXMACHINA -> "771059750074318919";
+			case FLUGEL -> "771059750388760596";
 		};
 	}
 
