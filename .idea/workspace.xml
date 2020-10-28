@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedRankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedRankCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -817,14 +817,7 @@
       <workItem from="1603887086737" duration="4180000" />
       <workItem from="1603892590317" duration="1265000" />
       <workItem from="1603895955950" duration="1120000" />
-      <workItem from="1603901063924" duration="2664000" />
-    </task>
-    <task id="LOCAL-02724" summary="Correções no Shoukan">
-      <created>1603500800181</created>
-      <option name="number" value="02724" />
-      <option name="presentableId" value="LOCAL-02724" />
-      <option name="project" value="LOCAL" />
-      <updated>1603500800181</updated>
+      <workItem from="1603901063924" duration="3144000" />
     </task>
     <task id="LOCAL-02725" summary="Correções no Shoukan">
       <created>1603501147917</created>
@@ -1162,7 +1155,14 @@
       <option name="project" value="LOCAL" />
       <updated>1603906209512</updated>
     </task>
-    <option name="localTasksCounter" value="2773" />
+    <task id="LOCAL-02773" summary="Correção dos emblemas que estavam invertidos">
+      <created>1603907715471</created>
+      <option name="number" value="02773" />
+      <option name="presentableId" value="LOCAL-02773" />
+      <option name="project" value="LOCAL" />
+      <updated>1603907715471</updated>
+    </task>
+    <option name="localTasksCounter" value="2774" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1313,10 +1313,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602708322237" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1603906206853">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1603907712769">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1603906206853" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1603907712769" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1603112314104">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1379,10 +1379,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603906213330">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603907719366">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603906213330" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603907719366" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603772848385" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />

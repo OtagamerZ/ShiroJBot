@@ -91,7 +91,7 @@ public class ExceedRankCommand extends Command {
 							.setChartFontColor(Color.WHITE)
 							.setHasAnnotations(true)
 							.setLegendPosition(Styler.LegendPosition.InsideNE)
-							.setSeriesColors(colors.toArray(Color[]::new))
+							.setSeriesColors(colors.stream().map(Color::darker).toArray(Color[]::new))
 							.setPlotBackgroundColor(Color.decode("#202225"))
 							.setChartBackgroundColor(Color.decode("#101114"))
 							.setLegendBackgroundColor(Color.decode("#101114"));
@@ -132,7 +132,7 @@ public class ExceedRankCommand extends Command {
 							.setAxisTickLabelsColor(Color.WHITE)
 							.setChartFontColor(Color.WHITE)
 							.setLegendPosition(Styler.LegendPosition.InsideNE)
-							.setSeriesColors(colors.toArray(Color[]::new))
+							.setSeriesColors(colors.stream().map(Color::darker).toArray(Color[]::new))
 							.setPlotBackgroundColor(Color.decode("#202225"))
 							.setChartBackgroundColor(Color.decode("#101114"))
 							.setLegendBackgroundColor(Color.decode("#101114"))
