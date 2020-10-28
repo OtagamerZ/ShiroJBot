@@ -113,6 +113,7 @@ public class BroadcastCommand extends Command {
 				wmb.setUsername("Stephanie (Notificações Shiro)");
 				wmb.setAvatarUrl("https://i.imgur.com/OmiNNMF.png"); //Halloween
 				//wmb.setAvatarUrl("https://i.imgur.com/mgA11Rx.png"); //Normal
+				wmb.setContent(msg);
 				WebhookCluster cluster = new WebhookCluster(clients);
 				cluster.broadcast(wmb.build());
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
