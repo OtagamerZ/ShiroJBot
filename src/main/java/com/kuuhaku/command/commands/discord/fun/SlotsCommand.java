@@ -89,6 +89,7 @@ public class SlotsCommand extends Command {
 			return;
 		}
 
+		long initialBet = bet.get();
 		boolean highbet = bet.get() >= 500;
 		Slots slt = SlotsDAO.getSlots();
 		acc.removeCredit(bet.get(), this.getClass());
@@ -231,7 +232,7 @@ public class SlotsCommand extends Command {
 			facc.addCredit(bet.get(), this.getClass());
 			AccountDAO.saveAccount(facc);
 			Slots slts = SlotsDAO.getSlots();
-			slts.addToPot(bet.get());
+			slts.addToPot(initialBet);
 			if (jackpot >= 3) slts.jackpot();
 			SlotsDAO.saveSlots(slts);
 		};
