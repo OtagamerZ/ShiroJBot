@@ -69,6 +69,16 @@ public class ExceedDAO {
 		}
 	}
 
+	public static void removeMember(ExceedMember ex) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.remove(ex);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	public static ExceedState getExceedState(String exceed) {
 		if (exceed.isBlank()) return new ExceedState(-1, "", 0);
 
