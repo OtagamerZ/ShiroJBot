@@ -65,7 +65,7 @@ public class ShoukanDeckCommand extends Command {
 
 					EmbedBuilder eb = new ColorlessEmbedBuilder()
 							.setTitle(":date: | Deck de Diário")
-							.setDescription("O deck diário será o mesmo para todos os jogadores até amanhã, e permite que usuários que não possuam 36 cartas Senshi joguem. Ganhar usando ele premiará seu Exceed com 5x mais pontos de influência (PDI).")
+							.setDescription("O deck diário será o mesmo para todos os jogadores até amanhã, e permite que usuários que não possuam 30 cartas Senshi joguem. Ganhar usando ele premiará seu Exceed com 5x mais pontos de influência (PDI).")
 							.setImage("attachment://deck.jpg");
 
 					m.delete().queue();
