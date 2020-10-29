@@ -14,10 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/FieldMarketDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/FieldMarket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -817,14 +814,7 @@
       <workItem from="1603987309143" duration="14793000" />
       <workItem from="1604003625490" duration="73000" />
       <workItem from="1604003771178" duration="177000" />
-      <workItem from="1604004435235" duration="323000" />
-    </task>
-    <task id="LOCAL-02741" summary="Adição de mensagem de erro no comando Mute">
-      <created>1603735157916</created>
-      <option name="number" value="02741" />
-      <option name="presentableId" value="LOCAL-02741" />
-      <option name="project" value="LOCAL" />
-      <updated>1603735157916</updated>
+      <workItem from="1604004435235" duration="647000" />
     </task>
     <task id="LOCAL-02742" summary="Adição de mensagem de erro no comando Mute">
       <created>1603735328070</created>
@@ -1162,7 +1152,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604003672402</updated>
     </task>
-    <option name="localTasksCounter" value="2790" />
+    <task id="LOCAL-02790" summary="Adição da possibilidade de vender cartas de campo no mercado global">
+      <created>1604005030352</created>
+      <option name="number" value="02790" />
+      <option name="presentableId" value="LOCAL-02790" />
+      <option name="project" value="LOCAL" />
+      <updated>1604005030352</updated>
+    </task>
+    <option name="localTasksCounter" value="2791" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1228,7 +1225,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correções" />
     <MESSAGE value="Nova condição de drop;&#10;Aumentado valor ganho no drop de créditos;&#10;Reduzida chance e penalidade dos drops coringa;" />
     <MESSAGE value="Correção no canal de logs" />
     <MESSAGE value="Correção no comando Bind" />
@@ -1253,7 +1249,8 @@
     <MESSAGE value="Cartas Senshi agora mostram o ícone da raça" />
     <MESSAGE value="Agora é possível sintetizar cartas de campo usando 3 cromadas (raridade é irrelevante)" />
     <MESSAGE value="Adição de ícone de mortos-vivos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de ícone de mortos-vivos" />
+    <MESSAGE value="Adição da possibilidade de vender cartas de campo no mercado global" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição da possibilidade de vender cartas de campo no mercado global" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
