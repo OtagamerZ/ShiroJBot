@@ -19,7 +19,6 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArenaField;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
@@ -38,7 +37,8 @@ import java.util.Objects;
 public class Arena {
 	private final Map<Side, List<SlotColumn<Drawable, Drawable>>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
-	private ArenaField field = ArenaField.DEFAULT;
+	private final LinkedList<Drawable> banished;
+	private Field field = null;
 
 	public Arena() {
 		this.slots = Map.of(
@@ -61,6 +61,7 @@ public class Arena {
 				Side.TOP, new LinkedList<>(),
 				Side.BOTTOM, new LinkedList<>()
 		);
+		this.banished = new LinkedList<>();
 	}
 
 	public Map<Side, List<SlotColumn<Drawable, Drawable>>> getSlots() {
@@ -71,18 +72,22 @@ public class Arena {
 		return graveyard;
 	}
 
-	public ArenaField getField() {
+	public LinkedList<Drawable> getBanished() {
+		return banished;
+	}
+
+	public Field getField() {
 		return field;
 	}
 
-	public void setField(ArenaField field) {
+	public void setField(Field field) {
 		this.field = field;
 	}
 
 	public BufferedImage render(Map<Side, Hand> hands) {
 		try {
 			BufferedImage back = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/backdrop.jpg")));
-			BufferedImage arena = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/arenas/" + field.name().toLowerCase() + ".png")));
+			BufferedImage arena = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/arenas/" + (field == null ? "default" : field.getField().name().toLowerCase()) + ".png")));
 			BufferedImage frames = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/frames.png")));
 
 			Graphics2D g2d = back.createGraphics();
@@ -144,6 +149,15 @@ public class Arena {
 					g2d.drawString("MP: " + h.getMana(), key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + h.getMana()), key == Side.TOP ? 178 : 1735);
 				}
 			});
+
+			if (field != null) {
+				g2d.drawImage(field.drawCard(field.getAcc(), false), 1889, 700, null);
+			}
+
+			if (banished.peekLast() != null) {
+				Drawable d = banished.peekLast();
+				g2d.drawImage(d.drawCard(d.getAcc(), false), 137, 700, null);
+			}
 
 			g2d.drawImage(frames, 0, 0, null);
 			g2d.dispose();

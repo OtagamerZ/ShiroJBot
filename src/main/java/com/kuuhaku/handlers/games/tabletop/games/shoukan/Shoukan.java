@@ -397,7 +397,7 @@ public class Shoukan extends Game {
 					}
 					t.addLinkedTo((Equipment) tp);
 					((Equipment) tp).setLinkedTo(Pair.of(toEquip, t.getCard()));
-				} else {
+				} else if (d instanceof Champion) {
 					if (args.length < 3) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue();
 						return;
@@ -437,7 +437,11 @@ public class Shoukan extends Game {
 					slot.setTop(tp);
 					if (tp.hasEffect() && !tp.isFlipped())
 						tp.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(tp, dest, null, -1), channel));
+				} else {
+					Field f = (Field) d.copy();
+					arena.setField(f);
 				}
+
 				d.setAvailable(false);
 				if (d instanceof Champion)
 					h.removeMana(((Champion) d).getMana());
@@ -546,7 +550,11 @@ public class Shoukan extends Game {
 
 					Hand enemy = getHandById(getBoard().getPlayers().get(1).getId());
 
-					int yPower = c.getAtk() + c.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum();
+					int yPower = Math.round(
+							c.getAtk() +
+							c.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
+							(arena.getField() == null ? 1 : arena.getField().getField().getModifiers().getOrDefault(c.getRace(), 1f))
+					);
 
 					enemy.removeHp(yPower);
 					c.setAvailable(false);
@@ -582,7 +590,11 @@ public class Shoukan extends Game {
 				if (his.hasEffect())
 					his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEFEND, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
 
-				int yPower = yours.getEAtk() + yours.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum();
+				int yPower = Math.round(
+						yours.getEAtk() +
+						yours.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
+						(arena.getField() == null ? 1 : arena.getField().getField().getModifiers().getOrDefault(yours.getRace(), 1f))
+				);
 
 				int hPower;
 				if (his.isDefending() || his.isFlipped()) {
@@ -592,9 +604,17 @@ public class Shoukan extends Game {
 						if (his.hasEffect())
 							his.getEffect(new EffectParameters(phase, EffectTrigger.ON_FLIP, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
 					}
-					hPower = his.getEDef() + his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum();
+					hPower = Math.round(
+							his.getEDef() +
+							his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum() *
+							(arena.getField() == null ? 1 : arena.getField().getField().getModifiers().getOrDefault(his.getRace(), 1f))
+					);
 				} else
-					hPower = his.getEAtk() + his.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum();
+					hPower = Math.round(
+							his.getEAtk() +
+							his.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
+							(arena.getField() == null ? 1 : arena.getField().getField().getModifiers().getOrDefault(his.getRace(), 1f))
+					);
 
 				if (yPower > hPower) {
 					yours.setAvailable(false);

@@ -20,6 +20,7 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Card;
@@ -157,6 +158,30 @@ public class CardDAO {
 		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.rarity <> :rarity", Champion.class);
 		q.setParameter("rarity", KawaiponRarity.FUSION);
 		List<Champion> c = (List<Champion>) q.getResultList();
+
+		em.close();
+
+		return c;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getAllFieldNames() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT f.card.id FROM Field f", String.class);
+		List<String> c = (List<String>) q.getResultList();
+
+		em.close();
+
+		return c;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Field> getAllFields() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT f FROM Field f", Field.class);
+		List<Field> c = (List<Field>) q.getResultList();
 
 		em.close();
 
@@ -335,14 +360,31 @@ public class CardDAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<Equipment> getEquipments() {
+	public static Field getField(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT e FROM Equipment e", Equipment.class);
+		Query q = em.createQuery("SELECT f FROM Field f WHERE card = :card", Field.class);
+		q.setParameter("card", c);
 
 		try {
-			return (List<Equipment>) q.getResultList();
+			return (Field) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Field getField(String name) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT f FROM Field f WHERE card.id = UPPER(:card)", Field.class);
+		q.setParameter("card", name);
+
+		try {
+			return (Field) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
 		} finally {
 			em.close();
 		}

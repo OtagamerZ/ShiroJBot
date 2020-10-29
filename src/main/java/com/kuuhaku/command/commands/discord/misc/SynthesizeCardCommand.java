@@ -101,7 +101,7 @@ public class SynthesizeCardCommand extends Command {
         double tier3 = Math.max(0, 0.65 - tier1);
         double tier4 = tier3 * 0.1 / 0.65;
 
-        List<Equipment> equips = CardDAO.getEquipments();
+        List<Equipment> equips = CardDAO.getAllEquipments();
         List<Equipment> chosenTier = Helper.getRandom(List.of(
                 Pair.create(equips.stream().filter(eq -> eq.getTier() == 1).collect(Collectors.toList()), tier1),
                 Pair.create(equips.stream().filter(eq -> eq.getTier() == 2).collect(Collectors.toList()), tier2),
