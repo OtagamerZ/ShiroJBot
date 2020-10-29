@@ -1481,14 +1481,18 @@ public class Helper {
         return ed.sample();
     }
 
-    public static Kawaipon getDailyDeck() {
-        ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
-        long seed = Long.parseLong("" + today.getYear() + today.getMonthValue() + today.getDayOfMonth());
-        Kawaipon kp = new Kawaipon();
+	public static Kawaipon getDailyDeck() {
+		ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
+		long seed = Long.parseLong("" + today.getYear() + today.getMonthValue() + today.getDayOfMonth());
+		Kawaipon kp = new Kawaipon();
 
-        kp.setChampions(getRandomN(CardDAO.getAllChampions(), 30, 3, seed));
-        kp.setEquipments(getRandomN(CardDAO.getAllEquipments(), 6, 3, seed));
+		kp.setChampions(getRandomN(CardDAO.getAllChampions(), 30, 3, seed));
+		kp.setEquipments(getRandomN(CardDAO.getAllEquipments(), 6, 3, seed));
 
-        return kp;
-    }
+		return kp;
+	}
+
+	public static String toPercent(double value) {
+		return (int) (value * 100) + "%";
+	}
 }
