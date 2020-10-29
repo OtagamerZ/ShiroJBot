@@ -71,6 +71,7 @@ public class Champion implements Drawable, Cloneable {
 
 	private transient boolean flipped = false;
 	private transient boolean available = true;
+	private transient Account acc = null;
 	private transient boolean defending = false;
 	private transient List<Equipment> linkedTo = new ArrayList<>();
 	private transient Bonus bonus = new Bonus();
@@ -197,6 +198,16 @@ public class Champion implements Drawable, Cloneable {
 	@Override
 	public void setAvailable(boolean available) {
 		this.available = available;
+	}
+
+	@Override
+	public Account getAcc() {
+		return acc;
+	}
+
+	@Override
+	public void setAcc(Account acc) {
+		this.acc = acc;
 	}
 
 	public void setLinkedTo(List<Equipment> linkedTo) {

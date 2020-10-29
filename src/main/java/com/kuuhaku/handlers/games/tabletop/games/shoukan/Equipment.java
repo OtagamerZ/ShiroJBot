@@ -54,6 +54,7 @@ public class Equipment implements Drawable, Cloneable {
 
 	private transient boolean flipped = false;
 	private transient boolean available = true;
+	private transient Account acc = null;
 	private transient Pair<Integer, Card> linkedTo = null;
 
 	@Override
@@ -160,6 +161,16 @@ public class Equipment implements Drawable, Cloneable {
 	@Override
 	public void setAvailable(boolean available) {
 		this.available = available;
+	}
+
+	@Override
+	public Account getAcc() {
+		return acc;
+	}
+
+	@Override
+	public void setAcc(Account acc) {
+		this.acc = acc;
 	}
 
 	public Pair<Integer, Card> getLinkedTo() {
