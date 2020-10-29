@@ -20,6 +20,7 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.persistent.Account;
 import org.apache.commons.lang3.StringUtils;
 
@@ -38,7 +39,7 @@ public class ShoukanDeck {
 		this.acc = acc;
 	}
 
-	public BufferedImage view(List<Champion> champs, List<Equipment> equips, List<Equipment> fields) throws IOException, InterruptedException {
+	public BufferedImage view(List<Champion> champs, List<Equipment> equips, List<Field> fields) throws IOException, InterruptedException {
 		champs.sort(Comparator
 				.comparing(Champion::getMana).reversed()
 				.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
