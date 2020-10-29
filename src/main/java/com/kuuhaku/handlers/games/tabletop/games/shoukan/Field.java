@@ -57,7 +57,7 @@ public class Field implements Drawable, Cloneable {
 		} else {
 			g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
 
-			g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);
+			g2d.drawImage(acc.getFrame().getFrontArena(), 0, 0, null);
 			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
 			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
@@ -76,7 +76,7 @@ public class Field implements Drawable, Cloneable {
 			int i = 0;
 			for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON}) {
 				g2d.setColor(colors[i]);
-				Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 86 + (28 * i), 45, g2d);
+				Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 45, 86 + (28 * i), g2d);
 				i++;
 			}
 		}
@@ -96,7 +96,7 @@ public class Field implements Drawable, Cloneable {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
 
-		g2d.drawImage(FrameColor.PINK.getFrontEquipment(), 0, 0, null);
+		g2d.drawImage(FrameColor.PINK.getFrontArena(), 0, 0, null);
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
 		Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
@@ -115,7 +115,7 @@ public class Field implements Drawable, Cloneable {
 		int i = 0;
 		for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON}) {
 			g2d.setColor(colors[i]);
-			Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 86 + (28 * i), 45, g2d);
+			Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 45, 86 + (28 * i), g2d);
 			i++;
 		}
 
