@@ -110,12 +110,13 @@ public class Field implements Drawable, Cloneable {
 				Color.cyan,
 				Color.decode("#993500"),
 				Color.white,
-				Color.red
+				Color.red,
+				Color.magenta
 		};
 		int i = 0;
-		for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON}) {
+		for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
 			g2d.setColor(colors[i]);
-			Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 45, 86 + (28 * i), g2d);
+			Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 45, 59 + (26 * i), g2d);
 			i++;
 		}
 
