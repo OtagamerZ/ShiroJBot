@@ -13,19 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_blue.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_blue.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_cyan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_cyan.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_green.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_green.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_grey.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_grey.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_pink.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_pink.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_purple.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_purple.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_red.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_red.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_yellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_yellow.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_arena.xcf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_arena.xcf" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -171,19 +159,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -834,14 +809,7 @@
       <workItem from="1603973596485" duration="21000" />
       <workItem from="1603973835939" duration="385000" />
       <workItem from="1603975546944" duration="3119000" />
-      <workItem from="1603987309143" duration="14520000" />
-    </task>
-    <task id="LOCAL-02739" summary="Atualização da funções do Shoukan para compatibilidade com novo efeito">
-      <created>1603733162207</created>
-      <option name="number" value="02739" />
-      <option name="presentableId" value="LOCAL-02739" />
-      <option name="project" value="LOCAL" />
-      <updated>1603733162207</updated>
+      <workItem from="1603987309143" duration="14793000" />
     </task>
     <task id="LOCAL-02740" summary="Adição de tier 4 para equipamentos">
       <created>1603733777989</created>
@@ -1179,7 +1147,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604002313036</updated>
     </task>
-    <option name="localTasksCounter" value="2788" />
+    <task id="LOCAL-02788" summary="Adição de ícone de mortos-vivos">
+      <created>1604003327817</created>
+      <option name="number" value="02788" />
+      <option name="presentableId" value="LOCAL-02788" />
+      <option name="project" value="LOCAL" />
+      <updated>1604003327817</updated>
+    </task>
+    <option name="localTasksCounter" value="2789" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1245,7 +1220,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de mensagem de erro no comando Mute" />
     <MESSAGE value="Correções" />
     <MESSAGE value="Nova condição de drop;&#10;Aumentado valor ganho no drop de créditos;&#10;Reduzida chance e penalidade dos drops coringa;" />
     <MESSAGE value="Correção no canal de logs" />
@@ -1270,7 +1244,8 @@
     <MESSAGE value="Adição de cartas de campo (ainda não são coletáveis)" />
     <MESSAGE value="Cartas Senshi agora mostram o ícone da raça" />
     <MESSAGE value="Agora é possível sintetizar cartas de campo usando 3 cromadas (raridade é irrelevante)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Agora é possível sintetizar cartas de campo usando 3 cromadas (raridade é irrelevante)" />
+    <MESSAGE value="Adição de ícone de mortos-vivos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de ícone de mortos-vivos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1326,10 +1301,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602708322237" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1604002309872">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1604003324926">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1604002309872" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1604003324926" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1603112314104">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1392,10 +1367,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604002314400">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604003328934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604002314400" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604003328934" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603772848385" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
