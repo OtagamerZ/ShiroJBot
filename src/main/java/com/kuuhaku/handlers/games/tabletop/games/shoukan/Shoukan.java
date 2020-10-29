@@ -399,7 +399,7 @@ public class Shoukan extends Game {
 					((Equipment) tp).setLinkedTo(Pair.of(toEquip, t.getCard()));
 				} else {
 					if (args.length < 3) {
-						channel.sendMessage("❌ | O terceiro argumento deve ser `S` ou `N` para definir se a carta estará virada para baixo ou não.").queue();
+						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue();
 						return;
 					} else if (h.getMana() < ((Champion) d).getMana()) {
 						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento.").queue();
@@ -420,7 +420,20 @@ public class Shoukan extends Game {
 					}
 
 					Champion tp = (Champion) d.copy();
-					tp.setFlipped(args[2].equalsIgnoreCase("s"));
+
+					switch (args[2].toLowerCase()) {
+						case "a" -> tp.setFlipped(false);
+						case "d" -> {
+							tp.setFlipped(false);
+							tp.setDefending(true);
+						}
+						case "b" -> tp.setFlipped(true);
+						default -> {
+							channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue();
+							return;
+						}
+					}
+
 					slot.setTop(tp);
 					if (tp.hasEffect() && !tp.isFlipped())
 						tp.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(tp, dest, null, -1), channel));

@@ -15,7 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,8 +60,8 @@
         <option value="XML Properties File" />
         <option value="Interface" />
         <option value="GraphQL File" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -162,17 +163,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -818,14 +808,12 @@
       <workItem from="1603887086737" duration="4180000" />
       <workItem from="1603892590317" duration="1265000" />
       <workItem from="1603895955950" duration="1120000" />
-      <workItem from="1603901063924" duration="8361000" />
-    </task>
-    <task id="LOCAL-02728" summary="Correções no Shoukan">
-      <created>1603503848158</created>
-      <option name="number" value="02728" />
-      <option name="presentableId" value="LOCAL-02728" />
-      <option name="project" value="LOCAL" />
-      <updated>1603503848158</updated>
+      <workItem from="1603901063924" duration="9191000" />
+      <workItem from="1603973051612" duration="250000" />
+      <workItem from="1603973596485" duration="21000" />
+      <workItem from="1603973835939" duration="385000" />
+      <workItem from="1603975546944" duration="3119000" />
+      <workItem from="1603987309143" duration="913000" />
     </task>
     <task id="LOCAL-02729" summary="Correção no gerador de convites">
       <created>1603509255732</created>
@@ -1163,7 +1151,14 @@
       <option name="project" value="LOCAL" />
       <updated>1603914379389</updated>
     </task>
-    <option name="localTasksCounter" value="2777" />
+    <task id="LOCAL-02777" summary="Correção no registro de novos usuários">
+      <created>1603917927424</created>
+      <option name="number" value="02777" />
+      <option name="presentableId" value="LOCAL-02777" />
+      <option name="project" value="LOCAL" />
+      <updated>1603917927424</updated>
+    </task>
+    <option name="localTasksCounter" value="2778" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1229,7 +1224,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Ratelimit de comandos agora é cumulativo" />
     <MESSAGE value="Adicionado intervalo mínimo entre spawn de cartas e drops" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Atualização da funções do Shoukan para compatibilidade com novo efeito" />
@@ -1254,7 +1248,8 @@
     <MESSAGE value="Escurecimento das cores dos exceeds no ranking" />
     <MESSAGE value="Membros desconhecidos agora serão removidos dos Exceeds todo fim de mês" />
     <MESSAGE value="Correção menor na Stephanie" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção menor na Stephanie" />
+    <MESSAGE value="Correção no registro de novos usuários" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no registro de novos usuários" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1289,10 +1284,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1603729905144">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1603979073987">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603729905144" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603979073987" />
     <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1603676493802" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1302,10 +1297,6 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="636" y="391" width="433" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1680.1010@0.0.1680.1010" timestamp="1602015480726" />
-    <state x="551" y="215" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1595276691052">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="551" y="215" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595276691052" />
     <state x="347" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1599568009895">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1314,10 +1305,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602708322237" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1603914376504">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1603917924770">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1603914376504" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1603917924770" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1603112314104">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1380,10 +1371,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603914381063">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1603917928714">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603914381063" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1603917928714" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603772848385" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1445,10 +1436,10 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1602705975152" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603503824528" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1603917889786">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1603979122236">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1603917889786" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1603979122236" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603675313001" />
   </component>
   <component name="XDebuggerManager">
