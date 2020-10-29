@@ -38,7 +38,7 @@ public class ShoukanDeck {
 		this.acc = acc;
 	}
 
-	public BufferedImage view(List<Champion> champs, List<Equipment> equips) throws IOException, InterruptedException {
+	public BufferedImage view(List<Champion> champs, List<Equipment> equips, List<Equipment> fields) throws IOException, InterruptedException {
 		champs.sort(Comparator
 				.comparing(Champion::getMana).reversed()
 				.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
@@ -46,6 +46,9 @@ public class ShoukanDeck {
 		equips.sort(Comparator
 				.comparing(Equipment::getTier).reversed()
 				.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+		);
+		fields.sort(Comparator
+				.comparing(f -> f.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 		);
 
 		BufferedImage deck = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/deck.jpg")));
@@ -55,7 +58,7 @@ public class ShoukanDeck {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 30));
 
-		g2d.drawImage(acc.getFrame().getBack(acc), 1746, 1400, null);
+		g2d.drawImage(acc.getFrame().getBack(acc), 1746, 2241, null);
 
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / 6) {
 			g2d.drawImage(champs.get(i).drawCard(acc, false), 76 + 279 * (i - 6 * y), 350 + 420 * y, null);
@@ -65,6 +68,11 @@ public class ShoukanDeck {
 		for (int i = 0, y = 0; i < equips.size(); i++, y = i / 3) {
 			g2d.drawImage(equips.get(i).drawCard(acc, false), 2022 + 279 * (i - 3 * y), 350 + 420 * y, null);
 			Profile.printCenteredString(StringUtils.abbreviate(equips.get(i).getCard().getName(), 15), 225, 2022 + 279 * (i - 3 * y), 740 + 420 * y, g2d);
+		}
+
+		for (int i = 0; i < equips.size(); i++) {
+			g2d.drawImage(fields.get(i).drawCard(acc, false), 1746, 771 + (420 * i), null);
+			Profile.printCenteredString(StringUtils.abbreviate(fields.get(i).getCard().getName(), 15), 225, 1746, 1161 + (420 * i), g2d);
 		}
 
 		return deck;

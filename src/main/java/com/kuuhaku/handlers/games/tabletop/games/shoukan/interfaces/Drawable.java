@@ -36,5 +36,9 @@ public interface Drawable {
 
 	void setAvailable(boolean available);
 
+	Account getAcc();
+
+	void setAcc(Account acc);
+
 	Drawable copy();
 }
