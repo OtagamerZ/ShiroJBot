@@ -82,7 +82,7 @@ public class TenthMinuteEvent implements Job {
 			List<Pair<String, Role>> addRoles = guild.getRoles()
 					.stream()
 					.filter(r -> r.getPosition() < guild.getSelfMember().getRoles().get(0).getPosition())
-					.filter(r -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase().replace("-", "")), exNames))
+					.filter(r -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase().replace("-", "")), exNames) || Helper.containsAny(StringUtils.stripAccents(r.name().toLowerCase().replace("-", "")), exNames))
 					.map(r -> {
 						String name = Arrays.stream(exNames).filter(s -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase().replace("-", "")), s)).findFirst().orElse(null);
 						return Pair.of(name, r);
