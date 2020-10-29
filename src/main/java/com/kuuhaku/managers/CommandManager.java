@@ -432,7 +432,7 @@ public class CommandManager {
 					"reverter", new String[]{"revert"}, "req_card", "cmd_revert-card", MISC, true
 			));
 			put(SynthesizeCardCommand.class, new Argument(
-					"sintetizar", new String[]{"synthesize", "synth"}, "req_cards", "cmd_synthesize-card", MISC, true
+					"sintetizar", new String[]{"synthesize", "synth"}, "req_cards-type", "cmd_synthesize-card", MISC, true
 			));
 
 			//FUN
