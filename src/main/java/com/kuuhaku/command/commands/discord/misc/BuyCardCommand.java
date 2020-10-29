@@ -24,21 +24,16 @@ import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardMarketDAO;
-import com.kuuhaku.controller.postgresql.EquipmentMarketDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.KawaiponRarity;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.CardMarket;
-import com.kuuhaku.model.persistent.EquipmentMarket;
-import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -78,6 +73,7 @@ public class BuyCardCommand extends Command {
 			AtomicBoolean onlyFoil = new AtomicBoolean();
 			AtomicBoolean onlyMine = new AtomicBoolean();
 			AtomicBoolean onlyEquip = new AtomicBoolean();
+			AtomicBoolean onlyField = new AtomicBoolean();
 
 			if (args.length > 0) {
 				List<String> params = List.of(args);
@@ -110,6 +106,8 @@ public class BuyCardCommand extends Command {
 				onlyMine.set(params.stream().anyMatch("-m"::equalsIgnoreCase));
 
 				onlyEquip.set(params.stream().anyMatch("-e"::equalsIgnoreCase));
+
+				onlyField.set(params.stream().anyMatch("-f"::equalsIgnoreCase));
 			}
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -132,7 +130,15 @@ public class BuyCardCommand extends Command {
 
 			List<Page> pages = new ArrayList<>();
 			List<Object> cards;
-			if (onlyEquip.get())
+			if (onlyField.get())
+				cards = FieldMarketDAO.getCards().stream()
+						.filter(em -> byName.get() == null || StringUtils.containsIgnoreCase(em.getCard().getCard().getName(), byName.get()))
+						.filter(em -> onlyMine.get() ? em.getSeller().equals(author.getId()) : em.getPrice() <= 250000)
+						.sorted(Comparator
+								.comparingInt(FieldMarket::getPrice)
+								.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER))
+						.collect(Collectors.toList());
+			else if (onlyEquip.get())
 				cards = EquipmentMarketDAO.getCards().stream()
 						.filter(em -> byName.get() == null || StringUtils.containsIgnoreCase(em.getCard().getCard().getName(), byName.get()))
 						.filter(em -> onlyMine.get() ? em.getSeller().equals(author.getId()) : em.getPrice() <= (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50))
@@ -158,7 +164,18 @@ public class BuyCardCommand extends Command {
 
 			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();
-				if (onlyEquip.get())
+
+				if (onlyField.get())
+					for (int p = i * 10; p < cards.size() && p < 10 * (i + 1); p++) {
+						FieldMarket em = (FieldMarket) cards.get(p);
+						User seller = Main.getInfo().getUserByID(em.getSeller());
+						eb.addField(
+								"`ID: " + em.getId() + "` | " + em.getCard().getCard().getName() + " (" + em.getCard().getCard().getRarity().toString() + ")",
+								"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + (em.getPrice() > 250000 ? "`valor muito alto`**" : em.getPrice() + "** créditos"),
+								false
+						);
+					}
+				else if (onlyEquip.get())
 					for (int p = i * 10; p < cards.size() && p < 10 * (i + 1); p++) {
 						EquipmentMarket em = (EquipmentMarket) cards.get(p);
 						User seller = Main.getInfo().getUserByID(em.getSeller());
