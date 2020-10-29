@@ -18,6 +18,11 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
+
 public enum Race {
 	HUMAN,
 	ELF,
@@ -30,6 +35,14 @@ public enum Race {
 	CREATURE,
 	SPIRIT,
 	DEMON;
+
+	public BufferedImage getIcon() {
+		try {
+			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/race/" + name().toLowerCase() + ".png")));
+		} catch (IOException e) {
+			return null;
+		}
+	}
 
 	@Override
 	public String toString() {
