@@ -75,14 +75,8 @@ public class Shoukan extends Game {
 		Kawaipon p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[1].getId());
 
 		this.hands = Map.of(
-				Side.TOP, new Hand(this, players[0], new ArrayList<>() {{
-					addAll(p1.getChampions());
-					addAll(p1.getEquipments());
-				}}, Side.TOP),
-				Side.BOTTOM, new Hand(this, players[1], new ArrayList<>() {{
-					addAll(p2.getChampions());
-					addAll(p2.getEquipments());
-				}}, Side.BOTTOM)
+				Side.TOP, new Hand(this, players[0], p1.getDrawables(), Side.TOP),
+				Side.BOTTOM, new Hand(this, players[1], p2.getDrawables(), Side.BOTTOM)
 		);
 
 		setActions(
