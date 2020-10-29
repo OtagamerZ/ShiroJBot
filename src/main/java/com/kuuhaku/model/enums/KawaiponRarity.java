@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Arrays;
 
 public enum KawaiponRarity {
+	FIELD(-3, ""),
 	EQUIPMENT(-2, ""),
 	FUSION(-1, ""),
 	COMMON(1, "<:common:726171819664736268> "),
