@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import org.apache.commons.collections4.ListUtils;
 import org.hibernate.annotations.LazyCollection;
@@ -51,6 +52,10 @@ public class Kawaipon {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
 	private List<Equipment> equipments = new ArrayList<>();
+
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
+	private List<Field> fields = new ArrayList<>();
 
 	public String getUid() {
 		return uid;
@@ -120,7 +125,23 @@ public class Kawaipon {
 		this.equipments.remove(equipment);
 	}
 
+	public List<Field> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<Field> fields) {
+		this.fields = fields;
+	}
+
+	public void addField(Field field) {
+		this.fields.add(field);
+	}
+
+	public void removeField(Field field) {
+		this.fields.remove(field);
+	}
+
 	public List<Drawable> getDrawables() {
-		return ListUtils.union(champions, equipments);
+		return ListUtils.union(ListUtils.union(champions, equipments), fields);
 	}
 }
