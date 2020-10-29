@@ -71,7 +71,7 @@ public class ShoukanDeck {
 			Profile.printCenteredString(StringUtils.abbreviate(equips.get(i).getCard().getName(), 15), 225, 2022 + 279 * (i - 3 * y), 740 + 420 * y, g2d);
 		}
 
-		for (int i = 0; i < equips.size(); i++) {
+		for (int i = 0; i < fields.size(); i++) {
 			g2d.drawImage(fields.get(i).drawCard(acc, false), 1746, 771 + (420 * i), null);
 			Profile.printCenteredString(StringUtils.abbreviate(fields.get(i).getCard().getName(), 15), 225, 1746, 1161 + (420 * i), g2d);
 		}
