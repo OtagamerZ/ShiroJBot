@@ -67,7 +67,7 @@ public class TenthMinuteEvent implements Job {
 
 		List<GuildConfig> guilds = GuildDAO.getAllGuildsWithExceedRoles();
 		List<ExceedMember> ems = ExceedDAO.getExceedMembers().stream().filter(em -> !em.getExceed().isBlank()).collect(Collectors.toList());
-		String[] exNames = {"imanity", "ex-machina", "flugel", "werebeast", "elf", "seiren"};
+		String[] exNames = {"imanity", "ex-machina", "exmachina", "flugel", "flügel", "werebeast", "elf", "seiren"};
 
 		for (GuildConfig gc : guilds) {
 			Guild guild = Main.getInfo().getGuildByID(gc.getGuildID());
@@ -82,7 +82,7 @@ public class TenthMinuteEvent implements Job {
 			List<Pair<String, Role>> addRoles = guild.getRoles()
 					.stream()
 					.filter(r -> r.getPosition() < guild.getSelfMember().getRoles().get(0).getPosition())
-					.filter(r -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase().replace("-", "")), exNames))
+					.filter(r -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase()), exNames))
 					.map(r -> {
 						String name = Arrays.stream(exNames).filter(s -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase().replace("-", "")), s)).findFirst().orElse(null);
 						return Pair.of(name, r);
