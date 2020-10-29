@@ -24,6 +24,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -100,7 +101,7 @@ public class Arena {
 				g2d.setColor(Color.white);
 				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 100));
 
-				Profile.printCenteredString(hands.get(key).getUser().getName(), 626, key == Side.TOP ? 1125 : 499, key == Side.TOP ? 838 : 975, g2d);
+				Profile.printCenteredString(StringUtils.abbreviate(hands.get(key).getUser().getName(), 18), 626, key == Side.TOP ? 1125 : 499, key == Side.TOP ? 838 : 975, g2d);
 
 				for (int i = 0; i < value.size(); i++) {
 					SlotColumn<Drawable, Drawable> c = value.get(i);
