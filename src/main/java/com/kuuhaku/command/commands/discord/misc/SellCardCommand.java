@@ -24,11 +24,13 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
@@ -67,53 +69,99 @@ public class SellCardCommand extends Command {
 			return;
 		} else if (args.length == 2) {
 			Equipment eq = CardDAO.getEquipment(args[0]);
+			Field f = CardDAO.getField(args[0]);
+
+			if (eq == null && f == null) {
+				channel.sendMessage("❌ | Esse equipamento ou arena não existe, você não quis dizer `" + Helper.didYouMean(args[0], ListUtils.union(CardDAO.getAllEquipmentNames(), CardDAO.getAllFieldNames()).toArray(String[]::new)) + "`?").queue();
+				return;
+			}
 
 			if (eq == null) {
-				channel.sendMessage("❌ | Esse equipamento não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
-				return;
-			}
-
-			if (!kp.getEquipments().contains(eq)) {
-				channel.sendMessage("❌ | Você não pode vender um equipamento que não possui!").queue();
-				return;
-			}
-
-			try {
-				boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
-				int price = Integer.parseInt(args[1]);
-				int min = eq.getTier() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2);
-
-				if (price < min) {
-					if (hasLoan)
-						channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
-					else
-						channel.sendMessage("❌ | Você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+				if (!kp.getFields().contains(f)) {
+					channel.sendMessage("❌ | Você não pode vender uma arena que não possui!").queue();
 					return;
 				}
 
-				String hash = Helper.generateHash(guild, author);
-				ShiroInfo.getHashes().add(hash);
-				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				channel.sendMessage("Este equipamento sairá da sua coleção, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?").queue(s -> {
-					Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
-						if (!ShiroInfo.getHashes().remove(hash)) return;
-						Main.getInfo().getConfirmationPending().invalidate(author.getId());
-						if (member1.getId().equals(author.getId())) {
-							kp.removeEquipment(eq);
-							KawaiponDAO.saveKawaipon(kp);
+				try {
+					boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
+					int price = Integer.parseInt(args[1]);
+					int min = 10000 * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2);
 
-							EquipmentMarket em = new EquipmentMarket(author.getId(), eq, price);
-							EquipmentMarketDAO.saveCard(em);
+					if (price < min) {
+						if (hasLoan)
+							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+						else
+							channel.sendMessage("❌ | Você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+						return;
+					}
 
-							s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Equipamento anunciado com sucesso!")).queue();
-						}
-					}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-						ShiroInfo.getHashes().remove(hash);
-						Main.getInfo().getConfirmationPending().invalidate(author.getId());
+					String hash = Helper.generateHash(guild, author);
+					ShiroInfo.getHashes().add(hash);
+					Main.getInfo().getConfirmationPending().put(author.getId(), true);
+					channel.sendMessage("Esta arena sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?").queue(s -> {
+						Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
+							if (!ShiroInfo.getHashes().remove(hash)) return;
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							if (member1.getId().equals(author.getId())) {
+								kp.removeField(f);
+								KawaiponDAO.saveKawaipon(kp);
+
+								FieldMarket fm = new FieldMarket(author.getId(), f, price);
+								FieldMarketDAO.saveCard(fm);
+
+								s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Arena anunciada com sucesso!")).queue();
+							}
+						}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+						});
 					});
-				});
-			} catch (NumberFormatException e) {
-				channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
+				} catch (NumberFormatException e) {
+					channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
+				}
+			} else {
+				if (!kp.getEquipments().contains(eq)) {
+					channel.sendMessage("❌ | Você não pode vender um equipamento que não possui!").queue();
+					return;
+				}
+
+				try {
+					boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
+					int price = Integer.parseInt(args[1]);
+					int min = eq.getTier() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2);
+
+					if (price < min) {
+						if (hasLoan)
+							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+						else
+							channel.sendMessage("❌ | Você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+						return;
+					}
+
+					String hash = Helper.generateHash(guild, author);
+					ShiroInfo.getHashes().add(hash);
+					Main.getInfo().getConfirmationPending().put(author.getId(), true);
+					channel.sendMessage("Este equipamento sairá da sua coleção, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?").queue(s -> {
+						Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
+							if (!ShiroInfo.getHashes().remove(hash)) return;
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							if (member1.getId().equals(author.getId())) {
+								kp.removeEquipment(eq);
+								KawaiponDAO.saveKawaipon(kp);
+
+								EquipmentMarket em = new EquipmentMarket(author.getId(), eq, price);
+								EquipmentMarketDAO.saveCard(em);
+
+								s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Equipamento anunciado com sucesso!")).queue();
+							}
+						}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+						});
+					});
+				} catch (NumberFormatException e) {
+					channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
+				}
 			}
 			return;
 		} else if (!StringUtils.isNumeric(args[2])) {
