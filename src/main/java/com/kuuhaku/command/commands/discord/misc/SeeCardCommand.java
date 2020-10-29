@@ -26,6 +26,7 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.RarityColorsDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.AnimeName;
@@ -79,20 +80,21 @@ public class SeeCardCommand extends Command {
 		if (shoukan) {
 			Champion ch = CardDAO.getChampion(args[0]);
 			Equipment eq = CardDAO.getEquipment(args[0]);
+			Field f = CardDAO.getField(args[0]);
 
-			if (ch == null && eq == null) {
-				channel.sendMessage("❌ | Esse equipamento ou campeão não existe, você não quis dizer `" + Helper.didYouMean(args[0], ListUtils.union(CardDAO.getAllChampionNames(), CardDAO.getAllEquipmentNames()).toArray(String[]::new)) + "`?").queue();
+			if (ch == null && eq == null && f == null) {
+				channel.sendMessage("❌ | Esse equipamento ou campeão não existe, você não quis dizer `" + Helper.didYouMean(args[0], ListUtils.union(ListUtils.union(CardDAO.getAllChampionNames(), CardDAO.getAllEquipmentNames()), CardDAO.getAllFieldNames()).toArray(String[]::new)) + "`?").queue();
 				return;
 			}
 
 			List<Drawable> cards = kp.getDrawables();
-			Drawable d = ch == null ? eq : ch;
+			Drawable d = ch == null ? eq == null ? f : eq : ch;
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle((ch == null ? ":shield:" : ":crossed_swords:") + " | " + d.getCard().getName());
 			eb.addField("Obtida:", cards.contains(d) ? "Sim" : "Não", true);
-			eb.addField("Tipo:", d instanceof Champion ? "Campeão Senshi" : "Equipamento EvoGear", true);
+			eb.addField("Tipo:", d instanceof Champion ? "Campeão Senshi" : d instanceof Field ? "Arena" : "Equipamento EvoGear", true);
 			eb.setImage("attachment://kawaipon.png");
 
 			channel.sendMessage(eb.build()).addFile(Helper.getBytes(d.drawCard(acc, false), "png"), "kawaipon.png").queue();
