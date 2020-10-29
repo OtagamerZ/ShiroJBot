@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
@@ -383,6 +384,7 @@ public class Shoukan extends Game {
 					}
 
 					Drawable tp = d.copy();
+					tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slot.setBottom(tp);
 					Champion t = (Champion) target.getTop();
 					if (t.isFlipped()) {
@@ -428,11 +430,13 @@ public class Shoukan extends Game {
 						}
 					}
 
+					tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slot.setTop(tp);
 					if (tp.hasEffect() && !tp.isFlipped())
 						tp.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(tp, dest, null, -1), channel));
 				} else {
 					Field f = (Field) d.copy();
+					f.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					arena.setField(f);
 				}
 
@@ -486,6 +490,7 @@ public class Shoukan extends Game {
 
 					for (SlotColumn<Drawable, Drawable> slt : slts) {
 						if (slt.getTop() == null) {
+							aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 							slt.setTop(aFusion.copy());
 							if (aFusion.hasEffect() && !aFusion.isFlipped())
 								aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, Integer.parseInt(args[1]) - 1, h.getSide(), Duelists.of(aFusion, Integer.parseInt(args[1]) - 1, null, -1), channel));
@@ -707,6 +712,7 @@ public class Shoukan extends Game {
 		SlotColumn<Drawable, Drawable> sc = getFirstAvailableSlot(side, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
+			ch.setAcc(AccountDAO.getAccount(getHands().get(side).getUser().getId()));
 			sc.setTop(ch);
 			List<SlotColumn<Drawable, Drawable>> slts = getArena().getSlots().get(his);
 			slts.get(index).setTop(null);
@@ -732,6 +738,7 @@ public class Shoukan extends Game {
 
 					target.addLinkedTo(eq);
 					eq.setLinkedTo(Pair.of(pos, target.getCard()));
+					eq.setAcc(AccountDAO.getAccount(getHands().get(side).getUser().getId()));
 					sc.setBottom(eq);
 				} else return;
 			}
