@@ -19,27 +19,10 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 public enum ArenaField {
-	DEFAULT/*(Map.of())*/,
-	NEW_WORLD/*(Map.of())*/,
-	GRAVEYARD/*(Map.of(
-			Race.UNDEAD, 1.5f,
-			Race.SPIRIT, 1.25f,
-			Race.MYSTICAL, 0.75f
-	))*/,
-	UNDERWORLD/*(Map.of(
-			Race.DEMON, 1.5f,
-			Race.SPIRIT, 0.75f,
-			Race.DIVINITY, 0.5f
-	))*/,
-	ECLIPSE/*(Map.of(
-			Race.DIVINITY, 1.5f,
-			Race.MYSTICAL, 1.25f,
-			Race.DEMON, 0.75f
-	))*/,
-	FOREST/*(Map.of(
-			Race.MYSTICAL, 1.5f,
-			Race.CREATURE, 1.5f,
-			Race.ELF, 1.25f,
-			Race.BESTIAL, 1.25f
-	))*/
+	DEFAULT,
+	NEW_WORLD,
+	GRAVEYARD,
+	UNDERWORLD,
+	ECLIPSE,
+	FOREST
 }
