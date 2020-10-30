@@ -31,7 +31,7 @@ public class TagDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT t FROM Tags t WHERE t.beta = true", Tags.class);
-		List<Tags> ts = (List<Tags>) q.getResultList();
+		List<Tags> ts = q.getResultList();
 
 		em.close();
 
@@ -43,7 +43,7 @@ public class TagDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT t FROM Tags t", Tags.class);
-		List<Tags> ts = (List<Tags>) q.getResultList();
+		List<Tags> ts = q.getResultList();
 
 		em.close();
 
@@ -75,7 +75,7 @@ public class TagDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT t FROM Tags t WHERE t.sponsor = true", Tags.class);
-		List<Tags> ts = (List<Tags>) q.getResultList();
+		List<Tags> ts = q.getResultList();
 
 		em.close();
 

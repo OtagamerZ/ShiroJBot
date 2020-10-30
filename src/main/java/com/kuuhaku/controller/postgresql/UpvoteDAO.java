@@ -43,7 +43,7 @@ public class UpvoteDAO {
 		Query q = em.createQuery("SELECT u FROM Upvote u");
 
 		try {
-			return (List<Upvote>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}

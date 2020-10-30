@@ -33,7 +33,7 @@ public class CardMarketDAO {
 		Query q = em.createQuery("SELECT cm FROM CardMarket cm WHERE buyer = ''", CardMarket.class);
 
 		try {
-			return (List<CardMarket>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}
@@ -48,7 +48,7 @@ public class CardMarketDAO {
 		q.setParameter("foil", foil);
 
 		try {
-			return (List<CardMarket>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}
@@ -63,7 +63,7 @@ public class CardMarketDAO {
 		q.setParameter("foil", foil);
 
 		try {
-			return (List<CardMarket>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}

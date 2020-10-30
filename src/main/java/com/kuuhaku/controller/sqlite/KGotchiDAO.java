@@ -35,7 +35,7 @@ public class KGotchiDAO {
 		Query q = em.createQuery("SELECT k FROM Kawaigotchi k", Kawaigotchi.class);
 
 		try {
-			return (List<Kawaigotchi>) q.getResultList();
+			return q.getResultList();
 		} catch (NoResultException e) {
 			return new ArrayList<>();
 		} finally {

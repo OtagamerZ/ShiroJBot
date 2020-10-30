@@ -95,7 +95,7 @@ public class MemberDAO {
 		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT m FROM Member m", Member.class);
-		List<Member> gcs = (List<Member>) gc.getResultList();
+		List<Member> gcs = gc.getResultList();
 
 		em.close();
 

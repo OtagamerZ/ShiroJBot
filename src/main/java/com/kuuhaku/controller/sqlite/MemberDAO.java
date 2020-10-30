@@ -45,7 +45,7 @@ public class MemberDAO {
 
 		Query q = em.createQuery("SELECT m FROM Member m WHERE mid = :id", Member.class);
 		q.setParameter("id", id);
-		m = (List<Member>) q.getResultList();
+		m = q.getResultList();
 
 		em.close();
 
@@ -59,7 +59,7 @@ public class MemberDAO {
 
 		Query q = em.createQuery("SELECT m FROM Member m WHERE sid = :id", Member.class);
 		q.setParameter("id", id);
-		m = (List<Member>) q.getResultList();
+		m = q.getResultList();
 
 		em.close();
 
@@ -117,7 +117,7 @@ public class MemberDAO {
 			q.setParameter("id", "%" + gid);
 		}
 
-		List<Member> mbs = (List<Member>) q.getResultList();
+		List<Member> mbs = q.getResultList();
 
 		em.close();
 
@@ -129,7 +129,7 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT m FROM Member m", Member.class);
-		List<Member> gcs = (List<Member>) gc.getResultList();
+		List<Member> gcs = gc.getResultList();
 
 		em.close();
 

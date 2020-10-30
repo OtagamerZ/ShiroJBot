@@ -35,7 +35,7 @@ public class PStateDAO {
 		Query q = em.createQuery("SELECT p FROM PoliticalState p", PoliticalState.class);
 
 		try {
-			return (List<PoliticalState>) q.getResultList();
+			return q.getResultList();
 		} catch (NoResultException e) {
 			return new ArrayList<>();
 		} finally {

@@ -35,7 +35,7 @@ public class CustomAnswerDAO {
 		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) = ?1 AND guildID = ?2 AND markForDelete = FALSE", CustomAnswers.class);
 		q.setParameter(1, trigger.toLowerCase());
 		q.setParameter(2, guild);
-		ca = (List<CustomAnswers>) q.getResultList();
+		ca = q.getResultList();
 
 		em.close();
 
@@ -64,7 +64,7 @@ public class CustomAnswerDAO {
 		q.setParameter(1, id);
 
 		try {
-			return (List<CustomAnswers>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}
