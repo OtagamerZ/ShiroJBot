@@ -44,7 +44,7 @@ public class Field implements Drawable, Cloneable {
 	@OneToOne(fetch = FetchType.EAGER)
 	private Card card;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT {}")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '{}'")
 	private final String modifiers = "{}";
 
 	private transient Account acc = null;
