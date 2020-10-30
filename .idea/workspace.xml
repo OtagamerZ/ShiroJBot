@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -830,20 +828,6 @@
       <workItem from="1604004435235" duration="647000" />
       <workItem from="1604025985410" duration="2473000" />
     </task>
-    <task id="LOCAL-02758" summary="Correção no gerador de valores aleatórios">
-      <created>1603772844742</created>
-      <option name="number" value="02758" />
-      <option name="presentableId" value="LOCAL-02758" />
-      <option name="project" value="LOCAL" />
-      <updated>1603772844742</updated>
-    </task>
-    <task id="LOCAL-02759" summary="Correção no gerador de valores aleatórios">
-      <created>1603828087137</created>
-      <option name="number" value="02759" />
-      <option name="presentableId" value="LOCAL-02759" />
-      <option name="project" value="LOCAL" />
-      <updated>1603828087137</updated>
-    </task>
     <task id="LOCAL-02760" summary="Correção menor">
       <created>1603828158360</created>
       <option name="number" value="02760" />
@@ -1173,7 +1157,21 @@
       <option name="project" value="LOCAL" />
       <updated>1604079016868</updated>
     </task>
-    <option name="localTasksCounter" value="2807" />
+    <task id="LOCAL-02807" summary="Criação do comando de salas de jogos">
+      <created>1604079166591</created>
+      <option name="number" value="02807" />
+      <option name="presentableId" value="LOCAL-02807" />
+      <option name="project" value="LOCAL" />
+      <updated>1604079166591</updated>
+    </task>
+    <task id="LOCAL-02808" summary="Criação do comando de salas de jogos">
+      <created>1604079439292</created>
+      <option name="number" value="02808" />
+      <option name="presentableId" value="LOCAL-02808" />
+      <option name="project" value="LOCAL" />
+      <updated>1604079439292</updated>
+    </task>
+    <option name="localTasksCounter" value="2809" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1320,10 +1318,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602708322237" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1604079014111">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1604079436526">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1604079014111" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1604079436526" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1603112314104">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1387,10 +1385,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604079022293">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604079440516">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604079022293" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604079440516" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604027912367" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />

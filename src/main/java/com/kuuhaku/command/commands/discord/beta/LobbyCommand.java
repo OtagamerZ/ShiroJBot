@@ -118,6 +118,8 @@ public class LobbyCommand extends Command {
 					.setMaxUses(1)
 					.setMaxAge(1L, TimeUnit.MINUTES)
 					.queue(inv -> channel.sendMessage("Convite para a sala: " + inv.getUrl()).queue());
+
+			Main.getInfo().getPendingJoin().put(author.getId(), lb.getId());
 		} else if (Helper.equalsAny(args[0], "criar", "create")) {
 			if (mb.getLevel() < 30) {
 				channel.sendMessage("❌ | Você precisa ser level 30 ou maior para poder criar uma sala de jogos.").queue();
@@ -191,6 +193,8 @@ public class LobbyCommand extends Command {
 									s.delete().queue(null, Helper::doNothing);
 									channel.sendMessage("Sala criada com sucesso: " + inv.getUrl()).queue();
 								});
+
+						Main.getInfo().getPendingJoin().put(author.getId(), lb.getId());
 					}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
 						ShiroInfo.getHashes().remove(hash);
 						Main.getInfo().getConfirmationPending().invalidate(author.getId());
