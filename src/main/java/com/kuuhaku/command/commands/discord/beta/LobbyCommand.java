@@ -112,7 +112,7 @@ public class LobbyCommand extends Command {
 			}
 
 			Guild g = Main.getInfo().getGuildByID(ShiroInfo.getLobbyServerID());
-			g.getVoiceChannels().get(0)
+			g.getTextChannels().get(0)
 					.createInvite()
 					.setMaxUses(1)
 					.setMaxAge(1L, TimeUnit.MINUTES)
@@ -182,7 +182,7 @@ public class LobbyCommand extends Command {
 						LobbyDAO.saveLobby(lb);
 
 						Guild g = Main.getInfo().getGuildByID(ShiroInfo.getLobbyServerID());
-						g.getVoiceChannels().get(0)
+						g.getTextChannels().get(0)
 								.createInvite()
 								.setMaxUses(1)
 								.setMaxAge(1L, TimeUnit.MINUTES)
