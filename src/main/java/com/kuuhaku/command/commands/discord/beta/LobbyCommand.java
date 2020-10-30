@@ -131,7 +131,7 @@ public class LobbyCommand extends Command {
 					.split(";");
 
 			if (params.length < 2) {
-				channel.sendMessage("❌ | Você precisa informar um nome para a sala e o máximo de jogadores.").queue();
+				channel.sendMessage("❌ | Você precisa informar um nome para a sala e o máximo de jogadores. (separados por `;`)").queue();
 				return;
 			} else if (LobbyDAO.getLobby(author.getId()) != null) {
 				channel.sendMessage("❌ | Você já possui uma sala ativa.").queue();
