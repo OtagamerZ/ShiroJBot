@@ -122,6 +122,7 @@ public class JDAEvents extends ListenerAdapter {
 						})
 						.findFirst()
 						.orElse(null);
+
 				if (BlacklistDAO.isBlacklisted(event.getUser()) || lb == null) {
 					guild.kick(member).queue();
 					return;
@@ -137,15 +138,37 @@ public class JDAEvents extends ListenerAdapter {
 						.findFirst()
 						.orElse(null);
 
-				assert cat != null;
-				if (member.getId().equals(lb.getOwner()))
-					cat.putPermissionOverride(member)
-							.grant(Permission.VIEW_CHANNEL, Permission.KICK_MEMBERS)
-							.queue();
-				else
-					cat.putPermissionOverride(member)
-							.grant(Permission.VIEW_CHANNEL)
-							.queue();
+				if (cat == null) {
+					guild.createCategory(lb.getId() + " | " + lb.getName()).queue(s -> {
+						guild.createTextChannel("Salão")
+								.setTopic("Sala de jogos criada por " + Main.getInfo().getUserByID(lb.getOwner()).getName())
+								.setParent(s)
+								.queue();
+
+						guild.createVoiceChannel("Call")
+								.setUserlimit(lb.getMaxPlayers())
+								.setParent(s)
+								.queue();
+
+						if (member.getId().equals(lb.getOwner()))
+							s.putPermissionOverride(member)
+									.grant(Permission.VIEW_CHANNEL, Permission.KICK_MEMBERS)
+									.queue();
+						else
+							s.putPermissionOverride(member)
+									.grant(Permission.VIEW_CHANNEL)
+									.queue();
+					});
+				} else {
+					if (member.getId().equals(lb.getOwner()))
+						cat.putPermissionOverride(member)
+								.grant(Permission.VIEW_CHANNEL, Permission.KICK_MEMBERS)
+								.queue();
+					else
+						cat.putPermissionOverride(member)
+								.grant(Permission.VIEW_CHANNEL)
+								.queue();
+				}
 			}
 
 			if (BlacklistDAO.isBlacklisted(event.getUser())) return;
