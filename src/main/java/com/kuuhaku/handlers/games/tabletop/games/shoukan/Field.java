@@ -77,7 +77,7 @@ public class Field implements Drawable, Cloneable {
 			int i = 0;
 			for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
 				g2d.setColor(colors[i]);
-				Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 45, 59 + (26 * i), g2d);
+				Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 45, 82 + (26 * i), g2d);
 				i++;
 			}
 		}
@@ -117,7 +117,7 @@ public class Field implements Drawable, Cloneable {
 		int i = 0;
 		for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
 			g2d.setColor(colors[i]);
-			Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 45, 59 + (26 * i), g2d);
+			Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 45, 82 + (26 * i), g2d);
 			i++;
 		}
 
