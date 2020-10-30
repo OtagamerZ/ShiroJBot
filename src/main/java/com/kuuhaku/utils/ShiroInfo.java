@@ -79,7 +79,8 @@ public class ShiroInfo {
 	private static final List<String> developers = List.of(
 			niichan, //KuuHaKu
 			"321665807988031495", //Reydux
-			"694652893571055746" //HeyCarlosz
+			"694652893571055746", //HeyCarlosz
+			"738832022038118472" //Riku
 	);
 	private static final List<String> editors = List.of(
 
