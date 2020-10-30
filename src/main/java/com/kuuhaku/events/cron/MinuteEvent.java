@@ -128,7 +128,7 @@ public class MinuteEvent implements Job {
 							.setParent(s)
 							.queue();
 
-					g.createTextChannel("Call")
+					g.createVoiceChannel("Call")
 							.setUserlimit(lb.getMaxPlayers())
 							.setParent(s)
 							.queue();
