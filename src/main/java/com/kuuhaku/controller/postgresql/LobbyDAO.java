@@ -76,8 +76,11 @@ public class LobbyDAO {
 	public static void deleteLobby(Lobby lb) {
 		EntityManager em = Manager.getEntityManager();
 
+		Query q = em.createQuery("DELETE FROM Lobby l WHERE l.id = :id");
+		q.setParameter("id", lb.getId());
+
 		em.getTransaction().begin();
-		em.remove(lb);
+		q.executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();
