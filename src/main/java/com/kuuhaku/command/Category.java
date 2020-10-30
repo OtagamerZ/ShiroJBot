@@ -86,7 +86,7 @@ public enum Category {
 		if (this == NSFW) return false;
 		else if ((this == DEV || this == SUPPORT) && (!g.getId().equals(ShiroInfo.getSupportServerID()) && !ShiroInfo.getDevelopers().contains(u.getId()))) {
 			return false;
-		} else if (this == BETA && (!TagDAO.getTagById(g.getOwnerId()).isBeta() && !ShiroInfo.getDevelopers().contains(u.getId()))) {
+		} else if (this == BETA && (!TagDAO.getTagById(g.getOwnerId()).isBeta() && !ShiroInfo.getStaff().contains(u.getId()))) {
 			return false;
 		} else return !gc.getDisabledModules().contains(this);
 	}
