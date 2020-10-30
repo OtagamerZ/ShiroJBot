@@ -13,11 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas cartas de campo">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança na forma de salvar os modificadores das cartas de campo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/ArenaField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/ArenaField.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -818,21 +815,7 @@
       <workItem from="1604003625490" duration="73000" />
       <workItem from="1604003771178" duration="177000" />
       <workItem from="1604004435235" duration="647000" />
-      <workItem from="1604025985410" duration="1064000" />
-    </task>
-    <task id="LOCAL-02746" summary="Correções">
-      <created>1603737445096</created>
-      <option name="number" value="02746" />
-      <option name="presentableId" value="LOCAL-02746" />
-      <option name="project" value="LOCAL" />
-      <updated>1603737445096</updated>
-    </task>
-    <task id="LOCAL-02747" summary="Correções">
-      <created>1603737513376</created>
-      <option name="number" value="02747" />
-      <option name="presentableId" value="LOCAL-02747" />
-      <option name="project" value="LOCAL" />
-      <updated>1603737513376</updated>
+      <workItem from="1604025985410" duration="1685000" />
     </task>
     <task id="LOCAL-02748" summary="Nova condição de drop;&#10;Aumentado valor ganho no drop de créditos;&#10;Reduzida chance e penalidade dos drops coringa;">
       <created>1603738285176</created>
@@ -1163,7 +1146,21 @@
       <option name="project" value="LOCAL" />
       <updated>1604026315208</updated>
     </task>
-    <option name="localTasksCounter" value="2795" />
+    <task id="LOCAL-02795" summary="Mudança na forma de salvar os modificadores das cartas de campo">
+      <created>1604027101885</created>
+      <option name="number" value="02795" />
+      <option name="presentableId" value="LOCAL-02795" />
+      <option name="project" value="LOCAL" />
+      <updated>1604027101885</updated>
+    </task>
+    <task id="LOCAL-02796" summary="Mudança na forma de salvar os modificadores das cartas de campo">
+      <created>1604027254503</created>
+      <option name="number" value="02796" />
+      <option name="presentableId" value="LOCAL-02796" />
+      <option name="project" value="LOCAL" />
+      <updated>1604027254503</updated>
+    </task>
+    <option name="localTasksCounter" value="2797" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1229,7 +1226,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no gerador aleatório com peso" />
     <MESSAGE value="Correção no Hitotsu multiplayer" />
     <MESSAGE value="Correção no gerador de valores aleatórios" />
     <MESSAGE value="Adição de deck diário ao comando para ver o deck" />
@@ -1254,7 +1250,8 @@
     <MESSAGE value="Correção no Shoukan" />
     <MESSAGE value="Correção nas confirmações dos jogos" />
     <MESSAGE value="Correção nas cartas de campo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nas cartas de campo" />
+    <MESSAGE value="Mudança na forma de salvar os modificadores das cartas de campo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mudança na forma de salvar os modificadores das cartas de campo" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1377,19 +1374,20 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604026323928">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604027290702">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604003674622" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604026323928" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604027290702" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1/0.0.1680.1010@0.0.1680.1010" timestamp="1599155360934" />
-    <state x="712" y="354" width="326" height="265" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1602269330537">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="814" y="365" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1604027672590">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="712" y="354" width="326" height="265" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1602269330537" />
+    <state x="814" y="365" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1920.1040@0.0.1920.1040" timestamp="1604027672590" />
     <state x="654" y="392" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog" timestamp="1600353827172">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
