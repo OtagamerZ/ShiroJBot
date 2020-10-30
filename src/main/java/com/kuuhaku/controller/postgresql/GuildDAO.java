@@ -30,7 +30,7 @@ public class GuildDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
-		List<GuildConfig> gcs = (List<GuildConfig>) gc.getResultList();
+		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
 

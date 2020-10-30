@@ -69,6 +69,7 @@ public class ShiroInfo {
 	private static final String version = VersionDAO.getBuildVersion(Version.V3);
 	private static final String supportServerName = "Shiro Support";
 	private static final String supportServerID = "421495229594730496";
+	private static final String lobbyServerID = "771733492543389766";
 	private static final String twitchChannelID = "743479145618472960";
 	private static final String announcementChannelID = "597587565809369089";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
@@ -119,6 +120,7 @@ public class ShiroInfo {
 	private final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
 	private final Cache<String, Boolean> confirmationPending = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
+	private final Cache<String, Integer> pendingJoin = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Map<String, Game> games = new HashMap<>();
 	private final Set<String> requests = new HashSet<>();
 	private final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
@@ -144,6 +146,10 @@ public class ShiroInfo {
 
 	public static String getSupportServerID() {
 		return supportServerID;
+	}
+
+	public static String getLobbyServerID() {
+		return lobbyServerID;
 	}
 
 	public static String getTwitchChannelID() {
@@ -368,6 +374,10 @@ public class ShiroInfo {
 
 	public Cache<String, byte[]> getCardCache() {
 		return cardCache;
+	}
+
+	public Cache<String, Integer> getPendingJoin() {
+		return pendingJoin;
 	}
 
 	public Cache<String, Boolean> getRatelimit() {

@@ -83,7 +83,7 @@ public class GuildDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
-		List<GuildConfig> gcs = (List<GuildConfig>) gc.getResultList();
+		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
 
@@ -95,7 +95,7 @@ public class GuildDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE exceedRolesEnabled = TRUE", GuildConfig.class);
-		List<GuildConfig> gcs = (List<GuildConfig>) gc.getResultList();
+		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
 
@@ -107,7 +107,7 @@ public class GuildDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE COALESCE(buttonConfigs, '') NOT IN ('', '{}')", GuildConfig.class);
-		List<GuildConfig> gcs = (List<GuildConfig>) gc.getResultList();
+		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
 
@@ -119,7 +119,7 @@ public class GuildDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE COALESCE(canalAvisos,'') <> ''", GuildConfig.class);
-		List<GuildConfig> gcs = (List<GuildConfig>) gc.getResultList();
+		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
 

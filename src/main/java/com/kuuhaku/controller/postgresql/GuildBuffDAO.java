@@ -32,7 +32,7 @@ public class GuildBuffDAO {
 		Query q = em.createQuery("SELECT gb FROM GuildBuff gb", GuildBuff.class);
 
 		try {
-			return (List<GuildBuff>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}

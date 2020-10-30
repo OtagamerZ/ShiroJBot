@@ -32,7 +32,7 @@ public class EquipmentMarketDAO {
 		Query q = em.createQuery("SELECT eqm FROM EquipmentMarket eqm WHERE buyer = ''", EquipmentMarket.class);
 
 		try {
-			return (List<EquipmentMarket>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}
@@ -46,7 +46,7 @@ public class EquipmentMarketDAO {
 		q.setParameter("id", id);
 
 		try {
-			return (List<EquipmentMarket>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}

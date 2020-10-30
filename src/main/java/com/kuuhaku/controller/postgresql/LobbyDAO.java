@@ -18,18 +18,43 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.FieldMarket;
+import com.kuuhaku.model.persistent.Lobby;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
-public class FieldMarketDAO {
-	@SuppressWarnings("unchecked")
-	public static List<FieldMarket> getCards() {
+public class LobbyDAO {
+	public static Lobby getLobby(int id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT fm FROM FieldMarket fm WHERE buyer = ''", FieldMarket.class);
+		try {
+			return em.find(Lobby.class, id);
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Lobby getLobby(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			Query q = em.createQuery("SELECT l FROM Lobby l WHERE l.owner = :owner", Lobby.class);
+			q.setParameter("owner", id);
+			return (Lobby) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Lobby> getLobbies() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT l FROM Lobby l WHERE SIZE(l.players) < l.maxPlayers ORDER BY l.id", Lobby.class);
 
 		try {
 			return q.getResultList();
@@ -38,37 +63,21 @@ public class FieldMarketDAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<FieldMarket> getCardsByCard(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT fm FROM EquipmentMarket fm WHERE fm.card.card.id = UPPER(:id) AND fm.publishDate IS NOT NULL", FieldMarket.class);
-		q.setParameter("id", id);
-
-		try {
-			return q.getResultList();
-		} finally {
-			em.close();
-		}
-	}
-
-	public static FieldMarket getCard(int id) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
-			FieldMarket fm = em.find(FieldMarket.class, id);
-			if (fm == null || !fm.getBuyer().isBlank()) return null;
-			else return fm;
-		} finally {
-			em.close();
-		}
-	}
-
-	public static void saveCard(FieldMarket card) {
+	public static void saveLobby(Lobby lb) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(card);
+		em.merge(lb);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void deleteLobby(Lobby lb) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.remove(lb);
 		em.getTransaction().commit();
 
 		em.close();
