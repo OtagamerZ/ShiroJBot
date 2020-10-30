@@ -73,7 +73,7 @@ public class SynthesizeCardCommand extends Command {
 		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
-		} else if (Helper.equalsAny(args[1], "n", "c")) {
+		} else if (!Helper.equalsAny(args[1], "n", "c")) {
 			channel.sendMessage("❌ | Você precisa informar o tipo da síntese (`n` = síntese normal e `c` = síntese cromada).").queue();
 			return;
 		}
