@@ -69,7 +69,6 @@ public class ShiroInfo {
 	private static final String version = VersionDAO.getBuildVersion(Version.V3);
 	private static final String supportServerName = "Shiro Support";
 	private static final String supportServerID = "421495229594730496";
-	private static final String lobbyServerID = "771733492543389766";
 	private static final String twitchChannelID = "743479145618472960";
 	private static final String announcementChannelID = "597587565809369089";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
@@ -79,8 +78,7 @@ public class ShiroInfo {
 	private static final List<String> developers = List.of(
 			niichan, //KuuHaKu
 			"321665807988031495", //Reydux
-			"694652893571055746", //HeyCarlosz
-			"738832022038118472" //Riku
+			"694652893571055746" //HeyCarlosz
 	);
 	private static final List<String> editors = List.of(
 
@@ -147,10 +145,6 @@ public class ShiroInfo {
 
 	public static String getSupportServerID() {
 		return supportServerID;
-	}
-
-	public static String getLobbyServerID() {
-		return lobbyServerID;
 	}
 
 	public static String getTwitchChannelID() {
