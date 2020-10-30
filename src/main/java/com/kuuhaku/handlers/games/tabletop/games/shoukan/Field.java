@@ -35,6 +35,7 @@ import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 @Entity
+@Table(name = "field")
 public class Field implements Drawable, Cloneable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
