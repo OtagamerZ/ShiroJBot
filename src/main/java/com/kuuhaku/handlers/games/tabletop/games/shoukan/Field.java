@@ -27,6 +27,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -42,8 +43,8 @@ public class Field implements Drawable, Cloneable {
 	@OneToOne(fetch = FetchType.EAGER)
 	private Card card;
 
-	@Enumerated(EnumType.STRING)
-	private ArenaField field;
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT {}")
+	private final String modifiers = "{}";
 
 	private transient Account acc = null;
 	private transient boolean available = true;
@@ -77,7 +78,7 @@ public class Field implements Drawable, Cloneable {
 			int i = 0;
 			for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
 				g2d.setColor(colors[i]);
-				Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 45, 82 + (26 * i), g2d);
+				Profile.drawOutlinedText(Helper.toPercent(getModifiers().optFloat(r.name(), 1f)), 45, 82 + (26 * i), g2d);
 				i++;
 			}
 		}
@@ -117,7 +118,7 @@ public class Field implements Drawable, Cloneable {
 		int i = 0;
 		for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
 			g2d.setColor(colors[i]);
-			Profile.drawOutlinedText(Helper.toPercent(field.getModifiers().getOrDefault(r, 1f)), 45, 82 + (26 * i), g2d);
+			Profile.drawOutlinedText(Helper.toPercent(getModifiers().optFloat(r.name(), 1f)), 45, 82 + (26 * i), g2d);
 			i++;
 		}
 
@@ -137,7 +138,11 @@ public class Field implements Drawable, Cloneable {
 	}
 
 	public ArenaField getField() {
-		return field;
+		return ArenaField.valueOf(card.getId());
+	}
+
+	public JSONObject getModifiers() {
+		return new JSONObject(modifiers);
 	}
 
 	@Override

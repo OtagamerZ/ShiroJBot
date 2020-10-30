@@ -552,7 +552,7 @@ public class Shoukan extends Game {
 					int yPower = Math.round(
 							c.getAtk() +
 							c.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
-							(arena.getField() == null ? 1 : arena.getField().getField().getModifiers().getOrDefault(c.getRace(), 1f))
+									(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
 					);
 
 					enemy.removeHp(yPower);
@@ -591,8 +591,8 @@ public class Shoukan extends Game {
 
 				int yPower = Math.round(
 						yours.getEAtk() +
-						yours.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
-						(arena.getField() == null ? 1 : arena.getField().getField().getModifiers().getOrDefault(yours.getRace(), 1f))
+								yours.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
+										(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
 				);
 
 				int hPower;
@@ -605,14 +605,14 @@ public class Shoukan extends Game {
 					}
 					hPower = Math.round(
 							his.getEDef() +
-							his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum() *
-							(arena.getField() == null ? 1 : arena.getField().getField().getModifiers().getOrDefault(his.getRace(), 1f))
+									his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum() *
+											(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 					);
 				} else
 					hPower = Math.round(
 							his.getEAtk() +
-							his.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
-							(arena.getField() == null ? 1 : arena.getField().getField().getModifiers().getOrDefault(his.getRace(), 1f))
+									his.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
+											(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 					);
 
 				if (yPower > hPower) {
