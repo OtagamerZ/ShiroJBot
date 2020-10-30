@@ -45,7 +45,7 @@ public class Field implements Drawable, Cloneable {
 	private Card card;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '{}'")
-	private final String modifiers = "{}";
+	private String modifiers = "{}";
 
 	private transient Account acc = null;
 	private transient boolean available = true;
