@@ -33,7 +33,7 @@ public class AccountDAO {
 		Query q = em.createQuery("SELECT a FROM Account a WHERE remind = TRUE", Account.class);
 
 		try {
-			return (List<Account>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}
@@ -88,7 +88,7 @@ public class AccountDAO {
 
 		Query q = em.createQuery("SELECT a FROM Account a ORDER BY a.balance DESC", Account.class);
 
-		List<Account> accs = (List<Account>) q.getResultList();
+		List<Account> accs = q.getResultList();
 
 		em.close();
 

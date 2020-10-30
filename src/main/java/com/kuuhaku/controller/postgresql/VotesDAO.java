@@ -82,7 +82,7 @@ public class VotesDAO {
 			}
 		}
 
-		List<Votes> votes = (List<Votes>) q.getResultList();
+		List<Votes> votes = q.getResultList();
 		HashMap<String, result> voteMap = new HashMap<>();
 
 		votes.forEach(v -> {

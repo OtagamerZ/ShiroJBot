@@ -62,7 +62,7 @@ public class LotteryDAO {
 
 		Query q = em.createQuery("SELECT l FROM Lottery l WHERE l.valid = TRUE", Lottery.class);
 
-		List<Lottery> ltts = (List<Lottery>) q.getResultList();
+		List<Lottery> ltts = q.getResultList();
 
 		em.close();
 
@@ -76,7 +76,7 @@ public class LotteryDAO {
 		Query q = em.createQuery("SELECT l FROM Lottery l WHERE l.uid = :id AND l.valid = TRUE", Lottery.class);
 		q.setParameter("id", id);
 
-		List<Lottery> ltts = (List<Lottery>) q.getResultList();
+		List<Lottery> ltts = q.getResultList();
 
 		em.close();
 
@@ -90,7 +90,7 @@ public class LotteryDAO {
 		Query q = em.createQuery("SELECT l FROM Lottery l WHERE l.dozens = :dozens AND l.valid = TRUE", Lottery.class);
 		q.setParameter("dozens", dozens);
 
-		List<Lottery> ltts = (List<Lottery>) q.getResultList();
+		List<Lottery> ltts = q.getResultList();
 
 		em.close();
 

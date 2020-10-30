@@ -20,6 +20,7 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.LobbyDAO;
 import com.kuuhaku.controller.postgresql.RelayDAO;
 import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
@@ -27,14 +28,13 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.Lobby;
 import com.kuuhaku.model.persistent.PermaBlock;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -44,6 +44,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.RestAction;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -106,16 +107,56 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
+		Guild guild = event.getGuild();
+		Member member = event.getMember();
+		List<Lobby> lobbies = LobbyDAO.getLobbies();
 		try {
-			if (BlacklistDAO.isBlacklisted(event.getUser())) return;
-			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+			if (guild.getId().equals(ShiroInfo.getLobbyServerID())) {
+				Lobby lb = lobbies.stream()
+						.filter(l -> {
+							int roomId = Helper.getOr(Main.getInfo().getPendingJoin().getIfPresent(member.getId()), -1);
+							boolean isPlayer = l.getPlayers().contains(member.getId());
+							boolean isPending = roomId != -1 && l.getId() == roomId;
 
-			MemberDAO.addMemberToDB(event.getMember());
+							return isPlayer || isPending;
+						})
+						.findFirst()
+						.orElse(null);
+				if (BlacklistDAO.isBlacklisted(event.getUser()) || lb == null) {
+					guild.kick(member).queue();
+					return;
+				}
+
+				lb.addPlayer(member.getId());
+				LobbyDAO.saveLobby(lb);
+
+				Main.getInfo().getPendingJoin().invalidate(member.getId());
+
+				Category cat = guild.getCategories().stream()
+						.filter(c -> c.getName().startsWith(String.valueOf(lb.getId())))
+						.findFirst()
+						.orElse(null);
+
+				assert cat != null;
+				if (member.getId().equals(lb.getOwner()))
+					cat.putPermissionOverride(member)
+							.grant(Permission.VIEW_CHANNEL, Permission.KICK_MEMBERS)
+							.queue();
+				else
+					cat.putPermissionOverride(member)
+							.grant(Permission.VIEW_CHANNEL)
+							.queue();
+			}
+
+			if (BlacklistDAO.isBlacklisted(event.getUser())) return;
+			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+
+			MemberDAO.addMemberToDB(member);
 
 			if (!gc.getMsgBoasVindas().equals("")) {
 				if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
-					Helper.logToChannel(event.getUser(), false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + event.getUser().getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", event.getGuild());
-					event.getGuild().kick(event.getMember()).queue();
+					Helper.logToChannel(event.getUser(), false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + event.getUser().getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", guild);
+					guild.kick(member).queue();
 					return;
 				}
 				URL url = new URL(Objects.requireNonNull(event.getUser().getAvatarUrl()));
@@ -127,9 +168,9 @@ public class JDAEvents extends ListenerAdapter {
 
 				eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
 				eb.setColor(Helper.colorThief(image));
-				eb.setDescription(gc.getMsgBoasVindas().replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
+				eb.setDescription(gc.getMsgBoasVindas().replace("%user%", event.getUser().getName()).replace("%guild%", guild.getName()));
 				eb.setThumbnail(event.getUser().getAvatarUrl());
-				eb.setFooter("ID do usuário: " + event.getUser().getId(), event.getGuild().getIconUrl());
+				eb.setFooter("ID do usuário: " + event.getUser().getId(), guild.getIconUrl());
 				switch ((int) (Math.random() * 5)) {
 					case 0 -> eb.setTitle("Opa, parece que temos um novo membro?");
 					case 1 -> eb.setTitle("Mais um membro para nosso lindo servidor!");
@@ -138,11 +179,11 @@ public class JDAEvents extends ListenerAdapter {
 					case 4 -> eb.setTitle("Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!");
 				}
 
-				Objects.requireNonNull(event.getGuild().getTextChannelById(gc.getCanalBV())).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
-				Helper.logToChannel(event.getUser(), false, null, "Um usuário entrou no servidor", event.getGuild());
+				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalBV())).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
+				Helper.logToChannel(event.getUser(), false, null, "Um usuário entrou no servidor", guild);
 			} else if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
-				Helper.logToChannel(event.getUser(), false, null, "Um usuário foi bloqueado de entrar no servidor", event.getGuild());
-				event.getGuild().kick(event.getMember()).queue();
+				Helper.logToChannel(event.getUser(), false, null, "Um usuário foi bloqueado de entrar no servidor", guild);
+				guild.kick(member).queue();
 			}
 		} catch (Exception ignore) {
 		}
@@ -150,8 +191,39 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
+		Guild guild = event.getGuild();
+		Member member = event.getMember();
+		List<Lobby> lobbies = LobbyDAO.getLobbies();
 		try {
 			if (BlacklistDAO.isBlacklisted(event.getUser())) return;
+			else if (guild.getId().equals(ShiroInfo.getLobbyServerID())) {
+				assert member != null;
+				Lobby lb = lobbies.stream()
+						.filter(l -> l.getPlayers().contains(member.getId()))
+						.findFirst()
+						.orElse(null);
+
+				assert lb != null;
+				lb.removePlayer(member.getId());
+				if (lb.getPlayers().size() == 0 || !lb.getPlayers().contains(lb.getOwner()))
+					LobbyDAO.deleteLobby(lb);
+				else
+					LobbyDAO.saveLobby(lb);
+
+				if (member.getId().equals(lb.getOwner())) {
+					Category cat = guild.getCategories().stream()
+							.filter(c -> c.getName().startsWith(String.valueOf(lb.getId())))
+							.findFirst()
+							.orElse(null);
+
+					assert cat != null;
+					cat.getChannels().stream()
+							.map(GuildChannel::delete)
+							.forEach(RestAction::queue);
+					cat.delete().queue();
+				}
+			}
+
 			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 
 			/*com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(event.getMember().getId() + event.getGuild().getId());

@@ -155,6 +155,9 @@ public class CommandManager {
 			put(DecryptCommand.class, new Argument(
 					"descriptografar", new String[]{"decrypt", "dcrpt"}, REQ_KEY_FILE, "cmd_decrypt", BETA, false
 			));
+			put(LobbyCommand.class, new Argument(
+					"lobby", new String[]{"saguão", "sala", "room"}, "req_operation-id-params", "cmd_lobby", BETA, true
+			));
 
 			//MODERATION
 			put(RemoveAnswerCommand.class, new Argument(
