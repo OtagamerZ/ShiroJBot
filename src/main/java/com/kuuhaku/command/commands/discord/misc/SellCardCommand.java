@@ -85,13 +85,13 @@ public class SellCardCommand extends Command {
 				try {
 					boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
 					int price = Integer.parseInt(args[1]);
-					int min = 10000 * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2);
+					int min = hasLoan ? 20000 : 10000;
 
 					if (price < min) {
 						if (hasLoan)
 							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
 						else
-							channel.sendMessage("❌ | Você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+							channel.sendMessage("❌ | Você não pode vender essa arena por menos que " + min + " créditos.").queue();
 						return;
 					}
 
