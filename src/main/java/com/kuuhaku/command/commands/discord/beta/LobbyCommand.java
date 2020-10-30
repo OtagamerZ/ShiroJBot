@@ -36,6 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -60,7 +61,7 @@ public class LobbyCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId());
+		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberByMid(author.getId()).stream().max(Comparator.comparingInt(com.kuuhaku.model.persistent.Member::getLevel)).orElseThrow();
 		List<Lobby> lobbies = LobbyDAO.getLobbies();
 
 		if (args.length == 0) {
