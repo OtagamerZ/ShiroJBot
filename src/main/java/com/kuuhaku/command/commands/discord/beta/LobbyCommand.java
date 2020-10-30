@@ -95,6 +95,7 @@ public class LobbyCommand extends Command {
 			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
 					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
 			);
+			return;
 		}
 
 		if (Helper.equalsAny(args[0], "entrar", "join")) {
@@ -105,7 +106,7 @@ public class LobbyCommand extends Command {
 
 			String pass = String.join(" ", args)
 					.replaceFirst("(?i)(entrar|join) ([0-9]+) ", "");
-			Lobby lb = LobbyDAO.getLobby(Integer.parseInt(args[0]));
+			Lobby lb = LobbyDAO.getLobby(Integer.parseInt(args[1]));
 			if (lb.hasPassword() && !lb.checkPassword(pass)) {
 				channel.sendMessage("❌ | Senha incorreta.").queue();
 				return;
@@ -153,7 +154,7 @@ public class LobbyCommand extends Command {
 				return;
 			}
 
-			if (Helper.between(maxPlayers, 2, 9)) {
+			if (!Helper.between(maxPlayers, 2, 9)) {
 				channel.sendMessage("❌ | O limite de jogadores deve ser maior que 2 e menor ou igual a 8.").queue();
 				return;
 			}
