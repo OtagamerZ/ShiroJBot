@@ -64,6 +64,7 @@ public enum KawaiponRarity {
 			case LEGENDARY -> "Lendária";
 			case ULTIMATE -> "Ultimate";
 			case EQUIPMENT -> "Equipamento";
+			case FIELD -> "Arena";
 			default -> throw new InvalidStateException();
 		};
 	}
@@ -76,6 +77,7 @@ public enum KawaiponRarity {
 			case "ultra", "ultra_rara" -> ULTRA_RARE;
 			case "lendaria" -> LEGENDARY;
 			case "equipamento" -> EQUIPMENT;
+			case "arena" -> FIELD;
 			default -> null;
 		};
 	}

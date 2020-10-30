@@ -121,6 +121,7 @@ public class BuyCardCommand extends Command {
 					`-a` - Busca cartas por anime
 					`-c` - Busca apenas cartas cromadas
 					`-e` - Busca apenas cartas-equipamento
+					`-f` - Busca apenas cartas de campo
 					`-m` - Busca apenas suas cartas anunciadas
 					       
 					Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`.
