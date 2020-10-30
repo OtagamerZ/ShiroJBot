@@ -126,7 +126,7 @@ public class JDAEvents extends ListenerAdapter {
 
 				eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
 				eb.setColor(Helper.colorThief(image));
-				eb.setDescription(gc.getMsgBoasVindas().replace("%user%", event.getUser().getName()).replace("%guild%", guild.getName()));
+				eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", event.getUser().getName()).replace("%guild%", guild.getName()));
 				eb.setThumbnail(event.getUser().getAvatarUrl());
 				eb.setFooter("ID do usuário: " + event.getUser().getId(), guild.getIconUrl());
 				switch ((int) (Math.random() * 5)) {
@@ -171,7 +171,7 @@ public class JDAEvents extends ListenerAdapter {
 				eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
 				eb.setColor(Helper.colorThief(image));
 				eb.setThumbnail(event.getUser().getAvatarUrl());
-				eb.setDescription(gc.getMsgAdeus().replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
+				eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
 				eb.setFooter("ID do usuário: " + event.getUser().getId() + "\n\nServidor gerenciado por " + Objects.requireNonNull(event.getGuild().getOwner()).getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
 				switch (rmsg) {
 					case 0 -> eb.setTitle("Nãããoo...um membro deixou este servidor!");
