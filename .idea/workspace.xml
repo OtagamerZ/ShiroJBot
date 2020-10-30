@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no Shoukan">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas confirmações dos jogos" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -816,13 +814,6 @@
       <workItem from="1604003771178" duration="177000" />
       <workItem from="1604004435235" duration="647000" />
     </task>
-    <task id="LOCAL-02743" summary="Correções">
-      <created>1603736012009</created>
-      <option name="number" value="02743" />
-      <option name="presentableId" value="LOCAL-02743" />
-      <option name="project" value="LOCAL" />
-      <updated>1603736012009</updated>
-    </task>
     <task id="LOCAL-02744" summary="Correções">
       <created>1603736092705</created>
       <option name="number" value="02744" />
@@ -1159,7 +1150,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604008933838</updated>
     </task>
-    <option name="localTasksCounter" value="2792" />
+    <task id="LOCAL-02792" summary="Correção nas confirmações dos jogos">
+      <created>1604014916402</created>
+      <option name="number" value="02792" />
+      <option name="presentableId" value="LOCAL-02792" />
+      <option name="project" value="LOCAL" />
+      <updated>1604014916402</updated>
+    </task>
+    <option name="localTasksCounter" value="2793" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1225,7 +1223,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no canal de logs" />
     <MESSAGE value="Correção no comando Bind" />
     <MESSAGE value="Correção no gerador aleatório com peso" />
     <MESSAGE value="Correção no Hitotsu multiplayer" />
@@ -1250,7 +1247,8 @@
     <MESSAGE value="Adição de ícone de mortos-vivos" />
     <MESSAGE value="Adição da possibilidade de vender cartas de campo no mercado global" />
     <MESSAGE value="Correção no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no Shoukan" />
+    <MESSAGE value="Correção nas confirmações dos jogos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nas confirmações dos jogos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1373,11 +1371,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604008936313">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604014933433">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604003674622" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604008936313" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604014933433" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
