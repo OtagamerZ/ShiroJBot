@@ -19,18 +19,16 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.LobbyDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
-import com.kuuhaku.model.persistent.Lobby;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
-import net.dv8tion.jda.api.requests.RestAction;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -104,45 +102,5 @@ public class MinuteEvent implements Job {
 				}
 			}
 		});
-
-		Guild g = Main.getInfo().getGuildByID(ShiroInfo.getLobbyServerID());
-		List<Lobby> lobbies = LobbyDAO.getLobbies();
-		List<Category> categories = g.getCategories();
-		for (Category cat : categories) {
-			if (lobbies.stream().noneMatch(l -> cat.getName().startsWith(String.valueOf(l.getId())))) {
-				cat.getChannels().stream()
-						.map(GuildChannel::delete)
-						.forEach(RestAction::queue);
-				cat.delete().queue();
-			}
-		}
-		categories = g.getCategories();
-		for (Lobby lb : lobbies) {
-			boolean exists = categories.stream()
-					.anyMatch(c -> c.getName().startsWith(String.valueOf(lb.getId())));
-
-			if (!exists) {
-				g.createCategory(lb.getId() + " | " + lb.getName()).queue(s -> {
-					g.createTextChannel("Salão")
-							.setTopic("Sala de jogos criada por " + Main.getInfo().getUserByID(lb.getOwner()).getName())
-							.setParent(s)
-							.queue();
-
-					g.createVoiceChannel("Call")
-							.setUserlimit(lb.getMaxPlayers())
-							.setParent(s)
-							.queue();
-				});
-			}
-
-			if (!lb.getPlayers().contains(lb.getOwner()) && Main.getInfo().getPendingJoin().getIfPresent(lb.getOwner()) == null)
-				LobbyDAO.deleteLobby(lb);
-		}
-
-		List<Member> members = g.getMembers();
-		for (Member mb : members) {
-			if (lobbies.stream().noneMatch(l -> l.getPlayers().contains(mb.getId())) && mb.getRoles().size() == 0)
-				g.kick(mb).queue();
-		}
 	}
 }
