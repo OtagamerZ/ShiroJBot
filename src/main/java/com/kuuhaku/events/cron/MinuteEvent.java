@@ -141,7 +141,7 @@ public class MinuteEvent implements Job {
 
 		List<Member> members = g.getMembers();
 		for (Member mb : members) {
-			if (lobbies.stream().noneMatch(l -> l.getPlayers().contains(mb.getId()) && mb.getRoles().stream().allMatch(Role::isPublicRole)))
+			if (lobbies.stream().noneMatch(l -> l.getPlayers().contains(mb.getId()) && mb.getRoles().size() == 0))
 				g.kick(mb).queue();
 		}
 	}
