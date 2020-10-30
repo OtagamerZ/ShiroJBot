@@ -34,7 +34,7 @@ public class GlobalMessageDAO {
 		Query q = em.createQuery("SELECT m FROM GlobalMessage m", GlobalMessage.class);
 
 		try {
-			return (List<GlobalMessage>) q.getResultList();
+			return q.getResultList();
 		} catch (NoResultException e) {
 			return new ArrayList<>();
 		} finally {

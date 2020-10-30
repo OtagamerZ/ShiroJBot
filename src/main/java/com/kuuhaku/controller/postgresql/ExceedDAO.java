@@ -109,7 +109,7 @@ public class ExceedDAO {
 		Query q = em.createQuery("SELECT ex FROM ExceedMember ex WHERE ex.exceed = :exceed", ExceedMember.class);
 		q.setParameter("exceed", ex.getName());
 
-		List<ExceedMember> members = (List<ExceedMember>) q.getResultList();
+		List<ExceedMember> members = q.getResultList();
 		em.close();
 
 		return members;
@@ -121,7 +121,7 @@ public class ExceedDAO {
 
 		Query q = em.createQuery("SELECT ex FROM ExceedMember ex", ExceedMember.class);
 
-		List<ExceedMember> members = (List<ExceedMember>) q.getResultList();
+		List<ExceedMember> members = q.getResultList();
 		em.close();
 
 		return members;
@@ -162,7 +162,7 @@ public class ExceedDAO {
 
 		Query q = em.createNativeQuery("SELECT e.exceed FROM shiro.\"GetCurrentExceedScores\" e");
 
-		List<Object> ex = (List<Object>) q.getResultList();
+		List<Object> ex = q.getResultList();
 		em.close();
 
 		Object winner = ex.get(0);
@@ -248,7 +248,7 @@ public class ExceedDAO {
 		q.setParameter("ex", ex);
 
 		try {
-			return (List<ExceedScore>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}

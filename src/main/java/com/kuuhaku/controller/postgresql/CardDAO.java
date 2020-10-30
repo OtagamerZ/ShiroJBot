@@ -82,7 +82,7 @@ public class CardDAO {
 
 		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND anime <> 'HIDDEN'", Card.class);
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-		List<Card> c = (List<Card>) q.getResultList();
+		List<Card> c = q.getResultList();
 
 		em.close();
 
@@ -95,7 +95,7 @@ public class CardDAO {
 
 		Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", Card.class);
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-		List<Card> c = (List<Card>) q.getResultList();
+		List<Card> c = q.getResultList();
 
 		em.close();
 
@@ -108,7 +108,7 @@ public class CardDAO {
 
 		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", String.class);
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-		List<String> c = (List<String>) q.getResultList();
+		List<String> c = q.getResultList();
 
 		em.close();
 
@@ -120,7 +120,7 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT e.card.id FROM Equipment e", String.class);
-		List<String> c = (List<String>) q.getResultList();
+		List<String> c = q.getResultList();
 
 		em.close();
 
@@ -132,7 +132,7 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT e FROM Equipment e", Equipment.class);
-		List<Equipment> c = (List<Equipment>) q.getResultList();
+		List<Equipment> c = q.getResultList();
 
 		em.close();
 
@@ -144,7 +144,7 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT c.card.id FROM Champion c", String.class);
-		List<String> c = (List<String>) q.getResultList();
+		List<String> c = q.getResultList();
 
 		em.close();
 
@@ -157,7 +157,7 @@ public class CardDAO {
 
 		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.rarity <> :rarity", Champion.class);
 		q.setParameter("rarity", KawaiponRarity.FUSION);
-		List<Champion> c = (List<Champion>) q.getResultList();
+		List<Champion> c = q.getResultList();
 
 		em.close();
 
@@ -169,7 +169,7 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT f.card.id FROM Field f", String.class);
-		List<String> c = (List<String>) q.getResultList();
+		List<String> c = q.getResultList();
 
 		em.close();
 
@@ -181,7 +181,7 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT f FROM Field f", Field.class);
-		List<Field> c = (List<Field>) q.getResultList();
+		List<Field> c = q.getResultList();
 
 		em.close();
 
@@ -196,7 +196,7 @@ public class CardDAO {
 		q.setParameter("anime", anime);
 
 		try {
-			return (List<Card>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}
@@ -210,7 +210,7 @@ public class CardDAO {
 		q.setParameter("anime", anime);
 
 		try {
-			return (List<Card>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}
@@ -225,7 +225,7 @@ public class CardDAO {
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 
 		try {
-			return (List<Card>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}
@@ -278,7 +278,7 @@ public class CardDAO {
 		Query q = em.createQuery("SELECT c FROM Champion c WHERE SIZE(requiredCards) > 0", Champion.class);
 
 		try {
-			return (List<Champion>) q.getResultList();
+			return q.getResultList();
 		} catch (NoResultException e) {
 			return null;
 		} finally {

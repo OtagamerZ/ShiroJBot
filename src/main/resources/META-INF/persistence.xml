@@ -73,6 +73,7 @@
         <class>com.kuuhaku.model.persistent.EquipmentMarket</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Field</class>
         <class>com.kuuhaku.model.persistent.FieldMarket</class>
+        <class>com.kuuhaku.model.persistent.Lobby</class>
 
         <properties>
             <!-- dados da conexao -->
