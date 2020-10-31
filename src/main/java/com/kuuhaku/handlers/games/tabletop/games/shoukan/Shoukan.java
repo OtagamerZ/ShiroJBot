@@ -191,7 +191,7 @@ public class Shoukan extends Game {
 
 		return condition
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
-				.and(e -> StringUtils.isNumeric(e.getMessage().getContentRaw().split(",")[0]))
+				.and(e -> StringUtils.isNumeric(e.getMessage().getContentRaw().split(",")[0]) || e.getMessage().getContentRaw().equalsIgnoreCase("reload"))
 				.test(evt);
 	}
 
@@ -286,6 +286,15 @@ public class Shoukan extends Game {
 				getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 			close();
 		});
+
+		if (cmd.equalsIgnoreCase("reload")) {
+			if (this.message != null) this.message.delete().queue();
+			this.message = channel.sendMessage(message.getAuthor().getAsMention() + " recriou a mensagem do jogo.")
+					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
+			Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+			resetTimerKeepTurn();
+			return;
+		}
 
 		String[] args = cmd.split(",");
 		if (!StringUtils.isNumeric(args[0])) {
