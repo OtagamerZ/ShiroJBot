@@ -73,7 +73,9 @@ public class ExceedDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(ex);
+		Query q = em.createQuery("DELETE FROM Member WHERE id = :id");
+		q.setParameter("id", ex.getId());
+		q.executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();
