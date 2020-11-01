@@ -42,8 +42,7 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import javax.persistence.NoResultException;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -113,7 +112,7 @@ public class TenthMinuteEvent implements Job {
 			});
 		}
 
-		int month = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).getMonthValue();
+		int month = LocalDate.now().getMonthValue();
 		if (!DynamicParameterDAO.getParam("last_upd_month").getValue().equals(String.valueOf(month)))
 			MonthlyEvent.call();
 	}
