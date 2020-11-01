@@ -270,16 +270,18 @@ public class Helper {
         BufferedImage icon = ImageIO.read(con.getInputStream());
 
         try {
-            if (icon != null)
-                return new Color(ColorThief.getColor(icon)[0], ColorThief.getColor(icon)[1], ColorThief.getColor(icon)[2]);
-            else return getRandomColor();
+            if (icon != null) {
+                int[] colors = ColorThief.getColor(icon, 5, false);
+                return new Color(colors[0], colors[1], colors[2]);
+            } else return getRandomColor();
         } catch (NullPointerException e) {
             return getRandomColor();
         }
     }
 
     public static Color colorThief(BufferedImage image) {
-        return new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]);
+        int[] colors = ColorThief.getColor(image, 5, false);
+        return new Color(colors[0], colors[1], colors[2]);
     }
 
     public static void spawnAd(MessageChannel channel) {

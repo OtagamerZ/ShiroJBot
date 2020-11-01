@@ -14,27 +14,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos ícones de raças">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/ultimate.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_blue.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_blue.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_cyan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_cyan.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_green.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_green.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_grey.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_grey.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_pink.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_pink.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_purple.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_purple.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_red.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_red.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_yellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_yellow.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/bestial.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/bestial.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/creature.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/creature.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/demon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/demon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/divinity.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/divinity.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/elf.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/elf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/human.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/human.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/machine.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/machine.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/mystical.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/mystical.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/spirit.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/spirit.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/undead.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/undead.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedRankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedRankCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ExceedDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ExceedDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -847,14 +831,7 @@
       <workItem from="1604003771178" duration="177000" />
       <workItem from="1604004435235" duration="647000" />
       <workItem from="1604025985410" duration="2473000" />
-      <workItem from="1604197352958" duration="2120000" />
-    </task>
-    <task id="LOCAL-02766" summary="Correção dos argumentos de Shoukan">
-      <created>1603831868296</created>
-      <option name="number" value="02766" />
-      <option name="presentableId" value="LOCAL-02766" />
-      <option name="project" value="LOCAL" />
-      <updated>1603831868297</updated>
+      <workItem from="1604197352958" duration="3247000" />
     </task>
     <task id="LOCAL-02767" summary="Adição de novas imagens de avatar">
       <created>1603889091369</created>
@@ -1192,7 +1169,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604187860019</updated>
     </task>
-    <option name="localTasksCounter" value="2815" />
+    <task id="LOCAL-02815" summary="Correção nos ícones de raças">
+      <created>1604199770684</created>
+      <option name="number" value="02815" />
+      <option name="presentableId" value="LOCAL-02815" />
+      <option name="project" value="LOCAL" />
+      <updated>1604199770684</updated>
+    </task>
+    <option name="localTasksCounter" value="2816" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1407,11 +1391,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604187869915">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604199777245">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604082169656" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604187869915" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604199777245" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
