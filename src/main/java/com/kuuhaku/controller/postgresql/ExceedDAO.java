@@ -269,4 +269,17 @@ public class ExceedDAO {
 
 		em.close();
 	}
+
+	public static boolean verifyMonth() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT es FROM ExceedScore es WHERE es.timestamp = :date");
+		q.setParameter("date", LocalDate.now());
+
+		try {
+			return q.getResultList().size() == 0;
+		} finally {
+			em.close();
+		}
+	}
 }

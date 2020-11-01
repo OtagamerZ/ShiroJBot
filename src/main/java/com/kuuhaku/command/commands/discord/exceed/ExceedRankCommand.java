@@ -110,8 +110,9 @@ public class ExceedRankCommand extends Command {
 					List<Color> colors = new ArrayList<>();
 					for (ExceedEnum ex : ExceedEnum.values()) {
 						List<ExceedScore> e = ExceedDAO.getExceedHistory(ex);
-						e.add(new ExceedScore(ex, ExceedDAO.getExceed(ex).getExp(), LocalDate.now()));
+						e.add(new ExceedScore(ex, ExceedDAO.getExceed(ex).getExp(), LocalDate.now().plusMonths(1)));
 						e.sort(Comparator.comparing(ExceedScore::getTimestamp));
+						e.removeIf(es -> es.getTimestamp().getYear() != LocalDate.now().getYear());
 						exceeds.add(e);
 						colors.add(ex.getPalette());
 					}
