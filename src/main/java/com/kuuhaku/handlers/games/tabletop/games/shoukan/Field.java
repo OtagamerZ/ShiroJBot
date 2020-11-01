@@ -64,21 +64,12 @@ public class Field implements Drawable, Cloneable {
 
 			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
-			Color[] colors = {
-					Color.decode("#8d01ff"),
-					Color.green,
-					Color.decode("#2c01ff"),
-					Color.orange,
-					Color.yellow,
-					Color.cyan,
-					Color.decode("#993500"),
-					Color.white,
-					Color.red,
-					Color.magenta
-			};
 			int i = 0;
 			for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
-				g2d.setColor(colors[i]);
+				BufferedImage icon = r.getIcon();
+				assert icon != null;
+				g2d.setColor(Helper.colorThief(icon));
+				g2d.drawImage(icon, 20, 59 + (26 * i), null);
 				Profile.drawOutlinedText(Helper.toPercent(getModifiers().optFloat(r.name(), 1f)), 45, 82 + (26 * i), g2d);
 				i++;
 			}
@@ -104,21 +95,12 @@ public class Field implements Drawable, Cloneable {
 
 		Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
-		Color[] colors = {
-				Color.decode("#8d01ff"),
-				Color.green,
-				Color.decode("#2c01ff"),
-				Color.orange,
-				Color.yellow,
-				Color.cyan,
-				Color.decode("#993500"),
-				Color.white,
-				Color.red,
-				Color.magenta
-		};
 		int i = 0;
 		for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
-			g2d.setColor(colors[i]);
+			BufferedImage icon = r.getIcon();
+			assert icon != null;
+			g2d.setColor(Helper.colorThief(icon));
+			g2d.drawImage(icon, 20, 59 + (26 * i), null);
 			Profile.drawOutlinedText(Helper.toPercent(getModifiers().optFloat(r.name(), 1f)), 45, 82 + (26 * i), g2d);
 			i++;
 		}
