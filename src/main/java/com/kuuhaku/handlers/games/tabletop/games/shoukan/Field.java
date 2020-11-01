@@ -37,145 +37,169 @@ import java.util.Objects;
 @Entity
 @Table(name = "field")
 public class Field implements Drawable, Cloneable {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	private Card card;
+    @OneToOne(fetch = FetchType.EAGER)
+    private Card card;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '{}'")
-	private String modifiers = "{}";
+    @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '{}'")
+    private String modifiers = "{}";
 
-	private transient Account acc = null;
-	private transient boolean available = true;
+    private transient Account acc = null;
+    private transient boolean available = true;
 
-	@Override
-	public BufferedImage drawCard(Account acc, boolean flipped) {
-		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = bi.createGraphics();
-		if (flipped) {
-			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
-		} else {
-			g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
+    @Override
+    public BufferedImage drawCard(Account acc, boolean flipped) {
+        BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bi.createGraphics();
+        if (flipped) {
+            g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
+        } else {
+            g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
 
-			g2d.drawImage(acc.getFrame().getFrontArena(), 0, 0, null);
-			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+            g2d.drawImage(acc.getFrame().getFrontArena(), 0, 0, null);
+            g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
-			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
+            Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
-			int i = 0;
-			for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
-				BufferedImage icon = r.getIcon();
-				assert icon != null;
-				g2d.setColor(Helper.colorThief(icon));
-				g2d.drawImage(icon, 20, 59 + (26 * i), null);
-				Profile.drawOutlinedText(Helper.toPercent(getModifiers().optFloat(r.name(), 1f)), 45, 82 + (26 * i), g2d);
-				i++;
-			}
-		}
+            Color[] colors = {
+                    Color.decode("#9013fe"), //HUMAN
+                    Color.decode("#7ed321"), //ELF
+                    Color.decode("#ffe0af"), //BESTIAL
+                    Color.decode("#f5a623"), //MACHINE
+                    Color.decode("#f8e71c"), //DIVINITY
+                    Color.decode("#4fe4c3"), //MYSTICAL
+                    Color.decode("#8b572a"), //CREATURE
+                    Color.white,             //SPIRIT
+                    Color.decode("#d0021b"), //DEMON
+                    Color.decode("#fd88fd") //UNDEAD
+            };
+            int i = 0;
+            for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
+                BufferedImage icon = r.getIcon();
+                assert icon != null;
+                g2d.setColor(colors[i]);
+                g2d.drawImage(icon, 20, 59 + (26 * i), null);
+                Profile.drawOutlinedText(Helper.toPercent(getModifiers().optFloat(r.name(), 1f)), 45, 80 + (26 * i), g2d);
+                i++;
+            }
+        }
 
-		if (!available) {
-			g2d.setColor(new Color(0, 0, 0, 150));
-			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-		}
+        if (!available) {
+            g2d.setColor(new Color(0, 0, 0, 150));
+            g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+        }
 
-		g2d.dispose();
+        g2d.dispose();
 
-		return bi;
-	}
+        return bi;
+    }
 
-	public BufferedImage drawCard() {
-		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = bi.createGraphics();
-		g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
+    public BufferedImage drawCard() {
+        BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bi.createGraphics();
+        g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
 
-		g2d.drawImage(FrameColor.PINK.getFrontArena(), 0, 0, null);
-		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+        g2d.drawImage(FrameColor.PINK.getFrontArena(), 0, 0, null);
+        g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
-		Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
+        Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
-		int i = 0;
-		for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
-			BufferedImage icon = r.getIcon();
-			assert icon != null;
-			g2d.setColor(Helper.colorThief(icon));
-			g2d.drawImage(icon, 20, 59 + (26 * i), null);
-			Profile.drawOutlinedText(Helper.toPercent(getModifiers().optFloat(r.name(), 1f)), 45, 82 + (26 * i), g2d);
-			i++;
-		}
+        Color[] colors = {
+                Color.decode("#9013fe"), //HUMAN
+                Color.decode("#7ed321"), //ELF
+                Color.decode("#ffe0af"), //BESTIAL
+                Color.decode("#f5a623"), //MACHINE
+                Color.decode("#f8e71c"), //DIVINITY
+                Color.decode("#4fe4c3"), //MYSTICAL
+                Color.decode("#8b572a"), //CREATURE
+                Color.white,             //SPIRIT
+                Color.decode("#d0021b"), //DEMON
+                Color.decode("#fd88fd") //UNDEAD
+        };
+        int i = 0;
+        for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
+            BufferedImage icon = r.getIcon();
+            assert icon != null;
+            g2d.setColor(colors[i]);
+            g2d.drawImage(icon, 20, 59 + (26 * i), null);
+            Profile.drawOutlinedText(Helper.toPercent(getModifiers().optFloat(r.name(), 1f)), 45, 80 + (26 * i), g2d);
+            i++;
+        }
 
-		if (!available) {
-			g2d.setColor(new Color(0, 0, 0, 150));
-			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-		}
+        if (!available) {
+            g2d.setColor(new Color(0, 0, 0, 150));
+            g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+        }
 
-		g2d.dispose();
+        g2d.dispose();
 
-		return bi;
-	}
+        return bi;
+    }
 
-	@Override
-	public Card getCard() {
-		return card;
-	}
+    @Override
+    public Card getCard() {
+        return card;
+    }
 
-	public ArenaField getField() {
-		return ArenaField.valueOf(card.getId());
-	}
+    public ArenaField getField() {
+        return ArenaField.valueOf(card.getId());
+    }
 
-	public JSONObject getModifiers() {
-		return new JSONObject(modifiers);
-	}
+    public JSONObject getModifiers() {
+        return new JSONObject(modifiers);
+    }
 
-	@Override
-	public boolean isFlipped() {
-		return false;
-	}
+    @Override
+    public boolean isFlipped() {
+        return false;
+    }
 
-	@Override
-	public void setFlipped(boolean flipped) {
-	}
+    @Override
+    public void setFlipped(boolean flipped) {
+    }
 
-	@Override
-	public boolean isAvailable() {
-		return available;
-	}
+    @Override
+    public boolean isAvailable() {
+        return available;
+    }
 
-	@Override
-	public void setAvailable(boolean available) {
-		this.available = available;
-	}
+    @Override
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
 
-	@Override
-	public Account getAcc() {
-		return acc;
-	}
+    @Override
+    public Account getAcc() {
+        return acc;
+    }
 
-	@Override
-	public void setAcc(Account acc) {
-		this.acc = acc;
-	}
+    @Override
+    public void setAcc(Account acc) {
+        this.acc = acc;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Field field = (Field) o;
-		return id == field.id;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Field field = (Field) o;
+        return id == field.id;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
-	@Override
-	public Drawable copy() {
-		try {
-			return (Drawable) clone();
-		} catch (CloneNotSupportedException e) {
-			return null;
-		}
-	}
+    @Override
+    public Drawable copy() {
+        try {
+            return (Drawable) clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
 }
