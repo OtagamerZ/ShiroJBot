@@ -53,29 +53,31 @@ public class MonthlyEvent implements Job {
 	}
 
 	public static void call() {
-		ExceedDAO.markWinner(ExceedDAO.findWinner());
-		Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
+		if (ExceedDAO.verifyMonth()) {
+			ExceedDAO.markWinner(ExceedDAO.findWinner());
+			Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
 
-		String ex = ExceedDAO.getWinner();
-		ExceedDAO.getExceedMembers(ExceedEnum.getByName(ex)).forEach(em -> {
-					User u = Main.getInfo().getUserByID(em.getId());
-					if (u != null) u.openPrivateChannel().queue(c -> {
-						try {
-							c.sendMessage("""
-									O seu Exceed foi campeão neste mês, parabéns!
-									Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas.
-									""".formatted(ex)).queue(null, Helper::doNothing);
-						} catch (Exception ignore) {
-						}
-					});
-				}
-		);
+			String ex = ExceedDAO.getWinner();
+			ExceedDAO.getExceedMembers(ExceedEnum.getByName(ex)).forEach(em -> {
+						User u = Main.getInfo().getUserByID(em.getId());
+						if (u != null) u.openPrivateChannel().queue(c -> {
+							try {
+								c.sendMessage("""
+										O seu Exceed foi campeão neste mês, parabéns!
+										Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas.
+										""".formatted(ex)).queue(null, Helper::doNothing);
+							} catch (Exception ignore) {
+							}
+						});
+					}
+			);
 
-		ExceedDAO.getExceedMembers().forEach(em -> {
-			if (Main.getInfo().getUserByID(em.getId()) == null) ExceedDAO.removeMember(em);
-		});
+			ExceedDAO.getExceedMembers().forEach(em -> {
+				if (Main.getInfo().getUserByID(em.getId()) == null) ExceedDAO.removeMember(em);
+			});
 
-		ExceedDAO.unblock();
+			ExceedDAO.unblock();
+		}
 
 		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
 
