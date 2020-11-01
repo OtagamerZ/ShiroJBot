@@ -131,8 +131,13 @@ public class ColorRoleCommand extends Command {
 			gc.addColorRole(name, c, r);
 		}
 
-		guild.modifyMemberRoles(member, roles).queue();
 		assert r != null;
+		if (r.getPosition() > guild.getSelfMember().getRoles().get(0).getPosition()) {
+			channel.sendMessage("❌ | O cargo dessa cor está acima de mim. Por favor peça a um moderador para colocar-me acima dele.").queue();
+			return;
+		}
+
+		guild.modifyMemberRoles(member, roles).queue();
 		guild.addRoleToMember(member, r).queue();
 		channel.sendMessage("Sua cor foi definida como " + r.getName() + " com sucesso!").queue();
 		GuildDAO.updateGuildSettings(gc);

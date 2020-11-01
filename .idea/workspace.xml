@@ -13,9 +13,28 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ExceedDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ExceedDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos ícones de raças">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/ultimate.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_blue.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_blue.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_cyan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_cyan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_green.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_green.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_grey.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_grey.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_pink.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_pink.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_purple.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_purple.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_red.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_red.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_yellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_arena_yellow.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/bestial.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/bestial.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/creature.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/creature.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/demon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/demon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/divinity.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/divinity.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/elf.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/elf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/human.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/human.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/machine.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/machine.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/mystical.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/mystical.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/spirit.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/spirit.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/race/undead.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/race/undead.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,6 +181,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -817,13 +847,7 @@
       <workItem from="1604003771178" duration="177000" />
       <workItem from="1604004435235" duration="647000" />
       <workItem from="1604025985410" duration="2473000" />
-    </task>
-    <task id="LOCAL-02765" summary="Agora você só pode ter 1 equipamento tier 4">
-      <created>1603830757591</created>
-      <option name="number" value="02765" />
-      <option name="presentableId" value="LOCAL-02765" />
-      <option name="project" value="LOCAL" />
-      <updated>1603830757592</updated>
+      <workItem from="1604197352958" duration="2120000" />
     </task>
     <task id="LOCAL-02766" summary="Correção dos argumentos de Shoukan">
       <created>1603831868296</created>
@@ -1161,7 +1185,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604082165069</updated>
     </task>
-    <option name="localTasksCounter" value="2814" />
+    <task id="LOCAL-02814" summary="Adição da opção de recriar a mensagem do Shoukan (previne W.O. por mensagem apagada)">
+      <created>1604187860018</created>
+      <option name="number" value="02814" />
+      <option name="presentableId" value="LOCAL-02814" />
+      <option name="project" value="LOCAL" />
+      <updated>1604187860019</updated>
+    </task>
+    <option name="localTasksCounter" value="2815" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1227,8 +1258,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Agora você só pode ter 1 equipamento tier 4" />
-    <MESSAGE value="Correção dos argumentos de Shoukan" />
     <MESSAGE value="Adição de novas imagens de avatar" />
     <MESSAGE value="Redução de cartas no deck diário (36 -&gt; 30)" />
     <MESSAGE value="Correção menor" />
@@ -1252,7 +1281,9 @@
     <MESSAGE value="Criação do comando de salas de jogos" />
     <MESSAGE value="Descontinuidade do projeto de comando de salas de jogos" />
     <MESSAGE value="Adição de quebra de linha nas mensagens de boas vindas e adeus" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de quebra de linha nas mensagens de boas vindas e adeus" />
+    <MESSAGE value="Adição da opção de recriar a mensagem do Shoukan (previne W.O. por mensagem apagada)" />
+    <MESSAGE value="Correção nos ícones de raças" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nos ícones de raças" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1283,10 +1314,11 @@
     </state>
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597927763665" />
     <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1602641774815" />
-    <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1603723317269">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1604198537643">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
+    <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1604075791754">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1320,26 +1352,26 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1603511768947">
+    <state width="1293" height="282" key="GridCell.Tab.0.bottom" timestamp="1604189279716">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1391" height="316" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448583" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1603511768947">
+    <state width="1293" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
+    <state width="1293" height="282" key="GridCell.Tab.0.center" timestamp="1604189279716">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1391" height="316" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448582" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1603511768947">
+    <state width="1293" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
+    <state width="1293" height="282" key="GridCell.Tab.0.left" timestamp="1604189279716">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1391" height="316" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448582" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1603511768947">
+    <state width="1293" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
+    <state width="1293" height="282" key="GridCell.Tab.0.right" timestamp="1604189279716">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1602695448583" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603511768947" />
+    <state width="1293" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
     <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1603507846095">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1375,11 +1407,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604082169656">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604187869915">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604082169656" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604027912367" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604187869915" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1407,10 +1439,11 @@
     </state>
     <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1603119487585" />
     <state x="1025" y="162" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604027864335" />
-    <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1601648967281">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1604191215864">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1601648967281" />
+    <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604191215864" />
     <state x="583" y="194" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1602850230580">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1441,11 +1474,11 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1602705975152" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603503824528" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1604001886226">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup" timestamp="1604189150904">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1604001886226" />
-    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603675313001" />
+    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604189150904" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
