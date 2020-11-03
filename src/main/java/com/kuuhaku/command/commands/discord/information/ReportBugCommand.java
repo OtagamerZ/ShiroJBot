@@ -62,7 +62,7 @@ public class ReportBugCommand extends Command {
 
 		String mensagem = String.join(" ", args).trim();
 
-		if (mensagem.length() > 191) {
+		if (mensagem.length() > 1000) {
 			channel.sendMessage("❌ | Mensagem muito longa, por favor tente ser mais breve.").queue();
 			return;
 		}

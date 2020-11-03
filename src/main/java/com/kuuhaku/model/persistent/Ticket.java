@@ -30,7 +30,7 @@ public class Ticket {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int number;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "TEXT")
 	private String subject = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
