@@ -707,6 +707,7 @@ public class Shoukan extends Game {
 
 	public void unequipCard(Side s, int index, List<SlotColumn<Drawable, Drawable>> side) {
 		Equipment eq = (Equipment) side.get(index).getBottom();
+		if (eq == null) return;
 
 		if (side.get(eq.getLinkedTo().getLeft()).getTop() != null)
 			((Champion) side.get(eq.getLinkedTo().getLeft()).getTop()).removeLinkedTo(eq);
