@@ -317,18 +317,19 @@ public class CardDAO {
 	}
 
 	public static Champion getRandomChampion() {
-		EntityManager em = Manager.getEntityManager();
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' ORDER BY RANDOM()", Champion.class);
+        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' ORDER BY RANDOM()", Champion.class);
+        q.setMaxResults(1);
 
-		try {
-			return (Champion) q.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return (Champion) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
 
 	public static Equipment getEquipment(Card c) {
 		EntityManager em = Manager.getEntityManager();

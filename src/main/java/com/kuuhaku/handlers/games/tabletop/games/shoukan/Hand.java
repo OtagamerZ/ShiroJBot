@@ -47,20 +47,20 @@ public class Hand {
 	private int hp;
 
 	public Hand(Shoukan game, User user, List<Drawable> deque, Side side) {
-		Collections.shuffle(deque);
+        Collections.shuffle(deque);
 
-		this.user = user;
-		this.deque = new LinkedList<>(deque);
-		this.side = side;
-		this.game = game;
+        this.user = user;
+        this.deque = new LinkedList<>(deque);
+        this.side = side;
+        this.game = game;
 
-		this.mana = Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
-		this.hp = Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
-		this.startingCount = Helper.minMax(game.getCustom().optInt("stcards", 5), 1, 10);
-		this.manaPerTurn = Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
+        this.mana = game.getCustom() == null ? 0 : Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
+        this.hp = game.getCustom() == null ? 5000 : Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
+        this.startingCount = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("stcards", 5), 1, 10);
+        this.manaPerTurn = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
 
-		redrawHand();
-	}
+        redrawHand();
+    }
 
 	public void draw() {
 		try {
