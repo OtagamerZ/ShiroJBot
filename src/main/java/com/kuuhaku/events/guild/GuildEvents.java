@@ -76,7 +76,6 @@ public class GuildEvents extends ListenerAdapter {
 			MessageChannel channel = message.getChannel();
 			Guild guild = message.getGuild();
 			String rawMessage = StringUtils.normalizeSpace(message.getContentRaw());
-			assert member != null;
 
 			String prefix = "";
 			if (!Main.getInfo().isDev()) {
@@ -110,7 +109,7 @@ public class GuildEvents extends ListenerAdapter {
 			if (author.isBot() && !Main.getInfo().getSelfUser().getId().equals(author.getId())) {
 				handleExchange(author, message);
 				return;
-			}
+			} else if (member == null) return;
 
 			boolean blacklisted = BlacklistDAO.isBlacklisted(author);
 
@@ -221,7 +220,7 @@ public class GuildEvents extends ListenerAdapter {
 				}
 			}
 
-			if (!found && !author.isBot() && !blacklisted) {
+			if (!found && !author.isBot() && !blacklisted && member != null) {
 				Account acc = AccountDAO.getAccount(author.getId());
 				if (!acc.getTwitchId().isBlank() && channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
 					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.stripEmotesAndMentions(rawMessage));
@@ -293,7 +292,7 @@ public class GuildEvents extends ListenerAdapter {
 						Helper.logToChannel(author, false, null, "Detectei um link no canal " + ((TextChannel) channel).getAsMention(), guild, rawMessage);
 					}
 
-					com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(member.getUser().getId() + member.getGuild().getId());
+					com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(member.getId() + member.getGuild().getId());
 					if (m.getMid() == null) {
 						m.setMid(author.getId());
 						m.setSid(guild.getId());

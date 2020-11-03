@@ -57,11 +57,11 @@ public class VIPShopCommand extends Command {
 		if (args.length == 0) {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setTitle(":diamonds: | Loja VIP");
-			eb.setDescription("""
-					Gemas podem ser obtidas ao resgatar um acúmulo de 7 votos seguidos com o comando `?resgatar`. Para utilizar as gemas basta usar `?vip ID`!
-					     
-					Muito obrigada por me apoiar!
-					""");
+            eb.setDescription("""
+                    Gemas podem ser obtidas ao resgatar um acúmulo de 7 votos seguidos com o comando `%sresgatar`. Para utilizar as gemas basta usar `%svip ID`!
+                         
+                    Muito obrigada por me apoiar!
+                    """.formatted(prefix, prefix));
 			for (VipItem v : VipItem.values()) eb.addField(v.getField());
 			eb.setColor(Color.red);
 			eb.setFooter("Suas gemas: " + acc.getGems(), "https://bgasparotto.com/wp-content/uploads/2016/03/ruby-logo.png");

@@ -42,6 +42,7 @@ public class Board {
 	private final BoardSize size;
 	private final InfiniteList<Player> players;
 	private final Piece[][] matrix;
+	private boolean awarded = false;
 
 	public Board(BoardSize size, long bet, String... players) {
 		this.size = size;
@@ -177,6 +178,7 @@ public class Board {
 		});
 
 		game.close();
+		awarded = true;
 	}
 
 	public void awardWinner(Game game, boolean daily, String id) {
@@ -207,6 +209,7 @@ public class Board {
 		});
 
 		game.close();
+		awarded = true;
 	}
 
 	public void awardWinners(Game game, String... ids) {
@@ -239,6 +242,7 @@ public class Board {
 		});
 
 		game.close();
+		awarded = true;
 	}
 
 	public void awardWinners(Game game, boolean daily, String... ids) {
@@ -271,6 +275,7 @@ public class Board {
 		});
 
 		game.close();
+		awarded = true;
 	}
 
 	public BufferedImage render() {
