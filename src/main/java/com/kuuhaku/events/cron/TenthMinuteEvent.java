@@ -81,9 +81,9 @@ public class TenthMinuteEvent implements Job {
 			List<Pair<String, Role>> addRoles = guild.getRoles()
 					.stream()
 					.filter(r -> r.getPosition() < guild.getSelfMember().getRoles().get(0).getPosition())
-					.filter(r -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase()), exNames))
+					.filter(r -> Helper.containsAny(StringUtils.stripAccents(r.getName()), exNames))
 					.map(r -> {
-						String name = Arrays.stream(exNames).filter(s -> Helper.containsAny(StringUtils.stripAccents(r.getName().toLowerCase().replace("-", "")), s)).findFirst().orElse(null);
+						String name = Arrays.stream(exNames).filter(s -> Helper.containsAny(StringUtils.stripAccents(r.getName()), s)).findFirst().orElse(null);
 						return Pair.of(name, r);
 					})
 					.filter(p -> p.getKey() != null)
@@ -96,13 +96,12 @@ public class TenthMinuteEvent implements Job {
 			}
 
 			mbs.forEach(mb -> {
-				List<Role> rs = new ArrayList<>(mb.getRoles());
 				ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
 				if (ex != null) {
-					List<Role> validRoles = roles.get(ex.getName().toLowerCase());
+					List<Role> validRoles = roles.get(ex.name().toLowerCase());
 					List<Role> invalidRoles = roles.entrySet()
 							.stream()
-							.filter(e -> !e.getKey().equalsIgnoreCase(ex.getName()))
+							.filter(e -> !e.getKey().equalsIgnoreCase(ex.name().toLowerCase()))
 							.map(Map.Entry::getValue)
 							.flatMap(List::stream)
 							.collect(Collectors.toList());
