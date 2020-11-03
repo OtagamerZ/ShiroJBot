@@ -81,6 +81,18 @@ public class Champion implements Drawable, Cloneable {
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
 
+	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
+		this.card = card;
+		this.race = race;
+		this.mana = mana;
+		this.atk = atk;
+		this.def = def;
+		this.description = description;
+		this.effect = effect;
+	}
+
+	public Champion() {
+	}
 
 	@Override
 	public BufferedImage drawCard(Account acc, boolean flipped) {
@@ -100,11 +112,13 @@ public class Champion implements Drawable, Cloneable {
 			g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
 			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
-			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 16), 181, 38, 32, g2d);
-			if (fakeCard != null)
+			if (fakeCard != null) {
+				Profile.printCenteredString(StringUtils.abbreviate(fakeCard.getCard().getName(), 16), 181, 38, 32, g2d);
 				g2d.drawImage(fakeCard.getRace().getIcon(), 11, 12, null);
-			else
+			} else {
+				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 16), 181, 38, 32, g2d);
 				g2d.drawImage(race.getIcon(), 11, 12, null);
+			}
 
 			g2d.setColor(Color.cyan);
 			Profile.drawOutlinedText(String.valueOf(mana), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 66, g2d);
@@ -306,6 +320,10 @@ public class Champion implements Drawable, Cloneable {
 
 	public boolean hasEffect() {
 		return effect != null;
+	}
+
+	public String getLiteralEffect() {
+		return effect;
 	}
 
 	public void getEffect(EffectParameters ep) {
