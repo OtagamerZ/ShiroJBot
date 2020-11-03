@@ -28,6 +28,7 @@ public enum EffectTrigger {
 	ON_DEFEND,
 	ON_SWITCH,
 	ON_SUICIDE,
+	ON_EQUIP,
 	POST_ATTACK,
 	POST_DEFENSE;
 }
