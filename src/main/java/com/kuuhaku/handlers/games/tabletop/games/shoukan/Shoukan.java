@@ -402,6 +402,8 @@ public class Shoukan extends Game {
 					}
 					t.addLinkedTo((Equipment) tp);
 					((Equipment) tp).setLinkedTo(Pair.of(toEquip, t.getCard()));
+					if (t.hasEffect() && !t.isFlipped())
+						t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
 				} else if (d instanceof Champion) {
 					if (args.length < 3) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
