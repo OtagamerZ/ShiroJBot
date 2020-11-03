@@ -88,7 +88,7 @@ public class ShoukanCommand extends Command {
             }
         }
 
-        boolean daily = Helper.containsAny(args, "daily", "diario");
+        boolean daily = args.length > 2 && Helper.equalsAny(args[2], "daily", "diario");
 
         if (!daily) {
             Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
