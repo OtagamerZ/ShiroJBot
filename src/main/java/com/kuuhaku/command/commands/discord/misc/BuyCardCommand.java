@@ -208,10 +208,70 @@ public class BuyCardCommand extends Command {
 
         CardMarket cm = CardMarketDAO.getCard(Integer.parseInt(args[0]));
         EquipmentMarket em = EquipmentMarketDAO.getCard(Integer.parseInt(args[0]));
+        FieldMarket fm = FieldMarketDAO.getCard(Integer.parseInt(args[0]));
 
         if (cm == null) {
             if (em == null) {
-                channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+                if (fm == null) {
+                    channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+                    return;
+                }
+
+                Account seller = AccountDAO.getAccount(fm.getSeller());
+                if (!seller.getUserId().equals(author.getId())) {
+                    if (buyer.getBalance() < fm.getPrice()) {
+                        channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+                        return;
+                    }
+
+                    Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+
+                    if (Collections.frequency(kp.getFields(), fm.getCard()) == 3) {
+                        channel.sendMessage("❌ | Parece que você já possui 3 cópias dessa arena!").queue();
+                        return;
+                    } else if (kp.getFields().size() == 3) {
+                        channel.sendMessage("❌ | Você está com o deck completo, venda uma carta antes de comprar esta!").queue();
+                        return;
+                    }
+
+                    kp.addField(fm.getCard());
+                    KawaiponDAO.saveKawaipon(kp);
+
+                    seller.addCredit(fm.getPrice(), this.getClass());
+                    buyer.removeCredit(fm.getPrice(), this.getClass());
+
+                    AccountDAO.saveAccount(seller);
+                    AccountDAO.saveAccount(buyer);
+
+                    fm.setBuyer(author.getId());
+                    FieldMarketDAO.saveCard(fm);
+
+                    User sellerU = Main.getInfo().getUserByID(fm.getSeller());
+                    User buyerU = Main.getInfo().getUserByID(fm.getBuyer());
+                    if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+                                    c.sendMessage(":white_check_mark: | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + fm.getPrice() + " créditos.").queue(),
+                            Helper::doNothing
+                    );
+                    channel.sendMessage(":white_check_mark: | Arena comprada com sucesso!").queue();
+                } else {
+                    Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+
+                    if (Collections.frequency(kp.getFields(), fm.getCard()) == 3) {
+                        channel.sendMessage("❌ | Parece que você já possui 3 cópias dessa arena!").queue();
+                        return;
+                    } else if (kp.getFields().size() == 3) {
+                        channel.sendMessage("❌ | Você está com o deck completo, venda uma carta antes de retirar esta!").queue();
+                        return;
+                    }
+
+                    kp.addField(fm.getCard());
+                    KawaiponDAO.saveKawaipon(kp);
+
+                    fm.setBuyer(author.getId());
+                    FieldMarketDAO.saveCard(fm);
+
+                    channel.sendMessage(":white_check_mark: | Arena retirada com sucesso!").queue();
+                }
                 return;
             }
 
@@ -228,7 +288,10 @@ public class BuyCardCommand extends Command {
                     channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
                     return;
                 } else if (kp.getEquipments().stream().filter(e -> e.getTier() == 4).count() == 1 && em.getCard().getTier() == 4) {
-                    channel.sendMessage("❌ | Parece que você já possui 1 equipamento tier 4!").queue();
+                    channel.sendMessage("❌ | Você já possui 1 equipamento tier 4!").queue();
+                    return;
+                } else if (kp.getEquipments().size() == 18) {
+                    channel.sendMessage("❌ | Você está com o deck completo, venda uma carta antes de comprar esta!").queue();
                     return;
                 }
 
@@ -257,6 +320,12 @@ public class BuyCardCommand extends Command {
                 if (Collections.frequency(kp.getEquipments(), em.getCard()) == 3) {
                     channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
                     return;
+                } else if (kp.getEquipments().stream().filter(e -> e.getTier() == 4).count() == 1 && em.getCard().getTier() == 4) {
+                    channel.sendMessage("❌ | Você já possui 1 equipamento tier 4!").queue();
+                    return;
+                } else if (kp.getEquipments().size() == 18) {
+                    channel.sendMessage("❌ | Você está com o deck completo, venda uma carta antes de retirar esta!").queue();
+                    return;
                 }
 
                 kp.addEquipment(em.getCard());
@@ -281,6 +350,9 @@ public class BuyCardCommand extends Command {
 
             if (kp.getCards().contains(cm.getCard())) {
                 channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
+                return;
+            } else if (kp.getCards().size() == 36) {
+                channel.sendMessage("❌ | Você está com o deck completo, reverta uma carta antes de comprar esta!").queue();
                 return;
             }
 
@@ -308,6 +380,9 @@ public class BuyCardCommand extends Command {
 
             if (kp.getCards().contains(cm.getCard())) {
                 channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
+                return;
+            } else if (kp.getCards().size() == 36) {
+                channel.sendMessage("❌ | Você está com o deck completo, reverta uma carta antes de retirar esta!").queue();
                 return;
             }
 
