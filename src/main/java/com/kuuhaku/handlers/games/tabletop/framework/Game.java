@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -47,7 +46,7 @@ public abstract class Game implements Closeable {
 		this.board = board;
 		this.channel = channel;
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
-		this.custom = new JSONObject();
+		this.custom = null;
 	}
 
 	public Game(JDA handler, Board board, TextChannel channel, JSONObject custom) {
@@ -55,7 +54,7 @@ public abstract class Game implements Closeable {
 		this.board = board;
 		this.channel = channel;
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
-		this.custom = Helper.getOr(custom, new JSONObject());
+		this.custom = custom;
 	}
 
 	public void setActions(Consumer<Message> onExpiration, Consumer<Message> onWO) {

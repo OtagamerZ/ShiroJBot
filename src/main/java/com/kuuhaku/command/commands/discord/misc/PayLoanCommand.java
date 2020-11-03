@@ -47,17 +47,19 @@ public class PayLoanCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
 
-		if (acc.getBalance() <= acc.getLoan()) {
-			long toPay = acc.getBalance();
-			acc.removeCredit(toPay, this.getClass());
-			acc.addCredit(toPay, this.getClass());
-			channel.sendMessage("Você debitou " + toPay + " créditos da sua dívida.").queue();
-		} else {
-			long toPay = acc.getLoan();
-			acc.removeCredit(toPay, this.getClass());
-			acc.addCredit(toPay, this.getClass());
-			channel.sendMessage("Você debitou " + toPay + " créditos da sua dívida.").queue();
+		long toPay = Math.min(acc.getBalance(), acc.getLoan());
+
+		if (acc.getBalance() <= 0 && acc.getLoan() > 0) {
+			channel.sendMessage("❌ | Você não têm créditos suficientes para reduzir sua dívida.").queue();
+			return;
+		} else if (acc.getLoan() == 0) {
+			channel.sendMessage("❌ | Você não está devendo nada (ao menos não para mim :wink:).").queue();
+			return;
 		}
+
+		acc.removeCredit(toPay, this.getClass());
+		acc.addCredit(toPay, this.getClass());
+		channel.sendMessage("Você debitou " + toPay + " créditos da sua dívida.").queue();
 
 		AccountDAO.saveAccount(acc);
 	}

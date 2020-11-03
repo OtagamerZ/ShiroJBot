@@ -102,18 +102,18 @@ public class SynthesizeCardCommand extends Command {
 		}
 
 		if (foilSynth) {
-			int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum() * 2;
-			List<Field> fs = CardDAO.getAllFields();
-			Field f = fs.get(Helper.rng(fs.size(), false));
+            int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum() * 2;
+            List<Field> fs = CardDAO.getAllFields();
+            Field f = fs.get(Helper.rng(fs.size(), true));
 
-			String hash = Helper.generateHash(guild, author);
-			ShiroInfo.getHashes().add(hash);
-			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (elas serão destruídas no processo). Deseja continuar?")
-					.queue(s ->
-							Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+            String hash = Helper.generateHash(guild, author);
+            ShiroInfo.getHashes().add(hash);
+            Main.getInfo().getConfirmationPending().put(author.getId(), true);
+            channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (elas serão destruídas no processo). Deseja continuar?")
+                    .queue(s ->
+                            Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+                                if (!ShiroInfo.getHashes().remove(hash)) return;
+                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
 
 								if (kp.getFields().size() == 3) {
 									int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);

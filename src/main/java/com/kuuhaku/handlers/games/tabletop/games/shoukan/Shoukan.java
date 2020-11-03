@@ -119,7 +119,7 @@ public class Shoukan extends Game {
 				}
 				hd.addMana(hd.getManaPerTurn());
 
-				if (this.message != null) this.message.delete().queue();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				this.message = channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 				Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -130,13 +130,13 @@ public class Shoukan extends Game {
 				return;
 			}
 
-			channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue();
+			channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue(null, Helper::doNothing);
 			phase = Phase.ATTACK;
 			resetTimerKeepTurn();
 		});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 			if (phase != Phase.PLAN) {
-				channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue();
+				channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 				return;
 			}
 
@@ -145,16 +145,16 @@ public class Shoukan extends Game {
 			int remaining = 5 - h.getCards().size();
 
 			if (remaining <= 0) {
-				channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver 5 cartas ou mais na sua mão.").queue();
+				channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver 5 cartas ou mais na sua mão.").queue(null, Helper::doNothing);
 				return;
 			}
 
 			if (h.getDeque().size() == 0) {
-				if (this.message != null) this.message.delete().queue();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				this.message = channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
-				if (getCustom().isEmpty())
+				if (getCustom() == null)
 					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 				close();
 			}
@@ -162,16 +162,16 @@ public class Shoukan extends Game {
 			h.draw();
 			h.showHand();
 			remaining = 5 - h.getCards().size();
-			if (this.message != null) this.message.delete().queue();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 			Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 			resetTimerKeepTurn();
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			if (this.message != null) this.message.delete().queue();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)").complete();
-			if (getCustom().isEmpty())
+			if (getCustom() == null)
 				getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 			close();
 		});
@@ -230,7 +230,7 @@ public class Shoukan extends Game {
 				}
 				hd.addMana(hd.getManaPerTurn());
 
-				if (this.message != null) this.message.delete().queue();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				this.message = channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 				Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -241,13 +241,13 @@ public class Shoukan extends Game {
 				return;
 			}
 
-			channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue();
+			channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue(null, Helper::doNothing);
 			phase = Phase.ATTACK;
 			resetTimerKeepTurn();
 		});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 			if (phase != Phase.PLAN) {
-				channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue();
+				channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 				return;
 			}
 
@@ -256,16 +256,16 @@ public class Shoukan extends Game {
 			int remaining = 5 - hd.getCards().size();
 
 			if (remaining <= 0) {
-				channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver 5 cartas ou mais na sua mão.").queue();
+				channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver 5 cartas ou mais na sua mão.").queue(null, Helper::doNothing);
 				return;
 			}
 
 			if (hd.getDeque().size() == 0) {
-				if (this.message != null) this.message.delete().queue();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				this.message = channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
-				if (getCustom().isEmpty())
+				if (getCustom() == null)
 					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 				close();
 			}
@@ -273,22 +273,22 @@ public class Shoukan extends Game {
 			hd.draw();
 			hd.showHand();
 			remaining = 5 - hd.getCards().size();
-			if (this.message != null) this.message.delete().queue();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 			Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 			resetTimerKeepTurn();
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			if (this.message != null) this.message.delete().queue();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)").complete();
-			if (getCustom().isEmpty())
+			if (getCustom() == null)
 				getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 			close();
 		});
 
 		if (cmd.equalsIgnoreCase("reload")) {
-			if (this.message != null) this.message.delete().queue();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			this.message = channel.sendMessage(message.getAuthor().getAsMention() + " recriou a mensagem do jogo.")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 			Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -298,7 +298,7 @@ public class Shoukan extends Game {
 
 		String[] args = cmd.split(",");
 		if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage("❌ | Índice inválido.").queue();
+			channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
 			return;
 		}
 		int index = Integer.parseInt(args[0]) - 1;
@@ -308,17 +308,17 @@ public class Shoukan extends Game {
 				List<SlotColumn<Drawable, Drawable>> slots = arena.getSlots().get(h.getSide());
 				if (args.length == 1) {
 					if (index < 0 || index >= slots.size()) {
-						channel.sendMessage("❌ | Índice inválido.").queue();
+						channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
 						return;
 					}
 
 					Champion c = (Champion) slots.get(index).getTop();
 
 					if (c == null) {
-						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue();
+						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
 						return;
 					} else if (changed[index]) {
-						channel.sendMessage("❌ | Você já mudou a postura dessa carta neste turno.").queue();
+						channel.sendMessage("❌ | Você já mudou a postura dessa carta neste turno.").queue(null, Helper::doNothing);
 						return;
 					}
 
@@ -330,19 +330,19 @@ public class Shoukan extends Game {
 					if (c.isFlipped()) {
 						c.setFlipped(false);
 
-						if (this.message != null) this.message.delete().queue();
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = channel.sendMessage("Carta virada para cima em modo de defesa.")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 						Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						changed[index] = true;
 					} else if (!c.isDefending()) {
-						if (this.message != null) this.message.delete().queue();
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = channel.sendMessage("Carta trocada para modo de ataque.")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 						Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						changed[index] = true;
 					} else {
-						if (this.message != null) this.message.delete().queue();
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = channel.sendMessage("Carta trocada para modo de defesa.")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 						Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -356,18 +356,18 @@ public class Shoukan extends Game {
 				Drawable d = h.getCards().get(index);
 
 				if (!d.isAvailable()) {
-					channel.sendMessage("❌ | Essa carta já foi jogada neste turno.").queue();
+					channel.sendMessage("❌ | Essa carta já foi jogada neste turno.").queue(null, Helper::doNothing);
 					return;
 				}
 
 				if (d instanceof Equipment) {
 					if (args.length < 3) {
-						channel.sendMessage("❌ | O terceiro argumento deve ser o número da casa da carta à equipar este equipamento.").queue();
+						channel.sendMessage("❌ | O terceiro argumento deve ser o número da casa da carta à equipar este equipamento.").queue(null, Helper::doNothing);
 						return;
 					}
 
 					if (!StringUtils.isNumeric(args[1])) {
-						channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue();
+						channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, Helper::doNothing);
 						return;
 					}
 
@@ -375,12 +375,12 @@ public class Shoukan extends Game {
 					SlotColumn<Drawable, Drawable> slot = slots.get(dest);
 
 					if (slot.getBottom() != null) {
-						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue();
+						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
 						return;
 					}
 
 					if (!StringUtils.isNumeric(args[2])) {
-						channel.sendMessage("❌ | Índice inválido, escolha uma carta para equipar esse equipamento.").queue();
+						channel.sendMessage("❌ | Índice inválido, escolha uma carta para equipar esse equipamento.").queue(null, Helper::doNothing);
 						return;
 					}
 					int toEquip = Integer.parseInt(args[2]) - 1;
@@ -388,7 +388,7 @@ public class Shoukan extends Game {
 					SlotColumn<Drawable, Drawable> target = slots.get(toEquip);
 
 					if (target.getTop() == null) {
-						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue();
+						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
 						return;
 					}
 
@@ -404,15 +404,15 @@ public class Shoukan extends Game {
 					((Equipment) tp).setLinkedTo(Pair.of(toEquip, t.getCard()));
 				} else if (d instanceof Champion) {
 					if (args.length < 3) {
-						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue();
+						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 						return;
 					} else if (h.getMana() < ((Champion) d).getMana()) {
-						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento.").queue();
+						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento.").queue(null, Helper::doNothing);
 						return;
 					}
 
 					if (!StringUtils.isNumeric(args[1])) {
-						channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue();
+						channel.sendMessage("❌ | Índice inválido, escolha uma casa para colocar essa carta.").queue(null, Helper::doNothing);
 						return;
 					}
 					int dest = Integer.parseInt(args[1]) - 1;
@@ -420,7 +420,7 @@ public class Shoukan extends Game {
 					SlotColumn<Drawable, Drawable> slot = slots.get(dest);
 
 					if (slot.getTop() != null) {
-						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue();
+						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
 						return;
 					}
 
@@ -434,7 +434,7 @@ public class Shoukan extends Game {
 						}
 						case "b" -> tp.setFlipped(true);
 						default -> {
-							channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue();
+							channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 							return;
 						}
 					}
@@ -509,20 +509,20 @@ public class Shoukan extends Game {
 					}
 				}
 
-				if (this.message != null) this.message.delete().queue();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				this.message = channel.sendFile(Helper.getBytes(arena.render(hands), "jpg"), "board.jpg").complete();
 				Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				h.showHand();
 				resetTimerKeepTurn();
 			} catch (IndexOutOfBoundsException e) {
-				channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue();
+				channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue(null, Helper::doNothing);
 			} catch (NumberFormatException e) {
-				channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser um valor inteiro que represente uma carta na sua mão e o segundo deve ser uma casa vazia no tabuleiro.").queue();
+				channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser um valor inteiro que represente uma carta na sua mão e o segundo deve ser uma casa vazia no tabuleiro.").queue(null, Helper::doNothing);
 			}
 		} else {
 			try {
 				if (args.length > 1 && !StringUtils.isNumeric(args[1])) {
-					channel.sendMessage("❌ | Índice inválido, escolha uma carta para ser atacada.").queue();
+					channel.sendMessage("❌ | Índice inválido, escolha uma carta para ser atacada.").queue(null, Helper::doNothing);
 					return;
 				}
 
@@ -533,26 +533,26 @@ public class Shoukan extends Game {
 
 				if (args.length == 1) {
 					if (is[0] < 0 || is[0] >= yourSide.size()) {
-						channel.sendMessage("❌ | Índice inválido.").queue();
+						channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
 						return;
 					}
 
 					Champion c = (Champion) yourSide.get(is[0]).getTop();
 
 					if (c == null) {
-						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue();
+						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
 						return;
 					} else if (hisSide.stream().anyMatch(s -> s.getTop() != null)) {
-						channel.sendMessage("❌ | Ainda existem campeões no campo inimigo.").queue();
+						channel.sendMessage("❌ | Ainda existem campeões no campo inimigo.").queue(null, Helper::doNothing);
 						return;
 					} else if (!c.isAvailable()) {
-						channel.sendMessage("❌ | Essa carta já atacou neste turno.").queue();
+						channel.sendMessage("❌ | Essa carta já atacou neste turno.").queue(null, Helper::doNothing);
 						return;
 					} else if (c.isFlipped()) {
-						channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue();
+						channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue(null, Helper::doNothing);
 						return;
 					} else if (c.isDefending()) {
-						channel.sendMessage("❌ | Você não pode atacar com cartas em modo de defesa.").queue();
+						channel.sendMessage("❌ | Você não pode atacar com cartas em modo de defesa.").queue(null, Helper::doNothing);
 						return;
 					}
 
@@ -560,14 +560,14 @@ public class Shoukan extends Game {
 
 					int yPower = Math.round(
 							c.getAtk() +
-							c.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
-									(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
+									c.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
+											(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
 					);
 
 					enemy.removeHp(yPower);
 					c.setAvailable(false);
 
-					if (this.message != null) this.message.delete().queue();
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = channel.sendMessage("Você atacou diretamente o inimigo.")
 							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 					Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -579,16 +579,16 @@ public class Shoukan extends Game {
 				Champion his = (Champion) hisSide.get(is[1]).getTop();
 
 				if (yours == null || his == null) {
-					channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue();
+					channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
 					return;
 				} else if (!yours.isAvailable()) {
-					channel.sendMessage("❌ | Essa carta já atacou neste turno.").queue();
+					channel.sendMessage("❌ | Essa carta já atacou neste turno.").queue(null, Helper::doNothing);
 					return;
 				} else if (yours.isFlipped()) {
-					channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue();
+					channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue(null, Helper::doNothing);
 					return;
 				} else if (yours.isDefending()) {
-					channel.sendMessage("❌ | Você não pode atacar com cartas em modo de defesa.").queue();
+					channel.sendMessage("❌ | Você não pode atacar com cartas em modo de defesa.").queue(null, Helper::doNothing);
 					return;
 				}
 
@@ -633,7 +633,7 @@ public class Shoukan extends Game {
 						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
 					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1], hisSide);
 
-					if (this.message != null) this.message.delete().queue();
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = channel.sendMessage("Sua carta derrotou a carta inimiga! (" + yPower + " > " + hPower + ")")
 							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 				} else if (yPower < hPower) {
@@ -644,14 +644,14 @@ public class Shoukan extends Game {
 						his.getEffect(new EffectParameters(phase, EffectTrigger.POST_DEFENSE, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
 					killCard(h.getSide(), is[0], yourSide);
 
-					if (this.message != null) this.message.delete().queue();
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = channel.sendMessage("Sua carta foi derrotada pela carta inimiga! (" + yPower + " < " + hPower + ")")
 							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 				} else {
 					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1], hisSide);
 					killCard(h.getSide(), is[0], yourSide);
 
-					if (this.message != null) this.message.delete().queue();
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
 							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 				}
@@ -659,9 +659,9 @@ public class Shoukan extends Game {
 				Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				if (!postCombat()) resetTimerKeepTurn();
 			} catch (IndexOutOfBoundsException e) {
-				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue();
+				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue(null, Helper::doNothing);
 			} catch (NumberFormatException e) {
-				channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser uma casa com uma carta no seu lado do tabuleiro e o segundo deve ser uma casa com uma carta no lado do inimigo.").queue();
+				channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser uma casa com uma carta no seu lado do tabuleiro e o segundo deve ser uma casa com uma carta no lado do inimigo.").queue(null, Helper::doNothing);
 			}
 		}
 	}
@@ -756,11 +756,11 @@ public class Shoukan extends Game {
 
 	public boolean postCombat() {
 		if (getHandById(getBoard().getPlayers().get(1).getId()).getHp() == 0) {
-			if (this.message != null) this.message.delete().queue();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			this.message = channel.sendMessage(getCurrent().getAsMention() + " zerou os pontos de vida de " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
-			if (getCustom().isEmpty())
+			if (getCustom() == null)
 				getBoard().awardWinner(this, daily, getCurrent().getId());
 			close();
 			return true;
