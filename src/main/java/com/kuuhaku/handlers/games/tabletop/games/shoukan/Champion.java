@@ -270,11 +270,11 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getAtk() {
-		return (altAtk == 0 ? atk : altAtk) + bonus.getAtk();
+		return (altAtk == -1 ? atk : altAtk) + bonus.getAtk();
 	}
 
 	public int getDef() {
-		return (altDef == 0 ? def : altDef) + bonus.getDef();
+		return (altDef == -1 ? def : altDef) + bonus.getDef();
 	}
 
 	public void setAltAtk(int altAtk) {
