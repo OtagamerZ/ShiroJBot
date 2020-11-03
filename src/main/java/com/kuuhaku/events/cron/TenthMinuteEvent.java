@@ -77,7 +77,7 @@ public class TenthMinuteEvent implements Job {
 					.filter(m -> m != null && ems.stream().anyMatch(em -> em.getId().equals(m.getId())))
 					.collect(Collectors.toList());
 
-			Map<String, List<Role>> roles = new HashMap<>();
+			Map<ExceedEnum, List<Role>> roles = new HashMap<>();
 			List<Pair<String, Role>> addRoles = guild.getRoles()
 					.stream()
 					.filter(r -> r.getPosition() < guild.getSelfMember().getRoles().get(0).getPosition())
@@ -90,18 +90,19 @@ public class TenthMinuteEvent implements Job {
 					.collect(Collectors.toList());
 
 			for (Pair<String, Role> addRole : addRoles) {
-				List<Role> rs = roles.getOrDefault(addRole.getLeft(), new ArrayList<>());
+				ExceedEnum ee = ExceedEnum.getByName(addRole.getLeft());
+				List<Role> rs = roles.getOrDefault(ee, new ArrayList<>());
 				rs.add(addRole.getRight());
-				roles.put(addRole.getLeft(), rs);
+				roles.put(ee, rs);
 			}
 
 			mbs.forEach(mb -> {
 				ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
 				if (ex != null) {
-					List<Role> validRoles = roles.get(ex.name().toLowerCase());
+					List<Role> validRoles = roles.get(ex);
 					List<Role> invalidRoles = roles.entrySet()
 							.stream()
-							.filter(e -> !e.getKey().equalsIgnoreCase(ex.name().toLowerCase()))
+							.filter(e -> e.getKey().equals(ex))
 							.map(Map.Entry::getValue)
 							.flatMap(List::stream)
 							.collect(Collectors.toList());
