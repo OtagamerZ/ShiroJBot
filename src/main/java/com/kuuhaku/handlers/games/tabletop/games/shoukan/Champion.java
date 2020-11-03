@@ -136,7 +136,7 @@ public class Champion implements Drawable, Cloneable {
 			if (fakeCard != null)
 				Profile.drawOutlinedText(String.valueOf(fakeCard.getAtk()), 45, 250, g2d);
 			else
-				Profile.drawOutlinedText(String.valueOf(atk), 45, 250, g2d);
+				Profile.drawOutlinedText(String.valueOf(getAtk()), 45, 250, g2d);
 
 			if (bonus.getAtk() != 0)
 				Profile.drawOutlinedText((bonus.getAtk() >= 0 ? "+" : "-") + Math.abs(bonus.getAtk()), 45, 225, g2d);
@@ -152,7 +152,7 @@ public class Champion implements Drawable, Cloneable {
 			if (fakeCard != null)
 				Profile.drawOutlinedText(String.valueOf(fakeCard.getDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
 			else
-				Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
+				Profile.drawOutlinedText(String.valueOf(getDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
 
 			if (bonus.getDef() != 0)
 				Profile.drawOutlinedText((bonus.getDef() >= 0 ? "+" : "-") + Math.abs(bonus.getDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(Math.abs(bonus.getDef()))), 225, g2d);
@@ -270,11 +270,11 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getAtk() {
-		return Math.max(atk, altAtk) + bonus.getAtk();
+		return (altAtk == 0 ? atk : altAtk) + bonus.getAtk();
 	}
 
 	public int getDef() {
-		return Math.max(def, altDef) + bonus.getDef();
+		return (altDef == 0 ? def : altDef) + bonus.getDef();
 	}
 
 	public void setAltAtk(int altAtk) {
