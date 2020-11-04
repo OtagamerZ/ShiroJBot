@@ -100,7 +100,12 @@ public class TwitchEvents {
 				return;
 			}
 
-			command.execute(author, acc, rawMsgNoPrefix, args, message, channel, client.getChat(), message.getPermissions());
+			String[] finalArgs = args;
+			String finalRawMsgNoPrefix = rawMsgNoPrefix;
+			ShiroInfo.getCommandPool().execute(() -> {
+				Thread.currentThread().setName("Command Thread - " + Thread.currentThread().getId());
+				command.execute(author, acc, finalRawMsgNoPrefix, finalArgs, message, channel, client.getChat(), message.getPermissions());
+			});
 			Main.getInfo().getRatelimit().put(author.getId(), true);
 
 			String ad = Helper.getAd();
