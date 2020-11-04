@@ -190,6 +190,10 @@ public class Hand {
 		return manaPerTurn;
 	}
 
+	public void setMana(int value) {
+		mana = value;
+	}
+
 	public void addMana(int value) {
 		mana += value;
 	}
@@ -200,6 +204,10 @@ public class Hand {
 
 	public int getHp() {
 		return hp;
+	}
+
+	public void setHp(int value) {
+		hp = value;
 	}
 
 	public void addHp(int value) {
