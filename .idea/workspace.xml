@@ -820,13 +820,7 @@
       <workItem from="1604364051620" duration="4191000" />
       <workItem from="1604459216481" duration="778000" />
       <workItem from="1604498959831" duration="135000" />
-    </task>
-    <task id="LOCAL-02778" summary="Melhoria na explicação do Shoukan">
-      <created>1603988338676</created>
-      <option name="number" value="02778" />
-      <option name="presentableId" value="LOCAL-02778" />
-      <option name="project" value="LOCAL" />
-      <updated>1603988338676</updated>
+      <workItem from="1604499548963" duration="1258000" />
     </task>
     <task id="LOCAL-02779" summary="Adição de cartas de campo (ainda não são coletáveis)">
       <created>1603998893816</created>
@@ -1164,7 +1158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604493457369</updated>
     </task>
-    <option name="localTasksCounter" value="2827" />
+    <task id="LOCAL-02827" summary="Agora é impossível ficar preso com 5 cartas-equipamento na mão">
+      <created>1604499638095</created>
+      <option name="number" value="02827" />
+      <option name="presentableId" value="LOCAL-02827" />
+      <option name="project" value="LOCAL" />
+      <updated>1604499638095</updated>
+    </task>
+    <option name="localTasksCounter" value="2828" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1230,7 +1231,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no registro de novos usuários" />
     <MESSAGE value="Melhoria na explicação do Shoukan" />
     <MESSAGE value="Adição de cartas de campo (ainda não são coletáveis)" />
     <MESSAGE value="Cartas Senshi agora mostram o ícone da raça" />
@@ -1255,7 +1255,8 @@
     <MESSAGE value="Correções e mudanças em certas cartas" />
     <MESSAGE value="Adição de threads dedicadas à execução de comandos" />
     <MESSAGE value="Correções menores e adição de banimento de equipamentos/arenas para jogos personalizados de Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores e adição de banimento de equipamentos/arenas para jogos personalizados de Shoukan" />
+    <MESSAGE value="Agora é impossível ficar preso com 5 cartas-equipamento na mão" />
+    <option name="LAST_COMMIT_MESSAGE" value="Agora é impossível ficar preso com 5 cartas-equipamento na mão" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1312,10 +1313,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602708322237" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1604493454357">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1604499635326">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1604493454357" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1604499635326" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1603112314104">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1379,10 +1380,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604493479579">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604499640586">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604493479579" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604499640586" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604459628107" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
