@@ -68,6 +68,7 @@ public class Shoukan extends Game {
 	private final List<Champion> ultimates = CardDAO.getFusions();
 	private final boolean[] changed = {false, false, false, false, false};
 	private final boolean daily;
+	private boolean draw = false;
 
 	public Shoukan(JDA handler, TextChannel channel, int bet, JSONObject custom, boolean daily, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, custom);
@@ -169,6 +170,38 @@ public class Shoukan extends Game {
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 			Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 			resetTimerKeepTurn();
+		});
+		buttons.put("\uD83E\uDD1D", (mb, ms) -> {
+			if (draw) {
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+				this.message = channel.sendMessage("Por acordo mútuo, declaro empate! (" + getRound() + " turnos)").complete();
+				close();
+			} else {
+				User u = getCurrent();
+				resetTimer();
+
+				phase = Phase.PLAN;
+				Hand hd = getHandById(getCurrent().getId());
+				arena.getSlots().get(getHandById(mb.getId()).getSide()).forEach(s -> {
+					if (s.getTop() != null) {
+						Champion c = (Champion) s.getTop();
+						c.setAvailable(true);
+						c.resetAttribs();
+					}
+				});
+
+				hd.addMana(hd.getManaPerTurn());
+
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+				this.message = channel.sendMessage(u.getAsMention() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D queira aceitar ou continue jogando normalmente.")
+						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
+				Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+				hd.showHand();
+				for (int i = 0; i < 5; i++) {
+					changed[i] = false;
+				}
+				draw = true;
+			}
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
@@ -280,6 +313,38 @@ public class Shoukan extends Game {
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 			Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 			resetTimerKeepTurn();
+		});
+		buttons.put("\uD83E\uDD1D", (mb, ms) -> {
+			if (draw) {
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+				this.message = channel.sendMessage("Por acordo mútuo, declaro empate! (" + getRound() + " turnos)").complete();
+				close();
+			} else {
+				User u = getCurrent();
+				resetTimer();
+
+				phase = Phase.PLAN;
+				Hand hd = getHandById(getCurrent().getId());
+				arena.getSlots().get(getHandById(mb.getId()).getSide()).forEach(s -> {
+					if (s.getTop() != null) {
+						Champion c = (Champion) s.getTop();
+						c.setAvailable(true);
+						c.resetAttribs();
+					}
+				});
+
+				hd.addMana(hd.getManaPerTurn());
+
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+				this.message = channel.sendMessage(u.getAsMention() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D queira aceitar ou continue jogando normalmente.")
+						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
+				Pages.buttonize(this.message, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+				hd.showHand();
+				for (int i = 0; i < 5; i++) {
+					changed[i] = false;
+				}
+				draw = true;
+			}
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
@@ -597,8 +662,8 @@ public class Shoukan extends Game {
 
 					int yPower = Math.round(
 							c.getAtk() +
-									c.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
-											(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
+							c.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
+							(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
 					);
 
 					enemy.removeHp(yPower);
@@ -641,8 +706,8 @@ public class Shoukan extends Game {
 
 				int yPower = Math.round(
 						yours.getEAtk() +
-								yours.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
-										(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+						yours.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
+						(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
 				);
 
 				int hPower;
@@ -657,14 +722,14 @@ public class Shoukan extends Game {
 					}
 					hPower = Math.round(
 							his.getEDef() +
-									his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum() *
-											(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+							his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum() *
+							(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 					);
 				} else
 					hPower = Math.round(
 							his.getEAtk() +
-									his.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
-											(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+							his.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum() *
+							(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 					);
 
 				if (yPower > hPower) {
