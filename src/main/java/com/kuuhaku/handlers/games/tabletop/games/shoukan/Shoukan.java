@@ -47,6 +47,7 @@ import org.json.JSONObject;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -325,8 +326,10 @@ public class Shoukan extends Game {
 
 					c.setDefending(c.isFlipped() || !c.isDefending());
 
-					if (c.hasEffect() && !c.isFlipped())
+					if (c.hasEffect() && !c.isFlipped()) {
 						c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1), channel));
+						postCombat();
+					}
 
 					if (c.isFlipped()) {
 						c.setFlipped(false);
@@ -403,8 +406,10 @@ public class Shoukan extends Game {
 					}
 					t.addLinkedTo((Equipment) tp);
 					((Equipment) tp).setLinkedTo(Pair.of(toEquip, t.getCard()));
-					if (t.hasEffect() && !t.isFlipped())
+					if (t.hasEffect() && !t.isFlipped()) {
 						t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
+						postCombat();
+					}
 				} else if (d instanceof Champion) {
 					if (args.length < 3) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
@@ -444,9 +449,16 @@ public class Shoukan extends Game {
 
 					tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slot.setTop(tp);
-					if (tp.hasEffect() && !tp.isFlipped())
+					if (tp.hasEffect() && !tp.isFlipped()) {
 						tp.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(tp, dest, null, -1), channel));
+						postCombat();
+					}
 				} else {
+					if (!args[1].equalsIgnoreCase("f")) {
+						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, Helper::doNothing);
+						return;
+					}
+
 					Field f = (Field) d.copy();
 					f.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					arena.setField(f);
@@ -523,8 +535,10 @@ public class Shoukan extends Game {
 							if (slt.getTop() == null) {
 								aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 								slt.setTop(aFusion.copy());
-								if (aFusion.hasEffect() && !aFusion.isFlipped())
+								if (aFusion.hasEffect() && !aFusion.isFlipped()) {
 									aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, Integer.parseInt(args[1]) - 1, h.getSide(), Duelists.of(aFusion, Integer.parseInt(args[1]) - 1, null, -1), channel));
+									postCombat();
+								}
 								h.removeMana(aFusion.getMana());
 								break;
 							}
@@ -615,11 +629,15 @@ public class Shoukan extends Game {
 					return;
 				}
 
-				if (yours.hasEffect())
+				if (yours.hasEffect()) {
 					yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
+					postCombat();
+				}
 
-				if (his.hasEffect())
+				if (his.hasEffect()) {
 					his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEFEND, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
+					postCombat();
+				}
 
 				int yPower = Math.round(
 						yours.getEAtk() +
@@ -632,8 +650,10 @@ public class Shoukan extends Game {
 					if (his.isFlipped()) {
 						his.setFlipped(false);
 						his.setDefending(true);
-						if (his.hasEffect())
+						if (his.hasEffect()) {
 							his.getEffect(new EffectParameters(phase, EffectTrigger.ON_FLIP, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
+							postCombat();
+						}
 					}
 					hPower = Math.round(
 							his.getEDef() +
@@ -650,10 +670,14 @@ public class Shoukan extends Game {
 				if (yPower > hPower) {
 					yours.setAvailable(false);
 					yours.resetAttribs();
-					if (yours.hasEffect())
+					if (yours.hasEffect()) {
 						yours.getEffect(new EffectParameters(phase, EffectTrigger.POST_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
-					if (his.hasEffect())
+						postCombat();
+					}
+					if (his.hasEffect()) {
 						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
+						postCombat();
+					}
 					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1], hisSide);
 
 					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
@@ -661,10 +685,14 @@ public class Shoukan extends Game {
 							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 				} else if (yPower < hPower) {
 					his.resetAttribs();
-					if (yours.hasEffect())
+					if (yours.hasEffect()) {
 						yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
-					if (his.hasEffect())
+						postCombat();
+					}
+					if (his.hasEffect()) {
 						his.getEffect(new EffectParameters(phase, EffectTrigger.POST_DEFENSE, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
+						postCombat();
+					}
 					killCard(h.getSide(), is[0], yourSide);
 
 					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
@@ -741,7 +769,7 @@ public class Shoukan extends Game {
 	public void convertCard(Side side, int index) {
 		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = (Champion) getArena().getSlots().get(his).get(index).getTop();
-		if (ch == null) return;
+		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert", false)) return;
 		SlotColumn<Drawable, Drawable> sc = getFirstAvailableSlot(side, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
@@ -779,17 +807,23 @@ public class Shoukan extends Game {
 	}
 
 	public boolean postCombat() {
-		if (getHandById(getBoard().getPlayers().get(1).getId()).getHp() == 0) {
-			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-			this.message = channel.sendMessage(getCurrent().getAsMention() + " zerou os pontos de vida de " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
-					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
+		AtomicBoolean finished = new AtomicBoolean(false);
+		getHands().forEach((s, h) -> {
+			if (!finished.get()) {
+				Hand op = getHands().get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
+				if (h.getHp() == 0) {
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+					this.message = channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
+							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
 
-			if (getCustom() == null)
-				getBoard().awardWinner(this, daily, getCurrent().getId());
-			close();
-			return true;
-		}
-		return false;
+					if (getCustom() == null)
+						getBoard().awardWinner(this, daily, op.getUser().getId());
+					close();
+					finished.set(true);
+				}
+			}
+		});
+		return finished.get();
 	}
 
 	@Override
