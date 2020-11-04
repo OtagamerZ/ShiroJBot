@@ -213,7 +213,13 @@ public class GuildEvents extends ListenerAdapter {
 						return;
 					}
 
-					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
+					String finalPrefix = prefix;
+					String[] finalArgs = args;
+					String finalRawMsgNoPrefix = rawMsgNoPrefix;
+					ShiroInfo.getCommandPool().execute(() -> {
+						Thread.currentThread().setName("Command Thread - " + Thread.currentThread().getId());
+						command.execute(author, member, finalRawMsgNoPrefix, finalArgs, message, channel, guild, finalPrefix);
+					});
 					if (!TagDAO.getTagById(author.getId()).isBeta() || !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
 						Main.getInfo().getRatelimit().put(author.getId(), true);
 					Helper.spawnAd(channel);

@@ -56,22 +56,23 @@ import java.util.stream.Stream;
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
 
-	//TODO Alternador do modo desenvolvimento (true quando utilizar em IDEs, false quando for dar push para o master)
-	private static final boolean DEV = false;
+    //TODO Alternador do modo desenvolvimento (true quando utilizar em IDEs, false quando for dar push para o master)
+    private static final boolean DEV = false;
 
-	//CONSTANTS
-	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
-	private static final ThreadPoolExecutor compilationPools = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
-	private static final String BotToken = System.getenv("BOT_TOKEN");
-	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
-	private static final String DBLToken;
-	private static final String name = "Shiro J. Bot";
-	private static final String version = VersionDAO.getBuildVersion(Version.V3);
-	private static final String supportServerName = "Shiro Support";
-	private static final String supportServerID = "421495229594730496";
-	private static final String twitchChannelID = "743479145618472960";
-	private static final String announcementChannelID = "597587565809369089";
-	private static final String default_prefix = DEV ? "dev!" : "s!";
+    //CONSTANTS
+    private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
+    private static final ThreadPoolExecutor compilationPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
+    private static final ThreadPoolExecutor commandPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+    private static final String BotToken = System.getenv("BOT_TOKEN");
+    private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
+    private static final String DBLToken;
+    private static final String name = "Shiro J. Bot";
+    private static final String version = VersionDAO.getBuildVersion(Version.V3);
+    private static final String supportServerName = "Shiro Support";
+    private static final String supportServerID = "421495229594730496";
+    private static final String twitchChannelID = "743479145618472960";
+    private static final String announcementChannelID = "597587565809369089";
+    private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String shiro = "572413282653306901";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
@@ -187,26 +188,30 @@ public class ShiroInfo {
 		return emoteRepo;
 	}
 
-	public static List<String> getStaff() {
-		return Stream.concat(developers.stream(), supports.stream()).distinct().collect(Collectors.toList());
-	}
+    public static List<String> getStaff() {
+        return Stream.concat(developers.stream(), supports.stream()).distinct().collect(Collectors.toList());
+    }
 
-	//NON-STATIC
-	public float getCPULoad() {
-		return (float) Helper.round(tBean.getCurrentThreadCpuTime() * 100, 2);
-	}
+    //NON-STATIC
+    public float getCPULoad() {
+        return (float) Helper.round(tBean.getCurrentThreadCpuTime() * 100, 2);
+    }
 
-	public ThreadPoolExecutor getPool() {
-		return compilationPools;
-	}
+    public ThreadPoolExecutor getCompilationPool() {
+        return compilationPool;
+    }
 
-	public boolean isDev() {
-		return DEV;
-	}
+    public static ThreadPoolExecutor getCommandPool() {
+        return commandPool;
+    }
 
-	public String getBotToken() {
-		return BotToken;
-	}
+    public boolean isDev() {
+        return DEV;
+    }
+
+    public String getBotToken() {
+        return BotToken;
+    }
 
 	public String getYoutubeToken() {
 		return YoutubeToken;
