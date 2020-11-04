@@ -108,7 +108,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		info.setStartTime(Instant.now().getEpochSecond());
-		Helper.logger(Main.class).info("Criada pool de compilação: " + info.getPool().getCorePoolSize() + " espaços alocados");
+		Helper.logger(Main.class).info("Criada pool de compilação: " + info.getCompilationPool().getCorePoolSize() + " espaços alocados");
 
 		Manager.connect();
 		if (com.kuuhaku.controller.sqlite.BackupDAO.restoreData(BackupDAO.getData()))
