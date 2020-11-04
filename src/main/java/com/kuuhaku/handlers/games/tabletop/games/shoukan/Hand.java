@@ -71,7 +71,7 @@ public class Hand {
 
 	public void draw() {
 		try {
-			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4)
+			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && deque.stream().anyMatch(d -> d instanceof Champion))
 				drawChampion();
 			else cards.add(deque.removeFirst().copy());
 		} catch (NoSuchElementException ignore) {
