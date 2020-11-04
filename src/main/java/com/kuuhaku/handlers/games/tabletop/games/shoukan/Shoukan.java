@@ -152,7 +152,7 @@ public class Shoukan extends Game {
 				return;
 			}
 
-			if (h.getDeque().size() == 0) {
+			if (!h.draw()) {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				this.message = channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
@@ -160,9 +160,9 @@ public class Shoukan extends Game {
 				if (getCustom() == null)
 					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 				close();
+				return;
 			}
 
-			h.draw();
 			h.showHand();
 			remaining = 5 - h.getCards().size();
 			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
@@ -295,7 +295,7 @@ public class Shoukan extends Game {
 				return;
 			}
 
-			if (hd.getDeque().size() == 0) {
+			if (!hd.draw()) {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				this.message = channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg").complete();
@@ -303,9 +303,9 @@ public class Shoukan extends Game {
 				if (getCustom() == null)
 					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 				close();
+				return;
 			}
 
-			hd.draw();
 			hd.showHand();
 			remaining = 5 - hd.getCards().size();
 			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
