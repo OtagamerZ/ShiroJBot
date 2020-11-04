@@ -130,7 +130,7 @@ public class ComandosCommand extends Command {
 
 			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
 
-			channel.sendMessage(eb.build()).queue(s -> Pages.categorize(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())));
+			channel.sendMessage(eb.build()).queue(s -> Pages.categorize(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())), Helper::doNothing);
 			return;
 		} else if (args.length == 0) {
 			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_TITLE));

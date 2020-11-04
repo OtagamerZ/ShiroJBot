@@ -47,24 +47,33 @@ public class Hand {
 	private int hp;
 
 	public Hand(Shoukan game, User user, List<Drawable> deque, Side side) {
-        Collections.shuffle(deque);
+		Collections.shuffle(deque);
 
-        this.user = user;
-        this.deque = new LinkedList<>(deque);
-        this.side = side;
-        this.game = game;
+		this.user = user;
+		this.deque = new LinkedList<>(deque);
+		this.side = side;
+		this.game = game;
 
-        this.mana = game.getCustom() == null ? 0 : Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
-        this.hp = game.getCustom() == null ? 5000 : Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
-        this.startingCount = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("stcards", 5), 1, 10);
-        this.manaPerTurn = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
+		this.mana = game.getCustom() == null ? 0 : Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
+		this.hp = game.getCustom() == null ? 5000 : Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
+		this.startingCount = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("stcards", 5), 1, 10);
+		this.manaPerTurn = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
 
-        redrawHand();
-    }
+		if (game.getCustom() != null) {
+			if (!game.getCustom().optBoolean("banEquip", false))
+				deque.removeIf(d -> d instanceof Equipment);
+			if (!game.getCustom().optBoolean("banField", false))
+				deque.removeIf(d -> d instanceof Field);
+		}
+
+		redrawHand();
+	}
 
 	public void draw() {
 		try {
-			cards.add(deque.removeFirst().copy());
+			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4)
+				drawChampion();
+			else cards.add(deque.removeFirst().copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -82,6 +91,15 @@ public class Hand {
 		Card card = drawable.getCard();
 		try {
 			Drawable dr = deque.stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
+			deque.remove(dr);
+			cards.add(dr);
+		} catch (NoSuchElementException ignore) {
+		}
+	}
+
+	public void drawChampion() {
+		try {
+			Drawable dr = deque.stream().filter(c -> c instanceof Champion).findFirst().orElseThrow().copy();
 			deque.remove(dr);
 			cards.add(dr);
 		} catch (NoSuchElementException ignore) {
