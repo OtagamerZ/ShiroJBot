@@ -405,7 +405,7 @@ public class Shoukan extends Game {
 						t.setDefending(true);
 					}
 					t.addLinkedTo((Equipment) tp);
-					((Equipment) tp).setLinkedTo(Pair.of(toEquip, t.getCard()));
+					((Equipment) tp).setLinkedTo(Pair.of(toEquip, t));
 					if (t.hasEffect() && !t.isFlipped()) {
 						t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
 						postCombat();
@@ -511,7 +511,7 @@ public class Shoukan extends Game {
 								));
 
 								for (Equipment eq : ((Champion) slt.getTop()).getLinkedTo())
-									equips.put(eq.getLinkedTo().getKey(), eq.getLinkedTo().getValue().getId());
+									equips.put(eq.getLinkedTo().getKey(), eq.getLinkedTo().getRight().getCard().getId());
 								break;
 							}
 						}
@@ -798,7 +798,7 @@ public class Shoukan extends Game {
 					slts.get(i).setBottom(null);
 
 					target.addLinkedTo(eq);
-					eq.setLinkedTo(Pair.of(pos, target.getCard()));
+					eq.setLinkedTo(Pair.of(pos, target));
 					eq.setAcc(AccountDAO.getAccount(getHands().get(side).getUser().getId()));
 					sc.setBottom(eq);
 				} else return;
