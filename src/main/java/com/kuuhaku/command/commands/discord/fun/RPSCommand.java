@@ -92,30 +92,30 @@ public class RPSCommand extends Command {
 		};
 
 		int finalWin = win;
-		channel.sendMessage("Saisho wa guu!\nJan...Ken...Pon! " + pcChoice)
-				.queue(m -> {
-					switch (finalWin) {
-						case 0 -> {
-							m.editMessage(m.getContentRaw() + "\nVocê perdeu!").queue();
-							if (ExceedDAO.hasExceed(author.getId())) {
-								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
-								ps.modifyInfluence(false);
-								PStateDAO.savePoliticalState(ps);
-							}
+		channel.sendMessage("Saisho wa guu!\nJan...Ken...Pon! " + pcChoice + (
+				switch (finalWin) {
+					case 0 -> {
+						if (ExceedDAO.hasExceed(author.getId())) {
+							PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+							ps.modifyInfluence(false);
+							PStateDAO.savePoliticalState(ps);
 						}
-						case 1 -> {
-							int crd = Math.max(10, Helper.rng(50, false));
-							acc.addCredit(crd, this.getClass());
-							AccountDAO.saveAccount(acc);
-							m.editMessage(m.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
-							if (ExceedDAO.hasExceed(author.getId())) {
-								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
-								ps.modifyInfluence(2);
-								PStateDAO.savePoliticalState(ps);
-							}
-						}
-						case 2 -> m.editMessage(m.getContentRaw() + "\nEmpate!").queue();
+						yield "\nVocê perdeu!";
 					}
-				});
+					case 1 -> {
+						int crd = Math.max(10, Helper.rng(50, false));
+						acc.addCredit(crd, this.getClass());
+						AccountDAO.saveAccount(acc);
+						if (ExceedDAO.hasExceed(author.getId())) {
+							PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+							ps.modifyInfluence(2);
+							PStateDAO.savePoliticalState(ps);
+						}
+						yield "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!";
+					}
+					case 2 -> "\nEmpate!";
+					default -> throw new IllegalStateException("Unexpected value: " + finalWin);
+				}
+		)).queue();
 	}
 }
