@@ -33,7 +33,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import javax.persistence.NoResultException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -104,11 +103,13 @@ public class Settings {
 			}
 
 			EmbedBuilder eb;
-			if (message.getGuild().getIconUrl() != null) eb = new EmbedBuilder();
-			else eb = new ColorlessEmbedBuilder();
 
-			eb.setColor(Helper.colorThief(message.getGuild().getIconUrl()));
-			if (message.getGuild().getIconUrl() != null) eb.setThumbnail(message.getGuild().getIconUrl());
+			if (message.getGuild().getIconUrl() != null) {
+				eb = new EmbedBuilder();
+				eb.setThumbnail(message.getGuild().getIconUrl());
+				eb.setColor(Helper.colorThief(message.getGuild().getIconUrl()));
+			} else eb = new ColorlessEmbedBuilder();
+
 			eb.setTitle("⚙ | Configurações do servidor");
 			eb.addField("\uD83D\uDD17 » Prefixo: __" + prefix + "__", Helper.VOID, false);
 
