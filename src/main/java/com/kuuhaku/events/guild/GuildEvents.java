@@ -213,20 +213,14 @@ public class GuildEvents extends ListenerAdapter {
 						return;
 					}
 
-					String finalPrefix = prefix;
-					String[] finalArgs = args;
-					String finalRawMsgNoPrefix = rawMsgNoPrefix;
-					ShiroInfo.getCommandPool().execute(() -> {
-						Thread.currentThread().setName("Command Thread - " + Thread.currentThread().getId());
-						command.execute(author, member, finalRawMsgNoPrefix, finalArgs, message, channel, guild, finalPrefix);
-					});
+					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
 					if (!TagDAO.getTagById(author.getId()).isBeta() || !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
 						Main.getInfo().getRatelimit().put(author.getId(), true);
 					Helper.spawnAd(channel);
 				}
 			}
 
-			if (!found && !author.isBot() && !blacklisted && member != null) {
+			if (!found && !author.isBot() && !blacklisted) {
 				Account acc = AccountDAO.getAccount(author.getId());
 				if (!acc.getTwitchId().isBlank() && channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
 					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.stripEmotesAndMentions(rawMessage));
