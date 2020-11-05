@@ -22,6 +22,7 @@ import com.kuuhaku.model.persistent.DynamicParameter;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 public class DynamicParameterDAO {
 	public static DynamicParameter getParam(String param) {
@@ -42,6 +43,18 @@ public class DynamicParameterDAO {
 
 		em.getTransaction().begin();
 		em.merge(dp);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void clearParam(String param) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		Query q = em.createQuery("DELETE FROM DynamicParameter dp WHERE dp.param = :param");
+		q.setParameter("param", param);
+		q.executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();

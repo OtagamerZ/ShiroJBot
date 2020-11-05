@@ -24,18 +24,17 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.KawaiponRarity;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.util.Pair;
@@ -102,18 +101,19 @@ public class SynthesizeCardCommand extends Command {
 		}
 
 		if (foilSynth) {
-            int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum() * 2;
-            List<Field> fs = CardDAO.getAllFields();
-            Field f = fs.get(Helper.rng(fs.size(), true));
+			int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum() * 2;
+			List<Field> fs = CardDAO.getAllFields();
+			Field f = fs.get(Helper.rng(fs.size(), true));
 
-            String hash = Helper.generateHash(guild, author);
-            ShiroInfo.getHashes().add(hash);
-            Main.getInfo().getConfirmationPending().put(author.getId(), true);
-            channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (elas serão destruídas no processo). Deseja continuar?")
-                    .queue(s ->
-                            Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-                                if (!ShiroInfo.getHashes().remove(hash)) return;
-                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
+			String hash = Helper.generateHash(guild, author);
+			ShiroInfo.getHashes().add(hash);
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (elas serão destruídas no processo). Deseja continuar?")
+					.queue(s ->
+							Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+								if (!ShiroInfo.getHashes().remove(hash)) return;
+								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
 
 								if (kp.getFields().size() == 3) {
 									int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
@@ -125,14 +125,23 @@ public class SynthesizeCardCommand extends Command {
 									if (kp.getFields().size() == 3)
 										channel.sendMessage("❌ | Você já possui 18 equipamentos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
 
-									tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, true)));
+									if (dp.getValue().isBlank())
+										tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, true)));
+									else
+										DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+
 									KawaiponDAO.saveKawaipon(kp);
 									s.delete().queue(null, Helper::doNothing);
 									return;
 								}
 
 								kp.addField(f);
-								tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, true)));
+
+								if (dp.getValue().isBlank())
+									tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, true)));
+								else
+									DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+
 								KawaiponDAO.saveKawaipon(kp);
 
 								s.delete().queue(null, Helper::doNothing);
@@ -176,6 +185,7 @@ public class SynthesizeCardCommand extends Command {
 								if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
 								String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
+								DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
 
 								if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) || kp.getEquipments().size() == 18) {
 									int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
@@ -191,14 +201,22 @@ public class SynthesizeCardCommand extends Command {
 									else
 										channel.sendMessage("❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + change + " créditos.").queue();
 
-									tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
+									if (dp.getValue().isBlank())
+										tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
+									else
+										DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
 									KawaiponDAO.saveKawaipon(kp);
 									s.delete().queue(null, Helper::doNothing);
 									return;
 								}
 
 								kp.addEquipment(e);
-								tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
+
+								if (dp.getValue().isBlank())
+									tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
+								else
+									DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+
 								KawaiponDAO.saveKawaipon(kp);
 
 								s.delete().queue(null, Helper::doNothing);
