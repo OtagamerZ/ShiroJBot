@@ -194,13 +194,15 @@ public class Account {
 			if (today.isAfter(lastVote.plusHours(12))) {
 				try {
 					Main.getInfo().getUserByID(userId).openPrivateChannel().queue(c -> {
-						EmbedBuilder eb = new ColorlessEmbedBuilder();
-						eb.setTitle("Opa, você já pode votar novamente!");
-						eb.setDescription("Como você pediu, estou aqui para lhe avisar que você já pode [votar novamente](https://top.gg/bot/572413282653306901/vote) para ganhar mais um acúmulo de votos e uma quantia de créditos!");
-						eb.setFooter("Data do último voto: " + lastVoted);
-						c.sendMessage(eb.build()).queue(null, Helper::doNothing);
-					}, Helper::doNothing);
-				} catch (NullPointerException ignore) {
+								EmbedBuilder eb = new ColorlessEmbedBuilder();
+								eb.setTitle("Opa, você já pode votar novamente!");
+								eb.setDescription("Como você pediu, estou aqui para lhe avisar que você já pode [votar novamente](https://top.gg/bot/572413282653306901/vote) para ganhar mais um acúmulo de votos e uma quantia de créditos!");
+								eb.setFooter("Data do último voto: " + lastVoted);
+								c.sendMessage(eb.build()).queue(null, e -> Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]));
+							}, e -> Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0])
+					);
+				} catch (NullPointerException e) {
+					Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 				} finally {
 					notified = true;
 					AccountDAO.saveAccount(this);
