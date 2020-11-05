@@ -83,6 +83,7 @@ public class TagDAO {
 	}
 
 	public static void addUserTagsToDB(String id) {
+		if (BlacklistDAO.isBlacklisted(id)) return;
 		EntityManager em = Manager.getEntityManager();
 
 		Tags t = em.find(Tags.class, id);
@@ -95,6 +96,18 @@ public class TagDAO {
 
 			em.close();
 		}
+	}
+
+	public static void clearTags(Tags t) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		Query q = em.createQuery("DELETE FROM Tags t WHERE t.id = :id");
+		q.setParameter("id", t.getId());
+		q.executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
 	}
 
 	public static void giveTagToxic(String id) {

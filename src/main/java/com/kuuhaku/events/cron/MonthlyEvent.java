@@ -19,16 +19,11 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.LotteryDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.enums.ExceedEnum;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Lottery;
-import com.kuuhaku.model.persistent.LotteryValue;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -84,7 +79,7 @@ public class MonthlyEvent implements Job {
 		kgs.forEach(k -> {
 			try {
 				if (k.getDiedAt().plusMonths(1).isBefore(LocalDateTime.now()) || k.getOffSince().plusMonths(1).isBefore(LocalDateTime.now()))
-					KGotchiDAO.deleteKawaigotchi(k);
+					com.kuuhaku.controller.postgresql.KGotchiDAO.deleteKawaigotchi(k);
 			} catch (NullPointerException ignore) {
 			}
 		});
@@ -137,5 +132,26 @@ public class MonthlyEvent implements Job {
 
 		LotteryDAO.closeLotteries();
 		DynamicParameterDAO.setParam("last_upd_month", String.valueOf(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).getMonthValue()));
+
+		List<Blacklist> blacklist = BlacklistDAO.getBlacklist();
+		for (Blacklist bl : blacklist) {
+			if (bl.canClear()) {
+				Account acc = AccountDAO.getAccount(bl.getId());
+				Kawaipon kp = KawaiponDAO.getKawaipon(bl.getId());
+				Kawaigotchi kg = KGotchiDAO.getKawaigotchi(bl.getId());
+				ExceedMember em = ExceedDAO.getExceedMember(bl.getId());
+				Tags t = TagDAO.getTagById(bl.getId());
+
+				AccountDAO.removeAccount(acc);
+				MemberDAO.clearMember(bl.getId());
+				KawaiponDAO.removeKawaipon(kp);
+				if (kg != null)
+					com.kuuhaku.controller.postgresql.KGotchiDAO.deleteKawaigotchi(kg);
+				ExceedDAO.removeMember(em);
+				TagDAO.clearTags(t);
+				WaifuDAO.voidCouple(bl.getId());
+				TokenDAO.voidToken(bl.getId());
+			}
+		}
 	}
 }

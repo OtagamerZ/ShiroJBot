@@ -58,6 +58,20 @@ public class WaifuDAO {
 		em.close();
 	}
 
+	public static void voidCouple(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando = :id OR waifu = :id");
+		q.setParameter("id", id);
+
+		em.getTransaction().begin();
+		em.remove(q.getSingleResult());
+		removeMultiplier(id);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	public static Couple getCouple(User u) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -98,5 +112,18 @@ public class WaifuDAO {
 		} finally {
 			em.close();
 		}
+	}
+
+	public static void removeMultiplier(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("DELETE FROM CoupleMultiplier c WHERE c.id = :id");
+		q.setParameter("id", id);
+
+		em.getTransaction().begin();
+		q.executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
 	}
 }

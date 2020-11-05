@@ -18,9 +18,15 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.github.twitch4j.common.events.domain.EventUser;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Blacklist;
+import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import java.util.List;
 
 public class BlacklistDAO {
 	public static void blacklist(Blacklist bl) {
@@ -31,5 +37,92 @@ public class BlacklistDAO {
 		em.getTransaction().commit();
 
 		em.close();
+	}
+
+	public static void removeFromList(Blacklist bl) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.remove(bl);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Blacklist> getBlacklist() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT b FROM Blacklist b", Blacklist.class);
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static boolean isBlacklisted(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT b FROM Blacklist b WHERE id = :id", Blacklist.class);
+		q.setParameter("id", id);
+
+		try {
+			q.getSingleResult();
+			return true;
+		} catch (NoResultException e) {
+			return false;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static boolean isBlacklisted(User user) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT b FROM Blacklist b WHERE id = :id", Blacklist.class);
+		q.setParameter("id", user.getId());
+
+		try {
+			q.getSingleResult();
+			return true;
+		} catch (NoResultException e) {
+			return false;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static boolean isBlacklisted(EventUser user) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT a FROM Account a WHERE twitchId = :id", Account.class);
+		q.setParameter("id", user.getId());
+
+		Account acc;
+		try {
+			acc = (Account) q.getSingleResult();
+		} catch (NoResultException e) {
+			acc = null;
+		}
+
+		boolean blacklisted = false;
+		if (acc != null) {
+			q = em.createQuery("SELECT b FROM Blacklist b WHERE id = :id", Blacklist.class);
+			q.setParameter("id", acc.getUserId());
+
+			try {
+				q.getSingleResult();
+				return true;
+			} catch (NoResultException e) {
+				return false;
+			} finally {
+				em.close();
+			}
+		} else {
+			em.close();
+			return false;
+		}
 	}
 }

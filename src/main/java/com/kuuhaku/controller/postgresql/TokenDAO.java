@@ -132,4 +132,20 @@ public class TokenDAO {
 			return false;
 		}
 	}
+
+	public static void voidToken(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT t FROM Token t WHERE t.uid = :id", Token.class);
+		q.setParameter("id", id);
+
+		Token t = (Token) q.getSingleResult();
+		t.disable();
+
+		em.getTransaction().begin();
+		em.merge(t);
+		em.getTransaction().commit();
+
+		em.close();
+	}
 }
