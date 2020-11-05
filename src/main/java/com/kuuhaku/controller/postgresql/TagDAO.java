@@ -85,14 +85,16 @@ public class TagDAO {
 	public static void addUserTagsToDB(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Tags t = new Tags();
-		t.setId(id);
+		Tags t = em.find(Tags.class, id);
+		if (t == null) {
+			t = new Tags(id);
 
-		em.getTransaction().begin();
-		em.merge(t);
-		em.getTransaction().commit();
+			em.getTransaction().begin();
+			em.merge(t);
+			em.getTransaction().commit();
 
-		em.close();
+			em.close();
+		}
 	}
 
 	public static void giveTagToxic(String id) {
