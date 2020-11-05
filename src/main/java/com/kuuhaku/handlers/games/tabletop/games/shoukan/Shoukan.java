@@ -663,7 +663,7 @@ public class Shoukan extends Game {
 					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
 							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue();
+							.queue(null, Helper::doNothing);
 
 					if (getCustom() == null)
 						getBoard().awardWinner(this, daily, op.getUser().getId());
@@ -744,7 +744,7 @@ public class Shoukan extends Game {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-						.queue();
+						.queue(null, Helper::doNothing);
 
 				if (getCustom() == null)
 					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
@@ -768,7 +768,7 @@ public class Shoukan extends Game {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Por acordo mútuo, declaro empate! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-						.queue();
+						.queue(null, Helper::doNothing);
 				close();
 			} else {
 				User u = getCurrent();
@@ -804,7 +804,7 @@ public class Shoukan extends Game {
 			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-					.queue();
+					.queue(null, Helper::doNothing);
 			if (getCustom() == null)
 				getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 			close();
