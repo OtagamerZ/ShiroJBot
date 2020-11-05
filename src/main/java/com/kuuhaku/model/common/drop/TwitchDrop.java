@@ -82,12 +82,12 @@ public class TwitchDrop implements Prize {
 		add(Pair.of("Ter até 1000 créditos.", u ->
 				Objects.requireNonNull(AccountDAO.getAccountByTwitchId(u.getId())).getBalance() <= 1000));
 
-		add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguidas ou mais.", u ->
+		add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguida" + (values[1] != 1 ? "s" : "") + " ou mais.", u ->
 				Objects.requireNonNull(AccountDAO.getAccountByTwitchId(u.getId())).getStreak() >= values[1]));
 
 		add(Pair.of("Ser membro da " + exceed.getName() + ".", u ->
 						ExceedDAO.hasExceed(Objects.requireNonNull(AccountDAO.getAccountByTwitchId(u.getId())).getUserId()) &&
-								ExceedDAO.getExceedMember(u.getId()).getExceed().equalsIgnoreCase(exceed.getName())
+						ExceedDAO.getExceedMember(u.getId()).getExceed().equalsIgnoreCase(exceed.getName())
 				)
 		);
 	}};
