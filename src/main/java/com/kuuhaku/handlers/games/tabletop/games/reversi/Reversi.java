@@ -177,25 +177,28 @@ public class Reversi extends Game {
 
 				if (whiteCount > blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)")
 							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue(null, Helper::doNothing);
+							.queue(s -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							});
 					getBoard().awardWinner(this, winner.getId());
 					return;
 				} else if (whiteCount < blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> !e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)")
 							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue(null, Helper::doNothing);
+							.queue(s -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							});
 					getBoard().awardWinner(this, winner.getId());
 					return;
 				} else {
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendMessage("Temos um empate!")
 							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue(null, Helper::doNothing);
+							.queue(s -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							});
 					close();
 					return;
 				}
@@ -213,10 +216,11 @@ public class Reversi extends Game {
 			draw = true;
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-					.queue(null, Helper::doNothing);
+					.queue(s -> {
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+					});
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 			close();
 		});
