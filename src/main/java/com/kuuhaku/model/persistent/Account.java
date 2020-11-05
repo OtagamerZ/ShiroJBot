@@ -34,8 +34,10 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 @Entity
@@ -82,6 +84,9 @@ public class Account {
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String ultimate = "";
+
+	@Temporal(TemporalType.DATE)
+	private Calendar lastDaily = null;
 
 	public String getUserId() {
 		return userId;
@@ -144,6 +149,21 @@ public class Account {
 		return lastVoted;
 	}
 
+	public Calendar getLastDaily() {
+		return lastDaily;
+	}
+
+	public boolean hasDailyAvailable() {
+		Calendar today = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+		Calendar lastDaily = this.lastDaily;
+
+		return today.get(Calendar.DAY_OF_YEAR) > lastDaily.get(Calendar.DAY_OF_YEAR);
+	}
+
+	public void playedDaily() {
+		this.lastDaily = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+	}
+
 	public void voted() {
 		ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
 		try {
@@ -151,8 +171,8 @@ public class Account {
 
 			Helper.logger(this.getClass()).info(
 					"\nVoto anterior: " + lastVote.format(Helper.dateformat) +
-							"\nHoje: " + today.format(Helper.dateformat) +
-							"\nAcumula? " + today.isBefore(lastVote.plusHours(24))
+					"\nHoje: " + today.format(Helper.dateformat) +
+					"\nAcumula? " + today.isBefore(lastVote.plusHours(24))
 			);
 
 			if (today.isBefore(lastVote.plusHours(24)) || streak == 0) streak = Helper.clamp(streak + 1, 0, 7);
