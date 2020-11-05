@@ -102,7 +102,7 @@ public class TenthMinuteEvent implements Job {
 					List<Role> validRoles = roles.get(ex);
 					List<Role> invalidRoles = roles.entrySet()
 							.stream()
-							.filter(e -> e.getKey().equals(ex))
+							.filter(e -> !e.getKey().equals(ex))
 							.map(Map.Entry::getValue)
 							.flatMap(List::stream)
 							.collect(Collectors.toList());
