@@ -13,14 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/chess/Chess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/chess/Chess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/crisscross/CrissCross.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/crisscross/CrissCross.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/reversi/Reversi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/reversi/Reversi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -831,14 +824,7 @@
       <workItem from="1604577250163" duration="9803000" />
       <workItem from="1604592110076" duration="7003000" />
       <workItem from="1604603264738" duration="143000" />
-      <workItem from="1604604181013" duration="1216000" />
-    </task>
-    <task id="LOCAL-02793" summary="Correção nas cartas de campo">
-      <created>1604026127782</created>
-      <option name="number" value="02793" />
-      <option name="presentableId" value="LOCAL-02793" />
-      <option name="project" value="LOCAL" />
-      <updated>1604026127782</updated>
+      <workItem from="1604604181013" duration="1265000" />
     </task>
     <task id="LOCAL-02794" summary="Correção nas cartas de campo">
       <created>1604026315208</created>
@@ -1176,7 +1162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604604427238</updated>
     </task>
-    <option name="localTasksCounter" value="2842" />
+    <task id="LOCAL-02842" summary="Correção na finalização dos jogos">
+      <created>1604606199048</created>
+      <option name="number" value="02842" />
+      <option name="presentableId" value="LOCAL-02842" />
+      <option name="project" value="LOCAL" />
+      <updated>1604606199049</updated>
+    </task>
+    <option name="localTasksCounter" value="2843" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1242,7 +1235,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Mudança na forma de salvar os modificadores das cartas de campo" />
     <MESSAGE value="Criação do comando de salas de jogos" />
     <MESSAGE value="Descontinuidade do projeto de comando de salas de jogos" />
     <MESSAGE value="Adição de quebra de linha nas mensagens de boas vindas e adeus" />
@@ -1267,7 +1259,8 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Correção nos cargos de exceed" />
     <MESSAGE value="Correção pequena" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção pequena" />
+    <MESSAGE value="Correção na finalização dos jogos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na finalização dos jogos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1324,10 +1317,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602708322237" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1604604424419">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1604606196279">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1604604424419" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1604606196279" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1604586940676">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1391,10 +1384,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604604429514">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604606200620">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604604429514" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604606200620" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604459628107" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
