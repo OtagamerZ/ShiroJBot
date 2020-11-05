@@ -57,9 +57,16 @@ public class Tags {
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean sponsor = false;
 
+    public Tags(String id) {
+        this.id = id;
+    }
+
+    public Tags() {
+    }
+
     public static List<String> getUserBadges(String id) {
         String pattern = "https://cdn.discordapp.com/emojis/%s.png?v=1";
-		String exceed = ExceedDAO.getExceed(id);
+        String exceed = ExceedDAO.getExceed(id);
         Member mb = MemberDAO.getMemberByMid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).stream().findFirst().orElse(null);
 
         if (mb == null) return new ArrayList<>();
