@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.framework;
 
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -26,8 +27,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.json.JSONObject;
 
 import java.io.Closeable;
+import java.util.Map;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public abstract class Game implements Closeable {
@@ -124,6 +127,8 @@ public abstract class Game implements Closeable {
 	public JSONObject getCustom() {
 		return custom;
 	}
+
+	public abstract Map<String, BiConsumer<Member, Message>> getButtons();
 
 	@Override
 	public void close() {

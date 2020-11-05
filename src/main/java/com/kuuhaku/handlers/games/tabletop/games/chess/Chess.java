@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.chess;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.Piece;
@@ -26,6 +27,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.chess.pieces.*;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -33,10 +35,9 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 public class Chess extends Game {
@@ -108,8 +109,12 @@ public class Chess extends Game {
 
 	@Override
 	public void start() {
-		message = channel.sendMessage(getCurrent().getAsMention() + " você começa!").addFile(Helper.getBytes(getBoard().render()), "board.jpg").complete();
-		getHandler().addEventListener(listener);
+		channel.sendMessage(getCurrent().getAsMention() + " você começa!").addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+				.queue(s -> {
+					this.message = s;
+					getHandler().addEventListener(listener);
+					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+				});
 	}
 
 	@Override
@@ -118,14 +123,13 @@ public class Chess extends Game {
 
 		return condition
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
-				.and(e -> e.getMessage().getContentRaw().length() == 4 || e.getMessage().getContentRaw().equalsIgnoreCase("ff"))
+				.and(e -> e.getMessage().getContentRaw().length() == 4)
 				.and(e -> {
-					char[] chars = e.getMessage().getContentRaw().toCharArray();
-					if (e.getMessage().getContentRaw().equalsIgnoreCase("ff")) return true;
-					else return Character.isLetter(chars[0])
-							&& Character.isDigit(chars[1])
-							&& Character.isLetter(chars[2])
-							&& Character.isDigit(chars[3]);
+					char[] chars = e.getMessage().getContentRaw().replace(" ", "").toCharArray();
+					return Character.isLetter(chars[0])
+						   && Character.isDigit(chars[1])
+						   && Character.isLetter(chars[2])
+						   && Character.isDigit(chars[3]);
 				})
 				.test(evt);
 	}
@@ -134,13 +138,6 @@ public class Chess extends Game {
 	public void play(GuildMessageReceivedEvent evt) {
 		Message message = evt.getMessage();
 		String[] command = {message.getContentRaw().substring(0, 2), message.getContentRaw().substring(2)};
-
-		if (command[0].equalsIgnoreCase("ff")) {
-			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)").queue();
-			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
-			close();
-			return;
-		}
 
 		try {
 			Spot from = Spot.of(command[0]);
@@ -189,19 +186,45 @@ public class Chess extends Game {
 			}
 
 			if (winner != null) {
-				channel.sendMessage(getCurrent().getAsMention() + " venceu! (" + getRound() + " turnos)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+				channel.sendMessage(getCurrent().getAsMention() + " venceu! (" + getRound() + " turnos)")
+						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+						.queue();
 				getBoard().awardWinner(this, winner);
 			} else if (remaining == 2) {
-				channel.sendMessage("Temos um empate! (" + getRound() + " turnos)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+				channel.sendMessage("Temos um empate! (" + getRound() + " turnos)")
+						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+						.queue();
 				close();
 			} else {
 				resetTimer();
-				this.message.delete().queue();
-				this.message = channel.sendMessage("Turno de " + getCurrent().getAsMention()).addFile(Helper.getBytes(getBoard().render()), "board.jpg").complete();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+				channel.sendMessage("Turno de " + getCurrent().getAsMention())
+						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+						.queue(s -> {
+							this.message = s;
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						});
 			}
 		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
 			channel.sendMessage("❌ | Coordenada inválida.").queue();
 		}
+	}
+
+	@Override
+	public Map<String, BiConsumer<Member, Message>> getButtons() {
+		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
+					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+					.queue();
+			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
+			close();
+		});
+
+		return buttons;
 	}
 
 	@Override
