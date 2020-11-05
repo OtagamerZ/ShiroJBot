@@ -77,7 +77,7 @@ public class Hitotsu extends Game {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 								.addFile(Helper.getBytes(mount, "png"), "mount.png")
-								.queue();
+								.queue(null, Helper::doNothing);
 						close();
 					}
 				}
@@ -134,11 +134,11 @@ public class Hitotsu extends Game {
 				}
 			}
 		} catch (IllegalCardException e) {
-			channel.sendMessage("❌ | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue();
+			channel.sendMessage("❌ | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue(null, Helper::doNothing);
 		} catch (IndexOutOfBoundsException e) {
-			channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue();
+			channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue(null, Helper::doNothing);
 		} catch (NumberFormatException | IllegalChainException e) {
-			channel.sendMessage("❌ | Para executar uma corrente você deve informar 2 ou mais índices de cartas do mesmo anime separados por vírgula.").queue();
+			channel.sendMessage("❌ | Para executar uma corrente você deve informar 2 ou mais índices de cartas do mesmo anime separados por vírgula.").queue(null, Helper::doNothing);
 		} catch (NoSuchElementException e) {
 			int lowest = 999;
 			for (Hand h : seats.values()) {
@@ -153,21 +153,21 @@ public class Hitotsu extends Game {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(h.getUser().getAsMention() + " é o jogador que possui menos cartas, temos um vencedor!! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
-						.queue();
+						.queue(null, Helper::doNothing);
 				getBoard().awardWinners(this, h.getUser().getId());
 				close();
 			} else if (winners.size() != getBoard().getPlayers().size()) {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(String.join(", ", winners.stream().map(h -> h.getUser().getAsMention()).toArray(String[]::new)) + " são os jogadores que possuem menos cartas, temos " + winners.size() + " vencedores!! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
-						.queue();
+						.queue(null, Helper::doNothing);
 				getBoard().awardWinners(this, winners.stream().map(h -> h.getUser().getId()).toArray(String[]::new));
 				close();
 			} else {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Temos um empate! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
-						.queue();
+						.queue(null, Helper::doNothing);
 				close();
 			}
 		}
@@ -177,7 +177,7 @@ public class Hitotsu extends Game {
 		if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 		channel.sendMessage("Não restam mais cartas para " + getCurrent().getAsMention() + ", temos um vencedor!! (" + getRound() + " turnos)")
 				.addFile(Helper.getBytes(mount, "png"), "mount.png")
-				.queue();
+				.queue(null, Helper::doNothing);
 		getBoard().awardWinner(this, getCurrent().getId());
 		close();
 	}
@@ -350,7 +350,9 @@ public class Hitotsu extends Game {
 			if (played.size() > 0)
 				eb.addField("Carta atual", "(" + played.getLast().getCard().getAnime() + ")" + played.getLast().getCard().getRarity().getEmote() + played.getLast().getName(), false);
 
-			getCurrent().openPrivateChannel().complete().sendMessage(eb.build()).queue();
+			getCurrent().openPrivateChannel()
+					.flatMap(c -> c.sendMessage(eb.build()))
+					.queue(null, Helper::doNothing);
 		});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 			seats.get(getCurrent().getId()).draw(getDeque());
@@ -367,7 +369,7 @@ public class Hitotsu extends Game {
 					});
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			channel.sendMessage(getCurrent().getAsMention() + " desistiu!").queue();
+			channel.sendMessage(getCurrent().getAsMention() + " desistiu!").queue(null, Helper::doNothing);
 			getBoard().leaveGame();
 			resetTimer();
 
@@ -376,7 +378,7 @@ public class Hitotsu extends Game {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
-						.queue();
+						.queue(null, Helper::doNothing);
 				close();
 			} else {
 				channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))

@@ -106,7 +106,7 @@ public class CrissCross extends Game {
 			if (getBoard().getPieceAt(s) == null) {
 				getBoard().setPieceAt(s, pieces.get(getCurrent().getId()));
 			} else {
-				channel.sendMessage("❌ | Essa casa já está ocupada!").queue();
+				channel.sendMessage("❌ | Essa casa já está ocupada!").queue(null, Helper::doNothing);
 				return;
 			}
 
@@ -132,13 +132,13 @@ public class CrissCross extends Game {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(getCurrent().getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-						.queue();
+						.queue(null, Helper::doNothing);
 				getBoard().awardWinner(this, winner);
 			} else if (fullRows == 3) {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Temos um empate!")
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-						.queue();
+						.queue(null, Helper::doNothing);
 				close();
 			} else {
 				resetTimer();
@@ -151,7 +151,7 @@ public class CrissCross extends Game {
 						});
 			}
 		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-			channel.sendMessage("❌ | Coordenada inválida.").queue();
+			channel.sendMessage("❌ | Coordenada inválida.").queue(null, Helper::doNothing);
 		}
 	}
 
@@ -162,7 +162,7 @@ public class CrissCross extends Game {
 			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-					.queue();
+					.queue(null, Helper::doNothing);
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 			close();
 		});
