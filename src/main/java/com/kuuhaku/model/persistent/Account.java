@@ -154,6 +154,7 @@ public class Account {
 	}
 
 	public boolean hasDailyAvailable() {
+		if (this.lastDaily == null) return true;
 		Calendar today = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
 		Calendar lastDaily = this.lastDaily;
 
