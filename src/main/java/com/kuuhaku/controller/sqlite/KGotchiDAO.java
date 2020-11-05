@@ -18,6 +18,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
+import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.utils.Helper;
 
@@ -59,6 +60,7 @@ public class KGotchiDAO {
 	}
 
 	public static void saveKawaigotchi(Kawaigotchi k) {
+		if (BlacklistDAO.isBlacklisted(k.getUserId())) return;
 		EntityManager em = Manager.getEntityManager();
 
 		k.setHealth(Helper.clamp(k.getHealth(), 0, 100));
@@ -83,7 +85,5 @@ public class KGotchiDAO {
 		em.getTransaction().commit();
 
 		em.close();
-
-		com.kuuhaku.controller.postgresql.KGotchiDAO.deleteKawaigotchi(k);
 	}
 }
