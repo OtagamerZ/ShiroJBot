@@ -248,10 +248,10 @@ public class Hitotsu extends Game {
 			suddenDeath = true;
 		}
 		resetTimer();
-		if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 		channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
 				.addFile(Helper.getBytes(mount, "png"), "mount.png")
 				.queue(s -> {
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = s;
 					seats.get(getCurrent().getId()).showHand();
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -270,10 +270,10 @@ public class Hitotsu extends Game {
 		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Math.random() * 90 - 45);
 		g2d.dispose();
 
-		if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 		channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
 				.addFile(Helper.getBytes(mount, "png"), "mount.png")
 				.queue(s -> {
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = s;
 					seats.get(getCurrent().getId()).showHand();
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -357,10 +357,10 @@ public class Hitotsu extends Game {
 
 			User u = getCurrent();
 			resetTimer();
-			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(u + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
 					.addFile(Helper.getBytes(mount, "png"), "mount.png")
 					.queue(s -> {
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = s;
 						seats.get(getCurrent().getId()).showHand();
 						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -379,10 +379,10 @@ public class Hitotsu extends Game {
 						.queue();
 				close();
 			} else {
-				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
 						.queue(s -> {
+							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
 							seats.get(getCurrent().getId()).showHand();
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
