@@ -118,7 +118,7 @@ public class Field implements Drawable, Cloneable {
                 Color.decode("#8b572a"), //CREATURE
                 Color.white,             //SPIRIT
                 Color.decode("#d0021b"), //DEMON
-                Color.decode("#fd88fd") //UNDEAD
+                Color.decode("#fd88fd")  //UNDEAD
         };
         int i = 0;
         for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
