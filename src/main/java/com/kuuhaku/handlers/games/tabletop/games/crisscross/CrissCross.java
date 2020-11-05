@@ -129,16 +129,18 @@ public class CrissCross extends Game {
 			}
 
 			if (winner != null) {
-				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(getCurrent().getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-						.queue(null, Helper::doNothing);
+						.queue(msg -> {
+							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+						});
 				getBoard().awardWinner(this, winner);
 			} else if (fullRows == 3) {
-				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Temos um empate!")
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-						.queue(null, Helper::doNothing);
+						.queue(msg -> {
+							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+						});
 				close();
 			} else {
 				resetTimer();
@@ -159,10 +161,11 @@ public class CrissCross extends Game {
 	public Map<String, BiConsumer<Member, Message>> getButtons() {
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-					.queue(null, Helper::doNothing);
+					.queue(s -> {
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+					});
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 			close();
 		});

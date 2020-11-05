@@ -660,10 +660,11 @@ public class Shoukan extends Game {
 			if (!finished.get()) {
 				Hand op = getHands().get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
 				if (h.getHp() == 0) {
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
 							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue(null, Helper::doNothing);
+							.queue(msg -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							});
 
 					if (getCustom() == null)
 						getBoard().awardWinner(this, daily, op.getUser().getId());
@@ -741,10 +742,11 @@ public class Shoukan extends Game {
 			}
 
 			if (!h.draw()) {
-				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-						.queue(null, Helper::doNothing);
+						.queue(s -> {
+							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+						});
 
 				if (getCustom() == null)
 					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
@@ -765,10 +767,11 @@ public class Shoukan extends Game {
 		});
 		buttons.put("\uD83E\uDD1D", (mb, ms) -> {
 			if (draw) {
-				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Por acordo mútuo, declaro empate! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-						.queue(null, Helper::doNothing);
+						.queue(s -> {
+							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+						});
 				close();
 			} else {
 				User u = getCurrent();
@@ -801,10 +804,11 @@ public class Shoukan extends Game {
 			}
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-					.queue(null, Helper::doNothing);
+					.queue(s -> {
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+					});
 			if (getCustom() == null)
 				getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 			close();
