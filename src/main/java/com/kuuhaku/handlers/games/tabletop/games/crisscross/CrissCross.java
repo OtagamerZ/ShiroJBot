@@ -142,10 +142,10 @@ public class CrissCross extends Game {
 				close();
 			} else {
 				resetTimer();
-				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Turno de " + getCurrent().getAsMention())
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 						.queue(msg -> {
+							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = msg;
 							Pages.buttonize(msg, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});

@@ -199,10 +199,10 @@ public class Chess extends Game {
 				close();
 			} else {
 				resetTimer();
-				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Turno de " + getCurrent().getAsMention())
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 						.queue(s -> {
+							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
