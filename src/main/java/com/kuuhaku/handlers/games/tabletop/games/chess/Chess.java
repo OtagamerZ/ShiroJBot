@@ -146,10 +146,10 @@ public class Chess extends Game {
 			ChessPiece toMove = (ChessPiece) getBoard().getPieceAt(from);
 			ChessPiece atSpot = (ChessPiece) getBoard().getPieceAt(to);
 			if (toMove == null) {
-				channel.sendMessage("❌ | Não há nenhuma peça nessa casa!").queue();
+				channel.sendMessage("❌ | Não há nenhuma peça nessa casa!").queue(null, Helper::doNothing);
 				return;
 			} else if (!toMove.getOwnerId().equals(evt.getAuthor().getId())) {
-				channel.sendMessage("❌ | Essa peça não é sua!").queue();
+				channel.sendMessage("❌ | Essa peça não é sua!").queue(null, Helper::doNothing);
 				return;
 			}
 
@@ -174,7 +174,7 @@ public class Chess extends Game {
 				getBoard().setPieceAt(from, null);
 				getBoard().setPieceAt(to, toMove);
 			} else {
-				channel.sendMessage("❌ | Movimento inválido!").queue();
+				channel.sendMessage("❌ | Movimento inválido!").queue(null, Helper::doNothing);
 				return;
 			}
 
@@ -189,13 +189,13 @@ public class Chess extends Game {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(getCurrent().getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-						.queue();
+						.queue(null, Helper::doNothing);
 				getBoard().awardWinner(this, winner);
 			} else if (remaining == 2) {
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Temos um empate! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-						.queue();
+						.queue(null, Helper::doNothing);
 				close();
 			} else {
 				resetTimer();
@@ -208,7 +208,7 @@ public class Chess extends Game {
 						});
 			}
 		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-			channel.sendMessage("❌ | Coordenada inválida.").queue();
+			channel.sendMessage("❌ | Coordenada inválida.").queue(null, Helper::doNothing);
 		}
 	}
 
@@ -219,7 +219,7 @@ public class Chess extends Game {
 			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-					.queue();
+					.queue(null, Helper::doNothing);
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 			close();
 		});

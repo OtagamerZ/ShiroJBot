@@ -114,14 +114,14 @@ public class Reversi extends Game {
 			Spot s = Spot.of(command);
 
 			if (!((Disk) pieces.get(getCurrent().getId())).validate(getBoard(), s, null)) {
-				channel.sendMessage("❌ | Casa inválida!").queue();
+				channel.sendMessage("❌ | Casa inválida!").queue(null, Helper::doNothing);
 				return;
 			}
 
 			if (getBoard().getPieceAt(s) == null) {
 				getBoard().setPieceAt(s, pieces.get(getCurrent().getId()));
 			} else {
-				channel.sendMessage("❌ | Essa casa já está ocupada!").queue();
+				channel.sendMessage("❌ | Essa casa já está ocupada!").queue(null, Helper::doNothing);
 				return;
 			}
 
@@ -135,16 +135,16 @@ public class Reversi extends Game {
 			if (whiteCount + blackCount == 64) {
 				if (whiteCount > blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
-					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue();
+					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue(null, Helper::doNothing);
 					getBoard().awardWinner(this, winner.getId());
 					close();
 				} else if (whiteCount < blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> !e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
-					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue();
+					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue(null, Helper::doNothing);
 					getBoard().awardWinner(this, winner.getId());
 					close();
 				} else {
-					channel.sendMessage("Temos um empate!").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue();
+					channel.sendMessage("Temos um empate!").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue(null, Helper::doNothing);
 					close();
 				}
 			} else {
@@ -159,7 +159,7 @@ public class Reversi extends Game {
 				draw = false;
 			}
 		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-			channel.sendMessage("❌ | Coordenada inválida.").queue();
+			channel.sendMessage("❌ | Coordenada inválida.").queue(null, Helper::doNothing);
 		}
 	}
 
@@ -180,7 +180,7 @@ public class Reversi extends Game {
 					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)")
 							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue();
+							.queue(null, Helper::doNothing);
 					getBoard().awardWinner(this, winner.getId());
 					return;
 				} else if (whiteCount < blackCount) {
@@ -188,14 +188,14 @@ public class Reversi extends Game {
 					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)")
 							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue();
+							.queue(null, Helper::doNothing);
 					getBoard().awardWinner(this, winner.getId());
 					return;
 				} else {
 					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendMessage("Temos um empate!")
 							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue();
+							.queue(null, Helper::doNothing);
 					close();
 					return;
 				}
@@ -216,7 +216,7 @@ public class Reversi extends Game {
 			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-					.queue();
+					.queue(null, Helper::doNothing);
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 			close();
 		});
