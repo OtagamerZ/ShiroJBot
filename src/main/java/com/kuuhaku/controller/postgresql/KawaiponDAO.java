@@ -45,10 +45,21 @@ public class KawaiponDAO {
 	}
 
 	public static void saveKawaipon(Kawaipon k) {
+		if (BlacklistDAO.isBlacklisted(k.getUid())) return;
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
 		em.merge(k);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void removeKawaipon(Kawaipon k) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.remove(k);
 		em.getTransaction().commit();
 
 		em.close();

@@ -71,4 +71,8 @@ public class Token {
 	public boolean isDisabled() {
 		return disabled;
 	}
+
+	public void disable() {
+		this.disabled = true;
+	}
 }
