@@ -18,6 +18,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
+import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.model.persistent.Member;
 
 import javax.persistence.EntityManager;
@@ -79,7 +80,7 @@ public class MemberDAO {
 	}
 
 	public static void addMemberToDB(net.dv8tion.jda.api.entities.Member u) {
-		if (u == null) return;
+		if (u == null || BlacklistDAO.isBlacklisted(u.getId())) return;
 		EntityManager em = Manager.getEntityManager();
 
 		Member m = new Member();
@@ -134,5 +135,17 @@ public class MemberDAO {
 		em.close();
 
 		return gcs;
+	}
+
+	public static void clearMember(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		Query q = em.createQuery("DELETE FROM Member m WHERE m.mid = :id");
+		q.setParameter("id", id);
+		q.executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
 	}
 }

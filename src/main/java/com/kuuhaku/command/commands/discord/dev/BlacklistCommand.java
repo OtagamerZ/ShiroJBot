@@ -62,7 +62,6 @@ public class BlacklistCommand extends Command {
 
 		Blacklist bl = new Blacklist(u.getId(), author.getName());
 		BlacklistDAO.blacklist(bl);
-		com.kuuhaku.controller.sqlite.BlacklistDAO.blacklist(bl);
 
 		channel.sendMessage("Usuário adicionado à lista negra com sucesso!").queue();
 	}

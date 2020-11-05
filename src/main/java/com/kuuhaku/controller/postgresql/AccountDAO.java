@@ -73,10 +73,21 @@ public class AccountDAO {
 	}
 
 	public static void saveAccount(Account acc) {
+		if (BlacklistDAO.isBlacklisted(acc.getUserId())) return;
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
 		em.merge(acc);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void removeAccount(Account acc) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.remove(acc);
 		em.getTransaction().commit();
 
 		em.close();

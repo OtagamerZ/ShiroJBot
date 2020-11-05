@@ -60,5 +60,7 @@ public class KGotchiDAO {
 		em.getTransaction().commit();
 
 		em.close();
+
+		com.kuuhaku.controller.sqlite.KGotchiDAO.deleteKawaigotchi(k);
 	}
 }
