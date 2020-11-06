@@ -1502,14 +1502,22 @@ public class Helper {
 		long seed = Long.parseLong("" + today.getYear() + today.getMonthValue() + today.getDayOfMonth());
 		Kawaipon kp = new Kawaipon();
 
-		kp.setChampions(getRandomN(CardDAO.getAllChampions(), 30, 3, seed));
-		kp.setEquipments(getRandomN(CardDAO.getAllEquipments(), 6, 3, seed));
+        kp.setChampions(getRandomN(CardDAO.getAllChampions(), 30, 3, seed));
+        kp.setEquipments(getRandomN(CardDAO.getAllEquipments(), 6, 3, seed));
         kp.setFields(getRandomN(CardDAO.getAllFields(), 1, 3, seed));
 
-		return kp;
-	}
+        return kp;
+    }
 
-	public static String toPercent(double value) {
-		return (int) (value * 100) + "%";
-	}
+    public static String toPercent(double value) {
+        return (int) (value * 100) + "%";
+    }
+
+    public static String getShortenedValue(long value, int startAt, int forEach) {
+        int times = -1;
+        for (int i = startAt; i < value; i *= forEach) {
+            times++;
+        }
+        return times == -1 ? String.valueOf(value) : (((int) Math.floor(value / (forEach * Math.pow(10, times)))) + StringUtils.repeat("k", times + 1));
+    }
 }
