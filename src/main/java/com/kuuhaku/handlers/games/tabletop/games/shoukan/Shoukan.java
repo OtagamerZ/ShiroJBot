@@ -32,6 +32,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -49,6 +50,7 @@ import org.json.JSONObject;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -678,8 +680,12 @@ public class Shoukan extends Game {
 
 	@Override
 	public Map<String, BiConsumer<Member, Message>> getButtons() {
+		AtomicReference<String> hash = new AtomicReference<>(Helper.generateHash(this));
+		ShiroInfo.getHashes().add(hash.get());
+
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("▶️", (mb, ms) -> {
+			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			getHandById(getCurrent().getId()).getCards().removeIf(d -> !d.isAvailable());
 			if (getRound() < 1 || phase == Phase.ATTACK) {
 				User u = getCurrent();
@@ -712,7 +718,7 @@ public class Shoukan extends Game {
 						.queue(s -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
-							Pages.buttonize(s, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 							h.showHand();
 							for (int i = 0; i < 5; i++) {
 								changed[i] = false;
@@ -727,6 +733,7 @@ public class Shoukan extends Game {
 			resetTimerKeepTurn();
 		});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
+			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			if (phase != Phase.PLAN) {
 				channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 				return;
@@ -760,12 +767,13 @@ public class Shoukan extends Game {
 					.queue(s -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = s;
-						Pages.buttonize(s, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						h.showHand();
 					});
 			resetTimerKeepTurn();
 		});
 		buttons.put("\uD83E\uDD1D", (mb, ms) -> {
+			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			if (draw) {
 				channel.sendMessage("Por acordo mútuo, declaro empate! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
@@ -794,7 +802,7 @@ public class Shoukan extends Game {
 						.queue(s -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
-							Pages.buttonize(s, buttons, false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 							h.showHand();
 							for (int i = 0; i < 5; i++) {
 								changed[i] = false;
@@ -804,6 +812,7 @@ public class Shoukan extends Game {
 			}
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
+			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 					.queue(s -> {
