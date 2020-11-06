@@ -28,6 +28,7 @@ import org.json.JSONObject;
 
 import java.io.Closeable;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
@@ -133,5 +134,21 @@ public abstract class Game implements Closeable {
 	@Override
 	public void close() {
 		if (timeout != null) timeout.cancel(true);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Game game = (Game) o;
+		return handler.equals(game.handler) &&
+			   board.equals(game.board) &&
+			   channel.equals(game.channel) &&
+			   custom.equals(game.custom);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(handler, board, channel, custom);
 	}
 }
