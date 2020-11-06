@@ -93,6 +93,8 @@ public class URankCommand extends Command {
 			mbs = MemberDAO.getMemberRank(guild.getId(), false);
 		}
 
+		mbs.removeIf(mb -> checkUser(mb).isBlank());
+
 		String champ = "1 - " + (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + checkUser(mbs.get(0)) + " (Level " + mbs.get(0).getLevel() + ")";
 		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
@@ -136,6 +138,7 @@ public class URankCommand extends Command {
 
 	private void getCreditRanking(List<Page> pages) {
 		List<Account> accs = AccountDAO.getAccountRank();
+		accs.removeIf(acc -> checkUser(acc).isBlank());
 
 		String champ = "1 - " + checkUser(accs.get(0)) + " (Créditos: " + accs.get(0).getBalance() + ")";
 		List<Account> sub9 = accs.subList(1, Math.min(accs.size(), 10));
@@ -178,6 +181,7 @@ public class URankCommand extends Command {
 
 	private void getCardRanking(List<Page> pages) {
 		List<Object[]> kps = KawaiponDAO.getCardRank();
+		kps.removeIf(kp -> checkUser(kp).isBlank());
 
 		String champ = "1 - " + checkUser(kps.get(0)) + " (Cartas: " + kps.get(0)[1] + ")";
 		List<Object[]> sub9 = kps.subList(1, Math.min(kps.size(), 10));
@@ -230,7 +234,7 @@ public class URankCommand extends Command {
 		try {
 			return Main.getInfo().getUserByID(m.getMid()).getName();
 		} catch (Exception e) {
-			return ShiroInfo.getLocale(I18n.PT).getString("str_invalid-user");
+			return "";
 		}
 	}
 
@@ -238,7 +242,7 @@ public class URankCommand extends Command {
 		try {
 			return Main.getInfo().getUserByID(String.valueOf(kp[0])).getName();
 		} catch (Exception e) {
-			return ShiroInfo.getLocale(I18n.PT).getString("str_invalid-user");
+			return "";
 		}
 	}
 
@@ -246,7 +250,7 @@ public class URankCommand extends Command {
 		try {
 			return Main.getInfo().getUserByID(acc.getUserId()).getName();
 		} catch (Exception e) {
-			return ShiroInfo.getLocale(I18n.PT).getString("str_invalid-user");
+			return "";
 		}
 	}
 
