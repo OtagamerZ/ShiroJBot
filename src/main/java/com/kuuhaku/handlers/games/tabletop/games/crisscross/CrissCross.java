@@ -28,6 +28,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.handlers.games.tabletop.games.crisscross.pieces.Circle;
 import com.kuuhaku.handlers.games.tabletop.games.crisscross.pieces.Cross;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -42,6 +43,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
@@ -159,8 +161,12 @@ public class CrissCross extends Game {
 
 	@Override
 	public Map<String, BiConsumer<Member, Message>> getButtons() {
+		AtomicReference<String> hash = new AtomicReference<>(Helper.generateHash(this));
+		ShiroInfo.getHashes().add(hash.get());
+
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
+			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 					.queue(s -> {

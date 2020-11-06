@@ -34,6 +34,7 @@ import com.kuuhaku.controller.postgresql.GuildBuffDAO;
 import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.common.drop.CreditDrop;
@@ -1471,6 +1472,10 @@ public class Helper {
 
     public static String generateHash(Guild guild, User user) {
         return hash((guild.getId() + user.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-256");
+    }
+
+    public static String generateHash(Game game) {
+        return hash((game.hashCode() + "" + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-256");
     }
 
     public static JSONObject findJson(String text) {
