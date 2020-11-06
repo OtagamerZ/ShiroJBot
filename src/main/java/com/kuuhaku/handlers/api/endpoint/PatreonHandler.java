@@ -28,8 +28,9 @@ public class PatreonHandler {
 
 	@RequestMapping(value = "/webhook/patreon", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
 	public void handleVote(@RequestHeader(value = "X-Patreon-Signature") String signature, @RequestBody String payload) {
+		if (!System.getenv().containsKey("PATREON_SECRET")) return;
 		Helper.logger(this.getClass()).info("Signature: " + signature);
-		Helper.logger(this.getClass()).info("Body MD5: " + Helper.hash(payload.getBytes(StandardCharsets.UTF_8), "MD5"));
+		Helper.logger(this.getClass()).info("Body MD5: " + Helper.hmac(payload.getBytes(StandardCharsets.UTF_8), System.getenv("PATREON_SECRET").getBytes(StandardCharsets.UTF_8), "MD5"));
 		Helper.logger(this.getClass()).info("Body: " + payload);
 	}
 }

@@ -69,6 +69,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.*;
 import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.ImageOutputStream;
@@ -87,6 +89,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -1398,6 +1401,17 @@ public class Helper {
         try {
             return Hex.encodeHexString(MessageDigest.getInstance(encoding).digest(bytes));
         } catch (NoSuchAlgorithmException e) {
+            logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+            return "";
+        }
+    }
+
+    public static String hmac(byte[] bytes, byte[] key, String encoding) {
+        try {
+            Mac hmac = Mac.getInstance("Hmac" + encoding);
+            hmac.init(new SecretKeySpec(key, hmac.getAlgorithm()));
+            return Hex.encodeHexString(hmac.doFinal(bytes));
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
             return "";
         }
