@@ -36,6 +36,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -66,6 +67,7 @@ public class ExceedMembersCommand extends Command {
 
 		ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()));
 		List<ExceedMember> members = ExceedDAO.getExceedMembers(ex);
+		members.sort(Comparator.comparingLong(ExceedMember::getContribution).reversed());
 		Emote e = Main.getInfo().getAPI().getEmoteById(TagIcons.getExceedId(ex));
 
 		assert e != null;
@@ -82,6 +84,9 @@ public class ExceedMembersCommand extends Command {
 			sb.setLength(0);
 			for (ExceedMember em : ems) {
 				sb.append(checkUser(em.getId()))
+						.append(" | ")
+						.append(Helper.getShortenedValue(em.getContribution(), 1000, 1000))
+						.append(" PDC")
 						.append("\n");
 			}
 			eb.addField("Total de membros: " + members.size(), sb.toString(), false);
