@@ -240,12 +240,8 @@ public class Profile {
 			}
 		}
 
-		g2d.setFont(FONT.deriveFont(Font.PLAIN, 40));
-		g2d.setColor(Color.WHITE);
-		printCenteredString("Emblemas", 182, 266, 590, g2d);
-		printCenteredString("Biografia", 460, 466, 590, g2d);
-
 		g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
+		g2d.setColor(Color.WHITE);
 		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 585, g2d);
 
 
