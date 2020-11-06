@@ -78,12 +78,14 @@ public class BotInfoCommand extends Command {
 									[%s](https://github.com/OtagamerZ/ShiroJBot/blob/master/PRIVACY_POLICY.md)
 									[Reddit](https://www.reddit.com/r/ShiroJBot/)
 									[%s](https://top.gg/bot/572413282653306901/invite)
+									[%s](https://donatebot.io/checkout/421495229594730496)
 						"""
 						.formatted(
 								ShiroInfo.getLocale(I18n.PT).getString("str_support"),
 								ShiroInfo.getLocale(I18n.PT).getString("str_vote"),
 								ShiroInfo.getLocale(I18n.PT).getString("str_privacy-policy"),
-								ShiroInfo.getLocale(I18n.PT).getString("str_invite")
+								ShiroInfo.getLocale(I18n.PT).getString("str_invite"),
+								ShiroInfo.getLocale(I18n.PT).getString("str_donate")
 						)
 				, false
 		);
