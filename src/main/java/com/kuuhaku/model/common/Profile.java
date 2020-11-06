@@ -30,7 +30,6 @@ import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.GifSequenceWriter;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 
 import javax.imageio.ImageIO;
@@ -220,7 +219,7 @@ public class Profile {
 		printCenteredString(String.valueOf(mb.getLevel()), 196, 52, 515, g2d);
 
 		g2d.setFont(FONT.deriveFont(Font.PLAIN, 25));
-		printCenteredString(getShortenedValue(mb.getXp(), 10000, 1000) + "/" + getShortenedValue((int) Math.pow(mb.getLevel(), 2) * 100, 10000, 1000), 196, 52, 538, g2d);
+		printCenteredString(Helper.getShortenedValue(mb.getXp(), 10000, 1000) + "/" + Helper.getShortenedValue((int) Math.pow(mb.getLevel(), 2) * 100, 10000, 1000), 196, 52, 538, g2d);
 
 		List<Member> mbs = MemberDAO.getMemberRank(g.getId(), false);
 		int pos = 0;
@@ -423,11 +422,4 @@ public class Profile {
 		g2d.translate(-(float) x, -(float) y);
 	}
 
-	public static String getShortenedValue(long value, int startAt, int forEach) {
-		int times = -1;
-		for (int i = startAt; i < value; i *= forEach) {
-			times++;
-		}
-		return times == -1 ? String.valueOf(value) : (((int) Math.floor(value / (forEach * Math.pow(10, times)))) + StringUtils.repeat("k", times + 1));
-	}
 }
