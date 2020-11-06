@@ -76,7 +76,7 @@ public class RatingCommand extends Command {
 													dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f);
 													dev.setLastHelped();
 												});
-												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
 											});
 									c.sendMessage(questions()[1])
 											.queue(m -> {
@@ -84,7 +84,7 @@ public class RatingCommand extends Command {
 													dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f);
 													dev.setLastHelped();
 												});
-												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
 											});
 									c.sendMessage(questions()[2])
 											.queue(m -> {
@@ -92,12 +92,12 @@ public class RatingCommand extends Command {
 													dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f);
 													dev.setLastHelped();
 												});
-												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
 											});
-									s1.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+									s1.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
 								});
 
-								s.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+								s.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
 							});
 				},
 				ex -> channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-request-rating"), ex)).queue()
