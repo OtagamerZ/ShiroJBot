@@ -63,23 +63,23 @@ public class PruneCommand extends Command {
 
 			List<Message> msgs = channel.getHistory().retrievePast(Integer.parseInt(args[0]) == 100 ? 100 : Integer.parseInt(args[0]) + 1).complete();
 			channel.purgeMessages(msgs);
-			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
+			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue(null, Helper::doNothing);
 		} else if (message.getMentionedUsers().size() > 0) {
 			User target = message.getMentionedUsers().get(0);
 			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
 			msgs.removeIf(m -> !m.getAuthor().getId().equals(target.getId()));
 			channel.purgeMessages(msgs);
-			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de " + target.getAsMention() + " limpa." : "ns de " + target.getAsMention() + " limpas.")).queue();
+			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de " + target.getAsMention() + " limpa." : "ns de " + target.getAsMention() + " limpas.")).queue(null, Helper::doNothing);
 		} else if (Helper.equalsAny(args[0], "user", "usuarios")) {
 			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
 			msgs.removeIf(m -> m.getAuthor().isBot());
 			channel.purgeMessages(msgs);
-			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de usuário limpa." : "ns de usuários limpas.")).queue();
+			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de usuário limpa." : "ns de usuários limpas.")).queue(null, Helper::doNothing);
 		} else if (Helper.equalsAny(args[0], "all", "tudo")) {
 			((TextChannel) channel).createCopy().queue(s -> {
 				try {
 					((GuildChannel) channel).delete().queue();
-					s.sendMessage("Canal limpo com sucesso!").queue();
+					s.sendMessage("Canal limpo com sucesso!").queue(null, Helper::doNothing);
 				} catch (InsufficientPermissionException e) {
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
 				}
