@@ -16,20 +16,20 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.api.endpoint;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.controller.postgresql.TokenDAO;
-import com.kuuhaku.handlers.api.exception.UnauthorizedException;
-import com.kuuhaku.utils.Helper;
-import org.springframework.web.bind.annotation.*;
+import com.kuuhaku.model.persistent.Donation;
 
-@RestController
-public class PatreonHandler {
+import javax.persistence.EntityManager;
 
-	@RequestMapping(value = "/webhook/donate", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
-	public void handleDonation(@RequestHeader(value = "Authorization") String token, @RequestBody String payload) {
-		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
+public class DonationDAO {
+	public static void register(Donation d) {
+		EntityManager em = Manager.getEntityManager();
 
-		Helper.logger(this.getClass()).info("Body: " + payload);
+		em.getTransaction().begin();
+		em.merge(d);
+		em.getTransaction().commit();
+
+		em.close();
 	}
 }
