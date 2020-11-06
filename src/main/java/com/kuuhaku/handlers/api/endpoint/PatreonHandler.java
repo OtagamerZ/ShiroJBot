@@ -18,19 +18,18 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
+import com.kuuhaku.controller.postgresql.TokenDAO;
+import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.utils.Helper;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.charset.StandardCharsets;
 
 @RestController
 public class PatreonHandler {
 
-	@RequestMapping(value = "/webhook/patreon", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
-	public void handleVote(@RequestHeader(value = "X-Patreon-Signature") String signature, @RequestBody String payload) {
-		if (!System.getenv().containsKey("PATREON_SECRET")) return;
-		Helper.logger(this.getClass()).info("Signature: " + signature);
-		Helper.logger(this.getClass()).info("Body MD5: " + Helper.hmac(payload.getBytes(StandardCharsets.UTF_8), System.getenv("PATREON_SECRET").getBytes(StandardCharsets.UTF_8), "MD5"));
+	@RequestMapping(value = "/webhook/donate", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+	public void handleDonation(@RequestHeader(value = "Authorization") String token, @RequestBody String payload) {
+		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
+
 		Helper.logger(this.getClass()).info("Body: " + payload);
 	}
 }
