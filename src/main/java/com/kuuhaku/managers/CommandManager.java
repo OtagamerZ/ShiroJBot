@@ -303,6 +303,12 @@ public class CommandManager {
 			put(ShoukanDeckCommand.class, new Argument(
 					"deck", "req_daily-deck", "cmd_shoukan-deck", INFO, false
 			));
+			put(VoteCommand.class, new Argument(
+					"votar", new String[]{"vote", "upvote"}, "cmd_vote", INFO, false
+			));
+			put(DonateCommand.class, new Argument(
+					"doar", new String[]{"donate"}, "cmd_donate", INFO, false
+			));
 
 			//MISC
 			put(BackgroundCommand.class, new Argument(
@@ -354,7 +360,7 @@ public class CommandManager {
 					"link", new String[]{"try"}, REQ_LINK, "cmd_link-test", MISC, false
 			));
 			put(RateCommand.class, new Argument(
-					"avaliar", new String[]{"rate"}, "req_mention-positive-negative", "cmd_vote", MISC, false
+					"avaliar", new String[]{"rate"}, "req_mention-positive-negative", "cmd_rate", MISC, false
 			));
 			/*put(TranslateCommand.class, new Argument(
 					"traduzir", new String[]{"translate", "traduza", "trad"}, "req_from-to-text", "cmd_translate", MISC, false
