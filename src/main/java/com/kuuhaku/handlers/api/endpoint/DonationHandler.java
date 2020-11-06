@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.DonationDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.enums.DonationBundle;
@@ -83,6 +84,8 @@ public class DonationHandler {
 				acc.addCredit(amount, this.getClass());
 				acc.addGem(db.getGems());
 
+				AccountDAO.saveAccount(acc);
+
 				eb.setColor(Helper.getRandomColor())
 						.setTitle("Obrigada por me ajudar a ficar online! <3")
 						.setDescription("Nós da OtagamerZ ficamos feliz que esteja apoiando o desenvolvimento de nossa querida bot Shiro, e agradecemos de coração por todo o tempo que você esteve conosco!")
@@ -112,6 +115,8 @@ public class DonationHandler {
 					acc.addLoan(10000 * db.getGems());
 				else
 					acc.removeGem(db.getGems());
+
+				AccountDAO.saveAccount(acc);
 
 				eb.setColor(Color.red)
 						.setTitle("Sua doação foi recusada/reembolsada")
@@ -143,5 +148,7 @@ public class DonationHandler {
 						.queue(null, Helper::doNothing);
 			}
 		}
+
+		DonationDAO.register(d);
 	}
 }
