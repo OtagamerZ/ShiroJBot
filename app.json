@@ -92,10 +92,6 @@
     "TWITCH_TOKEN": {
       "description": "Token de acesso à API da Twitch.",
       "required": false
-    },
-    "PATREON_SECRET": {
-      "description": "Chave secreta do webhook do Patreon.",
-      "required": false
     }
   }
 }
