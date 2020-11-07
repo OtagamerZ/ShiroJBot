@@ -85,7 +85,7 @@ public class ExceedMembersCommand extends Command {
 			for (ExceedMember em : ems) {
 				sb.append(checkUser(em.getId()))
 						.append(" | ")
-						.append(Helper.getShortenedValue(em.getContribution(), 1000, 1000))
+						.append(Helper.getShortenedValue(em.getContribution(), 1000))
 						.append(" PDC")
 						.append("\n");
 			}
