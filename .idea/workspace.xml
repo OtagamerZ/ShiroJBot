@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na camuflagem de Misa e Hideki">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no redutor de valores" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -836,13 +833,6 @@
       <workItem from="1604692913429" duration="24000" />
       <workItem from="1604694022000" duration="1607000" />
     </task>
-    <task id="LOCAL-02809" summary="Criação do comando de salas de jogos">
-      <created>1604079774445</created>
-      <option name="number" value="02809" />
-      <option name="presentableId" value="LOCAL-02809" />
-      <option name="project" value="LOCAL" />
-      <updated>1604079774445</updated>
-    </task>
     <task id="LOCAL-02810" summary="Criação do comando de salas de jogos">
       <created>1604080363962</created>
       <option name="number" value="02810" />
@@ -1179,7 +1169,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604695613231</updated>
     </task>
-    <option name="localTasksCounter" value="2858" />
+    <task id="LOCAL-02858" summary="Correção no redutor de valores">
+      <created>1604707463132</created>
+      <option name="number" value="02858" />
+      <option name="presentableId" value="LOCAL-02858" />
+      <option name="project" value="LOCAL" />
+      <updated>1604707463132</updated>
+    </task>
+    <option name="localTasksCounter" value="2859" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1245,7 +1242,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correções e mudanças em certas cartas" />
     <MESSAGE value="Adição de threads dedicadas à execução de comandos" />
     <MESSAGE value="Correções menores e adição de banimento de equipamentos/arenas para jogos personalizados de Shoukan" />
     <MESSAGE value="Agora é impossível ficar preso com 5 cartas-equipamento na mão" />
@@ -1270,7 +1266,8 @@
     <MESSAGE value="Remoção dos textos &quot;Emblemas&quot; e &quot;Biografia&quot; do perfil" />
     <MESSAGE value="Lista de membros do Exceed agora é ordenado e mostra o PDC de cada um" />
     <MESSAGE value="Adição de hashes nos botões dos jogos para impedir clique múltiplo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de hashes nos botões dos jogos para impedir clique múltiplo" />
+    <MESSAGE value="Correção no redutor de valores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no redutor de valores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1376,11 +1373,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1597148986370" />
-    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1604587302801">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1604707509459">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604587302801" />
-    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604008668643" />
+    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604707509459" />
     <state x="320" y="80" key="SettingsEditor" timestamp="1604666299734">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1398,11 +1395,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604695620858">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604707467229">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604695620858" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604459628107" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604707467229" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

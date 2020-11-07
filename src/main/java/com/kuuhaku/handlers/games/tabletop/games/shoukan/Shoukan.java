@@ -727,6 +727,8 @@ public class Shoukan extends Game {
 				return;
 			}
 
+			hash.set(Helper.generateHash(this));
+			ShiroInfo.getHashes().add(hash.get());
 			channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue(null, Helper::doNothing);
 			phase = Phase.ATTACK;
 			draw = false;
