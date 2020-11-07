@@ -83,8 +83,9 @@ public class ExceedMembersCommand extends Command {
 			eb.clearFields();
 			sb.setLength(0);
 			for (ExceedMember em : ems) {
-				sb.append(checkUser(em.getId()))
-						.append(" | ")
+				sb.append("**")
+						.append(checkUser(em.getId()))
+						.append("** | ")
 						.append(Helper.getShortenedValue(em.getContribution(), 1000))
 						.append(" PDC")
 						.append("\n");
