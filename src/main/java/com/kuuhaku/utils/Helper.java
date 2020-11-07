@@ -1518,11 +1518,14 @@ public class Helper {
         return (int) (value * 100) + "%";
     }
 
-    public static String getShortenedValue(long value, int startAt, int forEach) {
-        int times = -1;
-        for (int i = startAt; i < value; i *= forEach) {
-            times++;
-        }
-        return times == -1 ? String.valueOf(value) : (((int) Math.floor(value / (forEach * Math.pow(10, times)))) + StringUtils.repeat("k", times + 1));
+    public static double log(double value, double base) {
+        return Math.log(value) / Math.log(base);
+    }
+
+    public static String getShortenedValue(long value, int forEach) {
+        int times = (int) Math.floor(log(value, forEach));
+        double reduced = round(value / Math.pow(forEach, times), 2);
+
+        return reduced + StringUtils.repeat("k", times);
     }
 }
