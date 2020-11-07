@@ -125,7 +125,7 @@ public class Chess extends Game {
 
 		return condition
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
-				.and(e -> e.getMessage().getContentRaw().length() == 4)
+				.and(e -> e.getMessage().getContentRaw().replace(" ", "").length() == 4)
 				.and(e -> {
 					char[] chars = e.getMessage().getContentRaw().replace(" ", "").toCharArray();
 					return Character.isLetter(chars[0])
