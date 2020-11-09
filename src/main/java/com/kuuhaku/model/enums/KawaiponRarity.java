@@ -76,8 +76,6 @@ public enum KawaiponRarity {
 			case "rara" -> RARE;
 			case "ultra", "ultra_rara" -> ULTRA_RARE;
 			case "lendaria" -> LEGENDARY;
-			case "equipamento" -> EQUIPMENT;
-			case "arena" -> FIELD;
 			default -> null;
 		};
 	}
