@@ -440,14 +440,16 @@ public class Shoukan extends Game {
 					enemy.removeHp(yPower);
 					c.setAvailable(false);
 
-					channel.sendMessage("Você atacou diretamente o inimigo.")
-							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue(s -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-								this.message = s;
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							});
-					if (!postCombat()) resetTimerKeepTurn();
+					if (!postCombat()) {
+						channel.sendMessage("Você atacou diretamente o inimigo.")
+								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+								.queue(s -> {
+									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+									this.message = s;
+									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								});
+						resetTimerKeepTurn();
+					}
 					return;
 				}
 
@@ -519,13 +521,16 @@ public class Shoukan extends Game {
 					}
 					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1], hisSide);
 
-					channel.sendMessage("Sua carta derrotou a carta inimiga! (" + yPower + " > " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue(s -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-								this.message = s;
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							});
+					if (!postCombat()) {
+						channel.sendMessage("Sua carta derrotou a carta inimiga! (" + yPower + " > " + hPower + ")")
+								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+								.queue(s -> {
+									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+									this.message = s;
+									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								});
+						resetTimerKeepTurn();
+					}
 				} else if (yPower < hPower) {
 					his.resetAttribs();
 					if (yours.hasEffect()) {
@@ -538,27 +543,40 @@ public class Shoukan extends Game {
 					}
 					killCard(h.getSide(), is[0], yourSide);
 
-					channel.sendMessage("Sua carta foi derrotada pela carta inimiga! (" + yPower + " < " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue(s -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-								this.message = s;
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							});
+					if (!postCombat()) {
+						channel.sendMessage("Sua carta foi derrotada pela carta inimiga! (" + yPower + " < " + hPower + ")")
+								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+								.queue(s -> {
+									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+									this.message = s;
+									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								});
+						resetTimerKeepTurn();
+					}
 				} else {
 					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1], hisSide);
 					killCard(h.getSide(), is[0], yourSide);
 
-					channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue(s -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-								this.message = s;
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							});
-				}
+					if (yours.hasEffect()) {
+						yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
+						postCombat();
+					}
+					if (his.hasEffect()) {
+						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
+						postCombat();
+					}
 
-				if (!postCombat()) resetTimerKeepTurn();
+					if (!postCombat()) {
+						channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
+								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+								.queue(s -> {
+									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+									this.message = s;
+									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								});
+						resetTimerKeepTurn();
+					}
+				}
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue(null, Helper::doNothing);
 			} catch (NumberFormatException e) {
