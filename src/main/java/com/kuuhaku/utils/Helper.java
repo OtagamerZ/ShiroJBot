@@ -67,6 +67,7 @@ import org.apache.commons.math3.util.Precision;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.intellij.lang.annotations.Language;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -1526,5 +1527,9 @@ public class Helper {
 		double reduced = round(value / Math.pow(forEach, times), 2);
 
 		return reduced + StringUtils.repeat("k", times);
+	}
+
+	public static boolean regex(String text, @Language("RegExp") String regex) {
+		return Pattern.compile(regex).matcher(text).matches();
 	}
 }
