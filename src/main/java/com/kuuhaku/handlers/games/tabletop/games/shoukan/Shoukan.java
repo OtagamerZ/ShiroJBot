@@ -323,7 +323,9 @@ public class Shoukan extends Game {
 				Champion aFusion = ultimates
 						.stream()
 						.filter(f ->
-								f.getRequiredCards().size() > 0 && allCards.containsAll(f.getRequiredCards()) && f.getMana() <= h.getMana()
+								f.getRequiredCards().size() > 0 && 
+								allCards.containsAll(f.getRequiredCards()) && 
+								h.getMana() >= f.getMana()
 						)
 						.findFirst()
 						.orElse(null);
