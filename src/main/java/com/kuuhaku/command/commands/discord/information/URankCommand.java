@@ -95,20 +95,20 @@ public class URankCommand extends Command {
 
 		mbs.removeIf(mb -> checkUser(mb).isBlank());
 
-		String champ = "1 - " + (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + checkUser(mbs.get(0)) + " (Level " + mbs.get(0).getLevel() + ")";
+		String champ = "1 - %s %s %s".formatted(
+				global ? checkGuild(mbs.get(0)) : "",
+				checkUser(mbs.get(0)),
+				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL), mbs.get(0).getLevel())
+		);
 		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
-			sub9Formatted
-					.append(i + 2)
-					.append(" - ")
-					.append((global ? checkGuild(sub9.get(i)) : ""))
-					.append(checkUser(sub9.get(i)))
-					.append(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL))
-					.append(" ")
-					.append(sub9.get(i).getLevel())
-					.append(")")
-					.append("\n");
+			sub9Formatted.append("%s - %s %s %s\n".formatted(
+					i + 2,
+					global ? checkGuild(sub9.get(i)) : "",
+					checkUser(sub9.get(i)),
+					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL), sub9.get(i).getLevel())
+			));
 		}
 
 		StringBuilder next10 = new StringBuilder();
@@ -120,16 +120,12 @@ public class URankCommand extends Command {
 			eb.clear();
 			next10.setLength(0);
 			for (int i = 10 * x; i < mbs.size() && i < (10 * x) + 10; i++) {
-				next10
-						.append(i + 1)
-						.append(" - ")
-						.append((global ? checkGuild(mbs.get(i)) : ""))
-						.append(checkUser(mbs.get(i)))
-						.append(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL))
-						.append(" ")
-						.append(mbs.get(i).getLevel())
-						.append(")")
-						.append("\n");
+				next10.append("%s - %s %s %s\n".formatted(
+						i + 1,
+						global ? checkGuild(mbs.get(i)) : "",
+						checkUser(mbs.get(i)),
+						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL), mbs.get(i).getLevel())
+				));
 			}
 
 			makeEmbed(global, pages, next10, eb, Helper.VOID);
@@ -140,19 +136,18 @@ public class URankCommand extends Command {
 		List<Account> accs = AccountDAO.getAccountRank();
 		accs.removeIf(acc -> checkUser(acc).isBlank());
 
-		String champ = "1 - " + checkUser(accs.get(0)) + " (Créditos: " + accs.get(0).getBalance() + ")";
+		String champ = "1 - %s %s".formatted(
+				checkUser(accs.get(0)),
+				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), accs.get(0).getBalance())
+		);
 		List<Account> sub9 = accs.subList(1, Math.min(accs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
-			sub9Formatted
-					.append(i + 2)
-					.append(" - ")
-					.append(checkUser(sub9.get(i)))
-					.append(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT))
-					.append(" ")
-					.append(sub9.get(i).getBalance())
-					.append(")")
-					.append("\n");
+			sub9Formatted.append("%s - %s %s\n".formatted(
+					i + 2,
+					checkUser(accs.get(i)),
+					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), accs.get(i).getBalance())
+			));
 		}
 
 		StringBuilder next10 = new StringBuilder();
@@ -164,15 +159,11 @@ public class URankCommand extends Command {
 			eb.clear();
 			next10.setLength(0);
 			for (int i = 10 * x; i < accs.size() && i < (10 * x) + 10; i++) {
-				next10
-						.append(i + 1)
-						.append(" - ")
-						.append(checkUser(accs.get(i)))
-						.append(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT))
-						.append(" ")
-						.append(accs.get(i).getBalance())
-						.append(")")
-						.append("\n");
+				next10.append("%s - %s %s\n".formatted(
+						i + 1,
+						checkUser(accs.get(i)),
+						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL), accs.get(i).getBalance())
+				));
 			}
 
 			makeEmbed(true, pages, next10, eb, Helper.VOID);
@@ -183,19 +174,18 @@ public class URankCommand extends Command {
 		List<Object[]> kps = KawaiponDAO.getCardRank();
 		kps.removeIf(kp -> checkUser(kp).isBlank());
 
-		String champ = "1 - " + checkUser(kps.get(0)) + " (Cartas: " + kps.get(0)[1] + ")";
+		String champ = "1 - %s %s".formatted(
+				checkUser(kps.get(0)),
+				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD), kps.get(0)[1])
+		);
 		List<Object[]> sub9 = kps.subList(1, Math.min(kps.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
-			sub9Formatted
-					.append(i + 2)
-					.append(" - ")
-					.append(checkUser(sub9.get(i)))
-					.append(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD))
-					.append(" ")
-					.append(sub9.get(i)[1])
-					.append(")")
-					.append("\n");
+			sub9Formatted.append("%s - %s %s\n".formatted(
+					i + 2,
+					checkUser(kps.get(i)),
+					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD), kps.get(i)[1])
+			));
 		}
 
 		StringBuilder next10 = new StringBuilder();
@@ -207,15 +197,11 @@ public class URankCommand extends Command {
 			eb.clear();
 			next10.setLength(0);
 			for (int i = 10 * x; i < kps.size() && i < (10 * x) + 10; i++) {
-				next10
-						.append(i + 1)
-						.append(" - ")
-						.append(checkUser(kps.get(i)))
-						.append(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD))
-						.append(" ")
-						.append(kps.get(i)[1])
-						.append(")")
-						.append("\n");
+				next10.append("%s - %s %s\n".formatted(
+						i + 1,
+						checkUser(kps.get(i)),
+						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD), kps.get(i)[1])
+				));
 			}
 
 			makeEmbed(true, pages, next10, eb, Helper.VOID);
@@ -256,7 +242,7 @@ public class URankCommand extends Command {
 
 	private static String checkGuild(com.kuuhaku.model.persistent.Member m) {
 		try {
-			return "(" + Main.getInfo().getGuildByID(m.getId().replace(m.getMid(), "")).getName() + ") ";
+			return "(" + Main.getInfo().getGuildByID(m.getId().replace(m.getMid(), "")).getName() + ")";
 		} catch (Exception e) {
 			return "";
 		}
