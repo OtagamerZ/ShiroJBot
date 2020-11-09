@@ -689,29 +689,36 @@ public class Shoukan extends Game {
 			getHandById(getCurrent().getId()).getCards().removeIf(d -> !d.isAvailable());
 			if (getRound() < 1 || phase == Phase.ATTACK) {
 				User u = getCurrent();
-				resetTimer();
 
-				phase = Phase.PLAN;
-				Hand h = getHandById(getCurrent().getId());
-				arena.getSlots().get(getHandById(mb.getId()).getSide()).forEach(s -> {
-					if (s.getTop() != null) {
-						Champion c = (Champion) s.getTop();
+				AtomicReference<Hand> h = new AtomicReference<>(getHandById(getCurrent().getId()));
+				List<SlotColumn<Drawable, Drawable>> slots = arena.getSlots().get(h.get().getSide());
+				for (int i = 0; i < slots.size(); i++) {
+					Champion c = (Champion) slots.get(i).getTop();
+					if (c != null) {
 						c.setAvailable(true);
 						c.resetAttribs();
-					}
-				});
-
-				List<SlotColumn<Drawable, Drawable>> slots = arena.getSlots().get(h.getSide());
-				for (int i = 0; i < slots.size(); i++) {
-					if (slots.get(i).getTop() != null) {
-						Champion c = (Champion) slots.get(i).getTop();
 						if (c.hasEffect()) {
-							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_TURN, this, i, h.getSide(), Duelists.of(c, i, null, -1), channel));
+							c.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
 							postCombat();
 						}
 					}
 				}
-				h.addMana(h.getManaPerTurn());
+
+				resetTimer();
+
+				phase = Phase.PLAN;
+				h.set(getHandById(getCurrent().getId()));
+				slots = arena.getSlots().get(h.get().getSide());
+				for (int i = 0; i < slots.size(); i++) {
+					Champion c = (Champion) slots.get(i).getTop();
+					if (c != null) {
+						if (c.hasEffect()) {
+							c.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
+							postCombat();
+						}
+					}
+				}
+				h.get().addMana(h.get().getManaPerTurn());
 
 				channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
@@ -719,7 +726,7 @@ public class Shoukan extends Game {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							h.showHand();
+							h.get().showHand();
 							for (int i = 0; i < 5; i++) {
 								changed[i] = false;
 							}

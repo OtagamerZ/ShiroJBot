@@ -26,6 +26,8 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
+import java.util.List;
+
 public class BiographyCommand extends Command {
 
 	public BiographyCommand(String name, String description, Category category, boolean requiresMM) {
@@ -49,7 +51,7 @@ public class BiographyCommand extends Command {
 		if (String.join(" ", args).length() > 140) {
             channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_biography-too-long")).queue();
             return;
-        }
+		}
 
 		for (String s : args)
 			if (s.length() > 29) {
@@ -59,9 +61,11 @@ public class BiographyCommand extends Command {
 
 		String text = String.join(" ", args);
 
-		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
-		m.setBio(text);
-		MemberDAO.updateMemberConfigs(m);
+		List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMemberByMid(author.getId());
+		ms.forEach(m -> {
+			m.setBio(text);
+			MemberDAO.updateMemberConfigs(m);
+		});
 		if (text.length() > 0) channel.sendMessage("Biografia definida com sucesso!").queue();
 		else channel.sendMessage("Biografia limpa com sucesso!").queue();
 	}
