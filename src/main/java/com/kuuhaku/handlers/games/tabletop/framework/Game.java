@@ -134,6 +134,7 @@ public abstract class Game implements Closeable {
 	@Override
 	public void close() {
 		if (timeout != null) timeout.cancel(true);
+		timeout = null;
 	}
 
 	@Override
