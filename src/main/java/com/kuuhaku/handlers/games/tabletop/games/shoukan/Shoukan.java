@@ -345,8 +345,10 @@ public class Shoukan extends Game {
                                         true
                                 ));
 
-                                for (Equipment eq : ((Champion) slt.getTop()).getLinkedTo())
+                                for (Equipment eq : ((Champion) slt.getTop()).getLinkedTo()) {
+                                    System.out.println(slt.getTop().getCard().getId() + " -> " + eq.getCard().getId());
                                     equips.put(eq.getLinkedTo().getKey(), eq.getLinkedTo().getRight().getCard().getId());
+                                }
                                 break;
                             }
                         }
@@ -830,6 +832,7 @@ public class Shoukan extends Game {
 
                 h.addMana(h.getManaPerTurn());
 
+                draw = true;
                 channel.sendMessage(u.getAsMention() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D caso queira aceitar ou continue jogando normalmente.")
                         .addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
                         .queue(s -> {
@@ -841,7 +844,6 @@ public class Shoukan extends Game {
                                 changed[i] = false;
                             }
                         });
-                draw = true;
             }
         });
         buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
