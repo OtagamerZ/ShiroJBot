@@ -108,7 +108,7 @@ public class BuyCardCommand extends Command {
 
                 onlyMine.set(params.stream().anyMatch("-m"::equalsIgnoreCase));
 
-                onlyKawaipon.set(params.stream().anyMatch("-k"::equalsIgnoreCase));
+                onlyKawaipon.set(params.stream().anyMatch("-k"::equalsIgnoreCase) || byAnime.get() != null || byRarity.get() != null);
 
                 onlyEquip.set(params.stream().anyMatch("-e"::equalsIgnoreCase));
 

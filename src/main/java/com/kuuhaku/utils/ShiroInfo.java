@@ -159,7 +159,7 @@ public class ShiroInfo {
 		return httpBuilder;
 	}
 
-	public static HashSet<String> getHashes() {
+	public static synchronized HashSet<String> getHashes() {
 		return hashes;
 	}
 
