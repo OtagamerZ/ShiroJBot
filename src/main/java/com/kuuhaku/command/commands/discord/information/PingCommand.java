@@ -26,6 +26,8 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
+import java.text.MessageFormat;
+
 public class PingCommand extends Command {
 
 	public PingCommand(@NonNls String name, String description, Category category, boolean requiresMM) {
@@ -48,9 +50,15 @@ public class PingCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		int fp = (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024);
 		channel.sendMessage(":ping_pong: Pong! ")
-				.flatMap(m -> m.editMessage(m.getContentRaw() + " " + Main.getInfo().getAPI().getGatewayPing() + " ms!"))
-				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:floppy_disk: " + fp + " MB!"))
-				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:telephone: " + Main.getInfo().getAPI().getEventManager().getRegisteredListeners().size() + ShiroInfo.getLocale(I18n.PT).getString("str_listeners")))
+				.flatMap(m -> m.editMessage(m.getContentRaw() + """
+											 %s ms!
+											:floppy_disk: %s MB!
+											:telephone: %s 
+						""".formatted(
+						Main.getInfo().getAPI().getGatewayPing(),
+						fp,
+						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_listeners"), Main.getInfo().getAPI().getEventManager().getRegisteredListeners().size())
+				)))
 				.queue();
 	}
 }
