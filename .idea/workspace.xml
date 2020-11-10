@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -849,13 +851,6 @@
       <workItem from="1604937904201" duration="3494000" />
       <workItem from="1604971618047" duration="8898000" />
     </task>
-    <task id="LOCAL-02830" summary="Correção da compra de cartas e metodologia anti-terrorista de botões">
-      <created>1604523488476</created>
-      <option name="number" value="02830" />
-      <option name="presentableId" value="LOCAL-02830" />
-      <option name="project" value="LOCAL" />
-      <updated>1604523488476</updated>
-    </task>
     <task id="LOCAL-02831" summary="Implementação de botões nos demais jogos;&#10;Remoção das threads dedicadas a execução de comandos;&#10;Jogos agora são assíncronos;&#10;Adição de trava de daily para Shoukan;">
       <created>1604584117201</created>
       <option name="number" value="02831" />
@@ -1192,7 +1187,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605016845809</updated>
     </task>
-    <option name="localTasksCounter" value="2879" />
+    <task id="LOCAL-02879" summary="Integração da API do Now Animes">
+      <created>1605017209341</created>
+      <option name="number" value="02879" />
+      <option name="presentableId" value="LOCAL-02879" />
+      <option name="project" value="LOCAL" />
+      <updated>1605017209341</updated>
+    </task>
+    <option name="localTasksCounter" value="2880" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1344,10 +1346,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605016842783">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605017206396">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605016842783" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605017206396" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1604586940676">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1411,10 +1413,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605016846907">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605017210894">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605016846907" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605017210894" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604979820347" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
