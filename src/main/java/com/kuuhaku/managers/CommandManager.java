@@ -309,6 +309,9 @@ public class CommandManager {
 			put(DonateCommand.class, new Argument(
 					"doar", new String[]{"donate"}, "cmd_donate", INFO, false
 			));
+			put(MyTicketsCommand.class, new Argument(
+					"bilhetes", new String[]{"tickets"}, "cmd_tickets", INFO, false
+			));
 
 			//MISC
 			put(BackgroundCommand.class, new Argument(

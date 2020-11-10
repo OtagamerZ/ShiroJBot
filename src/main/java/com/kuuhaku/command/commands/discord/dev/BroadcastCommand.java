@@ -18,10 +18,6 @@
 
 package com.kuuhaku.command.commands.discord.dev;
 
-import club.minnced.discord.webhook.WebhookClient;
-import club.minnced.discord.webhook.WebhookClientBuilder;
-import club.minnced.discord.webhook.WebhookCluster;
-import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
@@ -29,10 +25,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TagDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Tags;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -79,45 +73,7 @@ public class BroadcastCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		switch (args[0].toLowerCase()) {
-			case "geral" -> {
-				List<WebhookClient> clients = new ArrayList<>();
-				List<GuildConfig> gcs = GuildDAO.getAlertChannels();
-				List<List<GuildConfig>> gcPages = Helper.chunkify(gcs, 10);
-				for (List<GuildConfig> gs : gcPages) {
-					result.clear();
-					eb.clear();
-					sb.setLength(0);
-
-					for (GuildConfig gc : gs) {
-						Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
-						if (g == null) continue;
-						try {
-							TextChannel c = g.getTextChannelById(gc.getCanalAvisos());
-							if (c != null && c.canTalk()) {
-								Webhook wh = Helper.getOrCreateWebhook(c, "Notificações Shiro", Main.getInfo().getAPI());
-								if (wh == null) result.put(g.getName(), false);
-								else {
-									WebhookClientBuilder wcb = new WebhookClientBuilder(wh.getUrl());
-									clients.add(wcb.build());
-									result.put(g.getName(), true);
-								}
-							} else result.put(g.getName(), false);
-						} catch (Exception e) {
-							result.put(g.getName(), false);
-						}
-					}
-
-					showResult(result, sb, pages, eb);
-				}
-				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-				wmb.setUsername("Stephanie (Notificações Shiro)");
-				wmb.setAvatarUrl("https://i.imgur.com/OmiNNMF.png"); //Halloween
-				//wmb.setAvatarUrl("https://i.imgur.com/mgA11Rx.png"); //Normal
-				wmb.setContent(msg);
-				WebhookCluster cluster = new WebhookCluster(clients);
-				cluster.broadcast(wmb.build());
-				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
-			}
+			case "geral" -> Helper.broadcast(msg, (TextChannel) channel, author);
 			case "beta" -> {
 				List<Tags> ps = TagDAO.getAllBetas();
 				List<List<Tags>> psPages = Helper.chunkify(ps, 10);
@@ -141,21 +97,17 @@ public class BroadcastCommand extends Command {
 						}
 					}
 
-					showResult(result, sb, pages, eb);
+					sb.append("```diff\n");
+					result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
+					sb.append("```");
+
+					eb.setTitle("__**STATUS**__ ");
+					eb.setDescription(sb.toString());
+					pages.add(new Page(PageType.EMBED, eb.build()));
 				}
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 			}
 			default -> channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-invalid-type")).queue();
 		}
-	}
-
-	private void showResult(Map<String, Boolean> result, StringBuilder sb, List<Page> pages, EmbedBuilder eb) {
-		sb.append("```diff\n");
-		result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
-		sb.append("```");
-
-		eb.setTitle("__**STATUS**__ ");
-		eb.setDescription(sb.toString());
-		pages.add(new Page(PageType.EMBED, eb.build()));
 	}
 }
