@@ -32,6 +32,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -117,7 +118,7 @@ public class EffectParameters {
 		return channel;
 	}
 
-	public void sendWebhookMessage(String message) {
+	public void sendWebhookMessage(String message, String gif) {
 		Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getInfo().getAPI());
 		Card c = duelists.getAttacker().getCard();
 
@@ -125,6 +126,11 @@ public class EffectParameters {
 				.setContent(message)
 				.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().name()))
 				.setUsername(c.getName());
+
+		if (gif != null) {
+			InputStream is = this.getClass().getClassLoader().getResourceAsStream("shoukan/gifs/" + gif + ".gif");
+			if (is != null) wmb.addFile("effect.gif", is);
+		}
 
 		try {
 			assert wh != null;
