@@ -13,13 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhorias gerais no ranking de usuários">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção do valor inválido na venda de equipamentos e arenas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -852,21 +848,7 @@
       <workItem from="1604694022000" duration="1607000" />
       <workItem from="1604719360081" duration="526000" />
       <workItem from="1604937904201" duration="3494000" />
-      <workItem from="1604971618047" duration="2923000" />
-    </task>
-    <task id="LOCAL-02814" summary="Adição da opção de recriar a mensagem do Shoukan (previne W.O. por mensagem apagada)">
-      <created>1604187860018</created>
-      <option name="number" value="02814" />
-      <option name="presentableId" value="LOCAL-02814" />
-      <option name="project" value="LOCAL" />
-      <updated>1604187860019</updated>
-    </task>
-    <task id="LOCAL-02815" summary="Correção nos ícones de raças">
-      <created>1604199770684</created>
-      <option name="number" value="02815" />
-      <option name="presentableId" value="LOCAL-02815" />
-      <option name="project" value="LOCAL" />
-      <updated>1604199770684</updated>
+      <workItem from="1604971618047" duration="3554000" />
     </task>
     <task id="LOCAL-02816" summary="Correção no ranking de exceeds">
       <created>1604200735516</created>
@@ -1197,7 +1179,21 @@
       <option name="project" value="LOCAL" />
       <updated>1604964004592</updated>
     </task>
-    <option name="localTasksCounter" value="2863" />
+    <task id="LOCAL-02863" summary="Tentativa de correção do bug de fusões com 3 componentes ou mais">
+      <created>1604974726401</created>
+      <option name="number" value="02863" />
+      <option name="presentableId" value="LOCAL-02863" />
+      <option name="project" value="LOCAL" />
+      <updated>1604974726401</updated>
+    </task>
+    <task id="LOCAL-02864" summary="Correção do valor inválido na venda de equipamentos e arenas">
+      <created>1604974885805</created>
+      <option name="number" value="02864" />
+      <option name="presentableId" value="LOCAL-02864" />
+      <option name="project" value="LOCAL" />
+      <updated>1604974885805</updated>
+    </task>
+    <option name="localTasksCounter" value="2865" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1263,8 +1259,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Agora é impossível ficar preso com 5 cartas-equipamento na mão" />
-    <MESSAGE value="Removido aumento de chance de drops para servidores grandes, aumentado valor base" />
     <MESSAGE value="Adição de botão de empate no Shoukan" />
     <MESSAGE value="Correção da compra de cartas e metodologia anti-terrorista de botões" />
     <MESSAGE value="Implementação de botões nos demais jogos;&#10;Remoção das threads dedicadas a execução de comandos;&#10;Jogos agora são assíncronos;&#10;Adição de trava de daily para Shoukan;" />
@@ -1288,7 +1282,9 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Mudanças no perfil agora são globais;&#10;Gatilho ON_TURN dividido em 2 novos gatilhos para melhor sequenciamento de efeitos;" />
     <MESSAGE value="Melhorias gerais no ranking de usuários" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhorias gerais no ranking de usuários" />
+    <MESSAGE value="Tentativa de correção do bug de fusões com 3 componentes ou mais" />
+    <MESSAGE value="Correção do valor inválido na venda de equipamentos e arenas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção do valor inválido na venda de equipamentos e arenas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1416,11 +1412,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604964140335">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604974886612">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604939164369" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604964140335" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604974886612" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
