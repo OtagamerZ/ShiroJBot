@@ -18,6 +18,10 @@
 
 package com.kuuhaku.utils;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.WebhookCluster;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.coder4.emoji.EmojiUtils;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.github.twitch4j.chat.TwitchChat;
@@ -1552,5 +1556,60 @@ public class Helper {
 
 	public static boolean regex(String text, @Language("RegExp") String regex) {
 		return Pattern.compile(regex).matcher(text).matches();
+	}
+
+	public static void broadcast(String message, TextChannel channel, User author) {
+		Map<String, Boolean> result = new HashMap<>();
+		StringBuilder sb = new StringBuilder();
+		List<Page> pages = new ArrayList<>();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		List<WebhookClient> clients = new ArrayList<>();
+		List<GuildConfig> gcs = GuildDAO.getAlertChannels();
+		List<List<GuildConfig>> gcPages = Helper.chunkify(gcs, 10);
+
+		for (List<GuildConfig> gs : gcPages) {
+			result.clear();
+			eb.clear();
+			sb.setLength(0);
+
+			for (GuildConfig gc : gs) {
+				Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+				if (g == null) continue;
+				try {
+					TextChannel c = g.getTextChannelById(gc.getCanalAvisos());
+					if (c != null && c.canTalk()) {
+						Webhook wh = Helper.getOrCreateWebhook(c, "Notificações Shiro", Main.getInfo().getAPI());
+						if (wh == null) result.put(g.getName(), false);
+						else {
+							WebhookClientBuilder wcb = new WebhookClientBuilder(wh.getUrl());
+							clients.add(wcb.build());
+							result.put(g.getName(), true);
+						}
+					} else result.put(g.getName(), false);
+				} catch (Exception e) {
+					result.put(g.getName(), false);
+				}
+			}
+
+			sb.append("```diff\n");
+			result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
+			sb.append("```");
+
+			eb.setTitle("__**STATUS**__ ");
+			eb.setDescription(sb.toString());
+			pages.add(new Page(PageType.EMBED, eb.build()));
+		}
+
+		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+		wmb.setUsername("Stephanie (Notificações Shiro)");
+		wmb.setAvatarUrl("https://i.imgur.com/OmiNNMF.png"); //Halloween
+		//wmb.setAvatarUrl("https://i.imgur.com/mgA11Rx.png"); //Normal
+		wmb.setContent(message);
+		WebhookCluster cluster = new WebhookCluster(clients);
+		cluster.broadcast(wmb.build());
+		if (channel != null)
+			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
+					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
+			);
 	}
 }
