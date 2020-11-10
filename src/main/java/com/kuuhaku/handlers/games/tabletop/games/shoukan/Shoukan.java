@@ -336,7 +336,6 @@ public class Shoukan extends Game {
                     Map<Integer, String> equips = new HashMap<>();
 
                     for (String requiredCard : aFusion.getRequiredCards()) {
-                        System.out.println("Finding: " + requiredCard);
                         for (int i = 0; i < slts.size(); i++) {
                             SlotColumn<Drawable, Drawable> slt = slts.get(i);
                             if (slt.getTop() != null && slt.getTop().getCard().getId().equals(requiredCard)) {
@@ -346,27 +345,26 @@ public class Shoukan extends Game {
                                         true
                                 ));
 
-                                System.out.println("Found: Champion");
                                 for (Equipment eq : ((Champion) slt.getTop()).getLinkedTo())
                                     equips.put(eq.getLinkedTo().getKey(), eq.getLinkedTo().getRight().getCard().getId());
                                 break;
                             }
                         }
+                    }
 
-                        AtomicBoolean foundEquip = new AtomicBoolean(false);
-                        equips.forEach((k, v) -> {
-                            if (v.equals(requiredCard) && !foundEquip.get()) {
-                                materials.add(Triple.of(v, k, false));
-                                foundEquip.set(true);
-                                System.out.println("Found: Equipment");
+                    for (String requiredCard : aFusion.getRequiredCards()) {
+                        for (Map.Entry<Integer, String> equip : equips.entrySet()) {
+                            if (equip.getValue().equals(requiredCard)) {
+                                materials.add(Triple.of(equip.getValue(), equip.getKey(), false));
+                                break;
                             }
-                        });
+                        }
                     }
 
                     if (materials.size() == aFusion.getRequiredCards().size()) {
                         for (Triple<String, Integer, Boolean> mat : materials) {
                             if (mat.getRight())
-                                killCard(h.getSide(), mat.getMiddle(), getArena().getSlots().get(h.getSide()));
+                                banishCard(h.getSide(), mat.getMiddle(), getArena().getSlots().get(h.getSide()));
                             else
                                 unequipCard(h.getSide(), mat.getMiddle(), getArena().getSlots().get(h.getSide()));
                         }
@@ -598,6 +596,24 @@ public class Shoukan extends Game {
         ch.reset();
         if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
             arena.getGraveyard().get(s).add(ch);
+        side.get(index).setTop(null);
+        side.forEach(sd -> {
+            if (sd.getBottom() != null && ((Equipment) sd.getBottom()).getLinkedTo().getLeft() == index) {
+                Equipment eq = (Equipment) sd.getBottom();
+                eq.setLinkedTo(null);
+                if (eq.getTier() >= 4) arena.getBanished().add(eq);
+                else arena.getGraveyard().get(s).add(eq);
+                sd.setBottom(null);
+            }
+        });
+    }
+
+    public void banishCard(Side s, int index, List<SlotColumn<Drawable, Drawable>> side) {
+        Champion ch = (Champion) side.get(index).getTop();
+        if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath", false)) return;
+        ch.reset();
+        if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
+            arena.getBanished().add(ch);
         side.get(index).setTop(null);
         side.forEach(sd -> {
             if (sd.getBottom() != null && ((Equipment) sd.getBottom()).getLinkedTo().getLeft() == index) {
