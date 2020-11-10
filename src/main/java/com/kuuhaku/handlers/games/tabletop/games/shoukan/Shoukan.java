@@ -336,6 +336,7 @@ public class Shoukan extends Game {
                     Map<Integer, String> equips = new HashMap<>();
 
                     for (String requiredCard : aFusion.getRequiredCards()) {
+                        System.out.println("Finding: " + requiredCard);
                         for (int i = 0; i < slts.size(); i++) {
                             SlotColumn<Drawable, Drawable> slt = slts.get(i);
                             if (slt.getTop() != null && slt.getTop().getCard().getId().equals(requiredCard)) {
@@ -345,22 +346,22 @@ public class Shoukan extends Game {
                                         true
                                 ));
 
-                                for (Equipment eq : ((Champion) slt.getTop()).getLinkedTo()) {
-                                    System.out.println(slt.getTop().getCard().getId() + " -> " + eq.getCard().getId());
+                                System.out.println("Found: Champion");
+                                for (Equipment eq : ((Champion) slt.getTop()).getLinkedTo())
                                     equips.put(eq.getLinkedTo().getKey(), eq.getLinkedTo().getRight().getCard().getId());
-                                }
                                 break;
                             }
                         }
 
+                        AtomicBoolean foundEquip = new AtomicBoolean(false);
                         equips.forEach((k, v) -> {
-                            if (v.equals(requiredCard)) {
+                            if (v.equals(requiredCard) && !foundEquip.get()) {
                                 materials.add(Triple.of(v, k, false));
+                                foundEquip.set(true);
+                                System.out.println("Found: Equipment");
                             }
                         });
                     }
-
-                    System.out.println(materials.stream().map(Triple::getLeft).map(s -> "|" + s + "|").collect(Collectors.joining()));
 
                     if (materials.size() == aFusion.getRequiredCards().size()) {
                         for (Triple<String, Integer, Boolean> mat : materials) {
