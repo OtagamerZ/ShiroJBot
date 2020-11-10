@@ -26,10 +26,13 @@ import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ConsumableShop {
 	private static final Map<String, Consumable> available = new HashMap<>() {{
@@ -38,12 +41,28 @@ public class ConsumableShop {
 				5000,
 				(mb, ch, ms) -> {
 					Member m = MemberDAO.getMemberById(mb.getId() + mb.getGuild().getId());
+					int lvl = m.getLevel();
 					ch.sendMessage(mb.getAsMention() + " utilizou um boost de experiência e ganhou " + m.addXp(3500) + " XP.").queue();
 					MemberDAO.updateMemberConfigs(m);
 
 					Account acc = AccountDAO.getAccount(mb.getId());
 					acc.removeBuff("xpboost");
 					AccountDAO.saveAccount(acc);
+
+					boolean lvlUp = m.getLevel() > lvl;
+					try {
+						GuildConfig gc = GuildDAO.getGuildById(ch.getGuild().getId());
+						TextChannel lvlChannel = null;
+						try {
+							lvlChannel = ch.getGuild().getTextChannelById(gc.getCanalLvl());
+						} catch (Exception ignore) {
+						}
+						if (lvlUp && gc.isLvlNotif()) {
+							Objects.requireNonNullElse(lvlChannel, ch).sendMessage(mb.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+						}
+					} catch (InsufficientPermissionException e) {
+						ch.sendMessage(mb.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+					}
 				}));
 		put("spawncard", new Consumable("spawncard", "Invocar Carta",
 				"Invoca uma carta aleatória (chance de ser cromada afetada pelo buff do servidor)",
