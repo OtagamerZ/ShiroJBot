@@ -440,6 +440,9 @@ public class CommandManager {
 			put(SynthesizeCardCommand.class, new Argument(
 					"sintetizar", new String[]{"synthesize", "synth"}, "req_cards-type", "cmd_synthesize-card", MISC, true
 			));
+			put(AuctionCommand.class, new Argument(
+					"leilão", new String[]{"auction", "leilao", "auct"}, "req_card-type-price", "cmd_auction", MISC, true
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(
@@ -525,9 +528,6 @@ public class CommandManager {
 			));
 			put(LearnToSearchCommand.class, new Argument(
 					"pesquisar", new String[]{"search", "lts", "aap"}, "req_search", "cmd_learn-to-search", FUN, false
-			));
-			put(AuctionCommand.class, new Argument(
-					"leilão", new String[]{"auction", "leilao", "auct"}, "req_card-type-price", "cmd_auction", FUN, true
 			));
 
 			//MUSICA

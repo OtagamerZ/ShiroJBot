@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.discord.fun;
+package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
@@ -26,6 +26,8 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.events.SimpleMessageListener;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
@@ -73,41 +75,86 @@ public class AuctionCommand extends Command {
 		} else if (!StringUtils.isNumeric(args[2])) {
 			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
 			return;
-		} else if (!Helper.equalsAny(args[1], "N", "C")) {
-			channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja leiloar (`N` = normal, `C` = cromada).").queue();
-			return;
 		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
 		}
 
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		Card c = CardDAO.getCard(args[0], false);
+		int type = switch (args[1].toUpperCase()) {
+			case "N", "C" -> 1;
+			case "E" -> 2;
+			case "F" -> 3;
+			default -> -1;
+		};
 
-		boolean foil = args[1].equalsIgnoreCase("C");
-
-		if (c == null) {
-			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
+		if (type == -1) {
+			channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja leiloar (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo).").queue();
 			return;
 		}
 
-		KawaiponCard card = kp.getCard(c, foil);
+		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Object obj;
+		boolean foil = args[1].equalsIgnoreCase("C");
+		switch (type) {
+			case 1 -> {
+				Card c = CardDAO.getCard(args[0], false);
 
-		if (card == null) {
-			channel.sendMessage("❌ | Você não pode leiloar uma carta que não possui!").queue();
-			return;
+				if (c == null) {
+					channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
+					return;
+				}
+
+				KawaiponCard card = kp.getCard(c, foil);
+
+				if (card == null) {
+					channel.sendMessage("❌ | Você não pode leiloar uma carta que não possui!").queue();
+					return;
+				}
+
+				obj = card;
+			}
+			case 2 -> {
+				Equipment c = CardDAO.getEquipment(args[0]);
+
+				if (c == null) {
+					channel.sendMessage("❌ | Esse equipamento não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
+					return;
+				} else if (!kp.getEquipments().contains(c)) {
+					channel.sendMessage("❌ | Você não pode leiloar um equipamento que não possui!").queue();
+					return;
+				}
+
+				obj = c;
+			}
+			default -> {
+				Field f = CardDAO.getField(args[0]);
+
+				if (f == null) {
+					channel.sendMessage("❌ | Essa arena não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllFieldNames().toArray(String[]::new)) + "`?").queue();
+					return;
+				} else if (!kp.getFields().contains(f)) {
+					channel.sendMessage("❌ | Você não pode leiloar uma arena que não possui!").queue();
+					return;
+				}
+
+				obj = f;
+			}
 		}
 
 		try {
 			boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
 			int price = Integer.parseInt(args[2]);
-			int min = c.getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+			int min = switch (type) {
+				case 1 -> ((KawaiponCard) obj).getCard().getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+				case 2 -> ((Equipment) obj).getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
+				default -> hasLoan ? 20000 : 5000;
+			};
 
 			if (price < min) {
 				if (hasLoan)
-					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode leiloar essa carta por menos que " + min + " créditos.").queue();
+					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + min + " créditos.").queue();
 				else
-					channel.sendMessage("❌ | Você não pode leiloar essa carta por menos que " + min + " créditos.").queue();
+					channel.sendMessage("❌ | Você não pode leiloar " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + " por menos que " + min + " créditos.").queue();
 				return;
 			}
 
@@ -131,10 +178,28 @@ public class AuctionCommand extends Command {
 								Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor().getId());
 								AtomicReference<Account> oacc = new AtomicReference<>(AccountDAO.getAccount(evt.getAuthor().getId()));
 
-								if (offerer.getCards().contains(card) && !evt.getAuthor().getId().equals(author.getId())) {
-									channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
-									return;
-								} else if (oacc.get().getBalance() < offer) {
+								switch (type) {
+									case 1 -> {
+										if (offerer.getCards().contains(obj) && !evt.getAuthor().getId().equals(author.getId())) {
+											channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
+											return;
+										}
+									}
+									case 2 -> {
+										if (offerer.getEquipments().contains(obj) && !evt.getAuthor().getId().equals(author.getId())) {
+											channel.sendMessage("❌ | Parece que você já possui esse equipamento!").queue();
+											return;
+										}
+									}
+									default -> {
+										if (offerer.getFields().contains(obj) && !evt.getAuthor().getId().equals(author.getId())) {
+											channel.sendMessage("❌ | Parece que você já possui essa arena!").queue();
+											return;
+										}
+									}
+								}
+
+								if (oacc.get().getBalance() < offer) {
 									channel.sendMessage("❌ | Você não possui créditos suficientes!").queue();
 									return;
 								}
@@ -147,23 +212,36 @@ public class AuctionCommand extends Command {
 								event.get().cancel(true);
 								event.set(exec.scheduleWithFixedDelay(() -> {
 									if (phase.get() == 4 && highest.get() != null) {
-										channel.sendMessage("**Carta vendida** para " + highest.get().getLeft().getAsMention() + " por **" + highest.get().getRight() + "** créditos!").queue();
+										channel.sendMessage("**" + (type == 1 ? "Carta vendida" : type == 2 ? "Equipamento vendido" : "Arena vendida") + "** para " + highest.get().getLeft().getAsMention() + " por **" + highest.get().getRight() + "** créditos!").queue();
 
 										Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
-										k.removeCard(card);
-										KawaiponDAO.saveKawaipon(k);
-
 										Kawaipon buyer = KawaiponDAO.getKawaipon(highest.get().getLeft().getId());
-										buyer.addCard(card);
-										KawaiponDAO.saveKawaipon(buyer);
-
-										oacc.set(AccountDAO.getAccount(highest.get().getLeft().getId()));
-										oacc.get().removeCredit(highest.get().getRight(), AuctionCommand.class);
-										AccountDAO.saveAccount(oacc.get());
 
 										Account acc = AccountDAO.getAccount(author.getId());
+										Account bacc = AccountDAO.getAccount(highest.get().getLeft().getId());
+
 										acc.addCredit(highest.get().getRight(), AuctionCommand.class);
+										bacc.removeCredit(highest.get().getRight(), AuctionCommand.class);
+
+										switch (type) {
+											case 1 -> {
+												k.removeCard((KawaiponCard) obj);
+												buyer.addCard((KawaiponCard) obj);
+											}
+											case 2 -> {
+												k.removeEquipment((Equipment) obj);
+												buyer.addEquipment((Equipment) obj);
+											}
+											default -> {
+												k.removeField((Field) obj);
+												buyer.addField((Field) obj);
+											}
+										}
+
+										KawaiponDAO.saveKawaipon(k);
+										KawaiponDAO.saveKawaipon(buyer);
 										AccountDAO.saveAccount(acc);
+										AccountDAO.saveAccount(oacc.get());
 
 										Main.getInfo().getConfirmationPending().invalidate(author.getId());
 										Main.getInfo().getAPI().removeEventListener(self);
