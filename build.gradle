@@ -80,7 +80,7 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web:2.3.4.RELEASE') {
         exclude module: 'spring-boot-starter-logging'
     }
-    implementation group: 'com.sedmelluq', name: 'lavaplayer', version: '1.3.50'
+    implementation group: 'com.sedmelluq', name: 'lavaplayer', version: '1.3.59'
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
     implementation group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.1'
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
