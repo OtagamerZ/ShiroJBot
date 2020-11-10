@@ -76,7 +76,7 @@ public class AnimeCommand extends Command {
 				JSONObject jo = com.kuuhaku.controller.Anime.getNAData(anime.gettRomaji());
 
 				String link;
-				if (jo.has("description")) {
+				if (jo.has("desc")) {
 					link = "https://www.nowanimes.com/?page_id=" + jo.getInt("id");
 				} else {
 					link = "Link indisponível";
