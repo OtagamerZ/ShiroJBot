@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.discord.reactions.Reaction;
+import com.kuuhaku.controller.Anime;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.GuildBuffDAO;
 import com.kuuhaku.controller.postgresql.LogDAO;
@@ -961,58 +962,70 @@ public class Helper {
 	}
 
 	public static JSONObject post(String endpoint, JSONObject payload, String token) {
-		HttpRequest req = HttpRequest.post(endpoint)
-				.header("Content-Type", "application/json; charset=UTF-8")
-				.header("Accept", "application/json")
-				.header("User-Agent", "Mozilla/5.0")
-				.header("Authorization", token)
-				.send(payload.toString());
+		try {
+			HttpRequest req = HttpRequest.post(endpoint)
+					.header("Content-Type", "application/json; charset=UTF-8")
+					.header("Accept", "application/json")
+					.header("User-Agent", "Mozilla/5.0")
+					.header("Authorization", token)
+					.send(payload.toString());
 
-		String body = req.body();
-		if (body == null || body.isBlank()) return new JSONObject();
-		else return new JSONObject(body);
+			return new JSONObject(req.body());
+		} catch (JSONException e) {
+			return new JSONObject();
+		}
 	}
 
 	public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers) {
-		HttpRequest req = HttpRequest.post(endpoint)
-				.headers(headers)
-				.send(payload.toString());
+		try {
+			HttpRequest req = HttpRequest.post(endpoint)
+					.headers(headers)
+					.send(payload.toString());
 
-		String body = req.body();
-		if (body == null || body.isBlank()) return new JSONObject();
-		else return new JSONObject(body);
+			return new JSONObject(req.body());
+		} catch (JSONException e) {
+			return new JSONObject();
+		}
 	}
 
 	public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers, String token) {
-		HttpRequest req = HttpRequest.post(endpoint)
-				.headers(headers)
-				.header("Authorization", token)
-				.send(payload.toString());
+		try {
+			HttpRequest req = HttpRequest.post(endpoint)
+					.headers(headers)
+					.header("Authorization", token)
+					.send(payload.toString());
 
-		String body = req.body();
-		if (body == null || body.isBlank()) return new JSONObject();
-		else return new JSONObject(body);
+			return new JSONObject(req.body());
+		} catch (JSONException e) {
+			return new JSONObject();
+		}
 	}
 
 	public static JSONObject post(String endpoint, String payload, Map<String, String> headers, String token) {
-		HttpRequest req = HttpRequest.post(endpoint)
-				.headers(headers)
-				.header("Authorization", token)
-				.send(payload);
+		try {
+			HttpRequest req = HttpRequest.post(endpoint)
+					.headers(headers)
+					.header("Authorization", token)
+					.send(payload);
 
-		String body = req.body();
-		if (body == null || body.isBlank()) return new JSONObject();
-		else return new JSONObject(body);
+			return new JSONObject(req.body());
+		} catch (JSONException e) {
+			return new JSONObject();
+		}
 	}
 
 	public static JSONObject get(String endpoint, JSONObject payload, Map<String, String> headers, String token) {
-		HttpRequest req = HttpRequest.get(endpoint, payload.toMap(), true)
-				.headers(headers)
-				.header("Authorization", token);
+		try {
+			HttpRequest req = HttpRequest.get(endpoint, payload.toMap(), true)
+					.headers(headers)
+					.header("Authorization", token);
 
-		String body = req.body();
-		if (body == null || body.isBlank()) return new JSONObject();
-		else return new JSONObject(body);
+			String body = req.body();
+			Helper.logger(Anime.class).info(body);
+			return new JSONObject(body);
+		} catch (JSONException e) {
+			return new JSONObject();
+		}
 	}
 
 	public static String urlEncode(JSONObject payload) {
