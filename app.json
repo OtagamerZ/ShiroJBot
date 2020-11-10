@@ -53,9 +53,13 @@
       "description": "Token de acesso à API do YouTube.",
       "required": true
     },
-    "DA_TOKEN": {
-      "description": "Token de acesso à API do Dream Animes.",
-      "required": true
+    "NOWANIMES_URL": {
+      "description": "URL da API do Now Animes.",
+      "required": false
+    },
+    "NOWANIMES_TOKEN": {
+      "description": "Token de acesso à API do Now Animes.",
+      "required": false
     },
     "SECRET": {
       "description": "Frase secreta para ser usada no comando TheAnswerCommand.",
