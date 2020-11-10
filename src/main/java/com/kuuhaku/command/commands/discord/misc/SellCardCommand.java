@@ -135,7 +135,7 @@ public class SellCardCommand extends Command {
 				try {
 					boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
 					int price = Integer.parseInt(args[2]);
-					int min = eq.getTier() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2);
+					int min = eq.getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
 
 					if (price < min) {
 						if (hasLoan)
@@ -183,7 +183,7 @@ public class SellCardCommand extends Command {
 				try {
 					boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
 					int price = Integer.parseInt(args[2]);
-					int min = hasLoan ? 20000 : 10000;
+					int min = hasLoan ? 20000 : 5000;
 
 					if (price < min) {
 						if (hasLoan)
