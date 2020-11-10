@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria do envio de mensagens das cartas durante o Shoukan">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -842,13 +840,7 @@
       <workItem from="1605035934176" duration="434000" />
       <workItem from="1605036495464" duration="128000" />
       <workItem from="1605037408456" duration="525000" />
-    </task>
-    <task id="LOCAL-02848" summary="Re-adaptação do endpoint de doações">
-      <created>1604679516761</created>
-      <option name="number" value="02848" />
-      <option name="presentableId" value="LOCAL-02848" />
-      <option name="project" value="LOCAL" />
-      <updated>1604679516761</updated>
+      <workItem from="1605038075340" duration="375000" />
     </task>
     <task id="LOCAL-02849" summary="Finalização da implementação do endpoint de doações">
       <created>1604685632396</created>
@@ -1186,7 +1178,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605037773299</updated>
     </task>
-    <option name="localTasksCounter" value="2897" />
+    <task id="LOCAL-02897" summary="Melhoria do envio de mensagens das cartas durante o Shoukan">
+      <created>1605038341695</created>
+      <option name="number" value="02897" />
+      <option name="presentableId" value="LOCAL-02897" />
+      <option name="project" value="LOCAL" />
+      <updated>1605038341695</updated>
+    </task>
+    <option name="localTasksCounter" value="2898" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
