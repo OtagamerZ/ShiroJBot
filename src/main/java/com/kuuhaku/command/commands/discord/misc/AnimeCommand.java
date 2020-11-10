@@ -73,9 +73,14 @@ public class AnimeCommand extends Command {
 					return;
 				}
 
-				//JSONObject jo = com.kuuhaku.controller.Anime.getDAData(anime.gettRomaji().replace(" ", "-"));
+				JSONObject jo = com.kuuhaku.controller.Anime.getNAData(anime.gettRomaji());
 
-				String link = /*(jo.has("url") ? jo.getString("url") : */"Link indisponível"/*).replace("api/", "")*/;
+				String link;
+				if (jo.has("description")) {
+					link = "https://www.nowanimes.com/?page_id=" + jo.getInt("id");
+				} else {
+					link = "Link indisponível";
+				}
 
 				eb.setColor(anime.getcColor());
 				eb.setAuthor("Bem, aqui está um novo anime para você assistir!\n");
@@ -93,19 +98,18 @@ public class AnimeCommand extends Command {
 				eb.addField("Popularidade:", Integer.toString(anime.getPopularity()), true);
 				eb.addField("Assista em:", link, true);
 
-				/*if (!link.equalsIgnoreCase("Link indisponível")) {
-					eb.setDescription(jo.getJSONObject("anime").getString("Sinopse"));
-					eb.addField("Gêneros:", jo.getJSONObject("anime").getJSONArray("tags").toString().replace("[", "`").replace("]", "`").replace(",", "` `").replace("\"", ""), false);
-				} else {*/
-				eb.setDescription(anime.getDescription()
-						.replace("<br>", "\n")
-						.replaceAll("(<i>|</i>)", "_")
-						.replaceAll("(<b>|</b>)", "**")
-						.replaceAll("(<u>|</u>)", "__")
-						.replaceAll("(<p>|</p>)", "")
-				);
+				if (!link.equalsIgnoreCase("Link indisponível")) {
+					eb.setDescription(jo.getString("desc"));
+				} else {
+					eb.setDescription(anime.getDescription()
+							.replace("<br>", "\n")
+							.replaceAll("(<i>|</i>)", "_")
+							.replaceAll("(<b>|</b>)", "**")
+							.replaceAll("(<u>|</u>)", "__")
+							.replaceAll("(<p>|</p>)", "")
+					);
+				}
 				eb.addField("Gêneros:", anime.getGenres(), false);
-				//}
 
 				m.delete().queue();
 				channel.sendMessage(eb.build()).queue();
