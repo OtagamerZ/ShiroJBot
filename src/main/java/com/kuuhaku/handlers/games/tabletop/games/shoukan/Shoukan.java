@@ -330,6 +330,8 @@ public class Shoukan extends Game {
 						.findFirst()
 						.orElse(null);
 
+				System.out.println(aFusion.getName());
+
 				if (aFusion != null) {
 					List<SlotColumn<Drawable, Drawable>> slts = arena.getSlots().get(h.getSide());
 					List<Triple<String, Integer, Boolean>> materials = new ArrayList<>();
