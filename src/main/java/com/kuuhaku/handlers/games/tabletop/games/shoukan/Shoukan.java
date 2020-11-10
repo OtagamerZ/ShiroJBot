@@ -336,6 +336,7 @@ public class Shoukan extends Game {
                     Map<Integer, String> equips = new HashMap<>();
 
                     for (String requiredCard : aFusion.getRequiredCards()) {
+                        boolean found = false;
                         for (int i = 0; i < slts.size(); i++) {
                             SlotColumn<Drawable, Drawable> slt = slts.get(i);
                             if (slt.getTop() != null && slt.getTop().getCard().getId().equals(requiredCard)) {
@@ -347,18 +348,19 @@ public class Shoukan extends Game {
 
                                 for (Equipment eq : ((Champion) slt.getTop()).getLinkedTo())
                                     equips.put(eq.getLinkedTo().getKey(), eq.getLinkedTo().getRight().getCard().getId());
+                                found = true;
                                 break;
                             }
                         }
-                    }
 
-                    for (String requiredCard : aFusion.getRequiredCards()) {
-                        for (Map.Entry<Integer, String> equip : equips.entrySet()) {
-                            if (equip.getValue().equals(requiredCard)) {
-                                materials.add(Triple.of(equip.getValue(), equip.getKey(), false));
-                                break;
+                        if (!found)
+                            for (Map.Entry<Integer, String> equip : equips.entrySet()) {
+                                System.out.println(equip.getValue() + " | " + requiredCard);
+                                if (equip.getValue().equals(requiredCard)) {
+                                    materials.add(Triple.of(equip.getValue(), equip.getKey(), false));
+                                    break;
+                                }
                             }
-                        }
                     }
 
                     if (materials.size() == aFusion.getRequiredCards().size()) {
