@@ -14,9 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AnimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AnimeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Anime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Anime.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -850,14 +848,7 @@
       <workItem from="1604719360081" duration="526000" />
       <workItem from="1604937904201" duration="3494000" />
       <workItem from="1604971618047" duration="8898000" />
-      <workItem from="1605024655250" duration="998000" />
-    </task>
-    <task id="LOCAL-02836" summary="Correções menores">
-      <created>1604594614896</created>
-      <option name="number" value="02836" />
-      <option name="presentableId" value="LOCAL-02836" />
-      <option name="project" value="LOCAL" />
-      <updated>1604594614896</updated>
+      <workItem from="1605024655250" duration="1338000" />
     </task>
     <task id="LOCAL-02837" summary="Correções menores">
       <created>1604595115689</created>
@@ -1195,7 +1186,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605025244698</updated>
     </task>
-    <option name="localTasksCounter" value="2885" />
+    <task id="LOCAL-02885" summary="Correção na busca por anime">
+      <created>1605025852688</created>
+      <option name="number" value="02885" />
+      <option name="presentableId" value="LOCAL-02885" />
+      <option name="project" value="LOCAL" />
+      <updated>1605025852688</updated>
+    </task>
+    <option name="localTasksCounter" value="2886" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1347,10 +1345,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605025241687">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605025849728">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605025241687" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605025849728" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1604586940676">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1414,10 +1412,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605025246394">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605025855174">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605025246394" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605025855174" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604979820347" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1459,10 +1457,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="634" y="385" key="data.grid.dml.preview.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597176288417" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1605011645483">
+    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1605025836258">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605011645483" />
+    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605025836258" />
     <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604459307974" />
     <state x="600" y="294" key="git4idea.ui.GitUnstashDialog" timestamp="1603112264983">
       <screen x="0" y="0" width="1680" height="1010" />
