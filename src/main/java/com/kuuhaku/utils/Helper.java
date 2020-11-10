@@ -29,7 +29,6 @@ import com.google.gson.Gson;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.discord.reactions.Reaction;
-import com.kuuhaku.controller.Anime;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.GuildBuffDAO;
 import com.kuuhaku.controller.postgresql.LogDAO;
@@ -1020,9 +1019,7 @@ public class Helper {
 					.headers(headers)
 					.header("Authorization", token);
 
-			String body = req.body();
-			Helper.logger(Anime.class).info(body);
-			return new JSONObject(body);
+			return new JSONObject(req.body());
 		} catch (JSONException e) {
 			return new JSONObject();
 		}
