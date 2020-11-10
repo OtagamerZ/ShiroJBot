@@ -346,8 +346,13 @@ public class Shoukan extends Game {
                                         true
                                 ));
 
-                                for (Equipment eq : ((Champion) slt.getTop()).getLinkedTo())
-                                    equips.put(eq.getLinkedTo().getLeft(), eq.getCard().getId());
+                                for (int x = 0; x < slts.size(); x++) {
+                                    Equipment eq = (Equipment) slts.get(x).getBottom();
+                                    if (eq != null && eq.getLinkedTo().getLeft() == i) {
+                                        equips.put(x, eq.getCard().getId());
+                                    }
+                                }
+
                                 found = true;
                                 break;
                             }
