@@ -19,13 +19,9 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.utils.Helper;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Map;
 
 public class Anime {
@@ -45,31 +41,19 @@ public class Anime {
 		);
 	}
 
-	public static JSONObject getDAData(String name) throws IOException {
-		URL url = new URL("https://www.dreamanimes.com.br/api/anime-info/" + name);
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-		con.setRequestMethod("GET");
-		con.setRequestProperty("Accept", "application/json");
-		con.addRequestProperty("Accept-Charset", "UTF-8");
-		con.addRequestProperty("User-Agent", "Mozilla/5.0");
-		con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
-		con.setInstanceFollowRedirects(false);
-
-		String redir = con.getHeaderField("Location");
-
-		if (redir != null) {
-			return getDAData(redir.replace("/anime-info/", ""));
+	public static JSONObject getNAData(String name) {
+		JSONObject resposta;
+		if (System.getenv().containsKey("NOWANIMES_URL") && System.getenv().containsKey("NOWANIMES_TOKEN")) {
+			resposta = Helper.get(System.getenv("NOWANIMES_URL"),
+					new JSONObject() {{
+						put("anime", name);
+					}},
+					Collections.emptyMap(),
+					System.getenv("NOWANIMES_TOKEN")
+			);
+		} else {
+			return new JSONObject();
 		}
-
-		JSONObject resposta = new JSONObject();
-
-		try {
-			resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
-			if (con.getResponseCode() == HttpURLConnection.HTTP_OK) resposta.put("url", con.getURL().toString());
-		} catch (IOException ignore) {
-		}
-
-		con.disconnect();
 
 		Helper.logger(Anime.class).debug(resposta);
 		return resposta;
