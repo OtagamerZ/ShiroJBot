@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de correção das fusões com mais de 3 materiais" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de correção das fusões com mais de 3 materiais">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -845,14 +847,7 @@
       <workItem from="1604694022000" duration="1607000" />
       <workItem from="1604719360081" duration="526000" />
       <workItem from="1604937904201" duration="3494000" />
-      <workItem from="1604971618047" duration="4733000" />
-    </task>
-    <task id="LOCAL-02819" summary="Adição de trigger ON_EQUIP nos efeitos Shoukan">
-      <created>1604413429656</created>
-      <option name="number" value="02819" />
-      <option name="presentableId" value="LOCAL-02819" />
-      <option name="project" value="LOCAL" />
-      <updated>1604413429656</updated>
+      <workItem from="1604971618047" duration="5041000" />
     </task>
     <task id="LOCAL-02820" summary="Fusões no Shoukan que precisam de equipamentos agora só funcionam se ele estiver equipado">
       <created>1604424973177</created>
@@ -1190,7 +1185,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604976229905</updated>
     </task>
-    <option name="localTasksCounter" value="2868" />
+    <task id="LOCAL-02868" summary="Tentativa de correção das fusões com mais de 3 materiais">
+      <created>1604976554984</created>
+      <option name="number" value="02868" />
+      <option name="presentableId" value="LOCAL-02868" />
+      <option name="project" value="LOCAL" />
+      <updated>1604976554984</updated>
+    </task>
+    <option name="localTasksCounter" value="2869" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1409,11 +1411,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604976231063">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1604976558157">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1604939164369" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604976231063" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604976558157" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
