@@ -136,7 +136,7 @@ public class TradeCardCommand extends Command {
 			}
 
 			if (type == 1)
-				product.setValue(new KawaiponCard((Card) product.getRight(), foil));
+				product = Pair.of(product.getLeft(), new KawaiponCard((Card) product.getRight(), foil));
 
 			switch (type) {
 				case 1 -> {
@@ -207,6 +207,7 @@ public class TradeCardCommand extends Command {
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			Pair<CardType, Object> finalProduct = product;
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar " + (type == 1 ? "sua carta" : type == 2 ? "seu equipamento" : "sua arena") + " `" + name + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
 						if (!ShiroInfo.getHashes().remove(hash)) return;
@@ -217,17 +218,17 @@ public class TradeCardCommand extends Command {
 
 						switch (type) {
 							case 1 -> {
-								KawaiponCard kc = (KawaiponCard) product.getRight();
+								KawaiponCard kc = (KawaiponCard) finalProduct.getRight();
 								target.removeCard(kc);
 								kp.addCard(kc);
 							}
 							case 2 -> {
-								Equipment eq = (Equipment) product.getRight();
+								Equipment eq = (Equipment) finalProduct.getRight();
 								target.removeEquipment(eq);
 								kp.addEquipment(eq);
 							}
 							default -> {
-								Field f = (Field) product.getRight();
+								Field f = (Field) finalProduct.getRight();
 								target.removeField(f);
 								kp.addField(f);
 							}
@@ -295,7 +296,7 @@ public class TradeCardCommand extends Command {
 			}
 
 			if (type == 1)
-				product.setValue(new KawaiponCard((Card) product.getRight(), foil));
+				product = Pair.of(product.getLeft(), new KawaiponCard((Card) product.getRight(), foil));
 
 			switch (type) {
 				case 1 -> {
@@ -366,6 +367,7 @@ public class TradeCardCommand extends Command {
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			Pair<CardType, Object> finalProduct = product;
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja vender " + (type == 1 ? "a carta" : type == 2 ? "o equipamento" : "a arena") + " `" + name + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
 						if (!ShiroInfo.getHashes().remove(hash)) return;
@@ -376,17 +378,17 @@ public class TradeCardCommand extends Command {
 
 						switch (type) {
 							case 1 -> {
-								KawaiponCard kc = (KawaiponCard) product.getRight();
+								KawaiponCard kc = (KawaiponCard) finalProduct.getRight();
 								target.addCard(kc);
 								kp.removeCard(kc);
 							}
 							case 2 -> {
-								Equipment eq = (Equipment) product.getRight();
+								Equipment eq = (Equipment) finalProduct.getRight();
 								target.addEquipment(eq);
 								kp.removeEquipment(eq);
 							}
 							default -> {
-								Field f = (Field) product.getRight();
+								Field f = (Field) finalProduct.getRight();
 								target.addField(f);
 								kp.removeField(f);
 							}
