@@ -133,7 +133,7 @@ public class EffectParameters {
 		}
 
 		try {
-			assert wh != null;
+			if (wh == null) return;
 			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 			wc.send(wmb.build()).get();
 		} catch (InterruptedException | ExecutionException e) {
