@@ -336,8 +336,15 @@ public class Helper {
 					.findFirst()
 					.ifPresent(w -> webhook[0] = w);
 
-			if (webhook[0] == null) return chn.createWebhook(name).complete();
-			else return webhook[0];
+			try {
+				if (webhook[0] == null) return chn.createWebhook(name).complete();
+				else {
+					webhook[0].getUrl();
+					return webhook[0];
+				}
+			} catch (NullPointerException e) {
+				return chn.createWebhook(name).complete();
+			}
 		} catch (InsufficientPermissionException | InterruptedException | ExecutionException e) {
 			sendPM(Objects.requireNonNull(chn.getGuild().getOwner()).getUser(), "❌ | " + name + " não possui permissão para criar um webhook em seu servidor no canal " + chn.getAsMention());
 		}
