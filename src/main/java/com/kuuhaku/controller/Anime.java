@@ -55,7 +55,7 @@ public class Anime {
 			return new JSONObject();
 		}
 
-		Helper.logger(Anime.class).info(resposta);
+		Helper.logger(Anime.class).debug(resposta);
 		return resposta;
 	}
 }
