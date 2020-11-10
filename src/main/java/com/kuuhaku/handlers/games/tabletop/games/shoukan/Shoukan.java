@@ -331,7 +331,7 @@ public class Shoukan extends Game {
 						.orElse(null);
 
 				if (aFusion != null) {
-					System.out.println(aFusion.getName());
+					System.out.println(aFusion.getCard().getName());
 					List<SlotColumn<Drawable, Drawable>> slts = arena.getSlots().get(h.getSide());
 					List<Triple<String, Integer, Boolean>> materials = new ArrayList<>();
 					Map<Integer, String> equips = new HashMap<>();
