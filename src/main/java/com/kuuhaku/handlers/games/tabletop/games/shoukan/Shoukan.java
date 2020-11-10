@@ -43,7 +43,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -332,60 +331,27 @@ public class Shoukan extends Game {
 
                 if (aFusion != null) {
                     List<SlotColumn<Drawable, Drawable>> slts = arena.getSlots().get(h.getSide());
-                    List<Triple<String, Integer, Boolean>> materials = new ArrayList<>();
-                    Map<Integer, String> equips = new HashMap<>();
 
                     for (String requiredCard : aFusion.getRequiredCards()) {
-                        boolean found = false;
                         for (int i = 0; i < slts.size(); i++) {
-                            SlotColumn<Drawable, Drawable> slt = slts.get(i);
-                            if (slt.getTop() != null && slt.getTop().getCard().getId().equals(requiredCard)) {
-                                materials.add(Triple.of(
-                                        slt.getTop().getCard().getId(),
-                                        i,
-                                        true
-                                ));
-
-                                for (int x = 0; x < slts.size(); x++) {
-                                    Equipment eq = (Equipment) slts.get(x).getBottom();
-                                    if (eq != null && eq.getLinkedTo().getLeft() == i) {
-                                        equips.put(x, eq.getCard().getId());
-                                    }
-                                }
-
-                                found = true;
-                                break;
-                            }
+                            SlotColumn<Drawable, Drawable> column = slts.get(i);
+                            if (column.getTop() != null && column.getTop().getCard().getId().equals(requiredCard))
+                                banishCard(h.getSide(), i, getArena().getSlots().get(h.getSide()));
+                            if (column.getBottom() != null && column.getBottom().getCard().getId().equals(requiredCard))
+                                unequipCard(h.getSide(), i, getArena().getSlots().get(h.getSide()));
                         }
-
-                        if (!found)
-                            for (Map.Entry<Integer, String> equip : equips.entrySet()) {
-                                if (equip.getValue().equals(requiredCard)) {
-                                    materials.add(Triple.of(equip.getValue(), equip.getKey(), false));
-                                    break;
-                                }
-                            }
                     }
 
-                    if (materials.size() == aFusion.getRequiredCards().size()) {
-                        for (Triple<String, Integer, Boolean> mat : materials) {
-                            if (mat.getRight())
-                                banishCard(h.getSide(), mat.getMiddle(), getArena().getSlots().get(h.getSide()));
-                            else
-                                unequipCard(h.getSide(), mat.getMiddle(), getArena().getSlots().get(h.getSide()));
-                        }
-
-                        for (SlotColumn<Drawable, Drawable> slt : slts) {
-                            if (slt.getTop() == null) {
-                                aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
-                                slt.setTop(aFusion.copy());
-                                if (aFusion.hasEffect() && !aFusion.isFlipped()) {
-                                    aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, Integer.parseInt(args[1]) - 1, h.getSide(), Duelists.of(aFusion, Integer.parseInt(args[1]) - 1, null, -1), channel));
-                                    postCombat();
-                                }
-                                h.removeMana(aFusion.getMana());
-                                break;
+                    for (SlotColumn<Drawable, Drawable> slt : slts) {
+                        if (slt.getTop() == null) {
+                            aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
+                            slt.setTop(aFusion.copy());
+                            if (aFusion.hasEffect() && !aFusion.isFlipped()) {
+                                aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, Integer.parseInt(args[1]) - 1, h.getSide(), Duelists.of(aFusion, Integer.parseInt(args[1]) - 1, null, -1), channel));
+                                postCombat();
                             }
+                            h.removeMana(aFusion.getMana());
+                            break;
                         }
                     }
                 }
