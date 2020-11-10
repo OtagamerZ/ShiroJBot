@@ -22,6 +22,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.AnimeName;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Card;
 
@@ -414,5 +415,11 @@ public class CardDAO {
         } finally {
             em.close();
         }
+    }
+
+    public static CardType identifyType(String name) {
+        if (getField(name) != null) return CardType.FIELD;
+        else if (getEquipment(name) != null) return CardType.EVOGEAR;
+        else return CardType.KAWAIPON;
     }
 }
