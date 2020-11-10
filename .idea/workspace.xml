@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -163,17 +160,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -851,14 +837,7 @@
       <workItem from="1604971618047" duration="8898000" />
       <workItem from="1605024655250" duration="4764000" />
       <workItem from="1605031049773" duration="4037000" />
-      <workItem from="1605035934176" duration="390000" />
-    </task>
-    <task id="LOCAL-02845" summary="Usuários inválidos agora são ocultados dos rankings">
-      <created>1604671265045</created>
-      <option name="number" value="02845" />
-      <option name="presentableId" value="LOCAL-02845" />
-      <option name="project" value="LOCAL" />
-      <updated>1604671265045</updated>
+      <workItem from="1605035934176" duration="434000" />
     </task>
     <task id="LOCAL-02846" summary="Adição de endpoint para o webhook do Patreon">
       <created>1604672598700</created>
@@ -1196,7 +1175,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605035059869</updated>
     </task>
-    <option name="localTasksCounter" value="2894" />
+    <task id="LOCAL-02894" summary="Correção do comando Ping">
+      <created>1605036355077</created>
+      <option name="number" value="02894" />
+      <option name="presentableId" value="LOCAL-02894" />
+      <option name="project" value="LOCAL" />
+      <updated>1605036355078</updated>
+    </task>
+    <option name="localTasksCounter" value="2895" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1262,7 +1248,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Re-adaptação do endpoint de doações" />
     <MESSAGE value="Finalização da implementação do endpoint de doações" />
     <MESSAGE value="Correção no comando prune" />
     <MESSAGE value="Correção nas porcentagens do comando MyStats" />
@@ -1287,7 +1272,8 @@
     <MESSAGE value="Usar xpbooster agora notifica ao passar de nível" />
     <MESSAGE value="Atualização da biblioteca lavaplayer" />
     <MESSAGE value="Adição de GIFs para certos efeitos no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de GIFs para certos efeitos no Shoukan" />
+    <MESSAGE value="Correção do comando Ping" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção do comando Ping" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1348,10 +1334,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605035056456">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605036352050">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605035056456" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605036352050" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1604586940676">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1415,10 +1401,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605035075094">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605036359610">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605035075094" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605036359610" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604979820347" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1482,10 +1468,10 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1604581770738" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603503824528" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1605034252842">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1605036215415">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605034252842" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605036215415" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604189150904" />
   </component>
   <component name="XDebuggerManager">
