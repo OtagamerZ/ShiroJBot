@@ -145,8 +145,8 @@ public class URankCommand extends Command {
 		for (int i = 0; i < sub9.size(); i++) {
 			sub9Formatted.append("%s - %s %s\n".formatted(
 					i + 2,
-					checkUser(accs.get(i)),
-					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), accs.get(i).getBalance())
+					checkUser(sub9.get(i)),
+					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), sub9.get(i).getBalance())
 			));
 		}
 
@@ -183,8 +183,8 @@ public class URankCommand extends Command {
 		for (int i = 0; i < sub9.size(); i++) {
 			sub9Formatted.append("%s - %s %s\n".formatted(
 					i + 2,
-					checkUser(kps.get(i)),
-					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD), kps.get(i)[1])
+					checkUser(sub9.get(i)),
+					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD), sub9.get(i)[1])
 			));
 		}
 
