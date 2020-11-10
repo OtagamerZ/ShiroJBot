@@ -431,7 +431,7 @@ public class TradeCardCommand extends Command {
 				return;
 			}
 
-			Pair<Pair<CardType, Object>, Pair<CardType, Object>> product = Pair.of(
+			Pair<CardType, Object>[] products = new Pair[]{
 					switch (types[0]) {
 						case 1 -> Pair.of(CardType.KAWAIPON, (Object) CardDAO.getCard(args[1], false));
 						case 2 -> Pair.of(CardType.EVOGEAR, (Object) CardDAO.getEquipment(args[1]));
@@ -442,14 +442,14 @@ public class TradeCardCommand extends Command {
 						case 2 -> Pair.of(CardType.EVOGEAR, (Object) CardDAO.getEquipment(args[3]));
 						default -> Pair.of(CardType.FIELD, (Object) CardDAO.getField(args[3]));
 					}
-			);
+			};
 
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
 			boolean yourFoil = args[2].equalsIgnoreCase("C");
 			boolean hisFoil = args[4].equalsIgnoreCase("C");
 
-			if (product.getLeft().getRight() == null) {
+			if (products[0].getRight() == null) {
 				switch (types[0]) {
 					case 1 -> {
 						channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[1], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
@@ -464,7 +464,7 @@ public class TradeCardCommand extends Command {
 						return;
 					}
 				}
-			} else if (product.getRight().getRight() == null) {
+			} else if (products[1].getRight() == null) {
 				switch (types[1]) {
 					case 1 -> {
 						channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[3], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
@@ -482,9 +482,9 @@ public class TradeCardCommand extends Command {
 			}
 
 			if (types[0] == 1)
-				product.getLeft().setValue(new KawaiponCard((Card) product.getLeft().getRight(), yourFoil));
+				products[0] = Pair.of(products[0].getLeft(), new KawaiponCard((Card) products[0].getRight(), yourFoil));
 			if (types[1] == 1)
-				product.getRight().setValue(new KawaiponCard((Card) product.getRight().getRight(), hisFoil));
+				products[1] = Pair.of(products[1].getLeft(), new KawaiponCard((Card) products[1].getRight(), hisFoil));
 
 			if (AccountDAO.getAccount(kp.getUid()).getLoan() > 0) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-with-loan")).queue();
@@ -496,7 +496,7 @@ public class TradeCardCommand extends Command {
 
 			switch (types[0]) {
 				case 1 -> {
-					KawaiponCard kc = (KawaiponCard) product.getRight().getRight();
+					KawaiponCard kc = (KawaiponCard) products[1].getRight();
 					if (kp.getCards().contains(kc)) {
 						channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
 						return;
@@ -506,7 +506,7 @@ public class TradeCardCommand extends Command {
 					}
 				}
 				case 2 -> {
-					Equipment e = (Equipment) product.getRight().getRight();
+					Equipment e = (Equipment) products[1].getRight();
 					if (Collections.frequency(kp.getEquipments(), e) == 3) {
 						channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
 						return;
@@ -522,7 +522,7 @@ public class TradeCardCommand extends Command {
 					}
 				}
 				default -> {
-					Field f = (Field) product.getRight().getRight();
+					Field f = (Field) products[1].getRight();
 					if (Collections.frequency(kp.getFields(), f) == 3) {
 						channel.sendMessage("❌ | Parece que você já possui 3 cópias dessa arena!").queue();
 						return;
@@ -538,7 +538,7 @@ public class TradeCardCommand extends Command {
 
 			switch (types[1]) {
 				case 1 -> {
-					KawaiponCard kc = (KawaiponCard) product.getLeft().getRight();
+					KawaiponCard kc = (KawaiponCard) products[0].getRight();
 					if (target.getCards().contains(kc)) {
 						channel.sendMessage("❌ | Ele/ela já possui essa carta!").queue();
 						return;
@@ -548,7 +548,7 @@ public class TradeCardCommand extends Command {
 					}
 				}
 				case 2 -> {
-					Equipment e = (Equipment) product.getLeft().getRight();
+					Equipment e = (Equipment) products[0].getRight();
 					if (Collections.frequency(target.getEquipments(), e) == 3) {
 						channel.sendMessage("❌ | Ele/ela já possui 3 cópias desse equipamento!").queue();
 						return;
@@ -564,7 +564,7 @@ public class TradeCardCommand extends Command {
 					}
 				}
 				default -> {
-					Field f = (Field) product.getLeft().getRight();
+					Field f = (Field) products[0].getRight();
 					if (Collections.frequency(target.getFields(), f) == 3) {
 						channel.sendMessage("❌ | Ele/ela já possui 3 cópias dessa arena!").queue();
 						return;
@@ -580,14 +580,14 @@ public class TradeCardCommand extends Command {
 
 			String[] names = {
 					switch (types[0]) {
-						case 1 -> ((KawaiponCard) product.getLeft().getRight()).getName();
-						case 2 -> ((Equipment) product.getLeft().getRight()).getCard().getName();
-						default -> ((Field) product.getLeft().getRight()).getCard().getName();
+						case 1 -> ((KawaiponCard) products[0].getRight()).getName();
+						case 2 -> ((Equipment) products[0].getRight()).getCard().getName();
+						default -> ((Field) products[0].getRight()).getCard().getName();
 					},
 					switch (types[1]) {
-						case 1 -> ((KawaiponCard) product.getRight().getRight()).getName();
-						case 2 -> ((Equipment) product.getRight().getRight()).getCard().getName();
-						default -> ((Field) product.getRight().getRight()).getCard().getName();
+						case 1 -> ((KawaiponCard) products[1].getRight()).getName();
+						case 2 -> ((Equipment) products[1].getRight()).getCard().getName();
+						default -> ((Field) products[1].getRight()).getCard().getName();
 					}
 			};
 			String hash = Helper.generateHash(guild, author);
@@ -601,17 +601,17 @@ public class TradeCardCommand extends Command {
 
 						switch (types[0]) {
 							case 1 -> {
-								KawaiponCard kc = (KawaiponCard) product.getLeft().getRight();
+								KawaiponCard kc = (KawaiponCard) products[0].getRight();
 								target.addCard(kc);
 								kp.removeCard(kc);
 							}
 							case 2 -> {
-								Equipment eq = (Equipment) product.getLeft().getRight();
+								Equipment eq = (Equipment) products[0].getRight();
 								target.addEquipment(eq);
 								kp.removeEquipment(eq);
 							}
 							default -> {
-								Field f = (Field) product.getLeft().getRight();
+								Field f = (Field) products[0].getRight();
 								target.addField(f);
 								kp.removeField(f);
 							}
@@ -619,17 +619,17 @@ public class TradeCardCommand extends Command {
 
 						switch (types[1]) {
 							case 1 -> {
-								KawaiponCard kc = (KawaiponCard) product.getRight().getRight();
+								KawaiponCard kc = (KawaiponCard) products[1].getRight();
 								target.addCard(kc);
 								kp.removeCard(kc);
 							}
 							case 2 -> {
-								Equipment eq = (Equipment) product.getRight().getRight();
+								Equipment eq = (Equipment) products[1].getRight();
 								target.addEquipment(eq);
 								kp.removeEquipment(eq);
 							}
 							default -> {
-								Field f = (Field) product.getRight().getRight();
+								Field f = (Field) products[1].getRight();
 								target.addField(f);
 								kp.removeField(f);
 							}
