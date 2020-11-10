@@ -335,10 +335,13 @@ public class Shoukan extends Game {
                     for (String requiredCard : aFusion.getRequiredCards()) {
                         for (int i = 0; i < slts.size(); i++) {
                             SlotColumn<Drawable, Drawable> column = slts.get(i);
-                            if (column.getTop() != null && column.getTop().getCard().getId().equals(requiredCard))
+                            if (column.getTop() != null && column.getTop().getCard().getId().equals(requiredCard)) {
                                 banishCard(h.getSide(), i, getArena().getSlots().get(h.getSide()));
-                            if (column.getBottom() != null && column.getBottom().getCard().getId().equals(requiredCard))
+                                break;
+                            } else if (column.getBottom() != null && column.getBottom().getCard().getId().equals(requiredCard)) {
                                 unequipCard(h.getSide(), i, getArena().getSlots().get(h.getSide()));
+                                break;
+                            }
                         }
                     }
 
