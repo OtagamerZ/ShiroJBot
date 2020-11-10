@@ -118,9 +118,9 @@ public class EffectParameters {
 		return channel;
 	}
 
-	public void sendWebhookMessage(String message, String gif) {
+	public void sendWebhookMessage(String message, String gif, Champion champion) {
 		Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getInfo().getAPI());
-		Card c = duelists.getAttacker().getCard();
+		Card c = champion.getCard();
 
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder()
 				.setContent(message)
