@@ -77,8 +77,8 @@ public class AnimeCommand extends Command {
 
 				String link;
 				if (jo.has("desc")) {
-					link = "[NowAnimes](https://www.nowanimes.com/?page_id=%s&ref=%s)".formatted(
-							jo.getInt("id"), "Referrer",
+					link = "[Now Animes](https://www.nowanimes.com/?page_id=%s&ref=%s)".formatted(
+							jo.getInt("id"),
 							Helper.hash(System.getenv("NOWANIMES_URL").getBytes(StandardCharsets.UTF_8), "SHA-1")
 					);
 				} else {
