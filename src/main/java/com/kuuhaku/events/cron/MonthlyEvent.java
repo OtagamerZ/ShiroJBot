@@ -99,26 +99,27 @@ public class MonthlyEvent implements Job {
 
 		TextChannel chn = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID()).getTextChannelById(ShiroInfo.getAnnouncementChannelID());
 
+		String msg;
+
 		assert chn != null;
-		if (winners.size() == 0) {
-			chn.sendMessage("""
+		if (winners.size() == 0)
+			msg = """
 					As dezenas sorteadas foram `%s`.
 					Como não houveram vencedores, o prêmio de %d créditos será acumulado para o próximo mês!
-					""".formatted(String.join(" ", dozens), value.getValue())
-			).queue();
-		} else if (winners.size() == 1) {
-			chn.sendMessage("""
+					""".formatted(String.join(" ", dozens), value.getValue());
+		else if (winners.size() == 1)
+			msg = """
 					As dezenas sorteadas foram `%s`.
 					O vencedor de %d créditos foi %s, parabéns!
-					""".formatted(String.join(" ", dozens), value.getValue(), Main.getInfo().getUserByID(winners.get(0).getUid()).getName())
-			).queue();
-		} else {
-			chn.sendMessage("""
+					""".formatted(String.join(" ", dozens), value.getValue(), Main.getInfo().getUserByID(winners.get(0).getUid()).getName());
+		else
+			msg = """
 					As dezenas sorteadas foram `%s`.
 					Os %d vencedores dividirão em partes iguais o prêmio de %d créditos, parabéns!!
-					""".formatted(String.join(" ", dozens), winners.size(), value.getValue())
-			).queue();
-		}
+					""".formatted(String.join(" ", dozens), winners.size(), value.getValue());
+
+		chn.sendMessage(msg).queue();
+		Helper.broadcast(msg, null, null);
 
 		winners.forEach(l -> {
 			Account acc = AccountDAO.getAccount(l.getUid());
