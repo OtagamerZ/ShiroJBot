@@ -968,8 +968,9 @@ public class Helper {
 				.header("Authorization", token)
 				.send(payload.toString());
 
-		if (req.body() == null || req.body().isBlank()) return new JSONObject();
-		else return new JSONObject(req.body());
+		String body = req.body();
+		if (body == null || body.isBlank()) return new JSONObject();
+		else return new JSONObject(body);
 	}
 
 	public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers) {
@@ -977,8 +978,9 @@ public class Helper {
 				.headers(headers)
 				.send(payload.toString());
 
-		if (req.body() == null || req.body().isBlank()) return new JSONObject();
-		else return new JSONObject(req.body());
+		String body = req.body();
+		if (body == null || body.isBlank()) return new JSONObject();
+		else return new JSONObject(body);
 	}
 
 	public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers, String token) {
@@ -987,8 +989,9 @@ public class Helper {
 				.header("Authorization", token)
 				.send(payload.toString());
 
-		if (req.body() == null || req.body().isBlank()) return new JSONObject();
-		else return new JSONObject(req.body());
+		String body = req.body();
+		if (body == null || body.isBlank()) return new JSONObject();
+		else return new JSONObject(body);
 	}
 
 	public static JSONObject post(String endpoint, String payload, Map<String, String> headers, String token) {
@@ -997,8 +1000,9 @@ public class Helper {
 				.header("Authorization", token)
 				.send(payload);
 
-		if (req.body() == null || req.body().isBlank()) return new JSONObject();
-		else return new JSONObject(req.body());
+		String body = req.body();
+		if (body == null || body.isBlank()) return new JSONObject();
+		else return new JSONObject(body);
 	}
 
 	public static JSONObject get(String endpoint, JSONObject payload, Map<String, String> headers, String token) {
@@ -1006,8 +1010,9 @@ public class Helper {
 				.headers(headers)
 				.header("Authorization", token);
 
-		if (req.body() == null || req.body().isBlank()) return new JSONObject();
-		else return new JSONObject(req.body());
+		String body = req.body();
+		if (body == null || body.isBlank()) return new JSONObject();
+		else return new JSONObject(body);
 	}
 
 	public static String urlEncode(JSONObject payload) {
