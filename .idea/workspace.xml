@@ -13,8 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/URankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/URankCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no ranking de usuários">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,17 +163,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -848,14 +838,8 @@
       <workItem from="1604719360081" duration="526000" />
       <workItem from="1604937904201" duration="3494000" />
       <workItem from="1604971618047" duration="8898000" />
-      <workItem from="1605024655250" duration="2884000" />
-    </task>
-    <task id="LOCAL-02839" summary="Correção nos cargos de exceed">
-      <created>1604597583771</created>
-      <option name="number" value="02839" />
-      <option name="presentableId" value="LOCAL-02839" />
-      <option name="project" value="LOCAL" />
-      <updated>1604597583771</updated>
+      <workItem from="1605024655250" duration="4764000" />
+      <workItem from="1605031049773" duration="346000" />
     </task>
     <task id="LOCAL-02840" summary="Correção pequena">
       <created>1604604348852</created>
@@ -1193,7 +1177,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605027228409</updated>
     </task>
-    <option name="localTasksCounter" value="2888" />
+    <task id="LOCAL-02888" summary="Correção no ranking de usuários">
+      <created>1605027607373</created>
+      <option name="number" value="02888" />
+      <option name="presentableId" value="LOCAL-02888" />
+      <option name="project" value="LOCAL" />
+      <updated>1605027607373</updated>
+    </task>
+    <option name="localTasksCounter" value="2889" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1259,7 +1250,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção pequena" />
     <MESSAGE value="Correção na finalização dos jogos" />
     <MESSAGE value="Adição de logger no evento de lembrete de voto" />
     <MESSAGE value="Correção ortográfica;&#10;Aumento nos créditos ganhos ao votar (350 -&gt; 500)" />
@@ -1284,7 +1274,8 @@
     <MESSAGE value="Integração da API do Now Animes" />
     <MESSAGE value="Correção na coleção de Kawaipons" />
     <MESSAGE value="Correção na busca por anime" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na busca por anime" />
+    <MESSAGE value="Correção no ranking de usuários" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no ranking de usuários" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1345,10 +1336,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605027225528">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605027870207">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605027225528" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605027870207" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1604586940676">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1390,10 +1381,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1597148986370" />
-    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1604707509459">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1605028035427">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604587302801" />
+    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605028035427" />
     <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604707509459" />
     <state x="320" y="80" key="SettingsEditor" timestamp="1604666299734">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1412,10 +1403,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605027229633">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605027610742">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605027229633" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605027610742" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604979820347" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1457,10 +1448,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="634" y="385" key="data.grid.dml.preview.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597176288417" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1605025836258">
+    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1605027866975">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605025836258" />
+    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605027866975" />
     <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604459307974" />
     <state x="600" y="294" key="git4idea.ui.GitUnstashDialog" timestamp="1603112264983">
       <screen x="0" y="0" width="1680" height="1010" />

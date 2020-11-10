@@ -277,8 +277,16 @@ public class Champion implements Drawable, Cloneable {
 		return (altDef == -1 ? def : altDef) + bonus.getDef();
 	}
 
+	public int getAltAtk() {
+		return altAtk;
+	}
+
 	public void setAltAtk(int altAtk) {
 		this.altAtk = altAtk;
+	}
+
+	public int getAltDef() {
+		return altDef;
 	}
 
 	public void setAltDef(int altDef) {
