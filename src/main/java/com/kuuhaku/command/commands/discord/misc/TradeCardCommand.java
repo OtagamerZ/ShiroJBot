@@ -187,15 +187,15 @@ public class TradeCardCommand extends Command {
 								  .getRarity()
 								  .getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
 				case 2 -> ((Equipment) product.getRight())
-								  .getTier() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2);
-				default -> hasLoan ? 20000 : 10000;
+								  .getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
+				default -> hasLoan ? 20000 : 5000;
 			};
 
 			if (price < min) {
 				if (hasLoan)
 					channel.sendMessage("❌ | Como esse usuário possui dívida ativa, você não pode oferecer menos que " + min + " créditos por " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + ".").queue();
 				else
-					channel.sendMessage("❌ | Você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
+					channel.sendMessage("❌ | Você não pode oferecer menos que " + min + " créditos por " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + ".").queue();
 				return;
 			}
 
@@ -346,15 +346,15 @@ public class TradeCardCommand extends Command {
 								  .getRarity()
 								  .getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
 				case 2 -> ((Equipment) product.getRight())
-								  .getTier() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2);
-				default -> hasLoan ? 20000 : 10000;
+								  .getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
+				default -> hasLoan ? 20000 : 5000;
 			};
 
 			if (price < min) {
 				if (hasLoan)
-					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode cobrar menos que " + min + " créditos por essa carta.").queue();
+					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode cobrar menos que " + min + " créditos por " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + ".").queue();
 				else
-					channel.sendMessage("❌ | Você não pode cobrar menos que " + min + " créditos por essa carta.").queue();
+					channel.sendMessage("❌ | Você não pode cobrar menos que " + min + " créditos por " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + ".").queue();
 				return;
 			}
 
