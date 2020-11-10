@@ -51,9 +51,9 @@ public class PingCommand extends Command {
 		int fp = (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024);
 		channel.sendMessage(":ping_pong: Pong! ")
 				.flatMap(m -> m.editMessage(m.getContentRaw() + """
-											 %s ms!
-											:floppy_disk: %s MB!
-											:telephone: %s 
+						 %s ms!
+						:floppy_disk: %s MB!
+						:telephone: %s 
 						""".formatted(
 						Main.getInfo().getAPI().getGatewayPing(),
 						fp,
