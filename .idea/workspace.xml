@@ -13,9 +13,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção do sendWebhookMessage">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -844,13 +849,7 @@
       <workItem from="1605036495464" duration="128000" />
       <workItem from="1605037408456" duration="525000" />
       <workItem from="1605038075340" duration="375000" />
-    </task>
-    <task id="LOCAL-02849" summary="Finalização da implementação do endpoint de doações">
-      <created>1604685632396</created>
-      <option name="number" value="02849" />
-      <option name="presentableId" value="LOCAL-02849" />
-      <option name="project" value="LOCAL" />
-      <updated>1604685632396</updated>
+      <workItem from="1605049467479" duration="1862000" />
     </task>
     <task id="LOCAL-02850" summary="Finalização da implementação do endpoint de doações">
       <created>1604687101448</created>
@@ -1188,7 +1187,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605038341695</updated>
     </task>
-    <option name="localTasksCounter" value="2898" />
+    <task id="LOCAL-02898" summary="Correção do sendWebhookMessage">
+      <created>1605046384997</created>
+      <option name="number" value="02898" />
+      <option name="presentableId" value="LOCAL-02898" />
+      <option name="project" value="LOCAL" />
+      <updated>1605046384998</updated>
+    </task>
+    <option name="localTasksCounter" value="2899" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1254,7 +1260,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no comando prune" />
     <MESSAGE value="Correção nas porcentagens do comando MyStats" />
     <MESSAGE value="Remoção dos textos &quot;Emblemas&quot; e &quot;Biografia&quot; do perfil" />
     <MESSAGE value="Lista de membros do Exceed agora é ordenado e mostra o PDC de cada um" />
@@ -1279,7 +1284,8 @@
     <MESSAGE value="Adição de GIFs para certos efeitos no Shoukan" />
     <MESSAGE value="Correção do comando Ping" />
     <MESSAGE value="Melhoria do envio de mensagens das cartas durante o Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria do envio de mensagens das cartas durante o Shoukan" />
+    <MESSAGE value="Correção do sendWebhookMessage" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção do sendWebhookMessage" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1315,11 +1321,11 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1605031356879">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1605052608876">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1605031356879" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604459386926" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605052608876" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1407,11 +1413,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605037774784">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605046390734">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605037774784" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604979820347" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605046390734" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
