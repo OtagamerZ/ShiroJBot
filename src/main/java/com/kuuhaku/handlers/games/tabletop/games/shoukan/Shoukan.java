@@ -346,10 +346,10 @@ public class Shoukan extends Game {
 						for (int i = 0; i < slts.size(); i++) {
 							SlotColumn<Champion, Equipment> column = slts.get(i);
 							if (column.getTop() != null && column.getTop().getCard().getId().equals(requiredCard)) {
-								banishCard(h.getSide(), i, getArena().getSlots().get(h.getSide()));
+								banishCard(false, i, getArena().getSlots().get(h.getSide()));
 								break;
 							} else if (column.getBottom() != null && column.getBottom().getCard().getId().equals(requiredCard)) {
-								unequipCard(h.getSide(), i, getArena().getSlots().get(h.getSide()));
+								banishCard(true, i, getArena().getSlots().get(h.getSide()));
 								break;
 							}
 						}
@@ -593,12 +593,12 @@ public class Shoukan extends Game {
 		});
 	}
 
-	public void banishCard(Side s, int index, List<SlotColumn<Champion, Equipment>> side) {
+	public void destroyCard(Side s, int index, List<SlotColumn<Champion, Equipment>> side) {
 		Champion ch = side.get(index).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath", false)) return;
+		if (ch == null) return;
 		ch.reset();
 		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
-			arena.getBanished().add(ch);
+			arena.getGraveyard().get(s).add(ch);
 		side.get(index).setTop(null);
 		side.forEach(sd -> {
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
@@ -609,6 +609,36 @@ public class Shoukan extends Game {
 				sd.setBottom(null);
 			}
 		});
+	}
+
+	public void banishCard(boolean equipment, int index, List<SlotColumn<Champion, Equipment>> side) {
+		if (equipment) {
+			Equipment eq = side.get(index).getBottom();
+			if (eq == null) return;
+
+			if (side.get(eq.getLinkedTo().getLeft()).getTop() != null)
+				side.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
+			eq.setLinkedTo(null);
+
+			SlotColumn<Champion, Equipment> sd = side.get(index);
+			arena.getBanished().add(eq);
+			sd.setBottom(null);
+		} else {
+			Champion ch = side.get(index).getTop();
+			if (ch == null) return;
+			ch.reset();
+			if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
+				arena.getBanished().add(ch);
+			side.get(index).setTop(null);
+			side.forEach(sd -> {
+				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
+					Equipment eq = sd.getBottom();
+					eq.setLinkedTo(null);
+					arena.getBanished().add(eq);
+					sd.setBottom(null);
+				}
+			});
+		}
 	}
 
 	public void unequipCard(Side s, int index, List<SlotColumn<Champion, Equipment>> side) {
