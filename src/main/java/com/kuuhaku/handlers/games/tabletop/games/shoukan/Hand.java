@@ -182,13 +182,13 @@ public class Hand {
 		List<Drawable> cards = new ArrayList<>(enemy.getCards());
 		Account acc = AccountDAO.getAccount(enemy.getUser().getId());
 
-		for (int i = 0; i < cards.size(); i++)
+		for (int i = 0; i < cards.size(); i++) {
 			g2d.drawImage(cards.get(i).drawCard(acc, false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
-
-		try {
-			BufferedImage so = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/shinigami_overlay.png")));
-			g2d.drawImage(so, 0, 0, null);
-		} catch (IOException ignore) {
+			try {
+				BufferedImage so = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/shinigami_overlay.png")));
+				g2d.drawImage(so, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			} catch (IOException ignore) {
+			}
 		}
 
 		g2d.dispose();
