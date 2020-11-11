@@ -83,27 +83,30 @@ public enum Tag {
 	CARTAS_CROMADAS_25(TagIcons.FOIL25, "Usuário que completou 25% da coleção de Kawaipons cromados.",
 			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards(), 25, 50)),
 
-	CARTAS_CROMADAS_50(TagIcons.FOIL50, "Usuário que completou 50% da coleção de Kawaipons cromados.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards(), 50, 75)),
+    CARTAS_CROMADAS_50(TagIcons.FOIL50, "Usuário que completou 50% da coleção de Kawaipons cromados.",
+            (user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards(), 50, 75)),
 
-	CARTAS_CROMADAS_75(TagIcons.FOIL75, "Usuário que completou 75% da coleção de Kawaipons cromados.",
-			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards(), 75, 100)),
+    CARTAS_CROMADAS_75(TagIcons.FOIL75, "Usuário que completou 75% da coleção de Kawaipons cromados.",
+            (user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards(), 75, 100)),
 
-	CARTAS_CROMADAS_100(TagIcons.FOIL100, "Usuário que completou 100% da coleção de Kawaipons cromados.",
-			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards() == 100),
+    CARTAS_CROMADAS_100(TagIcons.FOIL100, "Usuário que completou 100% da coleção de Kawaipons cromados.",
+            (user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().stream().filter(KawaiponCard::isFoil).count() * 100 / CardDAO.totalCards() == 100),
 
-	EXCEED_VITORIOSO(TagIcons.EXCEED_CHAMPION, "Seu Exceed foi vitorioso neste mês.",
-			(user, member) -> ExceedDAO.hasExceed(user.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(user.getId())));
+    EXCEED_VITORIOSO(TagIcons.EXCEED_CHAMPION, "Seu Exceed foi vitorioso neste mês.",
+            (user, member) -> ExceedDAO.hasExceed(user.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(user.getId()))),
 
-	private final TagIcons emote;
-	private final String description;
-	private final BiFunction<User, Member, Boolean> condition;
+    BUG_HUNTER(TagIcons.BUGHUNTER, "Você ajudou a corrigir muitos bugs na Shiro.",
+            (user, member) -> AccountDAO.getAccount(user.getId()).getBugs() > 10);
 
-	Tag(TagIcons emote, String description, BiFunction<User, Member, Boolean> condition) {
-		this.emote = emote;
-		this.description = description;
-		this.condition = condition;
-	}
+    private final TagIcons emote;
+    private final String description;
+    private final BiFunction<User, Member, Boolean> condition;
+
+    Tag(TagIcons emote, String description, BiFunction<User, Member, Boolean> condition) {
+        this.emote = emote;
+        this.description = description;
+        this.condition = condition;
+    }
 
 	public InputStream getPath(com.kuuhaku.model.persistent.Member mb) throws IOException, NullPointerException {
 		return Helper.getImage(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(Objects.requireNonNull(getEmote(mb)).getId(mb.getLevel()))).getImageUrl());
