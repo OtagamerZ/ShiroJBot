@@ -13,13 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no isLinkedTo dos campeões Shoukan;&#10;Correção no ranking de usuários;">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BugHuntCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Tag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/TagIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/TagIcons.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição do emblema Bug Hunter e do comando para dar pontos de Bug Hunter">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -850,14 +845,7 @@
       <workItem from="1605037408456" duration="525000" />
       <workItem from="1605038075340" duration="375000" />
       <workItem from="1605049467479" duration="2141000" />
-      <workItem from="1605061322520" duration="4482000" />
-    </task>
-    <task id="LOCAL-02853" summary="Correção no comando prune">
-      <created>1604692137138</created>
-      <option name="number" value="02853" />
-      <option name="presentableId" value="LOCAL-02853" />
-      <option name="project" value="LOCAL" />
-      <updated>1604692137138</updated>
+      <workItem from="1605061322520" duration="4910000" />
     </task>
     <task id="LOCAL-02854" summary="Correção nas porcentagens do comando MyStats">
       <created>1604692453491</created>
@@ -1195,7 +1183,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605063096258</updated>
     </task>
-    <option name="localTasksCounter" value="2902" />
+    <task id="LOCAL-02902" summary="Adição do emblema Bug Hunter e do comando para dar pontos de Bug Hunter">
+      <created>1605065863403</created>
+      <option name="number" value="02902" />
+      <option name="presentableId" value="LOCAL-02902" />
+      <option name="project" value="LOCAL" />
+      <updated>1605065863403</updated>
+    </task>
+    <option name="localTasksCounter" value="2903" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1261,7 +1256,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Lista de membros do Exceed agora é ordenado e mostra o PDC de cada um" />
     <MESSAGE value="Adição de hashes nos botões dos jogos para impedir clique múltiplo" />
     <MESSAGE value="Correção no redutor de valores" />
     <MESSAGE value="Correções menores" />
@@ -1286,7 +1280,8 @@
     <MESSAGE value="Correção do sendWebhookMessage" />
     <MESSAGE value="Melhoria na estrutura do Shoukan" />
     <MESSAGE value="Correção no isLinkedTo dos campeões Shoukan;&#10;Correção no ranking de usuários;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no isLinkedTo dos campeões Shoukan;&#10;Correção no ranking de usuários;" />
+    <MESSAGE value="Adição do emblema Bug Hunter e do comando para dar pontos de Bug Hunter" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição do emblema Bug Hunter e do comando para dar pontos de Bug Hunter" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1392,11 +1387,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1597148986370" />
-    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1605028035427">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1605066080212">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605028035427" />
-    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604707509459" />
+    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605066080212" />
     <state x="303" y="75" key="SettingsEditor" timestamp="1605061817984">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1414,11 +1409,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605063099106">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605065871562">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605037774784" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605063099106" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605065871562" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
