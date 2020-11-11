@@ -15,7 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,6 +162,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -847,14 +857,7 @@
       <workItem from="1605049467479" duration="2141000" />
       <workItem from="1605061322520" duration="4910000" />
       <workItem from="1605110211002" duration="2208000" />
-      <workItem from="1605114740147" duration="1359000" />
-    </task>
-    <task id="LOCAL-02859" summary="Correções menores">
-      <created>1604719607258</created>
-      <option name="number" value="02859" />
-      <option name="presentableId" value="LOCAL-02859" />
-      <option name="project" value="LOCAL" />
-      <updated>1604719607258</updated>
+      <workItem from="1605114740147" duration="3395000" />
     </task>
     <task id="LOCAL-02860" summary="Mudanças no perfil agora são globais;&#10;Gatilho ON_TURN dividido em 2 novos gatilhos para melhor sequenciamento de efeitos;">
       <created>1604930438207</created>
@@ -1192,7 +1195,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605111475416</updated>
     </task>
-    <option name="localTasksCounter" value="2908" />
+    <task id="LOCAL-02908" summary="As fusões agora também serão processadas no início de cada turno">
+      <created>1605116658492</created>
+      <option name="number" value="02908" />
+      <option name="presentableId" value="LOCAL-02908" />
+      <option name="project" value="LOCAL" />
+      <updated>1605116658493</updated>
+    </task>
+    <option name="localTasksCounter" value="2909" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1258,7 +1268,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Tentativa de correção do bug de fusões com 3 componentes ou mais" />
     <MESSAGE value="Correção do valor inválido na venda de equipamentos e arenas" />
     <MESSAGE value="Tentativa de correção das fusões com mais de 3 materiais" />
     <MESSAGE value="Corrigido bug quando houvesse uma derrota por meio de efeitos" />
@@ -1283,7 +1292,8 @@
     <MESSAGE value="Correção do erro onde os botões ainda funcionavam após perder por WO" />
     <MESSAGE value="Adição de método destroyCard" />
     <MESSAGE value="Correção na troca de cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na troca de cartas" />
+    <MESSAGE value="As fusões agora também serão processadas no início de cada turno" />
+    <option name="LAST_COMMIT_MESSAGE" value="As fusões agora também serão processadas no início de cada turno" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1319,10 +1329,10 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1605065269736">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1605116528892">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1605031356879" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1605116528892" />
     <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605065269736" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1344,10 +1354,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605111472492">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605116655486">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605111472492" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605116655486" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1604586940676">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1411,10 +1421,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605111479991">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605116660794">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605111479991" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605116660794" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605065871562" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1456,6 +1466,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="634" y="385" key="data.grid.dml.preview.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597176288417" />
+    <state x="570" y="266" key="extract.method.dialog" timestamp="1605116333066">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116333066" />
     <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1605027866975">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1469,10 +1483,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1603310922193" />
-    <state x="540" y="262" key="refactoring.ChangeSignatureDialog" timestamp="1601322355870">
+    <state x="540" y="262" key="refactoring.ChangeSignatureDialog" timestamp="1605116448554">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="540" y="262" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1601322355870" />
+    <state x="540" y="262" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116448554" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1604581770738">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

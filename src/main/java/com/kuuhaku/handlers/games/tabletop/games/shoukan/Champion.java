@@ -128,7 +128,7 @@ public class Champion implements Drawable, Cloneable {
 			if (!data.isBlank()) {
 				g2d.setColor(Color.yellow);
 				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 16));
-				Profile.drawOutlinedText(data, 45, 66, g2d);
+				Profile.drawOutlinedText(data, 20, 66, g2d);
 			}
 
 			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
