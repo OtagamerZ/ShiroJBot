@@ -701,7 +701,7 @@ public class Shoukan extends Game {
 	public void convertEquipments(Champion target, int pos, Side side, int index) {
 		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
-		if (ch == null) return;
+		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert", false)) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
 		for (int i = 0; i < 5; i++) {
 			Equipment eq = slts.get(i).getBottom();
