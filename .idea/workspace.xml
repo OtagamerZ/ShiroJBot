@@ -13,14 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção do sendWebhookMessage">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na estrutura do Shoukan">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/yagog.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,11 +113,11 @@
     <property name="last.edited.regexp" value="Entrar 123 adwa" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/gifs" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.ide.settings.spelling" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Java" />
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
@@ -849,14 +844,8 @@
       <workItem from="1605036495464" duration="128000" />
       <workItem from="1605037408456" duration="525000" />
       <workItem from="1605038075340" duration="375000" />
-      <workItem from="1605049467479" duration="1862000" />
-    </task>
-    <task id="LOCAL-02850" summary="Finalização da implementação do endpoint de doações">
-      <created>1604687101448</created>
-      <option name="number" value="02850" />
-      <option name="presentableId" value="LOCAL-02850" />
-      <option name="project" value="LOCAL" />
-      <updated>1604687101448</updated>
+      <workItem from="1605049467479" duration="2141000" />
+      <workItem from="1605061322520" duration="1299000" />
     </task>
     <task id="LOCAL-02851" summary="Finalização da implementação do endpoint de doações">
       <created>1604687338291</created>
@@ -1194,7 +1183,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605046384998</updated>
     </task>
-    <option name="localTasksCounter" value="2899" />
+    <task id="LOCAL-02899" summary="Melhoria na estrutura do Shoukan">
+      <created>1605053035470</created>
+      <option name="number" value="02899" />
+      <option name="presentableId" value="LOCAL-02899" />
+      <option name="project" value="LOCAL" />
+      <updated>1605053035470</updated>
+    </task>
+    <option name="localTasksCounter" value="2900" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1260,7 +1256,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nas porcentagens do comando MyStats" />
     <MESSAGE value="Remoção dos textos &quot;Emblemas&quot; e &quot;Biografia&quot; do perfil" />
     <MESSAGE value="Lista de membros do Exceed agora é ordenado e mostra o PDC de cada um" />
     <MESSAGE value="Adição de hashes nos botões dos jogos para impedir clique múltiplo" />
@@ -1285,7 +1280,8 @@
     <MESSAGE value="Correção do comando Ping" />
     <MESSAGE value="Melhoria do envio de mensagens das cartas durante o Shoukan" />
     <MESSAGE value="Correção do sendWebhookMessage" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção do sendWebhookMessage" />
+    <MESSAGE value="Melhoria na estrutura do Shoukan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria na estrutura do Shoukan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1396,11 +1392,11 @@
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605028035427" />
     <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604707509459" />
-    <state x="320" y="80" key="SettingsEditor" timestamp="1604666299734">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="303" y="75" key="SettingsEditor" timestamp="1605061817984">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1604666299734" />
-    <state x="303" y="75" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1603513162270" />
+    <state x="303" y="75" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1605061817984" />
     <state x="92" y="92" width="1496" height="826" key="ShowDiffWithBranchDialog" timestamp="1601645223790">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1413,11 +1409,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605046390734">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605053036813">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605037774784" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605046390734" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605053036813" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
