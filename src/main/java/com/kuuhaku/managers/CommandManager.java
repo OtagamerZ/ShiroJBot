@@ -115,6 +115,9 @@ public class CommandManager {
 			put(SweepCommand.class, new Argument(
 					"sweep", new String[]{"limpar", "cleanse"}, "cmd_sweep", DEV, true
 			));
+			put(BugHuntCommand.class, new Argument(
+					"bughunt", new String[]{"hunter", "debugador"}, REQ_MENTION, "cmd_bug-hunter", DEV, false
+			));
 
 			//SUPPORT
 			put(BlockCommand.class, new Argument(
