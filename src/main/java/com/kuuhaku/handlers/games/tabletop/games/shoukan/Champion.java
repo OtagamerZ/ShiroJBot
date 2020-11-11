@@ -80,6 +80,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient int altDef = -1;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
+	private transient int position = -1;
 
 	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
 		this.card = card;
@@ -380,10 +381,19 @@ public class Champion implements Drawable, Cloneable {
 		mDef = 0;
 		altAtk = -1;
 		altDef = -1;
+		position = -1;
 	}
 
 	public Set<String> getRequiredCards() {
 		return requiredCards;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
 	}
 
 	@Override
@@ -400,7 +410,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	@Override
-	public Drawable copy() {
+	public Champion copy() {
 		try {
 			Champion c = (Champion) clone();
 			c.linkedTo = new ArrayList<>();
