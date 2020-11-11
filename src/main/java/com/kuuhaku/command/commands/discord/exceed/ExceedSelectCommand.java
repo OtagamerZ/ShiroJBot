@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.discord.exceed;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
@@ -102,18 +103,18 @@ public class ExceedSelectCommand extends Command {
 				String e = ExceedDAO.getExceed(author.getId());
 
 				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + e + "**!").queue(null, Helper::doNothing);
-				/*ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(e -> {
-							User u = Main.getInfo().getUserByID(e);
+				ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(exm -> {
+							User u = Main.getInfo().getUserByID(exm);
 							if (u != null) {
 								u.openPrivateChannel().queue(c -> {
 									try {
-										c.sendMessage(author.getAsTag() + " juntou-se à " + ex + ", hooray!! :tada:").queue(null, Helper::doNothing);
+										c.sendMessage("**(Não responda esta mensagem)** | " + author.getAsTag() + " juntou-se à " + ex + ", hooray!! :tada:").queue(null, Helper::doNothing);
 									} catch (Exception ignore) {
 									}
 								}, Helper::doNothing);
 							}
 						}
-				);*/
+				);
 			} else {
 				m.editMessage("❌ | Você já pertence à um exceed, não é possível trocá-lo.").queue();
 			}
