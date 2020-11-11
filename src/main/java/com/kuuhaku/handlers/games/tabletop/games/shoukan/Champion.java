@@ -247,7 +247,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean isLinkedTo(String name) {
-		return linkedTo.stream().anyMatch(e -> e != null && e.getCard().getName().equalsIgnoreCase(name));
+		return linkedTo.stream().anyMatch(e -> e != null && e.getCard().getId().equalsIgnoreCase(name));
 	}
 
 	public void clearLinkedTo() {
