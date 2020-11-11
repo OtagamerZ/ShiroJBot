@@ -70,7 +70,13 @@ public class Hitotsu extends Game {
 		this.channel = channel;
 
 		setActions(
-				s -> close(),
+				s -> {
+					close();
+					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
+							.queue(msg -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							});
+				},
 				s -> {
 					getBoard().leaveGame();
 					resetTimer();
@@ -81,7 +87,6 @@ public class Hitotsu extends Game {
 								.queue(msg -> {
 									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 								});
-						close();
 					}
 				}
 		);

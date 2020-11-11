@@ -86,9 +86,19 @@ public class Shoukan extends Game {
 		);
 
 		setActions(
-				s -> close(),
+				s -> {
+					close();
+					channel.sendFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+							.queue(msg -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							});
+				},
 				s -> {
 					if (custom == null) getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
+					channel.sendFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+							.queue(msg -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							});
 				}
 		);
 	}

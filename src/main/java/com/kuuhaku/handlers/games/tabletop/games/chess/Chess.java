@@ -104,8 +104,20 @@ public class Chess extends Game {
 		});
 
 		setActions(
-				s -> close(),
-				s -> getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId())
+				s -> {
+					close();
+					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
+							.queue(msg -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							});
+				},
+				s -> {
+					getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
+					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
+							.queue(msg -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							});
+				}
 		);
 	}
 
