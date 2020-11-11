@@ -622,18 +622,18 @@ public class TradeCardCommand extends Command {
 						switch (types[1]) {
 							case 1 -> {
 								KawaiponCard kc = (KawaiponCard) products[1].getRight();
-								target.addCard(kc);
-								kp.removeCard(kc);
+								target.removeCard(kc);
+								kp.addCard(kc);
 							}
 							case 2 -> {
 								Equipment eq = (Equipment) products[1].getRight();
-								target.addEquipment(eq);
-								kp.removeEquipment(eq);
+								target.removeEquipment(eq);
+								kp.addEquipment(eq);
 							}
 							default -> {
 								Field f = (Field) products[1].getRight();
-								target.addField(f);
-								kp.removeField(f);
+								target.removeField(f);
+								kp.addField(f);
 							}
 						}
 
