@@ -144,14 +144,14 @@ public class Shoukan extends Game {
 
 		if (phase == Phase.PLAN) {
 			try {
-				List<SlotColumn<Drawable, Drawable>> slots = arena.getSlots().get(h.getSide());
+				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(h.getSide());
 				if (args.length == 1) {
 					if (index < 0 || index >= slots.size()) {
 						channel.sendMessage("❌ | Índice inválido.").queue(null, Helper::doNothing);
 						return;
 					}
 
-					Champion c = (Champion) slots.get(index).getTop();
+					Champion c = slots.get(index).getTop();
 
 					if (c == null) {
 						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
@@ -208,7 +208,7 @@ public class Shoukan extends Game {
 					}
 
 					int dest = Integer.parseInt(args[1]) - 1;
-					SlotColumn<Drawable, Drawable> slot = slots.get(dest);
+					SlotColumn<Champion, Equipment> slot = slots.get(dest);
 
 					if (slot.getBottom() != null) {
 						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
@@ -221,23 +221,23 @@ public class Shoukan extends Game {
 					}
 					int toEquip = Integer.parseInt(args[2]) - 1;
 
-					SlotColumn<Drawable, Drawable> target = slots.get(toEquip);
+					SlotColumn<Champion, Equipment> target = slots.get(toEquip);
 
 					if (target.getTop() == null) {
 						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
 						return;
 					}
 
-					Drawable tp = d.copy();
+					Equipment tp = (Equipment) d.copy();
 					tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slot.setBottom(tp);
-					Champion t = (Champion) target.getTop();
+					Champion t = target.getTop();
 					if (t.isFlipped()) {
 						t.setFlipped(false);
 						t.setDefending(true);
 					}
-					t.addLinkedTo((Equipment) tp);
-					((Equipment) tp).setLinkedTo(Pair.of(toEquip, t));
+					t.addLinkedTo(tp);
+					tp.setLinkedTo(Pair.of(toEquip, t));
 					if (t.hasEffect() && !t.isFlipped()) {
 						t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
 						if (postCombat()) return;
@@ -257,7 +257,7 @@ public class Shoukan extends Game {
 					}
 					int dest = Integer.parseInt(args[1]) - 1;
 
-					SlotColumn<Drawable, Drawable> slot = slots.get(dest);
+					SlotColumn<Champion, Equipment> slot = slots.get(dest);
 
 					if (slot.getTop() != null) {
 						channel.sendMessage("❌ | Já existe uma carta nessa casa.").queue(null, Helper::doNothing);
@@ -300,12 +300,12 @@ public class Shoukan extends Game {
 				if (d instanceof Champion)
 					h.removeMana(((Champion) d).getMana());
 
-				List<Drawable> champsInField = arena.getSlots().get(h.getSide())
+				List<Champion> champsInField = arena.getSlots().get(h.getSide())
 						.stream()
 						.map(SlotColumn::getTop)
 						.collect(Collectors.toList());
 
-				List<Drawable> equipsInField = arena.getSlots().get(h.getSide())
+				List<Equipment> equipsInField = arena.getSlots().get(h.getSide())
 						.stream()
 						.map(SlotColumn::getBottom)
 						.collect(Collectors.toList());
@@ -330,11 +330,11 @@ public class Shoukan extends Game {
 						.orElse(null);
 
 				if (aFusion != null) {
-					List<SlotColumn<Drawable, Drawable>> slts = arena.getSlots().get(h.getSide());
+					List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(h.getSide());
 
 					for (String requiredCard : aFusion.getRequiredCards()) {
 						for (int i = 0; i < slts.size(); i++) {
-							SlotColumn<Drawable, Drawable> column = slts.get(i);
+							SlotColumn<Champion, Equipment> column = slts.get(i);
 							if (column.getTop() != null && column.getTop().getCard().getId().equals(requiredCard)) {
 								banishCard(h.getSide(), i, getArena().getSlots().get(h.getSide()));
 								break;
@@ -345,7 +345,7 @@ public class Shoukan extends Game {
 						}
 					}
 
-					for (SlotColumn<Drawable, Drawable> slt : slts) {
+					for (SlotColumn<Champion, Equipment> slt : slts) {
 						if (slt.getTop() == null) {
 							aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 							slt.setTop(aFusion.copy());
@@ -381,8 +381,8 @@ public class Shoukan extends Game {
 
 				int[] is = {index, args.length == 1 ? 0 : Integer.parseInt(args[1]) - 1};
 
-				List<SlotColumn<Drawable, Drawable>> yourSide = arena.getSlots().get(h.getSide());
-				List<SlotColumn<Drawable, Drawable>> hisSide = arena.getSlots().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+				List<SlotColumn<Champion, Equipment>> yourSide = arena.getSlots().get(h.getSide());
+				List<SlotColumn<Champion, Equipment>> hisSide = arena.getSlots().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
 
 				if (args.length == 1) {
 					if (is[0] < 0 || is[0] >= yourSide.size()) {
@@ -390,7 +390,7 @@ public class Shoukan extends Game {
 						return;
 					}
 
-					Champion c = (Champion) yourSide.get(is[0]).getTop();
+					Champion c = yourSide.get(is[0]).getTop();
 
 					if (c == null) {
 						channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
@@ -433,8 +433,8 @@ public class Shoukan extends Game {
 					return;
 				}
 
-				Champion yours = (Champion) yourSide.get(is[0]).getTop();
-				Champion his = (Champion) hisSide.get(is[1]).getTop();
+				Champion yours = yourSide.get(is[0]).getTop();
+				Champion his = hisSide.get(is[1]).getTop();
 
 				if (yours == null || his == null) {
 					channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
@@ -565,16 +565,16 @@ public class Shoukan extends Game {
 		}
 	}
 
-	public void killCard(Side s, int index, List<SlotColumn<Drawable, Drawable>> side) {
-		Champion ch = (Champion) side.get(index).getTop();
+	public void killCard(Side s, int index, List<SlotColumn<Champion, Equipment>> side) {
+		Champion ch = side.get(index).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath", false)) return;
 		ch.reset();
 		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
 			arena.getGraveyard().get(s).add(ch);
 		side.get(index).setTop(null);
 		side.forEach(sd -> {
-			if (sd.getBottom() != null && ((Equipment) sd.getBottom()).getLinkedTo().getLeft() == index) {
-				Equipment eq = (Equipment) sd.getBottom();
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
+				Equipment eq = sd.getBottom();
 				eq.setLinkedTo(null);
 				if (eq.getTier() >= 4) arena.getBanished().add(eq);
 				else arena.getGraveyard().get(s).add(eq);
@@ -583,16 +583,16 @@ public class Shoukan extends Game {
 		});
 	}
 
-	public void banishCard(Side s, int index, List<SlotColumn<Drawable, Drawable>> side) {
-		Champion ch = (Champion) side.get(index).getTop();
+	public void banishCard(Side s, int index, List<SlotColumn<Champion, Equipment>> side) {
+		Champion ch = side.get(index).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath", false)) return;
 		ch.reset();
 		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
 			arena.getBanished().add(ch);
 		side.get(index).setTop(null);
 		side.forEach(sd -> {
-			if (sd.getBottom() != null && ((Equipment) sd.getBottom()).getLinkedTo().getLeft() == index) {
-				Equipment eq = (Equipment) sd.getBottom();
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
+				Equipment eq = sd.getBottom();
 				eq.setLinkedTo(null);
 				if (eq.getTier() >= 4) arena.getBanished().add(eq);
 				else arena.getGraveyard().get(s).add(eq);
@@ -601,15 +601,15 @@ public class Shoukan extends Game {
 		});
 	}
 
-	public void unequipCard(Side s, int index, List<SlotColumn<Drawable, Drawable>> side) {
-		Equipment eq = (Equipment) side.get(index).getBottom();
+	public void unequipCard(Side s, int index, List<SlotColumn<Champion, Equipment>> side) {
+		Equipment eq = side.get(index).getBottom();
 		if (eq == null) return;
 
 		if (side.get(eq.getLinkedTo().getLeft()).getTop() != null)
-			((Champion) side.get(eq.getLinkedTo().getLeft()).getTop()).removeLinkedTo(eq);
+			side.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
 		eq.setLinkedTo(null);
 
-		SlotColumn<Drawable, Drawable> sd = side.get(index);
+		SlotColumn<Champion, Equipment> sd = side.get(index);
 		arena.getGraveyard().get(s).add(eq);
 		sd.setBottom(null);
 	}
@@ -626,8 +626,8 @@ public class Shoukan extends Game {
 		return hands.values().stream().filter(h -> h.getUser().getId().equals(id)).findFirst().orElseThrow();
 	}
 
-	public SlotColumn<Drawable, Drawable> getFirstAvailableSlot(Side s, boolean top) {
-		for (SlotColumn<Drawable, Drawable> slot : arena.getSlots().get(s)) {
+	public SlotColumn<Champion, Equipment> getFirstAvailableSlot(Side s, boolean top) {
+		for (SlotColumn<Champion, Equipment> slot : arena.getSlots().get(s)) {
 			if (top ? slot.getTop() == null : slot.getBottom() == null)
 				return slot;
 		}
@@ -636,17 +636,17 @@ public class Shoukan extends Game {
 
 	public void convertCard(Side side, int index) {
 		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
-		Champion ch = (Champion) getArena().getSlots().get(his).get(index).getTop();
+		Champion ch = getArena().getSlots().get(his).get(index).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert", false)) return;
-		SlotColumn<Drawable, Drawable> sc = getFirstAvailableSlot(side, true);
+		SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(side, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
 			ch.setAcc(AccountDAO.getAccount(getHands().get(side).getUser().getId()));
 			sc.setTop(ch);
-			List<SlotColumn<Drawable, Drawable>> slts = getArena().getSlots().get(his);
+			List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
 			slts.get(index).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
-				if (slts.get(i).getBottom() != null && ((Equipment) slts.get(i).getBottom()).getLinkedTo().getLeft() == index)
+				if (slts.get(i).getBottom() != null && slts.get(i).getBottom().getLinkedTo().getLeft() == index)
 					unequipCard(his, i, slts);
 			}
 		}
@@ -654,13 +654,13 @@ public class Shoukan extends Game {
 
 	public void convertEquipments(Champion target, int pos, Side side, int index) {
 		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
-		Champion ch = (Champion) getArena().getSlots().get(his).get(index).getTop();
+		Champion ch = getArena().getSlots().get(his).get(index).getTop();
 		if (ch == null) return;
-		List<SlotColumn<Drawable, Drawable>> slts = getArena().getSlots().get(his);
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
 		for (int i = 0; i < 5; i++) {
-			Equipment eq = (Equipment) slts.get(i).getBottom();
+			Equipment eq = slts.get(i).getBottom();
 			if (eq != null && eq.getLinkedTo().getLeft() == index) {
-				SlotColumn<Drawable, Drawable> sc = getFirstAvailableSlot(side, false);
+				SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(side, false);
 				if (sc != null) {
 					ch.removeLinkedTo(eq);
 					slts.get(i).setBottom(null);
@@ -709,9 +709,9 @@ public class Shoukan extends Game {
 				User u = getCurrent();
 
 				AtomicReference<Hand> h = new AtomicReference<>(getHandById(getCurrent().getId()));
-				List<SlotColumn<Drawable, Drawable>> slots = arena.getSlots().get(h.get().getSide());
+				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(h.get().getSide());
 				for (int i = 0; i < slots.size(); i++) {
-					Champion c = (Champion) slots.get(i).getTop();
+					Champion c = slots.get(i).getTop();
 					if (c != null) {
 						c.setAvailable(true);
 						c.resetAttribs();
@@ -728,7 +728,7 @@ public class Shoukan extends Game {
 				h.set(getHandById(getCurrent().getId()));
 				slots = arena.getSlots().get(h.get().getSide());
 				for (int i = 0; i < slots.size(); i++) {
-					Champion c = (Champion) slots.get(i).getTop();
+					Champion c = slots.get(i).getTop();
 					if (c != null) {
 						if (c.hasEffect()) {
 							c.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
@@ -816,7 +816,7 @@ public class Shoukan extends Game {
 				Hand h = getHandById(getCurrent().getId());
 				arena.getSlots().get(getHandById(mb.getId()).getSide()).forEach(s -> {
 					if (s.getTop() != null) {
-						Champion c = (Champion) s.getTop();
+						Champion c = s.getTop();
 						c.setAvailable(true);
 						c.resetAttribs();
 					}

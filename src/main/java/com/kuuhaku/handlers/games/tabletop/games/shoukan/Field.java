@@ -197,9 +197,9 @@ public class Field implements Drawable, Cloneable {
     }
 
     @Override
-    public Drawable copy() {
+    public Field copy() {
         try {
-            return (Drawable) clone();
+            return (Field) clone();
         } catch (CloneNotSupportedException e) {
             return null;
         }
