@@ -79,24 +79,27 @@ public class Account {
 	@Column(columnDefinition = "TEXT")
 	private String buffs = "{}";
 
-	@Enumerated(value = EnumType.STRING)
-	private FrameColor frame = FrameColor.PINK;
+    @Enumerated(value = EnumType.STRING)
+    private FrameColor frame = FrameColor.PINK;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String ultimate = "";
+    @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+    private String ultimate = "";
 
-	@Temporal(TemporalType.DATE)
-	private Calendar lastDaily = null;
+    @Temporal(TemporalType.DATE)
+    private Calendar lastDaily = null;
 
-	public String getUserId() {
-		return userId;
-	}
+    @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+    private int bugs = 0;
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	public String getTwitchId() {
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getTwitchId() {
 		return twitchId;
 	}
 
@@ -309,14 +312,26 @@ public class Account {
 		if (ultimate != null && !ultimate.isBlank()) {
 			Kawaipon kp = KawaiponDAO.getKawaipon(userId);
 
-			AnimeName an = AnimeName.valueOf(ultimate);
-			if (CardDAO.totalCards(an) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an) && !k.isFoil()).count())
-				return ultimate;
-		}
-		return "";
-	}
+            AnimeName an = AnimeName.valueOf(ultimate);
+            if (CardDAO.totalCards(an) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an) && !k.isFoil()).count())
+                return ultimate;
+        }
+        return "";
+    }
 
-	public void setUltimate(String ultimate) {
-		this.ultimate = ultimate;
-	}
+    public void setUltimate(String ultimate) {
+        this.ultimate = ultimate;
+    }
+
+    public int getBugs() {
+        return bugs;
+    }
+
+    public void addBug() {
+        this.bugs++;
+    }
+
+    public void setBugs(int bugs) {
+        this.bugs = bugs;
+    }
 }
