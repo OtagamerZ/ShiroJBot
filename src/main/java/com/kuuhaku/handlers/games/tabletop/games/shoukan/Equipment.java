@@ -210,9 +210,9 @@ public class Equipment implements Drawable, Cloneable {
     }
 
     @Override
-    public Drawable copy() {
+    public Equipment copy() {
         try {
-            return (Drawable) clone();
+            return (Equipment) clone();
         } catch (CloneNotSupportedException e) {
             return null;
         }

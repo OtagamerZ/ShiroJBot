@@ -36,7 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Arena {
-	private final Map<Side, List<SlotColumn<Drawable, Drawable>>> slots;
+	private final Map<Side, List<SlotColumn<Champion, Equipment>>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
 	private final LinkedList<Drawable> banished;
 	private Field field = null;
@@ -65,7 +65,7 @@ public class Arena {
 		this.banished = new LinkedList<>();
 	}
 
-	public Map<Side, List<SlotColumn<Drawable, Drawable>>> getSlots() {
+	public Map<Side, List<SlotColumn<Champion, Equipment>>> getSlots() {
 		return slots;
 	}
 
@@ -104,15 +104,15 @@ public class Arena {
 				Profile.printCenteredString(StringUtils.abbreviate(hands.get(key).getUser().getName(), 18), 626, key == Side.TOP ? 1125 : 499, key == Side.TOP ? 838 : 975, g2d);
 
 				for (int i = 0; i < value.size(); i++) {
-					SlotColumn<Drawable, Drawable> c = value.get(i);
+					SlotColumn<Champion, Equipment> c = value.get(i);
 					switch (key) {
 						case TOP -> {
 							if (c.getTop() != null) {
-								Drawable d = c.getTop();
+								Champion d = c.getTop();
 								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 387, null);
 							}
 							if (c.getBottom() != null) {
-								Drawable d = c.getBottom();
+								Equipment d = c.getBottom();
 								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 0, null);
 							}
 							if (grv.size() > 0)
@@ -125,11 +125,11 @@ public class Arena {
 						}
 						case BOTTOM -> {
 							if (c.getTop() != null) {
-								Drawable d = c.getTop();
+								Champion d = c.getTop();
 								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 1013, null);
 							}
 							if (c.getBottom() != null) {
-								Drawable d = c.getBottom();
+								Equipment d = c.getBottom();
 								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 1400, null);
 							}
 							if (grv.size() > 0)
