@@ -310,64 +310,7 @@ public class Shoukan extends Game {
 				if (d instanceof Champion)
 					h.removeMana(((Champion) d).getMana());
 
-				List<Champion> champsInField = arena.getSlots().get(h.getSide())
-						.stream()
-						.map(SlotColumn::getTop)
-						.collect(Collectors.toList());
-
-				List<Equipment> equipsInField = arena.getSlots().get(h.getSide())
-						.stream()
-						.map(SlotColumn::getBottom)
-						.collect(Collectors.toList());
-
-				List<String> allCards = new ArrayList<>() {{
-					addAll(Stream.of(champsInField, equipsInField)
-							.flatMap(List::stream)
-							.filter(Objects::nonNull)
-							.map(dr -> dr.getCard().getId())
-							.collect(Collectors.toList())
-					);
-				}};
-
-				Champion aFusion = ultimates
-						.stream()
-						.filter(f ->
-								f.getRequiredCards().size() > 0 &&
-								allCards.containsAll(f.getRequiredCards()) &&
-								h.getMana() >= f.getMana()
-						)
-						.findFirst()
-						.orElse(null);
-
-				if (aFusion != null) {
-					List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(h.getSide());
-
-					for (String requiredCard : aFusion.getRequiredCards()) {
-						for (int i = 0; i < slts.size(); i++) {
-							SlotColumn<Champion, Equipment> column = slts.get(i);
-							if (column.getTop() != null && column.getTop().getCard().getId().equals(requiredCard)) {
-								banishCard(false, i, getArena().getSlots().get(h.getSide()));
-								break;
-							} else if (column.getBottom() != null && column.getBottom().getCard().getId().equals(requiredCard)) {
-								banishCard(true, i, getArena().getSlots().get(h.getSide()));
-								break;
-							}
-						}
-					}
-
-					for (SlotColumn<Champion, Equipment> slt : slts) {
-						if (slt.getTop() == null) {
-							aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
-							slt.setTop(aFusion.copy());
-							if (aFusion.hasEffect() && !aFusion.isFlipped()) {
-								aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, Integer.parseInt(args[1]) - 1, h.getSide(), Duelists.of(aFusion, Integer.parseInt(args[1]) - 1, null, -1), channel));
-								if (postCombat()) return;
-							}
-							h.removeMana(aFusion.getMana());
-							break;
-						}
-					}
-				}
+				if (makeFusion(h)) return;
 
 				channel.sendFile(Helper.getBytes(arena.render(hands), "jpg"), "board.jpg")
 						.queue(s -> {
@@ -575,6 +518,69 @@ public class Shoukan extends Game {
 		}
 	}
 
+	private boolean makeFusion(Hand h) {
+		List<Champion> champsInField = arena.getSlots().get(h.getSide())
+				.stream()
+				.map(SlotColumn::getTop)
+				.collect(Collectors.toList());
+
+		List<Equipment> equipsInField = arena.getSlots().get(h.getSide())
+				.stream()
+				.map(SlotColumn::getBottom)
+				.collect(Collectors.toList());
+
+		List<String> allCards = new ArrayList<>() {{
+			addAll(Stream.of(champsInField, equipsInField)
+					.flatMap(List::stream)
+					.filter(Objects::nonNull)
+					.map(dr -> dr.getCard().getId())
+					.collect(Collectors.toList())
+			);
+		}};
+
+		Champion aFusion = ultimates
+				.stream()
+				.filter(f ->
+						f.getRequiredCards().size() > 0 &&
+						allCards.containsAll(f.getRequiredCards()) &&
+						h.getMana() >= f.getMana()
+				)
+				.findFirst()
+				.orElse(null);
+
+		if (aFusion != null) {
+			List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(h.getSide());
+
+			for (String requiredCard : aFusion.getRequiredCards()) {
+				for (int i = 0; i < slts.size(); i++) {
+					SlotColumn<Champion, Equipment> column = slts.get(i);
+					if (column.getTop() != null && column.getTop().getCard().getId().equals(requiredCard)) {
+						banishCard(false, i, getArena().getSlots().get(h.getSide()));
+						break;
+					} else if (column.getBottom() != null && column.getBottom().getCard().getId().equals(requiredCard)) {
+						banishCard(true, i, getArena().getSlots().get(h.getSide()));
+						break;
+					}
+				}
+			}
+
+			for (int i = 0; i < slts.size(); i++) {
+				SlotColumn<Champion, Equipment> slt = slts.get(i);
+				if (slt.getTop() == null) {
+					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
+					slt.setTop(aFusion.copy());
+					if (aFusion.hasEffect() && !aFusion.isFlipped()) {
+						aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, i, h.getSide(), Duelists.of(aFusion, i, null, -1), channel));
+						if (postCombat()) return true;
+					}
+					h.removeMana(aFusion.getMana());
+					break;
+				}
+			}
+		}
+		return false;
+	}
+
 	public void killCard(Side s, int index, List<SlotColumn<Champion, Equipment>> side) {
 		Champion ch = side.get(index).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath", false)) return;
@@ -773,6 +779,7 @@ public class Shoukan extends Game {
 						if (c.hasEffect()) {
 							c.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
 							if (postCombat()) return;
+							else if (makeFusion(h.get())) return;
 						}
 					}
 				}
