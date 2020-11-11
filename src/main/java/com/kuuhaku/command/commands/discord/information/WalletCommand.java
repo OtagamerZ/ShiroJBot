@@ -57,7 +57,7 @@ public class WalletCommand extends Command {
 		eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-title"), author.getName()));
 		eb.addField(
 				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-field-title"), acc.getBalance()),
-				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-loan"), acc.getLoan())
+				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-loan-bugs"), acc.getLoan(), acc.getBugs())
 				, true
 		);
 		eb.addField(
