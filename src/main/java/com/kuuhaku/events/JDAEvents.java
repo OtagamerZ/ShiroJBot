@@ -20,12 +20,14 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.controller.postgresql.RelayDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.PermaBlock;
 import com.kuuhaku.utils.Helper;
@@ -238,6 +240,14 @@ public class JDAEvents extends ListenerAdapter {
 			}
 		} else {
 			try {
+				if (event.getMessage().getContentRaw().equalsIgnoreCase("silenciar")) {
+					Account acc = AccountDAO.getAccount(event.getAuthor().getId());
+					acc.setReceiveNotifs(false);
+					AccountDAO.saveAccount(acc);
+
+					event.getChannel().sendMessage("Você não receberá mais notificações de Exceed.").queue();
+					return;
+				}
 				event.getAuthor().openPrivateChannel().queue(c -> {
 					if (RelayDAO.blockedList().contains(event.getAuthor().getId())) {
 						c.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-blocked")).queue();

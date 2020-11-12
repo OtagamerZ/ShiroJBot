@@ -15,7 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no comando de cor do perfil">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ProfileColorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ProfileColorCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -852,13 +854,6 @@
       <workItem from="1605184469223" duration="4294000" />
       <workItem from="1605198396729" duration="6337000" />
     </task>
-    <task id="LOCAL-02868" summary="Tentativa de correção das fusões com mais de 3 materiais">
-      <created>1604976554984</created>
-      <option name="number" value="02868" />
-      <option name="presentableId" value="LOCAL-02868" />
-      <option name="project" value="LOCAL" />
-      <updated>1604976554984</updated>
-    </task>
     <task id="LOCAL-02869" summary="Tentativa de correção das fusões com mais de 3 materiais">
       <created>1604976827489</created>
       <option name="number" value="02869" />
@@ -1195,7 +1190,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605200370747</updated>
     </task>
-    <option name="localTasksCounter" value="2917" />
+    <task id="LOCAL-02917" summary="Correção no comando de cor do perfil">
+      <created>1605221582991</created>
+      <option name="number" value="02917" />
+      <option name="presentableId" value="LOCAL-02917" />
+      <option name="project" value="LOCAL" />
+      <updated>1605221582992</updated>
+    </task>
+    <option name="localTasksCounter" value="2918" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1322,11 +1324,11 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1605192088802">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1605223306818">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1605192088802" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605065269736" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605223306818" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1414,11 +1416,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605200372111">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605221590668">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605200372111" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605065871562" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605221590668" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
