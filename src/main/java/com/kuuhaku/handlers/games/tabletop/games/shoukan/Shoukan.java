@@ -759,7 +759,11 @@ public class Shoukan extends Game {
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
-						c.setAvailable(true);
+						if (c.getStun() > 0) {
+							c.reduceStun();
+							c.setDefending(true);
+						} else c.setAvailable(true);
+
 						c.resetAttribs();
 						if (c.hasEffect()) {
 							c.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
@@ -864,7 +868,10 @@ public class Shoukan extends Game {
 				arena.getSlots().get(getHandById(mb.getId()).getSide()).forEach(s -> {
 					if (s.getTop() != null) {
 						Champion c = s.getTop();
-						c.setAvailable(true);
+						if (c.getStun() > 0) {
+							c.reduceStun();
+							c.setDefending(true);
+						} else c.setAvailable(true);
 						c.resetAttribs();
 					}
 				});
