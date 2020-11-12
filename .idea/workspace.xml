@@ -13,9 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado efeito de atordoamento no Shoukan">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -850,14 +849,7 @@
       <workItem from="1605114740147" duration="3625000" />
       <workItem from="1605120748735" duration="4678000" />
       <workItem from="1605184469223" duration="4294000" />
-      <workItem from="1605198396729" duration="1911000" />
-    </task>
-    <task id="LOCAL-02867" summary="Tentativa de correção das fusões com mais de 3 materiais">
-      <created>1604976229905</created>
-      <option name="number" value="02867" />
-      <option name="presentableId" value="LOCAL-02867" />
-      <option name="project" value="LOCAL" />
-      <updated>1604976229905</updated>
+      <workItem from="1605198396729" duration="6337000" />
     </task>
     <task id="LOCAL-02868" summary="Tentativa de correção das fusões com mais de 3 materiais">
       <created>1604976554984</created>
@@ -1195,7 +1187,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605193211495</updated>
     </task>
-    <option name="localTasksCounter" value="2916" />
+    <task id="LOCAL-02916" summary="Implementação de métodos auxiliares no EffectParameters">
+      <created>1605200370746</created>
+      <option name="number" value="02916" />
+      <option name="presentableId" value="LOCAL-02916" />
+      <option name="project" value="LOCAL" />
+      <updated>1605200370747</updated>
+    </task>
+    <option name="localTasksCounter" value="2917" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1261,7 +1260,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Integração da API do Now Animes" />
     <MESSAGE value="Correção na coleção de Kawaipons" />
     <MESSAGE value="Correção na busca por anime" />
     <MESSAGE value="Correção no ranking de usuários" />
@@ -1286,7 +1284,8 @@
     <MESSAGE value="Correção basica" />
     <MESSAGE value="Shiro notifica sobre novos membros do Exceed novamente" />
     <MESSAGE value="Adicionado efeito de atordoamento no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionado efeito de atordoamento no Shoukan" />
+    <MESSAGE value="Implementação de métodos auxiliares no EffectParameters" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementação de métodos auxiliares no EffectParameters" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1347,10 +1346,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605200322857">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605200367542">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605200322857" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605200367542" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1604586940676">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1414,10 +1413,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605193213222">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605200372111">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605193213222" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605200372111" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605065871562" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1485,10 +1484,10 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1604581770738" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603503824528" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1605036215415">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1605204083398">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605036215415" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605204083398" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604189150904" />
   </component>
   <component name="XDebuggerManager">
