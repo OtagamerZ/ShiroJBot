@@ -80,7 +80,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient int altDef = -1;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
-	private transient int position = -1;
+	private transient int stun = 0;
 
 	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
 		this.card = card;
@@ -181,7 +181,13 @@ public class Champion implements Drawable, Cloneable {
 			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		}
 
-		if (defending) {
+		if (stun > 0) {
+			try {
+				BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/stunned.png")));
+				g2d.drawImage(dm, 0, 0, null);
+			} catch (IOException ignore) {
+			}
+		} else if (defending) {
 			try {
 				BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/defense_mode.png")));
 				g2d.drawImage(dm, 0, 0, null);
@@ -381,19 +387,23 @@ public class Champion implements Drawable, Cloneable {
 		mDef = 0;
 		altAtk = -1;
 		altDef = -1;
-		position = -1;
+		stun = 0;
 	}
 
 	public Set<String> getRequiredCards() {
 		return requiredCards;
 	}
 
-	public int getPosition() {
-		return position;
+	public int getStun() {
+		return stun;
 	}
 
-	public void setPosition(int position) {
-		this.position = position;
+	public void setStun(int stun) {
+		this.stun = stun;
+	}
+
+	public void reduceStun() {
+		this.stun--;
 	}
 
 	@Override
