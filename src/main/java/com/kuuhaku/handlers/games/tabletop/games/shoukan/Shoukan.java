@@ -169,6 +169,9 @@ public class Shoukan extends Game {
 					} else if (changed[index]) {
 						channel.sendMessage("❌ | Você já mudou a postura dessa carta neste turno.").queue(null, Helper::doNothing);
 						return;
+					} else if (c.getStun() > 0) {
+						channel.sendMessage("❌ | Essa carta está atordoada.").queue(null, Helper::doNothing);
+						return;
 					}
 
 					c.setDefending(c.isFlipped() || !c.isDefending());
