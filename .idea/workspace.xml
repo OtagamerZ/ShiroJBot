@@ -13,8 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no comando de cor do perfil">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ProfileColorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ProfileColorCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1260,7 +1261,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção na coleção de Kawaipons" />
     <MESSAGE value="Correção na busca por anime" />
     <MESSAGE value="Correção no ranking de usuários" />
     <MESSAGE value="Adição de getter para atributos alternativos das cartas" />
@@ -1285,7 +1285,8 @@
     <MESSAGE value="Shiro notifica sobre novos membros do Exceed novamente" />
     <MESSAGE value="Adicionado efeito de atordoamento no Shoukan" />
     <MESSAGE value="Implementação de métodos auxiliares no EffectParameters" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementação de métodos auxiliares no EffectParameters" />
+    <MESSAGE value="Correção no comando de cor do perfil" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no comando de cor do perfil" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
