@@ -13,8 +13,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na loja de cartas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -849,14 +856,9 @@
       <workItem from="1605114740147" duration="3625000" />
       <workItem from="1605120748735" duration="4678000" />
       <workItem from="1605184469223" duration="4294000" />
-      <workItem from="1605198396729" duration="6337000" />
-    </task>
-    <task id="LOCAL-02868" summary="Tentativa de correção das fusões com mais de 3 materiais">
-      <created>1604976554984</created>
-      <option name="number" value="02868" />
-      <option name="presentableId" value="LOCAL-02868" />
-      <option name="project" value="LOCAL" />
-      <updated>1604976554984</updated>
+      <workItem from="1605198396729" duration="8170000" />
+      <workItem from="1605214639474" duration="105000" />
+      <workItem from="1605268805098" duration="5226000" />
     </task>
     <task id="LOCAL-02869" summary="Tentativa de correção das fusões com mais de 3 materiais">
       <created>1604976827489</created>
@@ -1194,7 +1196,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605200370747</updated>
     </task>
-    <option name="localTasksCounter" value="2917" />
+    <task id="LOCAL-02917" summary="Correção na loja de cartas">
+      <created>1605212120201</created>
+      <option name="number" value="02917" />
+      <option name="presentableId" value="LOCAL-02917" />
+      <option name="project" value="LOCAL" />
+      <updated>1605212120201</updated>
+    </task>
+    <option name="localTasksCounter" value="2918" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1260,7 +1269,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção na coleção de Kawaipons" />
     <MESSAGE value="Correção na busca por anime" />
     <MESSAGE value="Correção no ranking de usuários" />
     <MESSAGE value="Adição de getter para atributos alternativos das cartas" />
@@ -1285,7 +1293,8 @@
     <MESSAGE value="Shiro notifica sobre novos membros do Exceed novamente" />
     <MESSAGE value="Adicionado efeito de atordoamento no Shoukan" />
     <MESSAGE value="Implementação de métodos auxiliares no EffectParameters" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementação de métodos auxiliares no EffectParameters" />
+    <MESSAGE value="Correção na loja de cartas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na loja de cartas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1321,10 +1330,10 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1605192088802">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1605269981498">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1605192088802" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1605269981498" />
     <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605065269736" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1346,10 +1355,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605200367542">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605269017780">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605200367542" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605269017780" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1604586940676">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1413,10 +1422,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605200372111">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605212141140">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605200372111" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605212141140" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605065871562" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />

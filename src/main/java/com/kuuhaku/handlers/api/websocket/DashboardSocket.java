@@ -22,7 +22,6 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.ReadyData;
 import com.kuuhaku.model.enums.AnimeName;
@@ -97,53 +96,6 @@ public class DashboardSocket extends WebSocketServer {
 			}
 
 			switch (jo.getString("type")) {
-				case "update" -> {
-					if (payload.has("guildData")) {
-						JSONObject guild = payload.getJSONObject("guildData");
-
-						GuildConfig gc = GuildDAO.getGuildById(guild.getString("guildID"));
-
-						JSONObject c = guild.getJSONObject("configs");
-
-						gc.setPrefix(c.getString("prefix"));
-
-						gc.setWarnTime(c.getInt("muteTime"));
-						gc.setPollTime(c.getInt("pollTime"));
-
-						if (!c.getJSONObject("muteRole").isEmpty())
-							gc.setCargoMute(c.getJSONObject("muteRole").getString("id"));
-
-						gc.setMsgBoasVindas(c.getString("welcomeMessage"));
-						gc.setMsgAdeus(c.getString("goodbyeMessage"));
-
-						if (!c.getJSONObject("welcomeChannel").isEmpty())
-							gc.setCanalBV(c.getJSONObject("welcomeChannel").getString("id"));
-						if (!c.getJSONObject("goodbyeChannel").isEmpty())
-							gc.setCanalAdeus(c.getJSONObject("goodbyeChannel").getString("id"));
-						if (!c.getJSONObject("suggestionChannel").isEmpty())
-							gc.setCanalSUG(c.getJSONObject("suggestionChannel").getString("id"));
-						if (!c.getJSONObject("relayChannel").isEmpty())
-							gc.setCanalRelay(c.getJSONObject("relayChannel").getString("id"));
-						if (!c.getJSONObject("levelUpChannel").isEmpty())
-							gc.setCanalLvl(c.getJSONObject("levelUpChannel").getString("id"));
-
-						JSONObject lr = new JSONObject();
-						c.getJSONArray("levelRoles").forEach(o -> lr.put(((JSONObject) o).getString("level"), ((JSONObject) o).getString("id")));
-
-						gc.setCargosLvl(lr);
-
-						GuildDAO.updateGuildSettings(gc);
-					}
-					if (payload.has("profileData")) {
-						JSONObject data = payload.getJSONObject("profileData");
-						Member mb = MemberDAO.getMemberById(data.getString("id"));
-
-						mb.setBg(data.getString("bg"));
-						mb.setBio(data.getString("bio"));
-
-						MemberDAO.updateMemberConfigs(mb);
-					}
-				}
 				case "ticket" -> {
 					int number = TicketDAO.openTicket(payload.getString("message"), Main.getInfo().getUserByID(t.getUid()));
 					EmbedBuilder eb = new EmbedBuilder();
