@@ -89,7 +89,7 @@ public class ConvertCardCommand extends Command {
 			return;
 		}
 
-		Champion c = CardDAO.getChampion(kc.getCard());
+		Champion c = CardDAO.getChampion(tc);
 
 		if (c == null) {
 			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();

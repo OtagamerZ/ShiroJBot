@@ -752,9 +752,9 @@ public class Shoukan extends Game {
 
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("▶️", (mb, ms) -> {
-			if (!ShiroInfo.getHashes().remove(hash.get())) return;
-			getHandById(getCurrent().getId()).getCards().removeIf(d -> !d.isAvailable());
 			if (getRound() < 1 || phase == Phase.ATTACK) {
+				if (!ShiroInfo.getHashes().remove(hash.get())) return;
+				getHandById(getCurrent().getId()).getCards().removeIf(d -> !d.isAvailable());
 				User u = getCurrent();
 
 				AtomicReference<Hand> h = new AtomicReference<>(getHandById(getCurrent().getId()));
@@ -806,8 +806,6 @@ public class Shoukan extends Game {
 				return;
 			}
 
-			hash.set(Helper.generateHash(this));
-			ShiroInfo.getHashes().add(hash.get());
 			channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue(null, Helper::doNothing);
 			phase = Phase.ATTACK;
 			draw = false;
