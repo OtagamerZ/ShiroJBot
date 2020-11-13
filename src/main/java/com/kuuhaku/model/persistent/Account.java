@@ -67,17 +67,20 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean remind = false;
 
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean notified = false;
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+    private boolean notified = false;
 
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean animatedBg = false;
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+    private boolean animatedBg = false;
 
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean follower = false;
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+    private boolean follower = false;
 
-	@Column(columnDefinition = "TEXT")
-	private String buffs = "{}";
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
+    private boolean receiveNotifs = true;
+
+    @Column(columnDefinition = "TEXT")
+    private String buffs = "{}";
 
     @Enumerated(value = EnumType.STRING)
     private FrameColor frame = FrameColor.PINK;
@@ -264,25 +267,33 @@ public class Account {
 
 	public void setAnimatedBg(boolean animatedBg) {
 		this.animatedBg = animatedBg;
-	}
+    }
 
-	public boolean isFollower() {
-		return follower;
-	}
+    public boolean isFollower() {
+        return follower;
+    }
 
-	public void setFollower(boolean follower) {
-		this.follower = follower;
-	}
+    public void setFollower(boolean follower) {
+        this.follower = follower;
+    }
 
-	public Map<String, Integer> getBuffs() {
-		if (buffs == null) return new HashMap<>();
-		else return new JSONObject(buffs)
-				.toMap()
-				.entrySet()
-				.stream()
-				.map(e -> Pair.of(e.getKey(), (int) e.getValue()))
-				.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
-	}
+    public boolean isReceivingNotifs() {
+        return receiveNotifs;
+    }
+
+    public void setReceiveNotifs(boolean receiveNotifs) {
+        this.receiveNotifs = receiveNotifs;
+    }
+
+    public Map<String, Integer> getBuffs() {
+        if (buffs == null) return new HashMap<>();
+        else return new JSONObject(buffs)
+                .toMap()
+                .entrySet()
+                .stream()
+                .map(e -> Pair.of(e.getKey(), (int) e.getValue()))
+                .collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
+    }
 
 	public void setBuffs(Map<String, Integer> buffs) {
 		this.buffs = new JSONObject(buffs).toString();
