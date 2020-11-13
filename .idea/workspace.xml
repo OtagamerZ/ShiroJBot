@@ -13,11 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no comando de cor do perfil">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de opção de não receber mais notificações de Exceed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,6 +163,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -853,13 +862,7 @@
       <workItem from="1605120748735" duration="4678000" />
       <workItem from="1605184469223" duration="4294000" />
       <workItem from="1605198396729" duration="6337000" />
-    </task>
-    <task id="LOCAL-02869" summary="Tentativa de correção das fusões com mais de 3 materiais">
-      <created>1604976827489</created>
-      <option name="number" value="02869" />
-      <option name="presentableId" value="LOCAL-02869" />
-      <option name="project" value="LOCAL" />
-      <updated>1604976827489</updated>
+      <workItem from="1605236136913" duration="499000" />
     </task>
     <task id="LOCAL-02870" summary="Tentativa de correção das fusões com mais de 3 materiais">
       <created>1604977222853</created>
@@ -1197,7 +1200,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605221582992</updated>
     </task>
-    <option name="localTasksCounter" value="2918" />
+    <task id="LOCAL-02918" summary="Adição de opção de não receber mais notificações de Exceed">
+      <created>1605225118592</created>
+      <option name="number" value="02918" />
+      <option name="presentableId" value="LOCAL-02918" />
+      <option name="project" value="LOCAL" />
+      <updated>1605225118592</updated>
+    </task>
+    <option name="localTasksCounter" value="2919" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1263,7 +1273,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção na busca por anime" />
     <MESSAGE value="Correção no ranking de usuários" />
     <MESSAGE value="Adição de getter para atributos alternativos das cartas" />
     <MESSAGE value="Adicionado comando para ver seus tickets;&#10;Stephanie agora anunciará o sorteio da loteria via canal de avisos também;" />
@@ -1288,7 +1297,8 @@
     <MESSAGE value="Adicionado efeito de atordoamento no Shoukan" />
     <MESSAGE value="Implementação de métodos auxiliares no EffectParameters" />
     <MESSAGE value="Correção no comando de cor do perfil" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no comando de cor do perfil" />
+    <MESSAGE value="Adição de opção de não receber mais notificações de Exceed" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de opção de não receber mais notificações de Exceed" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1324,11 +1334,11 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1605223306818">
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1605236409977">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1605192088802" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605223306818" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605236409977" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1341,10 +1351,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="551" y="216" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604694130886" />
-    <state x="347" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1599568009895">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1605236635371">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="347" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1599568009895" />
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605236635371" />
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1604695270131">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1416,11 +1427,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605221590668">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605225119647">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605200372111" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605221590668" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605225119647" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1434,6 +1445,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="654" y="392" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1600353827172" />
+    <state x="690" y="325" key="com.intellij.database.dbimport.ImportUtil.ChooseTargetDialog" timestamp="1605236159187">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="325" key="com.intellij.database.dbimport.ImportUtil.ChooseTargetDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605236159187" />
     <state x="636" y="331" width="408" height="355" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog" timestamp="1599656372884">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

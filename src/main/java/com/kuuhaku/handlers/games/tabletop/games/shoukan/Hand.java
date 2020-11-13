@@ -45,6 +45,7 @@ public class Hand {
 	private final int manaPerTurn;
 	private int mana;
 	private int hp;
+	private boolean manaSuppressed = false;
 
 	public Hand(Shoukan game, User user, List<Drawable> deque, Side side) {
 		Collections.shuffle(deque);
@@ -209,7 +210,7 @@ public class Hand {
 	}
 
 	public int getManaPerTurn() {
-		return manaPerTurn;
+		return manaSuppressed ? 0 : manaPerTurn;
 	}
 
 	public void setMana(int value) {
@@ -217,7 +218,7 @@ public class Hand {
 	}
 
 	public void addMana(int value) {
-		mana += value;
+		mana += manaSuppressed ? 0 : value;
 	}
 
 	public void removeMana(int value) {
@@ -242,5 +243,13 @@ public class Hand {
 
 	public void crippleHp(int value) {
 		hp = Math.max(1, hp - value);
+	}
+
+	public boolean isManaSuppressed() {
+		return manaSuppressed;
+	}
+
+	public void setManaSuppressed(boolean manaSuppressed) {
+		this.manaSuppressed = manaSuppressed;
 	}
 }
