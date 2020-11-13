@@ -55,7 +55,8 @@ public class MonthlyEvent implements Job {
 			String ex = ExceedDAO.getWinner();
 			ExceedDAO.getExceedMembers(ExceedEnum.getByName(ex)).forEach(em -> {
 						User u = Main.getInfo().getUserByID(em.getId());
-						if (u != null) u.openPrivateChannel().queue(c -> {
+						Account acc = AccountDAO.getAccount(em.getId());
+						if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
 							try {
 								c.sendMessage("""
 										O seu Exceed foi campeão neste mês, parabéns!
