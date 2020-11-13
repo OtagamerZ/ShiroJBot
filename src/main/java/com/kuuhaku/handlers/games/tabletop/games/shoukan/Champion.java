@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -65,6 +66,9 @@ public class Champion implements Drawable, Cloneable {
 
 	@Column(columnDefinition = "TEXT")
 	private String effect = "";
+
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String category = "";
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> requiredCards = new HashSet<>();
@@ -198,6 +202,10 @@ public class Champion implements Drawable, Cloneable {
 		g2d.dispose();
 
 		return bi;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	@Override
@@ -368,6 +376,10 @@ public class Champion implements Drawable, Cloneable {
 		}
 	}
 
+	public String getCategory() {
+		return category;
+	}
+
 	public Champion getFakeCard() {
 		return fakeCard;
 	}
@@ -429,5 +441,18 @@ public class Champion implements Drawable, Cloneable {
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
+	}
+
+	public String toString(Account acc) {
+		return new JSONObject() {{
+			put("id", id);
+			put("name", card.getName());
+			put("category", category);
+			put("mana", mana);
+			put("attack", atk);
+			put("defense", def);
+			put("description", description);
+			put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(acc, false), "png")));
+		}}.toString();
 	}
 }

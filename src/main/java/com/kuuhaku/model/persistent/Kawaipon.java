@@ -27,10 +27,9 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "kawaipon")
@@ -75,6 +74,11 @@ public class Kawaipon {
 
 	public void setCards(Set<KawaiponCard> cards) {
 		this.cards = cards;
+	}
+
+	public void addCards(Set<KawaiponCard> cards) {
+		this.cards.removeIf(kc -> !kc.isFoil());
+		this.cards.addAll(cards);
 	}
 
 	public void addCard(KawaiponCard card) {
@@ -143,5 +147,19 @@ public class Kawaipon {
 
 	public List<Drawable> getDrawables() {
 		return ListUtils.union(ListUtils.union(champions, equipments), fields);
+	}
+
+	public int getCollectionHash() {
+		List<String> cards = Stream.of(this.cards, champions)
+				.flatMap(Collection::stream)
+				.map(o -> {
+					if (o instanceof KawaiponCard) return ((KawaiponCard) o).getCard();
+					else return ((Champion) o).getCard();
+				})
+				.map(Card::getId)
+				.sorted(String::compareTo)
+				.collect(Collectors.toList());
+
+		return cards.hashCode();
 	}
 }
