@@ -77,25 +77,38 @@ public class CardDAO {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public static List<Card> getCards() {
-        EntityManager em = Manager.getEntityManager();
+	@SuppressWarnings("unchecked")
+	public static List<Card> getCards() {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND anime <> 'HIDDEN'", Card.class);
-        q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-        List<Card> c = q.getResultList();
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND anime <> 'HIDDEN'", Card.class);
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+		List<Card> c = q.getResultList();
 
-        em.close();
+		em.close();
 
-        return c;
-    }
+		return c;
+	}
 
-    @SuppressWarnings("unchecked")
-    public static List<Card> getAllCards() {
-        EntityManager em = Manager.getEntityManager();
+	@SuppressWarnings("unchecked")
+	public static List<Card> getCards(List<String> ids) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", Card.class);
-        q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+		Query q = em.createQuery("SELECT c FROM Card c WHERE c.id IN :ids", Card.class);
+		q.setParameter("ids", ids);
+		List<Card> c = q.getResultList();
+
+		em.close();
+
+		return c;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Card> getAllCards() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", Card.class);
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
         List<Card> c = q.getResultList();
 
         em.close();
@@ -278,24 +291,37 @@ public class CardDAO {
 
         Query q = em.createQuery("SELECT c FROM Champion c WHERE SIZE(requiredCards) > 0", Champion.class);
 
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Champion getChampion(Card c) {
-        EntityManager em = Manager.getEntityManager();
+	@SuppressWarnings("unchecked")
+	public static List<Champion> getChampions(List<String> ids) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE card = :card", Champion.class);
-        q.setParameter("card", c);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id IN :ids", Champion.class);
+		q.setParameter("ids", ids);
+		List<Champion> c = q.getResultList();
 
-        try {
-            return (Champion) q.getSingleResult();
-        } catch (NoResultException e) {
+		em.close();
+
+		return c;
+	}
+
+	public static Champion getChampion(Card c) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE card = :card", Champion.class);
+		q.setParameter("card", c);
+
+		try {
+			return (Champion) q.getSingleResult();
+		} catch (NoResultException e) {
             return null;
         } finally {
             em.close();

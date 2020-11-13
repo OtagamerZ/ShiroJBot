@@ -23,14 +23,17 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Objects;
 
 @Entity
@@ -141,6 +144,10 @@ public class Equipment implements Drawable, Cloneable {
         return bi;
     }
 
+    public int getId() {
+        return id;
+    }
+
     @Override
     public Card getCard() {
         return card;
@@ -216,5 +223,16 @@ public class Equipment implements Drawable, Cloneable {
         } catch (CloneNotSupportedException e) {
             return null;
         }
+    }
+
+    public String toString(Account acc) {
+        return new JSONObject() {{
+            put("id", id);
+            put("name", card.getName());
+            put("tier", tier);
+            put("attack", atk);
+            put("defense", def);
+            put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(acc, false), "png")));
+        }}.toString();
     }
 }
