@@ -49,18 +49,19 @@ public class ProfileColorCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMemberByMid(author.getId() + guild.getId());
-		if (args.length < 1 || !args[0].contains("#") || !Helper.between(args[0].length(), 7, 8)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
+		List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMemberByMid(author.getId());
+		if (args.length == 0) {
+			channel.sendMessage("❌ | O primeiro argumento deve ser uma cor em formato hexadecimal (#RRGGBB) ou `reset`.").queue();
 			return;
-		}
-
-		if (Helper.equalsAny(args[0], "none", "reset", "resetar", "limpar")) {
+		} else if (Helper.equalsAny(args[0], "none", "reset", "resetar", "limpar")) {
 			ms.forEach(m -> {
 				m.setProfileColor("");
 				MemberDAO.updateMemberConfigs(m);
 			});
 			channel.sendMessage("Cor de perfil restaurada ao padrão com sucesso!").queue();
+			return;
+		} else if (!args[0].contains("#") || !Helper.between(args[0].length(), 7, 8)) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
 			return;
 		}
 
