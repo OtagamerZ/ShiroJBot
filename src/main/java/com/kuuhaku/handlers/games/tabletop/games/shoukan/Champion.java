@@ -180,6 +180,10 @@ public class Champion implements Drawable, Cloneable {
 			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : description, 205, 9, 293);
 		}
 
+		if (stun > 0) {
+			available = false;
+		}
+
 		if (!available) {
 			g2d.setColor(new Color(0, 0, 0, 150));
 			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
