@@ -84,7 +84,7 @@ public class TradeCardCommand extends Command {
 
 		User other = message.getMentionedUsers().get(0);
 		String text = StringUtils.normalizeSpace(String.join(" ", ArrayUtils.subarray(args, 1, args.length)));
-		if (Helper.regex(text, "(\\d+)[ ]+[\\w\\d ]+[NnCcEeFf]")) { //Purchase
+		if (Helper.regex(text, "(\\d+)[ ]+[\\w ]+[NnCcEeFf]")) { //Purchase
 			int type = switch (args[3].toUpperCase()) {
 				case "N", "C" -> 1;
 				case "E" -> 2;
@@ -244,7 +244,7 @@ public class TradeCardCommand extends Command {
 						ShiroInfo.getHashes().remove(hash);
 						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					});
-		} else if (Helper.regex(text, "[\\w\\d ]+[NnCcEeFf][ ]+(\\d+)")) { //Selling
+		} else if (Helper.regex(text, "[\\w ]+[NnCcEeFf][ ]+(\\d+)")) { //Selling
 			int type = switch (args[2].toUpperCase()) {
 				case "N", "C" -> 1;
 				case "E" -> 2;
@@ -290,8 +290,8 @@ public class TradeCardCommand extends Command {
 				}
 			}
 
-			if (acc.getBalance() < price) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+			if (tacc.getBalance() < price) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
 				return;
 			}
 
@@ -404,7 +404,7 @@ public class TradeCardCommand extends Command {
 						ShiroInfo.getHashes().remove(hash);
 						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					});
-		} else if (Helper.regex(text, "([\\w\\d ]+[NnCcEeFf]){2}")) { //Trade
+		} else if (Helper.regex(text, "([\\w ]+[NnCcEeFf]){2}")) { //Trade
 			if (args.length < 5) {
 				channel.sendMessage("❌ | Você precisa mencionar uma carta, o tipo, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) para realizar a troca.").queue();
 				return;
