@@ -111,7 +111,11 @@ public class ExceedSelectCommand extends Command {
 								Account acc = AccountDAO.getAccount(u.getId());
 								if (acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
 									try {
-										c.sendMessage("**(Não responda esta mensagem)** | " + author.getAsTag() + " juntou-se à " + ex.getName() + ", hooray!! :tada:\nDigite `silenciar` para parar de receber notificações de Exceed (não pode ser desfeito).").queue(null, Helper::doNothing);
+										c.sendMessage("""
+												%s juntou-se à %s, hooray!! :tada:
+												**(Não responda esta mensagem)**
+												Digite `silenciar` para parar de receber notificações de Exceed (não pode ser desfeito).
+												""".formatted(author.getAsTag(), ex.getName())).queue(null, Helper::doNothing);
 									} catch (Exception ignore) {
 									}
 								}, Helper::doNothing);
