@@ -586,7 +586,7 @@ public class Shoukan extends Game {
 
 	public void killCard(Side s, int index, List<SlotColumn<Champion, Equipment>> side) {
 		Champion ch = side.get(index).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath", false)) return;
+		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath")) return;
 		ch.reset();
 		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
 			arena.getGraveyard().get(s).add(ch);
@@ -686,7 +686,7 @@ public class Shoukan extends Game {
 	public void convertCard(Side side, int index) {
 		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert", false)) return;
+		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
 		SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(side, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
@@ -704,7 +704,7 @@ public class Shoukan extends Game {
 	public void convertEquipments(Champion target, int pos, Side side, int index) {
 		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert", false)) return;
+		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
 		for (int i = 0; i < 5; i++) {
 			Equipment eq = slts.get(i).getBottom();
