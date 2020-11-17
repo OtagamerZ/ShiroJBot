@@ -61,6 +61,9 @@ public class SayCommand extends Command {
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa definir uma mensagem.").queue();
 			return;
+		} else if (args[0].length() > 1024) {
+			channel.sendMessage("❌ | Essa mensagem é muito longa.").queue();
+			return;
 		}
 
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());

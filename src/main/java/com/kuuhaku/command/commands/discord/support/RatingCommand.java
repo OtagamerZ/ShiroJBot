@@ -22,18 +22,26 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.controller.postgresql.VotesDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.DevRating;
+import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
+import java.awt.*;
 import java.io.File;
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -63,10 +71,46 @@ public class RatingCommand extends Command {
 		if (args.length < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_rating-no-id")).queue();
 			return;
+		} else if (!StringUtils.isNumeric(args[0])) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-ticket-id")).queue();
+			return;
 		}
 
-		channel.sendMessage("Avaliação requisitada com sucesso!").queue();
-		Main.getInfo().getUserByID(args[0]).openPrivateChannel().queue(c -> {
+		Ticket t = TicketDAO.getTicket(Integer.parseInt(args[0]));
+
+		if (t == null) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-ticket")).queue();
+			return;
+		} else if (t.isSolved()) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_ticket-already-solved")).queue();
+			return;
+		}
+
+		EmbedBuilder eb = new EmbedBuilder();
+
+		eb.setTitle("Resolução de ticket Nº " + args[0] + " (Requisitada avaliação)");
+		eb.setDescription("Assunto:```" + t.getSubject() + "```");
+		if (Helper.getOr(t.getRequestedBy(), null) != null)
+			eb.addField("Aberto por:", Main.getInfo().getUserByID(t.getRequestedBy()).getAsTag(), true);
+		eb.addField("Resolvido por:", author.getAsTag(), true);
+		eb.addField("Fechado em:", Helper.dateformat.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
+		eb.setColor(Color.green);
+
+		ShiroInfo.getStaff().forEach(dev -> {
+					Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
+							.flatMap(m -> m.sendMessage(eb.build()))
+							.complete();
+					msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
+							.flatMap(Message::delete)
+							.queue(null, Helper::doNothing);
+					t.solved();
+				}
+		);
+
+		TicketDAO.updateTicket(t);
+		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-solved-ticket-with-rating")).queue();
+
+		Main.getInfo().getUserByID(t.getRequestedBy()).openPrivateChannel().queue(c -> {
 					c.sendFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("assets/feedback.png")).getPath()))
 							.queue(s -> {
 								c.sendMessage(eval(author)).queue(s1 -> {
@@ -128,6 +172,8 @@ public class RatingCommand extends Command {
 	}
 
 	private void addRates(User author, Message msg, BiConsumer<DevRating, Integer> act) {
+		Account acc = AccountDAO.getAccount(author.getId());
+
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>() {{
 			put("1️⃣", (mb, ms) -> {
 				DevRating dev = VotesDAO.getRating(author.getId());
@@ -135,7 +181,10 @@ public class RatingCommand extends Command {
 				VotesDAO.evaluate(dev);
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
-						.queue();
+						.queue(s -> {
+							acc.addCredit(0, RatingCommand.class);
+							AccountDAO.saveAccount(acc);
+						});
 			});
 			put("2️⃣", (mb, ms) -> {
 				DevRating dev = VotesDAO.getRating(author.getId());
@@ -143,7 +192,10 @@ public class RatingCommand extends Command {
 				VotesDAO.evaluate(dev);
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
-						.queue();
+						.queue(s -> {
+							acc.addCredit(50, RatingCommand.class);
+							AccountDAO.saveAccount(acc);
+						});
 			});
 			put("3️⃣", (mb, ms) -> {
 				DevRating dev = VotesDAO.getRating(author.getId());
@@ -151,7 +203,10 @@ public class RatingCommand extends Command {
 				VotesDAO.evaluate(dev);
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
-						.queue();
+						.queue(s -> {
+							acc.addCredit(100, RatingCommand.class);
+							AccountDAO.saveAccount(acc);
+						});
 			});
 			put("4️⃣", (mb, ms) -> {
 				DevRating dev = VotesDAO.getRating(author.getId());
@@ -159,7 +214,10 @@ public class RatingCommand extends Command {
 				VotesDAO.evaluate(dev);
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
-						.queue();
+						.queue(s -> {
+							acc.addCredit(200, RatingCommand.class);
+							AccountDAO.saveAccount(acc);
+						});
 			});
 			put("5️⃣", (mb, ms) -> {
 				DevRating dev = VotesDAO.getRating(author.getId());
@@ -167,7 +225,10 @@ public class RatingCommand extends Command {
 				VotesDAO.evaluate(dev);
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
-						.queue();
+						.queue(s -> {
+							acc.addCredit(250, RatingCommand.class);
+							AccountDAO.saveAccount(acc);
+						});
 			});
 		}};
 		Pages.buttonize(msg, buttons, false);
