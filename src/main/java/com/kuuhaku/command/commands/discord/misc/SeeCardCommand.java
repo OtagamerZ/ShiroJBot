@@ -93,7 +93,8 @@ public class SeeCardCommand extends Command {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle((ch == null ? ":shield:" : ":crossed_swords:") + " | " + d.getCard().getName());
-			eb.addField("Obtida:", cards.contains(d) ? "Sim" : "Não", true);
+			if (d instanceof Champion)
+				eb.addField("Classe:", ((Champion) d).getCategory().getName(), true);
 			eb.addField("Tipo:", d instanceof Champion ? "Campeão Senshi" : d instanceof Field ? "Arena" : "Equipamento EvoGear", true);
 			eb.setImage("attachment://kawaipon.png");
 

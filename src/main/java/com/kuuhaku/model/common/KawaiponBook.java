@@ -19,10 +19,13 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.postgresql.RarityColorsDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.model.enums.KawaiponRarity;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.RarityColors;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.NContract;
 import org.apache.commons.lang3.StringUtils;
 
@@ -35,6 +38,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class KawaiponBook {
 	private final Set<KawaiponCard> cards;
@@ -44,26 +48,21 @@ public class KawaiponBook {
 		this.cards = cards;
 	}
 
+	public KawaiponBook() {
+		this.cards = null;
+	}
+
 	public BufferedImage view(List<Card> cardList, String title, boolean foil) throws IOException, InterruptedException {
-		int totalCards = cardList.size();
 		String text;
 		if (foil) text = "« " + title + " »";
 		else text = title;
+		assert this.cards != null;
 		List<KawaiponCard> cards = new ArrayList<>(this.cards);
 		cardList.sort(Comparator
 				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)
 		);
-		List<List<KawaiponCard>> chunks = new ArrayList<>();
-
-		int rowCount = (int) Math.ceil(totalCards / (float) COLUMN_COUNT);
-		for (int i = 0; i < rowCount; i++) {
-			ArrayList<KawaiponCard> chunk = new ArrayList<>();
-			for (int p = COLUMN_COUNT * i; p < totalCards && p < COLUMN_COUNT * (i + 1); p++) {
-				chunk.add(new KawaiponCard(cardList.get(p), foil));
-			}
-			chunks.add(chunk);
-		}
+		List<List<KawaiponCard>> chunks = Helper.chunkify(cardList.stream().map(c -> new KawaiponCard(c, foil)).collect(Collectors.toList()), COLUMN_COUNT);
 
 		BufferedImage header = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/header.png")));
 		BufferedImage footer = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/footer.png")));
@@ -133,6 +132,79 @@ public class KawaiponBook {
 							g.drawImage(slot, 54 + 198 * i, 24, 160, 250, null);
 							Profile.printCenteredString("???", 160, 54 + 198 * i, 298, g);
 						}
+					}
+
+					g.dispose();
+
+					result.set(act.addSignature(finalC, row));
+					row.flush();
+				} catch (IOException ignore) {
+				}
+			});
+		}
+
+		while (result.get() == null) {
+			Thread.sleep(250);
+		}
+
+		return result.get();
+	}
+
+	public BufferedImage view(List<Champion> cardList, Account acc, String title) throws IOException, InterruptedException {
+		cardList.sort(Comparator
+				.comparing(Champion::getMana)
+				.reversed()
+				.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+		);
+		List<List<Champion>> chunks = Helper.chunkify(cardList, COLUMN_COUNT);
+
+		BufferedImage header = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/header.png")));
+		BufferedImage footer = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/footer.png")));
+		BufferedImage slot = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/slot.png")));
+
+		Graphics2D g2d = header.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 72));
+		Profile.printCenteredString(title, 1904, 36, 168, g2d);
+
+		NContract<BufferedImage> act = new NContract<>(chunks.size());
+		act.setAction(imgs -> {
+			System.gc();
+			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (299 * imgs.size()), BufferedImage.TYPE_INT_RGB);
+			Graphics2D g = bg.createGraphics();
+			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+			g.drawImage(header, 0, 0, null);
+
+			for (int i = 0; i < imgs.size(); i++) {
+				g.drawImage(imgs.get(i), 0, header.getHeight() + 299 * i, null);
+			}
+
+			g.drawImage(footer, 0, bg.getHeight() - footer.getHeight(), null);
+			g.dispose();
+
+			return bg;
+		});
+
+		AtomicReference<BufferedImage> result = new AtomicReference<>();
+		ExecutorService th = Executors.newFixedThreadPool(10);
+		for (int c = 0; c < chunks.size(); c++) {
+			int finalC = c;
+			th.execute(() -> {
+				try {
+					BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row.png")));
+					Graphics2D g = row.createGraphics();
+					g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+					g.setColor(Color.white);
+
+					for (int i = 0; i < chunks.get(finalC).size(); i++) {
+						g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+
+						g.drawImage(chunks.get(finalC).get(i).drawCard(acc, false), 54 + 198 * i, 24, 160, 250, null);
+						Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getCard().getName(), 15), 160, 54 + 198 * i, 298, g);
 					}
 
 					g.dispose();

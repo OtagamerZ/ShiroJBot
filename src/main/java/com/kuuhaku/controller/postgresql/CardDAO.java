@@ -21,6 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.KawaiponRarity;
@@ -304,24 +305,37 @@ public class CardDAO {
 	public static List<Champion> getChampions(List<String> ids) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id IN :ids", Champion.class);
-		q.setParameter("ids", ids);
-		List<Champion> c = q.getResultList();
+        Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id IN :ids", Champion.class);
+        q.setParameter("ids", ids);
+        List<Champion> c = q.getResultList();
 
-		em.close();
+        em.close();
 
-		return c;
-	}
+        return c;
+    }
 
-	public static Champion getChampion(Card c) {
-		EntityManager em = Manager.getEntityManager();
+    @SuppressWarnings("unchecked")
+    public static List<Champion> getChampions(Class c) {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE card = :card", Champion.class);
-		q.setParameter("card", c);
+        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Card.class);
+        q.setParameter("class", c);
+        List<Champion> cds = q.getResultList();
 
-		try {
-			return (Champion) q.getSingleResult();
-		} catch (NoResultException e) {
+        em.close();
+
+        return cds;
+    }
+
+    public static Champion getChampion(Card c) {
+        EntityManager em = Manager.getEntityManager();
+
+        Query q = em.createQuery("SELECT c FROM Champion c WHERE card = :card", Champion.class);
+        q.setParameter("card", c);
+
+        try {
+            return (Champion) q.getSingleResult();
+        } catch (NoResultException e) {
             return null;
         } finally {
             em.close();
