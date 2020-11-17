@@ -203,7 +203,7 @@ public class KawaiponsCommand extends Command {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + s + ")")
+		eb.setTitle("\uD83C\uDFB4 | Cartas Senshi (" + s + ")")
 				.setDescription(c == null ? null : c.getDescription())
 				.setImage("https://api." + System.getenv("SERVER_URL") + "/collection?id=" + hash);
 		m.delete().queue();
