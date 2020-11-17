@@ -60,7 +60,7 @@ public class UseConsumableCommand extends Command {
 			return;
 		}
 
-		if (acc.getBuffs().getOrDefault(args[0], 0) <= 0) {
+		if (acc.getBuffs().getOrDefault(args[0].toLowerCase(), 0) <= 0) {
 			channel.sendMessage("❌ | Você não possui esse item.").queue();
 			return;
 		}
