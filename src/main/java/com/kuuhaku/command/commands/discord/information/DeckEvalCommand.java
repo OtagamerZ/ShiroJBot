@@ -73,13 +73,13 @@ public class DeckEvalCommand extends Command {
 				.setTitle("Análise do deck de " + author.getName())
 				.addField(":crossed_swords: | Cartas Senshi: " + kp.getChampions().size(), ":shield: | Cartas EvoGear: " + kp.getEquipments().size(), false)
 				.addField(":abacus: | Classes", """
-						Duelista: %s carta%s
-						Tanque: %s carta%s
-						Suporte: %s carta%s
-						Nuker: %s carta%s
-						Armadilha: %s carta%s
-						Nivelador: %s carta%s
-						Especialista: %s carta%s
+						**Duelista:** %s carta%s
+						**Tanque:** %s carta%s
+						**Suporte:** %s carta%s
+						**Nuker:** %s carta%s
+						**Armadilha:** %s carta%s
+						**Nivelador:** %s carta%s
+						**Especialista:** %s carta%s
 						""".formatted((Object[]) data), false);
 
 		StringBuilder sb = new StringBuilder();
