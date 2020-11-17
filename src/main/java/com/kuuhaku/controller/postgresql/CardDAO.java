@@ -318,7 +318,7 @@ public class CardDAO {
     public static List<Champion> getChampions(Class c) {
         EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Card.class);
+        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Champion.class);
         q.setParameter("class", c);
         List<Champion> cds = q.getResultList();
 
