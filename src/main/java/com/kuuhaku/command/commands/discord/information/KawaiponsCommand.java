@@ -21,8 +21,11 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.KawaiponBook;
 import com.kuuhaku.model.enums.AnimeName;
@@ -43,6 +46,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -103,31 +107,50 @@ public class KawaiponsCommand extends Command {
 					return;
 				}
 
+				Class c = Class.getByName(args[0]);
 				KawaiponRarity rr = KawaiponRarity.getByName(args[0]);
 
 				if (rr == null) {
-					if (args[0].equalsIgnoreCase("total")) {
-						Set<KawaiponCard> collection = kp.getCards();
+					if (c == null) {
+						if (args[0].equalsIgnoreCase("total")) {
+							Set<KawaiponCard> collection = kp.getCards();
+							Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+
+							KawaiponBook kb = new KawaiponBook(toRender);
+							BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", args[1].equalsIgnoreCase("C"));
+
+							send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
+							return;
+						} else if (args[0].equalsIgnoreCase("elegiveis")) {
+							List<Champion> cardList = CardDAO.getAllChampions();
+
+							KawaiponBook kb = new KawaiponBook();
+							BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis");
+
+							send(author, channel, m, cards, "Cartas elegíveis", null);
+							return;
+						} else if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
+							m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(AnimeName.validValues()).map(AnimeName::name).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+							return;
+						}
+
+						AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
+						Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
 						Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
 
 						KawaiponBook kb = new KawaiponBook(toRender);
-						BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", args[1].equalsIgnoreCase("C"));
+						BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), args[1].equalsIgnoreCase("C"));
 
-						send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
-						return;
-					} else if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
-						m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(AnimeName.validValues()).map(AnimeName::name).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+						send(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime));
 						return;
 					}
 
-					AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
-					Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
-					Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+					List<Champion> cardList = CardDAO.getChampions(c);
 
-					KawaiponBook kb = new KawaiponBook(toRender);
-					BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), args[1].equalsIgnoreCase("C"));
+					KawaiponBook kb = new KawaiponBook();
+					BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), c.getName());
 
-					send(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime));
+					send(author, channel, m, cards, c.getName(), c);
 				} else {
 					Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getRarity().equals(rr)).collect(Collectors.toSet());
 					Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
@@ -165,6 +188,27 @@ public class KawaiponsCommand extends Command {
 		eb.addField(":star2: | Cartas cromadas:", foil + " de " + l + " (" + Helper.prcntToInt(foil, l) + "%)", true);
 		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
 		eb.setImage("https://api." + System.getenv("SERVER_URL") + "/collection?id=" + hash);
+		m.delete().queue();
+
+		channel.sendMessage(eb.build()).queue();
+	}
+
+	private void send(User author, MessageChannel channel, Message m, BufferedImage cards, String s, Class c) throws IOException {
+		String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
+		File f = new File(Main.getInfo().getCollectionsFolder(), hash + ".jpg");
+		byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
+		//byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg");
+		try (FileOutputStream fos = new FileOutputStream(f)) {
+			fos.write(bytes);
+		}
+
+		Helper.keepMaximumNFiles(Main.getInfo().getCollectionsFolder(), 20);
+
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
+
+		eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + s + ")")
+				.setDescription(c == null ? null : c.getDescription())
+				.setImage("https://api." + System.getenv("SERVER_URL") + "/collection?id=" + hash);
 		m.delete().queue();
 
 		channel.sendMessage(eb.build()).queue();
