@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NonNls;
 import org.json.JSONArray;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class MuteMemberCommand extends Command {
@@ -95,7 +96,7 @@ public class MuteMemberCommand extends Command {
 
 		try {
 			Member mb = message.getMentionedMembers().get(0);
-			JSONArray roles = new JSONArray(mb.getRoles().stream().map(Role::getId).collect(Collectors.toList()));
+			JSONArray roles = new JSONArray(mb.getRoles().stream().filter(rl -> !rl.isManaged()).map(Role::getId).collect(Collectors.toList()));
 			MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(mb.getId()), new MutedMember(mb.getId(), guild.getId(), roles));
 			int time = Integer.parseInt(args[1]);
 
@@ -105,7 +106,10 @@ public class MuteMemberCommand extends Command {
 
 			MemberDAO.saveMutedMember(m);
 
-			guild.modifyMemberRoles(mb, guild.getRoleById(gc.getCargoMute())).complete();
+			List<Role> rls = mb.getRoles().stream().filter(Role::isManaged).collect(Collectors.toList());
+			rls.add(guild.getRoleById(gc.getCargoMute()));
+
+			guild.modifyMemberRoles(mb, rls).complete();
 			Helper.logToChannel(author, false, null, mb.getAsMention() + " foi silenciado pela seguinte razão: `" + reason + "`", guild);
 			channel.sendMessage("Usuário silenciado por " + time + " minutos com sucesso!\nMotivo: `" + reason + "`").queue();
 		} catch (InsufficientPermissionException e) {
