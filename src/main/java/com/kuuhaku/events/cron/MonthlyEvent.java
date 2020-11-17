@@ -156,5 +156,11 @@ public class MonthlyEvent implements Job {
 				TokenDAO.voidToken(bl.getId());
 			}
 		}
+
+		for (String id : ShiroInfo.getSupports()) {
+			Account acc = AccountDAO.getAccount(id);
+			acc.addCredit(5000, MonthlyEvent.class);
+			AccountDAO.saveAccount(acc);
+		}
 	}
 }
