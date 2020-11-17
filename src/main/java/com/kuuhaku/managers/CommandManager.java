@@ -315,6 +315,9 @@ public class CommandManager {
 			put(MyTicketsCommand.class, new Argument(
 					"bilhetes", new String[]{"tickets"}, "cmd_tickets", INFO, false
 			));
+			put(DeckEvalCommand.class, new Argument(
+					"avaliardeck", new String[]{"deckeval"}, "cmd_deck-eval", INFO, false
+			));
 
 			//MISC
 			put(BackgroundCommand.class, new Argument(
