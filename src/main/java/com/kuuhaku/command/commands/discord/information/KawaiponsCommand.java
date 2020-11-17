@@ -102,9 +102,6 @@ public class KawaiponsCommand extends Command {
 					m.delete().queue();
 					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
 					return;
-				} else if (args.length < 2 || !Helper.equalsAny(args[1], "N", "C")) {
-					m.editMessage("❌ | Você precisa especificar o tipo da coleção (`N` = normal, `C` = cromada).").queue();
-					return;
 				}
 
 				Class c = Class.getByName(args[0]);
@@ -114,10 +111,10 @@ public class KawaiponsCommand extends Command {
 					if (c == null) {
 						if (args[0].equalsIgnoreCase("total")) {
 							Set<KawaiponCard> collection = kp.getCards();
-							Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+							Set<KawaiponCard> toRender = collection.stream().filter(k -> args.length > 1 && k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
 
 							KawaiponBook kb = new KawaiponBook(toRender);
-							BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", args[1].equalsIgnoreCase("C"));
+							BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", args.length > 1 && args[1].equalsIgnoreCase("C"));
 
 							send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
 							return;
@@ -153,10 +150,10 @@ public class KawaiponsCommand extends Command {
 					send(author, channel, m, cards, c.getName(), c);
 				} else {
 					Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getRarity().equals(rr)).collect(Collectors.toSet());
-					Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+					Set<KawaiponCard> toRender = collection.stream().filter(k -> args.length > 1 && k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
 
 					KawaiponBook kb = new KawaiponBook(toRender);
-					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(rr), rr.toString(), args[1].equalsIgnoreCase("C"));
+					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(rr), rr.toString(), args.length > 1 && args[1].equalsIgnoreCase("C"));
 
 
 					send(author, channel, m, collection, cards, rr.toString(), CardDAO.totalCards(rr));
