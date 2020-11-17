@@ -133,10 +133,10 @@ public class KawaiponsCommand extends Command {
 
 						AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
 						Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
-						Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+						Set<KawaiponCard> toRender = collection.stream().filter(k -> args.length > 1 && k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
 
 						KawaiponBook kb = new KawaiponBook(toRender);
-						BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), args[1].equalsIgnoreCase("C"));
+						BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), args.length > 1 && args[1].equalsIgnoreCase("C"));
 
 						send(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime));
 						return;
