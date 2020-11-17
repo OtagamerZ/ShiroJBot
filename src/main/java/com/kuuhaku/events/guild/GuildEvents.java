@@ -340,8 +340,12 @@ public class GuildEvents extends ListenerAdapter {
 			if (gc.getCargoMute() != null && !gc.getCargoMute().isBlank()) try {
 				Role r = guild.getRoleById(gc.getCargoMute());
 				if (r != null) {
-					JSONArray roles = new JSONArray(member.getRoles().stream().map(Role::getId).collect(Collectors.toList()));
-					guild.modifyMemberRoles(member, r).queue(null, Helper::doNothing);
+					JSONArray roles = new JSONArray(member.getRoles().stream().filter(rl -> !rl.isManaged()).map(Role::getId).collect(Collectors.toList()));
+
+					List<Role> rls = member.getRoles().stream().filter(Role::isManaged).collect(Collectors.toList());
+					rls.add(r);
+
+					guild.modifyMemberRoles(member, rls).queue(null, Helper::doNothing);
 					MutedMember mm = Helper.getOr(com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId(), roles));
 					mm.mute(GuildDAO.getGuildById(guild.getId()).getWarnTime());
 

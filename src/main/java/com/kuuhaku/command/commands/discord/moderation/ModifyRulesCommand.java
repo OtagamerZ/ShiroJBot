@@ -73,8 +73,8 @@ public class ModifyRulesCommand extends Command {
 			GuildDAO.updateGuildSettings(gc);
 			channel.sendMessage("Regra removida com sucesso!").queue();
 		} else {
-			if (rule.split(";").length > 2) {
-				channel.sendMessage("❌ | A regra só pode ter 1 único separador (`;`).").queue();
+			if (rule.split(";").length != 2) {
+				channel.sendMessage("❌ | A regra deve ter exatamente 1 separador (`;`).").queue();
 				return;
 			}
 
