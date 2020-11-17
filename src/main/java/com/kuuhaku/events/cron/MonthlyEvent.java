@@ -69,7 +69,8 @@ public class MonthlyEvent implements Job {
 			);
 
 			ExceedDAO.getExceedMembers().forEach(em -> {
-				if (Main.getInfo().getUserByID(em.getId()) == null) ExceedDAO.removeMember(em);
+				if (Main.getInfo().getUserByID(em.getId()) == null || em.getContribution() == 0)
+					ExceedDAO.removeMember(em);
 			});
 
 			ExceedDAO.unblock();
