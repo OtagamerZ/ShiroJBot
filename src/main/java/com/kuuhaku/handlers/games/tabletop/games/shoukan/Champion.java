@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import bsh.EvalError;
 import bsh.Interpreter;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
@@ -67,8 +68,8 @@ public class Champion implements Drawable, Cloneable {
 	@Column(columnDefinition = "TEXT")
 	private String effect = "";
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String category = "";
+	@Enumerated(EnumType.STRING)
+	private Class category = null;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> requiredCards = new HashSet<>();
@@ -355,20 +356,21 @@ public class Champion implements Drawable, Cloneable {
 
 	public void getEffect(EffectParameters ep) {
 		String imports = """
-				              //%s
+				//%s
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
-				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArenaField;
-				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
-				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
-				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
-				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
-				              import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
-				              import com.kuuhaku.controller.postgresql.CardDAO;
-				              import com.kuuhaku.model.enums.AnimeName;
-				              				
-				              """.formatted(card.getName());
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArenaField;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
+				import com.kuuhaku.controller.postgresql.CardDAO;
+				import com.kuuhaku.model.enums.AnimeName;
+				import com.kuuhaku.utils.Helper;
+				          				
+				          """.formatted(card.getName());
 
 		try {
 			Interpreter i = new Interpreter();
@@ -380,7 +382,7 @@ public class Champion implements Drawable, Cloneable {
 		}
 	}
 
-	public String getCategory() {
+	public Class getCategory() {
 		return category;
 	}
 
