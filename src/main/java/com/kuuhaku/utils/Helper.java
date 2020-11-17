@@ -892,7 +892,7 @@ public class Helper {
 		String[] newWords = new String[oldWords.length];
 		List<Consumer<Void>> queue = new ArrayList<>();
 		Consumer<Emote> after = e -> e.delete().queue();
-		for (int i = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < oldWords.length; i++) {
+		for (int i = 0, emotes = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < oldWords.length && emotes < 10; i++) {
 			if (!oldWords[i].startsWith("&")) {
 				newWords[i] = oldWords[i];
 				continue;
@@ -925,6 +925,7 @@ public class Helper {
 				} catch (IOException ex) {
 					Helper.logger(Helper.class).error(ex + " | " + ex.getStackTrace()[0]);
 				}
+				emotes++;
 			} else newWords[i] = oldWords[i];
 		}
 
