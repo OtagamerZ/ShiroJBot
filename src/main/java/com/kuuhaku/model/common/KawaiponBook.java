@@ -63,6 +63,7 @@ public class KawaiponBook {
 				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)
 		);
 		List<List<KawaiponCard>> chunks = Helper.chunkify(cardList.stream().map(c -> new KawaiponCard(c, foil)).collect(Collectors.toList()), COLUMN_COUNT);
+		chunks.removeIf(List::isEmpty);
 
 		BufferedImage header = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/header.png")));
 		BufferedImage footer = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/footer.png")));
@@ -157,10 +158,10 @@ public class KawaiponBook {
 				.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 		);
 		List<List<Champion>> chunks = Helper.chunkify(cardList, COLUMN_COUNT);
+		chunks.removeIf(List::isEmpty);
 
 		BufferedImage header = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/header.png")));
 		BufferedImage footer = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/footer.png")));
-		BufferedImage slot = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/slot.png")));
 
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
