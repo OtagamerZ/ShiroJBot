@@ -100,6 +100,7 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.DecimalFormat;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -160,6 +161,12 @@ public class Helper {
 		if (places < 0) throw new IllegalArgumentException();
 
 		return Precision.round(value, places);
+	}
+
+	public static String roundToString(double value, int places) {
+		if (places < 0) throw new IllegalArgumentException();
+
+		return new DecimalFormat("0" + (places > 0 ? "." : "") + StringUtils.repeat("#", places)).format(value);
 	}
 
 	public static float clamp(float val, float min, float max) {
@@ -1555,8 +1562,10 @@ public class Helper {
 	}
 
 	public static String getShortenedValue(long value, int forEach) {
+		if (value == 0) return String.valueOf(value);
 		int times = (int) Math.floor(log(value, forEach));
-		double reduced = round(value / Math.pow(forEach, times), 2);
+		String reduced = roundToString(value / Math.pow(forEach, times), 2);
+
 
 		return reduced + StringUtils.repeat("k", times);
 	}
