@@ -59,6 +59,9 @@ public class DeckEvalCommand extends Command {
 		for (Champion c : kp.getChampions())
 			count.put(c.getCategory(), count.getOrDefault(c.getCategory(), 0) + 1);
 
+		int normal = count.getOrDefault(null, 0);
+		count.remove(null);
+
 		String[] data = new String[14];
 		for (int i = 0; i < Class.values().length; i++) {
 			int ct = count.getOrDefault(Class.values()[i], 0);
