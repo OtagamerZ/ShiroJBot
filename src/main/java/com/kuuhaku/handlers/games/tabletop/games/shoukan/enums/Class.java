@@ -24,12 +24,12 @@ import java.util.Arrays;
 
 public enum Class {
 	DUELIST("Duelista", "Cartas-duelista são especializadas em causar dano mas sem sacrificar a defesa. São melhor aproveitadas no modo ofensivo e possuem alta sinergia com equipamentos de ataque."),
-	SUPPORT("Suporte", "Cartas-suporte são usadas principalmente para oferecer sustentação ao jogador ou outras cartas. Por possuirem atributos baixos, é essencial que hajam equipamentos ou cartas defendendo-as."),
 	TANK("Tanque", "Cartas-tanque são muito difíceis de abater em ataques diretos, e oferecem uma alta sobrevivência quando viradas para baixo. Possuem alta sinergia com equipamentos defensivos."),
-	SPECIALIST("Especialista", "Cartas-especialista possuem efeitos complexos ou situacionais, o que tornam-as incrivelmente difíceis de serem usadas. Mas não se engane, nas mãos certas uma carta especialista pode virar completamente a situação de uma partida."),
+	SUPPORT("Suporte", "Cartas-suporte são usadas principalmente para oferecer sustentação ao jogador ou outras cartas. Por possuirem atributos baixos, é essencial que hajam equipamentos ou cartas defendendo-as."),
 	NUKE("Nuker", "Cartas-nuker sacrificam a defesa e sobrevivência em troca de um ataque extremamente alto. Geralmente são cartas que duram no máximo 2 turnos, mas são muito valiosas quando usadas corretamente."),
 	TRAP("Armadilha", "Cartas-armadilha são feitas para serem jogadas viradas para baixo. Seus efeitos tornam-as muito perigosas, e causam relutância no oponente de atacar quando houver uma em campo."),
-	LEVELER("Nivelador", "Cartas-niveladora são cartas especializadas em mudar o fluxo da partida. São equivalentes às cartas-armadilha, mas devem ser usadas apenas quando necessário para causar maior efeito colateral.");
+	LEVELER("Nivelador", "Cartas-niveladora são cartas especializadas em mudar o fluxo da partida. São equivalentes às cartas-armadilha, mas devem ser usadas apenas quando necessário para causar maior efeito colateral."),
+	SPECIALIST("Especialista", "Cartas-especialista possuem efeitos complexos ou situacionais, o que tornam-as incrivelmente difíceis de serem usadas. Mas não se engane, nas mãos certas uma carta especialista pode virar completamente a situação de uma partida.");
 
 	private final String name;
 	private final String description;
