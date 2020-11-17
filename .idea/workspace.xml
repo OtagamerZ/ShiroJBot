@@ -13,17 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Comando Kawaipons agora exibe cartas elegíveis ou de uma classe específica;&#10;Adicionado comando de avaliação de deck;&#10;Correções gerais;">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/DeckEvalCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Class.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/UseConsumableCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/UseConsumableCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,9 +59,9 @@
         <option value="XML Properties File" />
         <option value="Interface" />
         <option value="GraphQL File" />
+        <option value="Class" />
         <option value="JavaScript File" />
         <option value="Enum" />
-        <option value="Class" />
       </list>
     </option>
   </component>
@@ -140,25 +132,25 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.dev" />
+      <recent name="com.kuuhaku.command.commands.discord.information" />
+      <recent name="com.kuuhaku.controller.postgresql" />
+      <recent name="com.kuuhaku.model.persistent" />
+      <recent name="com.kuuhaku.handlers.api.endpoint" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\arenas" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\frames" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\tabletop\games" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.command.commands.discord.information" />
-      <recent name="com.kuuhaku.command.commands.discord.dev" />
-      <recent name="com.kuuhaku.controller.postgresql" />
-      <recent name="com.kuuhaku.model.persistent" />
-      <recent name="com.kuuhaku.handlers.api.endpoint" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -171,17 +163,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -873,10 +854,13 @@
       <workItem from="1605236136913" duration="499000" />
       <workItem from="1605283369242" duration="1902000" />
       <workItem from="1605528168309" duration="4123000" />
-      <workItem from="1605542890672" duration="1778000" />
-      <workItem from="1605546530188" duration="30000" />
-      <workItem from="1605553225280" duration="2896000" />
-      <workItem from="1605614347756" duration="10430000" />
+    </task>
+    <task id="LOCAL-02872" summary="Tentativa de correção das fusões com mais de 3 materiais">
+      <created>1604977941740</created>
+      <option name="number" value="02872" />
+      <option name="presentableId" value="LOCAL-02872" />
+      <option name="project" value="LOCAL" />
+      <updated>1604977941740</updated>
     </task>
     <task id="LOCAL-02873" summary="Tentativa de correção das fusões com mais de 3 materiais">
       <created>1604979617202</created>
@@ -1214,14 +1198,7 @@
       <option name="project" value="LOCAL" />
       <updated>1605530897585</updated>
     </task>
-    <task id="LOCAL-02921" summary="Correção no comando trade">
-      <created>1605543134379</created>
-      <option name="number" value="02921" />
-      <option name="presentableId" value="LOCAL-02921" />
-      <option name="project" value="LOCAL" />
-      <updated>1605543134379</updated>
-    </task>
-    <option name="localTasksCounter" value="2922" />
+    <option name="localTasksCounter" value="2921" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1287,6 +1264,7 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
+    <MESSAGE value="Adicionado comando para ver seus tickets;&#10;Stephanie agora anunciará o sorteio da loteria via canal de avisos também;" />
     <MESSAGE value="Usar xpbooster agora notifica ao passar de nível" />
     <MESSAGE value="Atualização da biblioteca lavaplayer" />
     <MESSAGE value="Adição de GIFs para certos efeitos no Shoukan" />
@@ -1311,8 +1289,7 @@
     <MESSAGE value="Adição de opção de não receber mais notificações de Exceed" />
     <MESSAGE value="Correção no efeito de atordoamento" />
     <MESSAGE value="Correção menor" />
-    <MESSAGE value="Correção no comando trade" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no comando trade" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1348,10 +1325,10 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1605631160825">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1605236409977">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1605631160825" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1605192088802" />
     <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605236409977" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1374,10 +1351,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605630538230">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605530894313">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605630538230" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605530894313" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1605528924821">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1386,25 +1363,25 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1387" height="266" key="GridCell.Tab.0.bottom" timestamp="1605614365706">
+    <state width="1387" height="316" key="GridCell.Tab.0.bottom" timestamp="1605530900907">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="266" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1605614365706" />
+    <state width="1387" height="316" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1605530900907" />
     <state width="1293" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="266" key="GridCell.Tab.0.center" timestamp="1605614365705">
+    <state width="1387" height="316" key="GridCell.Tab.0.center" timestamp="1605530900906">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="266" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1605614365705" />
+    <state width="1387" height="316" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1605530900906" />
     <state width="1293" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="266" key="GridCell.Tab.0.left" timestamp="1605614365705">
+    <state width="1387" height="316" key="GridCell.Tab.0.left" timestamp="1605530900906">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="266" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1605614365705" />
+    <state width="1387" height="316" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1605530900906" />
     <state width="1293" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="266" key="GridCell.Tab.0.right" timestamp="1605614365706">
+    <state width="1387" height="316" key="GridCell.Tab.0.right" timestamp="1605530900907">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="266" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1605614365706" />
+    <state width="1387" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1605530900907" />
     <state width="1293" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
     <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1603507846095">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1437,10 +1414,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605543136590">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605530899487">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605543136590" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605530899487" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605225119647" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
