@@ -176,7 +176,8 @@ public class Account {
 		try {
 			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
-			Helper.logger(this.getClass()).info("""							
+			Helper.logger(this.getClass()).info("""		
+     										
 					Voto anterior: %s							       
 					Hoje: %s     
 					Acumula? %s
