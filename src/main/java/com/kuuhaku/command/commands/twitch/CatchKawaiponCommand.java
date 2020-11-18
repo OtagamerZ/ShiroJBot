@@ -80,7 +80,7 @@ public class CatchKawaiponCommand extends TwitchCommand {
 
 		Main.getInfo().getCurrentCard().invalidate("twitch");
 		kp.addCard(kc);
-		acc.removeCredit(cost, this.getClass());
+		acc.consumeCredit(cost, this.getClass());
 
 		KawaiponDAO.saveKawaipon(kp);
 		AccountDAO.saveAccount(acc);
