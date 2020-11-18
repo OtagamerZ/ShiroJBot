@@ -55,11 +55,18 @@ public class DeckEvalCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		Map<Class, Integer> count = new HashMap<>();
+		Map<Class, Integer> count = new HashMap<>() {{
+			put(Class.DUELIST, 0);
+			put(Class.SUPPORT, 0);
+			put(Class.TANK, 0);
+			put(Class.SPECIALIST, 0);
+			put(Class.NUKE, 0);
+			put(Class.TRAP, 0);
+			put(Class.LEVELER, 0);
+		}};
 		for (Champion c : kp.getChampions())
 			count.put(c.getCategory(), count.getOrDefault(c.getCategory(), 0) + 1);
 
-		int normal = count.getOrDefault(null, 0);
 		count.remove(null);
 
 		String[] data = new String[14];
