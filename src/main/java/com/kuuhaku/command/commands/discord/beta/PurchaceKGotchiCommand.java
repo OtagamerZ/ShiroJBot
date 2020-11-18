@@ -75,7 +75,7 @@ public class PurchaceKGotchiCommand extends Command {
 
 		switch (args[0]) {
 			/*case "escolher" -> {
-				if (acc.getBalance() < 2500) {
+				if (acc.getTotalBalance() < 2500) {
 					channel.sendMessage("❌ | Você não possui créditos suficientes (seus créditos: " + acc.getBalance() + ")!").queue();
 					return;
 				} else if (args.length == 2) {
@@ -132,7 +132,7 @@ public class PurchaceKGotchiCommand extends Command {
 				}
 			}*/
 			case "aleatorio" -> {
-				if (acc.getBalance() < 500) {
+				if (acc.getTotalBalance() < 500) {
 					channel.sendMessage("❌ | Você não possui créditos suficientes (seus créditos: " + acc.getBalance() + ")!").queue();
 					return;
 				} else if (args.length < 2) {

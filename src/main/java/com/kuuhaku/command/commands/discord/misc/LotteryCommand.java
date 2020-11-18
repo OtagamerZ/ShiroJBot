@@ -81,7 +81,7 @@ public class LotteryCommand extends Command {
 		}
 
 		long cost = (long) (1000 * Math.pow(5, LotteryDAO.getLotteriesByUser(author.getId()).size()));
-		if (acc.getBalance() < cost) {
+		if (acc.getTotalBalance() < cost) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
 		}

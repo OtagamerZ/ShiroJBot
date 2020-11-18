@@ -121,6 +121,10 @@ public class Account {
 		return vBalance;
 	}
 
+	public long getTotalBalance() {
+		return balance + vBalance;
+	}
+
 	public long getLoan() {
 		return loan;
 	}
