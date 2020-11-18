@@ -84,7 +84,7 @@ public class SlotsCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 		AtomicLong bet = new AtomicLong(Long.parseLong(args[0]));
 
-		if (acc.getBalance() < bet.get()) {
+		if (acc.getTotalBalance() < bet.get()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
 		}

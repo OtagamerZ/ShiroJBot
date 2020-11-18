@@ -66,7 +66,7 @@ public class BuyConsumableCommand extends Command {
 		if (!ConsumableShop.getAvailable().containsKey(args[0])) {
 			channel.sendMessage("❌ | Esse item não existe.").queue();
 			return;
-		} else if (acc.getBalance() < ConsumableShop.getAvailable().get(args[0]).getPrice()) {
+		} else if (acc.getTotalBalance() < ConsumableShop.getAvailable().get(args[0]).getPrice()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
 		}

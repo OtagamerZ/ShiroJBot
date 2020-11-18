@@ -145,7 +145,7 @@ public class PurchaseBuffCommand extends Command {
 			return;
 		}
 
-		if (acc.getBalance() < sb.getPrice()) {
+		if (acc.getTotalBalance() < sb.getPrice()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
 		}
