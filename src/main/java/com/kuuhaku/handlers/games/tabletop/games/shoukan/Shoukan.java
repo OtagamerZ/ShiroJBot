@@ -823,7 +823,7 @@ public class Shoukan extends Game {
 			int remaining = 5 - h.getCards().size();
 
 			if (remaining <= 0) {
-				channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver 5 cartas ou mais na sua mão.").queue(null, Helper::doNothing);
+				channel.sendMessage("❌ | Você não pode puxar mais cartas se tiver 5 ou mais na sua mão.").queue(null, Helper::doNothing);
 				return;
 			}
 
