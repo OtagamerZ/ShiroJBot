@@ -57,7 +57,7 @@ public class PayLoanCommand extends Command {
 			return;
 		}
 
-		acc.removeCredit(toPay, this.getClass());
+		acc.consumeCredit(toPay, this.getClass());
 		acc.addCredit(toPay, this.getClass());
 		channel.sendMessage("Você debitou " + toPay + " créditos da sua dívida.").queue();
 

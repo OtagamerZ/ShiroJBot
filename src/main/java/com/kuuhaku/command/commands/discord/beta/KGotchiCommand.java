@@ -280,7 +280,7 @@ public class KGotchiCommand extends Command {
 							}
 
 							k.addVanity(v);
-							acc.removeCredit(v.getPrice(), this.getClass());
+							acc.consumeCredit(v.getPrice(), this.getClass());
 
 							channel.sendMessage("Você comprou uma " + v.getName().toLowerCase() + " por " + v.getPrice() + " créditos.").queue();
 
@@ -325,7 +325,7 @@ public class KGotchiCommand extends Command {
 
 							if (args.length < 4) {
 								k.addToBag(f);
-								acc.removeCredit(f.getPrice(), this.getClass());
+								acc.consumeCredit(f.getPrice(), this.getClass());
 
 								channel.sendMessage("Você comprou 1 unidade de " + f.getName().toLowerCase() + " por " + f.getPrice() + " créditos.").queue();
 
@@ -342,7 +342,7 @@ public class KGotchiCommand extends Command {
 								}
 
 								k.addToBag(f, Integer.parseInt(args[3]));
-								acc.removeCredit(f.getPrice() * Integer.parseInt(args[3]), this.getClass());
+								acc.consumeCredit(f.getPrice() * Integer.parseInt(args[3]), this.getClass());
 
 								channel.sendMessage("Você comprou " + args[3] + " unidades de " + f.getName().toLowerCase() + " por " + (f.getPrice() * Integer.parseInt(args[3])) + " créditos.").queue();
 							}
