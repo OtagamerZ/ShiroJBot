@@ -13,13 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção menor">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Retorno do comando Say, mas com limitações;&#10;Adição de salário para suportes;&#10;Comando de requisitar avaliação agora exige ticket aberto;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/RatingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/RatingCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -861,13 +856,6 @@
       <workItem from="1605642075623" duration="800000" />
       <workItem from="1605642968525" duration="900000" />
     </task>
-    <task id="LOCAL-02880" summary="Integração da API do Now Animes">
-      <created>1605017434382</created>
-      <option name="number" value="02880" />
-      <option name="presentableId" value="LOCAL-02880" />
-      <option name="project" value="LOCAL" />
-      <updated>1605017434383</updated>
-    </task>
     <task id="LOCAL-02881" summary="Integração da API do Now Animes">
       <created>1605017792481</created>
       <option name="number" value="02881" />
@@ -1204,7 +1192,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605638662132</updated>
     </task>
-    <option name="localTasksCounter" value="2929" />
+    <task id="LOCAL-02929" summary="Retorno do comando Say, mas com limitações;&#10;Adição de salário para suportes;&#10;Comando de requisitar avaliação agora exige ticket aberto;">
+      <created>1605655435441</created>
+      <option name="number" value="02929" />
+      <option name="presentableId" value="LOCAL-02929" />
+      <option name="project" value="LOCAL" />
+      <updated>1605655435442</updated>
+    </task>
+    <option name="localTasksCounter" value="2930" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1270,8 +1265,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adicionado comando para ver seus tickets;&#10;Stephanie agora anunciará o sorteio da loteria via canal de avisos também;" />
-    <MESSAGE value="Usar xpbooster agora notifica ao passar de nível" />
     <MESSAGE value="Atualização da biblioteca lavaplayer" />
     <MESSAGE value="Adição de GIFs para certos efeitos no Shoukan" />
     <MESSAGE value="Correção do comando Ping" />
@@ -1295,7 +1288,9 @@
     <MESSAGE value="Adição de opção de não receber mais notificações de Exceed" />
     <MESSAGE value="Correção no efeito de atordoamento" />
     <MESSAGE value="Correção menor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
+    <MESSAGE value="Retorno do comando Say, mas com limitações." />
+    <MESSAGE value="Retorno do comando Say, mas com limitações;&#10;Adição de salário para suportes;&#10;Comando de requisitar avaliação agora exige ticket aberto;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Retorno do comando Say, mas com limitações;&#10;Adição de salário para suportes;&#10;Comando de requisitar avaliação agora exige ticket aberto;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1420,11 +1415,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605638663786">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605655437783">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605638663786" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605225119647" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
