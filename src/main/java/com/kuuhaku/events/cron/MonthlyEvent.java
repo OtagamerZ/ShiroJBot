@@ -159,7 +159,8 @@ public class MonthlyEvent implements Job {
 
 		for (String id : ShiroInfo.getSupports()) {
 			Account acc = AccountDAO.getAccount(id);
-			acc.addCredit(5000, MonthlyEvent.class);
+			DevRating dr = VotesDAO.getRating(id);
+			acc.addCredit(Math.round(5000 * Helper.prcnt((dr.getInteraction() + dr.getKnowledge() + dr.getSolution()) / 3, 5)), MonthlyEvent.class);
 			AccountDAO.saveAccount(acc);
 		}
 	}
