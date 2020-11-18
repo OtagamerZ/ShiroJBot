@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/URankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/URankCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -856,13 +856,6 @@
       <workItem from="1605642075623" duration="800000" />
       <workItem from="1605642968525" duration="900000" />
     </task>
-    <task id="LOCAL-02884" summary="Correção na busca por anime">
-      <created>1605025244698</created>
-      <option name="number" value="02884" />
-      <option name="presentableId" value="LOCAL-02884" />
-      <option name="project" value="LOCAL" />
-      <updated>1605025244698</updated>
-    </task>
     <task id="LOCAL-02885" summary="Correção na busca por anime">
       <created>1605025852688</created>
       <option name="number" value="02885" />
@@ -1199,7 +1192,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605706953595</updated>
     </task>
-    <option name="localTasksCounter" value="2933" />
+    <task id="LOCAL-02933" summary="Correção no ranking de créditos">
+      <created>1605709544598</created>
+      <option name="number" value="02933" />
+      <option name="presentableId" value="LOCAL-02933" />
+      <option name="project" value="LOCAL" />
+      <updated>1605709544598</updated>
+    </task>
+    <option name="localTasksCounter" value="2934" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1265,7 +1265,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção do comando Ping" />
     <MESSAGE value="Melhoria do envio de mensagens das cartas durante o Shoukan" />
     <MESSAGE value="Correção do sendWebhookMessage" />
     <MESSAGE value="Melhoria na estrutura do Shoukan" />
@@ -1290,7 +1289,8 @@
     <MESSAGE value="Correção basica" />
     <MESSAGE value="Durante a Black Friday a loja recebe 25% de desconto" />
     <MESSAGE value="Loteria agora acumula o valor pago e não metade dele;&#10;Loteria agora sorteia valores de 00 à 30;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Loteria agora acumula o valor pago e não metade dele;&#10;Loteria agora sorteia valores de 00 à 30;" />
+    <MESSAGE value="Correção no ranking de créditos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no ranking de créditos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1352,10 +1352,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605706950672">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605709541650">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605706950672" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605709541650" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1605528924821">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1415,10 +1415,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605706955090">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605709546417">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605706955090" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605709546417" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
