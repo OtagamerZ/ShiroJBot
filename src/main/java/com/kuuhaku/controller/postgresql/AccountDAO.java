@@ -41,6 +41,19 @@ public class AccountDAO {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<Account> getVolatileAccounts() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT a FROM Account a WHERE vBalance > 0", Account.class);
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static Account getAccount(String id) {
 		EntityManager em = Manager.getEntityManager();
 

@@ -53,6 +53,9 @@ public class Account {
 	private long balance = 0;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long vBalance = 0;
+
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long loan = 0;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
@@ -114,6 +117,10 @@ public class Account {
 		return balance;
 	}
 
+	public long getVBalance() {
+		return vBalance;
+	}
+
 	public long getLoan() {
 		return loan;
 	}
@@ -141,9 +148,43 @@ public class Account {
 		}
 	}
 
+	public synchronized void addVCredit(long credit, Class<?> from) {
+		if (credit == 0) return;
+		else if (this.loan > 0) {
+			TransactionDAO.register(userId, from, -credit);
+			loan = loan - credit;
+		} else {
+			TransactionDAO.register(userId, from, credit);
+			vBalance += credit;
+		}
+
+		if (loan < 0) {
+			vBalance += loan * -1;
+			TransactionDAO.register(userId, from, loan * -1);
+			loan = 0;
+		}
+	}
+
 	public synchronized void removeCredit(long credit, Class<?> from) {
 		this.balance -= credit;
 		if (credit != 0) TransactionDAO.register(userId, from, -credit);
+	}
+
+	public synchronized void consumeCredit(long credit, Class<?> from) {
+		long remaining = vBalance - credit;
+
+		if (remaining > 0) {
+			this.vBalance = 0;
+			this.balance -= remaining;
+		} else {
+			this.vBalance -= credit;
+		}
+
+		if (credit != 0) TransactionDAO.register(userId, from, -credit);
+	}
+
+	public synchronized void expireVCredit() {
+		this.vBalance *= 0.75;
 	}
 
 	public synchronized void addLoan(long loan) {

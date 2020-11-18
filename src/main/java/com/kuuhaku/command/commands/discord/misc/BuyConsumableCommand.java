@@ -72,7 +72,7 @@ public class BuyConsumableCommand extends Command {
 		}
 
 		acc.addBuff(args[0]);
-		acc.removeCredit(ConsumableShop.getAvailable().get(args[0]).getPrice(), this.getClass());
+		acc.consumeCredit(ConsumableShop.getAvailable().get(args[0]).getPrice(), this.getClass());
 		AccountDAO.saveAccount(acc);
 		channel.sendMessage("Item comprado com sucesso, use `" + prefix + "usar " + args[0] + "` para usá-lo.").queue();
 	}

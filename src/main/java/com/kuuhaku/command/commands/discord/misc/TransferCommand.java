@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -70,8 +71,8 @@ public class TransferCommand extends Command {
 
 		boolean victorious = ExceedDAO.hasExceed(author.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
 		int rawAmount = Integer.parseInt(args[1]);
-		int tax = victorious ? 0 : (int) Math.floor(rawAmount * 0.025);
-		int liquidAmount = rawAmount - tax;
+		double tax = 0.01 + Helper.minMax(0.29 * Helper.prcnt(from.getBalance(), 500000), 0, 0.29);
+		int liquidAmount = rawAmount - (victorious ? 0 : (int) Math.floor(rawAmount * tax));
 
 		if (from.getBalance() < rawAmount) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
@@ -93,6 +94,6 @@ public class TransferCommand extends Command {
 		if (victorious)
 			channel.sendMessage(":white_check_mark: | **" + liquidAmount + "** créditos transferidos com sucesso! (Exceed vitorioso isento de taxa)").queue();
 		else
-			channel.sendMessage(":white_check_mark: | **" + liquidAmount + "** créditos transferidos com sucesso! (Taxa de transferência: " + tax + " créditos)").queue();
+			channel.sendMessage(":white_check_mark: | **" + liquidAmount + "** créditos transferidos com sucesso! (Taxa de transferência: " + Helper.roundToString(tax * 100, 1) + "%)").queue();
 	}
 }

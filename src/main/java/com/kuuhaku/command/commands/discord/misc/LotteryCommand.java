@@ -93,7 +93,7 @@ public class LotteryCommand extends Command {
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
 					Main.getInfo().getConfirmationPending().invalidate(author.getId());
-					acc.removeCredit(cost, this.getClass());
+					acc.consumeCredit(cost, this.getClass());
 					AccountDAO.saveAccount(acc);
 					LotteryDAO.saveLottery(new Lottery(author.getId(), args[0]));
 

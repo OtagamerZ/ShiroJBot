@@ -19,9 +19,11 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.BackupDAO;
 import com.kuuhaku.model.common.DataDump;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import org.json.JSONObject;
 import org.quartz.Job;
@@ -29,6 +31,7 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import java.io.File;
+import java.util.List;
 
 public class HourlyEvent implements Job {
 	public static JobDetail backup;
@@ -68,6 +71,12 @@ public class HourlyEvent implements Job {
 
 		for (File file : Main.getInfo().getCollectionsFolder().listFiles()) {
 			file.delete();
+		}
+
+		List<Account> accs = AccountDAO.getVolatileAccounts();
+		for (Account acc : accs) {
+			acc.expireVCredit();
+			AccountDAO.saveAccount(acc);
 		}
 	}
 }
