@@ -274,7 +274,7 @@ public class KGotchiCommand extends Command {
 							if (v == null) {
 								channel.sendMessage("❌ | Decoração inválida, você não quis dizer **" + Helper.didYouMean(args[2], VanityMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
 								return;
-							} else if (acc.getBalance() < v.getPrice()) {
+							} else if (acc.getTotalBalance() < v.getPrice()) {
 								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 								return;
 							}
@@ -318,7 +318,7 @@ public class KGotchiCommand extends Command {
 							if (f == null) {
 								channel.sendMessage("❌ | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[2], FoodMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
 								return;
-							} else if (acc.getBalance() < f.getPrice()) {
+							} else if (acc.getTotalBalance() < f.getPrice()) {
 								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 								return;
 							}
@@ -336,7 +336,7 @@ public class KGotchiCommand extends Command {
 								} else if (Integer.parseInt(args[3]) <= 0) {
 									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_amount-too-low")).queue();
 									return;
-								} else if (acc.getBalance() < f.getPrice() * Integer.parseInt(args[3])) {
+								} else if (acc.getTotalBalance() < f.getPrice() * Integer.parseInt(args[3])) {
 									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 									return;
 								}

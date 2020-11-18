@@ -63,7 +63,7 @@ public class CatchKawaiponCommand extends Command {
 		}
 
 		int cost = kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * (kc.isFoil() ? 2 : 1);
-		if (acc.getBalance() < cost) {
+		if (acc.getTotalBalance() < cost) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
 		}
