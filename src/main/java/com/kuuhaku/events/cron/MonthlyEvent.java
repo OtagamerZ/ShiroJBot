@@ -88,7 +88,7 @@ public class MonthlyEvent implements Job {
 
 		String[] dozens = new String[6];
 		for (int i = 0; i < 6; i++) {
-			dozens[i] = StringUtils.leftPad(String.valueOf(Helper.rng(60, false)), 2, "0");
+			dozens[i] = StringUtils.leftPad(String.valueOf(Helper.rng(30, false)), 2, "0");
 		}
 		String result = String.join(",", dozens);
 		List<Lottery> winners = LotteryDAO.getLotteries();

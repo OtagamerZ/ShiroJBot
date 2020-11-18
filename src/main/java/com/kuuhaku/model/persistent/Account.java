@@ -67,42 +67,42 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean remind = false;
 
-    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean notified = false;
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean notified = false;
 
-    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean animatedBg = false;
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean animatedBg = false;
 
-    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean follower = false;
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean follower = false;
 
-    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
-    private boolean receiveNotifs = true;
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
+	private boolean receiveNotifs = true;
 
-    @Column(columnDefinition = "TEXT")
-    private String buffs = "{}";
+	@Column(columnDefinition = "TEXT")
+	private String buffs = "{}";
 
-    @Enumerated(value = EnumType.STRING)
-    private FrameColor frame = FrameColor.PINK;
+	@Enumerated(value = EnumType.STRING)
+	private FrameColor frame = FrameColor.PINK;
 
-    @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-    private String ultimate = "";
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String ultimate = "";
 
-    @Temporal(TemporalType.DATE)
-    private Calendar lastDaily = null;
+	@Temporal(TemporalType.DATE)
+	private Calendar lastDaily = null;
 
-    @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-    private int bugs = 0;
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int bugs = 0;
 
-    public String getUserId() {
-        return userId;
-    }
+	public String getUserId() {
+		return userId;
+	}
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-    public String getTwitchId() {
+	public String getTwitchId() {
 		return twitchId;
 	}
 
@@ -176,10 +176,11 @@ public class Account {
 		try {
 			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
-			Helper.logger(this.getClass()).info(
-					"\nVoto anterior: " + lastVote.format(Helper.dateformat) +
-					"\nHoje: " + today.format(Helper.dateformat) +
-					"\nAcumula? " + today.isBefore(lastVote.plusHours(24))
+			Helper.logger(this.getClass()).info("""							
+					Voto anterior: %s							       
+					Hoje: %s     
+					Acumula? %s
+					""".formatted(lastVote.format(Helper.dateformat), today.format(Helper.dateformat), today.isBefore(lastVote.plusHours(24)))
 			);
 
 			if (today.isBefore(lastVote.plusHours(24)) || streak == 0) streak = Helper.clamp(streak + 1, 0, 7);
@@ -267,33 +268,33 @@ public class Account {
 
 	public void setAnimatedBg(boolean animatedBg) {
 		this.animatedBg = animatedBg;
-    }
+	}
 
-    public boolean isFollower() {
-        return follower;
-    }
+	public boolean isFollower() {
+		return follower;
+	}
 
-    public void setFollower(boolean follower) {
-        this.follower = follower;
-    }
+	public void setFollower(boolean follower) {
+		this.follower = follower;
+	}
 
-    public boolean isReceivingNotifs() {
-        return receiveNotifs;
-    }
+	public boolean isReceivingNotifs() {
+		return receiveNotifs;
+	}
 
-    public void setReceiveNotifs(boolean receiveNotifs) {
-        this.receiveNotifs = receiveNotifs;
-    }
+	public void setReceiveNotifs(boolean receiveNotifs) {
+		this.receiveNotifs = receiveNotifs;
+	}
 
-    public Map<String, Integer> getBuffs() {
-        if (buffs == null) return new HashMap<>();
-        else return new JSONObject(buffs)
-                .toMap()
-                .entrySet()
-                .stream()
-                .map(e -> Pair.of(e.getKey(), (int) e.getValue()))
-                .collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
-    }
+	public Map<String, Integer> getBuffs() {
+		if (buffs == null) return new HashMap<>();
+		else return new JSONObject(buffs)
+				.toMap()
+				.entrySet()
+				.stream()
+				.map(e -> Pair.of(e.getKey(), (int) e.getValue()))
+				.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
+	}
 
 	public void setBuffs(Map<String, Integer> buffs) {
 		this.buffs = new JSONObject(buffs).toString();
@@ -323,26 +324,26 @@ public class Account {
 		if (ultimate != null && !ultimate.isBlank()) {
 			Kawaipon kp = KawaiponDAO.getKawaipon(userId);
 
-            AnimeName an = AnimeName.valueOf(ultimate);
-            if (CardDAO.totalCards(an) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an) && !k.isFoil()).count())
-                return ultimate;
-        }
-        return "";
-    }
+			AnimeName an = AnimeName.valueOf(ultimate);
+			if (CardDAO.totalCards(an) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an) && !k.isFoil()).count())
+				return ultimate;
+		}
+		return "";
+	}
 
-    public void setUltimate(String ultimate) {
-        this.ultimate = ultimate;
-    }
+	public void setUltimate(String ultimate) {
+		this.ultimate = ultimate;
+	}
 
-    public int getBugs() {
-        return bugs;
-    }
+	public int getBugs() {
+		return bugs;
+	}
 
-    public void addBug() {
-        this.bugs++;
-    }
+	public void addBug() {
+		this.bugs++;
+	}
 
-    public void setBugs(int bugs) {
-        this.bugs = bugs;
-    }
+	public void setBugs(int bugs) {
+		this.bugs = bugs;
+	}
 }
