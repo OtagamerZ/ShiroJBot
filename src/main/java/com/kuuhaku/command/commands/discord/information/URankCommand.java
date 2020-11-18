@@ -162,7 +162,7 @@ public class URankCommand extends Command {
 				next10.append("%s - %s %s\n".formatted(
 						i + 1,
 						checkUser(accs.get(i)),
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL), accs.get(i).getBalance())
+						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), accs.get(i).getBalance())
 				));
 			}
 
