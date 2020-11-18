@@ -71,8 +71,8 @@ public class LotteryCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		for (String dozen : args[0].split(",")) {
-			if (!StringUtils.isNumeric(dozen) || !Helper.between(Integer.parseInt(dozen), 0, 61)) {
-				channel.sendMessage("❌ | As dezenas devem ser valores numéricos de 00 a 60.").queue();
+			if (!StringUtils.isNumeric(dozen) || !Helper.between(Integer.parseInt(dozen), 0, 31)) {
+				channel.sendMessage("❌ | As dezenas devem ser valores numéricos de 00 a 30.").queue();
 				return;
 			} else if (args[0].split(dozen).length > 2) {
 				channel.sendMessage("❌ | Você não pode repetir dezenas.").queue();
@@ -98,7 +98,7 @@ public class LotteryCommand extends Command {
 					LotteryDAO.saveLottery(new Lottery(author.getId(), args[0]));
 
 					LotteryValue lv = LotteryDAO.getLotteryValue();
-					lv.addValue(cost / 2);
+					lv.addValue(cost);
 					LotteryDAO.saveLotteryValue(lv);
 
 					s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Bilhete comprado com sucesso!")).queue();
