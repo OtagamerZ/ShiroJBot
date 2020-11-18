@@ -177,9 +177,9 @@ public class Account {
 	public synchronized void consumeCredit(long credit, Class<?> from) {
 		long remaining = vBalance - credit;
 
-		if (remaining > 0) {
+		if (remaining < 0) {
 			this.vBalance = 0;
-			this.balance -= remaining;
+			this.balance -= Math.abs(remaining);
 		} else {
 			this.vBalance -= credit;
 		}

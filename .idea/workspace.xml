@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -867,14 +868,7 @@
       <workItem from="1605642075623" duration="800000" />
       <workItem from="1605642968525" duration="900000" />
       <workItem from="1605711618235" duration="56000" />
-      <workItem from="1605718490265" duration="4824000" />
-    </task>
-    <task id="LOCAL-02889" summary="Adição de getter para atributos alternativos das cartas">
-      <created>1605031430768</created>
-      <option name="number" value="02889" />
-      <option name="presentableId" value="LOCAL-02889" />
-      <option name="project" value="LOCAL" />
-      <updated>1605031430769</updated>
+      <workItem from="1605718490265" duration="5444000" />
     </task>
     <task id="LOCAL-02890" summary="Adicionado comando para ver seus tickets;&#10;Stephanie agora anunciará o sorteio da loteria via canal de avisos também;">
       <created>1605032656743</created>
@@ -1212,7 +1206,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605723050943</updated>
     </task>
-    <option name="localTasksCounter" value="2938" />
+    <task id="LOCAL-02938" summary="Implementação de créditos voláteis">
+      <created>1605723660509</created>
+      <option name="number" value="02938" />
+      <option name="presentableId" value="LOCAL-02938" />
+      <option name="project" value="LOCAL" />
+      <updated>1605723660509</updated>
+    </task>
+    <option name="localTasksCounter" value="2939" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1365,10 +1366,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605723047738">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605723993066">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605723047738" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605723993066" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1605528924821">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1428,10 +1429,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605723053815">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605723662051">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605723053815" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605723662051" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
