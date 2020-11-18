@@ -116,7 +116,10 @@ public class DeckEvalCommand extends Command {
 			}
 		}
 
-		eb.setDescription(sb.toString().isBlank() ? "Seu deck está bem distribuído, parabéns!" : StringUtils.trim(sb.toString()));
+		if (kp.getChampions().size() < 30)
+			eb.setDescription("Seu deck ainda não está pronto para duelos.");
+		else
+			eb.setDescription(sb.toString().isBlank() ? "Seu deck está bem distribuído, parabéns!" : StringUtils.trim(sb.toString()));
 
 		channel.sendMessage(eb.build()).queue();
 	}
