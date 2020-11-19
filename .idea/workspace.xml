@@ -162,19 +162,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -870,14 +857,7 @@
       <workItem from="1605642968525" duration="900000" />
       <workItem from="1605711618235" duration="56000" />
       <workItem from="1605718490265" duration="12928000" />
-      <workItem from="1605787366807" duration="3278000" />
-    </task>
-    <task id="LOCAL-02896" summary="Melhoria do envio de mensagens das cartas durante o Shoukan">
-      <created>1605037773298</created>
-      <option name="number" value="02896" />
-      <option name="presentableId" value="LOCAL-02896" />
-      <option name="project" value="LOCAL" />
-      <updated>1605037773299</updated>
+      <workItem from="1605787366807" duration="6110000" />
     </task>
     <task id="LOCAL-02897" summary="Melhoria do envio de mensagens das cartas durante o Shoukan">
       <created>1605038341695</created>
@@ -1215,7 +1195,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605789659846</updated>
     </task>
-    <option name="localTasksCounter" value="2945" />
+    <task id="LOCAL-02945" summary="Aumento na taxa de conversão dos sonhos da Loritta">
+      <created>1605791152427</created>
+      <option name="number" value="02945" />
+      <option name="presentableId" value="LOCAL-02945" />
+      <option name="project" value="LOCAL" />
+      <updated>1605791152427</updated>
+    </task>
+    <option name="localTasksCounter" value="2946" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1368,10 +1355,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605789656830">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605791149488">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605789656830" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605791149488" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1605528924821">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1380,25 +1367,25 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1387" height="266" key="GridCell.Tab.0.bottom" timestamp="1605638231958">
+    <state width="1387" height="279" key="GridCell.Tab.0.bottom" timestamp="1605793284009">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="266" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1605638231958" />
+    <state width="1387" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1605793284009" />
     <state width="1293" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="266" key="GridCell.Tab.0.center" timestamp="1605638231957">
+    <state width="1387" height="279" key="GridCell.Tab.0.center" timestamp="1605793284008">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="266" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1605638231957" />
+    <state width="1387" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1605793284008" />
     <state width="1293" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="266" key="GridCell.Tab.0.left" timestamp="1605638231957">
+    <state width="1387" height="279" key="GridCell.Tab.0.left" timestamp="1605793284008">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="266" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1605638231957" />
+    <state width="1387" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1605793284008" />
     <state width="1293" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="266" key="GridCell.Tab.0.right" timestamp="1605638231957">
+    <state width="1387" height="279" key="GridCell.Tab.0.right" timestamp="1605793284008">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="266" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1605638231957" />
+    <state width="1387" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1605793284008" />
     <state width="1293" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
     <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1603507846095">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1431,10 +1418,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605789662685">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605791155254">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605789662685" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605791155254" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1484,10 +1471,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116333066" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1605788954452">
+    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1605791138820">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605788954452" />
+    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605791138820" />
     <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604459307974" />
     <state x="600" y="294" key="git4idea.ui.GitUnstashDialog" timestamp="1603112264983">
       <screen x="0" y="0" width="1680" height="1010" />
