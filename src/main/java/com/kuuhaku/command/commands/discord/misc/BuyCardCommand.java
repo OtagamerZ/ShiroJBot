@@ -237,6 +237,11 @@ public class BuyCardCommand extends Command {
 		EquipmentMarket em = EquipmentMarketDAO.getCard(Integer.parseInt(args[0]));
 		FieldMarket fm = FieldMarketDAO.getCard(Integer.parseInt(args[0]));
 
+		if (buyer.getLoan() > 0) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-with-loan")).queue();
+			return;
+		}
+
 		int type = cm == null ? em == null ? fm == null ? -1 : 3 : 2 : 1;
 		switch (type) {
 			case 1 -> {
