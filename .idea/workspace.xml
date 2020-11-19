@@ -15,7 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonRequest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,17 +164,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -868,14 +858,8 @@
       <workItem from="1605642075623" duration="800000" />
       <workItem from="1605642968525" duration="900000" />
       <workItem from="1605711618235" duration="56000" />
-      <workItem from="1605718490265" duration="6689000" />
-    </task>
-    <task id="LOCAL-02893" summary="Adição de GIFs para certos efeitos no Shoukan">
-      <created>1605035059869</created>
-      <option name="number" value="02893" />
-      <option name="presentableId" value="LOCAL-02893" />
-      <option name="project" value="LOCAL" />
-      <updated>1605035059869</updated>
+      <workItem from="1605718490265" duration="12928000" />
+      <workItem from="1605787366807" duration="872000" />
     </task>
     <task id="LOCAL-02894" summary="Correção do comando Ping">
       <created>1605036355077</created>
@@ -1213,7 +1197,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605724873855</updated>
     </task>
-    <option name="localTasksCounter" value="2942" />
+    <task id="LOCAL-02942" summary="Implementação de créditos voláteis">
+      <created>1605725270284</created>
+      <option name="number" value="02942" />
+      <option name="presentableId" value="LOCAL-02942" />
+      <option name="project" value="LOCAL" />
+      <updated>1605725270284</updated>
+    </task>
+    <option name="localTasksCounter" value="2943" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1366,10 +1357,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605724871013">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605725267193">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605724871013" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605725267193" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1605528924821">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1407,10 +1398,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1597148986370" />
-    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1605720494160">
+    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1605729179379">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605720494160" />
+    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605729179379" />
     <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605066080212" />
     <state x="303" y="75" key="SettingsEditor" timestamp="1605061817984">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1429,10 +1420,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605724877611">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605725272037">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605724877611" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605725272037" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1482,10 +1473,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116333066" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1605723029594">
+    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1605726656670">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605723029594" />
+    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605726656670" />
     <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604459307974" />
     <state x="600" y="294" key="git4idea.ui.GitUnstashDialog" timestamp="1603112264983">
       <screen x="0" y="0" width="1680" height="1010" />
