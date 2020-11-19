@@ -601,37 +601,37 @@ public class TradeCardCommand extends Command {
 						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						if (!member1.getId().equals(other.getId())) return;
 
-						switch (types[0]) {
+						switch (types[1]) {
 							case 1 -> {
-								KawaiponCard kc = (KawaiponCard) products[0].getRight();
+								KawaiponCard kc = (KawaiponCard) products[1].getRight();
 								target.addCard(kc);
 								kp.removeCard(kc);
 							}
 							case 2 -> {
-								Equipment eq = (Equipment) products[0].getRight();
+								Equipment eq = (Equipment) products[1].getRight();
 								target.addEquipment(eq);
 								kp.removeEquipment(eq);
 							}
 							default -> {
-								Field f = (Field) products[0].getRight();
+								Field f = (Field) products[1].getRight();
 								target.addField(f);
 								kp.removeField(f);
 							}
 						}
 
-						switch (types[1]) {
+						switch (types[0]) {
 							case 1 -> {
-								KawaiponCard kc = (KawaiponCard) products[1].getRight();
+								KawaiponCard kc = (KawaiponCard) products[0].getRight();
 								target.removeCard(kc);
 								kp.addCard(kc);
 							}
 							case 2 -> {
-								Equipment eq = (Equipment) products[1].getRight();
+								Equipment eq = (Equipment) products[0].getRight();
 								target.removeEquipment(eq);
 								kp.addEquipment(eq);
 							}
 							default -> {
-								Field f = (Field) products[1].getRight();
+								Field f = (Field) products[0].getRight();
 								target.removeField(f);
 								kp.addField(f);
 							}

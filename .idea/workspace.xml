@@ -162,6 +162,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -858,14 +869,7 @@
       <workItem from="1605711618235" duration="56000" />
       <workItem from="1605718490265" duration="12928000" />
       <workItem from="1605787366807" duration="6110000" />
-      <workItem from="1605803038286" duration="639000" />
-    </task>
-    <task id="LOCAL-02898" summary="Correção do sendWebhookMessage">
-      <created>1605046384997</created>
-      <option name="number" value="02898" />
-      <option name="presentableId" value="LOCAL-02898" />
-      <option name="project" value="LOCAL" />
-      <updated>1605046384998</updated>
+      <workItem from="1605803038286" duration="5660000" />
     </task>
     <task id="LOCAL-02899" summary="Melhoria na estrutura do Shoukan">
       <created>1605053035470</created>
@@ -1203,7 +1207,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605803139929</updated>
     </task>
-    <option name="localTasksCounter" value="2947" />
+    <task id="LOCAL-02947" summary="Agora será alertado sobre o reset de acúmulos de votos">
+      <created>1605803819860</created>
+      <option name="number" value="02947" />
+      <option name="presentableId" value="LOCAL-02947" />
+      <option name="project" value="LOCAL" />
+      <updated>1605803819860</updated>
+    </task>
+    <option name="localTasksCounter" value="2948" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1269,7 +1280,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Atualização da biblioteca de paginação para a versão nightly para testes" />
     <MESSAGE value="Atualização da biblioteca de paginação para a última versão" />
     <MESSAGE value="Correção do erro onde os botões ainda funcionavam após perder por WO" />
     <MESSAGE value="Adição de método destroyCard" />
@@ -1294,7 +1304,8 @@
     <MESSAGE value="Correção na api de imagem das cartas" />
     <MESSAGE value="Aumento na taxa de conversão dos sonhos da Loritta" />
     <MESSAGE value="Proibição de compra na loja se você possuir dívida ativa" />
-    <option name="LAST_COMMIT_MESSAGE" value="Proibição de compra na loja se você possuir dívida ativa" />
+    <MESSAGE value="Agora será alertado sobre o reset de acúmulos de votos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Agora será alertado sobre o reset de acúmulos de votos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1356,33 +1367,33 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605803136769">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1605803816901">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605803136769" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1605803816901" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1605528924821">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605528924821" />
-    <state width="1387" height="279" key="GridCell.Tab.0.bottom" timestamp="1605803391392">
+    <state width="1387" height="279" key="GridCell.Tab.0.bottom" timestamp="1605812246239">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1605803391392" />
+    <state width="1387" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1605812246239" />
     <state width="1293" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="279" key="GridCell.Tab.0.center" timestamp="1605803391391">
+    <state width="1387" height="279" key="GridCell.Tab.0.center" timestamp="1605812246239">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1605803391391" />
+    <state width="1387" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1605812246239" />
     <state width="1293" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="279" key="GridCell.Tab.0.left" timestamp="1605803391391">
+    <state width="1387" height="279" key="GridCell.Tab.0.left" timestamp="1605812246238">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1605803391391" />
+    <state width="1387" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1605812246238" />
     <state width="1293" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="279" key="GridCell.Tab.0.right" timestamp="1605803391392">
+    <state width="1387" height="279" key="GridCell.Tab.0.right" timestamp="1605812246239">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1605803391391" />
+    <state width="1387" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1605812246239" />
     <state width="1293" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
     <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1603507846095">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1411,10 +1422,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605803142139">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605803821516">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605803142139" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605803821516" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
