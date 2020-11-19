@@ -68,6 +68,21 @@ public class CardDAO {
         }
     }
 
+    public static String getCardAnime(String name) {
+        EntityManager em = Manager.getEntityManager();
+
+        Query q = em.createQuery("SELECT c.anime FROM Card c WHERE id = UPPER(:name)", String.class);
+        q.setParameter("name", name);
+
+        try {
+            return (String) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
     public static Card getUltimate(AnimeName anime) {
         EntityManager em = Manager.getEntityManager();
 
