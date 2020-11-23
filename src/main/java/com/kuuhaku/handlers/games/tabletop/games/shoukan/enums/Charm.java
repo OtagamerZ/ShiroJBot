@@ -40,7 +40,7 @@ public enum Charm {
 
 	public BufferedImage getIcon() {
 		try {
-			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/charm/" + name().toLowerCase() + ".png")));
+			return ImageIO.read(Objects.requireNonNull(Charm.class.getClassLoader().getResourceAsStream("shoukan/charm/" + name().toLowerCase() + ".png")));
 		} catch (IOException e) {
 			return null;
 		}
