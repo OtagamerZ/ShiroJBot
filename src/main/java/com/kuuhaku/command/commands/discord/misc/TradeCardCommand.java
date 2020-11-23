@@ -498,48 +498,6 @@ public class TradeCardCommand extends Command {
 
 			switch (types[0]) {
 				case 1 -> {
-					KawaiponCard kc = (KawaiponCard) products[1].getRight();
-					if (kp.getCards().contains(kc)) {
-						channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
-						return;
-					} else if (!target.getCards().contains(kc)) {
-						channel.sendMessage("❌ | Ele/ela não possui essa carta!").queue();
-						return;
-					}
-				}
-				case 2 -> {
-					Equipment e = (Equipment) products[1].getRight();
-					if (Collections.frequency(kp.getEquipments(), e) == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
-						return;
-					} else if (kp.getEquipments().size() == 18) {
-						channel.sendMessage("❌ | Parece que você já possui 18 equipamentos!").queue();
-						return;
-					} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) {
-						channel.sendMessage("❌ | Parece que você já possui 1 equipamento tier 4!").queue();
-						return;
-					} else if (!target.getEquipments().contains(e)) {
-						channel.sendMessage("❌ | Ele/ela não possui esse equipamento!").queue();
-						return;
-					}
-				}
-				default -> {
-					Field f = (Field) products[1].getRight();
-					if (Collections.frequency(kp.getFields(), f) == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 cópias dessa arena!").queue();
-						return;
-					} else if (kp.getFields().size() == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 arenas!").queue();
-						return;
-					} else if (!target.getFields().contains(f)) {
-						channel.sendMessage("❌ | Ele/ela não possui essa arena!").queue();
-						return;
-					}
-				}
-			}
-
-			switch (types[1]) {
-				case 1 -> {
 					KawaiponCard kc = (KawaiponCard) products[0].getRight();
 					if (target.getCards().contains(kc)) {
 						channel.sendMessage("❌ | Ele/ela já possui essa carta!").queue();
@@ -580,6 +538,48 @@ public class TradeCardCommand extends Command {
 				}
 			}
 
+			switch (types[1]) {
+				case 1 -> {
+					KawaiponCard kc = (KawaiponCard) products[1].getRight();
+					if (kp.getCards().contains(kc)) {
+						channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
+						return;
+					} else if (!target.getCards().contains(kc)) {
+						channel.sendMessage("❌ | Ele/ela não possui essa carta!").queue();
+						return;
+					}
+				}
+				case 2 -> {
+					Equipment e = (Equipment) products[1].getRight();
+					if (Collections.frequency(kp.getEquipments(), e) == 3) {
+						channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
+						return;
+					} else if (kp.getEquipments().size() == 18) {
+						channel.sendMessage("❌ | Parece que você já possui 18 equipamentos!").queue();
+						return;
+					} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) {
+						channel.sendMessage("❌ | Parece que você já possui 1 equipamento tier 4!").queue();
+						return;
+					} else if (!target.getEquipments().contains(e)) {
+						channel.sendMessage("❌ | Ele/ela não possui esse equipamento!").queue();
+						return;
+					}
+				}
+				default -> {
+					Field f = (Field) products[1].getRight();
+					if (Collections.frequency(kp.getFields(), f) == 3) {
+						channel.sendMessage("❌ | Parece que você já possui 3 cópias dessa arena!").queue();
+						return;
+					} else if (kp.getFields().size() == 3) {
+						channel.sendMessage("❌ | Parece que você já possui 3 arenas!").queue();
+						return;
+					} else if (!target.getFields().contains(f)) {
+						channel.sendMessage("❌ | Ele/ela não possui essa arena!").queue();
+						return;
+					}
+				}
+			}
+
 			String[] names = {
 					switch (types[0]) {
 						case 1 -> ((KawaiponCard) products[0].getRight()).getName();
@@ -601,37 +601,37 @@ public class TradeCardCommand extends Command {
 						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						if (!member1.getId().equals(other.getId())) return;
 
-						switch (types[1]) {
+						switch (types[0]) {
 							case 1 -> {
-								KawaiponCard kc = (KawaiponCard) products[1].getRight();
+								KawaiponCard kc = (KawaiponCard) products[0].getRight();
 								target.addCard(kc);
 								kp.removeCard(kc);
 							}
 							case 2 -> {
-								Equipment eq = (Equipment) products[1].getRight();
+								Equipment eq = (Equipment) products[0].getRight();
 								target.addEquipment(eq);
 								kp.removeEquipment(eq);
 							}
 							default -> {
-								Field f = (Field) products[1].getRight();
+								Field f = (Field) products[0].getRight();
 								target.addField(f);
 								kp.removeField(f);
 							}
 						}
 
-						switch (types[0]) {
+						switch (types[1]) {
 							case 1 -> {
-								KawaiponCard kc = (KawaiponCard) products[0].getRight();
+								KawaiponCard kc = (KawaiponCard) products[1].getRight();
 								target.removeCard(kc);
 								kp.addCard(kc);
 							}
 							case 2 -> {
-								Equipment eq = (Equipment) products[0].getRight();
+								Equipment eq = (Equipment) products[1].getRight();
 								target.removeEquipment(eq);
 								kp.addEquipment(eq);
 							}
 							default -> {
-								Field f = (Field) products[0].getRight();
+								Field f = (Field) products[1].getRight();
 								target.removeField(f);
 								kp.addField(f);
 							}
