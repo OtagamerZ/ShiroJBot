@@ -40,215 +40,212 @@ import java.util.Objects;
 @Entity
 @Table(name = "equipment")
 public class Equipment implements Drawable, Cloneable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    private Card card;
+	@OneToOne(fetch = FetchType.EAGER)
+	private Card card;
 
-    @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-    private int atk;
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int atk;
 
-    @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-    private int def;
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int def;
 
-    @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-    private int tier;
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int tier;
 
-    @Enumerated(value = EnumType.STRING)
-    private Charm charm = null;
+	@Enumerated(value = EnumType.STRING)
+	private Charm charm = null;
 
-    private transient boolean flipped = false;
-    private transient boolean available = true;
-    private transient Account acc = null;
-    private transient Pair<Integer, Champion> linkedTo = null;
+	private transient boolean flipped = false;
+	private transient boolean available = true;
+	private transient Account acc = null;
+	private transient Pair<Integer, Champion> linkedTo = null;
 
-    @Override
-    public BufferedImage drawCard(Account acc, boolean flipped) {
-        BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = bi.createGraphics();
-        if (flipped) {
-            g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
-        } else {
-            g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
+	@Override
+	public BufferedImage drawCard(Account acc, boolean flipped) {
+		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		if (flipped) {
+			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
+		} else {
+			g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
 
-            if (linkedTo != null) {
-                if (linkedTo.getRight().getFakeCard() != null)
-                    g2d.drawImage(linkedTo.getRight().getFakeCard().getCard().drawCardNoBorder(), 20, 52, 60, 93, null);
-                else
-                    g2d.drawImage(linkedTo.getRight().getCard().drawCardNoBorder(), 20, 52, 60, 93, null);
-                g2d.setClip(null);
-            }
+			if (linkedTo != null) {
+				if (linkedTo.getRight().getFakeCard() != null)
+					g2d.drawImage(linkedTo.getRight().getFakeCard().getCard().drawCardNoBorder(), 20, 52, 60, 93, null);
+				else
+					g2d.drawImage(linkedTo.getRight().getCard().drawCardNoBorder(), 20, 52, 60, 93, null);
+				g2d.setClip(null);
+			}
 
-            g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);
-            g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+			g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);
+			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
-            Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
+			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
-            g2d.setColor(Color.red);
-            Profile.drawOutlinedText(String.valueOf(atk), 45, 316, g2d);
+			g2d.setColor(Color.red);
+			Profile.drawOutlinedText(String.valueOf(atk), 45, 316, g2d);
 
-            g2d.setColor(Color.green);
-            Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
+			g2d.setColor(Color.green);
+			Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
 
-            try {
-                if (charm != null)
-                    g2d.drawImage(charm.getIcon(), 135, 58, null);
-            } catch (NullPointerException ignore) {
-            }
+			if (charm != null)
+				g2d.drawImage(charm.getIcon(), 135, 58, null);
 
-            try {
-                BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
-                for (int i = 0; i < tier; i++)
-                    g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
-            } catch (IOException ignore) {
-            }
+			try {
+				BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
+				for (int i = 0; i < tier; i++)
+					g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
+			} catch (IOException ignore) {
+			}
 
 
-        }
+		}
 
-        if (!available) {
-            g2d.setColor(new Color(0, 0, 0, 150));
-            g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-        }
+		if (!available) {
+			g2d.setColor(new Color(0, 0, 0, 150));
+			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+		}
 
-        g2d.dispose();
+		g2d.dispose();
 
-        return bi;
-    }
+		return bi;
+	}
 
-    public BufferedImage drawCard() {
-        BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = bi.createGraphics();
-        g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
+	public BufferedImage drawCard() {
+		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
 
-        if (linkedTo != null) {
-            g2d.drawImage(linkedTo.getRight().getCard().drawCardNoBorder(), 20, 52, 60, 93, null);
-            g2d.setClip(null);
-        }
+		if (linkedTo != null) {
+			g2d.drawImage(linkedTo.getRight().getCard().drawCardNoBorder(), 20, 52, 60, 93, null);
+			g2d.setClip(null);
+		}
 
-        g2d.drawImage(FrameColor.PINK.getFrontEquipment(), 0, 0, null);
-        g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+		g2d.drawImage(FrameColor.PINK.getFrontEquipment(), 0, 0, null);
+		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
-        Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
+		Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
-        g2d.setColor(Color.red);
-        Profile.drawOutlinedText(String.valueOf(atk), 45, 316, g2d);
+		g2d.setColor(Color.red);
+		Profile.drawOutlinedText(String.valueOf(atk), 45, 316, g2d);
 
-        g2d.setColor(Color.green);
-        Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
+		g2d.setColor(Color.green);
+		Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
 
-        try {
-            BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
-            for (int i = 0; i < tier; i++)
-                g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
-        } catch (IOException ignore) {
-        }
+		try {
+			BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
+			for (int i = 0; i < tier; i++)
+				g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
+		} catch (IOException ignore) {
+		}
 
-        if (!available) {
-            g2d.setColor(new Color(0, 0, 0, 150));
-            g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-        }
+		if (!available) {
+			g2d.setColor(new Color(0, 0, 0, 150));
+			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+		}
 
-        g2d.dispose();
+		g2d.dispose();
 
-        return bi;
-    }
+		return bi;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    @Override
-    public Card getCard() {
-        return card;
-    }
+	@Override
+	public Card getCard() {
+		return card;
+	}
 
-    @Override
-    public boolean isFlipped() {
-        return flipped;
-    }
+	@Override
+	public boolean isFlipped() {
+		return flipped;
+	}
 
-    @Override
-    public void setFlipped(boolean flipped) {
-        this.flipped = flipped;
-    }
+	@Override
+	public void setFlipped(boolean flipped) {
+		this.flipped = flipped;
+	}
 
-    @Override
-    public boolean isAvailable() {
-        return available;
-    }
+	@Override
+	public boolean isAvailable() {
+		return available;
+	}
 
-    @Override
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
+	@Override
+	public void setAvailable(boolean available) {
+		this.available = available;
+	}
 
-    @Override
-    public Account getAcc() {
-        return acc;
-    }
+	@Override
+	public Account getAcc() {
+		return acc;
+	}
 
-    @Override
-    public void setAcc(Account acc) {
-        this.acc = acc;
-    }
+	@Override
+	public void setAcc(Account acc) {
+		this.acc = acc;
+	}
 
-    public Pair<Integer, Champion> getLinkedTo() {
-        return linkedTo;
-    }
+	public Pair<Integer, Champion> getLinkedTo() {
+		return linkedTo;
+	}
 
-    public void setLinkedTo(Pair<Integer, Champion> linkedTo) {
-        this.linkedTo = linkedTo;
-    }
+	public void setLinkedTo(Pair<Integer, Champion> linkedTo) {
+		this.linkedTo = linkedTo;
+	}
 
-    public int getAtk() {
-        return atk;
-    }
+	public int getAtk() {
+		return atk;
+	}
 
-    public int getDef() {
-        return def;
-    }
+	public int getDef() {
+		return def;
+	}
 
-    public int getTier() {
-        return tier;
-    }
+	public int getTier() {
+		return tier;
+	}
 
-    public Charm getCharm() {
-        return charm;
-    }
+	public Charm getCharm() {
+		return charm;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Equipment champion = (Equipment) o;
-        return id == champion.id;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Equipment champion = (Equipment) o;
+		return id == champion.id;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 
-    @Override
-    public Equipment copy() {
-        try {
-            return (Equipment) clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
-    }
+	@Override
+	public Equipment copy() {
+		try {
+			return (Equipment) clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
 
-    public String toString(Account acc) {
-        return new JSONObject() {{
-            put("id", id);
-            put("name", card.getName());
-            put("tier", tier);
-            put("attack", atk);
-            put("defense", def);
-            put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(acc, false), "png")));
-        }}.toString();
-    }
+	public String toString(Account acc) {
+		return new JSONObject() {{
+			put("id", id);
+			put("name", card.getName());
+			put("tier", tier);
+			put("attack", atk);
+			put("defense", def);
+			put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(acc, false), "png")));
+		}}.toString();
+	}
 }
