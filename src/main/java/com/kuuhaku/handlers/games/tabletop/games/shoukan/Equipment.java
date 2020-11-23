@@ -92,8 +92,11 @@ public class Equipment implements Drawable, Cloneable {
             g2d.setColor(Color.green);
             Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
 
-            if (charm != null)
-                g2d.drawImage(charm.getIcon(), 135, 58, null);
+            try {
+                if (charm != null)
+                    g2d.drawImage(charm.getIcon(), 135, 58, null);
+            } catch (NullPointerException ignore) {
+            }
 
             try {
                 BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
