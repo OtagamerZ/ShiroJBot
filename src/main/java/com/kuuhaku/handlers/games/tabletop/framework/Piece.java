@@ -56,12 +56,12 @@ public abstract class Piece {
 		if (white) {
 			for (int y = 0; y < 64; y++) {
 				for (int x = 0; x < 64; x++) {
-					Color rgb = new Color(bi.getRGB(x, y), true);
-					int r = 255 - rgb.getRed();
-					int g = 255 - rgb.getGreen();
-					int b = 255 - rgb.getBlue();
+					int rgb = bi.getRGB(x, y);
+					int r = 255 - (rgb & 0xFF);
+					int g = 255 - ((rgb >> 8) & 0xFF);
+					int b = 255 - ((rgb >> 16) & 0xFF);
 
-					bi.setRGB(x, y, new Color(r, g, b, rgb.getAlpha()).getRGB());
+					bi.setRGB(x, y, 0xFF000000 | r | g | b);
 				}
 			}
 		}
