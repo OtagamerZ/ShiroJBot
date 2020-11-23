@@ -106,17 +106,15 @@ public class Chess extends Game {
 		setActions(
 				s -> {
 					close();
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-							});
+							.queue();
 				},
 				s -> {
 					getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-							});
+							.queue();
 				}
 		);
 	}
@@ -200,27 +198,23 @@ public class Chess extends Game {
 			}
 
 			if (winner != null) {
+				getBoard().awardWinner(this, winner);
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(getCurrent().getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-						});
-				getBoard().awardWinner(this, winner);
+						.queue();
 			} else if (remaining == 2) {
+				close();
 				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Temos um empate! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-						});
-				close();
+						.queue();
 			} else {
 				resetTimer();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Turno de " + getCurrent().getAsMention())
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
@@ -238,13 +232,12 @@ public class Chess extends Game {
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
-			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
-					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-					.queue(s -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-					});
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 			close();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
+					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+					.queue();
 		});
 
 		return buttons;
