@@ -95,7 +95,8 @@ public class SeeCardCommand extends Command {
 			eb.setTitle((ch == null ? ":shield:" : ":crossed_swords:") + " | " + d.getCard().getName());
 			if (d instanceof Champion)
 				eb.addField("Classe:", ((Champion) d).getCategory() == null ? "Nenhuma" : ((Champion) d).getCategory().getName(), true);
-			eb.addField("Tipo:", d instanceof Champion ? "Campeão Senshi" : d instanceof Field ? "Arena" : "Equipamento EvoGear", true);
+			else if (d instanceof Equipment && ((Equipment) d).getCharm() != null)
+				eb.addField("Amuleto:", ((Equipment) d).getCharm().getName(), true);
 			eb.setImage("attachment://kawaipon.png");
 
 			channel.sendMessage(eb.build()).addFile(Helper.getBytes(d.drawCard(acc, false), "png"), "kawaipon.png").queue();
