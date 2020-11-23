@@ -110,11 +110,12 @@ public class KawaiponsCommand extends Command {
 				if (rr == null) {
 					if (c == null) {
 						if (args[0].equalsIgnoreCase("total")) {
+							boolean foil = args.length > 1 && args[1].equalsIgnoreCase("C");
 							Set<KawaiponCard> collection = kp.getCards();
-							Set<KawaiponCard> toRender = collection.stream().filter(k -> args.length > 1 && k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+							Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == foil).collect(Collectors.toSet());
 
 							KawaiponBook kb = new KawaiponBook(toRender);
-							BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", args.length > 1 && args[1].equalsIgnoreCase("C"));
+							BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", foil);
 
 							send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
 							return;
@@ -131,12 +132,13 @@ public class KawaiponsCommand extends Command {
 							return;
 						}
 
+						boolean foil = args.length > 1 && args[1].equalsIgnoreCase("C");
 						AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
 						Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
-						Set<KawaiponCard> toRender = collection.stream().filter(k -> args.length > 1 && k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+						Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == foil).collect(Collectors.toSet());
 
 						KawaiponBook kb = new KawaiponBook(toRender);
-						BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), args.length > 1 && args[1].equalsIgnoreCase("C"));
+						BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), foil);
 
 						send(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime));
 						return;
@@ -149,11 +151,12 @@ public class KawaiponsCommand extends Command {
 
 					send(author, channel, m, cards, c.getName(), c);
 				} else {
+					boolean foil = args.length > 1 && args[1].equalsIgnoreCase("C");
 					Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getRarity().equals(rr)).collect(Collectors.toSet());
-					Set<KawaiponCard> toRender = collection.stream().filter(k -> args.length > 1 && k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+					Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == foil).collect(Collectors.toSet());
 
 					KawaiponBook kb = new KawaiponBook(toRender);
-					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(rr), rr.toString(), args.length > 1 && args[1].equalsIgnoreCase("C"));
+					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(rr), rr.toString(), foil);
 
 
 					send(author, channel, m, collection, cards, rr.toString(), CardDAO.totalCards(rr));
