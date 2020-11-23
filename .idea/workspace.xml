@@ -13,14 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na troca de cartas">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/charm/spellreflect.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/charm/spellshield.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/charm/timewarp.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/crisscross/CrissCross.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/crisscross/CrissCross.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/reversi/Reversi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/reversi/Reversi.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -878,14 +874,7 @@
       <workItem from="1605718490265" duration="12928000" />
       <workItem from="1605787366807" duration="6110000" />
       <workItem from="1605803038286" duration="7255000" />
-      <workItem from="1606141419701" duration="6261000" />
-    </task>
-    <task id="LOCAL-02900" summary="Correção no isLinkedTo dos campeões Shoukan;&#10;Correção no ranking de usuários;">
-      <created>1605062744298</created>
-      <option name="number" value="02900" />
-      <option name="presentableId" value="LOCAL-02900" />
-      <option name="project" value="LOCAL" />
-      <updated>1605062744298</updated>
+      <workItem from="1606141419701" duration="6624000" />
     </task>
     <task id="LOCAL-02901" summary="Correção no isLinkedTo dos campeões Shoukan;&#10;Correção no ranking de usuários;">
       <created>1605063096258</created>
@@ -1223,7 +1212,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605815710535</updated>
     </task>
-    <option name="localTasksCounter" value="2949" />
+    <task id="LOCAL-02949" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
+      <created>1606151487998</created>
+      <option name="number" value="02949" />
+      <option name="presentableId" value="LOCAL-02949" />
+      <option name="project" value="LOCAL" />
+      <updated>1606151487999</updated>
+    </task>
+    <option name="localTasksCounter" value="2950" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1289,7 +1285,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Atualização da biblioteca de paginação para a última versão" />
     <MESSAGE value="Correção do erro onde os botões ainda funcionavam após perder por WO" />
     <MESSAGE value="Adição de método destroyCard" />
     <MESSAGE value="As fusões agora também serão processadas no início de cada turno" />
@@ -1314,7 +1309,8 @@
     <MESSAGE value="Proibição de compra na loja se você possuir dívida ativa" />
     <MESSAGE value="Agora será alertado sobre o reset de acúmulos de votos" />
     <MESSAGE value="Correção na troca de cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na troca de cartas" />
+    <MESSAGE value="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1376,10 +1372,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606151012864">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606151484464">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606151012864" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606151484464" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1605528924821">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1431,10 +1427,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1605815712246">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606151489090">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1605815712246" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606151489090" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
