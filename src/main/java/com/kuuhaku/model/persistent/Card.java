@@ -107,15 +107,21 @@ public class Card {
 		for (int y = 0; y < bi.getHeight(); y++) {
 			for (int x = 0; x < bi.getWidth(); x++) {
 				int rgb = bi.getRGB(x, y);
-				Color col = new Color(rgb, true);
-				int alpha = col.getAlpha();
-				float[] hsv = Color.RGBtoHSB(col.getRed(), col.getBlue(), col.getGreen(), null);
+				int red = rgb & 0xFF;
+				int green = (rgb >> 8) & 0xFF;
+				int blue = (rgb >> 16) & 0xFF;
+
+				float[] hsv = Color.RGBtoHSB(red, blue, green, null);
 				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
 
-				col = Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
-				col = new Color(col.getRed(), col.getGreen(), col.getBlue(), alpha);
+				rgb = Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB();
+				red = rgb & 0xFF;
+				green = (rgb >> 8) & 0xFF;
+				blue = (rgb >> 16) & 0xFF;
+				int alpha = (rgb >> 24) & 0xFF;
+				rgb = alpha | red | green | blue;
 
-				out.setRGB(x, y, col.getRGB());
+				out.setRGB(x, y, rgb);
 			}
 		}
 

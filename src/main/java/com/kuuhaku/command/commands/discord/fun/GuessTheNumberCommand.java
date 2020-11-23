@@ -24,6 +24,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
+import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
@@ -32,7 +33,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
@@ -69,7 +69,7 @@ public class GuessTheNumberCommand extends Command {
 
 		channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
 
-		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
+		Main.getInfo().getAPI().addEventListener(new SimpleMessageListener() {
 			int chances = 4;
 
 			@Override
@@ -77,9 +77,9 @@ public class GuessTheNumberCommand extends Command {
 				if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
 					return;
 
-                String value = event.getMessage().getContentRaw();
-                if (value.equalsIgnoreCase("desistir")) {
-                    channel.sendMessage("Você desistiu, o valor escolhido por mim era **" + theValue + "**.").queue();
+				String value = event.getMessage().getContentRaw();
+				if (value.equalsIgnoreCase("desistir")) {
+					channel.sendMessage("Você desistiu, o valor escolhido por mim era **" + theValue + "**.").queue();
                     Main.getInfo().getAPI().removeEventListener(this);
                     return;
                 } else if (!StringUtils.isNumeric(value) || Integer.parseInt(value) < 0 || Integer.parseInt(value) > 100) {

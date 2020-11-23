@@ -38,6 +38,7 @@ import com.kuuhaku.controller.postgresql.GuildBuffDAO;
 import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Extensions;
@@ -56,7 +57,6 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
@@ -107,7 +107,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -1063,15 +1062,13 @@ public class Helper {
 		return Base64.getEncoder().encodeToString(nameSpace) + "." + Base64.getEncoder().encodeToString(randomSpace);
 	}
 
-	public static void awaitMessage(User u, TextChannel chn, Callable<Boolean> act) {
-		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
+	public static void awaitMessage(User u, TextChannel chn, Consumer<Message> act) {
+		Main.getInfo().getAPI().addEventListener(new SimpleMessageListener() {
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 				if (event.getChannel().getId().equals(chn.getId()) && event.getAuthor().getId().equals(u.getId())) {
-					try {
-						if (act.call()) Main.getInfo().getAPI().removeEventListener(this);
-					} catch (Exception ignore) {
-					}
+					Main.getInfo().getAPI().removeEventListener(this);
+					act.accept(event.getMessage());
 				}
 			}
 		});
@@ -1632,5 +1629,30 @@ public class Helper {
 			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
 					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
 			);
+	}
+
+	public static void applyMask(BufferedImage source, BufferedImage mask, int channel) {
+		BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+		Graphics2D g2d = newMask.createGraphics();
+		g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);
+		g2d.dispose();
+
+		for (int y = 0; y < source.getHeight(); y++) {
+			for (int x = 0; x < source.getWidth(); x++) {
+				int rgb = source.getRGB(x, y);
+				int red = rgb & 0xFF;
+				int green = (rgb >> 8) & 0xFF;
+				int blue = (rgb >> 16) & 0xFF;
+
+				int maskRgb = mask.getRGB(x, y);
+				int fac = switch (channel) {
+					case 0 -> maskRgb & 0xFF;
+					case 1 -> (maskRgb >> 8) & 0xFF;
+					case 2 -> (maskRgb >> 16) & 0xFF;
+					default -> throw new IllegalStateException("Unexpected value: " + channel);
+				};
+				source.setRGB(x, y, fac | red | green | blue);
+			}
+		}
 	}
 }
