@@ -79,17 +79,15 @@ public class Reversi extends Game {
 		setActions(
 				s -> {
 					close();
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-							});
+							.queue();
 				},
 				s -> {
 					getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-							});
+							.queue();
 				}
 		);
 	}
@@ -163,14 +161,14 @@ public class Reversi extends Game {
 				}
 			} else {
 				resetTimer();
+				draw = false;
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Turno de " + getCurrent().getAsMention())
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 						.queue(msg -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = msg;
 							Pages.buttonize(msg, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
-				draw = false;
 			}
 		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
 			channel.sendMessage("❌ | Coordenada inválida.").queue(null, Helper::doNothing);
@@ -195,53 +193,49 @@ public class Reversi extends Game {
 
 				if (whiteCount > blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
+					getBoard().awardWinner(this, winner.getId());
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)")
 							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue(s -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-							});
-					getBoard().awardWinner(this, winner.getId());
+							.queue();
 					return;
 				} else if (whiteCount < blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> !e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
+					getBoard().awardWinner(this, winner.getId());
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)")
 							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue(s -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-							});
-					getBoard().awardWinner(this, winner.getId());
+							.queue();
 					return;
 				} else {
+					close();
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendMessage("Temos um empate!")
 							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue(s -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-							});
-					close();
+							.queue();
 					return;
 				}
 			}
 
 			User current = getCurrent();
 			resetTimer();
+			draw = true;
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(current.getAsMention() + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
 					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 					.queue(s -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = s;
 						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					});
-			draw = true;
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
-			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
-					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
-					.queue(s -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-					});
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 			close();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
+					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+					.queue();
 		});
 
 		return buttons;
