@@ -173,22 +173,27 @@ public class Shoukan extends Game {
 						return;
 					}
 
-					c.setDefending(c.isFlipped() || !c.isDefending());
-
-					if (c.hasEffect() && !c.isFlipped()) {
-						c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1), channel));
-						if (postCombat()) return;
-					}
-
 					MessageAction act;
 					if (c.isFlipped()) {
 						c.setFlipped(false);
 
 						act = channel.sendMessage("Carta virada para cima em modo de defesa.");
-					} else if (!c.isDefending())
+					} else if (c.isDefending()) {
+						c.setDefending(false);
+
 						act = channel.sendMessage("Carta trocada para modo de ataque.");
-					else
+						if (c.hasEffect() && !c.isFlipped()) {
+							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1), channel));
+							if (postCombat()) return;
+						}
+					} else {
+						c.setDefending(false);
 						act = channel.sendMessage("Carta trocada para modo de defesa.");
+						if (c.hasEffect() && !c.isFlipped()) {
+							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1), channel));
+							if (postCombat()) return;
+						}
+					}
 
 					changed[index] = true;
 					resetTimerKeepTurn();
@@ -244,10 +249,7 @@ public class Shoukan extends Game {
 					tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slot.setBottom(tp);
 					Champion t = target.getTop();
-					if (t.isFlipped()) {
-						t.setFlipped(false);
-						t.setDefending(true);
-					}
+					t.setFlipped(false);
 					t.addLinkedTo(tp);
 					tp.setLinkedTo(Pair.of(toEquip, t));
 					if (t.hasEffect() && !t.isFlipped()) {
@@ -285,12 +287,18 @@ public class Shoukan extends Game {
 					Champion tp = (Champion) d.copy();
 
 					switch (args[2].toLowerCase()) {
-						case "a" -> tp.setFlipped(false);
+						case "a" -> {
+							tp.setFlipped(false);
+							tp.setDefending(false);
+						}
 						case "d" -> {
 							tp.setFlipped(false);
 							tp.setDefending(true);
 						}
-						case "b" -> tp.setFlipped(true);
+						case "b" -> {
+							tp.setFlipped(true);
+							tp.setDefending(true);
+						}
 						default -> {
 							channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 							return;
@@ -431,7 +439,6 @@ public class Shoukan extends Game {
 				if (his.isDefending() || his.isFlipped()) {
 					if (his.isFlipped()) {
 						his.setFlipped(false);
-						his.setDefending(true);
 						if (his.hasEffect()) {
 							his.getEffect(new EffectParameters(phase, EffectTrigger.ON_FLIP, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
 							if (postCombat()) return;
