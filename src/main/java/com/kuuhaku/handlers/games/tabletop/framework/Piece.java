@@ -60,8 +60,16 @@ public abstract class Piece {
 					int r = 255 - (rgb & 0xFF);
 					int g = 255 - ((rgb >> 8) & 0xFF);
 					int b = 255 - ((rgb >> 16) & 0xFF);
+					int a = ((rgb >> 24) & 0xFF);
 
-					bi.setRGB(x, y, 0xFF000000 | r | g | b);
+					bi.setRGB(
+							x,
+							y,
+							((a << 24) & 0xFF000000) |
+							((r << 16) & 0x00FF0000) |
+							((g << 8) & 0x0000FF00) |
+							(b & 0x000000FF)
+					);
 				}
 			}
 		}
