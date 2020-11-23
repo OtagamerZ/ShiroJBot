@@ -119,7 +119,11 @@ public class Card {
 				green = (rgb >> 8) & 0xFF;
 				blue = (rgb >> 16) & 0xFF;
 				int alpha = (rgb >> 24) & 0xFF;
-				rgb = alpha | red | green | blue;
+
+				rgb = ((alpha << 24) & 0xFF000000) |
+					  ((red << 16) & 0x00FF0000) |
+					  ((green << 8) & 0x0000FF00) |
+					  (blue & 0x000000FF);
 
 				out.setRGB(x, y, rgb);
 			}

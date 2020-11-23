@@ -13,17 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheCardsCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/gtc_mask.png" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Criação do jogo &quot;Adivinhe as cartas&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheNumberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheNumberCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Piece.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -881,21 +875,7 @@
       <workItem from="1605718490265" duration="12928000" />
       <workItem from="1605787366807" duration="6110000" />
       <workItem from="1605803038286" duration="7255000" />
-      <workItem from="1606141419701" duration="17679000" />
-    </task>
-    <task id="LOCAL-02909" summary="Correção visual simples">
-      <created>1605119445789</created>
-      <option name="number" value="02909" />
-      <option name="presentableId" value="LOCAL-02909" />
-      <option name="project" value="LOCAL" />
-      <updated>1605119445789</updated>
-    </task>
-    <task id="LOCAL-02910" summary="Correção basica">
-      <created>1605121553924</created>
-      <option name="number" value="02910" />
-      <option name="presentableId" value="LOCAL-02910" />
-      <option name="project" value="LOCAL" />
-      <updated>1605121553924</updated>
+      <workItem from="1606141419701" duration="18348000" />
     </task>
     <task id="LOCAL-02911" summary="Shiro notifica sobre novos membros do Exceed novamente">
       <created>1605122976265</created>
@@ -1226,7 +1206,21 @@
       <option name="project" value="LOCAL" />
       <updated>1606159353580</updated>
     </task>
-    <option name="localTasksCounter" value="2958" />
+    <task id="LOCAL-02958" summary="Criação do jogo &quot;Adivinhe as cartas&quot;">
+      <created>1606164392951</created>
+      <option name="number" value="02958" />
+      <option name="presentableId" value="LOCAL-02958" />
+      <option name="project" value="LOCAL" />
+      <updated>1606164392952</updated>
+    </task>
+    <task id="LOCAL-02959" summary="Criação do jogo &quot;Adivinhe as cartas&quot;">
+      <created>1606164522092</created>
+      <option name="number" value="02959" />
+      <option name="presentableId" value="LOCAL-02959" />
+      <option name="project" value="LOCAL" />
+      <updated>1606164522092</updated>
+    </task>
+    <option name="localTasksCounter" value="2960" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1292,7 +1286,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="As fusões agora também serão processadas no início de cada turno" />
     <MESSAGE value="Correção visual simples" />
     <MESSAGE value="Shiro notifica sobre novos membros do Exceed novamente" />
     <MESSAGE value="Adicionado efeito de atordoamento no Shoukan" />
@@ -1317,7 +1310,8 @@
     <MESSAGE value="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento" />
     <MESSAGE value="Cartas viradas pra baixo agora começam no modo de defesa ao serem invocadas" />
     <MESSAGE value="Melhoria nos ícones de amuleto" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria nos ícones de amuleto" />
+    <MESSAGE value="Criação do jogo &quot;Adivinhe as cartas&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Criação do jogo &quot;Adivinhe as cartas&quot;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1379,10 +1373,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606159350695">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606164949876">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606159350695" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606164949876" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1605528924821">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1434,10 +1428,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606159355252">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606164522977">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606159355252" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606164522977" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
