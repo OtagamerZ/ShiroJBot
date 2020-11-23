@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
@@ -88,17 +89,15 @@ public class Shoukan extends Game {
 		setActions(
 				s -> {
 					close();
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-							});
+							.queue();
 				},
 				s -> {
 					if (custom == null) getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-							});
+							.queue();
 				}
 		);
 	}
@@ -134,14 +133,14 @@ public class Shoukan extends Game {
 		Hand h = getHandById(getCurrent().getId());
 
 		if (cmd.equalsIgnoreCase("reload")) {
+			resetTimerKeepTurn();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(message.getAuthor().getAsMention() + " recriou a mensagem do jogo.")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 					.queue(s -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = s;
 						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					});
-			resetTimerKeepTurn();
 			return;
 		}
 
@@ -191,14 +190,14 @@ public class Shoukan extends Game {
 					else
 						act = channel.sendMessage("Carta trocada para modo de defesa.");
 
+					changed[index] = true;
+					resetTimerKeepTurn();
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					act.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 							.queue(s -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 								this.message = s;
 								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 							});
-					changed[index] = true;
-					resetTimerKeepTurn();
 					return;
 				}
 
@@ -315,14 +314,14 @@ public class Shoukan extends Game {
 
 				if (makeFusion(h)) return;
 
+				resetTimerKeepTurn();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendFile(Helper.getBytes(arena.render(hands), "jpg"), "board.jpg")
 						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 							h.showHand();
 						});
-				resetTimerKeepTurn();
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue(null, Helper::doNothing);
 			} catch (NumberFormatException e) {
@@ -377,14 +376,14 @@ public class Shoukan extends Game {
 					c.setAvailable(false);
 
 					if (!postCombat()) {
+						resetTimerKeepTurn();
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Você atacou diretamente o inimigo.")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
-									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 									this.message = s;
 									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
-						resetTimerKeepTurn();
 					}
 					return;
 				}
@@ -455,17 +454,17 @@ public class Shoukan extends Game {
 						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
 						if (postCombat()) return;
 					}
-					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1], hisSide);
+					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1]);
 
 					if (!postCombat()) {
+						resetTimerKeepTurn();
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Sua carta derrotou a carta inimiga! (" + yPower + " > " + hPower + ")")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
-									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 									this.message = s;
 									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
-						resetTimerKeepTurn();
 					}
 				} else if (yPower < hPower) {
 					his.resetAttribs();
@@ -477,21 +476,21 @@ public class Shoukan extends Game {
 						his.getEffect(new EffectParameters(phase, EffectTrigger.POST_DEFENSE, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
 						if (postCombat()) return;
 					}
-					killCard(h.getSide(), is[0], yourSide);
+					killCard(h.getSide(), is[0]);
 
 					if (!postCombat()) {
+						resetTimerKeepTurn();
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Sua carta foi derrotada pela carta inimiga! (" + yPower + " < " + hPower + ")")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
-									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 									this.message = s;
 									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
-						resetTimerKeepTurn();
 					}
 				} else {
-					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1], hisSide);
-					killCard(h.getSide(), is[0], yourSide);
+					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1]);
+					killCard(h.getSide(), is[0]);
 
 					if (yours.hasEffect()) {
 						yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
@@ -503,14 +502,14 @@ public class Shoukan extends Game {
 					}
 
 					if (!postCombat()) {
+						resetTimerKeepTurn();
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
-									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 									this.message = s;
 									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
-						resetTimerKeepTurn();
 					}
 				}
 			} catch (IndexOutOfBoundsException e) {
@@ -558,10 +557,10 @@ public class Shoukan extends Game {
 				for (int i = 0; i < slts.size(); i++) {
 					SlotColumn<Champion, Equipment> column = slts.get(i);
 					if (column.getTop() != null && column.getTop().getCard().getId().equals(requiredCard)) {
-						banishCard(false, i, getArena().getSlots().get(h.getSide()));
+						banishCard(h.getSide(), i, false);
 						break;
 					} else if (column.getBottom() != null && column.getBottom().getCard().getId().equals(requiredCard)) {
-						banishCard(true, i, getArena().getSlots().get(h.getSide()));
+						banishCard(h.getSide(), i, true);
 						break;
 					}
 				}
@@ -584,62 +583,80 @@ public class Shoukan extends Game {
 		return false;
 	}
 
-	public void killCard(Side s, int index, List<SlotColumn<Champion, Equipment>> side) {
-		Champion ch = side.get(index).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath")) return;
-		ch.reset();
-		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
-			arena.getGraveyard().get(s).add(ch);
-		side.get(index).setTop(null);
-		side.forEach(sd -> {
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
-				Equipment eq = sd.getBottom();
-				eq.setLinkedTo(null);
-				if (eq.getTier() >= 4) arena.getBanished().add(eq);
-				else arena.getGraveyard().get(s).add(eq);
-				sd.setBottom(null);
-			}
-		});
-	}
-
-	public void destroyCard(Side s, int index, List<SlotColumn<Champion, Equipment>> side) {
-		Champion ch = side.get(index).getTop();
+	public void killCard(Side side, int index) {
+		Champion ch = getArena().getSlots().get(side).get(index).getTop();
 		if (ch == null) return;
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
+
 		ch.reset();
 		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
-			arena.getGraveyard().get(s).add(ch);
-		side.get(index).setTop(null);
-		side.forEach(sd -> {
+			arena.getGraveyard().get(side).add(ch);
+		slts.get(index).setTop(null);
+		slts.forEach(sd -> {
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
 				Equipment eq = sd.getBottom();
 				eq.setLinkedTo(null);
 				if (eq.getTier() >= 4) arena.getBanished().add(eq);
-				else arena.getGraveyard().get(s).add(eq);
+				else arena.getGraveyard().get(side).add(eq);
 				sd.setBottom(null);
 			}
 		});
 	}
 
-	public void banishCard(boolean equipment, int index, List<SlotColumn<Champion, Equipment>> side) {
+	public void destroyCard(Side side, int index, int source) {
+		Champion ch = getArena().getSlots().get(side).get(index).getTop();
+		if (ch == null) return;
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
+
+		for (int i = 0; i < slts.size(); i++) {
+			Equipment eq = slts.get(i).getBottom();
+			if (eq != null && eq.getLinkedTo().getLeft() == index) {
+				if (eq.getCharm() == Charm.SPELLSHIELD) {
+					unequipCard(side, i, slts);
+					return;
+				} else if (eq.getCharm() == Charm.SPELLMIRROR && source != -1) {
+					destroyCard(side == Side.TOP ? Side.BOTTOM : Side.TOP, source, index);
+					return;
+				}
+			}
+		}
+
+		ch.reset();
+		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
+			arena.getGraveyard().get(side).add(ch);
+		slts.get(index).setTop(null);
+		slts.forEach(sd -> {
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
+				Equipment eq = sd.getBottom();
+				eq.setLinkedTo(null);
+				if (eq.getTier() >= 4) arena.getBanished().add(eq);
+				else arena.getGraveyard().get(side).add(eq);
+				sd.setBottom(null);
+			}
+		});
+	}
+
+	public void banishCard(Side side, int index, boolean equipment) {
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
 		if (equipment) {
-			Equipment eq = side.get(index).getBottom();
+			Equipment eq = slts.get(index).getBottom();
 			if (eq == null) return;
 
-			if (side.get(eq.getLinkedTo().getLeft()).getTop() != null)
-				side.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
+			if (slts.get(eq.getLinkedTo().getLeft()).getTop() != null)
+				slts.get(eq.getLinkedTo().getLeft()).getTop().removeLinkedTo(eq);
 			eq.setLinkedTo(null);
 
-			SlotColumn<Champion, Equipment> sd = side.get(index);
+			SlotColumn<Champion, Equipment> sd = slts.get(index);
 			arena.getBanished().add(eq);
 			sd.setBottom(null);
 		} else {
-			Champion ch = side.get(index).getTop();
+			Champion ch = slts.get(index).getTop();
 			if (ch == null) return;
 			ch.reset();
 			if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
 				arena.getBanished().add(ch);
-			side.get(index).setTop(null);
-			side.forEach(sd -> {
+			slts.get(index).setTop(null);
+			slts.forEach(sd -> {
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
 					Equipment eq = sd.getBottom();
 					eq.setLinkedTo(null);
@@ -683,16 +700,30 @@ public class Shoukan extends Game {
 		return null;
 	}
 
-	public void convertCard(Side side, int index) {
+	public void convertCard(Side side, int index, int source) {
 		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
+
+		for (int i = 0; i < slts.size(); i++) {
+			Equipment eq = slts.get(i).getBottom();
+			if (eq != null && eq.getLinkedTo().getLeft() == index) {
+				if (eq.getCharm() == Charm.SPELLSHIELD) {
+					unequipCard(his, i, slts);
+					return;
+				} else if (eq.getCharm() == Charm.SPELLMIRROR && source != -1) {
+					convertCard(his, source, index);
+					return;
+				}
+			}
+		}
+
 		SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(side, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
 			ch.setAcc(AccountDAO.getAccount(getHands().get(side).getUser().getId()));
 			sc.setTop(ch);
-			List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
 			slts.get(index).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				if (slts.get(i).getBottom() != null && slts.get(i).getBottom().getLinkedTo().getLeft() == index)
@@ -706,6 +737,20 @@ public class Shoukan extends Game {
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
+
+		for (int i = 0; i < slts.size(); i++) {
+			Equipment eq = slts.get(i).getBottom();
+			if (eq != null && eq.getLinkedTo().getLeft() == index) {
+				if (eq.getCharm() == Charm.SPELLSHIELD) {
+					unequipCard(his, i, slts);
+					return;
+				} else if (eq.getCharm() == Charm.SPELLMIRROR) {
+					convertEquipments(ch, index, his, pos);
+					return;
+				}
+			}
+		}
+
 		for (int i = 0; i < 5; i++) {
 			Equipment eq = slts.get(i).getBottom();
 			if (eq != null && eq.getLinkedTo().getLeft() == index) {
@@ -729,16 +774,14 @@ public class Shoukan extends Game {
 			if (!finished.get()) {
 				Hand op = getHands().get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
 				if (h.getHp() == 0) {
-					channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
-							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-							});
-
 					if (getCustom() == null)
 						getBoard().awardWinner(this, daily, op.getUser().getId());
 					close();
 					finished.set(true);
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+					channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
+							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+							.queue();
 				}
 			}
 		});
@@ -792,10 +835,10 @@ public class Shoukan extends Game {
 				}
 				h.get().addMana(h.get().getManaPerTurn());
 
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 							h.get().showHand();
@@ -828,38 +871,35 @@ public class Shoukan extends Game {
 			}
 
 			if (!h.draw()) {
-				channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
-						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-						});
-
 				if (getCustom() == null)
 					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 				close();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+				channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
+						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+						.queue();
 				return;
 			}
 
 			remaining = 5 - h.getCards().size();
+			resetTimerKeepTurn();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(getCurrent().getAsMention() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 					.queue(s -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = s;
 						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						h.showHand();
 					});
-			resetTimerKeepTurn();
 		});
 		buttons.put("\uD83E\uDD1D", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			if (draw) {
+				close();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Por acordo mútuo, declaro empate! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-						});
-				close();
+						.queue();
 			} else {
 				User u = getCurrent();
 				resetTimer();
@@ -880,10 +920,10 @@ public class Shoukan extends Game {
 				h.addMana(h.getManaPerTurn());
 
 				draw = true;
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(u.getAsMention() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D caso queira aceitar ou continue jogando normalmente.")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 							h.showHand();
@@ -895,14 +935,13 @@ public class Shoukan extends Game {
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
-			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
-					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-					.queue(s -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-					});
 			if (getCustom() == null)
 				getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 			close();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
+					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+					.queue();
 		});
 
 		return buttons;
@@ -910,7 +949,7 @@ public class Shoukan extends Game {
 
 	@Override
 	public void close() {
-		super.close();
 		getHandler().removeEventListener(listener);
+		super.close();
 	}
 }

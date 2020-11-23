@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
@@ -55,6 +56,9 @@ public class Equipment implements Drawable, Cloneable {
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
     private int tier;
 
+    @Enumerated(value = EnumType.STRING)
+    private Charm charm = null;
+
     private transient boolean flipped = false;
     private transient boolean available = true;
     private transient Account acc = null;
@@ -88,12 +92,17 @@ public class Equipment implements Drawable, Cloneable {
             g2d.setColor(Color.green);
             Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
 
+            if (charm != null)
+                g2d.drawImage(charm.getIcon(), 135, 58, null);
+
             try {
                 BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
                 for (int i = 0; i < tier; i++)
                     g2d.drawImage(star, (bi.getWidth() / 2) - (star.getWidth() * tier / 2) + star.getWidth() * i, 42, null);
             } catch (IOException ignore) {
             }
+
+
         }
 
         if (!available) {
@@ -201,6 +210,10 @@ public class Equipment implements Drawable, Cloneable {
 
     public int getTier() {
         return tier;
+    }
+
+    public Charm getCharm() {
+        return charm;
     }
 
     @Override
