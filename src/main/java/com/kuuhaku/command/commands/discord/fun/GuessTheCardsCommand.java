@@ -85,7 +85,7 @@ public class GuessTheCardsCommand extends Command {
 			g2d.dispose();
 
 			channel.sendMessage("Quais são as 3 cartas nesta imagem? Escreva os três nomes com `_` no lugar de espaços e separados por ponto-e-vírgula (`;`).")
-					.addFile(Helper.getBytes(img), "image.jpg")
+					.addFile(Helper.getBytes(img, "png"), "image.png")
 					.queue();
 
 			Helper.awaitMessage(author, (TextChannel) channel, (msg) -> {
