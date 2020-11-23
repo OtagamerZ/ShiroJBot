@@ -538,6 +538,9 @@ public class CommandManager {
 			put(LearnToSearchCommand.class, new Argument(
 					"pesquisar", new String[]{"search", "lts", "aap"}, "req_search", "cmd_learn-to-search", FUN, false
 			));
+			put(GuessTheCardsCommand.class, new Argument(
+					"adivinheascartas", new String[]{"aac", "guessthecards", "gtc"}, "cmd_guess-the-cards", FUN, false
+			));
 
 			//MUSICA
 			put(ControlCommand.class, new Argument(
