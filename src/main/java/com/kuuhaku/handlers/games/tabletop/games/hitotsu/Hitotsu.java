@@ -72,21 +72,19 @@ public class Hitotsu extends Game {
 		setActions(
 				s -> {
 					close();
+					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
-							.queue(msg -> {
-								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-							});
+							.queue();
 				},
 				s -> {
 					getBoard().leaveGame();
 					resetTimer();
 					if (getBoard().getInGamePlayers().size() == 1) {
 						getBoard().awardWinner(this, getCurrent().getId());
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 								.addFile(Helper.getBytes(mount, "png"), "mount.png")
-								.queue(msg -> {
-									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-								});
+								.queue();
 					}
 				}
 		);
@@ -158,40 +156,36 @@ public class Hitotsu extends Game {
 
 			if (winners.size() == 1) {
 				Hand h = winners.get(0);
+				close();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(h.getUser().getAsMention() + " é o jogador que possui menos cartas, temos um vencedor!! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
-						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-						});
+						.queue();
 				getBoard().awardWinners(this, h.getUser().getId());
-				close();
 			} else if (winners.size() != getBoard().getPlayers().size()) {
+				close();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(String.join(", ", winners.stream().map(h -> h.getUser().getAsMention()).toArray(String[]::new)) + " são os jogadores que possuem menos cartas, temos " + winners.size() + " vencedores!! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
-						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-						});
+						.queue();
 				getBoard().awardWinners(this, winners.stream().map(h -> h.getUser().getId()).toArray(String[]::new));
-				close();
 			} else {
+				close();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("Temos um empate! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
-						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-						});
-				close();
+						.queue();
 			}
 		}
 	}
 
 	private void declareWinner() {
-		channel.sendMessage("Não restam mais cartas para " + getCurrent().getAsMention() + ", temos um vencedor!! (" + getRound() + " turnos)")
-				.addFile(Helper.getBytes(mount, "png"), "mount.png")
-				.queue(s -> {
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-				});
 		getBoard().awardWinner(this, getCurrent().getId());
 		close();
+		if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+		channel.sendMessage("Não restam mais cartas para " + getCurrent().getAsMention() + ", temos um vencedor!! (" + getRound() + " turnos)")
+				.addFile(Helper.getBytes(mount, "png"), "mount.png")
+				.queue();
 	}
 
 	public boolean handle(int card) throws IllegalCardException {
@@ -260,10 +254,10 @@ public class Hitotsu extends Game {
 			suddenDeath = true;
 		}
 		resetTimer();
+		if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 		channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
 				.addFile(Helper.getBytes(mount, "png"), "mount.png")
 				.queue(s -> {
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = s;
 					seats.get(getCurrent().getId()).showHand();
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -282,10 +276,10 @@ public class Hitotsu extends Game {
 		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Math.random() * 90 - 45);
 		g2d.dispose();
 
+		if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 		channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
 				.addFile(Helper.getBytes(mount, "png"), "mount.png")
 				.queue(s -> {
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = s;
 					seats.get(getCurrent().getId()).showHand();
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -376,10 +370,10 @@ public class Hitotsu extends Game {
 
 			User u = getCurrent();
 			resetTimer();
+			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(u + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
 					.addFile(Helper.getBytes(mount, "png"), "mount.png")
 					.queue(s -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = s;
 						seats.get(getCurrent().getId()).showHand();
 						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
@@ -393,17 +387,16 @@ public class Hitotsu extends Game {
 
 			if (getBoard().getInGamePlayers().size() == 1) {
 				getBoard().awardWinner(this, getCurrent().getId());
+				close();
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
-						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-						});
-				close();
+						.queue();
 			} else {
+				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
 						.queue(s -> {
-							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
 							seats.get(getCurrent().getId()).showHand();
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
