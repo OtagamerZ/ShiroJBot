@@ -1632,7 +1632,7 @@ public class Helper {
 	}
 
 	public static void applyMask(BufferedImage source, BufferedImage mask, int channel) {
-		BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+		BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), mask.getType());
 		Graphics2D g2d = newMask.createGraphics();
 		g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);
 		g2d.dispose();
@@ -1644,14 +1644,21 @@ public class Helper {
 				int green = (rgb >> 8) & 0xFF;
 				int blue = (rgb >> 16) & 0xFF;
 
-				int maskRgb = mask.getRGB(x, y);
+				int maskRgb = newMask.getRGB(x, y);
 				int fac = switch (channel) {
 					case 0 -> maskRgb & 0xFF;
 					case 1 -> (maskRgb >> 8) & 0xFF;
 					case 2 -> (maskRgb >> 16) & 0xFF;
 					default -> throw new IllegalStateException("Unexpected value: " + channel);
 				};
-				source.setRGB(x, y, fac | red | green | blue);
+				source.setRGB(
+						x,
+						y,
+						((fac << 24) & 0xFF000000) |
+						((red << 16) & 0x00FF0000) |
+						((green << 8) & 0x0000FF00) |
+						(blue & 0x000000FF)
+				);
 			}
 		}
 	}
