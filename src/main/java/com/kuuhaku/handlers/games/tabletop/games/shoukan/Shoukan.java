@@ -253,6 +253,11 @@ public class Shoukan extends Game {
 					if (t.hasEffect() && !t.isFlipped()) {
 						t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
 						if (postCombat()) return;
+
+						if (tp.getCharm() != null && tp.getCharm() == Charm.TIMEWARP) {
+							t.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
+							if (postCombat()) return;
+						}
 					}
 				} else if (d instanceof Champion) {
 					if (args.length < 3) {
