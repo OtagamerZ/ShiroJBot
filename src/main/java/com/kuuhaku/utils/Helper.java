@@ -1661,7 +1661,7 @@ public class Helper {
         return a << 24 | r << 16 | g << 8 | b;
     }
 
-    public static void toColorSpace(BufferedImage in, int type) {
+    public static BufferedImage toColorSpace(BufferedImage in, int type) {
 	BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), type);
 	Graphics2d g2d = out.createGraphics();
 	g2d.drawImage(out, 0, 0, null);
