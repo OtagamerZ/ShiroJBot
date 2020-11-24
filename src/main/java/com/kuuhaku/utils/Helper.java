@@ -1645,7 +1645,7 @@ public class Helper {
                 source.setRGB(
                         x,
                         y,
-                        packRGB(fac, rgb[0], rgb[1], rgb[2])
+                        packRGB(fac, rgb[1], rgb[2], rgb[3])
                 );
             }
         }
