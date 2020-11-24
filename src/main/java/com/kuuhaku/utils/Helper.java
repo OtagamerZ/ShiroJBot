@@ -1664,7 +1664,7 @@ public class Helper {
     public static BufferedImage toColorSpace(BufferedImage in, int type) {
 	BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), type);
 	Graphics2D g2d = out.createGraphics();
-	g2d.drawImage(out, 0, 0, null);
+	g2d.drawImage(in, 0, 0, null);
 	g2d.dispose();
 	return out;
     }
