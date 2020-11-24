@@ -107,6 +107,9 @@ public class GuessTheCardsCommand extends Command {
 
 				@Override
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+					if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
+						return;
+
 					String[] answers = event.getMessage().getContentRaw().split(";");
 
 					if (answers.length != 3 && chances > 0) {
@@ -115,6 +118,9 @@ public class GuessTheCardsCommand extends Command {
 						return;
 					} else if (answers.length != 3) {
 						channel.sendMessage("❌ | Você errou muitas vezes, o jogo foi encerrado.").queue();
+						success.accept(null);
+						timeout.cancel(true);
+						timeout = null;
 						return;
 					}
 
