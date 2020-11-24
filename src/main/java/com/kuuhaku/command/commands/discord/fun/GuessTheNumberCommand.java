@@ -85,7 +85,9 @@ public class GuessTheNumberCommand extends Command {
 				String value = event.getMessage().getContentRaw();
 				if (value.equalsIgnoreCase("desistir")) {
 					channel.sendMessage("Você desistiu, o número escolhido por mim era **" + theValue + "**.").queue();
-					close();
+					success.accept(null);
+					timeout.cancel(true);
+					timeout = null;
 					return;
 				} else if (!StringUtils.isNumeric(value) || Integer.parseInt(value) < 0 || Integer.parseInt(value) > 100) {
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-number")).queue();

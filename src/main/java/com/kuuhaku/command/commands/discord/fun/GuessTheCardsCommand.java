@@ -116,7 +116,9 @@ public class GuessTheCardsCommand extends Command {
 								names.get(1),
 								names.get(2))
 						).queue();
-						close();
+						success.accept(null);
+						timeout.cancel(true);
+						timeout = null;
 						return;
 					}
 
