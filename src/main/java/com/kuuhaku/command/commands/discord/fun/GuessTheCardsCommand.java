@@ -110,6 +110,16 @@ public class GuessTheCardsCommand extends Command {
 					if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
 						return;
 
+					if (event.getMessage().getContentRaw().equalsIgnoreCase("desistir")) {
+						channel.sendMessage("Você desistiu, as cartas eram `%s`, `%s` e `%s`".formatted(
+								names.get(0),
+								names.get(1),
+								names.get(2))
+						).queue();
+						close();
+						return;
+					}
+
 					String[] answers = event.getMessage().getContentRaw().split(";");
 
 					if (answers.length != 3 && chances > 0) {
