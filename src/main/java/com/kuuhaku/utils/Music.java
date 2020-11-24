@@ -31,6 +31,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.io.IOException;
 import java.util.*;
@@ -38,10 +39,14 @@ import java.util.concurrent.TimeUnit;
 
 public class Music {
     private static void play(VoiceChannel vc, TextChannel channel, Guild guild, GuildMusicManager musicManager, AudioTrack track) {
-        guild.getAudioManager().openAudioConnection(vc);
+        try {
+            guild.getAudioManager().openAudioConnection(vc);
 
-        musicManager.scheduler.channel = channel;
-        musicManager.scheduler.queue(track);
+            musicManager.scheduler.channel = channel;
+            musicManager.scheduler.queue(track);
+        } catch (InsufficientPermissionException e) {
+            channel.sendMessage("❌ | Este canal de voz está cheio, para que eu possa me conectar à ele eu preciso da permissão para mover usuários (expulsar um membro do canal também ajuda :slight_smile:).").queue();
+        }
     }
 
     public static void skipTrack(TextChannel channel) {
