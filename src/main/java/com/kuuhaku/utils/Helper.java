@@ -1653,7 +1653,7 @@ public class Helper {
 
     public static int[] unpackRGB(int rgb, boolean hasAlpha) {
         return new int[]{
-                hasAlpha ? (rgb >> 24) & 0xFF : 255,
+                (rgb >> 24) & 0xFF,
                 (rgb >> 16) & 0xFF,
                 (rgb >> 8) & 0xFF,
                 rgb & 0xFF
