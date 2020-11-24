@@ -90,15 +90,17 @@ public class Shoukan extends Game {
 		setActions(
 				s -> {
 					close();
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue();
+							.queue(msg -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							});
 				},
 				s -> {
 					if (custom == null) getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					channel.sendFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue();
+							.queue(msg -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							});
 				}
 		);
 	}
@@ -135,10 +137,10 @@ public class Shoukan extends Game {
 
 		if (cmd.equalsIgnoreCase("reload")) {
 			resetTimerKeepTurn();
-			if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 			channel.sendMessage(message.getAuthor().getAsMention() + " recriou a mensagem do jogo.")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 					.queue(s -> {
+						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = s;
 						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					});
@@ -198,9 +200,9 @@ public class Shoukan extends Game {
 
 					changed[index] = true;
 					resetTimerKeepTurn();
-					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					act.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 							.queue(s -> {
+								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 								this.message = s;
 								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 							});
@@ -330,9 +332,9 @@ public class Shoukan extends Game {
 				if (makeFusion(h)) return;
 
 				resetTimerKeepTurn();
-				if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				channel.sendFile(Helper.getBytes(arena.render(hands), "jpg"), "board.jpg")
 						.queue(s -> {
+							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 							h.showHand();
@@ -392,10 +394,10 @@ public class Shoukan extends Game {
 
 					if (!postCombat()) {
 						resetTimerKeepTurn();
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Você atacou diretamente o inimigo.")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
+									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 									this.message = s;
 									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 								});
