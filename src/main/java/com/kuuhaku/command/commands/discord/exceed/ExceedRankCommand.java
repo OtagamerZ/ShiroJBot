@@ -85,16 +85,16 @@ public class ExceedRankCommand extends Command {
 							.build();
 
 					chart.getStyler()
-							.setPlotGridLinesColor(Color.decode("#404447"))
+							.setPlotGridLinesColor(new Color(64, 68, 71))
 							.setAxisTickLabelsColor(Color.WHITE)
 							.setAnnotationsFontColor(Color.WHITE)
 							.setChartFontColor(Color.WHITE)
 							.setHasAnnotations(true)
 							.setLegendPosition(Styler.LegendPosition.InsideNE)
 							.setSeriesColors(colors.stream().map(Color::darker).toArray(Color[]::new))
-							.setPlotBackgroundColor(Color.decode("#202225"))
-							.setChartBackgroundColor(Color.decode("#101114"))
-							.setLegendBackgroundColor(Color.decode("#101114"));
+							.setPlotBackgroundColor(new Color(32, 34, 37))
+							.setChartBackgroundColor(new Color(16, 17, 20))
+							.setLegendBackgroundColor(new Color(16, 17, 20, 100));
 
 					for (Exceed ex : exceeds) {
 						chart.addSeries(ex.getExceed().getName(),
@@ -127,16 +127,16 @@ public class ExceedRankCommand extends Command {
 
 
 					chart.getStyler()
-							.setPlotGridLinesColor(Color.decode("#404447"))
+							.setPlotGridLinesColor(new Color(64, 68, 71))
 							.setXAxisMin(1d)
 							.setXAxisMax(12d)
 							.setAxisTickLabelsColor(Color.WHITE)
 							.setChartFontColor(Color.WHITE)
 							.setLegendPosition(Styler.LegendPosition.InsideNE)
 							.setSeriesColors(colors.stream().map(Color::darker).toArray(Color[]::new))
-							.setPlotBackgroundColor(Color.decode("#202225"))
-							.setChartBackgroundColor(Color.decode("#101114"))
-							.setLegendBackgroundColor(Color.decode("#101114"))
+							.setPlotBackgroundColor(new Color(32, 34, 37))
+							.setChartBackgroundColor(new Color(16, 17, 20))
+							.setLegendBackgroundColor(new Color(16, 17, 20, 100))
 							.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
 
 					for (List<ExceedScore> ex : exceeds) {
