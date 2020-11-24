@@ -112,6 +112,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1062,13 +1063,13 @@ public class Helper {
         return Base64.getEncoder().encodeToString(nameSpace) + "." + Base64.getEncoder().encodeToString(randomSpace);
     }
 
-    public static void awaitMessage(User u, TextChannel chn, Consumer<Message> act) {
-        Main.getInfo().getAPI().addEventListener(new SimpleMessageListener() {
+    public static void awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act) {
+        Main.getInfo().getShiroEvents().addHandler(chn.getGuild(), new SimpleMessageListener() {
             @Override
             public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
                 if (event.getChannel().getId().equals(chn.getId()) && event.getAuthor().getId().equals(u.getId())) {
-                    Main.getInfo().getAPI().removeEventListener(this);
-                    act.accept(event.getMessage());
+                    if (act.apply(event.getMessage()))
+                        close();
                 }
             }
         });

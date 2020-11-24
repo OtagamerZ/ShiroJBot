@@ -19,7 +19,9 @@
 package com.kuuhaku.handlers.games.tabletop.games.hitotsu;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
@@ -35,7 +37,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +56,7 @@ public class Hitotsu extends Game {
 	private final LinkedList<KawaiponCard> played = new LinkedList<>();
 	private final GameDeque<KawaiponCard> deque = new GameDeque<>(this);
 	private final TextChannel channel;
-	private final ListenerAdapter listener = new ListenerAdapter() {
+	private final SimpleMessageListener listener = new SimpleMessageListener() {
 		@Override
 		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 			if (canInteract(event)) play(event);
@@ -107,7 +108,7 @@ public class Hitotsu extends Game {
 		channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
 				.queue(s -> {
 					this.message = s;
-					getHandler().addEventListener(listener);
+					Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), listener);
 					seats.get(getCurrent().getId()).showHand();
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
@@ -409,7 +410,7 @@ public class Hitotsu extends Game {
 
 	@Override
 	public void close() {
+		listener.close();
 		super.close();
-		getHandler().removeEventListener(listener);
 	}
 }

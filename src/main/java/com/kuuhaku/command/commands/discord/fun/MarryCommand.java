@@ -92,8 +92,8 @@ public class MarryCommand extends Command {
 					""".formatted(message.getMentionedUsers().get(0).getAsMention(), author.getAsMention())
 			).queue();
 
-			Main.getInfo().getAPI().addEventListener(new SimpleMessageListener() {
-				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
+			Main.getInfo().getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+				private final Consumer<Void> success = s -> close();
 				private Future<?> timeout = channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
 
 				@Override
