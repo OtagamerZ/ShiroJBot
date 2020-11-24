@@ -128,49 +128,8 @@ public class Profile {
 		g2d.fillRect(0, 300, w, 300);
 		g2d.fillRect(0, 350, w, 250);
 
-		int polyOffset = 30;
-		if (mb.getLevel() >= 125) {
-			g2d.setColor(Color.black);
-			g2d.fillPolygon(new int[]{
-					38 + (avatar.getWidth() + 24) / 2,
-					38 + (avatar.getWidth() + 24) / 2 + 50,
-					38 + (avatar.getWidth() + 24) + polyOffset + 4,
-					38 + (avatar.getWidth() + 24) / 2 + 50,
-					38 + (avatar.getWidth() + 24) / 2,
-					38 + (avatar.getWidth() + 24) / 2 - 50,
-					38 - polyOffset - 4,
-					38 + (avatar.getWidth() + 24) / 2 - 50,
-			}, new int[]{
-					188 - polyOffset - 4,
-					188 + (avatar.getHeight() + 24) / 2 - 50,
-					188 + (avatar.getHeight() + 24) / 2,
-					188 + (avatar.getHeight() + 24) / 2 + 50,
-					188 + (avatar.getHeight() + 24) + polyOffset + 4,
-					188 + (avatar.getHeight() + 24) / 2 + 50,
-					188 + (avatar.getHeight() + 24) / 2,
-					188 + (avatar.getHeight() + 24) / 2 - 50,
-			}, 8);
-			g2d.setColor(main);
-			g2d.fillPolygon(new int[]{
-					38 + (avatar.getWidth() + 24) / 2,
-					38 + (avatar.getWidth() + 24) / 2 + 46,
-					38 + (avatar.getWidth() + 24) + polyOffset,
-					38 + (avatar.getWidth() + 24) / 2 + 46,
-					38 + (avatar.getWidth() + 24) / 2,
-					38 + (avatar.getWidth() + 24) / 2 - 46,
-					38 - polyOffset,
-					38 + (avatar.getWidth() + 24) / 2 - 46,
-			}, new int[]{
-					188 - polyOffset,
-					188 + (avatar.getHeight() + 24) / 2 - 46,
-					188 + (avatar.getHeight() + 24) / 2,
-					188 + (avatar.getHeight() + 24) / 2 + 46,
-					188 + (avatar.getHeight() + 24) + polyOffset,
-					188 + (avatar.getHeight() + 24) / 2 + 46,
-					188 + (avatar.getHeight() + 24) / 2,
-					188 + (avatar.getHeight() + 24) / 2 - 46,
-			}, 8);
-		}
+		drawPrestigeDetails(g2d, avatar, main, mb.getLevel());
+
 		g2d.setColor(Color.black);
 		g2d.fillOval(38, 188, avatar.getWidth() + 24, avatar.getHeight() + 24);
 		g2d.fillRect(50, 348, 200, 204);
@@ -422,4 +381,98 @@ public class Profile {
 		g2d.translate(-(float) x, -(float) y);
 	}
 
+	private static void drawPrestigeDetails(Graphics2D g2d, BufferedImage avatar, Color main, int lvl) {
+		int polyOffset = 30;
+		if (lvl >= 125) {
+			g2d.setColor(Color.black);
+			g2d.fillPolygon(new int[]{
+					38 + (avatar.getWidth() + 24) / 2,
+					38 + (avatar.getWidth() + 24) / 2 + 50,
+					38 + (avatar.getWidth() + 24) + polyOffset + 4,
+					38 + (avatar.getWidth() + 24) / 2 + 50,
+					38 + (avatar.getWidth() + 24) / 2,
+					38 + (avatar.getWidth() + 24) / 2 - 50,
+					38 - polyOffset - 4,
+					38 + (avatar.getWidth() + 24) / 2 - 50,
+			}, new int[]{
+					188 - polyOffset - 4,
+					188 + (avatar.getHeight() + 24) / 2 - 50,
+					188 + (avatar.getHeight() + 24) / 2,
+					188 + (avatar.getHeight() + 24) / 2 + 50,
+					188 + (avatar.getHeight() + 24) + polyOffset + 4,
+					188 + (avatar.getHeight() + 24) / 2 + 50,
+					188 + (avatar.getHeight() + 24) / 2,
+					188 + (avatar.getHeight() + 24) / 2 - 50,
+			}, 8);
+			g2d.setColor(main);
+			g2d.fillPolygon(new int[]{
+					38 + (avatar.getWidth() + 24) / 2,
+					38 + (avatar.getWidth() + 24) / 2 + 46,
+					38 + (avatar.getWidth() + 24) + polyOffset - 8,
+					38 + (avatar.getWidth() + 24) / 2 + 46,
+					38 + (avatar.getWidth() + 24) / 2,
+					38 + (avatar.getWidth() + 24) / 2 - 46,
+					38 - polyOffset + 8,
+					38 + (avatar.getWidth() + 24) / 2 - 46,
+			}, new int[]{
+					188 - polyOffset + 8,
+					188 + (avatar.getHeight() + 24) / 2 - 46,
+					188 + (avatar.getHeight() + 24) / 2,
+					188 + (avatar.getHeight() + 24) / 2 + 46,
+					188 + (avatar.getHeight() + 24) + polyOffset - 8,
+					188 + (avatar.getHeight() + 24) / 2 + 46,
+					188 + (avatar.getHeight() + 24) / 2,
+					188 + (avatar.getHeight() + 24) / 2 - 46,
+			}, 8);
+		}
+
+		if (lvl >= 245) {
+			g2d.setColor(Color.black);
+			g2d.fillPolygon(new int[]{
+					38 + (avatar.getHeight() + 24) / 2 - polyOffset * 2,
+					38 + (avatar.getHeight() + 24) / 2 - polyOffset,
+					38 + (avatar.getHeight() + 24) / 2 - polyOffset,
+					38 + (avatar.getHeight() + 24) / 2 - polyOffset * 2
+			}, new int[]{
+					188 - 4,
+					188 - polyOffset * 2 - 4,
+					0,
+					0
+			}, 4);
+			g2d.fillPolygon(new int[]{
+					38 + (avatar.getHeight() + 24) / 2 + polyOffset * 2,
+					38 + (avatar.getHeight() + 24) / 2 + polyOffset,
+					38 + (avatar.getHeight() + 24) / 2 + polyOffset,
+					38 + (avatar.getHeight() + 24) / 2 + polyOffset * 2
+			}, new int[]{
+					188 - 4,
+					188 - polyOffset * 2 - 4,
+					0,
+					0
+			}, 4);
+			g2d.setColor(main);
+			g2d.fillPolygon(new int[]{
+					38 + (avatar.getHeight() + 24) / 2 - polyOffset * 2 + 4,
+					38 + (avatar.getHeight() + 24) / 2 - polyOffset - 4,
+					38 + (avatar.getHeight() + 24) / 2 - polyOffset - 4,
+					38 + (avatar.getHeight() + 24) / 2 - polyOffset * 2 + 4
+			}, new int[]{
+					180 - 16,
+					180 - polyOffset * 2,
+					0,
+					0
+			}, 4);
+			g2d.fillPolygon(new int[]{
+					38 + (avatar.getHeight() + 24) / 2 + polyOffset * 2 - 4,
+					38 + (avatar.getHeight() + 24) / 2 + polyOffset + 4,
+					38 + (avatar.getHeight() + 24) / 2 + polyOffset + 4,
+					38 + (avatar.getHeight() + 24) / 2 + polyOffset * 2 - 4
+			}, new int[]{
+					180 - 16,
+					180 - polyOffset * 2,
+					0,
+					0
+			}, 4);
+		}
+	}
 }

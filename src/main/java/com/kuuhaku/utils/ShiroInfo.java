@@ -92,7 +92,8 @@ public class ShiroInfo {
 	private static final List<String> emoteRepo = List.of(
 			"666619034103447642", //Shiro Emote Repository 1
 			"726171298044313694", //Shiro Emote Repository 2
-			"732300321673576498" //Shiro Emote Repository 3
+			"732300321673576498", //Shiro Emote Repository 3
+			"763775306095788033"  //Shiro Emote Repository 4
 	);
 	private static final Map<String, Map<String, String>> polls = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
