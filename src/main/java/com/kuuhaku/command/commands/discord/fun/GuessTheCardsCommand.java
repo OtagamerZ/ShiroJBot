@@ -79,7 +79,7 @@ public class GuessTheCardsCommand extends Command {
 			Graphics2D g2d = img.createGraphics();
 			for (int i = 0; i < imgs.size(); i++) {
 				BufferedImage bi = imgs.get(i);
-				Helper.applyMask(bi, mask, i);
+				Helper.applyMask(bi, mask, i + 1);
 				g2d.drawImage(bi, 0, 0, null);
 			}
 			g2d.dispose();
