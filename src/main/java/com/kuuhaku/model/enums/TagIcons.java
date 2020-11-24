@@ -122,15 +122,11 @@ public enum TagIcons {
 	}
 
 	public static Emote getLevelEmote(int lvl) {
-		int l = -1;
-		for (int i = 5; true; i += 5) {
-			if (lvl >= i) l = i;
-			else break;
-		}
+		int l = lvl - (lvl % 5);
 		return Main.getInfo().getAPI().getEmotesByName("lvl_" + Math.min(l, 320), true)
 				.stream()
 				.filter(e -> e.getGuild() != null && ShiroInfo.getEmoteRepo().contains(e.getGuild().getId()))
 				.findFirst()
-				.orElseThrow(() -> new NoSuchElementException("Emblema inexistente para o level " + lvl));
+				.orElseThrow(() -> new NoSuchElementException("Emblema inexistente para o level " + l));
 	}
 }
