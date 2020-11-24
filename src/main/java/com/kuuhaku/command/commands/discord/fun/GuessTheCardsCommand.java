@@ -69,7 +69,7 @@ public class GuessTheCardsCommand extends Command {
 		}
 
 		try {
-			BufferedImage mask = ImageIO.read(Objects.requireNonNull(GuessTheCardsCommand.class.getClassLoader().getResourceAsStream("assets/gtc_mask.png")));
+			BufferedImage mask = Helper.toColorSpace(ImageIO.read(Objects.requireNonNull(GuessTheCardsCommand.class.getClassLoader().getResourceAsStream("assets/gtc_mask.png"))), BufferedImage.TYPE_INT_ARGB);
 			List<Card> c = Helper.getRandomN(CardDAO.getCards(), 3, 1);
 			List<BufferedImage> imgs = c.stream()
 					.map(Card::drawCardNoBorder)
