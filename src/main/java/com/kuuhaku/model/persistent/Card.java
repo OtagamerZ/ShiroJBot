@@ -107,13 +107,14 @@ public class Card {
 		for (int y = 0; y < bi.getHeight(); y++) {
 			for (int x = 0; x < bi.getWidth(); x++) {
 				int[] rgb = Helper.unpackRGB(bi.getRGB(x, y));
+				int alpha = rgb[0];
 
 				float[] hsv = Color.RGBtoHSB(rgb[1], rgb[3], rgb[2], null);
 				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
 
 				rgb = Helper.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
 
-				out.setRGB(x, y, Helper.packRGB(rgb[0], rgb[1], rgb[2], rgb[3]));
+				out.setRGB(x, y, Helper.packRGB(alpha, rgb[1], rgb[2], rgb[3]));
 			}
 		}
 
