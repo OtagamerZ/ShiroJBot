@@ -19,9 +19,11 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
@@ -40,7 +42,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -60,7 +61,7 @@ public class Shoukan extends Game {
 	private final Map<Side, Hand> hands;
 	private final TextChannel channel;
 	private final Arena arena = new Arena();
-	private final ListenerAdapter listener = new ListenerAdapter() {
+	private final SimpleMessageListener listener = new SimpleMessageListener() {
 		@Override
 		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 			if (canInteract(event)) play(event);
@@ -110,7 +111,7 @@ public class Shoukan extends Game {
 				.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 				.queue(s -> {
 					this.message = s;
-					getHandler().addEventListener(listener);
+					Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), listener);
 					h.showHand();
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
@@ -962,7 +963,7 @@ public class Shoukan extends Game {
 
 	@Override
 	public void close() {
-		getHandler().removeEventListener(listener);
+		listener.close();
 		super.close();
 	}
 }

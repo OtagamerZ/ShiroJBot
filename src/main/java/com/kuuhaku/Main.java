@@ -31,8 +31,6 @@ import com.kuuhaku.events.ConsoleListener;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
 import com.kuuhaku.events.TwitchEvents;
-import com.kuuhaku.events.guild.GuildEvents;
-import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
@@ -160,9 +158,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		});
 
 		console = new ConsoleListener();
-		api.addEventListener(Main.getInfo().getShiroEvents());
-		api.addEventListener(new GuildEvents());
-		api.addEventListener(new GuildUpdateEvents());
+		api.addEventListener(info.getShiroEvents());
 		jbr.addEventListener(new JibrilEvents());
 
 		Pages.activate(api);

@@ -97,9 +97,8 @@ public class KGotchiCommand extends Command {
 
 				jo.toMap().forEach((f, v) -> {
 					Food food = FoodMenu.getFood(f);
-					List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
-					field.add(new MessageEmbed.Field(food.getName() + " - " + v + " unidades\n(`" + prefix + "kgotchi alimentar " + f + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
-					fields.put(food.getType(), field);
+					fields.compute(food.getType(), (ft, fd) -> fd == null ? new ArrayList<>() : fd)
+							.add(new MessageEmbed.Field(food.getName() + " - " + v + " unidades\n(`" + prefix + "kgotchi alimentar " + f + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
 				});
 
 				Map<String, Page> pages = new HashMap<>();
@@ -249,11 +248,10 @@ public class KGotchiCommand extends Command {
 
 							Map<VanityType, List<MessageEmbed.Field>> fields = new HashMap<>();
 
-							VanityMenu.getMenu().forEach((n, vanity) -> {
-								List<MessageEmbed.Field> field = fields.getOrDefault(vanity.getType(), new ArrayList<>());
-								field.add(new MessageEmbed.Field(vanity.getName() + " - " + vanity.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar extra " + n + "`)", "Bônus de " + vanity.getType().getBonus().toLowerCase() + ": " + (int) (vanity.getModifier() * 100) + "%", true));
-								fields.put(vanity.getType(), field);
-							});
+							VanityMenu.getMenu().forEach((n, vanity) ->
+									fields.compute(vanity.getType(), (vt, fd) -> fd == null ? new ArrayList<>() : fd)
+											.add(new MessageEmbed.Field(vanity.getName() + " - " + vanity.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar extra " + n + "`)", "Bônus de " + vanity.getType().getBonus().toLowerCase() + ": " + (int) (vanity.getModifier() * 100) + "%", true))
+							);
 
 							Map<String, Page> pages = new HashMap<>();
 
@@ -293,11 +291,10 @@ public class KGotchiCommand extends Command {
 
 							Map<FoodType, List<MessageEmbed.Field>> fields = new HashMap<>();
 
-							FoodMenu.getMenu().forEach((n, food) -> {
-								List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
-								field.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar comida " + n + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
-								fields.put(food.getType(), field);
-							});
+							FoodMenu.getMenu().forEach((n, food) ->
+									fields.compute(food.getType(), (ft, fd) -> fd == null ? new ArrayList<>() : fd)
+											.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar comida " + n + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true))
+							);
 
 							Map<String, Page> pages = new HashMap<>();
 

@@ -22,10 +22,21 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
+import java.io.Closeable;
 
-public abstract class SimpleMessageListener extends ListenerAdapter {
+public abstract class SimpleMessageListener extends ListenerAdapter implements Closeable {
 	public final SimpleMessageListener self = this;
+	private boolean closed = false;
 
 	@Override
 	public abstract void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event);
+
+	public boolean isClosed() {
+		return closed;
+	}
+
+	@Override
+	public void close() {
+		closed = true;
+	}
 }

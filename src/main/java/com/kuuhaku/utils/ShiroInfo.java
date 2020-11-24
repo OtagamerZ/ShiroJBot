@@ -23,7 +23,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.gson.GsonBuilder;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
-import com.kuuhaku.events.JDAEvents;
+import com.kuuhaku.events.ShiroEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.music.GuildMusicManager;
@@ -97,7 +97,7 @@ public class ShiroInfo {
 	private static final Map<String, Map<String, String>> polls = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
-	private static final JDAEvents shiroEvents = new JDAEvents();
+	private static final ShiroEvents shiroEvents = new ShiroEvents();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 	private static final HashSet<String> hashes = new HashSet<>();
@@ -260,7 +260,7 @@ public class ShiroInfo {
 		gmms.put(id, gmm);
 	}
 
-	public JDAEvents getShiroEvents() {
+	public ShiroEvents getShiroEvents() {
 		return shiroEvents;
 	}
 
@@ -342,9 +342,8 @@ public class ShiroInfo {
 	}
 
 	public void cache(Guild guild, Message message) {
-		KittyCache<String, Message> cache = messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
-		cache.put(message.getId(), message, (int) TimeUnit.DAYS.toSeconds(1));
-		messageCache.put(guild.getId(), cache);
+		messageCache.compute(guild.getId(), (s, cache) -> cache == null ? new KittyCache<>(64) : cache)
+				.put(message.getId(), message, (int) TimeUnit.DAYS.toSeconds(1));
 	}
 
 	public Message retrieveCachedMessage(Guild guild, String id) {

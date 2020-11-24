@@ -65,7 +65,7 @@ public class DeckEvalCommand extends Command {
 			put(Class.LEVELER, 0);
 		}};
 		for (Champion c : kp.getChampions())
-			count.put(c.getCategory(), count.getOrDefault(c.getCategory(), 0) + 1);
+			count.compute(c.getCategory(), (cl, ct) -> ct == null ? 1 : ct++);
 
 		count.remove(null);
 
