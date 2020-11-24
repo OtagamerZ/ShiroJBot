@@ -1632,10 +1632,7 @@ public class Helper {
     }
 
     public static void applyMask(BufferedImage source, BufferedImage mask, int channel) {
-        BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), mask.getType());
-        Graphics2D g2d = newMask.createGraphics();
-        g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);
-        g2d.dispose();
+        BufferedImage newMask = toColorSpace(new BufferedImage(source.getWidth(), source.getHeight(), mask.getType()), BufferedImage.TYPE_INT_ARGB);
 
         for (int y = 0; y < source.getHeight(); y++) {
             for (int x = 0; x < source.getWidth(); x++) {
@@ -1662,5 +1659,13 @@ public class Helper {
 
     public static int packRGB(int a, int r, int g, int b) {
         return a << 24 | r << 16 | g << 8 | b;
+    }
+
+    public static void toColorSpace(BufferedImage in, int type) {
+	BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), type);
+	Graphics2d g2d = out.createGraphics();
+	g2d.drawImage(out, 0, 0, null);
+	g2d.dispose();
+	return out;
     }
 }
