@@ -22,6 +22,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import com.kuuhaku.utils.Helper;
 
 public abstract class Piece {
 	private final String ownerId;
