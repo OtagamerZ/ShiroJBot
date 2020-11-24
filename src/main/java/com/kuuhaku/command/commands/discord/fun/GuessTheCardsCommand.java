@@ -103,7 +103,7 @@ public class GuessTheCardsCommand extends Command {
 				for (String s : answers)
 					points += names.remove(s.toUpperCase()) ? 1 : 0;
 
-				int reward = Helper.rng(250, false) * points;
+				int reward = 100 * points + Helper.rng(150, false) * points;
 
 				Account acc = AccountDAO.getAccount(author.getId());
 				acc.addCredit(reward, GuessTheCardsCommand.class);
