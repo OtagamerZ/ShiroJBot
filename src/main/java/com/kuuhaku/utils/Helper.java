@@ -1639,9 +1639,9 @@ public class Helper {
 
         for (int y = 0; y < source.getHeight(); y++) {
             for (int x = 0; x < source.getWidth(); x++) {
-                int[] rgb = unpackRGB(source.getRGB(x, y), true);
+                int[] rgb = unpackRGB(source.getRGB(x, y));
 
-                int fac = unpackRGB(newMask.getRGB(x, y), false)[channel];
+                int fac = unpackRGB(newMask.getRGB(x, y))[channel];
                 source.setRGB(
                         x,
                         y,
@@ -1651,7 +1651,7 @@ public class Helper {
         }
     }
 
-    public static int[] unpackRGB(int rgb, boolean hasAlpha) {
+    public static int[] unpackRGB(int rgb) {
         return new int[]{
                 (rgb >> 24) & 0xFF,
                 (rgb >> 16) & 0xFF,
