@@ -304,7 +304,7 @@ public class ShiroEvents extends ListenerAdapter {
 							try {
 								if (!guild.getSelfMember().getRoles().get(0).canInteract(sortedLvls.get(i))) return;
 								guild.addRoleToMember(member, sortedLvls.get(i)).queue(s -> {
-									String content = author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + "! :tada:";
+									String content = author.getAsMention() + " ganhou o cargo **`" + sortedLvls.get(i).getName() + "`**! :tada:";
 									if (finalLvlChannel != null) {
 										finalLvlChannel.getHistory().retrievePast(5).queue(m -> {
 											if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
