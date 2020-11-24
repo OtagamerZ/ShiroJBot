@@ -137,7 +137,7 @@ public class Account {
 
 	public synchronized void addCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
-		else if (this.loan > 0) {
+		else if (loan > 0) {
 			TransactionDAO.register(userId, from, -credit);
 			loan = loan - credit;
 		} else {
@@ -154,7 +154,7 @@ public class Account {
 
 	public synchronized void addVCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
-		else if (this.loan > 0) {
+		else if (loan > 0) {
 			TransactionDAO.register(userId, from, -credit);
 			loan = loan - credit;
 		} else {
@@ -167,6 +167,30 @@ public class Account {
 			TransactionDAO.register(userId, from, loan * -1);
 			loan = 0;
 		}
+	}
+
+	public synchronized long debitLoan() {
+		long remaining = loan - vBalance;
+		long paid;
+
+		if (remaining <= 0) {
+			paid = loan;
+			loan = 0;
+			vBalance = Math.abs(remaining);
+		} else {
+			remaining -= balance;
+
+			if (remaining <= 0) {
+				paid = loan;
+				loan = 0;
+				balance = Math.abs(remaining);
+			} else {
+				paid = loan - remaining;
+				loan = remaining;
+			}
+		}
+
+		return paid;
 	}
 
 	public synchronized void removeCredit(long credit, Class<?> from) {
