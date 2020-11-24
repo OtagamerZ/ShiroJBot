@@ -19,6 +19,8 @@
 package com.kuuhaku.handlers.games.tabletop.games.chess;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
+import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.Piece;
@@ -33,7 +35,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -46,7 +47,7 @@ public class Chess extends Game {
 	private final Map<String, List<Piece>> pieces;
 	private final TextChannel channel;
 	private Message message;
-	private final ListenerAdapter listener = new ListenerAdapter() {
+	private final SimpleMessageListener listener = new SimpleMessageListener() {
 		@Override
 		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 			if (canInteract(event)) play(event);
@@ -124,7 +125,7 @@ public class Chess extends Game {
 		channel.sendMessage(getCurrent().getAsMention() + " você começa!").addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 				.queue(s -> {
 					this.message = s;
-					getHandler().addEventListener(listener);
+					Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), listener);
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}
@@ -245,7 +246,7 @@ public class Chess extends Game {
 
 	@Override
 	public void close() {
+		listener.close();
 		super.close();
-		getHandler().removeEventListener(listener);
 	}
 }

@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
+import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
@@ -33,7 +34,9 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -41,6 +44,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class GuessTheCardsCommand extends Command {
@@ -71,6 +77,7 @@ public class GuessTheCardsCommand extends Command {
 		try {
 			BufferedImage mask = Helper.toColorSpace(ImageIO.read(Objects.requireNonNull(GuessTheCardsCommand.class.getClassLoader().getResourceAsStream("assets/gtc_mask.png"))), BufferedImage.TYPE_INT_ARGB);
 			List<Card> c = Helper.getRandomN(CardDAO.getCards(), 3, 1);
+			List<String> names = c.stream().map(Card::getId).collect(Collectors.toList());
 			List<BufferedImage> imgs = c.stream()
 					.map(Card::drawCardNoBorder)
 					.map(bi -> Helper.toColorSpace(bi, BufferedImage.TYPE_INT_ARGB))
@@ -89,53 +96,70 @@ public class GuessTheCardsCommand extends Command {
 					.addFile(Helper.getBytes(img, "png"), "image.png")
 					.queue();
 
-			Helper.awaitMessage(author, (TextChannel) channel, (msg) -> {
-				String[] answers = msg.getContentRaw().split(";");
+			Main.getInfo().getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+				private final Consumer<Void> success = s -> close();
+				private Future<?> timeout = channel.sendMessage("Acabou o tempo, as cartas eram `%s`, `%s` e `%s`".formatted(
+						names.get(0),
+						names.get(1),
+						names.get(2))
+				).queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
+				int chances = 4;
 
-				if (answers.length != 3) {
-					channel.sendMessage("❌ | Você deve informar exatamente 3 nomes separados por ponto-e-vírgula, este jogo foi anulado.").queue();
-					return;
-				}
+				@Override
+				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+					String[] answers = event.getMessage().getContentRaw().split(";");
 
-				List<String> names = c.stream().map(Card::getId).collect(Collectors.toList());
+					if (answers.length != 3 && chances > 0) {
+						channel.sendMessage("❌ | Você deve informar exatamente 3 nomes separados por ponto-e-vírgula.").queue();
+						chances--;
+						return;
+					} else if (answers.length != 3) {
+						channel.sendMessage("❌ | Você errou muitas vezes, o jogo foi encerrado.").queue();
+						return;
+					}
 
-				int points = 0;
-				for (String s : answers)
-					points += names.remove(s.toUpperCase()) ? 1 : 0;
+					int points = 0;
+					for (String s : answers)
+						points += names.remove(s.toUpperCase()) ? 1 : 0;
 
-				int reward = 100 * points + Helper.rng(150, false) * points;
+					int reward = 100 * points + Helper.rng(150, false) * points;
 
-				Account acc = AccountDAO.getAccount(author.getId());
-				acc.addCredit(reward, GuessTheCardsCommand.class);
-				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
-					ps.modifyInfluence(2 * points);
-					PStateDAO.savePoliticalState(ps);
-				}
-				switch (points) {
-					case 0 -> channel.sendMessage(
-							"Você não acertou nenhum dos 3 nomes, que eram `%s`, `%s` e `%s`."
-									.formatted(
-											names.get(0),
-											names.get(1),
-											names.get(2)
-									)).queue();
-					case 1 -> channel.sendMessage(
-							"Você acertou 1 dos 3 nomes, os outro eram `%s` e `%s`. (Recebeu %s créditos)."
-									.formatted(
-											names.get(0),
-											names.get(1),
-											reward
-									)).queue();
-					case 2 -> channel.sendMessage(
-							"Você acertou 2 dos 3 nomes, o outro era `%s`. (Recebeu %s créditos)."
-									.formatted(
-											names.get(0),
-											reward
-									)).queue();
-					case 3 -> channel.sendMessage(
-							"Você acertou todos os nomes, parabéns! (Recebeu %s créditos)."
-									.formatted(reward)).queue();
+					Account acc = AccountDAO.getAccount(author.getId());
+					acc.addCredit(reward, GuessTheCardsCommand.class);
+					if (ExceedDAO.hasExceed(author.getId())) {
+						PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+						ps.modifyInfluence(2 * points);
+						PStateDAO.savePoliticalState(ps);
+					}
+					switch (points) {
+						case 0 -> channel.sendMessage(
+								"Você não acertou nenhum dos 3 nomes, que eram `%s`, `%s` e `%s`."
+										.formatted(
+												names.get(0),
+												names.get(1),
+												names.get(2)
+										)).queue();
+						case 1 -> channel.sendMessage(
+								"Você acertou 1 dos 3 nomes, os outro eram `%s` e `%s`. (Recebeu %s créditos)."
+										.formatted(
+												names.get(0),
+												names.get(1),
+												reward
+										)).queue();
+						case 2 -> channel.sendMessage(
+								"Você acertou 2 dos 3 nomes, o outro era `%s`. (Recebeu %s créditos)."
+										.formatted(
+												names.get(0),
+												reward
+										)).queue();
+						case 3 -> channel.sendMessage(
+								"Você acertou todos os nomes, parabéns! (Recebeu %s créditos)."
+										.formatted(reward)).queue();
+					}
+
+					success.accept(null);
+					timeout.cancel(true);
+					timeout = null;
 				}
 			});
 		} catch (IOException e) {

@@ -37,6 +37,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class GuessTheNumberCommand extends Command {
 
@@ -69,7 +72,9 @@ public class GuessTheNumberCommand extends Command {
 
 		channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
 
-		Main.getInfo().getAPI().addEventListener(new SimpleMessageListener() {
+		Main.getInfo().getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+			private final Consumer<Void> success = s -> close();
+			private Future<?> timeout = channel.sendMessage("Acabou o tempo, o número escolhido por mim era **" + theValue + "**.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
 			int chances = 4;
 
 			@Override
@@ -79,27 +84,27 @@ public class GuessTheNumberCommand extends Command {
 
 				String value = event.getMessage().getContentRaw();
 				if (value.equalsIgnoreCase("desistir")) {
-					channel.sendMessage("Você desistiu, o valor escolhido por mim era **" + theValue + "**.").queue();
-                    Main.getInfo().getAPI().removeEventListener(this);
-                    return;
-                } else if (!StringUtils.isNumeric(value) || Integer.parseInt(value) < 0 || Integer.parseInt(value) > 100) {
+					channel.sendMessage("Você desistiu, o número escolhido por mim era **" + theValue + "**.").queue();
+					close();
+					return;
+				} else if (!StringUtils.isNumeric(value) || Integer.parseInt(value) < 0 || Integer.parseInt(value) > 100) {
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-number")).queue();
 					return;
 				}
 
-                int guess = Integer.parseInt(value);
-                int diff = Math.abs(theValue - guess);
-                String hint;
+				int guess = Integer.parseInt(value);
+				int diff = Math.abs(theValue - guess);
+				String hint;
 
-                if (diff > 50) {
-                    hint = "muito longe d";
-                } else if (diff > 25) {
-                    hint = "longe d";
-                } else if (diff > 10) {
-                    hint = "um pouco próximo d";
-                } else {
-                    hint = "próximo a";
-                }
+				if (diff > 50) {
+					hint = "muito longe d";
+				} else if (diff > 25) {
+					hint = "longe d";
+				} else if (diff > 10) {
+					hint = "um pouco próximo d";
+				} else {
+					hint = "próximo a";
+				}
 
 
 				if (guess == theValue) {
@@ -114,14 +119,18 @@ public class GuessTheNumberCommand extends Command {
 						PStateDAO.savePoliticalState(ps);
 					}
 
-					Main.getInfo().getAPI().removeEventListener(this);
+					success.accept(null);
+					timeout.cancel(true);
+					timeout = null;
 				} else {
 					if (chances > 0) {
-						channel.sendMessage("(" + chances + " chances restantes) | Você errou, esse valor está " + hint + "o número escolhido por mim.").queue();
+						channel.sendMessage("(" + chances + " chances restantes) | Você errou, esse número está " + hint + "o número escolhido por mim.").queue();
 						chances--;
 					} else {
-						channel.sendMessage("Acabaram suas chances, o valor escolhido por mim era **" + theValue + "**.").queue();
-						Main.getInfo().getAPI().removeEventListener(this);
+						channel.sendMessage("Acabaram suas chances, o número escolhido por mim era **" + theValue + "**.").queue();
+						success.accept(null);
+						timeout.cancel(true);
+						timeout = null;
 					}
 				}
 			}
