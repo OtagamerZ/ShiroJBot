@@ -1632,7 +1632,8 @@ public class Helper {
     }
 
     public static void applyMask(BufferedImage source, BufferedImage mask, int channel) {
-        BufferedImage newMask = toColorSpace(new BufferedImage(source.getWidth(), source.getHeight(), mask.getType()), BufferedImage.TYPE_INT_ARGB);
+	BufferedImage newSource = toColorSpace(source, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), mask.getType());
 
         for (int y = 0; y < source.getHeight(); y++) {
             for (int x = 0; x < source.getWidth(); x++) {
