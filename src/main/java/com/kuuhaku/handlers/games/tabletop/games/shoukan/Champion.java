@@ -179,28 +179,28 @@ public class Champion implements Drawable, Cloneable {
 					TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
 			)));
 			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : description, 205, 9, 293);
-		}
 
-		if (stun > 0) {
-			available = false;
-		}
-
-		if (!available) {
-			g2d.setColor(new Color(0, 0, 0, 150));
-			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-		}
-
-		if (stun > 0) {
-			try {
-				BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/stunned.png")));
-				g2d.drawImage(dm, 0, 0, null);
-			} catch (IOException ignore) {
+			if (stun > 0) {
+				available = false;
 			}
-		} else if (defending) {
-			try {
-				BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/defense_mode.png")));
-				g2d.drawImage(dm, 0, 0, null);
-			} catch (IOException ignore) {
+
+			if (!available) {
+				g2d.setColor(new Color(0, 0, 0, 150));
+				g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+			}
+
+			if (stun > 0) {
+				try {
+					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/stunned.png")));
+					g2d.drawImage(dm, 0, 0, null);
+				} catch (IOException ignore) {
+				}
+			} else if (defending) {
+				try {
+					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/defense_mode.png")));
+					g2d.drawImage(dm, 0, 0, null);
+				} catch (IOException ignore) {
+				}
 			}
 		}
 
