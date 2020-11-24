@@ -244,7 +244,7 @@ public class AuctionCommand extends Command {
 										AccountDAO.saveAccount(oacc.get());
 
 										Main.getInfo().getConfirmationPending().invalidate(author.getId());
-										Main.getInfo().getAPI().removeEventListener(self);
+										close();
 										event.get().cancel(true);
 									} else {
 										switch (phase.get()) {
@@ -276,12 +276,12 @@ public class AuctionCommand extends Command {
 					if (mb.getId().equals(author.getId())) {
 						event.set(channel.sendMessage("Não houve nenhuma oferta, declaro o leilão **encerrado**!").queueAfter(30, TimeUnit.SECONDS, msg -> {
 									Main.getInfo().getConfirmationPending().invalidate(author.getId());
-									Main.getInfo().getAPI().removeEventListener(listener);
+									listener.close();
 								}
 						));
 
 						s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Leilão aberto com sucesso, se não houver ofertas maiores que " + price + " dentro de 30 segundos irei fechá-lo!")).queue();
-						Main.getInfo().getAPI().addEventListener(listener);
+						Main.getInfo().getShiroEvents().addHandler(guild, listener);
 					}
 				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
 					ShiroInfo.getHashes().remove(hash);
