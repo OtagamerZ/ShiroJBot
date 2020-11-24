@@ -73,6 +73,7 @@ public class GuessTheCardsCommand extends Command {
 			List<Card> c = Helper.getRandomN(CardDAO.getCards(), 3, 1);
 			List<BufferedImage> imgs = c.stream()
 					.map(Card::drawCardNoBorder)
+					.map(bi -> Helper.toColorSpace(bi, BufferedImage.TYPE_INT_ARGB))
 					.collect(Collectors.toList());
 
 			BufferedImage img = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
