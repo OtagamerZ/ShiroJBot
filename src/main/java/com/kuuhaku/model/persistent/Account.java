@@ -30,7 +30,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
@@ -241,12 +240,12 @@ public class Account {
 	}
 
 	public void voted() {
-		ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
+		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		try {
 			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
 			Helper.logger(this.getClass()).info("""		
-     										
+															
 					Voto anterior: %s							       
 					Hoje: %s     
 					Acumula? %s
@@ -265,17 +264,17 @@ public class Account {
 
 	public void notifyVote() {
 		if (!notified && !lastVoted.equalsIgnoreCase("Nunca")) {
-			ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
+			ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
 			if (today.isAfter(lastVote.plusHours(12))) {
 				try {
 					Main.getInfo().getUserByID(userId).openPrivateChannel().queue(c -> {
-								EmbedBuilder eb = new ColorlessEmbedBuilder();
-								eb.setTitle("Opa, você já pode votar novamente!");
-								eb.setDescription("Como você pediu, estou aqui para lhe avisar que você já pode [votar novamente](https://top.gg/bot/572413282653306901/vote) para ganhar mais um acúmulo de votos e uma quantia de créditos!");
-								eb.setFooter("Data do último voto: " + lastVoted);
-								c.sendMessage(eb.build()).queue(null, e -> Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]));
+						EmbedBuilder eb = new ColorlessEmbedBuilder();
+						eb.setTitle("Opa, você já pode votar novamente!");
+						eb.setDescription("Como você pediu, estou aqui para lhe avisar que você já pode [votar novamente](https://top.gg/bot/572413282653306901/vote) para ganhar mais um acúmulo de votos e uma quantia de créditos!");
+						eb.setFooter("Data do último voto: " + lastVoted);
+						c.sendMessage(eb.build()).queue(null, e -> Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]));
 							}, e -> Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0])
 					);
 				} catch (NullPointerException e) {
@@ -290,7 +289,7 @@ public class Account {
 
 	public int getStreak() {
 		try {
-			ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
+			ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
 			if (today.isAfter(lastVote.plusHours(24))) streak = 0;
