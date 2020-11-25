@@ -58,9 +58,9 @@ public class MonthlyEvent implements Job {
 				User u = Main.getInfo().getUserByID(em.getId());
 				Account acc = AccountDAO.getAccount(em.getId());
 				if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
-					float share = ExceedDAO.getMemberShare(u.getId()).floatValue();
-					long total = ExceedDAO.getExceed(ee).getExp();
-					long prize = Math.round((total / 1000f) * share);
+					double share = ExceedDAO.getMemberShare(u.getId());
+					long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).getExp() / 1000f);
+					long prize = Math.round(total * share);
 					try {
 						c.sendMessage("""
 								O seu Exceed foi campeão neste mês, parabéns!
