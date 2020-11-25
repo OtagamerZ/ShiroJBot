@@ -44,7 +44,7 @@ public class DevRating {
 	private float knowledge = 0;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int timesVoted = 0;
+	private int monthlyVotes = 0;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'Nunca'")
 	private String lastHelped = "Nunca";
@@ -88,12 +88,16 @@ public class DevRating {
 		return lastHelped;
 	}
 
-	public int getTimesVoted() {
-		return timesVoted;
+	public int getMonthlyVotes() {
+		return monthlyVotes;
 	}
 
 	public void addVote() {
-		this.timesVoted++;
+		this.monthlyVotes++;
+	}
+
+	public void resetVotes() {
+		this.monthlyVotes = 0;
 	}
 
 	public void setLastHelped() {
