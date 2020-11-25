@@ -55,23 +55,23 @@ public class MonthlyEvent implements Job {
 			String ex = ExceedDAO.getWinner();
 			ExceedEnum ee = ExceedEnum.getByName(ex);
 			ExceedDAO.getExceedMembers(ee).forEach(em -> {
-				User u = Main.getInfo().getUserByID(em.getId());
-				Account acc = AccountDAO.getAccount(em.getId());
-				if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
-					double share = ExceedDAO.getMemberShare(u.getId());
-					long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).getExp() / 1000f);
-					long prize = Math.round(total * share);
-					try {
-						c.sendMessage("""
-								:tada: :tada: **O seu Exceed foi campeão neste mês, parabéns!** :tada: :tada:
-								Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas e redução de juros de empréstimos.
-								Adicionalmente, por ter sido responsável por **%s%%** da pontuação de seu Exceed, você receberá __**%s créditos**__ como parte do prêmio **(Total: %s)**.
-								""".formatted(ex, Helper.roundToString(share, 2), prize, total)).queue(null, Helper::doNothing);
-					} catch (Exception ignore) {
-					}
-					acc.addCredit(prize, MonthlyEvent.class);
-					AccountDAO.saveAccount(acc);
-				});
+						User u = Main.getInfo().getUserByID(em.getId());
+						Account acc = AccountDAO.getAccount(em.getId());
+						if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
+							double share = ExceedDAO.getMemberShare(u.getId());
+							long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).getExp() / 1000f);
+							long prize = Math.round(total * share);
+							try {
+								c.sendMessage("""
+										:tada: :tada: **O seu Exceed foi campeão neste mês, parabéns!** :tada: :tada:
+										Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas e redução de juros de empréstimos.
+										Adicionalmente, por ter sido responsável por **%s%%** da pontuação de seu Exceed, você receberá __**%s créditos**__ como parte do prêmio **(Total: %s)**.
+										""".formatted(ex, Helper.roundToString(share, 2), prize, total)).queue(null, Helper::doNothing);
+							} catch (Exception ignore) {
+							}
+							acc.addCredit(prize, MonthlyEvent.class);
+							AccountDAO.saveAccount(acc);
+						});
 					}
 			);
 
