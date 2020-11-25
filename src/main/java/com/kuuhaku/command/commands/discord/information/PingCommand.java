@@ -21,12 +21,7 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -65,23 +60,5 @@ public class PingCommand extends Command {
 						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_listeners"), Main.getInfo().getAPI().getEventManager().getRegisteredListeners().size())
 				)))
 				.queue();
-
-		if (author.getId().equals(ShiroInfo.getNiiChan())) {
-			User u = Main.getInfo().getUserByID(author.getId());
-			Account acc = AccountDAO.getAccount(author.getId());
-			if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
-				double share = ExceedDAO.getMemberShare(u.getId());
-				long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).getExp() / 1000f);
-				long prize = Math.round(total * share);
-				try {
-					c.sendMessage("""
-							O seu Exceed foi campeão neste mês, parabéns!
-							Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas.
-							Adicionalmente, por ter sido responsável por %s%% da pontuação de seu Exceed, você receberá %s créditos como parte do prêmio (Total: %s).
-							""".formatted("Imanity", Helper.roundToString(share, 2), prize, total)).queue(null, Helper::doNothing);
-				} catch (Exception ignore) {
-				}
-			});
-		}
 	}
 }
