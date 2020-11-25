@@ -19,13 +19,12 @@
 package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Category;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.KawaiponBook;
 import com.kuuhaku.model.enums.AnimeName;
@@ -52,19 +51,19 @@ import java.util.stream.Collectors;
 
 public class KawaiponsCommand extends Command {
 
-	public KawaiponsCommand(String name, String description, Category category, boolean requiresMM) {
+	public KawaiponsCommand(String name, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public KawaiponsCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+	public KawaiponsCommand(@NonNls String name, @NonNls String[] aliases, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public KawaiponsCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public KawaiponsCommand(String name, String usage, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public KawaiponsCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public KawaiponsCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
@@ -104,7 +103,7 @@ public class KawaiponsCommand extends Command {
 					return;
 				}
 
-				Class c = Class.getByName(args[0]);
+				Category c = Category.getByName(args[0]);
 				KawaiponRarity rr = KawaiponRarity.getByName(args[0]);
 
 				if (rr == null) {
@@ -193,7 +192,7 @@ public class KawaiponsCommand extends Command {
 		channel.sendMessage(eb.build()).queue();
 	}
 
-	private void send(User author, MessageChannel channel, Message m, BufferedImage cards, String s, Class c) throws IOException {
+	private void send(User author, MessageChannel channel, Message m, BufferedImage cards, String s, Category c) throws IOException {
 		String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
 		File f = new File(Main.getInfo().getCollectionsFolder(), hash + ".jpg");
 		byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
