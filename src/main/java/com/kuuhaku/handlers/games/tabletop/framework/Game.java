@@ -19,6 +19,10 @@
 package com.kuuhaku.handlers.games.tabletop.framework;
 
 import com.kuuhaku.controller.postgresql.MatchDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchRound;
 import net.dv8tion.jda.api.JDA;
@@ -83,6 +87,75 @@ public abstract class Game implements Closeable {
 
 	public void resetTimer() {
 		if (timeout != null) timeout.cancel(true);
+		round++;
+		Player p = null;
+		while (p == null || !p.isInGame()) {
+			p = board.getPlayers().getNext();
+		}
+		current = handler.getUserById(p.getId());
+		assert current != null;
+		if (round > 0)
+			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
+					.queueAfter(3, TimeUnit.MINUTES, onWO);
+		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
+				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
+
+		for (int y = 0; y < board.getMatrix().length; y++) {
+			for (int x = 0; x < board.getMatrix().length; x++) {
+				Piece pc = board.getPieceOrDecoyAt(Spot.of(x, y));
+				if (pc instanceof Decoy && current.getId().equals(pc.getOwnerId()))
+					board.setPieceAt(Spot.of(x, y), null);
+			}
+		}
+	}
+
+	public void resetTimer(Shoukan shkn) {
+		if (timeout != null) timeout.cancel(true);
+
+		Hand top = shkn.getHands().get(Side.TOP);
+		Hand bot = shkn.getHands().get(Side.BOTTOM);
+		getCurrRound().setScript(new JSONObject() {{
+			put("top", new JSONObject() {{
+				put("id", top.getUser().getId());
+				put("hp", top.getHp());
+				put("mana", top.getMana());
+				put("champions", shkn.getArena().getSlots().get(Side.TOP)
+						.stream()
+						.map(SlotColumn::getTop)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("equipments", shkn.getArena().getSlots().get(Side.TOP)
+						.stream()
+						.map(SlotColumn::getBottom)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("inHand", top.getCards().size());
+				put("deck", top.getDeque().size());
+			}});
+
+			put("bottom", new JSONObject() {{
+				put("id", bot.getUser().getId());
+				put("hp", bot.getHp());
+				put("mana", bot.getMana());
+				put("champions", shkn.getArena().getSlots().get(Side.BOTTOM)
+						.stream()
+						.map(SlotColumn::getTop)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("equipments", shkn.getArena().getSlots().get(Side.BOTTOM)
+						.stream()
+						.map(SlotColumn::getBottom)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("inHand", bot.getCards().size());
+				put("deck", bot.getDeque().size());
+			}});
+		}});
+
 		round++;
 		Player p = null;
 		while (p == null || !p.isInGame()) {

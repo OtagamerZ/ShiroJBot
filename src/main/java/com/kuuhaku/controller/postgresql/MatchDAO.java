@@ -42,4 +42,14 @@ public class MatchDAO {
 
 		em.close();
 	}
+
+	public static void cleanHistory() {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.createQuery("DELETE FROM MatchHistory mh WHERE mh.timestamp < current_date - 30").executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
+	}
 }
