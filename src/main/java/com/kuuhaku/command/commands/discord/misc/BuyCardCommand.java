@@ -361,7 +361,7 @@ public class BuyCardCommand extends Command {
 			case 3 -> {
 				Account seller = AccountDAO.getAccount(fm.getSeller());
 				if (!seller.getUserId().equals(author.getId())) {
-					if (buyer.getBalance() < (blackfriday ? em.getPrice() * 0.75 : em.getPrice())) {
+					if (buyer.getBalance() < (blackfriday ? fm.getPrice() * 0.75 : fm.getPrice())) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 						return;
 					}
