@@ -39,7 +39,6 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -59,7 +58,6 @@ public class CrissCross extends Game {
 			if (canInteract(event)) play(event);
 		}
 	};
-	private BufferedImage board = null;
 
 	public CrissCross(JDA handler, TextChannel channel, int bet, User... players) {
 		super(handler, new Board(BoardSize.S_3X3, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel);
@@ -71,21 +69,15 @@ public class CrissCross extends Game {
 
 		setActions(
 				s -> {
-					board = getBoard().render();
 					close();
-					channel.sendFile(Helper.getBytes(board), "board.jpg")
+					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							});
 				},
 				s -> {
-					board = getBoard().render();
-					getCurrRound().setSnippet(board);
-					getCurrRound().appendScript("RESIGN: %s (%s)".formatted(getCurrent().getAsTag(), getCurrent().getId()));
-					User u = Main.getInfo().getUserByID(getBoard().getPlayers().getNext().getId());
-					getCurrRound().appendScript("WIN: %s (%s)".formatted(u.getAsTag(), u.getId()));
-					getBoard().awardWinner(this, u.getId());
-					channel.sendFile(Helper.getBytes(board), "board.jpg")
+					getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
+					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							});
@@ -95,10 +87,8 @@ public class CrissCross extends Game {
 
 	@Override
 	public void start() {
-		board = getBoard().render();
-		getCurrRound().appendScript("TURN: %s (%s)".formatted(getCurrent().getAsTag(), getCurrent().getId()));
 		channel.sendMessage(getCurrent().getAsMention() + " você começa!")
-				.addFile(Helper.getBytes(board), "board.jpg")
+				.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 				.queue(s -> {
 					this.message = s;
 					Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), listener);
@@ -130,7 +120,6 @@ public class CrissCross extends Game {
 
 			if (getBoard().getPieceAt(s) == null) {
 				getBoard().setPieceAt(s, pieces.get(getCurrent().getId()));
-				getCurrRound().appendScript("PLACE: " + command);
 			} else {
 				channel.sendMessage("❌ | Essa casa já está ocupada!").queue(null, Helper::doNothing);
 				return;
@@ -155,32 +144,23 @@ public class CrissCross extends Game {
 			}
 
 			if (winner != null) {
-				board = getBoard().render();
-				getCurrRound().setSnippet(board);
-				getCurrRound().appendScript("WIN: %s (%s)".formatted(getCurrent().getAsTag(), getCurrent().getId()));
 				getBoard().awardWinner(this, winner);
 				channel.sendMessage(getCurrent().getAsMention() + " venceu! (" + getRound() + " turnos)")
-						.addFile(Helper.getBytes(board), "board.jpg")
+						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						});
 			} else if (fullRows == 3) {
-				board = getBoard().render();
-				getCurrRound().setSnippet(board);
-				getCurrRound().appendScript("DRAW!");
 				close();
 				channel.sendMessage("Temos um empate!")
-						.addFile(Helper.getBytes(board), "board.jpg")
+						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						});
 			} else {
-				board = getBoard().render();
-				getCurrRound().setSnippet(board);
 				resetTimer();
-				getCurrRound().appendScript("TURN: %s (%s)".formatted(getCurrent().getAsTag(), getCurrent().getId()));
 				channel.sendMessage("Turno de " + getCurrent().getAsMention())
-						.addFile(Helper.getBytes(board), "board.jpg")
+						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = msg;
@@ -200,11 +180,8 @@ public class CrissCross extends Game {
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
-			getCurrRound().appendScript("RESIGN: %s (%s)".formatted(getCurrent().getAsTag(), getCurrent().getId()));
-			User u = Main.getInfo().getUserByID(getBoard().getPlayers().getNext().getId());
-			getCurrRound().appendScript("WIN: %s (%s)".formatted(u.getAsTag(), u.getId()));
 
-			getBoard().awardWinner(this, u.getId());
+			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 					.queue(msg -> {
