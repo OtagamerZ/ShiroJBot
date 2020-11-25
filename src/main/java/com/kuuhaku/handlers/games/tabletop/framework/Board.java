@@ -31,10 +31,8 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -144,10 +142,7 @@ public class Board {
 	}
 
 	public void leaveGame() {
-		Player p = players.pollFirst();
-		assert p != null;
-		p.setInGame(false);
-		players.addFirst(p);
+		Objects.requireNonNull(players.pollFirst()).setInGame(false);
 	}
 
 	public void awardWinner(Game game, String id) {

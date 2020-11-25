@@ -34,10 +34,10 @@ public class MatchHistory {
 	@ElementCollection
 	private List<String> players = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date timestamp = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
 
 	public int getId() {
