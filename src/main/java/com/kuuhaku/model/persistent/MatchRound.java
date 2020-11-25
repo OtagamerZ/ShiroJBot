@@ -18,14 +18,9 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.Helper;
+import org.json.JSONObject;
 
-import javax.imageio.ImageIO;
 import javax.persistence.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Base64;
 
 @Entity
 @Table(name = "matchround")
@@ -35,40 +30,17 @@ public class MatchRound {
 	private int id;
 
 	@Column(columnDefinition = "TEXT")
-	private String script = "";
-
-	@Column(columnDefinition = "TEXT")
-	private String snippet = null;
+	private String state = "{}";
 
 	public int getId() {
 		return id;
 	}
 
-	public String getScript() {
-		return script;
+	public JSONObject getScript() {
+		return new JSONObject(state);
 	}
 
-	public void setScript(String command) {
-		this.script = command;
-	}
-
-	public void appendScript(String command) {
-		this.script += script.isBlank() ? command : "\n" + command;
-	}
-
-	public BufferedImage getSnippet() {
-		byte[] bytes = Base64.getDecoder().decode(snippet);
-		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-			return ImageIO.read(bais);
-		} catch (IOException e) {
-			return null;
-		}
-	}
-
-	public void setSnippet(BufferedImage img) {
-		BufferedImage bi = Helper.toColorSpace(Helper.scaleImage(img, 256, 256), BufferedImage.TYPE_INT_RGB);
-
-		this.snippet = Base64.getEncoder().encodeToString(Helper.getBytes(bi, "jpg", 0.5f));
-		;
+	public void setScript(JSONObject state) {
+		this.state = state.toString();
 	}
 }
