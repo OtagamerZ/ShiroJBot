@@ -132,6 +132,7 @@ public class VotesDAO {
 	public static void evaluate(DevRating dev) {
 		EntityManager em = Manager.getEntityManager();
 
+		dev.addVote();
 		em.getTransaction().begin();
 		em.merge(dev);
 		em.getTransaction().commit();
