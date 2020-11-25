@@ -19,10 +19,10 @@
 package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.*;
 
 @Entity
 @Table(name = "matchhistory")
@@ -36,6 +36,9 @@ public class MatchHistory {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date timestamp = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
 
 	public int getId() {
 		return id;
@@ -59,5 +62,13 @@ public class MatchHistory {
 
 	public void setRounds(Map<Integer, MatchRound> rounds) {
 		this.rounds = rounds;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 }
