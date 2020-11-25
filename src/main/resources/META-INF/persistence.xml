@@ -74,6 +74,8 @@
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Field</class>
         <class>com.kuuhaku.model.persistent.FieldMarket</class>
         <class>com.kuuhaku.model.persistent.Donation</class>
+        <class>com.kuuhaku.model.persistent.MatchHistory</class>
+        <class>com.kuuhaku.model.persistent.MatchRound</class>
 
         <properties>
             <!-- dados da conexao -->

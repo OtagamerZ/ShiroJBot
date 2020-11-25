@@ -18,6 +18,9 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
+import com.kuuhaku.controller.postgresql.MatchDAO;
+import com.kuuhaku.model.persistent.MatchHistory;
+import com.kuuhaku.model.persistent.MatchRound;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -33,12 +36,14 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public abstract class Game implements Closeable {
 	private final JDA handler;
 	private final Board board;
 	private final TextChannel channel;
 	private final JSONObject custom;
+	private final MatchHistory history = new MatchHistory();
 	private Consumer<Message> onExpiration;
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
@@ -51,6 +56,8 @@ public abstract class Game implements Closeable {
 		this.channel = channel;
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
 		this.custom = null;
+
+		history.setPlayers(board.getPlayers().stream().map(Player::getId).collect(Collectors.toList()));
 	}
 
 	public Game(JDA handler, Board board, TextChannel channel, JSONObject custom) {
@@ -59,6 +66,8 @@ public abstract class Game implements Closeable {
 		this.channel = channel;
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
 		this.custom = custom;
+
+		history.setPlayers(board.getPlayers().stream().map(Player::getId).collect(Collectors.toList()));
 	}
 
 	public void setActions(Consumer<Message> onExpiration, Consumer<Message> onWO) {
@@ -129,12 +138,23 @@ public abstract class Game implements Closeable {
 		return custom;
 	}
 
+	public MatchHistory getHistory() {
+		return history;
+	}
+
 	public abstract Map<String, BiConsumer<Member, Message>> getButtons();
+
+	public MatchRound getCurrRound() {
+		return history.getRound(round);
+	}
 
 	@Override
 	public void close() {
 		if (timeout != null) timeout.cancel(true);
 		timeout = null;
+
+		if (round > 0)
+			MatchDAO.saveMatch(history);
 	}
 
 	@Override
