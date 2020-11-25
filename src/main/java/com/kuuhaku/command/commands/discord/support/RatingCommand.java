@@ -193,7 +193,7 @@ public class RatingCommand extends Command {
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
 						.queue(s -> {
-							acc.addCredit(50, RatingCommand.class);
+							acc.addCredit(250, RatingCommand.class);
 							AccountDAO.saveAccount(acc);
 						});
 			});
@@ -204,7 +204,7 @@ public class RatingCommand extends Command {
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
 						.queue(s -> {
-							acc.addCredit(100, RatingCommand.class);
+							acc.addCredit(500, RatingCommand.class);
 							AccountDAO.saveAccount(acc);
 						});
 			});
@@ -215,7 +215,7 @@ public class RatingCommand extends Command {
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
 						.queue(s -> {
-							acc.addCredit(200, RatingCommand.class);
+							acc.addCredit(750, RatingCommand.class);
 							AccountDAO.saveAccount(acc);
 						});
 			});
@@ -226,7 +226,7 @@ public class RatingCommand extends Command {
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
 						.queue(s -> {
-							acc.addCredit(250, RatingCommand.class);
+							acc.addCredit(1000, RatingCommand.class);
 							AccountDAO.saveAccount(acc);
 						});
 			});
