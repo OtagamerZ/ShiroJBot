@@ -246,7 +246,7 @@ public class ExceedDAO {
 	public static BigDecimal getMemberShare(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT em.contribution / (SELECT SUM(emi.contribution) FROM ExceedMember emi WHERE emi.exceed = em.exceed) FROM ExceedMember em WHERE em.id = :id", BigDecimal.class);
+		Query q = em.createNativeQuery("SELECT em.contribution / (SELECT SUM(emi.contribution) FROM ExceedMember emi WHERE emi.exceed = em.exceed) FROM ExceedMember em WHERE em.id = :id");
 		q.setParameter("id", id);
 
 		try {
