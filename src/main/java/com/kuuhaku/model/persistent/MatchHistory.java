@@ -34,7 +34,7 @@ public class MatchHistory {
 	@ElementCollection
 	private List<String> players = new ArrayList<>();
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 
 	public int getId() {
