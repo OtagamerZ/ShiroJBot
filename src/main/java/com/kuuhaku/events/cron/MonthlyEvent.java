@@ -53,18 +53,25 @@ public class MonthlyEvent implements Job {
 			Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
 
 			String ex = ExceedDAO.getWinner();
-			ExceedDAO.getExceedMembers(ExceedEnum.getByName(ex)).forEach(em -> {
-						User u = Main.getInfo().getUserByID(em.getId());
-						Account acc = AccountDAO.getAccount(em.getId());
-						if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
-							try {
-								c.sendMessage("""
-										O seu Exceed foi campeão neste mês, parabéns!
-										Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas.
-										""".formatted(ex)).queue(null, Helper::doNothing);
-							} catch (Exception ignore) {
-							}
-						});
+			ExceedEnum ee = ExceedEnum.getByName(ex);
+			ExceedDAO.getExceedMembers(ee).forEach(em -> {
+				User u = Main.getInfo().getUserByID(em.getId());
+				Account acc = AccountDAO.getAccount(em.getId());
+				if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
+					float share = ExceedDAO.getMemberShare(u.getId()).floatValue();
+					long total = ExceedDAO.getExceed(ee).getExp();
+					long prize = Math.round((total / 1000f) * share);
+					try {
+						c.sendMessage("""
+								O seu Exceed foi campeão neste mês, parabéns!
+								Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas.
+								Adicionalmente, por ter sido responsável por %s%% da pontuação de seu Exceed, você receberá %s créditos como parte do prêmio (Total: %s).
+								""".formatted(ex, Helper.roundToString(share, 2), prize, total)).queue(null, Helper::doNothing);
+					} catch (Exception ignore) {
+					}
+					acc.addCredit(prize, MonthlyEvent.class);
+					AccountDAO.saveAccount(acc);
+				});
 					}
 			);
 
