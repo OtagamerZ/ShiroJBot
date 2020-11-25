@@ -34,9 +34,6 @@ public class MatchRound {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int round = 0;
-
 	@Column(columnDefinition = "TEXT")
 	private String script = "";
 
@@ -45,14 +42,6 @@ public class MatchRound {
 
 	public int getId() {
 		return id;
-	}
-
-	public int getRound() {
-		return round;
-	}
-
-	public void setRound(int round) {
-		this.round = round;
 	}
 
 	public String getScript() {
@@ -64,7 +53,7 @@ public class MatchRound {
 	}
 
 	public void appendScript(String command) {
-		this.script += "\n" + command;
+		this.script += script.isBlank() ? command : "\n" + command;
 	}
 
 	public BufferedImage getSnippet() {
