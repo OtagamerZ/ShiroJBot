@@ -23,8 +23,10 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
@@ -56,8 +58,13 @@ public class CatchKawaiponCommand extends Command {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 		KawaiponCard kc = Main.getInfo().getCurrentCard().getIfPresent(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		TextChannel chn = gc.getCanalKawaipon().isBlank() ? null : guild.getTextChannelById(gc.getCanalKawaipon());
 
-		if (kc == null) {
+		if (chn != null && !channel.getId().equals(chn.getId())) {
+			channel.sendMessage("❌ | O spawn de Kawaipons está configurado no canal " + chn.getAsMention() + ", você não pode coletá-los aqui.").queue();
+			return;
+		} else if (kc == null) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-card")).queue();
 			return;
 		}
@@ -66,9 +73,7 @@ public class CatchKawaiponCommand extends Command {
 		if (acc.getTotalBalance() < cost) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
-		}
-
-		if (kp.getCards().contains(kc)) {
+		} else if (kp.getCards().contains(kc)) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_card-owned")).queue();
 			return;
 		}
