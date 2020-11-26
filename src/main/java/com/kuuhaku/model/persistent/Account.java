@@ -169,26 +169,30 @@ public class Account {
 	}
 
 	public synchronized long debitLoan() {
-		long remaining = loan - vBalance;
-		long paid;
+		long remaining = loan;
+		long paid = 0;
 
-		if (remaining <= 0) {
-			paid = loan;
-			loan = 0;
-			vBalance = Math.abs(remaining);
-		} else {
-			remaining -= balance;
+		if (vBalance >= remaining) {
+			vBalance -= remaining;
+			paid = 0;
+			remaining = 0;
+		} else if (vBalance > 0) {
+			paid += vBalance;
+			remaining -= vBalance;
+		}
 
-			if (remaining <= 0) {
-				paid = loan;
-				loan = 0;
-				balance = Math.abs(remaining);
-			} else {
-				paid = loan - remaining;
-				loan = remaining;
+		if (remaining > 0) {
+			if (balance >= remaining) {
+				balance -= remaining;
+				paid = 0;
+				remaining = 0;
+			} else if (balance > 0) {
+				paid += balance;
+				remaining -= balance;
 			}
 		}
 
+		loan = remaining;
 		return paid;
 	}
 
