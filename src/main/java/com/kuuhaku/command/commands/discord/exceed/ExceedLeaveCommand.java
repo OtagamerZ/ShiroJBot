@@ -61,7 +61,7 @@ public class ExceedLeaveCommand extends Command {
 
 		ExceedMember em = ExceedDAO.getExceedMember(author.getId());
 
-		if (em == null) {
+		if (em == null || em.getExceed().isBlank()) {
 			channel.sendMessage("❌ | Você não faz parte de nenhum Exceed atualmente.").queue();
 			return;
 		}
