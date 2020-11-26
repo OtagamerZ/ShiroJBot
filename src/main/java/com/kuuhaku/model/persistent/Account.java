@@ -179,6 +179,7 @@ public class Account {
 		} else if (vBalance > 0) {
 			paid += vBalance;
 			remaining -= vBalance;
+			vBalance = 0;
 		}
 
 		if (remaining > 0) {
@@ -189,6 +190,7 @@ public class Account {
 			} else if (balance > 0) {
 				paid += balance;
 				remaining -= balance;
+				balance = 0;
 			}
 		}
 
