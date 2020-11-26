@@ -363,6 +363,7 @@ public class Champion implements Drawable, Cloneable {
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
