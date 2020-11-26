@@ -33,7 +33,6 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.json.JSONObject;
 
-import java.io.Closeable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Future;
@@ -42,7 +41,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public abstract class Game implements Closeable {
+public abstract class Game {
 	private final JDA handler;
 	private final Board board;
 	private final TextChannel channel;
@@ -221,7 +220,6 @@ public abstract class Game implements Closeable {
 		return history.getRound(round);
 	}
 
-	@Override
 	public void close() {
 		if (timeout != null) timeout.cancel(true);
 		timeout = null;

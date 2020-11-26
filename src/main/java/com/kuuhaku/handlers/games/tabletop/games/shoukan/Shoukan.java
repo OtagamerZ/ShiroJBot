@@ -966,9 +966,56 @@ public class Shoukan extends Game {
 		return buttons;
 	}
 
+	private void recordLast() {
+		Hand top = getHands().get(Side.TOP);
+		Hand bot = getHands().get(Side.BOTTOM);
+		getHistory().getRound(getRound() + 1).setScript(new JSONObject() {{
+			put("top", new JSONObject() {{
+				put("id", top.getUser().getId());
+				put("hp", top.getHp());
+				put("mana", top.getMana());
+				put("champions", getArena().getSlots().get(Side.TOP)
+						.stream()
+						.map(SlotColumn::getTop)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("equipments", getArena().getSlots().get(Side.TOP)
+						.stream()
+						.map(SlotColumn::getBottom)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("inHand", top.getCards().size());
+				put("deck", top.getDeque().size());
+			}});
+
+			put("bottom", new JSONObject() {{
+				put("id", bot.getUser().getId());
+				put("hp", bot.getHp());
+				put("mana", bot.getMana());
+				put("champions", getArena().getSlots().get(Side.BOTTOM)
+						.stream()
+						.map(SlotColumn::getTop)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("equipments", getArena().getSlots().get(Side.BOTTOM)
+						.stream()
+						.map(SlotColumn::getBottom)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("inHand", bot.getCards().size());
+				put("deck", bot.getDeque().size());
+			}});
+		}});
+	}
+
 	@Override
 	public void close() {
 		listener.close();
+		recordLast();
 		super.close();
 	}
 }
