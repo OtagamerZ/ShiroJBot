@@ -55,6 +55,8 @@ public class ShoukanDeckCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		boolean showPrivate = args.length > 0 && args[0].equalsIgnoreCase("p");
+
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-deck")).queue(m -> {
 			if (Helper.containsAny(args, "daily", "diario")) {
 				try {
@@ -88,7 +90,13 @@ public class ShoukanDeckCommand extends Command {
 							.setImage("attachment://deck.jpg");
 
 					m.delete().queue();
-					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg").queue();
+					if (showPrivate) {
+						author.openPrivateChannel()
+								.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg"))
+								.queue(null, Helper::doNothing);
+						channel.sendMessage("Deck enviado nas suas mensagens privadas.").queue();
+					} else
+						channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg").queue();
 				} catch (IOException | InterruptedException e) {
 					m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
