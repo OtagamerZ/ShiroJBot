@@ -175,6 +175,7 @@ public class GuessTheCardsCommand extends Command {
 										.formatted(reward)).queue();
 					}
 
+					AccountDAO.saveAccount(acc);
 					success.accept(null);
 					timeout.cancel(true);
 					timeout = null;

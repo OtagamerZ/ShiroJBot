@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção pequena">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,9 +58,9 @@
         <option value="XML Properties File" />
         <option value="Interface" />
         <option value="GraphQL File" />
-        <option value="Class" />
         <option value="JavaScript File" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -131,25 +131,25 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.model.persistent" />
+      <recent name="com.kuuhaku.command.commands.discord.fun" />
+      <recent name="com.kuuhaku.handlers.games.tabletop.games.shoukan.enums" />
+      <recent name="com.kuuhaku.command.commands.discord.dev" />
+      <recent name="com.kuuhaku.command.commands.discord.information" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\assets" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\arenas" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\frames" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.command.commands.discord.fun" />
-      <recent name="com.kuuhaku.handlers.games.tabletop.games.shoukan.enums" />
-      <recent name="com.kuuhaku.model.persistent" />
-      <recent name="com.kuuhaku.command.commands.discord.dev" />
-      <recent name="com.kuuhaku.command.commands.discord.information" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -162,6 +162,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -863,162 +874,8 @@
       <workItem from="1606235757794" duration="5196000" />
       <workItem from="1606245912137" duration="2959000" />
       <workItem from="1606250833216" duration="348000" />
-      <workItem from="1606342015241" duration="2169000" />
-      <workItem from="1606435713580" duration="832000" />
-    </task>
-    <task id="LOCAL-02922" summary="Correção menor">
-      <created>1605632304415</created>
-      <option name="number" value="02922" />
-      <option name="presentableId" value="LOCAL-02922" />
-      <option name="project" value="LOCAL" />
-      <updated>1605632304415</updated>
-    </task>
-    <task id="LOCAL-02923" summary="Correção menor">
-      <created>1605632739314</created>
-      <option name="number" value="02923" />
-      <option name="presentableId" value="LOCAL-02923" />
-      <option name="project" value="LOCAL" />
-      <updated>1605632739314</updated>
-    </task>
-    <task id="LOCAL-02924" summary="Correção menor">
-      <created>1605632844323</created>
-      <option name="number" value="02924" />
-      <option name="presentableId" value="LOCAL-02924" />
-      <option name="project" value="LOCAL" />
-      <updated>1605632844323</updated>
-    </task>
-    <task id="LOCAL-02925" summary="Correção menor">
-      <created>1605633157852</created>
-      <option name="number" value="02925" />
-      <option name="presentableId" value="LOCAL-02925" />
-      <option name="project" value="LOCAL" />
-      <updated>1605633157852</updated>
-    </task>
-    <task id="LOCAL-02926" summary="Correção menor">
-      <created>1605633967635</created>
-      <option name="number" value="02926" />
-      <option name="presentableId" value="LOCAL-02926" />
-      <option name="project" value="LOCAL" />
-      <updated>1605633967635</updated>
-    </task>
-    <task id="LOCAL-02927" summary="Correção menor">
-      <created>1605638039032</created>
-      <option name="number" value="02927" />
-      <option name="presentableId" value="LOCAL-02927" />
-      <option name="project" value="LOCAL" />
-      <updated>1605638039032</updated>
-    </task>
-    <task id="LOCAL-02928" summary="Correção menor">
-      <created>1605638662132</created>
-      <option name="number" value="02928" />
-      <option name="presentableId" value="LOCAL-02928" />
-      <option name="project" value="LOCAL" />
-      <updated>1605638662132</updated>
-    </task>
-    <task id="LOCAL-02929" summary="Retorno do comando Say, mas com limitações;&#10;Adição de salário para suportes;&#10;Comando de requisitar avaliação agora exige ticket aberto;">
-      <created>1605655435441</created>
-      <option name="number" value="02929" />
-      <option name="presentableId" value="LOCAL-02929" />
-      <option name="project" value="LOCAL" />
-      <updated>1605655435442</updated>
-    </task>
-    <task id="LOCAL-02930" summary="Correção basica">
-      <created>1605704153475</created>
-      <option name="number" value="02930" />
-      <option name="presentableId" value="LOCAL-02930" />
-      <option name="project" value="LOCAL" />
-      <updated>1605704153476</updated>
-    </task>
-    <task id="LOCAL-02931" summary="Durante a Black Friday a loja recebe 25% de desconto">
-      <created>1605706138959</created>
-      <option name="number" value="02931" />
-      <option name="presentableId" value="LOCAL-02931" />
-      <option name="project" value="LOCAL" />
-      <updated>1605706138959</updated>
-    </task>
-    <task id="LOCAL-02932" summary="Loteria agora acumula o valor pago e não metade dele;&#10;Loteria agora sorteia valores de 00 à 30;">
-      <created>1605706953595</created>
-      <option name="number" value="02932" />
-      <option name="presentableId" value="LOCAL-02932" />
-      <option name="project" value="LOCAL" />
-      <updated>1605706953595</updated>
-    </task>
-    <task id="LOCAL-02933" summary="Correção no ranking de créditos">
-      <created>1605709544598</created>
-      <option name="number" value="02933" />
-      <option name="presentableId" value="LOCAL-02933" />
-      <option name="project" value="LOCAL" />
-      <updated>1605709544598</updated>
-    </task>
-    <task id="LOCAL-02934" summary="Correção no ranking de créditos">
-      <created>1605711662559</created>
-      <option name="number" value="02934" />
-      <option name="presentableId" value="LOCAL-02934" />
-      <option name="project" value="LOCAL" />
-      <updated>1605711662560</updated>
-    </task>
-    <task id="LOCAL-02935" summary="Redução da taxa de cambio da Loritta de 1:1 para 4:3 (100 sonhos = 75 créditos)">
-      <created>1605718785439</created>
-      <option name="number" value="02935" />
-      <option name="presentableId" value="LOCAL-02935" />
-      <option name="project" value="LOCAL" />
-      <updated>1605718785440</updated>
-    </task>
-    <task id="LOCAL-02936" summary="Implementação de créditos voláteis">
-      <created>1605722790059</created>
-      <option name="number" value="02936" />
-      <option name="presentableId" value="LOCAL-02936" />
-      <option name="project" value="LOCAL" />
-      <updated>1605722790059</updated>
-    </task>
-    <task id="LOCAL-02937" summary="Implementação de créditos voláteis">
-      <created>1605723050943</created>
-      <option name="number" value="02937" />
-      <option name="presentableId" value="LOCAL-02937" />
-      <option name="project" value="LOCAL" />
-      <updated>1605723050943</updated>
-    </task>
-    <task id="LOCAL-02938" summary="Implementação de créditos voláteis">
-      <created>1605723660509</created>
-      <option name="number" value="02938" />
-      <option name="presentableId" value="LOCAL-02938" />
-      <option name="project" value="LOCAL" />
-      <updated>1605723660509</updated>
-    </task>
-    <task id="LOCAL-02939" summary="Implementação de créditos voláteis">
-      <created>1605723996067</created>
-      <option name="number" value="02939" />
-      <option name="presentableId" value="LOCAL-02939" />
-      <option name="project" value="LOCAL" />
-      <updated>1605723996068</updated>
-    </task>
-    <task id="LOCAL-02940" summary="Implementação de créditos voláteis">
-      <created>1605724140712</created>
-      <option name="number" value="02940" />
-      <option name="presentableId" value="LOCAL-02940" />
-      <option name="project" value="LOCAL" />
-      <updated>1605724140712</updated>
-    </task>
-    <task id="LOCAL-02941" summary="Implementação de créditos voláteis">
-      <created>1605724873855</created>
-      <option name="number" value="02941" />
-      <option name="presentableId" value="LOCAL-02941" />
-      <option name="project" value="LOCAL" />
-      <updated>1605724873855</updated>
-    </task>
-    <task id="LOCAL-02942" summary="Implementação de créditos voláteis">
-      <created>1605725270284</created>
-      <option name="number" value="02942" />
-      <option name="presentableId" value="LOCAL-02942" />
-      <option name="project" value="LOCAL" />
-      <updated>1605725270284</updated>
-    </task>
-    <task id="LOCAL-02943" summary="Correção na api de imagem das cartas">
-      <created>1605788874120</created>
-      <option name="number" value="02943" />
-      <option name="presentableId" value="LOCAL-02943" />
-      <option name="project" value="LOCAL" />
-      <updated>1605788874121</updated>
+      <workItem from="1606392374026" duration="7792000" />
+      <workItem from="1606406963954" duration="10561000" />
     </task>
     <task id="LOCAL-02944" summary="Aumento na taxa de conversão dos sonhos da Loritta">
       <created>1605789659846</created>
@@ -1202,14 +1059,168 @@
       <option name="project" value="LOCAL" />
       <updated>1606246024328</updated>
     </task>
-    <task id="LOCAL-02970" summary="Correção pequena">
-      <created>1606260153549</created>
+    <task id="LOCAL-02970" summary="Tentativa de implementação de histórico de partidas">
+      <created>1606310790876</created>
       <option name="number" value="02970" />
       <option name="presentableId" value="LOCAL-02970" />
       <option name="project" value="LOCAL" />
-      <updated>1606260153550</updated>
+      <updated>1606310790877</updated>
     </task>
-    <option name="localTasksCounter" value="2971" />
+    <task id="LOCAL-02971" summary="Tentativa de implementação de histórico de partidas">
+      <created>1606311167467</created>
+      <option name="number" value="02971" />
+      <option name="presentableId" value="LOCAL-02971" />
+      <option name="project" value="LOCAL" />
+      <updated>1606311167467</updated>
+    </task>
+    <task id="LOCAL-02972" summary="Tentativa de implementação de histórico de partidas">
+      <created>1606312016883</created>
+      <option name="number" value="02972" />
+      <option name="presentableId" value="LOCAL-02972" />
+      <option name="project" value="LOCAL" />
+      <updated>1606312016883</updated>
+    </task>
+    <task id="LOCAL-02973" summary="Remoção do histórico dos jogos comuns e adição de histórico específico do Shoukan">
+      <created>1606321823913</created>
+      <option name="number" value="02973" />
+      <option name="presentableId" value="LOCAL-02973" />
+      <option name="project" value="LOCAL" />
+      <updated>1606321823913</updated>
+    </task>
+    <task id="LOCAL-02974" summary="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio">
+      <created>1606329169418</created>
+      <option name="number" value="02974" />
+      <option name="presentableId" value="LOCAL-02974" />
+      <option name="project" value="LOCAL" />
+      <updated>1606329169418</updated>
+    </task>
+    <task id="LOCAL-02975" summary="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio">
+      <created>1606329322154</created>
+      <option name="number" value="02975" />
+      <option name="presentableId" value="LOCAL-02975" />
+      <option name="project" value="LOCAL" />
+      <updated>1606329322154</updated>
+    </task>
+    <task id="LOCAL-02976" summary="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio">
+      <created>1606329345249</created>
+      <option name="number" value="02976" />
+      <option name="presentableId" value="LOCAL-02976" />
+      <option name="project" value="LOCAL" />
+      <updated>1606329345249</updated>
+    </task>
+    <task id="LOCAL-02977" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
+      <created>1606330299270</created>
+      <option name="number" value="02977" />
+      <option name="presentableId" value="LOCAL-02977" />
+      <option name="project" value="LOCAL" />
+      <updated>1606330299270</updated>
+    </task>
+    <task id="LOCAL-02978" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
+      <created>1606330636456</created>
+      <option name="number" value="02978" />
+      <option name="presentableId" value="LOCAL-02978" />
+      <option name="project" value="LOCAL" />
+      <updated>1606330636456</updated>
+    </task>
+    <task id="LOCAL-02979" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
+      <created>1606330815952</created>
+      <option name="number" value="02979" />
+      <option name="presentableId" value="LOCAL-02979" />
+      <option name="project" value="LOCAL" />
+      <updated>1606330815952</updated>
+    </task>
+    <task id="LOCAL-02980" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
+      <created>1606330840590</created>
+      <option name="number" value="02980" />
+      <option name="presentableId" value="LOCAL-02980" />
+      <option name="project" value="LOCAL" />
+      <updated>1606330840590</updated>
+    </task>
+    <task id="LOCAL-02981" summary="Aumento no salário dos suportes">
+      <created>1606331493746</created>
+      <option name="number" value="02981" />
+      <option name="presentableId" value="LOCAL-02981" />
+      <option name="project" value="LOCAL" />
+      <updated>1606331493746</updated>
+    </task>
+    <task id="LOCAL-02982" summary="Correção na loja de arenas">
+      <created>1606331664366</created>
+      <option name="number" value="02982" />
+      <option name="presentableId" value="LOCAL-02982" />
+      <option name="project" value="LOCAL" />
+      <updated>1606331664366</updated>
+    </task>
+    <task id="LOCAL-02983" summary="Agora é armazenada a quantidade de votos que cada suporte recebeu">
+      <created>1606332096641</created>
+      <option name="number" value="02983" />
+      <option name="presentableId" value="LOCAL-02983" />
+      <option name="project" value="LOCAL" />
+      <updated>1606332096641</updated>
+    </task>
+    <task id="LOCAL-02984" summary="Agora é armazenada a quantidade de votos que cada suporte recebeu">
+      <created>1606332214740</created>
+      <option name="number" value="02984" />
+      <option name="presentableId" value="LOCAL-02984" />
+      <option name="project" value="LOCAL" />
+      <updated>1606332214740</updated>
+    </task>
+    <task id="LOCAL-02985" summary="Agora é armazenada a quantidade de votos que cada suporte recebeu">
+      <created>1606332338682</created>
+      <option name="number" value="02985" />
+      <option name="presentableId" value="LOCAL-02985" />
+      <option name="project" value="LOCAL" />
+      <updated>1606332338682</updated>
+    </task>
+    <task id="LOCAL-02986" summary="Agora é armazenada a quantidade de votos que cada suporte recebeu">
+      <created>1606400244558</created>
+      <option name="number" value="02986" />
+      <option name="presentableId" value="LOCAL-02986" />
+      <option name="project" value="LOCAL" />
+      <updated>1606400244559</updated>
+    </task>
+    <task id="LOCAL-02987" summary="Correção menor">
+      <created>1606407143984</created>
+      <option name="number" value="02987" />
+      <option name="presentableId" value="LOCAL-02987" />
+      <option name="project" value="LOCAL" />
+      <updated>1606407143986</updated>
+    </task>
+    <task id="LOCAL-02988" summary="Adicionado bloqueio de coleta em canais que não sejam o configurado para aparecerem kawaipons/drops">
+      <created>1606408394187</created>
+      <option name="number" value="02988" />
+      <option name="presentableId" value="LOCAL-02988" />
+      <option name="project" value="LOCAL" />
+      <updated>1606408394187</updated>
+    </task>
+    <task id="LOCAL-02989" summary="Correção menor">
+      <created>1606409144335</created>
+      <option name="number" value="02989" />
+      <option name="presentableId" value="LOCAL-02989" />
+      <option name="project" value="LOCAL" />
+      <updated>1606409144336</updated>
+    </task>
+    <task id="LOCAL-02990" summary="Correção menor">
+      <created>1606410977501</created>
+      <option name="number" value="02990" />
+      <option name="presentableId" value="LOCAL-02990" />
+      <option name="project" value="LOCAL" />
+      <updated>1606410977501</updated>
+    </task>
+    <task id="LOCAL-02991" summary="Correção no pagamento de dívidas">
+      <created>1606416069812</created>
+      <option name="number" value="02991" />
+      <option name="presentableId" value="LOCAL-02991" />
+      <option name="project" value="LOCAL" />
+      <updated>1606416069812</updated>
+    </task>
+    <task id="LOCAL-02992" summary="Correção no pagamento de dívidas">
+      <created>1606417244255</created>
+      <option name="number" value="02992" />
+      <option name="presentableId" value="LOCAL-02992" />
+      <option name="project" value="LOCAL" />
+      <updated>1606417244255</updated>
+    </task>
+    <option name="localTasksCounter" value="2993" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1275,15 +1286,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Retorno do comando Say, mas com limitações;&#10;Adição de salário para suportes;&#10;Comando de requisitar avaliação agora exige ticket aberto;" />
-    <MESSAGE value="Correção basica" />
-    <MESSAGE value="Durante a Black Friday a loja recebe 25% de desconto" />
-    <MESSAGE value="Loteria agora acumula o valor pago e não metade dele;&#10;Loteria agora sorteia valores de 00 à 30;" />
-    <MESSAGE value="Correção no ranking de créditos" />
-    <MESSAGE value="Redução da taxa de cambio da Loritta de 1:1 para 4:3 (100 sonhos = 75 créditos)" />
-    <MESSAGE value="Implementação de créditos voláteis" />
-    <MESSAGE value="Correção na api de imagem das cartas" />
-    <MESSAGE value="Aumento na taxa de conversão dos sonhos da Loritta" />
     <MESSAGE value="Proibição de compra na loja se você possuir dívida ativa" />
     <MESSAGE value="Agora será alertado sobre o reset de acúmulos de votos" />
     <MESSAGE value="Correção na troca de cartas" />
@@ -1299,8 +1301,17 @@
     <MESSAGE value="Remoção da menção de cargo ao ganhar devido à nível" />
     <MESSAGE value="Remoção da menção de cargo ao ganhar devido a alcançar um marco de nível" />
     <MESSAGE value="Criação de tags dos níveis 245-320" />
-    <MESSAGE value="Correção pequena" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção pequena" />
+    <MESSAGE value="Tentativa de implementação de histórico de partidas" />
+    <MESSAGE value="Remoção do histórico dos jogos comuns e adição de histórico específico do Shoukan" />
+    <MESSAGE value="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio" />
+    <MESSAGE value="Adicionado prêmio em créditos pela participação no confronto de Exceeds" />
+    <MESSAGE value="Aumento no salário dos suportes" />
+    <MESSAGE value="Correção na loja de arenas" />
+    <MESSAGE value="Agora é armazenada a quantidade de votos que cada suporte recebeu" />
+    <MESSAGE value="Adicionado bloqueio de coleta em canais que não sejam o configurado para aparecerem kawaipons/drops" />
+    <MESSAGE value="Correção menor" />
+    <MESSAGE value="Correção no pagamento de dívidas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no pagamento de dívidas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1336,10 +1347,10 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1606221324325">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1606331975320">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1606221324325" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1606331975320" />
     <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605236409977" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1362,44 +1373,44 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606251157413">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606417241199">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606251157413" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606417241199" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1606176807594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605528924821" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606176807594" />
-    <state width="1293" height="282" key="GridCell.Tab.0.bottom" timestamp="1606435992510">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="315" key="GridCell.Tab.0.bottom" timestamp="1606417964412">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1605816178657" />
-    <state width="1293" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606435992510" />
-    <state width="1293" height="282" key="GridCell.Tab.0.center" timestamp="1606435992510">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="315" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1606417964412" />
+    <state width="1293" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
+    <state width="1387" height="315" key="GridCell.Tab.0.center" timestamp="1606417964412">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1605816178657" />
-    <state width="1293" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606435992510" />
-    <state width="1293" height="282" key="GridCell.Tab.0.left" timestamp="1606435992510">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="315" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1606417964412" />
+    <state width="1293" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
+    <state width="1387" height="315" key="GridCell.Tab.0.left" timestamp="1606417964412">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1605816178657" />
-    <state width="1293" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606435992510" />
-    <state width="1293" height="282" key="GridCell.Tab.0.right" timestamp="1606435992510">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="315" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1606417964412" />
+    <state width="1293" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
+    <state width="1387" height="315" key="GridCell.Tab.0.right" timestamp="1606417964412">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1605816178657" />
-    <state width="1293" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606435992510" />
+    <state width="1387" height="315" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1606417964412" />
+    <state width="1293" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
     <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1603507846095">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1602268972182" />
     <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1603507846095" />
-    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1605729179379">
+    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1606320580357">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605729179379" />
+    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1606320580357" />
     <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605066080212" />
     <state x="320" y="80" key="SettingsEditor" timestamp="1606237363422">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1414,24 +1425,28 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606260155662">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="687" y="418" key="VCS.ChangelistChooser" timestamp="1597775476934">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606246026375" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606260155662" />
+    <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606417245444">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606417245444" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1/0.0.1680.1010@0.0.1680.1010" timestamp="1599155360934" />
-    <state x="712" y="354" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1604585573832">
+    <state x="712" y="354" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1606321875648">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="712" y="354" width="326" height="265" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1604585573832" />
+    <state x="712" y="354" width="326" height="265" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1606321875648" />
     <state x="814" y="365" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1920.1040@0.0.1920.1040" timestamp="1604027939743" />
-    <state x="654" y="392" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog" timestamp="1600353827172">
+    <state x="654" y="392" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog" timestamp="1606409403838">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="654" y="392" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1600353827172" />
+    <state x="654" y="392" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1606409403838" />
     <state x="690" y="325" key="com.intellij.database.dbimport.ImportUtil.ChooseTargetDialog" timestamp="1605236159187">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1463,10 +1478,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116333066" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1606236270945">
+    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1606413699589">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1606236270945" />
+    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1606413699589" />
     <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604459307974" />
     <state x="600" y="294" key="git4idea.ui.GitUnstashDialog" timestamp="1603112264983">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1485,10 +1500,10 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1604581770738" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603503824528" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1605638382527">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1606408265214">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1605638382527" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1606408265214" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604189150904" />
   </component>
   <component name="XDebuggerManager">
