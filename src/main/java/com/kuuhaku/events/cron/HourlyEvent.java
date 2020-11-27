@@ -21,6 +21,7 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.controller.sqlite.BackupDAO;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.persistent.Account;
@@ -78,5 +79,7 @@ public class HourlyEvent implements Job {
 			acc.expireVCredit();
 			AccountDAO.saveAccount(acc);
 		}
+
+		MatchDAO.cleanHistory();
 	}
 }

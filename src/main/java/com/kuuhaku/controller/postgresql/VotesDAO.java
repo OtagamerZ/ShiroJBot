@@ -129,9 +129,20 @@ public class VotesDAO {
 		}
 	}
 
+	public static void saveRating(DevRating dev) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(dev);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	public static void evaluate(DevRating dev) {
 		EntityManager em = Manager.getEntityManager();
 
+		dev.addVote();
 		em.getTransaction().begin();
 		em.merge(dev);
 		em.getTransaction().commit();

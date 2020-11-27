@@ -82,7 +82,8 @@ public class Hitotsu extends Game {
 					getBoard().leaveGame();
 					resetTimer();
 					if (getBoard().getInGamePlayers().size() == 1) {
-						getBoard().awardWinner(this, getCurrent().getId());
+						User u = getCurrent();
+						getBoard().awardWinner(this, u.getId());
 						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 								.addFile(Helper.getBytes(mount, "png"), "mount.png")
 								.queue(msg -> {
@@ -159,7 +160,6 @@ public class Hitotsu extends Game {
 
 			if (winners.size() == 1) {
 				Hand h = winners.get(0);
-				close();
 				channel.sendMessage(h.getUser().getAsMention() + " é o jogador que possui menos cartas, temos um vencedor!! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
 						.queue(msg -> {
@@ -167,7 +167,6 @@ public class Hitotsu extends Game {
 						});
 				getBoard().awardWinners(this, h.getUser().getId());
 			} else if (winners.size() != getBoard().getPlayers().size()) {
-				close();
 				channel.sendMessage(String.join(", ", winners.stream().map(h -> h.getUser().getAsMention()).toArray(String[]::new)) + " são os jogadores que possuem menos cartas, temos " + winners.size() + " vencedores!! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
 						.queue(msg -> {
@@ -187,7 +186,6 @@ public class Hitotsu extends Game {
 
 	private void declareWinner() {
 		getBoard().awardWinner(this, getCurrent().getId());
-		close();
 		channel.sendMessage("Não restam mais cartas para " + getCurrent().getAsMention() + ", temos um vencedor!! (" + getRound() + " turnos)")
 				.addFile(Helper.getBytes(mount, "png"), "mount.png")
 				.queue(msg -> {
@@ -353,15 +351,12 @@ public class Hitotsu extends Game {
 
 			eb.setTitle("Suas cartas");
 			for (int i = 0; i < cards.size(); i++) {
-				sb.append("**")
-						.append(i)
-						.append("** - ")
-						.append("(")
-						.append(cards.get(i).getCard().getAnime().toString())
-						.append(")")
-						.append(cards.get(i).getCard().getRarity().getEmote())
-						.append(cards.get(i).getName())
-						.append("\n");
+				sb.append("**%s** - (%s)%s%s\n".formatted(
+						i,
+						cards.get(i).getCard().getAnime().toString(),
+						cards.get(i).getCard().getRarity().getEmote(),
+						cards.get(i).getName()
+				));
 			}
 			eb.setDescription(sb.toString());
 			if (played.size() > 0)

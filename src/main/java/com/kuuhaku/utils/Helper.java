@@ -1545,7 +1545,7 @@ public class Helper {
     }
 
     public static Kawaipon getDailyDeck() {
-        ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
+        ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
         long seed = Long.parseLong("" + today.getYear() + today.getMonthValue() + today.getDayOfMonth());
         Kawaipon kp = new Kawaipon();
 

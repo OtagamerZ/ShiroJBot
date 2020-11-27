@@ -29,6 +29,8 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -59,21 +61,22 @@ public class ExceedLeaveCommand extends Command {
 
 		ExceedMember em = ExceedDAO.getExceedMember(author.getId());
 
-		if (em == null) {
+		if (em == null || em.getExceed().isBlank()) {
 			channel.sendMessage("❌ | Você não faz parte de nenhum Exceed atualmente.").queue();
 			return;
 		}
 
+		boolean willLock = ZonedDateTime.now(ZoneId.of("GMT-3")).getDayOfMonth() > 5;
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		String name = em.getExceed();
-		channel.sendMessage(":warning: | Sair da " + name + " irá zerar seus pontos de contribuição e fará com que você não possa escolher outro Exceed até o próximo mês. Deseja confirmar sua escolha?").queue(s ->
+		channel.sendMessage(":warning: | Sair da " + name + " irá zerar seus pontos de contribuição" + (willLock ? " e fará com que você não possa escolher outro Exceed até o próximo mês" : "") + ". Deseja confirmar sua escolha?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
 					Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					if (mb.getId().equals(author.getId())) {
-						em.setBlocked(true);
+						if (willLock) em.setBlocked(true);
 						em.setExceed("");
 						em.resetContribution();
 						ExceedDAO.saveExceedMember(em);

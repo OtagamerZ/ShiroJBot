@@ -179,11 +179,9 @@ public class Shoukan extends Game {
 					MessageAction act;
 					if (c.isFlipped()) {
 						c.setFlipped(false);
-
 						act = channel.sendMessage("Carta virada para cima em modo de defesa.");
 					} else if (c.isDefending()) {
 						c.setDefending(false);
-
 						act = channel.sendMessage("Carta trocada para modo de ataque.");
 						if (c.hasEffect() && !c.isFlipped()) {
 							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1), channel));
@@ -310,6 +308,8 @@ public class Shoukan extends Game {
 
 					tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slot.setTop(tp);
+					int bHP = h.getHp();
+					int bMana = h.getMana();
 					if (tp.hasEffect() && !tp.isFlipped()) {
 						tp.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(tp, dest, null, -1), channel));
 						if (postCombat()) return;
@@ -389,6 +389,7 @@ public class Shoukan extends Game {
 							(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
 					);
 
+					int eHP = enemy.getHp();
 					enemy.removeHp(yPower);
 					c.setAvailable(false);
 
@@ -591,6 +592,7 @@ public class Shoukan extends Game {
 						aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, i, h.getSide(), Duelists.of(aFusion, i, null, -1), channel));
 						if (postCombat()) return true;
 					}
+					int bMana = h.getMana();
 					h.removeMana(aFusion.getMana());
 					break;
 				}
@@ -760,9 +762,6 @@ public class Shoukan extends Game {
 				if (eq.getCharm() == Charm.SPELLSHIELD) {
 					unequipCard(his, i, slts);
 					return;
-				} else if (eq.getCharm() == Charm.SPELLMIRROR) {
-					convertEquipments(ch, index, his, pos);
-					return;
 				}
 			}
 		}
@@ -792,7 +791,7 @@ public class Shoukan extends Game {
 				if (h.getHp() == 0) {
 					if (getCustom() == null)
 						getBoard().awardWinner(this, daily, op.getUser().getId());
-					close();
+					else close();
 					finished.set(true);
 					channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
 							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
@@ -835,7 +834,7 @@ public class Shoukan extends Game {
 					}
 				}
 
-				resetTimer();
+				resetTimer(this);
 
 				phase = Phase.PLAN;
 				h.set(getHandById(getCurrent().getId()));
@@ -890,7 +889,7 @@ public class Shoukan extends Game {
 			if (!h.draw()) {
 				if (getCustom() == null)
 					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
-				close();
+				else close();
 				channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 						.queue(msg -> {
@@ -921,7 +920,7 @@ public class Shoukan extends Game {
 						});
 			} else {
 				User u = getCurrent();
-				resetTimer();
+				resetTimer(this);
 
 				phase = Phase.PLAN;
 				Hand h = getHandById(getCurrent().getId());
@@ -955,8 +954,8 @@ public class Shoukan extends Game {
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			if (getCustom() == null)
-				getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
-			close();
+				getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+			else close();
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 					.queue(msg -> {
@@ -967,9 +966,56 @@ public class Shoukan extends Game {
 		return buttons;
 	}
 
+	private void recordLast() {
+		Hand top = getHands().get(Side.TOP);
+		Hand bot = getHands().get(Side.BOTTOM);
+		getHistory().getRound(getRound() + 1).setScript(new JSONObject() {{
+			put("top", new JSONObject() {{
+				put("id", top.getUser().getId());
+				put("hp", top.getHp());
+				put("mana", top.getMana());
+				put("champions", getArena().getSlots().get(Side.TOP)
+						.stream()
+						.map(SlotColumn::getTop)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("equipments", getArena().getSlots().get(Side.TOP)
+						.stream()
+						.map(SlotColumn::getBottom)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("inHand", top.getCards().size());
+				put("deck", top.getDeque().size());
+			}});
+
+			put("bottom", new JSONObject() {{
+				put("id", bot.getUser().getId());
+				put("hp", bot.getHp());
+				put("mana", bot.getMana());
+				put("champions", getArena().getSlots().get(Side.BOTTOM)
+						.stream()
+						.map(SlotColumn::getTop)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("equipments", getArena().getSlots().get(Side.BOTTOM)
+						.stream()
+						.map(SlotColumn::getBottom)
+						.filter(Objects::nonNull)
+						.count()
+				);
+				put("inHand", bot.getCards().size());
+				put("deck", bot.getDeque().size());
+			}});
+		}});
+	}
+
 	@Override
 	public void close() {
 		listener.close();
+		recordLast();
 		super.close();
 	}
 }

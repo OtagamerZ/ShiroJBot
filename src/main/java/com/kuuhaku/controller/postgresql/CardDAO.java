@@ -21,7 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Category;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.KawaiponRarity;
@@ -329,18 +329,18 @@ public class CardDAO {
         return c;
     }
 
-    @SuppressWarnings("unchecked")
-    public static List<Champion> getChampions(Class c) {
-        EntityManager em = Manager.getEntityManager();
+	@SuppressWarnings("unchecked")
+	public static List<Champion> getChampions(Category c) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Champion.class);
-        q.setParameter("class", c);
-        List<Champion> cds = q.getResultList();
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Champion.class);
+		q.setParameter("class", c);
+		List<Champion> cds = q.getResultList();
 
-        em.close();
+		em.close();
 
-        return cds;
-    }
+		return cds;
+	}
 
     public static Champion getChampion(Card c) {
         EntityManager em = Manager.getEntityManager();
