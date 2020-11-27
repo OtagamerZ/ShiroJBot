@@ -14,10 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ShoukanDeckCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ShoukanDeckCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -881,14 +878,7 @@
       <workItem from="1606250833216" duration="348000" />
       <workItem from="1606392374026" duration="7792000" />
       <workItem from="1606406963954" duration="13565000" />
-      <workItem from="1606480697802" duration="6155000" />
-    </task>
-    <task id="LOCAL-02945" summary="Aumento na taxa de conversão dos sonhos da Loritta">
-      <created>1605791152427</created>
-      <option name="number" value="02945" />
-      <option name="presentableId" value="LOCAL-02945" />
-      <option name="project" value="LOCAL" />
-      <updated>1605791152427</updated>
+      <workItem from="1606480697802" duration="7806000" />
     </task>
     <task id="LOCAL-02946" summary="Proibição de compra na loja se você possuir dívida ativa">
       <created>1605803139929</created>
@@ -1226,7 +1216,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606418106088</updated>
     </task>
-    <option name="localTasksCounter" value="2994" />
+    <task id="LOCAL-02994" summary="Adicionada opção de mostrar seu deck no privado">
+      <created>1606486915710</created>
+      <option name="number" value="02994" />
+      <option name="presentableId" value="LOCAL-02994" />
+      <option name="project" value="LOCAL" />
+      <updated>1606486915711</updated>
+    </task>
+    <option name="localTasksCounter" value="2995" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1431,10 +1428,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606418107934">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606486942550">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606418107934" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606486942550" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
