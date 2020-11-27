@@ -39,7 +39,6 @@ import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
@@ -380,11 +379,9 @@ public class ShiroEvents extends ListenerAdapter {
 				if (gc.isNQNMode() && Helper.hasEmote(guild, rawMessage))
 					try {
 						com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
-						MessageBuilder mb = new MessageBuilder();
-						mb.append(Helper.makeEmoteFromMention(args));
 
 						Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getInfo().getAPI());
-						Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, mb.getStringBuilder().toString());
+						Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, rawMessage);
 
 						WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 						wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
