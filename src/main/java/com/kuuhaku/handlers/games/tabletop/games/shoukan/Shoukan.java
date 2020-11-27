@@ -603,7 +603,7 @@ public class Shoukan extends Game {
 
 	public void killCard(Side side, int index) {
 		Champion ch = getArena().getSlots().get(side).get(index).getTop();
-		if (ch == null) return;
+		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
 
 		ch.reset();
