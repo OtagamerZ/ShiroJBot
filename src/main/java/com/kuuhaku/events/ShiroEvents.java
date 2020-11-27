@@ -406,12 +406,13 @@ public class ShiroEvents extends ListenerAdapter {
 
 						assert wh != null;
 						WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
-						try {
-							wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).accept(null)).get();
-							message.delete().queue(null, Helper::doNothing);
-						} catch (InterruptedException | ExecutionException e) {
-							Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-						}
+						message.delete().queue(d -> {
+							try {
+								wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).accept(null)).get();
+							} catch (InterruptedException | ExecutionException e) {
+								Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+							}
+						}, Helper::doNothing);
 					} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException | NullPointerException ignore) {
 					}
 			}
