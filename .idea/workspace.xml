@@ -15,12 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ComandosCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/HelpCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,17 +162,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -884,28 +867,8 @@
       <workItem from="1606406963954" duration="13565000" />
       <workItem from="1606480697802" duration="7866000" />
       <workItem from="1606488834519" duration="386000" />
-      <workItem from="1606493009311" duration="4918000" />
-    </task>
-    <task id="LOCAL-02952" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
-      <created>1606152445293</created>
-      <option name="number" value="02952" />
-      <option name="presentableId" value="LOCAL-02952" />
-      <option name="project" value="LOCAL" />
-      <updated>1606152445293</updated>
-    </task>
-    <task id="LOCAL-02953" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
-      <created>1606152478929</created>
-      <option name="number" value="02953" />
-      <option name="presentableId" value="LOCAL-02953" />
-      <option name="project" value="LOCAL" />
-      <updated>1606152478929</updated>
-    </task>
-    <task id="LOCAL-02954" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
-      <created>1606152557793</created>
-      <option name="number" value="02954" />
-      <option name="presentableId" value="LOCAL-02954" />
-      <option name="project" value="LOCAL" />
-      <updated>1606152557793</updated>
+      <workItem from="1606493009311" duration="7133000" />
+      <workItem from="1606503166915" duration="66000" />
     </task>
     <task id="LOCAL-02955" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
       <created>1606152640868</created>
@@ -1229,7 +1192,28 @@
       <option name="project" value="LOCAL" />
       <updated>1606497078333</updated>
     </task>
-    <option name="localTasksCounter" value="3001" />
+    <task id="LOCAL-03001" summary="Correção no modo NQN">
+      <created>1606498013766</created>
+      <option name="number" value="03001" />
+      <option name="presentableId" value="LOCAL-03001" />
+      <option name="project" value="LOCAL" />
+      <updated>1606498013766</updated>
+    </task>
+    <task id="LOCAL-03002" summary="Correção no modo NQN">
+      <created>1606498100757</created>
+      <option name="number" value="03002" />
+      <option name="presentableId" value="LOCAL-03002" />
+      <option name="project" value="LOCAL" />
+      <updated>1606498100757</updated>
+    </task>
+    <task id="LOCAL-03003" summary="Correção no modo NQN">
+      <created>1606498267627</created>
+      <option name="number" value="03003" />
+      <option name="presentableId" value="LOCAL-03003" />
+      <option name="project" value="LOCAL" />
+      <updated>1606498267627</updated>
+    </task>
+    <option name="localTasksCounter" value="3004" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1295,7 +1279,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria nos ícones de amuleto" />
     <MESSAGE value="Criação do jogo &quot;Adivinhe as cartas&quot;" />
     <MESSAGE value="Melhoria no gerenciamento de eventos de mensagens e jogos" />
     <MESSAGE value="Correção no GuessTheCards" />
@@ -1320,7 +1303,8 @@
     <MESSAGE value="Adição de getter para atributos-base das cartas Senshi" />
     <MESSAGE value="Invocar cartas (s!use) não ativa mais o ratelimit de comandos" />
     <MESSAGE value="Criação do modo NQN" />
-    <option name="LAST_COMMIT_MESSAGE" value="Criação do modo NQN" />
+    <MESSAGE value="Correção no modo NQN" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no modo NQN" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1382,10 +1366,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606497075209">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606498264852">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606497075209" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606498264852" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1606176807594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1434,10 +1418,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606497080813">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606498269162">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606497080813" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606498269162" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
