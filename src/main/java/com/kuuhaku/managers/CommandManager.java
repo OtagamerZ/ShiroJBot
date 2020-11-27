@@ -161,7 +161,7 @@ public class CommandManager {
 
 			//MODERATION
 			put(RemoveAnswerCommand.class, new Argument(
-					"nãofale", "req_id-nothing", "cmd_dont-say", MODERACAO, false
+					"nãofale", "req_id-nothing", "cmd_remove-answer", MODERACAO, false
 			));
 			put(SettingsCommand.class, new Argument(
 					"settings", new String[]{"definicoes", "parametros", "configs"}, "req_parameter", "cmd_settings", MODERACAO, false
