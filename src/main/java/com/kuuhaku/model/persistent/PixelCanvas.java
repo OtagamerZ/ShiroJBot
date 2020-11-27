@@ -55,9 +55,8 @@ public class PixelCanvas {
 
 	public BufferedImage getCanvas() {
 		if (canvas != null) {
-			try {
-				byte[] bytes = Base64.getDecoder().decode(canvas);
-				ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+			byte[] bytes = Base64.getDecoder().decode(canvas);
+			try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
 				return ImageIO.read(bais);
 			} catch (IOException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);

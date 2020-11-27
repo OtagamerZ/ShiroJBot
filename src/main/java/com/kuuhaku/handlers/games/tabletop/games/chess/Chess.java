@@ -201,7 +201,7 @@ public class Chess extends Game {
 			}
 
 			if (winner != null) {
-				getBoard().awardWinner(this, winner);
+				getBoard().awardWinner(this, getCurrent().getId());
 				channel.sendMessage(getCurrent().getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 						.queue(msg -> {
