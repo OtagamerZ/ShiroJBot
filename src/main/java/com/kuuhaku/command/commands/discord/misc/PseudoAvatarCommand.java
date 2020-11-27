@@ -61,6 +61,7 @@ public class PseudoAvatarCommand extends Command {
 			mb.setPseudoAvatar("");
 			MemberDAO.updateMemberConfigs(mb);
 			channel.sendMessage("Pseudo-avatar limpo com sucesso!").queue();
+			return;
 		}
 
 		try {
