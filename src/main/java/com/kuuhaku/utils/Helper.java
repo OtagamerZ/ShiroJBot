@@ -1681,9 +1681,9 @@ public class Helper {
             Emote e;
             try {
                 List<Emote> emts = Main.getInfo().getAPI()
-                        .getEmotesByName(word.replace(":", ""), true);
+                        .getEmotesByName(word.replace(":", ""), false);
                 e = emts.get(0);
-                if (!e.getGuild().getId().equals(g.getId())) return true;
+                if (e != null && !e.getGuild().getId().equals(g.getId())) return true;
             } catch (IndexOutOfBoundsException | IllegalArgumentException ignore) {
             }
         }
