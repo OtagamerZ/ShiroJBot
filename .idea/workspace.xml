@@ -13,9 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na manipulação bitwise das cores">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção pequena">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/TagIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/TagIcons.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -864,13 +863,8 @@
       <workItem from="1606235757794" duration="5196000" />
       <workItem from="1606245912137" duration="2959000" />
       <workItem from="1606250833216" duration="348000" />
-    </task>
-    <task id="LOCAL-02921" summary="Correção menor">
-      <created>1605632044009</created>
-      <option name="number" value="02921" />
-      <option name="presentableId" value="LOCAL-02921" />
-      <option name="project" value="LOCAL" />
-      <updated>1605632044009</updated>
+      <workItem from="1606342015241" duration="2169000" />
+      <workItem from="1606435713580" duration="832000" />
     </task>
     <task id="LOCAL-02922" summary="Correção menor">
       <created>1605632304415</created>
@@ -1208,7 +1202,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606246024328</updated>
     </task>
-    <option name="localTasksCounter" value="2970" />
+    <task id="LOCAL-02970" summary="Correção pequena">
+      <created>1606260153549</created>
+      <option name="number" value="02970" />
+      <option name="presentableId" value="LOCAL-02970" />
+      <option name="project" value="LOCAL" />
+      <updated>1606260153550</updated>
+    </task>
+    <option name="localTasksCounter" value="2971" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1274,7 +1275,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Retorno do comando Say, mas com limitações." />
     <MESSAGE value="Retorno do comando Say, mas com limitações;&#10;Adição de salário para suportes;&#10;Comando de requisitar avaliação agora exige ticket aberto;" />
     <MESSAGE value="Correção basica" />
     <MESSAGE value="Durante a Black Friday a loja recebe 25% de desconto" />
@@ -1299,7 +1299,8 @@
     <MESSAGE value="Remoção da menção de cargo ao ganhar devido à nível" />
     <MESSAGE value="Remoção da menção de cargo ao ganhar devido a alcançar um marco de nível" />
     <MESSAGE value="Criação de tags dos níveis 245-320" />
-    <option name="LAST_COMMIT_MESSAGE" value="Criação de tags dos níveis 245-320" />
+    <MESSAGE value="Correção pequena" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção pequena" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1370,26 +1371,26 @@
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605528924821" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606176807594" />
-    <state width="1387" height="279" key="GridCell.Tab.0.bottom" timestamp="1605816178657">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1293" height="282" key="GridCell.Tab.0.bottom" timestamp="1606435992510">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1605816178657" />
-    <state width="1293" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="279" key="GridCell.Tab.0.center" timestamp="1605816178657">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1293" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606435992510" />
+    <state width="1293" height="282" key="GridCell.Tab.0.center" timestamp="1606435992510">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1605816178657" />
-    <state width="1293" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="279" key="GridCell.Tab.0.left" timestamp="1605816178657">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1293" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606435992510" />
+    <state width="1293" height="282" key="GridCell.Tab.0.left" timestamp="1606435992510">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1605816178657" />
-    <state width="1293" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
-    <state width="1387" height="279" key="GridCell.Tab.0.right" timestamp="1605816178657">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1293" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606435992510" />
+    <state width="1293" height="282" key="GridCell.Tab.0.right" timestamp="1606435992510">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1605816178657" />
-    <state width="1293" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
+    <state width="1293" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606435992510" />
     <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1603507846095">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1413,15 +1414,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="687" y="418" key="VCS.ChangelistChooser" timestamp="1597775476934">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606246026375">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606260155662">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606246026375" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606260155662" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
