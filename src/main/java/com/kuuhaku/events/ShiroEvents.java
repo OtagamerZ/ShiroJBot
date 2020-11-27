@@ -376,7 +376,7 @@ public class ShiroEvents extends ListenerAdapter {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 
-				if (gc.isNQNMode() && Helper.hasEmote(guild, rawMessage))
+				if (gc.isNQNMode() && Helper.hasEmote(rawMessage))
 					try {
 						com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
 
