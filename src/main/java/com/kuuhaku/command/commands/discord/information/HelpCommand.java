@@ -44,24 +44,24 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class ComandosCommand extends Command {
+public class HelpCommand extends Command {
 
 	private static final String STR_COMMAND_LIST_TITLE = "str_command-list-title";
 	private static final String STR_COMMAND_LIST_DESCRIPTION = "str_command-list-description";
 
-	public ComandosCommand(String name, String description, Category category, boolean requiresMM) {
+	public HelpCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public ComandosCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+	public HelpCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public ComandosCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public HelpCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public ComandosCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public HelpCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 

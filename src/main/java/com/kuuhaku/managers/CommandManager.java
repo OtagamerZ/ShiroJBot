@@ -240,7 +240,7 @@ public class CommandManager {
 			));
 
 			//INFORMATION
-			put(ComandosCommand.class, new Argument(
+			put(HelpCommand.class, new Argument(
 					"comandos", new String[]{"cmds", "cmd", "comando", "ajuda", "help"}, "req_command", "cmd_help", INFO, false
 			));
 			put(ProfileCommand.class, new Argument(
