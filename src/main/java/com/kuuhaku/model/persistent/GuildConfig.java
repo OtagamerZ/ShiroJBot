@@ -150,6 +150,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean allowImg = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean nqnMode = false;
+
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
 	private boolean mmPermissionLock = true;
 
@@ -446,6 +449,18 @@ public class GuildConfig {
 
 	public void setAllowImg(boolean allowImg) {
 		this.allowImg = allowImg;
+	}
+
+	public boolean isNQNMode() {
+		return nqnMode;
+	}
+
+	public void setNqnMode(boolean nqnMode) {
+		this.nqnMode = nqnMode;
+	}
+
+	public void toggleNQNMode() {
+		nqnMode = !nqnMode;
 	}
 
 	public boolean isMarkForDelete() {

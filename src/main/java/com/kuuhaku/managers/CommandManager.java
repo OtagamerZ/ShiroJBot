@@ -235,6 +235,9 @@ public class CommandManager {
 			put(ToggleExceedRolesCommand.class, new Argument(
 					"cargosexceed", new String[]{"exceedroles", "exroles", "cargosex"}, "cmd_toggle-exceed-roles", MODERACAO, false
 			));
+			put(NQNModeCommand.class, new Argument(
+					"modonqn", new String[]{"nqnmode", "nqn", "autoemotes"}, "cmd_nqn-mode", MODERACAO, true
+			));
 
 			//INFORMATION
 			put(ComandosCommand.class, new Argument(

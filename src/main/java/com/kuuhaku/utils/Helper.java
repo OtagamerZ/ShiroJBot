@@ -893,7 +893,7 @@ public class Helper {
         List<Consumer<Void>> queue = new ArrayList<>();
         Consumer<Emote> after = e -> e.delete().queue();
         for (int i = 0, emotes = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < oldWords.length && emotes < 10; i++) {
-            if (!oldWords[i].startsWith("&")) {
+            if (!oldWords[i].startsWith(":") || !oldWords[i].endsWith(":")) {
                 newWords[i] = oldWords[i];
                 continue;
             }
@@ -901,10 +901,12 @@ public class Helper {
             boolean makenew = false;
             Emote e;
             try {
-                e = g.getEmotesByName(oldWords[i].replace("&", ""), true).get(0);
+                List<Emote> emts = g.getEmotesByName(oldWords[i].replace(":", ""), true);
+                e = emts.get(0);
             } catch (IndexOutOfBoundsException | IllegalArgumentException ex) {
                 try {
-                    e = Main.getInfo().getAPI().getEmotesByName(oldWords[i].replace("&", ""), true).get(0);
+                    List<Emote> emts = Main.getInfo().getAPI().getEmotesByName(oldWords[i].replace(":", ""), true);
+                    e = emts.get(0);
                     makenew = true;
                 } catch (IndexOutOfBoundsException | IllegalArgumentException exc) {
                     e = null;
@@ -1666,10 +1668,26 @@ public class Helper {
     }
 
     public static BufferedImage toColorSpace(BufferedImage in, int type) {
-	BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), type);
-	Graphics2D g2d = out.createGraphics();
-	g2d.drawImage(in, 0, 0, null);
-	g2d.dispose();
-	return out;
+        BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), type);
+        Graphics2D g2d = out.createGraphics();
+        g2d.drawImage(in, 0, 0, null);
+        g2d.dispose();
+        return out;
+    }
+
+    public static boolean hasEmote(Guild g, String text) {
+        for (String word : text.split(" ")) {
+            if (!word.startsWith(":") || !word.endsWith(":")) continue;
+            Emote e;
+            try {
+                List<Emote> emts = Main.getInfo().getAPI()
+                        .getEmotesByName(word.replace(":", ""), true);
+                e = emts.get(0);
+                if (!e.getGuild().getId().equals(g.getId())) return true;
+            } catch (IndexOutOfBoundsException | IllegalArgumentException ignore) {
+            }
+        }
+
+        return false;
     }
 }
