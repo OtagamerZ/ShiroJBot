@@ -29,6 +29,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -238,6 +239,19 @@ public class ExceedDAO {
 
 		try {
 			return ((Long) exceed.getSingleResult()).floatValue() / ((Long) total.getSingleResult()).floatValue();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static double getMemberShare(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("SELECT em.contribution / (SELECT SUM(emi.contribution) FROM ExceedMember emi WHERE emi.exceed = em.exceed) FROM ExceedMember em WHERE em.id = :id");
+		q.setParameter("id", id);
+
+		try {
+			return ((BigDecimal) q.getSingleResult()).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
 		} finally {
 			em.close();
 		}

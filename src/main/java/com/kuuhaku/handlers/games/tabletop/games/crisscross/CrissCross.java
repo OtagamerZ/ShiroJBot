@@ -180,8 +180,8 @@ public class CrissCross extends Game {
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
+
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
-			close();
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 					.queue(msg -> {

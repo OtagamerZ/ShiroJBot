@@ -73,6 +73,9 @@ public class RegenRulesCommand extends Command {
 						Eu sou a única que gerencia isso, e não adianta insistir!
 						Pronto pessoal, isso é tudo!
 						%s
+												
+						**5 - Uso de _botting_ ou trapaças é proibido**
+						Quem for pego usando bots para farmar créditos, XP ou qualquer outra coisa será punido, podendo chegar à bloqueio do uso da Shiro.
 						""".formatted(guild.getId().equals(ShiroInfo.getSupportServerID())
 						? """
 												

@@ -22,7 +22,7 @@ import com.kuuhaku.utils.Helper;
 
 import java.util.Arrays;
 
-public enum Class {
+public enum Category {
 	DUELIST("Duelista", "Cartas-duelista são especializadas em causar dano mas sem sacrificar a defesa. São melhor aproveitadas no modo ofensivo e possuem alta sinergia com equipamentos de ataque."),
 	TANK("Tanque", "Cartas-tanque são muito difíceis de abater em ataques diretos, e oferecem uma alta sobrevivência quando viradas para baixo. Possuem alta sinergia com equipamentos defensivos."),
 	SUPPORT("Suporte", "Cartas-suporte são usadas principalmente para oferecer sustentação ao jogador ou outras cartas. Por possuirem atributos baixos, é essencial que hajam equipamentos ou cartas defendendo-as."),
@@ -34,7 +34,7 @@ public enum Class {
 	private final String name;
 	private final String description;
 
-	Class(String name, String description) {
+	Category(String name, String description) {
 		this.name = name;
 		this.description = description;
 	}
@@ -47,7 +47,7 @@ public enum Class {
 		return description;
 	}
 
-	public static Class getByName(String name) {
+	public static Category getByName(String name) {
 		return Arrays.stream(values()).filter(c -> Helper.equalsAny(name, c.name, c.name())).findFirst().orElse(null);
 	}
 }
