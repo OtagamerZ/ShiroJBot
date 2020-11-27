@@ -42,6 +42,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -161,11 +162,16 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api.addEventListener(info.getShiroEvents());
 		jbr.addEventListener(new JibrilEvents());
 
+		for (Emote emote : api.getEmotes()) {
+			ShiroInfo.getEmoteCache().put(":" + emote.getName() + ":", emote.getId());
+		}
+
 		Pages.activate(api);
 		console.start();
 
 		GuildDAO.getAllGuildsWithButtons().forEach(Helper::refreshButtons);
 
+		System.gc();
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
 		Helper.logger(Main.class).info("Estou pronta!");
 	}

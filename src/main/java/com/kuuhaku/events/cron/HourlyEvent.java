@@ -26,6 +26,8 @@ import com.kuuhaku.controller.sqlite.BackupDAO;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.entities.Emote;
 import org.json.JSONObject;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -66,6 +68,11 @@ public class HourlyEvent implements Job {
 				String response = Helper.post("https://discord.bots.gg/api/v1/bots/" + Main.getInfo().getSelfUser().getId() + "/stats", jo, System.getenv("DBL_TOKEN")).toString();
 				Helper.logger(this.getClass()).debug(response);
 			}
+		}
+
+		ShiroInfo.getEmoteCache().clear();
+		for (Emote emote : Main.getInfo().getAPI().getEmotes()) {
+			ShiroInfo.getEmoteCache().put(":" + emote.getName() + ":", emote.getId());
 		}
 
 		System.gc();

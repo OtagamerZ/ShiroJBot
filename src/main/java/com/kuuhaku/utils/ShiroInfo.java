@@ -102,6 +102,7 @@ public class ShiroInfo {
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 	private static final HashSet<String> hashes = new HashSet<>();
+	private static final HashMap<String, String> emoteCache = new HashMap<>();
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -162,6 +163,10 @@ public class ShiroInfo {
 
 	public static synchronized HashSet<String> getHashes() {
 		return hashes;
+	}
+
+	public static HashMap<String, String> getEmoteCache() {
+		return emoteCache;
 	}
 
 	public static String getShiro() {
