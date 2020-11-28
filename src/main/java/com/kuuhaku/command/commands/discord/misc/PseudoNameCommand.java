@@ -53,6 +53,7 @@ public class PseudoNameCommand extends Command {
 			mb.setPseudoName("");
 			MemberDAO.updateMemberConfigs(mb);
 			channel.sendMessage("Pseudônimo limpo com sucesso!").queue();
+			return;
 		} else if (String.join(" ", args).length() > 32) {
 			channel.sendMessage("❌ | Por favor escolha um nome mais curto.").queue();
 			return;

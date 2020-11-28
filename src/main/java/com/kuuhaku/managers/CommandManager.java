@@ -161,7 +161,7 @@ public class CommandManager {
 
 			//MODERATION
 			put(RemoveAnswerCommand.class, new Argument(
-					"nãofale", "req_id-nothing", "cmd_dont-say", MODERACAO, false
+					"nãofale", "req_id-nothing", "cmd_remove-answer", MODERACAO, false
 			));
 			put(SettingsCommand.class, new Argument(
 					"settings", new String[]{"definicoes", "parametros", "configs"}, "req_parameter", "cmd_settings", MODERACAO, false
@@ -235,9 +235,12 @@ public class CommandManager {
 			put(ToggleExceedRolesCommand.class, new Argument(
 					"cargosexceed", new String[]{"exceedroles", "exroles", "cargosex"}, "cmd_toggle-exceed-roles", MODERACAO, false
 			));
+			put(NQNModeCommand.class, new Argument(
+					"modonqn", new String[]{"nqnmode", "nqn", "autoemotes"}, "cmd_nqn-mode", MODERACAO, true
+			));
 
 			//INFORMATION
-			put(ComandosCommand.class, new Argument(
+			put(HelpCommand.class, new Argument(
 					"comandos", new String[]{"cmds", "cmd", "comando", "ajuda", "help"}, "req_command", "cmd_help", INFO, false
 			));
 			put(ProfileCommand.class, new Argument(
@@ -304,7 +307,7 @@ public class CommandManager {
 					"valor", new String[]{"value"}, "req_card", "cmd_card-value", INFO, false
 			));
 			put(ShoukanDeckCommand.class, new Argument(
-					"deck", "req_daily-deck", "cmd_shoukan-deck", INFO, false
+					"deck", "req_daily-deck-p", "cmd_shoukan-deck", INFO, false
 			));
 			put(VoteCommand.class, new Argument(
 					"votar", new String[]{"vote", "upvote"}, "cmd_vote", INFO, false
