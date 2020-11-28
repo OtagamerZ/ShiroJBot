@@ -13,10 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção pequena">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,25 +131,25 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.model.persistent" />
-      <recent name="com.kuuhaku.command.commands.discord.fun" />
-      <recent name="com.kuuhaku.handlers.games.tabletop.games.shoukan.enums" />
-      <recent name="com.kuuhaku.command.commands.discord.dev" />
-      <recent name="com.kuuhaku.command.commands.discord.information" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\assets" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\arenas" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\frames" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.moderation" />
+      <recent name="com.kuuhaku.model.persistent" />
+      <recent name="com.kuuhaku.command.commands.discord.fun" />
+      <recent name="com.kuuhaku.handlers.games.tabletop.games.shoukan.enums" />
+      <recent name="com.kuuhaku.command.commands.discord.dev" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -866,87 +864,11 @@
       <workItem from="1606245912137" duration="2959000" />
       <workItem from="1606250833216" duration="348000" />
       <workItem from="1606392374026" duration="7792000" />
-      <workItem from="1606406963954" duration="10561000" />
-      <workItem from="1606444076260" duration="1391000" />
-      <workItem from="1606514431117" duration="139000" />
-      <workItem from="1606527079272" duration="3316000" />
-    </task>
-    <task id="LOCAL-02944" summary="Aumento na taxa de conversão dos sonhos da Loritta">
-      <created>1605789659846</created>
-      <option name="number" value="02944" />
-      <option name="presentableId" value="LOCAL-02944" />
-      <option name="project" value="LOCAL" />
-      <updated>1605789659846</updated>
-    </task>
-    <task id="LOCAL-02945" summary="Aumento na taxa de conversão dos sonhos da Loritta">
-      <created>1605791152427</created>
-      <option name="number" value="02945" />
-      <option name="presentableId" value="LOCAL-02945" />
-      <option name="project" value="LOCAL" />
-      <updated>1605791152427</updated>
-    </task>
-    <task id="LOCAL-02946" summary="Proibição de compra na loja se você possuir dívida ativa">
-      <created>1605803139929</created>
-      <option name="number" value="02946" />
-      <option name="presentableId" value="LOCAL-02946" />
-      <option name="project" value="LOCAL" />
-      <updated>1605803139929</updated>
-    </task>
-    <task id="LOCAL-02947" summary="Agora será alertado sobre o reset de acúmulos de votos">
-      <created>1605803819860</created>
-      <option name="number" value="02947" />
-      <option name="presentableId" value="LOCAL-02947" />
-      <option name="project" value="LOCAL" />
-      <updated>1605803819860</updated>
-    </task>
-    <task id="LOCAL-02948" summary="Correção na troca de cartas">
-      <created>1605815710534</created>
-      <option name="number" value="02948" />
-      <option name="presentableId" value="LOCAL-02948" />
-      <option name="project" value="LOCAL" />
-      <updated>1605815710535</updated>
-    </task>
-    <task id="LOCAL-02949" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
-      <created>1606151487998</created>
-      <option name="number" value="02949" />
-      <option name="presentableId" value="LOCAL-02949" />
-      <option name="project" value="LOCAL" />
-      <updated>1606151487999</updated>
-    </task>
-    <task id="LOCAL-02950" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
-      <created>1606151836582</created>
-      <option name="number" value="02950" />
-      <option name="presentableId" value="LOCAL-02950" />
-      <option name="project" value="LOCAL" />
-      <updated>1606151836582</updated>
-    </task>
-    <task id="LOCAL-02951" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
-      <created>1606151928527</created>
-      <option name="number" value="02951" />
-      <option name="presentableId" value="LOCAL-02951" />
-      <option name="project" value="LOCAL" />
-      <updated>1606151928527</updated>
-    </task>
-    <task id="LOCAL-02952" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
-      <created>1606152445293</created>
-      <option name="number" value="02952" />
-      <option name="presentableId" value="LOCAL-02952" />
-      <option name="project" value="LOCAL" />
-      <updated>1606152445293</updated>
-    </task>
-    <task id="LOCAL-02953" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
-      <created>1606152478929</created>
-      <option name="number" value="02953" />
-      <option name="presentableId" value="LOCAL-02953" />
-      <option name="project" value="LOCAL" />
-      <updated>1606152478929</updated>
-    </task>
-    <task id="LOCAL-02954" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
-      <created>1606152557793</created>
-      <option name="number" value="02954" />
-      <option name="presentableId" value="LOCAL-02954" />
-      <option name="project" value="LOCAL" />
-      <updated>1606152557793</updated>
+      <workItem from="1606406963954" duration="13565000" />
+      <workItem from="1606480697802" duration="7866000" />
+      <workItem from="1606488834519" duration="386000" />
+      <workItem from="1606493009311" duration="7133000" />
+      <workItem from="1606503166915" duration="66000" />
     </task>
     <task id="LOCAL-02955" summary="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento">
       <created>1606152640868</created>
@@ -1214,7 +1136,84 @@
       <option name="project" value="LOCAL" />
       <updated>1606417244255</updated>
     </task>
-    <option name="localTasksCounter" value="2993" />
+    <task id="LOCAL-02993" summary="Correção no Shoukan">
+      <created>1606418106088</created>
+      <option name="number" value="02993" />
+      <option name="presentableId" value="LOCAL-02993" />
+      <option name="project" value="LOCAL" />
+      <updated>1606418106088</updated>
+    </task>
+    <task id="LOCAL-02994" summary="Adicionada opção de mostrar seu deck no privado">
+      <created>1606486915710</created>
+      <option name="number" value="02994" />
+      <option name="presentableId" value="LOCAL-02994" />
+      <option name="project" value="LOCAL" />
+      <updated>1606486915711</updated>
+    </task>
+    <task id="LOCAL-02995" summary="Adição de getter para atributos-base das cartas Senshi">
+      <created>1606488629072</created>
+      <option name="number" value="02995" />
+      <option name="presentableId" value="LOCAL-02995" />
+      <option name="project" value="LOCAL" />
+      <updated>1606488629072</updated>
+    </task>
+    <task id="LOCAL-02996" summary="Invocar cartas (s!use) não ativa mais o ratelimit de comandos">
+      <created>1606493313198</created>
+      <option name="number" value="02996" />
+      <option name="presentableId" value="LOCAL-02996" />
+      <option name="project" value="LOCAL" />
+      <updated>1606493313199</updated>
+    </task>
+    <task id="LOCAL-02997" summary="Criação do modo NQN">
+      <created>1606496388457</created>
+      <option name="number" value="02997" />
+      <option name="presentableId" value="LOCAL-02997" />
+      <option name="project" value="LOCAL" />
+      <updated>1606496388457</updated>
+    </task>
+    <task id="LOCAL-02998" summary="Criação do modo NQN">
+      <created>1606496703789</created>
+      <option name="number" value="02998" />
+      <option name="presentableId" value="LOCAL-02998" />
+      <option name="project" value="LOCAL" />
+      <updated>1606496703789</updated>
+    </task>
+    <task id="LOCAL-02999" summary="Criação do modo NQN">
+      <created>1606496793654</created>
+      <option name="number" value="02999" />
+      <option name="presentableId" value="LOCAL-02999" />
+      <option name="project" value="LOCAL" />
+      <updated>1606496793654</updated>
+    </task>
+    <task id="LOCAL-03000" summary="Criação do modo NQN">
+      <created>1606497078333</created>
+      <option name="number" value="03000" />
+      <option name="presentableId" value="LOCAL-03000" />
+      <option name="project" value="LOCAL" />
+      <updated>1606497078333</updated>
+    </task>
+    <task id="LOCAL-03001" summary="Correção no modo NQN">
+      <created>1606498013766</created>
+      <option name="number" value="03001" />
+      <option name="presentableId" value="LOCAL-03001" />
+      <option name="project" value="LOCAL" />
+      <updated>1606498013766</updated>
+    </task>
+    <task id="LOCAL-03002" summary="Correção no modo NQN">
+      <created>1606498100757</created>
+      <option name="number" value="03002" />
+      <option name="presentableId" value="LOCAL-03002" />
+      <option name="project" value="LOCAL" />
+      <updated>1606498100757</updated>
+    </task>
+    <task id="LOCAL-03003" summary="Correção no modo NQN">
+      <created>1606498267627</created>
+      <option name="number" value="03003" />
+      <option name="presentableId" value="LOCAL-03003" />
+      <option name="project" value="LOCAL" />
+      <updated>1606498267627</updated>
+    </task>
+    <option name="localTasksCounter" value="3004" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1280,12 +1279,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Proibição de compra na loja se você possuir dívida ativa" />
-    <MESSAGE value="Agora será alertado sobre o reset de acúmulos de votos" />
-    <MESSAGE value="Correção na troca de cartas" />
-    <MESSAGE value="Correções no fluxo do Shoukan e implementação de efeitos em certas cartas-equipamento" />
-    <MESSAGE value="Cartas viradas pra baixo agora começam no modo de defesa ao serem invocadas" />
-    <MESSAGE value="Melhoria nos ícones de amuleto" />
     <MESSAGE value="Criação do jogo &quot;Adivinhe as cartas&quot;" />
     <MESSAGE value="Melhoria no gerenciamento de eventos de mensagens e jogos" />
     <MESSAGE value="Correção no GuessTheCards" />
@@ -1305,7 +1298,13 @@
     <MESSAGE value="Adicionado bloqueio de coleta em canais que não sejam o configurado para aparecerem kawaipons/drops" />
     <MESSAGE value="Correção menor" />
     <MESSAGE value="Correção no pagamento de dívidas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no pagamento de dívidas" />
+    <MESSAGE value="Correção no Shoukan" />
+    <MESSAGE value="Adicionada opção de mostrar seu deck no privado" />
+    <MESSAGE value="Adição de getter para atributos-base das cartas Senshi" />
+    <MESSAGE value="Invocar cartas (s!use) não ativa mais o ratelimit de comandos" />
+    <MESSAGE value="Criação do modo NQN" />
+    <MESSAGE value="Correção no modo NQN" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no modo NQN" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1341,10 +1340,10 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1606331975320">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1606497325870">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1606331975320" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1606497325870" />
     <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605236409977" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1367,35 +1366,35 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606417241199">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606498264852">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606417241199" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606498264852" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1606176807594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605528924821" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606176807594" />
-    <state width="1648" height="282" key="GridCell.Tab.0.bottom" timestamp="1606527541593">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="315" key="GridCell.Tab.0.bottom" timestamp="1606480969057">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1606417964412" />
-    <state width="1648" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606527541593" />
-    <state width="1648" height="282" key="GridCell.Tab.0.center" timestamp="1606527541593">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="315" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1606480969057" />
+    <state width="1293" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
+    <state width="1387" height="315" key="GridCell.Tab.0.center" timestamp="1606480969057">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1606417964412" />
-    <state width="1648" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606527541593" />
-    <state width="1648" height="282" key="GridCell.Tab.0.left" timestamp="1606527541592">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="315" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1606480969057" />
+    <state width="1293" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
+    <state width="1387" height="315" key="GridCell.Tab.0.left" timestamp="1606480969056">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1606417964412" />
-    <state width="1648" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606527541592" />
-    <state width="1648" height="282" key="GridCell.Tab.0.right" timestamp="1606527541593">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="315" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1606480969056" />
+    <state width="1293" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
+    <state width="1387" height="315" key="GridCell.Tab.0.right" timestamp="1606480969057">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1606417964412" />
-    <state width="1648" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606527541593" />
+    <state width="1387" height="315" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1606480969057" />
+    <state width="1293" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604189279716" />
     <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1603507846095">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1419,11 +1418,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606437030705">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606498269162">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606417245444" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606437030705" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606498269162" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605655437783" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1468,10 +1467,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116333066" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1606413699589">
+    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1606493144831">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1606413699589" />
+    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1606493144831" />
     <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604459307974" />
     <state x="600" y="294" key="git4idea.ui.GitUnstashDialog" timestamp="1603112264983">
       <screen x="0" y="0" width="1680" height="1010" />

@@ -289,6 +289,14 @@ public class Champion implements Drawable, Cloneable {
 		return mana;
 	}
 
+	public int getBaseAtk() {
+		return atk;
+	}
+
+	public int getBaseDef() {
+		return def;
+	}
+
 	public int getAtk() {
 		return (altAtk == -1 ? atk : altAtk) + bonus.getAtk();
 	}
