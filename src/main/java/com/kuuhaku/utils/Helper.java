@@ -1173,7 +1173,7 @@ public class Helper {
 		boolean cbUltimate = cardBuff != null && cardBuff.getTier() == 4;
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
 
-		if (cbUltimate || chance((float) (3 - minMax(prcnt(channel.getGuild().getMemberCount(), 5000), 0, 1)) * (cardBuff != null ? cardBuff.getMult() : 1))) {
+		if (cbUltimate || chance((3 - minMax(prcnt(channel.getGuild().getMemberCount(), 5000), 0, 1)) * (cardBuff != null ? cardBuff.getMult() : 1))) {
 			KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
 					.map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
@@ -1294,7 +1294,7 @@ public class Helper {
 		ServerBuff dropBuff = gb.getBuffs().stream().filter(b -> b.getId() == 3).findFirst().orElse(null);
 		boolean dbUltimate = dropBuff != null && dropBuff.getTier() == 4;
 
-		if (dbUltimate || chance((float) (2.5 - minMax(prcnt(channel.getGuild().getMemberCount() * 0.75, 5000), 0, 0.75)) * (dropBuff != null ? dropBuff.getMult() : 1))) {
+		if (dbUltimate || chance((2.5 - minMax(prcnt(channel.getGuild().getMemberCount() * 0.75f, 5000), 0, 0.75)) * (dropBuff != null ? dropBuff.getMult() : 1))) {
 			int rolled = Helper.rng(100, false);
 			Prize drop = rolled > 90 ? new ItemDrop() : rolled > 80 ? new JokerDrop() : new CreditDrop();
 
