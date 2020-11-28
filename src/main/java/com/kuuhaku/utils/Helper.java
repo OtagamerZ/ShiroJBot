@@ -900,7 +900,8 @@ public class Helper {
 			}
 
 			boolean makenew = false;
-			Emote e = Main.getInfo().getAPI().getEmoteById(ShiroInfo.getEmoteCache().get(oldWords[i]));
+			String id = ShiroInfo.getEmoteCache().get(oldWords[i]);
+			Emote e = id == null ? null : Main.getInfo().getAPI().getEmoteById(id);
 			if (e != null && !Objects.requireNonNull(e.getGuild()).getId().equals(g.getId()))
 				makenew = true;
 
