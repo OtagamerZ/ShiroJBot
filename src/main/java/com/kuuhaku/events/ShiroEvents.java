@@ -18,6 +18,9 @@
 
 package com.kuuhaku.events;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -75,6 +78,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
@@ -263,7 +267,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
-					if (!TagDAO.getTagById(author.getId()).isBeta() || !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
+					if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
 						Main.getInfo().getRatelimit().put(author.getId(), true);
 					Helper.spawnAd(channel);
 				}
@@ -371,6 +375,43 @@ public class ShiroEvents extends ListenerAdapter {
 				} catch (ErrorResponseException | NullPointerException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
+
+				if (gc.isNQNMode() && Helper.hasEmote(rawMessage))
+					try {
+						com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
+
+						Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getInfo().getAPI());
+						Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, rawMessage);
+
+						WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+						wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
+						if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank())
+							wmb.setAvatarUrl(author.getAvatarUrl());
+						else try {
+							wmb.setAvatarUrl(m.getPseudoAvatar());
+						} catch (RuntimeException e) {
+							m.setPseudoAvatar("");
+							MemberDAO.updateMemberConfigs(m);
+						}
+						if (m.getPseudoName() == null || m.getPseudoName().isBlank()) wmb.setUsername(author.getName());
+						else try {
+							wmb.setUsername(m.getPseudoName());
+						} catch (RuntimeException e) {
+							m.setPseudoName("");
+							MemberDAO.updateMemberConfigs(m);
+						}
+
+						assert wh != null;
+						WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
+						message.delete().queue(d -> {
+							try {
+								wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).accept(null)).get();
+							} catch (InterruptedException | ExecutionException e) {
+								Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+							}
+						}, Helper::doNothing);
+					} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException | NullPointerException ignore) {
+					}
 			}
 		} catch (InsufficientPermissionException | ErrorResponseException ignore) {
 		}

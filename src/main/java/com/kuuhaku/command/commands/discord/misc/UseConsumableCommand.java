@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.discord.misc;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -25,6 +26,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Consumable;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.ConsumableShop;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -67,5 +69,7 @@ public class UseConsumableCommand extends Command {
 
 		Consumable c = ConsumableShop.getAvailable().get(args[0]);
 		c.getEffect().accept(member, (TextChannel) channel, message);
+		if (Helper.equalsAny(c.getId(), "spawncard", "spawnanime"))
+			Main.getInfo().getRatelimit().invalidate(author.getId());
 	}
 }
