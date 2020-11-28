@@ -482,6 +482,7 @@ public class Shoukan extends Game {
                                 });
                     }
                 } else if (yPower < hPower) {
+                    yours.setAvailable(false);
                     his.resetAttribs();
                     if (yours.hasEffect()) {
                         yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
@@ -504,6 +505,7 @@ public class Shoukan extends Game {
                                 });
                     }
                 } else {
+                    yours.setAvailable(false);
                     killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1]);
                     killCard(h.getSide(), is[0]);
 
