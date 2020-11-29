@@ -69,9 +69,9 @@ public class RedeemCommand extends Command {
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Deseja realmente trocar seu acúmulo de 7 votos por uma gema?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (m, ms) -> {
-					if (!ShiroInfo.getHashes().remove(hash)) return;
-					Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					if (m.getId().equals(author.getId())) {
+						if (!ShiroInfo.getHashes().remove(hash)) return;
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						acc.setStreak(0);
 						acc.addGem();
 						AccountDAO.saveAccount(acc);
