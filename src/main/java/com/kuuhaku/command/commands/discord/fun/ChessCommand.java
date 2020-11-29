@@ -103,9 +103,9 @@ public class ChessCommand extends Command {
         Game t = new Chess(Main.getInfo().getAPI(), (TextChannel) channel, bet, author, message.getMentionedUsers().get(0));
         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Xadrez, deseja aceitar?")
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-                            if (!ShiroInfo.getHashes().remove(hash)) return;
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
                             if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+                                if (!ShiroInfo.getHashes().remove(hash)) return;
+                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
                                 if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
                                     channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
                                     return;

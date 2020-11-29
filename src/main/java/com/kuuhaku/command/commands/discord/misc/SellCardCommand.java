@@ -102,9 +102,9 @@ public class SellCardCommand extends Command {
 					Main.getInfo().getConfirmationPending().put(author.getId(), true);
 					channel.sendMessage("Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?").queue(s -> {
 						Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 							if (mb.getId().equals(author.getId())) {
+								if (!ShiroInfo.getHashes().remove(hash)) return;
+								Main.getInfo().getConfirmationPending().invalidate(author.getId());
 								kp.removeCard(card);
 								KawaiponDAO.saveKawaipon(kp);
 
@@ -150,9 +150,9 @@ public class SellCardCommand extends Command {
 					Main.getInfo().getConfirmationPending().put(author.getId(), true);
 					channel.sendMessage("Este equipamento sairá da sua coleção, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?").queue(s -> {
 						Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
-							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 							if (member1.getId().equals(author.getId())) {
+								if (!ShiroInfo.getHashes().remove(hash)) return;
+								Main.getInfo().getConfirmationPending().invalidate(author.getId());
 								kp.removeEquipment(eq);
 								KawaiponDAO.saveKawaipon(kp);
 
@@ -198,9 +198,9 @@ public class SellCardCommand extends Command {
 					Main.getInfo().getConfirmationPending().put(author.getId(), true);
 					channel.sendMessage("Esta arena sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?").queue(s -> {
 						Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
-							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 							if (member1.getId().equals(author.getId())) {
+								if (!ShiroInfo.getHashes().remove(hash)) return;
+								Main.getInfo().getConfirmationPending().invalidate(author.getId());
 								kp.removeField(f);
 								KawaiponDAO.saveKawaipon(kp);
 

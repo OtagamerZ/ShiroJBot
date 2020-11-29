@@ -272,8 +272,9 @@ public class AuctionCommand extends Command {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Esta carta será vendida para quem oferecer o maior valor. Deseja mesmo leiloá-la?").queue(s -> {
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-					if (!ShiroInfo.getHashes().remove(hash)) return;
 					if (mb.getId().equals(author.getId())) {
+						if (!ShiroInfo.getHashes().remove(hash)) return;
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						event.set(channel.sendMessage("Não houve nenhuma oferta, declaro o leilão **encerrado**!").queueAfter(30, TimeUnit.SECONDS, msg -> {
 									Main.getInfo().getConfirmationPending().invalidate(author.getId());
 									listener.close();
