@@ -73,9 +73,9 @@ public class ExceedLeaveCommand extends Command {
 		String name = em.getExceed();
 		channel.sendMessage(":warning: | Sair da " + name + " irá zerar seus pontos de contribuição" + (willLock ? " e fará com que você não possa escolher outro Exceed até o próximo mês" : "") + ". Deseja confirmar sua escolha?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-					if (!ShiroInfo.getHashes().remove(hash)) return;
-					Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					if (mb.getId().equals(author.getId())) {
+						if (!ShiroInfo.getHashes().remove(hash)) return;
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						if (willLock) em.setBlocked(true);
 						em.setExceed("");
 						em.resetContribution();

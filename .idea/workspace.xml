@@ -13,8 +13,17 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de método necessário para o funcionamento da carta Shikoutazer">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção menor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedLeaveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedLeaveCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ChessCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ChessCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CrissCrossCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CrissCrossCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ReversiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ReversiCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AuctionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AuctionCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RedeemCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RedeemCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,6 +171,19 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -869,20 +891,8 @@
       <workItem from="1606488834519" duration="386000" />
       <workItem from="1606493009311" duration="7133000" />
       <workItem from="1606503166915" duration="66000" />
-    </task>
-    <task id="LOCAL-02956" summary="Cartas viradas pra baixo agora começam no modo de defesa ao serem invocadas">
-      <created>1606157169071</created>
-      <option name="number" value="02956" />
-      <option name="presentableId" value="LOCAL-02956" />
-      <option name="project" value="LOCAL" />
-      <updated>1606157169072</updated>
-    </task>
-    <task id="LOCAL-02957" summary="Melhoria nos ícones de amuleto">
-      <created>1606159353579</created>
-      <option name="number" value="02957" />
-      <option name="presentableId" value="LOCAL-02957" />
-      <option name="project" value="LOCAL" />
-      <updated>1606159353580</updated>
+      <workItem from="1606596000957" duration="1378000" />
+      <workItem from="1606673905928" duration="548000" />
     </task>
     <task id="LOCAL-02958" summary="Criação do jogo &quot;Adivinhe as cartas&quot;">
       <created>1606164392951</created>
@@ -1213,7 +1223,21 @@
       <option name="project" value="LOCAL" />
       <updated>1606533798767</updated>
     </task>
-    <option name="localTasksCounter" value="3005" />
+    <task id="LOCAL-03005" summary="Correção menor">
+      <created>1606596330407</created>
+      <option name="number" value="03005" />
+      <option name="presentableId" value="LOCAL-03005" />
+      <option name="project" value="LOCAL" />
+      <updated>1606596330407</updated>
+    </task>
+    <task id="LOCAL-03006" summary="Correção menor">
+      <created>1606597176259</created>
+      <option name="number" value="03006" />
+      <option name="presentableId" value="LOCAL-03006" />
+      <option name="project" value="LOCAL" />
+      <updated>1606597176259</updated>
+    </task>
+    <option name="localTasksCounter" value="3007" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1295,7 +1319,6 @@
     <MESSAGE value="Correção na loja de arenas" />
     <MESSAGE value="Agora é armazenada a quantidade de votos que cada suporte recebeu" />
     <MESSAGE value="Adicionado bloqueio de coleta em canais que não sejam o configurado para aparecerem kawaipons/drops" />
-    <MESSAGE value="Correção menor" />
     <MESSAGE value="Correção no pagamento de dívidas" />
     <MESSAGE value="Correção no Shoukan" />
     <MESSAGE value="Adicionada opção de mostrar seu deck no privado" />
@@ -1304,7 +1327,8 @@
     <MESSAGE value="Criação do modo NQN" />
     <MESSAGE value="Correção no modo NQN" />
     <MESSAGE value="Adição de método necessário para o funcionamento da carta Shikoutazer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de método necessário para o funcionamento da carta Shikoutazer" />
+    <MESSAGE value="Correção menor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1333,7 +1357,6 @@
     <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602641774815">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597927763665" />
     <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1602641774815" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1604198537643">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1418,11 +1441,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606533800412">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606597177604">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606498269162" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606533800412" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606597177604" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1467,11 +1490,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116333066" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1606493144831">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup" timestamp="1606674432659">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1606493144831" />
-    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604459307974" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606674432659" />
     <state x="600" y="294" key="git4idea.ui.GitUnstashDialog" timestamp="1603112264983">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
