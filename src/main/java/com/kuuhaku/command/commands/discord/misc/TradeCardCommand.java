@@ -210,9 +210,9 @@ public class TradeCardCommand extends Command {
 			Pair<CardType, Object> finalProduct = product;
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar " + (type == 1 ? "sua carta" : type == 2 ? "seu equipamento" : "sua arena") + " `" + name + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
-						if (!ShiroInfo.getHashes().remove(hash)) return;
-						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						if (!member1.getId().equals(other.getId())) return;
+						else if (!ShiroInfo.getHashes().remove(hash)) return;
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						acc.removeCredit(price, this.getClass());
 						tacc.addCredit(price, this.getClass());
 
@@ -370,9 +370,9 @@ public class TradeCardCommand extends Command {
 			Pair<CardType, Object> finalProduct = product;
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja vender " + (type == 1 ? "a carta" : type == 2 ? "o equipamento" : "a arena") + " `" + name + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
-						if (!ShiroInfo.getHashes().remove(hash)) return;
-						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						if (!member1.getId().equals(other.getId())) return;
+						else if (!ShiroInfo.getHashes().remove(hash)) return;
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						acc.addCredit(price, this.getClass());
 						tacc.removeCredit(price, this.getClass());
 
@@ -597,9 +597,9 @@ public class TradeCardCommand extends Command {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja trocar a carta `" + names[0] + "` pela sua carta `" + names[1] + "`, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
-						if (!ShiroInfo.getHashes().remove(hash)) return;
-						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						if (!member1.getId().equals(other.getId())) return;
+						else if (!ShiroInfo.getHashes().remove(hash)) return;
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 
 						switch (types[0]) {
 							case 1 -> {
