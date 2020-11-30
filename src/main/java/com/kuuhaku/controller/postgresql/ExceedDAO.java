@@ -24,7 +24,6 @@ import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.model.persistent.ExceedScore;
 import com.kuuhaku.model.persistent.MonthWinner;
-import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -263,7 +262,9 @@ public class ExceedDAO {
         q.setParameter("id", id);
 
         try {
-            return Helper.getOr((BigDecimal) q.getSingleResult(), new BigDecimal(0)).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+            return ((BigDecimal) q.getSingleResult()).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+        } catch (NoResultException e) {
+            return 0;
         } finally {
             em.close();
         }
