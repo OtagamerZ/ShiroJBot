@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no cron mensal">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no cron mensal" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -873,14 +871,7 @@
       <workItem from="1606673905928" duration="1563000" />
       <workItem from="1606698348766" duration="683000" />
       <workItem from="1606764546893" duration="2707000" />
-      <workItem from="1606777776914" duration="2233000" />
-    </task>
-    <task id="LOCAL-02970" summary="Tentativa de implementação de histórico de partidas">
-      <created>1606310790876</created>
-      <option name="number" value="02970" />
-      <option name="presentableId" value="LOCAL-02970" />
-      <option name="project" value="LOCAL" />
-      <updated>1606310790877</updated>
+      <workItem from="1606777776914" duration="2553000" />
     </task>
     <task id="LOCAL-02971" summary="Tentativa de implementação de histórico de partidas">
       <created>1606311167467</created>
@@ -1218,7 +1209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606779832677</updated>
     </task>
-    <option name="localTasksCounter" value="3019" />
+    <task id="LOCAL-03019" summary="Correção no cron mensal">
+      <created>1606780112951</created>
+      <option name="number" value="03019" />
+      <option name="presentableId" value="LOCAL-03019" />
+      <option name="project" value="LOCAL" />
+      <updated>1606780112951</updated>
+    </task>
+    <option name="localTasksCounter" value="3020" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1379,26 +1377,26 @@
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605528924821" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606176807594" />
-    <state width="1648" height="282" key="GridCell.Tab.0.bottom" timestamp="1606779968503">
+    <state width="1648" height="282" key="GridCell.Tab.0.bottom" timestamp="1606780154149">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1606480969057" />
-    <state width="1648" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606779968503" />
-    <state width="1648" height="282" key="GridCell.Tab.0.center" timestamp="1606779968503">
+    <state width="1648" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606780154149" />
+    <state width="1648" height="282" key="GridCell.Tab.0.center" timestamp="1606780154149">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1606480969057" />
-    <state width="1648" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606779968503" />
-    <state width="1648" height="282" key="GridCell.Tab.0.left" timestamp="1606779968503">
+    <state width="1648" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606780154149" />
+    <state width="1648" height="282" key="GridCell.Tab.0.left" timestamp="1606780154149">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1606480969056" />
-    <state width="1648" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606779968503" />
-    <state width="1648" height="282" key="GridCell.Tab.0.right" timestamp="1606779968503">
+    <state width="1648" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606780154149" />
+    <state width="1648" height="282" key="GridCell.Tab.0.right" timestamp="1606780154149">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1606480969057" />
-    <state width="1648" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606779968503" />
+    <state width="1648" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606780154149" />
     <state width="224" height="471" key="HiddenNamespacesPopup" timestamp="1603507846095">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1422,11 +1420,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606779833853">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606780127823">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606767561133" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606779833853" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606780127823" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
