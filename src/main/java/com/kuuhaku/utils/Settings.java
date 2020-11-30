@@ -587,7 +587,7 @@ public class Settings {
 			}
 
 			gc.removeDisabledModule(c);
-			message.getTextChannel().sendMessage("✅ | Módulo " + c.getName() + " desabilitado com sucesso.").queue();
+			message.getTextChannel().sendMessage("✅ | Módulo " + c.getName() + " habilitado com sucesso.").queue();
 		} else if (Helper.equalsAny(args[2].toLowerCase(), "desligado", "disabled", "off")) {
 			if (antigoModulo.contains(c.name())) {
 				message.getTextChannel().sendMessage("❌ | Esse módulo já está desativado.").queue();
@@ -595,7 +595,7 @@ public class Settings {
 			}
 
 			gc.addDisabledModule(c);
-			message.getTextChannel().sendMessage("✅ | Módulo " + c.getName() + " habilitado com sucesso.").queue();
+			message.getTextChannel().sendMessage("✅ | Módulo " + c.getName() + " desabilitado com sucesso.").queue();
 		} else {
 			message.getTextChannel().sendMessage("❌ | O terceiro argumento deve ser ligado ou desligado").queue();
 			return;
