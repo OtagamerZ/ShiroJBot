@@ -143,36 +143,35 @@ public class HitotsuCommand extends Command {
         String hash = Helper.generateHash(guild, author);
         ShiroInfo.getHashes().add(hash);
         Main.getInfo().getConfirmationPending().put(author.getId(), true);
-        channel.sendMessage(msg)
-                .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-                            if (players.contains(mb.getUser())) {
-                                if (Main.getInfo().gameInProgress(mb.getId())) {
-                                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
-                                    return;
-                                } else if (Main.getInfo().gameInProgress(author.getId())) {
-                                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
-                                    return;
-                                }
+        channel.sendMessage(msg).queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+                    if (players.contains(mb.getUser())) {
+                        if (Main.getInfo().gameInProgress(mb.getId())) {
+                            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+                            return;
+                        } else if (Main.getInfo().gameInProgress(author.getId())) {
+                            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+                            return;
+                        }
 
-                                if (!accepted.contains(mb.getId())) {
-                                    channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
-                                    accepted.add(mb.getId());
-                                }
+                        if (!accepted.contains(mb.getId())) {
+                            channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
+                            accepted.add(mb.getId());
+                        }
 
-                                if (accepted.size() == players.size()) {
-                                    if (!ShiroInfo.getHashes().remove(hash)) return;
-                                    Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                                    //Main.getInfo().getGames().put(id, t);
-                                    s.delete().queue(null, Helper::doNothing);
-                                    t.start();
-                                }
-                            }
-                        }), true, 1, TimeUnit.MINUTES,
-                        u -> Helper.equalsAny(u.getId(), players.stream().map(User::getId).toArray(String[]::new)),
-                        ms -> {
-                            ShiroInfo.getHashes().remove(hash);
+                        if (accepted.size() == players.size()) {
+                            if (!ShiroInfo.getHashes().remove(hash)) return;
                             Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                        })
-                );
+                            //Main.getInfo().getGames().put(id, t);
+                            s.delete().queue(null, Helper::doNothing);
+                            t.start();
+                        }
+                    }
+                }), true, 1, TimeUnit.MINUTES,
+                u -> Helper.equalsAny(u.getId(), players.stream().map(User::getId).toArray(String[]::new)),
+                ms -> {
+                    ShiroInfo.getHashes().remove(hash);
+                    Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                })
+        );
     }
 }

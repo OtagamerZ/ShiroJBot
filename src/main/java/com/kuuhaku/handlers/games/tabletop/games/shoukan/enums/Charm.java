@@ -26,7 +26,8 @@ import java.util.Objects;
 public enum Charm {
 	SPELLSHIELD("Escudo de feitiços"),
 	SPELLMIRROR("Reflexo de feitiços"),
-	TIMEWARP("Salto temporal");
+	TIMEWARP("Salto temporal"),
+	DOUBLETAP("Toque duplo");
 
 	private final String name;
 
