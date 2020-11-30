@@ -141,7 +141,6 @@ public class MonthlyEvent implements Job {
 		});
 
 		LotteryDAO.closeLotteries();
-		DynamicParameterDAO.setParam("last_upd_month", String.valueOf(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).getMonthValue()));
 
 		List<Blacklist> blacklist = BlacklistDAO.getBlacklist();
 		for (Blacklist bl : blacklist) {
@@ -173,5 +172,7 @@ public class MonthlyEvent implements Job {
 			VotesDAO.saveRating(dr);
 			AccountDAO.saveAccount(acc);
 		}
+
+		DynamicParameterDAO.setParam("last_upd_month", String.valueOf(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).getMonthValue()));
 	}
 }
