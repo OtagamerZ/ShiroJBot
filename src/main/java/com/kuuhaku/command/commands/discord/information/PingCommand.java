@@ -29,7 +29,8 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.text.MessageFormat;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 public class PingCommand extends Command {
 
@@ -65,7 +66,7 @@ public class PingCommand extends Command {
 				.queue();
 
 		if (author.getId().equals(ShiroInfo.getNiiChan())) {
-			int month = LocalDate.now().getMonthValue();
+			int month = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).getMonthValue();
 			if (!DynamicParameterDAO.getParam("last_upd_month").getValue().equals(String.valueOf(month)))
 				MonthlyEvent.call();
 		}
