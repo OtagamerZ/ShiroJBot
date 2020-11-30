@@ -564,12 +564,12 @@ public class Settings {
 	public static void updateModules(String[] args, Message message, GuildConfig gc) {
 		List<Category> antigoModulo = gc.getDisabledModules();
 
-		if (args[1].equals("reset") || args[1].equals("resetar")) {
+		if (Helper.equalsAny(args[1], "reset", "resetar")) {
 			gc.setDisabledModules(new ArrayList<>());
 			GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | Todos os módulos habilitados novamente.").queue();
 			return;
-		} else if (args.length < 3) {
+		} else if (Helper.equalsAny(args[1], "list", "lista")) {
 			if (antigoModulo.size() == 0) {
 				message.getTextChannel().sendMessage("Nenhum módulo desligado.").queue();
 			} else {
@@ -584,13 +584,15 @@ public class Settings {
 		try {
 			if (Helper.equalsAny(args[2].toLowerCase(), "ligado", "enabled", "on")) {
 				if (!antigoModulo.contains(Category.getByName(args[1]))) {
-					message.getTextChannel().sendMessage("❌ | Módulo já ativado.").queue();
+					message.getTextChannel().sendMessage("❌ | Esse módulo já está ativado.").queue();
+					return;
 				} else {
 					antigoModulo.remove(Category.getByName(args[1]));
 				}
 			} else if (Helper.equalsAny(args[2].toLowerCase(), "desligado", "disabled", "off")) {
 				if (antigoModulo.contains(Category.getByName(args[1]))) {
-					message.getTextChannel().sendMessage("❌ | Módulo já desativado.").queue();
+					message.getTextChannel().sendMessage("❌ | Esse módulo já está desativado.").queue();
+					return;
 				} else {
 					antigoModulo.add(Category.getByName(args[1]));
 				}
