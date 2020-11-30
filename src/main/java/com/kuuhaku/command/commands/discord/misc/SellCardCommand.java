@@ -38,187 +38,193 @@ import java.util.concurrent.TimeUnit;
 
 public class SellCardCommand extends Command {
 
-	public SellCardCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
+    public SellCardCommand(String name, String description, Category category, boolean requiresMM) {
+        super(name, description, category, requiresMM);
+    }
 
-	public SellCardCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
+    public SellCardCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+        super(name, aliases, description, category, requiresMM);
+    }
 
-	public SellCardCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
+    public SellCardCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+        super(name, usage, description, category, requiresMM);
+    }
 
-	public SellCardCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+    public SellCardCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+        super(name, aliases, usage, description, category, requiresMM);
+    }
 
-	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+    @Override
+    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+        Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		} else if (args.length < 3) {
-			channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
-			return;
-		} else if (!StringUtils.isNumeric(args[2])) {
-			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
-			return;
-		}
+        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        } else if (args.length < 3) {
+            channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
+            return;
+        } else if (!StringUtils.isNumeric(args[2])) {
+            channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
+            return;
+        }
 
-		switch (args[1].toUpperCase()) {
-			case "N", "C" -> {
-				boolean foil = args[1].equalsIgnoreCase("C");
-				Card c = CardDAO.getCard(args[0], foil);
-				if (c == null) {
-					channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
-					return;
-				}
+        switch (args[1].toUpperCase()) {
+            case "N", "C" -> {
+                boolean foil = args[1].equalsIgnoreCase("C");
+                Card c = CardDAO.getCard(args[0], foil);
+                if (c == null) {
+                    channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
+                    return;
+                }
 
-				KawaiponCard card = kp.getCard(c, foil);
-				if (card == null) {
-					channel.sendMessage("❌ | Você não pode vender uma carta que não possui!").queue();
-					return;
-				}
+                KawaiponCard card = kp.getCard(c, foil);
+                if (card == null) {
+                    channel.sendMessage("❌ | Você não pode vender uma carta que não possui!").queue();
+                    return;
+                }
 
-				try {
-					boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
-					int price = Integer.parseInt(args[2]);
-					int min = c.getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+                try {
+                    boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
+                    int price = Integer.parseInt(args[2]);
+                    int min = c.getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
 
-					if (price < min) {
-						if (hasLoan)
-							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + min + " créditos.").queue();
-						else
-							channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + min + " créditos.").queue();
-						return;
-					}
+                    if (price < min) {
+                        if (hasLoan)
+                            channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + min + " créditos.").queue();
+                        else
+                            channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + min + " créditos.").queue();
+                        return;
+                    }
 
-					String hash = Helper.generateHash(guild, author);
-					ShiroInfo.getHashes().add(hash);
-					Main.getInfo().getConfirmationPending().put(author.getId(), true);
-					channel.sendMessage("Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?").queue(s -> {
-						Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-							if (mb.getId().equals(author.getId())) {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								kp.removeCard(card);
-								KawaiponDAO.saveKawaipon(kp);
+                    String hash = Helper.generateHash(guild, author);
+                    ShiroInfo.getHashes().add(hash);
+                    Main.getInfo().getConfirmationPending().put(author.getId(), true);
+                    channel.sendMessage("Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?")
+                            .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+                                        if (mb.getId().equals(author.getId())) {
+                                            if (!ShiroInfo.getHashes().remove(hash)) return;
+                                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                            kp.removeCard(card);
+                                            KawaiponDAO.saveKawaipon(kp);
 
-								CardMarket cm = new CardMarket(author.getId(), card, price);
-								CardMarketDAO.saveCard(cm);
+                                            CardMarket cm = new CardMarket(author.getId(), card, price);
+                                            CardMarketDAO.saveCard(cm);
 
-								s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Carta anunciada com sucesso!")).queue();
-							}
-						}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
-						});
-					});
-				} catch (NumberFormatException e) {
-					channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
-				}
-			}
-			case "E" -> {
-				Equipment eq = CardDAO.getEquipment(args[0]);
-				if (eq == null) {
-					channel.sendMessage("❌ | Esse equipamento não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
-					return;
-				} else if (!kp.getEquipments().contains(eq)) {
-					channel.sendMessage("❌ | Você não pode vender um equipamento que não possui!").queue();
-					return;
-				}
+                                            s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Carta anunciada com sucesso!")).queue();
+                                        }
+                                    }), true, 1, TimeUnit.MINUTES,
+                                    u -> u.getId().equals(author.getId()),
+                                    ms -> {
+                                        ShiroInfo.getHashes().remove(hash);
+                                        Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                    })
+                            );
+                } catch (NumberFormatException e) {
+                    channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
+                }
+            }
+            case "E" -> {
+                Equipment eq = CardDAO.getEquipment(args[0]);
+                if (eq == null) {
+                    channel.sendMessage("❌ | Esse equipamento não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
+                    return;
+                } else if (!kp.getEquipments().contains(eq)) {
+                    channel.sendMessage("❌ | Você não pode vender um equipamento que não possui!").queue();
+                    return;
+                }
 
-				try {
-					boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
-					int price = Integer.parseInt(args[2]);
-					int min = eq.getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
+                try {
+                    boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
+                    int price = Integer.parseInt(args[2]);
+                    int min = eq.getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
 
-					if (price < min) {
-						if (hasLoan)
-							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
-						else
-							channel.sendMessage("❌ | Você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
-						return;
-					}
+                    if (price < min) {
+                        if (hasLoan)
+                            channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+                        else
+                            channel.sendMessage("❌ | Você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+                        return;
+                    }
 
-					String hash = Helper.generateHash(guild, author);
-					ShiroInfo.getHashes().add(hash);
-					Main.getInfo().getConfirmationPending().put(author.getId(), true);
-					channel.sendMessage("Este equipamento sairá da sua coleção, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?").queue(s -> {
-						Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
-							if (member1.getId().equals(author.getId())) {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								kp.removeEquipment(eq);
-								KawaiponDAO.saveKawaipon(kp);
+                    String hash = Helper.generateHash(guild, author);
+                    ShiroInfo.getHashes().add(hash);
+                    Main.getInfo().getConfirmationPending().put(author.getId(), true);
+                    channel.sendMessage("Este equipamento sairá da sua coleção, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?")
+                            .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+                                        if (mb.getId().equals(author.getId())) {
+                                            if (!ShiroInfo.getHashes().remove(hash)) return;
+                                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                            kp.removeEquipment(eq);
+                                            KawaiponDAO.saveKawaipon(kp);
 
-								EquipmentMarket em = new EquipmentMarket(author.getId(), eq, price);
-								EquipmentMarketDAO.saveCard(em);
+                                            EquipmentMarket em = new EquipmentMarket(author.getId(), eq, price);
+                                            EquipmentMarketDAO.saveCard(em);
 
-								s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Equipamento anunciado com sucesso!")).queue();
-							}
-						}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
-						});
-					});
-				} catch (NumberFormatException e) {
-					channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
-				}
-			}
-			case "F" -> {
-				Field f = CardDAO.getField(args[0]);
-				if (f == null) {
-					channel.sendMessage("❌ | Essa arena não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllFieldNames().toArray(String[]::new)) + "`?").queue();
-					return;
-				} else if (!kp.getFields().contains(f)) {
-					channel.sendMessage("❌ | Você não pode vender uma arena que não possui!").queue();
-					return;
-				}
+                                            s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Equipamento anunciado com sucesso!")).queue();
+                                        }
+                                    }), true, 1, TimeUnit.MINUTES,
+                                    u -> u.getId().equals(author.getId()),
+                                    ms -> {
+                                        ShiroInfo.getHashes().remove(hash);
+                                        Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                    })
+                            );
+                } catch (NumberFormatException e) {
+                    channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
+                }
+            }
+            case "F" -> {
+                Field f = CardDAO.getField(args[0]);
+                if (f == null) {
+                    channel.sendMessage("❌ | Essa arena não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllFieldNames().toArray(String[]::new)) + "`?").queue();
+                    return;
+                } else if (!kp.getFields().contains(f)) {
+                    channel.sendMessage("❌ | Você não pode vender uma arena que não possui!").queue();
+                    return;
+                }
 
-				try {
-					boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
-					int price = Integer.parseInt(args[2]);
-					int min = hasLoan ? 20000 : 5000;
+                try {
+                    boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
+                    int price = Integer.parseInt(args[2]);
+                    int min = hasLoan ? 20000 : 5000;
 
-					if (price < min) {
-						if (hasLoan)
-							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
-						else
-							channel.sendMessage("❌ | Você não pode vender essa arena por menos que " + min + " créditos.").queue();
-						return;
-					}
+                    if (price < min) {
+                        if (hasLoan)
+                            channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+                        else
+                            channel.sendMessage("❌ | Você não pode vender essa arena por menos que " + min + " créditos.").queue();
+                        return;
+                    }
 
-					String hash = Helper.generateHash(guild, author);
-					ShiroInfo.getHashes().add(hash);
-					Main.getInfo().getConfirmationPending().put(author.getId(), true);
-					channel.sendMessage("Esta arena sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?").queue(s -> {
-						Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
-							if (member1.getId().equals(author.getId())) {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								kp.removeField(f);
-								KawaiponDAO.saveKawaipon(kp);
+                    String hash = Helper.generateHash(guild, author);
+                    ShiroInfo.getHashes().add(hash);
+                    Main.getInfo().getConfirmationPending().put(author.getId(), true);
+                    channel.sendMessage("Esta arena sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?")
+                            .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+                                        if (mb.getId().equals(author.getId())) {
+                                            if (!ShiroInfo.getHashes().remove(hash)) return;
+                                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                            kp.removeField(f);
+                                            KawaiponDAO.saveKawaipon(kp);
 
-								FieldMarket fm = new FieldMarket(author.getId(), f, price);
-								FieldMarketDAO.saveCard(fm);
+                                            FieldMarket fm = new FieldMarket(author.getId(), f, price);
+                                            FieldMarketDAO.saveCard(fm);
 
-								s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Arena anunciada com sucesso!")).queue();
-							}
-						}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
-						});
-					});
-				} catch (NumberFormatException e) {
-					channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
-				}
-			}
-			default -> channel.sendMessage("❌ | Tipo inválido, o tipo deve ser um dos seguntes valores: `N` = normal, `C` = cromada, `E` = evogear e `F` = campo.").queue();
-		}
-	}
+                                            s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Arena anunciada com sucesso!")).queue();
+                                        }
+                                    }), true, 1, TimeUnit.MINUTES,
+                                    u -> u.getId().equals(author.getId()),
+                                    ms -> {
+                                        ShiroInfo.getHashes().remove(hash);
+                                        Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                    })
+                            );
+                } catch (NumberFormatException e) {
+                    channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
+                }
+            }
+            default -> channel.sendMessage("❌ | Tipo inválido, o tipo deve ser um dos seguntes valores: `N` = normal, `C` = cromada, `E` = evogear e `F` = campo.").queue();
+        }
+    }
 }

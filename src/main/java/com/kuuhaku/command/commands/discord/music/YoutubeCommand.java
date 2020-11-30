@@ -63,66 +63,68 @@ public class YoutubeCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length < 1) {
-			channel.sendMessage("❌ | Você precisa digitar um nome para pesquisar.").queue();
-			return;
-		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		}
+        if (args.length < 1) {
+            channel.sendMessage("❌ | Você precisa digitar um nome para pesquisar.").queue();
+            return;
+        } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        }
 
         channel.sendMessage("<a:loading:697879726630502401> Buscando videos...").queue(m -> {
             try {
-				List<YoutubeVideo> videos = Youtube.getData(String.join(" ", args));
-				EmbedBuilder eb = new ColorlessEmbedBuilder();
+                List<YoutubeVideo> videos = Youtube.getData(String.join(" ", args));
+                EmbedBuilder eb = new ColorlessEmbedBuilder();
 
                 m.editMessage(":mag: Resultados da busca").queue(s -> {
-					if (videos.size() > 0) {
-						List<Page> pages = new ArrayList<>();
+                    if (videos.size() > 0) {
+                        List<Page> pages = new ArrayList<>();
 
-						for (YoutubeVideo v : videos) {
-							eb.clear();
-							eb.setAuthor("Para ouvir essa música, conecte-se à um canal de voz e clique no botão ✅");
-							eb.setTitle(v.getTitle(), v.getUrl());
-							eb.setDescription(v.getDesc());
-							eb.setThumbnail(v.getThumb());
-							eb.setFooter("Link: " + v.getUrl(), v.getUrl());
-							pages.add(new Page(PageType.EMBED, eb.build()));
-						}
+                        for (YoutubeVideo v : videos) {
+                            eb.clear();
+                            eb.setAuthor("Para ouvir essa música, conecte-se à um canal de voz e clique no botão ✅");
+                            eb.setTitle(v.getTitle(), v.getUrl());
+                            eb.setDescription(v.getDesc());
+                            eb.setThumbnail(v.getThumb());
+                            eb.setFooter("Link: " + v.getUrl(), v.getUrl());
+                            pages.add(new Page(PageType.EMBED, eb.build()));
+                        }
 
-						String hash = Helper.generateHash(guild, author);
-						ShiroInfo.getHashes().add(hash);
-						Main.getInfo().getConfirmationPending().put(author.getId(), true);
-						channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
-							Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
-							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
-								Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
-									if (!ShiroInfo.getHashes().remove(hash)) return;
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
-									try {
-										String url = Objects.requireNonNull(ms.getEmbeds().get(0).getFooter()).getIconUrl();
-										assert url != null;
-										if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isVerified()) {
-											channel.sendMessage("❌ | Você precisa ser um usuário verificado para poder adicionar playlists.").queue();
-											msg.delete().queue();
-											return;
-										}
-										Music.loadAndPlay(member, (TextChannel) channel, url);
-										msg.delete().queue(null, Helper::doNothing);
-									} catch (ErrorResponseException ignore) {
-									}
-								}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								});
-							}
-						});
-					} else m.editMessage("❌ | Nenhum vídeo encontrado").queue();
-				});
+                        String hash = Helper.generateHash(guild, author);
+                        ShiroInfo.getHashes().add(hash);
+                        Main.getInfo().getConfirmationPending().put(author.getId(), true);
+                        channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
+                            Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
+                            if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
+                                Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
+                                            if (!ShiroInfo.getHashes().remove(hash)) return;
+                                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                            try {
+                                                String url = Objects.requireNonNull(ms.getEmbeds().get(0).getFooter()).getIconUrl();
+                                                assert url != null;
+                                                if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isVerified()) {
+                                                    channel.sendMessage("❌ | Você precisa ser um usuário verificado para poder adicionar playlists.").queue();
+                                                    msg.delete().queue();
+                                                    return;
+                                                }
+                                                Music.loadAndPlay(member, (TextChannel) channel, url);
+                                                msg.delete().queue(null, Helper::doNothing);
+                                            } catch (ErrorResponseException ignore) {
+                                            }
+                                        }), true, 1, TimeUnit.MINUTES,
+                                        u -> u.getId().equals(author.getId()),
+                                        ms -> {
+                                            ShiroInfo.getHashes().remove(hash);
+                                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                        });
+                            }
+                        });
+                    } else m.editMessage("❌ | Nenhum vídeo encontrado").queue();
+                });
             } catch (IOException e) {
-				m.editMessage("❌ | Erro ao buscar vídeos, meus desenvolvedores já foram notificados.").queue();
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-			}
+                m.editMessage("❌ | Erro ao buscar vídeos, meus desenvolvedores já foram notificados.").queue();
+                Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+            }
         });
     }
 }

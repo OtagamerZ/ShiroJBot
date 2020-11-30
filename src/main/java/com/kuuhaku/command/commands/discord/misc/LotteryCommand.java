@@ -39,73 +39,75 @@ import java.util.concurrent.TimeUnit;
 
 public class LotteryCommand extends Command {
 
-	public LotteryCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
+    public LotteryCommand(String name, String description, Category category, boolean requiresMM) {
+        super(name, description, category, requiresMM);
+    }
 
-	public LotteryCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
+    public LotteryCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+        super(name, aliases, description, category, requiresMM);
+    }
 
-	public LotteryCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
+    public LotteryCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+        super(name, usage, description, category, requiresMM);
+    }
 
-	public LotteryCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+    public LotteryCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+        super(name, aliases, usage, description, category, requiresMM);
+    }
 
-	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length < 1) {
-			channel.sendMessage("O prêmio atual é __**" + LotteryDAO.getLotteryValue().getValue() + " créditos**__.").queue();
-			return;
-		} else if (args[0].split(",").length != 6 || args[0].length() != 17) {
-			channel.sendMessage("❌ | Você precisa informar 6 dezenas separadas por vírgula.").queue();
-			return;
-		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		}
+    @Override
+    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+        if (args.length < 1) {
+            channel.sendMessage("O prêmio atual é __**" + LotteryDAO.getLotteryValue().getValue() + " créditos**__.").queue();
+            return;
+        } else if (args[0].split(",").length != 6 || args[0].length() != 17) {
+            channel.sendMessage("❌ | Você precisa informar 6 dezenas separadas por vírgula.").queue();
+            return;
+        } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        }
 
-		Account acc = AccountDAO.getAccount(author.getId());
+        Account acc = AccountDAO.getAccount(author.getId());
 
-		for (String dozen : args[0].split(",")) {
-			if (!StringUtils.isNumeric(dozen) || !Helper.between(Integer.parseInt(dozen), 0, 31)) {
-				channel.sendMessage("❌ | As dezenas devem ser valores numéricos de 00 a 30.").queue();
-				return;
-			} else if (args[0].split(dozen).length > 2) {
-				channel.sendMessage("❌ | Você não pode repetir dezenas.").queue();
-				return;
-			}
-		}
+        for (String dozen : args[0].split(",")) {
+            if (!StringUtils.isNumeric(dozen) || !Helper.between(Integer.parseInt(dozen), 0, 31)) {
+                channel.sendMessage("❌ | As dezenas devem ser valores numéricos de 00 a 30.").queue();
+                return;
+            } else if (args[0].split(dozen).length > 2) {
+                channel.sendMessage("❌ | Você não pode repetir dezenas.").queue();
+                return;
+            }
+        }
 
-		long cost = (long) (1000 * Math.pow(5, LotteryDAO.getLotteriesByUser(author.getId()).size()));
-		if (acc.getTotalBalance() < cost) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
-			return;
-		}
+        long cost = (long) (1000 * Math.pow(5, LotteryDAO.getLotteriesByUser(author.getId()).size()));
+        if (acc.getTotalBalance() < cost) {
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+            return;
+        }
 
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
-		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes a comprar um bilhete de loteria com as dezenas `" + args[0].replace(",", " ") + "` por " + cost + " créditos, deseja confirmar?").queue(s ->
-				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-					if (!ShiroInfo.getHashes().remove(hash)) return;
-					Main.getInfo().getConfirmationPending().invalidate(author.getId());
-					acc.consumeCredit(cost, this.getClass());
-					AccountDAO.saveAccount(acc);
-					LotteryDAO.saveLottery(new Lottery(author.getId(), args[0]));
+        String hash = Helper.generateHash(guild, author);
+        ShiroInfo.getHashes().add(hash);
+        Main.getInfo().getConfirmationPending().put(author.getId(), true);
+        channel.sendMessage("Você está prestes a comprar um bilhete de loteria com as dezenas `" + args[0].replace(",", " ") + "` por " + cost + " créditos, deseja confirmar?")
+                .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+                            if (!ShiroInfo.getHashes().remove(hash)) return;
+                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                            acc.consumeCredit(cost, this.getClass());
+                            AccountDAO.saveAccount(acc);
+                            LotteryDAO.saveLottery(new Lottery(author.getId(), args[0]));
 
-					LotteryValue lv = LotteryDAO.getLotteryValue();
-					lv.addValue(cost);
-					LotteryDAO.saveLotteryValue(lv);
+                            LotteryValue lv = LotteryDAO.getLotteryValue();
+                            lv.addValue(cost);
+                            LotteryDAO.saveLotteryValue(lv);
 
-					s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Bilhete comprado com sucesso!")).queue();
-				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-					ShiroInfo.getHashes().remove(hash);
-					Main.getInfo().getConfirmationPending().invalidate(author.getId());
-				})
-		);
-	}
+                            s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Bilhete comprado com sucesso!")).queue();
+                        }), true, 1, TimeUnit.MINUTES,
+                        u -> u.getId().equals(author.getId()),
+                        ms -> {
+                            ShiroInfo.getHashes().remove(hash);
+                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                        })
+                );
+    }
 }
