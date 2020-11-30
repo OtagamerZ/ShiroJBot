@@ -27,7 +27,7 @@ public enum Charm {
 	SPELLSHIELD("Escudo de feitiços"),
 	SPELLMIRROR("Reflexo de feitiços"),
 	TIMEWARP("Salto temporal"),
-	DOUBLED("Dobrado");
+	DOUBLETAP("Toque duplo");
 
 	private final String name;
 
