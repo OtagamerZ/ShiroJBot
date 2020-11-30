@@ -492,7 +492,7 @@ public class GuildConfig {
 	}
 
 	public List<Category> getDisabledModules() {
-		return disabledModules == null ? List.of() : Arrays.stream(disabledModules.split(",")).map(Category::valueOf).collect(Collectors.toList());
+		return disabledModules.isBlank() ? List.of() : Arrays.stream(disabledModules.split(",")).map(Category::valueOf).collect(Collectors.toList());
 	}
 
 	public void setDisabledModules(List<Category> disabledModules) {
