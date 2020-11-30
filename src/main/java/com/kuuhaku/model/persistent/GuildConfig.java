@@ -33,7 +33,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -491,12 +490,21 @@ public class GuildConfig {
 		return exceedRolesEnabled;
 	}
 
-	public List<Category> getDisabledModules() {
-		return disabledModules.isBlank() ? List.of() : Arrays.stream(disabledModules.split(",")).map(Category::valueOf).collect(Collectors.toList());
+	public List<String> getDisabledModules() {
+		if (disabledModules.isBlank()) return new ArrayList<>();
+		else return new JSONArray(disabledModules).toList().stream().map(String::valueOf).collect(Collectors.toList());
 	}
 
-	public void setDisabledModules(List<Category> disabledModules) {
-		this.disabledModules = disabledModules.stream().map(Category::name).collect(Collectors.joining(","));
+	public void addDisabledModule(Category c) {
+		List<String> ph = new ArrayList<>(getDisabledModules());
+		ph.add(c.name());
+		disabledModules = new JSONArray(ph).toString();
+	}
+
+	public void removeDisabledModule(Category c) {
+		List<String> ph = new ArrayList<>(getDisabledModules());
+		ph.removeIf(s -> s.equals(c.name()));
+		disabledModules = new JSONArray(ph).toString();
 	}
 
 	public JSONObject getButtonConfigs() {
