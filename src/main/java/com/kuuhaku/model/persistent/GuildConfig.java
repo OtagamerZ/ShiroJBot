@@ -492,21 +492,11 @@ public class GuildConfig {
 	}
 
 	public List<Category> getDisabledModules() {
-		List<Category> cats = new ArrayList<>();
-		if (Helper.getOr(disabledModules, null) == null) return cats;
-		String[] dmods = disabledModules.split(",");
-		for (String mod : dmods) {
-			try {
-				cats.add(Category.getByName(mod));
-			} catch (IndexOutOfBoundsException e) {
-				return cats;
-			}
-		}
-		return cats;
+		return disabledModules == null ? List.of() : Arrays.stream(disabledModules.split(",")).map(Category::valueOf).collect(Collectors.toList());
 	}
 
 	public void setDisabledModules(List<Category> disabledModules) {
-		this.disabledModules = Arrays.toString(disabledModules.toArray()).replace("[", "").replace("]", "").replace(" ", "");
+		this.disabledModules = disabledModules.stream().map(Category::name).collect(Collectors.joining(","));
 	}
 
 	public JSONObject getButtonConfigs() {
