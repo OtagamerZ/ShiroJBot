@@ -24,6 +24,7 @@ import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.model.persistent.ExceedScore;
 import com.kuuhaku.model.persistent.MonthWinner;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -37,264 +38,275 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExceedDAO {
-	public static void unblock() {
-		EntityManager em = Manager.getEntityManager();
+    public static void unblock() {
+        EntityManager em = Manager.getEntityManager();
 
-		em.getTransaction().begin();
-		em.createQuery("UPDATE ExceedMember em SET em.blocked = false WHERE em.blocked = true").executeUpdate();
-		em.getTransaction().commit();
+        em.getTransaction().begin();
+        em.createQuery("UPDATE ExceedMember em SET em.blocked = false WHERE em.blocked = true").executeUpdate();
+        em.getTransaction().commit();
 
-		em.close();
-	}
+        em.close();
+    }
 
-	public static boolean hasExceed(String id) {
-		EntityManager em = Manager.getEntityManager();
+    public static boolean hasExceed(String id) {
+        EntityManager em = Manager.getEntityManager();
 
-		try {
-			ExceedMember ex = em.find(ExceedMember.class, id);
-			return ex != null && !ex.getExceed().isBlank();
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            ExceedMember ex = em.find(ExceedMember.class, id);
+            return ex != null && !ex.getExceed().isBlank();
+        } finally {
+            em.close();
+        }
+    }
 
-	public static String getExceed(String id) {
-		EntityManager em = Manager.getEntityManager();
+    public static String getExceed(String id) {
+        EntityManager em = Manager.getEntityManager();
 
-		try {
-			return em.find(ExceedMember.class, id).getExceed();
-		} catch (NullPointerException e) {
-			return "";
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return em.find(ExceedMember.class, id).getExceed();
+        } catch (NullPointerException e) {
+            return "";
+        } finally {
+            em.close();
+        }
+    }
 
-	public static void removeMember(ExceedMember ex) {
-		EntityManager em = Manager.getEntityManager();
+    public static void removeMember(ExceedMember ex) {
+        EntityManager em = Manager.getEntityManager();
 
-		em.getTransaction().begin();
-		Query q = em.createQuery("DELETE FROM Member WHERE id = :id");
-		q.setParameter("id", ex.getId());
-		q.executeUpdate();
-		em.getTransaction().commit();
+        em.getTransaction().begin();
+        Query q = em.createQuery("DELETE FROM Member WHERE id = :id");
+        q.setParameter("id", ex.getId());
+        q.executeUpdate();
+        em.getTransaction().commit();
 
-		em.close();
-	}
+        em.close();
+    }
 
-	public static ExceedState getExceedState(String exceed) {
-		if (exceed.isBlank()) return new ExceedState(-1, "", 0);
+    public static ExceedState getExceedState(String exceed) {
+        if (exceed.isBlank()) return new ExceedState(-1, "", 0);
 
-		@SuppressWarnings("SuspiciousMethodCalls")
-		int pos = Arrays.stream(ExceedEnum.values())
-						  .map(ExceedDAO::getExceed)
-						  .sorted(Comparator.comparingLong(Exceed::getExp).reversed())
-						  .collect(Collectors.toList())
-						  .indexOf(ExceedEnum.getByName(exceed)) + 1;
+        @SuppressWarnings("SuspiciousMethodCalls")
+        int pos = Arrays.stream(ExceedEnum.values())
+                .map(ExceedDAO::getExceed)
+                .sorted(Comparator.comparingLong(Exceed::getExp).reversed())
+                .collect(Collectors.toList())
+                .indexOf(ExceedEnum.getByName(exceed)) + 1;
 
-		return new ExceedState(ExceedEnum.getByName(exceed).ordinal(), exceed, pos);
-	}
+        return new ExceedState(ExceedEnum.getByName(exceed).ordinal(), exceed, pos);
+    }
 
-	public static void saveExceedMember(ExceedMember ex) {
-		if (BlacklistDAO.isBlacklisted(ex.getId())) return;
-		EntityManager em = Manager.getEntityManager();
+    public static void saveExceedMember(ExceedMember ex) {
+        if (BlacklistDAO.isBlacklisted(ex.getId())) return;
+        EntityManager em = Manager.getEntityManager();
 
-		em.getTransaction().begin();
-		em.merge(ex);
-		em.getTransaction().commit();
+        em.getTransaction().begin();
+        em.merge(ex);
+        em.getTransaction().commit();
 
-		em.close();
-	}
+        em.close();
+    }
 
-	@SuppressWarnings("unchecked")
-	public static List<ExceedMember> getExceedMembers(ExceedEnum ex) {
-		EntityManager em = Manager.getEntityManager();
+    @SuppressWarnings("unchecked")
+    public static List<ExceedMember> getExceedMembers(ExceedEnum ex) {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT ex FROM ExceedMember ex WHERE ex.exceed = :exceed", ExceedMember.class);
-		q.setParameter("exceed", ex.getName());
+        Query q = em.createQuery("SELECT ex FROM ExceedMember ex WHERE ex.exceed = :exceed", ExceedMember.class);
+        q.setParameter("exceed", ex.getName());
 
-		List<ExceedMember> members = q.getResultList();
-		em.close();
+        List<ExceedMember> members = q.getResultList();
+        em.close();
 
-		return members;
-	}
+        return members;
+    }
 
-	@SuppressWarnings("unchecked")
-	public static List<ExceedMember> getExceedMembers() {
-		EntityManager em = Manager.getEntityManager();
+    @SuppressWarnings("unchecked")
+    public static List<ExceedMember> getExceedMembers() {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT ex FROM ExceedMember ex", ExceedMember.class);
+        Query q = em.createQuery("SELECT ex FROM ExceedMember ex", ExceedMember.class);
 
-		List<ExceedMember> members = q.getResultList();
-		em.close();
+        List<ExceedMember> members = q.getResultList();
+        em.close();
 
-		return members;
-	}
+        return members;
+    }
 
-	public static ExceedMember getExceedMember(String id) {
-		EntityManager em = Manager.getEntityManager();
+    public static ExceedMember getExceedMember(String id) {
+        EntityManager em = Manager.getEntityManager();
 
-		try {
-			return em.find(ExceedMember.class, id);
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return em.find(ExceedMember.class, id);
+        } finally {
+            em.close();
+        }
+    }
 
-	@SuppressWarnings({"unchecked", "SqlResolve"})
-	public static Exceed getExceed(ExceedEnum ex) {
-		EntityManager em = Manager.getEntityManager();
+    @SuppressWarnings({"unchecked", "SqlResolve"})
+    public static Exceed getExceed(ExceedEnum ex) {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(ex) FROM ExceedMember ex WHERE ex.exceed = :exceed");
-		q.setParameter("exceed", ex.getName());
+        Query q = em.createQuery("SELECT COUNT(ex) FROM ExceedMember ex WHERE ex.exceed = :exceed");
+        q.setParameter("exceed", ex.getName());
 
-		Query points = em.createNativeQuery("SELECT e.points FROM shiro.\"GetCurrentExceedScores\" e WHERE e.exceed = :exceed");
-		points.setParameter("exceed", ex.getName());
+        Query points = em.createNativeQuery("SELECT e.points FROM shiro.\"GetCurrentExceedScores\" e WHERE e.exceed = :exceed");
+        points.setParameter("exceed", ex.getName());
 
-		int memberCount = ((Long) q.getSingleResult()).intValue();
+        int memberCount = ((Long) q.getSingleResult()).intValue();
 
-		try {
-			return new Exceed(ex, memberCount, ((BigDecimal) points.getSingleResult()).longValue());
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return new Exceed(ex, memberCount, ((BigDecimal) points.getSingleResult()).longValue());
+        } finally {
+            em.close();
+        }
+    }
 
-	@SuppressWarnings({"SqlResolve", "unchecked"})
-	public static ExceedEnum findWinner() {
-		EntityManager em = Manager.getEntityManager();
+    @SuppressWarnings({"SqlResolve", "unchecked"})
+    public static ExceedEnum findWinner() {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT e.exceed FROM shiro.\"GetCurrentExceedScores\" e");
+        Query q = em.createNativeQuery("SELECT e.exceed FROM shiro.\"GetCurrentExceedScores\" e");
 
-		List<Object> ex = q.getResultList();
-		em.close();
+        List<Object> ex = q.getResultList();
+        em.close();
 
-		Object winner = ex.get(0);
+        Object winner = ex.get(0);
 
-		return ExceedEnum.getByName(String.valueOf(winner));
-	}
+        return ExceedEnum.getByName(String.valueOf(winner));
+    }
 
-	public static void markWinner(ExceedEnum ex) {
-		EntityManager em = Manager.getEntityManager();
+    public static void markWinner(ExceedEnum ex) {
+        EntityManager em = Manager.getEntityManager();
 
-		MonthWinner m = new MonthWinner();
-		m.setExceed(ex.getName());
+        MonthWinner m = new MonthWinner();
+        m.setExceed(ex.getName());
 
-		saveScores();
+        saveScores();
 
-		em.getTransaction().begin();
-		em.merge(m);
-		em.getTransaction().commit();
+        em.getTransaction().begin();
+        em.merge(m);
+        em.getTransaction().commit();
 
-		getExceedMembers().forEach(e -> {
-			e.resetContribution();
-			saveExceedMember(e);
-		});
+        getExceedMembers().forEach(e -> {
+            e.resetContribution();
+            saveExceedMember(e);
+        });
 
-		em.close();
-	}
+        em.close();
+    }
 
-	public static String getWinner() {
-		EntityManager em = Manager.getEntityManager();
+    public static String getWinner() {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT w FROM MonthWinner w ORDER BY id DESC", MonthWinner.class);
-		q.setMaxResults(1);
-		try {
-			MonthWinner winner = (MonthWinner) q.getSingleResult();
+        Query q = em.createQuery("SELECT w FROM MonthWinner w ORDER BY id DESC", MonthWinner.class);
+        q.setMaxResults(1);
+        try {
+            MonthWinner winner = (MonthWinner) q.getSingleResult();
 
-			if (LocalDate.now().isBefore(winner.getExpiry())) {
-				return winner.getExceed();
-			} else {
-				return "none";
-			}
-		} catch (NoResultException | IndexOutOfBoundsException e) {
-			return "none";
-		} finally {
-			em.close();
-		}
-	}
+            if (LocalDate.now().isBefore(winner.getExpiry())) {
+                return winner.getExceed();
+            } else {
+                return "none";
+            }
+        } catch (NoResultException | IndexOutOfBoundsException e) {
+            return "none";
+        } finally {
+            em.close();
+        }
+    }
 
-	public static String getLeader(ExceedEnum ex) {
-		EntityManager em = Manager.getEntityManager();
+    public static String getLeader(ExceedEnum ex) {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m.mid FROM Member m WHERE m.mid IN (SELECT em.id FROM ExceedMember em WHERE em.exceed = :exceed) GROUP BY m.mid ORDER BY SUM(m.xp) DESC", String.class);
-		q.setParameter("exceed", ex.getName());
-		q.setMaxResults(1);
+        Query q = em.createQuery("SELECT m.mid FROM Member m WHERE m.mid IN (SELECT em.id FROM ExceedMember em WHERE em.exceed = :exceed) GROUP BY m.mid ORDER BY SUM(m.xp) DESC", String.class);
+        q.setParameter("exceed", ex.getName());
+        q.setMaxResults(1);
 
-		try {
-			return String.valueOf(q.getSingleResult());
-		} catch (NoResultException e) {
-			return null;
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return String.valueOf(q.getSingleResult());
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
 
-	public static float getPercentage(ExceedEnum ex) {
-		EntityManager em = Manager.getEntityManager();
+    public static float getPercentage(ExceedEnum ex) {
+        EntityManager em = Manager.getEntityManager();
 
-		Query exceed = em.createQuery("SELECT COUNT(e) FROM ExceedMember e WHERE e.exceed = :ex", Long.class);
-		Query total = em.createQuery("SELECT COUNT(e) FROM ExceedMember e", Long.class);
-		exceed.setParameter("ex", ex.getName());
+        Query exceed = em.createQuery("SELECT COUNT(e) FROM ExceedMember e WHERE e.exceed = :ex", Long.class);
+        Query total = em.createQuery("SELECT COUNT(e) FROM ExceedMember e", Long.class);
+        exceed.setParameter("ex", ex.getName());
 
-		try {
-			return ((Long) exceed.getSingleResult()).floatValue() / ((Long) total.getSingleResult()).floatValue();
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return ((Long) exceed.getSingleResult()).floatValue() / ((Long) total.getSingleResult()).floatValue();
+        } finally {
+            em.close();
+        }
+    }
 
-	public static double getMemberShare(String id) {
-		EntityManager em = Manager.getEntityManager();
+    public static double getMemberShare(String id) {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT em.contribution / (SELECT SUM(emi.contribution) FROM ExceedMember emi WHERE emi.exceed = em.exceed) FROM ExceedMember em WHERE em.id = :id");
-		q.setParameter("id", id);
+        Query q = em.createNativeQuery("""
+                SELECT x.prcnt
+                FROM (
+                         SELECT em.id 
+                              , em.contribution /
+                                NULLIF((SELECT SUM(emi.contribution) FROM ExceedMember emi WHERE emi.exceed = em.exceed), 0) AS prcnt
+                         FROM ExceedMember em
+                         WHERE em.exceed <> ''
+                     ) x
+                WHERE x.prcnt IS NOT NULL
+                AND x.id = :id
+                """);
+        q.setParameter("id", id);
 
-		try {
-			return ((BigDecimal) q.getSingleResult()).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return Helper.getOr((BigDecimal) q.getSingleResult(), new BigDecimal(0)).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+        } finally {
+            em.close();
+        }
+    }
 
-	@SuppressWarnings({"unchecked"})
-	public static List<ExceedScore> getExceedHistory(ExceedEnum ex) {
-		EntityManager em = Manager.getEntityManager();
+    @SuppressWarnings({"unchecked"})
+    public static List<ExceedScore> getExceedHistory(ExceedEnum ex) {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT e FROM ExceedScore e WHERE e.exceed = :ex AND YEAR(e.timestamp) = YEAR(CURRENT_DATE)", ExceedScore.class);
-		q.setParameter("ex", ex);
+        Query q = em.createQuery("SELECT e FROM ExceedScore e WHERE e.exceed = :ex AND YEAR(e.timestamp) = YEAR(CURRENT_DATE)", ExceedScore.class);
+        q.setParameter("ex", ex);
 
-		try {
-			return q.getResultList();
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 
-	public static void saveScores() {
-		EntityManager em = Manager.getEntityManager();
+    public static void saveScores() {
+        EntityManager em = Manager.getEntityManager();
 
-		for (ExceedEnum ee : ExceedEnum.values()) {
-			Exceed ex = getExceed(ee);
+        for (ExceedEnum ee : ExceedEnum.values()) {
+            Exceed ex = getExceed(ee);
 
-			em.getTransaction().begin();
-			em.merge(new ExceedScore(ee, ex.getExp(), LocalDate.now()));
-			em.getTransaction().commit();
-		}
+            em.getTransaction().begin();
+            em.merge(new ExceedScore(ee, ex.getExp(), LocalDate.now()));
+            em.getTransaction().commit();
+        }
 
-		em.close();
-	}
+        em.close();
+    }
 
-	public static boolean verifyMonth() {
-		EntityManager em = Manager.getEntityManager();
+    public static boolean verifyMonth() {
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT es FROM ExceedScore es WHERE es.timestamp = :date");
-		q.setParameter("date", LocalDate.now());
+        Query q = em.createQuery("SELECT es FROM ExceedScore es WHERE es.timestamp = :date");
+        q.setParameter("date", LocalDate.now());
 
-		try {
-			return q.getResultList().size() == 0;
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            return q.getResultList().size() == 0;
+        } finally {
+            em.close();
+        }
+    }
 }

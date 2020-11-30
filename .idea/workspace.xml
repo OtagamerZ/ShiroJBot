@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ExceedDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ExceedDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -873,6 +874,7 @@
       <workItem from="1606673905928" duration="1563000" />
       <workItem from="1606698348766" duration="683000" />
       <workItem from="1606764546893" duration="2707000" />
+      <workItem from="1606777776914" duration="854000" />
     </task>
     <task id="LOCAL-02965" summary="Correção na chamada de remoção de mensagens antigas durante jogos">
       <created>1606228954544</created>
