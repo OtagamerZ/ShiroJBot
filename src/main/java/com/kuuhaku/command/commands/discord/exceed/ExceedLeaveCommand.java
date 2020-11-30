@@ -36,57 +36,59 @@ import java.util.concurrent.TimeUnit;
 
 public class ExceedLeaveCommand extends Command {
 
-	public ExceedLeaveCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
+    public ExceedLeaveCommand(String name, String description, Category category, boolean requiresMM) {
+        super(name, description, category, requiresMM);
+    }
 
-	public ExceedLeaveCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
+    public ExceedLeaveCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+        super(name, aliases, description, category, requiresMM);
+    }
 
-	public ExceedLeaveCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
+    public ExceedLeaveCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+        super(name, usage, description, category, requiresMM);
+    }
 
-	public ExceedLeaveCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+    public ExceedLeaveCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+        super(name, aliases, usage, description, category, requiresMM);
+    }
 
-	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		}
+    @Override
+    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        }
 
-		ExceedMember em = ExceedDAO.getExceedMember(author.getId());
+        ExceedMember em = ExceedDAO.getExceedMember(author.getId());
 
-		if (em == null || em.getExceed().isBlank()) {
-			channel.sendMessage("❌ | Você não faz parte de nenhum Exceed atualmente.").queue();
-			return;
-		}
+        if (em == null || em.getExceed().isBlank()) {
+            channel.sendMessage("❌ | Você não faz parte de nenhum Exceed atualmente.").queue();
+            return;
+        }
 
-		boolean willLock = ZonedDateTime.now(ZoneId.of("GMT-3")).getDayOfMonth() > 5;
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
-		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		String name = em.getExceed();
-		channel.sendMessage(":warning: | Sair da " + name + " irá zerar seus pontos de contribuição" + (willLock ? " e fará com que você não possa escolher outro Exceed até o próximo mês" : "") + ". Deseja confirmar sua escolha?").queue(s ->
-				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-					if (!ShiroInfo.getHashes().remove(hash)) return;
-					Main.getInfo().getConfirmationPending().invalidate(author.getId());
-					if (mb.getId().equals(author.getId())) {
-						if (willLock) em.setBlocked(true);
-						em.setExceed("");
-						em.resetContribution();
-						ExceedDAO.saveExceedMember(em);
-						s.delete().queue(null, Helper::doNothing);
-						channel.sendMessage("Você saiu da " + name + " com sucesso!").queue();
-					}
-				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-					ShiroInfo.getHashes().remove(hash);
-					Main.getInfo().getConfirmationPending().invalidate(author.getId());
-				})
-		);
-	}
+        boolean willLock = ZonedDateTime.now(ZoneId.of("GMT-3")).getDayOfMonth() > 5;
+        String hash = Helper.generateHash(guild, author);
+        ShiroInfo.getHashes().add(hash);
+        Main.getInfo().getConfirmationPending().put(author.getId(), true);
+        String name = em.getExceed();
+        channel.sendMessage(":warning: | Sair da " + name + " irá zerar seus pontos de contribuição" + (willLock ? " e fará com que você não possa escolher outro Exceed até o próximo mês" : "") + ". Deseja confirmar sua escolha?").queue(s ->
+                Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+                            if (mb.getId().equals(author.getId())) {
+                                if (!ShiroInfo.getHashes().remove(hash)) return;
+                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                if (willLock) em.setBlocked(true);
+                                em.setExceed("");
+                                em.resetContribution();
+                                ExceedDAO.saveExceedMember(em);
+                                s.delete().queue(null, Helper::doNothing);
+                                channel.sendMessage("Você saiu da " + name + " com sucesso!").queue();
+                            }
+                        }), true, 1, TimeUnit.MINUTES,
+                        u -> u.getId().equals(author.getId()),
+                        ms -> {
+                            ShiroInfo.getHashes().remove(hash);
+                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                        })
+        );
+    }
 }

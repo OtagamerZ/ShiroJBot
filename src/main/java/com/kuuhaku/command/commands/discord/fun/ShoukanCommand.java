@@ -121,9 +121,9 @@ public class ShoukanCommand extends Command {
         Game t = new Shoukan(Main.getInfo().getAPI(), (TextChannel) channel, bet, custom, daily, author, message.getMentionedUsers().get(0));
         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-                            if (!ShiroInfo.getHashes().remove(hash)) return;
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
                             if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+                                if (!ShiroInfo.getHashes().remove(hash)) return;
+                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
                                 if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
                                     channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
                                     return;
