@@ -1617,7 +1617,7 @@ public class Helper {
 		wmb.setUsername("Stephanie (Notificações Shiro)");
 		wmb.setAvatarUrl("https://i.imgur.com/OmiNNMF.png"); //Halloween
 		//wmb.setAvatarUrl("https://i.imgur.com/mgA11Rx.png"); //Normal
-		wmb.setContent(message);
+		wmb.setContent(message.replace("\\n", "\n"));
 		WebhookCluster cluster = new WebhookCluster(clients);
 		cluster.broadcast(wmb.build());
 		if (channel != null)
