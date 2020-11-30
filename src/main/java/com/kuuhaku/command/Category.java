@@ -67,7 +67,7 @@ public enum Category {
 	}
 
 	public static Category getByName(String name) throws ArrayIndexOutOfBoundsException {
-		return Arrays.stream(Category.values()).filter(c -> c.name.equalsIgnoreCase(name)).collect(Collectors.toList()).get(0);
+		return Arrays.stream(Category.values()).filter(c -> c.name.equalsIgnoreCase(name) || c.name().equalsIgnoreCase(name)).findFirst().orElse(null);
 	}
 
 	public String getDescription() {

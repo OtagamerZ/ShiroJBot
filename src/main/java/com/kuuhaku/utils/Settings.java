@@ -586,16 +586,16 @@ public class Settings {
 				if (!antigoModulo.contains(Category.getByName(args[1]))) {
 					message.getTextChannel().sendMessage("❌ | Esse módulo já está ativado.").queue();
 					return;
-				} else {
-					antigoModulo.remove(Category.getByName(args[1]));
 				}
+
+				antigoModulo.remove(Category.getByName(args[1]));
 			} else if (Helper.equalsAny(args[2].toLowerCase(), "desligado", "disabled", "off")) {
 				if (antigoModulo.contains(Category.getByName(args[1]))) {
 					message.getTextChannel().sendMessage("❌ | Esse módulo já está desativado.").queue();
 					return;
-				} else {
-					antigoModulo.add(Category.getByName(args[1]));
 				}
+
+				antigoModulo.add(Category.getByName(args[1]));
 			} else {
 				message.getTextChannel().sendMessage("❌ | O terceiro argumento deve ser ligado ou desligado").queue();
 				return;
