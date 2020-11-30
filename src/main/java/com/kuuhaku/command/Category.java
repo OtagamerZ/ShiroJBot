@@ -88,7 +88,7 @@ public enum Category {
 			return false;
 		} else if (this == BETA && (!TagDAO.getTagById(g.getOwnerId()).isBeta() && !ShiroInfo.getStaff().contains(u.getId()))) {
 			return false;
-		} else return !gc.getDisabledModules().contains(this);
+		} else return !gc.getDisabledModules().contains(name());
 	}
 
 	public String getEmote() {
