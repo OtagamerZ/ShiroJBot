@@ -169,33 +169,17 @@ public class Account {
 	}
 
 	public synchronized long debitLoan() {
-		long remaining = loan;
-		long paid = 0;
+		long stBalance = balance;
 
-		if (vBalance >= remaining) {
-			vBalance -= remaining;
-			paid = 0;
-			remaining = 0;
-		} else if (vBalance > 0) {
-			paid += vBalance;
-			remaining -= vBalance;
-			vBalance = 0;
-		}
+		if (balance >= loan) {
+			balance -= loan;
+			loan = 0;
+		} else {
+			loan -= balance;
+			balance = 0;
+		} 
 
-		if (remaining > 0) {
-			if (balance >= remaining) {
-				balance -= remaining;
-				paid = 0;
-				remaining = 0;
-			} else if (balance > 0) {
-				paid += balance;
-				remaining -= balance;
-				balance = 0;
-			}
-		}
-
-		loan = remaining;
-		return paid;
+		return stBalance - balance;
 	}
 
 	public synchronized void removeCredit(long credit, Class<?> from) {
