@@ -86,6 +86,7 @@ public abstract class Game {
 
 	public void resetTimer() {
 		if (timeout != null) timeout.cancel(true);
+		timeout = null;
 		round++;
 		Player p = null;
 		while (p == null || !p.isInGame()) {
@@ -110,6 +111,7 @@ public abstract class Game {
 
 	public void resetTimer(Shoukan shkn) {
 		if (timeout != null) timeout.cancel(true);
+		timeout = null;
 
 		Hand top = shkn.getHands().get(Side.TOP);
 		Hand bot = shkn.getHands().get(Side.BOTTOM);
