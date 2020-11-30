@@ -875,20 +875,6 @@
       <workItem from="1606673905928" duration="1563000" />
       <workItem from="1606698348766" duration="683000" />
     </task>
-    <task id="LOCAL-02959" summary="Criação do jogo &quot;Adivinhe as cartas&quot;">
-      <created>1606164522092</created>
-      <option name="number" value="02959" />
-      <option name="presentableId" value="LOCAL-02959" />
-      <option name="project" value="LOCAL" />
-      <updated>1606164522092</updated>
-    </task>
-    <task id="LOCAL-02960" summary="Melhoria no gerenciamento de eventos de mensagens e jogos">
-      <created>1606224338116</created>
-      <option name="number" value="02960" />
-      <option name="presentableId" value="LOCAL-02960" />
-      <option name="project" value="LOCAL" />
-      <updated>1606224338116</updated>
-    </task>
     <task id="LOCAL-02961" summary="Melhoria no gerenciamento de eventos de mensagens e jogos">
       <created>1606225025340</created>
       <option name="number" value="02961" />
@@ -1218,7 +1204,21 @@
       <option name="project" value="LOCAL" />
       <updated>1606674489991</updated>
     </task>
-    <option name="localTasksCounter" value="3008" />
+    <task id="LOCAL-03008" summary="Correção na desabilitação de módulos">
+      <created>1606757309428</created>
+      <option name="number" value="03008" />
+      <option name="presentableId" value="LOCAL-03008" />
+      <option name="project" value="LOCAL" />
+      <updated>1606757309428</updated>
+    </task>
+    <task id="LOCAL-03009" summary="Correção na desabilitação de módulos">
+      <created>1606757450094</created>
+      <option name="number" value="03009" />
+      <option name="presentableId" value="LOCAL-03009" />
+      <option name="project" value="LOCAL" />
+      <updated>1606757450094</updated>
+    </task>
+    <option name="localTasksCounter" value="3010" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1284,7 +1284,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no GuessTheCards" />
     <MESSAGE value="Correção na chamada de remoção de mensagens antigas durante jogos" />
     <MESSAGE value="Legenda dos gráficos agora é semi-transparente" />
     <MESSAGE value="Correção do exploit que usava dívidas para trocar créditos voláteis por créditos normais" />
@@ -1309,7 +1308,8 @@
     <MESSAGE value="Adição de método necessário para o funcionamento da carta Shikoutazer" />
     <MESSAGE value="Correção menor" />
     <MESSAGE value="Correção das confirmações" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção das confirmações" />
+    <MESSAGE value="Correção na desabilitação de módulos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na desabilitação de módulos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1370,10 +1370,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606498264852">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606757447162">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606498264852" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606757447162" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1606176807594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1422,10 +1422,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606756426380">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606757451241">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606756426380" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606757451241" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606674495918" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
