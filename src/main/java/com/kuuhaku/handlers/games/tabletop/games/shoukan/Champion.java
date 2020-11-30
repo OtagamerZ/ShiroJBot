@@ -85,6 +85,8 @@ public class Champion implements Drawable, Cloneable {
 	private transient int altDef = -1;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
+	private transient int redAtk = 0;
+	private transient int redDef = 0;
 	private transient int stun = 0;
 
 	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
@@ -298,11 +300,11 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getAtk() {
-		return (altAtk == -1 ? atk : altAtk) + bonus.getAtk();
+		return (altAtk == -1 ? atk : altAtk) - redAtk + bonus.getAtk();
 	}
 
 	public int getDef() {
-		return (altDef == -1 ? def : altDef) + bonus.getDef();
+		return (altDef == -1 ? def : altDef) - redDef + bonus.getDef();
 	}
 
 	public int getAltAtk() {
@@ -319,6 +321,22 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setAltDef(int altDef) {
 		this.altDef = altDef;
+	}
+
+	public int getRedAtk() {
+		return redAtk;
+	}
+
+	public void setRedAtk(int redAtk) {
+		this.redAtk = redAtk;
+	}
+
+	public int getRedDef() {
+		return redDef;
+	}
+
+	public void setRedDef(int redDef) {
+		this.redDef = redDef;
 	}
 
 	public int getEAtk() {
@@ -414,6 +432,8 @@ public class Champion implements Drawable, Cloneable {
 		mDef = 0;
 		altAtk = -1;
 		altDef = -1;
+		redAtk = 0;
+		redDef = 0;
 		stun = 0;
 	}
 

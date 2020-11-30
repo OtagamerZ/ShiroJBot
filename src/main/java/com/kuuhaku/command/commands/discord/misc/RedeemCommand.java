@@ -34,55 +34,57 @@ import java.util.concurrent.TimeUnit;
 
 public class RedeemCommand extends Command {
 
-	public RedeemCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
+    public RedeemCommand(String name, String description, Category category, boolean requiresMM) {
+        super(name, description, category, requiresMM);
+    }
 
-	public RedeemCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
+    public RedeemCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+        super(name, aliases, description, category, requiresMM);
+    }
 
-	public RedeemCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
+    public RedeemCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+        super(name, usage, description, category, requiresMM);
+    }
 
-	public RedeemCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+    public RedeemCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+        super(name, aliases, usage, description, category, requiresMM);
+    }
 
-	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		}
+    @Override
+    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        }
 
-		Account acc = AccountDAO.getAccount(author.getId());
+        Account acc = AccountDAO.getAccount(author.getId());
 
-		if (acc.getStreak() < 7) {
-			channel.sendMessage("❌ | Você não chegou no acúmulo máximo de votos ainda (" + acc.getStreak() + " de 7)").queue();
-			return;
-		}
+        if (acc.getStreak() < 7) {
+            channel.sendMessage("❌ | Você não chegou no acúmulo máximo de votos ainda (" + acc.getStreak() + " de 7)").queue();
+            return;
+        }
 
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
-		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Deseja realmente trocar seu acúmulo de 7 votos por uma gema?").queue(s ->
-				Pages.buttonize(s, Map.of(Helper.ACCEPT, (m, ms) -> {
-					if (!ShiroInfo.getHashes().remove(hash)) return;
-					Main.getInfo().getConfirmationPending().invalidate(author.getId());
-					if (m.getId().equals(author.getId())) {
-						acc.setStreak(0);
-						acc.addGem();
-						AccountDAO.saveAccount(acc);
+        String hash = Helper.generateHash(guild, author);
+        ShiroInfo.getHashes().add(hash);
+        Main.getInfo().getConfirmationPending().put(author.getId(), true);
+        channel.sendMessage("Deseja realmente trocar seu acúmulo de 7 votos por uma gema?")
+                .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (m, ms) -> {
+                            if (m.getId().equals(author.getId())) {
+                                if (!ShiroInfo.getHashes().remove(hash)) return;
+                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                acc.setStreak(0);
+                                acc.addGem();
+                                AccountDAO.saveAccount(acc);
 
-						s.delete().queue();
-						channel.sendMessage("Gema adquirida com sucesso! Use `" + prefix + "vip` para ver a loja de gemas.").queue();
-					}
-				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-					ShiroInfo.getHashes().remove(hash);
-					Main.getInfo().getConfirmationPending().invalidate(author.getId());
-				})
-		);
-	}
+                                s.delete().queue();
+                                channel.sendMessage("Gema adquirida com sucesso! Use `" + prefix + "vip` para ver a loja de gemas.").queue();
+                            }
+                        }), true, 1, TimeUnit.MINUTES,
+                        u -> u.getId().equals(author.getId()),
+                        ms -> {
+                            ShiroInfo.getHashes().remove(hash);
+                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                        })
+                );
+    }
 }

@@ -48,7 +48,7 @@ public class PayLoanCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (acc.getBalance() <= 0 && acc.getLoan() > 0) {
-			channel.sendMessage("❌ | Você não têm créditos suficientes para reduzir sua dívida.").queue();
+			channel.sendMessage("❌ | Você não têm créditos suficientes para reduzir sua dívida (não é possível pagar com créditos voláteis).").queue();
 			return;
 		} else if (acc.getLoan() == 0) {
 			channel.sendMessage("❌ | Você não está devendo nada (ao menos não para mim :wink:).").queue();
