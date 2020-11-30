@@ -49,9 +49,6 @@ public class MonthlyEvent implements Job {
 
 	public static void call() {
 		if (ExceedDAO.verifyMonth()) {
-			ExceedDAO.markWinner(ExceedDAO.findWinner());
-			Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
-
 			String ex = ExceedDAO.getWinner();
 			ExceedEnum ee = ExceedEnum.getByName(ex);
 			ExceedDAO.getExceedMembers(ee).forEach(em -> {
@@ -81,6 +78,9 @@ public class MonthlyEvent implements Job {
 			});
 
 			ExceedDAO.unblock();
+
+			ExceedDAO.markWinner(ExceedDAO.findWinner());
+			Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
 		}
 
 		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
