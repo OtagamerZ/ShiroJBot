@@ -19,48 +19,47 @@
 package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
-import java.time.Clock;
-import java.time.Instant;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 @Entity
 @Table(name = "blacklist")
 public class Blacklist {
-	@Id
-	@Column(columnDefinition = "VARCHAR(191)")
-	private String id;
+    @Id
+    @Column(columnDefinition = "VARCHAR(191)")
+    private String id;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String blockedBy = "";
+    @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+    private String blockedBy = "";
 
-	@Temporal(TemporalType.DATE)
-	private Date blockDate = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
+    @Temporal(TemporalType.DATE)
+    private Calendar blockDate = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
 
-	public Blacklist(String id, String by) {
-		this.id = id;
-		this.blockedBy = by;
-	}
+    public Blacklist(String id, String by) {
+        this.id = id;
+        this.blockedBy = by;
+    }
 
-	public Blacklist() {
-	}
+    public Blacklist() {
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getBlockedBy() {
-		return blockedBy;
-	}
+    public String getBlockedBy() {
+        return blockedBy;
+    }
 
-	public Date getBlockDate() {
-		return blockDate;
-	}
+    public Calendar getBlockDate() {
+        return blockDate;
+    }
 
-	public boolean canClear() {
-		Instant today = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3")))).toInstant();
+    public boolean canClear() {
+        Calendar today = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+        Calendar lastDaily = this.blockDate;
 
-		return today.isAfter(this.blockDate.toInstant().plus(1, ChronoUnit.MONTHS));
-	}
+        return today.get(Calendar.MONTH) > lastDaily.get(Calendar.MONTH);
+    }
 }
