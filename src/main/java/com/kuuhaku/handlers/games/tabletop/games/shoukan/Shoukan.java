@@ -259,7 +259,7 @@ public class Shoukan extends Game {
                             t.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
                             t.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
                             if (postCombat()) return;
-                        } else if (tp.getCharm() != null && tp.getCharm() == Charm.DOUBLED) {
+                        } else if (tp.getCharm() != null && tp.getCharm() == Charm.DOUBLETAP) {
                             t.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
                             if (postCombat()) return;
                         }
