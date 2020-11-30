@@ -797,7 +797,6 @@ public class Helper {
 	}
 
 	public static InviteAction createInvite(Guild guild) {
-		InviteAction i = null;
 		if (guild.getDefaultChannel() != null) {
 			return guild.getDefaultChannel().createInvite();
 		}
