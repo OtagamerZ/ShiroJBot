@@ -615,6 +615,7 @@ public class Settings {
 		eb.setTitle("⚙ | Painel de ajuda");
 		eb.setDescription("Utilize os comandos a baixo para estabelecer suas configurações.");
 		eb.addField(prefix + "settings prefix", "Altera o prefixo da Shiro no seu servidor.", false);
+		eb.addField(prefix + "settings categoria", "Ativa ou desativa uma categoria de comandos.", false);
 
 		eb.addField(prefix + "settings canalbv", "Define o canal onde a Shiro ira mandar as mensagens de boas-vindas. Para remover esta configuração, use `" + prefix + "settings canalbv reset`.", false);
 		eb.addField(prefix + "settings mensagembv", "Defina uma mensagem de boas-vindas em seu servidor.", false);
