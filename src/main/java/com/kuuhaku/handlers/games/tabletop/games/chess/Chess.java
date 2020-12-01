@@ -146,6 +146,7 @@ public class Chess extends Game {
 						   && Character.isLetter(chars[2])
 						   && Character.isDigit(chars[3]);
 				})
+				.and(e -> !isClosed())
 				.test(evt);
 	}
 
