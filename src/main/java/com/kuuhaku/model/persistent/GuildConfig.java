@@ -470,8 +470,16 @@ public class GuildConfig {
 		kawaiponEnabled = !kawaiponEnabled;
 	}
 
+	public void setKawaiponEnabled(boolean kawaiponEnabled) {
+		this.kawaiponEnabled = kawaiponEnabled;
+	}
+
 	public void toggleDrop() {
 		dropEnabled = !dropEnabled;
+	}
+
+	public void setDropEnabled(boolean dropEnabled) {
+		this.dropEnabled = dropEnabled;
 	}
 
 	public void toggleExceedRoles() {

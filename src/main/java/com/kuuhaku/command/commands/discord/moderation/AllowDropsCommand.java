@@ -66,15 +66,9 @@ public class AllowDropsCommand extends Command {
 				channel.sendMessage("Agora aparecerão drops neste servidor.").queue();
 			}
 		} else {
-			if (gc.isDropEnabled()) {
-				gc.toggleDrop();
-				gc.setCanalDrop(null);
-				channel.sendMessage("Não aparecerão mais drops.").queue();
-			} else {
-				gc.toggleDrop();
-				gc.setCanalDrop(message.getMentionedChannels().get(0).getId());
-				channel.sendMessage("Agora aparecerão drops no canal " + message.getMentionedChannels().get(0).getAsMention() + ".").queue();
-			}
+			gc.setDropEnabled(true);
+			gc.setCanalDrop(message.getMentionedChannels().get(0).getId());
+			channel.sendMessage("Agora aparecerão drops no canal " + message.getMentionedChannels().get(0).getAsMention() + ".").queue();
 		}
 
 		GuildDAO.updateGuildSettings(gc);
