@@ -66,15 +66,9 @@ public class AllowKawaiponCommand extends Command {
 				channel.sendMessage("Agora aparecerão cartas Kawaipon neste servidor.").queue();
 			}
 		} else {
-			if (gc.isKawaiponEnabled()) {
-				gc.toggleKawaipon();
-				gc.setCanalKawaipon(null);
-				channel.sendMessage("Não aparecerão mais cartas Kawaipon.").queue();
-			} else {
-				gc.toggleKawaipon();
-				gc.setCanalKawaipon(message.getMentionedChannels().get(0).getId());
-				channel.sendMessage("Agora aparecerão cartas Kawaipon no canal " + message.getMentionedChannels().get(0).getAsMention() + ".").queue();
-			}
+			gc.setKawaiponEnabled(true);
+			gc.setCanalKawaipon(message.getMentionedChannels().get(0).getId());
+			channel.sendMessage("Agora aparecerão cartas Kawaipon no canal " + message.getMentionedChannels().get(0).getAsMention() + ".").queue();
 		}
 
 		GuildDAO.updateGuildSettings(gc);
