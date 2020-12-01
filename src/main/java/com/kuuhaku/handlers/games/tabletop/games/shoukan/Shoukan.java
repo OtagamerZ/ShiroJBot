@@ -124,6 +124,7 @@ public class Shoukan extends Game {
         return condition
                 .and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
                 .and(e -> StringUtils.isNumeric(e.getMessage().getContentRaw().split(",")[0]) || e.getMessage().getContentRaw().equalsIgnoreCase("reload"))
+                .and(e -> !isClosed())
                 .test(evt);
     }
 

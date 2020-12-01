@@ -52,6 +52,7 @@ public abstract class Game {
 	private Future<?> timeout;
 	private int round = 0;
 	private User current;
+	private boolean closed = false;
 
 	public Game(JDA handler, Board board, TextChannel channel) {
 		this.handler = handler;
@@ -96,9 +97,13 @@ public abstract class Game {
 		assert current != null;
 		if (round > 0)
 			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.queueAfter(3, TimeUnit.MINUTES, onWO);
+					.submitAfter(3, TimeUnit.MINUTES)
+					.thenAccept(onWO)
+					.thenRun(() -> closed = true);
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
+				.submitAfter(3, TimeUnit.MINUTES)
+				.thenAccept(onExpiration)
+				.thenRun(() -> closed = true);
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
@@ -166,9 +171,13 @@ public abstract class Game {
 		assert current != null;
 		if (round > 0)
 			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.queueAfter(3, TimeUnit.MINUTES, onWO);
+					.submitAfter(3, TimeUnit.MINUTES)
+					.thenAccept(onWO)
+					.thenRun(() -> closed = true);
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
+				.submitAfter(3, TimeUnit.MINUTES)
+				.thenAccept(onExpiration)
+				.thenRun(() -> closed = true);
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
@@ -183,9 +192,13 @@ public abstract class Game {
 		if (timeout != null) timeout.cancel(true);
 		if (round > 0)
 			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.queueAfter(3, TimeUnit.MINUTES, onWO);
+					.submitAfter(3, TimeUnit.MINUTES)
+					.thenAccept(onWO)
+					.thenRun(() -> closed = true);
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
+				.submitAfter(3, TimeUnit.MINUTES)
+				.thenAccept(onExpiration)
+				.thenRun(() -> closed = true);
 	}
 
 	public JDA getHandler() {
@@ -222,12 +235,18 @@ public abstract class Game {
 		return history.getRound(round);
 	}
 
+	public boolean isClosed() {
+		return closed;
+	}
+
 	public void close() {
 		if (timeout != null) timeout.cancel(true);
 		timeout = null;
 
 		if (round > 0)
 			MatchDAO.saveMatch(history);
+
+		closed = true;
 	}
 
 	@Override
