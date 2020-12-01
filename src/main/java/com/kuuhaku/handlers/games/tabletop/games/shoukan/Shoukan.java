@@ -186,7 +186,7 @@ public class Shoukan extends Game {
                             if (postCombat()) return;
                         }
                     } else {
-                        c.setDefending(false);
+                        c.setDefending(true);
                         act = channel.sendMessage("Carta trocada para modo de defesa.");
                         if (c.hasEffect() && !c.isFlipped()) {
                             c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1), channel));
