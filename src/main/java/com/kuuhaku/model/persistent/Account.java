@@ -153,19 +153,8 @@ public class Account {
 
 	public synchronized void addVCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
-		else if (loan > 0) {
-			TransactionDAO.register(userId, from, -credit);
-			loan = loan - credit;
-		} else {
-			TransactionDAO.register(userId, from, credit);
-			vBalance += credit;
-		}
-
-		if (loan < 0) {
-			vBalance += loan * -1;
-			TransactionDAO.register(userId, from, loan * -1);
-			loan = 0;
-		}
+		vBalance += credit;
+		TransactionDAO.register(userId, from, credit);
 	}
 
 	public synchronized long debitLoan() {
