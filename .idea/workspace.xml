@@ -13,8 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no cron mensal">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção menor">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +116,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Java" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
@@ -876,13 +876,9 @@
       <workItem from="1606777776914" duration="2553000" />
       <workItem from="1606833023821" duration="1552000" />
       <workItem from="1606851543368" duration="1173000" />
-    </task>
-    <task id="LOCAL-02973" summary="Remoção do histórico dos jogos comuns e adição de histórico específico do Shoukan">
-      <created>1606321823913</created>
-      <option name="number" value="02973" />
-      <option name="presentableId" value="LOCAL-02973" />
-      <option name="project" value="LOCAL" />
-      <updated>1606321823913</updated>
+      <workItem from="1606876490071" duration="396000" />
+      <workItem from="1606877170925" duration="29000" />
+      <workItem from="1607034339712" duration="1077000" />
     </task>
     <task id="LOCAL-02974" summary="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio">
       <created>1606329169418</created>
@@ -1220,7 +1216,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606852000139</updated>
     </task>
-    <option name="localTasksCounter" value="3022" />
+    <task id="LOCAL-03022" summary="Correção menor">
+      <created>1606876337161</created>
+      <option name="number" value="03022" />
+      <option name="presentableId" value="LOCAL-03022" />
+      <option name="project" value="LOCAL" />
+      <updated>1606876337162</updated>
+    </task>
+    <option name="localTasksCounter" value="3023" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1303,7 +1306,6 @@
     <MESSAGE value="Criação do modo NQN" />
     <MESSAGE value="Correção no modo NQN" />
     <MESSAGE value="Adição de método necessário para o funcionamento da carta Shikoutazer" />
-    <MESSAGE value="Correção menor" />
     <MESSAGE value="Correção das confirmações" />
     <MESSAGE value="Correção na desabilitação de módulos" />
     <MESSAGE value="Tentativa de correção no WO dos jogos" />
@@ -1311,7 +1313,8 @@
     <MESSAGE value="Correção no cron mensal" />
     <MESSAGE value="Correção na conversão de sonhos em créditos voláteis" />
     <MESSAGE value="Correção da derrota por WO após a partida ter acabado" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção da derrota por WO após a partida ter acabado" />
+    <MESSAGE value="Correção menor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1337,10 +1340,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="557" y="213" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1603373521967" />
-    <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602641774815">
+    <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607036494795">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1602641774815" />
+    <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607036494795" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1604198537643">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1411,11 +1414,11 @@
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1606320580357" />
     <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605066080212" />
-    <state x="320" y="80" key="SettingsEditor" timestamp="1606237363422">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="303" y="75" key="SettingsEditor" timestamp="1606877192402">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1606237363422" />
-    <state x="303" y="75" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1605061817984" />
+    <state x="303" y="75" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1606877192402" />
     <state x="92" y="92" width="1496" height="826" key="ShowDiffWithBranchDialog" timestamp="1601645223790">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1424,15 +1427,16 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606852006062">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606876338898">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606852006062" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606780127823" />
-    <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606876338898" />
+    <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1/0.0.1680.1010@0.0.1680.1010" timestamp="1599155360934" />
+    <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1/0.0.1920.1040@0.0.1920.1040" timestamp="1607036605289" />
     <state x="712" y="354" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1606321875648">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
