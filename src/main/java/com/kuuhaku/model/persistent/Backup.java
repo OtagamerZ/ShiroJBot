@@ -47,7 +47,7 @@ public class Backup {
 	@Column(columnDefinition = "VARCHAR(191)")
 	private String guild;
 
-	@Column(columnDefinition = "LONGTEXT")
+	@Column(columnDefinition = "TEXT")
 	private String serverData = "";
 
 	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
