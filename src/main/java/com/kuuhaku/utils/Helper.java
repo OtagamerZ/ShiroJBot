@@ -352,8 +352,8 @@ public class Helper {
 			} catch (NullPointerException e) {
 				return chn.createWebhook(name).complete();
 			}
-		} catch (InsufficientPermissionException | InterruptedException | ExecutionException e) {
-			sendPM(Objects.requireNonNull(chn.getGuild().getOwner()).getUser(), "❌ | " + name + " não possui permissão para criar um webhook em seu servidor no canal " + chn.getAsMention());
+		} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
+			//sendPM(Objects.requireNonNull(chn.getGuild().getOwner()).getUser(), "❌ | " + name + " não possui permissão para criar um webhook em seu servidor no canal " + chn.getAsMention());
 		}
 		return null;
 	}
