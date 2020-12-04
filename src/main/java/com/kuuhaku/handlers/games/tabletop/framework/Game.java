@@ -97,13 +97,15 @@ public abstract class Game {
 		assert current != null;
 		if (round > 0)
 			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.submitAfter(3, TimeUnit.MINUTES)
-					.thenAccept(onWO)
-					.thenRun(() -> closed = true);
+					.queueAfter(3, TimeUnit.MINUTES, s -> {
+						onWO.accept(s);
+						closed = true;
+					);
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.submitAfter(3, TimeUnit.MINUTES)
-				.thenAccept(onExpiration)
-				.thenRun(() -> closed = true);
+				.queueAfter(3, TimeUnit.MINUTES, s -> {
+					onExpiration.accept(s);
+					closed = true;
+				);
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
@@ -171,13 +173,15 @@ public abstract class Game {
 		assert current != null;
 		if (round > 0)
 			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.submitAfter(3, TimeUnit.MINUTES)
-					.thenAccept(onWO)
-					.thenRun(() -> closed = true);
+					.queueAfter(3, TimeUnit.MINUTES, s -> {
+						onWO.accept(s);
+						closed = true;
+					);
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.submitAfter(3, TimeUnit.MINUTES)
-				.thenAccept(onExpiration)
-				.thenRun(() -> closed = true);
+				.queueAfter(3, TimeUnit.MINUTES, s -> {
+					onExpiration.accept(s);
+					closed = true;
+				);
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
@@ -192,13 +196,15 @@ public abstract class Game {
 		if (timeout != null) timeout.cancel(true);
 		if (round > 0)
 			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.submitAfter(3, TimeUnit.MINUTES)
-					.thenAccept(onWO)
-					.thenRun(() -> closed = true);
+					.queueAfter(3, TimeUnit.MINUTES, s -> {
+						onWO.accept(s);
+						closed = true;
+					);
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.submitAfter(3, TimeUnit.MINUTES)
-				.thenAccept(onExpiration)
-				.thenRun(() -> closed = true);
+				.queueAfter(3, TimeUnit.MINUTES, s -> {
+					onExpiration.accept(s);
+					closed = true;
+				);
 	}
 
 	public JDA getHandler() {
