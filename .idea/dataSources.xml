@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="ShiroDB" uuid="53f6dc79-49f3-415d-8d11-c5f83610185f">
+    <data-source source="LOCAL" name="ShiroDB (Old)" uuid="53f6dc79-49f3-415d-8d11-c5f83610185f">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql:///shiro</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="ShiroDB" uuid="602cac60-5412-4cdb-b3cd-cb78a9a217e8">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
