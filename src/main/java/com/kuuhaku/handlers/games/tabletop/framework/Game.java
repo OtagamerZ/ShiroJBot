@@ -100,12 +100,12 @@ public abstract class Game {
 					.queueAfter(3, TimeUnit.MINUTES, s -> {
 						onWO.accept(s);
 						closed = true;
-					);
+					});
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
 				.queueAfter(3, TimeUnit.MINUTES, s -> {
 					onExpiration.accept(s);
 					closed = true;
-				);
+				});
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
@@ -176,12 +176,12 @@ public abstract class Game {
 					.queueAfter(3, TimeUnit.MINUTES, s -> {
 						onWO.accept(s);
 						closed = true;
-					);
+					});
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
 				.queueAfter(3, TimeUnit.MINUTES, s -> {
 					onExpiration.accept(s);
 					closed = true;
-				);
+				});
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
@@ -199,12 +199,12 @@ public abstract class Game {
 					.queueAfter(3, TimeUnit.MINUTES, s -> {
 						onWO.accept(s);
 						closed = true;
-					);
+					});
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
 				.queueAfter(3, TimeUnit.MINUTES, s -> {
 					onExpiration.accept(s);
 					closed = true;
-				);
+				});
 	}
 
 	public JDA getHandler() {
