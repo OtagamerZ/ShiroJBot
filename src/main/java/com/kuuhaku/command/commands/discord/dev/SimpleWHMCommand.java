@@ -26,9 +26,11 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
@@ -52,20 +54,24 @@ public class SimpleWHMCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Webhook Test", Main.getInfo().getAPI());
-		Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, String.join(" ", args));
-
-		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-		wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
-		wmb.setAvatarUrl(author.getAvatarUrl());
-		wmb.setUsername(author.getName());
-
-		assert wh != null;
-		WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 		try {
-			wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).accept(null)).get();
-		} catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace();
+			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Webhook Test", Main.getInfo().getAPI());
+			Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, String.join(" ", args));
+
+			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+			wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
+			wmb.setAvatarUrl(author.getAvatarUrl());
+			wmb.setUsername(author.getName());
+
+			assert wh != null;
+			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
+			try {
+				wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).accept(null)).get();
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+		} catch (InterruptedException | ExecutionException | InsufficientPermissionException e) {
+			Helper.sendPM(Objects.requireNonNull(message.getTextChannel().getGuild().getOwner()).getUser(), "❌ | " + Main.getInfo().getAPI().getSelfUser().getName() + " não possui permissão para criar um webhook em seu servidor no canal " + message.getTextChannel().getAsMention());
 		}
 	}
 }

@@ -44,6 +44,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -130,7 +131,7 @@ public class TwitchEvents {
 				assert wh != null;
 				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 				wc.send(wmb.build()).get();
-			} catch (InterruptedException | ExecutionException e) {
+			} catch (InsufficientPermissionException | InterruptedException | ExecutionException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			} catch (NullPointerException ignore) {
 			}

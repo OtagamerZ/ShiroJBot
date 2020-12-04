@@ -410,7 +410,7 @@ public class ShiroEvents extends ListenerAdapter {
 								Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 							}
 						}, Helper::doNothing);
-					} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException | NullPointerException ignore) {
+					} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException | NullPointerException | InterruptedException | ExecutionException ignore) {
 					}
 			}
 		} catch (InsufficientPermissionException | ErrorResponseException ignore) {
