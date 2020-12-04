@@ -334,28 +334,23 @@ public class Helper {
 		return con.getInputStream();
 	}
 
-	public static Webhook getOrCreateWebhook(TextChannel chn, String name, JDA bot) {
-		try {
-			final Webhook[] webhook = {null};
-			List<Webhook> whs = chn.retrieveWebhooks().submit().get();
-			whs.stream()
-					.filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == bot.getSelfUser())
-					.findFirst()
-					.ifPresent(w -> webhook[0] = w);
+	public static Webhook getOrCreateWebhook(TextChannel chn, String name, JDA bot) throws InterruptedException, ExecutionException {
+		final Webhook[] webhook = {null};
+		List<Webhook> whs = chn.retrieveWebhooks().submit().get();
+		whs.stream()
+				.filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == bot.getSelfUser())
+				.findFirst()
+				.ifPresent(w -> webhook[0] = w);
 
-			try {
-				if (webhook[0] == null) return chn.createWebhook(name).complete();
-				else {
-					webhook[0].getUrl();
-					return webhook[0];
-				}
-			} catch (NullPointerException e) {
-				return chn.createWebhook(name).complete();
+		try {
+			if (webhook[0] == null) return chn.createWebhook(name).complete();
+			else {
+				webhook[0].getUrl();
+				return webhook[0];
 			}
-		} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
-			//sendPM(Objects.requireNonNull(chn.getGuild().getOwner()).getUser(), "❌ | " + name + " não possui permissão para criar um webhook em seu servidor no canal " + chn.getAsMention());
+		} catch (NullPointerException e) {
+			return chn.createWebhook(name).complete();
 		}
-		return null;
 	}
 
 	public static Color reverseColor(Color c) {
@@ -951,7 +946,7 @@ public class Helper {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-message-manage-permission")).queue();
 			return true;
 		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_EMBED_LINKS, (TextChannel) channel)) {
-			channel.sendMessage("❌ | A permissão de criar embeds é essencial para que eu funcione, por favor adicione-a ao meu cargo!").queue();
+			channel.sendMessage("❌ | As permissões de enviar links e anexar arquivos são essenciais para que eu funcione, por favor adicione-as ao meu cargo!").queue();
 			return true;
 		}
 

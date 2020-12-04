@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -137,25 +138,28 @@ public class EffectParameters {
 	}
 
 	public void sendWebhookMessage(String message, String gif, Champion champion) {
-		Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getInfo().getAPI());
-		Card c = champion.getCard();
-
-		WebhookMessageBuilder wmb = new WebhookMessageBuilder()
-				.setContent(message)
-				.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().name()))
-				.setUsername(c.getName());
-
-		if (gif != null) {
-			InputStream is = this.getClass().getClassLoader().getResourceAsStream("shoukan/gifs/" + gif + ".gif");
-			if (is != null) wmb.addFile("effect.gif", is);
-		}
-
 		try {
-			if (wh == null) return;
-			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
-			wc.send(wmb.build()).get();
-		} catch (InterruptedException | ExecutionException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getInfo().getAPI());
+			Card c = champion.getCard();
+
+			WebhookMessageBuilder wmb = new WebhookMessageBuilder()
+					.setContent(message)
+					.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().name()))
+					.setUsername(c.getName());
+
+			if (gif != null) {
+				InputStream is = this.getClass().getClassLoader().getResourceAsStream("shoukan/gifs/" + gif + ".gif");
+				if (is != null) wmb.addFile("effect.gif", is);
+			}
+
+			try {
+				if (wh == null) return;
+				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
+				wc.send(wmb.build()).get();
+			} catch (InterruptedException | ExecutionException e) {
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			}
+		} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
 		}
 	}
 }

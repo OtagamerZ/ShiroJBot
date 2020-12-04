@@ -47,6 +47,7 @@ import javax.persistence.Query;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class Relay {
@@ -88,8 +89,13 @@ public class Relay {
 			WebhookClientBuilder wcb = new WebhookClientBuilder(wbs.get(0).getUrl());
 			return wcb.build();
 		} else {
-			WebhookClientBuilder wcb = new WebhookClientBuilder(Objects.requireNonNull(Helper.getOrCreateWebhook(ch, "Jibril", Main.getJibril())).getUrl());
-			return wcb.build();
+			try {
+				WebhookClientBuilder wcb = new WebhookClientBuilder(Objects.requireNonNull(Helper.getOrCreateWebhook(ch, "Jibril", Main.getJibril())).getUrl());
+				return wcb.build();
+			} catch (InsufficientPermissionException | InterruptedException | ExecutionException e) {
+				Helper.sendPM(Objects.requireNonNull(ch.getGuild().getOwner()).getUser(), "❌ | " + Main.getJibril().getSelfUser().getName() + " não possui permissão para criar um webhook em seu servidor no canal " + ch.getAsMention());
+				return null;
+			}
 		}
 	}
 
@@ -145,8 +151,10 @@ public class Relay {
 				if (GuildDAO.getGuildById(k).isAllowImg()) {
 					if (GuildDAO.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
-						client.send(getMessage(msg, m, s));
-						client.close();
+						if (client != null) {
+							client.send(getMessage(msg, m, s));
+							client.close();
+						}
 					} else {
 						if (img != null) {
 							t.sendMessage(mb.build()).addFile(img.toByteArray(), "image.png").queue();
@@ -157,8 +165,10 @@ public class Relay {
 				} else {
 					if (GuildDAO.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
-						client.send(getMessage(msg, m, s));
-						client.close();
+						if (client != null) {
+							client.send(getMessage(msg, m, s));
+							client.close();
+						}
 					} else {
 						t.sendMessage(mb.build()).queue();
 					}
@@ -235,16 +245,20 @@ public class Relay {
 				if (GuildDAO.getGuildById(k).isAllowImg()) {
 					if (GuildDAO.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
-						client.send(getMessage(gm));
-						client.close();
+						if (client != null) {
+							client.send(getMessage(gm));
+							client.close();
+						}
 					} else {
 						t.sendMessage(mb.build()).queue();
 					}
 				} else {
 					if (GuildDAO.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
-						client.send(getMessage(gm));
-						client.close();
+						if (client != null) {
+							client.send(getMessage(gm));
+							client.close();
+						}
 					} else {
 						t.sendMessage(mb.build()).queue();
 					}
