@@ -7,7 +7,7 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql:///shiro</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="ShiroDB" uuid="602cac60-5412-4cdb-b3cd-cb78a9a217e8">
+    <data-source source="LOCAL" name="ShiroDB" uuid="d22aba9a-bc76-4f6b-a978-2c6c8a76889a">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
