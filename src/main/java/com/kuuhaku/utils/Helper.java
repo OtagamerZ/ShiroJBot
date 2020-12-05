@@ -140,7 +140,9 @@ public class Helper {
 	}
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
-		if (ShiroInfo.getNiiChan().equals(member.getId()))
+		if (member == null)
+			return PrivilegeLevel.USER;
+		else if (ShiroInfo.getNiiChan().equals(member.getId()))
 			return PrivilegeLevel.NIICHAN;
 		else if (ShiroInfo.getDevelopers().contains(member.getId()))
 			return PrivilegeLevel.DEV;
