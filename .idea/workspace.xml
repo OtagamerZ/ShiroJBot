@@ -13,11 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção menor">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de efeito de trava de deck">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -895,14 +892,7 @@
       <workItem from="1607034339712" duration="3346000" />
       <workItem from="1607127923219" duration="37000" />
       <workItem from="1607134412288" duration="901000" />
-      <workItem from="1607135347323" duration="2875000" />
-    </task>
-    <task id="LOCAL-02976" summary="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio">
-      <created>1606329345249</created>
-      <option name="number" value="02976" />
-      <option name="presentableId" value="LOCAL-02976" />
-      <option name="project" value="LOCAL" />
-      <updated>1606329345249</updated>
+      <workItem from="1607135347323" duration="3174000" />
     </task>
     <task id="LOCAL-02977" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
       <created>1606330299270</created>
@@ -1240,7 +1230,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607135291889</updated>
     </task>
-    <option name="localTasksCounter" value="3025" />
+    <task id="LOCAL-03025" summary="Adição de efeito de trava de deck">
+      <created>1607138299028</created>
+      <option name="number" value="03025" />
+      <option name="presentableId" value="LOCAL-03025" />
+      <option name="project" value="LOCAL" />
+      <updated>1607138299028</updated>
+    </task>
+    <option name="localTasksCounter" value="3026" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1306,7 +1303,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Criação de tags dos níveis 245-320" />
     <MESSAGE value="Tentativa de implementação de histórico de partidas" />
     <MESSAGE value="Remoção do histórico dos jogos comuns e adição de histórico específico do Shoukan" />
     <MESSAGE value="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio" />
@@ -1331,7 +1327,8 @@
     <MESSAGE value="Correção na conversão de sonhos em créditos voláteis" />
     <MESSAGE value="Correção da derrota por WO após a partida ter acabado" />
     <MESSAGE value="Correção menor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
+    <MESSAGE value="Adição de efeito de trava de deck" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de efeito de trava de deck" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
