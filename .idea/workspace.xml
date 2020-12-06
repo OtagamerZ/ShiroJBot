@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de efeito de trava de deck">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,17 +162,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -892,14 +881,9 @@
       <workItem from="1607034339712" duration="3346000" />
       <workItem from="1607127923219" duration="37000" />
       <workItem from="1607134412288" duration="901000" />
-      <workItem from="1607135347323" duration="3174000" />
-    </task>
-    <task id="LOCAL-02977" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
-      <created>1606330299270</created>
-      <option name="number" value="02977" />
-      <option name="presentableId" value="LOCAL-02977" />
-      <option name="project" value="LOCAL" />
-      <updated>1606330299270</updated>
+      <workItem from="1607135347323" duration="4069000" />
+      <workItem from="1607194035082" duration="224000" />
+      <workItem from="1607204458396" duration="91000" />
     </task>
     <task id="LOCAL-02978" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
       <created>1606330636456</created>
@@ -1237,7 +1221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607138299028</updated>
     </task>
-    <option name="localTasksCounter" value="3026" />
+    <task id="LOCAL-03026" summary="Adição de efeito de trava de deck">
+      <created>1607138589202</created>
+      <option name="number" value="03026" />
+      <option name="presentableId" value="LOCAL-03026" />
+      <option name="project" value="LOCAL" />
+      <updated>1607138589203</updated>
+    </task>
+    <option name="localTasksCounter" value="3027" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1441,11 +1432,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607135311183">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607138613411">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606852006062" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607135311183" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607138613411" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
