@@ -14,15 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SimpleWHMCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SimpleWHMCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -887,13 +879,10 @@
       <workItem from="1606876490071" duration="396000" />
       <workItem from="1606877170925" duration="29000" />
       <workItem from="1607034339712" duration="1077000" />
-    </task>
-    <task id="LOCAL-02974" summary="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio">
-      <created>1606329169418</created>
-      <option name="number" value="02974" />
-      <option name="presentableId" value="LOCAL-02974" />
-      <option name="project" value="LOCAL" />
-      <updated>1606329169418</updated>
+      <workItem from="1607343237121" duration="113000" />
+      <workItem from="1607343880500" duration="608000" />
+      <workItem from="1607345521467" duration="544000" />
+      <workItem from="1607347021931" duration="604000" />
     </task>
     <task id="LOCAL-02975" summary="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio">
       <created>1606329322154</created>
@@ -1231,7 +1220,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606876337162</updated>
     </task>
-    <option name="localTasksCounter" value="3023" />
+    <task id="LOCAL-03023" summary="Correção das mensagens de falta de permissões para criar webhook">
+      <created>1607101020327</created>
+      <option name="number" value="03023" />
+      <option name="presentableId" value="LOCAL-03023" />
+      <option name="project" value="LOCAL" />
+      <updated>1607101020329</updated>
+    </task>
+    <option name="localTasksCounter" value="3024" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1297,7 +1293,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Criação de tags dos níveis 245-320" />
     <MESSAGE value="Tentativa de implementação de histórico de partidas" />
     <MESSAGE value="Remoção do histórico dos jogos comuns e adição de histórico específico do Shoukan" />
     <MESSAGE value="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio" />
@@ -1322,7 +1317,8 @@
     <MESSAGE value="Correção na conversão de sonhos em créditos voláteis" />
     <MESSAGE value="Correção da derrota por WO após a partida ter acabado" />
     <MESSAGE value="Correção menor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
+    <MESSAGE value="Correção das mensagens de falta de permissões para criar webhook" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção das mensagens de falta de permissões para criar webhook" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1383,10 +1379,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606851996846">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607101019275">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606851996846" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607101019275" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1606176807594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1435,10 +1431,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1606876338898">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607101060332">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606852006062" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607101060332" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606876338898" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1466,10 +1462,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="679" y="268" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1920.1040@0.0.1920.1040" timestamp="1603511313028" />
-    <state x="305" y="160" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1605631827299">
+    <state x="305" y="160" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1607101391090">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605631827299" />
+    <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1607101391090" />
     <state x="1025" y="162" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604027864335" />
     <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1604191215864">
       <screen x="0" y="0" width="1920" height="1040" />
