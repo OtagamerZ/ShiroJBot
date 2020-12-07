@@ -103,7 +103,7 @@ public class GuessTheCardsCommand extends Command {
 						names.get(1),
 						names.get(2))
 				).queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
-				int chances = 4;
+				int chances = 2;
 
 				@Override
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
