@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.AnimeRequest;
 import com.kuuhaku.model.common.Anime;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
@@ -64,29 +65,38 @@ public class AnimeCommand extends Command {
 			try {
 				String query = IOUtils.toString(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("anilist.graphql")), StandardCharsets.UTF_8);
 
-				JSONObject data = com.kuuhaku.controller.Anime.getData(String.join(" ", args), query);
+				JSONObject data = AnimeRequest.getData(String.join(" ", args), query);
 				Anime anime = new Anime(data);
 
 				EmbedBuilder eb = new EmbedBuilder();
-				if (anime.getGenres().toLowerCase().contains("hentai") && !message.getTextChannel().isNSFW()) {
+				boolean hentai = anime.getGenres().toLowerCase().contains("hentai");
+				if (hentai && !message.getTextChannel().isNSFW()) {
 					m.editMessage("Humm safadinho, eu não posso postar sobre Hentais neste canal!").queue();
 					return;
 				}
 
-				JSONObject jo = com.kuuhaku.controller.Anime.getNAData(anime.gettRomaji());
+				JSONObject jo = hentai ? AnimeRequest.getMHData(anime.gettRomaji()) : AnimeRequest.getNAData(anime.gettRomaji());
 
 				String link;
 				if (jo.has("desc")) {
-					link = "[Now Animes](https://www.nowanimes.com/?page_id=%s&ref=%s)".formatted(
-							jo.getInt("id"),
-							Helper.hash(System.getenv("NOWANIMES_URL").getBytes(StandardCharsets.UTF_8), "SHA-1")
-					);
+					if (hentai) {
+						link = "[Mega Hentais](https://www.megahentais.com/?page_id=%s&ref=%s)".formatted(
+								jo.getInt("id"),
+								Helper.hash(System.getenv("MEGAHENTAIS_TOKEN").getBytes(StandardCharsets.UTF_8), "SHA-1")
+						);
+					} else {
+						link = "[Now Animes](https://www.nowanimes.com/?page_id=%s&ref=%s)".formatted(
+								jo.getInt("id"),
+								Helper.hash(System.getenv("NOWANIMES_TOKEN").getBytes(StandardCharsets.UTF_8), "SHA-1")
+						);
+					}
 				} else {
 					link = "Link indisponível";
 				}
 
 				eb.setColor(anime.getcColor());
-				eb.setAuthor("Bem, aqui está um novo anime para você assistir!\n");
+				if (hentai) eb.setAuthor("Bem, aqui está um novo hentai para você assistir!\n");
+				else eb.setAuthor("Bem, aqui está um novo anime para você assistir!\n");
 				eb.setTitle(anime.gettRomaji() + (!anime.gettRomaji().equals(anime.gettEnglish()) ? " (" + anime.gettEnglish() + ")" : ""));
 
 				eb.setImage(anime.getcImage());

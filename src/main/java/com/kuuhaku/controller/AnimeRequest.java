@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import java.util.Collections;
 import java.util.Map;
 
-public class Anime {
+public class AnimeRequest {
 	public static JSONObject getData(String anime, String query) {
 		JSONObject json = new JSONObject() {{
 			put("query", query);
@@ -55,7 +55,25 @@ public class Anime {
 			return new JSONObject();
 		}
 
-		Helper.logger(Anime.class).debug(resposta);
+		Helper.logger(AnimeRequest.class).debug(resposta);
+		return resposta;
+	}
+
+	public static JSONObject getMHData(String name) {
+		JSONObject resposta;
+		if (System.getenv().containsKey("MEGAHENTAIS_URL") && System.getenv().containsKey("MEGAHENTAIS_TOKEN")) {
+			resposta = Helper.get(System.getenv("MEGAHENTAIS_URL"),
+					new JSONObject() {{
+						put("anime", name);
+					}},
+					Collections.emptyMap(),
+					System.getenv("MEGAHENTAIS_TOKEN")
+			);
+		} else {
+			return new JSONObject();
+		}
+
+		Helper.logger(AnimeRequest.class).debug(resposta);
 		return resposta;
 	}
 }
