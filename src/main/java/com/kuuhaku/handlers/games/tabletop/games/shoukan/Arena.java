@@ -122,6 +122,13 @@ public class Arena {
 								assert d != null;
 								g2d.drawImage(d.drawCard(acc, true), 137, 193, null);
 							}
+							if (h.getLockTime() > 0) {
+								try {
+									BufferedImage lock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/locked.png")));
+									g2d.drawImage(lock, 137, 193, null);
+								} catch (IOException ignore) {
+								}
+							}
 						}
 						case BOTTOM -> {
 							if (c.getTop() != null) {
@@ -138,6 +145,13 @@ public class Arena {
 								Drawable d = h.getDeque().peek();
 								assert d != null;
 								g2d.drawImage(d.drawCard(acc, true), 1889, 1206, null);
+							}
+							if (h.getLockTime() > 0) {
+								try {
+									BufferedImage lock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/locked.png")));
+									g2d.drawImage(lock, 1889, 1206, null);
+								} catch (IOException ignore) {
+								}
 							}
 						}
 					}
