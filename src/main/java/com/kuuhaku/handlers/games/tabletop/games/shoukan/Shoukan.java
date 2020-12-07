@@ -496,7 +496,9 @@ public class Shoukan extends Game {
                     }
                     killCard(h.getSide(), is[0]);
 
-                    h.removeHp(hPower - yPower);
+                    if (yours.getBonus().getSpecialData().remove("noDamage") == null) {
+                        h.removeHp(hPower - yPower);
+                    }
 
                     if (!postCombat()) {
                         resetTimerKeepTurn();
