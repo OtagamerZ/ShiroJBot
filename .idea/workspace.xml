@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheCardsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheCardsCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -887,14 +887,7 @@
       <workItem from="1607278612250" duration="467000" />
       <workItem from="1607350850985" duration="2021000" />
       <workItem from="1607357523186" duration="2556000" />
-      <workItem from="1607367447270" duration="2407000" />
-    </task>
-    <task id="LOCAL-02983" summary="Agora é armazenada a quantidade de votos que cada suporte recebeu">
-      <created>1606332096641</created>
-      <option name="number" value="02983" />
-      <option name="presentableId" value="LOCAL-02983" />
-      <option name="project" value="LOCAL" />
-      <updated>1606332096641</updated>
+      <workItem from="1607367447270" duration="2875000" />
     </task>
     <task id="LOCAL-02984" summary="Agora é armazenada a quantidade de votos que cada suporte recebeu">
       <created>1606332214740</created>
@@ -1232,7 +1225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607358897759</updated>
     </task>
-    <option name="localTasksCounter" value="3032" />
+    <task id="LOCAL-03032" summary="Melhoria no logger do comando de busca por anime">
+      <created>1607370647167</created>
+      <option name="number" value="03032" />
+      <option name="presentableId" value="LOCAL-03032" />
+      <option name="project" value="LOCAL" />
+      <updated>1607370647168</updated>
+    </task>
+    <option name="localTasksCounter" value="3033" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1298,7 +1298,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adicionado prêmio em créditos pela participação no confronto de Exceeds" />
     <MESSAGE value="Aumento no salário dos suportes" />
     <MESSAGE value="Correção na loja de arenas" />
     <MESSAGE value="Agora é armazenada a quantidade de votos que cada suporte recebeu" />
@@ -1323,7 +1322,8 @@
     <MESSAGE value="Pontuação de Exceeds agora não é mais influenciada por modificadores" />
     <MESSAGE value="Adição de endpoint da API do Mega Hentais" />
     <MESSAGE value="Correção na loja de cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na loja de cartas" />
+    <MESSAGE value="Melhoria no logger do comando de busca por anime" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no logger do comando de busca por anime" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
