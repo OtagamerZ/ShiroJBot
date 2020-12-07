@@ -471,6 +471,11 @@ public class Shoukan extends Game {
                     }
                     killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1]);
 
+                    if (!his.isDefending()) {
+                        Hand enemy = getHands().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+                        enemy.removeHp(yPower - hPower);
+                    }
+
                     if (!postCombat()) {
                         resetTimerKeepTurn();
                         channel.sendMessage("Sua carta derrotou a carta inimiga! (" + yPower + " > " + hPower + ")")
@@ -493,6 +498,8 @@ public class Shoukan extends Game {
                         if (postCombat()) return;
                     }
                     killCard(h.getSide(), is[0]);
+
+                    h.removeHp(hPower - yPower);
 
                     if (!postCombat()) {
                         resetTimerKeepTurn();
