@@ -61,6 +61,14 @@
       "description": "Token de acesso à API do Now Animes.",
       "required": false
     },
+    "MEGAHENTAIS_URL": {
+      "description": "URL da API do Mega Hentais.",
+      "required": false
+    },
+    "MEGAHENTAIS_TOKEN": {
+      "description": "Token de acesso à API do Mega Hentais.",
+      "required": false
+    },
     "SECRET": {
       "description": "Frase secreta para ser usada no comando TheAnswerCommand.",
       "required": true
