@@ -95,7 +95,7 @@ public class AnimeCommand extends Command {
 				}
 
 				eb.setColor(anime.getcColor());
-				if (hentai) eb.setAuthor("Bem, aqui está um novo hentai para você assistir!\n");
+				if (hentai) eb.setAuthor("Bem, aqui está um novo hentai para você assistir! ( ͡° ͜ʖ ͡°)\n");
 				else eb.setAuthor("Bem, aqui está um novo anime para você assistir!\n");
 				eb.setTitle(anime.gettRomaji() + (!anime.gettRomaji().equals(anime.gettEnglish()) ? " (" + anime.gettEnglish() + ")" : ""));
 
