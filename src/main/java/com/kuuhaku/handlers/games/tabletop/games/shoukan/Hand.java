@@ -46,6 +46,7 @@ public class Hand {
 	private int mana;
 	private int hp;
 	private boolean manaSuppressed = false;
+	private int lockTime = 0;
 
 	public Hand(Shoukan game, User user, List<Drawable> deque, Side side) {
 		Collections.shuffle(deque);
@@ -70,7 +71,7 @@ public class Hand {
 		redrawHand();
 	}
 
-	public boolean draw() {
+	public boolean manualDraw() {
 		try {
 			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && deque.stream().anyMatch(d -> d instanceof Champion))
 				drawChampion();
@@ -81,7 +82,18 @@ public class Hand {
 		}
 	}
 
+	public void draw() {
+		if (lockTime > 0) return;
+		try {
+			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && deque.stream().anyMatch(d -> d instanceof Champion))
+				drawChampion();
+			else cards.add(deque.removeFirst().copy());
+		} catch (NoSuchElementException ignore) {
+		}
+	}
+
 	public void draw(Card card) {
+		if (lockTime > 0) return;
 		try {
 			Drawable dr = deque.stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
 			deque.remove(dr);
@@ -91,6 +103,7 @@ public class Hand {
 	}
 
 	public void draw(Drawable drawable) {
+		if (lockTime > 0) return;
 		Card card = drawable.getCard();
 		try {
 			Drawable dr = deque.stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
@@ -101,6 +114,7 @@ public class Hand {
 	}
 
 	public void drawChampion() {
+		if (lockTime > 0) return;
 		try {
 			Drawable dr = deque.stream().filter(c -> c instanceof Champion).findFirst().orElseThrow().copy();
 			deque.remove(dr);
@@ -110,6 +124,7 @@ public class Hand {
 	}
 
 	public void drawEquipment() {
+		if (lockTime > 0) return;
 		try {
 			Drawable dr = deque.stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow().copy();
 			deque.remove(dr);
@@ -119,6 +134,7 @@ public class Hand {
 	}
 
 	public void drawRace(Race race) {
+		if (lockTime > 0) return;
 		try {
 			Drawable dr = deque.stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow().copy();
 			deque.remove(dr);
@@ -251,5 +267,17 @@ public class Hand {
 
 	public void setManaSuppressed(boolean manaSuppressed) {
 		this.manaSuppressed = manaSuppressed;
+	}
+
+	public void addLockTime(int time) {
+		lockTime += time;
+	}
+
+	public void decreaseLockTime() {
+		lockTime = Math.max(0, lockTime - 1);
+	}
+
+	public int getLockTime() {
+		return lockTime;
 	}
 }
