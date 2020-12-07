@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de efeito de trava de deck">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Pontuação de Exceeds agora não é mais influenciada por modificadores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -884,13 +884,7 @@
       <workItem from="1607135347323" duration="4069000" />
       <workItem from="1607194035082" duration="224000" />
       <workItem from="1607204458396" duration="91000" />
-    </task>
-    <task id="LOCAL-02978" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
-      <created>1606330636456</created>
-      <option name="number" value="02978" />
-      <option name="presentableId" value="LOCAL-02978" />
-      <option name="project" value="LOCAL" />
-      <updated>1606330636456</updated>
+      <workItem from="1607278612250" duration="467000" />
     </task>
     <task id="LOCAL-02979" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
       <created>1606330815952</created>
@@ -1228,7 +1222,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607138589203</updated>
     </task>
-    <option name="localTasksCounter" value="3027" />
+    <task id="LOCAL-03027" summary="Pontuação de Exceeds agora não é mais influenciada por modificadores">
+      <created>1607278809652</created>
+      <option name="number" value="03027" />
+      <option name="presentableId" value="LOCAL-03027" />
+      <option name="project" value="LOCAL" />
+      <updated>1607278809652</updated>
+    </task>
+    <option name="localTasksCounter" value="3028" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1294,7 +1295,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Tentativa de implementação de histórico de partidas" />
     <MESSAGE value="Remoção do histórico dos jogos comuns e adição de histórico específico do Shoukan" />
     <MESSAGE value="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio" />
     <MESSAGE value="Adicionado prêmio em créditos pela participação no confronto de Exceeds" />
@@ -1319,7 +1319,8 @@
     <MESSAGE value="Correção da derrota por WO após a partida ter acabado" />
     <MESSAGE value="Correção menor" />
     <MESSAGE value="Adição de efeito de trava de deck" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de efeito de trava de deck" />
+    <MESSAGE value="Pontuação de Exceeds agora não é mais influenciada por modificadores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Pontuação de Exceeds agora não é mais influenciada por modificadores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1432,11 +1433,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607138613411">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607278811557">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606852006062" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607138613411" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607278811557" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
