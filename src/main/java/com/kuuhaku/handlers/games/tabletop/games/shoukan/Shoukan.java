@@ -253,15 +253,15 @@ public class Shoukan extends Game {
                     t.addLinkedTo(tp);
                     tp.setLinkedTo(Pair.of(toEquip, t));
                     if (t.hasEffect() && !t.isFlipped()) {
-                        t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
+                        t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
                         if (postCombat()) return;
 
                         if (tp.getCharm() != null && tp.getCharm() == Charm.TIMEWARP) {
-                            t.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
-                            t.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
+                            t.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
+                            t.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
                             if (postCombat()) return;
                         } else if (tp.getCharm() != null && tp.getCharm() == Charm.DOUBLETAP) {
-                            t.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
+                            t.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
                             if (postCombat()) return;
                         }
                     }
