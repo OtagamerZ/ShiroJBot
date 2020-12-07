@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Pontuação de Exceeds agora não é mais influenciada por modificadores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -110,7 +110,7 @@
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="Entrar 123 adwa" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/assets" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/gifs" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -131,12 +131,11 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\assets" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\arenas" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\frames" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
@@ -145,11 +144,12 @@
       <recent name="com.kuuhaku.handlers.games.tabletop.games.shoukan.enums" />
       <recent name="com.kuuhaku.command.commands.discord.dev" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\assets" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\arenas" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -878,39 +878,13 @@
       <workItem from="1606851543368" duration="1173000" />
       <workItem from="1606876490071" duration="396000" />
       <workItem from="1606877170925" duration="29000" />
-      <workItem from="1607034339712" duration="1077000" />
-      <workItem from="1607343237121" duration="113000" />
-      <workItem from="1607343880500" duration="608000" />
-      <workItem from="1607345521467" duration="544000" />
-      <workItem from="1607347021931" duration="604000" />
-    </task>
-    <task id="LOCAL-02975" summary="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio">
-      <created>1606329322154</created>
-      <option name="number" value="02975" />
-      <option name="presentableId" value="LOCAL-02975" />
-      <option name="project" value="LOCAL" />
-      <updated>1606329322154</updated>
-    </task>
-    <task id="LOCAL-02976" summary="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio">
-      <created>1606329345249</created>
-      <option name="number" value="02976" />
-      <option name="presentableId" value="LOCAL-02976" />
-      <option name="project" value="LOCAL" />
-      <updated>1606329345249</updated>
-    </task>
-    <task id="LOCAL-02977" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
-      <created>1606330299270</created>
-      <option name="number" value="02977" />
-      <option name="presentableId" value="LOCAL-02977" />
-      <option name="project" value="LOCAL" />
-      <updated>1606330299270</updated>
-    </task>
-    <task id="LOCAL-02978" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
-      <created>1606330636456</created>
-      <option name="number" value="02978" />
-      <option name="presentableId" value="LOCAL-02978" />
-      <option name="project" value="LOCAL" />
-      <updated>1606330636456</updated>
+      <workItem from="1607034339712" duration="3346000" />
+      <workItem from="1607127923219" duration="37000" />
+      <workItem from="1607134412288" duration="901000" />
+      <workItem from="1607135347323" duration="4069000" />
+      <workItem from="1607194035082" duration="224000" />
+      <workItem from="1607204458396" duration="91000" />
+      <workItem from="1607278612250" duration="467000" />
     </task>
     <task id="LOCAL-02979" summary="Adicionado prêmio em créditos pela participação no confronto de Exceeds">
       <created>1606330815952</created>
@@ -1220,14 +1194,42 @@
       <option name="project" value="LOCAL" />
       <updated>1606876337162</updated>
     </task>
-    <task id="LOCAL-03023" summary="Correção das mensagens de falta de permissões para criar webhook">
-      <created>1607101020327</created>
+    <task id="LOCAL-03023" summary="Correção menor">
+      <created>1607036800131</created>
       <option name="number" value="03023" />
       <option name="presentableId" value="LOCAL-03023" />
       <option name="project" value="LOCAL" />
-      <updated>1607101020329</updated>
+      <updated>1607036800131</updated>
     </task>
-    <option name="localTasksCounter" value="3024" />
+    <task id="LOCAL-03024" summary="Correção menor">
+      <created>1607135291888</created>
+      <option name="number" value="03024" />
+      <option name="presentableId" value="LOCAL-03024" />
+      <option name="project" value="LOCAL" />
+      <updated>1607135291889</updated>
+    </task>
+    <task id="LOCAL-03025" summary="Adição de efeito de trava de deck">
+      <created>1607138299028</created>
+      <option name="number" value="03025" />
+      <option name="presentableId" value="LOCAL-03025" />
+      <option name="project" value="LOCAL" />
+      <updated>1607138299028</updated>
+    </task>
+    <task id="LOCAL-03026" summary="Adição de efeito de trava de deck">
+      <created>1607138589202</created>
+      <option name="number" value="03026" />
+      <option name="presentableId" value="LOCAL-03026" />
+      <option name="project" value="LOCAL" />
+      <updated>1607138589203</updated>
+    </task>
+    <task id="LOCAL-03027" summary="Pontuação de Exceeds agora não é mais influenciada por modificadores">
+      <created>1607278809652</created>
+      <option name="number" value="03027" />
+      <option name="presentableId" value="LOCAL-03027" />
+      <option name="project" value="LOCAL" />
+      <updated>1607278809652</updated>
+    </task>
+    <option name="localTasksCounter" value="3028" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1293,7 +1295,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Tentativa de implementação de histórico de partidas" />
     <MESSAGE value="Remoção do histórico dos jogos comuns e adição de histórico específico do Shoukan" />
     <MESSAGE value="Agora é possível sair do Exceed até o dia 5 de cada mês sem levar bloqueio" />
     <MESSAGE value="Adicionado prêmio em créditos pela participação no confronto de Exceeds" />
@@ -1317,8 +1318,9 @@
     <MESSAGE value="Correção na conversão de sonhos em créditos voláteis" />
     <MESSAGE value="Correção da derrota por WO após a partida ter acabado" />
     <MESSAGE value="Correção menor" />
-    <MESSAGE value="Correção das mensagens de falta de permissões para criar webhook" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção das mensagens de falta de permissões para criar webhook" />
+    <MESSAGE value="Adição de efeito de trava de deck" />
+    <MESSAGE value="Pontuação de Exceeds agora não é mais influenciada por modificadores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Pontuação de Exceeds agora não é mais influenciada por modificadores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1344,10 +1346,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="557" y="213" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1603373521967" />
-    <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607036494795">
+    <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607134975208">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607036494795" />
+    <state x="336" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607134975208" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1604198537643">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1379,10 +1381,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607101019275">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1606851996846">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607101019275" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1606851996846" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1606176807594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1413,11 +1415,11 @@
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1602268972182" />
     <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1603507846095" />
-    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1606320580357">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1607135143799">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1606320580357" />
-    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605066080212" />
+    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607135143799" />
     <state x="303" y="75" key="SettingsEditor" timestamp="1606877192402">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1431,25 +1433,26 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607101060332">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607278811557">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607101060332" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606876338898" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1606852006062" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607278811557" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1/0.0.1680.1010@0.0.1680.1010" timestamp="1599155360934" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1/0.0.1920.1040@0.0.1920.1040" timestamp="1607036605289" />
-    <state x="712" y="354" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1606321875648">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="814" y="365" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1607038013533">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="712" y="354" width="326" height="265" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1606321875648" />
-    <state x="814" y="365" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1920.1040@0.0.1920.1040" timestamp="1604027939743" />
-    <state x="654" y="392" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog" timestamp="1606409403838">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="814" y="365" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1920.1040@0.0.1920.1040" timestamp="1607038013533" />
+    <state x="747" y="404" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog" timestamp="1607037420476">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="654" y="392" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1606409403838" />
+    <state x="747" y="404" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607037420476" />
     <state x="690" y="325" key="com.intellij.database.dbimport.ImportUtil.ChooseTargetDialog" timestamp="1605236159187">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1462,11 +1465,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="679" y="268" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1920.1040@0.0.1920.1040" timestamp="1603511313028" />
-    <state x="305" y="160" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1607101391090">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="1025" y="162" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1607039467546">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1607101391090" />
-    <state x="1025" y="162" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604027864335" />
+    <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605631827299" />
+    <state x="1025" y="162" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607039467546" />
     <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1604191215864">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

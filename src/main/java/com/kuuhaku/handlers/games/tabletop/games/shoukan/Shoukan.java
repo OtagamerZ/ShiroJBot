@@ -253,15 +253,15 @@ public class Shoukan extends Game {
                     t.addLinkedTo(tp);
                     tp.setLinkedTo(Pair.of(toEquip, t));
                     if (t.hasEffect() && !t.isFlipped()) {
-                        t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
+                        t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
                         if (postCombat()) return;
 
                         if (tp.getCharm() != null && tp.getCharm() == Charm.TIMEWARP) {
-                            t.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
-                            t.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
+                            t.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
+                            t.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
                             if (postCombat()) return;
                         } else if (tp.getCharm() != null && tp.getCharm() == Charm.DOUBLETAP) {
-                            t.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(t, dest, null, -1), channel));
+                            t.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
                             if (postCombat()) return;
                         }
                     }
@@ -310,8 +310,6 @@ public class Shoukan extends Game {
 
                     tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
                     slot.setTop(tp);
-                    int bHP = h.getHp();
-                    int bMana = h.getMana();
                     if (tp.hasEffect() && !tp.isFlipped()) {
                         tp.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(tp, dest, null, -1), channel));
                         if (postCombat()) return;
@@ -390,7 +388,6 @@ public class Shoukan extends Game {
                                     (arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
                     );
 
-                    int eHP = enemy.getHp();
                     enemy.removeHp(yPower);
                     c.setAvailable(false);
 
@@ -599,7 +596,7 @@ public class Shoukan extends Game {
                         aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, i, h.getSide(), Duelists.of(aFusion, i, null, -1), channel));
                         if (postCombat()) return true;
                     }
-                    int bMana = h.getMana();
+
                     h.removeMana(aFusion.getMana());
                     break;
                 }
@@ -856,6 +853,7 @@ public class Shoukan extends Game {
                         }
                     }
                 }
+                h.get().decreaseLockTime();
                 h.get().addMana(h.get().getManaPerTurn());
 
                 channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
@@ -893,7 +891,7 @@ public class Shoukan extends Game {
                 return;
             }
 
-            if (!h.draw()) {
+            if (!h.manualDraw()) {
                 if (getCustom() == null)
                     getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
                 else close();

@@ -159,7 +159,7 @@ public class Member {
 
 		ExceedMember em = ExceedDAO.getExceedMember(mid);
 		if (em != null) {
-			em.addContribution((int) (15 * mult.get() * spamModif));
+			em.addContribution((int) (15 * spamModif));
 			ExceedDAO.saveExceedMember(em);
 		}
 
