@@ -466,12 +466,13 @@ public class Shoukan extends Game {
                         his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
                         if (postCombat()) return;
                     }
-                    killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1]);
 
                     if (!his.isDefending()) {
                         Hand enemy = getHands().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
                         enemy.removeHp(yPower - hPower);
                     }
+
+                    killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1]);
 
                     if (!postCombat()) {
                         resetTimerKeepTurn();
@@ -494,11 +495,12 @@ public class Shoukan extends Game {
                         his.getEffect(new EffectParameters(phase, EffectTrigger.POST_DEFENSE, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
                         if (postCombat()) return;
                     }
-                    killCard(h.getSide(), is[0]);
 
                     if (yours.getBonus().getSpecialData().remove("noDamage") == null) {
                         h.removeHp(hPower - yPower);
                     }
+
+                    killCard(h.getSide(), is[0]);
 
                     if (!postCombat()) {
                         resetTimerKeepTurn();
