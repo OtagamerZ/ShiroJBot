@@ -28,15 +28,13 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class MonthlyEvent implements Job {
@@ -93,10 +91,16 @@ public class MonthlyEvent implements Job {
 			}
 		});
 
-		String[] dozens = new String[6];
-		for (int i = 0; i < 6; i++) {
-			dozens[i] = StringUtils.leftPad(String.valueOf(Helper.rng(30, false)), 2, "0");
-		}
+		List<String> ns = List.of(
+				"00", "01", "02", "03", "04", "05",
+				"06", "07", "08", "09", "10", "11",
+				"12", "13", "14", "15", "16", "17",
+				"18", "19", "20", "21", "22", "23",
+				"24", "25", "26", "27", "28", "29",
+				"30"
+		);
+		List<String> dozens = Helper.getRandomN(ns, 6, 1);
+		dozens.sort(Comparator.comparingInt(Integer::parseInt));
 		String result = String.join(",", dozens);
 		List<Lottery> winners = LotteryDAO.getLotteries();
 
@@ -172,7 +176,5 @@ public class MonthlyEvent implements Job {
 			VotesDAO.saveRating(dr);
 			AccountDAO.saveAccount(acc);
 		}
-
-		DynamicParameterDAO.setParam("last_upd_month", String.valueOf(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).getMonthValue()));
 	}
 }
