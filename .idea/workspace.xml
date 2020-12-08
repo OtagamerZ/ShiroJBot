@@ -14,11 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/charm/doppelganger.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -892,21 +890,8 @@
       <workItem from="1607350850985" duration="2021000" />
       <workItem from="1607357523186" duration="2556000" />
       <workItem from="1607367447270" duration="5640000" />
-      <workItem from="1607429390672" duration="4117000" />
-    </task>
-    <task id="LOCAL-02986" summary="Agora é armazenada a quantidade de votos que cada suporte recebeu">
-      <created>1606400244558</created>
-      <option name="number" value="02986" />
-      <option name="presentableId" value="LOCAL-02986" />
-      <option name="project" value="LOCAL" />
-      <updated>1606400244559</updated>
-    </task>
-    <task id="LOCAL-02987" summary="Correção menor">
-      <created>1606407143984</created>
-      <option name="number" value="02987" />
-      <option name="presentableId" value="LOCAL-02987" />
-      <option name="project" value="LOCAL" />
-      <updated>1606407143986</updated>
+      <workItem from="1607429390672" duration="8050000" />
+      <workItem from="1607443353570" duration="4657000" />
     </task>
     <task id="LOCAL-02988" summary="Adicionado bloqueio de coleta em canais que não sejam o configurado para aparecerem kawaipons/drops">
       <created>1606408394187</created>
@@ -1237,7 +1222,21 @@
       <option name="project" value="LOCAL" />
       <updated>1607374768860</updated>
     </task>
-    <option name="localTasksCounter" value="3035" />
+    <task id="LOCAL-03035" summary="Adição do amuleto clone">
+      <created>1607434009847</created>
+      <option name="number" value="03035" />
+      <option name="presentableId" value="LOCAL-03035" />
+      <option name="project" value="LOCAL" />
+      <updated>1607434009847</updated>
+    </task>
+    <task id="LOCAL-03036" summary="Adição do amuleto clone">
+      <created>1607434107586</created>
+      <option name="number" value="03036" />
+      <option name="presentableId" value="LOCAL-03036" />
+      <option name="project" value="LOCAL" />
+      <updated>1607434107586</updated>
+    </task>
+    <option name="localTasksCounter" value="3037" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1303,7 +1302,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Aumento no salário dos suportes" />
     <MESSAGE value="Correção na loja de arenas" />
     <MESSAGE value="Agora é armazenada a quantidade de votos que cada suporte recebeu" />
     <MESSAGE value="Adicionado bloqueio de coleta em canais que não sejam o configurado para aparecerem kawaipons/drops" />
@@ -1328,7 +1326,8 @@
     <MESSAGE value="Correção na loja de cartas" />
     <MESSAGE value="Melhoria no logger do comando de busca por anime" />
     <MESSAGE value="Correção no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no Shoukan" />
+    <MESSAGE value="Adição do amuleto clone" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição do amuleto clone" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1390,34 +1389,34 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607374767861">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607434106658">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607374767861" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607434106658" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1606176807594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605528924821" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606176807594" />
-    <state width="1387" height="315" key="GridCell.Tab.0.bottom" timestamp="1607433533649">
+    <state width="1387" height="315" key="GridCell.Tab.0.bottom" timestamp="1607448236723">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1607433533649" />
+    <state width="1387" height="315" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1607448236723" />
     <state width="1648" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606780154149" />
-    <state width="1387" height="315" key="GridCell.Tab.0.center" timestamp="1607433533649">
+    <state width="1387" height="315" key="GridCell.Tab.0.center" timestamp="1607448236723">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1607433533649" />
+    <state width="1387" height="315" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1607448236723" />
     <state width="1648" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606780154149" />
-    <state width="1387" height="315" key="GridCell.Tab.0.left" timestamp="1607433533649">
+    <state width="1387" height="315" key="GridCell.Tab.0.left" timestamp="1607448236723">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1607433533649" />
+    <state width="1387" height="315" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1607448236723" />
     <state width="1648" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606780154149" />
-    <state width="1387" height="315" key="GridCell.Tab.0.right" timestamp="1607433533649">
+    <state width="1387" height="315" key="GridCell.Tab.0.right" timestamp="1607448236723">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1607433533649" />
+    <state width="1387" height="315" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1607448236723" />
     <state width="1648" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606780154149" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1607347986126">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1442,10 +1441,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607374770064">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607434110738">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607374770064" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607434110738" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607278811557" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
