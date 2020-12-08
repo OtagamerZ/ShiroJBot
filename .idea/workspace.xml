@@ -15,8 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -891,14 +891,10 @@
       <workItem from="1607357523186" duration="2556000" />
       <workItem from="1607367447270" duration="5640000" />
       <workItem from="1607429390672" duration="8050000" />
-      <workItem from="1607443353570" duration="4657000" />
-    </task>
-    <task id="LOCAL-02988" summary="Adicionado bloqueio de coleta em canais que não sejam o configurado para aparecerem kawaipons/drops">
-      <created>1606408394187</created>
-      <option name="number" value="02988" />
-      <option name="presentableId" value="LOCAL-02988" />
-      <option name="project" value="LOCAL" />
-      <updated>1606408394187</updated>
+      <workItem from="1607443353570" duration="6345000" />
+      <workItem from="1607457776243" duration="1131000" />
+      <workItem from="1607459697428" duration="101000" />
+      <workItem from="1607460400312" duration="428000" />
     </task>
     <task id="LOCAL-02989" summary="Correção menor">
       <created>1606409144335</created>
@@ -1236,7 +1232,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607434107586</updated>
     </task>
-    <option name="localTasksCounter" value="3037" />
+    <task id="LOCAL-03037" summary="Correção menor">
+      <created>1607450805255</created>
+      <option name="number" value="03037" />
+      <option name="presentableId" value="LOCAL-03037" />
+      <option name="project" value="LOCAL" />
+      <updated>1607450805256</updated>
+    </task>
+    <option name="localTasksCounter" value="3038" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1319,7 +1322,6 @@
     <MESSAGE value="Correção no cron mensal" />
     <MESSAGE value="Correção na conversão de sonhos em créditos voláteis" />
     <MESSAGE value="Correção da derrota por WO após a partida ter acabado" />
-    <MESSAGE value="Correção menor" />
     <MESSAGE value="Adição de efeito de trava de deck" />
     <MESSAGE value="Pontuação de Exceeds agora não é mais influenciada por modificadores" />
     <MESSAGE value="Adição de endpoint da API do Mega Hentais" />
@@ -1327,7 +1329,8 @@
     <MESSAGE value="Melhoria no logger do comando de busca por anime" />
     <MESSAGE value="Correção no Shoukan" />
     <MESSAGE value="Adição do amuleto clone" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição do amuleto clone" />
+    <MESSAGE value="Correção menor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1389,10 +1392,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607434106658">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607450804350">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607434106658" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607450804350" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1606176807594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1441,10 +1444,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607434110738">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607450853076">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607434110738" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607450853076" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607278811557" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
