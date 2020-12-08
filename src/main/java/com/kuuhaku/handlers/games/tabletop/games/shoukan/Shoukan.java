@@ -478,7 +478,7 @@ public class Shoukan extends Game {
                         if (postCombat()) return;
                     }
 
-                    if (!his.isDefending()) {
+                    if (!his.isDefending() && (getCustom() == null || !getCustom().getBoolean("semdano"))) {
                         Hand enemy = getHands().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
                         enemy.removeHp(yPower - hPower);
                     }
@@ -507,7 +507,7 @@ public class Shoukan extends Game {
                         if (postCombat()) return;
                     }
 
-                    if (yours.getBonus().getSpecialData().remove("noDamage") == null) {
+                    if (yours.getBonus().getSpecialData().remove("noDamage") == null && (getCustom() == null || !getCustom().getBoolean("semdano"))) {
                         h.removeHp(hPower - yPower);
                     }
 
