@@ -269,8 +269,8 @@ public class Shoukan extends Game {
                             if (sc != null) {
                                 Champion dp = target.getTop().copy();
                                 dp.clearLinkedTo();
-                                dp.setBaseAtk(dp.getBaseAtk() / 2);
-                                dp.setBaseDef(dp.getBaseDef() / 2);
+                                dp.setBaseAtk(Math.round(dp.getBaseAtk() * 0.75f));
+                                dp.setBaseDef(Math.round(dp.getBaseDef() * 0.75f));
 
                                 sc.setTop(dp);
                             }
