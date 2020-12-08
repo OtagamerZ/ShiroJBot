@@ -263,6 +263,17 @@ public class Shoukan extends Game {
                         } else if (tp.getCharm() != null && tp.getCharm() == Charm.DOUBLETAP) {
                             t.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
                             if (postCombat()) return;
+                        } else if (tp.getCharm() != null && tp.getCharm() == Charm.DOPPELGANGER) {
+                            SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(h.getSide(), true);
+
+                            if (sc != null) {
+                                Champion dp = target.getTop().copy();
+                                dp.clearLinkedTo();
+                                dp.setBaseAtk(dp.getBaseAtk() / 2);
+                                dp.setBaseDef(dp.getBaseDef() / 2);
+
+                                sc.setTop(dp);
+                            }
                         }
                     }
                 } else if (d instanceof Champion) {
