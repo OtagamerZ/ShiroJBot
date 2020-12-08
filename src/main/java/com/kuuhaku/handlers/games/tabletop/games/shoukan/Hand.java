@@ -58,13 +58,13 @@ public class Hand {
 
 		this.mana = game.getCustom() == null ? 0 : Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
 		this.hp = game.getCustom() == null ? 5000 : Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
-		this.startingCount = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("stcards", 5), 1, 10);
+		this.startingCount = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
 		this.manaPerTurn = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
 
 		if (game.getCustom() != null) {
-			if (!game.getCustom().optBoolean("banEquip", false))
+			if (!game.getCustom().optBoolean("semequip", false))
 				deque.removeIf(d -> d instanceof Equipment);
-			if (!game.getCustom().optBoolean("banField", false))
+			if (!game.getCustom().optBoolean("semfield", false))
 				deque.removeIf(d -> d instanceof Field);
 		}
 
