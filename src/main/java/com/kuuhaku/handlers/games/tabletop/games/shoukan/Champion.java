@@ -295,8 +295,16 @@ public class Champion implements Drawable, Cloneable {
 		return atk;
 	}
 
+	public void setBaseAtk(int atk) {
+		this.atk = atk;
+	}
+
 	public int getBaseDef() {
 		return def;
+	}
+
+	public void setBaseDef(int def) {
+		this.def = def;
 	}
 
 	public int getAtk() {
