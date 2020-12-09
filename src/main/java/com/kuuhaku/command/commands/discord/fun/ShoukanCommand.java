@@ -59,7 +59,7 @@ public class ShoukanCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		boolean practice = (args.length > 0 && Helper.equalsAny(args[0], "practice", "treino"));
+		boolean practice = args.length > 0 && Helper.equalsAny(args[0], "practice", "treino");
 
 		if (practice) {
 			JSONObject custom = Helper.findJson(rawCmd);
@@ -73,7 +73,7 @@ public class ShoukanCommand extends Command {
 				}
 			}
 
-			String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
+			String id = author.getId() + "." + 0 + "." + guild.getId();
 
 			if (Main.getInfo().gameInProgress(author.getId())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
