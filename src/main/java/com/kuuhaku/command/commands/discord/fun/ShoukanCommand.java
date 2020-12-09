@@ -59,7 +59,7 @@ public class ShoukanCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		boolean practice = (args.length > 1 && Helper.equalsAny(args[0], "practice", "treino"));
+		boolean practice = (args.length > 0 && Helper.equalsAny(args[0], "practice", "treino"));
 
 		if (!practice) {
 			if (message.getMentionedUsers().size() == 0) {
