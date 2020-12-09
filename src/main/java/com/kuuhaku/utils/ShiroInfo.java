@@ -21,6 +21,7 @@ package com.kuuhaku.utils;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.gson.GsonBuilder;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
 import com.kuuhaku.events.ShiroEvents;
@@ -35,7 +36,6 @@ import com.kuuhaku.model.persistent.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.spaceprogram.kittycache.KittyCache;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
@@ -56,22 +56,22 @@ import java.util.stream.Stream;
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
 
-    //TODO Alternador do modo desenvolvimento (true quando utilizar em IDEs, false quando for dar push para o master)
-    private static final boolean DEV = false;
+	//TODO Alternador do modo desenvolvimento (true quando utilizar em IDEs, false quando for dar push para o master)
+	private static final boolean DEV = false;
 
-    //CONSTANTS
-    private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
-    private static final ThreadPoolExecutor compilationPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
-    private static final String BotToken = System.getenv("BOT_TOKEN");
-    private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
-    private static final String DBLToken;
-    private static final String name = "Shiro J. Bot";
-    private static final String version = VersionDAO.getBuildVersion(Version.V3);
-    private static final String supportServerName = "Shiro Support";
-    private static final String supportServerID = "421495229594730496";
-    private static final String twitchChannelID = "743479145618472960";
-    private static final String announcementChannelID = "597587565809369089";
-    private static final String default_prefix = DEV ? "dev!" : "s!";
+	//CONSTANTS
+	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
+	private static final ThreadPoolExecutor compilationPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
+	private static final String botToken = System.getenv("BOT_TOKEN");
+	private static final String youtubeToken = System.getenv("YOUTUBE_TOKEN");
+	private static final String dblToken;
+	private static final String name = "Shiro J. Bot";
+	private static final String version = VersionDAO.getBuildVersion(Version.V3);
+	private static final String supportServerName = "Shiro Support";
+	private static final String supportServerID = "421495229594730496";
+	private static final String twitchChannelID = "743479145618472960";
+	private static final String announcementChannelID = "597587565809369089";
+	private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String shiro = "572413282653306901";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
@@ -106,16 +106,15 @@ public class ShiroInfo {
 
 	//STATIC CONSTRUCTOR
 	static {
-		if (System.getenv().containsKey("TOPGG_TOKEN")) DBLToken = System.getenv("TOPGG_TOKEN");
-		else DBLToken = null;
+		if (System.getenv().containsKey("TOPGG_TOKEN")) dblToken = System.getenv("TOPGG_TOKEN");
+		else dblToken = null;
 	}
 
-	private JDA api = null;
 	private long startTime = 0;
 	private String winner = "";
 	private WebSocketConfig sockets;
-	private final DiscordBotListAPI dblApi = DBLToken == null ? null : new DiscordBotListAPI.Builder()
-			.token(DBLToken)
+	private final DiscordBotListAPI dblApi = dblToken == null ? null : new DiscordBotListAPI.Builder()
+			.token(dblToken)
 			.botId("572413282653306901")
 			.build();
 	private final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
@@ -208,18 +207,18 @@ public class ShiroInfo {
 
     public boolean isDev() {
         return DEV;
-    }
-
-    public String getBotToken() {
-        return BotToken;
-    }
-
-	public String getYoutubeToken() {
-		return YoutubeToken;
 	}
 
-	public static String getDBLToken() {
-		return DBLToken;
+	public String getBotToken() {
+		return botToken;
+	}
+
+	public String getYoutubeToken() {
+		return youtubeToken;
+	}
+
+	public static String getDblToken() {
+		return dblToken;
 	}
 
 	public DiscordBotListAPI getDblApi() {
@@ -285,18 +284,6 @@ public class ShiroInfo {
 	}
 
 	//VARIABLES
-	public JDA getAPI() {
-		return api;
-	}
-
-	public void setAPI(JDA api) {
-		this.api = api;
-	}
-
-	public SelfUser getSelfUser() {
-		return api.getSelfUser();
-	}
-
 	public long getStartTime() {
 		return startTime;
 	}
@@ -306,7 +293,7 @@ public class ShiroInfo {
 	}
 
 	public User getUserByID(String userID) {
-		return api.getUserById(userID);
+		return Main.getShiroShards().getUserById(userID);
 	}
 
 	public Member getMemberByID(String userID) {
@@ -320,11 +307,11 @@ public class ShiroInfo {
 	}
 
 	public Role getRoleByID(String roleID) {
-		return api.getRoleById(roleID);
+		return Main.getShiroShards().getRoleById(roleID);
 	}
 
 	public Guild getGuildByID(String guildID) {
-		return api.getGuildById(guildID);
+		return Main.getShiroShards().getGuildById(guildID);
 	}
 
 	public String getWinner() {

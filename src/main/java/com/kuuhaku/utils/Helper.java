@@ -60,6 +60,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -341,6 +342,25 @@ public class Helper {
 		List<Webhook> whs = chn.retrieveWebhooks().submit().get();
 		whs.stream()
 				.filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == bot.getSelfUser())
+				.findFirst()
+				.ifPresent(w -> webhook[0] = w);
+
+		try {
+			if (webhook[0] == null) return chn.createWebhook(name).complete();
+			else {
+				webhook[0].getUrl();
+				return webhook[0];
+			}
+		} catch (NullPointerException e) {
+			return chn.createWebhook(name).complete();
+		}
+	}
+
+	public static Webhook getOrCreateWebhook(TextChannel chn, String name, ShardManager manager) throws InterruptedException, ExecutionException {
+		final Webhook[] webhook = {null};
+		List<Webhook> whs = chn.retrieveWebhooks().submit().get();
+		whs.stream()
+				.filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == manager.getShards().get(0).getSelfUser())
 				.findFirst()
 				.ifPresent(w -> webhook[0] = w);
 
@@ -706,7 +726,7 @@ public class Helper {
 			JSONObject msg = new JSONObject();
 
 			JSONObject btn = new JSONObject();
-			btn.put("emote", EmojiUtils.containsEmoji(s2) ? s2 : Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(s2)).getId());
+			btn.put("emote", EmojiUtils.containsEmoji(s2) ? s2 : Objects.requireNonNull(Main.getShiroShards().getEmoteById(s2)).getId());
 			btn.put("role", message.getMentionedRoles().get(0).getId());
 
 			if (!root.has(msgId)) {
@@ -738,7 +758,7 @@ public class Helper {
 		List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getId).collect(Collectors.toList());
 		List<Guild> spGuilds = new ArrayList<>();
 		for (String sp : sponsors) {
-			spGuilds.add(Main.getInfo().getAPI()
+			spGuilds.add(Main.getShiroShards()
 					.getGuilds()
 					.stream()
 					.filter(g -> g.getOwnerId().equals(sp) && g.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE))
@@ -752,7 +772,7 @@ public class Helper {
 		for (Guild g : spGuilds) {
 			AtomicReference<Invite> i = new AtomicReference<>();
 			g.retrieveInvites().queue(invs -> invs.forEach(inv -> {
-				if (inv.getInviter() == Main.getInfo().getSelfUser()) {
+				if (inv.getInviter() == Main.getSelfUser()) {
 					i.set(inv);
 				}
 			}));
@@ -833,7 +853,7 @@ public class Helper {
 
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith(":") && args[i].endsWith(":")) {
-				Emote e = Main.getInfo().getAPI().getEmoteById(ShiroInfo.getEmoteCache().get(args[i]));
+				Emote e = Main.getShiroShards().getEmoteById(ShiroInfo.getEmoteCache().get(args[i]));
 				if (e != null)
 					args[i] = e.getAsMention();
 			}
@@ -897,7 +917,7 @@ public class Helper {
 
 			boolean makenew = false;
 			String id = ShiroInfo.getEmoteCache().get(oldWords[i]);
-			Emote e = id == null ? null : Main.getInfo().getAPI().getEmoteById(id);
+			Emote e = id == null ? null : Main.getShiroShards().getEmoteById(id);
 			if (e != null && !Objects.requireNonNull(e.getGuild()).getId().equals(g.getId()))
 				makenew = true;
 
@@ -941,7 +961,7 @@ public class Helper {
 	}
 
 	public static boolean showMMError(User author, MessageChannel channel, Guild guild, String rawMessage, Command command) {
-		if (author == Main.getInfo().getSelfUser()) {
+		if (author.getId().equals(Main.getSelfUser().getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_human-command")).queue();
 			return true;
 		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked() && command.requiresMM()) {
@@ -1587,7 +1607,7 @@ public class Helper {
 				try {
 					TextChannel c = g.getTextChannelById(gc.getCanalAvisos());
 					if (c != null && c.canTalk()) {
-						Webhook wh = Helper.getOrCreateWebhook(c, "Notificações Shiro", Main.getInfo().getAPI());
+						Webhook wh = Helper.getOrCreateWebhook(c, "Notificações Shiro", Main.getShiroShards());
 						if (wh == null) result.put(g.getName(), false);
 						else {
 							WebhookClientBuilder wcb = new WebhookClientBuilder(wh.getUrl());

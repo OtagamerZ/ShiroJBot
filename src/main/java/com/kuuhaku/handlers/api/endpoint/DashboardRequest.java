@@ -59,7 +59,7 @@ public class DashboardRequest {
 
 		JSONObject jo = new JSONObject();
 
-		jo.put("client_id", Main.getInfo().getSelfUser().getId());
+		jo.put("client_id", Main.getSelfUser().getId());
 		jo.put("client_secret", System.getenv("BOT_SECRET"));
 		jo.put("grant_type", "authorization_code");
 		jo.put("code", code);

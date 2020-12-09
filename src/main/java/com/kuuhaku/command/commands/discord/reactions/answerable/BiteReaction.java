@@ -51,8 +51,8 @@ public class BiteReaction extends Reaction {
 				"Não sou biscoito pra morder!"
 		});
 
-		if (getInteraction()[1] == Main.getInfo().getSelfUser()) {
-			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou morder a " + Main.getInfo().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
+		if (getInteraction()[1] == Main.getSelfUser()) {
+			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou morder a " + Main.getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
 			return;
 		}
 

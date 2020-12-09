@@ -50,8 +50,8 @@ public class HugReaction extends Reaction {
 				"Moshi moshi, FBI-sama?"
 		});
 
-		if (getInteraction()[1] == Main.getInfo().getSelfUser()) {
-			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou abraçar a " + Main.getInfo().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
+		if (getInteraction()[1] == Main.getSelfUser()) {
+			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou abraçar a " + Main.getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
 			return;
 		}
 

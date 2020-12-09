@@ -85,7 +85,7 @@ public class HelpCommand extends Command {
 
 			eb.setColor(Color.PINK);
 			eb.setFooter(Main.getInfo().getFullName(), null);
-			eb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(Helper.HOME)).getImageUrl());
+			eb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(Helper.HOME)).getImageUrl());
 
 			pages.put(Helper.HOME, new Page(PageType.EMBED, eb.build()));
 
@@ -93,7 +93,7 @@ public class HelpCommand extends Command {
 				EmbedBuilder ceb = new ColorlessEmbedBuilder();
 				ceb.setTitle(cat.getName());
 				ceb.setFooter(Main.getInfo().getFullName(), null);
-				ceb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(cat.getEmoteId())).getImageUrl());
+				ceb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(cat.getEmoteId())).getImageUrl());
 
 				ceb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_prefix"), prefix, cat.getCmds().size()));
 
@@ -118,7 +118,7 @@ public class HelpCommand extends Command {
 			EmbedBuilder ceb = new ColorlessEmbedBuilder();
 			ceb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_tips-and-tricks"));
 			ceb.setFooter(Main.getInfo().getFullName(), null);
-			ceb.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById("684039810079522846")).getImageUrl()));
+			ceb.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getShiroShards().getEmoteById("684039810079522846")).getImageUrl()));
 
 			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_quick-emote-tip"), prefix), false);
 			ceb.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_pagination-tip"), false);
@@ -148,7 +148,7 @@ public class HelpCommand extends Command {
 			}
 
 			eb.setFooter(Main.getInfo().getFullName(), null);
-			eb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(Helper.HOME)).getImageUrl());
+			eb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(Helper.HOME)).getImageUrl());
 
 			channel.sendMessage(eb.build()).queue();
 			return;
