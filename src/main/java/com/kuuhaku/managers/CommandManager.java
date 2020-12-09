@@ -122,7 +122,7 @@ public class CommandManager {
 					"shards", "cmd_shard-status", DEV, true
 			));
 			put(ShardRestartCommand.class, new Argument(
-					"rshard", REQ_ID, "cmd_rshard", DEV, false
+					"rshard", REQ_ID, "cmd_shard-restart", DEV, false
 			));
 
 			//SUPPORT
