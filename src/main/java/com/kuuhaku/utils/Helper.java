@@ -1549,7 +1549,12 @@ public class Helper {
 	}
 
 	public static <T> T getRandom(List<Pair<T, Double>> values) {
-		EnumeratedDistribution<T> ed = new EnumeratedDistribution<>(values.stream().sorted(Comparator.comparingDouble(Pair::getValue)).collect(Collectors.toList()));
+		EnumeratedDistribution<T> ed = new EnumeratedDistribution<>(
+				values.stream()
+						.sorted(Comparator.comparingDouble(Pair::getValue))
+						.map(p -> p.getValue() < 0 ? Pair.create(p.getFirst(), 0d) : p)
+						.collect(Collectors.toList())
+		);
 
 		return ed.sample();
 	}

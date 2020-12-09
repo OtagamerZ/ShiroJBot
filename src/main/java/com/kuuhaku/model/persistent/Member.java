@@ -25,14 +25,12 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.Bonus;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
+import com.kuuhaku.model.enums.TrophyType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -88,6 +86,9 @@ public class Member {
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean rulesSent = false;
+
+	@Enumerated(value = EnumType.STRING)
+	private TrophyType trophy = null;
 
 	public Member() {
 
@@ -299,6 +300,14 @@ public class Member {
 
 	public void setPseudoAvatar(String pseudoAvatar) {
 		this.pseudoAvatar = pseudoAvatar;
+	}
+
+	public TrophyType getTrophy() {
+		return trophy;
+	}
+
+	public void setTrophy(TrophyType trophy) {
+		this.trophy = trophy;
 	}
 
 	public int getLocalRank() {
