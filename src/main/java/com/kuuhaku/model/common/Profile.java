@@ -65,7 +65,6 @@ public class Profile {
 	}
 
 	public static BufferedImage makeProfile(net.dv8tion.jda.api.entities.Member m, Guild g) throws IOException {
-		int w = WIDTH;
 		BufferedImage avatar;
 		Member mb = MemberDAO.getMemberById(m.getUser().getId() + g.getId());
 		Account acc = AccountDAO.getAccount(m.getId());
@@ -76,7 +75,7 @@ public class Profile {
 			avatar = Helper.scaleImage(ImageIO.read(Helper.getImage("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg")), 200, 200);
 		}
 
-		BufferedImage bi = new BufferedImage(w, HEIGTH, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(WIDTH, HEIGTH, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setBackground(Color.black);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -125,8 +124,8 @@ public class Profile {
 		}
 
 		g2d.setColor(new Color(main.getRed(), main.getGreen(), main.getBlue(), 100));
-		g2d.fillRect(0, 300, w, 300);
-		g2d.fillRect(0, 350, w, 250);
+		g2d.fillRect(0, 300, WIDTH, 300);
+		g2d.fillRect(0, 350, WIDTH, 250);
 
 		drawPrestigeDetails(g2d, avatar, main, mb.getLevel());
 
@@ -135,7 +134,7 @@ public class Profile {
 		g2d.fillRect(50, 348, 200, 204);
 
 		g2d.setColor(lvlBar);
-		g2d.setClip(new Rectangle2D.Float(0, 100, w, 250));
+		g2d.setClip(new Rectangle2D.Float(0, 100, WIDTH, 250));
 
 		long xpToNext = (long) ((Math.pow(mb.getLevel(), 2) * 100) - (Math.pow(mb.getLevel() - 1, 2) * 100));
 		long currentXp = (long) (mb.getXp() - (Math.pow(mb.getLevel() - 1, 2) * 100));
@@ -214,7 +213,7 @@ public class Profile {
 		g2d.drawImage(avatar, null, 50, 200);
 
 		if (mb.getTrophy() != null)
-			g2d.drawImage(mb.getTrophy().getImage(), 287, 14, null);
+			g2d.drawImage(mb.getTrophy().getImage(), 665, 22, null);
 
 		g2d.dispose();
 
