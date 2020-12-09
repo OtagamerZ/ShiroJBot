@@ -63,7 +63,7 @@ public class ShoukanCommand extends Command {
 
 		if (practice) {
 			JSONObject custom = Helper.findJson(rawCmd);
-			boolean daily = Helper.equalsAny(args[1], "daily", "diario");
+			boolean daily = args.length > 1 && Helper.equalsAny(args[1], "daily", "diario");
 
 			if (!daily) {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
