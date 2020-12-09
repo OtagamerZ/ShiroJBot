@@ -71,6 +71,7 @@ public class Shoukan extends Game {
     private final boolean[] changed = {false, false, false, false, false};
     private final boolean daily;
     private boolean draw = false;
+    private Side current = Side.BOTTOM;
 
     public Shoukan(JDA handler, TextChannel channel, int bet, JSONObject custom, boolean daily, User... players) {
         super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, custom);
