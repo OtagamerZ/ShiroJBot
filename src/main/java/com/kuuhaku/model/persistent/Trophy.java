@@ -30,6 +30,7 @@ public class Trophy {
 	@Id
 	private String uid;
 
+	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<TrophyType> trophies = EnumSet.noneOf(TrophyType.class);
 
