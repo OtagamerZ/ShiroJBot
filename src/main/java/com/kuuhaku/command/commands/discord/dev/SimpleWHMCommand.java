@@ -55,7 +55,7 @@ public class SimpleWHMCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		try {
-			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Webhook Test", Main.getInfo().getAPI());
+			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Webhook Test", Main.getShiroShards());
 			Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, String.join(" ", args));
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
@@ -71,7 +71,7 @@ public class SimpleWHMCommand extends Command {
 				e.printStackTrace();
 			}
 		} catch (InterruptedException | ExecutionException | InsufficientPermissionException e) {
-			Helper.sendPM(Objects.requireNonNull(message.getTextChannel().getGuild().getOwner()).getUser(), "❌ | " + Main.getInfo().getAPI().getSelfUser().getName() + " não possui permissão para criar um webhook em seu servidor no canal " + message.getTextChannel().getAsMention());
+			Helper.sendPM(Objects.requireNonNull(message.getTextChannel().getGuild().getOwner()).getUser(), "❌ | " + Main.getSelfUser().getName() + " não possui permissão para criar um webhook em seu servidor no canal " + message.getTextChannel().getAsMention());
 		}
 	}
 }

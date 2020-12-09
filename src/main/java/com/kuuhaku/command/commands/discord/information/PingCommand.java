@@ -59,9 +59,9 @@ public class PingCommand extends Command {
 						:floppy_disk: %s MB!
 						:telephone: %s 
 						""".formatted(
-						Main.getInfo().getAPI().getGatewayPing(),
+						(int) Main.getShiroShards().getAverageGatewayPing(),
 						fp,
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_listeners"), Main.getInfo().getAPI().getEventManager().getRegisteredListeners().size())
+						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_listeners"), Main.getShiroShards().getShards().get(0).getEventManager().getRegisteredListeners().size())
 				)))
 				.queue();
 

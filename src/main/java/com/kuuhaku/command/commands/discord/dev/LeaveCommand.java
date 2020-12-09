@@ -59,7 +59,7 @@ public class LeaveCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		List<String[]> servers = new ArrayList<>();
-		Main.getInfo().getAPI().getGuilds().forEach(g -> servers.add(new String[]{g.getName(), g.getId(), String.valueOf(g.getMembers().stream().filter(m -> !m.getUser().isBot()).count())}));
+		Main.getShiroShards().getGuilds().forEach(g -> servers.add(new String[]{g.getName(), g.getId(), String.valueOf(g.getMembers().stream().filter(m -> !m.getUser().isBot()).count())}));
 		List<List<String[]>> svPages = Helper.chunkify(servers, 10);
 
 		List<Page> pages = new ArrayList<>();

@@ -34,13 +34,13 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -74,7 +74,7 @@ public class Shoukan extends Game {
     private Side current = Side.BOTTOM;
     private Side next = Side.TOP;
 
-    public Shoukan(JDA handler, TextChannel channel, int bet, JSONObject custom, boolean daily, User... players) {
+    public Shoukan(ShardManager handler, TextChannel channel, int bet, JSONObject custom, boolean daily, User... players) {
         super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, custom);
         this.channel = channel;
         this.daily = daily;

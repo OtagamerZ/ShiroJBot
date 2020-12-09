@@ -139,7 +139,7 @@ public class EffectParameters {
 
 	public void sendWebhookMessage(String message, String gif, Champion champion) {
 		try {
-			Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getInfo().getAPI());
+			Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
 			Card c = champion.getCard();
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder()

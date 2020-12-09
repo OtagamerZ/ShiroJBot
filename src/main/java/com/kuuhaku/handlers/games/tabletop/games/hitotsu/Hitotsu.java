@@ -31,12 +31,12 @@ import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,7 +66,7 @@ public class Hitotsu extends Game {
 	private Message message = null;
 	private boolean suddenDeath = false;
 
-	public Hitotsu(JDA handler, TextChannel channel, int bet, User... players) {
+	public Hitotsu(ShardManager handler, TextChannel channel, int bet, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel);
 		this.channel = channel;
 

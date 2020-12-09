@@ -133,8 +133,8 @@ public class HitotsuCommand extends Command {
             add(author.getId());
         }};
 
-        Game t = new Hitotsu(Main.getInfo().getAPI(), (TextChannel) channel, bet, players.toArray(User[]::new));
-        String msg;
+        Game t = new Hitotsu(Main.getShiroShards(), (TextChannel) channel, bet, players.toArray(User[]::new));
+		String msg;
         if (players.size() > 2)
             msg = message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : "");
         else

@@ -43,15 +43,16 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.persistence.NoResultException;
-import javax.security.auth.login.LoginException;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -65,7 +66,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static ConsoleListener console;
 	private static CommandManager cmdManager;
 	private static TwitchCommandManager tCmdManager;
-	private static JDA api;
+	private static ShardManager shiroShards;
 	private static JDA jbr;
 	private static JDA tet;
 	private static TwitchClient twitch;
@@ -89,21 +90,18 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		EnumSet<GatewayIntent> intents = EnumSet.allOf(GatewayIntent.class);
 
-		api = JDABuilder.create(info.getBotToken(), intents)
+		shiroShards = DefaultShardManagerBuilder.create(info.getBotToken(), intents)
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
 				.setAudioSendFactory(new NativeAudioSendFactory())
-				.build()
-				.awaitReady();
+				.build();
 
 		jbr = JDABuilder.createLight(System.getenv("JIBRIL_TOKEN"))
 				.build()
 				.awaitReady();
 
-		info.setAPI(api);
-
-		api.getPresence().setActivity(Activity.playing("Iniciando..."));
+		shiroShards.setActivity(Activity.playing("Iniciando..."));
 		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		info.setStartTime(Instant.now().getEpochSecond());
@@ -145,11 +143,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		finishStartUp();
 	}
 
-	private static void finishStartUp() throws IOException, InterruptedException {
-		api.getPresence().setActivity(getRandomActivity());
+	private static void finishStartUp() {
+		shiroShards.setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 		getInfo().setWinner(ExceedDAO.getWinner());
-		api.getGuilds().forEach(g -> {
+		shiroShards.getGuilds().forEach(g -> {
 			try {
 				GuildDAO.getGuildById(g.getId());
 			} catch (NoResultException e) {
@@ -159,14 +157,14 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		});
 
 		console = new ConsoleListener();
-		api.addEventListener(info.getShiroEvents());
+		shiroShards.addEventListener(info.getShiroEvents());
 		jbr.addEventListener(new JibrilEvents());
 
-		for (Emote emote : api.getEmotes()) {
+		for (Emote emote : shiroShards.getEmotes()) {
 			ShiroInfo.getEmoteCache().put(":" + emote.getName() + ":", emote.getId());
 		}
 
-		Pages.activate(api);
+		Pages.activate(shiroShards);
 		console.start();
 
 		GuildDAO.getAllGuildsWithButtons().forEach(Helper::refreshButtons);
@@ -180,7 +178,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		List<Activity> activities = new ArrayList<>() {{
 			add(Activity.playing("Digite " + info.getDefaultPrefix() + "ajuda para ver meus comandos!"));
 			add(Activity.playing("Nico nico nii!!"));
-			add(Activity.listening(api.getGuilds().size() + " servidores, e isso ainda é só o começo!"));
+			add(Activity.listening(shiroShards.getGuilds().size() + " servidores, e isso ainda é só o começo!"));
 			add(Activity.watching("No Game No Life pela 30ª vez, e ainda não enjoei de ver como eu atuo bem!"));
 		}};
 
@@ -189,6 +187,10 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static ShiroInfo getInfo() {
 		return info;
+	}
+
+	public static User getSelfUser() {
+		return shiroShards.getShards().get(0).getSelfUser();
 	}
 
 	public static CommandManager getCommandManager() {
@@ -213,12 +215,16 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		SpringApplication.exit(spring);
 		jbr.shutdownNow();
-		api.shutdownNow();
+		shiroShards.shutdown();
 		return true;
 	}
 
 	public static Relay getRelay() {
 		return relay;
+	}
+
+	public static ShardManager getShiroShards() {
+		return shiroShards;
 	}
 
 	public static JDA getJibril() {
@@ -227,21 +233,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static JDA getTet() {
 		return tet;
-	}
-
-	public static boolean reboot() throws LoginException, InterruptedException {
-		EnumSet<GatewayIntent> intents = EnumSet.allOf(GatewayIntent.class);
-		intents.remove(GatewayIntent.GUILD_PRESENCES);
-
-		api = JDABuilder.create(info.getBotToken(), intents)
-				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
-				.setMemberCachePolicy(m -> !m.getUser().isBot())
-				.setBulkDeleteSplittingEnabled(false)
-				.setAudioSendFactory(new NativeAudioSendFactory())
-				.build()
-				.awaitReady();
-
-		return true;
 	}
 
 	@Override

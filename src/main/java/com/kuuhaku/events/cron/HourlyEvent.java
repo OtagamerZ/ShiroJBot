@@ -41,7 +41,7 @@ public class HourlyEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		if (!Main.getInfo().isLive()) Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
+		if (!Main.getInfo().isLive()) Main.getShiroShards().setActivity(Main.getRandomActivity());
 
 		com.kuuhaku.controller.postgresql.BackupDAO.dumpData(
 				new DataDump(
@@ -58,20 +58,20 @@ public class HourlyEvent implements Job {
 		Helper.logger(this.getClass()).info("Atualizado vencedor mensal.");
 
 		if (Main.getInfo().getDblApi() != null) {
-			int size = Main.getInfo().getAPI().getGuilds().size();
+			int size = Main.getShiroShards().getGuilds().size();
 			Main.getInfo().getDblApi().setStats(size);
 			if (System.getenv().containsKey("DBL_TOKEN")) {
 				JSONObject jo = new JSONObject();
 
 				jo.put("guildCount", size);
 
-				String response = Helper.post("https://discord.bots.gg/api/v1/bots/" + Main.getInfo().getSelfUser().getId() + "/stats", jo, System.getenv("DBL_TOKEN")).toString();
+				String response = Helper.post("https://discord.bots.gg/api/v1/bots/" + Main.getShiroShards().getShards().get(0).getSelfUser().getId() + "/stats", jo, System.getenv("DBL_TOKEN")).toString();
 				Helper.logger(this.getClass()).debug(response);
 			}
 		}
 
 		ShiroInfo.getEmoteCache().clear();
-		for (Emote emote : Main.getInfo().getAPI().getEmotes()) {
+		for (Emote emote : Main.getShiroShards().getEmotes()) {
 			ShiroInfo.getEmoteCache().put(":" + emote.getName() + ":", emote.getId());
 		}
 

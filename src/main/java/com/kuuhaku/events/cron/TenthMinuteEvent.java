@@ -52,7 +52,7 @@ public class TenthMinuteEvent implements Job {
 		Main.getJibril().getGuilds().forEach(TenthMinuteEvent::notif);
 		AccountDAO.getNotifiableAccounts().forEach(Account::notifyVote);
 
-		for (Guild g : Main.getInfo().getAPI().getGuilds()) {
+		for (Guild g : Main.getShiroShards().getGuilds()) {
 			GuildMusicManager gmm = Music.getGuildAudioPlayer(g, null);
 			if (g.getAudioManager().isConnected() && (Objects.requireNonNull(g.getAudioManager().getConnectedChannel()).getMembers().size() < 1)) {
 				g.getAudioManager().closeAudioConnection();

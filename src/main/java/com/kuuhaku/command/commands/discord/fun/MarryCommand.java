@@ -63,7 +63,7 @@ public class MarryCommand extends Command {
 			} else if (message.getMentionedUsers().get(0) == author) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-yourself")).queue();
 				return;
-			} else if (message.getMentionedUsers().get(0) == Main.getInfo().getSelfUser() && !author.getId().equals(ShiroInfo.getNiiChan())) {
+			} else if (message.getMentionedUsers().get(0) == Main.getSelfUser() && !author.getId().equals(ShiroInfo.getNiiChan())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-shiro")).queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getJibril().getSelfUser() && !author.getId().equals(ShiroInfo.getNiiChan())) {
@@ -78,7 +78,7 @@ public class MarryCommand extends Command {
 			} else if (WaifuDAO.isWaifued(author) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0))) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
 				return;
-			} else if (author.getId().equals(Main.getInfo().getSelfUser().getId())) {
+			} else if (author.getId().equals(Main.getSelfUser().getId())) {
 				channel.sendMessage("Ei, o que você acha que está fazendo ao me forçar a me casar? :rage:").queue();
 				return;
 			} else if (author.isBot()) {

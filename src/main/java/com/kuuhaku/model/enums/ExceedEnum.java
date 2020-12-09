@@ -56,7 +56,7 @@ public enum ExceedEnum {
 
 	public Color getPalette() {
 		try {
-			return Helper.colorThief(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(TagIcons.getExceedId(this))).getImageUrl());
+			return Helper.colorThief(Objects.requireNonNull(Main.getShiroShards().getEmoteById(TagIcons.getExceedId(this))).getImageUrl());
 		} catch (IOException | NullPointerException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return Helper.getRandomColor();

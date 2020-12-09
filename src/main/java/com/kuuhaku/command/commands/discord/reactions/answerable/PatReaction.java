@@ -53,8 +53,8 @@ public class PatReaction extends Reaction {
 					"Nem tenta!"
 			});
 
-			if (message.getMentionedUsers().get(0) == Main.getInfo().getSelfUser()) {
-				sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou acariciar a " + Main.getInfo().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
+			if (message.getMentionedUsers().get(0) == Main.getSelfUser()) {
+				sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou acariciar a " + Main.getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
 				return;
 			}
 
