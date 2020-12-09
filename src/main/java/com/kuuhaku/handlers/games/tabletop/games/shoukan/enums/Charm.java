@@ -28,7 +28,8 @@ public enum Charm {
 	SPELLMIRROR("Reflexo de feitiços"),
 	TIMEWARP("Salto temporal"),
 	DOUBLETAP("Toque duplo"),
-	DOPPELGANGER("Clone");
+	DOPPELGANGER("Clone"),
+	SACRIFICE("Sacrifício");
 
 	private final String name;
 
