@@ -20,10 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.model.enums.TrophyType;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -33,7 +30,7 @@ public class Trophy {
 	@Id
 	private String uid;
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<TrophyType> trophies = EnumSet.noneOf(TrophyType.class);
 
 	public Trophy(String uid) {
