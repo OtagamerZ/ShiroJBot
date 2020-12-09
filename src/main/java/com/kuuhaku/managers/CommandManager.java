@@ -462,7 +462,7 @@ public class CommandManager {
 					"leilão", new String[]{"auction", "leilao", "auct"}, "req_card-type-price", "cmd_auction", MISC, true
 			));
 			put(ProfileTrophyCommand.class, new Argument(
-					"trofeu", new String[]{"trophy"}, "req_-id-reset", "cmd_trophy", MISC, true
+					"trofeu", new String[]{"trophy"}, "req_id-reset", "cmd_trophy", MISC, true
 			));
 
 			//FUN
