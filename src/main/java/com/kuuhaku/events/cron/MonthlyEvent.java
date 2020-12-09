@@ -150,12 +150,14 @@ public class MonthlyEvent implements Job {
 		for (Blacklist bl : blacklist) {
 			if (bl.canClear()) {
 				Account acc = AccountDAO.getAccount(bl.getId());
+				Trophy tp = TrophyDAO.getTrophies(bl.getId());
 				Kawaipon kp = KawaiponDAO.getKawaipon(bl.getId());
 				Kawaigotchi kg = KGotchiDAO.getKawaigotchi(bl.getId());
 				ExceedMember em = ExceedDAO.getExceedMember(bl.getId());
 				Tags t = TagDAO.getTagById(bl.getId());
 
 				AccountDAO.removeAccount(acc);
+				TrophyDAO.removeTrophies(tp);
 				MemberDAO.clearMember(bl.getId());
 				KawaiponDAO.removeKawaipon(kp);
 				if (kg != null)
