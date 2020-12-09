@@ -60,6 +60,11 @@ public class ProfileTrophyCommand extends Command {
 		Trophy t = TrophyDAO.getTrophies(author.getId());
 
 		if (args.length == 0) {
+			if (t.getTrophies().size() == 0) {
+				channel.sendMessage("❌ | Você não possui troféus ainda.").queue();
+				return;
+			}
+
 			List<Page> pages = new ArrayList<>();
 
 			List<List<TrophyType>> trophies = Helper.chunkify(t.getTrophies(), 10);
