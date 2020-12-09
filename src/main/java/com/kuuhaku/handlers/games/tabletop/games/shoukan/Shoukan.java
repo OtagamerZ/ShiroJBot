@@ -72,6 +72,7 @@ public class Shoukan extends Game {
     private final boolean daily;
     private boolean draw = false;
     private Side current = Side.BOTTOM;
+    private Side next = Side.TOP;
 
     public Shoukan(JDA handler, TextChannel channel, int bet, JSONObject custom, boolean daily, User... players) {
         super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, custom);
@@ -106,7 +107,7 @@ public class Shoukan extends Game {
 
     @Override
     public void start() {
-        Hand h = getHandById(getCurrent().getId());
+        Hand h = getHands().get(current);
         h.addMana(h.getManaPerTurn());
         channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
                 .addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
@@ -133,7 +134,7 @@ public class Shoukan extends Game {
     public void play(GuildMessageReceivedEvent evt) {
         Message message = evt.getMessage();
         String cmd = message.getContentRaw();
-        Hand h = getHandById(getCurrent().getId());
+        Hand h = getHands().get(current);
 
         if (cmd.equalsIgnoreCase("reload")) {
             resetTimerKeepTurn();
@@ -392,11 +393,12 @@ public class Shoukan extends Game {
                         return;
                     }
 
-                    Hand enemy = getHandById(getBoard().getPlayers().get(1).getId());
+                    Hand enemy = getHands().get(next);
+                    ;
 
                     int yPower = Math.round(
                             (c.getAtk() + c.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum()) *
-                                    (arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
+                            (arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
                     );
 
                     enemy.removeHp(yPower);
@@ -725,10 +727,6 @@ public class Shoukan extends Game {
         return hands;
     }
 
-    public Hand getHandById(String id) {
-        return hands.values().stream().filter(h -> h.getUser().getId().equals(id)).findFirst().orElseThrow();
-    }
-
     public SlotColumn<Champion, Equipment> getFirstAvailableSlot(Side s, boolean top) {
         for (SlotColumn<Champion, Equipment> slot : arena.getSlots().get(s)) {
             if (top ? slot.getTop() == null : slot.getBottom() == null)
@@ -832,10 +830,10 @@ public class Shoukan extends Game {
         buttons.put("▶️", (mb, ms) -> {
             if (getRound() < 1 || phase == Phase.ATTACK) {
                 if (!ShiroInfo.getHashes().remove(hash.get())) return;
-                getHandById(getCurrent().getId()).getCards().removeIf(d -> !d.isAvailable());
+                getHands().get(current).getCards().removeIf(d -> !d.isAvailable());
                 User u = getCurrent();
 
-                AtomicReference<Hand> h = new AtomicReference<>(getHandById(getCurrent().getId()));
+                AtomicReference<Hand> h = new AtomicReference<>(getHands().get(current));
                 List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(h.get().getSide());
                 for (int i = 0; i < slots.size(); i++) {
                     Champion c = slots.get(i).getTop();
@@ -856,7 +854,7 @@ public class Shoukan extends Game {
                 resetTimer(this);
 
                 phase = Phase.PLAN;
-                h.set(getHandById(getCurrent().getId()));
+                h.set(getHands().get(current));
                 slots = arena.getSlots().get(h.get().getSide());
                 for (int i = 0; i < slots.size(); i++) {
                     Champion c = slots.get(i).getTop();
@@ -897,7 +895,7 @@ public class Shoukan extends Game {
                 return;
             }
 
-            Hand h = getHandById(getCurrent().getId());
+            Hand h = getHands().get(current);
 
             int remaining = 5 - h.getCards().size();
 
@@ -943,8 +941,8 @@ public class Shoukan extends Game {
                 resetTimer(this);
 
                 phase = Phase.PLAN;
-                Hand h = getHandById(getCurrent().getId());
-                arena.getSlots().get(getHandById(mb.getId()).getSide()).forEach(s -> {
+                Hand h = getHands().get(current);
+                arena.getSlots().get(getHands().get(next).getSide()).forEach(s -> {
                     if (s.getTop() != null) {
                         Champion c = s.getTop();
                         if (c.getStun() > 0) {
@@ -1095,5 +1093,13 @@ public class Shoukan extends Game {
         listener.close();
         recordLast();
         super.close();
+    }
+
+    @Override
+    public void resetTimer(Shoukan shkn) {
+        super.resetTimer(shkn);
+
+        current = next;
+        next = current == Side.TOP ? Side.BOTTOM : Side.TOP;
     }
 }
