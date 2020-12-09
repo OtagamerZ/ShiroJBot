@@ -28,8 +28,10 @@ public class TrophyDAO {
 
 		try {
 			Trophy t = em.find(Trophy.class, id);
-			if (t == null) saveTrophies(new Trophy(id));
-			return getTrophies(id);
+			if (t == null) {
+				saveTrophies(new Trophy(id));
+				return getTrophies(id);
+			} else return t;
 		} finally {
 			em.close();
 		}
