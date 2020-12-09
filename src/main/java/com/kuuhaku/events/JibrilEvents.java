@@ -38,7 +38,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
-import javax.security.auth.login.LoginException;
 import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
@@ -99,13 +98,9 @@ public class JibrilEvents extends ListenerAdapter {
 			if (!rawMsgNoPrefix.isBlank()) {
 				if (commandName.equalsIgnoreCase("reboot") && ShiroInfo.getDevelopers().contains(event.getAuthor().getId())) {
 					event.getChannel().sendMessage("Estou acordando a Shiro, calma ai!").queue(m -> {
-						try {
-							Main.reboot();
-							System.gc();
-							m.editMessage("Prontinho!").queue(null, Helper::doNothing);
-						} catch (LoginException | InterruptedException e) {
-							Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-						}
+						Main.getShiroShards().restart();
+						System.gc();
+						m.editMessage("Prontinho!").queue(null, Helper::doNothing);
 					}, Helper::doNothing);
 					return;
 				} else return;

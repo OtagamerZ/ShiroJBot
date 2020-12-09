@@ -53,8 +53,8 @@ public class SlapReaction extends Reaction {
 					"O que você achou que ia acontecer?!"
 			});
 
-			if (message.getMentionedUsers().get(0) == Main.getInfo().getSelfUser()) {
-				sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou estapear a " + Main.getInfo().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
+			if (message.getMentionedUsers().get(0) == Main.getSelfUser()) {
+				sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou estapear a " + Main.getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
 				return;
 			}
 

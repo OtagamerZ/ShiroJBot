@@ -35,7 +35,7 @@ public class ExportableGuildConfig {
 
 			TextChannel bv;
 			try {
-				bv = Main.getInfo().getAPI().getTextChannelById(g.getCanalBV());
+				bv = Main.getShiroShards().getTextChannelById(g.getCanalBV());
 			} catch (IllegalArgumentException e) {
 				bv = null;
 			}
@@ -47,7 +47,7 @@ public class ExportableGuildConfig {
 
 			TextChannel ad;
 			try {
-				ad = Main.getInfo().getAPI().getTextChannelById(g.getCanalAdeus());
+				ad = Main.getShiroShards().getTextChannelById(g.getCanalAdeus());
 			} catch (IllegalArgumentException e) {
 				ad = null;
 			}
@@ -59,7 +59,7 @@ public class ExportableGuildConfig {
 
 			TextChannel sg;
 			try {
-				sg = Main.getInfo().getAPI().getTextChannelById(g.getCanalSUG());
+				sg = Main.getShiroShards().getTextChannelById(g.getCanalSUG());
 			} catch (IllegalArgumentException e) {
 				sg = null;
 			}
@@ -83,7 +83,7 @@ public class ExportableGuildConfig {
 
 			TextChannel lvl;
 			try {
-				lvl = Main.getInfo().getAPI().getTextChannelById(g.getCanalLvl());
+				lvl = Main.getShiroShards().getTextChannelById(g.getCanalLvl());
 			} catch (IllegalArgumentException e) {
 				lvl = null;
 			}
@@ -110,7 +110,7 @@ public class ExportableGuildConfig {
 
 			TextChannel rl;
 			try {
-				rl = Main.getInfo().getAPI().getTextChannelById(g.getCanalRelay());
+				rl = Main.getShiroShards().getTextChannelById(g.getCanalRelay());
 			} catch (IllegalArgumentException e) {
 				rl = null;
 			}

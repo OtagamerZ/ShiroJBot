@@ -31,12 +31,12 @@ import com.kuuhaku.handlers.games.tabletop.games.crisscross.pieces.Circle;
 import com.kuuhaku.handlers.games.tabletop.games.crisscross.pieces.Cross;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -59,7 +59,7 @@ public class CrissCross extends Game {
 		}
 	};
 
-	public CrissCross(JDA handler, TextChannel channel, int bet, User... players) {
+	public CrissCross(ShardManager handler, TextChannel channel, int bet, User... players) {
 		super(handler, new Board(BoardSize.S_3X3, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel);
 		this.channel = channel;
 		this.pieces = Map.of(

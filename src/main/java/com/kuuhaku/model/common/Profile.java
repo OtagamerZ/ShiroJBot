@@ -233,7 +233,7 @@ public class Profile {
 		List<BufferedImage> badges = new ArrayList<>() {{
 			String exceed = ExceedDAO.getExceed(m.getId());
 			if (!exceed.isEmpty()) {
-				add(ImageIO.read(Helper.getImage(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(TagIcons.getExceedId(ExceedEnum.getByName(exceed)))).getImageUrl())));
+				add(ImageIO.read(Helper.getImage(Objects.requireNonNull(Main.getShiroShards().getEmoteById(TagIcons.getExceedId(ExceedEnum.getByName(exceed)))).getImageUrl())));
 			}
 
 			Set<Tag> tags = Tag.getTags(m.getUser(), m);
