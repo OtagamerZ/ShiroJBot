@@ -81,8 +81,8 @@ public class Champion implements Drawable, Cloneable {
 	private transient List<Equipment> linkedTo = new ArrayList<>();
 	private transient Bonus bonus = new Bonus();
 	private transient Champion fakeCard = null;
-	private transient int altAtk = -1;
-	private transient int altDef = -1;
+	private transient int altAtk = atk;
+	private transient int altDef = def;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
 	private transient int redAtk = 0;
