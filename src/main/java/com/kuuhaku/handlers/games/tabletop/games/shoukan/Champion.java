@@ -295,24 +295,16 @@ public class Champion implements Drawable, Cloneable {
 		return atk;
 	}
 
-	public void setBaseAtk(int atk) {
-		this.atk = atk;
-	}
-
 	public int getBaseDef() {
 		return def;
 	}
 
-	public void setBaseDef(int def) {
-		this.def = def;
-	}
-
 	public int getAtk() {
-		return (altAtk == -1 ? atk : altAtk) - redAtk + bonus.getAtk();
+		return altAtk - redAtk;
 	}
 
 	public int getDef() {
-		return (altDef == -1 ? def : altDef) - redDef + bonus.getDef();
+		return altDef - redDef;
 	}
 
 	public int getAltAtk() {
@@ -438,8 +430,8 @@ public class Champion implements Drawable, Cloneable {
 		fakeCard = null;
 		mAtk = 0;
 		mDef = 0;
-		altAtk = -1;
-		altDef = -1;
+		altAtk = atk;
+		altDef = def;
 		redAtk = 0;
 		redDef = 0;
 		stun = 0;
@@ -480,6 +472,16 @@ public class Champion implements Drawable, Cloneable {
 			Champion c = (Champion) clone();
 			c.linkedTo = new ArrayList<>();
 			c.bonus = new Bonus();
+			return c;
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
+	public Champion getClone() {
+		try {
+			Champion c = (Champion) clone();
+			c.linkedTo = new ArrayList<>();
 			return c;
 		} catch (CloneNotSupportedException e) {
 			return null;

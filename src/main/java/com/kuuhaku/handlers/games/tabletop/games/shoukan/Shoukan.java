@@ -267,10 +267,9 @@ public class Shoukan extends Game {
                             SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(h.getSide(), true);
 
                             if (sc != null) {
-                                Champion dp = target.getTop().copy();
-                                dp.clearLinkedTo();
-                                dp.setBaseAtk(Math.round(dp.getBaseAtk() * 0.75f));
-                                dp.setBaseDef(Math.round(dp.getBaseDef() * 0.75f));
+                                Champion dp = target.getTop().getClone();
+                                dp.setAltAtk(Math.round(dp.getAltAtk() * 0.75f));
+                                dp.setAltDef(Math.round(dp.getAltDef() * 0.75f));
 
                                 sc.setTop(dp);
                             }
