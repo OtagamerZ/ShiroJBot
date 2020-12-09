@@ -20,6 +20,8 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.postgresql.RarityColorsDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
@@ -151,13 +153,21 @@ public class KawaiponBook {
 		return result.get();
 	}
 
-	public BufferedImage view(List<Champion> cardList, Account acc, String title) throws IOException, InterruptedException {
-		cardList.sort(Comparator
-				.comparing(Champion::getMana)
-				.reversed()
-				.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-		);
-		List<List<Champion>> chunks = Helper.chunkify(cardList, COLUMN_COUNT);
+	public BufferedImage view(List<Drawable> cardList, Account acc, String title, boolean senshi) throws IOException, InterruptedException {
+		if (senshi)
+			cardList.sort(Comparator
+					.comparing(d -> ((Champion) d).getMana())
+					.reversed()
+					.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+			);
+		else
+			cardList.sort(Comparator
+					.comparing(d -> ((Equipment) d).getTier())
+					.reversed()
+					.thenComparing(c -> ((Equipment) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+			);
+
+		List<List<Drawable>> chunks = Helper.chunkify(cardList, COLUMN_COUNT);
 		chunks.removeIf(List::isEmpty);
 
 		BufferedImage header = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/header.png")));

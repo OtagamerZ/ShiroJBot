@@ -23,8 +23,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Category;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.KawaiponBook;
 import com.kuuhaku.model.enums.AnimeName;
@@ -118,13 +118,21 @@ public class KawaiponsCommand extends Command {
 
                             send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
                             return;
-                        } else if (args[0].equalsIgnoreCase("elegiveis")) {
-                            List<Champion> cardList = CardDAO.getAllChampions();
+                        } else if (Helper.equalsAny(args[0], "elegivel", "elegiveis", "campeoes", "senshi")) {
+                            List<Drawable> cardList = CardDAO.getAllChampions().stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                             KawaiponBook kb = new KawaiponBook();
-                            BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis");
+                            BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis", true);
 
                             send(author, channel, m, cards, "Cartas elegíveis", null);
+                            return;
+                        } else if (Helper.equalsAny(args[0], "item", "itens", "equips", "equipamentos", "equipments", "evogear")) {
+                            List<Drawable> cardList = CardDAO.getAllEquipments().stream().map(d -> (Drawable) d).collect(Collectors.toList());
+
+                            KawaiponBook kb = new KawaiponBook();
+                            BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Equipamentos EvoGear", false);
+
+                            send(author, channel, m, cards, "Equipamentos EvoGear", null);
                             return;
                         } else if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
                             m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(AnimeName.validValues()).map(AnimeName::name).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
@@ -143,10 +151,10 @@ public class KawaiponsCommand extends Command {
                         return;
                     }
 
-                    List<Champion> cardList = CardDAO.getChampions(c);
+                    List<Drawable> cardList = CardDAO.getChampions(c).stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                     KawaiponBook kb = new KawaiponBook();
-                    BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), c.getName());
+                    BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), c.getName(), true);
 
                     send(author, channel, m, cards, c.getName(), c);
                 } else {
