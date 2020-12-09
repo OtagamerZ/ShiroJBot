@@ -212,6 +212,7 @@ public class Profile {
 		g2d.fillOval(50, 200, avatar.getWidth(), avatar.getHeight());
 		g2d.drawImage(avatar, null, 50, 200);
 
+		g2d.setClip(null);
 		if (mb.getTrophy() != null)
 			g2d.drawImage(mb.getTrophy().getImage(), 665, 22, null);
 
