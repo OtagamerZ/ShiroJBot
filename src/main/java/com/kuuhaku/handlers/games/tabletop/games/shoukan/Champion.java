@@ -81,8 +81,8 @@ public class Champion implements Drawable, Cloneable {
 	private transient List<Equipment> linkedTo = new ArrayList<>();
 	private transient Bonus bonus = new Bonus();
 	private transient Champion fakeCard = null;
-	private transient int altAtk = atk;
-	private transient int altDef = def;
+	private transient int altAtk;
+	private transient int altDef;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
 	private transient int redAtk = 0;
@@ -95,11 +95,15 @@ public class Champion implements Drawable, Cloneable {
 		this.mana = mana;
 		this.atk = atk;
 		this.def = def;
+		this.altAtk = atk;
+		this.altDef = def;
 		this.description = description;
 		this.effect = effect;
 	}
 
 	public Champion() {
+		this.altAtk = atk;
+		this.altDef = def;
 	}
 
 	@Override
