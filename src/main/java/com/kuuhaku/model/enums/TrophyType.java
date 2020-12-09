@@ -46,6 +46,7 @@ public enum TrophyType {
 		try {
 			return ImageIO.read(Objects.requireNonNull(TrophyType.class.getClassLoader().getResourceAsStream("shoukan/trophy/" + name().toLowerCase() + ".png")));
 		} catch (IOException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
