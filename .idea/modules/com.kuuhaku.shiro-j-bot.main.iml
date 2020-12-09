@@ -37,7 +37,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: com.github.ygimenez:Pagination-Utils:5a1ae67c71" level="project" />
-    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.2.0_204" level="project" />
+    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.2.0_222" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:discord-webhooks:0.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.SvenWoltmann:color-thief-java:v1.1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.enigmabridge:hibernate4-sqlite-dialect:0.1.2" level="project" />

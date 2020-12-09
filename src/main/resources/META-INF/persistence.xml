@@ -76,6 +76,7 @@
         <class>com.kuuhaku.model.persistent.Donation</class>
         <class>com.kuuhaku.model.persistent.MatchHistory</class>
         <class>com.kuuhaku.model.persistent.MatchRound</class>
+        <class>com.kuuhaku.model.persistent.Trophy</class>
 
         <properties>
             <!-- dados da conexao -->
