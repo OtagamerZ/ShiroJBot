@@ -25,12 +25,12 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchRound;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -42,7 +42,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public abstract class Game {
-	private final JDA handler;
+	private final ShardManager handler;
 	private final Board board;
 	private final TextChannel channel;
 	private final JSONObject custom;
@@ -54,7 +54,7 @@ public abstract class Game {
 	private User current;
 	private boolean closed = false;
 
-	public Game(JDA handler, Board board, TextChannel channel) {
+	public Game(ShardManager handler, Board board, TextChannel channel) {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
@@ -64,7 +64,7 @@ public abstract class Game {
 		history.setPlayers(board.getPlayers().stream().map(Player::getId).collect(Collectors.toList()));
 	}
 
-	public Game(JDA handler, Board board, TextChannel channel, JSONObject custom) {
+	public Game(ShardManager handler, Board board, TextChannel channel, JSONObject custom) {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
@@ -207,7 +207,7 @@ public abstract class Game {
 				});
 	}
 
-	public JDA getHandler() {
+	public ShardManager getHandler() {
 		return handler;
 	}
 

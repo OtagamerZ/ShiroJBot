@@ -121,7 +121,7 @@ public class TwitchEvents {
 						.getGuildByID(ShiroInfo.getSupportServerID())
 						.getTextChannelById(ShiroInfo.getTwitchChannelID());
 				assert tc != null;
-				Webhook wh = Helper.getOrCreateWebhook(tc, "Shiro", Main.getInfo().getAPI());
+				Webhook wh = Helper.getOrCreateWebhook(tc, "Shiro", Main.getShiroShards());
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 				wmb.setContent(Helper.stripEmotesAndMentions(rawMessage));
@@ -173,7 +173,7 @@ public class TwitchEvents {
 
 	private void onChannelGoLiveEvent(ChannelGoLiveEvent evt) {
 		Main.getInfo().setLive(true);
-		Main.getInfo().getAPI().getPresence().setActivity(Activity.streaming("Na conta do meu Nii-chan sem ele saber!", "https://twitch.tv/kuuhaku_otgmz"));
+		Main.getShiroShards().setActivity(Activity.streaming("Na conta do meu Nii-chan sem ele saber!", "https://twitch.tv/kuuhaku_otgmz"));
 		Guild sup = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
 		TextChannel tth = sup.getTextChannelById(ShiroInfo.getTwitchChannelID());
 
@@ -185,7 +185,7 @@ public class TwitchEvents {
 
 	private void onChannelGoOfflineEvent(ChannelGoOfflineEvent evt) {
 		Main.getInfo().setLive(false);
-		Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
+		Main.getShiroShards().setActivity(Main.getRandomActivity());
 		Guild sup = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
 		TextChannel tth = sup.getTextChannelById(ShiroInfo.getTwitchChannelID());
 

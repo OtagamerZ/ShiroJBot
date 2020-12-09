@@ -71,7 +71,7 @@ public class SayCommand extends Command {
 		mb.append(Helper.makeEmoteFromMention(args));
 
 		try {
-			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getInfo().getAPI());
+			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getShiroShards());
 			Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, mb.getStringBuilder().toString());
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder();

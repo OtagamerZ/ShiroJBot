@@ -159,7 +159,7 @@ public class ShiroEvents extends ListenerAdapter {
 				return;
 			}
 
-			if (author.isBot() && !Main.getInfo().getSelfUser().getId().equals(author.getId())) {
+			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
 				handleExchange(author, message);
 				return;
 			} else if (member == null) return;
@@ -182,7 +182,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}*/
 
 			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-			if (gc.getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
+			if (gc.getNoSpamChannels().contains(channel.getId()) && Main.getSelfUser().getId().equals(author.getId())) {
 				if (message.getReactions().size() >= gc.getNoSpamAmount()) {
 					message.delete()
 							.flatMap(s -> channel.sendMessage(":warning: | Opa, sem spam meu amigo!"))
@@ -205,7 +205,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 			}
 
-			if (rawMessage.trim().equals("<@" + Main.getInfo().getSelfUser().getId() + ">") || rawMessage.trim().equals("<@!" + Main.getInfo().getSelfUser().getId() + ">")) {
+			if (rawMessage.trim().equals("<@" + Main.getSelfUser().getId() + ">") || rawMessage.trim().equals("<@!" + Main.getSelfUser().getId() + ">")) {
 				channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!").queue(null, Helper::doNothing);
 				return;
 			}
@@ -221,7 +221,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			try {
 				CustomAnswers ca = CustomAnswerDAO.getCAByTrigger(rawMessage, guild.getId());
-				if (!Objects.requireNonNull(ca).isMarkForDelete() && author != Main.getInfo().getSelfUser())
+				if (!Objects.requireNonNull(ca).isMarkForDelete() && Main.getSelfUser().getId().equals(author.getId()))
 					Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer().replace("%user%", author.getAsMention()).replace("%guild%", guild.getName()));
 			} catch (NoResultException | NullPointerException ignore) {
 			}
@@ -380,7 +380,7 @@ public class ShiroEvents extends ListenerAdapter {
 					try {
 						com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
 
-						Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getInfo().getAPI());
+						Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getShiroShards());
 						Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, rawMessage);
 
 						WebhookMessageBuilder wmb = new WebhookMessageBuilder();
@@ -688,7 +688,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	private void handleExchange(User u, Message msg) {
-		if (BotExchange.isBotAdded(u.getId()) && msg.getMentionedUsers().stream().anyMatch(usr -> usr.getId().equals(Main.getInfo().getSelfUser().getId()))) {
+		if (BotExchange.isBotAdded(u.getId()) && msg.getMentionedUsers().stream().anyMatch(usr -> usr.getId().equals(Main.getSelfUser().getId()))) {
 			BotExchange be = BotExchange.getById(u.getId());
 
 			if (be.matchTrigger(msg.getContentRaw()).find()) {
@@ -704,7 +704,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 				if (value == 0) return;
 
-				User target = msg.getMentionedUsers().stream().filter(usr -> !usr.getId().equals(Main.getInfo().getSelfUser().getId())).findFirst().orElse(null);
+				User target = msg.getMentionedUsers().stream().filter(usr -> !usr.getId().equals(Main.getSelfUser().getId())).findFirst().orElse(null);
 				if (target == null) return;
 
 				Account acc = AccountDAO.getAccount(target.getId());

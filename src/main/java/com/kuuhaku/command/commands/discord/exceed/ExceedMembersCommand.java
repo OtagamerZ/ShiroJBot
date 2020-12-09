@@ -68,7 +68,7 @@ public class ExceedMembersCommand extends Command {
 		ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()));
 		List<ExceedMember> members = ExceedDAO.getExceedMembers(ex);
 		members.sort(Comparator.comparingLong(ExceedMember::getContribution).reversed());
-		Emote e = Main.getInfo().getAPI().getEmoteById(TagIcons.getExceedId(ex));
+		Emote e = Main.getShiroShards().getEmoteById(TagIcons.getExceedId(ex));
 
 		assert e != null;
 		EmbedBuilder eb = new EmbedBuilder()

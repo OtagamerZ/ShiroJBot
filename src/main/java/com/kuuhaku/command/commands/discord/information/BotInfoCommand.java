@@ -60,14 +60,14 @@ public class BotInfoCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-title"));
-		eb.setThumbnail(Main.getInfo().getSelfUser().getAvatarUrl());
+		eb.setThumbnail(Main.getSelfUser().getAvatarUrl());
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-1"), Main.getInfo().getUserByID(ShiroInfo.getNiiChan()).getAsTag(), false);
 
 		StringBuilder sb = new StringBuilder();
 		ShiroInfo.getDevelopers().forEach(d -> sb.append("`").append(Main.getInfo().getUserByID(d).getAsTag()).append("`  "));
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-2"), sb.toString(), false);
-		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-3"), Main.getInfo().getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern(ShiroInfo.getLocale(I18n.PT).getString("date-format"))), false);
-		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-4"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_BOT_INFO_SERVERS), Main.getInfo().getAPI().getGuilds().size()), false);
+		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-3"), Main.getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern(ShiroInfo.getLocale(I18n.PT).getString("date-format"))), false);
+		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-4"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_BOT_INFO_SERVERS), Main.getShiroShards().getGuilds().size()), false);
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-5"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-registered-users"), MemberDAO.getAllMembers().size()), false);
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-6"), Main.getInfo().getVersion(), false);
 		eb.addField("Links:", """

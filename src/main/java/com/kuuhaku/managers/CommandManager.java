@@ -118,6 +118,12 @@ public class CommandManager {
 			put(BugHuntCommand.class, new Argument(
 					"bughunt", new String[]{"hunter", "debugador"}, REQ_MENTION, "cmd_bug-hunter", DEV, false
 			));
+			put(ShardStatusCommand.class, new Argument(
+					"shards", "cmd_shard-status", DEV, true
+			));
+			put(ShardRestartCommand.class, new Argument(
+					"rshard", REQ_ID, "cmd_rshard", DEV, false
+			));
 
 			//SUPPORT
 			put(BlockCommand.class, new Argument(
