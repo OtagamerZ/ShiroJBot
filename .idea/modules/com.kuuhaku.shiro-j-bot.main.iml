@@ -6,9 +6,9 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="entityManagerFactory" value="53f6dc79-49f3-415d-8d11-c5f83610185f" />
+          <factory-entry name="entityManagerFactory" value="d22aba9a-bc76-4f6b-a978-2c6c8a76889a" />
           <factory-entry name="shiro_local" />
-          <factory-entry name="shiro_remote" value="53f6dc79-49f3-415d-8d11-c5f83610185f" />
+          <factory-entry name="shiro_remote" value="d22aba9a-bc76-4f6b-a978-2c6c8a76889a" />
         </datasource-mapping>
         <naming-strategy-map>
           <unit-entry name="entityManagerFactory" />
