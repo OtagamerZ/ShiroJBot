@@ -366,6 +366,10 @@ public class Champion implements Drawable, Cloneable {
 		return bonus;
 	}
 
+	public void setBonus(Bonus bonus) {
+		this.bonus = bonus;
+	}
+
 	public void clearBonus() {
 		this.bonus = new Bonus();
 	}
@@ -474,16 +478,6 @@ public class Champion implements Drawable, Cloneable {
 			Champion c = (Champion) clone();
 			c.linkedTo = new ArrayList<>();
 			c.bonus = new Bonus();
-			return c;
-		} catch (CloneNotSupportedException e) {
-			return null;
-		}
-	}
-
-	public Champion getClone() {
-		try {
-			Champion c = (Champion) clone();
-			c.linkedTo = new ArrayList<>();
 			return c;
 		} catch (CloneNotSupportedException e) {
 			return null;
