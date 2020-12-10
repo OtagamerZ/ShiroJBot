@@ -864,10 +864,11 @@ public class Shoukan extends Game {
 		buttons.put("▶️", (mb, ms) -> {
 			if (getRound() < 1 || phase == Phase.ATTACK) {
 				if (!ShiroInfo.getHashes().remove(hash.get())) return;
-				getHands().get(current).getCards().removeIf(d -> !d.isAvailable());
 				User u = getCurrent();
 
 				AtomicReference<Hand> h = new AtomicReference<>(getHands().get(current));
+				h.get().getCards().removeIf(d -> !d.isAvailable());
+				h.get().decreaseSuppression();
 				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(h.get().getSide());
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
@@ -901,7 +902,6 @@ public class Shoukan extends Game {
 					}
 				}
 				h.get().decreaseLockTime();
-				h.get().decreaseSuppression();
 				h.get().addMana(h.get().getManaPerTurn());
 
 				channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
@@ -973,24 +973,40 @@ public class Shoukan extends Game {
 						});
 			} else {
 				User u = getCurrent();
-				resetTimer(this);
 
-				phase = Phase.PLAN;
-				Hand h = getHands().get(current);
-				arena.getSlots().get(getHands().get(next).getSide()).forEach(s -> {
-					if (s.getTop() != null) {
-						Champion c = s.getTop();
+				AtomicReference<Hand> h = new AtomicReference<>(getHands().get(current));
+				h.get().getCards().removeIf(d -> !d.isAvailable());
+				h.get().decreaseSuppression();
+				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(h.get().getSide());
+				for (int i = 0; i < slots.size(); i++) {
+					Champion c = slots.get(i).getTop();
+					if (c != null) {
 						if (c.getStun() > 0) {
 							c.reduceStun();
 							c.setDefending(true);
 						} else c.setAvailable(true);
+
 						c.resetAttribs();
 					}
-				});
+				}
 
-				h.decreaseLockTime();
-				h.decreaseSuppression();
-				h.addMana(h.getManaPerTurn());
+				resetTimer(this);
+
+				phase = Phase.PLAN;
+				h.set(getHands().get(current));
+				slots = arena.getSlots().get(h.get().getSide());
+				for (int i = 0; i < slots.size(); i++) {
+					Champion c = slots.get(i).getTop();
+					if (c != null) {
+						if (c.hasEffect()) {
+							c.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
+							if (postCombat()) return;
+							else if (makeFusion(h.get())) return;
+						}
+					}
+				}
+				h.get().decreaseLockTime();
+				h.get().addMana(h.get().getManaPerTurn());
 
 				draw = true;
 				channel.sendMessage(u.getAsMention() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D caso queira aceitar ou continue jogando normalmente.")
@@ -999,7 +1015,7 @@ public class Shoukan extends Game {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							h.showHand();
+							h.get().showHand();
 							for (int i = 0; i < 5; i++) {
 								changed[i] = false;
 							}
