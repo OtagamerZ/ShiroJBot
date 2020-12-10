@@ -664,6 +664,7 @@ public class Shoukan extends Game {
 					return;
 				} else if (eq.getCharm() == Charm.SPELLMIRROR && source != -1) {
 					destroyCard(side == Side.TOP ? Side.BOTTOM : Side.TOP, source, index);
+					unequipCard(side, i, slts);
 					return;
 				}
 			}
@@ -778,6 +779,7 @@ public class Shoukan extends Game {
 					return;
 				} else if (eq.getCharm() == Charm.SPELLMIRROR && source != -1) {
 					convertCard(his, source, index);
+					unequipCard(his, i, slts);
 					return;
 				}
 			}
