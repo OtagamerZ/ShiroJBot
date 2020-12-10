@@ -43,7 +43,15 @@ public class CardMarketDAO {
 	public static List<CardMarket> getCardsByCard(String id, boolean foil) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT cm FROM CardMarket cm WHERE cm.card.card.id = UPPER(:id) AND cm.card.foil = :foil AND cm.publishDate IS NOT NULL", CardMarket.class);
+		Query q = em.createQuery("""
+				SELECT cm 
+				FROM CardMarket cm 
+				WHERE cm.card.card.id = UPPER(:id) 
+				AND cm.card.foil = :foil 
+				AND cm.publishDate IS NOT NULL
+				AND cm.buyer IS NOT NULL
+				AND cm.buyer <> cm.seller
+				""", CardMarket.class);
 		q.setParameter("id", id);
 		q.setParameter("foil", foil);
 
@@ -58,7 +66,15 @@ public class CardMarketDAO {
 	public static List<CardMarket> getCardsByRarity(KawaiponRarity r, boolean foil) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT cm FROM CardMarket cm WHERE cm.card.card.rarity = :rarity AND cm.card.foil = :foil AND cm.publishDate IS NOT NULL", CardMarket.class);
+		Query q = em.createQuery("""
+				SELECT cm 
+				FROM CardMarket cm 
+				WHERE cm.card.card.rarity = :rarity 
+				AND cm.card.foil = :foil 
+				AND cm.publishDate IS NOT NULL
+				AND cm.buyer IS NOT NULL
+				AND cm.buyer <> cm.seller
+				""", CardMarket.class);
 		q.setParameter("rarity", r);
 		q.setParameter("foil", foil);
 
