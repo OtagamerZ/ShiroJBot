@@ -585,6 +585,9 @@ public class Shoukan extends Game {
 					.map(dr -> dr.getCard().getId())
 					.collect(Collectors.toList())
 			);
+
+			if (getArena().getField() != null)
+				add(getArena().getField().getCard().getId());
 		}};
 
 		Champion aFusion = ultimates
