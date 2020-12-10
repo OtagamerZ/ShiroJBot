@@ -116,12 +116,13 @@ public class SeeCardCommand extends Command {
 					cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 			}
 
+			Champion c = CardDAO.getChampion(card.getCard());
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setTitle((foil ? ":star2:" : ":flower_playing_cards:") + " | " + card.getName());
 			eb.setColor(RarityColorsDAO.getColor(tc.getRarity()).getPrimary());
 			eb.addField("Obtida:", cards.contains(card) ? "Sim" : "Não", true);
-			eb.addField("Elegível:", CardDAO.getChampion(card.getCard()) != null ? "Sim" : "Não", true);
+			eb.addField("Elegível:", c != null && c.getRequiredCards().size() == 0 ? "Sim" : "Não", true);
 			eb.addField("Raridade:", tc.getRarity().toString(), true);
 			eb.addField("Tipo:", tc.getRarity() == KawaiponRarity.ULTIMATE ? "Única" : (card.isFoil() ? "Cromada" : "Normal"), true);
 			eb.addField("Anime:", tc.getAnime().toString(), true);
