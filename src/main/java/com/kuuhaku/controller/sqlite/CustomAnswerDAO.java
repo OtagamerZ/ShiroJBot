@@ -32,9 +32,9 @@ public class CustomAnswerDAO {
 		EntityManager em = Manager.getEntityManager();
 		List<CustomAnswers> ca;
 
-		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) = ?1 AND guildID = ?2 AND markForDelete = FALSE", CustomAnswers.class);
-		q.setParameter(1, trigger.toLowerCase());
-		q.setParameter(2, guild);
+		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) = :trigger AND guildID = :guild AND markForDelete = FALSE", CustomAnswers.class);
+		q.setParameter("trigger", trigger.toLowerCase());
+		q.setParameter("guild", guild);
 		ca = q.getResultList();
 
 		em.close();
@@ -46,8 +46,8 @@ public class CustomAnswerDAO {
 		EntityManager em = Manager.getEntityManager();
 		CustomAnswers ca;
 
-		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE id = ?1 AND markForDelete = FALSE", CustomAnswers.class);
-		q.setParameter(1, id);
+		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE id = :id AND markForDelete = FALSE", CustomAnswers.class);
+		q.setParameter("id", id);
 		ca = (CustomAnswers) q.getSingleResult();
 
 		em.close();
@@ -60,8 +60,8 @@ public class CustomAnswerDAO {
 		EntityManager em = Manager.getEntityManager();
 		CustomAnswers ca;
 
-		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE guildID = ?1 AND markForDelete = FALSE", CustomAnswers.class);
-		q.setParameter(1, id);
+		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE guildID = :guild AND markForDelete = FALSE", CustomAnswers.class);
+		q.setParameter("guild", id);
 
 		try {
 			return q.getResultList();
