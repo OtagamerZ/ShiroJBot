@@ -724,9 +724,7 @@ public class Shoukan extends Game {
 		} else {
 			Champion ch = slts.get(index).getTop();
 			if (ch == null) return;
-			ch.reset();
-			if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
-				arena.getBanished().add(ch);
+
 			slts.get(index).setTop(null);
 			slts.forEach(sd -> {
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
@@ -736,6 +734,10 @@ public class Shoukan extends Game {
 					sd.setBottom(null);
 				}
 			});
+
+			ch.reset();
+			if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
+				arena.getBanished().add(ch);
 		}
 	}
 
