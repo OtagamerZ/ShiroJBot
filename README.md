@@ -28,7 +28,7 @@ Pela Shiro estar em desenvolvimento constante, foram criados dois bots adicionai
 
 ### Para informar erros
 
-* Utilizar a seção [Issues ](https://github.com/OtagamerZ/ShiroJBot/issues)no repositório para relatar o erro
+* Utilizar a seção *[Issues](https://github.com/OtagamerZ/ShiroJBot/issues)* no repositório para relatar o erro
 
   **OU**
 
