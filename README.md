@@ -8,7 +8,7 @@ Precisa de um bot de reações? Talvez uma bot de moderação de servidor? Ou at
 
 ## Uma equipe pronta para lhe ajudar!
 
-Não se sinta inseguro para pedir ajuda, sugerir novas funções ou deixar o seu comentário sobre a Shiro, estamos sempre abertos para o seu *feedback*!
+Não tenha medo de pedir ajuda, sugerir novas funções ou deixar o seu comentário sobre a Shiro, estamos sempre abertos para o seu *feedback*!
 
 ## Seja um parceiro!
 
