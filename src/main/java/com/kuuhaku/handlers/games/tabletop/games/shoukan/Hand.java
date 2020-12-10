@@ -45,8 +45,9 @@ public class Hand {
 	private final int manaPerTurn;
 	private int mana;
 	private int hp;
-	private boolean manaSuppressed = false;
+	private int suppressTime = 0;
 	private int lockTime = 0;
+	private int manaReturn = 0;
 
 	public Hand(Shoukan game, User user, List<Drawable> deque, Side side) {
 		Collections.shuffle(deque);
@@ -226,7 +227,7 @@ public class Hand {
 	}
 
 	public int getManaPerTurn() {
-		return manaSuppressed ? 0 : manaPerTurn;
+		return suppressTime > 0 ? 0 : manaPerTurn;
 	}
 
 	public void setMana(int value) {
@@ -234,7 +235,7 @@ public class Hand {
 	}
 
 	public void addMana(int value) {
-		mana += manaSuppressed ? 0 : value;
+		mana += suppressTime > 0 ? 0 : value;
 	}
 
 	public void removeMana(int value) {
@@ -261,12 +262,18 @@ public class Hand {
 		hp = Math.max(1, hp - value);
 	}
 
-	public boolean isManaSuppressed() {
-		return manaSuppressed;
+	public boolean isSuppressed() {
+		return suppressTime > 0;
 	}
 
-	public void setManaSuppressed(boolean manaSuppressed) {
-		this.manaSuppressed = manaSuppressed;
+	public void setSuppressTime(int time) {
+		this.suppressTime = time;
+		this.manaReturn = mana;
+		this.mana = 0;
+	}
+
+	public void decreaseSuppression() {
+		suppressTime = Math.max(0, suppressTime - 1);
 	}
 
 	public void addLockTime(int time) {
@@ -275,6 +282,10 @@ public class Hand {
 
 	public void decreaseLockTime() {
 		lockTime = Math.max(0, lockTime - 1);
+		if (lockTime == 0) {
+			mana = manaReturn;
+			manaReturn = 0;
+		}
 	}
 
 	public int getLockTime() {

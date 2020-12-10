@@ -636,9 +636,6 @@ public class Shoukan extends Game {
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
 
-		ch.reset();
-		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
-			arena.getGraveyard().get(side).add(ch);
 		slts.get(index).setTop(null);
 		slts.forEach(sd -> {
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
@@ -649,6 +646,10 @@ public class Shoukan extends Game {
 				sd.setBottom(null);
 			}
 		});
+
+		ch.reset();
+		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
+			arena.getGraveyard().get(side).add(ch);
 	}
 
 	public void destroyCard(Side side, int index, int source) {
@@ -670,9 +671,6 @@ public class Shoukan extends Game {
 			}
 		}
 
-		ch.reset();
-		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
-			arena.getGraveyard().get(side).add(ch);
 		slts.get(index).setTop(null);
 		slts.forEach(sd -> {
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
@@ -683,6 +681,10 @@ public class Shoukan extends Game {
 				sd.setBottom(null);
 			}
 		});
+
+		ch.reset();
+		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
+			arena.getGraveyard().get(side).add(ch);
 	}
 
 	public void destroyCard(Side side, int index) {
@@ -690,9 +692,6 @@ public class Shoukan extends Game {
 		if (ch == null) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
 
-		ch.reset();
-		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
-			arena.getGraveyard().get(side).add(ch);
 		slts.get(index).setTop(null);
 		slts.forEach(sd -> {
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
@@ -703,6 +702,10 @@ public class Shoukan extends Game {
 				sd.setBottom(null);
 			}
 		});
+
+		ch.reset();
+		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
+			arena.getGraveyard().get(side).add(ch);
 	}
 
 	public void banishCard(Side side, int index, boolean equipment) {
@@ -898,6 +901,7 @@ public class Shoukan extends Game {
 					}
 				}
 				h.get().decreaseLockTime();
+				h.get().decreaseSuppression();
 				h.get().addMana(h.get().getManaPerTurn());
 
 				channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
@@ -984,6 +988,8 @@ public class Shoukan extends Game {
 					}
 				});
 
+				h.decreaseLockTime();
+				h.decreaseSuppression();
 				h.addMana(h.getManaPerTurn());
 
 				draw = true;
