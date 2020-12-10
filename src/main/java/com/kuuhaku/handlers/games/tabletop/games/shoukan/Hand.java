@@ -227,7 +227,7 @@ public class Hand {
 	}
 
 	public int getManaPerTurn() {
-		return suppressTime > 0 ? 0 : manaPerTurn;
+		return isSuppressed() ? 0 : manaPerTurn;
 	}
 
 	public void setMana(int value) {
@@ -235,7 +235,7 @@ public class Hand {
 	}
 
 	public void addMana(int value) {
-		mana += suppressTime > 0 ? 0 : value;
+		mana += isSuppressed() ? 0 : value;
 	}
 
 	public void removeMana(int value) {
@@ -274,6 +274,10 @@ public class Hand {
 
 	public void decreaseSuppression() {
 		suppressTime = Math.max(0, suppressTime - 1);
+		if (suppressTime == 0) {
+			mana += manaReturn;
+			manaReturn = 0;
+		}
 	}
 
 	public void addLockTime(int time) {
@@ -282,10 +286,6 @@ public class Hand {
 
 	public void decreaseLockTime() {
 		lockTime = Math.max(0, lockTime - 1);
-		if (lockTime == 0) {
-			mana += manaReturn;
-			manaReturn = 0;
-		}
 	}
 
 	public int getLockTime() {
