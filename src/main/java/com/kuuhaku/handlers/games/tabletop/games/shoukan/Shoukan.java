@@ -67,7 +67,7 @@ public class Shoukan extends Game {
 	};
 	private Message message = null;
 	private Phase phase = Phase.PLAN;
-	private final List<Champion> ultimates = CardDAO.getFusions();
+	private final List<Champion> fusions = CardDAO.getFusions();
 	private final boolean[] changed = {false, false, false, false, false};
 	private final boolean daily;
 	private boolean draw = false;
@@ -590,7 +590,7 @@ public class Shoukan extends Game {
 				add(getArena().getField().getCard().getId());
 		}};
 
-		Champion aFusion = ultimates
+		Champion aFusion = fusions
 				.stream()
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
