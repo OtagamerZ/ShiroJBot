@@ -314,7 +314,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setAltAtk(int altAtk) {
-		this.altAtk = altAtk;
+		this.altAtk = Math.max(0, altAtk);
 	}
 
 	public int getAltDef() {
@@ -322,7 +322,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setAltDef(int altDef) {
-		this.altDef = altDef;
+		this.altDef = Math.max(0, altDef);
 	}
 
 	public int getRedAtk() {
