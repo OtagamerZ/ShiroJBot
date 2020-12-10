@@ -24,5 +24,6 @@ public enum ArenaField {
 	GRAVEYARD,
 	UNDERWORLD,
 	ECLIPSE,
-	FOREST
+	FOREST,
+	OTHERWORLD
 }
