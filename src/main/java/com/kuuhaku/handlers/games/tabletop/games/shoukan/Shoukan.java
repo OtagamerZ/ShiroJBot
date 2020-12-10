@@ -254,7 +254,7 @@ public class Shoukan extends Game {
 					t.setFlipped(false);
 					t.addLinkedTo(tp);
 					tp.setLinkedTo(Pair.of(toEquip, t));
-					if (t.hasEffect() && !t.isFlipped()) {
+					if (t.hasEffect()) {
 						t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
 						if (postCombat()) return;
 

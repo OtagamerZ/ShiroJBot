@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -909,13 +910,6 @@
       <workItem from="1607530918280" duration="12418000" />
       <workItem from="1607547123454" duration="433000" />
     </task>
-    <task id="LOCAL-03021" summary="Correção da derrota por WO após a partida ter acabado">
-      <created>1606852000138</created>
-      <option name="number" value="03021" />
-      <option name="presentableId" value="LOCAL-03021" />
-      <option name="project" value="LOCAL" />
-      <updated>1606852000139</updated>
-    </task>
     <task id="LOCAL-03022" summary="Correção menor">
       <created>1606876337161</created>
       <option name="number" value="03022" />
@@ -1252,7 +1246,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607620657403</updated>
     </task>
-    <option name="localTasksCounter" value="3070" />
+    <task id="LOCAL-03070" summary="Correção na supressão de mana">
+      <created>1607626190663</created>
+      <option name="number" value="03070" />
+      <option name="presentableId" value="LOCAL-03070" />
+      <option name="project" value="LOCAL" />
+      <updated>1607626190663</updated>
+    </task>
+    <option name="localTasksCounter" value="3071" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1339,11 +1340,11 @@
     <MESSAGE value="Correção do troféu no perfil" />
     <MESSAGE value="Melhorias no Shoukan" />
     <MESSAGE value="Correção no amuleto clone" />
-    <MESSAGE value="Correção na supressão de mana" />
     <MESSAGE value="Adição de checagem de campo para fusões" />
     <MESSAGE value="Adição da arena Otherworld" />
     <MESSAGE value="Correção no comando MyStats" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no comando MyStats" />
+    <MESSAGE value="Correção na supressão de mana" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na supressão de mana" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1405,10 +1406,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607620656518">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607626189614">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607620656518" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607626189614" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1606176807594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1457,10 +1458,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607620669498">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607626192887">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607620669498" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607626192887" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607567656724" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
