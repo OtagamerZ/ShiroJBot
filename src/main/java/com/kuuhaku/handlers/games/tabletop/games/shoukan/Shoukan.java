@@ -257,34 +257,34 @@ public class Shoukan extends Game {
 					if (t.hasEffect()) {
 						t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
 						if (postCombat()) return;
+					}
 
-						if (tp.getCharm() != null) {
-							switch (tp.getCharm()) {
-								case TIMEWARP -> {
-									t.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
-									t.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
-								}
-								case DOUBLETAP -> t.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
-								case DOPPELGANGER -> {
-									SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(h.getSide(), true);
+					if (tp.getCharm() != null) {
+						switch (tp.getCharm()) {
+							case TIMEWARP -> {
+								t.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
+								t.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
+							}
+							case DOUBLETAP -> t.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
+							case DOPPELGANGER -> {
+								SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(h.getSide(), true);
 
-									if (sc != null) {
-										Champion dp = t.copy();
-										dp.setAltAtk(Math.round(dp.getAltAtk() * 0.75f));
-										dp.setAltDef(Math.round(dp.getAltDef() * 0.75f));
-										dp.setBonus(t.getBonus());
+								if (sc != null) {
+									Champion dp = t.copy();
+									dp.setAltAtk(Math.round(dp.getAltAtk() * 0.75f));
+									dp.setAltDef(Math.round(dp.getAltDef() * 0.75f));
+									dp.setBonus(t.getBonus());
 
-										sc.setTop(dp);
-									}
-								}
-								case SACRIFICE -> {
-									h.addMana(Math.max(1, Math.round(t.getMana() / 2f)));
-									destroyCard(h.getSide(), toEquip);
+									sc.setTop(dp);
 								}
 							}
-
-							if (postCombat()) return;
+							case SACRIFICE -> {
+								h.addMana(Math.max(1, Math.round(t.getMana() / 2f)));
+								destroyCard(h.getSide(), toEquip);
+							}
 						}
+
+						if (postCombat()) return;
 					}
 				} else if (d instanceof Champion) {
 					if (args.length < 3) {
