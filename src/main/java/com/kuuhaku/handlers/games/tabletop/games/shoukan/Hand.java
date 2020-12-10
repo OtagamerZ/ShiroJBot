@@ -283,7 +283,7 @@ public class Hand {
 	public void decreaseLockTime() {
 		lockTime = Math.max(0, lockTime - 1);
 		if (lockTime == 0) {
-			mana = manaReturn;
+			mana += manaReturn;
 			manaReturn = 0;
 		}
 	}

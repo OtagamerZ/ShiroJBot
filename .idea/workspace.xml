@@ -13,10 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhorias no Shoukan">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -899,13 +898,6 @@
       <workItem from="1607530918280" duration="12418000" />
       <workItem from="1607547123454" duration="433000" />
     </task>
-    <task id="LOCAL-03012" summary="Tentativa de correção no WO dos jogos">
-      <created>1606765610649</created>
-      <option name="number" value="03012" />
-      <option name="presentableId" value="LOCAL-03012" />
-      <option name="project" value="LOCAL" />
-      <updated>1606765610650</updated>
-    </task>
     <task id="LOCAL-03013" summary="Novo avatar padoru da Shiro">
       <created>1606767559512</created>
       <option name="number" value="03013" />
@@ -1242,7 +1234,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607546326614</updated>
     </task>
-    <option name="localTasksCounter" value="3061" />
+    <task id="LOCAL-03061" summary="Melhorias no Shoukan">
+      <created>1607567634891</created>
+      <option name="number" value="03061" />
+      <option name="presentableId" value="LOCAL-03061" />
+      <option name="project" value="LOCAL" />
+      <updated>1607567634892</updated>
+    </task>
+    <option name="localTasksCounter" value="3062" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1308,7 +1307,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Criação do modo NQN" />
     <MESSAGE value="Correção no modo NQN" />
     <MESSAGE value="Adição de método necessário para o funcionamento da carta Shikoutazer" />
     <MESSAGE value="Correção das confirmações" />
@@ -1333,7 +1331,8 @@
     <MESSAGE value="Adição de amuleto de sacrifício" />
     <MESSAGE value="Correção do clone" />
     <MESSAGE value="Correção do troféu no perfil" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção do troféu no perfil" />
+    <MESSAGE value="Melhorias no Shoukan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhorias no Shoukan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1447,11 +1446,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607546328181">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607567656724">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607546328181" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607278811557" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607567656724" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
