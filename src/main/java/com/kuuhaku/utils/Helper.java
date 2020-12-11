@@ -1404,7 +1404,7 @@ public class Helper {
 			};
 
 			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), sml);
-			Function<? super Void, RestAction<Message>> act = msg -> {
+			Function<Message, RestAction<Message>> act = msg -> {
 				if (users.size() > 0) {
 					List<String> ids = new ArrayList<>(users);
 					User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
@@ -1419,17 +1419,17 @@ public class Helper {
 
 					AccountDAO.saveAccount(acc);
 					sml.close();
-					return channel.sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!");
+					return msg.getTextChannel().sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!");
 				} else {
-					return channel.sendMessage("Nero decidiu que ninguém merece os presentes!");
+					return msg.getTextChannel().sendMessage("Nero decidiu que ninguém merece os presentes!");
 				}
 			};
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
 				channel.sendMessage(eb.build())
 						.delay(1, TimeUnit.MINUTES)
-						.flatMap(Message::delete)
 						.flatMap(act)
+						.flatMap(Message::delete)
 						.queue(null, Helper::doNothing);
 			} else {
 				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
@@ -1439,13 +1439,14 @@ public class Helper {
 					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage(eb.build())
 							.delay(1, TimeUnit.MINUTES)
-							.flatMap(Message::delete)
 							.flatMap(act)
+							.flatMap(Message::delete)
 							.queue(null, Helper::doNothing);
 				} else {
-					tc.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES)
-							.flatMap(Message::delete)
+					tc.sendMessage(eb.build())
+							.delay(1, TimeUnit.MINUTES)
 							.flatMap(act)
+							.flatMap(Message::delete)
 							.queue(null, Helper::doNothing);
 				}
 			}
