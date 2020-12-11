@@ -14,11 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/padoru.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -904,14 +900,7 @@
       <workItem from="1607651706255" duration="98000" />
       <workItem from="1607652393578" duration="1053000" />
       <workItem from="1607653527848" duration="1807000" />
-      <workItem from="1607702943381" duration="3755000" />
-    </task>
-    <task id="LOCAL-03034" summary="Correção no Shoukan">
-      <created>1607374768860</created>
-      <option name="number" value="03034" />
-      <option name="presentableId" value="LOCAL-03034" />
-      <option name="project" value="LOCAL" />
-      <updated>1607374768860</updated>
+      <workItem from="1607702943381" duration="4123000" />
     </task>
     <task id="LOCAL-03035" summary="Adição do amuleto clone">
       <created>1607434009847</created>
@@ -1249,7 +1238,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607704280750</updated>
     </task>
-    <option name="localTasksCounter" value="3083" />
+    <task id="LOCAL-03083" summary="Adição do drop padoru">
+      <created>1607706879327</created>
+      <option name="number" value="03083" />
+      <option name="presentableId" value="LOCAL-03083" />
+      <option name="project" value="LOCAL" />
+      <updated>1607706879327</updated>
+    </task>
+    <option name="localTasksCounter" value="3084" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1315,7 +1311,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria no logger do comando de busca por anime" />
     <MESSAGE value="Correção no Shoukan" />
     <MESSAGE value="Adição do amuleto clone" />
     <MESSAGE value="Adição de modo personalizado sem dano direto" />
@@ -1340,7 +1335,8 @@
     <MESSAGE value="Adição de ID do usuário no log de comandos" />
     <MESSAGE value="Adição do comando de auditoria" />
     <MESSAGE value="Correção menor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
+    <MESSAGE value="Adição do drop padoru" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição do drop padoru" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1406,10 +1402,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607704279721">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607706878477">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607704279721" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607706878477" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1606176807594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1458,10 +1454,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607704300596">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607706880725">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607704300596" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607706880725" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607655616775" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
