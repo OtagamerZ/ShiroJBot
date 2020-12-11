@@ -1387,7 +1387,7 @@ public class Helper {
 			}
 
 
-			eb.setFooter("Complete a música para participar do sorteio dos prêmios (requisito: Ser level maior que 10).", null);
+			eb.setFooter("Complete a música para participar do sorteio dos prêmios.", null);
 
 			Set<String> users = new HashSet<>();
 			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), new SimpleMessageListener() {
