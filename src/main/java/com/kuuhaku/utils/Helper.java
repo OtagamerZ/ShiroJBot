@@ -107,6 +107,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -1404,28 +1405,26 @@ public class Helper {
 			};
 
 			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), sml);
-			channel.sendMessage("Nero decidiu que...")
-					.queueAfter(1, TimeUnit.MINUTES, msg -> {
-						msg.delete().queue(null, Helper::doNothing);
-						if (users.size() > 0) {
-							List<String> ids = new ArrayList<>(users);
-							User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
-							channel.sendMessage("Nero decidiu que..." + u.getAsMention() + " receberá os presentes!").queue();
+			Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+				if (users.size() > 0) {
+					List<String> ids = new ArrayList<>(users);
+					User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
+					channel.sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!").queue();
 
-							Account acc = AccountDAO.getAccount(u.getId());
-							for (Prize prize : prizes) {
-								if (prize instanceof CreditDrop)
-									acc.addCredit(prize.getPrize(), Helper.class);
-								else
-									acc.addBuff(prize.getPrizeAsItem().getId());
-							}
+					Account acc = AccountDAO.getAccount(u.getId());
+					for (Prize prize : prizes) {
+						if (prize instanceof CreditDrop)
+							acc.addCredit(prize.getPrize(), Helper.class);
+						else
+							acc.addBuff(prize.getPrizeAsItem().getId());
+					}
 
-							AccountDAO.saveAccount(acc);
-							sml.close();
-						} else {
-							channel.sendMessage("Nero decidiu que..." + msg.getContentRaw() + " que ninguém receberá os presentes!").queue();
-						}
-					});
+					AccountDAO.saveAccount(acc);
+					sml.close();
+				} else {
+					channel.sendMessage("Nero decidiu que ninguém merece os presentes!").queue();
+				}
+			}, 1, TimeUnit.MINUTES);
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
 				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
