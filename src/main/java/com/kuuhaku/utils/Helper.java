@@ -1418,7 +1418,7 @@ public class Helper {
 					String msg = event.getMessage().getContentRaw();
 					User author = event.getAuthor();
 					if (msg.equalsIgnoreCase("PADORU PADORU") && !author.isBot() && users.add(author.getId())) {
-						Emote e = Main.getShiroShards().getEmoteById("787012933577736253");
+						Emote e = Main.getShiroShards().getEmoteById("787012642501689344");
 						if (e != null) event.getMessage().addReaction(e).queue();
 					}
 				}
