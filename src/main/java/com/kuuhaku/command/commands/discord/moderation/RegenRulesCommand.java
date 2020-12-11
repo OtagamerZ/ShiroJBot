@@ -71,14 +71,15 @@ public class RegenRulesCommand extends Command {
 						           
 						**4 - Não peça cargos, xp ou coisas do tipo**
 						Eu sou a única que gerencia isso, e não adianta insistir!
-						Pronto pessoal, isso é tudo!
-						%s
 												
 						**5 - Uso de _botting_ ou trapaças é proibido**
 						Quem for pego usando bots para farmar créditos, XP ou qualquer outra coisa será punido, podendo chegar à bloqueio do uso da Shiro.
-						""".formatted(guild.getId().equals(ShiroInfo.getSupportServerID())
-						? """
 												
+						Pronto pessoal, isso é tudo!
+												
+						%s
+						""".formatted(guild.getId().equals(ShiroInfo.getSupportServerID())
+						? """						
 						Divirta-se e, caso tenha lido as regras você pode utilizar o comando `s!arespostaé RESPOSTA` para completar a seguinte frase e ganhar um emblema único:
 						Infratores serão `_______ __ ______ ___ ____ ____`
 						      
