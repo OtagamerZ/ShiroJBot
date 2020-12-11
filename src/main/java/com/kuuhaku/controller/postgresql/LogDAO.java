@@ -62,7 +62,7 @@ public class LogDAO {
 							FROM transaction t
 							WHERE t.uid = :id
 							GROUP BY t.fromclass
-							ORDER BY 2
+							ORDER BY 2 DESC
 							""");
 					q.setParameter("id", id);
 
@@ -75,7 +75,7 @@ public class LogDAO {
 							FROM logs l
 							WHERE l.uid = :id
 							GROUP BY l.command
-							ORDER BY 2
+							ORDER BY 2 DESC
 							""");
 					q.setParameter("id", id);
 
