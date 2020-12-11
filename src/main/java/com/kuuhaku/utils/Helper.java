@@ -1362,7 +1362,7 @@ public class Helper {
 	public static void spawnPadoru(GuildConfig gc, TextChannel channel) {
 		if (Main.getInfo().getPadoruLimit().getIfPresent(gc.getGuildID()) != null) return;
 
-		if (chance(0.01)) {
+		if (chance(0.1)) {
 			int rolled = Helper.rng(100, false);
 			List<Prize> prizes = new ArrayList<>();
 			for (int i = 0; i < 5; i++) {
