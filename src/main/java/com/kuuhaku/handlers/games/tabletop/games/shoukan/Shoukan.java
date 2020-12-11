@@ -621,7 +621,7 @@ public class Shoukan extends Game {
 				if (slt.getTop() == null) {
 					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slt.setTop(aFusion.copy());
-					if (aFusion.hasEffect() && !aFusion.isFlipped()) {
+					if (aFusion.hasEffect()) {
 						aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, i, h.getSide(), Duelists.of(aFusion, i, null, -1), channel));
 						if (postCombat()) return true;
 					}
@@ -787,7 +787,7 @@ public class Shoukan extends Game {
 					return;
 				} else if (eq.getCharm() == Charm.SPELLMIRROR && source != -1) {
 					convertCard(his, source, index);
-					unequipCard(his, i, slts);
+					unequipCard(side, i, slts);
 					return;
 				}
 			}
