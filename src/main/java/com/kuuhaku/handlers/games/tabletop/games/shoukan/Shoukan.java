@@ -873,7 +873,6 @@ public class Shoukan extends Game {
 
 				AtomicReference<Hand> h = new AtomicReference<>(getHands().get(current));
 				h.get().getCards().removeIf(d -> !d.isAvailable());
-				h.get().decreaseSuppression();
 				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(h.get().getSide());
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
@@ -893,6 +892,7 @@ public class Shoukan extends Game {
 
 				phase = Phase.PLAN;
 				h.set(getHands().get(current));
+				h.get().decreaseSuppression();
 				slots = arena.getSlots().get(h.get().getSide());
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
@@ -984,7 +984,6 @@ public class Shoukan extends Game {
 
 				AtomicReference<Hand> h = new AtomicReference<>(getHands().get(current));
 				h.get().getCards().removeIf(d -> !d.isAvailable());
-				h.get().decreaseSuppression();
 				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(h.get().getSide());
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
@@ -1000,6 +999,7 @@ public class Shoukan extends Game {
 
 				phase = Phase.PLAN;
 				h.set(getHands().get(current));
+				h.get().decreaseSuppression();
 				slots = arena.getSlots().get(h.get().getSide());
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
