@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -36,6 +37,9 @@ public class Log {
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String usr = "";
+
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String uid = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String guild = "";
@@ -67,8 +71,9 @@ public class Log {
 		return usr;
 	}
 
-	public Log setUser(String user) {
-		this.usr = user;
+	public Log setUser(User user) {
+		this.usr = user.getAsTag();
+		this.uid = user.getId();
 		return this;
 	}
 
