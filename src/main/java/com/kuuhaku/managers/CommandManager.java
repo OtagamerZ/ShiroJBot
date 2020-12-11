@@ -124,6 +124,9 @@ public class CommandManager {
 			put(ShardRestartCommand.class, new Argument(
 					"rshard", REQ_ID, "cmd_shard-restart", DEV, false
 			));
+			put(AuditCommand.class, new Argument(
+					"audit", "req_type-id", "cmd_audit", DEV, true
+			));
 
 			//SUPPORT
 			put(BlockCommand.class, new Argument(
