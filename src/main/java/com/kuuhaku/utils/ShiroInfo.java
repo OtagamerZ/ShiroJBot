@@ -84,7 +84,6 @@ public class ShiroInfo {
 
 	);
 	private static final List<String> supports = List.of(
-			"581550063327903744", //Riki Yamada
 			"656542716108472340", //Fenyx
 			"666488799835979786", //Lucas
 			"633774453876326410" //Kurome
