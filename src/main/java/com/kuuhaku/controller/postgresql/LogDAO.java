@@ -22,6 +22,7 @@ import com.kuuhaku.model.persistent.Log;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LogDAO {
@@ -46,5 +47,44 @@ public class LogDAO {
 		Query q = em.createNativeQuery("SELECT * FROM shiro.\"GetUsage\"");
 
 		return q.getResultList();
+	}
+
+	@SuppressWarnings({"unchecked", "SqlResolve"})
+	public static List<Object[]> auditUser(String id, String type) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return switch (type.toUpperCase()) {
+				case "T" -> {
+					Query q = em.createNativeQuery("""
+							SELECT t.fromclass
+								 , SUM(t.value)
+							FROM transaction t
+							WHERE t.uid = :id
+							GROUP BY t.fromclass
+							ORDER BY 2
+							""");
+					q.setParameter("id", id);
+
+					yield q.getResultList();
+				}
+				case "C" -> {
+					Query q = em.createNativeQuery("""
+							SELECT l.command
+								 , COUNT(1)
+							FROM logs l
+							WHERE l.uid = :id
+							GROUP BY l.command
+							ORDER BY 2
+							""");
+					q.setParameter("id", id);
+
+					yield q.getResultList();
+				}
+				default -> new ArrayList<>();
+			};
+		} finally {
+			em.close();
+		}
 	}
 }
