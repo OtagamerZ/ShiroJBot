@@ -27,7 +27,10 @@ import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Account;
@@ -1097,7 +1100,7 @@ public class Shoukan extends Game {
 	public void banishWeaklings(int threshold) {
 		for (int i = 0; i < 5; i++) {
 			Champion c = getArena().getSlots().get(Side.TOP).get(i).getTop();
-			if (c != null && c.getMana() <= threshold && c.getRace() != Race.ULTIMATE)
+			if (c != null && c.getMana() <= threshold && c.getCard().getRarity() != KawaiponRarity.FUSION && c.getRequiredCards().size() == 0 && c.getMana() > 0)
 				banishCard(
 						Side.TOP,
 						i,
@@ -1105,7 +1108,7 @@ public class Shoukan extends Game {
 				);
 
 			c = getArena().getSlots().get(Side.BOTTOM).get(i).getTop();
-			if (c != null && c.getMana() <= threshold && c.getRace() == Race.ULTIMATE)
+			if (c != null && c.getMana() <= threshold && c.getCard().getRarity() != KawaiponRarity.FUSION && c.getRequiredCards().size() == 0 && c.getMana() > 0)
 				banishCard(
 						Side.BOTTOM,
 						i,
