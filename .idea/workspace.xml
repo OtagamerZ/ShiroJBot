@@ -13,8 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do Riki Yamada da lista de suportes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RegenRulesCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RegenRulesCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -899,13 +900,7 @@
       <workItem from="1607547123454" duration="433000" />
       <workItem from="1607651706255" duration="98000" />
       <workItem from="1607652393578" duration="1053000" />
-    </task>
-    <task id="LOCAL-03026" summary="Adição de efeito de trava de deck">
-      <created>1607138589202</created>
-      <option name="number" value="03026" />
-      <option name="presentableId" value="LOCAL-03026" />
-      <option name="project" value="LOCAL" />
-      <updated>1607138589203</updated>
+      <workItem from="1607653527848" duration="454000" />
     </task>
     <task id="LOCAL-03027" summary="Pontuação de Exceeds agora não é mais influenciada por modificadores">
       <created>1607278809652</created>
@@ -1243,7 +1238,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607644005541</updated>
     </task>
-    <option name="localTasksCounter" value="3075" />
+    <task id="LOCAL-03075" summary="Remoção do Riki Yamada da lista de suportes">
+      <created>1607653569466</created>
+      <option name="number" value="03075" />
+      <option name="presentableId" value="LOCAL-03075" />
+      <option name="project" value="LOCAL" />
+      <updated>1607653569467</updated>
+    </task>
+    <option name="localTasksCounter" value="3076" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1309,7 +1311,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção da derrota por WO após a partida ter acabado" />
     <MESSAGE value="Adição de efeito de trava de deck" />
     <MESSAGE value="Pontuação de Exceeds agora não é mais influenciada por modificadores" />
     <MESSAGE value="Adição de endpoint da API do Mega Hentais" />
@@ -1334,7 +1335,8 @@
     <MESSAGE value="Correção ao equipar cartas viradas para baixo" />
     <MESSAGE value="Correção ao equipar EvoGears com amuleto" />
     <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Remoção do Riki Yamada da lista de suportes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remoção do Riki Yamada da lista de suportes" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1348,6 +1350,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="586" y="198" key="#Inspections/0.0.1920.1040@0.0.1920.1040" timestamp="1603512953712" />
+    <state x="550" y="59" key="#Java" timestamp="1607653633371">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="550" y="59" key="#Java/0.0.1920.1040@0.0.1920.1040" timestamp="1607653633371" />
     <state x="320" y="79" key="#Project_Structure" timestamp="1599071410447">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1448,11 +1454,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607644009594">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607653609716">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607626815610" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607644009594" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607653609716" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
