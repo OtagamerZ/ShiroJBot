@@ -651,7 +651,7 @@ public class Shoukan extends Game {
 		});
 
 		ch.reset();
-		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
+		if (ch.getCard().getRarity() != KawaiponRarity.FUSION && ch.getRequiredCards().size() == 0 && ch.getMana() > 0)
 			arena.getGraveyard().get(side).add(ch);
 	}
 
@@ -686,7 +686,7 @@ public class Shoukan extends Game {
 		});
 
 		ch.reset();
-		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
+		if (ch.getCard().getRarity() != KawaiponRarity.FUSION && ch.getRequiredCards().size() == 0 && ch.getMana() > 0)
 			arena.getGraveyard().get(side).add(ch);
 	}
 
@@ -707,7 +707,7 @@ public class Shoukan extends Game {
 		});
 
 		ch.reset();
-		if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
+		if (ch.getCard().getRarity() != KawaiponRarity.FUSION && ch.getRequiredCards().size() == 0 && ch.getMana() > 0)
 			arena.getGraveyard().get(side).add(ch);
 	}
 
@@ -739,7 +739,7 @@ public class Shoukan extends Game {
 			});
 
 			ch.reset();
-			if (ch.getCard().getRarity() != KawaiponRarity.FUSION)
+			if (ch.getCard().getRarity() != KawaiponRarity.FUSION && ch.getRequiredCards().size() == 0 && ch.getMana() > 0)
 				arena.getBanished().add(ch);
 		}
 	}
