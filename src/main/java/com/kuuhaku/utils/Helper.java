@@ -107,7 +107,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -1392,26 +1391,31 @@ public class Helper {
 
 			Set<String> users = new HashSet<>();
 			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), new SimpleMessageListener() {
-				private final Future<?> timeout = channel.sendMessage("Nero decidiu que...").queueAfter(1, TimeUnit.MINUTES, msg -> {
-					if (users.size() > 0) {
-						List<String> ids = new ArrayList<>(users);
-						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
-						msg.editMessage(msg.getContentRaw() + u.getAsMention() + " receberá os presentes!").queue();
+				{
+					channel.sendMessage("Nero decidiu que...")
+							.delay(1, TimeUnit.MINUTES)
+							.queue(msg -> {
+								msg.delete().queue(null, Helper::doNothing);
+								if (users.size() > 0) {
+									List<String> ids = new ArrayList<>(users);
+									User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
+									channel.sendMessage("Nero decidiu que..." + u.getAsMention() + " receberá os presentes!").queue();
 
-						Account acc = AccountDAO.getAccount(u.getId());
-						for (Prize prize : prizes) {
-							if (prize instanceof CreditDrop)
-								acc.addCredit(prize.getPrize(), Helper.class);
-							else
-								acc.addBuff(prize.getPrizeAsItem().getId());
-						}
+									Account acc = AccountDAO.getAccount(u.getId());
+									for (Prize prize : prizes) {
+										if (prize instanceof CreditDrop)
+											acc.addCredit(prize.getPrize(), Helper.class);
+										else
+											acc.addBuff(prize.getPrizeAsItem().getId());
+									}
 
-						AccountDAO.saveAccount(acc);
-						close();
-					} else {
-						msg.editMessage(msg.getContentRaw() + " que ninguém receberá os presentes!").queue();
-					}
-				});
+									AccountDAO.saveAccount(acc);
+									close();
+								} else {
+									channel.sendMessage("Nero decidiu que..." + msg.getContentRaw() + " que ninguém receberá os presentes!").queue();
+								}
+							});
+				}
 
 				@Override
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
