@@ -85,8 +85,12 @@ public class AuditCommand extends Command {
 		StringBuilder sb = new StringBuilder();
 		for (List<Object[]> chunk : data) {
 			sb.setLength(0);
-			for (Object[] entry : chunk)
-				sb.append("`%s`: %s usos\n".formatted(StringUtils.abbreviate(String.valueOf(entry[0]), 60), entry[1]));
+			if (args[0].equalsIgnoreCase("T"))
+				for (Object[] entry : chunk)
+					sb.append("`%s`: %s créditos\n".formatted(StringUtils.abbreviate(String.valueOf(entry[0]), 60), entry[1]));
+			else
+				for (Object[] entry : chunk)
+					sb.append("`%s`: %s usos\n".formatted(StringUtils.abbreviate(String.valueOf(entry[0]), 60), entry[1]));
 
 			eb.setDescription(sb.toString());
 			pages.add(new Page(PageType.EMBED, eb.build()));
