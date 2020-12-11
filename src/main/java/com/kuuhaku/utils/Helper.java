@@ -33,10 +33,7 @@ import com.google.gson.Gson;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.discord.reactions.Reaction;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.GuildBuffDAO;
-import com.kuuhaku.controller.postgresql.LogDAO;
-import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
@@ -110,7 +107,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -1395,16 +1391,27 @@ public class Helper {
 
 			Set<String> users = new HashSet<>();
 			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), new SimpleMessageListener() {
-				private final Consumer<Void> success = s -> close();
-				private final Future<?> timeout = channel.sendMessage("Nero decidiu que...")
-						.queueAfter(5, TimeUnit.MINUTES, msg -> {
-							if (users.size() > 0) {
-								List<String> ids = new ArrayList<>(users);
-								User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
-								msg.editMessage(msg.getContentRaw() + u.getAsMention() + " receberá os presentes!").queue();
-								success.accept(null);
-							}
-						});
+				{
+					channel.sendMessage("Nero decidiu que...")
+							.queueAfter(5, TimeUnit.MINUTES, msg -> {
+								if (users.size() > 0) {
+									List<String> ids = new ArrayList<>(users);
+									User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
+									msg.editMessage(msg.getContentRaw() + u.getAsMention() + " receberá os presentes!").queue();
+
+									Account acc = AccountDAO.getAccount(u.getId());
+									for (Prize prize : prizes) {
+										if (prize instanceof CreditDrop)
+											acc.addCredit(prize.getPrize(), Helper.class);
+										else
+											acc.addBuff(prize.getPrizeAsItem().getId());
+									}
+
+									AccountDAO.saveAccount(acc);
+									close();
+								}
+							});
+				}
 
 				@Override
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
