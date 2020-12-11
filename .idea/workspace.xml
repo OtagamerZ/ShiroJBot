@@ -13,9 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhorias no Shoukan">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/CustomAnswerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/CustomAnswerDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -898,13 +897,8 @@
       <workItem from="1607515059101" duration="7864000" />
       <workItem from="1607530918280" duration="12418000" />
       <workItem from="1607547123454" duration="433000" />
-    </task>
-    <task id="LOCAL-03025" summary="Adição de efeito de trava de deck">
-      <created>1607138299028</created>
-      <option name="number" value="03025" />
-      <option name="presentableId" value="LOCAL-03025" />
-      <option name="project" value="LOCAL" />
-      <updated>1607138299028</updated>
+      <workItem from="1607651706255" duration="98000" />
+      <workItem from="1607652393578" duration="1053000" />
     </task>
     <task id="LOCAL-03026" summary="Adição de efeito de trava de deck">
       <created>1607138589202</created>
@@ -1242,7 +1236,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607626811290</updated>
     </task>
-    <option name="localTasksCounter" value="3074" />
+    <task id="LOCAL-03074" summary="Correções menores">
+      <created>1607644005540</created>
+      <option name="number" value="03074" />
+      <option name="presentableId" value="LOCAL-03074" />
+      <option name="project" value="LOCAL" />
+      <updated>1607644005541</updated>
+    </task>
+    <option name="localTasksCounter" value="3075" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1308,7 +1309,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção na conversão de sonhos em créditos voláteis" />
     <MESSAGE value="Correção da derrota por WO após a partida ter acabado" />
     <MESSAGE value="Adição de efeito de trava de deck" />
     <MESSAGE value="Pontuação de Exceeds agora não é mais influenciada por modificadores" />
@@ -1333,7 +1333,8 @@
     <MESSAGE value="Correção na supressão de mana" />
     <MESSAGE value="Correção ao equipar cartas viradas para baixo" />
     <MESSAGE value="Correção ao equipar EvoGears com amuleto" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção ao equipar EvoGears com amuleto" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1447,11 +1448,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607626815610">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607644009594">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607626815610" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607567656724" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607644009594" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
