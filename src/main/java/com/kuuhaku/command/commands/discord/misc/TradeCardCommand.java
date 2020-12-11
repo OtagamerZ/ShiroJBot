@@ -320,7 +320,7 @@ public class TradeCardCommand extends Command {
                     } else if (target.getEquipments().size() == 18) {
                         channel.sendMessage("❌ | Ele/ela já possui 18 equipamentos!").queue();
                         return;
-                    } else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) {
+                    } else if (target.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) {
                         channel.sendMessage("❌ | Ele/ela já possui 1 equipamento tier 4!").queue();
                         return;
                     } else if (!kp.getEquipments().contains(e)) {
@@ -521,7 +521,7 @@ public class TradeCardCommand extends Command {
                     } else if (target.getEquipments().size() == 18) {
                         channel.sendMessage("❌ | Ele/ela já possui 18 equipamentos!").queue();
                         return;
-                    } else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) {
+                    } else if (target.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) {
                         channel.sendMessage("❌ | Ele/ela já possui 1 equipamento tier 4!").queue();
                         return;
                     } else if (!kp.getEquipments().contains(e)) {
