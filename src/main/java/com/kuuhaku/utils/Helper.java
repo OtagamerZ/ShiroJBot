@@ -1419,8 +1419,9 @@ public class Helper {
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 					String msg = event.getMessage().getContentRaw();
 					User author = event.getAuthor();
-					if (msg.equalsIgnoreCase("PADORU PADORU") && !author.isBot() && !users.contains(author.getId())) {
-						users.add(author.getId());
+					if (msg.equalsIgnoreCase("PADORU PADORU") && !author.isBot() && users.add(author.getId())) {
+						Emote e = Main.getShiroShards().getEmoteById("787012933577736253");
+						if (e != null) event.getMessage().addReaction(e).queue();
 					}
 				}
 			});
