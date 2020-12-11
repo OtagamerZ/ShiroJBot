@@ -1393,7 +1393,7 @@ public class Helper {
 			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), new SimpleMessageListener() {
 				{
 					channel.sendMessage("Nero decidiu que...")
-							.queueAfter(5, TimeUnit.MINUTES, msg -> {
+							.queueAfter(30, TimeUnit.SECONDS, msg -> {
 								if (users.size() > 0) {
 									List<String> ids = new ArrayList<>(users);
 									User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
@@ -1409,6 +1409,8 @@ public class Helper {
 
 									AccountDAO.saveAccount(acc);
 									close();
+								} else {
+									msg.editMessage(msg.getContentRaw() + " que ninguém receberá os presentes!").queue();
 								}
 							});
 				}
