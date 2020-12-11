@@ -107,7 +107,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -513,10 +512,10 @@ public class Helper {
 				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissionsExplicit(c);
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
-							  perms.stream()
-									  .map(p -> ":white_check_mark: -> " + p.getName() + "\n")
-									  .sorted()
-									  .collect(Collectors.joining());
+						perms.stream()
+								.map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+								.sorted()
+								.collect(Collectors.joining());
 			}
 		} catch (NoResultException ignore) {
 		}
@@ -525,11 +524,11 @@ public class Helper {
 		EnumSet<Permission> perms = shiro.getPermissionsExplicit(c);
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
-			   perms.stream()
-					   .map(p -> ":white_check_mark: -> " + p.getName() + "\n")
-					   .sorted()
-					   .collect(Collectors.joining()) +
-			   jibrilPerms;
+				perms.stream()
+						.map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+						.sorted()
+						.collect(Collectors.joining()) +
+				jibrilPerms;
 	}
 
 	public static <T> T getOr(T get, T or) {
@@ -1405,11 +1404,10 @@ public class Helper {
 			};
 
 			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), sml);
-			Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+			Function<? super Void, RestAction<Message>> act = msg -> {
 				if (users.size() > 0) {
 					List<String> ids = new ArrayList<>(users);
 					User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
-					channel.sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!").queue();
 
 					Account acc = AccountDAO.getAccount(u.getId());
 					for (Prize prize : prizes) {
@@ -1421,22 +1419,34 @@ public class Helper {
 
 					AccountDAO.saveAccount(acc);
 					sml.close();
+					return channel.sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!");
 				} else {
-					channel.sendMessage("Nero decidiu que ninguém merece os presentes!").queue();
+					return channel.sendMessage("Nero decidiu que ninguém merece os presentes!");
 				}
-			}, 1, TimeUnit.MINUTES);
+			};
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
-				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				channel.sendMessage(eb.build())
+						.delay(1, TimeUnit.MINUTES)
+						.flatMap(Message::delete)
+						.flatMap(act)
+						.queue(null, Helper::doNothing);
 			} else {
 				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
 
 				if (tc == null) {
 					gc.setCanalDrop(null);
 					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+					channel.sendMessage(eb.build())
+							.delay(1, TimeUnit.MINUTES)
+							.flatMap(Message::delete)
+							.flatMap(act)
+							.queue(null, Helper::doNothing);
 				} else {
-					tc.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+					tc.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES)
+							.flatMap(Message::delete)
+							.flatMap(act)
+							.queue(null, Helper::doNothing);
 				}
 			}
 			Main.getInfo().getPadoruLimit().put(gc.getGuildID(), true);
