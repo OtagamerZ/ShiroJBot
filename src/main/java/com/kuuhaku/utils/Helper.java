@@ -73,6 +73,7 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -109,6 +110,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -1330,7 +1332,7 @@ public class Helper {
 			else
 				eb.addField("Conteúdo:", drop.getPrizeAsItem().getName(), true);
 			eb.addField("Código captcha:", drop.getCaptcha(), true)
-					.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisitos: " + drop.getRequirement().getKey() + ").", null);
+					.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisito: " + drop.getRequirement().getKey() + ").", null);
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
 				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1355,9 +1357,79 @@ public class Helper {
 			Prize drop = new CreditDrop();
 
 			chat.sendMessage(channel.getName(),
-					"HolidayPresent | Digite \"s!abrir " + drop.getCaptcha() + "\" para receber o prêmio (" + drop.getPrize() + " créditos | requisitos: " + drop.getRequirement().getKey() + ")."
+					"HolidayPresent | Digite \"s!abrir " + drop.getCaptcha() + "\" para receber o prêmio (" + drop.getPrize() + " créditos | requisito: " + drop.getRequirement().getKey() + ")."
 			);
 			Main.getInfo().getCurrentDrop().put("twitch", drop);
+		}
+	}
+
+	public static void spawnPadoru(GuildConfig gc, TextChannel channel) {
+		if (Main.getInfo().getPadoruLimit().getIfPresent(gc.getGuildID()) != null) return;
+
+		if (chance(0.01)) {
+			int rolled = Helper.rng(100, false);
+			List<Prize> prizes = new ArrayList<>();
+			for (int i = 0; i < 5; i++) {
+				prizes.add(rolled > 80 ? new ItemDrop() : new CreditDrop());
+			}
+
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setDescription("""
+													**Hashire sori yo**
+													**Kaze no you ni**
+													**Tsukimihara wo...**
+							""")
+					.setThumbnail("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/assets/padoru.gif")
+					.setTitle("Nero Claudius apareceu trazendo presentes neste servidor!");
+
+			for (int i = 0; i < prizes.size(); i++) {
+				Prize prize = prizes.get(i);
+				if (prize instanceof CreditDrop)
+					eb.addField("Presente " + (i + 1) + ":", prize.getPrize() + " créditos", true);
+				else
+					eb.addField("Presente " + (i + 1) + ":", prize.getPrizeAsItem().getName(), true);
+			}
+
+
+			eb.setFooter("Complete a música para participar do sorteio dos prêmios (requisito: Ser level maior que 10).", null);
+
+			Set<String> users = new HashSet<>();
+			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), new SimpleMessageListener() {
+				private final Consumer<Void> success = s -> close();
+				private final Future<?> timeout = channel.sendMessage("Nero decidiu que...")
+						.queueAfter(5, TimeUnit.MINUTES, msg -> {
+							if (users.size() > 0) {
+								List<String> ids = new ArrayList<>(users);
+								User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
+								msg.editMessage(msg.getContentRaw() + u.getAsMention() + " receberá os presentes!").queue();
+								success.accept(null);
+							}
+						});
+
+				@Override
+				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+					String msg = event.getMessage().getContentRaw();
+					User author = event.getAuthor();
+					if (msg.equalsIgnoreCase("PADORU PADORU") && !author.isBot() && !users.contains(author.getId())) {
+						users.add(author.getId());
+					}
+				}
+			});
+
+			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
+				channel.sendMessage(eb.build()).delay(5, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			} else {
+				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
+
+				if (tc == null) {
+					gc.setCanalDrop(null);
+					GuildDAO.updateGuildSettings(gc);
+					channel.sendMessage(eb.build()).delay(5, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				} else {
+					tc.sendMessage(eb.build()).delay(5, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				}
+			}
+			Main.getInfo().getPadoruLimit().put(gc.getGuildID(), true);
 		}
 	}
 

@@ -291,6 +291,10 @@ public class ShiroEvents extends ListenerAdapter {
 				if (!TagDAO.getTagById(guild.getOwnerId()).isToxic()) {
 					if (gc.isKawaiponEnabled()) Helper.spawnKawaipon(gc, (TextChannel) channel);
 					if (gc.isDropEnabled()) Helper.spawnDrop(gc, (TextChannel) channel);
+
+					Calendar c = Calendar.getInstance();
+					if (c.get(Calendar.MONTH) == Calendar.DECEMBER && gc.isDropEnabled())
+						Helper.spawnPadoru(gc, (TextChannel) channel);
 				}
 
 				MessageChannel lvlChannel = null;
