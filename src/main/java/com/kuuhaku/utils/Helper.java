@@ -107,6 +107,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -1391,29 +1392,26 @@ public class Helper {
 
 			Set<String> users = new HashSet<>();
 			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), new SimpleMessageListener() {
-				{
-					channel.sendMessage("Nero decidiu que...")
-							.queueAfter(30, TimeUnit.SECONDS, msg -> {
-								if (users.size() > 0) {
-									List<String> ids = new ArrayList<>(users);
-									User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
-									msg.editMessage(msg.getContentRaw() + u.getAsMention() + " receberá os presentes!").queue();
+				private final Future<?> timeout = channel.sendMessage("Nero decidiu que...").queueAfter(1, TimeUnit.MINUTES, msg -> {
+					if (users.size() > 0) {
+						List<String> ids = new ArrayList<>(users);
+						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
+						msg.editMessage(msg.getContentRaw() + u.getAsMention() + " receberá os presentes!").queue();
 
-									Account acc = AccountDAO.getAccount(u.getId());
-									for (Prize prize : prizes) {
-										if (prize instanceof CreditDrop)
-											acc.addCredit(prize.getPrize(), Helper.class);
-										else
-											acc.addBuff(prize.getPrizeAsItem().getId());
-									}
+						Account acc = AccountDAO.getAccount(u.getId());
+						for (Prize prize : prizes) {
+							if (prize instanceof CreditDrop)
+								acc.addCredit(prize.getPrize(), Helper.class);
+							else
+								acc.addBuff(prize.getPrizeAsItem().getId());
+						}
 
-									AccountDAO.saveAccount(acc);
-									close();
-								} else {
-									msg.editMessage(msg.getContentRaw() + " que ninguém receberá os presentes!").queue();
-								}
-							});
-				}
+						AccountDAO.saveAccount(acc);
+						close();
+					} else {
+						msg.editMessage(msg.getContentRaw() + " que ninguém receberá os presentes!").queue();
+					}
+				});
 
 				@Override
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -1427,16 +1425,16 @@ public class Helper {
 			});
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
-				channel.sendMessage(eb.build()).delay(5, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			} else {
 				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
 
 				if (tc == null) {
 					gc.setCanalDrop(null);
 					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessage(eb.build()).delay(5, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+					channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 				} else {
-					tc.sendMessage(eb.build()).delay(5, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+					tc.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 				}
 			}
 			Main.getInfo().getPadoruLimit().put(gc.getGuildID(), true);
