@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção troca síntese de equipamentos">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no padoru drop">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
@@ -903,13 +903,7 @@
       <workItem from="1607653527848" duration="1807000" />
       <workItem from="1607702943381" duration="12069000" />
       <workItem from="1607717080113" duration="689000" />
-    </task>
-    <task id="LOCAL-03047" summary="Adição do modo treino no Shoukan">
-      <created>1607518937341</created>
-      <option name="number" value="03047" />
-      <option name="presentableId" value="LOCAL-03047" />
-      <option name="project" value="LOCAL" />
-      <updated>1607518937341</updated>
+      <workItem from="1607728064144" duration="1382000" />
     </task>
     <task id="LOCAL-03048" summary="Implementação do ShardManager na Shiro">
       <created>1607532053417</created>
@@ -1247,7 +1241,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607717160258</updated>
     </task>
-    <option name="localTasksCounter" value="3096" />
+    <task id="LOCAL-03096" summary="Correção no padoru drop">
+      <created>1607726545841</created>
+      <option name="number" value="03096" />
+      <option name="presentableId" value="LOCAL-03096" />
+      <option name="project" value="LOCAL" />
+      <updated>1607726545842</updated>
+    </task>
+    <option name="localTasksCounter" value="3097" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1313,8 +1314,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição do amuleto clone" />
-    <MESSAGE value="Adição de modo personalizado sem dano direto" />
     <MESSAGE value="Adição do modo treino no Shoukan" />
     <MESSAGE value="Implementação do ShardManager na Shiro" />
     <MESSAGE value="Adição de exibição de troféu no perfil" />
@@ -1338,7 +1337,9 @@
     <MESSAGE value="Correção menor" />
     <MESSAGE value="Adição do drop padoru" />
     <MESSAGE value="Correção no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no Shoukan" />
+    <MESSAGE value="Correção troca síntese de equipamentos" />
+    <MESSAGE value="Correção no padoru drop" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no padoru drop" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1404,11 +1405,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607717159157" />
-    <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1606176807594">
+    <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1607728513022">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605528924821" />
-    <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606176807594" />
+    <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728513022" />
     <state width="1387" height="315" key="GridCell.Tab.0.bottom" timestamp="1607696671595">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1434,11 +1435,11 @@
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1607347986126" />
     <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1603507846095" />
-    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1607640001412">
+    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1607728075972">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1607530724883" />
-    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607640001412" />
+    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728075972" />
     <state x="303" y="75" key="SettingsEditor" timestamp="1606877192402">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1452,11 +1453,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607717165910">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607726604591">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607717165910" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607655616775" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607726604591" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
