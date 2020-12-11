@@ -13,7 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção do RegenRulesCommand" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na síntese de equipamentos">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -897,14 +900,7 @@
       <workItem from="1607547123454" duration="433000" />
       <workItem from="1607651706255" duration="98000" />
       <workItem from="1607652393578" duration="1053000" />
-      <workItem from="1607653527848" duration="1112000" />
-    </task>
-    <task id="LOCAL-03028" summary="Pontuação de Exceeds agora não é mais influenciada por modificadores">
-      <created>1607348910912</created>
-      <option name="number" value="03028" />
-      <option name="presentableId" value="LOCAL-03028" />
-      <option name="project" value="LOCAL" />
-      <updated>1607348910912</updated>
+      <workItem from="1607653527848" duration="1807000" />
     </task>
     <task id="LOCAL-03029" summary="Adição de endpoint da API do Mega Hentais">
       <created>1607353359166</created>
@@ -1242,7 +1238,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607654005668</updated>
     </task>
-    <option name="localTasksCounter" value="3077" />
+    <task id="LOCAL-03077" summary="Correção na síntese de equipamentos">
+      <created>1607655611049</created>
+      <option name="number" value="03077" />
+      <option name="presentableId" value="LOCAL-03077" />
+      <option name="project" value="LOCAL" />
+      <updated>1607655611049</updated>
+    </task>
+    <option name="localTasksCounter" value="3078" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1308,7 +1311,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Pontuação de Exceeds agora não é mais influenciada por modificadores" />
     <MESSAGE value="Adição de endpoint da API do Mega Hentais" />
     <MESSAGE value="Correção na loja de cartas" />
     <MESSAGE value="Melhoria no logger do comando de busca por anime" />
@@ -1333,7 +1335,8 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Remoção do Riki Yamada da lista de suportes" />
     <MESSAGE value="Correção do RegenRulesCommand" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção do RegenRulesCommand" />
+    <MESSAGE value="Correção na síntese de equipamentos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na síntese de equipamentos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1451,11 +1454,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607654009950">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607655616775">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607626815610" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607654009950" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607655616775" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
