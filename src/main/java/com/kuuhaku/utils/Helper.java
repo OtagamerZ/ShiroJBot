@@ -1390,33 +1390,8 @@ public class Helper {
 			eb.setFooter("Complete a música para participar do sorteio dos prêmios.", null);
 
 			Set<String> users = new HashSet<>();
-			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), new SimpleMessageListener() {
-				{
-					channel.sendMessage("Nero decidiu que...")
-							.delay(1, TimeUnit.MINUTES)
-							.queue(msg -> {
-								msg.delete().queue(null, Helper::doNothing);
-								if (users.size() > 0) {
-									List<String> ids = new ArrayList<>(users);
-									User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
-									channel.sendMessage("Nero decidiu que..." + u.getAsMention() + " receberá os presentes!").queue();
 
-									Account acc = AccountDAO.getAccount(u.getId());
-									for (Prize prize : prizes) {
-										if (prize instanceof CreditDrop)
-											acc.addCredit(prize.getPrize(), Helper.class);
-										else
-											acc.addBuff(prize.getPrizeAsItem().getId());
-									}
-
-									AccountDAO.saveAccount(acc);
-									close();
-								} else {
-									channel.sendMessage("Nero decidiu que..." + msg.getContentRaw() + " que ninguém receberá os presentes!").queue();
-								}
-							});
-				}
-
+			SimpleMessageListener sml = new SimpleMessageListener() {
 				@Override
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 					String msg = event.getMessage().getContentRaw();
@@ -1426,7 +1401,31 @@ public class Helper {
 						if (e != null) event.getMessage().addReaction(e).queue();
 					}
 				}
-			});
+			};
+
+			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), sml);
+			channel.sendMessage("Nero decidiu que...")
+					.queueAfter(1, TimeUnit.MINUTES, msg -> {
+						msg.delete().queue(null, Helper::doNothing);
+						if (users.size() > 0) {
+							List<String> ids = new ArrayList<>(users);
+							User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
+							channel.sendMessage("Nero decidiu que..." + u.getAsMention() + " receberá os presentes!").queue();
+
+							Account acc = AccountDAO.getAccount(u.getId());
+							for (Prize prize : prizes) {
+								if (prize instanceof CreditDrop)
+									acc.addCredit(prize.getPrize(), Helper.class);
+								else
+									acc.addBuff(prize.getPrizeAsItem().getId());
+							}
+
+							AccountDAO.saveAccount(acc);
+							sml.close();
+						} else {
+							channel.sendMessage("Nero decidiu que..." + msg.getContentRaw() + " que ninguém receberá os presentes!").queue();
+						}
+					});
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
 				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
