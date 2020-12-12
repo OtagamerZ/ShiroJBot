@@ -902,13 +902,7 @@
       <workItem from="1607717080113" duration="689000" />
       <workItem from="1607728064144" duration="2131000" />
       <workItem from="1607731872625" duration="228000" />
-    </task>
-    <task id="LOCAL-03051" summary="Adição de exibição de troféu no perfil">
-      <created>1607537713380</created>
-      <option name="number" value="03051" />
-      <option name="presentableId" value="LOCAL-03051" />
-      <option name="project" value="LOCAL" />
-      <updated>1607537713380</updated>
+      <workItem from="1607732133145" duration="33000" />
     </task>
     <task id="LOCAL-03052" summary="Adição de amuleto de sacrifício">
       <created>1607540003997</created>
@@ -1246,7 +1240,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607732069830</updated>
     </task>
-    <option name="localTasksCounter" value="3100" />
+    <task id="LOCAL-03100" summary="Correção no padoru drop">
+      <created>1607732157104</created>
+      <option name="number" value="03100" />
+      <option name="presentableId" value="LOCAL-03100" />
+      <option name="project" value="LOCAL" />
+      <updated>1607732157104</updated>
+    </task>
+    <option name="localTasksCounter" value="3101" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1451,11 +1452,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607732071009">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607732158404">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607717165910" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607732071009" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607732158404" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
