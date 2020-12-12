@@ -268,7 +268,7 @@ public class Hand {
 
 	public void setSuppressTime(int time) {
 		this.suppressTime = time;
-		this.manaReturn = manaReturn + mana;
+		this.manaReturn += mana;
 		this.mana = 0;
 	}
 
