@@ -1426,25 +1426,31 @@ public class Helper {
 			};
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
-				channel.sendMessage(eb.build()).queueAfter(1, TimeUnit.MINUTES, msg -> {
-					msg.delete().queue(null, Helper::doNothing);
-					act.accept(msg);
-				});
+				channel.sendMessage(eb.build())
+					.delay(1, TimeUnit.MINUTES)
+					.queue(msg -> {
+						msg.delete().queue(null, Helper::doNothing);
+						act.accept(msg);
+					});
 			} else {
 				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
 
 				if (tc == null) {
 					gc.setCanalDrop(null);
 					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessage(eb.build()).queueAfter(1, TimeUnit.MINUTES, msg -> {
-						msg.delete().queue(null, Helper::doNothing);
-						act.accept(msg);
-					});
+					channel.sendMessage(eb.build())
+						.delay(1, TimeUnit.MINUTES)
+						.queue(msg -> {
+							msg.delete().queue(null, Helper::doNothing);
+							act.accept(msg);
+						});
 				} else {
-					tc.sendMessage(eb.build()).queueAfter(1, TimeUnit.MINUTES, msg -> {
-						msg.delete().queue(null, Helper::doNothing);
-						act.accept(msg);
-					});
+					tc.sendMessage(eb.build())
+						.delay(1, TimeUnit.MINUTES)
+						.queue(msg -> {
+							msg.delete().queue(null, Helper::doNothing);
+							act.accept(msg);
+						});
 				}
 			}
 			Main.getInfo().getPadoruLimit().put(gc.getGuildID(), true);
