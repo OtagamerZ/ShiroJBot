@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no padoru drop">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no padoru drop" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -903,14 +900,7 @@
       <workItem from="1607653527848" duration="1807000" />
       <workItem from="1607702943381" duration="12069000" />
       <workItem from="1607717080113" duration="689000" />
-      <workItem from="1607728064144" duration="1382000" />
-    </task>
-    <task id="LOCAL-03048" summary="Implementação do ShardManager na Shiro">
-      <created>1607532053417</created>
-      <option name="number" value="03048" />
-      <option name="presentableId" value="LOCAL-03048" />
-      <option name="project" value="LOCAL" />
-      <updated>1607532053418</updated>
+      <workItem from="1607728064144" duration="2131000" />
     </task>
     <task id="LOCAL-03049" summary="Implementação do ShardManager na Shiro">
       <created>1607532282479</created>
@@ -1248,7 +1238,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607726545842</updated>
     </task>
-    <option name="localTasksCounter" value="3097" />
+    <task id="LOCAL-03097" summary="Correção no padoru drop">
+      <created>1607729911579</created>
+      <option name="number" value="03097" />
+      <option name="presentableId" value="LOCAL-03097" />
+      <option name="project" value="LOCAL" />
+      <updated>1607729911580</updated>
+    </task>
+    <option name="localTasksCounter" value="3098" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1435,11 +1432,11 @@
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1607347986126" />
     <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1603507846095" />
-    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1607728075972">
+    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1607729790272">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1607530724883" />
-    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728075972" />
+    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607729790272" />
     <state x="303" y="75" key="SettingsEditor" timestamp="1606877192402">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1453,11 +1450,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607726604591">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607729917381">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607717165910" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607726604591" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607729917381" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
