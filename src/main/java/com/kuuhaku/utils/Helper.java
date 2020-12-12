@@ -1404,7 +1404,7 @@ public class Helper {
 			};
 
 			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), sml);
-			Function<Message, RestAction<Message>> act = msg -> {
+			Consumer<Message> act = msg -> {
 				if (users.size() > 0) {
 					List<String> ids = new ArrayList<>(users);
 					User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
@@ -1419,33 +1419,32 @@ public class Helper {
 
 					AccountDAO.saveAccount(acc);
 					sml.close();
-					return msg.getTextChannel().sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!");
+					msg.getTextChannel().sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!");
 				} else {
-					return msg.getTextChannel().sendMessage("Nero decidiu que ninguém merece os presentes!");
+					msg.getTextChannel().sendMessage("Nero decidiu que ninguém merece os presentes!");
 				}
 			};
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
-				channel.sendMessage(eb.build())
-						.delay(1, TimeUnit.MINUTES)
-						.flatMap(act)
-						.flatMap(Message::delete)
-						.queue();
+				channel.sendMessage(eb.build()).queueAfter(1, TimeUnit.MINUTES, msg -> {
+					msg.delete().queue(null, Helper::doNothing);
+					act.accept(msg);
+				});
 			} else {
 				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
 
 				if (tc == null) {
 					gc.setCanalDrop(null);
 					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessage(eb.build())
-							.flatMap(Message::delete)
-							.queue();
+					channel.sendMessage(eb.build()).queueAfter(1, TimeUnit.MINUTES, msg -> {
+						msg.delete().queue(null, Helper::doNothing);
+						act.accept(msg);
+					});
 				} else {
-					tc.sendMessage(eb.build())
-							.delay(1, TimeUnit.MINUTES)
-							.flatMap(act)
-							.flatMap(Message::delete)
-							.queue();
+					tc.sendMessage(eb.build()).queueAfter(1, TimeUnit.MINUTES, msg -> {
+						msg.delete().queue(null, Helper::doNothing);
+						act.accept(msg);
+					});
 				}
 			}
 			Main.getInfo().getPadoruLimit().put(gc.getGuildID(), true);
