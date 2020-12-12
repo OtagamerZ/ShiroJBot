@@ -1418,11 +1418,11 @@ public class Helper {
 					}
 
 					AccountDAO.saveAccount(acc);
-					sml.close();
 					msg.getTextChannel().sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!").queue();
 				} else {
 					msg.getTextChannel().sendMessage("Nero decidiu que ninguém merece os presentes!").queue();
 				}
+				sml.close();
 			};
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
