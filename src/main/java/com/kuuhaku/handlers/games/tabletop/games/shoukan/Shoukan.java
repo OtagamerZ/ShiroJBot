@@ -400,6 +400,9 @@ public class Shoukan extends Game {
 					} else if (c.isFlipped()) {
 						channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue(null, Helper::doNothing);
 						return;
+					} else if (c.getStun() > 0) {
+						channel.sendMessage("❌ | Essa carta está atordoada.").queue(null, Helper::doNothing);
+						return;
 					} else if (c.isDefending()) {
 						channel.sendMessage("❌ | Você não pode atacar com cartas em modo de defesa.").queue(null, Helper::doNothing);
 						return;
@@ -441,6 +444,9 @@ public class Shoukan extends Game {
 				} else if (yours.isFlipped()) {
 					channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue(null, Helper::doNothing);
 					return;
+				} else if (yours.getStun() > 0) {
+					channel.sendMessage("❌ | Essa carta está atordoada.").queue(null, Helper::doNothing);
+					return;
 				} else if (yours.isDefending()) {
 					channel.sendMessage("❌ | Você não pode atacar com cartas em modo de defesa.").queue(null, Helper::doNothing);
 					return;
@@ -458,11 +464,11 @@ public class Shoukan extends Game {
 
 				int yPower = Math.round(
 						(yours.getEAtk() + yours.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum()) *
-						(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+								(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
 				);
 
 				int hPower;
-				if (his.isDefending() || his.isFlipped()) {
+				if (his.isDefending() || his.isFlipped() || his.getStun() > 0) {
 					if (his.isFlipped()) {
 						his.setFlipped(false);
 						if (his.hasEffect()) {
@@ -472,7 +478,7 @@ public class Shoukan extends Game {
 					}
 					hPower = Math.round(
 							(his.getEDef() + his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum()) *
-							(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+									(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 					);
 				} else
 					hPower = Math.round(
@@ -492,7 +498,7 @@ public class Shoukan extends Game {
 						if (postCombat()) return;
 					}
 
-					if (!his.isDefending() && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+					if (!his.isDefending() && his.getStun() == 0 && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
 						Hand enemy = getHands().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
 						enemy.removeHp(yPower - hPower);
 					}
