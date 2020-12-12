@@ -1430,7 +1430,7 @@ public class Helper {
 						.delay(1, TimeUnit.MINUTES)
 						.flatMap(act)
 						.flatMap(Message::delete)
-						.queue(null, Helper::doNothing);
+						.queue();
 			} else {
 				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
 
@@ -1438,16 +1438,14 @@ public class Helper {
 					gc.setCanalDrop(null);
 					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage(eb.build())
-							.delay(1, TimeUnit.MINUTES)
-							.flatMap(act)
 							.flatMap(Message::delete)
-							.queue(null, Helper::doNothing);
+							.queue();
 				} else {
 					tc.sendMessage(eb.build())
 							.delay(1, TimeUnit.MINUTES)
 							.flatMap(act)
 							.flatMap(Message::delete)
-							.queue(null, Helper::doNothing);
+							.queue();
 				}
 			}
 			Main.getInfo().getPadoruLimit().put(gc.getGuildID(), true);
