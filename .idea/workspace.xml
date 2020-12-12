@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no padoru drop">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -906,20 +907,9 @@
       <workItem from="1607731872625" duration="228000" />
       <workItem from="1607732133145" duration="33000" />
       <workItem from="1607732311012" duration="736000" />
-    </task>
-    <task id="LOCAL-03053" summary="Correção do clone">
-      <created>1607541174082</created>
-      <option name="number" value="03053" />
-      <option name="presentableId" value="LOCAL-03053" />
-      <option name="project" value="LOCAL" />
-      <updated>1607541174082</updated>
-    </task>
-    <task id="LOCAL-03054" summary="Correção do clone">
-      <created>1607541690078</created>
-      <option name="number" value="03054" />
-      <option name="presentableId" value="LOCAL-03054" />
-      <option name="project" value="LOCAL" />
-      <updated>1607541690078</updated>
+      <workItem from="1607733948973" duration="709000" />
+      <workItem from="1607742203418" duration="3707000" />
+      <workItem from="1607796171649" duration="693000" />
     </task>
     <task id="LOCAL-03055" summary="Correção do clone">
       <created>1607544204444</created>
@@ -1250,7 +1240,21 @@
       <option name="project" value="LOCAL" />
       <updated>1607732448064</updated>
     </task>
-    <option name="localTasksCounter" value="3102" />
+    <task id="LOCAL-03102" summary="Correção no padoru drop">
+      <created>1607734085544</created>
+      <option name="number" value="03102" />
+      <option name="presentableId" value="LOCAL-03102" />
+      <option name="project" value="LOCAL" />
+      <updated>1607734085545</updated>
+    </task>
+    <task id="LOCAL-03103" summary="Correção no padoru drop">
+      <created>1607734308479</created>
+      <option name="number" value="03103" />
+      <option name="presentableId" value="LOCAL-03103" />
+      <option name="project" value="LOCAL" />
+      <updated>1607734308479</updated>
+    </task>
+    <option name="localTasksCounter" value="3104" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1455,11 +1459,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607732449454">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607734334400">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607717165910" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607732449454" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607734334400" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
