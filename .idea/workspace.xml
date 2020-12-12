@@ -901,20 +901,7 @@
       <workItem from="1607702943381" duration="12069000" />
       <workItem from="1607717080113" duration="689000" />
       <workItem from="1607728064144" duration="2131000" />
-    </task>
-    <task id="LOCAL-03049" summary="Implementação do ShardManager na Shiro">
-      <created>1607532282479</created>
-      <option name="number" value="03049" />
-      <option name="presentableId" value="LOCAL-03049" />
-      <option name="project" value="LOCAL" />
-      <updated>1607532282479</updated>
-    </task>
-    <task id="LOCAL-03050" summary="Adição de exibição de troféu no perfil">
-      <created>1607537507152</created>
-      <option name="number" value="03050" />
-      <option name="presentableId" value="LOCAL-03050" />
-      <option name="project" value="LOCAL" />
-      <updated>1607537507152</updated>
+      <workItem from="1607731872625" duration="228000" />
     </task>
     <task id="LOCAL-03051" summary="Adição de exibição de troféu no perfil">
       <created>1607537713380</created>
@@ -1245,7 +1232,21 @@
       <option name="project" value="LOCAL" />
       <updated>1607729911580</updated>
     </task>
-    <option name="localTasksCounter" value="3098" />
+    <task id="LOCAL-03098" summary="Correção no padoru drop">
+      <created>1607732052905</created>
+      <option name="number" value="03098" />
+      <option name="presentableId" value="LOCAL-03098" />
+      <option name="project" value="LOCAL" />
+      <updated>1607732052905</updated>
+    </task>
+    <task id="LOCAL-03099" summary="Correção no padoru drop">
+      <created>1607732069830</created>
+      <option name="number" value="03099" />
+      <option name="presentableId" value="LOCAL-03099" />
+      <option name="project" value="LOCAL" />
+      <updated>1607732069830</updated>
+    </task>
+    <option name="localTasksCounter" value="3100" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1450,11 +1451,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607729917381">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607732071009">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607717165910" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607729917381" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607732071009" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
