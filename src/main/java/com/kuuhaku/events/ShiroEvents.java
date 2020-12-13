@@ -266,9 +266,10 @@ public class ShiroEvents extends ListenerAdapter {
 						return;
 					}
 
-					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
 					if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
 						Main.getInfo().getRatelimit().put(author.getId(), true);
+
+					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
 					Helper.spawnAd(channel);
 				}
 			}
