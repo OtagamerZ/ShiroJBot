@@ -34,8 +34,8 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.stream.Collectors;
 
 public class MyBuffsCommand extends Command {
@@ -91,7 +91,7 @@ public class MyBuffsCommand extends Command {
 		if (gb.getBuffs().size() > 0) {
 			gb.getBuffs().forEach(b -> {
 				boolean isUltimate = b.getTier() == 4;
-				String until = OffsetDateTime.ofInstant(Instant.ofEpochMilli(b.getAcquiredAt()), ZoneId.of("GMT-3"))
+				String until = ZonedDateTime.ofInstant(Instant.ofEpochMilli(b.getAcquiredAt()), ZoneId.of("GMT-3"))
 						.plusDays(b.getTime())
 						.format(Helper.dateformat);
 				switch (b.getId()) {
