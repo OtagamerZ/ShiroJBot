@@ -101,8 +101,9 @@ public class TwitchEvents {
 				return;
 			}
 
-			command.execute(author, acc, rawMsgNoPrefix, args, message, channel, client.getChat(), message.getPermissions());
 			Main.getInfo().getRatelimit().put(author.getId(), true);
+
+			command.execute(author, acc, rawMsgNoPrefix, args, message, channel, client.getChat(), message.getPermissions());
 
 			String ad = Helper.getAd();
 			if (ad != null) {
