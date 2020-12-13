@@ -108,13 +108,13 @@ public class CustomAnswerCommand extends Command {
 			return;
 		}
 
-		String txt = String.join(" ", args);
+		String[] txt = String.join(" ", args).split(";");
 
-		if (txt.contains(";") && txt.split(";").length == 2) {
-			if (txt.split(";")[0].length() <= 200) {
-				if (txt.split(";")[1].length() <= 200) {
-					CustomAnswerDAO.addCAtoDB(guild, txt.split(";")[0], txt.replace(txt.split(";")[0] + ";", ""));
-					channel.sendMessage("Agora quando alguém disser `" + txt.split(";")[0] + "` irei responder `" + txt.replace(txt.split(";")[0] + ";", "") + "`.").queue();
+		if (txt.length > 1) {
+			if (txt[0].length() <= 200) {
+				if (txt[1].length() <= 200) {
+					CustomAnswerDAO.addCAtoDB(guild, txt[0].trim(), txt[1].trim());
+					channel.sendMessage("Agora quando alguém disser `" + txt[0] + "` irei responder `" + txt[1] + "`.").queue();
 				} else {
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-reply-too-long")).queue();
 				}
