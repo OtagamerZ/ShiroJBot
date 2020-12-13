@@ -136,7 +136,7 @@ public class CommandManager {
 					"convite", new String[]{"invite"}, REQ_SERVER_ID, "cmd_invite", SUPPORT, true
 			));
 			put(RatingCommand.class, new Argument(
-					"pedirvoto", new String[]{"requestvote", "howwasi"}, "cmd_rating", SUPPORT, false
+					"pedirvoto", new String[]{"requestvote", "howwasi"}, REQ_ID, "cmd_rating", SUPPORT, false
 			));
 			put(MarkTicketCommand.class, new Argument(
 					"mark", new String[]{"solved", "resolvido"}, REQ_ID, "cmd_mark-ticket", SUPPORT, false
