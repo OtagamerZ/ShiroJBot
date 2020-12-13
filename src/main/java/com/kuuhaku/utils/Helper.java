@@ -336,7 +336,9 @@ public class Helper {
 	public static InputStream getImage(String url) throws IOException {
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 		con.addRequestProperty("User-Agent", "Mozilla/5.0");
-		return con.getInputStream();
+		InputStream is = con.getInputStream();
+		is.openStream();
+		return is;
 	}
 
 	public static Webhook getOrCreateWebhook(TextChannel chn, String name, JDA bot) throws InterruptedException, ExecutionException {
