@@ -93,26 +93,26 @@ public class MyBuffsCommand extends Command {
 				boolean isUltimate = b.getTier() == 4;
 				String until = ZonedDateTime.ofInstant(Instant.ofEpochMilli(b.getAcquiredAt()), ZoneId.of("GMT-3"))
 						.plusDays(b.getTime())
-						.format(Helper.dateformat);
+						.format(Helper.onlyDate);
 				switch (b.getId()) {
-					case 1 -> eb.addField("Melhoria de servidor (XP)", "+" + (int) ((b.getMult() * 100) - 100) + "% XP ganho (" + until + ")", false);
+					case 1 -> eb.addField("Melhoria de servidor (XP)", "+" + (int) ((b.getMult() * 100) - 100) + "% XP ganho (até " + until + ")", false);
 					case 2 -> {
 						if (isUltimate)
 							eb.addField("Melhoria de servidor (cartas)", "Bônus ultimate, todas as mensagens tem 100% de chance de spawn de cartas (1 minuto)", false);
 						else
-							eb.addField("Melhoria de servidor (cartas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas (" + until + ")", false);
+							eb.addField("Melhoria de servidor (cartas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas (até " + until + ")", false);
 					}
 					case 3 -> {
 						if (isUltimate)
 							eb.addField("Melhoria de servidor (drops)", "Bônus ultimate, todas as mensagens tem 100% de chance de spawn de drops (1 minuto)", false);
 						else
-							eb.addField("Melhoria de servidor (drops)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de drops (" + until + ")", false);
+							eb.addField("Melhoria de servidor (drops)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de drops (até " + until + ")", false);
 					}
 					case 4 -> {
 						if (isUltimate)
 							eb.addField("Melhoria de servidor (cromadas)", "Bônus ultimate, todas as cartas tem 100% de chance de serem cromadas (1 minuto)", false);
 						else
-							eb.addField("Melhoria de servidor (cromadas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas cromadas (" + until + ")", false);
+							eb.addField("Melhoria de servidor (cromadas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas cromadas (até " + until + ")", false);
 					}
 				}
 			});
