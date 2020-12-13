@@ -1409,24 +1409,51 @@ public class Helper {
 
 			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), sml);
 			Consumer<Message> act = msg -> {
-				if (users.size() > 0) {
-					List<String> ids = new ArrayList<>(users);
-					User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
+				try (InputStream is = getImage("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/assets/padoru_padoru.gif")) {
+					if (users.size() > 0) {
+						List<String> ids = new ArrayList<>(users);
+						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
 
-					Account acc = AccountDAO.getAccount(u.getId());
-					for (Prize prize : prizes) {
-						if (prize instanceof CreditDrop)
-							acc.addCredit(prize.getPrize(), Helper.class);
-						else
-							acc.addBuff(prize.getPrizeAsItem().getId());
+						Account acc = AccountDAO.getAccount(u.getId());
+						for (Prize prize : prizes) {
+							if (prize instanceof CreditDrop)
+								acc.addCredit(prize.getPrize(), Helper.class);
+							else
+								acc.addBuff(prize.getPrizeAsItem().getId());
+						}
+
+						AccountDAO.saveAccount(acc);
+						msg.getTextChannel().sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!")
+								.addFile(is, "padoru_padoru.gif")
+								.queue();
+					} else {
+						msg.getTextChannel().sendMessage("Nero decidiu que ninguém merece os presentes!")
+								.addFile(is, "padoru_padoru.gif")
+								.queue();
 					}
+					sml.close();
+				} catch (IOException e) {
+					if (users.size() > 0) {
+						List<String> ids = new ArrayList<>(users);
+						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
 
-					AccountDAO.saveAccount(acc);
-					msg.getTextChannel().sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!").queue();
-				} else {
-					msg.getTextChannel().sendMessage("Nero decidiu que ninguém merece os presentes!").queue();
+						Account acc = AccountDAO.getAccount(u.getId());
+						for (Prize prize : prizes) {
+							if (prize instanceof CreditDrop)
+								acc.addCredit(prize.getPrize(), Helper.class);
+							else
+								acc.addBuff(prize.getPrizeAsItem().getId());
+						}
+
+						AccountDAO.saveAccount(acc);
+						msg.getTextChannel().sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!")
+								.queue();
+					} else {
+						msg.getTextChannel().sendMessage("Nero decidiu que ninguém merece os presentes!")
+								.queue();
+					}
+					sml.close();
 				}
-				sml.close();
 			};
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
