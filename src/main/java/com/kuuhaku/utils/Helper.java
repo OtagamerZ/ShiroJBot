@@ -124,6 +124,7 @@ public class Helper {
 	public static final String ANTICOPY = "͏"; //U+034F
 	public static final int CANVAS_SIZE = 1025;
 	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
+	public static final DateTimeFormatter onlyDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	public static final String HOME = "674261700366827539";
 	public static final int BASE_CARD_PRICE = 350;
 	public static final int BASE_EQUIPMENT_PRICE = 500;
