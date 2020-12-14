@@ -56,6 +56,9 @@ public class Kawaipon {
 	@ManyToMany
 	private List<Field> fields = new ArrayList<>();
 
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String destinyDraw = "";
+
 	public String getUid() {
 		return uid;
 	}
@@ -161,5 +164,14 @@ public class Kawaipon {
 				.collect(Collectors.toList());
 
 		return cards.hashCode();
+	}
+
+	public List<Integer> getDestinyDraw() {
+		if (destinyDraw.isBlank()) return null;
+		return Arrays.stream(destinyDraw.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+	}
+
+	public void setDestinyDraw(Integer[] destinyDraw) {
+		this.destinyDraw = Arrays.stream(destinyDraw).map(String::valueOf).collect(Collectors.joining(","));
 	}
 }
