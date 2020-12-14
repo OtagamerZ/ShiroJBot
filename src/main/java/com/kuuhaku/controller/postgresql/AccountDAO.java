@@ -25,6 +25,7 @@ import net.dv8tion.jda.api.entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccountDAO {
@@ -115,10 +116,12 @@ public class AccountDAO {
 
 		Query q = em.createQuery("SELECT a FROM Account a ORDER BY a.balance DESC", Account.class);
 
-		List<Account> accs = q.getResultList();
-
-		em.close();
-
-		return accs;
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
 	}
 }
