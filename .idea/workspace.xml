@@ -13,10 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção da raça Ultimate">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/arenas/konoha.png" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição do campo Konoha">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/arena.xcf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/arena.xcf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,6 +73,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
     <option name="SWAP_SIDES_IN_COMPARE_BRANCHES" value="true" />
   </component>
   <component name="InvalidFacetManager">
@@ -165,17 +166,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -931,13 +921,7 @@
       <workItem from="1607891218394" duration="6999000" />
       <workItem from="1607899981968" duration="76000" />
       <workItem from="1607907435028" duration="4183000" />
-    </task>
-    <task id="LOCAL-03067" summary="Adição da arena Otherworld">
-      <created>1607618471144</created>
-      <option name="number" value="03067" />
-      <option name="presentableId" value="LOCAL-03067" />
-      <option name="project" value="LOCAL" />
-      <updated>1607618471144</updated>
+      <workItem from="1607916357144" duration="312000" />
     </task>
     <task id="LOCAL-03068" summary="Adição da arena Otherworld">
       <created>1607618726481</created>
@@ -1275,7 +1259,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607910398902</updated>
     </task>
-    <option name="localTasksCounter" value="3116" />
+    <task id="LOCAL-03116" summary="Adição do campo Konoha">
+      <created>1607912233304</created>
+      <option name="number" value="03116" />
+      <option name="presentableId" value="LOCAL-03116" />
+      <option name="project" value="LOCAL" />
+      <updated>1607912233304</updated>
+    </task>
+    <option name="localTasksCounter" value="3117" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1322,16 +1313,36 @@
             </State>
           </value>
         </entry>
+        <entry key="2">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="structure">
+                    <value>
+                      <list>
+                        <option value="dir:C:/Users/yagog/IdeaProjects/ShiroJBot/src/main/resources/kawaigotchi" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State />
           </value>
         </entry>
-      </map>
-    </option>
-    <option name="OPEN_GENERIC_TABS">
-      <map>
-        <entry key="1" value="TOOL_WINDOW" />
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
@@ -1341,7 +1352,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção do clone" />
     <MESSAGE value="Correção do troféu no perfil" />
     <MESSAGE value="Melhorias no Shoukan" />
     <MESSAGE value="Correção no amuleto clone" />
@@ -1366,7 +1376,8 @@
     <MESSAGE value="Correções e melhorias sugeridas" />
     <MESSAGE value="Adição de GIF no resultado do padoru drop" />
     <MESSAGE value="Remoção da raça Ultimate" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remoção da raça Ultimate" />
+    <MESSAGE value="Adição do campo Konoha" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição do campo Konoha" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1462,11 +1473,11 @@
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1607347986126" />
     <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1603507846095" />
-    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1607907555462">
+    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1607912205537">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1607530724883" />
-    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607907555462" />
+    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607912205537" />
     <state x="303" y="75" key="SettingsEditor" timestamp="1606877192402">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1480,11 +1491,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607910409783">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607912241021">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607717165910" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607910409783" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607912241021" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1534,10 +1545,11 @@
     </state>
     <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1607602048614" />
     <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607910233346" />
-    <state x="600" y="294" key="git4idea.ui.GitUnstashDialog" timestamp="1603112264983">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="686" y="303" key="git4idea.ui.GitUnstashDialog" timestamp="1607912268563">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="600" y="294" key="git4idea.ui.GitUnstashDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1603112264983" />
+    <state x="686" y="303" key="git4idea.ui.GitUnstashDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607912268563" />
     <state x="239" y="152" key="new project wizard" timestamp="1603310922193">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
