@@ -174,6 +174,7 @@ public class Kawaipon {
 	public void setDestinyDraw(Integer[] destinyDraw) {
 		if (destinyDraw == null)
 			this.destinyDraw = "";
-		this.destinyDraw = Arrays.stream(destinyDraw).map(String::valueOf).collect(Collectors.joining(","));
+		else
+			this.destinyDraw = Arrays.stream(destinyDraw).map(String::valueOf).collect(Collectors.joining(","));
 	}
 }
