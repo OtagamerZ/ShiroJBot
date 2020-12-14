@@ -25,5 +25,6 @@ public enum ArenaField {
 	UNDERWORLD,
 	ECLIPSE,
 	FOREST,
-	OTHERWORLD
+	OTHERWORLD,
+	KONOHA;
 }
