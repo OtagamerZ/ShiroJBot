@@ -18,11 +18,15 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+
 import javax.persistence.*;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "matchhistory")
@@ -31,8 +35,12 @@ public class MatchHistory {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@ElementCollection
-	private List<String> players = new ArrayList<>();
+	@Enumerated(value = EnumType.STRING)
+	@ElementCollection(fetch = FetchType.EAGER)
+	private Map<String, Side> players = new HashMap<>();
+
+	@Enumerated(value = EnumType.STRING)
+	private Side winner = null;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
@@ -44,11 +52,11 @@ public class MatchHistory {
 		return id;
 	}
 
-	public List<String> getPlayers() {
+	public Map<String, Side> getPlayers() {
 		return players;
 	}
 
-	public void setPlayers(List<String> players) {
+	public void setPlayers(Map<String, Side> players) {
 		this.players = players;
 	}
 
@@ -70,5 +78,13 @@ public class MatchHistory {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public Side getWinner() {
+		return winner;
+	}
+
+	public void setWinner(Side winner) {
+		this.winner = winner;
 	}
 }

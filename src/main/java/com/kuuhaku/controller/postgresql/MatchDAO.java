@@ -21,6 +21,10 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.model.persistent.MatchHistory;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MatchDAO {
 	public static MatchHistory getMatch(int id) {
@@ -28,6 +32,22 @@ public class MatchDAO {
 
 		try {
 			return em.find(MatchHistory.class, id);
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<MatchHistory> getMatchByPlayer(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT h FROM MatchHistory h WHERE KEY(h.players) = :id AND winner IS NOT NULL", MatchHistory.class);
+		q.setParameter("id", id);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
 		} finally {
 			em.close();
 		}
