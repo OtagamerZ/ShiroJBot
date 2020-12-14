@@ -53,6 +53,10 @@ public class Hand {
 
 	public Hand(Shoukan game, User user, Kawaipon kp, Side side) {
 		List<Drawable> deque = new ArrayList<>(kp.getChampions());
+		deque.sort(Comparator
+				.comparing(d -> ((Champion) d).getMana()).reversed()
+				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+		);
 		if (kp.getDestinyDraw() != null)
 			for (int i : kp.getDestinyDraw()) {
 				destinyDeck.add(deque.remove(i));
