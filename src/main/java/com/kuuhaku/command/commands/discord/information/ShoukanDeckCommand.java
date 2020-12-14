@@ -63,7 +63,7 @@ public class ShoukanDeckCommand extends Command {
 					Kawaipon kp = Helper.getDailyDeck();
 
 					ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
-					BufferedImage cards = kb.view(kp.getChampions(), kp.getEquipments(), kp.getFields());
+					BufferedImage cards = kb.view(kp);
 
 					EmbedBuilder eb = new ColorlessEmbedBuilder()
 							.setTitle(":date: | Deck de Diário")
@@ -81,7 +81,7 @@ public class ShoukanDeckCommand extends Command {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 					ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
-					BufferedImage cards = kb.view(kp.getChampions(), kp.getEquipments(), kp.getFields());
+					BufferedImage cards = kb.view(kp);
 
 					EmbedBuilder eb = new ColorlessEmbedBuilder()
 							.setTitle(":beginner: | Deck de " + author.getName())
