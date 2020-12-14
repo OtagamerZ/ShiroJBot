@@ -1366,7 +1366,7 @@ public class Helper {
 	public static void spawnPadoru(GuildConfig gc, TextChannel channel) {
 		if (Main.getInfo().getPadoruLimit().getIfPresent(gc.getGuildID()) != null) return;
 
-		if (chance(0.1)) {
+		if (chance(0.1 - minMax(prcnt(channel.getGuild().getMemberCount() * 0.09f, 5000), 0, 0.09))) {
 			int rolled = Helper.rng(100, false);
 			List<Prize> prizes = new ArrayList<>();
 			for (int i = 0; i < 5; i++) {
@@ -1424,8 +1424,18 @@ public class Helper {
 								acc.addBuff(prize.getPrizeAsItem().getId());
 						}
 
+						EmbedBuilder neb = new ColorlessEmbedBuilder();
+						for (int i = 0; i < prizes.size(); i++) {
+							Prize prize = prizes.get(i);
+							if (prize instanceof CreditDrop)
+								eb.addField("Presente " + (i + 1) + ":", prize.getPrize() + " créditos", true);
+							else
+								eb.addField("Presente " + (i + 1) + ":", prize.getPrizeAsItem().getName(), true);
+						}
+
 						AccountDAO.saveAccount(acc);
 						msg.getTextChannel().sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!")
+								.embed(neb.build())
 								.addFile(is, "padoru_padoru.gif")
 								.queue();
 					} else {
