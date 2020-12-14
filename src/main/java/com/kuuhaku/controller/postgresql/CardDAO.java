@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.Card;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -310,8 +311,8 @@ public class CardDAO {
 		try {
 			return q.getResultList();
 		} catch (NoResultException e) {
-			return null;
-		} finally {
+            return new ArrayList<>();
+        } finally {
 			em.close();
 		}
 	}

@@ -89,6 +89,11 @@ public class Shoukan extends Game {
 				Side.BOTTOM, new Hand(this, players[1], p2.getDrawables(), Side.BOTTOM)
 		);
 
+		getHistory().setPlayers(Map.of(
+				players[0].getId(), Side.TOP,
+				players[1].getId(), Side.BOTTOM
+		));
+
 		setActions(
 				s -> {
 					close();
@@ -98,7 +103,10 @@ public class Shoukan extends Game {
 							});
 				},
 				s -> {
-					if (custom == null) getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
+					if (custom == null) {
+						getHistory().setWinner(next);
+						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
+					}
 					channel.sendFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
@@ -463,7 +471,7 @@ public class Shoukan extends Game {
 
 				int yPower = Math.round(
 						(yours.getEAtk() + yours.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum()) *
-								(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+						(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
 				);
 
 				int hPower;
@@ -477,7 +485,7 @@ public class Shoukan extends Game {
 					}
 					hPower = Math.round(
 							(his.getEDef() + his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum()) *
-									(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+							(arena.getField() == null ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 					);
 				} else
 					hPower = Math.round(
@@ -853,9 +861,10 @@ public class Shoukan extends Game {
 			if (!finished.get()) {
 				Hand op = getHands().get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
 				if (h.getHp() == 0) {
-					if (getCustom() == null)
+					if (getCustom() == null) {
+						getHistory().setWinner(op.getSide());
 						getBoard().awardWinner(this, daily, op.getUser().getId());
-					else close();
+					} else close();
 					finished.set(true);
 					channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
 							.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
@@ -909,7 +918,7 @@ public class Shoukan extends Game {
 							c.reduceStun();
 							c.setDefending(true);
 						}
-						
+
 						if (c.hasEffect()) {
 							c.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
 							if (postCombat()) return;
@@ -956,9 +965,10 @@ public class Shoukan extends Game {
 			}
 
 			if (!h.manualDraw()) {
-				if (getCustom() == null)
+				if (getCustom() == null) {
+					getHistory().setWinner(next);
 					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
-				else close();
+				} else close();
 				channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 						.queue(msg -> {
@@ -1043,9 +1053,10 @@ public class Shoukan extends Game {
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
-			if (getCustom() == null)
+			if (getCustom() == null) {
+				getHistory().setWinner(next);
 				getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
-			else close();
+			} else close();
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 					.queue(msg -> {
