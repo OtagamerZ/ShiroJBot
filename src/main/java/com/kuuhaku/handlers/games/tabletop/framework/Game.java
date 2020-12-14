@@ -39,7 +39,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public abstract class Game {
 	private final ShardManager handler;
@@ -60,8 +59,6 @@ public abstract class Game {
 		this.channel = channel;
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
 		this.custom = null;
-
-		history.setPlayers(board.getPlayers().stream().map(Player::getId).collect(Collectors.toList()));
 	}
 
 	public Game(ShardManager handler, Board board, TextChannel channel, JSONObject custom) {
@@ -70,8 +67,6 @@ public abstract class Game {
 		this.channel = channel;
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
 		this.custom = custom;
-
-		history.setPlayers(board.getPlayers().stream().map(Player::getId).collect(Collectors.toList()));
 	}
 
 	public void setActions(Consumer<Message> onExpiration, Consumer<Message> onWO) {
