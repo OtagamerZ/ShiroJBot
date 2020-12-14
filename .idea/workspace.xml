@@ -15,7 +15,10 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de GIF no resultado do padoru drop">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/junketsu_ryuuko.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/junketsu_ryuuko.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/junketsu_satsuki.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/junketsu_satsuki.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/kisaragi_ryuuko.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/kisaragi_ryuuko.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/senketsu_ryuuko.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/senketsu_ryuuko.gif" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,6 +167,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -918,13 +932,7 @@
       <workItem from="1607886871319" duration="260000" />
       <workItem from="1607891218394" duration="6999000" />
       <workItem from="1607899981968" duration="76000" />
-    </task>
-    <task id="LOCAL-03063" summary="Correção na supressão de mana">
-      <created>1607604737051</created>
-      <option name="number" value="03063" />
-      <option name="presentableId" value="LOCAL-03063" />
-      <option name="project" value="LOCAL" />
-      <updated>1607604737051</updated>
+      <workItem from="1607907435028" duration="1098000" />
     </task>
     <task id="LOCAL-03064" summary="Correção na supressão de mana">
       <created>1607604998273</created>
@@ -1262,7 +1270,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607897295191</updated>
     </task>
-    <option name="localTasksCounter" value="3112" />
+    <task id="LOCAL-03112" summary="Adição de GIF no resultado do padoru drop">
+      <created>1607907722167</created>
+      <option name="number" value="03112" />
+      <option name="presentableId" value="LOCAL-03112" />
+      <option name="project" value="LOCAL" />
+      <updated>1607907722167</updated>
+    </task>
+    <option name="localTasksCounter" value="3113" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1449,11 +1464,11 @@
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1607347986126" />
     <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1603507846095" />
-    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1607899288881">
+    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1607907555462">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1607530724883" />
-    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607899288881" />
+    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607907555462" />
     <state x="303" y="75" key="SettingsEditor" timestamp="1606877192402">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1467,11 +1482,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607897301343">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607907730234">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607717165910" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607897301343" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607907730234" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
