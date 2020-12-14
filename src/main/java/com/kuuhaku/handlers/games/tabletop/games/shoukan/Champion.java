@@ -74,6 +74,9 @@ public class Champion implements Drawable, Cloneable {
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> requiredCards = new HashSet<>();
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean fusion = false;
+
 	private transient boolean flipped = false;
 	private transient boolean available = true;
 	private transient Account acc = null;
@@ -384,6 +387,14 @@ public class Champion implements Drawable, Cloneable {
 
 	public String getLiteralEffect() {
 		return effect;
+	}
+
+	public boolean isFusion() {
+		return fusion;
+	}
+
+	public void setFusion(boolean fusion) {
+		this.fusion = fusion;
 	}
 
 	public void getEffect(EffectParameters ep) {
