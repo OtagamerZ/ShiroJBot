@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import org.json.JSONObject;
 
 import javax.persistence.*;
@@ -28,6 +29,9 @@ public class MatchRound {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
+	@Enumerated(value = EnumType.STRING)
+	private Side side = Side.BOTTOM;
 
 	@Column(columnDefinition = "TEXT")
 	private String state = "{}";
@@ -42,5 +46,13 @@ public class MatchRound {
 
 	public void setScript(JSONObject state) {
 		this.state = state.toString();
+	}
+
+	public Side getSide() {
+		return side;
+	}
+
+	public void setSide(Side side) {
+		this.side = side;
 	}
 }
