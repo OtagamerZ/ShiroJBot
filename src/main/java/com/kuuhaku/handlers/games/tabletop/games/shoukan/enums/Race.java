@@ -29,7 +29,6 @@ public enum Race {
 	BESTIAL,
 	UNDEAD,
 	MACHINE,
-	ULTIMATE,
 	DIVINITY,
 	MYSTICAL,
 	CREATURE,
@@ -52,7 +51,6 @@ public enum Race {
 			case BESTIAL -> "Bestial";
 			case UNDEAD -> "Morto-vivo";
 			case MACHINE -> "Máquina";
-			case ULTIMATE -> "Ultimate";
 			case DIVINITY -> "Divindade";
 			case MYSTICAL -> "Místico";
 			case CREATURE -> "Criatura";
