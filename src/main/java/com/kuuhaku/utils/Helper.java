@@ -334,7 +334,9 @@ public class Helper {
 	}
 
 	public static InputStream getImage(String url) throws IOException {
-		return new URL(url).openStream();
+		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+		con.addRequestProperty("User-Agent", "Mozilla/5.0");
+		return con.getInputStream();
 	}
 
 	public static Webhook getOrCreateWebhook(TextChannel chn, String name, JDA bot) throws InterruptedException, ExecutionException {
@@ -1407,7 +1409,9 @@ public class Helper {
 
 			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), sml);
 			Consumer<Message> act = msg -> {
-				try (InputStream is = getImage("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/assets/padoru_padoru.gif")) {
+				try {
+					InputStream is = getImage("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/assets/padoru_padoru.gif");
+
 					if (users.size() > 0) {
 						List<String> ids = new ArrayList<>(users);
 						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
