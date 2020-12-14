@@ -468,7 +468,7 @@ public class CommandManager {
 					"trofeu", new String[]{"trophy"}, "req_id-reset", "cmd_trophy", MISC, true
 			));
 			put(DestinyCardsCommand.class, new Argument(
-					"destino", new String[]{"destiny", "dest"}, "req_positions-reset", "cmd_destiny-cards", MISC, false
+					"destino", new String[]{"destiny", "dest"}, "req_positions", "cmd_destiny-cards", MISC, false
 			));
 
 			//FUN
