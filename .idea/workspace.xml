@@ -920,21 +920,7 @@
       <workItem from="1607899981968" duration="76000" />
       <workItem from="1607907435028" duration="4183000" />
       <workItem from="1607916357144" duration="312000" />
-      <workItem from="1607971711347" duration="3973000" />
-    </task>
-    <task id="LOCAL-03085" summary="Adição do drop padoru">
-      <created>1607707230135</created>
-      <option name="number" value="03085" />
-      <option name="presentableId" value="LOCAL-03085" />
-      <option name="project" value="LOCAL" />
-      <updated>1607707230135</updated>
-    </task>
-    <task id="LOCAL-03086" summary="Adição do drop padoru">
-      <created>1607707411616</created>
-      <option name="number" value="03086" />
-      <option name="presentableId" value="LOCAL-03086" />
-      <option name="project" value="LOCAL" />
-      <updated>1607707411616</updated>
+      <workItem from="1607971711347" duration="5027000" />
     </task>
     <task id="LOCAL-03087" summary="Adição do drop padoru">
       <created>1607708324513</created>
@@ -1265,7 +1251,21 @@
       <option name="project" value="LOCAL" />
       <updated>1607975975878</updated>
     </task>
-    <option name="localTasksCounter" value="3134" />
+    <task id="LOCAL-03134" summary="Melhoria na borda das cartas do destino">
+      <created>1607976512317</created>
+      <option name="number" value="03134" />
+      <option name="presentableId" value="LOCAL-03134" />
+      <option name="project" value="LOCAL" />
+      <updated>1607976512317</updated>
+    </task>
+    <task id="LOCAL-03135" summary="Melhoria na borda das cartas do destino">
+      <created>1607976787230</created>
+      <option name="number" value="03135" />
+      <option name="presentableId" value="LOCAL-03135" />
+      <option name="project" value="LOCAL" />
+      <updated>1607976787230</updated>
+    </task>
+    <option name="localTasksCounter" value="3136" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1438,10 +1438,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607975975023">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1607976786107">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607975975023" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1607976786107" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1607728513022">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1490,10 +1490,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607975983334">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607976789208">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607975983334" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607976789208" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607912241021" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
