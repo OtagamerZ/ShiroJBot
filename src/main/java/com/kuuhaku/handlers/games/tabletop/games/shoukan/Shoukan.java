@@ -148,7 +148,6 @@ public class Shoukan extends Game {
 		Hand h = getHands().get(current);
 
 		if (cmd.equalsIgnoreCase("reload")) {
-			resetTimerKeepTurn();
 			channel.sendMessage(message.getAuthor().getAsMention() + " recriou a mensagem do jogo.")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 					.queue(s -> {
