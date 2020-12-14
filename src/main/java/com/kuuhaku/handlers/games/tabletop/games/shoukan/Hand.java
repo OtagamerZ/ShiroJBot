@@ -57,10 +57,15 @@ public class Hand {
 				.comparing(d -> ((Champion) d).getMana()).reversed()
 				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 		);
-		if (kp.getDestinyDraw() != null)
+		if (kp.getDestinyDraw() != null) {
 			for (int i : kp.getDestinyDraw()) {
-				destinyDeck.add(deque.remove(i));
+				if (i > deque.size())
+					destinyDeck.add(deque.get(Helper.rng(deque.size(), true)));
+				else
+					destinyDeck.add(deque.get(i));
 			}
+		}
+		destinyDeck.forEach(deque::remove);
 		deque.addAll(kp.getEquipments());
 		deque.addAll(kp.getFields());
 		Collections.shuffle(deque);
