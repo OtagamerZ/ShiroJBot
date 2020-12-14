@@ -96,41 +96,50 @@ public class CardDAO {
 
 	@SuppressWarnings("unchecked")
 	public static List<Card> getCards() {
-		EntityManager em = Manager.getEntityManager();
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND anime <> 'HIDDEN'", Card.class);
-		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-		List<Card> c = q.getResultList();
+        Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND anime <> 'HIDDEN'", Card.class);
+        q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 
-		em.close();
-
-		return c;
-	}
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
 
 	@SuppressWarnings("unchecked")
 	public static List<Card> getCards(List<String> ids) {
-		EntityManager em = Manager.getEntityManager();
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE c.id IN :ids", Card.class);
-		q.setParameter("ids", ids);
-		List<Card> c = q.getResultList();
+        Query q = em.createQuery("SELECT c FROM Card c WHERE c.id IN :ids", Card.class);
+        q.setParameter("ids", ids);
 
-		em.close();
-
-		return c;
-	}
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
 
 	@SuppressWarnings("unchecked")
 	public static List<Card> getAllCards() {
-		EntityManager em = Manager.getEntityManager();
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", Card.class);
-		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-        List<Card> c = q.getResultList();
+        Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", Card.class);
+        q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 
-        em.close();
-
-        return c;
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -139,11 +148,14 @@ public class CardDAO {
 
         Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", String.class);
         q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-        List<String> c = q.getResultList();
 
-        em.close();
-
-        return c;
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -151,11 +163,14 @@ public class CardDAO {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createQuery("SELECT e.card.id FROM Equipment e", String.class);
-        List<String> c = q.getResultList();
 
-        em.close();
-
-        return c;
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -163,11 +178,14 @@ public class CardDAO {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createQuery("SELECT e FROM Equipment e", Equipment.class);
-        List<Equipment> c = q.getResultList();
 
-        em.close();
-
-        return c;
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -175,11 +193,14 @@ public class CardDAO {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createQuery("SELECT c.card.id FROM Champion c", String.class);
-        List<String> c = q.getResultList();
 
-        em.close();
-
-        return c;
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -188,11 +209,14 @@ public class CardDAO {
 
         Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.rarity <> :rarity", Champion.class);
         q.setParameter("rarity", KawaiponRarity.FUSION);
-        List<Champion> c = q.getResultList();
 
-        em.close();
-
-        return c;
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -200,11 +224,14 @@ public class CardDAO {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createQuery("SELECT f.card.id FROM Field f", String.class);
-        List<String> c = q.getResultList();
 
-        em.close();
-
-        return c;
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -212,11 +239,14 @@ public class CardDAO {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createQuery("SELECT f FROM Field f", Field.class);
-        List<Field> c = q.getResultList();
 
-        em.close();
-
-        return c;
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -319,29 +349,35 @@ public class CardDAO {
 
 	@SuppressWarnings("unchecked")
 	public static List<Champion> getChampions(List<String> ids) {
-		EntityManager em = Manager.getEntityManager();
+        EntityManager em = Manager.getEntityManager();
 
         Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id IN :ids", Champion.class);
         q.setParameter("ids", ids);
-        List<Champion> c = q.getResultList();
 
-        em.close();
-
-        return c;
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
     }
 
 	@SuppressWarnings("unchecked")
 	public static List<Champion> getChampions(Category c) {
-		EntityManager em = Manager.getEntityManager();
+        EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Champion.class);
-		q.setParameter("class", c);
-		List<Champion> cds = q.getResultList();
+        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Champion.class);
+        q.setParameter("class", c);
 
-		em.close();
-
-		return cds;
-	}
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
 
     public static Champion getChampion(Card c) {
         EntityManager em = Manager.getEntityManager();
