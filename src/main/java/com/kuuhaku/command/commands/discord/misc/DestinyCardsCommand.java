@@ -65,7 +65,7 @@ public class DestinyCardsCommand extends Command {
 			try {
 				Integer[] values = Arrays.stream(inds).map(Integer::parseInt).toArray(Integer[]::new);
 				for (Integer value : values) {
-					if (!Helper.between(value, 0, 30)) {
+					if (!Helper.between(value, 1, 30)) {
 						channel.sendMessage("❌ | Posições inválidas, elas devem ser números inteiros de 1 à 30.").queue();
 						return;
 					}
