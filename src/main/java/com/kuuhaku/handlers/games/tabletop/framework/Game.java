@@ -249,7 +249,7 @@ public abstract class Game {
 		if (timeout != null) timeout.cancel(true);
 		timeout = null;
 
-		if (round > 0)
+		if (round > 0 && custom == null)
 			MatchDAO.saveMatch(history);
 
 		closed = true;

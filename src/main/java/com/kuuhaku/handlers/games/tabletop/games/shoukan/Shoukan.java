@@ -1059,6 +1059,7 @@ public class Shoukan extends Game {
 	private void recordLast() {
 		Hand top = getHands().get(Side.TOP);
 		Hand bot = getHands().get(Side.BOTTOM);
+		getHistory().getRound(getRound() + 1).setSide(current);
 		getHistory().getRound(getRound() + 1).setScript(new JSONObject() {{
 			put("top", new JSONObject() {{
 				put("id", top.getUser().getId());
@@ -1169,6 +1170,7 @@ public class Shoukan extends Game {
 
 	@Override
 	public void resetTimer(Shoukan shkn) {
+		getCurrRound().setSide(current);
 		super.resetTimer(shkn);
 
 		current = next;
