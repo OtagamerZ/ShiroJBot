@@ -89,10 +89,11 @@ public class Shoukan extends Game {
 				Side.BOTTOM, new Hand(this, players[1], p2.getDrawables(), Side.BOTTOM)
 		);
 
-		getHistory().setPlayers(Map.of(
-				players[0].getId(), Side.TOP,
-				players[1].getId(), Side.BOTTOM
-		));
+		if (custom == null)
+			getHistory().setPlayers(Map.of(
+					players[0].getId(), Side.TOP,
+					players[1].getId(), Side.BOTTOM
+			));
 
 		setActions(
 				s -> {
