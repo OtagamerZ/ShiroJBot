@@ -13,7 +13,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de GIF no resultado do padoru drop" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de GIF no resultado do padoru drop">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -926,14 +932,7 @@
       <workItem from="1607886871319" duration="260000" />
       <workItem from="1607891218394" duration="6999000" />
       <workItem from="1607899981968" duration="76000" />
-      <workItem from="1607907435028" duration="1737000" />
-    </task>
-    <task id="LOCAL-03065" summary="Adição de checagem de campo para fusões">
-      <created>1607608346996</created>
-      <option name="number" value="03065" />
-      <option name="presentableId" value="LOCAL-03065" />
-      <option name="project" value="LOCAL" />
-      <updated>1607608346996</updated>
+      <workItem from="1607907435028" duration="2587000" />
     </task>
     <task id="LOCAL-03066" summary="Adição da arena Otherworld">
       <created>1607609762368</created>
@@ -1271,7 +1270,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607908550739</updated>
     </task>
-    <option name="localTasksCounter" value="3114" />
+    <task id="LOCAL-03114" summary="Adição de GIF no resultado do padoru drop">
+      <created>1607909535010</created>
+      <option name="number" value="03114" />
+      <option name="presentableId" value="LOCAL-03114" />
+      <option name="project" value="LOCAL" />
+      <updated>1607909535010</updated>
+    </task>
+    <option name="localTasksCounter" value="3115" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1398,11 +1404,11 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1607710793215">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1607909519594">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1607710793215" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1606698642640" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1607909519594" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1476,11 +1482,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607908561896">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1607909537472">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1607717165910" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607908561896" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607909537472" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1525,11 +1531,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116333066" />
-    <state x="339" y="117" width="1094" height="808" key="find.popup" timestamp="1607885760480">
+    <state x="339" y="117" width="1094" height="808" key="find.popup" timestamp="1607910153022">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1607602048614" />
-    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607885760480" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607910153022" />
     <state x="600" y="294" key="git4idea.ui.GitUnstashDialog" timestamp="1603112264983">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

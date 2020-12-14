@@ -91,7 +91,7 @@ public class ConvertCardCommand extends Command {
 
         Champion c = CardDAO.getChampion(tc);
 
-        if (c == null || c.getRequiredCards().size() > 0) {
+        if (c == null || c.isFusion()) {
             channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
             return;
         } else if (kp.getChampions().stream().filter(c::equals).count() == 3) {

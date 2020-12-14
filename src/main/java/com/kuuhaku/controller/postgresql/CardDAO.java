@@ -305,7 +305,7 @@ public class CardDAO {
     public static List<Champion> getFusions() {
         EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE SIZE(requiredCards) > 0", Champion.class);
+        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion", Champion.class);
 
 		try {
 			return q.getResultList();
