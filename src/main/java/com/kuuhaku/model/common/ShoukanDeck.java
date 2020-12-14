@@ -70,7 +70,7 @@ public class ShoukanDeck {
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / 6) {
 			g2d.drawImage(champs.get(i).drawCard(acc, false), 76 + 279 * (i - 6 * y), 350 + 420 * y, null);
 			if (kp.getDestinyDraw() != null && kp.getDestinyDraw().contains(i + (y * 6)))
-				g2d.drawImage(destiny, 66 + 279 * (i - 6 * y), 350 + 410 * y, null);
+				g2d.drawImage(destiny, 66 + 279 * (i - 6 * y), 340 + 420 * y, null);
 			Profile.printCenteredString(StringUtils.abbreviate(champs.get(i).getCard().getName(), 15), 225, 76 + 279 * (i - 6 * y), 740 + 420 * y, g2d);
 		}
 
