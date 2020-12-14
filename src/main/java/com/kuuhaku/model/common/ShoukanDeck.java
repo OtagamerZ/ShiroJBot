@@ -22,6 +22,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Kawaipon;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
@@ -39,7 +40,11 @@ public class ShoukanDeck {
 		this.acc = acc;
 	}
 
-	public BufferedImage view(List<Champion> champs, List<Equipment> equips, List<Field> fields) throws IOException, InterruptedException {
+	public BufferedImage view(Kawaipon kp) throws IOException, InterruptedException {
+		List<Champion> champs = kp.getChampions();
+		List<Equipment> equips = kp.getEquipments();
+		List<Field> fields = kp.getFields();
+
 		champs.sort(Comparator
 				.comparing(Champion::getMana).reversed()
 				.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
@@ -53,6 +58,7 @@ public class ShoukanDeck {
 		);
 
 		BufferedImage deck = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/deck.jpg")));
+		BufferedImage destiny = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/destiny.png")));
 
 		Graphics2D g2d = deck.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -63,6 +69,8 @@ public class ShoukanDeck {
 
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / 6) {
 			g2d.drawImage(champs.get(i).drawCard(acc, false), 76 + 279 * (i - 6 * y), 350 + 420 * y, null);
+			if (kp.getDestinyDraw() != null && kp.getDestinyDraw().contains(i + (y * 6)))
+				g2d.drawImage(destiny, 66 + 279 * (i - 6 * y), 350 + 410 * y, null);
 			Profile.printCenteredString(StringUtils.abbreviate(champs.get(i).getCard().getName(), 15), 225, 76 + 279 * (i - 6 * y), 740 + 420 * y, g2d);
 		}
 

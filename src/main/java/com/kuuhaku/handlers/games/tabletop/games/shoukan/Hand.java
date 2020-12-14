@@ -25,6 +25,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
@@ -40,6 +41,7 @@ public class Hand {
 	private final User user;
 	private final LinkedList<Drawable> deque;
 	private final List<Drawable> cards = new ArrayList<>();
+	private final List<Drawable> destinyDeck = new ArrayList<>();
 	private final Side side;
 	private final int startingCount;
 	private final int manaPerTurn;
@@ -49,7 +51,14 @@ public class Hand {
 	private int lockTime = 0;
 	private int manaReturn = 0;
 
-	public Hand(Shoukan game, User user, List<Drawable> deque, Side side) {
+	public Hand(Shoukan game, User user, Kawaipon kp, Side side) {
+		List<Drawable> deque = new ArrayList<>(kp.getChampions());
+		if (kp.getDestinyDraw() != null)
+			for (int i : kp.getDestinyDraw()) {
+				destinyDeck.add(deque.remove(i));
+			}
+		deque.addAll(kp.getEquipments());
+		deque.addAll(kp.getFields());
 		Collections.shuffle(deque);
 
 		this.user = user;
@@ -64,9 +73,9 @@ public class Hand {
 
 		if (game.getCustom() != null) {
 			if (!game.getCustom().optBoolean("semequip", false))
-				deque.removeIf(d -> d instanceof Equipment);
+				getDeque().removeIf(d -> d instanceof Equipment);
 			if (!game.getCustom().optBoolean("semfield", false))
-				deque.removeIf(d -> d instanceof Field);
+				getDeque().removeIf(d -> d instanceof Field);
 		}
 
 		redrawHand();
@@ -74,21 +83,29 @@ public class Hand {
 
 	public boolean manualDraw() {
 		try {
-			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && deque.stream().anyMatch(d -> d instanceof Champion))
+			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
 				drawChampion();
-			else cards.add(deque.removeFirst().copy());
+			else cards.add(getDeque().removeFirst().copy());
 			return true;
 		} catch (NoSuchElementException e) {
 			return false;
 		}
 	}
 
+	public void destinyDraw() {
+		if (destinyDeck.size() > 0) {
+			cards.add(destinyDeck.remove(Helper.rng(destinyDeck.size(), true)).copy());
+			deque.addAll(destinyDeck);
+			destinyDeck.clear();
+		}
+	}
+
 	public void draw() {
 		if (lockTime > 0) return;
 		try {
-			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && deque.stream().anyMatch(d -> d instanceof Champion))
+			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
 				drawChampion();
-			else cards.add(deque.removeFirst().copy());
+			else cards.add(getDeque().removeFirst().copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -96,8 +113,8 @@ public class Hand {
 	public void draw(Card card) {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = deque.stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
-			deque.remove(dr);
+			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
+			getDeque().remove(dr);
 			cards.add(dr);
 		} catch (NoSuchElementException ignore) {
 		}
@@ -107,8 +124,8 @@ public class Hand {
 		if (lockTime > 0) return;
 		Card card = drawable.getCard();
 		try {
-			Drawable dr = deque.stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
-			deque.remove(dr);
+			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
+			getDeque().remove(dr);
 			cards.add(dr);
 		} catch (NoSuchElementException ignore) {
 		}
@@ -117,8 +134,8 @@ public class Hand {
 	public void drawChampion() {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = deque.stream().filter(c -> c instanceof Champion).findFirst().orElseThrow().copy();
-			deque.remove(dr);
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow().copy();
+			getDeque().remove(dr);
 			cards.add(dr);
 		} catch (NoSuchElementException ignore) {
 		}
@@ -127,8 +144,8 @@ public class Hand {
 	public void drawEquipment() {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = deque.stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow().copy();
-			deque.remove(dr);
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow().copy();
+			getDeque().remove(dr);
 			cards.add(dr);
 		} catch (NoSuchElementException ignore) {
 		}
@@ -137,8 +154,8 @@ public class Hand {
 	public void drawRace(Race race) {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = deque.stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow().copy();
-			deque.remove(dr);
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow().copy();
+			getDeque().remove(dr);
 			cards.add(dr);
 		} catch (NoSuchElementException ignore) {
 		}
@@ -153,11 +170,19 @@ public class Hand {
 	}
 
 	public LinkedList<Drawable> getDeque() {
+		if (deque.size() == 0) {
+			deque.addAll(destinyDeck);
+			destinyDeck.clear();
+		}
 		return deque;
 	}
 
 	public List<Drawable> getCards() {
 		return cards;
+	}
+
+	public List<Drawable> getDestinyDeck() {
+		return destinyDeck;
 	}
 
 	public Side getSide() {

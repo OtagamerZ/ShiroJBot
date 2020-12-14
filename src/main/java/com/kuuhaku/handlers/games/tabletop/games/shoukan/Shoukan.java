@@ -85,8 +85,8 @@ public class Shoukan extends Game {
 		Kawaipon p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[1].getId());
 
 		this.hands = Map.of(
-				Side.TOP, new Hand(this, players[0], p1.getDrawables(), Side.TOP),
-				Side.BOTTOM, new Hand(this, players[1], p2.getDrawables(), Side.BOTTOM)
+				Side.TOP, new Hand(this, players[0], p1, Side.TOP),
+				Side.BOTTOM, new Hand(this, players[1], p2, Side.BOTTOM)
 		);
 
 		if (custom == null)
@@ -989,6 +989,27 @@ public class Shoukan extends Game {
 						h.showHand();
 					});
 		});
+		if (getHands().get(current).getHp() < 1500 && getHands().get(current).getDestinyDeck().size() > 0)
+			buttons.put("\uD83E\uDDE7", (mb, ms) -> {
+				if (!ShiroInfo.getHashes().remove(hash.get())) return;
+				if (phase != Phase.PLAN) {
+					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
+					return;
+				}
+
+				Hand h = getHands().get(current);
+				h.destinyDraw();
+
+				resetTimerKeepTurn();
+				channel.sendMessage(getCurrent().getAsMention() + " executou um saque do destino!")
+						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+						.queue(s -> {
+							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+							this.message = s;
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							h.showHand();
+						});
+			});
 		buttons.put("\uD83E\uDD1D", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			if (draw) {
