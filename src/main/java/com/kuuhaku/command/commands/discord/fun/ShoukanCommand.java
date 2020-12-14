@@ -62,7 +62,7 @@ public class ShoukanCommand extends Command {
 		boolean practice = args.length > 0 && Helper.equalsAny(args[0], "practice", "treino");
 
 		if (practice) {
-			JSONObject custom = Helper.findJson(rawCmd);
+			JSONObject custom = Helper.getOr(Helper.findJson(rawCmd), new JSONObject());
 			boolean daily = args.length > 1 && Helper.equalsAny(args[1], "daily", "diario");
 
 			if (!daily) {
