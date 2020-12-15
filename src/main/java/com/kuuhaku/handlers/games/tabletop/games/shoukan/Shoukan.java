@@ -805,7 +805,7 @@ public class Shoukan extends Game {
 					return;
 				} else if (eq.getCharm() == Charm.SPELLMIRROR && source != -1) {
 					convertCard(his, source, index);
-					unequipCard(side, i, slts);
+					unequipCard(his, i, slts);
 					return;
 				}
 			}
