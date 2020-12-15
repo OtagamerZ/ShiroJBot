@@ -353,11 +353,9 @@ public class Shoukan extends Game {
 				}
 
 				d.setAvailable(false);
-				if (d instanceof Champion)
-					h.removeMana(((Champion) d).getMana());
-
 				if (d instanceof Champion) {
 					Champion c = (Champion) d;
+					h.removeMana(c.getMana());
 					if (c.hasEffect() && !c.isFlipped()) {
 						c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, Integer.parseInt(args[1]), h.getSide(), Duelists.of(c, Integer.parseInt(args[1]), null, -1), channel));
 						if (postCombat()) return;
