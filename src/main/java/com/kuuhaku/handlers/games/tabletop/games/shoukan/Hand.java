@@ -161,6 +161,16 @@ public class Hand {
 		}
 	}
 
+	public void drawField() {
+		if (lockTime > 0) return;
+		try {
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow().copy();
+			getDeque().remove(dr);
+			cards.add(dr);
+		} catch (NoSuchElementException ignore) {
+		}
+	}
+
 	public void drawRace(Race race) {
 		if (lockTime > 0) return;
 		try {
