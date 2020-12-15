@@ -26,5 +26,6 @@ public enum ArenaField {
 	ECLIPSE,
 	FOREST,
 	OTHERWORLD,
-	KONOHA;
+	KONOHA,
+	UNLIMITED_BLADE_WORKS;
 }
