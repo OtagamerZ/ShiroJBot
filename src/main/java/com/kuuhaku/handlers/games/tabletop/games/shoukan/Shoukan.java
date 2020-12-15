@@ -258,6 +258,7 @@ public class Shoukan extends Game {
 					}
 
 					Equipment tp = (Equipment) d.copy();
+					d.setAvailable(false);
 					tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slot.setBottom(tp);
 					Champion t = target.getTop();
@@ -319,6 +320,7 @@ public class Shoukan extends Game {
 					}
 
 					Champion tp = (Champion) d.copy();
+					d.setAvailable(false);
 
 					switch (args[2].toLowerCase()) {
 						case "a" -> {
@@ -341,6 +343,10 @@ public class Shoukan extends Game {
 
 					tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slot.setTop(tp);
+					if (tp.hasEffect() && !tp.isFlipped()) {
+						tp.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(tp, dest, null, -1), channel));
+						if (postCombat()) return;
+					}
 				} else {
 					if (!args[1].equalsIgnoreCase("f")) {
 						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, Helper::doNothing);
@@ -348,19 +354,13 @@ public class Shoukan extends Game {
 					}
 
 					Field f = (Field) d.copy();
+					d.setAvailable(false);
 					f.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					arena.setField(f);
 				}
 
-				d.setAvailable(false);
-				if (d instanceof Champion) {
-					Champion c = (Champion) d;
-					h.removeMana(c.getMana());
-					if (c.hasEffect() && !c.isFlipped()) {
-						c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, Integer.parseInt(args[1]), h.getSide(), Duelists.of(c, Integer.parseInt(args[1]), null, -1), channel));
-						if (postCombat()) return;
-					}
-				}
+				if (d instanceof Champion)
+					h.removeMana(((Champion) d).getMana());
 
 				if (makeFusion(h)) return;
 
