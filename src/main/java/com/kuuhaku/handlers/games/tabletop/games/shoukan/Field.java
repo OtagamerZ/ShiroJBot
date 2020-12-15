@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArenaField;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -151,8 +150,8 @@ public class Field implements Drawable, Cloneable {
 		return card;
 	}
 
-	public ArenaField getField() {
-		return ArenaField.valueOf(card.getId());
+	public String getField() {
+		return card.getId();
 	}
 
 	public JSONObject getModifiers() {
