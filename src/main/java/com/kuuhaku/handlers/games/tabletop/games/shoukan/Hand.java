@@ -35,6 +35,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Hand {
 	private final Shoukan game;
@@ -188,6 +189,10 @@ public class Hand {
 
 	public List<Drawable> getCards() {
 		return cards;
+	}
+
+	public List<Drawable> getAvailableCards() {
+		return cards.stream().filter(Drawable::isAvailable).collect(Collectors.toList());
 	}
 
 	public List<Drawable> getDestinyDeck() {
