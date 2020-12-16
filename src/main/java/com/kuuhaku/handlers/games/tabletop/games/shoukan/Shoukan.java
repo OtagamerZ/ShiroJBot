@@ -320,7 +320,6 @@ public class Shoukan extends Game {
 					}
 
 					Champion tp = (Champion) d.copy();
-					d.setAvailable(false);
 
 					switch (args[2].toLowerCase()) {
 						case "a" -> {
@@ -341,6 +340,7 @@ public class Shoukan extends Game {
 						}
 					}
 
+					d.setAvailable(false);
 					tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slot.setTop(tp);
 					if (tp.hasEffect() && !tp.isFlipped()) {
@@ -579,6 +579,7 @@ public class Shoukan extends Game {
 				}
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue(null, Helper::doNothing);
+
 			} catch (NumberFormatException e) {
 				channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser uma casa com uma carta no seu lado do tabuleiro e o segundo deve ser uma casa com uma carta no lado do inimigo.").queue(null, Helper::doNothing);
 			}
@@ -1074,18 +1075,19 @@ public class Shoukan extends Game {
 						});
 			}
 		});
-		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			if (!ShiroInfo.getHashes().remove(hash.get())) return;
-			if (getCustom() == null) {
-				getHistory().setWinner(next);
-				getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
-			} else close();
-			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
-					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-					.queue(msg -> {
-						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
-					});
-		});
+		if (getRound() > 8)
+			buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
+				if (!ShiroInfo.getHashes().remove(hash.get())) return;
+				if (getCustom() == null) {
+					getHistory().setWinner(next);
+					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
+				} else close();
+				channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
+						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+						.queue(msg -> {
+							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
+						});
+			});
 
 		return buttons;
 	}
