@@ -14,7 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/arenas/infinite_tsukuyomi.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -935,14 +937,7 @@
       <workItem from="1608034113876" duration="6519000" />
       <workItem from="1608048891064" duration="7907000" />
       <workItem from="1608058016059" duration="5366000" />
-      <workItem from="1608120077619" duration="16071000" />
-    </task>
-    <task id="LOCAL-03107" summary="Correções e melhorias sugeridas">
-      <created>1607885633530</created>
-      <option name="number" value="03107" />
-      <option name="presentableId" value="LOCAL-03107" />
-      <option name="project" value="LOCAL" />
-      <updated>1607885633530</updated>
+      <workItem from="1608120077619" duration="17219000" />
     </task>
     <task id="LOCAL-03108" summary="Correções e melhorias sugeridas">
       <created>1607885772552</created>
@@ -1280,7 +1275,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608142886052</updated>
     </task>
-    <option name="localTasksCounter" value="3156" />
+    <task id="LOCAL-03156" summary="Adição de lista de raças Senshi">
+      <created>1608143564508</created>
+      <option name="number" value="03156" />
+      <option name="presentableId" value="LOCAL-03156" />
+      <option name="project" value="LOCAL" />
+      <updated>1608143564509</updated>
+    </task>
+    <option name="localTasksCounter" value="3157" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1453,10 +1455,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608142885031">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608143563548">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608142885031" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608143563548" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1607728513022">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1505,10 +1507,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608142887554">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608143567407">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608142887554" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608143567407" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607912241021" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
