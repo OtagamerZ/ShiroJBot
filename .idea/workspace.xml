@@ -13,16 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Category.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/ExceedEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/ExceedEnum.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de lista de raças Senshi">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +112,7 @@
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="Entrar 123 adwa" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/gifs" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/arenas" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -140,12 +133,12 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\arenas" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\assets" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.command.commands.discord.misc" />
@@ -154,12 +147,12 @@
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
       <recent name="com.kuuhaku.model.persistent" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\assets" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\assets" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -943,14 +936,7 @@
       <workItem from="1608034113876" duration="6519000" />
       <workItem from="1608048891064" duration="7907000" />
       <workItem from="1608058016059" duration="5366000" />
-      <workItem from="1608120077619" duration="14722000" />
-    </task>
-    <task id="LOCAL-03105" summary="Correção na adição de respostas customizadas">
-      <created>1607821968568</created>
-      <option name="number" value="03105" />
-      <option name="presentableId" value="LOCAL-03105" />
-      <option name="project" value="LOCAL" />
-      <updated>1607821968569</updated>
+      <workItem from="1608120077619" duration="15389000" />
     </task>
     <task id="LOCAL-03106" summary="Correções e melhorias sugeridas">
       <created>1607885496932</created>
@@ -1288,7 +1274,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608140385915</updated>
     </task>
-    <option name="localTasksCounter" value="3154" />
+    <task id="LOCAL-03154" summary="Adição de lista de raças Senshi">
+      <created>1608142416847</created>
+      <option name="number" value="03154" />
+      <option name="presentableId" value="LOCAL-03154" />
+      <option name="project" value="LOCAL" />
+      <updated>1608142416847</updated>
+    </task>
+    <option name="localTasksCounter" value="3155" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1374,8 +1367,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correções menores" />
-    <MESSAGE value="Remoção do Riki Yamada da lista de suportes" />
     <MESSAGE value="Correção do RegenRulesCommand" />
     <MESSAGE value="Correção na síntese de equipamentos" />
     <MESSAGE value="Adição de ID do usuário no log de comandos" />
@@ -1399,7 +1390,9 @@
     <MESSAGE value="Remoção da dependência do enumerador ArenaField" />
     <MESSAGE value="Correção no Shoukan" />
     <MESSAGE value="Adição de cálculo de MMR para partidas do Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de cálculo de MMR para partidas do Shoukan" />
+    <MESSAGE value="Adição de lista de raças" />
+    <MESSAGE value="Adição de lista de raças Senshi" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de lista de raças Senshi" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1461,10 +1454,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608140384955">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608142796948">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608140384955" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608142796948" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1607728513022">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1513,10 +1506,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608140392244">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608142418588">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608140392244" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608142418588" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607912241021" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
