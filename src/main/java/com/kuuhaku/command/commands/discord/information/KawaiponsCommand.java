@@ -160,6 +160,7 @@ public class KawaiponsCommand extends Command {
                         BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), r.getName(), true);
 
                         send(author, channel, m, cards, r, r.getName());
+                        return;
                     }
 
                     List<Drawable> cardList = CardDAO.getChampions(c).stream().map(d -> (Drawable) d).collect(Collectors.toList());
