@@ -24,9 +24,11 @@ import com.kuuhaku.managers.Argument;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -67,7 +69,7 @@ public enum Category {
 	}
 
 	public static Category getByName(String name) throws ArrayIndexOutOfBoundsException {
-		return Arrays.stream(Category.values()).filter(c -> c.name.equalsIgnoreCase(name) || c.name().equalsIgnoreCase(name)).findFirst().orElse(null);
+		return Arrays.stream(Category.values()).filter(c -> Helper.equalsAny(name, StringUtils.stripAccents(c.name), c.name, c.name())).findFirst().orElse(null);
 	}
 
 	public String getDescription() {

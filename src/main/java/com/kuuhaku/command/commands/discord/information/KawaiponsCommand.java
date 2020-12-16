@@ -24,6 +24,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Category;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.KawaiponBook;
@@ -104,51 +105,61 @@ public class KawaiponsCommand extends Command {
                 }
 
                 Category c = Category.getByName(args[0]);
+                Race r = Race.getByName(args[0]);
                 KawaiponRarity rr = KawaiponRarity.getByName(args[0]);
 
                 if (rr == null) {
                     if (c == null) {
-                        if (args[0].equalsIgnoreCase("total")) {
+                        if (r == null) {
+                            if (args[0].equalsIgnoreCase("total")) {
+                                boolean foil = args.length > 1 && args[1].equalsIgnoreCase("C");
+                                Set<KawaiponCard> collection = kp.getCards();
+                                Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == foil).collect(Collectors.toSet());
+
+                                KawaiponBook kb = new KawaiponBook(toRender);
+                                BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", foil);
+
+                                send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
+                                return;
+                            } else if (Helper.equalsAny(args[0], "elegivel", "elegiveis", "campeoes", "senshi")) {
+                                List<Drawable> cardList = CardDAO.getAllChampions().stream().map(d -> (Drawable) d).collect(Collectors.toList());
+
+                                KawaiponBook kb = new KawaiponBook();
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis", true);
+
+                                send(author, channel, m, cards, "Cartas elegíveis", null);
+                                return;
+                            } else if (Helper.equalsAny(args[0], "item", "itens", "equips", "equipamentos", "equipments", "evogear")) {
+                                List<Drawable> cardList = CardDAO.getAllEquipments().stream().map(d -> (Drawable) d).collect(Collectors.toList());
+
+                                KawaiponBook kb = new KawaiponBook();
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Equipamentos EvoGear", false);
+
+                                send(author, channel, m, cards, "Equipamentos EvoGear", null);
+                                return;
+                            } else if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
+                                m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(AnimeName.validValues()).map(AnimeName::name).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+                                return;
+                            }
+
                             boolean foil = args.length > 1 && args[1].equalsIgnoreCase("C");
-                            Set<KawaiponCard> collection = kp.getCards();
+                            AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
+                            Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
                             Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == foil).collect(Collectors.toSet());
 
                             KawaiponBook kb = new KawaiponBook(toRender);
-                            BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", foil);
+                            BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), foil);
 
-                            send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
-                            return;
-                        } else if (Helper.equalsAny(args[0], "elegivel", "elegiveis", "campeoes", "senshi")) {
-                            List<Drawable> cardList = CardDAO.getAllChampions().stream().map(d -> (Drawable) d).collect(Collectors.toList());
-
-                            KawaiponBook kb = new KawaiponBook();
-                            BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis", true);
-
-                            send(author, channel, m, cards, "Cartas elegíveis", null);
-                            return;
-                        } else if (Helper.equalsAny(args[0], "item", "itens", "equips", "equipamentos", "equipments", "evogear")) {
-                            List<Drawable> cardList = CardDAO.getAllEquipments().stream().map(d -> (Drawable) d).collect(Collectors.toList());
-
-                            KawaiponBook kb = new KawaiponBook();
-                            BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Equipamentos EvoGear", false);
-
-                            send(author, channel, m, cards, "Equipamentos EvoGear", null);
-                            return;
-                        } else if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
-                            m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(AnimeName.validValues()).map(AnimeName::name).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+                            send(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime));
                             return;
                         }
 
-                        boolean foil = args.length > 1 && args[1].equalsIgnoreCase("C");
-                        AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
-                        Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
-                        Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == foil).collect(Collectors.toSet());
+                        List<Drawable> cardList = CardDAO.getChampions(r).stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
-                        KawaiponBook kb = new KawaiponBook(toRender);
-                        BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), foil);
+                        KawaiponBook kb = new KawaiponBook();
+                        BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), r.getName(), true);
 
-                        send(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime));
-                        return;
+                        send(author, channel, m, cards, r, r.getName());
                     }
 
                     List<Drawable> cardList = CardDAO.getChampions(c).stream().map(d -> (Drawable) d).collect(Collectors.toList());
@@ -218,6 +229,28 @@ public class KawaiponsCommand extends Command {
         String url = "https://api." + System.getenv("SERVER_URL") + "/collection?id=" + hash;
         eb.setTitle("\uD83C\uDFB4 | Cartas Senshi (" + s + ")")
                 .setDescription((c == null ? "" : c.getDescription() + "\n\n") + "[Clique para abrir a imagem no navegador](" + url + ")")
+                .setImage(url);
+        m.delete().queue();
+
+        channel.sendMessage(eb.build()).queue();
+    }
+
+    private void send(User author, MessageChannel channel, Message m, BufferedImage cards, Race r, String s) throws IOException {
+        String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
+        File f = new File(Main.getInfo().getCollectionsFolder(), hash + ".jpg");
+        byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
+        //byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg");
+        try (FileOutputStream fos = new FileOutputStream(f)) {
+            fos.write(bytes);
+        }
+
+        Helper.keepMaximumNFiles(Main.getInfo().getCollectionsFolder(), 20);
+
+        EmbedBuilder eb = new ColorlessEmbedBuilder();
+
+        String url = "https://api." + System.getenv("SERVER_URL") + "/collection?id=" + hash;
+        eb.setTitle("\uD83C\uDFB4 | Cartas Senshi (" + s + ")")
+                .setDescription((r == null ? "" : r.getDescription() + "\n\n") + "[Clique para abrir a imagem no navegador](" + url + ")")
                 .setImage(url);
         m.delete().queue();
 

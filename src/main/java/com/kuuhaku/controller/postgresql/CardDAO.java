@@ -22,6 +22,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Category;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.KawaiponRarity;
@@ -363,12 +364,28 @@ public class CardDAO {
         }
     }
 
-	@SuppressWarnings("unchecked")
-	public static List<Champion> getChampions(Category c) {
+    @SuppressWarnings("unchecked")
+    public static List<Champion> getChampions(Category c) {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Champion.class);
         q.setParameter("class", c);
+
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<Champion> getChampions(Race r) {
+        EntityManager em = Manager.getEntityManager();
+
+        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.race = :race", Champion.class);
+        q.setParameter("race", r);
 
         try {
             return q.getResultList();
