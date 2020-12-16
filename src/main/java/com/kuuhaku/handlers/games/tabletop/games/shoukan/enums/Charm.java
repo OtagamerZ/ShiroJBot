@@ -29,7 +29,8 @@ public enum Charm {
 	TIMEWARP("Salto temporal"),
 	DOUBLETAP("Toque duplo"),
 	DOPPELGANGER("Clone"),
-	SACRIFICE("Sacrifício");
+	SACRIFICE("Sacrifício"),
+	SOULLINK("Vínculo espiritual");
 
 	private final String name;
 
