@@ -250,9 +250,9 @@ public class Helper {
 
 	public static void typeMessage(MessageChannel channel, String message) {
 		channel.sendTyping().queue(tm ->
-				channel.sendMessage(Helper.makeEmoteFromMention(message.split(" ")))
-						.queueAfter(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS, null, Helper::doNothing)
-		);
+						channel.sendMessage(Helper.makeEmoteFromMention(message.split(" ")))
+								.queueAfter(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS, null, Helper::doNothing)
+				, Helper::doNothing);
 	}
 
 	public static Consumer<MessageAction> sendReaction(Reaction r, String imageURL, User target, MessageChannel channel, boolean allowReact) throws IllegalAccessException {
