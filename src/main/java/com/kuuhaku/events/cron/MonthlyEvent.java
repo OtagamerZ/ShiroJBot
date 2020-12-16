@@ -151,6 +151,7 @@ public class MonthlyEvent implements Job {
 			if (bl.canClear()) {
 				Account acc = AccountDAO.getAccount(bl.getId());
 				Trophy tp = TrophyDAO.getTrophies(bl.getId());
+				MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(bl.getId());
 				Kawaipon kp = KawaiponDAO.getKawaipon(bl.getId());
 				Kawaigotchi kg = KGotchiDAO.getKawaigotchi(bl.getId());
 				ExceedMember em = ExceedDAO.getExceedMember(bl.getId());
@@ -158,6 +159,7 @@ public class MonthlyEvent implements Job {
 
 				AccountDAO.removeAccount(acc);
 				TrophyDAO.removeTrophies(tp);
+				MatchMakingRatingDAO.removeMMR(mmr);
 				MemberDAO.clearMember(bl.getId());
 				KawaiponDAO.removeKawaipon(kp);
 				if (kg != null)

@@ -13,9 +13,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no Shoukan">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MatchMakingRatingDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/RankedTier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,8 +65,8 @@
         <option value="Interface" />
         <option value="GraphQL File" />
         <option value="JavaScript File" />
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -165,6 +170,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -924,14 +940,8 @@
       <workItem from="1607971711347" duration="6213000" />
       <workItem from="1608034113876" duration="6519000" />
       <workItem from="1608048891064" duration="7907000" />
-      <workItem from="1608058016059" duration="1984000" />
-    </task>
-    <task id="LOCAL-03097" summary="Correção no padoru drop">
-      <created>1607729911579</created>
-      <option name="number" value="03097" />
-      <option name="presentableId" value="LOCAL-03097" />
-      <option name="project" value="LOCAL" />
-      <updated>1607729911580</updated>
+      <workItem from="1608058016059" duration="5366000" />
+      <workItem from="1608120077619" duration="6330000" />
     </task>
     <task id="LOCAL-03098" summary="Correção no padoru drop">
       <created>1607732052905</created>
@@ -1269,7 +1279,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608057317780</updated>
     </task>
-    <option name="localTasksCounter" value="3146" />
+    <task id="LOCAL-03146" summary="Correção no Shoukan">
+      <created>1608062448487</created>
+      <option name="number" value="03146" />
+      <option name="presentableId" value="LOCAL-03146" />
+      <option name="project" value="LOCAL" />
+      <updated>1608062448487</updated>
+    </task>
+    <option name="localTasksCounter" value="3147" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1366,7 +1383,6 @@
     <MESSAGE value="Adição do drop padoru" />
     <MESSAGE value="Correção troca síntese de equipamentos" />
     <MESSAGE value="Correção no padoru drop" />
-    <MESSAGE value="Correção no Shoukan" />
     <MESSAGE value="Correção na adição de respostas customizadas" />
     <MESSAGE value="Correções e melhorias sugeridas" />
     <MESSAGE value="Adição de GIF no resultado do padoru drop" />
@@ -1380,7 +1396,8 @@
     <MESSAGE value="Adição de novo GIF para o Archer" />
     <MESSAGE value="Novo campo: Unlimited Blade Works" />
     <MESSAGE value="Remoção da dependência do enumerador ArenaField" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remoção da dependência do enumerador ArenaField" />
+    <MESSAGE value="Correção no Shoukan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no Shoukan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1416,10 +1433,10 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1607968313467">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1608123065550">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1607968313467" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1608123065550" />
     <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1607909519594" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1442,10 +1459,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608057316695">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608062914611">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608057316695" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608062914611" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1607728513022">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1494,10 +1511,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608057319597">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608062450381">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608057319597" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608062450381" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607912241021" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1539,10 +1556,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="583" y="194" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1602850230580" />
-    <state x="570" y="266" key="extract.method.dialog" timestamp="1605116333066">
+    <state x="570" y="266" key="extract.method.dialog" timestamp="1608122622979">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116333066" />
+    <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608122622979" />
     <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1607957352095">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1561,15 +1578,15 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="540" y="262" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116448554" />
-    <state x="567" y="240" width="768" height="698" key="run.anything.popup" timestamp="1607897060344">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1604581770738" />
-    <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607897060344" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1608056837199">
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1608122798760">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608056837199" />
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608122798760" />
+    <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607897060344" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1608124153403">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608124153403" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604189150904" />
   </component>
   <component name="XDebuggerManager">
