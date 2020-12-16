@@ -99,20 +99,4 @@ public class MatchMakingRatingDAO {
 			em.close();
 		}
 	}
-
-	@SuppressWarnings("unchecked")
-	public static RankedTier getRecommendedTier(long mmr) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT mmr.tier AS distance FROM MatchMakingRating mmr WHERE mmr.tier <> 'UNRANKED' GROUP BY mmr.tier ORDER BY ABS(AVG(mmr.mmr) - :mmr)");
-		q.setParameter("mmr", mmr);
-
-		try {
-			return RankedTier.valueOf(String.valueOf(q.getSingleResult()));
-		} catch (NoResultException | IllegalArgumentException e) {
-			return RankedTier.MINARAI_IV;
-		} finally {
-			em.close();
-		}
-	}
 }
