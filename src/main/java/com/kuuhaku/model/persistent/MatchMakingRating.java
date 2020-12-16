@@ -92,10 +92,9 @@ public class MatchMakingRating {
 	public void increaseRankPoints() {
 		double mmrModif = Helper.prcnt(MatchMakingRatingDAO.getAverageMMR(tier), mmr);
 		int rpValue = (int) Math.round(mmrModif * 15);
-		if (tier == null || rankPoints == 100) {
+		if (tier == RankedTier.UNRANKED || rankPoints == 100) {
 			promWins++;
 
-			if (tier == null) tier = RankedTier.UNRANKED;
 			if (promWins + promLosses == tier.getMd()) {
 				if (tier == RankedTier.UNRANKED) {
 					tier = RankedTier.MINARAI_IV;
@@ -118,10 +117,9 @@ public class MatchMakingRating {
 	public void decreaseRankPoints() {
 		double mmrModif = Helper.prcnt(mmr, MatchMakingRatingDAO.getAverageMMR(tier));
 		int rpValue = (int) Math.round(mmrModif * 15);
-		if (tier == null || rankPoints == 100) {
+		if (tier == RankedTier.UNRANKED || rankPoints == 100) {
 			promLosses++;
 
-			if (tier == null) tier = RankedTier.UNRANKED;
 			if (promWins + promLosses == tier.getMd()) {
 				if (tier == RankedTier.UNRANKED) {
 					tier = RankedTier.MINARAI_IV;
