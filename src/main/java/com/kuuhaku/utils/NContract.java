@@ -57,7 +57,7 @@ public class NContract<A> {
 
 	private A checkContract() {
 		if (this.signatures.size() == signers) {
-			List<A> ordered = new ArrayList<>(signers);
+			List<A> ordered = new ArrayList<>();
 			signatures.forEach(ordered::add);
 			A result = action.apply(ordered);
 			signatures.clear();
