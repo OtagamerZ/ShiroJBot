@@ -304,7 +304,7 @@ public class CommandManager {
 					"catnet", new String[]{"httpcat"}, "cmd_http-cat", INFO, false
 			));
 			put(KawaiponsCommand.class, new Argument(
-					"kawaipons", new String[]{"kps"}, "req_anime-rarity-type", "cmd_kawaipons", INFO, false
+					"kawaipons", new String[]{"kps"}, "req_anime-rarity-class-race-type", "cmd_kawaipons", INFO, false
 			));
 			put(RemainingCardsCommand.class, new Argument(
 					"cartasrestantes", new String[]{"restante", "remaining"}, "req_anime", "cmd_remaining-cards", INFO, false
