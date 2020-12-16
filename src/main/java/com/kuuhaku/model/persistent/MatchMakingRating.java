@@ -98,7 +98,7 @@ public class MatchMakingRating {
 			if (tier == null) tier = RankedTier.UNRANKED;
 			if (promWins + promLosses == tier.getMd()) {
 				if (tier == RankedTier.UNRANKED) {
-					tier = MatchMakingRatingDAO.getRecommendedTier(mmr);
+					tier = RankedTier.MINARAI_IV;
 					rankPoints = 0;
 					promWins = promLosses = 0;
 					return;
@@ -124,7 +124,7 @@ public class MatchMakingRating {
 			if (tier == null) tier = RankedTier.UNRANKED;
 			if (promWins + promLosses == tier.getMd()) {
 				if (tier == RankedTier.UNRANKED) {
-					tier = MatchMakingRatingDAO.getRecommendedTier(mmr);
+					tier = RankedTier.MINARAI_IV;
 					rankPoints = 0;
 					promWins = promLosses = 0;
 					return;
