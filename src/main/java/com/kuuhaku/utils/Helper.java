@@ -993,6 +993,10 @@ public class Helper {
 		return value / max;
 	}
 
+	public static double prcnt(double value, double max) {
+		return value / max;
+	}
+
 	public static float prcnt(float value, float max, int round) {
 		return new BigDecimal((value * 100) / max).setScale(round, RoundingMode.HALF_EVEN).floatValue();
 	}
