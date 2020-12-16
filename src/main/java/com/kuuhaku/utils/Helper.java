@@ -516,10 +516,10 @@ public class Helper {
 				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissionsExplicit(c);
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
-						perms.stream()
-								.map(p -> ":white_check_mark: -> " + p.getName() + "\n")
-								.sorted()
-								.collect(Collectors.joining());
+							  perms.stream()
+									  .map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+									  .sorted()
+									  .collect(Collectors.joining());
 			}
 		} catch (NoResultException ignore) {
 		}
@@ -528,11 +528,11 @@ public class Helper {
 		EnumSet<Permission> perms = shiro.getPermissionsExplicit(c);
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
-				perms.stream()
-						.map(p -> ":white_check_mark: -> " + p.getName() + "\n")
-						.sorted()
-						.collect(Collectors.joining()) +
-				jibrilPerms;
+			   perms.stream()
+					   .map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+					   .sorted()
+					   .collect(Collectors.joining()) +
+			   jibrilPerms;
 	}
 
 	public static <T> T getOr(T get, T or) {
@@ -1470,11 +1470,11 @@ public class Helper {
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
 				channel.sendMessage(eb.build())
-					.delay(1, TimeUnit.MINUTES)
-					.queue(msg -> {
-						msg.delete().queue(null, Helper::doNothing);
-						act.accept(msg);
-					});
+						.delay(1, TimeUnit.MINUTES)
+						.queue(msg -> {
+							msg.delete().queue(null, Helper::doNothing);
+							act.accept(msg);
+						});
 			} else {
 				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
 
@@ -1482,18 +1482,18 @@ public class Helper {
 					gc.setCanalDrop(null);
 					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage(eb.build())
-						.delay(1, TimeUnit.MINUTES)
-						.queue(msg -> {
-							msg.delete().queue(null, Helper::doNothing);
-							act.accept(msg);
-						});
+							.delay(1, TimeUnit.MINUTES)
+							.queue(msg -> {
+								msg.delete().queue(null, Helper::doNothing);
+								act.accept(msg);
+							});
 				} else {
 					tc.sendMessage(eb.build())
-						.delay(1, TimeUnit.MINUTES)
-						.queue(msg -> {
-							msg.delete().queue(null, Helper::doNothing);
-							act.accept(msg);
-						});
+							.delay(1, TimeUnit.MINUTES)
+							.queue(msg -> {
+								msg.delete().queue(null, Helper::doNothing);
+								act.accept(msg);
+							});
 				}
 			}
 			Main.getInfo().getPadoruLimit().put(gc.getGuildID(), true);
