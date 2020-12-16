@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.Helper;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -94,7 +95,7 @@ public enum FrameColor {
 	}
 
 	public static FrameColor getByName(String name) {
-		return Arrays.stream(values()).filter(fc -> fc.name().equalsIgnoreCase(name) || fc.toString().equalsIgnoreCase(name)).findFirst().orElse(null);
+		return Arrays.stream(values()).filter(fc -> Helper.equalsAny(name, fc.name(), fc.toString())).findFirst().orElse(null);
 	}
 
 	@Override

@@ -49,7 +49,7 @@ public enum ExceedEnum {
 
 	public static ExceedEnum getByName(String name) {
 		return Arrays.stream(ExceedEnum.values())
-				.filter(e -> e.name().equalsIgnoreCase(name) || StringUtils.stripAccents(e.name).equalsIgnoreCase(StringUtils.stripAccents(name)))
+				.filter(e -> Helper.equalsAny(name, StringUtils.stripAccents(e.name), e.name, e.name()))
 				.findFirst()
 				.orElse(null);
 	}
