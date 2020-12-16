@@ -19,11 +19,13 @@
 package com.kuuhaku.handlers.games.tabletop.framework;
 
 import com.kuuhaku.controller.postgresql.MatchDAO;
+import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.persistent.MatchHistory;
+import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.MatchRound;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -31,6 +33,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -244,8 +247,34 @@ public abstract class Game {
 		if (timeout != null) timeout.cancel(true);
 		timeout = null;
 
-		if (round > 0 && custom == null)
+		if (round > 0 && custom == null) {
 			MatchDAO.saveMatch(history);
+
+			Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcMMR(history);
+			for (Side s : Side.values()) {
+				Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
+				Map<String, Integer> yourResult = result.get(s).getRight();
+				Map<String, Integer> hisResult = result.get(other).getRight();
+
+				MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(result.get(s).getLeft());
+				MatchMakingRating hisMMR = MatchMakingRatingDAO.getMMR(result.get(other).getLeft());
+
+				int spentMana = yourResult.get("mana");
+				int damageDealt = hisResult.get("hp");
+				double manaEff = Math.max(0, (double) -damageDealt / Math.abs(spentMana < 0 ? spentMana : spentMana * 1.5));
+				double turnEff = Math.max(0, (double) -damageDealt / yourResult.size());
+				double expEff = 5000d / yourResult.size();
+				long mmr = Math.round(500d * (manaEff / 500) * (turnEff / expEff));
+
+				if (history.getWinner() == s) {
+					yourMMR.addMMR(mmr, hisMMR.getMMR());
+				} else if (history.getWinner() == other) {
+					yourMMR.removeMMR(mmr, hisMMR.getMMR());
+				}
+
+				MatchMakingRatingDAO.saveMMR(yourMMR);
+			}
+		}
 
 		closed = true;
 	}
