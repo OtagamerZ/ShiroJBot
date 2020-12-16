@@ -935,14 +935,7 @@
       <workItem from="1608034113876" duration="6519000" />
       <workItem from="1608048891064" duration="7907000" />
       <workItem from="1608058016059" duration="5366000" />
-      <workItem from="1608120077619" duration="11210000" />
-    </task>
-    <task id="LOCAL-03102" summary="Correção no padoru drop">
-      <created>1607734085544</created>
-      <option name="number" value="03102" />
-      <option name="presentableId" value="LOCAL-03102" />
-      <option name="project" value="LOCAL" />
-      <updated>1607734085545</updated>
+      <workItem from="1608120077619" duration="12218000" />
     </task>
     <task id="LOCAL-03103" summary="Correção no padoru drop">
       <created>1607734308479</created>
@@ -1280,7 +1273,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608137924959</updated>
     </task>
-    <option name="localTasksCounter" value="3151" />
+    <task id="LOCAL-03151" summary="Adição de cálculo de MMR para partidas do Shoukan">
+      <created>1608138709140</created>
+      <option name="number" value="03151" />
+      <option name="presentableId" value="LOCAL-03151" />
+      <option name="project" value="LOCAL" />
+      <updated>1608138709140</updated>
+    </task>
+    <option name="localTasksCounter" value="3152" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1453,10 +1453,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608137924069">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608138708222">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608137924069" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608138708222" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1607728513022">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1505,10 +1505,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608137926408">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608138710156">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608137926408" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608138710156" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607912241021" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1519,10 +1519,10 @@
     </state>
     <state x="712" y="354" width="326" height="265" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1607950955076" />
     <state x="814" y="365" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1920.1040@0.0.1920.1040" timestamp="1607038013533" />
-    <state x="747" y="404" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog" timestamp="1607037420476">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="654" y="392" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog" timestamp="1608138646949">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="654" y="392" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1606409403838" />
+    <state x="654" y="392" width="295" height="225" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608138646949" />
     <state x="747" y="404" key="com.intellij.database.actions.ToolActions$ScriptingActionBase$MyDatabaseScriptDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607037420476" />
     <state x="690" y="325" key="com.intellij.database.dbimport.ImportUtil.ChooseTargetDialog" timestamp="1605236159187">
       <screen x="0" y="0" width="1920" height="1040" />
