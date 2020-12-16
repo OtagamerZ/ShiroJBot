@@ -85,14 +85,14 @@ public class MatchMakingRatingDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static long getAverageMMR(RankedTier tier) {
+	public static double getAverageMMR(RankedTier tier) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT AVG(mmr.mmr) AS average FROM MatchMakingRating mmr WHERE mmr.tier = :tier GROUP BY mmr.tier ORDER BY average");
 		q.setParameter("tier", tier);
 
 		try {
-			return (Long) q.getSingleResult();
+			return (Double) q.getSingleResult();
 		} catch (NoResultException e) {
 			return 0;
 		} finally {
