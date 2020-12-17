@@ -73,9 +73,9 @@ public enum TagIcons {
 			case LEVEL -> getLevelEmote(lvl).getAsMention() + " ";
 			case EXCEED_CHAMPION -> "<:exceed_champion:755126333482336326> ";
 			case BUGHUNTER -> "<:bughunter:775923780643061780> ";
-			case RANKED_WIN -> "<:ranked_lose:789231689820930048> ";
-			case RANKED_LOSE -> "<:ranked_pending:789231687950663691> ";
-			case RANKED_PENDING -> "<:ranked_win:789231688122236939> ";
+			case RANKED_WIN -> ":ranked_win:789231688122236939> ";
+			case RANKED_LOSE -> "<:ranked_lose:789231689820930048> ";
+			case RANKED_PENDING -> "<<:ranked_pending:789231687950663691> ";
 		};
 	}
 
@@ -102,9 +102,9 @@ public enum TagIcons {
 			case LEVEL -> getLevelEmote(lvl).getId();
 			case EXCEED_CHAMPION -> "755126333482336326";
 			case BUGHUNTER -> "775923780643061780";
-			case RANKED_WIN -> "789231689820930048";
-			case RANKED_LOSE -> "789231687950663691";
-			case RANKED_PENDING -> "789231688122236939";
+			case RANKED_WIN -> "789231688122236939";
+			case RANKED_LOSE -> "789231689820930048";
+			case RANKED_PENDING -> "789231687950663691";
 		};
 	}
 
