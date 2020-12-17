@@ -24,12 +24,14 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -61,6 +63,7 @@ public class ShoukanCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		boolean practice = args.length > 0 && Helper.equalsAny(args[0], "practice", "treino");
+		boolean ranked = args.length > 0 && Helper.equalsAny(args[0], "ranqueada", "ranked");
 
 		if (practice) {
 			JSONObject custom = Helper.getOr(Helper.findJson(rawCmd), new JSONObject());
@@ -81,8 +84,29 @@ public class ShoukanCommand extends Command {
 				return;
 			}
 
-			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), 0, custom, daily, author, author);
+			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), 0, custom, daily, false, author, author);
 			t.start();
+		} else if (ranked) {
+			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+			if (kp.getChampions().size() < 30) {
+				channel.sendMessage("❌ | É necessário ter ao menos 30 cartas no deck para poder jogar Shoukan.").queue();
+				return;
+			}
+
+			String id = author.getId() + "." + 0 + "." + guild.getId();
+
+			if (Main.getInfo().gameInProgress(author.getId())) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+				return;
+			}
+
+			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
+			Main.getInfo().getMatchMaking().joinLobby(mmr, (TextChannel) channel);
+			channel.sendMessage("Você entrou no saguão com sucesso, você será notificado caso uma partida seja encontrada.").queue(s ->
+					Pages.buttonize(s, Map.of(
+							Helper.CANCEL, (mb, ms) -> Main.getInfo().getMatchMaking().getLobby().remove(mmr)
+					), false)
+			);
 		} else {
 			if (message.getMentionedUsers().size() == 0) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
@@ -144,7 +168,7 @@ public class ShoukanCommand extends Command {
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), bet, custom, daily, author, message.getMentionedUsers().get(0));
+			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), bet, custom, daily, false, author, message.getMentionedUsers().get(0));
 			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {

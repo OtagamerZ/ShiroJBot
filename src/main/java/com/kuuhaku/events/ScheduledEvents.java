@@ -33,18 +33,19 @@ public class ScheduledEvents implements JobListener {
 		schedTenthMinute();
 		schedMonthly();
 		schedOddSecond();
+		schedFifthSecond();
 	}
 
 	private void schedTenthMinute() {
 		try {
-			if (TenthMinuteEvent.check == null) {
-				TenthMinuteEvent.check = JobBuilder.newJob(TenthMinuteEvent.class).withIdentity("tenth", "1").build();
+			if (TenthMinuteEvent.tenthMinute == null) {
+				TenthMinuteEvent.tenthMinute = JobBuilder.newJob(TenthMinuteEvent.class).withIdentity("tenth", "1").build();
 			}
 			Trigger cron = TriggerBuilder.newTrigger().withIdentity("tenth", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/10 * ? * * *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
-				sched.scheduleJob(TenthMinuteEvent.check, cron);
+				sched.scheduleJob(TenthMinuteEvent.tenthMinute, cron);
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
@@ -57,14 +58,14 @@ public class ScheduledEvents implements JobListener {
 
 	private void schedHourly() {
 		try {
-			if (HourlyEvent.backup == null) {
-				HourlyEvent.backup = JobBuilder.newJob(HourlyEvent.class).withIdentity("hourly", "1").build();
+			if (HourlyEvent.hourly == null) {
+				HourlyEvent.hourly = JobBuilder.newJob(HourlyEvent.class).withIdentity("hourly", "1").build();
 			}
 			Trigger cron = TriggerBuilder.newTrigger().withIdentity("hourly", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 * ? * * *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
-				sched.scheduleJob(HourlyEvent.backup, cron);
+				sched.scheduleJob(HourlyEvent.hourly, cron);
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
@@ -77,14 +78,14 @@ public class ScheduledEvents implements JobListener {
 
 	private void schedMinute() {
 		try {
-			if (MinuteEvent.unblock == null) {
-				MinuteEvent.unblock = JobBuilder.newJob(MinuteEvent.class).withIdentity("minute", "1").build();
+			if (MinuteEvent.minute == null) {
+				MinuteEvent.minute = JobBuilder.newJob(MinuteEvent.class).withIdentity("minute", "1").build();
 			}
 			Trigger cron = TriggerBuilder.newTrigger().withIdentity("minute", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 * * * * ? *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
-				sched.scheduleJob(MinuteEvent.unblock, cron);
+				sched.scheduleJob(MinuteEvent.minute, cron);
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
@@ -97,14 +98,14 @@ public class ScheduledEvents implements JobListener {
 
 	private void schedMonthly() {
 		try {
-			if (MonthlyEvent.markWinner == null) {
-				MonthlyEvent.markWinner = JobBuilder.newJob(MonthlyEvent.class).withIdentity("monthly", "1").build();
+			if (MonthlyEvent.monthly == null) {
+				MonthlyEvent.monthly = JobBuilder.newJob(MonthlyEvent.class).withIdentity("monthly", "1").build();
 			}
 			Trigger cron = TriggerBuilder.newTrigger().withIdentity("monthly", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 1 * ? *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
-				sched.scheduleJob(MonthlyEvent.markWinner, cron);
+				sched.scheduleJob(MonthlyEvent.monthly, cron);
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
@@ -117,14 +118,14 @@ public class ScheduledEvents implements JobListener {
 
 	private void schedOddSecond() {
 		try {
-			if (OddSecondEvent.updateKawaigotchi == null) {
-				OddSecondEvent.updateKawaigotchi = JobBuilder.newJob(OddSecondEvent.class).withIdentity("oddsecond", "1").build();
+			if (OddSecondEvent.oddSecond == null) {
+				OddSecondEvent.oddSecond = JobBuilder.newJob(OddSecondEvent.class).withIdentity("oddsecond", "1").build();
 			}
 			Trigger cron = TriggerBuilder.newTrigger().withIdentity("oddsecond", "1").withSchedule(CronScheduleBuilder.cronSchedule("0/2 * * ? * * *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
-				sched.scheduleJob(OddSecondEvent.updateKawaigotchi, cron);
+				sched.scheduleJob(OddSecondEvent.oddSecond, cron);
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
@@ -132,6 +133,26 @@ public class ScheduledEvents implements JobListener {
 			}
 		} catch (SchedulerException e) {
 			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada segundo par: " + e);
+		}
+	}
+
+	private void schedFifthSecond() {
+		try {
+			if (TenthSecondEvent.tenthSecond == null) {
+				TenthSecondEvent.tenthSecond = JobBuilder.newJob(TenthSecondEvent.class).withIdentity("fifthsecond", "1").build();
+			}
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("fifthsecond", "1").withSchedule(CronScheduleBuilder.cronSchedule("0/10 * * ? * * *")).build();
+			SchedulerFactory sf = new StdSchedulerFactory();
+			try {
+				sched = sf.getScheduler();
+				sched.scheduleJob(TenthSecondEvent.tenthSecond, cron);
+			} catch (Exception ignore) {
+			} finally {
+				sched.start();
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada décimo segundo");
+			}
+		} catch (SchedulerException e) {
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada décimo segundo: " + e);
 		}
 	}
 

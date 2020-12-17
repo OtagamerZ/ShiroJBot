@@ -18,10 +18,12 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
@@ -67,6 +69,10 @@ public class MatchMakingRating {
 
 	public String getUserId() {
 		return userId;
+	}
+
+	public User getUser() {
+		return Main.getInfo().getUserByID(userId);
 	}
 
 	public void setUserId(String userId) {
@@ -202,5 +208,18 @@ public class MatchMakingRating {
 		}
 
 		return finalData;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		MatchMakingRating that = (MatchMakingRating) o;
+		return Objects.equals(userId, that.userId);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(userId);
 	}
 }
