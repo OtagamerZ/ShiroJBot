@@ -506,7 +506,7 @@ public class Shoukan extends Game {
 						if (postCombat()) return;
 					}
 
-					if (!his.isDefending() && his.getStun() == 0 && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+					if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
 						Hand enemy = getHands().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
 						enemy.removeHp(yPower - hPower);
 					}
