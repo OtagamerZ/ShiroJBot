@@ -35,7 +35,6 @@ import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 
 public class SayCommand extends Command {
 
@@ -72,7 +71,7 @@ public class SayCommand extends Command {
 
 		try {
 			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getShiroShards());
-			Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, mb.getStringBuilder().toString());
+			Map<String, Runnable> s = Helper.sendEmotifiedString(guild, mb.getStringBuilder().toString());
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 			wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
@@ -95,7 +94,7 @@ public class SayCommand extends Command {
 			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 			try {
 				message.delete().queue(null, Helper::doNothing);
-				wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).accept(null)).get();
+				wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).run()).get();
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}

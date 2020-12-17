@@ -35,7 +35,10 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class BroadcastCommand extends Command {
@@ -66,7 +69,10 @@ public class BroadcastCommand extends Command {
 			return;
 		}
 
-		String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+		String msg = rawCmd
+				.replaceFirst("[^\\s]+", "")
+				.replaceFirst("[^\\s]+", "")
+				.trim();
 		Map<String, Boolean> result = new HashMap<>();
 		StringBuilder sb = new StringBuilder();
 		List<Page> pages = new ArrayList<>();
