@@ -47,6 +47,9 @@ public class Field implements Drawable, Cloneable {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '{}'")
 	private String modifiers = "{}";
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean effectOnly = false;
+
 	private transient Account acc = null;
 	private transient boolean available = true;
 
