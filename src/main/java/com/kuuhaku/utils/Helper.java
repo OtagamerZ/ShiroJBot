@@ -1419,7 +1419,7 @@ public class Helper {
 					if (users.size() > 0) {
 						List<String> ids = new ArrayList<>(users);
 						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
-						logger(Helper.class).info("Padoru drop users: " + users.size());
+						logger(Helper.class).info("Padoru drop users: " + ids.size());
 
 						Account acc = AccountDAO.getAccount(u.getId());
 						for (Prize prize : prizes) {
