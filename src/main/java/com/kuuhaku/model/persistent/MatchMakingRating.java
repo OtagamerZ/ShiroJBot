@@ -111,7 +111,10 @@ public class MatchMakingRating {
 			return;
 		}
 
-		rankPoints += Math.min(100 - rankPoints, rpValue);
+		if (tier != RankedTier.DAI_MAJUTSU_SHI)
+			rankPoints += Math.min(100 - rankPoints, rpValue);
+		else
+			rankPoints += rpValue;
 	}
 
 	public void decreaseRankPoints() {
@@ -135,7 +138,7 @@ public class MatchMakingRating {
 			return;
 		}
 
-		if (rankPoints == 0 && Helper.chance(20 * mmrModif)) {
+		if (rankPoints == 0 && Helper.chance(20 * mmrModif) && tier != RankedTier.MINARAI_IV) {
 			tier = tier.getPrevious();
 			rankPoints = 75;
 			return;
