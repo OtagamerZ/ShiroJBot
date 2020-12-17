@@ -32,7 +32,6 @@ import org.jetbrains.annotations.NonNls;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 
 public class SimpleWHMCommand extends Command {
 
@@ -56,7 +55,7 @@ public class SimpleWHMCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		try {
 			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Webhook Test", Main.getShiroShards());
-			Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, String.join(" ", args));
+			Map<String, Runnable> s = Helper.sendEmotifiedString(guild, String.join(" ", args));
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 			wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
@@ -66,7 +65,7 @@ public class SimpleWHMCommand extends Command {
 			assert wh != null;
 			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 			try {
-				wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).accept(null)).get();
+				wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).run()).get();
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}

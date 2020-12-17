@@ -906,42 +906,49 @@ public class Helper {
 		return baos;
 	}
 
-	public static Map<String, Consumer<Void>> sendEmotifiedString(Guild g, String text) {
-		String[] oldWords = text.split(" ");
-		String[] newWords = new String[oldWords.length];
+	public static Map<String, Runnable> sendEmotifiedString(Guild g, String text) {
+		String[] oldLines = text.split("\n");
+		String[] newLines = new String[oldLines.length];
 		List<Consumer<Void>> queue = new ArrayList<>();
 		Consumer<Emote> after = e -> e.delete().queue();
-		for (int i = 0, emotes = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < oldWords.length && emotes < 10; i++) {
-			if (!oldWords[i].startsWith(":") || !oldWords[i].endsWith(":")) {
-				newWords[i] = oldWords[i];
-				continue;
+
+		for (int l = 0; l < oldLines.length; l++) {
+			String[] oldWords = oldLines[l].split(" ");
+			String[] newWords = new String[oldWords.length];
+			for (int i = 0, emotes = 0, slots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(e -> !e.isAnimated()).count(), aSlots = g.getMaxEmotes() - (int) g.getEmotes().stream().filter(Emote::isAnimated).count(); i < oldWords.length && emotes < 10; i++) {
+				if (!oldWords[i].startsWith(":") || !oldWords[i].endsWith(":")) {
+					newWords[i] = oldWords[i];
+					continue;
+				}
+
+				boolean makenew = false;
+				String id = ShiroInfo.getEmoteCache().get(oldWords[i]);
+				Emote e = id == null ? null : Main.getShiroShards().getEmoteById(id);
+				if (e != null && !Objects.requireNonNull(e.getGuild()).getId().equals(g.getId()))
+					makenew = true;
+
+				if (e != null) {
+					try {
+						boolean animated = e.isAnimated();
+						if (makenew && (animated ? aSlots : slots) > 0) {
+							e = g.createEmote(e.getName(), Icon.from(getImage(e.getImageUrl())), g.getSelfMember().getRoles().get(0)).complete();
+							Emote finalE = e;
+							queue.add(aVoid -> after.accept(finalE));
+							if (animated) aSlots--;
+							else slots--;
+						}
+						newWords[i] = e.getAsMention();
+					} catch (IOException ex) {
+						Helper.logger(Helper.class).error(ex + " | " + ex.getStackTrace()[0]);
+					}
+					emotes++;
+				} else newWords[i] = oldWords[i];
 			}
 
-			boolean makenew = false;
-			String id = ShiroInfo.getEmoteCache().get(oldWords[i]);
-			Emote e = id == null ? null : Main.getShiroShards().getEmoteById(id);
-			if (e != null && !Objects.requireNonNull(e.getGuild()).getId().equals(g.getId()))
-				makenew = true;
-
-			if (e != null) {
-				try {
-					boolean animated = e.isAnimated();
-					if (makenew && (animated ? aSlots : slots) > 0) {
-						e = g.createEmote(e.getName(), Icon.from(getImage(e.getImageUrl())), g.getSelfMember().getRoles().get(0)).complete();
-						Emote finalE = e;
-						queue.add(aVoid -> after.accept(finalE));
-						if (animated) aSlots--;
-						else slots--;
-					}
-					newWords[i] = e.getAsMention();
-				} catch (IOException ex) {
-					Helper.logger(Helper.class).error(ex + " | " + ex.getStackTrace()[0]);
-				}
-				emotes++;
-			} else newWords[i] = oldWords[i];
+			newLines[l] = String.join(" ", newWords);
 		}
 
-		return Collections.singletonMap(String.join(" ", newWords), aVoid -> queue.forEach(q -> q.accept(null)));
+		return Collections.singletonMap(String.join("\n", newLines), () -> queue.forEach(q -> q.accept(null)));
 	}
 
 	public static boolean isEmpty(String... values) {
@@ -1787,7 +1794,7 @@ public class Helper {
 		wmb.setUsername("Stephanie (Notificações Shiro)");
 		wmb.setAvatarUrl("https://i.imgur.com/OmiNNMF.png"); //Halloween
 		//wmb.setAvatarUrl("https://i.imgur.com/mgA11Rx.png"); //Normal
-		wmb.setContent(message.replace("\\n", "\n"));
+		wmb.setContent(message);
 		WebhookCluster cluster = new WebhookCluster(clients);
 		cluster.broadcast(wmb.build());
 		if (channel != null)
