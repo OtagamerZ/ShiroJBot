@@ -24,7 +24,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.framework.Game;
+import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
+import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
@@ -80,7 +81,7 @@ public class ShoukanCommand extends Command {
 				return;
 			}
 
-			Game t = new Shoukan(Main.getShiroShards(), (TextChannel) channel, 0, custom, daily, author, author);
+			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), 0, custom, daily, author, author);
 			t.start();
 		} else {
 			if (message.getMentionedUsers().size() == 0) {
@@ -143,7 +144,7 @@ public class ShoukanCommand extends Command {
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			Game t = new Shoukan(Main.getShiroShards(), (TextChannel) channel, bet, custom, daily, author, message.getMentionedUsers().get(0));
+			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), bet, custom, daily, author, message.getMentionedUsers().get(0));
 			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
