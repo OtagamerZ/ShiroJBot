@@ -370,11 +370,15 @@ public class Account {
 
     public String getUltimate() {
         if (ultimate != null && !ultimate.isBlank()) {
-            Kawaipon kp = KawaiponDAO.getKawaipon(userId);
+            try {
+                Kawaipon kp = KawaiponDAO.getKawaipon(userId);
 
-            AnimeName an = AnimeName.valueOf(ultimate);
-            if (CardDAO.totalCards(an) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an) && !k.isFoil()).count())
-                return ultimate;
+                AnimeName an = AnimeName.valueOf(ultimate);
+                if (CardDAO.totalCards(an) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an) && !k.isFoil()).count())
+                    return ultimate;
+            } catch (IllegalArgumentException e) {
+                return "";
+            }
         }
         return "";
     }
