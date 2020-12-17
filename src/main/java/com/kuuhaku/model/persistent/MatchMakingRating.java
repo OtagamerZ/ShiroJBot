@@ -157,6 +157,18 @@ public class MatchMakingRating {
 		rankPoints -= Math.max(rpValue, rankPoints);
 	}
 
+	public RankedTier getTier() {
+		return tier;
+	}
+
+	public int getPromLosses() {
+		return promLosses;
+	}
+
+	public int getPromWins() {
+		return promWins;
+	}
+
 	public boolean isBlocked() {
 		if (blockedUntil == null) return false;
 		else if (Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3")))).after(blockedUntil)) {
