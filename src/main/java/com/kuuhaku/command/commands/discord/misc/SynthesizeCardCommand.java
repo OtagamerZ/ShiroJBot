@@ -102,7 +102,7 @@ public class SynthesizeCardCommand extends Command {
 
 		if (foilSynth) {
 			int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum() * 2;
-			List<Field> fs = CardDAO.getAllFields();
+			List<Field> fs = CardDAO.getAllAvailableFields();
 			Field f = fs.get(Helper.rng(fs.size(), true));
 
 			String hash = Helper.generateHash(guild, author);
@@ -123,7 +123,7 @@ public class SynthesizeCardCommand extends Command {
 									AccountDAO.saveAccount(acc);
 
 									if (kp.getFields().size() == 3)
-										channel.sendMessage("❌ | Você já possui 18 equipamentos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
+										channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
 
 									if (dp.getValue().isBlank())
 										tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, true)));
