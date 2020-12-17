@@ -32,6 +32,7 @@ import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.GuildBuff;
 import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -65,11 +66,29 @@ public class MyStatsCommand extends Command {
 		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
 		Kawaigotchi kg = KGotchiDAO.getKawaigotchi(author.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		String exceed = ExceedDAO.getExceed(author.getId());
 		Set<Tag> tags = Tag.getTags(author, member);
 
-		eb.setTitle(":clipboard: | Status");
+		eb.setTitle(":clipboard: | Status")
+				.addField("Ranking no Shoukan", mmr.getTier().getName(), false);
+
+		if (mmr.getRankPoints() == 100) {
+			StringBuilder sb = new StringBuilder();
+
+			for (int i = 0; i < mmr.getPromWins(); i++)
+				sb.append(TagIcons.RANKED_WIN.getTag(0).trim());
+
+			for (int i = 0; i < mmr.getPromLosses(); i++)
+				sb.append(TagIcons.RANKED_LOSE.getTag(0).trim());
+
+			for (int i = 0; i < mmr.getTier().getMd() - (mmr.getPromWins() + mmr.getPromLosses()); i++)
+				sb.append(TagIcons.RANKED_PENDING.getTag(0).trim());
+
+			eb.addField("Progresso para o próximo tier", sb.toString(), false);
+		} else
+			eb.addField("Progresso para o próximo tier", mmr.getRankPoints() + "/100 Pontos de Ranking", false);
 
 		boolean victorious = Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
 		boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author));

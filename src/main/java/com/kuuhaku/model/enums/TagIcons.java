@@ -35,42 +35,48 @@ public enum TagIcons {
 	TOXIC,
 	MARRIED,
     RICH,
-    COLLECTION25,
-    COLLECTION50,
-    COLLECTION75,
-    COLLECTION100,
-    FOIL25,
-    FOIL50,
-    FOIL75,
-    FOIL100,
-    LEVEL,
-    EXCEED_CHAMPION,
-    BUGHUNTER;
+	COLLECTION25,
+	COLLECTION50,
+	COLLECTION75,
+	COLLECTION100,
+	FOIL25,
+	FOIL50,
+	FOIL75,
+	FOIL100,
+	LEVEL,
+	EXCEED_CHAMPION,
+	BUGHUNTER,
+	RANKED_WIN,
+	RANKED_LOSE,
+	RANKED_PENDING;
 
-    public String getTag(int lvl) {
-        return switch (this) {
-            case NIICHAN -> "<:niichan:697879726018003115> ";
-            case DEV -> "<:developer:697879725925990466> ";
-            case SUPPORT -> "<:support:697879726047625216> ";
-            case EDITOR -> "<:writer:697879725497909310> ";
-            case READER -> "<:reader:697879726148288542> ";
-            case MODERATOR -> "<:moderator:697879725628194878> ";
-            case VERIFIED -> "<:verified:697879725887979621> ";
+	public String getTag(int lvl) {
+		return switch (this) {
+			case NIICHAN -> "<:niichan:697879726018003115> ";
+			case DEV -> "<:developer:697879725925990466> ";
+			case SUPPORT -> "<:support:697879726047625216> ";
+			case EDITOR -> "<:writer:697879725497909310> ";
+			case READER -> "<:reader:697879726148288542> ";
+			case MODERATOR -> "<:moderator:697879725628194878> ";
+			case VERIFIED -> "<:verified:697879725887979621> ";
 			case TOXIC -> "<:toxic:697879725816676442> ";
 			case MARRIED -> "<:married:697879725888241684> ";
 			case RICH -> "<:rich:718447753944105012> ";
             case COLLECTION25 -> "<:collection_25:724662152366915636> ";
-            case COLLECTION50 -> "<:collection_50:724662153570812446> ";
-            case COLLECTION75 -> "<:collection_75:724662152602058762> ";
-            case COLLECTION100 -> "<:collection_100:724662152824225862> ";
-            case FOIL25 -> "<:foil_25:747511886186151956> ";
-            case FOIL50 -> "<:foil_50:747511886035026092> ";
-            case FOIL75 -> "<:foil_75:747511886202798192> ";
-            case FOIL100 -> "<:foil_100:747511886307655770> ";
-            case LEVEL -> getLevelEmote(lvl).getAsMention() + " ";
-            case EXCEED_CHAMPION -> "<:exceed_champion:755126333482336326> ";
-            case BUGHUNTER -> "<:bughunter:775923780643061780> ";
-        };
+			case COLLECTION50 -> "<:collection_50:724662153570812446> ";
+			case COLLECTION75 -> "<:collection_75:724662152602058762> ";
+			case COLLECTION100 -> "<:collection_100:724662152824225862> ";
+			case FOIL25 -> "<:foil_25:747511886186151956> ";
+			case FOIL50 -> "<:foil_50:747511886035026092> ";
+			case FOIL75 -> "<:foil_75:747511886202798192> ";
+			case FOIL100 -> "<:foil_100:747511886307655770> ";
+			case LEVEL -> getLevelEmote(lvl).getAsMention() + " ";
+			case EXCEED_CHAMPION -> "<:exceed_champion:755126333482336326> ";
+			case BUGHUNTER -> "<:bughunter:775923780643061780> ";
+			case RANKED_WIN -> "<:ranked_lose:789231689820930048> ";
+			case RANKED_LOSE -> "<:ranked_pending:789231687950663691> ";
+			case RANKED_PENDING -> "<:ranked_win:789231688122236939> ";
+		};
 	}
 
 	public String getId(int lvl) {
@@ -86,17 +92,20 @@ public enum TagIcons {
 			case MARRIED -> "697879725888241684";
 			case RICH -> "718447753944105012";
             case COLLECTION25 -> "724662152366915636";
-            case COLLECTION50 -> "724662153570812446";
-            case COLLECTION75 -> "724662152602058762";
-            case COLLECTION100 -> "724662152824225862";
-            case FOIL25 -> "747511886186151956";
-            case FOIL50 -> "747511886035026092";
-            case FOIL75 -> "747511886202798192";
-            case FOIL100 -> "74751188630765577";
-            case LEVEL -> getLevelEmote(lvl).getId();
-            case EXCEED_CHAMPION -> "755126333482336326";
-            case BUGHUNTER -> "775923780643061780";
-        };
+			case COLLECTION50 -> "724662153570812446";
+			case COLLECTION75 -> "724662152602058762";
+			case COLLECTION100 -> "724662152824225862";
+			case FOIL25 -> "747511886186151956";
+			case FOIL50 -> "747511886035026092";
+			case FOIL75 -> "747511886202798192";
+			case FOIL100 -> "74751188630765577";
+			case LEVEL -> getLevelEmote(lvl).getId();
+			case EXCEED_CHAMPION -> "755126333482336326";
+			case BUGHUNTER -> "775923780643061780";
+			case RANKED_WIN -> "789231689820930048";
+			case RANKED_LOSE -> "789231687950663691";
+			case RANKED_PENDING -> "789231688122236939";
+		};
 	}
 
 	public static String getExceed(ExceedEnum t) {
