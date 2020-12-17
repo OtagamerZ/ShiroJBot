@@ -13,11 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/charm/soullink.png" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo amuleto: Vínculo espiritual">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,17 +166,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -938,14 +926,8 @@
       <workItem from="1608034113876" duration="6519000" />
       <workItem from="1608048891064" duration="7907000" />
       <workItem from="1608058016059" duration="5366000" />
-      <workItem from="1608120077619" duration="18832000" />
-    </task>
-    <task id="LOCAL-03109" summary="Correções e melhorias sugeridas">
-      <created>1607885952553</created>
-      <option name="number" value="03109" />
-      <option name="presentableId" value="LOCAL-03109" />
-      <option name="project" value="LOCAL" />
-      <updated>1607885952553</updated>
+      <workItem from="1608120077619" duration="19727000" />
+      <workItem from="1608206524198" duration="349000" />
     </task>
     <task id="LOCAL-03110" summary="Correções e melhorias sugeridas">
       <created>1607886108455</created>
@@ -1283,7 +1265,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608144730191</updated>
     </task>
-    <option name="localTasksCounter" value="3158" />
+    <task id="LOCAL-03158" summary="Novo amuleto: Vínculo espiritual">
+      <created>1608146363863</created>
+      <option name="number" value="03158" />
+      <option name="presentableId" value="LOCAL-03158" />
+      <option name="project" value="LOCAL" />
+      <updated>1608146363863</updated>
+    </task>
+    <option name="localTasksCounter" value="3159" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1369,7 +1358,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção na síntese de equipamentos" />
     <MESSAGE value="Adição de ID do usuário no log de comandos" />
     <MESSAGE value="Adição do comando de auditoria" />
     <MESSAGE value="Correção menor" />
@@ -1394,7 +1382,8 @@
     <MESSAGE value="Adição de lista de raças" />
     <MESSAGE value="Adição de lista de raças Senshi" />
     <MESSAGE value="Novo campo: Infinite Tsukuyomi" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novo campo: Infinite Tsukuyomi" />
+    <MESSAGE value="Novo amuleto: Vínculo espiritual" />
+    <option name="LAST_COMMIT_MESSAGE" value="Novo amuleto: Vínculo espiritual" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1456,10 +1445,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608144724739">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608146362758">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608144724739" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608146362758" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1607728513022">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1508,10 +1497,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608144735006">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608146365390">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608144735006" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608146365390" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607912241021" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
