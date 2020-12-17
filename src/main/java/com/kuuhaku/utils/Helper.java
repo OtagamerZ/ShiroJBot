@@ -1432,9 +1432,9 @@ public class Helper {
 						for (int i = 0; i < prizes.size(); i++) {
 							Prize prize = prizes.get(i);
 							if (prize instanceof CreditDrop)
-								eb.addField("Presente " + (i + 1) + ":", prize.getPrize() + " créditos", true);
+								neb.addField("Presente " + (i + 1) + ":", prize.getPrize() + " créditos", true);
 							else
-								eb.addField("Presente " + (i + 1) + ":", prize.getPrizeAsItem().getName(), true);
+								neb.addField("Presente " + (i + 1) + ":", prize.getPrizeAsItem().getName(), true);
 						}
 
 						AccountDAO.saveAccount(acc);
