@@ -37,6 +37,7 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
+import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.common.drop.CreditDrop;
@@ -1683,6 +1684,10 @@ public class Helper {
 	}
 
 	public static String generateHash(Game game) {
+		return hash((game.hashCode() + "" + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-256");
+	}
+
+	public static String generateHash(GlobalGame game) {
 		return hash((game.hashCode() + "" + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-256");
 	}
 

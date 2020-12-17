@@ -24,8 +24,10 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.events.SimpleMessageListener;
+import com.kuuhaku.handlers.games.tabletop.ClusterAction;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
-import com.kuuhaku.handlers.games.tabletop.framework.Game;
+import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
+import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
@@ -36,12 +38,11 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -57,9 +58,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Shoukan extends Game {
+public class Shoukan extends GlobalGame {
 	private final Map<Side, Hand> hands;
-	private final TextChannel channel;
+	private final GameChannel channel;
 	private final Arena arena = new Arena();
 	private final SimpleMessageListener listener = new SimpleMessageListener() {
 		@Override
@@ -76,7 +77,7 @@ public class Shoukan extends Game {
 	private Side current = Side.BOTTOM;
 	private Side next = Side.TOP;
 
-	public Shoukan(ShardManager handler, TextChannel channel, int bet, JSONObject custom, boolean daily, User... players) {
+	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, custom);
 		this.channel = channel;
 		this.daily = daily;
@@ -124,7 +125,9 @@ public class Shoukan extends Game {
 				.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 				.queue(s -> {
 					this.message = s;
-					Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), listener);
+					for (Guild guild : channel.getGuilds()) {
+						Main.getInfo().getShiroEvents().addHandler(guild, listener);
+					}
 					h.showHand();
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
@@ -132,7 +135,7 @@ public class Shoukan extends Game {
 
 	@Override
 	public boolean canInteract(GuildMessageReceivedEvent evt) {
-		Predicate<GuildMessageReceivedEvent> condition = e -> e.getChannel().getId().equals(channel.getId());
+		Predicate<GuildMessageReceivedEvent> condition = e -> channel.getGuilds().stream().anyMatch(g -> e.getChannel().getId().equals(g.getId()));
 
 		return condition
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
@@ -187,7 +190,7 @@ public class Shoukan extends Game {
 						return;
 					}
 
-					MessageAction act;
+					ClusterAction act;
 					if (c.isFlipped()) {
 						c.setFlipped(false);
 						act = channel.sendMessage("Carta virada para cima em modo de defesa.");
