@@ -86,7 +86,7 @@ public class ShoukanCommand extends Command {
 
 			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), 0, custom, daily, false, author, author);
 			t.start();
-		} else if (ranked) {
+		} else if (ranked && ShiroInfo.getStaff().contains(author)) {
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			if (kp.getChampions().size() < 30) {
 				channel.sendMessage("❌ | É necessário ter ao menos 30 cartas no deck para poder jogar Shoukan.").queue();
