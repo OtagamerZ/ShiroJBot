@@ -22,6 +22,7 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
+import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
@@ -50,9 +51,9 @@ public class EffectParameters {
 	private final Map<Side, List<SlotColumn<Champion, Equipment>>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
 	private final Duelists duelists;
-	private final TextChannel channel;
+	private final GameChannel channel;
 
-	public EffectParameters(Phase phase, EffectTrigger trigger, Shoukan shoukan, int index, Side side, Duelists duelists, TextChannel channel) {
+	public EffectParameters(Phase phase, EffectTrigger trigger, Shoukan shoukan, int index, Side side, Duelists duelists, GameChannel channel) {
 		this.phase = phase;
 		this.trigger = trigger;
 		this.shoukan = shoukan;
@@ -133,33 +134,35 @@ public class EffectParameters {
 		return types;
 	}
 
-	public TextChannel getChannel() {
+	public GameChannel getChannel() {
 		return channel;
 	}
 
 	public void sendWebhookMessage(String message, String gif, Champion champion) {
-		try {
-			Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
-			Card c = champion.getCard();
-
-			WebhookMessageBuilder wmb = new WebhookMessageBuilder()
-					.setContent(message)
-					.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().name()))
-					.setUsername(c.getName());
-
-			if (gif != null) {
-				InputStream is = this.getClass().getClassLoader().getResourceAsStream("shoukan/gifs/" + gif + ".gif");
-				if (is != null) wmb.addFile("effect.gif", is);
-			}
-
+		for (TextChannel channel : channel.getChannels()) {
 			try {
-				if (wh == null) return;
-				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
-				wc.send(wmb.build()).get();
-			} catch (InterruptedException | ExecutionException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
+				Card c = champion.getCard();
+
+				WebhookMessageBuilder wmb = new WebhookMessageBuilder()
+						.setContent(message)
+						.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().name()))
+						.setUsername(c.getName());
+
+				if (gif != null) {
+					InputStream is = this.getClass().getClassLoader().getResourceAsStream("shoukan/gifs/" + gif + ".gif");
+					if (is != null) wmb.addFile("effect.gif", is);
+				}
+
+				try {
+					if (wh == null) return;
+					WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
+					wc.send(wmb.build()).get();
+				} catch (InterruptedException | ExecutionException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
+			} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
 			}
-		} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
 		}
 	}
 }
