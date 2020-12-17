@@ -94,8 +94,7 @@ public enum RankedTier {
 
 	public RankedTier getPrevious() {
 		return switch (this) {
-			case UNRANKED -> null;
-			case MINARAI_IV -> null;
+			case UNRANKED, MINARAI_IV -> null;
 			case MINARAI_III -> MINARAI_IV;
 			case MINARAI_II -> MINARAI_III;
 			case MINARAI_I -> MINARAI_II;
