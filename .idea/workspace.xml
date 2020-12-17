@@ -14,7 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -925,14 +926,7 @@
       <workItem from="1608048891064" duration="7907000" />
       <workItem from="1608058016059" duration="5366000" />
       <workItem from="1608120077619" duration="19727000" />
-      <workItem from="1608206524198" duration="1480000" />
-    </task>
-    <task id="LOCAL-03113" summary="Adição de GIF no resultado do padoru drop">
-      <created>1607908550739</created>
-      <option name="number" value="03113" />
-      <option name="presentableId" value="LOCAL-03113" />
-      <option name="project" value="LOCAL" />
-      <updated>1607908550739</updated>
+      <workItem from="1608206524198" duration="2525000" />
     </task>
     <task id="LOCAL-03114" summary="Adição de GIF no resultado do padoru drop">
       <created>1607909535010</created>
@@ -1270,7 +1264,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608207850172</updated>
     </task>
-    <option name="localTasksCounter" value="3162" />
+    <task id="LOCAL-03162" summary="Correções menores">
+      <created>1608208045105</created>
+      <option name="number" value="03162" />
+      <option name="presentableId" value="LOCAL-03162" />
+      <option name="project" value="LOCAL" />
+      <updated>1608208045105</updated>
+    </task>
+    <option name="localTasksCounter" value="3163" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1443,14 +1444,14 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608207849345">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608208044314">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608207849345" />
-    <state x="105" y="95" width="1710" height="851" key="DiffContextDialog" timestamp="1607728513022">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608208044314" />
+    <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605528924821" />
+    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608208920619" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728513022" />
     <state width="1648" height="322" key="GridCell.Tab.0.bottom" timestamp="1607798774138">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1477,10 +1478,10 @@
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1607347986126" />
     <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1603507846095" />
-    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1608049940928">
+    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1608208921507">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608049940928" />
+    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608208921507" />
     <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607912205537" />
     <state x="303" y="75" key="SettingsEditor" timestamp="1606877192402">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1495,10 +1496,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608207851575">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608208046198">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608207851575" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608208046198" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607912241021" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
