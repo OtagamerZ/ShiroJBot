@@ -28,6 +28,7 @@ import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.ExceedEnum;
+import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.GuildBuff;
@@ -74,7 +75,7 @@ public class MyStatsCommand extends Command {
 		eb.setTitle(":clipboard: | Status")
 				.addField("Ranking no Shoukan", mmr.getTier().getName(), false);
 
-		if (mmr.getRankPoints() == 100) {
+		if (mmr.getRankPoints() == 100 || mmr.getTier() == RankedTier.UNRANKED) {
 			StringBuilder sb = new StringBuilder();
 
 			for (int i = 0; i < mmr.getPromWins(); i++)
