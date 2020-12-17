@@ -251,6 +251,21 @@ public class CardDAO {
     }
 
     @SuppressWarnings("unchecked")
+    public static List<Field> getAllAvailableFields() {
+        EntityManager em = Manager.getEntityManager();
+
+        Query q = em.createQuery("SELECT f FROM Field f WHERE f.effectOnly = FALSE", Field.class);
+
+        try {
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
     public static List<Card> getCardsByAnime(AnimeName anime) {
         EntityManager em = Manager.getEntityManager();
 
