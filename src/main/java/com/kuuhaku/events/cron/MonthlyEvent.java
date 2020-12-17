@@ -38,7 +38,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MonthlyEvent implements Job {
-	public static JobDetail markWinner;
+	public static JobDetail monthly;
 
 	@Override
 	public void execute(JobExecutionContext context) {

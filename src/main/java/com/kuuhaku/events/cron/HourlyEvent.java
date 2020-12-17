@@ -37,7 +37,7 @@ import java.io.File;
 import java.util.List;
 
 public class HourlyEvent implements Job {
-	public static JobDetail backup;
+	public static JobDetail hourly;
 
 	@Override
 	public void execute(JobExecutionContext context) {

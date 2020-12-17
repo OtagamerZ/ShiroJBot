@@ -45,7 +45,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TenthMinuteEvent implements Job {
-	public static JobDetail check;
+	public static JobDetail tenthMinute;
 
 	@Override
 	public void execute(JobExecutionContext context) {
