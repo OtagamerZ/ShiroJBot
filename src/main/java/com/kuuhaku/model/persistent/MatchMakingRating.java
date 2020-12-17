@@ -26,10 +26,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
 import javax.persistence.*;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.temporal.TemporalUnit;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,9 @@ public class MatchMakingRating {
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int promWins = 0;
+
+	@Temporal(TemporalType.DATE)
+	private Date blockedUntil = null;
 
 	public MatchMakingRating(String userId) {
 		this.userId = userId;
@@ -145,6 +149,18 @@ public class MatchMakingRating {
 		}
 
 		rankPoints -= Math.max(rpValue, rankPoints);
+	}
+
+	public boolean isBlocked() {
+		if (blockedUntil == null) return false;
+		else if (Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3")))).after(blockedUntil)) {
+			blockedUntil = null;
+			return false;
+		} else return true;
+	}
+
+	public void block(int time, TemporalUnit unit) {
+		blockedUntil = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))).plus(time, unit));
 	}
 
 	public static Map<Side, Pair<String, Map<String, Integer>>> calcMMR(MatchHistory mh) {
