@@ -167,6 +167,8 @@ public class TenthSecondEvent implements Job {
 					});
 				}
 			}
+
+			Main.getInfo().getMatchMaking().getLobby().computeIfPresent(p1.getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 		}
 	}
 }
