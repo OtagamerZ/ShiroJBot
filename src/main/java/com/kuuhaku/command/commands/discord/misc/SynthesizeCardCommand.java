@@ -127,6 +127,8 @@ public class SynthesizeCardCommand extends Command {
 
 									if (dp.getValue().isBlank())
 										tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, true)));
+									else if (Integer.parseInt(dp.getValue()) >= 1)
+										DynamicParameterDAO.setParam("freeSynth_" + author.getId(), String.valueOf(Integer.parseInt(dp.getValue()) - 1));
 									else
 										DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
 
@@ -202,9 +204,12 @@ public class SynthesizeCardCommand extends Command {
 										channel.sendMessage("❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + change + " créditos.").queue();
 
 									if (dp.getValue().isBlank())
-										tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
+										tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, true)));
+									else if (Integer.parseInt(dp.getValue()) >= 1)
+										DynamicParameterDAO.setParam("freeSynth_" + author.getId(), String.valueOf(Integer.parseInt(dp.getValue()) - 1));
 									else
 										DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+
 									KawaiponDAO.saveKawaipon(kp);
 									s.delete().queue(null, Helper::doNothing);
 									return;
