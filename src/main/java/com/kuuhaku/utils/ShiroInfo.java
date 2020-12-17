@@ -28,6 +28,7 @@ import com.kuuhaku.events.ShiroEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.music.GuildMusicManager;
+import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.Version;
@@ -127,6 +128,7 @@ public class ShiroInfo {
 	private final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 	private final Set<String> gameLock = new HashSet<>();
+	private final MatchMaking matchMaking = new MatchMaking();
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private boolean isLive = false;
 
@@ -281,6 +283,10 @@ public class ShiroInfo {
 		if (!collectionsFolder.exists())
 			collectionsFolder.mkdir();
 		return collectionsFolder;
+	}
+
+	public MatchMaking getMatchMaking() {
+		return matchMaking;
 	}
 
 	//VARIABLES
