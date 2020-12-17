@@ -77,8 +77,8 @@ public class Shoukan extends GlobalGame {
 	private Side current = Side.BOTTOM;
 	private Side next = Side.TOP;
 
-	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, User... players) {
-		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, custom);
+	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, User... players) {
+		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
 		this.channel = channel;
 		this.daily = daily;
 

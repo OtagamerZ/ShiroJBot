@@ -51,6 +51,7 @@ public abstract class GlobalGame {
 	private final GameChannel channel;
 	private final JSONObject custom;
 	private final MatchHistory history = new MatchHistory();
+	private final boolean ranked;
 	private Consumer<Message> onExpiration;
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
@@ -58,19 +59,21 @@ public abstract class GlobalGame {
 	private User current;
 	private boolean closed = false;
 
-	public GlobalGame(ShardManager handler, Board board, GameChannel channel) {
+	public GlobalGame(ShardManager handler, Board board, GameChannel channel, boolean ranked) {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
+		this.ranked = ranked;
 		this.custom = null;
 	}
 
-	public GlobalGame(ShardManager handler, Board board, GameChannel channel, JSONObject custom) {
+	public GlobalGame(ShardManager handler, Board board, GameChannel channel, boolean ranked, JSONObject custom) {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
+		this.ranked = ranked;
 		this.custom = custom;
 	}
 
@@ -258,38 +261,40 @@ public abstract class GlobalGame {
 		if (round > 0 && custom == null) {
 			MatchDAO.saveMatch(history);
 
-			Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcMMR(history);
-			for (Side s : Side.values()) {
-				Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
-				Map<String, Integer> yourResult = result.get(s).getRight();
-				Map<String, Integer> hisResult = result.get(other).getRight();
-				MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(result.get(s).getLeft());
-				MatchMakingRating hisMMR = MatchMakingRatingDAO.getMMR(result.get(other).getLeft());
-				int spentMana = yourResult.get("mana");
-				int damageDealt = hisResult.get("hp");
+			if (ranked) {
+				Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcMMR(history);
+				for (Side s : Side.values()) {
+					Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
+					Map<String, Integer> yourResult = result.get(s).getRight();
+					Map<String, Integer> hisResult = result.get(other).getRight();
+					MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(result.get(s).getLeft());
+					MatchMakingRating hisMMR = MatchMakingRatingDAO.getMMR(result.get(other).getLeft());
+					int spentMana = yourResult.get("mana");
+					int damageDealt = hisResult.get("hp");
 
-				if (history.getWinner() == s) {
-					double manaEff = 1 + Math.max(-0.75, Math.min(spentMana * 0.5 / 5, 0.25));
-					double damageEff = (double) -damageDealt / yourResult.size();
-					double expEff = 5000d / yourResult.size();
-					double sustainEff = 1 + yourResult.get("hp") / 5000f;
-					long mmr = Math.round(250 * manaEff + (125 * (damageEff / expEff) + 125 * sustainEff));
+					if (history.getWinner() == s) {
+						double manaEff = 1 + Math.max(-0.75, Math.min(spentMana * 0.5 / 5, 0.25));
+						double damageEff = (double) -damageDealt / yourResult.size();
+						double expEff = 5000d / yourResult.size();
+						double sustainEff = 1 + yourResult.get("hp") / 5000f;
+						long mmr = Math.round(250 * manaEff + (125 * (damageEff / expEff) + 125 * sustainEff));
 
 
-					yourMMR.addMMR(mmr, hisMMR.getMMR());
-					yourMMR.increaseRankPoints();
-				} else if (history.getWinner() == other) {
-					double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
-					double damageEff = (double) -damageDealt / yourResult.size();
-					double expEff = 5000d / yourResult.size();
-					double sustainEff = 1 + yourResult.get("hp") / 5000d;
-					long mmr = Math.round(250 * manaEff - (125 * (damageEff / expEff) + 125 * sustainEff));
+						yourMMR.addMMR(mmr, hisMMR.getMMR());
+						yourMMR.increaseRankPoints();
+					} else if (history.getWinner() == other) {
+						double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
+						double damageEff = (double) -damageDealt / yourResult.size();
+						double expEff = 5000d / yourResult.size();
+						double sustainEff = 1 + yourResult.get("hp") / 5000d;
+						long mmr = Math.round(250 * manaEff - (125 * (damageEff / expEff) + 125 * sustainEff));
 
-					yourMMR.removeMMR(mmr, hisMMR.getMMR());
-					yourMMR.decreaseRankPoints();
+						yourMMR.removeMMR(mmr, hisMMR.getMMR());
+						yourMMR.decreaseRankPoints();
+					}
+
+					MatchMakingRatingDAO.saveMMR(yourMMR);
 				}
-
-				MatchMakingRatingDAO.saveMMR(yourMMR);
 			}
 		}
 

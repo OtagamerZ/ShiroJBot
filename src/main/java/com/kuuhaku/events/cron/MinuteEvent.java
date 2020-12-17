@@ -39,7 +39,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MinuteEvent implements Job {
-	public static JobDetail unblock;
+	public static JobDetail minute;
 	public static boolean restarting = false;
 
 	@Override
