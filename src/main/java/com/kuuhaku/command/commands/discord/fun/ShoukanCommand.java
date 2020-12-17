@@ -101,6 +101,12 @@ public class ShoukanCommand extends Command {
 			}
 
 			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
+
+			if (Main.getInfo().getMatchMaking().inGame(author.getId())) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+				return;
+			}
+
 			Main.getInfo().getMatchMaking().joinLobby(mmr, (TextChannel) channel);
 			channel.sendMessage("Você entrou no saguão com sucesso, você será notificado caso uma partida seja encontrada.").queue(s ->
 					Pages.buttonize(s, Map.of(
