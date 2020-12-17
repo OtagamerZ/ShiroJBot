@@ -1379,9 +1379,9 @@ public class Helper {
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setDescription("""
-													**Hashire sori yo**
-													**Kaze no you ni**
-													**Tsukimihara wo...**
+							**Hashire sori yo**
+							**Kaze no you ni**
+							**Tsukimihara wo...**
 							""")
 					.setThumbnail("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/assets/padoru.gif")
 					.setTitle("Nero Claudius apareceu trazendo presentes neste servidor!");
@@ -1419,6 +1419,7 @@ public class Helper {
 					if (users.size() > 0) {
 						List<String> ids = new ArrayList<>(users);
 						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
+						logger(Helper.class).info("Padoru drop users: " + users.size());
 
 						Account acc = AccountDAO.getAccount(u.getId());
 						for (Prize prize : prizes) {
