@@ -60,7 +60,7 @@ public class LobbyCommand extends Command {
 		List<List<MatchMakingRating>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getLobby().keySet(), 10);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Saguão do Shoukan ranqueado (" + Main.getInfo().getMatchMaking().getLobby() + " jogadores)");
+				.setTitle("Saguão do Shoukan ranqueado (" + Main.getInfo().getMatchMaking().getLobby().size() + " jogadores)");
 
 		StringBuilder sb = new StringBuilder();
 		for (List<MatchMakingRating> chunk : lobby) {
