@@ -106,9 +106,12 @@ public class MatchMakingRating {
 			promWins++;
 
 			if (promWins + promLosses == tier.getMd()) {
-				tier = RankedTier.MINARAI_IV;
+				tier = RankedTier.APPRENTICE_IV;
 				rankPoints = 0;
 				promWins = promLosses = 0;
+				Main.getInfo().getUserByID(userId).openPrivateChannel()
+						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+						.queue(null, Helper::doNothing);
 				return;
 			}
 			return;
@@ -119,12 +122,15 @@ public class MatchMakingRating {
 				tier = tier.getNext();
 				rankPoints = 0;
 				promWins = promLosses = 0;
+				Main.getInfo().getUserByID(userId).openPrivateChannel()
+						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+						.queue(null, Helper::doNothing);
 				return;
 			}
 			return;
 		}
 
-		if (tier != RankedTier.DAI_MAJUTSU_SHI)
+		if (tier != RankedTier.ARCHMAGE)
 			rankPoints += Math.min(100 - rankPoints, rpValue);
 		else
 			rankPoints += rpValue;
@@ -138,9 +144,12 @@ public class MatchMakingRating {
 			promLosses++;
 
 			if (promWins + promLosses == tier.getMd()) {
-				tier = RankedTier.MINARAI_IV;
+				tier = RankedTier.APPRENTICE_IV;
 				rankPoints = 0;
 				promWins = promLosses = 0;
+				Main.getInfo().getUserByID(userId).openPrivateChannel()
+						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+						.queue(null, Helper::doNothing);
 				return;
 			}
 			return;
@@ -155,9 +164,12 @@ public class MatchMakingRating {
 			return;
 		}
 
-		if (rankPoints == 0 && Helper.chance(20 * mmrModif) && tier != RankedTier.MINARAI_IV) {
+		if (rankPoints == 0 && Helper.chance(20 * mmrModif) && tier != RankedTier.APPRENTICE_IV) {
 			tier = tier.getPrevious();
 			rankPoints = 75;
+			Main.getInfo().getUserByID(userId).openPrivateChannel()
+					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+					.queue(null, Helper::doNothing);
 			return;
 		}
 
