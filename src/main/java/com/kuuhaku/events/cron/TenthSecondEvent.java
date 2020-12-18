@@ -128,8 +128,8 @@ public class TenthSecondEvent implements Job {
 						}
 					});
 
-					Main.getInfo().getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
-						private Future<?> timeout = p1Channel.sendMessage("Tempo para aceitar a partida encerrado, você está impedido de entrar no saguão novamente por 10 minutos.")
+					Main.getInfo().getShiroEvents().addHandler(p2Channel.getGuild(), new SimpleMessageListener() {
+						private Future<?> timeout = p2Channel.sendMessage("Tempo para aceitar a partida encerrado, você está impedido de entrar no saguão novamente por 10 minutos.")
 								.queueAfter(5, TimeUnit.MINUTES, msg -> {
 									p2.getKey().block(10, ChronoUnit.MINUTES);
 									MatchMakingRatingDAO.saveMMR(p2.getKey());
