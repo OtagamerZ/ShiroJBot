@@ -19,7 +19,7 @@
 package com.kuuhaku.model.enums;
 
 public enum RankedTier {
-	UNRANKED(0, "Unranked", 10),
+	UNRANKED(0, "Sem ranking", 10),
 
 	MINARAI_IV(1, "Minarai IV", 3),
 	MINARAI_III(1, "Minarai III", 3),
