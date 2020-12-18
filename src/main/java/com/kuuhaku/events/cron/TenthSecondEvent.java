@@ -50,7 +50,7 @@ public class TenthSecondEvent implements Job {
 		Map<MatchMakingRating, Pair<Integer, TextChannel>> lobby = new HashMap<>(Main.getInfo().getMatchMaking().getLobby());
 		for (Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1 : lobby.entrySet()) {
 			for (Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2 : lobby.entrySet()) {
-				if (!p1.equals(p2) && p1.getKey().getMMR() * 100 / p2.getKey().getMMR() <= p1.getValue().getLeft()) {
+				if (!p1.equals(p2) && p1.getKey().getMMR() * 100 / (p2.getKey().getMMR() == 0 ? 1 : p2.getKey().getMMR()) <= p1.getValue().getLeft()) {
 					Main.getInfo().getMatchMaking().getLobby().remove(p1.getKey());
 					Main.getInfo().getMatchMaking().getLobby().remove(p2.getKey());
 
@@ -95,7 +95,7 @@ public class TenthSecondEvent implements Job {
 								.queueAfter(5, TimeUnit.MINUTES, msg -> {
 									p1.getKey().block(10, ChronoUnit.MINUTES);
 									MatchMakingRatingDAO.saveMMR(p1.getKey());
-									match.addSignature(match.getSignatures().size() + 1, Pair.of(p1, false));
+									match.addSignature(0, Pair.of(p1, false));
 									close();
 								});
 
@@ -121,7 +121,7 @@ public class TenthSecondEvent implements Job {
 									.flatMap(s -> p2Channel.sendMessage("%s aceitou a partida.".formatted(p1.getKey().getUser().getName())))
 									.queue();
 
-							match.addSignature(match.getSignatures().size() + 1, Pair.of(p1, true));
+							match.addSignature(0, Pair.of(p1, true));
 							timeout.cancel(true);
 							timeout = null;
 							close();
@@ -133,7 +133,7 @@ public class TenthSecondEvent implements Job {
 								.queueAfter(5, TimeUnit.MINUTES, msg -> {
 									p2.getKey().block(10, ChronoUnit.MINUTES);
 									MatchMakingRatingDAO.saveMMR(p2.getKey());
-									match.addSignature(match.getSignatures().size() + 1, Pair.of(p2, false));
+									match.addSignature(0, Pair.of(p2, false));
 									close();
 								});
 
@@ -159,7 +159,7 @@ public class TenthSecondEvent implements Job {
 									.flatMap(s -> p1Channel.sendMessage("%s aceitou a partida.".formatted(p2.getKey().getUser().getName())))
 									.queue();
 
-							match.addSignature(match.getSignatures().size() + 1, Pair.of(p2, true));
+							match.addSignature(0, Pair.of(p2, true));
 							timeout.cancel(true);
 							timeout = null;
 							close();
