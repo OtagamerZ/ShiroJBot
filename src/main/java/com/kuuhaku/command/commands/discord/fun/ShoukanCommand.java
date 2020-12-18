@@ -114,7 +114,7 @@ public class ShoukanCommand extends Command {
 								Main.getInfo().getMatchMaking().getLobby().remove(mmr);
 								ms.delete().queue();
 							}
-					), false)
+					), false, 30, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 			);
 		} else {
 			if (message.getMentionedUsers().size() == 0) {
