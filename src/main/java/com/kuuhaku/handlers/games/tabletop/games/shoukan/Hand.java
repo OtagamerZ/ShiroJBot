@@ -88,7 +88,7 @@ public class Hand {
 			if (!game.getCustom().optBoolean("semfield", false))
 				getDeque().removeIf(d -> d instanceof Field);
 			if (game.getCustom().optBoolean("roleta", false)) {
-				this.deque.clear();
+				this.deque.removeIf(d -> d instanceof Champion);
 				this.deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
 			}
 		} else {
