@@ -49,6 +49,7 @@ public class TenthSecondEvent implements Job {
 	@Override
 	public void execute(JobExecutionContext context) {
 		Map<MatchMakingRating, Pair<Integer, TextChannel>> lobby = new HashMap<>(Main.getInfo().getMatchMaking().getLobby());
+		if (lobby.size() == 1) return;
 		for (Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1 : lobby.entrySet()) {
 			for (Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2 : lobby.entrySet()) {
 				if (!p1.equals(p2) && p1.getKey().getMMR() * 100 / (p2.getKey().getMMR() == 0 ? 1 : p2.getKey().getMMR()) <= p1.getValue().getLeft()) {
@@ -60,7 +61,6 @@ public class TenthSecondEvent implements Job {
 					List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
 
 					Runnable result = () -> {
-						System.out.println("Done");
 						System.gc();
 
 						if (match.stream().allMatch(Pair::getRight)) {
