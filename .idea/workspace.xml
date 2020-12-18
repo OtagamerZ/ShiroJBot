@@ -14,6 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -928,13 +929,6 @@
       <workItem from="1608206524198" duration="11242000" />
       <workItem from="1608224693076" duration="12272000" />
     </task>
-    <task id="LOCAL-03140" summary="Adição de novo GIF para o Archer">
-      <created>1608052860471</created>
-      <option name="number" value="03140" />
-      <option name="presentableId" value="LOCAL-03140" />
-      <option name="project" value="LOCAL" />
-      <updated>1608052860471</updated>
-    </task>
     <task id="LOCAL-03141" summary="Novo campo: Unlimited Blade Works">
       <created>1608054184562</created>
       <option name="number" value="03141" />
@@ -1271,7 +1265,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608300712004</updated>
     </task>
-    <option name="localTasksCounter" value="3189" />
+    <task id="LOCAL-03189" summary="Implementação do modo raqueado concluìdo, início do public beta">
+      <created>1608301482909</created>
+      <option name="number" value="03189" />
+      <option name="presentableId" value="LOCAL-03189" />
+      <option name="project" value="LOCAL" />
+      <updated>1608301482909</updated>
+    </task>
+    <option name="localTasksCounter" value="3190" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1444,10 +1445,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608300711220">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608301481917">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608300711220" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608301481917" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1496,10 +1497,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608300715701">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608301484460">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608300715701" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608301484460" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608242114243" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
