@@ -85,6 +85,21 @@ public class MatchMakingRatingDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<MatchMakingRating> getMMRRank(RankedTier tier) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT mmr FROM MatchMakingRating mmr WHERE mmr.tier = :tier ORDER BY mmr.rankPoints DESC, mmr.promWins + mmr.promLosses DESC", MatchMakingRating.class);
+		q.setParameter("tier", tier);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static double getAverageMMR(RankedTier tier) {
 		EntityManager em = Manager.getEntityManager();
 
