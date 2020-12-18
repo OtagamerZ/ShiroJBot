@@ -25,6 +25,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
@@ -86,7 +87,13 @@ public class ShoukanCommand extends Command {
 
 			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), 0, custom, daily, false, author, author);
 			t.start();
-		} else if (ranked && ShiroInfo.getStaff().contains(author.getId())) {
+		} else if (ranked) {
+			com.kuuhaku.model.persistent.Member m = MemberDAO.getHighestProfile(author.getId());
+			if (m.getLevel() < 30) {
+				channel.sendMessage("❌ | É necessário ter ao menos nível 30 para poder jogar partidas ranqueadas.").queue();
+				return;
+			}
+
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			if (kp.getChampions().size() < 30) {
 				channel.sendMessage("❌ | É necessário ter ao menos 30 cartas no deck para poder jogar Shoukan.").queue();
