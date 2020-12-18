@@ -57,7 +57,7 @@ public class MatchMakingRating {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int promWins = 0;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date blockedUntil = null;
 
 	public MatchMakingRating(String userId) {
