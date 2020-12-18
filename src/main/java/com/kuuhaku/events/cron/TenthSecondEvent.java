@@ -105,7 +105,6 @@ public class TenthSecondEvent implements Job {
 										Main.getInfo().getMatchMaking().getLobby().put(p.getLeft().getKey(), newPair);
 									}
 								}
-
 							}
 						};
 
