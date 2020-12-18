@@ -327,7 +327,7 @@ public class ShiroEvents extends ListenerAdapter {
 										}, Helper::doNothing);
 									}
 								}, Helper::doNothing);
-							} catch (IllegalArgumentException e) {
+							} catch (IllegalArgumentException | InsufficientPermissionException e) {
 								Map<String, Object> cl = gc.getCargoslvl();
 								cl.remove(String.valueOf(i));
 								GuildDAO.updateGuildSettings(gc);

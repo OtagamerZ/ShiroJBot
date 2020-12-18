@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções nas novas mudanças">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções nas novas mudanças" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -929,13 +927,6 @@
       <workItem from="1608224693076" duration="12272000" />
       <workItem from="1608307554659" duration="10840000" />
     </task>
-    <task id="LOCAL-03159" summary="Correções menores">
-      <created>1608206889227</created>
-      <option name="number" value="03159" />
-      <option name="presentableId" value="LOCAL-03159" />
-      <option name="project" value="LOCAL" />
-      <updated>1608206889228</updated>
-    </task>
     <task id="LOCAL-03160" summary="Correções menores">
       <created>1608207692616</created>
       <option name="number" value="03160" />
@@ -1272,7 +1263,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608318978946</updated>
     </task>
-    <option name="localTasksCounter" value="3208" />
+    <task id="LOCAL-03208" summary="Correções nas novas mudanças">
+      <created>1608329998701</created>
+      <option name="number" value="03208" />
+      <option name="presentableId" value="LOCAL-03208" />
+      <option name="project" value="LOCAL" />
+      <updated>1608329998702</updated>
+    </task>
+    <option name="localTasksCounter" value="3209" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1377,13 +1375,13 @@
     <MESSAGE value="Adição de quebra de linha nos comandos que usam webhook" />
     <MESSAGE value="Adição de suporte para Shoukan inter-servidor" />
     <MESSAGE value="Adição de ranqueadas para o Shoukan" />
-    <MESSAGE value="Correções nas novas mudanças" />
     <MESSAGE value="Implementação do modo raqueado concluìdo, início do public beta" />
     <MESSAGE value="Melhorias gerais" />
     <MESSAGE value="Adição dos comandos para ver o lobby e o ranking do Shoukan ranqueado" />
     <MESSAGE value="Mudança nos nomes dos tiers" />
     <MESSAGE value="Adição do minigame de roleta no Shoukan personalizado" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição do minigame de roleta no Shoukan personalizado" />
+    <MESSAGE value="Correções nas novas mudanças" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções nas novas mudanças" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1497,11 +1495,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608318980847">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608330000212">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608242114243" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608330000212" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
