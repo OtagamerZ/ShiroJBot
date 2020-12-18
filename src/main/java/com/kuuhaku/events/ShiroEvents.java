@@ -316,18 +316,18 @@ public class ShiroEvents extends ListenerAdapter {
 									if (finalLvlChannel != null) {
 										finalLvlChannel.getHistory().retrievePast(5).queue(m -> {
 											if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-												finalLvlChannel.sendMessage(content).queue();
+												finalLvlChannel.sendMessage(content).queue(null, Helper::doNothing);
 											}
 										}, Helper::doNothing);
 									} else {
 										channel.getHistory().retrievePast(5).queue(m -> {
 											if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-												channel.sendMessage(content).queue();
+												channel.sendMessage(content).queue(null, Helper::doNothing);
 											}
 										}, Helper::doNothing);
 									}
 								}, Helper::doNothing);
-							} catch (IllegalArgumentException | InsufficientPermissionException e) {
+							} catch (IllegalArgumentException e) {
 								Map<String, Object> cl = gc.getCargoslvl();
 								cl.remove(String.valueOf(i));
 								GuildDAO.updateGuildSettings(gc);
