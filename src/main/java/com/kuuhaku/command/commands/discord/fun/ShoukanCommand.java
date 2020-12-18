@@ -122,8 +122,13 @@ public class ShoukanCommand extends Command {
 							Helper.CANCEL, (mb, ms) -> {
 								Main.getInfo().getMatchMaking().getLobby().remove(mmr);
 								ms.delete().queue();
+							}), false, 30, TimeUnit.MINUTES
+							, u -> u.getId().equals(author.getId())
+							, ms -> {
+								Main.getInfo().getMatchMaking().getLobby().remove(mmr);
+								ms.delete().queue();
 							}
-					), false, 30, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+					)
 			);
 		} else {
 			if (message.getMentionedUsers().size() == 0) {
