@@ -170,7 +170,7 @@ public class CommandManager {
 
 			//MODERATION
 			put(RemoveAnswerCommand.class, new Argument(
-					"nãofale", "req_id-nothing", "cmd_remove-answer", MODERACAO, false
+					"naofale", "req_id-nothing", "cmd_remove-answer", MODERACAO, false
 			));
 			put(SettingsCommand.class, new Argument(
 					"settings", new String[]{"definicoes", "parametros", "configs"}, "req_parameter", "cmd_settings", MODERACAO, false
@@ -330,6 +330,12 @@ public class CommandManager {
 			put(DeckEvalCommand.class, new Argument(
 					"avaliardeck", new String[]{"deckeval"}, "cmd_deck-eval", INFO, false
 			));
+			put(LobbyCommand.class, new Argument(
+					"saguao", new String[]{"lobby"}, "cmd_lobby", INFO, true
+			));
+			put(TierCommand.class, new Argument(
+					"liga", new String[]{"tier", "ranked"}, "cmd_tier", INFO, true
+			));
 
 			//MISC
 			put(BackgroundCommand.class, new Argument(
@@ -462,7 +468,7 @@ public class CommandManager {
 					"sintetizar", new String[]{"synthesize", "synth"}, "req_cards-type", "cmd_synthesize-card", MISC, true
 			));
 			put(AuctionCommand.class, new Argument(
-					"leilão", new String[]{"auction", "leilao", "auct"}, "req_card-type-price", "cmd_auction", MISC, true
+					"leilao", new String[]{"auction", "auct"}, "req_card-type-price", "cmd_auction", MISC, true
 			));
 			put(ProfileTrophyCommand.class, new Argument(
 					"trofeu", new String[]{"trophy"}, "req_id-reset", "cmd_trophy", MISC, true
@@ -622,13 +628,13 @@ public class CommandManager {
 					"dançar", new String[]{"dancar", "dance", "tuts"}, "cmd_dance", false, "dance"
 			));
 			put(FacedeskReaction.class, new ReactionArgument(
-					"facedesk", new String[]{"mds", "ahnão", "nss"}, "cmd_facedesk", false, "facedesk"
+					"facedesk", new String[]{"mds", "ahnao", "nss"}, "cmd_facedesk", false, "facedesk"
 			));
 			put(LaughReaction.class, new ReactionArgument(
 					"rir", new String[]{"kkk", "laugh", "aiai"}, "cmd_laugh", false, "laugh"
 			));
 			put(NopeReaction.class, new ReactionArgument(
-					"nope", new String[]{"sqn", "hojenão", "esquiva"}, "cmd_nope", false, "nope"
+					"nope", new String[]{"sqn", "hojenao", "esquiva"}, "cmd_nope", false, "nope"
 			));
 			put(RunReaction.class, new ReactionArgument(
 					"corre", new String[]{"saisai", "run", "foge"}, "cmd_run", false, "run"
