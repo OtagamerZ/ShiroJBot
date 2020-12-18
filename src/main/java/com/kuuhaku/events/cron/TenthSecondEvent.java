@@ -59,10 +59,10 @@ public class TenthSecondEvent implements Job {
 					NContract<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new NContract<>(2);
 
 					match.setAction(bs -> {
+						System.out.println("Done");
 						System.gc();
 
 						if (bs.stream().allMatch(Pair::getRight)) {
-							System.out.println("Done");
 							GlobalGame g = new Shoukan(
 									Main.getShiroShards(),
 									new GameChannel(p1Channel, p2Channel),
