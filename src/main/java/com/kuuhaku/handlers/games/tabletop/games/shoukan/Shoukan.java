@@ -38,7 +38,6 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -134,9 +133,7 @@ public class Shoukan extends GlobalGame {
 				.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 				.queue(s -> {
 					this.message.put(s.getChannel().getId(), s);
-					for (Guild guild : channel.getGuilds()) {
-						Main.getInfo().getShiroEvents().addHandler(guild, listener);
-					}
+					Main.getInfo().getShiroEvents().addHandler(s.getGuild(), listener);
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					if (!shownHand.get()) {
 						shownHand.set(true);
