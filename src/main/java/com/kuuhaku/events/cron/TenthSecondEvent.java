@@ -18,6 +18,7 @@
 
 package com.kuuhaku.events.cron;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.events.SimpleMessageListener;
@@ -84,7 +85,19 @@ public class TenthSecondEvent implements Job {
 							} else {
 								for (Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean> p : match) {
 									if (p.getRight()) {
-										p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue();
+										p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue(s ->
+												Pages.buttonize(s, Map.of(
+														Helper.CANCEL, (mb, ms) -> {
+															Main.getInfo().getMatchMaking().getLobby().remove(p.getLeft().getKey());
+															ms.delete().queue();
+														}), false, 30, TimeUnit.MINUTES
+														, u -> u.getId().equals(p.getLeft().getKey().getUserId())
+														, ms -> {
+															Main.getInfo().getMatchMaking().getLobby().remove(p.getLeft().getKey());
+															ms.delete().queue();
+														}
+												)
+										);
 										Pair<Integer, TextChannel> newPair = Pair.of(
 												p.getLeft().getValue().getLeft() + 1,
 												p.getLeft().getValue().getRight()
