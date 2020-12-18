@@ -94,7 +94,6 @@ public class Hand {
 					this.deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
 				}
 				case "blackrock" -> {
-					game.getArena().setField(CardDAO.getField("OTHERWORLD"));
 					this.deque.removeIf(d -> d instanceof Champion || d instanceof Field);
 					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("MATO_KUROI")));
 					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("SAYA_IRINO")));
