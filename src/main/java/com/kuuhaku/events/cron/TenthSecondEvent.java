@@ -58,7 +58,7 @@ public class TenthSecondEvent implements Job {
 					Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1 = lobby.get(a);
 					Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2 = lobby.get(b);
 
-					if (!p1.equals(p2) && Math.abs(p1.getKey().getMMR() * 100 / (p2.getKey().getMMR() == 0 ? 1 : p2.getKey().getMMR())) <= p1.getValue().getLeft()) {
+					if (!p1.equals(p2) && Math.abs(p1.getKey().getMMR() * 100d / (p2.getKey().getMMR() == 0 ? 1 : p2.getKey().getMMR())) <= p1.getValue().getLeft() * 5) {
 						Main.getInfo().getMatchMaking().getLobby().remove(p1.getKey());
 						Main.getInfo().getMatchMaking().getLobby().remove(p2.getKey());
 
