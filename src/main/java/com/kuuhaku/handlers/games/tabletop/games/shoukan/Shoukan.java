@@ -99,13 +99,12 @@ public class Shoukan extends GlobalGame {
 				s -> {
 					close();
 					channel.sendFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue(msg -> {
-								this.message.compute(msg.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return msg;
-								});
-							});
+							.queue(msg ->
+									this.message.compute(msg.getChannel().getId(), (id, m) -> {
+										if (m != null)
+											m.delete().queue(null, Helper::doNothing);
+										return msg;
+									}));
 				},
 				s -> {
 					if (custom == null) {
@@ -113,13 +112,12 @@ public class Shoukan extends GlobalGame {
 						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 					}
 					channel.sendFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
-							.queue(msg -> {
-								this.message.compute(msg.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return msg;
-								});
-							});
+							.queue(msg ->
+									this.message.compute(msg.getChannel().getId(), (id, m) -> {
+										if (m != null)
+											m.delete().queue(null, Helper::doNothing);
+										return msg;
+									}));
 				}
 		);
 	}
@@ -129,11 +127,15 @@ public class Shoukan extends GlobalGame {
 		Hand h = getHands().get(current);
 		h.addMana(h.getManaPerTurn());
 		AtomicBoolean shownHand = new AtomicBoolean(false);
+		AtomicReference<String> previous = new AtomicReference<>("");
 		channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
 				.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 				.queue(s -> {
 					this.message.put(s.getChannel().getId(), s);
-					Main.getInfo().getShiroEvents().addHandler(s.getGuild(), listener);
+					if (!s.getGuild().getId().equals(previous.get())) {
+						previous.set(s.getGuild().getId());
+						Main.getInfo().getShiroEvents().addHandler(s.getGuild(), listener);
+					}
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					if (!shownHand.get()) {
 						shownHand.set(true);
