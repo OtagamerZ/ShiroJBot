@@ -87,9 +87,24 @@ public class Hand {
 				getDeque().removeIf(d -> d instanceof Equipment);
 			if (!game.getCustom().optBoolean("semfield", false))
 				getDeque().removeIf(d -> d instanceof Field);
-			if (game.getCustom().optBoolean("roleta", false)) {
-				this.deque.removeIf(d -> d instanceof Champion);
-				this.deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
+
+			switch (game.getCustom().optString("arcade", "")) {
+				case "roleta" -> {
+					this.deque.removeIf(d -> d instanceof Champion);
+					this.deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
+				}
+				case "blackrock" -> {
+					game.getArena().setField(CardDAO.getField("OTHERWORLD"));
+					this.deque.removeIf(d -> d instanceof Champion || d instanceof Field);
+					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("MATO_KUROI")));
+					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("SAYA_IRINO")));
+					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("YOMI_TAKANASHI")));
+					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("YUU_KOUTARI")));
+					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("TAKU_KATSUCHI")));
+					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("KAGARI_IZURIHA")));
+					Collections.shuffle(this.deque);
+				}
+				case "instakill" -> this.hp = 1;
 			}
 		} else {
 			this.mana = 0;
