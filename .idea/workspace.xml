@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -941,14 +938,7 @@
       <workItem from="1608120077619" duration="19727000" />
       <workItem from="1608206524198" duration="11242000" />
       <workItem from="1608224693076" duration="12272000" />
-      <workItem from="1608307554659" duration="8907000" />
-    </task>
-    <task id="LOCAL-03153" summary="Adição de cálculo de MMR para partidas do Shoukan">
-      <created>1608140385915</created>
-      <option name="number" value="03153" />
-      <option name="presentableId" value="LOCAL-03153" />
-      <option name="project" value="LOCAL" />
-      <updated>1608140385915</updated>
+      <workItem from="1608307554659" duration="9485000" />
     </task>
     <task id="LOCAL-03154" summary="Adição de lista de raças Senshi">
       <created>1608142416847</created>
@@ -1286,7 +1276,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608314997644</updated>
     </task>
-    <option name="localTasksCounter" value="3202" />
+    <task id="LOCAL-03202" summary="Mudança nos nomes dos tiers">
+      <created>1608317541986</created>
+      <option name="number" value="03202" />
+      <option name="presentableId" value="LOCAL-03202" />
+      <option name="project" value="LOCAL" />
+      <updated>1608317541986</updated>
+    </task>
+    <option name="localTasksCounter" value="3203" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1459,10 +1456,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608314996785">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608317541027">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608314996785" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608317541027" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1511,10 +1508,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608314998964">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608317543597">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608314998964" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608317543597" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608242114243" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
