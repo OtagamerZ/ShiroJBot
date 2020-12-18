@@ -1381,7 +1381,7 @@ public class Helper {
 		if (chance(0.1 - minMax(prcnt(channel.getGuild().getMemberCount() * 0.09f, 5000), 0, 0.09))) {
 			int rolled = Helper.rng(100, false);
 			List<Prize> prizes = new ArrayList<>();
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 6; i++) {
 				prizes.add(rolled > 80 ? new ItemDrop() : new CreditDrop());
 			}
 
