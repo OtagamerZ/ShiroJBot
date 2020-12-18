@@ -39,6 +39,20 @@ public class MemberDAO {
 		return m;
 	}
 
+	public static Member getHighestProfile(String id) {
+		EntityManager em = Manager.getEntityManager();
+		Member m;
+
+		Query q = em.createQuery("SELECT m FROM Member m WHERE mid = :id ORDER BY level DESC", Member.class);
+		q.setMaxResults(1);
+		q.setParameter("id", id);
+		m = (Member) q.getSingleResult();
+
+		em.close();
+
+		return m;
+	}
+
 	@SuppressWarnings("unchecked")
 	public static List<Member> getMemberByMid(String id) {
 		EntityManager em = Manager.getEntityManager();
