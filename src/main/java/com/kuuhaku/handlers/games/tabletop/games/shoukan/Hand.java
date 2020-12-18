@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -76,16 +77,25 @@ public class Hand {
 		this.side = side;
 		this.game = game;
 
-		this.mana = game.getCustom() == null ? 0 : Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
-		this.hp = game.getCustom() == null ? 5000 : Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
-		this.startingCount = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
-		this.manaPerTurn = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
-
 		if (game.getCustom() != null) {
+			this.mana = Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
+			this.hp = Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
+			this.startingCount = Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
+			this.manaPerTurn = Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
+
 			if (!game.getCustom().optBoolean("semequip", false))
 				getDeque().removeIf(d -> d instanceof Equipment);
 			if (!game.getCustom().optBoolean("semfield", false))
 				getDeque().removeIf(d -> d instanceof Field);
+			if (!game.getCustom().optBoolean("roleta", false)) {
+				Kawaipon newKp = new Kawaipon();
+				newKp.setChampions(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
+			}
+		} else {
+			this.mana = 0;
+			this.hp = 5000;
+			this.startingCount = 5;
+			this.manaPerTurn = 5;
 		}
 
 		redrawHand();
