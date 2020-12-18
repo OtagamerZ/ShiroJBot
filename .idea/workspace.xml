@@ -13,10 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções nas novas mudanças">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -930,13 +928,6 @@
       <workItem from="1608206524198" duration="11242000" />
       <workItem from="1608224693076" duration="12272000" />
     </task>
-    <task id="LOCAL-03126" summary="Adição do saque do destino">
-      <created>1607972496924</created>
-      <option name="number" value="03126" />
-      <option name="presentableId" value="LOCAL-03126" />
-      <option name="project" value="LOCAL" />
-      <updated>1607972496924</updated>
-    </task>
     <task id="LOCAL-03127" summary="Adição do saque do destino">
       <created>1607972793788</created>
       <option name="number" value="03127" />
@@ -1273,7 +1264,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608241947808</updated>
     </task>
-    <option name="localTasksCounter" value="3175" />
+    <task id="LOCAL-03175" summary="Correções nas novas mudanças">
+      <created>1608293955738</created>
+      <option name="number" value="03175" />
+      <option name="presentableId" value="LOCAL-03175" />
+      <option name="project" value="LOCAL" />
+      <updated>1608293955739</updated>
+    </task>
+    <option name="localTasksCounter" value="3176" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
