@@ -62,9 +62,10 @@ public class TenthSecondEvent implements Job {
 						System.gc();
 
 						if (bs.stream().allMatch(Pair::getRight)) {
+							System.out.println("Done");
 							GlobalGame g = new Shoukan(
 									Main.getShiroShards(),
-									new GameChannel(p1.getValue().getRight(), p2.getValue().getRight()),
+									new GameChannel(p1Channel, p2Channel),
 									0,
 									null,
 									false,
