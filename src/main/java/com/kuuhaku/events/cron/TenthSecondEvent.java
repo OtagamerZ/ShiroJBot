@@ -138,7 +138,7 @@ public class TenthSecondEvent implements Job {
 								});
 
 						{
-							p1Channel.sendMessage("""
+							p2Channel.sendMessage("""
 									%s
 									Oponente encontrado (%s), digite `aschente` para confirmar a partida.
 									Demorar para responder resultará em um bloqueio de saguão de 10 minutos.
