@@ -112,7 +112,7 @@ public class ShoukanCommand extends Command {
 					Pages.buttonize(s, Map.of(
 							Helper.CANCEL, (mb, ms) -> {
 								Main.getInfo().getMatchMaking().getLobby().remove(mmr);
-								ms.delete();
+								ms.delete().queue();
 							}
 					), false)
 			);
