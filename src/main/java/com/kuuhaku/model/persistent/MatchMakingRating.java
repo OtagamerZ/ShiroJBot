@@ -28,6 +28,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -58,7 +59,7 @@ public class MatchMakingRating {
 	private int promWins = 0;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date blockedUntil = null;
+	private Timestamp blockedUntil = null;
 
 	public MatchMakingRating(String userId) {
 		this.userId = userId;
@@ -178,14 +179,14 @@ public class MatchMakingRating {
 
 	public boolean isBlocked() {
 		if (blockedUntil == null) return false;
-		else if (Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3")))).after(blockedUntil)) {
+		else if (Timestamp.from(Instant.now(Clock.system(ZoneId.of("GMT-3")))).after(blockedUntil)) {
 			blockedUntil = null;
 			return false;
 		} else return true;
 	}
 
 	public void block(int time, TemporalUnit unit) {
-		blockedUntil = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))).plus(time, unit));
+		blockedUntil = Timestamp.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))).plus(time, unit));
 	}
 
 	public static Map<Side, Pair<String, Map<String, Integer>>> calcMMR(MatchHistory mh) {
