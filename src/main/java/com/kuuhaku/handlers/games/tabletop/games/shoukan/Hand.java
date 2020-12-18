@@ -54,7 +54,7 @@ public class Hand {
 	private int manaReturn = 0;
 
 	public Hand(Shoukan game, User user, Kawaipon kp, Side side) {
-		List<Drawable> deque = new ArrayList<>(kp.getChampions());
+		deque = new LinkedList<>(kp.getChampions());
 		deque.sort(Comparator
 				.comparing(d -> ((Champion) d).getMana()).reversed()
 				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
@@ -70,18 +70,16 @@ public class Hand {
 		destinyDeck.forEach(deque::remove);
 		deque.addAll(kp.getEquipments());
 		deque.addAll(kp.getFields());
-		Collections.shuffle(deque);
 
 		this.user = user;
-		this.deque = new LinkedList<>(deque);
 		this.side = side;
 		this.game = game;
 
 		if (game.getCustom() != null) {
-			this.mana = Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
-			this.hp = Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
-			this.startingCount = Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
-			this.manaPerTurn = Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
+			mana = Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
+			hp = Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
+			startingCount = Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
+			manaPerTurn = Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
 
 			if (!game.getCustom().optBoolean("semequip", false))
 				getDeque().removeIf(d -> d instanceof Equipment);
@@ -90,28 +88,27 @@ public class Hand {
 
 			switch (game.getCustom().optString("arcade", "")) {
 				case "roleta" -> {
-					this.deque.removeIf(d -> d instanceof Champion);
-					this.deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
+					deque.removeIf(d -> d instanceof Champion);
+					deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
 				}
 				case "blackrock" -> {
+					game.getArena().setField(CardDAO.getField("OTHERWORLD"));
 					this.deque.removeIf(d -> d instanceof Champion || d instanceof Field);
-					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("MATO_KUROI")));
-					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("SAYA_IRINO")));
-					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("YOMI_TAKANASHI")));
-					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("YUU_KOUTARI")));
-					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("TAKU_KATSUCHI")));
-					this.deque.addAll(Collections.nCopies(6, CardDAO.getChampion("KAGARI_IZURIHA")));
-					Collections.shuffle(this.deque);
+					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
+						Champion c = CardDAO.getChampion(name);
+						deque.addAll(Collections.nCopies(6, c));
+					}
 				}
-				case "instakill" -> this.hp = 1;
+				case "instakill" -> hp = 1;
 			}
 		} else {
-			this.mana = 0;
-			this.hp = 5000;
-			this.startingCount = 5;
-			this.manaPerTurn = 5;
+			mana = 0;
+			hp = 5000;
+			startingCount = 5;
+			manaPerTurn = 5;
 		}
 
+		Collections.shuffle(deque);
 		redrawHand();
 	}
 
