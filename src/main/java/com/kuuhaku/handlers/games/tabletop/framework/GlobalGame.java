@@ -255,6 +255,8 @@ public abstract class GlobalGame {
 	}
 
 	public void close() {
+		if (closed) return;
+		closed = true;
 		if (timeout != null) timeout.cancel(true);
 		timeout = null;
 
@@ -297,8 +299,6 @@ public abstract class GlobalGame {
 				}
 			}
 		}
-
-		closed = true;
 	}
 
 	@Override
