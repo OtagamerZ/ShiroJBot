@@ -102,17 +102,20 @@ public class MatchMakingRating {
 	public void increaseRankPoints() {
 		double mmrModif = Helper.prcnt(mmr, MatchMakingRatingDAO.getAverageMMR(tier));
 		int rpValue = (int) Math.round(mmrModif * 15);
-		if (tier == RankedTier.UNRANKED || rankPoints == 100) {
+		if (tier == RankedTier.UNRANKED) {
 			promWins++;
 
 			if (promWins + promLosses == tier.getMd()) {
-				if (tier == RankedTier.UNRANKED) {
-					tier = RankedTier.MINARAI_IV;
-					rankPoints = 0;
-					promWins = promLosses = 0;
-					return;
-				}
-			} else if (promWins > tier.getMd() / 2f) {
+				tier = RankedTier.MINARAI_IV;
+				rankPoints = 0;
+				promWins = promLosses = 0;
+				return;
+			}
+			return;
+		} else if (rankPoints == 100) {
+			promWins++;
+
+			if (promWins > tier.getMd() / 2f) {
 				tier = tier.getNext();
 				rankPoints = 0;
 				promWins = promLosses = 0;
@@ -130,17 +133,21 @@ public class MatchMakingRating {
 	public void decreaseRankPoints() {
 		double mmrModif = Helper.prcnt(MatchMakingRatingDAO.getAverageMMR(tier), mmr);
 		int rpValue = (int) Math.round(mmrModif * 15);
-		if (tier == RankedTier.UNRANKED || rankPoints == 100) {
+
+		if (tier == RankedTier.UNRANKED) {
 			promLosses++;
 
 			if (promWins + promLosses == tier.getMd()) {
-				if (tier == RankedTier.UNRANKED) {
-					tier = RankedTier.MINARAI_IV;
-					rankPoints = 0;
-					promWins = promLosses = 0;
-					return;
-				}
-			} else if (promLosses > tier.getMd() / 2f) {
+				tier = RankedTier.MINARAI_IV;
+				rankPoints = 0;
+				promWins = promLosses = 0;
+				return;
+			}
+			return;
+		} else if (rankPoints == 100) {
+			promLosses++;
+
+			if (promLosses > tier.getMd() / 2f) {
 				rankPoints -= rpValue * promLosses;
 				promWins = promLosses = 0;
 				return;
