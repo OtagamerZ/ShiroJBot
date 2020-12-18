@@ -929,13 +929,6 @@
       <workItem from="1608206524198" duration="11242000" />
       <workItem from="1608224693076" duration="12272000" />
     </task>
-    <task id="LOCAL-03128" summary="Adição do saque do destino">
-      <created>1607974286052</created>
-      <option name="number" value="03128" />
-      <option name="presentableId" value="LOCAL-03128" />
-      <option name="project" value="LOCAL" />
-      <updated>1607974286053</updated>
-    </task>
     <task id="LOCAL-03129" summary="Adição do saque do destino">
       <created>1607974489834</created>
       <option name="number" value="03129" />
@@ -1272,7 +1265,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608294111484</updated>
     </task>
-    <option name="localTasksCounter" value="3177" />
+    <task id="LOCAL-03177" summary="Correções nas novas mudanças">
+      <created>1608295030089</created>
+      <option name="number" value="03177" />
+      <option name="presentableId" value="LOCAL-03177" />
+      <option name="project" value="LOCAL" />
+      <updated>1608295030089</updated>
+    </task>
+    <option name="localTasksCounter" value="3178" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1445,10 +1445,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608294110533">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1608295029033">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608294110533" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1608295029033" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1497,10 +1497,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608294113852">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608295031301">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608294113852" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608295031301" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608242114243" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
