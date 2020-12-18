@@ -274,7 +274,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			if (!found && !author.isBot() && !blacklisted) {
-				if (getHandler().containsKey(guild.getId())) {
+				if (toHandle.containsKey(guild.getId())) {
 					Iterator<SimpleMessageListener> evts = getHandler().get(guild.getId()).iterator();
 					while (evts.hasNext()) {
 						SimpleMessageListener sml = evts.next();
