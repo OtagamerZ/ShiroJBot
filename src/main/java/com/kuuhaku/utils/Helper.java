@@ -1436,7 +1436,8 @@ public class Helper {
 								acc.addBuff(prize.getPrizeAsItem().getId());
 						}
 
-						EmbedBuilder neb = new ColorlessEmbedBuilder();
+						EmbedBuilder neb = new ColorlessEmbedBuilder()
+								.setImage("attachment://padoru_padoru.gif");
 						for (int i = 0; i < prizes.size(); i++) {
 							Prize prize = prizes.get(i);
 							if (prize instanceof CreditDrop)
