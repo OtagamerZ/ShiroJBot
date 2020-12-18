@@ -88,8 +88,8 @@ public class Hand {
 			if (!game.getCustom().optBoolean("semfield", false))
 				getDeque().removeIf(d -> d instanceof Field);
 			if (!game.getCustom().optBoolean("roleta", false)) {
-				Kawaipon newKp = new Kawaipon();
-				newKp.setChampions(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
+				deque.clear();
+				deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
 			}
 		} else {
 			this.mana = 0;
