@@ -88,8 +88,8 @@ public class Hand {
 			if (!game.getCustom().optBoolean("semfield", false))
 				getDeque().removeIf(d -> d instanceof Field);
 			if (game.getCustom().optBoolean("roleta", false)) {
-				deque.clear();
-				deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
+				this.deque.clear();
+				this.deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
 			}
 		} else {
 			this.mana = 0;
