@@ -37,7 +37,6 @@ import org.quartz.JobExecutionContext;
 import javax.annotation.Nonnull;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -51,11 +50,14 @@ public class TenthSecondEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		if (lock) return;
 		lock = true;
-		Map<MatchMakingRating, Pair<Integer, TextChannel>> lobby = new HashMap<>(Main.getInfo().getMatchMaking().getLobby());
+		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> lobby = new ArrayList<>(Main.getInfo().getMatchMaking().getLobby().entrySet());
 		if (lobby.size() == 1) return;
-		for (Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1 : lobby.entrySet()) {
-			for (Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2 : lobby.entrySet()) {
-				if (!p1.equals(p2) && p1.getKey().getMMR() * 100 / (p2.getKey().getMMR() == 0 ? 1 : p2.getKey().getMMR()) <= p1.getValue().getLeft()) {
+		for (int a = 0; a < lobby.size(); a++) {
+			for (int b = a; a < lobby.size(); b++) {
+				Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1 = lobby.get(a);
+				Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2 = lobby.get(b);
+
+				if (!p1.equals(p2) && Math.abs(p1.getKey().getMMR() * 100 / (p2.getKey().getMMR() == 0 ? 1 : p2.getKey().getMMR())) <= p1.getValue().getLeft()) {
 					Main.getInfo().getMatchMaking().getLobby().remove(p1.getKey());
 					Main.getInfo().getMatchMaking().getLobby().remove(p2.getKey());
 
@@ -172,11 +174,14 @@ public class TenthSecondEvent implements Job {
 							if (match.size() == 2) result.run();
 						}
 					});
-				}
-			}
 
-			Main.getInfo().getMatchMaking().getLobby().computeIfPresent(p1.getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
+					return;
+				}
+
+				Main.getInfo().getMatchMaking().getLobby().computeIfPresent(p1.getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
+			}
 		}
+
 		lock = false;
 	}
 }
