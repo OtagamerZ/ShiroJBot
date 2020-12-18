@@ -20,30 +20,29 @@ package com.kuuhaku.model.enums;
 
 public enum RankedTier {
 	UNRANKED(0, "Sem ranking", 10),
+	APPRENTICE_IV(1, "Aprendiz IV", 3),
+	APPRENTICE_III(1, "Aprendiz III", 3),
+	APPRENTICE_II(1, "Aprendiz II", 3),
+	APPRENTICE_I(1, "Aprendiz I", 5),
 
-	MINARAI_IV(1, "Minarai IV", 3),
-	MINARAI_III(1, "Minarai III", 3),
-	MINARAI_II(1, "Minarai II", 3),
-	MINARAI_I(1, "Minarai I", 5),
+	INITIATE_IV(2, "Iniciado IV", 3),
+	INITIATE_III(2, "Iniciado III", 3),
+	INITIATE_II(2, "Iniciado II", 3),
+	INITIATE_I(2, "Iniciado I", 5),
 
-	KAISHI_IV(2, "Kaishi IV", 3),
-	KAISHI_III(2, "Kaishi III", 3),
-	KAISHI_II(2, "Kaishi II", 3),
-	KAISHI_I(2, "Kaishi I", 5),
+	DISCIPLE_IV(3, "Discípulo IV", 3),
+	DISCIPLE_III(3, "Discípulo III", 3),
+	DISCIPLE_II(3, "Discípulo II", 3),
+	DISCIPLE_I(3, "Discípulo I", 5),
 
-	DESHI_IV(3, "Deshi IV", 3),
-	DESHI_III(3, "Deshi III", 3),
-	DESHI_II(3, "Deshi II", 3),
-	DESHI_I(3, "Deshi I", 5),
+	ADEPT_IV(4, "Adepto IV", 3),
+	ADEPT_III(4, "Adepto III", 3),
+	ADEPT_II(4, "Adepto II", 3),
+	ADEPT_I(4, "Adepto I", 5),
 
-	JUKUTATSU_IV(4, "Jukutatsu IV", 3),
-	JUKUTATSU_III(4, "Jukutatsu III", 3),
-	JUKUTATSU_II(4, "Jukutatsu II", 3),
-	JUKUTATSU_I(4, "Jukutatsu I", 5),
-
-	SHUJIN(5, "Shujin", 5),
-	JOUKYUU(6, "Joukyuu", 5),
-	DAI_MAJUTSU_SHI(7, "Dai Majutsu-shi", 0);
+	MASTER(5, "Mestre", 5),
+	ORACLE(6, "Oráculo", 5),
+	ARCHMAGE(7, "Arquimago", 0);
 
 	private final int tier;
 	private final String name;
@@ -69,50 +68,50 @@ public enum RankedTier {
 
 	public RankedTier getNext() {
 		return switch (this) {
-			case UNRANKED -> MINARAI_IV;
-			case MINARAI_IV -> MINARAI_III;
-			case MINARAI_III -> MINARAI_II;
-			case MINARAI_II -> MINARAI_I;
-			case MINARAI_I -> KAISHI_IV;
-			case KAISHI_IV -> KAISHI_III;
-			case KAISHI_III -> KAISHI_II;
-			case KAISHI_II -> KAISHI_I;
-			case KAISHI_I -> DESHI_IV;
-			case DESHI_IV -> DESHI_III;
-			case DESHI_III -> DESHI_II;
-			case DESHI_II -> DESHI_I;
-			case DESHI_I -> JUKUTATSU_IV;
-			case JUKUTATSU_IV -> JUKUTATSU_III;
-			case JUKUTATSU_III -> JUKUTATSU_II;
-			case JUKUTATSU_II -> JUKUTATSU_I;
-			case JUKUTATSU_I -> SHUJIN;
-			case SHUJIN -> JOUKYUU;
-			case JOUKYUU -> DAI_MAJUTSU_SHI;
-			case DAI_MAJUTSU_SHI -> null;
+			case UNRANKED -> APPRENTICE_IV;
+			case APPRENTICE_IV -> APPRENTICE_III;
+			case APPRENTICE_III -> APPRENTICE_II;
+			case APPRENTICE_II -> APPRENTICE_I;
+			case APPRENTICE_I -> INITIATE_IV;
+			case INITIATE_IV -> INITIATE_III;
+			case INITIATE_III -> INITIATE_II;
+			case INITIATE_II -> INITIATE_I;
+			case INITIATE_I -> DISCIPLE_IV;
+			case DISCIPLE_IV -> DISCIPLE_III;
+			case DISCIPLE_III -> DISCIPLE_II;
+			case DISCIPLE_II -> DISCIPLE_I;
+			case DISCIPLE_I -> ADEPT_IV;
+			case ADEPT_IV -> ADEPT_III;
+			case ADEPT_III -> ADEPT_II;
+			case ADEPT_II -> ADEPT_I;
+			case ADEPT_I -> MASTER;
+			case MASTER -> ORACLE;
+			case ORACLE -> ARCHMAGE;
+			case ARCHMAGE -> null;
 		};
 	}
 
 	public RankedTier getPrevious() {
 		return switch (this) {
-			case UNRANKED, MINARAI_IV -> null;
-			case MINARAI_III -> MINARAI_IV;
-			case MINARAI_II -> MINARAI_III;
-			case MINARAI_I -> MINARAI_II;
-			case KAISHI_IV -> MINARAI_I;
-			case KAISHI_III -> KAISHI_IV;
-			case KAISHI_II -> KAISHI_III;
-			case KAISHI_I -> KAISHI_II;
-			case DESHI_IV -> KAISHI_I;
-			case DESHI_III -> DESHI_IV;
-			case DESHI_II -> DESHI_III;
-			case DESHI_I -> DESHI_II;
-			case JUKUTATSU_IV -> DESHI_I;
-			case JUKUTATSU_III -> JUKUTATSU_IV;
-			case JUKUTATSU_II -> JUKUTATSU_III;
-			case JUKUTATSU_I -> JUKUTATSU_II;
-			case SHUJIN -> JUKUTATSU_I;
-			case JOUKYUU -> SHUJIN;
-			case DAI_MAJUTSU_SHI -> JOUKYUU;
+			case UNRANKED, APPRENTICE_IV -> null;
+			case APPRENTICE_III -> APPRENTICE_IV;
+			case APPRENTICE_II -> APPRENTICE_III;
+			case APPRENTICE_I -> APPRENTICE_II;
+			case INITIATE_IV -> APPRENTICE_I;
+			case INITIATE_III -> INITIATE_IV;
+			case INITIATE_II -> INITIATE_III;
+			case INITIATE_I -> INITIATE_II;
+			case DISCIPLE_IV -> INITIATE_I;
+			case DISCIPLE_III -> DISCIPLE_IV;
+			case DISCIPLE_II -> DISCIPLE_III;
+			case DISCIPLE_I -> DISCIPLE_II;
+			case ADEPT_IV -> DISCIPLE_I;
+			case ADEPT_III -> ADEPT_IV;
+			case ADEPT_II -> ADEPT_III;
+			case ADEPT_I -> ADEPT_II;
+			case MASTER -> ADEPT_I;
+			case ORACLE -> MASTER;
+			case ARCHMAGE -> MASTER;
 		};
 	}
 }
