@@ -45,9 +45,12 @@ import java.util.concurrent.TimeUnit;
 
 public class TenthSecondEvent implements Job {
 	public static JobDetail tenthSecond;
+	private boolean lock = false;
 
 	@Override
 	public void execute(JobExecutionContext context) {
+		if (lock) return;
+		lock = true;
 		Map<MatchMakingRating, Pair<Integer, TextChannel>> lobby = new HashMap<>(Main.getInfo().getMatchMaking().getLobby());
 		if (lobby.size() == 1) return;
 		for (Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1 : lobby.entrySet()) {
@@ -174,5 +177,6 @@ public class TenthSecondEvent implements Job {
 
 			Main.getInfo().getMatchMaking().getLobby().computeIfPresent(p1.getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 		}
+		lock = false;
 	}
 }
