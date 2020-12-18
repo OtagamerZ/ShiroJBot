@@ -274,8 +274,8 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			if (!found && !author.isBot() && !blacklisted) {
-				if (toHandle.containsKey(guild.getId())) {
-					Iterator<SimpleMessageListener> evts = toHandle.get(guild.getId()).iterator();
+				if (getHandler().containsKey(guild.getId())) {
+					Iterator<SimpleMessageListener> evts = getHandler().get(guild.getId()).iterator();
 					while (evts.hasNext()) {
 						SimpleMessageListener sml = evts.next();
 						sml.onGuildMessageReceived(event);
@@ -720,7 +720,11 @@ public class ShiroEvents extends ListenerAdapter {
 		}
 	}
 
+	public synchronized Map<String, List<SimpleMessageListener>> getHandler() {
+		return toHandle;
+	}
+
 	public void addHandler(Guild guild, SimpleMessageListener sml) {
-		toHandle.compute(guild.getId(), (s, evts) -> evts == null ? new ArrayList<>() : evts).add(sml);
+		getHandler().compute(guild.getId(), (s, evts) -> evts == null ? new ArrayList<>() : evts).add(sml);
 	}
 }
