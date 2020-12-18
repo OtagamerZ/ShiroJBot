@@ -94,9 +94,6 @@ public class Shoukan extends GlobalGame {
 					players[0].getId(), Side.TOP,
 					players[1].getId(), Side.BOTTOM
 			));
-		else if (custom.optString("arcade", "").equals("blackrock")) {
-			getArena().setField(CardDAO.getField("OTHERWORLD"));
-		}
 
 		setActions(
 				s -> {
