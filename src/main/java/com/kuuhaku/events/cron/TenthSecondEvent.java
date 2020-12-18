@@ -26,7 +26,6 @@ import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.NContract;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -37,7 +36,9 @@ import org.quartz.JobExecutionContext;
 
 import javax.annotation.Nonnull;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -56,13 +57,13 @@ public class TenthSecondEvent implements Job {
 
 					TextChannel p1Channel = p1.getValue().getRight();
 					TextChannel p2Channel = p2.getValue().getRight();
-					NContract<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new NContract<>(2);
+					List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
 
-					match.setAction(bs -> {
+					Runnable result = () -> {
 						System.out.println("Done");
 						System.gc();
 
-						if (bs.stream().allMatch(Pair::getRight)) {
+						if (match.stream().allMatch(Pair::getRight)) {
 							GlobalGame g = new Shoukan(
 									Main.getShiroShards(),
 									new GameChannel(p1Channel, p2Channel),
@@ -75,7 +76,7 @@ public class TenthSecondEvent implements Job {
 							);
 							g.start();
 						} else {
-							for (Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean> p : bs) {
+							for (Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean> p : match) {
 								if (p.getRight()) {
 									p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue();
 									Pair<Integer, TextChannel> newPair = Pair.of(
@@ -87,17 +88,16 @@ public class TenthSecondEvent implements Job {
 							}
 
 						}
-
-						return null;
-					});
+					};
 
 					Main.getInfo().getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
 						private Future<?> timeout = p1Channel.sendMessage("Tempo para aceitar a partida encerrado, você está impedido de entrar no saguão novamente por 10 minutos.")
 								.queueAfter(5, TimeUnit.MINUTES, msg -> {
 									p1.getKey().block(10, ChronoUnit.MINUTES);
 									MatchMakingRatingDAO.saveMMR(p1.getKey());
-									match.addSignature(0, Pair.of(p1, false));
+									match.add(Pair.of(p1, false));
 									close();
+									if (match.size() == 2) result.run();
 								});
 
 						{
@@ -122,10 +122,11 @@ public class TenthSecondEvent implements Job {
 									.flatMap(s -> p2Channel.sendMessage("%s aceitou a partida.".formatted(p1.getKey().getUser().getName())))
 									.queue();
 
-							match.addSignature(0, Pair.of(p1, true));
+							match.add(Pair.of(p1, true));
 							timeout.cancel(true);
 							timeout = null;
 							close();
+							if (match.size() == 2) result.run();
 						}
 					});
 
@@ -134,8 +135,9 @@ public class TenthSecondEvent implements Job {
 								.queueAfter(5, TimeUnit.MINUTES, msg -> {
 									p2.getKey().block(10, ChronoUnit.MINUTES);
 									MatchMakingRatingDAO.saveMMR(p2.getKey());
-									match.addSignature(0, Pair.of(p2, false));
+									match.add(Pair.of(p2, false));
 									close();
+									if (match.size() == 2) result.run();
 								});
 
 						{
@@ -160,10 +162,11 @@ public class TenthSecondEvent implements Job {
 									.flatMap(s -> p1Channel.sendMessage("%s aceitou a partida.".formatted(p2.getKey().getUser().getName())))
 									.queue();
 
-							match.addSignature(0, Pair.of(p2, true));
+							match.add(Pair.of(p2, true));
 							timeout.cancel(true);
 							timeout = null;
 							close();
+							if (match.size() == 2) result.run();
 						}
 					});
 				}
