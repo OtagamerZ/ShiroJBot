@@ -124,6 +124,8 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public void start() {
+		if (getCustom().optString("arcade").equals("blackrock"))
+			getArena().setField(CardDAO.getField("OTHERWORLD"));
 		Hand h = getHands().get(current);
 		h.addMana(h.getManaPerTurn());
 		AtomicBoolean shownHand = new AtomicBoolean(false);
