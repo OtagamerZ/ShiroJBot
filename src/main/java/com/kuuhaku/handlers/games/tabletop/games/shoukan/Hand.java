@@ -54,8 +54,9 @@ public class Hand {
 	private int manaReturn = 0;
 
 	public Hand(Shoukan game, User user, Kawaipon kp, Side side) {
-		deque = new LinkedList<>();
-		deque.addAll(kp.getChampions());
+		deque = new LinkedList<>() {{
+			addAll(kp.getChampions());
+		}};
 		deque.sort(Comparator
 				.comparing(d -> ((Champion) d).getMana()).reversed()
 				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
