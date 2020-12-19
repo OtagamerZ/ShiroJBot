@@ -15,7 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções nas novas mudanças">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -929,20 +929,7 @@
       <workItem from="1608206524198" duration="11242000" />
       <workItem from="1608224693076" duration="12272000" />
       <workItem from="1608307554659" duration="10840000" />
-    </task>
-    <task id="LOCAL-03168" summary="Cartas atordoadas agora causam dano caso dejam derrotadas">
-      <created>1608214352456</created>
-      <option name="number" value="03168" />
-      <option name="presentableId" value="LOCAL-03168" />
-      <option name="project" value="LOCAL" />
-      <updated>1608214352456</updated>
-    </task>
-    <task id="LOCAL-03169" summary="Adição de quebra de linha nos comandos que usam webhook">
-      <created>1608226836132</created>
-      <option name="number" value="03169" />
-      <option name="presentableId" value="LOCAL-03169" />
-      <option name="project" value="LOCAL" />
-      <updated>1608226836133</updated>
+      <workItem from="1608350356100" duration="896000" />
     </task>
     <task id="LOCAL-03170" summary="Adição de suporte para Shoukan inter-servidor">
       <created>1608232859405</created>
@@ -1273,7 +1260,21 @@
       <option name="project" value="LOCAL" />
       <updated>1608336581108</updated>
     </task>
-    <option name="localTasksCounter" value="3217" />
+    <task id="LOCAL-03217" summary="Correções nas novas mudanças">
+      <created>1608337079372</created>
+      <option name="number" value="03217" />
+      <option name="presentableId" value="LOCAL-03217" />
+      <option name="project" value="LOCAL" />
+      <updated>1608337079372</updated>
+    </task>
+    <task id="LOCAL-03218" summary="Correções nas novas mudanças">
+      <created>1608337096232</created>
+      <option name="number" value="03218" />
+      <option name="presentableId" value="LOCAL-03218" />
+      <option name="project" value="LOCAL" />
+      <updated>1608337096232</updated>
+    </task>
+    <option name="localTasksCounter" value="3219" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1498,11 +1499,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608336582324">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608337097307">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608336582324" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608337097307" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1539,10 +1540,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="583" y="194" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1602850230580" />
-    <state x="570" y="266" key="extract.method.dialog" timestamp="1608122622979">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="651" y="274" key="extract.method.dialog" timestamp="1608350738643">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608122622979" />
+    <state x="651" y="274" key="extract.method.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1608350738643" />
     <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1608310170929">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
