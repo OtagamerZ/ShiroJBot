@@ -52,18 +52,16 @@ public class TenthSecondEvent implements Job {
 		if (lock) return;
 		lock = true;
 		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> lobby = new ArrayList<>(Main.getInfo().getMatchMaking().getLobby().entrySet());
-		if (lobby.size() == 1) {
-			lock = false;
-			return;
-		}
-		for (int a = 0; a < lobby.size(); a++) {
-			for (int b = a; a < lobby.size(); b++) {
-				if (tryMatching(lobby, a, b)) {
-					lock = false;
-					return;
+		if (lobby.size() > 1) {
+			for (int a = 0; a < lobby.size(); a++) {
+				for (int b = a; b < lobby.size(); b++) {
+					if (tryMatching(lobby, a, b)) {
+						lock = false;
+						return;
+					}
 				}
+				Main.getInfo().getMatchMaking().getLobby().computeIfPresent(lobby.get(a).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 			}
-			Main.getInfo().getMatchMaking().getLobby().computeIfPresent(lobby.get(a).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 		}
 
 		lock = false;
@@ -74,7 +72,7 @@ public class TenthSecondEvent implements Job {
 			Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1 = lobby.get(a);
 			Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2 = lobby.get(b);
 
-			if (!p1.equals(p2)
+			if (!p1.getKey().equals(p2.getKey())
 					&& Math.abs(Helper.prcnt(p1.getKey().getMMR(), p2.getKey().getMMR() == 0 ? 1 : p2.getKey().getMMR()) * 100) <= p1.getValue().getLeft() * 5
 					&& Math.abs(p1.getKey().getTier().getTier() - p2.getKey().getTier().getTier()) < 2) {
 				Main.getInfo().getMatchMaking().getLobby().remove(p1.getKey());
