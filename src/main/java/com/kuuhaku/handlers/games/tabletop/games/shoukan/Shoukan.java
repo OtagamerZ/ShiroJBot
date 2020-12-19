@@ -67,11 +67,11 @@ public class Shoukan extends GlobalGame {
 			if (canInteract(event)) play(event);
 		}
 	};
-	private Map<String, Message> message = new HashMap<>();
-	private Phase phase = Phase.PLAN;
+	private final Map<String, Message> message = new HashMap<>();
 	private final List<Champion> fusions = CardDAO.getFusions();
 	private final boolean[] changed = {false, false, false, false, false};
 	private final boolean daily;
+	private Phase phase = Phase.PLAN;
 	private boolean draw = false;
 	private Side current = Side.BOTTOM;
 	private Side next = Side.TOP;
@@ -124,8 +124,6 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public void start() {
-		if (getCustom().optString("arcade").equals("blackrock"))
-			getArena().setField(CardDAO.getField("OTHERWORLD"));
 		Hand h = getHands().get(current);
 		h.addMana(h.getManaPerTurn());
 		AtomicBoolean shownHand = new AtomicBoolean(false);
