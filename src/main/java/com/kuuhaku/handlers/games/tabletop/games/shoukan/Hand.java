@@ -86,13 +86,12 @@ public class Hand {
 			if (!game.getCustom().optBoolean("semfield", false))
 				getDeque().removeIf(d -> d instanceof Field);
 
-			switch (game.getCustom().optString("arcade", "")) {
+			switch (game.getCustom().optString("arcade")) {
 				case "roleta" -> {
 					deque.removeIf(d -> d instanceof Champion);
 					deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
 				}
 				case "blackrock" -> {
-					//game.getArena().setField(CardDAO.getField("OTHERWORLD"));
 					this.deque.removeIf(d -> d instanceof Champion || d instanceof Field);
 					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
 						Champion c = CardDAO.getChampion(name);
