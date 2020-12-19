@@ -54,7 +54,8 @@ public class Hand {
 	private int manaReturn = 0;
 
 	public Hand(Shoukan game, User user, Kawaipon kp, Side side) {
-		deque = new LinkedList<>(kp.getChampions());
+		deque = new LinkedList<>();
+		deque.addAll(kp.getChampions());
 		deque.sort(Comparator
 				.comparing(d -> ((Champion) d).getMana()).reversed()
 				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
@@ -92,7 +93,10 @@ public class Hand {
 					deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
 				}
 				case "blackrock" -> {
-					game.getArena().setField(CardDAO.getField("OTHERWORLD"));
+					Field f = CardDAO.getField("OTHERWORLD");
+					assert f != null;
+					f.setAcc(AccountDAO.getAccount(user.getId()));
+					game.getArena().setField(f);
 					this.deque.removeIf(d -> d instanceof Champion || d instanceof Field);
 					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
 						Champion c = CardDAO.getChampion(name);
@@ -137,8 +141,7 @@ public class Hand {
 			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
 				drawChampion();
 			else cards.add(getDeque().removeFirst().copy());
-		} catch (NoSuchElementException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		} catch (NoSuchElementException ignore) {
 		}
 	}
 
@@ -148,8 +151,7 @@ public class Hand {
 			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
 			getDeque().remove(dr);
 			cards.add(dr);
-		} catch (NoSuchElementException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		} catch (NoSuchElementException ignore) {
 		}
 	}
 
@@ -160,8 +162,7 @@ public class Hand {
 			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
 			getDeque().remove(dr);
 			cards.add(dr);
-		} catch (NoSuchElementException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		} catch (NoSuchElementException ignore) {
 		}
 	}
 
@@ -171,8 +172,7 @@ public class Hand {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow().copy();
 			getDeque().remove(dr);
 			cards.add(dr);
-		} catch (NoSuchElementException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		} catch (NoSuchElementException ignore) {
 		}
 	}
 
@@ -182,8 +182,7 @@ public class Hand {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow().copy();
 			getDeque().remove(dr);
 			cards.add(dr);
-		} catch (NoSuchElementException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		} catch (NoSuchElementException ignore) {
 		}
 	}
 
@@ -193,8 +192,7 @@ public class Hand {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow().copy();
 			getDeque().remove(dr);
 			cards.add(dr);
-		} catch (NoSuchElementException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		} catch (NoSuchElementException ignore) {
 		}
 	}
 
@@ -204,8 +202,7 @@ public class Hand {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow().copy();
 			getDeque().remove(dr);
 			cards.add(dr);
-		} catch (NoSuchElementException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		} catch (NoSuchElementException ignore) {
 		}
 	}
 

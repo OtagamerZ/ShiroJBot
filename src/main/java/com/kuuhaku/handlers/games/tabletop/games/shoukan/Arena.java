@@ -94,7 +94,9 @@ public class Arena {
 			Graphics2D g2d = back.createGraphics();
 			g2d.drawImage(arena, 0, 0, null);
 
-			slots.forEach((key, value) -> {
+			for (Map.Entry<Side, List<SlotColumn<Champion, Equipment>>> entry : slots.entrySet()) {
+				Side key = entry.getKey();
+				List<SlotColumn<Champion, Equipment>> value = entry.getValue();
 				Hand h = hands.get(key);
 				Account acc = AccountDAO.getAccount(hands.get(key).getUser().getId());
 				LinkedList<Drawable> grv = graveyard.get(key);
@@ -163,7 +165,7 @@ public class Arena {
 					g2d.setColor(Color.cyan);
 					Profile.drawOutlinedText("MP: " + h.getMana(), key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + h.getMana()), key == Side.TOP ? 178 : 1735, g2d);
 				}
-			});
+			}
 
 			if (field != null) {
 				g2d.drawImage(field.drawCard(field.getAcc(), false), 1889, 700, null);
