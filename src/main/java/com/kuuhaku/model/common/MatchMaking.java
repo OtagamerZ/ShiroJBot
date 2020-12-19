@@ -26,12 +26,12 @@ import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MatchMaking {
-	private final Map<MatchMakingRating, Pair<Integer, TextChannel>> lobby = new HashMap<>();
+	private final Map<MatchMakingRating, Pair<Integer, TextChannel>> lobby = new LinkedHashMap<>();
 	private final List<GlobalGame> games = new ArrayList<>();
 
 	public Map<MatchMakingRating, Pair<Integer, TextChannel>> getLobby() {
