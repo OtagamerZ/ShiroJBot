@@ -131,7 +131,7 @@ public class MatchMakingRating {
 		}
 
 		if (tier != RankedTier.ARCHMAGE)
-			rankPoints += Math.min(100 - rankPoints, rpValue);
+			rankPoints = Math.min(rankPoints + rpValue, 100);
 		else
 			rankPoints += rpValue;
 	}
@@ -173,7 +173,7 @@ public class MatchMakingRating {
 			return;
 		}
 
-		rankPoints -= Math.max(rpValue, rankPoints);
+		rankPoints = Math.max(0, rpValue - rankPoints);
 	}
 
 	public RankedTier getTier() {
