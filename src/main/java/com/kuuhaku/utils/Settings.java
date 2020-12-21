@@ -477,6 +477,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalRelay(null);
+			GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi resetado com sucesso.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
@@ -503,6 +504,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalAvisos(null);
+			GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal de avisos do servidor foi resetado com sucesso.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
