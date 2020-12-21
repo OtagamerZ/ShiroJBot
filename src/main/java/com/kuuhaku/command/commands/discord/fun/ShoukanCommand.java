@@ -114,6 +114,9 @@ public class ShoukanCommand extends Command {
 			if (Main.getInfo().getMatchMaking().inGame(author.getId())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 				return;
+			} else if (Main.getInfo().getMatchMaking().getLobby().keySet().stream().anyMatch(mr -> mr.getUserId().equals(author.getId()))) {
+				channel.sendMessage("❌ | Você já está no saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
+				return;
 			}
 
 			Main.getInfo().getMatchMaking().joinLobby(mmr, (TextChannel) channel);
