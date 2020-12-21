@@ -256,8 +256,7 @@ public class Account {
                     Main.getInfo().getUserByID(userId).openPrivateChannel()
                             .flatMap(s -> s.sendMessage(eb.build()))
                             .queue(null, e -> Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]));
-                } catch (NullPointerException e) {
-                    Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
+                } catch (NullPointerException ignore) {
                 } finally {
                     notified = true;
                     AccountDAO.saveAccount(this);
