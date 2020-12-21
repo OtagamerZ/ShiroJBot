@@ -344,19 +344,27 @@ public class Champion implements Drawable, Cloneable {
 		this.redDef = redDef;
 	}
 
-	public int getEAtk() {
+	public int getFinAtk() {
+		return Math.max(0, getAtk() + mAtk + bonus.getAtk() + getLinkedTo().stream().mapToInt(Equipment::getAtk).sum());
+	}
+
+	public int getEffAtk() {
 		return Math.max(0, getAtk() + mAtk + bonus.getAtk());
 	}
 
-	public void setMAtk(int mAtk) {
+	public void setModAtk(int mAtk) {
 		this.mAtk = mAtk;
 	}
 
-	public int getEDef() {
+	public int getFinDef() {
+		return Math.max(0, getDef() + mDef + bonus.getDef() + getLinkedTo().stream().mapToInt(Equipment::getDef).sum());
+	}
+
+	public int getEffDef() {
 		return Math.max(0, getDef() + mDef + bonus.getDef());
 	}
 
-	public void setMDef(int mDef) {
+	public void setModDef(int mDef) {
 		this.mDef = mDef;
 	}
 

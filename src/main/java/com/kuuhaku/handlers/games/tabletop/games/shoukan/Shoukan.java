@@ -501,8 +501,8 @@ public class Shoukan extends GlobalGame {
 				}
 
 				int yPower = Math.round(
-						(yours.getEAtk() + yours.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum()) *
-						(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+						yours.getFinAtk() *
+								(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
 				);
 
 				int hPower;
@@ -515,13 +515,13 @@ public class Shoukan extends GlobalGame {
 						}
 					}
 					hPower = Math.round(
-							(his.getEDef() + his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum()) *
-							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+							(his.getFinDef() + his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum()) *
+									(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 					);
 				} else
 					hPower = Math.round(
-							(his.getEAtk() + his.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum()) *
-							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+							his.getFinAtk() *
+									(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 					);
 
 				if (yPower > hPower) {
