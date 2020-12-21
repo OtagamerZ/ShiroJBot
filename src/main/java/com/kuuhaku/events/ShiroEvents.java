@@ -477,30 +477,31 @@ public class ShiroEvents extends ListenerAdapter {
 	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
 		Guild guild = event.getGuild();
 		Member member = event.getMember();
+		User author = event.getUser();
 		try {
-			if (BlacklistDAO.isBlacklisted(event.getUser())) return;
+			if (BlacklistDAO.isBlacklisted(author)) return;
 			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 			MemberDAO.addMemberToDB(member);
 
 			if (!gc.getMsgBoasVindas().equals("")) {
-				if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
-					Helper.logToChannel(event.getUser(), false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + event.getUser().getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", guild);
+				if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
+					Helper.logToChannel(author, false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + author.getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", guild);
 					guild.kick(member).queue();
 					return;
 				}
-				URL url = new URL(Objects.requireNonNull(event.getUser().getAvatarUrl()));
+				URL url = new URL(Objects.requireNonNull(author.getAvatarUrl()));
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
 
 				EmbedBuilder eb = new EmbedBuilder();
 
-				eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
+				eb.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl());
 				eb.setColor(Helper.colorThief(image));
-				eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", event.getUser().getName()).replace("%guild%", guild.getName()));
-				eb.setThumbnail(event.getUser().getAvatarUrl());
-				eb.setFooter("ID do usuário: " + event.getUser().getId(), guild.getIconUrl());
+				eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
+				eb.setThumbnail(author.getAvatarUrl());
+				eb.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				switch ((int) (Math.random() * 5)) {
 					case 0 -> eb.setTitle("Opa, parece que temos um novo membro?");
 					case 1 -> eb.setTitle("Mais um membro para nosso lindo servidor!");
@@ -509,10 +510,10 @@ public class ShiroEvents extends ListenerAdapter {
 					case 4 -> eb.setTitle("Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!");
 				}
 
-				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalBV())).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
-				Helper.logToChannel(event.getUser(), false, null, "Um usuário entrou no servidor", guild);
-			} else if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
-				Helper.logToChannel(event.getUser(), false, null, "Um usuário foi bloqueado de entrar no servidor", guild);
+				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalBV())).sendMessage(author.getAsMention()).embed(eb.build()).queue();
+				Helper.logToChannel(author, false, null, "Um usuário entrou no servidor", guild);
+			} else if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
+				Helper.logToChannel(author, false, null, "Um usuário foi bloqueado de entrar no servidor", guild);
 				guild.kick(member).queue();
 			}
 		} catch (Exception ignore) {
@@ -522,16 +523,16 @@ public class ShiroEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
 		Guild guild = event.getGuild();
-		Member member = event.getMember();
+		User author = event.getUser();
 		try {
-			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 			/*com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(event.getMember().getId() + event.getGuild().getId());
 			m.setMarkForDelete(true);
 			MemberDAO.updateMemberConfigs(m);*/
 
 			if (!gc.getMsgAdeus().equals("")) {
-				URL url = new URL(Objects.requireNonNull(event.getUser().getAvatarUrl()));
+				URL url = new URL(Objects.requireNonNull(author.getAvatarUrl()));
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
@@ -540,11 +541,11 @@ public class ShiroEvents extends ListenerAdapter {
 
 				EmbedBuilder eb = new EmbedBuilder();
 
-				eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
+				eb.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl());
 				eb.setColor(Helper.colorThief(image));
-				eb.setThumbnail(event.getUser().getAvatarUrl());
-				eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
-				eb.setFooter("ID do usuário: " + event.getUser().getId() + "\n\nServidor gerenciado por " + Objects.requireNonNull(event.getGuild().getOwner()).getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
+				eb.setThumbnail(author.getAvatarUrl());
+				eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
+				eb.setFooter("ID do usuário: " + author.getId() + "\n\nServidor gerenciado por " + Objects.requireNonNull(guild.getOwner()).getEffectiveName(), guild.getOwner().getUser().getAvatarUrl());
 				switch (rmsg) {
 					case 0 -> eb.setTitle("Nãããoo...um membro deixou este servidor!");
 					case 1 -> eb.setTitle("O quê? Temos um membro a menos neste servidor!");
@@ -553,8 +554,8 @@ public class ShiroEvents extends ListenerAdapter {
 					case 4 -> eb.setTitle("Saíram do servidor bem no meio de uma teamfight, da pra acreditar?");
 				}
 
-				Objects.requireNonNull(event.getGuild().getTextChannelById(gc.getCanalAdeus())).sendMessage(eb.build()).queue();
-				Helper.logToChannel(event.getUser(), false, null, "Um usuário saiu do servidor", event.getGuild());
+				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalAdeus())).sendMessage(eb.build()).queue();
+				Helper.logToChannel(author, false, null, "Um usuário saiu do servidor", guild);
 			}
 		} catch (Exception ignore) {
 		}
