@@ -313,6 +313,11 @@ public class Shoukan extends GlobalGame {
 								h.addMana(Math.max(1, Math.round(t.getMana() / 2f)));
 								destroyCard(h.getSide(), toEquip);
 							}
+							case HEX -> {
+								h.removeHp(tp.getDef());
+								getHands().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP).removeHp(tp.getAtk());
+								unequipCard(h.getSide(), dest, slots);
+							}
 						}
 
 						if (postCombat()) return;
