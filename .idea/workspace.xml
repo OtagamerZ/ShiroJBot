@@ -13,11 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas configurações de servidor">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Aumento no ganho de créditos por voto" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -934,14 +930,7 @@
       <workItem from="1608521104756" duration="4278000" />
       <workItem from="1608568775365" duration="2962000" />
       <workItem from="1608578250760" duration="4589000" />
-      <workItem from="1608585638879" duration="739000" />
-    </task>
-    <task id="LOCAL-03180" summary="Implementação do modo raqueado concluìdo, início do public beta">
-      <created>1608297049797</created>
-      <option name="number" value="03180" />
-      <option name="presentableId" value="LOCAL-03180" />
-      <option name="project" value="LOCAL" />
-      <updated>1608297049797</updated>
+      <workItem from="1608585638879" duration="1018000" />
     </task>
     <task id="LOCAL-03181" summary="Implementação do modo raqueado concluìdo, início do public beta">
       <created>1608297407896</created>
@@ -1279,7 +1268,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608581645874</updated>
     </task>
-    <option name="localTasksCounter" value="3229" />
+    <task id="LOCAL-03229" summary="Aumento no ganho de créditos por voto">
+      <created>1608586649885</created>
+      <option name="number" value="03229" />
+      <option name="presentableId" value="LOCAL-03229" />
+      <option name="project" value="LOCAL" />
+      <updated>1608586649885</updated>
+    </task>
+    <option name="localTasksCounter" value="3230" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1365,7 +1361,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria na borda das cartas do destino" />
     <MESSAGE value="Correção em certos nomes de anime" />
     <MESSAGE value="Adição de novo GIF para o Archer" />
     <MESSAGE value="Novo campo: Unlimited Blade Works" />
@@ -1390,7 +1385,8 @@
     <MESSAGE value="Correções nas novas mudanças" />
     <MESSAGE value="Novo amuleto: Sortilégio" />
     <MESSAGE value="Correção nas configurações de servidor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nas configurações de servidor" />
+    <MESSAGE value="Aumento no ganho de créditos por voto" />
+    <option name="LAST_COMMIT_MESSAGE" value="Aumento no ganho de créditos por voto" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1504,11 +1500,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608581652074">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608586652881">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608581652074" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608586652881" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

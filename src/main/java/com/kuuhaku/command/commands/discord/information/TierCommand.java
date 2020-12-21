@@ -72,6 +72,7 @@ public class TierCommand extends Command {
 
 		StringBuilder sb = new StringBuilder();
 		StringBuilder prom = new StringBuilder();
+		boolean firstPass = true;
 		for (List<MatchMakingRating> chunk : lobby) {
 			sb.setLength(0);
 
@@ -88,14 +89,15 @@ public class TierCommand extends Command {
 					for (int i = 0; i < mm.getTier().getMd() - (mm.getPromWins() + mm.getPromLosses()); i++)
 						md.append(TagIcons.RANKED_PENDING.getTag(0).trim());
 
-					prom.append("%s - %s\n".formatted(mm.getUser().getName(), md.toString()));
+					prom.append("**%s - %s**\n".formatted(mm.getUser().getName(), md.toString()));
 				} else
 					sb.append("%s - %s PDR\n".formatted(mm.getUser().getName(), mm.getRankPoints()));
 			}
 
-			eb.addField("Promoção de tier", "**" + prom.toString() + "**", false)
-					.addField(Helper.VOID, sb.toString(), false);
+			if (firstPass) eb.addField("Promoção de tier", prom.toString(), false);
+			eb.addField(Helper.VOID, sb.toString(), false);
 			pages.add(new Page(PageType.EMBED, eb.build()));
+			firstPass = false;
 		}
 
 		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
