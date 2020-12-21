@@ -93,7 +93,7 @@ public class TierCommand extends Command {
 					sb.append("%s - %s PDR\n".formatted(mm.getUser().getName(), mm.getRankPoints()));
 			}
 
-			eb.addField("Promoção de tier", prom.toString(), false)
+			eb.addField("Promoção de tier", "**" + prom.toString() + "**", false)
 					.addField(Helper.VOID, sb.toString(), false);
 			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
