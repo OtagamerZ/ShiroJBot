@@ -323,8 +323,9 @@ public class Shoukan extends GlobalGame {
 								destroyCard(h.getSide(), toEquip);
 							}
 							case HEX -> {
-								h.removeHp(tp.getDef());
-								getHands().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP).removeHp(tp.getAtk());
+								double healthModif = Math.max(Helper.prcnt(h.getHp(), tp.getDef()), 1);
+								h.crippleHp(tp.getDef());
+								getHands().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP).removeHp((int) Math.round(tp.getAtk() * healthModif));
 								unequipCard(h.getSide(), dest, slots);
 							}
 						}
