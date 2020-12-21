@@ -33,6 +33,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -192,8 +193,14 @@ public class MatchMakingRating {
 		if (blockedUntil == null) return false;
 		else if (Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3")))).after(blockedUntil)) {
 			blockedUntil = null;
+			MatchMakingRatingDAO.saveMMR(this);
 			return false;
 		} else return true;
+	}
+
+	public int getRemainingBlock() {
+		if (blockedUntil == null) return 0;
+		return (int) TimeUnit.MINUTES.convert(Math.max(0, blockedUntil.getTime() - Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3")))).getTime()), TimeUnit.MILLISECONDS);
 	}
 
 	public void block(int time, TemporalUnit unit) {

@@ -23,6 +23,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.ClusterAction;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
@@ -36,6 +37,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Member;
@@ -48,6 +50,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -108,6 +111,12 @@ public class Shoukan extends GlobalGame {
 				},
 				s -> {
 					if (custom == null) {
+						if (ranked) {
+							MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(getCurrent().getId());
+							mmr.block(30, ChronoUnit.MINUTES);
+							MatchMakingRatingDAO.saveMMR(mmr);
+						}
+
 						getHistory().setWinner(next);
 						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 					}
