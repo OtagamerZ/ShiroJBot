@@ -63,10 +63,12 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -75,6 +77,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -482,32 +485,69 @@ public class ShiroEvents extends ListenerAdapter {
 			if (BlacklistDAO.isBlacklisted(author)) return;
 			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
+			if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
+				Helper.logToChannel(author, false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + author.getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", guild);
+				guild.kick(member).queue();
+				return;
+			}
+
 			MemberDAO.addMemberToDB(member);
 
 			if (!gc.getMsgBoasVindas().equals("")) {
-				if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
-					Helper.logToChannel(author, false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + author.getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", guild);
-					guild.kick(member).queue();
-					return;
-				}
 				URL url = new URL(Objects.requireNonNull(author.getAvatarUrl()));
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
 
-				EmbedBuilder eb = new EmbedBuilder();
+				JSONObject template = gc.getEmbedTemplate();
+				EmbedBuilder eb;
+				if (!template.isEmpty()) {
+					if (template.has("color")) eb = new EmbedBuilder();
+					else eb = new ColorlessEmbedBuilder();
 
-				eb.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl());
-				eb.setColor(Helper.colorThief(image));
-				eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
-				eb.setThumbnail(author.getAvatarUrl());
-				eb.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
-				switch ((int) (Math.random() * 5)) {
-					case 0 -> eb.setTitle("Opa, parece que temos um novo membro?");
-					case 1 -> eb.setTitle("Mais um membro para nosso lindo servidor!");
-					case 2 -> eb.setTitle("Um novo jogador entrou na partida, pressione start 2P!");
-					case 3 -> eb.setTitle("Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!");
-					case 4 -> eb.setTitle("Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!");
+					eb.setTitle(
+							switch (Helper.rng(5, true)) {
+								case 0 -> "Opa, parece que temos um novo membro?";
+								case 1 -> "Mais um membro para nosso lindo servidor!";
+								case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
+								case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
+								case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
+								default -> "";
+							}
+					);
+
+					if (template.has("color")) eb.setColor(Color.decode(template.getString("color")));
+					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
+					if (template.has("image")) eb.setThumbnail(template.getString("image"));
+
+					eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
+
+					if (template.has("fields")) template.getJSONArray("fields").forEach(j -> {
+						try {
+							JSONObject jo = (JSONObject) j;
+							eb.addField(jo.getString("name"), jo.getString("value"), true);
+						} catch (Exception ignore) {
+						}
+					});
+
+					if (template.has("footer")) eb.setFooter(template.getString("footer"), null);
+				} else {
+					eb = new EmbedBuilder()
+							.setTitle(
+									switch (Helper.rng(5, true)) {
+										case 0 -> "Opa, parece que temos um novo membro?";
+										case 1 -> "Mais um membro para nosso lindo servidor!";
+										case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
+										case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
+										case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
+										default -> "";
+									}
+							)
+							.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl())
+							.setColor(Helper.colorThief(image))
+							.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()))
+							.setThumbnail(author.getAvatarUrl())
+							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
 
 				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalBV())).sendMessage(author.getAsMention()).embed(eb.build()).queue();
@@ -537,21 +577,55 @@ public class ShiroEvents extends ListenerAdapter {
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
 
-				int rmsg = (int) (Math.random() * 5);
+				JSONObject template = gc.getEmbedTemplate();
+				EmbedBuilder eb;
+				if (!template.isEmpty()) {
+					if (template.has("color")) eb = new EmbedBuilder();
+					else eb = new ColorlessEmbedBuilder();
 
-				EmbedBuilder eb = new EmbedBuilder();
+					eb.setTitle(
+							switch (Helper.rng(5, true)) {
+								case 0 -> "Nãããoo...um membro deixou este servidor!";
+								case 1 -> "O quê? Temos um membro a menos neste servidor!";
+								case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
+								case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
+								case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
+								default -> "";
+							}
+					);
 
-				eb.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl());
-				eb.setColor(Helper.colorThief(image));
-				eb.setThumbnail(author.getAvatarUrl());
-				eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
-				eb.setFooter("ID do usuário: " + author.getId() + "\n\nServidor gerenciado por " + Objects.requireNonNull(guild.getOwner()).getEffectiveName(), guild.getOwner().getUser().getAvatarUrl());
-				switch (rmsg) {
-					case 0 -> eb.setTitle("Nãããoo...um membro deixou este servidor!");
-					case 1 -> eb.setTitle("O quê? Temos um membro a menos neste servidor!");
-					case 2 -> eb.setTitle("Alguém saiu do servidor, deve ter acabado a pilha, só pode!");
-					case 3 -> eb.setTitle("Bem, alguém não está mais neste servidor, que pena!");
-					case 4 -> eb.setTitle("Saíram do servidor bem no meio de uma teamfight, da pra acreditar?");
+					if (template.has("color")) eb.setColor(Color.decode(template.getString("color")));
+					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
+					if (template.has("image")) eb.setThumbnail(template.getString("image"));
+
+					eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
+
+					if (template.has("fields")) template.getJSONArray("fields").forEach(j -> {
+						try {
+							JSONObject jo = (JSONObject) j;
+							eb.addField(jo.getString("name"), jo.getString("value"), true);
+						} catch (Exception ignore) {
+						}
+					});
+
+					if (template.has("footer")) eb.setFooter(template.getString("footer"), null);
+				} else {
+					eb = new EmbedBuilder()
+							.setTitle(
+									switch (Helper.rng(5, true)) {
+										case 0 -> "Nãããoo...um membro deixou este servidor!";
+										case 1 -> "O quê? Temos um membro a menos neste servidor!";
+										case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
+										case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
+										case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
+										default -> "";
+									}
+							)
+							.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl())
+							.setColor(Helper.colorThief(image))
+							.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()))
+							.setThumbnail(author.getAvatarUrl())
+							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
 
 				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalAdeus())).sendMessage(eb.build()).queue();
