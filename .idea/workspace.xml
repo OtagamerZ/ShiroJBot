@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo amuleto: Sortilégio" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas configurações de servidor" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -929,13 +929,7 @@
       <workItem from="1608350356100" duration="896000" />
       <workItem from="1608521104756" duration="4278000" />
       <workItem from="1608568775365" duration="2962000" />
-    </task>
-    <task id="LOCAL-03177" summary="Correções nas novas mudanças">
-      <created>1608295030089</created>
-      <option name="number" value="03177" />
-      <option name="presentableId" value="LOCAL-03177" />
-      <option name="project" value="LOCAL" />
-      <updated>1608295030089</updated>
+      <workItem from="1608578250760" duration="735000" />
     </task>
     <task id="LOCAL-03178" summary="Correções nas novas mudanças">
       <created>1608296054928</created>
@@ -1273,7 +1267,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608571069990</updated>
     </task>
-    <option name="localTasksCounter" value="3226" />
+    <task id="LOCAL-03226" summary="Correção nas configurações de servidor">
+      <created>1608578369342</created>
+      <option name="number" value="03226" />
+      <option name="presentableId" value="LOCAL-03226" />
+      <option name="project" value="LOCAL" />
+      <updated>1608578369343</updated>
+    </task>
+    <option name="localTasksCounter" value="3227" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1359,7 +1360,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição do saque do destino" />
     <MESSAGE value="Melhoria na borda das cartas do destino" />
     <MESSAGE value="Correção em certos nomes de anime" />
     <MESSAGE value="Adição de novo GIF para o Archer" />
@@ -1384,7 +1384,8 @@
     <MESSAGE value="Adição do minigame de roleta no Shoukan personalizado" />
     <MESSAGE value="Correções nas novas mudanças" />
     <MESSAGE value="Novo amuleto: Sortilégio" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novo amuleto: Sortilégio" />
+    <MESSAGE value="Correção nas configurações de servidor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nas configurações de servidor" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1498,11 +1499,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608571076880">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608578370642">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608571076880" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608578370642" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
