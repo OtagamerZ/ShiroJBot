@@ -13,11 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções nas novas mudanças">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/charm/blast.png" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo amuleto: Sortilégio">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +112,7 @@
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="Entrar 123 adwa" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/source" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -150,11 +148,11 @@
       <recent name="com.kuuhaku.command.commands.discord.dev" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
       <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\arenas" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\assets" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -167,17 +165,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -943,28 +930,8 @@
       <workItem from="1608224693076" duration="12272000" />
       <workItem from="1608307554659" duration="10840000" />
       <workItem from="1608350356100" duration="896000" />
-      <workItem from="1608521104756" duration="3408000" />
-    </task>
-    <task id="LOCAL-03172" summary="Adição de ranqueadas para o Shoukan">
-      <created>1608238230820</created>
-      <option name="number" value="03172" />
-      <option name="presentableId" value="LOCAL-03172" />
-      <option name="project" value="LOCAL" />
-      <updated>1608238230820</updated>
-    </task>
-    <task id="LOCAL-03173" summary="Adição de ranqueadas para o Shoukan">
-      <created>1608238415466</created>
-      <option name="number" value="03173" />
-      <option name="presentableId" value="LOCAL-03173" />
-      <option name="project" value="LOCAL" />
-      <updated>1608238415466</updated>
-    </task>
-    <task id="LOCAL-03174" summary="Correções nas novas mudanças">
-      <created>1608241947807</created>
-      <option name="number" value="03174" />
-      <option name="presentableId" value="LOCAL-03174" />
-      <option name="project" value="LOCAL" />
-      <updated>1608241947808</updated>
+      <workItem from="1608521104756" duration="4278000" />
+      <workItem from="1608568775365" duration="1020000" />
     </task>
     <task id="LOCAL-03175" summary="Correções nas novas mudanças">
       <created>1608293955738</created>
@@ -1288,7 +1255,28 @@
       <option name="project" value="LOCAL" />
       <updated>1608523141928</updated>
     </task>
-    <option name="localTasksCounter" value="3221" />
+    <task id="LOCAL-03221" summary="Novo amuleto: Sortilégio">
+      <created>1608524687125</created>
+      <option name="number" value="03221" />
+      <option name="presentableId" value="LOCAL-03221" />
+      <option name="project" value="LOCAL" />
+      <updated>1608524687125</updated>
+    </task>
+    <task id="LOCAL-03222" summary="Novo amuleto: Sortilégio">
+      <created>1608524895889</created>
+      <option name="number" value="03222" />
+      <option name="presentableId" value="LOCAL-03222" />
+      <option name="project" value="LOCAL" />
+      <updated>1608524895889</updated>
+    </task>
+    <task id="LOCAL-03223" summary="Novo amuleto: Sortilégio">
+      <created>1608525415845</created>
+      <option name="number" value="03223" />
+      <option name="presentableId" value="LOCAL-03223" />
+      <option name="project" value="LOCAL" />
+      <updated>1608525415846</updated>
+    </task>
+    <option name="localTasksCounter" value="3224" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1374,7 +1362,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no modo treino do Shoukan" />
     <MESSAGE value="Adição do saque do destino" />
     <MESSAGE value="Melhoria na borda das cartas do destino" />
     <MESSAGE value="Correção em certos nomes de anime" />
@@ -1399,7 +1386,8 @@
     <MESSAGE value="Mudança nos nomes dos tiers" />
     <MESSAGE value="Adição do minigame de roleta no Shoukan personalizado" />
     <MESSAGE value="Correções nas novas mudanças" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções nas novas mudanças" />
+    <MESSAGE value="Novo amuleto: Sortilégio" />
+    <option name="LAST_COMMIT_MESSAGE" value="Novo amuleto: Sortilégio" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1513,11 +1501,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608523144238">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608525416600">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608523144238" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608525416600" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
