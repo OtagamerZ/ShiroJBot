@@ -14,27 +14,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções nas novas mudanças">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_i.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_ii.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_iii.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_iv.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_i.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_ii.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_iv.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentive_iii.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_i.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_ii.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_iii.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_iv.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_i.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_ii.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_iii.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_iv.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/master/master.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/charm/blast.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -960,14 +943,7 @@
       <workItem from="1608224693076" duration="12272000" />
       <workItem from="1608307554659" duration="10840000" />
       <workItem from="1608350356100" duration="896000" />
-      <workItem from="1608521104756" duration="1910000" />
-    </task>
-    <task id="LOCAL-03171" summary="Adição de ranqueadas para o Shoukan">
-      <created>1608237270152</created>
-      <option name="number" value="03171" />
-      <option name="presentableId" value="LOCAL-03171" />
-      <option name="project" value="LOCAL" />
-      <updated>1608237270152</updated>
+      <workItem from="1608521104756" duration="3408000" />
     </task>
     <task id="LOCAL-03172" summary="Adição de ranqueadas para o Shoukan">
       <created>1608238230820</created>
@@ -1305,7 +1281,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608509733231</updated>
     </task>
-    <option name="localTasksCounter" value="3220" />
+    <task id="LOCAL-03220" summary="Correções nas novas mudanças">
+      <created>1608523141928</created>
+      <option name="number" value="03220" />
+      <option name="presentableId" value="LOCAL-03220" />
+      <option name="project" value="LOCAL" />
+      <updated>1608523141928</updated>
+    </task>
+    <option name="localTasksCounter" value="3221" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1530,11 +1513,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608509735410">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608523144238">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608509735410" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608523144238" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
