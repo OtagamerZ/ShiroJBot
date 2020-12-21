@@ -15,6 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas configurações de servidor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -931,14 +933,8 @@
       <workItem from="1608350356100" duration="896000" />
       <workItem from="1608521104756" duration="4278000" />
       <workItem from="1608568775365" duration="2962000" />
-      <workItem from="1608578250760" duration="1743000" />
-    </task>
-    <task id="LOCAL-03179" summary="Correções nas novas mudanças">
-      <created>1608296865636</created>
-      <option name="number" value="03179" />
-      <option name="presentableId" value="LOCAL-03179" />
-      <option name="project" value="LOCAL" />
-      <updated>1608296865636</updated>
+      <workItem from="1608578250760" duration="4589000" />
+      <workItem from="1608585638879" duration="739000" />
     </task>
     <task id="LOCAL-03180" summary="Implementação do modo raqueado concluìdo, início do public beta">
       <created>1608297049797</created>
@@ -1276,7 +1272,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608580331752</updated>
     </task>
-    <option name="localTasksCounter" value="3228" />
+    <task id="LOCAL-03228" summary="Correção nas configurações de servidor">
+      <created>1608581645874</created>
+      <option name="number" value="03228" />
+      <option name="presentableId" value="LOCAL-03228" />
+      <option name="project" value="LOCAL" />
+      <updated>1608581645874</updated>
+    </task>
+    <option name="localTasksCounter" value="3229" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1501,11 +1504,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608580342816">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608581652074">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608580342816" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608581652074" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
