@@ -193,7 +193,7 @@ public class TradeCardCommand extends Command {
 
             if (price < min) {
                 if (hasLoan)
-                    channel.sendMessage("❌ | Como esse usuário possui dívida ativa, você não pode oferecer menos que " + min + " créditos por " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + ".").queue();
+                    channel.sendMessage("❌ | Como esse usuário possui uma dívida ativa, você não pode oferecer menos que " + min + " créditos por " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + ".").queue();
                 else
                     channel.sendMessage("❌ | Você não pode oferecer menos que " + min + " créditos por " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + ".").queue();
                 return;
@@ -343,7 +343,7 @@ public class TradeCardCommand extends Command {
                 }
             }
 
-            boolean hasLoan = tacc.getLoan() > 0;
+            boolean hasLoan = acc.getLoan() > 0;
             int min = switch (type) {
                 case 1 -> ((KawaiponCard) product.getRight())
                         .getCard()
