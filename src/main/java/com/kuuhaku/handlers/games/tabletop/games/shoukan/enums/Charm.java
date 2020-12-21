@@ -30,7 +30,8 @@ public enum Charm {
 	DOUBLETAP("Toque duplo"),
 	DOPPELGANGER("Clone"),
 	SACRIFICE("Sacrifício"),
-	SOULLINK("Vínculo espiritual");
+	SOULLINK("Vínculo espiritual"),
+	HEX("Sortilégio");
 
 	private final String name;
 
