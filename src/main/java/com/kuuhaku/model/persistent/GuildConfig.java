@@ -113,6 +113,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "TEXT")
 	private String rules = "";
 
+	@Column(columnDefinition = "TEXT")
+	private String embedTemplate = "{}";
+
 	//NUMBERS
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 60")
 	private int pollTime = 60;
@@ -383,6 +386,16 @@ public class GuildConfig {
 		List<String> ph = new ArrayList<>(getRules());
 		ph.remove(index);
 		rules = new JSONArray(ph).toString();
+	}
+
+	public JSONObject getEmbedTemplate() {
+		if (embedTemplate.isBlank()) return new JSONObject();
+		else return new JSONObject(embedTemplate);
+	}
+
+	public void setEmbedTemplate(JSONObject embedTemplate) {
+		if (embedTemplate == null) this.embedTemplate = "{}";
+		else this.embedTemplate = embedTemplate.toString();
 	}
 
 	public boolean isHardAntispam() {
