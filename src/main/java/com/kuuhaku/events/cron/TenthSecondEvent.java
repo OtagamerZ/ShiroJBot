@@ -137,8 +137,8 @@ public class TenthSecondEvent implements Job {
 
 	private void sendConfirmation(Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1, Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2, TextChannel p1Channel, TextChannel p2Channel, List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match, Runnable result) {
 		Main.getInfo().getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
-			private Future<?> timeout = p1Channel.sendMessage("Tempo para aceitar a partida encerrado, você está impedido de entrar no saguão novamente por 10 minutos.")
-					.queueAfter(5, TimeUnit.MINUTES, msg -> {
+			private Future<?> timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotadp, você está impedido de entrar no saguão novamente por 10 minutos.")
+					.queueAfter(1, TimeUnit.MINUTES, msg -> {
 						p1.getKey().block(10, ChronoUnit.MINUTES);
 						MatchMakingRatingDAO.saveMMR(p1.getKey());
 						match.add(Pair.of(p1, false));

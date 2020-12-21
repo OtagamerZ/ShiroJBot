@@ -117,6 +117,9 @@ public class ShoukanCommand extends Command {
 			} else if (Main.getInfo().getMatchMaking().getLobby().keySet().stream().anyMatch(mr -> mr.getUserId().equals(author.getId()))) {
 				channel.sendMessage("❌ | Você já está no saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
 				return;
+			} else if (mmr.isBlocked()) {
+				channel.sendMessage("❌ | Você está impedido de entrar no saguão ranqueado devido a um abandono recente (Tempo restante: %s min).".formatted(mmr.getRemainingBlock())).queue();
+				return;
 			}
 
 			Main.getInfo().getMatchMaking().joinLobby(mmr, (TextChannel) channel);
