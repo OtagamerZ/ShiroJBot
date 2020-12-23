@@ -174,7 +174,7 @@ public class MatchMakingRating {
 			return;
 		}
 
-		rankPoints = Math.max(0, rpValue - rankPoints);
+		rankPoints = Math.max(0, rankPoints - rpValue);
 	}
 
 	public RankedTier getTier() {
