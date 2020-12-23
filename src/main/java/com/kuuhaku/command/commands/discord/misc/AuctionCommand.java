@@ -241,7 +241,7 @@ public class AuctionCommand extends Command {
                                         KawaiponDAO.saveKawaipon(k);
                                         KawaiponDAO.saveKawaipon(buyer);
                                         AccountDAO.saveAccount(acc);
-                                        AccountDAO.saveAccount(oacc.get());
+                                        AccountDAO.saveAccount(bacc);
 
                                         Main.getInfo().getConfirmationPending().invalidate(author.getId());
                                         close();
