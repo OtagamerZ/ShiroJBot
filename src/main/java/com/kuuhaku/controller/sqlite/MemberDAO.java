@@ -22,6 +22,7 @@ import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.model.persistent.Member;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
