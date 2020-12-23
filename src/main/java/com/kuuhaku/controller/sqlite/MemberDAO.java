@@ -28,15 +28,17 @@ import java.util.List;
 public class MemberDAO {
 	public static Member getMemberById(String id) {
 		EntityManager em = Manager.getEntityManager();
-		Member m;
 
 		Query q = em.createQuery("SELECT m FROM Member m WHERE id = :id", Member.class);
 		q.setParameter("id", id);
-		m = (Member) q.getSingleResult();
 
-		em.close();
-
-		return m;
+		try {
+			return (Member) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
 	}
 
 	public static Member getHighestProfile(String id) {
@@ -97,16 +99,18 @@ public class MemberDAO {
 		if (u == null || BlacklistDAO.isBlacklisted(u.getId())) return;
 		EntityManager em = Manager.getEntityManager();
 
-		Member m = new Member();
-		m.setId(u.getUser().getId() + u.getGuild().getId());
-		m.setMid(u.getUser().getId());
-		m.setSid(u.getGuild().getId());
+		if (getMemberById(u.getUser().getId() + u.getGuild().getId()) == null) {
+			Member m = new Member();
+			m.setId(u.getUser().getId() + u.getGuild().getId());
+			m.setMid(u.getUser().getId());
+			m.setSid(u.getGuild().getId());
 
-		em.getTransaction().begin();
-		em.merge(m);
-		em.getTransaction().commit();
+			em.getTransaction().begin();
+			em.merge(m);
+			em.getTransaction().commit();
 
-		em.close();
+			em.close();
+		} 
 	}
 
 	public static void updateMemberConfigs(Member m) {
