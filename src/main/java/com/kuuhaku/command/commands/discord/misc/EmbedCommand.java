@@ -77,7 +77,7 @@ public class EmbedCommand extends Command {
 				if (json.has("title")) eb.setTitle(json.getString("title"));
 				if (json.has("color")) eb.setColor(Color.decode(json.getString("color")));
 				if (json.has("thumbnail")) eb.setThumbnail(json.getString("thumbnail"));
-				if (json.has("image")) eb.setThumbnail(json.getString("image"));
+				if (json.has("image")) eb.setImage(json.getString("image"));
 				if (json.has("body")) eb.setDescription(json.getString("body"));
 
 				if (json.has("fields")) json.getJSONArray("fields").forEach(j -> {
