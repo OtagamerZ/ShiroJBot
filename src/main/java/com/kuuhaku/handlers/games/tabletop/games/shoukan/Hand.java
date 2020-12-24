@@ -94,7 +94,7 @@ public class Hand {
 	public boolean manualDraw() {
 		try {
 			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
-				return manualDrawChampion();
+				manualDrawChampion();
 			else cards.add(getDeque().removeFirst().copy());
 			return true;
 		} catch (NoSuchElementException e) {
@@ -151,14 +151,12 @@ public class Hand {
 		}
 	}
 
-	public boolean manualDrawChampion() {
+	public void manualDrawChampion() {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow().copy();
 			getDeque().remove(dr);
 			cards.add(dr);
-			return true;
-		} catch (NoSuchElementException e) {
-			return false;
+		} catch (NoSuchElementException ignore) {
 		}
 	}
 
