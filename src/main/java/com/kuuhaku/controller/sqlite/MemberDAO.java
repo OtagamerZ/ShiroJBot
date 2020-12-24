@@ -30,13 +30,8 @@ public class MemberDAO {
 	public static Member getMemberById(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE id = :id", Member.class);
-		q.setParameter("id", id);
-
 		try {
-			return (Member) q.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
+			return em.find(Member.class, id);
 		} finally {
 			em.close();
 		}
