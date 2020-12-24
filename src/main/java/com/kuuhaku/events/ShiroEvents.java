@@ -362,7 +362,9 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(member.getId() + member.getGuild().getId());
-					if (m.getMid() == null) {
+					if (m == null) {
+						MemberDAO.addMemberToDB(member);
+					} else if (m.getMid() == null) {
 						m.setMid(author.getId());
 						m.setSid(guild.getId());
 					}
@@ -377,8 +379,6 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					MemberDAO.updateMemberConfigs(m);
-				} catch (NoResultException e) {
-					MemberDAO.addMemberToDB(member);
 				} catch (ErrorResponseException | NullPointerException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
