@@ -518,7 +518,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 					if (template.has("color")) eb.setColor(Color.decode(template.getString("color")));
 					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
-					if (template.has("image")) eb.setThumbnail(template.getString("image"));
+					if (template.has("image")) eb.setImage(template.getString("image"));
 
 					eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
 
@@ -596,7 +596,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 					if (template.has("color")) eb.setColor(Color.decode(template.getString("color")));
 					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
-					if (template.has("image")) eb.setThumbnail(template.getString("image"));
+					if (template.has("image")) eb.setImage(template.getString("image"));
 
 					eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
 
