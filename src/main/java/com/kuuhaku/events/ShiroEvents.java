@@ -364,6 +364,7 @@ public class ShiroEvents extends ListenerAdapter {
 					com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(member.getId() + member.getGuild().getId());
 					if (m == null) {
 						MemberDAO.addMemberToDB(member);
+						m = MemberDAO.getMemberById(member.getId() + member.getGuild().getId());
 					} else if (m.getMid() == null) {
 						m.setMid(author.getId());
 						m.setSid(guild.getId());
