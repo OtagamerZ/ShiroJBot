@@ -54,7 +54,7 @@ public class TenthSecondEvent implements Job {
 		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> lobby = new ArrayList<>(Main.getInfo().getMatchMaking().getLobby().entrySet());
 		if (lobby.size() > 1) {
 			for (int a = 0; a < lobby.size(); a++) {
-				for (int b = a; b < lobby.size(); b++) {
+				for (int b = 0; b < lobby.size(); b++) {
 					if (tryMatching(lobby, a, b)) {
 						lock = false;
 						return;
