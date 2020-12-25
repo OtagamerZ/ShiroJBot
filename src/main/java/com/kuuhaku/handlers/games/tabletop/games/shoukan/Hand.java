@@ -83,9 +83,9 @@ public class Hand {
 			startingCount = Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
 			manaPerTurn = Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
 
-			if (!game.getCustom().optBoolean("semequip"))
+			if (game.getCustom().optBoolean("semequip"))
 				getDeque().removeIf(d -> d instanceof Equipment);
-			if (!game.getCustom().optBoolean("semfield"))
+			if (game.getCustom().optBoolean("semfield"))
 				getDeque().removeIf(d -> d instanceof Field);
 
 			switch (game.getCustom().optString("arcade")) {
@@ -149,9 +149,9 @@ public class Hand {
 	public void draw(Card card) {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -160,9 +160,9 @@ public class Hand {
 		if (lockTime > 0) return;
 		Card card = drawable.getCard();
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -170,18 +170,18 @@ public class Hand {
 	public void drawChampion() {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
 
 	public void manualDrawChampion() {
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -189,9 +189,9 @@ public class Hand {
 	public void drawEquipment() {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -199,9 +199,9 @@ public class Hand {
 	public void drawField() {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -209,15 +209,15 @@ public class Hand {
 	public void drawRace(Race race) {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
 
 	public void redrawHand() {
-		for (int i = 0; i < startingCount; i++) draw();
+		for (int i = 0; i < startingCount; i++) manualDraw();
 	}
 
 	public User getUser() {
