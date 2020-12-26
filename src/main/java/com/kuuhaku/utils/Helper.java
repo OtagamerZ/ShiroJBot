@@ -1728,7 +1728,7 @@ public class Helper {
 
 		kp.setChampions(getRandomN(CardDAO.getAllChampions(), 30, 3, seed));
 		kp.setEquipments(getRandomN(CardDAO.getAllEquipments(), 6, 3, seed));
-		kp.setFields(getRandomN(CardDAO.getAllFields(), 1, 3, seed));
+		kp.setFields(getRandomN(CardDAO.getAllAvailableFields(), 1, 3, seed));
 
 		return kp;
 	}
