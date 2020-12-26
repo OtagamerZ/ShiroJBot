@@ -557,7 +557,8 @@ public class ShiroEvents extends ListenerAdapter {
 				Helper.logToChannel(author, false, null, "Um usuário foi bloqueado de entrar no servidor", guild);
 				guild.kick(member).queue();
 			}
-		} catch (Exception ignore) {
+		} catch (Exception e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
