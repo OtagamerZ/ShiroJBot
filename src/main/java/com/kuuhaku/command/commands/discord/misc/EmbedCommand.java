@@ -104,6 +104,9 @@ public class EmbedCommand extends Command {
 												channel.sendMessage(":white_check_mark: | Embed de servidor definido com sucesso!").queue();
 											}), true, 1, TimeUnit.MINUTES
 											, u -> u.getId().equals(author.getId())
+											, ms -> {
+												ms.editMessage(eb.build()).queue();
+											}
 									)
 							);
 				else
