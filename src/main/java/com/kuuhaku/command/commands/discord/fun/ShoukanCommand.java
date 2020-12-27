@@ -124,11 +124,7 @@ public class ShoukanCommand extends Command {
 
 			Main.getInfo().getMatchMaking().joinLobby(mmr, (TextChannel) channel);
 			channel.sendMessage("Você entrou no saguão com sucesso, você será notificado caso uma partida seja encontrada (" + (Main.getInfo().getMatchMaking().getLobby().size() - 1) + " no saguão).").queue(s ->
-					Pages.buttonize(s, Map.of(
-							Helper.CANCEL, (mb, ms) -> {
-								Main.getInfo().getMatchMaking().getLobby().remove(mmr);
-								ms.delete().queue();
-							}), false, 30, TimeUnit.MINUTES
+					Pages.buttonize(s, Collections.emptyMap(), true, 30, TimeUnit.MINUTES
 							, u -> u.getId().equals(author.getId())
 							, ms -> {
 								Main.getInfo().getMatchMaking().getLobby().remove(mmr);
