@@ -105,7 +105,7 @@ public class EmbedCommand extends Command {
 											}), true, 1, TimeUnit.MINUTES
 											, u -> u.getId().equals(author.getId())
 											, ms -> {
-												ms.editMessage(eb.build()).queue();
+												ms.editMessage(null).queue();
 											}
 									)
 							);
