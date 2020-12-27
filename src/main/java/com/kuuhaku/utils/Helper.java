@@ -393,7 +393,7 @@ public class Helper {
 				chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
 			else chkdSrc[i] = source[i];
 		}
-		return String.join(" ", chkdSrc).trim().replace("@everyone", "everyone").replace("@here", "here");
+		return String.join(" ", chkdSrc).trim().replace("@everyone", "`@everyone`").replace("@here", "`@here`");
 	}
 
 	public static String makeEmoteFromMention(String sourceNoSplit) {
@@ -404,11 +404,11 @@ public class Helper {
 				chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
 			else chkdSrc[i] = source[i];
 		}
-		return String.join(" ", chkdSrc).trim().replace("@everyone", "everyone").replace("@here", "here");
+		return String.join(" ", chkdSrc).trim().replace("@everyone", "`@everyone`").replace("@here", "`@here`");
 	}
 
 	public static String stripEmotesAndMentions(String source) {
-		return Helper.getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", "everyone").replace("@here", "here"), "...");
+		return Helper.getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", "`@everyone`").replace("@here", "`@here`"), "...");
 	}
 
 	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
