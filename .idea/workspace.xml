@@ -13,11 +13,28 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação de threading nos jogos">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação dos banners de ranqueada">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_i.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_i.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_ii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_ii.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_iii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_iii.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_iv.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_iv.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_i.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_i.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_ii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_ii.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_iii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_iii.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_iv.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_iv.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/archmage/archmage.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/archmage/archmage.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_i.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_i.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_ii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_ii.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_iii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_iii.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_iv.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_iv.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_i.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_i.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_iii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_iii.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_iv.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_iv.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/inititate_ii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/inititate_ii.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/master/master.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/master/master.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/oracle/oracle.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/oracle/oracle.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,8 +130,8 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="last.edited.regexp" value="Entrar 123 adwa" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/source" />
+    <property name="last.edited.regexp" value="blabla_iv" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/banners" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -143,18 +160,18 @@
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.information" />
       <recent name="com.kuuhaku.command.commands.discord.dev" />
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
-      <recent name="com.kuuhaku.command.commands.discord.information" />
       <recent name="com.kuuhaku.events.cron" />
       <recent name="com.kuuhaku.handlers.games.tabletop.framework" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners" />
       <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
       <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\arenas" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -950,90 +967,8 @@
       <workItem from="1608587040376" duration="280000" />
       <workItem from="1608587495489" duration="127000" />
       <workItem from="1608589371029" duration="1503000" />
-    </task>
-    <task id="LOCAL-03184" summary="Implementação do modo raqueado concluìdo, início do public beta">
-      <created>1608299058492</created>
-      <option name="number" value="03184" />
-      <option name="presentableId" value="LOCAL-03184" />
-      <option name="project" value="LOCAL" />
-      <updated>1608299058492</updated>
-    </task>
-    <task id="LOCAL-03185" summary="Implementação do modo raqueado concluìdo, início do public beta">
-      <created>1608299135393</created>
-      <option name="number" value="03185" />
-      <option name="presentableId" value="LOCAL-03185" />
-      <option name="project" value="LOCAL" />
-      <updated>1608299135393</updated>
-    </task>
-    <task id="LOCAL-03186" summary="Implementação do modo raqueado concluìdo, início do public beta">
-      <created>1608299486870</created>
-      <option name="number" value="03186" />
-      <option name="presentableId" value="LOCAL-03186" />
-      <option name="project" value="LOCAL" />
-      <updated>1608299486870</updated>
-    </task>
-    <task id="LOCAL-03187" summary="Implementação do modo raqueado concluìdo, início do public beta">
-      <created>1608300651267</created>
-      <option name="number" value="03187" />
-      <option name="presentableId" value="LOCAL-03187" />
-      <option name="project" value="LOCAL" />
-      <updated>1608300651268</updated>
-    </task>
-    <task id="LOCAL-03188" summary="Implementação do modo raqueado concluìdo, início do public beta">
-      <created>1608300712004</created>
-      <option name="number" value="03188" />
-      <option name="presentableId" value="LOCAL-03188" />
-      <option name="project" value="LOCAL" />
-      <updated>1608300712004</updated>
-    </task>
-    <task id="LOCAL-03189" summary="Implementação do modo raqueado concluìdo, início do public beta">
-      <created>1608301482909</created>
-      <option name="number" value="03189" />
-      <option name="presentableId" value="LOCAL-03189" />
-      <option name="project" value="LOCAL" />
-      <updated>1608301482909</updated>
-    </task>
-    <task id="LOCAL-03190" summary="Melhorias gerais">
-      <created>1608302209469</created>
-      <option name="number" value="03190" />
-      <option name="presentableId" value="LOCAL-03190" />
-      <option name="project" value="LOCAL" />
-      <updated>1608302209469</updated>
-    </task>
-    <task id="LOCAL-03191" summary="Adição dos comandos para ver o lobby e o ranking do Shoukan ranqueado">
-      <created>1608303326461</created>
-      <option name="number" value="03191" />
-      <option name="presentableId" value="LOCAL-03191" />
-      <option name="project" value="LOCAL" />
-      <updated>1608303326461</updated>
-    </task>
-    <task id="LOCAL-03192" summary="Adição dos comandos para ver o lobby e o ranking do Shoukan ranqueado">
-      <created>1608307931475</created>
-      <option name="number" value="03192" />
-      <option name="presentableId" value="LOCAL-03192" />
-      <option name="project" value="LOCAL" />
-      <updated>1608307931475</updated>
-    </task>
-    <task id="LOCAL-03193" summary="Adição dos comandos para ver o lobby e o ranking do Shoukan ranqueado">
-      <created>1608308238426</created>
-      <option name="number" value="03193" />
-      <option name="presentableId" value="LOCAL-03193" />
-      <option name="project" value="LOCAL" />
-      <updated>1608308238426</updated>
-    </task>
-    <task id="LOCAL-03194" summary="Adição dos comandos para ver o lobby e o ranking do Shoukan ranqueado">
-      <created>1608308430631</created>
-      <option name="number" value="03194" />
-      <option name="presentableId" value="LOCAL-03194" />
-      <option name="project" value="LOCAL" />
-      <updated>1608308430631</updated>
-    </task>
-    <task id="LOCAL-03195" summary="Adição dos comandos para ver o lobby e o ranking do Shoukan ranqueado">
-      <created>1608308549008</created>
-      <option name="number" value="03195" />
-      <option name="presentableId" value="LOCAL-03195" />
-      <option name="project" value="LOCAL" />
-      <updated>1608308549008</updated>
+      <workItem from="1609132262598" duration="41000" />
+      <workItem from="1609179554410" duration="527000" />
     </task>
     <task id="LOCAL-03196" summary="Mudança nos nomes dos tiers">
       <created>1608309952236</created>
@@ -1294,7 +1229,91 @@
       <option name="project" value="LOCAL" />
       <updated>1609118463715</updated>
     </task>
-    <option name="localTasksCounter" value="3233" />
+    <task id="LOCAL-03233" summary="Implementação de threading">
+      <created>1609119554399</created>
+      <option name="number" value="03233" />
+      <option name="presentableId" value="LOCAL-03233" />
+      <option name="project" value="LOCAL" />
+      <updated>1609119554400</updated>
+    </task>
+    <task id="LOCAL-03234" summary="Implementação de threading">
+      <created>1609119597680</created>
+      <option name="number" value="03234" />
+      <option name="presentableId" value="LOCAL-03234" />
+      <option name="project" value="LOCAL" />
+      <updated>1609119597680</updated>
+    </task>
+    <task id="LOCAL-03235" summary="Implementação de threading">
+      <created>1609120628179</created>
+      <option name="number" value="03235" />
+      <option name="presentableId" value="LOCAL-03235" />
+      <option name="project" value="LOCAL" />
+      <updated>1609120628179</updated>
+    </task>
+    <task id="LOCAL-03236" summary="Implementação de threading">
+      <created>1609121409434</created>
+      <option name="number" value="03236" />
+      <option name="presentableId" value="LOCAL-03236" />
+      <option name="project" value="LOCAL" />
+      <updated>1609121409434</updated>
+    </task>
+    <task id="LOCAL-03237" summary="Implementação de threading">
+      <created>1609122925833</created>
+      <option name="number" value="03237" />
+      <option name="presentableId" value="LOCAL-03237" />
+      <option name="project" value="LOCAL" />
+      <updated>1609122925833</updated>
+    </task>
+    <task id="LOCAL-03238" summary="Implementação de threading">
+      <created>1609123102026</created>
+      <option name="number" value="03238" />
+      <option name="presentableId" value="LOCAL-03238" />
+      <option name="project" value="LOCAL" />
+      <updated>1609123102026</updated>
+    </task>
+    <task id="LOCAL-03239" summary="Mudança no comando de reportar bugs">
+      <created>1609124383844</created>
+      <option name="number" value="03239" />
+      <option name="presentableId" value="LOCAL-03239" />
+      <option name="project" value="LOCAL" />
+      <updated>1609124383844</updated>
+    </task>
+    <task id="LOCAL-03240" summary="Mudança no comando de reportar bugs">
+      <created>1609124604341</created>
+      <option name="number" value="03240" />
+      <option name="presentableId" value="LOCAL-03240" />
+      <option name="project" value="LOCAL" />
+      <updated>1609124604343</updated>
+    </task>
+    <task id="LOCAL-03241" summary="Tentativa de correção das coleções borradas">
+      <created>1609125596802</created>
+      <option name="number" value="03241" />
+      <option name="presentableId" value="LOCAL-03241" />
+      <option name="project" value="LOCAL" />
+      <updated>1609125596802</updated>
+    </task>
+    <task id="LOCAL-03242" summary="Implementação dos banners de ranqueada">
+      <created>1609131191757</created>
+      <option name="number" value="03242" />
+      <option name="presentableId" value="LOCAL-03242" />
+      <option name="project" value="LOCAL" />
+      <updated>1609131191757</updated>
+    </task>
+    <task id="LOCAL-03243" summary="Implementação dos banners de ranqueada">
+      <created>1609131483068</created>
+      <option name="number" value="03243" />
+      <option name="presentableId" value="LOCAL-03243" />
+      <option name="project" value="LOCAL" />
+      <updated>1609131483068</updated>
+    </task>
+    <task id="LOCAL-03244" summary="Implementação dos banners de ranqueada">
+      <created>1609131613516</created>
+      <option name="number" value="03244" />
+      <option name="presentableId" value="LOCAL-03244" />
+      <option name="project" value="LOCAL" />
+      <updated>1609131613516</updated>
+    </task>
+    <option name="localTasksCounter" value="3245" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1380,10 +1399,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de novo GIF para o Archer" />
-    <MESSAGE value="Novo campo: Unlimited Blade Works" />
-    <MESSAGE value="Remoção da dependência do enumerador ArenaField" />
-    <MESSAGE value="Correção no Shoukan" />
     <MESSAGE value="Adição de cálculo de MMR para partidas do Shoukan" />
     <MESSAGE value="Adição de lista de raças" />
     <MESSAGE value="Adição de lista de raças Senshi" />
@@ -1405,7 +1420,11 @@
     <MESSAGE value="Correção nas configurações de servidor" />
     <MESSAGE value="Aumento no ganho de créditos por voto" />
     <MESSAGE value="Implementação de threading nos jogos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementação de threading nos jogos" />
+    <MESSAGE value="Implementação de threading" />
+    <MESSAGE value="Mudança no comando de reportar bugs" />
+    <MESSAGE value="Tentativa de correção das coleções borradas" />
+    <MESSAGE value="Implementação dos banners de ranqueada" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementação dos banners de ranqueada" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1441,11 +1460,11 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1609118140433">
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1609121503239">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1608297788251" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1609118140433" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1609121503239" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1476,26 +1495,26 @@
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608208920619" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728513022" />
-    <state width="1648" height="322" key="GridCell.Tab.0.bottom" timestamp="1607798774138">
+    <state width="1648" height="322" key="GridCell.Tab.0.bottom" timestamp="1609130419364">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671595" />
-    <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1607798774138" />
-    <state width="1648" height="322" key="GridCell.Tab.0.center" timestamp="1607798774137">
+    <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1609130419364" />
+    <state width="1648" height="322" key="GridCell.Tab.0.center" timestamp="1609130419364">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671594" />
-    <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1607798774137" />
-    <state width="1648" height="322" key="GridCell.Tab.0.left" timestamp="1607798774136">
+    <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1609130419364" />
+    <state width="1648" height="322" key="GridCell.Tab.0.left" timestamp="1609130419363">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671594" />
-    <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1607798774136" />
-    <state width="1648" height="322" key="GridCell.Tab.0.right" timestamp="1607798774137">
+    <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1609130419363" />
+    <state width="1648" height="322" key="GridCell.Tab.0.right" timestamp="1609130419364">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671595" />
-    <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1607798774137" />
+    <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1609130419364" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1607347986126">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1519,11 +1538,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609118467047">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609132292067">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609118467047" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609132292067" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1546,11 +1565,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="679" y="268" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1920.1040@0.0.1920.1040" timestamp="1603511313028" />
-    <state x="305" y="160" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1608140501516">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="1025" y="162" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1609130533224">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608140501516" />
-    <state x="1025" y="162" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607039467546" />
+    <state x="1025" y="162" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1609130533224" />
     <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1604191215864">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1565,11 +1584,11 @@
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608122622979" />
     <state x="651" y="274" key="extract.method.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1608350738643" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1608310170929">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup" timestamp="1609125004932">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608310170929" />
-    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607910233346" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1609125004932" />
     <state x="686" y="303" key="git4idea.ui.GitUnstashDialog" timestamp="1607912268563">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1588,11 +1607,11 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608309711856" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607897060344" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1608236323401">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup" timestamp="1609119769545">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608236323401" />
-    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604189150904" />
+    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1609119769545" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
