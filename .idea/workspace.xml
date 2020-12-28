@@ -13,15 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de configuração de embeds de servidor">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/LockRankedCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação de threading nos jogos">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/MatchMaking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/MatchMaking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -955,13 +951,6 @@
       <workItem from="1608587495489" duration="127000" />
       <workItem from="1608589371029" duration="1503000" />
     </task>
-    <task id="LOCAL-03183" summary="Implementação do modo raqueado concluìdo, início do public beta">
-      <created>1608297898792</created>
-      <option name="number" value="03183" />
-      <option name="presentableId" value="LOCAL-03183" />
-      <option name="project" value="LOCAL" />
-      <updated>1608297898792</updated>
-    </task>
     <task id="LOCAL-03184" summary="Implementação do modo raqueado concluìdo, início do public beta">
       <created>1608299058492</created>
       <option name="number" value="03184" />
@@ -1298,7 +1287,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608587610580</updated>
     </task>
-    <option name="localTasksCounter" value="3232" />
+    <task id="LOCAL-03232" summary="Implementação de threading nos jogos">
+      <created>1609118463715</created>
+      <option name="number" value="03232" />
+      <option name="presentableId" value="LOCAL-03232" />
+      <option name="project" value="LOCAL" />
+      <updated>1609118463715</updated>
+    </task>
+    <option name="localTasksCounter" value="3233" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1384,7 +1380,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção em certos nomes de anime" />
     <MESSAGE value="Adição de novo GIF para o Archer" />
     <MESSAGE value="Novo campo: Unlimited Blade Works" />
     <MESSAGE value="Remoção da dependência do enumerador ArenaField" />
@@ -1409,7 +1404,8 @@
     <MESSAGE value="Novo amuleto: Sortilégio" />
     <MESSAGE value="Correção nas configurações de servidor" />
     <MESSAGE value="Aumento no ganho de créditos por voto" />
-    <option name="LAST_COMMIT_MESSAGE" value="Aumento no ganho de créditos por voto" />
+    <MESSAGE value="Implementação de threading nos jogos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementação de threading nos jogos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1523,11 +1519,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1608587613208">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609118467047">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1608587613208" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609118467047" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
