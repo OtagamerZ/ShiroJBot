@@ -30,6 +30,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
+import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
@@ -41,8 +42,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
-import java.util.Map;
 import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ShoukanCommand extends Command {
@@ -91,6 +92,13 @@ public class ShoukanCommand extends Command {
 			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), 0, custom, daily, false, author, author);
 			t.start();
 		} else if (ranked && betaAccess) {
+			MatchMaking mm = Main.getInfo().getMatchMaking();
+
+			if (mm.isLocked()) {
+				channel.sendMessage("❌ | A fila ranqueada está bloqueada temporariamente para minha reinicialização, por favor aguarde.").queue();
+				return;
+			}
+
 			com.kuuhaku.model.persistent.Member m = MemberDAO.getHighestProfile(author.getId());
 			if (m.getLevel() < 30) {
 				channel.sendMessage("❌ | É necessário ter ao menos nível 30 para poder jogar partidas ranqueadas.").queue();
@@ -112,10 +120,10 @@ public class ShoukanCommand extends Command {
 
 			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 
-			if (Main.getInfo().getMatchMaking().inGame(author.getId())) {
+			if (mm.inGame(author.getId())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 				return;
-			} else if (Main.getInfo().getMatchMaking().getLobby().keySet().stream().anyMatch(mr -> mr.getUserId().equals(author.getId()))) {
+			} else if (mm.getLobby().keySet().stream().anyMatch(mr -> mr.getUserId().equals(author.getId()))) {
 				channel.sendMessage("❌ | Você já está no saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
 				return;
 			} else if (mmr.isBlocked()) {
@@ -123,12 +131,12 @@ public class ShoukanCommand extends Command {
 				return;
 			}
 
-			Main.getInfo().getMatchMaking().joinLobby(mmr, (TextChannel) channel);
-			channel.sendMessage("Você entrou no saguão com sucesso, você será notificado caso uma partida seja encontrada (" + (Main.getInfo().getMatchMaking().getLobby().size() - 1) + " no saguão).").queue(s ->
+			mm.joinLobby(mmr, (TextChannel) channel);
+			channel.sendMessage("Você entrou no saguão com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getLobby().size() - 1) + " no saguão).").queue(s ->
 					Pages.buttonize(s, Collections.emptyMap(), true, 30, TimeUnit.MINUTES
 							, u -> u.getId().equals(author.getId())
 							, ms -> {
-								Main.getInfo().getMatchMaking().getLobby().remove(mmr);
+								mm.getLobby().remove(mmr);
 								ms.delete().queue();
 							}
 					)
