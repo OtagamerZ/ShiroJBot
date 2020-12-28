@@ -21,14 +21,18 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.enums.ExceedEnum;
+import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.GifSequenceWriter;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -54,7 +58,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Profile {
 	public static Font FONT;
 	public static final int WIDTH = 944;
-	public static final int HEIGTH = 600;
+	public static final int HEIGHT = 600;
 
 	static {
 		try {
@@ -75,7 +79,7 @@ public class Profile {
 			avatar = Helper.scaleImage(ImageIO.read(Helper.getImage("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg")), 200, 200);
 		}
 
-		BufferedImage bi = new BufferedImage(WIDTH, HEIGTH, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setBackground(Color.black);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -217,6 +221,19 @@ public class Profile {
 			g2d.drawImage(mb.getTrophy().getImage(), 665, 22, null);
 
 		g2d.dispose();
+
+		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(m.getId());
+		if (mmr.getTier() != RankedTier.UNRANKED && ShiroInfo.getStaff().contains(m.getId())) {
+			BufferedImage finalImg = new BufferedImage(983, 630, BufferedImage.TYPE_INT_ARGB);
+			g2d = finalImg.createGraphics();
+
+			g2d.drawImage(bi, 39, 30, null);
+			g2d.drawImage(mmr.getTier().getBanner(), 0, 0, null);
+
+			g2d.dispose();
+
+			bi = finalImg;
+		}
 
 		return Helper.scaleImage(clipRoundEdges(bi), 400, 254);
 	}
