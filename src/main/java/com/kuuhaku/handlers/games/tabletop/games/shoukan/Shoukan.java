@@ -922,16 +922,6 @@ public class Shoukan extends GlobalGame {
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
 
-		for (int i = 0; i < slts.size(); i++) {
-			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == index) {
-				if (eq.getCharm() == Charm.SPELLSHIELD) {
-					unequipCard(his, i, slts);
-					return;
-				}
-			}
-		}
-
 		for (int i = 0; i < 5; i++) {
 			Equipment eq = slts.get(i).getBottom();
 			if (eq != null && eq.getLinkedTo().getLeft() == index) {
