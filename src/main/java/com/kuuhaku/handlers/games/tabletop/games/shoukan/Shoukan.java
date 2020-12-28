@@ -877,6 +877,45 @@ public class Shoukan extends GlobalGame {
 		}
 	}
 
+	public void switchCards(Side side, int index, int source) {
+		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
+		Champion ch = getArena().getSlots().get(his).get(index).getTop();
+		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
+
+		for (int i = 0; i < slts.size(); i++) {
+			Equipment eq = slts.get(i).getBottom();
+			if (eq != null && eq.getLinkedTo().getLeft() == index) {
+				if (eq.getCharm() == Charm.SPELLSHIELD) {
+					unequipCard(his, i, slts);
+					return;
+				}
+			}
+		}
+
+		ch.clearLinkedTo();
+		ch.setAcc(AccountDAO.getAccount(getHands().get(side).getUser().getId()));
+		slts.get(index).setTop(null);
+		for (int i = 0; i < slts.size(); i++) {
+			if (slts.get(i).getBottom() != null && slts.get(i).getBottom().getLinkedTo().getLeft() == index)
+				unequipCard(his, i, slts);
+		}
+
+		Champion yours = getArena().getSlots().get(side).get(source).getTop();
+		List<SlotColumn<Champion, Equipment>> slots = getArena().getSlots().get(side);
+
+		yours.clearLinkedTo();
+		yours.setAcc(AccountDAO.getAccount(getHands().get(his).getUser().getId()));
+		slots.get(source).setTop(null);
+		for (int i = 0; i < slots.size(); i++) {
+			if (slots.get(i).getBottom() != null && slots.get(i).getBottom().getLinkedTo().getLeft() == source)
+				unequipCard(side, i, slots);
+		}
+
+		slts.get(index).setTop(yours);
+		slots.get(source).setTop(ch);
+	}
+
 	public void convertEquipments(Champion target, int pos, Side side, int index) {
 		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
