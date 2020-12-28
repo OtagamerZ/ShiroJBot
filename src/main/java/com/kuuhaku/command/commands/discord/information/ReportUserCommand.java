@@ -94,6 +94,10 @@ public class ReportUserCommand extends Command {
 				.complete()
 		);
 
+		author.openPrivateChannel()
+				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
+				.queue(null, Helper::doNothing);
+
 		TicketDAO.setIds(number, ids);
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-reported-user")).queue();
 	}

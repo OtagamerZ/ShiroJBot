@@ -258,8 +258,8 @@ public class CommandManager {
 			put(ProfileCommand.class, new Argument(
 					"perfil", new String[]{"xp", "profile", "pf"}, "cmd_profile", INFO, false
 			));
-			put(ReportBugCommand.class, new Argument(
-					"bug", new String[]{"sendbug", "feedback"}, REQ_MESSAGE, "cmd_bug", INFO, false
+			put(OpenTicketCommand.class, new Argument(
+					"ticket", new String[]{"openticket", "tkt"}, REQ_MESSAGE, "cmd_ticket", INFO, false
 			));
 			put(ReportUserCommand.class, new Argument(
 					"report", new String[]{"reportar"}, "req_user-reason", "cmd_report", INFO, false

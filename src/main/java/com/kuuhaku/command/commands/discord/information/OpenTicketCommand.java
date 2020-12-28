@@ -34,21 +34,21 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ReportBugCommand extends Command {
+public class OpenTicketCommand extends Command {
 
-	public ReportBugCommand(String name, String description, Category category, boolean requiresMM) {
+	public OpenTicketCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public ReportBugCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+	public OpenTicketCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public ReportBugCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public OpenTicketCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public ReportBugCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public OpenTicketCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
@@ -65,16 +65,19 @@ public class ReportBugCommand extends Command {
 		if (mensagem.length() > 1000) {
 			channel.sendMessage("❌ | Mensagem muito longa, por favor tente ser mais breve.").queue();
 			return;
+		} else if (mensagem.length() < 100) {
+			channel.sendMessage("❌ | Mensagem muito curta, por favor tente ser mais detalhado.").queue();
+			return;
 		}
 
 		int number = TicketDAO.openTicket(mensagem, author);
 
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setTitle("Relatório de bug (Ticket Nº " + number + ")");
+		eb.setTitle("Ticket Nº " + number + "");
 		eb.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
 		eb.addField("Enviado em:", Helper.dateformat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
-		eb.addField("Relatório:", "```" + mensagem + "```", false);
+		eb.addField("Descrição:", "```" + mensagem + "```", false);
 		eb.setFooter(author.getId());
 		eb.setColor(Color.yellow);
 
@@ -89,7 +92,11 @@ public class ReportBugCommand extends Command {
 				.complete()
 		);
 
+		author.openPrivateChannel()
+				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
+				.queue(null, Helper::doNothing);
+
 		TicketDAO.setIds(number, ids);
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-reported-bug")).queue();
+		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-opened-ticket")).queue();
 	}
 }
