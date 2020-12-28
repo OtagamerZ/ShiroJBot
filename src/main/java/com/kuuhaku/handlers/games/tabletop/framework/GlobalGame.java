@@ -246,6 +246,10 @@ public abstract class GlobalGame {
 
 	public abstract Map<String, BiConsumer<Member, Message>> getButtons();
 
+	public GameChannel getChannel() {
+		return channel;
+	}
+
 	public MatchRound getCurrRound() {
 		return history.getRound(round);
 	}
