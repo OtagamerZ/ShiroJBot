@@ -75,7 +75,7 @@ public class MarkTicketCommand extends Command {
 
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setTitle("Resolução de ticket Nº " + args[0]);
+		eb.setTitle("Resolução do ticket Nº " + args[0]);
 		eb.setDescription("Assunto:```" + t.getSubject() + "```");
 		if (Helper.getOr(t.getRequestedBy(), null) != null)
 			eb.addField("Aberto por:", Main.getInfo().getUserByID(t.getRequestedBy()).getAsTag(), true);
@@ -93,6 +93,10 @@ public class MarkTicketCommand extends Command {
 					t.solved();
 				}
 		);
+
+		Main.getInfo().getUserByID(t.getRequestedBy()).openPrivateChannel()
+				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getName()))
+				.queue(null, Helper::doNothing);
 
 		TicketDAO.updateTicket(t);
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-solved-ticket")).queue();

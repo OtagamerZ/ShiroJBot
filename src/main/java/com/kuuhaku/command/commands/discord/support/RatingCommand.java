@@ -107,6 +107,10 @@ public class RatingCommand extends Command {
 				}
 		);
 
+		Main.getInfo().getUserByID(t.getRequestedBy()).openPrivateChannel()
+				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getName()))
+				.queue(null, Helper::doNothing);
+
 		TicketDAO.updateTicket(t);
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-solved-ticket-with-rating")).queue();
 
