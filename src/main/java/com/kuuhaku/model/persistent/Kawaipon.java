@@ -38,7 +38,7 @@ public class Kawaipon {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''", unique = true)
 	private String uid = "";
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
