@@ -279,12 +279,11 @@ public class ShiroEvents extends ListenerAdapter {
 
 			if (!found && !author.isBot() && !blacklisted) {
 				if (toHandle.containsKey(guild.getId())) {
-					Iterator<SimpleMessageListener> evts = getHandler().get(guild.getId()).iterator();
-					while (evts.hasNext()) {
-						SimpleMessageListener evt = evts.next();
+					List<SimpleMessageListener> evts = getHandler().get(guild.getId());
+					for (SimpleMessageListener evt : evts) {
 						evt.onGuildMessageReceived(event);
-						if (evt.isClosed()) evts.remove();
 					}
+					evts.removeIf(SimpleMessageListener::isClosed);
 				}
 
 				Account acc = AccountDAO.getAccount(author.getId());
@@ -309,7 +308,10 @@ public class ShiroEvents extends ListenerAdapter {
 				try {
 					Map<String, Object> rawLvls = gc.getCargoslvl().entrySet()
 							.stream()
-							.filter(e -> MemberDAO.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey()))
+							.filter(e -> {
+								com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
+								return mb != null && mb.getLevel() >= Integer.parseInt(e.getKey());
+							})
 							.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 					Map<Integer, Role> sortedLvls = new TreeMap<>();
 					for (Map.Entry<String, Object> entry : rawLvls.entrySet()) {
