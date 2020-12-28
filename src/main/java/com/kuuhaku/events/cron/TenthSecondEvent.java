@@ -98,6 +98,7 @@ public class TenthSecondEvent implements Job {
 								p1.getKey().getUser()
 						);
 						g.start();
+						Main.getInfo().getMatchMaking().getGames().add(g);
 					} else {
 						for (Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean> p : match) {
 							if (p.getRight()) {
