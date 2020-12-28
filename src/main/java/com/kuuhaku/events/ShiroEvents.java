@@ -79,12 +79,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
-	private final Map<String, List<SimpleMessageListener>> toHandle = new HashMap<>();
+	private final Map<String, List<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 
 	@Override
 	public void onGuildUpdateName(GuildUpdateNameEvent event) {
@@ -278,11 +279,12 @@ public class ShiroEvents extends ListenerAdapter {
 
 			if (!found && !author.isBot() && !blacklisted) {
 				if (toHandle.containsKey(guild.getId())) {
-					List<SimpleMessageListener> evts = getHandler().get(guild.getId());
-					for (SimpleMessageListener evt : evts) {
+					Iterator<SimpleMessageListener> evts = getHandler().get(guild.getId()).iterator();
+					while (evts.hasNext()) {
+						SimpleMessageListener evt = evts.next();
 						evt.onGuildMessageReceived(event);
+						if (evt.isClosed()) evts.remove();
 					}
-					evts.removeIf(SimpleMessageListener::isClosed);
 				}
 
 				Account acc = AccountDAO.getAccount(author.getId());
@@ -803,7 +805,7 @@ public class ShiroEvents extends ListenerAdapter {
 		}
 	}
 
-	public synchronized Map<String, List<SimpleMessageListener>> getHandler() {
+	public Map<String, List<SimpleMessageListener>> getHandler() {
 		return toHandle;
 	}
 
