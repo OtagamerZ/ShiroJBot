@@ -58,6 +58,12 @@ public class MatchMakingRating {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int promWins = 0;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int wins = 0;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int losses = 0;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date blockedUntil = null;
 
@@ -187,6 +193,27 @@ public class MatchMakingRating {
 
 	public int getPromWins() {
 		return promWins;
+	}
+
+	public int getWins() {
+		return wins;
+	}
+
+	public void addWin() {
+		wins++;
+	}
+
+	public int getLosses() {
+		return losses;
+	}
+
+	public void addLoss() {
+		losses++;
+	}
+
+	public String getWinrate() {
+		if (losses == 0) return "Perfeito";
+		return "%s:1 (W/D)".formatted(Helper.round((double) wins / losses, 1));
 	}
 
 	public boolean isBlocked() {
