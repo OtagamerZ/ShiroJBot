@@ -127,6 +127,9 @@ public class CommandManager {
 			put(AuditCommand.class, new Argument(
 					"audit", "req_type-id", "cmd_audit", DEV, true
 			));
+			put(LockRankedCommand.class, new Argument(
+					"rlock", "cmd_ranked-lock", DEV, false
+			));
 
 			//SUPPORT
 			put(BlockCommand.class, new Argument(
