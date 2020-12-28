@@ -128,7 +128,7 @@ public class Hitotsu extends Game {
 	}
 
 	@Override
-	public void play(GuildMessageReceivedEvent evt) {
+	public synchronized void play(GuildMessageReceivedEvent evt) {
 		Message message = evt.getMessage();
 		String command = message.getContentRaw();
 
