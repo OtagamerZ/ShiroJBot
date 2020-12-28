@@ -221,6 +221,7 @@ public class Profile {
 			g2d.drawImage(mb.getTrophy().getImage(), 665, 22, null);
 
 		g2d.dispose();
+		bi = clipRoundEdges(bi);
 
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(m.getId());
 		if (mmr.getTier() != RankedTier.UNRANKED && ShiroInfo.getStaff().contains(m.getId())) {
@@ -235,7 +236,7 @@ public class Profile {
 			bi = finalImg;
 		}
 
-		return Helper.scaleImage(clipRoundEdges(bi), 400, 254);
+		return Helper.scaleImage(bi, 400, 254);
 	}
 
 	public static BufferedImage clipRoundEdges(BufferedImage image) {
