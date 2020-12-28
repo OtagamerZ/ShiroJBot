@@ -286,6 +286,7 @@ public abstract class GlobalGame {
 
 
 					yourMMR.addMMR(mmr, hisMMR.getMMR());
+					yourMMR.addWin();
 					if (ranked) yourMMR.increaseRankPoints(hisMMR, ranked);
 				} else if (history.getWinner() == other) {
 					double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
@@ -295,6 +296,7 @@ public abstract class GlobalGame {
 					long mmr = Math.round(250 * manaEff - (125 * (damageEff / expEff) + 125 * sustainEff));
 
 					yourMMR.removeMMR(mmr, hisMMR.getMMR());
+					yourMMR.addLoss();
 					if (ranked) yourMMR.decreaseRankPoints(hisMMR, ranked);
 				}
 
