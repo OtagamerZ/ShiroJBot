@@ -165,7 +165,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	@Override
-	public void play(GuildMessageReceivedEvent evt) {
+	public synchronized void play(GuildMessageReceivedEvent evt) {
 		Message message = evt.getMessage();
 		String cmd = message.getContentRaw();
 		Hand h = getHands().get(current);
