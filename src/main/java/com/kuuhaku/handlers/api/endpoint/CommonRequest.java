@@ -20,6 +20,8 @@ package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
 import org.apache.commons.io.FileUtils;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,19 +31,31 @@ import java.io.IOException;
 
 @RestController
 public class CommonRequest {
-    @RequestMapping(value = "/collection", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    @RequestMapping(value = "/collection", method = RequestMethod.GET)
     public @ResponseBody
-    byte[] serveCollectionImage(@RequestParam(value = "id") String id) throws IOException {
+    HttpEntity<byte[]> serveCollectionImage(@RequestParam(value = "id") String id) throws IOException {
         File f = new File(Main.getInfo().getCollectionsFolder(), id + ".jpg");
         if (!f.exists()) throw new FileNotFoundException();
-        return FileUtils.readFileToByteArray(f);
+        byte[] bytes = FileUtils.readFileToByteArray(f);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.setContentLength(bytes.length);
+
+        return new HttpEntity<>(bytes, headers);
     }
 
-    @RequestMapping(value = "/card", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    @RequestMapping(value = "/card", method = RequestMethod.GET)
     public @ResponseBody
-    byte[] serveCardImage(@RequestParam(value = "name") String name, @RequestParam(value = "anime") String anime) throws IOException {
+    HttpEntity<byte[]> serveCardImage(@RequestParam(value = "name") String name, @RequestParam(value = "anime") String anime) throws IOException {
         File f = new File(System.getenv("CARDS_PATH") + anime, name + ".png");
         if (!f.exists()) throw new FileNotFoundException();
-        return FileUtils.readFileToByteArray(f);
+        byte[] bytes = FileUtils.readFileToByteArray(f);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentLength(bytes.length);
+
+        return new HttpEntity<>(bytes, headers);
     }
 }
