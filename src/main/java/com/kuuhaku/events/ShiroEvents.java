@@ -278,12 +278,14 @@ public class ShiroEvents extends ListenerAdapter {
 
 			if (!found && !author.isBot() && !blacklisted) {
 				if (toHandle.containsKey(guild.getId())) {
-					Iterator<SimpleMessageListener> evts = getHandler().get(guild.getId()).iterator();
-					while (evts.hasNext()) {
-						SimpleMessageListener sml = evts.next();
-						sml.onGuildMessageReceived(event);
-						if (sml.isClosed()) evts.remove();
-					}
+					ShiroInfo.getHandlingPool().execute(() -> {
+						Iterator<SimpleMessageListener> evts = getHandler().get(guild.getId()).iterator();
+						while (evts.hasNext()) {
+							SimpleMessageListener sml = evts.next();
+							sml.onGuildMessageReceived(event);
+							if (sml.isClosed()) evts.remove();
+						}
+					});
 				}
 
 				Account acc = AccountDAO.getAccount(author.getId());

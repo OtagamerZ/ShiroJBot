@@ -33,6 +33,7 @@ import java.util.Map;
 public class MatchMaking {
 	private final Map<MatchMakingRating, Pair<Integer, TextChannel>> lobby = new LinkedHashMap<>();
 	private final List<GlobalGame> games = new ArrayList<>();
+	boolean locked = false;
 
 	public Map<MatchMakingRating, Pair<Integer, TextChannel>> getLobby() {
 		return lobby;
@@ -61,5 +62,17 @@ public class MatchMaking {
 
 	public void closeGames() {
 		games.removeIf(GlobalGame::isClosed);
+	}
+
+	public List<GlobalGame> getGames() {
+		return games;
+	}
+
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
 }
