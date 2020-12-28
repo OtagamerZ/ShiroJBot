@@ -32,7 +32,6 @@ import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.GifSequenceWriter;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -224,7 +223,7 @@ public class Profile {
 		bi = clipRoundEdges(bi);
 
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(m.getId());
-		if (mmr.getTier() != RankedTier.UNRANKED && ShiroInfo.getStaff().contains(m.getId())) {
+		if (mmr.getTier() != RankedTier.UNRANKED) {
 			BufferedImage finalImg = new BufferedImage(983, 630, BufferedImage.TYPE_INT_ARGB);
 			g2d = finalImg.createGraphics();
 
