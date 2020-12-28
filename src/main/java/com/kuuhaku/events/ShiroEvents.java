@@ -80,12 +80,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
-	private final Map<String, List<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
+	private final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 
 	@Override
 	public void onGuildUpdateName(GuildUpdateNameEvent event) {
@@ -807,11 +808,11 @@ public class ShiroEvents extends ListenerAdapter {
 		}
 	}
 
-	public Map<String, List<SimpleMessageListener>> getHandler() {
+	public Map<String, CopyOnWriteArrayList<SimpleMessageListener>> getHandler() {
 		return toHandle;
 	}
 
 	public void addHandler(Guild guild, SimpleMessageListener sml) {
-		getHandler().compute(guild.getId(), (s, evts) -> evts == null ? new ArrayList<>() : evts).add(sml);
+		getHandler().compute(guild.getId(), (s, evts) -> evts == null ? new CopyOnWriteArrayList<>() : evts).add(sml);
 	}
 }
