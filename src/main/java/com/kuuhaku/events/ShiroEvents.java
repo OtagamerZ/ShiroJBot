@@ -278,14 +278,12 @@ public class ShiroEvents extends ListenerAdapter {
 
 			if (!found && !author.isBot() && !blacklisted) {
 				if (toHandle.containsKey(guild.getId())) {
-					ShiroInfo.getHandlingPool().execute(() -> {
-						Iterator<SimpleMessageListener> evts = getHandler().get(guild.getId()).iterator();
-						while (evts.hasNext()) {
-							SimpleMessageListener sml = evts.next();
-							sml.onGuildMessageReceived(event);
-							if (sml.isClosed()) evts.remove();
-						}
-					});
+					Iterator<SimpleMessageListener> evts = getHandler().get(guild.getId()).iterator();
+					while (evts.hasNext()) {
+						SimpleMessageListener sml = evts.next();
+						sml.onGuildMessageReceived(event);
+						if (sml.isClosed()) evts.remove();
+					}
 				}
 
 				Account acc = AccountDAO.getAccount(author.getId());
@@ -308,9 +306,17 @@ public class ShiroEvents extends ListenerAdapter {
 				} catch (Exception ignore) {
 				}
 				try {
-					Map<String, Object> rawLvls = gc.getCargoslvl().entrySet().stream().filter(e -> MemberDAO.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+					Map<String, Object> rawLvls = gc.getCargoslvl().entrySet()
+							.stream()
+							.filter(e -> MemberDAO.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey()))
+							.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 					Map<Integer, Role> sortedLvls = new TreeMap<>();
-					rawLvls.forEach((k, v) -> sortedLvls.put(Integer.parseInt(k), guild.getRoleById((String) v)));
+					for (Map.Entry<String, Object> entry : rawLvls.entrySet()) {
+						sortedLvls.put(
+								Integer.parseInt(entry.getKey()),
+								guild.getRoleById((String) entry.getValue())
+						);
+					}
 					MessageChannel finalLvlChannel = lvlChannel;
 					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
 						if (gc.isLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
