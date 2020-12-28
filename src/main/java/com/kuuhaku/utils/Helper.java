@@ -172,6 +172,10 @@ public class Helper {
 		return new DecimalFormat("0" + (places > 0 ? "." : "") + StringUtils.repeat("#", places)).format(value);
 	}
 
+	public static double avg(double... values) {
+		return Arrays.stream(values).average().orElse(0);
+	}
+
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(val, max));
 	}
