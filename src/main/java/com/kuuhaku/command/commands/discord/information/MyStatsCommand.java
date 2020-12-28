@@ -73,6 +73,12 @@ public class MyStatsCommand extends Command {
 		Set<Tag> tags = Tag.getTags(author, member);
 
 		eb.setTitle(":clipboard: | Status")
+				.addField("Estatísticas de jogo", """
+						%s vitórias
+						%s derrotas
+						Taxa de vitórias: %s
+						""".formatted(mmr.getWins(), mmr.getLosses(), mmr.getWinrate()
+				), false)
 				.addField("Ranking no Shoukan", mmr.getTier().getName(), false);
 
 		if (mmr.getRankPoints() == 100 || mmr.getTier() == RankedTier.UNRANKED) {
@@ -96,9 +102,9 @@ public class MyStatsCommand extends Command {
 		boolean kgotchi = kg != null;
 
 		int xp = (int) (15
-						* (victorious ? 2 : 1)
-						* (waifu ? WaifuDAO.getMultiplier(author).getMult() : 1)
-						* (gb.getBuff(1) != null ? gb.getBuff(1).getMult() : 1)
+				* (victorious ? 2 : 1)
+				* (waifu ? WaifuDAO.getMultiplier(author).getMult() : 1)
+				* (gb.getBuff(1) != null ? gb.getBuff(1).getMult() : 1)
 		);
 
 		if (kgotchi) {
