@@ -63,6 +63,7 @@ public class ShiroInfo {
 	//CONSTANTS
 	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
 	private static final ThreadPoolExecutor compilationPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
+	private static final ThreadPoolExecutor handlingPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 	private static final String botToken = System.getenv("BOT_TOKEN");
 	private static final String youtubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String dblToken;
@@ -196,19 +197,23 @@ public class ShiroInfo {
 
     public static List<String> getStaff() {
         return Stream.concat(developers.stream(), supports.stream()).distinct().collect(Collectors.toList());
-    }
+	}
 
-    //NON-STATIC
-    public float getCPULoad() {
-        return (float) Helper.round(tBean.getCurrentThreadCpuTime() * 100, 2);
-    }
+	//NON-STATIC
+	public float getCPULoad() {
+		return (float) Helper.round(tBean.getCurrentThreadCpuTime() * 100, 2);
+	}
 
-    public ThreadPoolExecutor getCompilationPool() {
-        return compilationPool;
-    }
+	public ThreadPoolExecutor getCompilationPool() {
+		return compilationPool;
+	}
 
-    public boolean isDev() {
-        return DEV;
+	public static ThreadPoolExecutor getHandlingPool() {
+		return handlingPool;
+	}
+
+	public boolean isDev() {
+		return DEV;
 	}
 
 	public String getBotToken() {
