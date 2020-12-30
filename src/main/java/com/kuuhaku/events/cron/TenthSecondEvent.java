@@ -74,7 +74,7 @@ public class TenthSecondEvent implements Job {
 
 			if (!p1.getKey().equals(p2.getKey())
 					&& p1.getKey().getMMR() <= p2.getKey().getMMR()
-					&& Helper.prcnt(p1.getKey().getMMR(), p2.getKey().getMMR() == 0 ? 1 : p2.getKey().getMMR()) * 100 <= p1.getValue().getLeft() * 5
+					&& Helper.prcnt(p1.getKey().getMMR(), p2.getKey().getMMR() == 0 ? 1 : p2.getKey().getMMR()) * 100 <= p1.getValue().getLeft() * 10
 					&& Math.abs(p1.getKey().getTier().getTier() - p2.getKey().getTier().getTier()) < 2) {
 				Main.getInfo().getMatchMaking().getLobby().remove(p1.getKey());
 				Main.getInfo().getMatchMaking().getLobby().remove(p2.getKey());
