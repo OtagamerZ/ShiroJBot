@@ -15,26 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação dos banners de ranqueada">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_i.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_i.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_ii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_ii.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_iii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_iii.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_iv.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/adept/adept_iv.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_i.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_i.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_ii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_ii.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_iii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_iii.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_iv.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/apprentice/apprentice_iv.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/archmage/archmage.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/archmage/archmage.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_i.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_i.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_ii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_ii.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_iii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_iii.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_iv.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/disciple/disciple_iv.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_i.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_i.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_iii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_iii.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_iv.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_iv.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/inititate_ii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/inititate_ii.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/master/master.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/master/master.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/oracle/oracle.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/oracle/oracle.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/VipItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/VipItem.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,17 +166,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
