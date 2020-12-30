@@ -506,12 +506,44 @@ public class Shoukan extends GlobalGame {
 
 				if (yours.hasEffect()) {
 					yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
+
+					if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
+						if (!postCombat()) {
+							resetTimerKeepTurn();
+							channel.sendMessage("Cálculo de combate ignorado por efeito do atacante!")
+									.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+									.queue(s -> {
+										this.message.compute(s.getChannel().getId(), (id, m) -> {
+											if (m != null)
+												m.delete().queue(null, Helper::doNothing);
+											return s;
+										});
+										Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									});
+						}
+						return;
+					} else if (postCombat()) return;
 				}
 
 				if (his.hasEffect()) {
 					his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEFEND, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
+
+					if (his.getBonus().getSpecialData().remove("skipCombat") != null) {
+						if (!postCombat()) {
+							resetTimerKeepTurn();
+							channel.sendMessage("Cálculo de combate ignorado por efeito do defensor!")
+									.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+									.queue(s -> {
+										this.message.compute(s.getChannel().getId(), (id, m) -> {
+											if (m != null)
+												m.delete().queue(null, Helper::doNothing);
+											return s;
+										});
+										Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									});
+						}
+						return;
+					} else if (postCombat()) return;
 				}
 
 				int yPower = Math.round(
