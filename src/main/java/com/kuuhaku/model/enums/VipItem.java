@@ -74,9 +74,14 @@ public enum VipItem {
 
 				boolean foil = cs != CardStatus.NORMAL_CARDS && (args[1].equalsIgnoreCase("C") || cs == CardStatus.FOIL_CARDS);
 
-				List<Card> cards = CardDAO.getCardsByAnime(AnimeName.validValues()[Helper.rng(AnimeName.validValues().length, true)]).stream().filter(cd -> kp.getCard(c, foil) == null).collect(Collectors.toList());
-				while (cards.size() <= 0) {
-					cards = CardDAO.getCardsByAnime(AnimeName.validValues()[Helper.rng(AnimeName.validValues().length, true)]).stream().filter(cd -> kp.getCard(c, foil) == null).collect(Collectors.toList());
+				List<Card> cards = CardDAO.getCards()
+						.stream()
+						.filter(cd -> !kp.getCards().contains(new KawaiponCard(cd, foil)))
+						.collect(Collectors.toList());
+
+				if (cards.size() == 0) {
+					ch.sendMessage("❌ | Você já possui todas as cartas " + (foil ? "cromadas" : "normais") + ", parabéns!").queue();
+					return;
 				}
 
 				Card chosen = cards.get(Helper.rng(cards.size(), true));
