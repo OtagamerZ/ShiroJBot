@@ -13,11 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação dos banners de ranqueada">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/VipItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/VipItem.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -941,20 +937,6 @@
       <workItem from="1609132262598" duration="41000" />
       <workItem from="1609179554410" duration="527000" />
     </task>
-    <task id="LOCAL-03196" summary="Mudança nos nomes dos tiers">
-      <created>1608309952236</created>
-      <option name="number" value="03196" />
-      <option name="presentableId" value="LOCAL-03196" />
-      <option name="project" value="LOCAL" />
-      <updated>1608309952236</updated>
-    </task>
-    <task id="LOCAL-03197" summary="Mudança nos nomes dos tiers">
-      <created>1608310114513</created>
-      <option name="number" value="03197" />
-      <option name="presentableId" value="LOCAL-03197" />
-      <option name="project" value="LOCAL" />
-      <updated>1608310114514</updated>
-    </task>
     <task id="LOCAL-03198" summary="Mudança nos nomes dos tiers">
       <created>1608310930842</created>
       <option name="number" value="03198" />
@@ -1284,7 +1266,21 @@
       <option name="project" value="LOCAL" />
       <updated>1609131613516</updated>
     </task>
-    <option name="localTasksCounter" value="3245" />
+    <task id="LOCAL-03245" summary="Correções gerais">
+      <created>1609359460557</created>
+      <option name="number" value="03245" />
+      <option name="presentableId" value="LOCAL-03245" />
+      <option name="project" value="LOCAL" />
+      <updated>1609359460557</updated>
+    </task>
+    <task id="LOCAL-03246" summary="Correções gerais">
+      <created>1609359644884</created>
+      <option name="number" value="03246" />
+      <option name="presentableId" value="LOCAL-03246" />
+      <option name="project" value="LOCAL" />
+      <updated>1609359644884</updated>
+    </task>
+    <option name="localTasksCounter" value="3247" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1370,7 +1366,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de cálculo de MMR para partidas do Shoukan" />
     <MESSAGE value="Adição de lista de raças" />
     <MESSAGE value="Adição de lista de raças Senshi" />
     <MESSAGE value="Novo campo: Infinite Tsukuyomi" />
@@ -1395,7 +1390,8 @@
     <MESSAGE value="Mudança no comando de reportar bugs" />
     <MESSAGE value="Tentativa de correção das coleções borradas" />
     <MESSAGE value="Implementação dos banners de ranqueada" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementação dos banners de ranqueada" />
+    <MESSAGE value="Correções gerais" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções gerais" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1509,11 +1505,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609132292067">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609359646119">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609132292067" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609359646119" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
