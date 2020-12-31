@@ -35,7 +35,10 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DeckStashCommand extends Command {
 
@@ -62,7 +65,6 @@ public class DeckStashCommand extends Command {
 
 		if (args.length == 0) {
 			List<DeckStash> stashes = DeckStashDAO.getStash(author.getId());
-			stashes.sort(Comparator.comparingInt(DeckStash::getId));
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Decks reserva (capacidade: " + acc.getStashCapacity() + " slots)");
@@ -125,9 +127,7 @@ public class DeckStashCommand extends Command {
 				return;
 			}
 
-			List<DeckStash> stashes = DeckStashDAO.getStash(author.getId());
-			stashes.sort(Comparator.comparingInt(DeckStash::getId));
-			DeckStash ds = stashes.get(slot);
+			DeckStash ds = DeckStashDAO.getStash(author.getId()).get(slot);
 
 			List<Champion> champions = new ArrayList<>(kp.getChampions());
 			List<Equipment> equipments = new ArrayList<>(kp.getEquipments());
