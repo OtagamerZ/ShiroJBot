@@ -142,9 +142,9 @@ public class DeckStashCommand extends Command {
 
 			DeckStash ds = DeckStashDAO.getStash(author.getId()).get(slot);
 
-			List<Champion> champions = kp.getChampions();
-			List<Equipment> equipments = kp.getEquipments();
-			List<Field> fields = kp.getFields();
+			List<Champion> champions = new ArrayList<>(kp.getChampions());
+			List<Equipment> equipments = new ArrayList<>(kp.getEquipments());
+			List<Field> fields = new ArrayList<>(kp.getFields());
 			List<Integer> destinyDraw = kp.getDestinyDraw();
 
 			kp.setChampions(ds.getChampions());
