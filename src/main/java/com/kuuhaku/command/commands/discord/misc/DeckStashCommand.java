@@ -18,9 +18,6 @@
 
 package com.kuuhaku.command.commands.discord.misc;
 
-import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.Page;
-import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -34,13 +31,11 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.DeckStash;
 import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class DeckStashCommand extends Command {
 
@@ -66,68 +61,59 @@ public class DeckStashCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (args.length == 0) {
-			List<Page> pages = new ArrayList<>();
-
 			List<DeckStash> stashes = DeckStashDAO.getStash(author.getId());
 			stashes.sort(Comparator.comparingInt(DeckStash::getId));
-			List<List<DeckStash>> lobby = Helper.chunkify(stashes, 10);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Decks reserva (capacidade: " + acc.getStashCapacity() + " slots)");
 
-			for (List<DeckStash> chunk : lobby) {
-				for (int j = 0; j < chunk.size(); j++) {
-					DeckStash ds = chunk.get(j);
-					Map<Class, Integer> count = new HashMap<>() {{
-						put(Class.DUELIST, 0);
-						put(Class.SUPPORT, 0);
-						put(Class.TANK, 0);
-						put(Class.SPECIALIST, 0);
-						put(Class.NUKE, 0);
-						put(Class.TRAP, 0);
-						put(Class.LEVELER, 0);
-					}};
-					for (Champion c : ds.getChampions())
-						count.compute(c.getCategory(), (cl, ct) -> ct == null ? 1 : ct + 1);
+			for (int j = 0; j < stashes.size(); j++) {
+				DeckStash ds = stashes.get(j);
+				Map<Class, Integer> count = new HashMap<>() {{
+					put(Class.DUELIST, 0);
+					put(Class.SUPPORT, 0);
+					put(Class.TANK, 0);
+					put(Class.SPECIALIST, 0);
+					put(Class.NUKE, 0);
+					put(Class.TRAP, 0);
+					put(Class.LEVELER, 0);
+				}};
+				for (Champion c : ds.getChampions())
+					count.compute(c.getCategory(), (cl, ct) -> ct == null ? 1 : ct + 1);
 
-					count.remove(null);
+				count.remove(null);
 
-					String[] data = new String[14];
-					for (int i = 0; i < Class.values().length; i++) {
-						int ct = count.getOrDefault(Class.values()[i], 0);
-						data[i * 2] = String.valueOf(ct);
-						data[i * 2 + 1] = ct != 1 ? "s" : "";
-					}
-
-					eb.addField(
-							"`Slot %s` | %sreserva %s\n".formatted(j, prefix, j),
-							"""
-									:crossed_swords: | Cartas Senshi: %s
-									:shield: | Cartas EvoGear: %s
-																		
-									%s
-									""".formatted(
-									ds.getChampions().size(),
-									ds.getEquipments().size(),
-									"""
-											:abacus: | Classes
-												**├─Duelista:** %s carta%s
-												**├─Tanque:** %s carta%s
-												**├─Suporte:** %s carta%s
-												**├─Nuker:** %s carta%s
-												**├─Armadilha:** %s carta%s
-												**├─Nivelador:** %s carta%s
-												**└─Especialista:** %s carta%s
-												""".formatted((Object[]) data)),
-							false);
+				String[] data = new String[14];
+				for (int i = 0; i < Class.values().length; i++) {
+					int ct = count.getOrDefault(Class.values()[i], 0);
+					data[i * 2] = String.valueOf(ct);
+					data[i * 2 + 1] = ct != 1 ? "s" : "";
 				}
 
-				pages.add(new Page(PageType.EMBED, eb.build()));
+				eb.addField(
+						"`Slot %s` | %sreserva %s\n".formatted(j, prefix, j),
+						"""
+								:crossed_swords: | Cartas Senshi: %s
+								:shield: | Cartas EvoGear: %s
+																	
+								%s
+								""".formatted(
+								ds.getChampions().size(),
+								ds.getEquipments().size(),
+								"""
+										:abacus: | Classes
+											**├─Duelista:** %s carta%s
+											**├─Tanque:** %s carta%s
+											**├─Suporte:** %s carta%s
+											**├─Nuker:** %s carta%s
+											**├─Armadilha:** %s carta%s
+											**├─Nivelador:** %s carta%s
+											**└─Especialista:** %s carta%s
+											""".formatted((Object[]) data)),
+						true);
 			}
 
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
-			);
+			channel.sendMessage(eb.build()).queue();
 			return;
 		}
 
