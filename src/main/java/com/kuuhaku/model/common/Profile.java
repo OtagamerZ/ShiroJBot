@@ -88,28 +88,28 @@ public class Profile {
 		int yOffset = 0;
 
 		Color main = null;
-		if (!mb.getProfileColor().isBlank()) {
+		if (!acc.getProfileColor().isBlank()) {
 			try {
-				main = Color.decode(mb.getProfileColor());
+				main = Color.decode(acc.getProfileColor());
 			} catch (NumberFormatException ignore) {
 			}
 		}
 		try {
-			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(mb.getBg())), bi.getWidth(), bi.getHeight());
+			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(acc.getBg())), bi.getWidth(), bi.getHeight());
 
 			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
 			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
-			if (!acc.hasAnimatedBg() || !Helper.getFileType(mb.getBg()).contains("gif"))
+			if (!acc.hasAnimatedBg() || !Helper.getFileType(acc.getBg()).contains("gif"))
 				g2d.drawImage(bg, xOffset, yOffset, null);
-			if (main == null) main = Helper.reverseColor(Helper.colorThief(mb.getBg()));
+			if (main == null) main = Helper.reverseColor(Helper.colorThief(acc.getBg()));
 		} catch (IOException e) {
 			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
 			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
 			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
-			if (!acc.hasAnimatedBg() || !Helper.getFileType(mb.getBg()).contains("gif"))
+			if (!acc.hasAnimatedBg() || !Helper.getFileType(acc.getBg()).contains("gif"))
 				g2d.drawImage(bg, xOffset, yOffset, null);
 			if (main == null)
 				main = Helper.reverseColor(Helper.colorThief("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg"));
@@ -206,7 +206,7 @@ public class Profile {
 
 
 		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
-		String s = mb.getBio();
+		String s = acc.getBio();
 		drawStringMultiLine(g2d, s.isEmpty() ? "Sem biografia" : s, 440, 474, 403);
 
 		drawBadges(m, mb, g, g2d);
@@ -280,10 +280,10 @@ public class Profile {
 		}
 	}
 
-	public static File applyAnimatedBackground(Member mb, BufferedImage overlay) throws IOException {
+	public static File applyAnimatedBackground(Account acc, BufferedImage overlay) throws IOException {
 		File out = File.createTempFile("profile_", ".gif");
 		try (ImageOutputStream ios = new FileImageOutputStream(out)) {
-			List<Triple<Integer, Integer, BufferedImage>> frames = Helper.readGIF(mb.getBg());
+			List<Triple<Integer, Integer, BufferedImage>> frames = Helper.readGIF(acc.getBg());
 			List<Triple<Integer, Integer, BufferedImage>> toDraw = new ArrayList<>();
 			AtomicInteger xOffset = new AtomicInteger();
 			AtomicInteger yOffset = new AtomicInteger();
