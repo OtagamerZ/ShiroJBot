@@ -39,10 +39,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class DeckStashCommand extends Command {
@@ -71,7 +68,9 @@ public class DeckStashCommand extends Command {
 		if (args.length == 0) {
 			List<Page> pages = new ArrayList<>();
 
-			List<List<DeckStash>> lobby = Helper.chunkify(DeckStashDAO.getStash(author.getId()), 10);
+			List<DeckStash> stashes = DeckStashDAO.getStash(author.getId());
+			stashes.sort(Comparator.comparingInt(DeckStash::getId));
+			List<List<DeckStash>> lobby = Helper.chunkify(stashes, 10);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Decks reserva (capacidade: " + acc.getStashCapacity() + " slots)");
@@ -147,9 +146,9 @@ public class DeckStashCommand extends Command {
 			List<Field> fields = new ArrayList<>(kp.getFields());
 			List<Integer> destinyDraw = kp.getDestinyDraw();
 
-			kp.setChampions(ds.getChampions());
-			kp.setEquipments(ds.getEquipments());
-			kp.setFields(ds.getFields());
+			kp.setChampions(new ArrayList<>(ds.getChampions()));
+			kp.setEquipments(new ArrayList<>(ds.getEquipments()));
+			kp.setFields(new ArrayList<>(ds.getFields()));
 			if (ds.getDestinyDraw() != null) kp.setDestinyDraw(ds.getDestinyDraw().toArray(Integer[]::new));
 
 			ds.setChampions(champions);
