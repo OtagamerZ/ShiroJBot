@@ -53,17 +53,6 @@ public class Member {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String pseudoName = "";
 
-	@Column(columnDefinition = "CHAR(7) NOT NULL DEFAULT ''")
-	private String profileColor = "";
-
-
-	//TEXTS
-	@Column(columnDefinition = "TEXT")
-	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
-
-	@Column(columnDefinition = "TEXT")
-	private String bio = "";
-
 	@Column(columnDefinition = "TEXT")
 	private String pseudoAvatar = "";
 
@@ -206,14 +195,6 @@ public class Member {
 		xp = 0;
 	}
 
-	public String getProfileColor() {
-		return profileColor;
-	}
-
-	public void setProfileColor(String profileColor) {
-		this.profileColor = profileColor;
-	}
-
 	public String getId() {
 		return id;
 	}
@@ -230,28 +211,12 @@ public class Member {
 		this.id = id;
 	}
 
-	public String getBg() {
-		return bg;
-	}
-
-	public void setBg(String bg) {
-		this.bg = bg;
-	}
-
 	public boolean isMarkForDelete() {
 		return markForDelete;
 	}
 
 	public void setMarkForDelete(boolean markForDelete) {
 		this.markForDelete = markForDelete;
-	}
-
-	public String getBio() {
-		return bio;
-	}
-
-	public void setBio(String bio) {
-		this.bio = bio;
 	}
 
 	public String getMid() {
@@ -337,14 +302,16 @@ public class Member {
 	}
 
 	public JSONObject toJson() {
+		Account acc = AccountDAO.getAccount(mid);
+
 		return new JSONObject() {{
 			put("id", id);
 			put("mid", mid);
 			put("sid", sid);
 			put("pseudoName", pseudoName);
-			put("profileColor", profileColor);
-			put("bg", bg);
-			put("bio", bio);
+			put("profileColor", acc.getProfileColor());
+			put("bg", acc.getBg());
+			put("bio", acc.getBio());
 			put("pseudoAvatar", pseudoAvatar);
 			put("level", level);
 			put("xp", xp);
