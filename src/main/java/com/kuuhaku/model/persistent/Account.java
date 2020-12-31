@@ -66,6 +66,9 @@ public class Account {
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
     private int bugs = 0;
 
+    @Column(columnDefinition = "INT NOT NULL DEFAULT 3")
+    private int stashCapacity = 3;
+
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean remind = false;
 
@@ -429,5 +432,13 @@ public class Account {
 
     public void setBugs(int bugs) {
         this.bugs = bugs;
+    }
+
+    public int getStashCapacity() {
+        return stashCapacity;
+    }
+
+    public void setStashCapacity(int stashCapacity) {
+        this.stashCapacity = stashCapacity;
     }
 }

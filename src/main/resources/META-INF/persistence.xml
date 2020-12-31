@@ -78,6 +78,7 @@
         <class>com.kuuhaku.model.persistent.MatchRound</class>
         <class>com.kuuhaku.model.persistent.Trophy</class>
         <class>com.kuuhaku.model.persistent.MatchMakingRating</class>
+        <class>com.kuuhaku.model.persistent.DeckStash</class>
 
         <properties>
             <!-- dados da conexao -->

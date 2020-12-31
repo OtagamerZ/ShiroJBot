@@ -23,7 +23,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Category;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -104,7 +104,7 @@ public class KawaiponsCommand extends Command {
                     return;
                 }
 
-                Category c = Category.getByName(args[0]);
+                Class c = Class.getByName(args[0]);
                 Race r = Race.getByName(args[0]);
                 KawaiponRarity rr = KawaiponRarity.getByName(args[0]);
 
@@ -214,7 +214,7 @@ public class KawaiponsCommand extends Command {
         channel.sendMessage(eb.build()).queue();
     }
 
-    private void send(User author, MessageChannel channel, Message m, BufferedImage cards, String s, Category c) throws IOException {
+    private void send(User author, MessageChannel channel, Message m, BufferedImage cards, String s, Class c) throws IOException {
         String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
         File f = new File(Main.getInfo().getCollectionsFolder(), hash + ".jpg");
         byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
