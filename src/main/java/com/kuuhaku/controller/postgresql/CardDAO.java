@@ -21,7 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Category;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.CardType;
@@ -379,7 +379,7 @@ public class CardDAO {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Champion> getChampions(Category c) {
+    public static List<Champion> getChampions(Class c) {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Champion.class);

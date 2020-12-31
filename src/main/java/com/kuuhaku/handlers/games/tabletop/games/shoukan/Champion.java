@@ -20,7 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import bsh.EvalError;
 import bsh.Interpreter;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Category;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
@@ -69,7 +69,7 @@ public class Champion implements Drawable, Cloneable {
 	private String effect = "";
 
 	@Enumerated(EnumType.STRING)
-	private Category category = null;
+	private Class category = null;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> requiredCards = new HashSet<>();
@@ -437,7 +437,7 @@ public class Champion implements Drawable, Cloneable {
 		}
 	}
 
-	public Category getCategory() {
+	public Class getCategory() {
 		return category;
 	}
 
