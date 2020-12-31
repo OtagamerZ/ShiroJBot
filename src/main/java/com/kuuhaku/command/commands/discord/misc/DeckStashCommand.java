@@ -139,7 +139,9 @@ public class DeckStashCommand extends Command {
 				return;
 			}
 
-			DeckStash ds = DeckStashDAO.getStash(author.getId()).get(slot);
+			List<DeckStash> stashes = DeckStashDAO.getStash(author.getId());
+			stashes.sort(Comparator.comparingInt(DeckStash::getId));
+			DeckStash ds = stashes.get(slot);
 
 			List<Champion> champions = new ArrayList<>(kp.getChampions());
 			List<Equipment> equipments = new ArrayList<>(kp.getEquipments());
