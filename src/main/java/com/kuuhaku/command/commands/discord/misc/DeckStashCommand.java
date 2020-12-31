@@ -150,12 +150,12 @@ public class DeckStashCommand extends Command {
 			kp.setChampions(ds.getChampions());
 			kp.setEquipments(ds.getEquipments());
 			kp.setFields(ds.getFields());
-			kp.setDestinyDraw(ds.getDestinyDraw().toArray(Integer[]::new));
+			if (ds.getDestinyDraw() != null) kp.setDestinyDraw(ds.getDestinyDraw().toArray(Integer[]::new));
 
 			ds.setChampions(champions);
 			ds.setEquipments(equipments);
 			ds.setFields(fields);
-			ds.setDestinyDraw(destinyDraw.toArray(Integer[]::new));
+			if (destinyDraw != null) ds.setDestinyDraw(destinyDraw.toArray(Integer[]::new));
 
 			DeckStashDAO.saveStash(ds);
 			KawaiponDAO.saveKawaipon(kp);
