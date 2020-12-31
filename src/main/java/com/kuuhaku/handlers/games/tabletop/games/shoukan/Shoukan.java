@@ -733,6 +733,8 @@ public class Shoukan extends GlobalGame {
 					break;
 				}
 			}
+
+			makeFusion(h);
 		}
 		return false;
 	}
