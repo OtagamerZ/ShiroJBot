@@ -39,7 +39,7 @@ public class DeckStashDAO {
 
 			if (stashes.size() < acc.getStashCapacity()) {
 				for (int i = stashes.size(); i < acc.getStashCapacity(); i++)
-					saveStash(new DeckStash());
+					saveStash(new DeckStash(id));
 
 				stashes = getStash(id);
 			}
