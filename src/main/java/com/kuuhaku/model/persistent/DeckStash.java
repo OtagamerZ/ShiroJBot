@@ -37,7 +37,7 @@ public class DeckStash {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''", unique = true)
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String uid = "";
 
 	@LazyCollection(LazyCollectionOption.FALSE)
