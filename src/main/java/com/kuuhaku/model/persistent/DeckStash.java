@@ -55,11 +55,8 @@ public class DeckStash {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String destinyDraw = "";
 
-	public DeckStash(List<Champion> champions, List<Equipment> equipments, List<Field> fields, String destinyDraw) {
-		this.champions = champions;
-		this.equipments = equipments;
-		this.fields = fields;
-		this.destinyDraw = destinyDraw;
+	public DeckStash(String uid) {
+		this.uid = uid;
 	}
 
 	public DeckStash() {
