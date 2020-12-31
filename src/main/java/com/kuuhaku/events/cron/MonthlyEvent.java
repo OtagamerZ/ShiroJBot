@@ -36,7 +36,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 public class MonthlyEvent implements Job {
 	public static JobDetail monthly;
@@ -154,7 +153,7 @@ public class MonthlyEvent implements Job {
 				Trophy tp = TrophyDAO.getTrophies(bl.getId());
 				MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(bl.getId());
 				Kawaipon kp = KawaiponDAO.getKawaipon(bl.getId());
-				Map<String, DeckStash> stashes = DeckStashDAO.getStash(bl.getId());
+				List<DeckStash> stashes = DeckStashDAO.getStash(bl.getId());
 				Kawaigotchi kg = KGotchiDAO.getKawaigotchi(bl.getId());
 				ExceedMember em = ExceedDAO.getExceedMember(bl.getId());
 				Tags t = TagDAO.getTagById(bl.getId());
@@ -164,7 +163,7 @@ public class MonthlyEvent implements Job {
 				MatchMakingRatingDAO.removeMMR(mmr);
 				MemberDAO.clearMember(bl.getId());
 				KawaiponDAO.removeKawaipon(kp);
-				for (DeckStash ds : stashes.values()) {
+				for (DeckStash ds : stashes) {
 					DeckStashDAO.removeKawaipon(ds);
 				}
 				if (kg != null)
