@@ -93,7 +93,7 @@ public class DeckStashCommand extends Command {
 				}
 
 				eb.addField(
-						"`Slot %s` | %sreserva %s\n".formatted(j, prefix, j),
+						"`Slot %s | %sreserva %s`".formatted(j, prefix, j),
 						"""
 								:crossed_swords: | Cartas Senshi: %s
 								:shield: | Cartas EvoGear: %s
