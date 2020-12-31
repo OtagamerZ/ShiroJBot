@@ -14,7 +14,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação de decks reserva">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -952,21 +951,7 @@
       <workItem from="1609179554410" duration="527000" />
       <workItem from="1609359721916" duration="130000" />
       <workItem from="1609369217241" duration="266000" />
-      <workItem from="1609383529573" duration="5622000" />
-    </task>
-    <task id="LOCAL-03204" summary="Adição do minigame de roleta no Shoukan personalizado">
-      <created>1608318434537</created>
-      <option name="number" value="03204" />
-      <option name="presentableId" value="LOCAL-03204" />
-      <option name="project" value="LOCAL" />
-      <updated>1608318434537</updated>
-    </task>
-    <task id="LOCAL-03205" summary="Adição do minigame de roleta no Shoukan personalizado">
-      <created>1608318643557</created>
-      <option name="number" value="03205" />
-      <option name="presentableId" value="LOCAL-03205" />
-      <option name="project" value="LOCAL" />
-      <updated>1608318643557</updated>
+      <workItem from="1609383529573" duration="6058000" />
     </task>
     <task id="LOCAL-03206" summary="Adição do minigame de roleta no Shoukan personalizado">
       <created>1608318768647</created>
@@ -1297,7 +1282,21 @@
       <option name="project" value="LOCAL" />
       <updated>1609392222618</updated>
     </task>
-    <option name="localTasksCounter" value="3253" />
+    <task id="LOCAL-03253" summary="Implementação de decks reserva">
+      <created>1609392442043</created>
+      <option name="number" value="03253" />
+      <option name="presentableId" value="LOCAL-03253" />
+      <option name="project" value="LOCAL" />
+      <updated>1609392442043</updated>
+    </task>
+    <task id="LOCAL-03254" summary="Implementação de decks reserva">
+      <created>1609392660028</created>
+      <option name="number" value="03254" />
+      <option name="presentableId" value="LOCAL-03254" />
+      <option name="project" value="LOCAL" />
+      <updated>1609392660028</updated>
+    </task>
+    <option name="localTasksCounter" value="3255" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1522,11 +1521,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609392223625">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609392661044">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609392223625" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609392661044" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
