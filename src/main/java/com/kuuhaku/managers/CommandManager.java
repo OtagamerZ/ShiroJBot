@@ -479,6 +479,9 @@ public class CommandManager {
 			put(DestinyCardsCommand.class, new Argument(
 					"destino", new String[]{"destiny", "dest"}, "req_positions", "cmd_destiny-cards", MISC, false
 			));
+			put(DeckStashCommand.class, new Argument(
+					"reserva", new String[]{"stash", "estoque"}, "req_slot", "cmd_deck-stash", MISC, true
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(

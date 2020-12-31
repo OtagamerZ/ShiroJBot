@@ -557,6 +557,20 @@ public class Helper {
 		else return usrRoles.get(0).getPosition() > tgtRoles.get(0).getPosition();
 	}
 
+	public static <T> List<List<T>> chunkify(Collection<T> col, int chunkSize) {
+		List<T> list = new ArrayList<>(col);
+		int overflow = list.size() % chunkSize;
+		List<List<T>> chunks = new ArrayList<>();
+
+		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
+			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
+		}
+
+		chunks.add(list.subList(list.size() - overflow, list.size()));
+
+		return chunks;
+	}
+
 	public static <T> List<List<T>> chunkify(List<T> list, int chunkSize) {
 		int overflow = list.size() % chunkSize;
 		List<List<T>> chunks = new ArrayList<>();
@@ -574,6 +588,20 @@ public class Helper {
 		List<T> list = new ArrayList<>(set);
 		int overflow = list.size() % chunkSize;
 		List<List<T>> chunks = new ArrayList<>();
+
+		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
+			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
+		}
+
+		chunks.add(list.subList(list.size() - overflow, list.size()));
+
+		return chunks;
+	}
+
+	public static <K, V> List<List<Map.Entry<K, V>>> chunkify(Map<K, V> map, int chunkSize) {
+		List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
+		int overflow = list.size() % chunkSize;
+		List<List<Map.Entry<K, V>>> chunks = new ArrayList<>();
 
 		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
 			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
