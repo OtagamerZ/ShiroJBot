@@ -47,6 +47,7 @@ public class MonthlyEvent implements Job {
 
 	public static void call() {
 		if (ExceedDAO.verifyMonth()) {
+			ExceedDAO.markWinner(ExceedDAO.findWinner());
 			String ex = ExceedDAO.getWinner();
 			ExceedEnum ee = ExceedEnum.getByName(ex);
 			ExceedDAO.getExceedMembers(ee).forEach(em -> {
@@ -73,11 +74,14 @@ public class MonthlyEvent implements Job {
 			ExceedDAO.getExceedMembers().forEach(em -> {
 				if (Main.getInfo().getUserByID(em.getId()) == null || em.getContribution() == 0)
 					ExceedDAO.removeMember(em);
+				else {
+					em.resetContribution();
+					saveExceedMember(em);
+				} 
 			});
 
 			ExceedDAO.unblock();
 
-			ExceedDAO.markWinner(ExceedDAO.findWinner());
 			Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
 		}
 
