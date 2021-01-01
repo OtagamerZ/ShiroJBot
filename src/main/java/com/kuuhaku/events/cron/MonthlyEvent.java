@@ -47,6 +47,7 @@ public class MonthlyEvent implements Job {
 
 	public static void call() {
 		if (ExceedDAO.verifyMonth()) {
+			ExceedDAO.markWinner(ExceedDAO.findWinner());
 			String ex = ExceedDAO.getWinner();
 			ExceedEnum ee = ExceedEnum.getByName(ex);
 			ExceedDAO.getExceedMembers(ee).forEach(em -> {
@@ -73,11 +74,14 @@ public class MonthlyEvent implements Job {
 			ExceedDAO.getExceedMembers().forEach(em -> {
 				if (Main.getInfo().getUserByID(em.getId()) == null || em.getContribution() == 0)
 					ExceedDAO.removeMember(em);
+				else {
+					em.resetContribution();
+					ExceedDAO.saveExceedMember(em);
+				} 
 			});
 
 			ExceedDAO.unblock();
 
-			ExceedDAO.markWinner(ExceedDAO.findWinner());
 			Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
 		}
 
@@ -178,7 +182,7 @@ public class MonthlyEvent implements Job {
 		for (String id : ShiroInfo.getSupports()) {
 			Account acc = AccountDAO.getAccount(id);
 			DevRating dr = VotesDAO.getRating(id);
-			if (dr.getMonthlyVotes() >= 15)
+			//if (dr.getMonthlyVotes() >= 15)
 				acc.addCredit(Math.round(10000 * Helper.prcnt((dr.getInteraction() + dr.getKnowledge() + dr.getSolution()) / 3, 5)), MonthlyEvent.class);
 			dr.resetVotes();
 			VotesDAO.saveRating(dr);
