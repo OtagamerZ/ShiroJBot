@@ -182,7 +182,7 @@ public class MonthlyEvent implements Job {
 		for (String id : ShiroInfo.getSupports()) {
 			Account acc = AccountDAO.getAccount(id);
 			DevRating dr = VotesDAO.getRating(id);
-			if (dr.getMonthlyVotes() >= 15)
+			//if (dr.getMonthlyVotes() >= 15)
 				acc.addCredit(Math.round(10000 * Helper.prcnt((dr.getInteraction() + dr.getKnowledge() + dr.getSolution()) / 3, 5)), MonthlyEvent.class);
 			dr.resetVotes();
 			VotesDAO.saveRating(dr);
