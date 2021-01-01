@@ -186,11 +186,6 @@ public class ExceedDAO {
         em.merge(m);
         em.getTransaction().commit();
 
-        getExceedMembers().forEach(e -> {
-            e.resetContribution();
-            saveExceedMember(e);
-        });
-
         em.close();
     }
 
