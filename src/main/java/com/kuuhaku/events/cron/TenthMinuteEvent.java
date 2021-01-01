@@ -63,7 +63,7 @@ public class TenthMinuteEvent implements Job {
 		}
 
 		List<GuildConfig> guilds = GuildDAO.getAllGuildsWithExceedRoles();
-		List<ExceedMember> ems = ExceedDAO.getExceedMembers().stream().filter(em -> !em.getExceed().isBlank()).collect(Collectors.toList());
+		List<ExceedMember> ems = ExceedDAO.getExceedMembers();
 		String[] exNames = {"imanity", "ex-machina", "exmachina", "flugel", "flügel", "werebeast", "elf", "seiren"};
 
 		for (GuildConfig gc : guilds) {
@@ -105,6 +105,13 @@ public class TenthMinuteEvent implements Job {
 							.collect(Collectors.toList());
 
 					guild.modifyMemberRoles(mb, validRoles, invalidRoles).queue();
+				} else {
+					List<Role> invalidRoles = roles.values()
+							.stream()
+							.flatMap(List::stream)
+							.collect(Collectors.toList());
+
+					guild.modifyMemberRoles(mb, null, invalidRoles).queue();
 				}
 			});
 		}

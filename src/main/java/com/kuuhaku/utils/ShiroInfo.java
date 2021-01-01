@@ -36,7 +36,6 @@ import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.spaceprogram.kittycache.KittyCache;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
@@ -46,10 +45,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -118,7 +114,7 @@ public class ShiroInfo {
 			.token(dblToken)
 			.botId("572413282653306901")
 			.build();
-	private final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
+	private final ConcurrentMap<String, Cache<String, Message>> messageCache = new ConcurrentHashMap<>();
 	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
 	private final Cache<String, Boolean> confirmationPending = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, Integer> pendingJoin = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
@@ -195,8 +191,8 @@ public class ShiroInfo {
 		return emoteRepo;
 	}
 
-    public static List<String> getStaff() {
-        return Stream.concat(developers.stream(), supports.stream()).distinct().collect(Collectors.toList());
+	public static List<String> getStaff() {
+		return Stream.concat(developers.stream(), supports.stream()).distinct().collect(Collectors.toList());
 	}
 
 	//NON-STATIC
@@ -346,16 +342,33 @@ public class ShiroInfo {
 	}
 
 	public void cache(Guild guild, Message message) {
-		messageCache.compute(guild.getId(), (s, cache) -> cache == null ? new KittyCache<>(64) : cache)
-				.put(message.getId(), message, (int) TimeUnit.DAYS.toSeconds(1));
+		messageCache.compute(
+				guild.getId(),
+				(s, cache) -> cache == null ? CacheBuilder.newBuilder()
+						.maximumSize(64)
+						.expireAfterWrite(1, TimeUnit.DAYS)
+						.build() : cache
+		).put(message.getId(), message);
 	}
 
 	public Message retrieveCachedMessage(Guild guild, String id) {
-		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).get(id);
+		return messageCache.getOrDefault(
+				guild.getId(),
+				CacheBuilder.newBuilder()
+						.maximumSize(64)
+						.expireAfterWrite(1, TimeUnit.DAYS)
+						.build()
+		).getIfPresent(id);
 	}
 
-	public KittyCache<String, Message> retrieveCache(Guild guild) {
-		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
+	public Cache<String, Message> retrieveCache(Guild guild) {
+		return messageCache.getOrDefault(
+				guild.getId(),
+				CacheBuilder.newBuilder()
+						.maximumSize(64)
+						.expireAfterWrite(1, TimeUnit.DAYS)
+						.build()
+		);
 	}
 
 	public Set<String> getRequests() {
