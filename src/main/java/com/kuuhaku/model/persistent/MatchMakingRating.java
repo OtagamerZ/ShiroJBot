@@ -213,7 +213,7 @@ public class MatchMakingRating {
 
 	public String getWinrate() {
 		if (losses == 0) return "perfeito";
-		return "%s%% (V/D)".formatted(Helper.prcntToInt((float) wins / losses, 1));
+		return "%s%% (V/D)".formatted(Helper.prcntToInt((float) wins, wins + losses));
 	}
 
 	public boolean isBlocked() {
