@@ -13,9 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação de decks reserva">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhorias gerais">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,6 +167,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -943,14 +956,8 @@
       <workItem from="1609369217241" duration="266000" />
       <workItem from="1609383529573" duration="6468000" />
       <workItem from="1609393795655" duration="272000" />
-      <workItem from="1609445552299" duration="930000" />
-    </task>
-    <task id="LOCAL-03212" summary="Correções nas novas mudanças">
-      <created>1608334328033</created>
-      <option name="number" value="03212" />
-      <option name="presentableId" value="LOCAL-03212" />
-      <option name="project" value="LOCAL" />
-      <updated>1608334328033</updated>
+      <workItem from="1609445552299" duration="1701000" />
+      <workItem from="1609475286603" duration="919000" />
     </task>
     <task id="LOCAL-03213" summary="Correções nas novas mudanças">
       <created>1608335564968</created>
@@ -1288,7 +1295,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609393851432</updated>
     </task>
-    <option name="localTasksCounter" value="3261" />
+    <task id="LOCAL-03261" summary="Melhorias gerais">
+      <created>1609446652675</created>
+      <option name="number" value="03261" />
+      <option name="presentableId" value="LOCAL-03261" />
+      <option name="project" value="LOCAL" />
+      <updated>1609446652676</updated>
+    </task>
+    <option name="localTasksCounter" value="3262" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1396,10 +1410,10 @@
     <MESSAGE value="Tentativa de correção das coleções borradas" />
     <MESSAGE value="Implementação dos banners de ranqueada" />
     <MESSAGE value="Correções gerais" />
-    <MESSAGE value="Melhorias gerais" />
     <MESSAGE value="Implementação de decks reserva" />
     <MESSAGE value="Redução dos slots iniciais nos deck reservas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Redução dos slots iniciais nos deck reservas" />
+    <MESSAGE value="Melhorias gerais" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhorias gerais" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1513,11 +1527,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609393854022">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609446654431">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609393854022" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609446654431" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1559,11 +1573,11 @@
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608122622979" />
     <state x="651" y="274" key="extract.method.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1608350738643" />
-    <state x="339" y="117" width="1094" height="808" key="find.popup" timestamp="1609125004932">
+    <state x="339" y="117" width="1094" height="808" key="find.popup" timestamp="1609476144844">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608310170929" />
-    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1609125004932" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1609476144844" />
     <state x="686" y="303" key="git4idea.ui.GitUnstashDialog" timestamp="1607912268563">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
