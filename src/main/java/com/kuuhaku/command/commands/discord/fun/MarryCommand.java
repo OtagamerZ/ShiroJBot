@@ -81,7 +81,7 @@ public class MarryCommand extends Command {
 			} else if (author.getId().equals(Main.getSelfUser().getId())) {
 				channel.sendMessage("Ei, o que você acha que está fazendo ao me forçar a me casar? :rage:").queue();
 				return;
-			} else if (author.isBot()) {
+			} else if (message.getMentionedUsers().get(0).isBot()) {
 				channel.sendMessage("Isso é um bot, não acho que dê pra se casar com um!").queue();
 				return;
 			}
