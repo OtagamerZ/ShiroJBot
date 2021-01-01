@@ -76,7 +76,7 @@ public class MonthlyEvent implements Job {
 					ExceedDAO.removeMember(em);
 				else {
 					em.resetContribution();
-					saveExceedMember(em);
+					ExceedDAO.saveExceedMember(em);
 				} 
 			});
 
