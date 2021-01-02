@@ -508,6 +508,13 @@ public class Shoukan extends GlobalGame {
 					yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
 
 					if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
+						yours.setAvailable(false);
+						yours.resetAttribs();
+						if (yours.hasEffect()) {
+							yours.getEffect(new EffectParameters(phase, EffectTrigger.POST_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
+							if (postCombat()) return;
+						}
+
 						if (!postCombat()) {
 							resetTimerKeepTurn();
 							channel.sendMessage("Cálculo de combate ignorado por efeito do atacante!")
