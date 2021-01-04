@@ -314,8 +314,8 @@ public class Shoukan extends GlobalGame {
 
 								if (sc != null) {
 									Champion dp = t.copy();
-									dp.setAltAtk(Math.round(dp.getAltAtk() * 0.75f));
-									dp.setAltDef(Math.round(dp.getAltDef() * 0.75f));
+									dp.setRedAtk(Math.round(dp.getAltAtk() * 0.25f));
+									dp.setRedDef(Math.round(dp.getAltDef() * 0.25f));
 									dp.setBonus(t.getBonus());
 
 									sc.setTop(dp);
