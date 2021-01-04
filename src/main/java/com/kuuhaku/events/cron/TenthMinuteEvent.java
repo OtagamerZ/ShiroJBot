@@ -34,6 +34,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.quartz.Job;
@@ -116,6 +117,19 @@ public class TenthMinuteEvent implements Job {
 							.collect(Collectors.toList());
 
 					guild.modifyMemberRoles(mb, null, invalidRoles).queue();
+				}
+			}
+		}
+
+		for (GuildConfig gc : GuildDAO.getAllGuildsWithGeneralChannel()) {
+			Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+			if (g != null && !Helper.getOr(gc.getGeneralTopic(), "").isBlank()) {
+				TextChannel tc = g.getTextChannelById(gc.getCanalGeral());
+				if (tc != null)
+					tc.getManager().setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount(), false))).queue();
+				else {
+					gc.setCanalGeral(null);
+					GuildDAO.updateGuildSettings(gc);
 				}
 			}
 		}
