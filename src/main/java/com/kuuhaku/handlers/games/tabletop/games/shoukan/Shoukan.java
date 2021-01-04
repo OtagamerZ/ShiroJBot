@@ -251,6 +251,7 @@ public class Shoukan extends GlobalGame {
 				}
 
 				Drawable d = h.getCards().get(index);
+				String msg = null;
 
 				if (!d.isAvailable()) {
 					channel.sendMessage("❌ | Essa carta já foi jogada neste turno.").queue(null, Helper::doNothing);
@@ -273,6 +274,24 @@ public class Shoukan extends GlobalGame {
 						getHands().get(next).removeHp(Math.round(e.getAtk()));
 						h.removeMana(e.getMana());
 						arena.getGraveyard().get(h.getSide()).add(e);
+
+						resetTimerKeepTurn();
+						AtomicBoolean shownHand = new AtomicBoolean(false);
+						channel.sendMessage(h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + ".")
+								.addFile(Helper.getBytes(arena.render(hands), "jpg"), "board.jpg")
+								.queue(s -> {
+									this.message.compute(s.getChannel().getId(), (id, m) -> {
+										if (m != null)
+											m.delete().queue(null, Helper::doNothing);
+										return s;
+									});
+									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									if (!shownHand.get()) {
+										shownHand.set(true);
+										h.showHand();
+									}
+								});
+						return;
 					}
 
 					if (args.length < 3) {
@@ -345,6 +364,8 @@ public class Shoukan extends GlobalGame {
 
 						if (postCombat()) return;
 					}
+
+					msg = h.getUser().getName() + " equipou " + e.getCard().getName() + " em " + t.getCard().getName() + ".";
 				} else if (d instanceof Champion) {
 					Champion c = (Champion) d.copy();
 					if (args[1].equalsIgnoreCase("d")) {
@@ -415,6 +436,8 @@ public class Shoukan extends GlobalGame {
 						c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(c, dest, null, -1), channel));
 						if (postCombat()) return;
 					}
+
+					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : "a carta " + c.getCard().getName()) + ".";
 				} else {
 					if (!args[1].equalsIgnoreCase("f")) {
 						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, Helper::doNothing);
@@ -425,6 +448,7 @@ public class Shoukan extends GlobalGame {
 					d.setAvailable(false);
 					f.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					arena.setField(f);
+					msg = h.getUser().getName() + " invocou o campo " + f.getCard().getName() + ".";
 				}
 
 				if (d instanceof Champion)
@@ -434,7 +458,7 @@ public class Shoukan extends GlobalGame {
 
 				resetTimerKeepTurn();
 				AtomicBoolean shownHand = new AtomicBoolean(false);
-				channel.sendMessage("Invocou " + (d instanceof Champion && d.isFlipped() ? "uma carta virada para baixo" : "a carta " + d.getCard().getName()) + ".")
+				channel.sendMessage(msg)
 						.addFile(Helper.getBytes(arena.render(hands), "jpg"), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
