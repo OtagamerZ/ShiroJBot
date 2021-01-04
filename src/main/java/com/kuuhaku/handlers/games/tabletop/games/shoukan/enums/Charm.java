@@ -31,7 +31,7 @@ public enum Charm {
 	DOPPELGANGER("Clone"),
 	SACRIFICE("Sacrifício"),
 	SOULLINK("Vínculo espiritual"),
-	HEX("Sortilégio");
+	SPELL("Sortilégio");
 
 	private final String name;
 
