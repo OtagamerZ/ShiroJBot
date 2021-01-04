@@ -159,7 +159,10 @@ public class Shoukan extends GlobalGame {
 
 		return condition
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
-				.and(e -> StringUtils.isNumeric(e.getMessage().getContentRaw().split(",")[0]) || e.getMessage().getContentRaw().equalsIgnoreCase("reload"))
+				.and(e -> {
+					String[] args = e.getMessage().getContentRaw().split(",");
+					return (args.length > 0 && StringUtils.isNumeric(args[0])) || e.getMessage().getContentRaw().equalsIgnoreCase("reload");
+				})
 				.and(e -> !isClosed())
 				.test(evt);
 	}
@@ -752,7 +755,7 @@ public class Shoukan extends GlobalGame {
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
 
 		slts.get(index).setTop(null);
-		slts.forEach(sd -> {
+		for (SlotColumn<Champion, Equipment> sd : slts) {
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
 				Equipment eq = sd.getBottom();
 				eq.setLinkedTo(null);
@@ -760,7 +763,7 @@ public class Shoukan extends GlobalGame {
 				else arena.getGraveyard().get(side).add(eq);
 				sd.setBottom(null);
 			}
-		});
+		}
 
 		ch.reset();
 		if (!ch.isFusion())
@@ -787,7 +790,7 @@ public class Shoukan extends GlobalGame {
 		}
 
 		slts.get(index).setTop(null);
-		slts.forEach(sd -> {
+		for (SlotColumn<Champion, Equipment> sd : slts) {
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
 				Equipment eq = sd.getBottom();
 				eq.setLinkedTo(null);
@@ -795,7 +798,7 @@ public class Shoukan extends GlobalGame {
 				else arena.getGraveyard().get(side).add(eq);
 				sd.setBottom(null);
 			}
-		});
+		}
 
 		ch.reset();
 		if (!ch.isFusion())
@@ -808,7 +811,7 @@ public class Shoukan extends GlobalGame {
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
 
 		slts.get(index).setTop(null);
-		slts.forEach(sd -> {
+		for (SlotColumn<Champion, Equipment> sd : slts) {
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
 				Equipment eq = sd.getBottom();
 				eq.setLinkedTo(null);
@@ -816,7 +819,7 @@ public class Shoukan extends GlobalGame {
 				else arena.getGraveyard().get(side).add(eq);
 				sd.setBottom(null);
 			}
-		});
+		}
 
 		ch.reset();
 		if (!ch.isFusion())
@@ -841,14 +844,14 @@ public class Shoukan extends GlobalGame {
 			if (ch == null) return;
 
 			slts.get(index).setTop(null);
-			slts.forEach(sd -> {
+			for (SlotColumn<Champion, Equipment> sd : slts) {
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
 					Equipment eq = sd.getBottom();
 					eq.setLinkedTo(null);
 					arena.getBanished().add(eq);
 					sd.setBottom(null);
 				}
-			});
+			}
 
 			ch.reset();
 			if (!ch.isFusion())
@@ -992,7 +995,9 @@ public class Shoukan extends GlobalGame {
 
 	public boolean postCombat() {
 		AtomicBoolean finished = new AtomicBoolean(false);
-		getHands().forEach((s, h) -> {
+		for (Map.Entry<Side, Hand> entry : getHands().entrySet()) {
+			Side s = entry.getKey();
+			Hand h = entry.getValue();
 			if (!finished.get()) {
 				Hand op = getHands().get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
 				if (h.getHp() == 0) {
@@ -1011,7 +1016,7 @@ public class Shoukan extends GlobalGame {
 									}));
 				}
 			}
-		});
+		}
 		return finished.get();
 	}
 

@@ -80,13 +80,15 @@ public class EmbedCommand extends Command {
 				if (json.has("image")) eb.setImage(json.getString("image"));
 				if (json.has("body")) eb.setDescription(json.getString("body"));
 
-				if (json.has("fields")) json.getJSONArray("fields").forEach(j -> {
-					try {
-						JSONObject jo = (JSONObject) j;
-						eb.addField(jo.getString("name"), jo.getString("value"), true);
-					} catch (Exception ignore) {
+				if (json.has("fields")) {
+					for (Object j : json.getJSONArray("fields")) {
+						try {
+							JSONObject jo = (JSONObject) j;
+							eb.addField(jo.getString("name"), jo.getString("value"), true);
+						} catch (Exception ignore) {
+						}
 					}
-				});
+				}
 
 				if (json.has("footer")) eb.setFooter(json.getString("footer"), null);
 

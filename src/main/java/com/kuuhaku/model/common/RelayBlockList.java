@@ -41,12 +41,13 @@ public class RelayBlockList {
 		eb.setColor(Color.orange);
 		eb.setThumbnail("https://image.flaticon.com/icons/png/512/718/718672.png");
 		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
-		ShiroInfo.getStaff().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
-				u.openPrivateChannel().queue(c -> {
-					String msg = "Usuário bloqueado do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
-					c.sendMessage(msg).queue();
-				}))
-		);
+		for (String d : ShiroInfo.getStaff()) {
+			Main.getJibril().retrieveUserById(d).queue(u ->
+					u.openPrivateChannel().queue(c -> {
+						String msg = "Usuário bloqueado do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
+						c.sendMessage(msg).queue();
+					}));
+		}
 	}
 
 	public static void permaBlockID(String id, String reason) {
@@ -60,12 +61,13 @@ public class RelayBlockList {
 		eb.setColor(Color.red);
 		eb.setThumbnail("https://cdn.icon-icons.com/icons2/1380/PNG/512/vcsconflicting_93497.png");
 		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
-		ShiroInfo.getStaff().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
-				u.openPrivateChannel().queue(c -> {
-					String msg = "Usuário bloqueado permanentemente do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
-					c.sendMessage(msg).queue();
-				}))
-		);
+		for (String d : ShiroInfo.getStaff()) {
+			Main.getJibril().retrieveUserById(d).queue(u ->
+					u.openPrivateChannel().queue(c -> {
+						String msg = "Usuário bloqueado permanentemente do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
+						c.sendMessage(msg).queue();
+					}));
+		}
 	}
 
 	public static void blockThumb(String id) {

@@ -50,35 +50,34 @@ public class MonthlyEvent implements Job {
 			ExceedDAO.markWinner(ExceedDAO.findWinner());
 			String ex = ExceedDAO.getWinner();
 			ExceedEnum ee = ExceedEnum.getByName(ex);
-			ExceedDAO.getExceedMembers(ee).forEach(em -> {
-						User u = Main.getInfo().getUserByID(em.getId());
-						Account acc = AccountDAO.getAccount(em.getId());
-						if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
-							double share = ExceedDAO.getMemberShare(u.getId());
-							long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).getExp() / 1000f);
-							long prize = Math.round(total * share);
-							try {
-								c.sendMessage("""
-										:tada: :tada: **O seu Exceed foi campeão neste mês, parabéns!** :tada: :tada:
-										Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas e redução de juros de empréstimos.
-										Adicionalmente, por ter sido responsável por **%s%%** da pontuação de seu Exceed, você receberá __**%s créditos**__ como parte do prêmio **(Total: %s)**.
-										""".formatted(ex, Helper.roundToString(share, 2), prize, total)).queue(null, Helper::doNothing);
-							} catch (Exception ignore) {
-							}
-							acc.addCredit(prize, MonthlyEvent.class);
-							AccountDAO.saveAccount(acc);
-						});
+			for (ExceedMember exceedMember : ExceedDAO.getExceedMembers(ee)) {
+				User u = Main.getInfo().getUserByID(exceedMember.getId());
+				Account acc = AccountDAO.getAccount(exceedMember.getId());
+				if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
+					double share = ExceedDAO.getMemberShare(u.getId());
+					long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).getExp() / 1000f);
+					long prize = Math.round(total * share);
+					try {
+						c.sendMessage("""
+								:tada: :tada: **O seu Exceed foi campeão neste mês, parabéns!** :tada: :tada:
+								Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas e redução de juros de empréstimos.
+								Adicionalmente, por ter sido responsável por **%s%%** da pontuação de seu Exceed, você receberá __**%s créditos**__ como parte do prêmio **(Total: %s)**.
+								""".formatted(ex, Helper.roundToString(share, 2), prize, total)).queue(null, Helper::doNothing);
+					} catch (Exception ignore) {
 					}
-			);
+					acc.addCredit(prize, MonthlyEvent.class);
+					AccountDAO.saveAccount(acc);
+				});
+			}
 
-			ExceedDAO.getExceedMembers().forEach(em -> {
+			for (ExceedMember em : ExceedDAO.getExceedMembers()) {
 				if (Main.getInfo().getUserByID(em.getId()) == null || em.getContribution() == 0)
 					ExceedDAO.removeMember(em);
 				else {
 					em.resetContribution();
 					ExceedDAO.saveExceedMember(em);
-				} 
-			});
+				}
+			}
 
 			ExceedDAO.unblock();
 
@@ -87,13 +86,13 @@ public class MonthlyEvent implements Job {
 
 		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
 
-		kgs.forEach(k -> {
+		for (Kawaigotchi k : kgs) {
 			try {
 				if (k.getDiedAt().plusMonths(1).isBefore(LocalDateTime.now()) || k.getOffSince().plusMonths(1).isBefore(LocalDateTime.now()))
 					com.kuuhaku.controller.postgresql.KGotchiDAO.deleteKawaigotchi(k);
 			} catch (NullPointerException ignore) {
 			}
-		});
+		}
 
 		List<String> ns = List.of(
 				"00", "01", "02", "03", "04", "05",
@@ -138,7 +137,7 @@ public class MonthlyEvent implements Job {
 		chn.sendMessage(msg).queue();
 		Helper.broadcast(msg, null, null);
 
-		winners.forEach(l -> {
+		for (Lottery l : winners) {
 			Account acc = AccountDAO.getAccount(l.getUid());
 			acc.addCredit(value.getValue() / winners.size(), MonthlyEvent.class);
 			AccountDAO.saveAccount(acc);
@@ -146,7 +145,7 @@ public class MonthlyEvent implements Job {
 			Main.getInfo().getUserByID(l.getUid()).openPrivateChannel().queue(c -> {
 				c.sendMessage("Você ganhou " + (value.getValue() / winners.size()) + " créditos na loteria, parabéns!").queue(null, Helper::doNothing);
 			}, Helper::doNothing);
-		});
+		}
 
 		LotteryDAO.closeLotteries();
 

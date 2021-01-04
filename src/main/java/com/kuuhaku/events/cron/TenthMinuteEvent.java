@@ -49,8 +49,12 @@ public class TenthMinuteEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		Main.getJibril().getGuilds().forEach(TenthMinuteEvent::notif);
-		AccountDAO.getNotifiableAccounts().forEach(Account::notifyVote);
+		for (Guild guild1 : Main.getJibril().getGuilds()) {
+			notif(guild1);
+		}
+		for (Account account : AccountDAO.getNotifiableAccounts()) {
+			account.notifyVote();
+		}
 
 		for (Guild g : Main.getShiroShards().getGuilds()) {
 			GuildMusicManager gmm = Music.getGuildAudioPlayer(g, null);
@@ -93,7 +97,7 @@ public class TenthMinuteEvent implements Job {
 						.add(addRole.getRight());
 			}
 
-			mbs.forEach(mb -> {
+			for (Member mb : mbs) {
 				ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
 				if (ex != null) {
 					List<Role> validRoles = roles.get(ex);
@@ -113,7 +117,7 @@ public class TenthMinuteEvent implements Job {
 
 					guild.modifyMemberRoles(mb, null, invalidRoles).queue();
 				}
-			});
+			}
 		}
 	}
 

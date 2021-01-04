@@ -95,23 +95,29 @@ public class KGotchiCommand extends Command {
 
 				Map<FoodType, List<MessageEmbed.Field>> fields = new HashMap<>();
 
-				jo.toMap().forEach((f, v) -> {
-					Food food = FoodMenu.getFood(f);
+				for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
+					String key = entry.getKey();
+					Object v = entry.getValue();
+					Food food = FoodMenu.getFood(key);
 					fields.compute(food.getType(), (ft, fd) -> fd == null ? new ArrayList<>() : fd)
-							.add(new MessageEmbed.Field(food.getName() + " - " + v + " unidades\n(`" + prefix + "kgotchi alimentar " + f + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
-				});
+							.add(new MessageEmbed.Field(food.getName() + " - " + v + " unidades\n(`" + prefix + "kgotchi alimentar " + key + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
+				}
 
 				Map<String, Page> pages = new HashMap<>();
 
-				fields.forEach((t, f) -> {
+				for (Map.Entry<FoodType, List<MessageEmbed.Field>> entry : fields.entrySet()) {
+					FoodType t = entry.getKey();
+					List<MessageEmbed.Field> f = entry.getValue();
 					eb.clear();
 					eb.setTitle("Estoque de " + t.toStrings().toLowerCase());
-					f.forEach(eb::addField);
+					for (MessageEmbed.Field field : f) {
+						eb.addField(field);
+					}
 					eb.setThumbnail(t.getIcon());
 					eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 					pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
-				});
+				}
 
 				channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())));
 			} else {
@@ -248,22 +254,28 @@ public class KGotchiCommand extends Command {
 
 							Map<VanityType, List<MessageEmbed.Field>> fields = new HashMap<>();
 
-							VanityMenu.getMenu().forEach((n, vanity) ->
-									fields.compute(vanity.getType(), (vt, fd) -> fd == null ? new ArrayList<>() : fd)
-											.add(new MessageEmbed.Field(vanity.getName() + " - " + vanity.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar extra " + n + "`)", "Bônus de " + vanity.getType().getBonus().toLowerCase() + ": " + (int) (vanity.getModifier() * 100) + "%", true))
-							);
+							for (Map.Entry<String, Vanity> e : VanityMenu.getMenu().entrySet()) {
+								String n = e.getKey();
+								Vanity vanity = e.getValue();
+								fields.compute(vanity.getType(), (vt, fd) -> fd == null ? new ArrayList<>() : fd)
+										.add(new MessageEmbed.Field(vanity.getName() + " - " + vanity.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar extra " + n + "`)", "Bônus de " + vanity.getType().getBonus().toLowerCase() + ": " + (int) (vanity.getModifier() * 100) + "%", true));
+							}
 
 							Map<String, Page> pages = new HashMap<>();
 
-							fields.forEach((t, v) -> {
+							for (Map.Entry<VanityType, List<MessageEmbed.Field>> entry : fields.entrySet()) {
+								VanityType t = entry.getKey();
+								List<MessageEmbed.Field> v = entry.getValue();
 								eb.clear();
 								eb.setTitle("Setor de " + t.toStrings().toLowerCase());
-								v.forEach(eb::addField);
+								for (MessageEmbed.Field field : v) {
+									eb.addField(field);
+								}
 								eb.setThumbnail(t.getIcon());
 								eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 								pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
-							});
+							}
 
 							channel.sendMessage((MessageEmbed) pages.get(VanityType.HOUSE.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())));
 						} else {
@@ -291,22 +303,28 @@ public class KGotchiCommand extends Command {
 
 							Map<FoodType, List<MessageEmbed.Field>> fields = new HashMap<>();
 
-							FoodMenu.getMenu().forEach((n, food) ->
-									fields.compute(food.getType(), (ft, fd) -> fd == null ? new ArrayList<>() : fd)
-											.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar comida " + n + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true))
-							);
+							for (Map.Entry<String, Food> entry : FoodMenu.getMenu().entrySet()) {
+								String n = entry.getKey();
+								Food food = entry.getValue();
+								fields.compute(food.getType(), (ft, fd) -> fd == null ? new ArrayList<>() : fd)
+										.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar comida " + n + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
+							}
 
 							Map<String, Page> pages = new HashMap<>();
 
-							fields.forEach((t, f) -> {
+							for (Map.Entry<FoodType, List<MessageEmbed.Field>> entry : fields.entrySet()) {
+								FoodType t = entry.getKey();
+								List<MessageEmbed.Field> f = entry.getValue();
 								eb.clear();
 								eb.setTitle("Setor de " + t.toStrings().toLowerCase());
-								f.forEach(eb::addField);
+								for (MessageEmbed.Field field : f) {
+									eb.addField(field);
+								}
 								eb.setThumbnail(t.getIcon());
 								eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 								pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
-							});
+							}
 
 							channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())));
 						} else {
@@ -347,6 +365,7 @@ public class KGotchiCommand extends Command {
 							AccountDAO.saveAccount(acc);
 						}
 					}
+					default -> throw new IllegalStateException("Unexpected value: " + args[1].toLowerCase());
 				}
 			} else {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_shop-type-required")).queue();

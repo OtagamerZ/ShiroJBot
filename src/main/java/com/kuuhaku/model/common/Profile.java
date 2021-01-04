@@ -257,14 +257,14 @@ public class Profile {
 			}
 
 			Set<Tag> tags = Tag.getTags(m.getUser(), m);
-			tags.forEach(t -> {
+			for (Tag t : tags) {
 				try {
 					add(ImageIO.read(t.getPath(mb)));
 				} catch (IOException e) {
 					Helper.logger(Profile.class).error(e + " | " + e.getStackTrace()[0]);
 				} catch (NullPointerException ignore) {
 				}
-			});
+			}
 		}};
 
 		List<int[]> coords = new ArrayList<>() {{
@@ -288,30 +288,30 @@ public class Profile {
 			AtomicInteger xOffset = new AtomicInteger();
 			AtomicInteger yOffset = new AtomicInteger();
 
-			frames.forEach(p -> {
+			for (Triple<Integer, Integer, BufferedImage> frame : frames) {
 				BufferedImage canvas = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
 
-				if (p.getRight().getWidth() > canvas.getWidth())
-					xOffset.set(-(p.getRight().getWidth() - canvas.getWidth()) / 2);
-				if (p.getRight().getHeight() > canvas.getHeight())
-					yOffset.set(-(p.getRight().getHeight() - canvas.getHeight()) / 2);
+				if (frame.getRight().getWidth() > canvas.getWidth())
+					xOffset.set(-(frame.getRight().getWidth() - canvas.getWidth()) / 2);
+				if (frame.getRight().getHeight() > canvas.getHeight())
+					yOffset.set(-(frame.getRight().getHeight() - canvas.getHeight()) / 2);
 
-				g2d.drawImage(p.getRight(), xOffset.get(), yOffset.get(), null);
+				g2d.drawImage(frame.getRight(), xOffset.get(), yOffset.get(), null);
 				g2d.drawImage(overlay, 0, 0, null);
 
 				g2d.dispose();
-				toDraw.add(Triple.of(p.getLeft(), p.getMiddle(), clipRoundEdges(canvas)));
-			});
+				toDraw.add(Triple.of(frame.getLeft(), frame.getMiddle(), clipRoundEdges(canvas)));
+			}
 
 			GifSequenceWriter writer = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
-			toDraw.forEach(p -> {
+			for (Triple<Integer, Integer, BufferedImage> p : toDraw) {
 				try {
 					writer.writeToSequence(p.getRight(), p.getLeft(), p.getMiddle(), true);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			});
+			}
 
 			writer.close();
 		}
