@@ -238,7 +238,10 @@ public class Settings {
 			return;
 		}
 
-		String newMsgBv = String.join(" ", args).replace(args[0], "").trim();
+		String newMsgBv = String.join(" ", args)
+				.replace(args[0], "")
+				.replace("\\n", "\n")
+				.trim();
 
 		gc.setMsgBoasVindas(newMsgBv);
 		GuildDAO.updateGuildSettings(gc);
@@ -285,7 +288,10 @@ public class Settings {
 			return;
 		}
 
-		String newMsgAdeus = String.join(" ", args).replace(args[0], "").trim();
+		String newMsgAdeus = String.join(" ", args)
+				.replace(args[0], "")
+				.replace("\\n", "\n")
+				.trim();
 
 		gc.setMsgAdeus(newMsgAdeus);
 		GuildDAO.updateGuildSettings(gc);
@@ -305,7 +311,10 @@ public class Settings {
 			return;
 		}
 
-		String newGeneralTopic = String.join(" ", args).replace(args[0], "").trim();
+		String newGeneralTopic = String.join(" ", args)
+				.replace(args[0], "")
+				.replace("\\n", "\n")
+				.trim();
 
 		gc.setGeneralTopic(newGeneralTopic);
 		GuildDAO.updateGuildSettings(gc);
