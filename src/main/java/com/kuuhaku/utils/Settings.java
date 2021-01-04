@@ -678,6 +678,8 @@ public class Settings {
 		eb.addField(prefix + "settings mensagembv", "Defina uma mensagem de boas-vindas em seu servidor.", false);
 		eb.addField(prefix + "settings canaladeus", "Define o canal onde a Shiro ira mandar as mensagens de saída. Para remover esta configuração, use `" + prefix + "settings canaladeus reset`.", false);
 		eb.addField(prefix + "settings mensagemadeus", "Defina uma mensagem de saída em seu servidor.", false);
+		eb.addField(prefix + "settings canalgeral", "Define o canal geral do seu servidor. Para remover esta configuração, use `" + prefix + "settings canalgeral reset`.", false);
+		eb.addField(prefix + "settings mensagemadeus", "Defina o tópico do canal geral do seu servidor.", false);
 
 		eb.addField(prefix + "settings canalsug", "Define o canal de sugestões em seu servidor. Para remover esta configuração, use `" + prefix + "settings canalsug reset`.", false);
 		eb.addField(prefix + "settings canallevelup", "Define o canal de level up em seu servidor. Para remover esta configuração, use `" + prefix + "settings canallevelup reset`.", false);
@@ -694,6 +696,7 @@ public class Settings {
 
 		eb.addField("%guild%", "Para dizer o nome do server.", false);
 		eb.addField("%user%", "Para dizer o nome do usuário.", false);
+		eb.addField("%count%", "(Apenas tópico) Para dizer a contagem de membros.", false);
 
 		message.getTextChannel().sendMessage(eb.build()).queue();
 	}
