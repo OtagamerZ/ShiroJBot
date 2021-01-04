@@ -437,7 +437,7 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return;
 					}
 
-					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : "a carta " + c.getCard().getName()) + ".";
+					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : c.getCard().getName()) + ".";
 				} else {
 					if (!args[1].equalsIgnoreCase("f")) {
 						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, Helper::doNothing);
