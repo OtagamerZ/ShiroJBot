@@ -54,6 +54,9 @@ public class Equipment implements Drawable, Cloneable {
 	private int def;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int mana;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int tier;
 
 	@Enumerated(value = EnumType.STRING)
@@ -81,7 +84,10 @@ public class Equipment implements Drawable, Cloneable {
 				g2d.setClip(null);
 			}
 
-			g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);
+			if (charm != null && charm.equals(Charm.SPELL))
+				g2d.drawImage(acc.getFrame().getFrontSpell(), 0, 0, null);
+			else
+				g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);
 			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
 			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
@@ -93,8 +99,11 @@ public class Equipment implements Drawable, Cloneable {
 			Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 316, g2d);
 
 			if (charm != null)
-				g2d.drawImage(charm.getIcon(), 135, 58, null);
-
+				if (charm.equals(Charm.SPELL)) {
+					g2d.setColor(Color.cyan);
+					Profile.drawOutlinedText(String.valueOf(mana), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 66, g2d);
+				} else
+					g2d.drawImage(charm.getIcon(), 135, 58, null);
 			try {
 				BufferedImage star = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/star.png")));
 				for (int i = 0; i < tier; i++)
@@ -206,6 +215,10 @@ public class Equipment implements Drawable, Cloneable {
 
 	public int getDef() {
 		return def;
+	}
+
+	public int getMana() {
+		return mana;
 	}
 
 	public int getTier() {

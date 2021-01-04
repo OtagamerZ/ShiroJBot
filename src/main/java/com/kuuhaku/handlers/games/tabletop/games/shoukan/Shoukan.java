@@ -258,6 +258,23 @@ public class Shoukan extends GlobalGame {
 				}
 
 				if (d instanceof Equipment) {
+					Equipment e = (Equipment) d.copy();
+					if (e.getCharm() != null && e.getCharm().equals(Charm.SPELL)) {
+						if (!args[1].equalsIgnoreCase("s")) {
+							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de feitiço.").queue(null, Helper::doNothing);
+							return;
+						} else if (h.getMana() < e.getMana()) {
+							channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
+							return;
+						}
+
+						d.setAvailable(false);
+						h.addHp(e.getDef());
+						getHands().get(next).removeHp(Math.round(e.getAtk()));
+						h.removeMana(e.getMana());
+						arena.getGraveyard().get(h.getSide()).add(e);
+					}
+
 					if (args.length < 3) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser o número da casa da carta à equipar este equipamento.").queue(null, Helper::doNothing);
 						return;
@@ -289,21 +306,20 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
-					Equipment tp = (Equipment) d.copy();
 					d.setAvailable(false);
-					tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
-					slot.setBottom(tp);
+					e.setAcc(AccountDAO.getAccount(h.getUser().getId()));
+					slot.setBottom(e);
 					Champion t = target.getTop();
 					t.setFlipped(false);
-					t.addLinkedTo(tp);
-					tp.setLinkedTo(Pair.of(toEquip, t));
+					t.addLinkedTo(e);
+					e.setLinkedTo(Pair.of(toEquip, t));
 					if (t.hasEffect()) {
 						t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
 						if (postCombat()) return;
 					}
 
-					if (tp.getCharm() != null) {
-						switch (tp.getCharm()) {
+					if (e.getCharm() != null) {
+						switch (e.getCharm()) {
 							case TIMEWARP -> {
 								t.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
 								t.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
@@ -325,21 +341,38 @@ public class Shoukan extends GlobalGame {
 								h.addMana(Math.max(1, Math.round(t.getMana() / 2f)));
 								destroyCard(h.getSide(), toEquip);
 							}
-							case HEX -> {
-								h.crippleHp(tp.getDef());
-								getHands().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP).removeHp((int) Math.round(tp.getAtk()));
-								unequipCard(h.getSide(), dest, slots);
-							}
 						}
 
 						if (postCombat()) return;
 					}
 				} else if (d instanceof Champion) {
-					if (args.length < 3) {
+					Champion c = (Champion) d.copy();
+					if (args[1].equalsIgnoreCase("d")) {
+						d.setAvailable(false);
+						arena.getGraveyard().get(h.getSide()).add(c);
+
+						resetTimerKeepTurn();
+						AtomicBoolean shownHand = new AtomicBoolean(false);
+						channel.sendMessage(h.getUser().getName() + " descartou a carta " + d.getCard().getName() + ".")
+								.addFile(Helper.getBytes(arena.render(hands), "jpg"), "board.jpg")
+								.queue(s -> {
+									this.message.compute(s.getChannel().getId(), (id, m) -> {
+										if (m != null)
+											m.delete().queue(null, Helper::doNothing);
+										return s;
+									});
+									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									if (!shownHand.get()) {
+										shownHand.set(true);
+										h.showHand();
+									}
+								});
+						return;
+					} else if (args.length < 3) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 						return;
 					} else if (h.getMana() < ((Champion) d).getMana()) {
-						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento.").queue(null, Helper::doNothing);
+						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
 						return;
 					}
 
@@ -356,20 +389,18 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
-					Champion tp = (Champion) d.copy();
-
 					switch (args[2].toLowerCase()) {
 						case "a" -> {
-							tp.setFlipped(false);
-							tp.setDefending(false);
+							c.setFlipped(false);
+							c.setDefending(false);
 						}
 						case "d" -> {
-							tp.setFlipped(false);
-							tp.setDefending(true);
+							c.setFlipped(false);
+							c.setDefending(true);
 						}
 						case "b" -> {
-							tp.setFlipped(true);
-							tp.setDefending(true);
+							c.setFlipped(true);
+							c.setDefending(true);
 						}
 						default -> {
 							channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
@@ -378,10 +409,10 @@ public class Shoukan extends GlobalGame {
 					}
 
 					d.setAvailable(false);
-					tp.setAcc(AccountDAO.getAccount(h.getUser().getId()));
-					slot.setTop(tp);
-					if (tp.hasEffect() && !tp.isFlipped()) {
-						tp.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(tp, dest, null, -1), channel));
+					c.setAcc(AccountDAO.getAccount(h.getUser().getId()));
+					slot.setTop(c);
+					if (c.hasEffect() && !c.isFlipped()) {
+						c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(c, dest, null, -1), channel));
 						if (postCombat()) return;
 					}
 				} else {
@@ -403,7 +434,8 @@ public class Shoukan extends GlobalGame {
 
 				resetTimerKeepTurn();
 				AtomicBoolean shownHand = new AtomicBoolean(false);
-				channel.sendFile(Helper.getBytes(arena.render(hands), "jpg"), "board.jpg")
+				channel.sendMessage("Invocou " + (d instanceof Champion && d.isFlipped() ? "uma carta virada para baixo" : "a carta " + d.getCard().getName()) + ".")
+						.addFile(Helper.getBytes(arena.render(hands), "jpg"), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -431,7 +463,7 @@ public class Shoukan extends GlobalGame {
 				int[] is = {index, args.length == 1 ? 0 : Integer.parseInt(args[1]) - 1};
 
 				List<SlotColumn<Champion, Equipment>> yourSide = arena.getSlots().get(h.getSide());
-				List<SlotColumn<Champion, Equipment>> hisSide = arena.getSlots().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+				List<SlotColumn<Champion, Equipment>> hisSide = arena.getSlots().get(next);
 
 				if (args.length == 1) {
 					if (is[0] < 0 || is[0] >= yourSide.size()) {
@@ -473,7 +505,7 @@ public class Shoukan extends GlobalGame {
 
 					if (!postCombat()) {
 						resetTimerKeepTurn();
-						channel.sendMessage("Você atacou diretamente o inimigo.")
+						channel.sendMessage(h.getUser().getName() + " atacou diretamente " + getHands().get(next).getUser().getName() + ".")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
 									this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -536,7 +568,7 @@ public class Shoukan extends GlobalGame {
 				}
 
 				if (his.hasEffect()) {
-					his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEFEND, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
+					his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEFEND, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 
 					if (his.getBonus().getSpecialData().remove("skipCombat") != null) {
 						if (!postCombat()) {
@@ -566,7 +598,7 @@ public class Shoukan extends GlobalGame {
 					if (his.isFlipped()) {
 						his.setFlipped(false);
 						if (his.hasEffect()) {
-							his.getEffect(new EffectParameters(phase, EffectTrigger.ON_FLIP, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
+							his.getEffect(new EffectParameters(phase, EffectTrigger.ON_FLIP, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 							if (postCombat()) return;
 						}
 					}
@@ -588,20 +620,20 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return;
 					}
 					if (his.hasEffect()) {
-						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
+						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 						if (postCombat()) return;
 					}
 
 					if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
-						Hand enemy = getHands().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+						Hand enemy = getHands().get(next);
 						enemy.removeHp(yPower - hPower);
 					}
 
-					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1]);
+					killCard(next, is[1]);
 
 					if (!postCombat()) {
 						resetTimerKeepTurn();
-						channel.sendMessage("Sua carta derrotou a carta inimiga! (" + yPower + " > " + hPower + ")")
+						channel.sendMessage(yours.getCard().getName() + " derrotou a " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
 									this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -620,7 +652,7 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return;
 					}
 					if (his.hasEffect()) {
-						his.getEffect(new EffectParameters(phase, EffectTrigger.POST_DEFENSE, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
+						his.getEffect(new EffectParameters(phase, EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 						if (postCombat()) return;
 					}
 
@@ -632,7 +664,7 @@ public class Shoukan extends GlobalGame {
 
 					if (!postCombat()) {
 						resetTimerKeepTurn();
-						channel.sendMessage("Sua carta foi derrotada pela carta inimiga! (" + yPower + " < " + hPower + ")")
+						channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getCard().getName() + "! (" + yPower + " < " + hPower + ")")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
 									this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -645,7 +677,7 @@ public class Shoukan extends GlobalGame {
 					}
 				} else {
 					yours.setAvailable(false);
-					killCard(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, is[1]);
+					killCard(next, is[1]);
 					killCard(h.getSide(), is[0]);
 
 					if (yours.hasEffect()) {
@@ -653,7 +685,7 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return;
 					}
 					if (his.hasEffect()) {
-						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP, Duelists.of(yours, is[0], his, is[1]), channel));
+						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 						if (postCombat()) return;
 					}
 
@@ -744,7 +776,7 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 
-			makeFusion(h);
+			return makeFusion(h);
 		}
 		return false;
 	}

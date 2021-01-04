@@ -14,9 +14,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_blue.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_cyan.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_green.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_grey.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_purple.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_yellow.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/banner.xcf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,6 +178,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -950,14 +973,7 @@
       <workItem from="1609710370505" duration="693000" />
       <workItem from="1609715848595" duration="8125000" />
       <workItem from="1609735023766" duration="64000" />
-      <workItem from="1609786146229" duration="742000" />
-    </task>
-    <task id="LOCAL-03221" summary="Novo amuleto: Sortilégio">
-      <created>1608524687125</created>
-      <option name="number" value="03221" />
-      <option name="presentableId" value="LOCAL-03221" />
-      <option name="project" value="LOCAL" />
-      <updated>1608524687125</updated>
+      <workItem from="1609786146229" duration="4464000" />
     </task>
     <task id="LOCAL-03222" summary="Novo amuleto: Sortilégio">
       <created>1608524895889</created>
@@ -1295,7 +1311,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609786774295</updated>
     </task>
-    <option name="localTasksCounter" value="3270" />
+    <task id="LOCAL-03270" summary="Correções">
+      <created>1609787031191</created>
+      <option name="number" value="03270" />
+      <option name="presentableId" value="LOCAL-03270" />
+      <option name="project" value="LOCAL" />
+      <updated>1609787031192</updated>
+    </task>
+    <option name="localTasksCounter" value="3271" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1442,11 +1465,11 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1609392198098">
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1609790004087">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1608297788251" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1609392198098" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1609790004087" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1520,11 +1543,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609734921151">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609787032918">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609734921151" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609787032918" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
