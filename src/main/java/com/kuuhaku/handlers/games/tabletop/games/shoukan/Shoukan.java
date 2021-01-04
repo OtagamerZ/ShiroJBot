@@ -1027,8 +1027,8 @@ public class Shoukan extends GlobalGame {
 
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("▶️", (mb, ms) -> {
+			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			if (getRound() < 1 || phase == Phase.ATTACK) {
-				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				User u = getCurrent();
 
 				AtomicReference<Hand> h = new AtomicReference<>(getHands().get(current));
@@ -1092,6 +1092,8 @@ public class Shoukan extends GlobalGame {
 				return;
 			}
 
+			hash.set(Helper.generateHash(this));
+			ShiroInfo.getHashes().add(hash.get());
 			channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue(null, Helper::doNothing);
 			phase = Phase.ATTACK;
 			draw = false;

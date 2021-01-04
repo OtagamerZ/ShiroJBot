@@ -13,9 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhorias gerais e remoção completa do forEach">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -949,14 +950,7 @@
       <workItem from="1609710370505" duration="693000" />
       <workItem from="1609715848595" duration="8125000" />
       <workItem from="1609735023766" duration="64000" />
-      <workItem from="1609786146229" duration="322000" />
-    </task>
-    <task id="LOCAL-03220" summary="Correções nas novas mudanças">
-      <created>1608523141928</created>
-      <option name="number" value="03220" />
-      <option name="presentableId" value="LOCAL-03220" />
-      <option name="project" value="LOCAL" />
-      <updated>1608523141928</updated>
+      <workItem from="1609786146229" duration="742000" />
     </task>
     <task id="LOCAL-03221" summary="Novo amuleto: Sortilégio">
       <created>1608524687125</created>
@@ -1294,7 +1288,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609734919231</updated>
     </task>
-    <option name="localTasksCounter" value="3269" />
+    <task id="LOCAL-03269" summary="Correções">
+      <created>1609786774295</created>
+      <option name="number" value="03269" />
+      <option name="presentableId" value="LOCAL-03269" />
+      <option name="project" value="LOCAL" />
+      <updated>1609786774295</updated>
+    </task>
+    <option name="localTasksCounter" value="3270" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1380,7 +1381,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correções no Shoukan" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Cartas atordoadas agora causam dano caso dejam derrotadas" />
     <MESSAGE value="Adição de quebra de linha nos comandos que usam webhook" />
@@ -1405,7 +1405,8 @@
     <MESSAGE value="Melhorias gerais" />
     <MESSAGE value="Correnção nos caches" />
     <MESSAGE value="Melhorias gerais e remoção completa do forEach" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhorias gerais e remoção completa do forEach" />
+    <MESSAGE value="Correções" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
