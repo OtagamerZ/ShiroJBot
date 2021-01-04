@@ -70,12 +70,18 @@ public class Settings {
 			String canalAvisos = Helper.getOr(gc.getCanalAvisos(), "Não definido.");
 			if (!canalAvisos.equals("Não definido.")) canalAvisos = "<#" + canalAvisos + ">";
 
+			String canalGeral = Helper.getOr(gc.getCanalGeral(), "Não definido.");
+			if (!canalGeral.equals("Não definido.")) canalGeral = "<#" + canalGeral + ">";
+
 			//MENSAGENS
 			String msgBV = Helper.getOr(gc.getMsgBoasVindas(), "Não definido.");
 			if (!msgBV.equals("Não definido.")) msgBV = "```" + msgBV + "```";
 
 			String msgAdeus = Helper.getOr(gc.getMsgAdeus(), "Não definido.");
 			if (!msgAdeus.equals("Não definido.")) msgAdeus = "```" + msgAdeus + "```";
+
+			String generalTopic = Helper.getOr(gc.getGeneralTopic(), "Não definido.");
+			if (!generalTopic.equals("Não definido.")) generalTopic = "```" + generalTopic + "```";
 
 			//TEMPOS
 			int pollTime = gc.getPollTime();
@@ -116,6 +122,8 @@ public class Settings {
 			eb.addField("\uD83D\uDCDD » Mensagem de Boas-vindas", msgBV, false);
 			eb.addField(Helper.VOID + "\n\uD83D\uDCD6 » Canal de Adeus", canalAdeus, false);
 			eb.addField("\uD83D\uDCDD » Mensagem de Adeus", msgAdeus, false);
+			eb.addField(Helper.VOID + "\n\uD83D\uDCD6 » Canal geral", canalAvisos, true);
+			eb.addField("\uD83D\uDCDD » Tópico do canal geral", generalTopic, false);
 
 			eb.addBlankField(false);
 
@@ -282,6 +290,26 @@ public class Settings {
 		gc.setMsgAdeus(newMsgAdeus);
 		GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | A mensagem de adeus do servidor foi trocada para " + newMsgAdeus + " com sucesso.").queue();
+	}
+
+	public static void updateGeneralTopic(String[] args, Message message, GuildConfig gc) {
+		String antigoGeneralTopic = gc.getGeneralTopic();
+
+		if (args.length < 2) {
+			message.getTextChannel().sendMessage("O tópico do canal geral atual do servidor é `" + antigoGeneralTopic + "`.").queue();
+			return;
+		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
+			gc.setGeneralTopic("Contagem de membros em %count% e subindo!");
+			GuildDAO.updateGuildSettings(gc);
+			message.getTextChannel().sendMessage("✅ | O tópico do canal geral foi resetada com sucesso.").queue();
+			return;
+		}
+
+		String newGeneralTopic = String.join(" ", args).replace(args[0], "").trim();
+
+		gc.setGeneralTopic(newGeneralTopic);
+		GuildDAO.updateGuildSettings(gc);
+		message.getTextChannel().sendMessage("✅ | O tópico do canal geral foi trocado para " + newGeneralTopic + " com sucesso.").queue();
 	}
 
 	public static void updateCanalSUG(String[] args, Message message, GuildConfig gc) {
@@ -517,6 +545,33 @@ public class Settings {
 		gc.setCanalAvisos(newCanalAvisos.getId());
 		GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O canal de avisos do servidor foi trocado para " + newCanalAvisos.getAsMention() + " com sucesso.").queue();
+	}
+
+	public static void updateCanalGeral(String[] args, Message message, GuildConfig gc) {
+		String antigoCanalGeral = gc.getCanalAvisos();
+
+		if (args.length < 2) {
+			if (antigoCanalGeral.equals("Não definido.")) {
+				message.getTextChannel().sendMessage("O canal geral atual do servidor ainda não foi definido.").queue();
+			} else {
+				message.getTextChannel().sendMessage("O canal geral atual do servidor é <#" + antigoCanalGeral + ">.").queue();
+			}
+			return;
+		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
+			gc.setCanalGeral(null);
+			GuildDAO.updateGuildSettings(gc);
+			message.getTextChannel().sendMessage("✅ | O canal geral do servidor foi resetado com sucesso.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
+			return;
+		}
+
+		TextChannel newCanalGeral = message.getMentionedChannels().get(0);
+
+		gc.setCanalGeral(newCanalGeral.getId());
+		GuildDAO.updateGuildSettings(gc);
+		message.getTextChannel().sendMessage("✅ | O canal geral do servidor foi trocado para " + newCanalGeral.getAsMention() + " com sucesso.").queue();
 	}
 
 	public static void updateCargoLvl(String[] args, Message message, GuildConfig gc) {

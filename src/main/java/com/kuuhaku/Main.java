@@ -35,6 +35,7 @@ import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.managers.TwitchCommandManager;
+import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
@@ -43,6 +44,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -151,14 +153,14 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		shiroShards.setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 		getInfo().setWinner(ExceedDAO.getWinner());
-		shiroShards.getGuilds().forEach(g -> {
+		for (Guild g : shiroShards.getGuilds()) {
 			try {
 				GuildDAO.getGuildById(g.getId());
 			} catch (NoResultException e) {
 				GuildDAO.addGuildToDB(g);
 				Helper.logger(Main.class).info("Guild adicionada ao banco: " + g.getName());
 			}
-		});
+		}
 
 		console = new ConsoleListener();
 		shiroShards.addEventListener(info.getShiroEvents());
@@ -171,7 +173,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Pages.activate(shiroShards);
 		console.start();
 
-		GuildDAO.getAllGuildsWithButtons().forEach(Helper::refreshButtons);
+		for (GuildConfig guildConfig : GuildDAO.getAllGuildsWithButtons()) {
+			Helper.refreshButtons(guildConfig);
+		}
 
 		System.gc();
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");

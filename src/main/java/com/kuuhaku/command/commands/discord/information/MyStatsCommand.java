@@ -139,7 +139,9 @@ public class MyStatsCommand extends Command {
 			badges.append(TagIcons.getExceed(ExceedEnum.getByName(exceed)));
 		}
 
-		tags.forEach(t -> badges.append(t.getEmote(mb) == null ? "" : Objects.requireNonNull(t.getEmote(mb)).getTag(mb.getLevel())));
+		for (Tag t : tags) {
+			badges.append(t.getEmote(mb) == null ? "" : Objects.requireNonNull(t.getEmote(mb)).getTag(mb.getLevel()));
+		}
 
 		eb.addField(":label: | Seus emblemas:", badges.toString(), false);
 

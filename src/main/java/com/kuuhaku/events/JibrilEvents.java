@@ -56,23 +56,25 @@ public class JibrilEvents extends ListenerAdapter {
 			}
 		}
 
-		ShiroInfo.getDevelopers().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
-				u.openPrivateChannel().queue(c -> {
-					String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
-					c.sendMessage(msg).queue();
-				}))
-		);
+		for (String d : ShiroInfo.getDevelopers()) {
+			Main.getJibril().retrieveUserById(d).queue(u ->
+					u.openPrivateChannel().queue(c -> {
+						String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
+						c.sendMessage(msg).queue();
+					}));
+		}
 		Helper.logger(this.getClass()).info("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
 	}
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
-		ShiroInfo.getDevelopers().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
-				u.openPrivateChannel().queue(c -> {
-					String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
-					c.sendMessage(msg).queue();
-				}))
-		);
+		for (String d : ShiroInfo.getDevelopers()) {
+			Main.getJibril().retrieveUserById(d).queue(u ->
+					u.openPrivateChannel().queue(c -> {
+						String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
+						c.sendMessage(msg).queue();
+					}));
+		}
 		Helper.logger(this.getClass()).info("Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
 	}
 

@@ -241,13 +241,13 @@ public class Hitotsu extends Game {
 		for (KawaiponCard cd : c)
 			if (!c.get(0).getCard().getAnime().equals(cd.getCard().getAnime())) throw new IllegalChainException();
 
-		c.forEach(cd -> {
+		for (KawaiponCard cd : c) {
 			played.add(cd);
 			justPut(cd);
 			hand.getCards().remove(cd);
 			if (cd.isFoil())
 				CardEffect.getEffect(cd.getCard().getRarity()).accept(this, seats.get(getBoard().getInGamePlayers().peekNext().getId()));
-		});
+		}
 
 		User winner = seats.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null);
 		if (winner != null) {

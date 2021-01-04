@@ -61,13 +61,17 @@ public class LocalEmoteListCommand extends Command {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		guild.getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
+		for (Emote emote : guild.getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList())) {
+			f.add(new MessageEmbed.Field("Emote " + emote.getAsMention(), "Menção: " + emote.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false));
+		}
 
 		try {
 			for (int i = 0; i < Math.ceil(f.size() / 10f); i++) {
 				eb.clear();
 				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), Math.min(10 * (i + 1), f.size()));
-				subF.forEach(eb::addField);
+				for (MessageEmbed.Field field : subF) {
+					eb.addField(field);
+				}
 
 				eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_available-server-emotes"));
 				Helper.finishEmbed(guild, pages, f, eb, i);

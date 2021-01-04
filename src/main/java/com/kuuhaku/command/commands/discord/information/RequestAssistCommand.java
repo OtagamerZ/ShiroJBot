@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.discord.information;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -33,6 +34,7 @@ import java.awt.*;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class RequestAssistCommand extends Command {
 
@@ -71,17 +73,31 @@ public class RequestAssistCommand extends Command {
 
 		Map<String, String> ids = new HashMap<>();
 
-		ShiroInfo.getStaff().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
-				.flatMap(m -> m.sendMessage(eb.build()))
-				.flatMap(m -> {
-					ids.put(dev, m.getId());
-					return m.pin();
-				})
-				.complete()
-		);
+		for (String dev : ShiroInfo.getStaff()) {
+			Main.getInfo().getUserByID(dev).openPrivateChannel()
+					.flatMap(m -> m.sendMessage(eb.build()))
+					.flatMap(m -> {
+						ids.put(dev, m.getId());
+						return m.pin();
+					})
+					.complete();
+		}
 
-		Main.getInfo().getRequests().add(guild.getId());
-		TicketDAO.setIds(number, ids);
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
+		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `SUPORTE PRESENCIAL`?").queue(s ->
+				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					if (!ShiroInfo.getHashes().remove(hash)) return;
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
+					author.openPrivateChannel()
+							.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
+							.queue(null, Helper::doNothing);
+					Main.getInfo().getRequests().add(guild.getId());
+					TicketDAO.setIds(number, ids);
+					s.delete().queue(null, Helper::doNothing);
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
+				}), true, 60, TimeUnit.SECONDS)
+		);
 	}
 }

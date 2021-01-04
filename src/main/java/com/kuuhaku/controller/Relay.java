@@ -133,18 +133,25 @@ public class Relay {
 
 		if (!exceed.isEmpty()) {
 			badges.append(TagIcons.getExceed(ExceedEnum.getByName(exceed)));
+			for (Tag t : tags) {
+				badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag(mbr.getLevel()));
+			}
+		} else {
+			for (Tag t : tags) {
+				badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag(mbr.getLevel()));
+			}
 		}
-
-		tags.forEach(t -> badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag(mbr.getLevel())));
 
 		eb.addField("Emblemas:", badges.toString(), false);
 
 		MessageBuilder mb = new MessageBuilder();
 		mb.setEmbed(eb.build());
 
-		relays.forEach((k, r) -> {
+		for (Map.Entry<String, String> entry : relays.entrySet()) {
+			String k = entry.getKey();
+			String r = entry.getValue();
 			if (k.equals(s.getId()) && GuildDAO.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser())
-				return;
+				continue;
 			try {
 				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
 				assert t != null;
@@ -209,7 +216,7 @@ public class Relay {
 					Helper.logger(this.getClass()).error(ex + " | Dono " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag());
 				}
 			}
-		});
+		}
 		try {
 			if (!GuildDAO.getGuildById(s.getId()).isLiteMode()) {
 				source.delete().queue();
@@ -238,7 +245,9 @@ public class Relay {
 		MessageBuilder mb = new MessageBuilder();
 		mb.setEmbed(eb.build());
 
-		relays.forEach((k, r) -> {
+		for (Map.Entry<String, String> entry : relays.entrySet()) {
+			String k = entry.getKey();
+			String r = entry.getValue();
 			try {
 				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
 				assert t != null;
@@ -299,7 +308,7 @@ public class Relay {
 					Helper.logger(this.getClass()).error(ex + " | Dono " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag());
 				}
 			}
-		});
+		}
 	}
 
 	public MessageEmbed getRelayInfo(GuildConfig gc) {
@@ -330,7 +339,9 @@ public class Relay {
 
 		List<GuildConfig> gc = q.getResultList();
 		gc.removeIf(g -> Main.getJibril().getGuildById(g.getGuildID()) == null);
-		gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
+		for (GuildConfig g : gc) {
+			relays.put(g.getGuildID(), g.getCanalRelay());
+		}
 
 		em.close();
 	}

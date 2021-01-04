@@ -69,7 +69,9 @@ public class Hand {
 					destinyDeck.add(deque.get(i));
 			}
 		}
-		destinyDeck.forEach(deque::remove);
+		for (Drawable drawable : destinyDeck) {
+			deque.remove(drawable);
+		}
 		deque.addAll(kp.getEquipments());
 		deque.addAll(kp.getFields());
 

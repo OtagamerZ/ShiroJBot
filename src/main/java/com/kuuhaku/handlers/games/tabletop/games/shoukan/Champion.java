@@ -255,7 +255,9 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setLinkedTo(List<Equipment> linkedTo) {
 		this.linkedTo = linkedTo;
-		this.linkedTo.forEach(e -> e.setLinkedTo(Pair.of(e.getLinkedTo().getLeft(), this)));
+		for (Equipment e : this.linkedTo) {
+			e.setLinkedTo(Pair.of(e.getLinkedTo().getLeft(), this));
+		}
 	}
 
 	public List<Equipment> getLinkedTo() {

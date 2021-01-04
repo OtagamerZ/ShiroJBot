@@ -36,11 +36,21 @@ public class BackupDAO {
 
 		try {
 			em.getTransaction().begin();
-			data.getCaDump().forEach(em::merge);
-			data.getmDump().forEach(em::merge);
-			data.getGcDump().forEach(em::merge);
-			data.getKgDump().forEach(em::merge);
-			data.getPsDump().forEach(em::merge);
+			for (CustomAnswers customAnswers : data.getCaDump()) {
+				em.merge(customAnswers);
+			}
+			for (Member member : data.getmDump()) {
+				em.merge(member);
+			}
+			for (GuildConfig guildConfig : data.getGcDump()) {
+				em.merge(guildConfig);
+			}
+			for (Kawaigotchi kawaigotchi : data.getKgDump()) {
+				em.merge(kawaigotchi);
+			}
+			for (PoliticalState politicalState : data.getPsDump()) {
+				em.merge(politicalState);
+			}
 			em.getTransaction().commit();
 
 			return true;

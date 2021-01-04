@@ -110,48 +110,56 @@ public class SynthesizeCardCommand extends Command {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (elas serão destruídas no processo). Deseja continuar?")
 					.queue(s ->
-							Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
+							{
+								Map<String, java.util.function.BiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
+								buttons.put(Helper.ACCEPT, (ms, mb) -> {
+									if (!ShiroInfo.getHashes().remove(hash)) return;
+									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
 
-								if (kp.getFields().size() == 3) {
-									int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
+									if (kp.getFields().size() == 3) {
+										int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
 
-									Account acc = AccountDAO.getAccount(author.getId());
-									acc.addCredit(change, this.getClass());
-									AccountDAO.saveAccount(acc);
+										Account acc = AccountDAO.getAccount(author.getId());
+										acc.addCredit(change, this.getClass());
+										AccountDAO.saveAccount(acc);
 
-									if (kp.getFields().size() == 3)
-										channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
+										if (kp.getFields().size() == 3)
+											channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
 
-									if (dp.getValue().isBlank())
-										tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, true)));
-									else if (Integer.parseInt(dp.getValue()) >= 1)
-										DynamicParameterDAO.setParam("freeSynth_" + author.getId(), String.valueOf(Integer.parseInt(dp.getValue()) - 1));
-									else
+										if (dp.getValue().isBlank()) {
+											for (Card t : tributes) {
+												kp.removeCard(new KawaiponCard(t, true));
+											}
+										} else if (Integer.parseInt(dp.getValue()) >= 1)
+											DynamicParameterDAO.setParam("freeSynth_" + author.getId(), String.valueOf(Integer.parseInt(dp.getValue()) - 1));
+										else
+											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+
+										KawaiponDAO.saveKawaipon(kp);
+										s.delete().queue(null, Helper::doNothing);
+										return;
+									}
+
+									kp.addField(f);
+
+									if (dp.getValue().isBlank()) {
+										for (Card t : tributes) {
+											kp.removeCard(new KawaiponCard(t, true));
+										}
+									} else
 										DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
 
 									KawaiponDAO.saveKawaipon(kp);
+
 									s.delete().queue(null, Helper::doNothing);
-									return;
-								}
-
-								kp.addField(f);
-
-								if (dp.getValue().isBlank())
-									tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, true)));
-								else
-									DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
-
-								KawaiponDAO.saveKawaipon(kp);
-
-								s.delete().queue(null, Helper::doNothing);
-								channel.sendMessage("Síntese realizada com sucesso, você obteve a arena **" + f.getCard().getName() + "**!").queue();
-							}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-								ShiroInfo.getHashes().remove(hash);
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-							})
+									channel.sendMessage("Síntese realizada com sucesso, você obteve a arena **" + f.getCard().getName() + "**!").queue();
+								});
+								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
+									ShiroInfo.getHashes().remove(hash);
+									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								});
+							}
 					);
 		} else {
 			int score = tributes.stream().mapToInt(c -> c.getRarity().getIndex()).sum();
@@ -183,53 +191,61 @@ public class SynthesizeCardCommand extends Command {
 			channel.sendMessage("Você está prester a sintetizar um equipamento usando essas cartas (elas serão destruídas no processo). Deseja continuar?")
 					.embed(eb.build())
 					.queue(s ->
-							Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
-								DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
+							{
+								Map<String, java.util.function.BiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
+								buttons.put(Helper.ACCEPT, (ms, mb) -> {
+									if (!ShiroInfo.getHashes().remove(hash)) return;
+									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
+									DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
 
-								if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) || kp.getEquipments().size() == 18) {
-									int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
+									if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) || kp.getEquipments().size() == 18) {
+										int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
 
-									Account acc = AccountDAO.getAccount(author.getId());
-									acc.addCredit(change, this.getClass());
-									AccountDAO.saveAccount(acc);
+										Account acc = AccountDAO.getAccount(author.getId());
+										acc.addCredit(change, this.getClass());
+										AccountDAO.saveAccount(acc);
 
-									if (kp.getEquipments().size() == 18)
-										channel.sendMessage("❌ | Você já possui 18 equipamentos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
-									else if (kp.getEquipments().stream().filter(e::equals).count() == 3)
-										channel.sendMessage("❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + change + " créditos.").queue();
-									else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4)
-										channel.sendMessage("❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + change + " créditos.").queue();
+										if (kp.getEquipments().size() == 18)
+											channel.sendMessage("❌ | Você já possui 18 equipamentos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
+										else if (kp.getEquipments().stream().filter(e::equals).count() == 3)
+											channel.sendMessage("❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + change + " créditos.").queue();
+										else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4)
+											channel.sendMessage("❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + change + " créditos.").queue();
 
-									if (dp.getValue().isBlank())
-										tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
-									else if (Integer.parseInt(dp.getValue()) >= 1)
-										DynamicParameterDAO.setParam("freeSynth_" + author.getId(), String.valueOf(Integer.parseInt(dp.getValue()) - 1));
-									else
+										if (dp.getValue().isBlank()) {
+											for (Card t : tributes) {
+												kp.removeCard(new KawaiponCard(t, false));
+											}
+										} else if (Integer.parseInt(dp.getValue()) >= 1)
+											DynamicParameterDAO.setParam("freeSynth_" + author.getId(), String.valueOf(Integer.parseInt(dp.getValue()) - 1));
+										else
+											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
+
+										KawaiponDAO.saveKawaipon(kp);
+										s.delete().queue(null, Helper::doNothing);
+										return;
+									}
+
+									kp.addEquipment(e);
+
+									if (dp.getValue().isBlank()) {
+										for (Card t : tributes) {
+											kp.removeCard(new KawaiponCard(t, false));
+										}
+									} else
 										DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
 
 									KawaiponDAO.saveKawaipon(kp);
+
 									s.delete().queue(null, Helper::doNothing);
-									return;
-								}
-
-								kp.addEquipment(e);
-
-								if (dp.getValue().isBlank())
-									tributes.forEach(t -> kp.removeCard(new KawaiponCard(t, false)));
-								else
-									DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
-
-								KawaiponDAO.saveKawaipon(kp);
-
-								s.delete().queue(null, Helper::doNothing);
-								channel.sendMessage("Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
-							}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-								ShiroInfo.getHashes().remove(hash);
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-							})
+									channel.sendMessage("Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
+								});
+								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
+									ShiroInfo.getHashes().remove(hash);
+									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								});
+							}
 					);
 		}
 	}

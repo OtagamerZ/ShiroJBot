@@ -54,11 +54,12 @@ public class TetEvents extends ListenerAdapter {
 		} catch (IOException ignore) {
 		}
 
-		ems.forEach(em -> Main.getTet().retrieveUserById(em.getId())
-				.flatMap(User::openPrivateChannel)
-				.flatMap(c -> c.sendMessage(eb.build()))
-				.queue(null, Helper::doNothing)
-		);
+		for (ExceedMember em : ems) {
+			Main.getTet().retrieveUserById(em.getId())
+					.flatMap(User::openPrivateChannel)
+					.flatMap(c -> c.sendMessage(eb.build()))
+					.queue(null, Helper::doNothing);
+		}
 
 		event.getChannel().sendMessage("Mensagem enviada aos outros " + ExceedDAO.getExceed(event.getAuthor().getId()) + "s com sucesso!").queue();
 	}
