@@ -464,7 +464,7 @@ public class Shoukan extends GlobalGame {
 					Hand enemy = getHands().get(next);
 
 					int yPower = Math.round(
-							c.getAtk() *
+							c.getFinAtk() *
 									(arena.getField() == null || c.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
 					);
 
