@@ -464,8 +464,8 @@ public class Shoukan extends GlobalGame {
 					Hand enemy = getHands().get(next);
 
 					int yPower = Math.round(
-							(c.getAtk() + c.getLinkedTo().stream().mapToInt(Equipment::getAtk).sum()) *
-							(arena.getField() == null || c.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
+							c.getAtk() *
+									(arena.getField() == null || c.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
 					);
 
 					enemy.removeHp(yPower);
@@ -571,7 +571,7 @@ public class Shoukan extends GlobalGame {
 						}
 					}
 					hPower = Math.round(
-							(his.getFinDef() + his.getLinkedTo().stream().mapToInt(Equipment::getDef).sum()) *
+							his.getFinDef() *
 									(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 					);
 				} else
@@ -707,8 +707,8 @@ public class Shoukan extends GlobalGame {
 				.stream()
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
-						allCards.containsAll(f.getRequiredCards()) &&
-						h.getMana() >= f.getMana()
+								allCards.containsAll(f.getRequiredCards()) &&
+								h.getMana() >= f.getMana()
 				)
 				.findFirst()
 				.orElse(null);

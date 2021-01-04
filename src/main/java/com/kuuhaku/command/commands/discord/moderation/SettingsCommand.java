@@ -89,6 +89,14 @@ public class SettingsCommand extends Command {
 				}
 				Settings.updateMsgAdeus(args, message, gc);
 			}
+			case "cg", "canalgeral" -> Settings.updateCanalGeral(args, message, gc);
+			case "topico", "tp", "tpgeral" -> {
+				if (msg.length() > 500) {
+					channel.sendMessage("❌ | Tópico muito longo (Max. 500 caractéres)").queue();
+					return;
+				}
+				Settings.updateGeneralTopic(args, message, gc);
+			}
 			case "tmute", "tempomute", "tmu" -> Settings.updateWarnTime(args, message, gc);
 			case "tpoll", "tempopoll" -> Settings.updatePollTime(args, message, gc);
 			case "csug", "canalsug" -> Settings.updateCanalSUG(args, message, gc);
