@@ -84,18 +84,6 @@ public class OpenTicketCommand extends Command {
 		eb.setFooter(author.getId());
 		eb.setColor(Color.yellow);
 
-		Map<String, String> ids = new HashMap<>();
-
-		for (String dev : ShiroInfo.getStaff()) {
-			Main.getInfo().getUserByID(dev).openPrivateChannel()
-					.flatMap(m -> m.sendMessage(eb.build()))
-					.flatMap(m -> {
-						ids.put(dev, m.getId());
-						return m.pin();
-					})
-					.complete();
-		}
-
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
@@ -103,13 +91,25 @@ public class OpenTicketCommand extends Command {
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
 					Main.getInfo().getConfirmationPending().invalidate(author.getId());
+
+					Map<String, String> ids = new HashMap<>();
+					for (String dev : ShiroInfo.getStaff()) {
+						Main.getInfo().getUserByID(dev).openPrivateChannel()
+								.flatMap(m -> m.sendMessage(eb.build()))
+								.flatMap(m -> {
+									ids.put(dev, m.getId());
+									return m.pin();
+								})
+								.complete();
+					}
+
 					author.openPrivateChannel()
 							.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
 							.queue(null, Helper::doNothing);
 					TicketDAO.setIds(number, ids);
 					s.delete().queue(null, Helper::doNothing);
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-opened-ticket")).queue();
-				}), true, 60, TimeUnit.SECONDS)
+				}), true, 60, TimeUnit.SECONDS, u -> u.getId().equals(author.getId()))
 		);
 	}
 }
