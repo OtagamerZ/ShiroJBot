@@ -174,7 +174,7 @@ public class Shoukan extends GlobalGame {
 		Hand h = getHands().get(current);
 
 		if (cmd.equalsIgnoreCase("reload")) {
-			channel.sendMessage(message.getAuthor().getAsMention() + " recriou a mensagem do jogo.")
+			channel.sendMessage(message.getAuthor().getName() + " recriou a mensagem do jogo.")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 					.queue(s -> {
 						this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -1104,7 +1104,7 @@ public class Shoukan extends GlobalGame {
 				h.get().decreaseLockTime();
 				h.get().addMana(h.get().getManaPerTurn());
 				AtomicBoolean shownHand = new AtomicBoolean(false);
-				channel.sendMessage(u.getAsMention() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
+				channel.sendMessage(u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -1166,7 +1166,7 @@ public class Shoukan extends GlobalGame {
 			remaining = 5 - h.getCards().size();
 			resetTimerKeepTurn();
 			AtomicBoolean shownHand = new AtomicBoolean(false);
-			channel.sendMessage(getCurrent().getAsMention() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")")
+			channel.sendMessage(getCurrent().getName() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")")
 					.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 					.queue(s -> {
 						this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -1194,7 +1194,7 @@ public class Shoukan extends GlobalGame {
 
 				resetTimerKeepTurn();
 				AtomicBoolean shownHand = new AtomicBoolean(false);
-				channel.sendMessage(getCurrent().getAsMention() + " executou um saque do destino!")
+				channel.sendMessage(getCurrent().getName() + " executou um saque do destino!")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -1262,7 +1262,7 @@ public class Shoukan extends GlobalGame {
 				h.get().addMana(h.get().getManaPerTurn());
 				AtomicBoolean shownHand = new AtomicBoolean(false);
 				draw = true;
-				channel.sendMessage(u.getAsMention() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D caso queira aceitar ou continue jogando normalmente.")
+				channel.sendMessage(u.getName() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D caso queira aceitar ou continue jogando normalmente.")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
