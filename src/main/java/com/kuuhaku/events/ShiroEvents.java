@@ -148,13 +148,13 @@ public class ShiroEvents extends ListenerAdapter {
 						channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
 					} else {
 						MessageAction send = channel.sendMessage(Helper.makeEmoteFromMention(rawMessage.substring(1).split(" ")));
-						message.getAttachments().forEach(a -> {
+						for (Message.Attachment a : message.getAttachments()) {
 							try {
 								//noinspection ResultOfMethodCallIgnored
 								send.addFile(a.downloadToFile().get());
 							} catch (InterruptedException | ExecutionException ignore) {
 							}
-						});
+						}
 						send.queue();
 						message.delete().queue();
 					}
@@ -351,7 +351,9 @@ public class ShiroEvents extends ListenerAdapter {
 						}
 						rawLvls.remove(String.valueOf(i));
 						List<Role> list = new ArrayList<>();
-						rawLvls.forEach((k, v) -> {
+						for (Map.Entry<String, Object> entry : rawLvls.entrySet()) {
+							String k = entry.getKey();
+							Object v = entry.getValue();
 							Role r = guild.getRoleById((String) v);
 
 							if (r != null) list.add(r);
@@ -360,7 +362,7 @@ public class ShiroEvents extends ListenerAdapter {
 								cl.remove(String.valueOf(i));
 								GuildDAO.updateGuildSettings(gc);
 							}
-						});
+						}
 						guild.modifyMemberRoles(member, null, list).queue(null, Helper::doNothing);
 					});
 				} catch (HierarchyException | InsufficientPermissionException ignore) {
@@ -470,22 +472,26 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		}
 
-		ShiroInfo.getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
-			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
-			c.sendMessage(msg).queue();
-		}));
+		for (String d : ShiroInfo.getDevelopers()) {
+			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+				String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
+				c.sendMessage(msg).queue();
+			});
+		}
 		Helper.logger(this.getClass()).info("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
 	}
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
-		ShiroInfo.getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
-			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
-			gc.setMarkForDelete(true);
-			GuildDAO.updateGuildSettings(gc);
-			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
-			c.sendMessage(msg).queue();
-		}));
+		for (String d : ShiroInfo.getDevelopers()) {
+			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+				GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+				gc.setMarkForDelete(true);
+				GuildDAO.updateGuildSettings(gc);
+				String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
+				c.sendMessage(msg).queue();
+			});
+		}
 		Helper.logger(this.getClass()).info("Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
 	}
 
@@ -535,13 +541,15 @@ public class ShiroEvents extends ListenerAdapter {
 
 					eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
 
-					if (template.has("fields")) template.getJSONArray("fields").forEach(j -> {
-						try {
-							JSONObject jo = (JSONObject) j;
-							eb.addField(jo.getString("name"), jo.getString("value"), true);
-						} catch (Exception ignore) {
+					if (template.has("fields")) {
+						for (Object j : template.getJSONArray("fields")) {
+							try {
+								JSONObject jo = (JSONObject) j;
+								eb.addField(jo.getString("name"), jo.getString("value"), true);
+							} catch (Exception ignore) {
+							}
 						}
-					});
+					}
 
 					if (template.has("footer")) eb.setFooter(template.getString("footer"), null);
 				} else {
@@ -613,13 +621,15 @@ public class ShiroEvents extends ListenerAdapter {
 
 					eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
 
-					if (template.has("fields")) template.getJSONArray("fields").forEach(j -> {
-						try {
-							JSONObject jo = (JSONObject) j;
-							eb.addField(jo.getString("name"), jo.getString("value"), true);
-						} catch (Exception ignore) {
+					if (template.has("fields")) {
+						for (Object j : template.getJSONArray("fields")) {
+							try {
+								JSONObject jo = (JSONObject) j;
+								eb.addField(jo.getString("name"), jo.getString("value"), true);
+							} catch (Exception ignore) {
+							}
 						}
-					});
+					}
 
 					if (template.has("footer")) eb.setFooter(template.getString("footer"), null);
 				} else {
@@ -668,12 +678,12 @@ public class ShiroEvents extends ListenerAdapter {
 						}
 						u.openPrivateChannel().queue(c ->
 								c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
-						staffIds.forEach(d -> {
+						for (String d : staffIds) {
 							if (!d.equals(event.getAuthor().getId())) {
 								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
 										c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
 							}
-						});
+						}
 						event.getChannel().sendMessage("Mensagem enviada com sucesso!").queue();
 					}
 					case "block", "b" -> {
@@ -685,12 +695,12 @@ public class ShiroEvents extends ListenerAdapter {
 						RelayDAO.permaBlock(new PermaBlock(args[1]));
 						us.openPrivateChannel().queue(c ->
 								c.sendMessage("Você foi bloqueado dos canais de comunicação da Shiro pela seguinte razão: `" + msgNoArgs + "`").queue());
-						staffIds.forEach(d -> {
+						for (String d : staffIds) {
 							if (!d.equals(event.getAuthor().getId())) {
 								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
 										c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
 							}
-						});
+						}
 						event.getChannel().sendMessage("Usuário bloqueado com sucesso!").queue();
 					}
 				}
@@ -716,8 +726,9 @@ public class ShiroEvents extends ListenerAdapter {
 
 									eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
 									eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
-									staffIds.forEach(d ->
-											Main.getInfo().getUserByID(d).openPrivateChannel().queue(ch -> ch.sendMessage(event.getMessage()).embed(eb.build()).queue()));
+									for (String d : staffIds) {
+										Main.getInfo().getUserByID(d).openPrivateChannel().queue(ch -> ch.sendMessage(event.getMessage()).embed(eb.build()).queue());
+									}
 									s.delete().queueAfter(1, TimeUnit.MINUTES);
 								});
 				});

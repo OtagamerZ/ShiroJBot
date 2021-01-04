@@ -96,16 +96,15 @@ public class RatingCommand extends Command {
 		eb.addField("Fechado em:", Helper.dateformat.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
 		eb.setColor(Color.green);
 
-		ShiroInfo.getStaff().forEach(dev -> {
-					Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
-							.flatMap(m -> m.sendMessage(eb.build()))
-							.complete();
-					msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
-							.flatMap(Message::delete)
-							.queue(null, Helper::doNothing);
-					t.solved();
-				}
-		);
+		for (String dev1 : ShiroInfo.getStaff()) {
+			Message msg = Main.getInfo().getUserByID(dev1).openPrivateChannel()
+					.flatMap(m -> m.sendMessage(eb.build()))
+					.complete();
+			msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev1)))
+					.flatMap(Message::delete)
+					.queue(null, Helper::doNothing);
+			t.solved();
+		}
 
 		Main.getInfo().getUserByID(t.getRequestedBy()).openPrivateChannel()
 				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getName()))

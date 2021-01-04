@@ -57,8 +57,10 @@ public class VotesDAO {
 		em.close();
 
 		List<Member> m = MemberDAO.getMemberByMid(user.getId());
-		m.forEach(Member::vote);
-		m.forEach(MemberDAO::updateMemberConfigs);
+		for (Member member : m) {
+			member.vote();
+			MemberDAO.updateMemberConfigs(member);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -85,14 +87,14 @@ public class VotesDAO {
 		List<Votes> votes = q.getResultList();
 		HashMap<String, result> voteMap = new HashMap<>();
 
-		votes.forEach(v -> {
-			String user = v.getVotedUserID();
+		for (Votes vote : votes) {
+			String user = vote.getVotedUserID();
 			if (voteMap.containsKey(user)) {
-				voteMap.get(user).votes += v.getVote();
+				voteMap.get(user).votes += vote.getVote();
 			} else {
-				voteMap.put(v.getVotedUserID(), new result(v.getVotedUser(), v.getVote()));
+				voteMap.put(vote.getVotedUserID(), new result(vote.getVotedUser(), vote.getVote()));
 			}
-		});
+		}
 
 		List<result> results = new ArrayList<>(voteMap.values());
 		results.sort(Comparator.comparing(result::getVotes));
@@ -101,12 +103,16 @@ public class VotesDAO {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		List<MessageEmbed.Field> f = new ArrayList<>();
 
-		results.forEach(v -> f.add(new MessageEmbed.Field(v.name, "Pontuação: " + v.votes, false)));
+		for (result v : results) {
+			f.add(new MessageEmbed.Field(v.name, "Pontuação: " + v.votes, false));
+		}
 
 		for (int i = 0; i < Math.ceil(f.size() / 10f); i++) {
 			eb.clear();
 			List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), Math.min(10 * (i + 1), f.size()));
-			subF.forEach(eb::addField);
+			for (MessageEmbed.Field field : subF) {
+				eb.addField(field);
+			}
 
 			eb.setTitle("Pontuação de usuários deste servidor");
 			eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " usuários.", null);

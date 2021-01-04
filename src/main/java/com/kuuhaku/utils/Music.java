@@ -146,7 +146,9 @@ public class Music {
         for (int i = 0; i < Math.ceil(f.size() / 10f); i++) {
             eb.clear();
             List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), Math.min(10 * (i + 1), f.size()));
-            subF.forEach(eb::addField);
+            for (MessageEmbed.Field field : subF) {
+                eb.addField(field);
+            }
 
             eb.setTitle("Fila de músicas:");
             eb.setFooter("Tempo estimado da fila: " + Helper.toDuration(musicManager.scheduler.queue().stream().mapToLong(AudioTrack::getDuration).sum()), null);
@@ -191,10 +193,10 @@ public class Music {
                     Collections.shuffle(tracks);
                     tracks = tracks.subList(0, Math.min(tracks.size(), 10));
 
-                    tracks.forEach(p -> {
+                    for (AudioTrack p : tracks) {
                         p.setUserData(m.getUser());
                         play(m.getVoiceState().getChannel(), channel, channel.getGuild(), musicManager, p);
-                    });
+                    }
 
                     channel.sendMessage("Playlist adicionada com sucesso à fila (max. 10 músicas por playlist, escolhidas aleatoriamente): " + playlist.getName()).queue();
                 } else

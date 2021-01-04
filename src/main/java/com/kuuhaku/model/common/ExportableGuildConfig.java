@@ -25,6 +25,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public class ExportableGuildConfig {
 	private final JSONObject gc = new JSONObject();
 
@@ -90,20 +92,24 @@ public class ExportableGuildConfig {
 			if (lvl != null) put("name", lvl.getName());
 		}});
 		gc.put("levelRoles", new JSONArray() {{
-			g.getCargoslvl().forEach((key, value) -> put(new JSONObject() {{
-				put("id", String.valueOf(value));
+			for (Map.Entry<String, Object> entry : g.getCargoslvl().entrySet()) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				put(new JSONObject() {{
+					put("id", String.valueOf(value));
 
-				Role r;
-				try {
-					r = Main.getInfo().getRoleByID(String.valueOf(value));
-				} catch (IllegalArgumentException e) {
-					r = null;
-				}
-				if (r != null) {
-					put("name", r.getName());
-					put("level", key);
-				}
-			}}));
+					Role r;
+					try {
+						r = Main.getInfo().getRoleByID(String.valueOf(value));
+					} catch (IllegalArgumentException e) {
+						r = null;
+					}
+					if (r != null) {
+						put("name", r.getName());
+						put("level", key);
+					}
+				}});
+			}
 		}});
 		gc.put("relayChannel", new JSONObject() {{
 			put("id", g.getCanalRelay());

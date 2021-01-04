@@ -115,6 +115,18 @@ public class GuildDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<GuildConfig> getAllGuildsWithGeneralChannel() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE canalGeral <> ''", GuildConfig.class);
+		List<GuildConfig> gcs = gc.getResultList();
+
+		em.close();
+
+		return gcs;
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<GuildConfig> getAlertChannels() {
 		EntityManager em = Manager.getEntityManager();
 

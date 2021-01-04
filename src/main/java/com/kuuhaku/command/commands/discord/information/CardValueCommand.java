@@ -124,20 +124,20 @@ public class CardValueCommand extends Command {
 					.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
 
 			Map<Date, Integer> normalValues = new HashMap<>();
-			normalCards.forEach(nc -> {
+			for (CardMarket nc : normalCards) {
 				if (normalValues.containsKey(nc.getPublishDate()))
 					normalValues.computeIfPresent(nc.getPublishDate(), (k, v) -> Math.round(v + nc.getPrice() / 2f));
 				else
 					normalValues.put(nc.getPublishDate(), nc.getPrice());
-			});
+			}
 
 			Map<Date, Integer> foilValues = new HashMap<>();
-			foilCards.forEach(fc -> {
+			for (CardMarket fc : foilCards) {
 				if (foilValues.containsKey(fc.getPublishDate()))
 					foilValues.computeIfPresent(fc.getPublishDate(), (k, v) -> Math.round(v + fc.getPrice() / 2f));
 				else
 					foilValues.put(fc.getPublishDate(), fc.getPrice());
-			});
+			}
 
 			List<Map.Entry<Date, Integer>> normalData = normalValues.entrySet()
 					.stream()

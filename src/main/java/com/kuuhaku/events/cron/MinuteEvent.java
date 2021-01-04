@@ -23,11 +23,14 @@ import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
+import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -77,13 +80,13 @@ public class MinuteEvent implements Job {
 			}
 		}
 
-		MemberDAO.getMutedMembers().forEach(m -> {
+		for (MutedMember m : MemberDAO.getMutedMembers()) {
 			Guild g = Main.getInfo().getGuildByID(m.getGuild());
 			if (g == null) {
 				MemberDAO.removeMutedMember(m);
 			} else {
 				try {
-					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
+					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) continue;
 					Member mb = g.getMemberById(m.getUid());
 					Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoMute());
 					assert r != null;
@@ -101,6 +104,19 @@ public class MinuteEvent implements Job {
 					MemberDAO.removeMutedMember(m);
 				}
 			}
-		});
+		}
+
+		for (GuildConfig gc : GuildDAO.getAllGuildsWithGeneralChannel()) {
+			Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+			if (g != null && !Helper.getOr(gc.getGeneralTopic(), "").isBlank()) {
+				TextChannel tc = g.getTextChannelById(gc.getCanalGeral());
+				if (tc != null)
+					tc.getManager().setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount(), false))).queue();
+				else {
+					gc.setCanalGeral(null);
+					GuildDAO.updateGuildSettings(gc);
+				}
+			}
+		}
 	}
 }

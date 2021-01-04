@@ -217,10 +217,13 @@ public class PollCommand extends Command {
 
 	private static void showResultOP(Message msg, Member member, EmbedBuilder eb) {
 		Map<String, Integer> votes = new HashMap<>();
-		Main.getInfo()
+		for (Map.Entry<String, String> entry : Main.getInfo()
 				.getPolls()
-				.get(msg.getId())
-				.forEach((k, v) -> votes.put(v, (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals(v)).count()));
+				.get(msg.getId()).entrySet()) {
+			String key = entry.getKey();
+			String value = entry.getValue();
+			votes.put(value, (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals(value)).count());
+		}
 
 		Main.getInfo().getPolls().remove(msg.getId());
 		boolean NOVOTE = false;
@@ -237,11 +240,17 @@ public class PollCommand extends Command {
 
 		boolean finalNOVOTE = NOVOTE;
 		List<MessageEmbed.Field> fields = new ArrayList<>();
-		votes.forEach((k, v) -> fields.add(new MessageEmbed.Field(k + " | " + (finalNOVOTE ? "0.0%" : Helper.round(Helper.prcntToInt(v, totalVotes), 1) + "%"), Helper.VOID, true)));
+		for (Map.Entry<String, Integer> entry : votes.entrySet()) {
+			String k = entry.getKey();
+			Integer v = entry.getValue();
+			fields.add(new MessageEmbed.Field(k + " | " + (finalNOVOTE ? "0.0%" : Helper.round(Helper.prcntToInt(v, totalVotes), 1) + "%"), Helper.VOID, true));
+		}
 
 		fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
 
-		fields.forEach(eb::addField);
+		for (MessageEmbed.Field field : fields) {
+			eb.addField(field);
+		}
 		msg.editMessage(eb.build()).queue(null, Helper::doNothing);
 		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
 		msg.clearReactions().queue(null, Helper::doNothing);

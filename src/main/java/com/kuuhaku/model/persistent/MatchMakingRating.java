@@ -253,20 +253,25 @@ public class MatchMakingRating {
 			AtomicReference<JSONObject> ph = new AtomicReference<>();
 			for (MatchRound round : rounds) {
 				JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase());
-				if (ph.get() == null)
-					jo.toMap().forEach((k, v) -> {
+				if (ph.get() == null) {
+					for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
+						String k = entry.getKey();
+						Object v = entry.getValue();
 						if (!k.equals("id")) {
 							int rv = (int) v;
 							fd.getRight().put(k, rv);
 						}
-					});
-				else
-					jo.toMap().forEach((k, v) -> {
+					}
+				} else {
+					for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
+						String k = entry.getKey();
+						Object v = entry.getValue();
 						if (!k.equals("id")) {
 							int rv = (int) v - ph.get().optInt(k);
 							fd.getRight().computeIfPresent(k, (key, value) -> rv);
 						}
-					});
+					}
+				}
 				ph.set(jo);
 			}
 			finalData.put(s, fd);
