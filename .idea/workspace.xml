@@ -13,22 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_cyan.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_grey.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_pink.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_purple.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_yellow.png" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Várias mudanças no Shoukan">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/charm/spell.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Charm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/banner.xcf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/charm/hex.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -973,21 +962,7 @@
       <workItem from="1609710370505" duration="693000" />
       <workItem from="1609715848595" duration="8125000" />
       <workItem from="1609735023766" duration="64000" />
-      <workItem from="1609786146229" duration="4464000" />
-    </task>
-    <task id="LOCAL-03222" summary="Novo amuleto: Sortilégio">
-      <created>1608524895889</created>
-      <option name="number" value="03222" />
-      <option name="presentableId" value="LOCAL-03222" />
-      <option name="project" value="LOCAL" />
-      <updated>1608524895889</updated>
-    </task>
-    <task id="LOCAL-03223" summary="Novo amuleto: Sortilégio">
-      <created>1608525415845</created>
-      <option name="number" value="03223" />
-      <option name="presentableId" value="LOCAL-03223" />
-      <option name="project" value="LOCAL" />
-      <updated>1608525415846</updated>
+      <workItem from="1609786146229" duration="6914000" />
     </task>
     <task id="LOCAL-03224" summary="Novo amuleto: Sortilégio">
       <created>1608569813830</created>
@@ -1318,7 +1293,21 @@
       <option name="project" value="LOCAL" />
       <updated>1609787031192</updated>
     </task>
-    <option name="localTasksCounter" value="3271" />
+    <task id="LOCAL-03271" summary="Várias mudanças no Shoukan">
+      <created>1609791092404</created>
+      <option name="number" value="03271" />
+      <option name="presentableId" value="LOCAL-03271" />
+      <option name="project" value="LOCAL" />
+      <updated>1609791092404</updated>
+    </task>
+    <task id="LOCAL-03272" summary="Várias mudanças no Shoukan">
+      <created>1609791184520</created>
+      <option name="number" value="03272" />
+      <option name="presentableId" value="LOCAL-03272" />
+      <option name="project" value="LOCAL" />
+      <updated>1609791184520</updated>
+    </task>
+    <option name="localTasksCounter" value="3273" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1404,7 +1393,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Cartas atordoadas agora causam dano caso dejam derrotadas" />
     <MESSAGE value="Adição de quebra de linha nos comandos que usam webhook" />
     <MESSAGE value="Adição de suporte para Shoukan inter-servidor" />
@@ -1429,7 +1417,8 @@
     <MESSAGE value="Correnção nos caches" />
     <MESSAGE value="Melhorias gerais e remoção completa do forEach" />
     <MESSAGE value="Correções" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções" />
+    <MESSAGE value="Várias mudanças no Shoukan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Várias mudanças no Shoukan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1543,11 +1532,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609787032918">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609791185748">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609787032918" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609791185748" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
