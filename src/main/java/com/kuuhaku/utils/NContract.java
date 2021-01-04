@@ -58,7 +58,11 @@ public class NContract<A> {
 	private A checkContract() {
 		if (this.signatures.size() == signers) {
 			List<A> ordered = new ArrayList<>();
-			signatures.forEach(ordered::add);
+			for (Map.Entry<Integer, A> entry : signatures.entrySet()) {
+				Integer key = entry.getKey();
+				A value = entry.getValue();
+				ordered.add(key, value);
+			}
 			A result = action.apply(ordered);
 			signatures.clear();
 			return result;

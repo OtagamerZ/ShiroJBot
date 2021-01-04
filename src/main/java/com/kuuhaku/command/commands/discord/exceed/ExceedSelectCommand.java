@@ -105,23 +105,23 @@ public class ExceedSelectCommand extends Command {
 				String e = ExceedDAO.getExceed(author.getId());
 
 				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + e + "**!").queue(null, Helper::doNothing);
-				ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(exm -> {
-							User u = Main.getInfo().getUserByID(exm);
-							if (u != null) {
-								Account acc = AccountDAO.getAccount(u.getId());
-								if (acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
-									try {
-										c.sendMessage("""
-												%s juntou-se à %s, hooray!! :tada:
-												**(Não responda esta mensagem)**
-												Digite `silenciar` para parar de receber notificações de Exceed (não pode ser desfeito).
-												""".formatted(author.getAsTag(), ex.getName())).queue(null, Helper::doNothing);
-									} catch (Exception ignore) {
-									}
-								}, Helper::doNothing);
+				for (ExceedMember exceedMember : ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())))) {
+					String exm = exceedMember.getId();
+					User u = Main.getInfo().getUserByID(exm);
+					if (u != null) {
+						Account acc = AccountDAO.getAccount(u.getId());
+						if (acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
+							try {
+								c.sendMessage("""
+										%s juntou-se à %s, hooray!! :tada:
+										**(Não responda esta mensagem)**
+										Digite `silenciar` para parar de receber notificações de Exceed (não pode ser desfeito).
+										""".formatted(author.getAsTag(), ex.getName())).queue(null, Helper::doNothing);
+							} catch (Exception ignore) {
 							}
-						}
-				);
+						}, Helper::doNothing);
+					}
+				}
 			} else {
 				m.editMessage("❌ | Você já pertence à um exceed, não é possível trocá-lo.").queue();
 			}

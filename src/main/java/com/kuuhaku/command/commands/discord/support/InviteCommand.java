@@ -61,7 +61,11 @@ public class InviteCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		List<String[]> servers = new ArrayList<>();
-		Main.getShiroShards().getGuilds().stream().filter(s -> s.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE)).forEach(g -> servers.add(new String[]{g.getName(), g.getId(), String.valueOf(g.getMembers().stream().filter(m -> !m.getUser().isBot()).count())}));
+		for (Guild s : Main.getShiroShards().getGuilds()) {
+			if (s.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE)) {
+				servers.add(new String[]{s.getName(), s.getId(), String.valueOf(s.getMembers().stream().filter(m -> !m.getUser().isBot()).count())});
+			}
+		}
 		List<List<String[]>> svPages = Helper.chunkify(servers, 10);
 
 		List<Page> pages = new ArrayList<>();
@@ -70,7 +74,9 @@ public class InviteCommand extends Command {
 			eb.clear();
 
 			eb.setTitle("Servidores que eu posso criar um convite:");
-			svPages.get(i).forEach(p -> eb.addField("Nome: " + p[0], "ID: " + p[1] + "\nMembros: " + p[2], false));
+			for (String[] p : svPages.get(i)) {
+				eb.addField("Nome: " + p[0], "ID: " + p[1] + "\nMembros: " + p[2], false);
+			}
 			eb.setFooter("Página " + (i + 1) + " de " + svPages.size() + ". Total de " + svPages.stream().mapToInt(List::size).sum() + " resultados.", null);
 
 			pages.add(new Page(PageType.EMBED, eb.build()));

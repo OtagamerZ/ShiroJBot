@@ -159,7 +159,7 @@ public class Board {
 			PStateDAO.savePoliticalState(wps);
 		}
 
-		losers.forEach(l -> {
+		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 			AccountDAO.saveAccount(lacc);
@@ -170,7 +170,7 @@ public class Board {
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
 				PStateDAO.savePoliticalState(lps);
 			}
-		});
+		}
 
 		game.close();
 		awarded = true;
@@ -192,7 +192,7 @@ public class Board {
 		wacc.playedDaily();
 		AccountDAO.saveAccount(wacc);
 
-		losers.forEach(l -> {
+		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 
@@ -205,7 +205,7 @@ public class Board {
 
 			lacc.playedDaily();
 			AccountDAO.saveAccount(lacc);
-		});
+		}
 
 		game.close();
 		awarded = true;
@@ -227,7 +227,7 @@ public class Board {
 			}
 		}
 
-		losers.forEach(l -> {
+		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 			AccountDAO.saveAccount(lacc);
@@ -238,7 +238,7 @@ public class Board {
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
 				PStateDAO.savePoliticalState(lps);
 			}
-		});
+		}
 
 		game.close();
 		awarded = true;
@@ -262,7 +262,7 @@ public class Board {
 			AccountDAO.saveAccount(wacc);
 		}
 
-		losers.forEach(l -> {
+		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 
@@ -275,7 +275,7 @@ public class Board {
 
 			lacc.playedDaily();
 			AccountDAO.saveAccount(lacc);
-		});
+		}
 
 		game.close();
 		awarded = true;
@@ -295,7 +295,7 @@ public class Board {
 			PStateDAO.savePoliticalState(wps);
 		}
 
-		losers.forEach(l -> {
+		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 			AccountDAO.saveAccount(lacc);
@@ -306,7 +306,7 @@ public class Board {
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
 				PStateDAO.savePoliticalState(lps);
 			}
-		});
+		}
 
 		game.close();
 		awarded = true;
@@ -328,7 +328,7 @@ public class Board {
 		wacc.playedDaily();
 		AccountDAO.saveAccount(wacc);
 
-		losers.forEach(l -> {
+		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 
@@ -341,7 +341,7 @@ public class Board {
 
 			lacc.playedDaily();
 			AccountDAO.saveAccount(lacc);
-		});
+		}
 
 		game.close();
 		awarded = true;
@@ -363,7 +363,7 @@ public class Board {
 			}
 		}
 
-		losers.forEach(l -> {
+		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 			AccountDAO.saveAccount(lacc);
@@ -374,7 +374,7 @@ public class Board {
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
 				PStateDAO.savePoliticalState(lps);
 			}
-		});
+		}
 
 		game.close();
 		awarded = true;
@@ -398,7 +398,7 @@ public class Board {
 			AccountDAO.saveAccount(wacc);
 		}
 
-		losers.forEach(l -> {
+		for (Player l : losers) {
 			Account lacc = AccountDAO.getAccount(l.getId());
 			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 
@@ -411,7 +411,7 @@ public class Board {
 
 			lacc.playedDaily();
 			AccountDAO.saveAccount(lacc);
-		});
+		}
 
 		game.close();
 		awarded = true;

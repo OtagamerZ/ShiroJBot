@@ -272,7 +272,9 @@ public class Helper {
 			} else
 				return RestAction::queue;
 		} catch (Exception e) {
-			ShiroInfo.getStaff().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF com erro: " + imageURL).queue()));
+			for (String d : ShiroInfo.getStaff()) {
+				Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF com erro: " + imageURL).queue());
+			}
 			logger(Helper.class).error("Erro ao carregar a imagem: " + imageURL + " -> " + e + " | " + e.getStackTrace()[0]);
 			throw new IllegalAccessException();
 		}
@@ -397,7 +399,7 @@ public class Helper {
 				chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
 			else chkdSrc[i] = source[i];
 		}
-		return String.join(" ", chkdSrc).trim().replace("@everyone", "`@everyone`").replace("@here", "`@here`");
+		return String.join(" ", chkdSrc).trim().replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here"));
 	}
 
 	public static String makeEmoteFromMention(String sourceNoSplit) {
@@ -408,11 +410,11 @@ public class Helper {
 				chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
 			else chkdSrc[i] = source[i];
 		}
-		return String.join(" ", chkdSrc).trim().replace("@everyone", "`@everyone`").replace("@here", "`@here`");
+		return String.join(" ", chkdSrc).trim().replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here"));
 	}
 
 	public static String stripEmotesAndMentions(String source) {
-		return Helper.getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", "`@everyone`").replace("@here", "`@here`"), "...");
+		return Helper.getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here")), "...");
 	}
 
 	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
@@ -650,8 +652,8 @@ public class Helper {
 		if (btns.isEmpty()) return;
 
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
-		if (g != null)
-			source.keySet().forEach(k -> {
+		if (g != null) {
+			for (String k : source.keySet()) {
 				try {
 					JSONObject jo = btns.getJSONObject(k);
 					Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
@@ -697,11 +699,12 @@ public class Helper {
 				} catch (JSONException e) {
 					logger(Helper.class).info("Error in buttons JSON: " + source.toString());
 				}
-			});
+			}
+		}
 	}
 
 	public static void resolveButton(Guild g, JSONObject jo, Map<String, BiConsumer<Member, Message>> buttons) {
-		jo.getJSONObject("buttons").keySet().forEach(b -> {
+		for (String b : jo.getJSONObject("buttons").keySet()) {
 			JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
 			Role role = g.getRoleById(btns.getString("role"));
 			buttons.put(btns.getString("emote"), (m, ms) -> {
@@ -723,7 +726,7 @@ public class Helper {
 					});
 				}
 			});
-		});
+		}
 	}
 
 	public static void gatekeep(GuildConfig gc) {
@@ -733,7 +736,7 @@ public class Helper {
 
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 
-		ja.keySet().forEach(k -> {
+		for (String k : ja.keySet()) {
 			JSONObject jo = ja.getJSONObject(k);
 			Map<String, BiConsumer<Member, Message>> buttons = new HashMap<>();
 
@@ -750,7 +753,7 @@ public class Helper {
 
 				Pages.buttonize(msg, buttons, false);
 			}, Helper::doNothing);
-		});
+		}
 	}
 
 	public static void addButton(String[] args, Message message, MessageChannel channel, GuildConfig gc, String s2, boolean gatekeeper) {
@@ -806,11 +809,13 @@ public class Helper {
 
 		for (Guild g : spGuilds) {
 			AtomicReference<Invite> i = new AtomicReference<>();
-			g.retrieveInvites().queue(invs -> invs.forEach(inv -> {
-				if (inv.getInviter() == Main.getSelfUser()) {
-					i.set(inv);
+			g.retrieveInvites().queue(invs -> {
+				for (Invite inv : invs) {
+					if (inv.getInviter() == Main.getSelfUser()) {
+						i.set(inv);
+					}
 				}
-			}));
+			});
 
 			if (i.get() == null) {
 				try {
@@ -981,7 +986,11 @@ public class Helper {
 			newLines[l] = String.join(" ", newWords);
 		}
 
-		return Collections.singletonMap(String.join("\n", newLines), () -> queue.forEach(q -> q.accept(null)));
+		return Collections.singletonMap(String.join("\n", newLines), () -> {
+			for (Consumer<Void> q : queue) {
+				q.accept(null);
+			}
+		});
 	}
 
 	public static boolean isEmpty(String... values) {
@@ -1186,7 +1195,11 @@ public class Helper {
 
 	public static String replaceWith(String source, Map<String, String> replaces) {
 		AtomicReference<String> toChange = new AtomicReference<>();
-		replaces.forEach((k, v) -> toChange.set(source.replace(k, v)));
+		for (Map.Entry<String, String> entry : replaces.entrySet()) {
+			String k = entry.getKey();
+			String v = entry.getValue();
+			toChange.set(source.replace(k, v));
+		}
 		return toChange.get();
 	}
 
@@ -1820,7 +1833,11 @@ public class Helper {
 			}
 
 			sb.append("```diff\n");
-			result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
+			for (Map.Entry<String, Boolean> entry : result.entrySet()) {
+				String key = entry.getKey();
+				Boolean value = entry.getValue();
+				sb.append(value ? "+ " : "- ").append(key).append("\n");
+			}
 			sb.append("```");
 
 			eb.setTitle("__**STATUS**__ ");
@@ -1889,5 +1906,31 @@ public class Helper {
 		}
 
 		return false;
+	}
+
+	public static String getFancyNumber(int number, boolean animated) {
+		Map<Character, String> emotes = Map.of(
+				'0', "<:0_n:795486513541939230>",
+				'1', "<:1_n:795486513618092042>",
+				'2', "<:2_n:795486513412046908>",
+				'3', "<:3_n:795486513319772211>",
+				'4', "<:4_n:795486513197744178>",
+				'5', "<:5_n:795486513235492875>",
+				'6', "<:6_n:795486513328554008>",
+				'7', "<:7_n:795486513067720755>",
+				'8', "<:8_n:795486513428824075>",
+				'9', "<:9_n:795486513143742465>"
+		);
+
+		String sNumber = String.valueOf(number);
+		StringBuilder sb = new StringBuilder();
+		for (char c : sNumber.toCharArray())
+			sb.append(emotes.get(c));
+
+		return sb.toString();
+	}
+
+	public static String bugText(String text) {
+		return String.join(ANTICOPY, text.split(""));
 	}
 }

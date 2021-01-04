@@ -85,6 +85,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String canalDrop = "";
 
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String canalGeral = "";
+
 	//TEXTS
 	@Column(columnDefinition = "TEXT")
 	private String msgBoasVindas = "Seja bem-vindo(a) ao %guild%, %user%!";
@@ -115,6 +118,9 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "TEXT")
 	private String embedTemplate = "{}";
+
+	@Column(columnDefinition = "TEXT")
+	private String generalTopic = "";
 
 	//NUMBERS
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 60")
@@ -445,6 +451,24 @@ public class GuildConfig {
 	public void setCanalLog(String canalLog) {
 		if (canalLog == null || canalLog.equals("-1")) this.canalLog = "";
 		else this.canalLog = canalLog;
+	}
+
+	public String getCanalGeral() {
+		return canalGeral;
+	}
+
+	public void setCanalGeral(String canalGeral) {
+		if (canalGeral == null || canalGeral.equals("-1")) this.canalGeral = "";
+		else this.canalGeral = canalGeral;
+	}
+
+	public String getGeneralTopic() {
+		return generalTopic;
+	}
+
+	public void setGeneralTopic(String generalTopic) {
+		if (generalTopic.isBlank()) this.generalTopic = "Contagem de membros em %count% e subindo!";
+		else this.generalTopic = generalTopic;
 	}
 
 	public boolean isLiteMode() {

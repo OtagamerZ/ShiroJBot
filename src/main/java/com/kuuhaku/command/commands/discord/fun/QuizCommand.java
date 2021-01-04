@@ -189,7 +189,9 @@ public class QuizCommand extends Command {
 		}
 
 		fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
-		fields.forEach(eb::addField);
+		for (MessageEmbed.Field field : fields) {
+			eb.addField(field);
+		}
 		channel.sendMessage(eb.build()).queue(s -> Pages.buttonize(s, buttons, false, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())));
 	}
 }

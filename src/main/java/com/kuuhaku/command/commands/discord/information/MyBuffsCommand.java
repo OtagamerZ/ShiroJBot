@@ -29,6 +29,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.GuildBuff;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ServerBuff;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -89,7 +90,7 @@ public class MyBuffsCommand extends Command {
 
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		if (gb.getBuffs().size() > 0) {
-			gb.getBuffs().forEach(b -> {
+			for (ServerBuff b : gb.getBuffs()) {
 				boolean isUltimate = b.getTier() == 4;
 				String until = ZonedDateTime.ofInstant(Instant.ofEpochMilli(b.getAcquiredAt()), ZoneId.of("GMT-3"))
 						.plusDays(b.getTime())
@@ -115,7 +116,7 @@ public class MyBuffsCommand extends Command {
 							eb.addField("Melhoria de servidor (cromadas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas cromadas (até " + until + ")", false);
 					}
 				}
-			});
+			}
 		}
 
 		eb.setColor(Helper.getRandomColor());
