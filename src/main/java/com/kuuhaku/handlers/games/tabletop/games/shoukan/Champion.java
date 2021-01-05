@@ -62,7 +62,7 @@ public class Champion implements Drawable, Cloneable {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int def;
 
-	@Column(columnDefinition = "VARCHAR(130) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(140) NOT NULL DEFAULT ''")
 	private String description;
 
 	@Column(columnDefinition = "TEXT")
