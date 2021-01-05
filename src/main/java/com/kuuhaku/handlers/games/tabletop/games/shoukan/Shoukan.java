@@ -1155,11 +1155,20 @@ public class Shoukan extends GlobalGame {
 			});
 		else
 			buttons.put("▶️", (mb, ms) -> {
-				if (!ShiroInfo.getHashes().remove(hash.get())) return;
-				channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue(null, Helper::doNothing);
 				phase = Phase.ATTACK;
 				draw = false;
 				resetTimerKeepTurn();
+				if (!ShiroInfo.getHashes().remove(hash.get())) return;
+				channel.sendMessage("**FASE DE COMBATE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate")
+						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						});
 			});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
