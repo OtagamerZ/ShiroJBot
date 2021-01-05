@@ -274,6 +274,8 @@ public class Shoukan extends GlobalGame {
 						e.activate(h, getHands().get(next), arena);
 						arena.getGraveyard().get(h.getSide()).add(e);
 
+						if (postCombat()) return;
+
 						resetTimerKeepTurn();
 						AtomicBoolean shownHand = new AtomicBoolean(false);
 						channel.sendMessage(h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + ".")
