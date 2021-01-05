@@ -254,7 +254,7 @@ public class Equipment implements Drawable, Cloneable {
 		return charm;
 	}
 
-	public void activate(Hand you, Hand opponent, Arena arena) {
+	public void activate(Hand you, Hand opponent, Shoukan game) {
 		String imports = """
 				//%s
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -281,7 +281,7 @@ public class Equipment implements Drawable, Cloneable {
 			i.setStrictJava(true);
 			i.set("you", you);
 			i.set("opponent", opponent);
-			i.set("arena", arena);
+			i.set("game", game);
 			i.eval(imports + effect);
 		} catch (EvalError e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
