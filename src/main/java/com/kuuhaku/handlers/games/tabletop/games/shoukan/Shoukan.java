@@ -78,6 +78,8 @@ public class Shoukan extends GlobalGame {
 	private boolean draw = false;
 	private Side current = Side.BOTTOM;
 	private Side next = Side.TOP;
+	private int fusionLock = 0;
+	private int spellLock = 0;
 
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
@@ -264,6 +266,9 @@ public class Shoukan extends GlobalGame {
 						if (!args[1].equalsIgnoreCase("s")) {
 							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de feitiço.").queue(null, Helper::doNothing);
 							return;
+						} else if (spellLock > 0) {
+							channel.sendMessage("❌ | Feitiços estão bloqueados por mais " + (fusionLock == 1 ? "turno" : "turnos") + ".").queue(null, Helper::doNothing);
+							return;
 						} else if (h.getMana() < e.getMana()) {
 							channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
 							return;
@@ -271,7 +276,7 @@ public class Shoukan extends GlobalGame {
 
 						d.setAvailable(false);
 						h.removeMana(e.getMana());
-						e.activate(h, getHands().get(next), arena);
+						e.activate(h, getHands().get(next), this);
 						arena.getGraveyard().get(h.getSide()).add(e);
 
 						if (postCombat()) return;
@@ -738,6 +743,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	private boolean makeFusion(Hand h) {
+		if (fusionLock > 0) return false;
 		List<Champion> champsInField = arena.getSlots().get(h.getSide())
 				.stream()
 				.map(SlotColumn::getTop)
@@ -1430,6 +1436,22 @@ public class Shoukan extends GlobalGame {
 		}
 	}
 
+	public void addFLockTime(int time) {
+		fusionLock += time;
+	}
+
+	public void decreaseFLockTime() {
+		fusionLock = Math.max(0, fusionLock - 1);
+	}
+
+	public void addSLockTime(int time) {
+		spellLock += time;
+	}
+
+	public void decreaseSLockTime() {
+		spellLock = Math.max(0, spellLock - 1);
+	}
+
 	@Override
 	public void close() {
 		listener.close();
@@ -1440,6 +1462,7 @@ public class Shoukan extends GlobalGame {
 	@Override
 	public void resetTimer(Shoukan shkn) {
 		getCurrRound().setSide(current);
+		decreaseFLockTime();
 		super.resetTimer(shkn);
 
 		current = next;
