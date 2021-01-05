@@ -182,39 +182,7 @@ public class Relay {
 				}
 			} catch (NullPointerException e) {
 				GuildDAO.getGuildById(k).setCanalRelay(null);
-			} catch (InsufficientPermissionException ex) {
-				Guild g = Main.getJibril().getGuildById(k);
-				assert g != null;
-				try {
-					Objects.requireNonNull(g.getOwner()).getUser()
-							.openPrivateChannel()
-							.queue(c -> c.sendMessage("""
-									❌ | Me faltam permissões para enviar mensagens globais no servidor %s.
-																
-									Minhas permissões:```
-									%s Ler/Enviar mensagens
-									%s Inserir links
-									%s Anexar arquivos
-									%s Ver histórico de mensagens
-									%s Usar emojis externos
-									%s Gerenciar mensagens
-									%s Gerenciar webhooks
-									```
-									"""
-									.formatted(
-											g.getName(),
-											g.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌"
-									)).queue());
-					Helper.logger(this.getClass()).error(ex + " | Sevidor " + g.getName());
-				} catch (Exception e) {
-					Helper.logger(this.getClass()).error(ex + " | Dono " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag());
-				}
+			} catch (InsufficientPermissionException ignore) {
 			}
 		}
 		try {
