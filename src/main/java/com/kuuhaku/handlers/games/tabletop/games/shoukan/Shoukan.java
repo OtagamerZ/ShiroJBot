@@ -365,7 +365,7 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return;
 					}
 
-					msg = h.getUser().getName() + " equipou " + e.getCard().getName() + " em " + t.getCard().getName() + ".";
+					msg = h.getUser().getName() + " equipou " + e.getCard().getName() + " em " + t.getName() + ".";
 				} else if (d instanceof Champion) {
 					Champion c = (Champion) d.copy();
 					if (args[1].equalsIgnoreCase("d")) {
@@ -437,7 +437,7 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return;
 					}
 
-					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : c.getCard().getName()) + ".";
+					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : c.getName()) + ".";
 				} else {
 					if (!args[1].equalsIgnoreCase("f")) {
 						channel.sendMessage("❌ | O segundo argumento precisa ser `F` se deseja jogar uma carta de campo.").queue(null, Helper::doNothing);
@@ -657,7 +657,7 @@ public class Shoukan extends GlobalGame {
 
 					if (!postCombat()) {
 						resetTimerKeepTurn();
-						channel.sendMessage(yours.getCard().getName() + " derrotou a " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
+						channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
 									this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -688,7 +688,7 @@ public class Shoukan extends GlobalGame {
 
 					if (!postCombat()) {
 						resetTimerKeepTurn();
-						channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getCard().getName() + "! (" + yPower + " < " + hPower + ")")
+						channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")")
 								.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
 									this.message.compute(s.getChannel().getId(), (id, m) -> {

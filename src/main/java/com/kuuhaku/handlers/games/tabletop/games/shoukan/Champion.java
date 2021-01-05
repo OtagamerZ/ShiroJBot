@@ -375,6 +375,10 @@ public class Champion implements Drawable, Cloneable {
 		this.mDef = 0;
 	}
 
+	public String getName() {
+		return fakeCard != null ? fakeCard.getCard().getName() : card.getName();
+	}
+
 	public Bonus getBonus() {
 		return bonus;
 	}
