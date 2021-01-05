@@ -60,7 +60,7 @@ public class Equipment implements Drawable, Cloneable {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int mana;
 
-	@Column(columnDefinition = "VARCHAR(130) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(175) NOT NULL DEFAULT ''")
 	private String description;
 
 	@Column(columnDefinition = "TEXT")
@@ -107,7 +107,7 @@ public class Equipment implements Drawable, Cloneable {
 						TextAttribute.SIZE, 11,
 						TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
 				)));
-				Profile.drawStringMultiLineNO(g2d, description, 205, 9, 293);
+				Profile.drawStringMultiLineNO(g2d, description, 205, 9, 277);
 			} else {
 				g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);
 				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
