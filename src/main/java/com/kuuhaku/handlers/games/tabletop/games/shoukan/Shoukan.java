@@ -1159,7 +1159,7 @@ public class Shoukan extends GlobalGame {
 				draw = false;
 				resetTimerKeepTurn();
 				if (!ShiroInfo.getHashes().remove(hash.get())) return;
-				channel.sendMessage("**FASE DE COMBATE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate")
+				channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate")
 						.addFile(Helper.getBytes(arena.render(hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
