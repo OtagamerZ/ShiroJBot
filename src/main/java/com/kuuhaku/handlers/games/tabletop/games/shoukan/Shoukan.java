@@ -1481,6 +1481,8 @@ public class Shoukan extends GlobalGame {
 	public void resetTimer(Shoukan shkn) {
 		getCurrRound().setSide(current);
 		decreaseFLockTime();
+		decreaseSLockTime();
+		decreaseELockTime();
 		super.resetTimer(shkn);
 
 		current = next;
