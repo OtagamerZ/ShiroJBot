@@ -1081,9 +1081,9 @@ public class Shoukan extends GlobalGame {
 		ShiroInfo.getHashes().add(hash.get());
 
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
-		buttons.put("▶️", (mb, ms) -> {
-			if (!ShiroInfo.getHashes().remove(hash.get())) return;
-			if (getRound() < 1 || phase == Phase.ATTACK) {
+		if (getRound() < 1 || phase == Phase.ATTACK)
+			buttons.put("▶️", (mb, ms) -> {
+				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				User u = getCurrent();
 
 				AtomicReference<Hand> h = new AtomicReference<>(getHands().get(current));
@@ -1144,16 +1144,15 @@ public class Shoukan extends GlobalGame {
 								changed[i] = false;
 							}
 						});
-				return;
-			}
-
-			hash.set(Helper.generateHash(this));
-			ShiroInfo.getHashes().add(hash.get());
-			channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue(null, Helper::doNothing);
-			phase = Phase.ATTACK;
-			draw = false;
-			resetTimerKeepTurn();
-		});
+			});
+		else
+			buttons.put("▶️", (mb, ms) -> {
+				if (!ShiroInfo.getHashes().remove(hash.get())) return;
+				channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate").queue(null, Helper::doNothing);
+				phase = Phase.ATTACK;
+				draw = false;
+				resetTimerKeepTurn();
+			});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			if (phase != Phase.PLAN) {
