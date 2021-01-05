@@ -335,7 +335,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setRedAtk(int redAtk) {
-		this.redAtk = redAtk + redAtk;
+		this.redAtk += redAtk;
 	}
 
 	public int getRedDef() {
@@ -343,7 +343,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setRedDef(int redDef) {
-		this.redDef = redDef + redDef;
+		this.redDef += redDef;
 	}
 
 	public int getFinAtk() {
