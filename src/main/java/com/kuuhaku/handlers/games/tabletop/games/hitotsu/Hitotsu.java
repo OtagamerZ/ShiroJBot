@@ -373,7 +373,7 @@ public class Hitotsu extends Game {
 
 			User u = getCurrent();
 			resetTimer();
-			channel.sendMessage(u + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
+			channel.sendMessage(u.getName() + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
 					.addFile(Helper.getBytes(mount, "png"), "mount.png")
 					.queue(s -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);

@@ -225,7 +225,7 @@ public class Reversi extends Game {
 			User current = getCurrent();
 			resetTimer();
 			draw = true;
-			channel.sendMessage(current.getAsMention() + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
+			channel.sendMessage(current.getName() + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
 					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 					.queue(s -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
