@@ -49,6 +49,7 @@ public class LockRankedCommand extends Command {
 		if (mm.isLocked())
 			channel.sendMessage("❌ | A fila ranqueada já está bloqueada (" + mm.getGames().size() + " jogos restantes).").queue();
 		else {
+			mm.getLobby().clear();
 			mm.setLocked(true);
 			channel.sendMessage("Fila ranqueada bloqueada com sucesso até a reinicialização.").queue();
 		}
