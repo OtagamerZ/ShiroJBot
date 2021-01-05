@@ -13,7 +13,28 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Várias mudanças no Shoukan" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Várias mudanças no Shoukan">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/arena.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/banner.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_back.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_arena.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_equip.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_spell.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/trophy.xcf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_blue.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_blue.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_cyan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_cyan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_green.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_green.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_grey.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_grey.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_pink.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_pink.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_purple.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_purple.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_red.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_red.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_yellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_spell_yellow.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -162,6 +183,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -948,13 +980,7 @@
       <workItem from="1609735023766" duration="64000" />
       <workItem from="1609786146229" duration="8566000" />
       <workItem from="1609800911432" duration="1265000" />
-    </task>
-    <task id="LOCAL-03227" summary="Correção nas configurações de servidor">
-      <created>1608580331751</created>
-      <option name="number" value="03227" />
-      <option name="presentableId" value="LOCAL-03227" />
-      <option name="project" value="LOCAL" />
-      <updated>1608580331752</updated>
+      <workItem from="1609812448954" duration="2969000" />
     </task>
     <task id="LOCAL-03228" summary="Correção nas configurações de servidor">
       <created>1608581645874</created>
@@ -1292,7 +1318,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609802567359</updated>
     </task>
-    <option name="localTasksCounter" value="3276" />
+    <task id="LOCAL-03276" summary="Várias mudanças no Shoukan">
+      <created>1609812703395</created>
+      <option name="number" value="03276" />
+      <option name="presentableId" value="LOCAL-03276" />
+      <option name="project" value="LOCAL" />
+      <updated>1609812703395</updated>
+    </task>
+    <option name="localTasksCounter" value="3277" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1517,11 +1550,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609802576679">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609812706446">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609802576679" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609812706446" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

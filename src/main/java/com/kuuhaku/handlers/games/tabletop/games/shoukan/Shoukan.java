@@ -270,9 +270,8 @@ public class Shoukan extends GlobalGame {
 						}
 
 						d.setAvailable(false);
-						h.addHp(e.getDef());
-						getHands().get(next).removeHp(Math.round(e.getAtk()));
 						h.removeMana(e.getMana());
+						e.activate(h, getHands().get(next), arena);
 						arena.getGraveyard().get(h.getSide()).add(e);
 
 						resetTimerKeepTurn();
