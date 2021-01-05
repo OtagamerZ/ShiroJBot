@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança nas cartas-feitiço">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança nas cartas-feitiço" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -962,14 +959,7 @@
       <workItem from="1609735023766" duration="64000" />
       <workItem from="1609786146229" duration="8566000" />
       <workItem from="1609800911432" duration="1265000" />
-      <workItem from="1609812448954" duration="3779000" />
-    </task>
-    <task id="LOCAL-03229" summary="Aumento no ganho de créditos por voto">
-      <created>1608586649885</created>
-      <option name="number" value="03229" />
-      <option name="presentableId" value="LOCAL-03229" />
-      <option name="project" value="LOCAL" />
-      <updated>1608586649885</updated>
+      <workItem from="1609812448954" duration="4156000" />
     </task>
     <task id="LOCAL-03230" summary="Aumento no ganho de créditos por voto">
       <created>1608587204662</created>
@@ -1307,7 +1297,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609817593854</updated>
     </task>
-    <option name="localTasksCounter" value="3278" />
+    <task id="LOCAL-03278" summary="Mudança nas cartas-feitiço">
+      <created>1609818348517</created>
+      <option name="number" value="03278" />
+      <option name="presentableId" value="LOCAL-03278" />
+      <option name="project" value="LOCAL" />
+      <updated>1609818348517</updated>
+    </task>
+    <option name="localTasksCounter" value="3279" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1532,11 +1529,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609817595715">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609818349669">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609817595715" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609818349669" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
