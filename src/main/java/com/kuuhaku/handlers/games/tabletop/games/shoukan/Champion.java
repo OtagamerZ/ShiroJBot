@@ -34,7 +34,6 @@ import org.json.JSONObject;
 import javax.imageio.ImageIO;
 import javax.persistence.*;
 import java.awt.*;
-import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
@@ -179,10 +178,7 @@ public class Champion implements Drawable, Cloneable {
 			g2d.setColor(Color.black);
 			g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 9, 277);
 
-			g2d.setFont(Helper.HAMMERSMITH.deriveFont(Map.of(
-					TextAttribute.SIZE, 11,
-					TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
-			)));
+			g2d.setFont(Helper.HAMMERSMITH.deriveFont(Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : description, 205, 9, 293);
 
 			if (stun > 0) {
