@@ -13,17 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do xadrez;&#10;Remoção do spawn de cartas/drops no canal da Twitch;&#10;Correção no Hitotsu;&#10;Mudança na fonte das cartas;">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/effect_lock.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/effect_unlock.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/fusion_lock.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/fusion_unlock.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/spell_lock.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/spell_unlock.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de ícones de travas" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -974,14 +964,7 @@
       <workItem from="1609871563171" duration="170000" />
       <workItem from="1609871752253" duration="99000" />
       <workItem from="1609877266142" duration="5509000" />
-      <workItem from="1609898703129" duration="5176000" />
-    </task>
-    <task id="LOCAL-03244" summary="Implementação dos banners de ranqueada">
-      <created>1609131613516</created>
-      <option name="number" value="03244" />
-      <option name="presentableId" value="LOCAL-03244" />
-      <option name="project" value="LOCAL" />
-      <updated>1609131613516</updated>
+      <workItem from="1609898703129" duration="5496000" />
     </task>
     <task id="LOCAL-03245" summary="Correções gerais">
       <created>1609359460557</created>
@@ -1319,7 +1302,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609901272125</updated>
     </task>
-    <option name="localTasksCounter" value="3293" />
+    <task id="LOCAL-03293" summary="Adição de ícones de travas">
+      <created>1609904214747</created>
+      <option name="number" value="03293" />
+      <option name="presentableId" value="LOCAL-03293" />
+      <option name="project" value="LOCAL" />
+      <updated>1609904214747</updated>
+    </task>
+    <option name="localTasksCounter" value="3294" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1405,8 +1395,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de ranqueadas para o Shoukan" />
-    <MESSAGE value="Implementação do modo raqueado concluìdo, início do public beta" />
     <MESSAGE value="Adição dos comandos para ver o lobby e o ranking do Shoukan ranqueado" />
     <MESSAGE value="Mudança nos nomes dos tiers" />
     <MESSAGE value="Adição do minigame de roleta no Shoukan personalizado" />
@@ -1430,7 +1418,9 @@
     <MESSAGE value="Mudança nas cartas-feitiço" />
     <MESSAGE value="Remoção do xadrez;&#10;Remoção do spawn de cartas/drops no canal da Twitch;&#10;Correção no Hitotsu;" />
     <MESSAGE value="Remoção do xadrez;&#10;Remoção do spawn de cartas/drops no canal da Twitch;&#10;Correção no Hitotsu;&#10;Mudança na fonte das cartas;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remoção do xadrez;&#10;Remoção do spawn de cartas/drops no canal da Twitch;&#10;Correção no Hitotsu;&#10;Mudança na fonte das cartas;" />
+    <MESSAGE value="Remoção do xadrez" />
+    <MESSAGE value="Adição de ícones de travas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de ícones de travas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1548,11 +1538,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609901286336">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609904216247">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609901286336" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609904216247" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
