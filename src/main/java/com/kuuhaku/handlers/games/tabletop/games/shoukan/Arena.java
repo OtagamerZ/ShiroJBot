@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
@@ -85,7 +86,7 @@ public class Arena {
 		this.field = field;
 	}
 
-	public BufferedImage render(Map<Side, Hand> hands) {
+	public BufferedImage render(Shoukan game, Map<Side, Hand> hands) {
 		try {
 			BufferedImage back = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/backdrop.jpg")));
 			BufferedImage arena = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/arenas/" + (field == null ? "default" : field.getField().toLowerCase()) + ".png")));
@@ -103,7 +104,11 @@ public class Arena {
 				g2d.setColor(Color.white);
 				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 100));
 
-				Profile.printCenteredString(StringUtils.abbreviate(hands.get(key).getUser().getName(), 18), 626, key == Side.TOP ? 1125 : 499, key == Side.TOP ? 838 : 975, g2d);
+				String name = StringUtils.abbreviate(hands.get(key).getUser().getName(), 18);
+				if (key == Side.TOP)
+					Profile.printCenteredString(name, 626, 1125, 824, g2d);
+				else
+					Profile.printCenteredString(name, 626, 499, 989, g2d);
 
 				for (int i = 0; i < value.size(); i++) {
 					SlotColumn<Champion, Equipment> c = value.get(i);
@@ -177,6 +182,31 @@ public class Arena {
 			}
 
 			g2d.drawImage(frames, 0, 0, null);
+
+			Map<String, Integer> locks = Map.of(
+					"fusion", game.getFusionLock(),
+					"spell", game.getSpellLock(),
+					"effect", game.getEffectLock()
+			);
+
+			String[] lockNames = {
+					"fusion",
+					"spell",
+					"effect"
+			};
+
+			for (int i = 0; i < lockNames.length; i++) {
+				String name = locks.get(lockNames[i]) > 0 ? lockNames[i] + "_lock" : lockNames[i] + "_unlock";
+				BufferedImage icon;
+				try {
+					icon = ImageIO.read(Objects.requireNonNull(Charm.class.getClassLoader().getResourceAsStream("shoukan/" + name + ".png")));
+				} catch (IOException e) {
+					icon = null;
+				}
+				g2d.drawImage(icon, 919 + (i * 166), 835, null);
+				Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 999 + (i * 166), 835, g2d);
+			}
+
 			g2d.dispose();
 
 			return back;
