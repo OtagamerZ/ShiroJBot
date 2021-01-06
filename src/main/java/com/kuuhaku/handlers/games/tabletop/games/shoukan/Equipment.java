@@ -34,11 +34,9 @@ import org.json.JSONObject;
 import javax.imageio.ImageIO;
 import javax.persistence.*;
 import java.awt.*;
-import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -103,10 +101,7 @@ public class Equipment implements Drawable, Cloneable {
 				Profile.drawOutlinedText(String.valueOf(mana), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 66, g2d);
 
 				g2d.setColor(Color.black);
-				g2d.setFont(Helper.HAMMERSMITH.deriveFont(Map.of(
-						TextAttribute.SIZE, 11,
-						TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
-				)));
+				g2d.setFont(Helper.HAMMERSMITH.deriveFont(Font.PLAIN, 11));
 				Profile.drawStringMultiLineNO(g2d, description, 205, 9, 277);
 			} else {
 				g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);
