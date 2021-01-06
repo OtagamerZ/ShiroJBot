@@ -250,6 +250,9 @@ public class CommandManager {
 			put(NQNModeCommand.class, new Argument(
 					"modonqn", new String[]{"nqnmode", "nqn", "autoemotes"}, "cmd_nqn-mode", MODERACAO, true
 			));
+			put(SmallCardsCommand.class, new Argument(
+					"cartaspequenas", new String[]{"smallcards"}, "cmd_small-cards", MODERACAO, false
+			));
 
 			//INFORMATION
 			put(HelpCommand.class, new Argument(
