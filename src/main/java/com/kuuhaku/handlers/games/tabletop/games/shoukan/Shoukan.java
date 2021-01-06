@@ -35,7 +35,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
@@ -333,7 +332,6 @@ public class Shoukan extends GlobalGame {
 					}
 
 					d.setAvailable(false);
-					e.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slot.setBottom(e);
 					Champion t = target.getTop();
 					t.setFlipped(false);
@@ -437,7 +435,6 @@ public class Shoukan extends GlobalGame {
 					}
 
 					d.setAvailable(false);
-					c.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slot.setTop(c);
 					if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
 						c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(c, dest, null, -1), channel));
@@ -453,7 +450,6 @@ public class Shoukan extends GlobalGame {
 
 					Field f = (Field) d.copy();
 					d.setAvailable(false);
-					f.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					arena.setField(f);
 					msg = h.getUser().getName() + " invocou o campo " + f.getCard().getName() + ".";
 				}
@@ -1409,11 +1405,9 @@ public class Shoukan extends GlobalGame {
 
 		for (Map.Entry<Side, LinkedList<Drawable>> entry : getArena().getGraveyard().entrySet()) {
 			Hand h = getHands().get(entry.getKey());
-			Account acc = AccountDAO.getAccount(h.getUser().getId());
 			List<Champion> dead = entry.getValue().stream()
 					.filter(d -> d instanceof Champion && ((Champion) d).getMana() <= threshold)
 					.map(d -> (Champion) d)
-					.peek(c -> c.setAcc(acc))
 					.collect(Collectors.toList());
 
 			for (Champion c : dead) {
@@ -1423,7 +1417,6 @@ public class Shoukan extends GlobalGame {
 			List<Champion> inHand = h.getCards().stream()
 					.filter(d -> d instanceof Champion && ((Champion) d).getMana() <= threshold)
 					.map(d -> (Champion) d)
-					.peek(c -> c.setAcc(acc))
 					.collect(Collectors.toList());
 
 			for (Champion c : inHand) {
@@ -1433,7 +1426,6 @@ public class Shoukan extends GlobalGame {
 			List<Champion> inDeck = h.getDeque().stream()
 					.filter(d -> d instanceof Champion && ((Champion) d).getMana() <= threshold)
 					.map(d -> (Champion) d)
-					.peek(c -> c.setAcc(acc))
 					.collect(Collectors.toList());
 
 			for (Champion c : inDeck) {
