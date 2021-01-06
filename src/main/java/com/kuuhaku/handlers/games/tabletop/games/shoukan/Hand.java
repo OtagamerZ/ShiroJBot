@@ -94,6 +94,7 @@ public class Hand {
 				case "roleta" -> {
 					deque.removeIf(d -> d instanceof Champion);
 					deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
+					destinyDeck.clear();
 				}
 				case "blackrock" -> {
 					Field f = CardDAO.getField("OTHERWORLD");
@@ -105,6 +106,7 @@ public class Hand {
 						Champion c = CardDAO.getChampion(name);
 						deque.addAll(Collections.nCopies(6, c));
 					}
+					destinyDeck.clear();
 				}
 				case "instakill" -> hp = 1;
 			}
@@ -115,6 +117,8 @@ public class Hand {
 			manaPerTurn = 5;
 		}
 
+		Account acc = AccountDAO.getAccount(user.getId());
+		for (Drawable d : deque) d.setAcc(acc);
 		Collections.shuffle(deque);
 		redrawHand();
 	}
@@ -261,7 +265,7 @@ public class Hand {
 		Account acc = AccountDAO.getAccount(user.getId());
 
 		for (int i = 0; i < cards.size(); i++) {
-			g2d.drawImage(cards.get(i).drawCard(acc, false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
 			if (cards.get(i).isAvailable())
 				Profile.printCenteredString(String.valueOf(i + 1), 225, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 90, g2d);
 		}
@@ -287,7 +291,7 @@ public class Hand {
 		Account acc = AccountDAO.getAccount(enemy.getUser().getId());
 
 		for (int i = 0; i < cards.size(); i++) {
-			g2d.drawImage(cards.get(i).drawCard(acc, false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
 			try {
 				BufferedImage so = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/shinigami_overlay.png")));
 				g2d.drawImage(so, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);

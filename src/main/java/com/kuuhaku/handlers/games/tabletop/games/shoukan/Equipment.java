@@ -76,7 +76,7 @@ public class Equipment implements Drawable, Cloneable {
 	private transient Pair<Integer, Champion> linkedTo = null;
 
 	@Override
-	public BufferedImage drawCard(Account acc, boolean flipped) {
+	public BufferedImage drawCard(boolean flipped) {
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -309,7 +309,7 @@ public class Equipment implements Drawable, Cloneable {
 		}
 	}
 
-	public String toString(Account acc) {
+	public String toString() {
 		return new JSONObject() {{
 			put("id", id);
 			put("name", card.getName());
@@ -318,7 +318,7 @@ public class Equipment implements Drawable, Cloneable {
 			put("defense", def);
 			put("mana", mana);
 			put("description", description);
-			put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(acc, false), "png")));
+			put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(false), "png")));
 		}}.toString();
 	}
 }
