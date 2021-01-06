@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -61,17 +62,6 @@ public class Hand {
 				.comparing(d -> ((Champion) d).getMana()).reversed()
 				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 		);
-		if (kp.getDestinyDraw() != null) {
-			for (int i : kp.getDestinyDraw()) {
-				if (i > deque.size())
-					destinyDeck.add(deque.get(Helper.rng(deque.size(), true)));
-				else
-					destinyDeck.add(deque.get(i));
-			}
-		}
-		for (Drawable drawable : destinyDeck) {
-			deque.remove(drawable);
-		}
 		deque.addAll(kp.getEquipments());
 		deque.addAll(kp.getFields());
 
@@ -92,9 +82,24 @@ public class Hand {
 
 			switch (game.getCustom().optString("arcade")) {
 				case "roleta" -> {
-					deque.removeIf(d -> d instanceof Champion);
-					deque.addAll(Collections.nCopies(30, CardDAO.getChampion("AKAME")));
-					destinyDeck.clear();
+					for (Drawable d : deque) {
+						if (d instanceof Champion) {
+							Champion c = (Champion) d;
+							c.setRawEffect("""
+									if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
+										int rng = Math.round(Math.random() * 100);
+										if (rng < 25) {
+											Hand h = ep.getHands().get(ep.getSide());
+											h.setHp(h.getHp() / 2);
+										} else if (rng < 50) {
+											Hand h = ep.getHands().get(ep.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+											h.setHp(h.getHp() / 2);
+										}
+									}
+									%s
+									""".formatted(Helper.getOr(c.getRawEffect(), "")));
+						}
+					}
 				}
 				case "blackrock" -> {
 					Field f = CardDAO.getField("OTHERWORLD");
@@ -106,15 +111,29 @@ public class Hand {
 						Champion c = CardDAO.getChampion(name);
 						deque.addAll(Collections.nCopies(6, c));
 					}
-					destinyDeck.clear();
 				}
-				case "instakill" -> hp = 1;
+				case "instakill" -> {
+					deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
+					hp = 1;
+				}
 			}
 		} else {
 			mana = 0;
 			hp = 5000;
 			startingCount = 5;
 			manaPerTurn = 5;
+		}
+
+		if (kp.getDestinyDraw() != null) {
+			for (int i : kp.getDestinyDraw()) {
+				if (i > deque.size())
+					destinyDeck.add(deque.get(Helper.rng(deque.size(), true)));
+				else
+					destinyDeck.add(deque.get(i));
+			}
+		}
+		for (Drawable drawable : destinyDeck) {
+			deque.remove(drawable);
 		}
 
 		Account acc = AccountDAO.getAccount(user.getId());
