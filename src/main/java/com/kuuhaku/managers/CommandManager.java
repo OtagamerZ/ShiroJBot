@@ -262,13 +262,13 @@ public class CommandManager {
 					"perfil", new String[]{"xp", "profile", "pf"}, "cmd_profile", INFO, false
 			));
 			put(OpenTicketCommand.class, new Argument(
-					"ticket", new String[]{"openticket", "tkt"}, REQ_MESSAGE, "cmd_ticket", INFO, false
+					"ticket", new String[]{"openticket", "tkt"}, REQ_MESSAGE, "cmd_ticket", INFO, true
 			));
 			put(ReportUserCommand.class, new Argument(
-					"report", new String[]{"reportar"}, "req_user-reason", "cmd_report", INFO, false
+					"report", new String[]{"reportar"}, "req_user-reason", "cmd_report", INFO, true
 			));
 			put(RequestAssistCommand.class, new Argument(
-					"suporte", new String[]{"support", "assist"}, "cmd_request-assist", INFO, false
+					"suporte", new String[]{"support", "assist"}, "cmd_request-assist", INFO, true
 			));
 			put(BotInfoCommand.class, new Argument(
 					"info", new String[]{"botinfo", "bot"}, "cmd_info", INFO, false
