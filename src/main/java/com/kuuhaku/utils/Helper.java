@@ -24,8 +24,6 @@ import club.minnced.discord.webhook.WebhookCluster;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.coder4.emoji.EmojiUtils;
 import com.github.kevinsawicki.http.HttpRequest;
-import com.github.twitch4j.chat.TwitchChat;
-import com.github.twitch4j.common.events.domain.EventChannel;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
@@ -523,10 +521,10 @@ public class Helper {
 				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissionsExplicit(c);
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
-							  perms.stream()
-									  .map(p -> ":white_check_mark: -> " + p.getName() + "\n")
-									  .sorted()
-									  .collect(Collectors.joining());
+						perms.stream()
+								.map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+								.sorted()
+								.collect(Collectors.joining());
 			}
 		} catch (NoResultException ignore) {
 		}
@@ -535,11 +533,11 @@ public class Helper {
 		EnumSet<Permission> perms = shiro.getPermissionsExplicit(c);
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
-			   perms.stream()
-					   .map(p -> ":white_check_mark: -> " + p.getName() + "\n")
-					   .sorted()
-					   .collect(Collectors.joining()) +
-			   jibrilPerms;
+				perms.stream()
+						.map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+						.sorted()
+						.collect(Collectors.joining()) +
+				jibrilPerms;
 	}
 
 	public static <T> T getOr(T get, T or) {
@@ -1268,11 +1266,15 @@ public class Helper {
 			BufferedImage img = c.drawCard(foil);
 
 			EmbedBuilder eb = new EmbedBuilder()
-					.setImage("attachment://kawaipon.png")
 					.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!")
 					.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 					.setColor(colorThief(img))
 					.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
+
+			if (gc.isSmallCards())
+				eb.setThumbnail("attachment://kawaipon.png");
+			else
+				eb.setImage("attachment://kawaipon.png");
 
 			if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
 				channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1326,11 +1328,15 @@ public class Helper {
 		BufferedImage img = c.drawCard(foil);
 
 		EmbedBuilder eb = new EmbedBuilder()
-				.setImage("attachment://kawaipon.png")
 				.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase() + " neste servidor!")
 				.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 				.setColor(colorThief(img))
 				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
+
+		if (gc.isSmallCards())
+			eb.setThumbnail("attachment://kawaipon.png");
+		else
+			eb.setImage("attachment://kawaipon.png");
 
 		if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
 			channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1347,26 +1353,6 @@ public class Helper {
 		}
 		Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
 		Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildID(), true);
-	}
-
-	public static void spawnKawaipon(EventChannel channel, TwitchChat chat) {
-		if (chance(2.5)) {
-			KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
-					.filter(r -> r != KawaiponRarity.ULTIMATE)
-					.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
-					.collect(Collectors.toList())
-			);
-
-			List<Card> cards = CardDAO.getCardsByRarity(kr);
-			Card c = cards.get(Helper.rng(cards.size(), true));
-			boolean foil = chance(1);
-			KawaiponCard kc = new KawaiponCard(c, foil);
-
-			chat.sendMessage(channel.getName(),
-					"FootYellow | " + kc.getName() + " (" + c.getRarity().toString() + " | " + c.getAnime().toString() + ") | Digite \"s!coletar\" para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos)."
-			);
-			Main.getInfo().getCurrentCard().put("twitch", kc);
-		}
 	}
 
 	public static void spawnDrop(GuildConfig gc, TextChannel channel) {
@@ -1406,17 +1392,6 @@ public class Helper {
 			}
 			Main.getInfo().getCurrentDrop().put(channel.getGuild().getId(), drop);
 			Main.getInfo().getRatelimit().put("drop_" + gc.getGuildID(), true);
-		}
-	}
-
-	public static void spawnDrop(EventChannel channel, TwitchChat chat) {
-		if (chance(2)) {
-			Prize drop = new CreditDrop();
-
-			chat.sendMessage(channel.getName(),
-					"HolidayPresent | Digite \"s!abrir " + drop.getCaptcha() + "\" para receber o prêmio (" + drop.getPrize() + " créditos | requisito: " + drop.getRequirement().getKey() + ")."
-			);
-			Main.getInfo().getCurrentDrop().put("twitch", drop);
 		}
 	}
 
