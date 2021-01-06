@@ -110,7 +110,7 @@ public class ConvertCardCommand extends Command {
         String hash = Helper.generateHash(guild, author);
         ShiroInfo.getHashes().add(hash);
         Main.getInfo().getConfirmationPending().put(author.getId(), true);
-        channel.sendMessage(eb.build()).addFile(Helper.getBytes(c.drawCard(acc, false), "png"), "card.png").queue(s ->
+        channel.sendMessage(eb.build()).addFile(Helper.getBytes(c.drawCard(false), "png"), "card.png").queue(s ->
                 Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
                             if (!ShiroInfo.getHashes().remove(hash)) return;
                             Main.getInfo().getConfirmationPending().invalidate(author.getId());
