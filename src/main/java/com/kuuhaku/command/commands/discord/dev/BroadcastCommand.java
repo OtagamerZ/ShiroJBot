@@ -69,7 +69,11 @@ public class BroadcastCommand extends Command {
 			return;
 		}
 
-		String msg = String.join(" ", args).replace("\\n", "\n");
+		String msg = rawCmd
+				.replaceFirst("[^\\s]+", "")
+				.replaceFirst("[^\\s]+", "")
+				.replace("\\n", "\n")
+				.trim();
 		Map<String, Boolean> result = new HashMap<>();
 		StringBuilder sb = new StringBuilder();
 		List<Page> pages = new ArrayList<>();
