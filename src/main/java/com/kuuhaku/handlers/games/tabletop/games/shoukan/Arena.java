@@ -116,18 +116,18 @@ public class Arena {
 						case TOP -> {
 							if (c.getTop() != null) {
 								Champion d = c.getTop();
-								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 387, null);
+								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 387, null);
 							}
 							if (c.getBottom() != null) {
 								Equipment d = c.getBottom();
-								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 0, null);
+								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 0, null);
 							}
 							if (grv.size() > 0)
-								g2d.drawImage(grv.peekLast().drawCard(acc, false), 1889, 193, null);
+								g2d.drawImage(grv.peekLast().drawCard(false), 1889, 193, null);
 							if (h.getDeque().size() > 0) {
 								Drawable d = h.getDeque().peek();
 								assert d != null;
-								g2d.drawImage(d.drawCard(acc, true), 137, 193, null);
+								g2d.drawImage(d.drawCard(true), 137, 193, null);
 							}
 							if (h.getLockTime() > 0) {
 								try {
@@ -140,18 +140,18 @@ public class Arena {
 						case BOTTOM -> {
 							if (c.getTop() != null) {
 								Champion d = c.getTop();
-								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 1013, null);
+								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1013, null);
 							}
 							if (c.getBottom() != null) {
 								Equipment d = c.getBottom();
-								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 1400, null);
+								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1400, null);
 							}
 							if (grv.size() > 0)
-								g2d.drawImage(grv.peekLast().drawCard(acc, false), 137, 1206, null);
+								g2d.drawImage(grv.peekLast().drawCard(false), 137, 1206, null);
 							if (h.getDeque().size() > 0) {
 								Drawable d = h.getDeque().peek();
 								assert d != null;
-								g2d.drawImage(d.drawCard(acc, true), 1889, 1206, null);
+								g2d.drawImage(d.drawCard(true), 1889, 1206, null);
 							}
 							if (h.getLockTime() > 0) {
 								try {
@@ -178,7 +178,7 @@ public class Arena {
 
 			if (banished.peekLast() != null) {
 				Drawable d = banished.peekLast();
-				g2d.drawImage(d.drawCard(d.getAcc(), false), 137, 700, null);
+				g2d.drawImage(d.drawCard(false), 137, 700, null);
 			}
 
 			g2d.drawImage(frames, 0, 0, null);
