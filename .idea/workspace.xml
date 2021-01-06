@@ -13,11 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição do modo pequeno para spawns">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no modo roleta" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -958,14 +954,7 @@
       <workItem from="1609871752253" duration="99000" />
       <workItem from="1609877266142" duration="5509000" />
       <workItem from="1609898703129" duration="7007000" />
-      <workItem from="1609962456971" duration="6990000" />
-    </task>
-    <task id="LOCAL-03255" summary="Implementação de decks reserva">
-      <created>1609392887796</created>
-      <option name="number" value="03255" />
-      <option name="presentableId" value="LOCAL-03255" />
-      <option name="project" value="LOCAL" />
-      <updated>1609392887796</updated>
+      <workItem from="1609962456971" duration="7725000" />
     </task>
     <task id="LOCAL-03256" summary="Implementação de decks reserva">
       <created>1609393042668</created>
@@ -1303,7 +1292,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609969962836</updated>
     </task>
-    <option name="localTasksCounter" value="3304" />
+    <task id="LOCAL-03304" summary="Melhoria no modo roleta">
+      <created>1609972722292</created>
+      <option name="number" value="03304" />
+      <option name="presentableId" value="LOCAL-03304" />
+      <option name="project" value="LOCAL" />
+      <updated>1609972722292</updated>
+    </task>
+    <option name="localTasksCounter" value="3305" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1389,7 +1385,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Mudança nos nomes dos tiers" />
     <MESSAGE value="Adição do minigame de roleta no Shoukan personalizado" />
     <MESSAGE value="Correções nas novas mudanças" />
     <MESSAGE value="Novo amuleto: Sortilégio" />
@@ -1414,7 +1409,8 @@
     <MESSAGE value="Remoção do xadrez" />
     <MESSAGE value="Adição de ícones de travas" />
     <MESSAGE value="Adição do modo pequeno para spawns" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição do modo pequeno para spawns" />
+    <MESSAGE value="Melhoria no modo roleta" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no modo roleta" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1532,11 +1528,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609969968571">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609972723511">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609969968571" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609972723511" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
