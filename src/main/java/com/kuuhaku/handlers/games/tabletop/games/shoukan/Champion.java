@@ -407,6 +407,14 @@ public class Champion implements Drawable, Cloneable {
 		this.fusion = fusion;
 	}
 
+	public String getRawEffect() {
+		return effect;
+	}
+
+	public void setRawEffect(String effect) {
+		this.effect = effect;
+	}
+
 	public void getEffect(EffectParameters ep) {
 		String imports = """
 				//%s
