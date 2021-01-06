@@ -547,9 +547,9 @@ public class CommandManager {
 			put(CrissCrossCommand.class, new Argument(
 					"jogodavelha", new String[]{"jdv", "crisscross", "cc"}, REQ_MENTION_BET, "cmd_criss-cross", FUN, true
 			));
-			put(ChessCommand.class, new Argument(
+			/*put(ChessCommand.class, new Argument(
 					"xadrez", new String[]{"chess"}, REQ_MENTION, "cmd_chess", FUN, true
-			));
+			));*/
 			put(HitotsuCommand.class, new Argument(
 					"hitotsu", new String[]{"uno"}, "req_bet-mentions", "cmd_hitotsu", FUN, true
 			));

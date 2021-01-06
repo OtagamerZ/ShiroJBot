@@ -345,7 +345,6 @@ public class Hitotsu extends Game {
 
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83D\uDCCB", (mb, ms) -> {
-			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			StringBuilder sb = new StringBuilder();
 			List<KawaiponCard> cards = seats.get(getCurrent().getId()).getCards();
