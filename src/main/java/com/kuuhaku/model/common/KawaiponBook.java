@@ -214,7 +214,7 @@ public class KawaiponBook {
 					for (int i = 0; i < chunks.get(finalC).size(); i++) {
 						g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
-						g.drawImage(chunks.get(finalC).get(i).drawCard(acc, false), 54 + 198 * i, 24, 160, 250, null);
+						g.drawImage(chunks.get(finalC).get(i).drawCard(false), 54 + 198 * i, 24, 160, 250, null);
 						Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getCard().getName(), 15), 160, 54 + 198 * i, 298, g);
 					}
 
