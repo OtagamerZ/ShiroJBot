@@ -130,11 +130,11 @@ public class Helper {
 	public static final int BASE_CARD_PRICE = 350;
 	public static final int BASE_EQUIPMENT_PRICE = 500;
 
-	public static Font HAMLIN;
+	public static Font HAMMERSMITH;
 
 	static {
 		try {
-			HAMLIN = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Helper.class.getClassLoader().getResourceAsStream("font/Hamlin.ttf")));
+			HAMMERSMITH = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Helper.class.getClassLoader().getResourceAsStream("font/HammersmithOne.ttf")));
 		} catch (FontFormatException | IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 		}

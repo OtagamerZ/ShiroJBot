@@ -671,37 +671,45 @@ public class ShiroEvents extends ListenerAdapter {
 			try {
 				switch (args[0].toLowerCase()) {
 					case "send", "s" -> {
-						User u = Main.getInfo().getUserByID(args[1]);
-						if (u == null) {
-							event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
-							return;
-						}
-						u.openPrivateChannel().queue(c ->
-								c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
-						for (String d : staffIds) {
-							if (!d.equals(event.getAuthor().getId())) {
-								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-										c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
+						try {
+							User u = Main.getInfo().getUserByID(args[1]);
+							if (u == null) {
+								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
+								return;
 							}
+							u.openPrivateChannel().queue(c ->
+									c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
+							for (String d : staffIds) {
+								if (!d.equals(event.getAuthor().getId())) {
+									Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
+											c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
+								}
+							}
+							event.getChannel().sendMessage("Mensagem enviada com sucesso!").queue();
+						} catch (NumberFormatException e) {
+							event.getChannel().sendMessage("❌ | ID inválido.").queue();
 						}
-						event.getChannel().sendMessage("Mensagem enviada com sucesso!").queue();
 					}
 					case "block", "b" -> {
-						User us = Main.getInfo().getUserByID(args[1]);
-						if (us == null) {
-							event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
-							return;
-						}
-						RelayDAO.permaBlock(new PermaBlock(args[1]));
-						us.openPrivateChannel().queue(c ->
-								c.sendMessage("Você foi bloqueado dos canais de comunicação da Shiro pela seguinte razão: `" + msgNoArgs + "`").queue());
-						for (String d : staffIds) {
-							if (!d.equals(event.getAuthor().getId())) {
-								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-										c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
+						try {
+							User us = Main.getInfo().getUserByID(args[1]);
+							if (us == null) {
+								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
+								return;
 							}
+							RelayDAO.permaBlock(new PermaBlock(args[1]));
+							us.openPrivateChannel().queue(c ->
+									c.sendMessage("Você foi bloqueado dos canais de comunicação da Shiro pela seguinte razão: `" + msgNoArgs + "`").queue());
+							for (String d : staffIds) {
+								if (!d.equals(event.getAuthor().getId())) {
+									Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
+											c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
+								}
+							}
+							event.getChannel().sendMessage("Usuário bloqueado com sucesso!").queue();
+						} catch (NumberFormatException e) {
+							event.getChannel().sendMessage("❌ | ID inválido.").queue();
 						}
-						event.getChannel().sendMessage("Usuário bloqueado com sucesso!").queue();
 					}
 				}
 			} catch (NullPointerException ignore) {
