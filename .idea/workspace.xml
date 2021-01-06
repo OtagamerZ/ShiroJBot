@@ -13,9 +13,17 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança nas cartas-feitiço">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do xadrez;&#10;Remoção do spawn de cartas/drops no canal da Twitch;&#10;Correção no Hitotsu;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/CatchDropCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/CatchKawaiponCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/ChooseCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/EightBallCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/TwitchCommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/TwitchCommandManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,6 +173,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -955,49 +974,8 @@
       <workItem from="1609821663598" duration="542000" />
       <workItem from="1609871563171" duration="170000" />
       <workItem from="1609871752253" duration="99000" />
-      <workItem from="1609877266142" duration="2147000" />
-    </task>
-    <task id="LOCAL-03237" summary="Implementação de threading">
-      <created>1609122925833</created>
-      <option name="number" value="03237" />
-      <option name="presentableId" value="LOCAL-03237" />
-      <option name="project" value="LOCAL" />
-      <updated>1609122925833</updated>
-    </task>
-    <task id="LOCAL-03238" summary="Implementação de threading">
-      <created>1609123102026</created>
-      <option name="number" value="03238" />
-      <option name="presentableId" value="LOCAL-03238" />
-      <option name="project" value="LOCAL" />
-      <updated>1609123102026</updated>
-    </task>
-    <task id="LOCAL-03239" summary="Mudança no comando de reportar bugs">
-      <created>1609124383844</created>
-      <option name="number" value="03239" />
-      <option name="presentableId" value="LOCAL-03239" />
-      <option name="project" value="LOCAL" />
-      <updated>1609124383844</updated>
-    </task>
-    <task id="LOCAL-03240" summary="Mudança no comando de reportar bugs">
-      <created>1609124604341</created>
-      <option name="number" value="03240" />
-      <option name="presentableId" value="LOCAL-03240" />
-      <option name="project" value="LOCAL" />
-      <updated>1609124604343</updated>
-    </task>
-    <task id="LOCAL-03241" summary="Tentativa de correção das coleções borradas">
-      <created>1609125596802</created>
-      <option name="number" value="03241" />
-      <option name="presentableId" value="LOCAL-03241" />
-      <option name="project" value="LOCAL" />
-      <updated>1609125596802</updated>
-    </task>
-    <task id="LOCAL-03242" summary="Implementação dos banners de ranqueada">
-      <created>1609131191757</created>
-      <option name="number" value="03242" />
-      <option name="presentableId" value="LOCAL-03242" />
-      <option name="project" value="LOCAL" />
-      <updated>1609131191757</updated>
+      <workItem from="1609877266142" duration="5509000" />
+      <workItem from="1609898703129" duration="2101000" />
     </task>
     <task id="LOCAL-03243" summary="Implementação dos banners de ranqueada">
       <created>1609131483068</created>
@@ -1300,7 +1278,49 @@
       <option name="project" value="LOCAL" />
       <updated>1609877762364</updated>
     </task>
-    <option name="localTasksCounter" value="3286" />
+    <task id="LOCAL-03286" summary="Mudança nas cartas-feitiço">
+      <created>1609880077086</created>
+      <option name="number" value="03286" />
+      <option name="presentableId" value="LOCAL-03286" />
+      <option name="project" value="LOCAL" />
+      <updated>1609880077086</updated>
+    </task>
+    <task id="LOCAL-03287" summary="Mudança nas cartas-feitiço">
+      <created>1609880262798</created>
+      <option name="number" value="03287" />
+      <option name="presentableId" value="LOCAL-03287" />
+      <option name="project" value="LOCAL" />
+      <updated>1609880262798</updated>
+    </task>
+    <task id="LOCAL-03288" summary="Mudança nas cartas-feitiço">
+      <created>1609880307862</created>
+      <option name="number" value="03288" />
+      <option name="presentableId" value="LOCAL-03288" />
+      <option name="project" value="LOCAL" />
+      <updated>1609880307862</updated>
+    </task>
+    <task id="LOCAL-03289" summary="Mudança nas cartas-feitiço">
+      <created>1609881444579</created>
+      <option name="number" value="03289" />
+      <option name="presentableId" value="LOCAL-03289" />
+      <option name="project" value="LOCAL" />
+      <updated>1609881444579</updated>
+    </task>
+    <task id="LOCAL-03290" summary="Mudança nas cartas-feitiço">
+      <created>1609881476131</created>
+      <option name="number" value="03290" />
+      <option name="presentableId" value="LOCAL-03290" />
+      <option name="project" value="LOCAL" />
+      <updated>1609881476131</updated>
+    </task>
+    <task id="LOCAL-03291" summary="Mudança nas cartas-feitiço">
+      <created>1609889817529</created>
+      <option name="number" value="03291" />
+      <option name="presentableId" value="LOCAL-03291" />
+      <option name="project" value="LOCAL" />
+      <updated>1609889817530</updated>
+    </task>
+    <option name="localTasksCounter" value="3292" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1386,7 +1406,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de quebra de linha nos comandos que usam webhook" />
     <MESSAGE value="Adição de suporte para Shoukan inter-servidor" />
     <MESSAGE value="Adição de ranqueadas para o Shoukan" />
     <MESSAGE value="Implementação do modo raqueado concluìdo, início do public beta" />
@@ -1411,7 +1430,8 @@
     <MESSAGE value="Correções" />
     <MESSAGE value="Várias mudanças no Shoukan" />
     <MESSAGE value="Mudança nas cartas-feitiço" />
-    <option name="LAST_COMMIT_MESSAGE" value="Mudança nas cartas-feitiço" />
+    <MESSAGE value="Remoção do xadrez;&#10;Remoção do spawn de cartas/drops no canal da Twitch;&#10;Correção no Hitotsu;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remoção do xadrez;&#10;Remoção do spawn de cartas/drops no canal da Twitch;&#10;Correção no Hitotsu;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1525,11 +1545,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609877764278">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609889826698">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609877764278" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609889826698" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

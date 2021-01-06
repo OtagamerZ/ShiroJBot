@@ -179,7 +179,7 @@ public class Champion implements Drawable, Cloneable {
 			g2d.setColor(Color.black);
 			g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 9, 277);
 
-			g2d.setFont(Helper.HAMLIN.deriveFont(Map.of(
+			g2d.setFont(Helper.HAMMERSMITH.deriveFont(Map.of(
 					TextAttribute.SIZE, 11,
 					TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
 			)));
