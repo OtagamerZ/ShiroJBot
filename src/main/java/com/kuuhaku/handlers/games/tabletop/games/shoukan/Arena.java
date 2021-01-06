@@ -173,7 +173,7 @@ public class Arena {
 			}
 
 			if (field != null) {
-				g2d.drawImage(field.drawCard(field.getAcc(), false), 1889, 700, null);
+				g2d.drawImage(field.drawCard(false), 1889, 700, null);
 			}
 
 			if (banished.peekLast() != null) {
