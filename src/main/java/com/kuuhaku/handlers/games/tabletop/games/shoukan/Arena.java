@@ -195,6 +195,7 @@ public class Arena {
 					"effect"
 			};
 
+			g2d.setColor(Color.red);
 			for (int i = 0; i < lockNames.length; i++) {
 				String name = locks.get(lockNames[i]) > 0 ? lockNames[i] + "_lock" : lockNames[i] + "_unlock";
 				BufferedImage icon;
@@ -204,7 +205,8 @@ public class Arena {
 					icon = null;
 				}
 				g2d.drawImage(icon, 919 + (i * 166), 835, null);
-				Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 999 + (i * 166), 835, g2d);
+				if (locks.get(lockNames[i]) > 0)
+					Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 999 + (i * 166), 835 + g2d.getFontMetrics().getHeight(), g2d);
 			}
 
 			g2d.dispose();
