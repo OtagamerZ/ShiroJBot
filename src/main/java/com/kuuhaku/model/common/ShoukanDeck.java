@@ -68,19 +68,19 @@ public class ShoukanDeck {
 		g2d.drawImage(acc.getFrame().getBack(acc), 1746, 2241, null);
 
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / 6) {
-			g2d.drawImage(champs.get(i).drawCard(acc, false), 76 + 279 * (i - 6 * y), 350 + 420 * y, null);
+			g2d.drawImage(champs.get(i).drawCard(false), 76 + 279 * (i - 6 * y), 350 + 420 * y, null);
 			if (kp.getDestinyDraw() != null && kp.getDestinyDraw().contains(i))
 				g2d.drawImage(destiny, 66 + 279 * (i - 6 * y), 340 + 420 * y, null);
 			Profile.printCenteredString(StringUtils.abbreviate(champs.get(i).getCard().getName(), 15), 225, 76 + 279 * (i - 6 * y), 740 + 420 * y, g2d);
 		}
 
 		for (int i = 0, y = 0; i < equips.size(); i++, y = i / 3) {
-			g2d.drawImage(equips.get(i).drawCard(acc, false), 2022 + 279 * (i - 3 * y), 350 + 420 * y, null);
+			g2d.drawImage(equips.get(i).drawCard(false), 2022 + 279 * (i - 3 * y), 350 + 420 * y, null);
 			Profile.printCenteredString(StringUtils.abbreviate(equips.get(i).getCard().getName(), 15), 225, 2022 + 279 * (i - 3 * y), 740 + 420 * y, g2d);
 		}
 
 		for (int i = 0; i < fields.size(); i++) {
-			g2d.drawImage(fields.get(i).drawCard(acc, false), 1746, 771 + (420 * i), null);
+			g2d.drawImage(fields.get(i).drawCard(false), 1746, 771 + (420 * i), null);
 			Profile.printCenteredString(StringUtils.abbreviate(fields.get(i).getCard().getName(), 15), 225, 1746, 1161 + (420 * i), g2d);
 		}
 
