@@ -176,6 +176,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean exceedRolesEnabled = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean smallCards = false;
+
 	public GuildConfig() {
 	}
 
@@ -533,6 +536,15 @@ public class GuildConfig {
 
 	public boolean isExceedRolesEnabled() {
 		return exceedRolesEnabled;
+	}
+
+
+	public boolean isSmallCards() {
+		return smallCards;
+	}
+
+	public void toggleSmallCards() {
+		smallCards = !smallCards;
 	}
 
 	public List<String> getDisabledModules() {
