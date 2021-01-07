@@ -38,6 +38,9 @@ public class GiftCode {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String redeemedBy = "";
 
+	@Column(columnDefinition = "VARCHAR(100) NOT NULL DEFAULT ''")
+	private String description = "";
+
 	@Column(columnDefinition = "TEXT NOT NULL DEFAULT ''")
 	private String gift = "";
 
@@ -55,10 +58,6 @@ public class GiftCode {
 		return code;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
-	}
-
 	public String getRedeemedBy() {
 		return redeemedBy;
 	}
@@ -68,12 +67,12 @@ public class GiftCode {
 		this.redeemed = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
 	}
 
-	public String getGift() {
-		return gift;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setGift(String gift) {
-		this.gift = gift;
+	public String getGift() {
+		return gift;
 	}
 
 	public void useCode(String id) {

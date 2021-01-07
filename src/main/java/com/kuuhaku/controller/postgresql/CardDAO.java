@@ -205,10 +205,14 @@ public class CardDAO {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Champion> getAllChampions() {
+    public static List<Champion> getAllChampions(boolean withFusion) {
         EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = FALSE", Champion.class);
+        Query q;
+        if (withFusion)
+            q = em.createQuery("SELECT c FROM Champion c", Champion.class);
+        else
+            q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = FALSE", Champion.class);
 
         try {
             return q.getResultList();
