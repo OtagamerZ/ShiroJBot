@@ -64,6 +64,8 @@ public class Hand {
 		);
 		deque.addAll(kp.getEquipments());
 		deque.addAll(kp.getFields());
+		Account acc = AccountDAO.getAccount(user.getId());
+		for (Drawable d : deque) d.setAcc(acc);
 
 		this.user = user;
 		this.side = side;
@@ -111,6 +113,7 @@ public class Hand {
 						Champion c = CardDAO.getChampion(name);
 						deque.addAll(Collections.nCopies(6, c));
 					}
+					for (Drawable d : deque) d.setAcc(acc);
 				}
 				case "instakill" -> {
 					deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
@@ -136,8 +139,6 @@ public class Hand {
 			deque.remove(drawable);
 		}
 
-		Account acc = AccountDAO.getAccount(user.getId());
-		for (Drawable d : deque) d.setAcc(acc);
 		Collections.shuffle(deque);
 		redrawHand();
 	}
@@ -281,7 +282,6 @@ public class Hand {
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 90));
 
 		List<Drawable> cards = new ArrayList<>(getCards());
-		Account acc = AccountDAO.getAccount(user.getId());
 
 		for (int i = 0; i < cards.size(); i++) {
 			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
