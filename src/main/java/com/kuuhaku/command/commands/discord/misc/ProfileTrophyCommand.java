@@ -93,7 +93,7 @@ public class ProfileTrophyCommand extends Command {
 				m.setTrophy(null);
 				MemberDAO.updateMemberConfigs(m);
 			}
-			channel.sendMessage(":white_check_mark: | Troféu removido com sucesso!").queue();
+			channel.sendMessage("✅ | Troféu removido com sucesso!").queue();
 			return;
 		}
 
@@ -110,7 +110,7 @@ public class ProfileTrophyCommand extends Command {
 				m.setTrophy(tt);
 				MemberDAO.updateMemberConfigs(m);
 			}
-			channel.sendMessage(":white_check_mark: | Troféu definido com sucesso!").queue();
+			channel.sendMessage("✅ | Troféu definido com sucesso!").queue();
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage("❌ | Troféu inválido, verifique se você digitou o ID corretamente.").queue();
 		}

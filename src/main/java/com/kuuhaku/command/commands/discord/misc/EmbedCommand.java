@@ -63,7 +63,7 @@ public class EmbedCommand extends Command {
 				GuildDAO.updateGuildSettings(gc);
 
 				m.delete().queue(null, Helper::doNothing);
-				channel.sendMessage(":white_check_mark: | Embed de servidor limpo com sucesso!").queue();
+				channel.sendMessage("✅ | Embed de servidor limpo com sucesso!").queue();
 				return;
 			}
 
@@ -94,7 +94,7 @@ public class EmbedCommand extends Command {
 
 				m.delete().queue(null, Helper::doNothing);
 				if (Helper.hasPermission(member, PrivilegeLevel.MOD))
-					channel.sendMessage("Embed construído com sucesso, deseja configurá-lo para ser o formato das mensagens de boas-vindas/adeus?")
+					channel.sendMessage("✅ | Embed construído com sucesso, deseja configurá-lo para ser o formato das mensagens de boas-vindas/adeus?")
 							.embed(eb.build())
 							.queue(s ->
 									Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
@@ -103,7 +103,7 @@ public class EmbedCommand extends Command {
 												GuildDAO.updateGuildSettings(gc);
 
 												s.delete().queue(null, Helper::doNothing);
-												channel.sendMessage(":white_check_mark: | Embed de servidor definido com sucesso!").queue();
+												channel.sendMessage("✅ | Embed de servidor definido com sucesso!").queue();
 											}), true, 1, TimeUnit.MINUTES
 											, u -> u.getId().equals(author.getId())
 											, ms -> {

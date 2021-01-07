@@ -51,7 +51,7 @@ public class LockRankedCommand extends Command {
 		else {
 			mm.getLobby().clear();
 			mm.setLocked(true);
-			channel.sendMessage("Fila ranqueada bloqueada com sucesso até a reinicialização.").queue();
+			channel.sendMessage("✅ | Fila ranqueada bloqueada com sucesso até a reinicialização.").queue();
 		}
 	}
 }

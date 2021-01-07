@@ -67,12 +67,12 @@ public class KickMemberCommand extends Command {
 
         try {
             if (args.length < 2) {
-                guild.kick(message.getMentionedMembers().get(0)).queue();
-                channel.sendMessage("Membro expulso com sucesso!").queue();
-            } else {
-                guild.kick(message.getMentionedMembers().get(0), String.join(" ", args).replace(args[0], "").trim()).queue();
-				channel.sendMessage("Membro expulso com sucesso!\nMotivo: `" + String.join(" ", args).replace(args[0], "").trim() + "`").queue();
-            }
+				guild.kick(message.getMentionedMembers().get(0)).queue();
+				channel.sendMessage("✅ | Membro expulso com sucesso!").queue();
+			} else {
+				guild.kick(message.getMentionedMembers().get(0), String.join(" ", args).replace(args[0], "").trim()).queue();
+				channel.sendMessage("✅ | Membro expulso com sucesso!\nMotivo: `" + String.join(" ", args).replace(args[0], "").trim() + "`").queue();
+			}
         } catch (InsufficientPermissionException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_kick-permission")).queue();
 		}

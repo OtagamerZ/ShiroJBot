@@ -239,7 +239,7 @@ public class TradeCardCommand extends Command {
                                 AccountDAO.saveAccount(acc);
                                 AccountDAO.saveAccount(tacc);
 
-                                s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
+                                s.delete().flatMap(n -> channel.sendMessage("✅ | Troca concluída com sucesso!")).queue(null, Helper::doNothing);
                             }), true, 1, TimeUnit.MINUTES,
                             u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
                             ms -> {
@@ -402,7 +402,7 @@ public class TradeCardCommand extends Command {
                                 AccountDAO.saveAccount(acc);
                                 AccountDAO.saveAccount(tacc);
 
-                                s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
+                                s.delete().flatMap(n -> channel.sendMessage("✅ | Troca concluída com sucesso!")).queue(null, Helper::doNothing);
                             }), true, 1, TimeUnit.MINUTES,
                             u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
                             ms -> {
@@ -646,7 +646,7 @@ public class TradeCardCommand extends Command {
                                 KawaiponDAO.saveKawaipon(kp);
                                 KawaiponDAO.saveKawaipon(target);
 
-                                s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
+                                s.delete().flatMap(n -> channel.sendMessage("✅ | Troca concluída com sucesso!")).queue(null, Helper::doNothing);
                             }), true, 1, TimeUnit.MINUTES,
                             u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
                             ms -> {

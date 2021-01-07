@@ -522,7 +522,7 @@ public class Helper {
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
 						perms.stream()
-								.map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+								.map(p -> "✅ -> " + p.getName() + "\n")
 								.sorted()
 								.collect(Collectors.joining());
 			}
@@ -534,7 +534,7 @@ public class Helper {
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
 				perms.stream()
-						.map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+						.map(p -> "✅ -> " + p.getName() + "\n")
 						.sorted()
 						.collect(Collectors.joining()) +
 				jibrilPerms;

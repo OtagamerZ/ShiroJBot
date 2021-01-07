@@ -63,7 +63,7 @@ public class BiographyCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 		acc.setBio(text);
 		AccountDAO.saveAccount(acc);
-		if (text.length() > 0) channel.sendMessage("Biografia definida com sucesso!").queue();
-		else channel.sendMessage("Biografia limpa com sucesso!").queue();
+		if (text.length() > 0) channel.sendMessage("✅ | Biografia definida com sucesso!").queue();
+		else channel.sendMessage("✅ | Biografia limpa com sucesso!").queue();
 	}
 }

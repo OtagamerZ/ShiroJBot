@@ -94,7 +94,7 @@ public enum VipItem {
 				acc.removeGem(1);
 				AccountDAO.saveAccount(acc);
 
-				ch.sendMessage("Você rodou a carta " + oldCard.getName() + " com sucesso e conseguiu....**" + card.getName() + " (" + card.getCard().getRarity().toString() + ")**!").queue();
+				ch.sendMessage("✅ | Você rodou a carta " + oldCard.getName() + " com sucesso e conseguiu....**" + card.getName() + " (" + card.getCard().getRarity().toString() + ")**!").queue();
 			}),
 	CARD_FOIL(2, 5, new MessageEmbed.Field("2 - Melhoria de carta (5 gemas)", "Transforma uma carta em cromada", false),
 			(ch, acc, args) -> {
@@ -127,7 +127,7 @@ public enum VipItem {
 				acc.removeGem(5);
 				AccountDAO.saveAccount(acc);
 
-				ch.sendMessage("Você cromou a carta " + oldCard.getName() + " com sucesso!").queue();
+				ch.sendMessage("✅ | Você cromou a carta " + oldCard.getName() + " com sucesso!").queue();
 			}),
 	ANIMATED_BACKGROUND(3, 10, new MessageEmbed.Field("3 - Fundo de perfil animado (10 gemas)", "Permite usar GIFs como fundo de perfil", false),
 			(ch, acc, args) -> {
