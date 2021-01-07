@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ShoukanDeck {
 	private final Account acc;
@@ -45,17 +46,26 @@ public class ShoukanDeck {
 		List<Equipment> equips = kp.getEquipments();
 		List<Field> fields = kp.getFields();
 
-		champs.sort(Comparator
+		champs = champs.stream()
+			.peek(c -> c.setAcc(acc))
+			.sorted(Comparator
 				.comparing(Champion::getMana).reversed()
 				.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-		);
-		equips.sort(Comparator
+			)
+			.collect(Collectors.toList());
+		equips = equips.stream()
+			.peek(e -> e.setAcc(acc))
+			.sorted(Comparator
 				.comparing(Equipment::getTier).reversed()
 				.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-		);
-		fields.sort(Comparator
+			)
+			.collect(Collectors.toList());
+		fields = fields.stream()
+			.peek(f -> f.setAcc(acc))
+			.sorted(Comparator
 				.comparing(f -> f.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-		);
+			)
+			.collect(Collectors.toList());
 
 		BufferedImage deck = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/deck.jpg")));
 		BufferedImage destiny = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/destiny.png")));
