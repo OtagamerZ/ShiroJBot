@@ -24,7 +24,6 @@ import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -42,7 +41,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class EffectParameters {
-	private final Phase phase;
 	private final EffectTrigger trigger;
 	private final Shoukan shoukan;
 	private final int index;
@@ -53,8 +51,7 @@ public class EffectParameters {
 	private final Duelists duelists;
 	private final GameChannel channel;
 
-	public EffectParameters(Phase phase, EffectTrigger trigger, Shoukan shoukan, int index, Side side, Duelists duelists, GameChannel channel) {
-		this.phase = phase;
+	public EffectParameters(EffectTrigger trigger, Shoukan shoukan, int index, Side side, Duelists duelists, GameChannel channel) {
 		this.trigger = trigger;
 		this.shoukan = shoukan;
 		this.index = index;
@@ -66,8 +63,16 @@ public class EffectParameters {
 		this.channel = channel;
 	}
 
-	public Phase getPhase() {
-		return phase;
+	public EffectParameters() {
+		this.trigger = EffectTrigger.NONE;
+		this.shoukan = null;
+		this.index = -1;
+		this.side = null;
+		this.hands = new HashMap<>();
+		this.slots = new HashMap<>();
+		this.graveyard = new HashMap<>();
+		this.duelists = null;
+		this.channel = null;
 	}
 
 	public EffectTrigger getTrigger() {

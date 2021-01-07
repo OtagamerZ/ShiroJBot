@@ -122,7 +122,7 @@ public class KawaiponsCommand extends Command {
                                 send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
                                 return;
                             } else if (Helper.equalsAny(args[0], "elegivel", "elegiveis", "campeoes", "senshi")) {
-                                List<Drawable> cardList = CardDAO.getAllChampions().stream().map(d -> (Drawable) d).collect(Collectors.toList());
+                                List<Drawable> cardList = CardDAO.getAllChampions(false).stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                                 KawaiponBook kb = new KawaiponBook();
                                 BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis", true);

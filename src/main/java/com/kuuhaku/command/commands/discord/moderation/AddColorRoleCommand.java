@@ -26,6 +26,7 @@ import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
@@ -73,15 +74,20 @@ public class AddColorRoleCommand extends Command {
 			JSONObject jo = gc.getColorRoles();
 
 			if (jo.has(name) && guild.getRoleById(jo.getJSONObject(name).getString("role")) != null) {
-				Role r = guild.getRoleById(jo.getJSONObject(name).getString("role"));
-				assert r != null;
-				r.getManager()
-						.setColor(Color.decode(args[1]))
-						.complete();
+				try {
+					Role r = guild.getRoleById(jo.getJSONObject(name).getString("role"));
+					assert r != null;
+					r.getManager()
+							.setColor(Color.decode(args[1]))
+							.complete();
 
-				gc.addColorRole(name, args[1], r);
-				channel.sendMessage("✅ | Cor modificada com sucesso!").queue();
-				return;
+					gc.addColorRole(name, args[1], r);
+					channel.sendMessage("✅ | Cor modificada com sucesso!").queue();
+					return;
+				} catch (HierarchyException e) {
+					channel.sendMessage("❌ | Não posso modificar um cargo de cor que está acima de mim.").queue();
+					return;
+				}
 			}
 
 			Role r = guild.createRole()

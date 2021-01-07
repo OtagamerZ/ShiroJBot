@@ -226,14 +226,14 @@ public class Shoukan extends GlobalGame {
 						c.setDefending(false);
 						act = channel.sendMessage("Carta trocada para modo de ataque.");
 						if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
-							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1), channel));
+							c.getEffect(new EffectParameters(EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1), channel));
 							if (postCombat()) return;
 						}
 					} else {
 						c.setDefending(true);
 						act = channel.sendMessage("Carta trocada para modo de defesa.");
 						if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
-							c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1), channel));
+							c.getEffect(new EffectParameters(EffectTrigger.ON_SWITCH, this, index, h.getSide(), Duelists.of(c, index, null, -1), channel));
 							if (postCombat()) return;
 						}
 					}
@@ -338,17 +338,17 @@ public class Shoukan extends GlobalGame {
 					t.addLinkedTo(e);
 					e.setLinkedTo(Pair.of(toEquip, t));
 					if (t.hasEffect() && effectLock == 0) {
-						t.getEffect(new EffectParameters(phase, EffectTrigger.ON_EQUIP, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
+						t.getEffect(new EffectParameters(EffectTrigger.ON_EQUIP, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
 						if (postCombat()) return;
 					}
 
 					if (e.getCharm() != null) {
 						switch (e.getCharm()) {
 							case TIMEWARP -> {
-								t.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
-								t.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
+								t.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
+								t.getEffect(new EffectParameters(EffectTrigger.AFTER_TURN, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
 							}
-							case DOUBLETAP -> t.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
+							case DOUBLETAP -> t.getEffect(new EffectParameters(EffectTrigger.ON_SUMMON, this, toEquip, h.getSide(), Duelists.of(t, toEquip, null, -1), channel));
 							case DOPPELGANGER -> {
 								SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(h.getSide(), true);
 
@@ -437,7 +437,7 @@ public class Shoukan extends GlobalGame {
 					d.setAvailable(false);
 					slot.setTop(c);
 					if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
-						c.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(c, dest, null, -1), channel));
+						c.getEffect(new EffectParameters(EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(c, dest, null, -1), channel));
 						if (postCombat()) return;
 					}
 
@@ -567,13 +567,13 @@ public class Shoukan extends GlobalGame {
 				}
 
 				if (yours.hasEffect() && effectLock == 0) {
-					yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
+					yours.getEffect(new EffectParameters(EffectTrigger.ON_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
 
 					if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
 						yours.setAvailable(false);
 						yours.resetAttribs();
 						if (yours.hasEffect()) {
-							yours.getEffect(new EffectParameters(phase, EffectTrigger.POST_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
+							yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
 							if (postCombat()) return;
 						}
 
@@ -595,7 +595,7 @@ public class Shoukan extends GlobalGame {
 				}
 
 				if (his.hasEffect() && effectLock == 0) {
-					his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEFEND, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+					his.getEffect(new EffectParameters(EffectTrigger.ON_DEFEND, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 
 					if (his.getBonus().getSpecialData().remove("skipCombat") != null) {
 						if (!postCombat()) {
@@ -625,7 +625,7 @@ public class Shoukan extends GlobalGame {
 					if (his.isFlipped()) {
 						his.setFlipped(false);
 						if (his.hasEffect() && effectLock == 0) {
-							his.getEffect(new EffectParameters(phase, EffectTrigger.ON_FLIP, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+							his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 							if (postCombat()) return;
 						}
 					}
@@ -643,11 +643,11 @@ public class Shoukan extends GlobalGame {
 					yours.setAvailable(false);
 					yours.resetAttribs();
 					if (yours.hasEffect() && effectLock == 0) {
-						yours.getEffect(new EffectParameters(phase, EffectTrigger.POST_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
+						yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
 						if (postCombat()) return;
 					}
 					if (his.hasEffect() && effectLock == 0) {
-						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+						his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 						if (postCombat()) return;
 					}
 
@@ -675,11 +675,11 @@ public class Shoukan extends GlobalGame {
 					yours.setAvailable(false);
 					his.resetAttribs();
 					if (yours.hasEffect() && effectLock == 0) {
-						yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
+						yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
 						if (postCombat()) return;
 					}
 					if (his.hasEffect() && effectLock == 0) {
-						his.getEffect(new EffectParameters(phase, EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+						his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 						if (postCombat()) return;
 					}
 
@@ -708,11 +708,11 @@ public class Shoukan extends GlobalGame {
 					killCard(h.getSide(), is[0]);
 
 					if (yours.hasEffect() && effectLock == 0) {
-						yours.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
+						yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
 						if (postCombat()) return;
 					}
 					if (his.hasEffect() && effectLock == 0) {
-						his.getEffect(new EffectParameters(phase, EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+						his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 						if (postCombat()) return;
 					}
 
@@ -795,7 +795,7 @@ public class Shoukan extends GlobalGame {
 					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slt.setTop(aFusion.copy());
 					if (aFusion.hasEffect() && effectLock == 0) {
-						aFusion.getEffect(new EffectParameters(phase, EffectTrigger.ON_SUMMON, this, i, h.getSide(), Duelists.of(aFusion, i, null, -1), channel));
+						aFusion.getEffect(new EffectParameters(EffectTrigger.ON_SUMMON, this, i, h.getSide(), Duelists.of(aFusion, i, null, -1), channel));
 						if (postCombat()) return true;
 					}
 
@@ -1102,7 +1102,7 @@ public class Shoukan extends GlobalGame {
 
 						c.resetAttribs();
 						if (c.hasEffect() && effectLock == 0) {
-							c.getEffect(new EffectParameters(phase, EffectTrigger.AFTER_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
+							c.getEffect(new EffectParameters(EffectTrigger.AFTER_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
 							if (postCombat()) return;
 						}
 					}
@@ -1123,7 +1123,7 @@ public class Shoukan extends GlobalGame {
 						}
 
 						if (c.hasEffect() && effectLock == 0) {
-							c.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
+							c.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
 							if (postCombat()) return;
 							else if (makeFusion(h.get())) return;
 						}
@@ -1288,7 +1288,7 @@ public class Shoukan extends GlobalGame {
 						}
 
 						if (c.hasEffect() && effectLock == 0) {
-							c.getEffect(new EffectParameters(phase, EffectTrigger.BEFORE_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
+							c.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
 							if (postCombat()) return;
 							else if (makeFusion(h.get())) return;
 						}
