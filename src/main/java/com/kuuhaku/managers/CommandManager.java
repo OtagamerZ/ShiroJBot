@@ -130,6 +130,9 @@ public class CommandManager {
 			put(LockRankedCommand.class, new Argument(
 					"rlock", "cmd_ranked-lock", DEV, false
 			));
+			put(CompileChampionsCommand.class, new Argument(
+					"testchamp", "cmd_compile-champions", DEV, false
+			));
 
 			//SUPPORT
 			put(BlockCommand.class, new Argument(

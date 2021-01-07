@@ -80,7 +80,7 @@ public class GiftCodeCommand extends Command {
 				}
 				gc.useCode(author.getId());
 
-				channel.sendMessage("✅ | Código resgatado com sucesso.").queue();
+				channel.sendMessage("✅ | Código para `" + gc.getDescription() + "` resgatado com sucesso.").queue();
 			}
 		}
 	}
