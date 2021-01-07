@@ -52,6 +52,18 @@ public class RegenRulesCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		message.delete().complete();
 		try {
+			String[] rules = new String[gc.getRules().size()];
+			for (int i = 0; i < gc.getRules().size(); i++) {
+				String[] rule = gc.getRules().get(i).split(";");
+				rules[i] = "**%s - %s**\n%s".formatted(i + 1, rule[0], rule[1]);
+			}
+
+			String text = String.join("\n\n", rules);
+			if (text.length() > 2000) {
+				channel.sendMessage("❌ | Mensagem das regras ultrapassa 2000 caractéres.").queue();
+				return;
+			}
+
 			if (guild.getId().equals(ShiroInfo.getSupportServerID())) {
 				channel.sendFile(Helper.getImage("https://i.imgur.com/JQ3LvGK.png"), "title.png").complete();
 				channel.sendFile(Helper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").complete();
@@ -64,11 +76,7 @@ public class RegenRulesCommand extends Command {
 			}
 
 			channel.sendFile(Helper.getImage("https://i.imgur.com/aCYUW1G.png"), "rules.png").complete();
-
-			for (int i = 0; i < gc.getRules().size(); i++) {
-				String[] rule = gc.getRules().get(i).split(";");
-				channel.sendMessage("**" + (i + 1) + " - " + rule[0] + "**\n" + rule[1]).complete();
-			}
+			channel.sendMessage(text).complete();
 
 			if (guild.getId().equals(ShiroInfo.getSupportServerID()))
 				channel.sendMessage("""
