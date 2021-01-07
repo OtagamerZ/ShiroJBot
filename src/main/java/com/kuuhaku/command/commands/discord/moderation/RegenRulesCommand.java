@@ -58,7 +58,19 @@ public class RegenRulesCommand extends Command {
 				rules[i] = "**%s - %s**\n%s".formatted(i + 1, rule[0], rule[1]);
 			}
 
-			String text = String.join("\n\n", rules);
+			String text;
+			if (guild.getId().equals(ShiroInfo.getSupportServerID()))
+				text = """
+					%s
+					
+					Divirta-se e, caso tenha lido as regras você pode utilizar o comando `s!arespostaé RESPOSTA` para completar a seguinte frase e ganhar um emblema único:
+					Infratores serão `_______ __ ______ ___ ____ ____`
+					
+					É proibido compartilhar qual é a resposta, se não não teria graça!
+				""".formatted(String.join("\n\n", rules));
+			else
+				text = text + "\n\nCaso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna";
+
 			if (text.length() > 2000) {
 				channel.sendMessage("❌ | Mensagem das regras ultrapassa 2000 caractéres.").queue();
 				return;
@@ -77,18 +89,8 @@ public class RegenRulesCommand extends Command {
 
 			channel.sendFile(Helper.getImage("https://i.imgur.com/aCYUW1G.png"), "rules.png").complete();
 
-			if (guild.getId().equals(ShiroInfo.getSupportServerID()))
-				channel.sendMessage("""
-						%s
-						
-						Divirta-se e, caso tenha lido as regras você pode utilizar o comando `s!arespostaé RESPOSTA` para completar a seguinte frase e ganhar um emblema único:
-						Infratores serão `_______ __ ______ ___ ____ ____`
-						      
-						É proibido compartilhar qual é a resposta, se não não teria graça!
-						""".formatted(text)).complete();
-			else
-				channel.sendMessage(text + "\n\nCaso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna").complete();
-
+			channel.sendMessage(text).complete();
+			
 			if (Helper.getSponsors().length() > 0) {
 				channel.sendFile(Helper.getImage("https://i.imgur.com/U9lTSWD.png"), "sponsors.png").complete();
 				channel.sendMessage(Helper.getSponsors()).complete();
