@@ -52,46 +52,34 @@ public class RegenRulesCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		message.delete().complete();
 		try {
-			if (guild.getId().equals(ShiroInfo.getSupportServerID()))
+			if (guild.getId().equals(ShiroInfo.getSupportServerID())) {
 				channel.sendFile(Helper.getImage("https://i.imgur.com/JQ3LvGK.png"), "title.png").complete();
-			channel.sendFile(Helper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").complete();
-			channel.sendMessage(guild.getId().equals(ShiroInfo.getSupportServerID()) ? "Seja bem-vindo(a) ao meu servidor oficial de suporte, qualquer duvida que tenha sobre como me utilizar será esclarecida por um de nossos membros, fique à vontade e lembre-se de sempre relatar quando achar algo suspeito." : "Seja bem-vindo(a) ao servidor " + guild.getName() + ", fique à vontade e lembre-se de sempre relatar quando achar algo suspeito.").complete();
+				channel.sendFile(Helper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").complete();
+				channel.sendMessage("Seja bem-vindo(a) ao meu servidor oficial de suporte, qualquer duvida que tenha sobre como me utilizar será esclarecida por um de nossos membros, fique à vontade e lembre-se de sempre relatar quando achar algo suspeito.").complete();
+			} else {
+				if (guild.getBannerUrl() != null)
+					channel.sendFile(Helper.getImage(guild.getBannerUrl()), "title.png").complete();
+				channel.sendFile(Helper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").complete();
+				channel.sendMessage("Seja bem-vindo(a) ao servidor " + guild.getName() + ", fique à vontade e lembre-se de sempre relatar quando achar algo suspeito.").complete();
+			}
+
 			channel.sendFile(Helper.getImage("https://i.imgur.com/aCYUW1G.png"), "rules.png").complete();
+
+			for (int i = 0; i < gc.getRules().size(); i++) {
+				String[] rule = gc.getRules().get(i).split(";");
+				channel.sendMessage("**" + (i + 1) + " - " + rule[0] + "**\n" + rule[1]).complete();
+			}
+
 			if (guild.getId().equals(ShiroInfo.getSupportServerID()))
 				channel.sendMessage("""
-						**1 - É proibido qualquer ato de SPAM, flood ou bullying**
-						Por razões obvias, tais coisas poluem o servidor e prejudicam a comunidade e é considerado um ato grave para medidas de punição.
-						Infratores serão punidos de acordo com seus atos.
-						           
-						**2 - Proibido postar qualquer conteúdo pornográfico ou racista**
-						Ninguem gosta de racismo, e este servidor não é um lugar para coisas NSFW, então mantenha-os no seu HD. (Inclui avatares)
-						           
-						**3 - Atenha-se ao tópico**
-						Existem vários canais para diversos assuntos, não há necessidade de entupir tudo em um canal só.
-						           
-						**4 - Não peça cargos, xp ou coisas do tipo**
-						Eu sou a única que gerencia isso, e não adianta insistir!
-												
-						**5 - Uso de _botting_ ou trapaças é proibido**
-						Quem for pego usando bots para farmar créditos, XP ou qualquer outra coisa será punido, podendo chegar à bloqueio do uso da Shiro.
-												
-						Pronto pessoal, isso é tudo!
-												
-						%s
-						""".formatted(guild.getId().equals(ShiroInfo.getSupportServerID())
-						? """						
 						Divirta-se e, caso tenha lido as regras você pode utilizar o comando `s!arespostaé RESPOSTA` para completar a seguinte frase e ganhar um emblema único:
 						Infratores serão `_______ __ ______ ___ ____ ____`
 						      
 						É proibido compartilhar qual é a resposta, se não não teria graça!
-						"""
-						: "Caso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna")
-				).complete();
+						""").complete();
 			else
-				for (int i = 0; i < gc.getRules().size(); i++) {
-					String[] rule = gc.getRules().get(i).split(";");
-					channel.sendMessage("**" + (i + 1) + " - " + rule[0] + "**\n" + rule[1]).complete();
-				}
+				channel.sendMessage("Caso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna").complete();
+
 			if (Helper.getSponsors().length() > 0) {
 				channel.sendFile(Helper.getImage("https://i.imgur.com/U9lTSWD.png"), "sponsors.png").complete();
 				channel.sendMessage(Helper.getSponsors()).complete();
