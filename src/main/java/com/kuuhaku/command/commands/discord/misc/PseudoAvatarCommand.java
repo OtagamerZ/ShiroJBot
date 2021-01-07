@@ -60,7 +60,7 @@ public class PseudoAvatarCommand extends Command {
 		} else if (Helper.equalsAny(args[0], "reset", "limpar")) {
 			mb.setPseudoAvatar("");
 			MemberDAO.updateMemberConfigs(mb);
-			channel.sendMessage("Pseudo-avatar limpo com sucesso!").queue();
+			channel.sendMessage("✅ | Pseudo-avatar limpo com sucesso!").queue();
 			return;
 		}
 
@@ -73,7 +73,7 @@ public class PseudoAvatarCommand extends Command {
 
 			mb.setPseudoAvatar(args[0]);
 			MemberDAO.updateMemberConfigs(mb);
-			channel.sendMessage("Pseudo-avatar definido com sucesso!").queue();
+			channel.sendMessage("✅ | Pseudo-avatar definido com sucesso!").queue();
 		} catch (IOException | NullPointerException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-image")).queue();
 		}

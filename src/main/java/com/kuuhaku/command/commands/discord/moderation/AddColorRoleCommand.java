@@ -80,7 +80,7 @@ public class AddColorRoleCommand extends Command {
 						.complete();
 
 				gc.addColorRole(name, args[1], r);
-				channel.sendMessage("Cor modificada com sucesso!").queue();
+				channel.sendMessage("✅ | Cor modificada com sucesso!").queue();
 				return;
 			}
 
@@ -95,7 +95,7 @@ public class AddColorRoleCommand extends Command {
 					.complete();
 			gc.addColorRole(name, args[1], r);
 
-			channel.sendMessage("Cor adicionada com sucesso!").queue();
+			channel.sendMessage("✅ | Cor adicionada com sucesso!").queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -109,7 +109,7 @@ public class AddColorRoleCommand extends Command {
 			if (r != null) r.delete().queue();
 			gc.removeColorRole(name);
 
-			channel.sendMessage("Cor removida com sucesso!").queue();
+			channel.sendMessage("✅ | Cor removida com sucesso!").queue();
 		} finally {
 			GuildDAO.updateGuildSettings(gc);
 		}

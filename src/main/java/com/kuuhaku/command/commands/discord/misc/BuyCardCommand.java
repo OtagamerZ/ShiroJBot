@@ -274,10 +274,10 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(cm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(cm.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage(":white_check_mark: | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + cm.getPrice() + " créditos.").queue(null, Helper::doNothing),
+									c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + cm.getPrice() + " créditos.").queue(null, Helper::doNothing),
 							Helper::doNothing
 					);
-					channel.sendMessage(":white_check_mark: | Carta comprada com sucesso!").queue();
+					channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
@@ -292,7 +292,7 @@ public class BuyCardCommand extends Command {
 					cm.setBuyer(author.getId());
 					CardMarketDAO.saveCard(cm);
 
-					channel.sendMessage(":white_check_mark: | Carta retirada com sucesso!").queue();
+					channel.sendMessage("✅ | Carta retirada com sucesso!").queue();
 				}
 			}
 			case 2 -> {
@@ -331,10 +331,10 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(em.getSeller());
 					User buyerU = Main.getInfo().getUserByID(em.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage(":white_check_mark: | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + em.getPrice() + " créditos.").queue(),
+									c.sendMessage("✅ | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + em.getPrice() + " créditos.").queue(),
 							Helper::doNothing
 					);
-					channel.sendMessage(":white_check_mark: | Equipamento comprado com sucesso!").queue();
+					channel.sendMessage("✅ | Equipamento comprado com sucesso!").queue();
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
@@ -355,7 +355,7 @@ public class BuyCardCommand extends Command {
 					em.setBuyer(author.getId());
 					EquipmentMarketDAO.saveCard(em);
 
-					channel.sendMessage(":white_check_mark: | Equipamento retirado com sucesso!").queue();
+					channel.sendMessage("✅ | Equipamento retirado com sucesso!").queue();
 				}
 			}
 			case 3 -> {
@@ -391,10 +391,10 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(fm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(fm.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage(":white_check_mark: | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + fm.getPrice() + " créditos.").queue(),
+									c.sendMessage("✅ | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + fm.getPrice() + " créditos.").queue(),
 							Helper::doNothing
 					);
-					channel.sendMessage(":white_check_mark: | Arena comprada com sucesso!").queue();
+					channel.sendMessage("✅ | Arena comprada com sucesso!").queue();
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
@@ -412,7 +412,7 @@ public class BuyCardCommand extends Command {
 					fm.setBuyer(author.getId());
 					FieldMarketDAO.saveCard(fm);
 
-					channel.sendMessage(":white_check_mark: | Arena retirada com sucesso!").queue();
+					channel.sendMessage("✅ | Arena retirada com sucesso!").queue();
 				}
 			}
 			case -1 -> channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();

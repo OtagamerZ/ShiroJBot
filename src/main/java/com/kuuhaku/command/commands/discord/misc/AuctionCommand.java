@@ -283,7 +283,7 @@ public class AuctionCommand extends Command {
                                         }
                                 ));
 
-                                s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Leilão aberto com sucesso, se não houver ofertas maiores que " + price + " dentro de 30 segundos irei fechá-lo!")).queue();
+                                s.delete().flatMap(d -> channel.sendMessage("✅ | Leilão aberto com sucesso, se não houver ofertas maiores que " + price + " dentro de 30 segundos irei fechá-lo!")).queue();
                                 Main.getInfo().getShiroEvents().addHandler(guild, listener);
                             }
                         }), true, 1, TimeUnit.MINUTES,

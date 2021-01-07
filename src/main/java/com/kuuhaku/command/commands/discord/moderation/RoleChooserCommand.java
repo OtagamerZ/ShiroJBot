@@ -57,7 +57,7 @@ public class RoleChooserCommand extends Command {
 
 		if (args.length == 1 && Helper.equalsAny(args[0], "reboot", "regen", "reset", "restart", "refresh")) {
 			Helper.refreshButtons(gc);
-			channel.sendMessage("Botões atualizados com sucesso!").queue();
+			channel.sendMessage("✅ | Botões atualizados com sucesso!").queue();
 			return;
 		} else if (args.length < 3) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-arguments")).queue();
@@ -82,7 +82,7 @@ public class RoleChooserCommand extends Command {
 		try {
 			Helper.addButton(args, message, channel, gc, message.getEmotes().size() > 0 ? message.getEmotes().get(0).getId() : args[1], false);
 
-			channel.sendMessage("Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc));
+			channel.sendMessage("✅ | Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc));
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-argument-error"), e)).queue();
 		} catch (ErrorResponseException e) {

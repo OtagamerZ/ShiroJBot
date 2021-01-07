@@ -61,7 +61,7 @@ public class TetEvents extends ListenerAdapter {
 					.queue(null, Helper::doNothing);
 		}
 
-		event.getChannel().sendMessage("Mensagem enviada aos outros " + ExceedDAO.getExceed(event.getAuthor().getId()) + "s com sucesso!").queue();
+		event.getChannel().sendMessage("✅ | Mensagem enviada aos outros " + ExceedDAO.getExceed(event.getAuthor().getId()) + "s com sucesso!").queue();
 	}
 
 	@Override

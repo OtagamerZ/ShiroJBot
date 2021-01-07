@@ -73,6 +73,6 @@ public class RateCommand extends Command {
 		} catch (InsufficientPermissionException ignore) {
 		}
 
-		channel.sendMessage(":white_check_mark: | Obrigada, seu voto ajudará tanto os administradores deste servidor quanto meus administradores!").queue();
+		channel.sendMessage("✅ | Obrigada, seu voto ajudará tanto os administradores deste servidor quanto meus administradores!").queue();
 	}
 }

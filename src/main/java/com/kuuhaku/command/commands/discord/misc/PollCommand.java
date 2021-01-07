@@ -191,7 +191,7 @@ public class PollCommand extends Command {
 			}
 		}
 
-		channel.sendMessage("Enquete criada com sucesso, ela encerrará automaticamente em " + gc.getPollTime() + " segundos.").queue();
+		channel.sendMessage("✅ | Enquete criada com sucesso, ela encerrará automaticamente em " + gc.getPollTime() + " segundos.").queue();
 	}
 
 	private static void showResult(Message msg, Member member, EmbedBuilder eb) {

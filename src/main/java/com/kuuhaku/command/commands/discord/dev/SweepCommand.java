@@ -139,7 +139,7 @@ public class SweepCommand extends Command {
                                     Sweeper.sweep(guildTrashBin, memberTrashBin);
 
                                     m.delete().queue(null, Helper::doNothing);
-                                    channel.sendMessage(Helper.ACCEPT + " | Entradas limpas com sucesso!").queue();
+                                    channel.sendMessage("✅ | Entradas limpas com sucesso!").queue();
                                 }), true, 1, TimeUnit.MINUTES,
                                 u -> u.getId().equals(author.getId()),
                                 ms -> {
@@ -147,7 +147,7 @@ public class SweepCommand extends Command {
                                     Main.getInfo().getConfirmationPending().invalidate(author.getId());
                                 })
                         );
-            } else s.editMessage(Helper.ACCEPT + " | Não há entradas para serem limpas.").queue();
+            } else s.editMessage("✅ | Não há entradas para serem limpas.").queue();
         });
     }
 }

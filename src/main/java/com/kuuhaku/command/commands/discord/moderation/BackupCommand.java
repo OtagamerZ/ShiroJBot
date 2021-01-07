@@ -82,7 +82,7 @@ public class BackupCommand extends Command {
         if (args[0].equalsIgnoreCase("salvar")) {
             data.setGuild(guild.getId());
             data.saveServerData(guild);
-            channel.sendMessage("Backup feito com sucesso, utilize `" + prefix + "backup recuperar` para recuperar para este estado do servidor. (ISSO IRÁ REESCREVER O SERVIDOR, TODAS AS MENSAGENS SERÃO PERDIDAS)").queue();
+            channel.sendMessage("✅ | Backup feito com sucesso, utilize `" + prefix + "backup recuperar` para recuperar para este estado do servidor. (ISSO IRÁ REESCREVER O SERVIDOR, TODAS AS MENSAGENS SERÃO PERDIDAS)").queue();
         } else if (data.getGuild() == null || data.getGuild().isEmpty()) {
             channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_backup-not-exists"), prefix)).queue();
         } else if (data.getLastRestored().toLocalDateTime().plusDays(7).until(LocalDateTime.now(), ChronoUnit.DAYS) < 7) {

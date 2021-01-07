@@ -55,7 +55,7 @@ public class ProfileColorCommand extends Command {
 		} else if (Helper.equalsAny(args[0], "none", "reset", "resetar", "limpar")) {
 			acc.setProfileColor("");
 			AccountDAO.saveAccount(acc);
-			channel.sendMessage("Cor de perfil restaurada ao padrão com sucesso!").queue();
+			channel.sendMessage("✅ | Cor de perfil restaurada ao padrão com sucesso!").queue();
 			return;
 		} else if (!args[0].contains("#") || !Helper.between(args[0].length(), 7, 8)) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
@@ -65,7 +65,7 @@ public class ProfileColorCommand extends Command {
 		try {
 			acc.setProfileColor(args[0].toUpperCase());
 			AccountDAO.saveAccount(acc);
-			channel.sendMessage("Cor de perfil definida com sucesso!").queue();
+			channel.sendMessage("✅ | Cor de perfil definida com sucesso!").queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
 		}
