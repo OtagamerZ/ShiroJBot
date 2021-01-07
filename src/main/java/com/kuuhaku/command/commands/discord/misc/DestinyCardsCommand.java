@@ -53,7 +53,7 @@ public class DestinyCardsCommand extends Command {
 		if (args.length == 0) {
 			kp.setDestinyDraw(null);
 
-			channel.sendMessage(":white_check_mark: | Cartas do destino limpas com sucesso.").queue();
+			channel.sendMessage("✅ | Cartas do destino limpas com sucesso.").queue();
 		} else {
 			String[] inds = args[0].split(",");
 
@@ -73,7 +73,7 @@ public class DestinyCardsCommand extends Command {
 
 				kp.setDestinyDraw(Arrays.stream(values).map(i -> i - 1).toArray(Integer[]::new));
 
-				channel.sendMessage(":white_check_mark: | Cartas do destino definidas com sucesso.").queue();
+				channel.sendMessage("✅ | Cartas do destino definidas com sucesso.").queue();
 			} catch (NumberFormatException e) {
 				channel.sendMessage("❌ | Posições inválidas, elas devem ser números inteiros de 1 à 30.").queue();
 				return;

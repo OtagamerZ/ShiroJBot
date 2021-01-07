@@ -79,7 +79,7 @@ public class BackgroundCommand extends Command {
 			AccountDAO.saveAccount(acc);
 			if (args[0].contains("discordapp"))
 				channel.sendMessage(":warning: | Imagens que utilizam o CDN do Discord (postadas no Discord) correm o risco de serem apagadas com o tempo, mas de todo modo: Imagem de fundo trocada com sucesso!").queue();
-			else channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();
+			else channel.sendMessage("✅ | Imagem de fundo trocada com sucesso!").queue();
 		} catch (IOException | NullPointerException e) {
 			if (args[0].contains("google"))
 				channel.sendMessage("❌ | Você pegou o link da **pesquisa do Google** bobo!").queue();

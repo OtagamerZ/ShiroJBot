@@ -153,7 +153,7 @@ public class SynthesizeCardCommand extends Command {
 									KawaiponDAO.saveKawaipon(kp);
 
 									s.delete().queue(null, Helper::doNothing);
-									channel.sendMessage("Síntese realizada com sucesso, você obteve a arena **" + f.getCard().getName() + "**!").queue();
+									channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve a arena **" + f.getCard().getName() + "**!").queue();
 								});
 								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
 									ShiroInfo.getHashes().remove(hash);
@@ -239,7 +239,7 @@ public class SynthesizeCardCommand extends Command {
 									KawaiponDAO.saveKawaipon(kp);
 
 									s.delete().queue(null, Helper::doNothing);
-									channel.sendMessage("Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
+									channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
 								});
 								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
 									ShiroInfo.getHashes().remove(hash);

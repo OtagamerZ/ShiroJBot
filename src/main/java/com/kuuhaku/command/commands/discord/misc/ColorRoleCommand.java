@@ -104,7 +104,7 @@ public class ColorRoleCommand extends Command {
 		if (args[0].equalsIgnoreCase("nenhum")) {
 			guild.modifyMemberRoles(member, roles).queue();
 
-			channel.sendMessage("Sua cor foi removida com sucesso!").queue();
+			channel.sendMessage("✅ | Sua cor foi removida com sucesso!").queue();
 			return;
 		}
 
@@ -139,7 +139,7 @@ public class ColorRoleCommand extends Command {
 
 		guild.modifyMemberRoles(member, roles).queue();
 		guild.addRoleToMember(member, r).queue();
-		channel.sendMessage("Sua cor foi definida como " + r.getName() + " com sucesso!").queue();
+		channel.sendMessage("✅ | Sua cor foi definida como " + r.getName() + " com sucesso!").queue();
 		GuildDAO.updateGuildSettings(gc);
 	}
 }

@@ -15,6 +15,58 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de códigos promocionais resgatáveis">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BlacklistCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BlacklistCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/LockRankedCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/LockRankedCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SweepCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SweepCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedLeaveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedLeaveCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchDropCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchDropCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchKawaiponCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchKawaiponCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AuctionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AuctionCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BiographyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BiographyCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyConsumableCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyConsumableCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ColorRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ColorRoleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DestinyCardsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DestinyCardsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EmbedCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EmbedCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameBackgroundCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameBackgroundCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameColorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameColorCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/GiftCodeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/GiftCodeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LotteryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LotteryCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PollCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PollCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ProfileColorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ProfileColorCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ProfileTrophyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ProfileTrophyCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoAvatarCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoAvatarCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoNameCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoNameCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RateCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RateCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RedeemCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RedeemCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RevertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RevertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/UnbindCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/UnbindCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddColorRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddColorRoleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/BackupCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/BackupCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/BanMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/BanMemberCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/GatekeeperCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/GatekeeperCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/KickMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/KickMemberCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MakeLogCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MakeLogCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ModifyRulesCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ModifyRulesCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MuteMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MuteMemberCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PurchaseBuffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PurchaseBuffCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RoleChooserCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RoleChooserCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/UnmuteMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/UnmuteMemberCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TetEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TetEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/VipItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/VipItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Music.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Music.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -968,14 +1020,7 @@
       <workItem from="1609877266142" duration="5509000" />
       <workItem from="1609898703129" duration="7007000" />
       <workItem from="1609962456971" duration="9728000" />
-      <workItem from="1609988939110" duration="3619000" />
-    </task>
-    <task id="LOCAL-03259" summary="Implementação de decks reserva">
-      <created>1609393283332</created>
-      <option name="number" value="03259" />
-      <option name="presentableId" value="LOCAL-03259" />
-      <option name="project" value="LOCAL" />
-      <updated>1609393283332</updated>
+      <workItem from="1609988939110" duration="4810000" />
     </task>
     <task id="LOCAL-03260" summary="Redução dos slots iniciais nos deck reservas">
       <created>1609393851432</created>
@@ -1313,7 +1358,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609991453341</updated>
     </task>
-    <option name="localTasksCounter" value="3308" />
+    <task id="LOCAL-03308" summary="Adição de códigos promocionais resgatáveis">
+      <created>1609992653573</created>
+      <option name="number" value="03308" />
+      <option name="presentableId" value="LOCAL-03308" />
+      <option name="project" value="LOCAL" />
+      <updated>1609992653573</updated>
+    </task>
+    <option name="localTasksCounter" value="3309" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1499,26 +1551,26 @@
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608208920619" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728513022" />
-    <state width="1648" height="322" key="GridCell.Tab.0.bottom" timestamp="1609992024255">
+    <state width="1648" height="322" key="GridCell.Tab.0.bottom" timestamp="1609993129410">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671595" />
-    <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1609992024255" />
-    <state width="1648" height="322" key="GridCell.Tab.0.center" timestamp="1609992024255">
+    <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1609993129410" />
+    <state width="1648" height="322" key="GridCell.Tab.0.center" timestamp="1609993129410">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671594" />
-    <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1609992024255" />
-    <state width="1648" height="322" key="GridCell.Tab.0.left" timestamp="1609992024255">
+    <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1609993129410" />
+    <state width="1648" height="322" key="GridCell.Tab.0.left" timestamp="1609993129410">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671594" />
-    <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1609992024255" />
-    <state width="1648" height="322" key="GridCell.Tab.0.right" timestamp="1609992024255">
+    <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1609993129410" />
+    <state width="1648" height="322" key="GridCell.Tab.0.right" timestamp="1609993129410">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671595" />
-    <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1609992024255" />
+    <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1609993129410" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1607347986126">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1542,11 +1594,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609991465682">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609992655913">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609991465682" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609992655913" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1588,11 +1640,11 @@
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608122622979" />
     <state x="651" y="274" key="extract.method.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1608350738643" />
-    <state x="339" y="117" width="1094" height="808" key="find.popup" timestamp="1609732189810">
+    <state x="339" y="117" width="1094" height="808" key="find.popup" timestamp="1609993781497">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608310170929" />
-    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1609732189810" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1609993781497" />
     <state x="686" y="303" key="git4idea.ui.GitUnstashDialog" timestamp="1607912268563">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1606,11 +1658,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="540" y="262" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116448554" />
-    <state x="567" y="240" width="768" height="698" key="run.anything.popup" timestamp="1609972618321">
+    <state x="567" y="240" width="768" height="698" key="run.anything.popup" timestamp="1609993622933">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608309711856" />
-    <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1609972618321" />
+    <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1609993622933" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup" timestamp="1609729309112">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

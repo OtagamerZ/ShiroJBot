@@ -111,7 +111,7 @@ public class SellCardCommand extends Command {
                                             CardMarket cm = new CardMarket(author.getId(), card, price);
                                             CardMarketDAO.saveCard(cm);
 
-                                            s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Carta anunciada com sucesso!")).queue();
+                                            s.delete().flatMap(d -> channel.sendMessage("✅ | Carta anunciada com sucesso!")).queue();
                                         }
                                     }), true, 1, TimeUnit.MINUTES,
                                     u -> u.getId().equals(author.getId()),
@@ -161,7 +161,7 @@ public class SellCardCommand extends Command {
                                             EquipmentMarket em = new EquipmentMarket(author.getId(), eq, price);
                                             EquipmentMarketDAO.saveCard(em);
 
-                                            s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Equipamento anunciado com sucesso!")).queue();
+                                            s.delete().flatMap(d -> channel.sendMessage("✅ | Equipamento anunciado com sucesso!")).queue();
                                         }
                                     }), true, 1, TimeUnit.MINUTES,
                                     u -> u.getId().equals(author.getId()),
@@ -211,7 +211,7 @@ public class SellCardCommand extends Command {
                                             FieldMarket fm = new FieldMarket(author.getId(), f, price);
                                             FieldMarketDAO.saveCard(fm);
 
-                                            s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Arena anunciada com sucesso!")).queue();
+                                            s.delete().flatMap(d -> channel.sendMessage("✅ | Arena anunciada com sucesso!")).queue();
                                         }
                                     }), true, 1, TimeUnit.MINUTES,
                                     u -> u.getId().equals(author.getId()),

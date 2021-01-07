@@ -685,7 +685,7 @@ public class ShiroEvents extends ListenerAdapter {
 											c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
 								}
 							}
-							event.getChannel().sendMessage("Mensagem enviada com sucesso!").queue();
+							event.getChannel().sendMessage("✅ | Mensagem enviada com sucesso!").queue();
 						} catch (NumberFormatException e) {
 							event.getChannel().sendMessage("❌ | ID inválido.").queue();
 						}
@@ -706,7 +706,7 @@ public class ShiroEvents extends ListenerAdapter {
 											c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
 								}
 							}
-							event.getChannel().sendMessage("Usuário bloqueado com sucesso!").queue();
+							event.getChannel().sendMessage("✅ | Usuário bloqueado com sucesso!").queue();
 						} catch (NumberFormatException e) {
 							event.getChannel().sendMessage("❌ | ID inválido.").queue();
 						}
@@ -822,7 +822,7 @@ public class ShiroEvents extends ListenerAdapter {
 				acc.addVCredit((long) Math.ceil(value * be.getRate()), this.getClass());
 				AccountDAO.saveAccount(acc);
 
-				msg.getChannel().sendMessage("Obrigada, seus " + value + " " + be.getCurrency() + (value != 1 ? "s" : "") + " foram convertidos em " + (long) (value * be.getRate()) + " créditos voláteis com sucesso!").queue();
+				msg.getChannel().sendMessage("✅ | Obrigada, seus " + value + " " + be.getCurrency() + (value != 1 ? "s" : "") + " foram convertidos em " + (long) (value * be.getRate()) + " créditos voláteis com sucesso!").queue();
 			}
 		}
 	}

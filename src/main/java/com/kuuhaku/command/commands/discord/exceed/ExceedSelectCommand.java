@@ -104,7 +104,7 @@ public class ExceedSelectCommand extends Command {
 
 				String e = ExceedDAO.getExceed(author.getId());
 
-				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + e + "**!").queue(null, Helper::doNothing);
+				m.editMessage("✅ | Exceed escolhido com sucesso, você agora pertence à **" + e + "**!").queue(null, Helper::doNothing);
 				for (ExceedMember exceedMember : ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())))) {
 					String exm = exceedMember.getId();
 					User u = Main.getInfo().getUserByID(exm);

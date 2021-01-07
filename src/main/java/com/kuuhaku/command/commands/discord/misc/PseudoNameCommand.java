@@ -52,7 +52,7 @@ public class PseudoNameCommand extends Command {
 		} else if (Helper.equalsAny(args[0], "reset", "limpar")) {
 			mb.setPseudoName("");
 			MemberDAO.updateMemberConfigs(mb);
-			channel.sendMessage("Pseudônimo limpo com sucesso!").queue();
+			channel.sendMessage("✅ | Pseudônimo limpo com sucesso!").queue();
 			return;
 		} else if (String.join(" ", args).length() > 32) {
 			channel.sendMessage("❌ | Por favor escolha um nome mais curto.").queue();
@@ -61,6 +61,6 @@ public class PseudoNameCommand extends Command {
 
 		mb.setPseudoName(String.join(" ", args));
 		MemberDAO.updateMemberConfigs(mb);
-		channel.sendMessage("Pseudônimo definido com sucesso!").queue();
+		channel.sendMessage("✅ | Pseudônimo definido com sucesso!").queue();
 	}
 }
