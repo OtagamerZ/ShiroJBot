@@ -99,9 +99,13 @@ public class ShoukanCommand extends Command {
 				return;
 			}
 
+			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 			com.kuuhaku.model.persistent.Member m = MemberDAO.getHighestProfile(author.getId());
 			if (m.getLevel() < 30) {
 				channel.sendMessage("❌ | É necessário ter ao menos nível 30 para poder jogar partidas ranqueadas.").queue();
+				return;
+			} else if (mmr.getWins() + mmr.getLosses() < 50) {
+				channel.sendMessage("❌ | É necessário ter jogado ao menos 50 partidas para poder entrar na fila ranqueada.").queue();
 				return;
 			}
 
@@ -117,8 +121,6 @@ public class ShoukanCommand extends Command {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 				return;
 			}
-
-			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 
 			if (mm.inGame(author.getId())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
