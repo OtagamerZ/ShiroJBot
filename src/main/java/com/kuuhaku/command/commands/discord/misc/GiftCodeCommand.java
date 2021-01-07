@@ -62,6 +62,7 @@ public class GiftCodeCommand extends Command {
 				try {
 					int i = Integer.parseInt(args[1]);
 					GiftCodeDAO.generateGiftCodes(i);
+					channel.sendMessage("✅ | Códigos gerados com sucesso.").queue();
 				} catch (NumberFormatException e) {
 					channel.sendMessage("❌ | Quantidade inválida.").queue();
 				}
@@ -78,6 +79,8 @@ public class GiftCodeCommand extends Command {
 					return;
 				}
 				gc.useCode(author.getId());
+
+				channel.sendMessage("✅ | Código resgatado com sucesso.").queue();
 			}
 		}
 	}

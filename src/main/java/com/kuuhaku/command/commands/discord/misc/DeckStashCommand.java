@@ -149,7 +149,7 @@ public class DeckStashCommand extends Command {
 			DeckStashDAO.saveStash(ds);
 			KawaiponDAO.saveKawaipon(kp);
 
-			channel.sendMessage(":white_check_mark: | Deck alternado com sucesso.").queue();
+			channel.sendMessage("✅ | Deck alternado com sucesso.").queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage("❌ | O número do slot precisa ser um valor inteiro.").queue();
 		}

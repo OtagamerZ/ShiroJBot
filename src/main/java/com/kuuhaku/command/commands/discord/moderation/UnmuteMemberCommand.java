@@ -78,7 +78,7 @@ public class UnmuteMemberCommand extends Command {
 			MemberDAO.removeMutedMember(m);
 
 			Helper.logToChannel(author, false, null, mb.getAsMention() + " foi dessilenciado por " + author.getAsMention(), guild);
-			channel.sendMessage("Usuário dessilenciado com sucesso!").queue();
+			channel.sendMessage("✅ | Usuário dessilenciado com sucesso!").queue();
 		} catch (InsufficientPermissionException | HierarchyException e) {
 			channel.sendMessage("❌ | Não possuo a permissão para dessilenciar membros.").queue();
 		}

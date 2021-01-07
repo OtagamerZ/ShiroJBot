@@ -159,7 +159,7 @@ public class PurchaseBuffCommand extends Command {
 
 		GuildBuffDAO.saveBuffs(gb);
 		AccountDAO.saveAccount(acc);
-		if (tier != 4) channel.sendMessage("Melhoria aplicada com sucesso! (" + sb.getTime() + " dias).").queue();
-		else channel.sendMessage("Melhoria aplicada com sucesso! (" + sb.getTime() + " minuto). CORRA!!!").queue();
+		if (tier != 4) channel.sendMessage("✅ | Melhoria aplicada com sucesso! (" + sb.getTime() + " dias).").queue();
+		else channel.sendMessage("✅ | Melhoria aplicada com sucesso! (" + sb.getTime() + " minuto). CORRA!!!").queue();
 	}
 }

@@ -78,6 +78,6 @@ public class CatchDropCommand extends Command {
 		Main.getInfo().getCurrentDrop().invalidate(guild.getId());
 		p.award(author);
 
-		channel.sendMessage(author.getAsMention() + " coletou o drop com sucesso!").queue();
+		channel.sendMessage("✅ | " + author.getAsMention() + " coletou o drop com sucesso!").queue();
 	}
 }
