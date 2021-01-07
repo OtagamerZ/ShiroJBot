@@ -80,7 +80,8 @@ public class GiftCode {
 		String imports = """
 				//%s
 				import com.kuuhaku.model.persistent.Account;
-				          				
+				import com.kuuhaku.model.persistent.GiftCode;
+								
 				          """.formatted(code);
 
 		Account acc = AccountDAO.getAccount(id);
