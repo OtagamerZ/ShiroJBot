@@ -104,8 +104,8 @@ public class ShoukanCommand extends Command {
 			if (m.getLevel() < 30) {
 				channel.sendMessage("❌ | É necessário ter ao menos nível 30 para poder jogar partidas ranqueadas.").queue();
 				return;
-			} else if (mmr.getWins() + mmr.getLosses() < 50) {
-				channel.sendMessage("❌ | É necessário ter jogado ao menos 50 partidas para poder entrar na fila ranqueada.").queue();
+			} else if (mmr.getWins() + mmr.getLosses() < 30) {
+				channel.sendMessage("❌ | É necessário ter jogado ao menos 30 partidas para poder entrar na fila ranqueada.").queue();
 				return;
 			}
 
