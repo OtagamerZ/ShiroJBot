@@ -59,7 +59,7 @@ public class ShoukanDeck {
 			);
 		fields.stream()
 			.peek(f -> f.setAcc(acc))
-			.sort(Comparator
+			.sorted(Comparator
 				.comparing(f -> f.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 			);
 
