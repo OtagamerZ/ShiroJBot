@@ -79,6 +79,7 @@
         <class>com.kuuhaku.model.persistent.Trophy</class>
         <class>com.kuuhaku.model.persistent.MatchMakingRating</class>
         <class>com.kuuhaku.model.persistent.DeckStash</class>
+        <class>com.kuuhaku.model.persistent.GiftCode</class>
 
         <properties>
             <!-- dados da conexao -->

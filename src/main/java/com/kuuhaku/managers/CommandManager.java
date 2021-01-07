@@ -485,6 +485,9 @@ public class CommandManager {
 			put(DeckStashCommand.class, new Argument(
 					"reserva", new String[]{"stash", "estoque"}, "req_slot", "cmd_deck-stash", MISC, true
 			));
+			put(GiftCodeCommand.class, new Argument(
+					"giftcode", "req_type-amount-code", "cmd_gift-code", MISC, false
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(
