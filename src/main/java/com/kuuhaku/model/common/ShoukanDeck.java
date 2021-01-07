@@ -45,17 +45,23 @@ public class ShoukanDeck {
 		List<Equipment> equips = kp.getEquipments();
 		List<Field> fields = kp.getFields();
 
-		champs.sort(Comparator
+		champs.stream()
+			.peek(c -> c.setAcc(acc))
+			.sorted(Comparator
 				.comparing(Champion::getMana).reversed()
 				.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-		);
-		equips.sort(Comparator
+			);
+		equips.stream()
+			.peek(e -> e.setAcc(acc))
+			.sorted(Comparator
 				.comparing(Equipment::getTier).reversed()
 				.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-		);
-		fields.sort(Comparator
+			);
+		fields.stream()
+			.peek(f -> f.setAcc(acc))
+			.sort(Comparator
 				.comparing(f -> f.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-		);
+			);
 
 		BufferedImage deck = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/deck.jpg")));
 		BufferedImage destiny = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/destiny.png")));
