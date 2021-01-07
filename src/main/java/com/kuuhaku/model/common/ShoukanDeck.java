@@ -50,18 +50,21 @@ public class ShoukanDeck {
 			.sorted(Comparator
 				.comparing(Champion::getMana).reversed()
 				.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-			);
+			)
+			.collect(Collectors.toList());
 		equips = equips.stream()
 			.peek(e -> e.setAcc(acc))
 			.sorted(Comparator
 				.comparing(Equipment::getTier).reversed()
 				.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-			);
+			)
+			.collect(Collectors.toList());
 		fields = fields.stream()
 			.peek(f -> f.setAcc(acc))
 			.sorted(Comparator
 				.comparing(f -> f.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-			);
+			)
+			.collect(Collectors.toList());
 
 		BufferedImage deck = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/deck.jpg")));
 		BufferedImage destiny = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/destiny.png")));
