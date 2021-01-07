@@ -13,15 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de códigos promocionais resgatáveis">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileChampionsCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de comando para testar efeitos dos campeões">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddColorRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddColorRoleCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RegenRulesCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RegenRulesCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -965,35 +959,8 @@
       <workItem from="1609898703129" duration="7007000" />
       <workItem from="1609962456971" duration="9728000" />
       <workItem from="1609988939110" duration="7182000" />
-      <workItem from="1610047250309" duration="2004000" />
-    </task>
-    <task id="LOCAL-03263" summary="Melhorias gerais e remoção completa do forEach">
-      <created>1609732447070</created>
-      <option name="number" value="03263" />
-      <option name="presentableId" value="LOCAL-03263" />
-      <option name="project" value="LOCAL" />
-      <updated>1609732447070</updated>
-    </task>
-    <task id="LOCAL-03264" summary="Melhorias gerais e remoção completa do forEach">
-      <created>1609732817193</created>
-      <option name="number" value="03264" />
-      <option name="presentableId" value="LOCAL-03264" />
-      <option name="project" value="LOCAL" />
-      <updated>1609732817193</updated>
-    </task>
-    <task id="LOCAL-03265" summary="Melhorias gerais e remoção completa do forEach">
-      <created>1609733038322</created>
-      <option name="number" value="03265" />
-      <option name="presentableId" value="LOCAL-03265" />
-      <option name="project" value="LOCAL" />
-      <updated>1609733038322</updated>
-    </task>
-    <task id="LOCAL-03266" summary="Melhorias gerais e remoção completa do forEach">
-      <created>1609734831855</created>
-      <option name="number" value="03266" />
-      <option name="presentableId" value="LOCAL-03266" />
-      <option name="project" value="LOCAL" />
-      <updated>1609734831855</updated>
+      <workItem from="1610047250309" duration="5268000" />
+      <workItem from="1610060851975" duration="795000" />
     </task>
     <task id="LOCAL-03267" summary="Melhorias gerais e remoção completa do forEach">
       <created>1609734900324</created>
@@ -1310,7 +1277,35 @@
       <option name="project" value="LOCAL" />
       <updated>1609994579719</updated>
     </task>
-    <option name="localTasksCounter" value="3312" />
+    <task id="LOCAL-03312" summary="Adição de comando para testar efeitos dos campeões">
+      <created>1610052737865</created>
+      <option name="number" value="03312" />
+      <option name="presentableId" value="LOCAL-03312" />
+      <option name="project" value="LOCAL" />
+      <updated>1610052737865</updated>
+    </task>
+    <task id="LOCAL-03313" summary="Adição de comando para testar efeitos dos campeões">
+      <created>1610052889696</created>
+      <option name="number" value="03313" />
+      <option name="presentableId" value="LOCAL-03313" />
+      <option name="project" value="LOCAL" />
+      <updated>1610052889696</updated>
+    </task>
+    <task id="LOCAL-03314" summary="Adição de comando para testar efeitos dos campeões">
+      <created>1610053516320</created>
+      <option name="number" value="03314" />
+      <option name="presentableId" value="LOCAL-03314" />
+      <option name="project" value="LOCAL" />
+      <updated>1610053516320</updated>
+    </task>
+    <task id="LOCAL-03315" summary="Adição de comando para testar efeitos dos campeões">
+      <created>1610053755004</created>
+      <option name="number" value="03315" />
+      <option name="presentableId" value="LOCAL-03315" />
+      <option name="project" value="LOCAL" />
+      <updated>1610053755004</updated>
+    </task>
+    <option name="localTasksCounter" value="3316" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1396,7 +1391,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Novo amuleto: Sortilégio" />
     <MESSAGE value="Correção nas configurações de servidor" />
     <MESSAGE value="Aumento no ganho de créditos por voto" />
     <MESSAGE value="Implementação de threading nos jogos" />
@@ -1421,7 +1415,8 @@
     <MESSAGE value="Melhoria no modo roleta" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Adição de códigos promocionais resgatáveis" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de códigos promocionais resgatáveis" />
+    <MESSAGE value="Adição de comando para testar efeitos dos campeões" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de comando para testar efeitos dos campeões" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1457,11 +1452,11 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1609989829053">
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1610052625193">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1608297788251" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1609989829053" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1610052625193" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1539,11 +1534,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1609994583829">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610053756217">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1609994583829" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610053756217" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
