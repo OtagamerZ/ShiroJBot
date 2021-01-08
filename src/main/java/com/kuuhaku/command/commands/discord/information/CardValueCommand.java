@@ -104,12 +104,6 @@ public class CardValueCommand extends Command {
 						.collect(Collectors.toList());
 			}
 
-			if (normalCards.size() <= 1 && foilCards.size() <= 1) {
-				channel.sendMessage("❌ | Essa carta ainda não foi vendida recentemente ou possui apenas 1 venda.").queue();
-				m.delete().queue();
-				return;
-			}
-
 			XYChart chart = new XYChartBuilder()
 					.width(800)
 					.height(600)
@@ -151,6 +145,12 @@ public class CardValueCommand extends Command {
 			List<Map.Entry<Date, Integer>> foilData = foilValues.entrySet()
 					.stream()
 					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
+
+			if (normalData.size() <= 1 && foilData.size() <= 1) {
+				channel.sendMessage("❌ | Essa carta ainda não foi vendida nos últimos 30 dias ou possui vendas em apenas .").queue();
+				m.delete().queue();
+				return;
+			}
 
 			if (normalCards.size() > 1)
 				chart.addSeries("Normal",
