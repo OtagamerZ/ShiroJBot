@@ -49,7 +49,7 @@ public class DivorceCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		try {
-			if (!WaifuDAO.isWaifued(author)) {
+			if (!WaifuDAO.isWaifued(author.getId())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_divorce-no-waifu")).queue();
 				return;
 			}
