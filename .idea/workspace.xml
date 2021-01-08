@@ -15,7 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de comando para testar efeitos dos campeões">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RegenRulesCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RegenRulesCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -960,14 +960,8 @@
       <workItem from="1609962456971" duration="9728000" />
       <workItem from="1609988939110" duration="7182000" />
       <workItem from="1610047250309" duration="5268000" />
-      <workItem from="1610060851975" duration="795000" />
-    </task>
-    <task id="LOCAL-03267" summary="Melhorias gerais e remoção completa do forEach">
-      <created>1609734900324</created>
-      <option name="number" value="03267" />
-      <option name="presentableId" value="LOCAL-03267" />
-      <option name="project" value="LOCAL" />
-      <updated>1609734900325</updated>
+      <workItem from="1610060851975" duration="861000" />
+      <workItem from="1610074352582" duration="295000" />
     </task>
     <task id="LOCAL-03268" summary="Melhorias gerais e remoção completa do forEach">
       <created>1609734919231</created>
@@ -1305,7 +1299,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610053755004</updated>
     </task>
-    <option name="localTasksCounter" value="3316" />
+    <task id="LOCAL-03316" summary="Adição de comando para testar efeitos dos campeões">
+      <created>1610061662669</created>
+      <option name="number" value="03316" />
+      <option name="presentableId" value="LOCAL-03316" />
+      <option name="project" value="LOCAL" />
+      <updated>1610061662669</updated>
+    </task>
+    <option name="localTasksCounter" value="3317" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1534,11 +1535,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610053756217">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610061665455">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610053756217" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610061665455" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
