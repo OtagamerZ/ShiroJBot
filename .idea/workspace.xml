@@ -13,9 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de comando para testar efeitos dos campeões">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/inititate_ii.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/banners/initiate/initiate_ii.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,6 +166,19 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -961,28 +975,8 @@
       <workItem from="1609988939110" duration="7182000" />
       <workItem from="1610047250309" duration="5268000" />
       <workItem from="1610060851975" duration="861000" />
-      <workItem from="1610074352582" duration="295000" />
-    </task>
-    <task id="LOCAL-03268" summary="Melhorias gerais e remoção completa do forEach">
-      <created>1609734919231</created>
-      <option name="number" value="03268" />
-      <option name="presentableId" value="LOCAL-03268" />
-      <option name="project" value="LOCAL" />
-      <updated>1609734919231</updated>
-    </task>
-    <task id="LOCAL-03269" summary="Correções">
-      <created>1609786774295</created>
-      <option name="number" value="03269" />
-      <option name="presentableId" value="LOCAL-03269" />
-      <option name="project" value="LOCAL" />
-      <updated>1609786774295</updated>
-    </task>
-    <task id="LOCAL-03270" summary="Correções">
-      <created>1609787031191</created>
-      <option name="number" value="03270" />
-      <option name="presentableId" value="LOCAL-03270" />
-      <option name="project" value="LOCAL" />
-      <updated>1609787031192</updated>
+      <workItem from="1610074352582" duration="3641000" />
+      <workItem from="1610133629880" duration="607000" />
     </task>
     <task id="LOCAL-03271" summary="Várias mudanças no Shoukan">
       <created>1609791092404</created>
@@ -1306,7 +1300,28 @@
       <option name="project" value="LOCAL" />
       <updated>1610061662669</updated>
     </task>
-    <option name="localTasksCounter" value="3317" />
+    <task id="LOCAL-03317" summary="Adição de comando para testar efeitos dos campeões">
+      <created>1610074853460</created>
+      <option name="number" value="03317" />
+      <option name="presentableId" value="LOCAL-03317" />
+      <option name="project" value="LOCAL" />
+      <updated>1610074853460</updated>
+    </task>
+    <task id="LOCAL-03318" summary="Mudança no descarte de cartas no Shoukan">
+      <created>1610075247862</created>
+      <option name="number" value="03318" />
+      <option name="presentableId" value="LOCAL-03318" />
+      <option name="project" value="LOCAL" />
+      <updated>1610075247862</updated>
+    </task>
+    <task id="LOCAL-03319" summary="Correções">
+      <created>1610080621980</created>
+      <option name="number" value="03319" />
+      <option name="presentableId" value="LOCAL-03319" />
+      <option name="project" value="LOCAL" />
+      <updated>1610080621980</updated>
+    </task>
+    <option name="localTasksCounter" value="3320" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1392,7 +1407,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nas configurações de servidor" />
     <MESSAGE value="Aumento no ganho de créditos por voto" />
     <MESSAGE value="Implementação de threading nos jogos" />
     <MESSAGE value="Implementação de threading" />
@@ -1405,7 +1419,6 @@
     <MESSAGE value="Melhorias gerais" />
     <MESSAGE value="Correnção nos caches" />
     <MESSAGE value="Melhorias gerais e remoção completa do forEach" />
-    <MESSAGE value="Correções" />
     <MESSAGE value="Várias mudanças no Shoukan" />
     <MESSAGE value="Mudança nas cartas-feitiço" />
     <MESSAGE value="Remoção do xadrez;&#10;Remoção do spawn de cartas/drops no canal da Twitch;&#10;Correção no Hitotsu;" />
@@ -1417,7 +1430,9 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Adição de códigos promocionais resgatáveis" />
     <MESSAGE value="Adição de comando para testar efeitos dos campeões" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de comando para testar efeitos dos campeões" />
+    <MESSAGE value="Mudança no descarte de cartas no Shoukan" />
+    <MESSAGE value="Correções" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1535,11 +1550,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610061665455">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610080623213">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610061665455" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610080623213" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
