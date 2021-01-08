@@ -75,7 +75,7 @@ public class MarryCommand extends Command {
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-the-answer-is-no")).queue();
 				}
 				return;
-			} else if (WaifuDAO.isWaifued(author) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0))) {
+			} else if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
 				return;
 			} else if (author.getId().equals(Main.getSelfUser().getId())) {
@@ -101,7 +101,7 @@ public class MarryCommand extends Command {
 					if (event.getAuthor().isBot() || event.getAuthor() != message.getMentionedUsers().get(0) || event.getChannel() != channel)
 						return;
 
-					if (WaifuDAO.isWaifued(author) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0))) {
+					if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
 						return;
 					}

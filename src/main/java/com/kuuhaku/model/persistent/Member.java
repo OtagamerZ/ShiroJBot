@@ -110,7 +110,7 @@ public class Member {
 	}
 
 	public static String getWaifu(User u) {
-		Couple c = WaifuDAO.getCouple(u);
+		Couple c = WaifuDAO.getCouple(u.getId());
 		if (c == null) return "";
 		return c.getHusbando().equals(u.getId()) ? c.getWaifu() : c.getHusbando();
 	}
