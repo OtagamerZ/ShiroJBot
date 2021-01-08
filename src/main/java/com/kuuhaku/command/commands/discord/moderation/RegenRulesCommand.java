@@ -69,7 +69,7 @@ public class RegenRulesCommand extends Command {
 					É proibido compartilhar qual é a resposta, se não não teria graça!
 				""".formatted(String.join("\n\n", rules));
 			else
-				text = text + "\n\nCaso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna";
+				text = String.join("\n\n", rules) + "\n\nCaso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna";
 
 			if (text.length() > 2000) {
 				channel.sendMessage("❌ | Mensagem das regras ultrapassa 2000 caractéres.").queue();
