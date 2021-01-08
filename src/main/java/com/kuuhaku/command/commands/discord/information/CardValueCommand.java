@@ -35,6 +35,8 @@ import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.Styler;
 
 import java.awt.*;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -82,24 +84,28 @@ public class CardValueCommand extends Command {
 				normalCards = CardMarketDAO.getCardsByCard(c.getId(), false)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(1, ChronoUnit.MONTHS))))
 						.collect(Collectors.toList());
 				foilCards = CardMarketDAO.getCardsByCard(c.getId(), true)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(1, ChronoUnit.MONTHS))))
 						.collect(Collectors.toList());
 			} else {
 				normalCards = CardMarketDAO.getCardsByRarity(r, false)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(1, ChronoUnit.MONTHS))))
 						.collect(Collectors.toList());
 				foilCards = CardMarketDAO.getCardsByRarity(r, true)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(1, ChronoUnit.MONTHS))))
 						.collect(Collectors.toList());
 			}
 
 			if (normalCards.size() <= 1 && foilCards.size() <= 1) {
-				channel.sendMessage("❌ | Essa carta ainda não foi anunciada no mercado ainda ou possui apenas 1 oferta.").queue();
+				channel.sendMessage("❌ | Essa carta ainda não foi vendida recentemente ou possui apenas 1 venda.").queue();
 				m.delete().queue();
 				return;
 			}

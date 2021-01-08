@@ -49,7 +49,7 @@ public class CardMarketDAO {
 				WHERE cm.card.card.id = UPPER(:id) 
 				AND cm.card.foil = :foil 
 				AND cm.publishDate IS NOT NULL
-				AND cm.buyer IS NOT NULL
+				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
 				""", CardMarket.class);
 		q.setParameter("id", id);
@@ -72,7 +72,7 @@ public class CardMarketDAO {
 				WHERE cm.card.card.rarity = :rarity 
 				AND cm.card.foil = :foil 
 				AND cm.publishDate IS NOT NULL
-				AND cm.buyer IS NOT NULL
+				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
 				""", CardMarket.class);
 		q.setParameter("rarity", r);
