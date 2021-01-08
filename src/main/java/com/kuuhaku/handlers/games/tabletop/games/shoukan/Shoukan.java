@@ -80,6 +80,7 @@ public class Shoukan extends GlobalGame {
 	private int fusionLock = 0;
 	private int spellLock = 0;
 	private int effectLock = 0;
+	private List<Drawable> discardBatch = new ArrayList<>();
 
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
@@ -253,7 +254,30 @@ public class Shoukan extends GlobalGame {
 				}
 
 				Drawable d = h.getCards().get(index);
-				String msg = null;
+				String msg;
+
+				if (args[1].equalsIgnoreCase("d")) {
+					d.setAvailable(false);
+					discardBatch.add(d);
+
+					resetTimerKeepTurn();
+					AtomicBoolean shownHand = new AtomicBoolean(false);
+					channel.sendMessage(h.getUser().getName() + " descartou a carta " + d.getCard().getName() + ".")
+							.addFile(Helper.getBytes(arena.render(this, hands), "jpg"), "board.jpg")
+							.queue(s -> {
+								this.message.compute(s.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return s;
+								});
+								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								if (!shownHand.get()) {
+									shownHand.set(true);
+									h.showHand();
+								}
+							});
+					return;
+				}
 
 				if (!d.isAvailable()) {
 					channel.sendMessage("❌ | Essa carta já foi jogada neste turno.").queue(null, Helper::doNothing);
@@ -373,28 +397,7 @@ public class Shoukan extends GlobalGame {
 					msg = h.getUser().getName() + " equipou " + e.getCard().getName() + " em " + t.getName() + ".";
 				} else if (d instanceof Champion) {
 					Champion c = (Champion) d.copy();
-					if (args[1].equalsIgnoreCase("d")) {
-						d.setAvailable(false);
-						arena.getGraveyard().get(h.getSide()).add(c);
-
-						resetTimerKeepTurn();
-						AtomicBoolean shownHand = new AtomicBoolean(false);
-						channel.sendMessage(h.getUser().getName() + " descartou a carta " + d.getCard().getName() + ".")
-								.addFile(Helper.getBytes(arena.render(this, hands), "jpg"), "board.jpg")
-								.queue(s -> {
-									this.message.compute(s.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return s;
-									});
-									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-									if (!shownHand.get()) {
-										shownHand.set(true);
-										h.showHand();
-									}
-								});
-						return;
-					} else if (args.length < 3) {
+					if (args.length < 3) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 						return;
 					} else if (h.getMana() < ((Champion) d).getMana()) {
@@ -1108,6 +1111,8 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 
+				arena.getGraveyard().get(h.get().getSide()).addAll(discardBatch);
+				discardBatch.clear();
 				resetTimer(this);
 
 				phase = Phase.PLAN;
