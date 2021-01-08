@@ -257,8 +257,8 @@ public class Shoukan extends GlobalGame {
 				String msg;
 
 				if (args[1].equalsIgnoreCase("d")) {
-					d.setAvailable(false);
 					discardBatch.add(d.copy());
+					d.setAvailable(false);
 
 					resetTimerKeepTurn();
 					AtomicBoolean shownHand = new AtomicBoolean(false);

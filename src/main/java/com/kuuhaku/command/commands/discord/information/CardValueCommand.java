@@ -84,23 +84,23 @@ public class CardValueCommand extends Command {
 				normalCards = CardMarketDAO.getCardsByCard(c.getId(), false)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50))
-						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(1, ChronoUnit.MONTHS))))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
 				foilCards = CardMarketDAO.getCardsByCard(c.getId(), true)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100))
-						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(1, ChronoUnit.MONTHS))))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
 			} else {
 				normalCards = CardMarketDAO.getCardsByRarity(r, false)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50))
-						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(1, ChronoUnit.MONTHS))))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
 				foilCards = CardMarketDAO.getCardsByRarity(r, true)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100))
-						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(1, ChronoUnit.MONTHS))))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
 			}
 
