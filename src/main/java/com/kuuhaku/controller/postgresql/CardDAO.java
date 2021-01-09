@@ -459,6 +459,22 @@ public class CardDAO {
         }
     }
 
+    public static Champion getRandomChampion(int mana) {
+        EntityManager em = Manager.getEntityManager();
+
+        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' AND c.mana = :mana ORDER BY RANDOM()", Champion.class);
+        q.setParameter("mana", mana);
+        q.setMaxResults(1);
+
+        try {
+            return (Champion) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public static Champion getFakeChampion() {
         EntityManager em = Manager.getEntityManager();
