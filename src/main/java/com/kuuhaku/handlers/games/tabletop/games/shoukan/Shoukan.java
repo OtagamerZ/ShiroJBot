@@ -260,6 +260,8 @@ public class Shoukan extends GlobalGame {
 					discardBatch.add(d.copy());
 					d.setAvailable(false);
 
+					if (makeFusion(h)) return;
+
 					resetTimerKeepTurn();
 					AtomicBoolean shownHand = new AtomicBoolean(false);
 					channel.sendMessage(h.getUser().getName() + " descartou a carta " + d.getCard().getName() + ".")
@@ -373,7 +375,7 @@ public class Shoukan extends GlobalGame {
 						e.activate(h, getHands().get(next), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
 						arena.getGraveyard().get(h.getSide()).add(e);
 
-						if (postCombat()) return;
+						if (makeFusion(h)) return;
 
 						String result = switch (e.getArgType()) {
 							case NONE -> h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + ".";
@@ -704,121 +706,7 @@ public class Shoukan extends GlobalGame {
 					} else if (postCombat()) return;
 				}
 
-				int yPower = Math.round(
-						yours.getFinAtk() *
-								(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
-				);
-
-				int hPower;
-				if (his.isDefending() || his.isFlipped() || his.getStun() > 0) {
-					if (his.isFlipped()) {
-						his.setFlipped(false);
-						if (his.hasEffect() && effectLock == 0) {
-							his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-							if (postCombat()) return;
-						}
-					}
-					hPower = Math.round(
-							his.getFinDef() *
-									(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
-					);
-				} else
-					hPower = Math.round(
-							his.getFinAtk() *
-									(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
-					);
-
-				if (yPower > hPower) {
-					yours.setAvailable(false);
-					yours.resetAttribs();
-					if (yours.hasEffect() && effectLock == 0) {
-						yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
-						if (postCombat()) return;
-					}
-					if (his.hasEffect() && effectLock == 0) {
-						his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-						if (postCombat()) return;
-					}
-
-					if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
-						Hand enemy = getHands().get(next);
-						enemy.removeHp(yPower - hPower);
-					}
-
-					killCard(next, is[1]);
-
-					if (!postCombat()) {
-						resetTimerKeepTurn();
-						channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
-								.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-								.queue(s -> {
-									this.message.compute(s.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return s;
-									});
-									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								});
-					}
-				} else if (yPower < hPower) {
-					yours.setAvailable(false);
-					his.resetAttribs();
-					if (yours.hasEffect() && effectLock == 0) {
-						yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
-						if (postCombat()) return;
-					}
-					if (his.hasEffect() && effectLock == 0) {
-						his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-						if (postCombat()) return;
-					}
-
-					if (yours.getBonus().getSpecialData().remove("noDamage") == null && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
-						h.removeHp(hPower - yPower);
-					}
-
-					killCard(h.getSide(), is[0]);
-
-					if (!postCombat()) {
-						resetTimerKeepTurn();
-						channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")")
-								.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-								.queue(s -> {
-									this.message.compute(s.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return s;
-									});
-									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								});
-					}
-				} else {
-					yours.setAvailable(false);
-					killCard(next, is[1]);
-					killCard(h.getSide(), is[0]);
-
-					if (yours.hasEffect() && effectLock == 0) {
-						yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
-						if (postCombat()) return;
-					}
-					if (his.hasEffect() && effectLock == 0) {
-						his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-						if (postCombat()) return;
-					}
-
-					if (!postCombat()) {
-						resetTimerKeepTurn();
-						channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
-								.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-								.queue(s -> {
-									this.message.compute(s.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return s;
-									});
-									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								});
-					}
-				}
+				attack(is);
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue(null, Helper::doNothing);
 
@@ -826,6 +714,252 @@ public class Shoukan extends GlobalGame {
 				channel.sendMessage("❌ | Índice inválido, o primeiro argumento deve ser uma casa com uma carta no seu lado do tabuleiro e o segundo deve ser uma casa com uma carta no lado do inimigo.").queue(null, Helper::doNothing);
 			}
 		}
+	}
+
+	public boolean attack(int[] is) {
+		Champion yours = getArena().getSlots().get(current).get(is[0]).getTop();
+		Champion his = getArena().getSlots().get(next).get(is[1]).getTop();
+
+		int yPower = Math.round(
+				yours.getFinAtk() *
+						(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+		);
+
+		int hPower;
+		if (his.isDefending() || his.isFlipped() || his.getStun() > 0) {
+			if (his.isFlipped()) {
+				his.setFlipped(false);
+				if (his.hasEffect() && effectLock == 0) {
+					his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+					if (postCombat()) return true;
+				}
+			}
+			hPower = Math.round(
+					his.getFinDef() *
+							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+			);
+		} else
+			hPower = Math.round(
+					his.getFinAtk() *
+							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+			);
+
+		if (yPower > hPower) {
+			yours.setAvailable(false);
+			yours.resetAttribs();
+			if (yours.hasEffect() && effectLock == 0) {
+				yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+			if (his.hasEffect() && effectLock == 0) {
+				his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+
+			if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+				Hand enemy = getHands().get(next);
+				enemy.removeHp(yPower - hPower);
+			}
+
+			killCard(next, is[1]);
+
+			if (!postCombat()) {
+				resetTimerKeepTurn();
+				channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						});
+			}
+		} else if (yPower < hPower) {
+			yours.setAvailable(false);
+			his.resetAttribs();
+			if (yours.hasEffect() && effectLock == 0) {
+				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+			if (his.hasEffect() && effectLock == 0) {
+				his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+
+			if (yours.getBonus().getSpecialData().remove("noDamage") == null && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+				Hand you = getHands().get(current);
+				you.removeHp(hPower - yPower);
+			}
+
+			killCard(current, is[0]);
+
+			if (!postCombat()) {
+				resetTimerKeepTurn();
+				channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")")
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						});
+			}
+		} else {
+			yours.setAvailable(false);
+			killCard(next, is[1]);
+			killCard(current, is[0]);
+
+			if (yours.hasEffect() && effectLock == 0) {
+				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+			if (his.hasEffect() && effectLock == 0) {
+				his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+
+			if (!postCombat()) {
+				resetTimerKeepTurn();
+				channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						});
+			}
+		}
+		return false;
+	}
+
+	public boolean forceAttack(int[] is) {
+		Champion yours = getArena().getSlots().get(next).get(is[0]).getTop();
+		Champion his = getArena().getSlots().get(current).get(is[1]).getTop();
+
+		int yPower = Math.round(
+				yours.getFinAtk() *
+						(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+		);
+
+		int hPower;
+		if (his.isDefending() || his.isFlipped() || his.getStun() > 0) {
+			if (his.isFlipped()) {
+				his.setFlipped(false);
+				if (his.hasEffect() && effectLock == 0) {
+					his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
+					if (postCombat()) return true;
+				}
+			}
+			hPower = Math.round(
+					his.getFinDef() *
+							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+			);
+		} else
+			hPower = Math.round(
+					his.getFinAtk() *
+							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+			);
+
+		if (yPower > hPower) {
+			yours.setAvailable(false);
+			yours.resetAttribs();
+			if (yours.hasEffect() && effectLock == 0) {
+				yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+			if (his.hasEffect() && effectLock == 0) {
+				his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+
+			if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+				Hand enemy = getHands().get(current);
+				enemy.removeHp(yPower - hPower);
+			}
+
+			killCard(current, is[1]);
+
+			if (!postCombat()) {
+				resetTimerKeepTurn();
+				channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						});
+			}
+		} else if (yPower < hPower) {
+			yours.setAvailable(false);
+			his.resetAttribs();
+			if (yours.hasEffect() && effectLock == 0) {
+				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+			if (his.hasEffect() && effectLock == 0) {
+				his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+
+			if (yours.getBonus().getSpecialData().remove("noDamage") == null && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+				Hand you = getHands().get(next);
+				you.removeHp(hPower - yPower);
+			}
+
+			killCard(next, is[0]);
+
+			if (!postCombat()) {
+				resetTimerKeepTurn();
+				channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")")
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						});
+			}
+		} else {
+			yours.setAvailable(false);
+			killCard(current, is[1]);
+			killCard(next, is[0]);
+
+			if (yours.hasEffect() && effectLock == 0) {
+				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+			if (his.hasEffect() && effectLock == 0) {
+				his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
+				if (postCombat()) return true;
+			}
+
+			if (!postCombat()) {
+				resetTimerKeepTurn();
+				channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						});
+			}
+		}
+		return false;
 	}
 
 	private boolean makeFusion(Hand h) {
@@ -973,6 +1107,41 @@ public class Shoukan extends GlobalGame {
 		ch.reset();
 		if (!ch.isFusion())
 			arena.getGraveyard().get(side).add(ch);
+	}
+
+	public void captureCard(Side side, int index, int source) {
+		Champion ch = getArena().getSlots().get(side).get(index).getTop();
+		if (ch == null) return;
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
+
+		for (int i = 0; i < slts.size(); i++) {
+			Equipment eq = slts.get(i).getBottom();
+			if (eq != null && eq.getLinkedTo().getLeft() == index) {
+				if (eq.getCharm() == Charm.SPELLSHIELD) {
+					unequipCard(side, i, slts);
+					return;
+				} else if (eq.getCharm() == Charm.SPELLMIRROR && source != -1) {
+					destroyCard(side == Side.TOP ? Side.BOTTOM : Side.TOP, source, index);
+					unequipCard(side, i, slts);
+					return;
+				}
+			}
+		}
+
+		slts.get(index).setTop(null);
+		for (SlotColumn<Champion, Equipment> sd : slts) {
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
+				Equipment eq = sd.getBottom();
+				eq.setLinkedTo(null);
+				if (eq.getTier() >= 4) arena.getBanished().add(eq);
+				else arena.getGraveyard().get(side).add(eq);
+				sd.setBottom(null);
+			}
+		}
+
+		ch.reset();
+		if (!ch.isFusion())
+			getHands().get(side == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch);
 	}
 
 	public void banishCard(Side side, int index, boolean equipment) {
@@ -1527,6 +1696,42 @@ public class Shoukan extends GlobalGame {
 			getArena().getBanished().addAll(inHand);
 			getArena().getBanished().addAll(inDeck);
 		}
+	}
+
+	public Champion getChampionFromGrave(Side s) {
+		LinkedList<Drawable> grv = getArena().getGraveyard().get(s);
+		for (int i = grv.size() - 1; i >= 0; i--)
+			if (grv.get(i) instanceof Champion)
+				return (Champion) grv.remove(i);
+
+		return null;
+	}
+
+	public Equipment getEquipmentFromGrave(Side s) {
+		LinkedList<Drawable> grv = getArena().getGraveyard().get(s);
+		for (int i = grv.size() - 1; i >= 0; i--)
+			if (grv.get(i) instanceof Equipment)
+				return (Equipment) grv.remove(i);
+
+		return null;
+	}
+
+	public Champion getChampionFromBanished() {
+		LinkedList<Drawable> grv = getArena().getBanished();
+		for (int i = grv.size() - 1; i >= 0; i--)
+			if (grv.get(i) instanceof Champion)
+				return (Champion) grv.remove(i);
+
+		return null;
+	}
+
+	public Equipment getEquipmentFromBanished() {
+		LinkedList<Drawable> grv = getArena().getBanished();
+		for (int i = grv.size() - 1; i >= 0; i--)
+			if (grv.get(i) instanceof Equipment)
+				return (Equipment) grv.remove(i);
+
+		return null;
 	}
 
 	public int getFusionLock() {
