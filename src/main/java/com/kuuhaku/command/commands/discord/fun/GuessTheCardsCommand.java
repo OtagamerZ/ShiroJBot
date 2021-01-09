@@ -94,93 +94,96 @@ public class GuessTheCardsCommand extends Command {
 
 			channel.sendMessage("Quais são as 3 cartas nesta imagem? Escreva os três nomes com `_` no lugar de espaços e separados por ponto-e-vírgula (`;`).")
 					.addFile(Helper.getBytes(img, "png"), "image.png")
-					.queue();
+					.queue(ms -> {
+						Main.getInfo().getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+							private final Consumer<Void> success = s -> {
+								ms.delete().queue(null, Helper::doNothing);
+								close();
+							};
+							private Future<?> timeout = channel.sendMessage("Acabou o tempo, as cartas eram `%s`, `%s` e `%s`".formatted(
+									names.get(0),
+									names.get(1),
+									names.get(2))
+							).queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
+							int chances = 2;
 
-			Main.getInfo().getShiroEvents().addHandler(guild, new SimpleMessageListener() {
-				private final Consumer<Void> success = s -> close();
-				private Future<?> timeout = channel.sendMessage("Acabou o tempo, as cartas eram `%s`, `%s` e `%s`".formatted(
-						names.get(0),
-						names.get(1),
-						names.get(2))
-				).queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
-				int chances = 2;
+							@Override
+							public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+								if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
+									return;
 
-				@Override
-				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-					if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
-						return;
+								if (event.getMessage().getContentRaw().equalsIgnoreCase("desistir")) {
+									channel.sendMessage("Você desistiu, as cartas eram `%s`, `%s` e `%s`".formatted(
+											names.get(0),
+											names.get(1),
+											names.get(2))
+									).queue();
+									success.accept(null);
+									timeout.cancel(true);
+									timeout = null;
+									return;
+								}
 
-					if (event.getMessage().getContentRaw().equalsIgnoreCase("desistir")) {
-						channel.sendMessage("Você desistiu, as cartas eram `%s`, `%s` e `%s`".formatted(
-								names.get(0),
-								names.get(1),
-								names.get(2))
-						).queue();
-						success.accept(null);
-						timeout.cancel(true);
-						timeout = null;
-						return;
-					}
+								String[] answers = event.getMessage().getContentRaw().split(";");
 
-					String[] answers = event.getMessage().getContentRaw().split(";");
+								if (answers.length != 3 && chances > 0) {
+									channel.sendMessage("❌ | Você deve informar exatamente 3 nomes separados por ponto-e-vírgula.").queue();
+									chances--;
+									return;
+								} else if (answers.length != 3) {
+									channel.sendMessage("❌ | Você errou muitas vezes, o jogo foi encerrado.").queue();
+									success.accept(null);
+									timeout.cancel(true);
+									timeout = null;
+									return;
+								}
 
-					if (answers.length != 3 && chances > 0) {
-						channel.sendMessage("❌ | Você deve informar exatamente 3 nomes separados por ponto-e-vírgula.").queue();
-						chances--;
-						return;
-					} else if (answers.length != 3) {
-						channel.sendMessage("❌ | Você errou muitas vezes, o jogo foi encerrado.").queue();
-						success.accept(null);
-						timeout.cancel(true);
-						timeout = null;
-						return;
-					}
+								int points = 0;
+								for (String s : answers)
+									points += names.remove(s.toUpperCase()) ? 1 : 0;
 
-					int points = 0;
-					for (String s : answers)
-						points += names.remove(s.toUpperCase()) ? 1 : 0;
+								int reward = 100 * points + Helper.rng(150, false) * points;
 
-					int reward = 100 * points + Helper.rng(150, false) * points;
+								Account acc = AccountDAO.getAccount(author.getId());
+								acc.addCredit(reward, GuessTheCardsCommand.class);
+								if (ExceedDAO.hasExceed(author.getId())) {
+									PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+									ps.modifyInfluence(2 * points);
+									PStateDAO.savePoliticalState(ps);
+								}
+								switch (points) {
+									case 0 -> channel.sendMessage(
+											"Você não acertou nenhum dos 3 nomes, que eram `%s`, `%s` e `%s`."
+													.formatted(
+															names.get(0),
+															names.get(1),
+															names.get(2)
+													)).queue();
+									case 1 -> channel.sendMessage(
+											"Você acertou 1 dos 3 nomes, os outro eram `%s` e `%s`. (Recebeu %s créditos)."
+													.formatted(
+															names.get(0),
+															names.get(1),
+															reward
+													)).queue();
+									case 2 -> channel.sendMessage(
+											"Você acertou 2 dos 3 nomes, o outro era `%s`. (Recebeu %s créditos)."
+													.formatted(
+															names.get(0),
+															reward
+													)).queue();
+									case 3 -> channel.sendMessage(
+											"Você acertou todos os nomes, parabéns! (Recebeu %s créditos)."
+													.formatted(reward)).queue();
+								}
 
-					Account acc = AccountDAO.getAccount(author.getId());
-					acc.addCredit(reward, GuessTheCardsCommand.class);
-					if (ExceedDAO.hasExceed(author.getId())) {
-						PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
-						ps.modifyInfluence(2 * points);
-						PStateDAO.savePoliticalState(ps);
-					}
-					switch (points) {
-						case 0 -> channel.sendMessage(
-								"Você não acertou nenhum dos 3 nomes, que eram `%s`, `%s` e `%s`."
-										.formatted(
-												names.get(0),
-												names.get(1),
-												names.get(2)
-										)).queue();
-						case 1 -> channel.sendMessage(
-								"Você acertou 1 dos 3 nomes, os outro eram `%s` e `%s`. (Recebeu %s créditos)."
-										.formatted(
-												names.get(0),
-												names.get(1),
-												reward
-										)).queue();
-						case 2 -> channel.sendMessage(
-								"Você acertou 2 dos 3 nomes, o outro era `%s`. (Recebeu %s créditos)."
-										.formatted(
-												names.get(0),
-												reward
-										)).queue();
-						case 3 -> channel.sendMessage(
-								"Você acertou todos os nomes, parabéns! (Recebeu %s créditos)."
-										.formatted(reward)).queue();
-					}
-
-					AccountDAO.saveAccount(acc);
-					success.accept(null);
-					timeout.cancel(true);
-					timeout = null;
-				}
-			});
+								AccountDAO.saveAccount(acc);
+								success.accept(null);
+								timeout.cancel(true);
+								timeout = null;
+							}
+						});
+					});
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}

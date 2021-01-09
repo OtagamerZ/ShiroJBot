@@ -15,10 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectParameters.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -980,14 +976,7 @@
       <workItem from="1610133629880" duration="4163000" />
       <workItem from="1610163406776" duration="576000" />
       <workItem from="1610164020789" duration="1968000" />
-      <workItem from="1610221710952" duration="5698000" />
-    </task>
-    <task id="LOCAL-03275" summary="Várias mudanças no Shoukan">
-      <created>1609802567356</created>
-      <option name="number" value="03275" />
-      <option name="presentableId" value="LOCAL-03275" />
-      <option name="project" value="LOCAL" />
-      <updated>1609802567359</updated>
+      <workItem from="1610221710952" duration="7573000" />
     </task>
     <task id="LOCAL-03276" summary="Várias mudanças no Shoukan">
       <created>1609812703395</created>
@@ -1325,7 +1314,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610230759427</updated>
     </task>
-    <option name="localTasksCounter" value="3324" />
+    <task id="LOCAL-03324" summary="Correções">
+      <created>1610234353126</created>
+      <option name="number" value="03324" />
+      <option name="presentableId" value="LOCAL-03324" />
+      <option name="project" value="LOCAL" />
+      <updated>1610234353126</updated>
+    </task>
+    <option name="localTasksCounter" value="3325" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1554,11 +1550,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610230762525">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610234353810">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610230762525" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610234353810" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
