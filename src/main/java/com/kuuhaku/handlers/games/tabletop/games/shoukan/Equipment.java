@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import bsh.EvalError;
 import bsh.Interpreter;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Arguments;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -69,6 +70,9 @@ public class Equipment implements Drawable, Cloneable {
 
 	@Enumerated(value = EnumType.STRING)
 	private Charm charm = null;
+
+	@Enumerated(value = EnumType.STRING)
+	private Arguments argType = Arguments.NONE;
 
 	private transient boolean flipped = false;
 	private transient boolean available = true;
@@ -253,7 +257,11 @@ public class Equipment implements Drawable, Cloneable {
 		return charm;
 	}
 
-	public void activate(Hand you, Hand opponent, Shoukan game) {
+	public Arguments getArgType() {
+		return argType;
+	}
+
+	public void activate(Hand you, Hand opponent, Shoukan game, int allyPos, int enemyPos) {
 		String imports = """
 				//%s
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -281,6 +289,8 @@ public class Equipment implements Drawable, Cloneable {
 			i.set("you", you);
 			i.set("opponent", opponent);
 			i.set("game", game);
+			i.set("allyPos", allyPos);
+			i.set("enemyPos", enemyPos);
 			i.eval(imports + effect);
 		} catch (EvalError e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);

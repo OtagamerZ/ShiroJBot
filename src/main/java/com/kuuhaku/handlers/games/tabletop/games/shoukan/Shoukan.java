@@ -296,18 +296,104 @@ public class Shoukan extends GlobalGame {
 						} else if (h.getMana() < e.getMana()) {
 							channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
 							return;
+						} else if (args.length - 2 < e.getArgType().getArgs()) {
+							channel.sendMessage(
+									switch (e.getArgType()) {
+										case ALLY -> "❌ | Este feitiço requer um alvo aliado.";
+										case ENEMY -> "❌ | Este feitiço requer um alvo inimigo.";
+										case BOTH -> "❌ | Este feitiço requer um alvo aliado e um inimigo.";
+										default -> "";
+									}
+							).queue(null, Helper::doNothing);
+							return;
+						}
+
+						Pair<Champion, Integer> allyPos = null;
+						Pair<Champion, Integer> enemyPos = null;
+
+						switch (e.getArgType()) {
+							case ALLY -> {
+								if (!StringUtils.isNumeric(args[2])) {
+									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para usar este feitiço.").queue(null, Helper::doNothing);
+									return;
+								}
+								int pos = Integer.parseInt(args[2]);
+								Champion target = slots.get(pos).getTop();
+
+								if (target == null) {
+									channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
+									return;
+								}
+
+								allyPos = Pair.of(target, pos);
+							}
+							case ENEMY -> {
+								if (!StringUtils.isNumeric(args[2])) {
+									channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para usar este feitiço.").queue(null, Helper::doNothing);
+									return;
+								}
+								int pos = Integer.parseInt(args[2]);
+								Champion target = slots.get(pos).getTop();
+
+								if (target == null) {
+									channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
+									return;
+								}
+
+								enemyPos = Pair.of(target, pos);
+							}
+							case BOTH -> {
+								if (!StringUtils.isNumeric(args[2]) || !StringUtils.isNumeric(args[3])) {
+									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada e uma inimiga para usar este feitiço.").queue(null, Helper::doNothing);
+									return;
+								}
+								int pos1 = Integer.parseInt(args[2]);
+								int pos2 = Integer.parseInt(args[3]);
+								Champion target = slots.get(pos1).getTop();
+
+								if (target == null) {
+									channel.sendMessage("❌ | Não existe uma carta na primeira casa.").queue(null, Helper::doNothing);
+									return;
+								}
+
+								allyPos = Pair.of(target, pos1);
+								target = slots.get(pos2).getTop();
+
+								if (target == null) {
+									channel.sendMessage("❌ | Não existe uma carta na segunda casa.").queue(null, Helper::doNothing);
+									return;
+								}
+
+								enemyPos = Pair.of(target, pos2);
+							}
 						}
 
 						d.setAvailable(false);
 						h.removeMana(e.getMana());
-						e.activate(h, getHands().get(next), this);
+						e.activate(h, getHands().get(next), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
 						arena.getGraveyard().get(h.getSide()).add(e);
 
 						if (postCombat()) return;
 
+						String result = switch (e.getArgType()) {
+							case NONE -> h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + ".";
+							case ALLY -> {
+								assert allyPos != null;
+								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + allyPos.getLeft().getName() + ".";
+							}
+							case ENEMY -> {
+								assert enemyPos != null;
+								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + enemyPos.getLeft().getName() + ".";
+							}
+							case BOTH -> {
+								assert allyPos != null && enemyPos != null;
+								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + allyPos.getLeft().getName() + " e " + enemyPos.getLeft().getName() + ".";
+							}
+						};
+
 						resetTimerKeepTurn();
 						AtomicBoolean shownHand = new AtomicBoolean(false);
-						channel.sendMessage(h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + ".")
+						channel.sendMessage(result)
 								.addFile(Helper.getBytes(arena.render(this, hands), "jpg"), "board.jpg")
 								.queue(s -> {
 									this.message.compute(s.getChannel().getId(), (id, m) -> {

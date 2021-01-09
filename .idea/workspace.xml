@@ -14,8 +14,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Arguments.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,8 +62,8 @@
         <option value="Interface" />
         <option value="GraphQL File" />
         <option value="JavaScript File" />
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -165,15 +167,13 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -975,14 +975,10 @@
       <workItem from="1610047250309" duration="5268000" />
       <workItem from="1610060851975" duration="861000" />
       <workItem from="1610074352582" duration="3641000" />
-      <workItem from="1610133629880" duration="4132000" />
-    </task>
-    <task id="LOCAL-03273" summary="Várias mudanças no Shoukan">
-      <created>1609794345358</created>
-      <option name="number" value="03273" />
-      <option name="presentableId" value="LOCAL-03273" />
-      <option name="project" value="LOCAL" />
-      <updated>1609794345358</updated>
+      <workItem from="1610133629880" duration="4163000" />
+      <workItem from="1610163406776" duration="576000" />
+      <workItem from="1610164020789" duration="1968000" />
+      <workItem from="1610221710952" duration="2269000" />
     </task>
     <task id="LOCAL-03274" summary="Várias mudanças no Shoukan">
       <created>1609795680790</created>
@@ -1320,7 +1316,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610137858263</updated>
     </task>
-    <option name="localTasksCounter" value="3322" />
+    <task id="LOCAL-03322" summary="Correções">
+      <created>1610150520222</created>
+      <option name="number" value="03322" />
+      <option name="presentableId" value="LOCAL-03322" />
+      <option name="project" value="LOCAL" />
+      <updated>1610150520222</updated>
+    </task>
+    <option name="localTasksCounter" value="3323" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1467,11 +1470,11 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1610052625193">
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1610229463812">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1608297788251" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1610052625193" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1610229463812" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1506,26 +1509,26 @@
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608208920619" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728513022" />
-    <state width="1648" height="322" key="GridCell.Tab.0.bottom" timestamp="1609993129410">
+    <state width="1648" height="322" key="GridCell.Tab.0.bottom" timestamp="1610165753290">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671595" />
-    <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1609993129410" />
-    <state width="1648" height="322" key="GridCell.Tab.0.center" timestamp="1609993129410">
+    <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
+    <state width="1648" height="322" key="GridCell.Tab.0.center" timestamp="1610165753290">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671594" />
-    <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1609993129410" />
-    <state width="1648" height="322" key="GridCell.Tab.0.left" timestamp="1609993129410">
+    <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
+    <state width="1648" height="322" key="GridCell.Tab.0.left" timestamp="1610165753290">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671594" />
-    <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1609993129410" />
-    <state width="1648" height="322" key="GridCell.Tab.0.right" timestamp="1609993129410">
+    <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
+    <state width="1648" height="322" key="GridCell.Tab.0.right" timestamp="1610165753290">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1387" height="315" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1607696671595" />
-    <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1609993129410" />
+    <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1607347986126">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1549,11 +1552,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610137859973">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610150536982">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610137859973" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610150536982" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1581,11 +1584,11 @@
     </state>
     <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608140501516" />
     <state x="1025" y="162" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1609393932293" />
-    <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1604191215864">
+    <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1610165689488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1601648967281" />
-    <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604191215864" />
+    <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1610165689488" />
     <state x="583" y="194" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1602850230580">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1618,11 +1621,11 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608309711856" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1609993622933" />
-    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup" timestamp="1609729309112">
+    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup" timestamp="1610164259061">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608236323401" />
-    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1609729309112" />
+    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610164259061" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
