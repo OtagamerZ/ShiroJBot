@@ -99,7 +99,7 @@ public class Hitotsu extends Game {
 		}
 
 		Collections.shuffle(available);
-		deque.addAll(available);
+		deque.addAll(available.subList(0, Math.min(available.size(), 150)));
 
 		for (User u : players) {
 			seats.put(new Hand(u, deque));
