@@ -87,6 +87,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient int altDef = -1;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
+	private transient int mMana = 0;
 	private transient int redAtk = 0;
 	private transient int redDef = 0;
 	private transient int stun = 0;
@@ -131,7 +132,7 @@ public class Champion implements Drawable, Cloneable {
 			}
 
 			g2d.setColor(Color.cyan);
-			Profile.drawOutlinedText(String.valueOf(mana), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 66, g2d);
+			Profile.drawOutlinedText(String.valueOf(getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getMana())), 66, g2d);
 
 			String data = bonus.getSpecialData().optString("write");
 			if (!data.isBlank()) {
@@ -289,7 +290,11 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getMana() {
-		return mana;
+		return mana + mMana;
+	}
+
+	public void setModMana(int mana) {
+		this.mMana = mana;
 	}
 
 	public int getBaseAtk() {
@@ -468,6 +473,7 @@ public class Champion implements Drawable, Cloneable {
 		fakeCard = null;
 		mAtk = 0;
 		mDef = 0;
+		mMana = 0;
 		altAtk = atk;
 		altDef = def;
 		redAtk = 0;

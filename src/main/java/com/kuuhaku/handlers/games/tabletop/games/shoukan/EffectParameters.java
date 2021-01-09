@@ -104,21 +104,11 @@ public class EffectParameters {
 	}
 
 	public Champion getChampionFromGrave(Side s) {
-		LinkedList<Drawable> grv = graveyard.get(s);
-		for (int i = grv.size() - 1; i >= 0; i--)
-			if (grv.get(i) instanceof Champion)
-				return (Champion) grv.remove(i);
-
-		return null;
+		return shoukan.getChampionFromGrave(s);
 	}
 
 	public Equipment getEquipmentFromGrave(Side s) {
-		LinkedList<Drawable> grv = graveyard.get(s);
-		for (int i = grv.size() - 1; i >= 0; i--)
-			if (grv.get(i) instanceof Equipment)
-				return (Equipment) grv.remove(i);
-
-		return null;
+		return shoukan.getEquipmentFromGrave(s);
 	}
 
 	public Duelists getDuelists() {
