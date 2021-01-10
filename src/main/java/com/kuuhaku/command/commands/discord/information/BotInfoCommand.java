@@ -73,14 +73,14 @@ public class BotInfoCommand extends Command {
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-5"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-registered-users"), MemberDAO.getAllMembers().size()), false);
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-6"), Main.getInfo().getVersion(), false);
 		eb.addField("Links:", """
-									[%s](https://discordapp.com/invite/9sgkzna)
-									[Top.GG](https://top.gg/bot/572413282653306901)
-									[%s](https://top.gg/bot/572413282653306901/vote)
-									[GitHub](https://github.com/OtagamerZ/ShiroJBot)
-									[%s](https://github.com/OtagamerZ/ShiroJBot/blob/master/PRIVACY_POLICY.md)
-									[Reddit](https://www.reddit.com/r/ShiroJBot/)
-									[%s](https://top.gg/bot/572413282653306901/invite)
-									[%s](https://donatebot.io/checkout/421495229594730496)
+						[%s](https://discordapp.com/invite/9sgkzna)
+						[Top.GG](https://top.gg/bot/572413282653306901)
+						[%s](https://top.gg/bot/572413282653306901/vote)
+						[GitHub](https://github.com/OtagamerZ/ShiroJBot)
+						[%s](https://github.com/OtagamerZ/ShiroJBot/blob/master/PRIVACY_POLICY.md)
+						[Reddit](https://www.reddit.com/r/ShiroJBot/)
+						[%s](https://top.gg/bot/572413282653306901/invite)
+						[%s](https://donatebot.io/checkout/421495229594730496)
 						"""
 						.formatted(
 								ShiroInfo.getLocale(I18n.PT).getString("str_support"),
