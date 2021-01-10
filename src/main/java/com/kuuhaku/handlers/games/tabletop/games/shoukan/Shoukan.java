@@ -395,22 +395,24 @@ public class Shoukan extends GlobalGame {
 							}
 						};
 
-						resetTimerKeepTurn();
-						AtomicBoolean shownHand = new AtomicBoolean(false);
-						channel.sendMessage(result)
-								.addFile(Helper.getBytes(arena.render(this, hands), "jpg"), "board.jpg")
-								.queue(s -> {
-									this.message.compute(s.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return s;
+						if (!postCombat()) {
+							resetTimerKeepTurn();
+							AtomicBoolean shownHand = new AtomicBoolean(false);
+							channel.sendMessage(result)
+									.addFile(Helper.getBytes(arena.render(this, hands), "jpg"), "board.jpg")
+									.queue(s -> {
+										this.message.compute(s.getChannel().getId(), (id, m) -> {
+											if (m != null)
+												m.delete().queue(null, Helper::doNothing);
+											return s;
+										});
+										Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+										if (!shownHand.get()) {
+											shownHand.set(true);
+											h.showHand();
+										}
 									});
-									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-									if (!shownHand.get()) {
-										shownHand.set(true);
-										h.showHand();
-									}
-								});
+						}
 						return;
 					}
 
@@ -1332,6 +1334,7 @@ public class Shoukan extends GlobalGame {
 						if (c.hasEffect() && effectLock == 0) {
 							c.getEffect(new EffectParameters(EffectTrigger.AFTER_TURN, this, i, h.get().getSide(), Duelists.of(c, i, null, -1), channel));
 							if (postCombat()) return;
+							else if (makeFusion(h.get())) return;
 						}
 					}
 				}
