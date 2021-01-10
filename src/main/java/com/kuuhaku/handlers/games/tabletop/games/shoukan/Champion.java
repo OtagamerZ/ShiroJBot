@@ -422,6 +422,10 @@ public class Champion implements Drawable, Cloneable {
 		return effect;
 	}
 
+	public void setRawEffect(String effect) {
+		this.effect = effect;
+	}
+
 	public void setAltEffect(String effect) {
 		this.altEffect = effect;
 	}
