@@ -25,6 +25,7 @@ import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
+import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Message;
@@ -75,7 +76,7 @@ public class TenthSecondEvent implements Job {
 			if (!p1.getKey().equals(p2.getKey())
 					&& p1.getKey().getMMR() <= p2.getKey().getMMR()
 					&& Helper.prcnt(p1.getKey().getMMR(), p2.getKey().getMMR() == 0 ? 1 : p2.getKey().getMMR()) * 100 <= p1.getValue().getLeft() * 10
-					&& Math.abs(p1.getKey().getTier().getTier() - p2.getKey().getTier().getTier()) < 2) {
+					&& (Math.abs(p1.getKey().getTier().getTier() - p2.getKey().getTier().getTier()) < 2 || p2.getKey().getTier() == RankedTier.UNRANKED)) {
 				Main.getInfo().getMatchMaking().getLobby().remove(p1.getKey());
 				Main.getInfo().getMatchMaking().getLobby().remove(p2.getKey());
 

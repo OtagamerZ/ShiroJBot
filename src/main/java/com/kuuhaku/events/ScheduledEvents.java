@@ -28,12 +28,13 @@ public class ScheduledEvents implements JobListener {
 
 	public ScheduledEvents() {
 		Thread.currentThread().setName("crontab");
+		schedOddSecond();
+		schedFifthSecond();
 		schedHourly();
+		schedDaily();
 		schedMinute();
 		schedTenthMinute();
 		schedMonthly();
-		schedOddSecond();
-		schedFifthSecond();
 	}
 
 	private void schedTenthMinute() {
@@ -153,6 +154,26 @@ public class ScheduledEvents implements JobListener {
 			}
 		} catch (SchedulerException e) {
 			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada décimo segundo: " + e);
+		}
+	}
+
+	private void schedDaily() {
+		try {
+			if (DailyEvent.daily == null) {
+				DailyEvent.daily = JobBuilder.newJob(DailyEvent.class).withIdentity("daily", "1").build();
+			}
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("daily", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 ? * * *")).build();
+			SchedulerFactory sf = new StdSchedulerFactory();
+			try {
+				sched = sf.getScheduler();
+				sched.scheduleJob(DailyEvent.daily, cron);
+			} catch (Exception ignore) {
+			} finally {
+				sched.start();
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso diariamente");
+			}
+		} catch (SchedulerException e) {
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma diariamente");
 		}
 	}
 
