@@ -85,6 +85,8 @@ public class Champion implements Drawable, Cloneable {
 	private transient Champion fakeCard = null;
 	private transient int altAtk = -1;
 	private transient int altDef = -1;
+	private transient String altDescription = null;
+	private transient String altEffect = null;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
 	private transient int mMana = 0;
@@ -180,7 +182,7 @@ public class Champion implements Drawable, Cloneable {
 			g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 9, 277);
 
 			g2d.setFont(Helper.HAMMERSMITH.deriveFont(Font.PLAIN, 11));
-			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : description, 205, 9, 293);
+			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : Helper.getOr(altDescription, description), 205, 9, 293);
 
 			if (stun > 0) {
 				available = false;
@@ -396,6 +398,10 @@ public class Champion implements Drawable, Cloneable {
 		return description;
 	}
 
+	public void setAltDescription(String description) {
+		this.altDescription = description;
+	}
+
 	public boolean hasEffect() {
 		return effect != null;
 	}
@@ -416,8 +422,8 @@ public class Champion implements Drawable, Cloneable {
 		return effect;
 	}
 
-	public void setRawEffect(String effect) {
-		this.effect = effect;
+	public void setAltEffect(String effect) {
+		this.altEffect = effect;
 	}
 
 	public void getEffect(EffectParameters ep) {
@@ -446,7 +452,7 @@ public class Champion implements Drawable, Cloneable {
 			Interpreter i = new Interpreter();
 			i.setStrictJava(true);
 			i.set("ep", ep);
-			i.eval(imports + effect);
+			i.eval(imports + Helper.getOr(altEffect, effect));
 		} catch (EvalError e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 		}
@@ -476,6 +482,8 @@ public class Champion implements Drawable, Cloneable {
 		mMana = 0;
 		altAtk = atk;
 		altDef = def;
+		altDescription = null;
+		altEffect = null;
 		redAtk = 0;
 		redDef = 0;
 		stun = 0;
