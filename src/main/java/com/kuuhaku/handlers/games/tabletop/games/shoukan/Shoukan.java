@@ -849,6 +849,8 @@ public class Shoukan extends GlobalGame {
 		Champion yours = getArena().getSlots().get(next).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(current).get(is[1]).getTop();
 
+		if (yours.isDefending() || yours.isFlipped()) return false;
+
 		int yPower = Math.round(
 				yours.getFinAtk() *
 						(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
