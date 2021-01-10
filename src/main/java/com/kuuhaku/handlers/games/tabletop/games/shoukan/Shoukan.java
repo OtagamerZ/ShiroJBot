@@ -745,6 +745,7 @@ public class Shoukan extends GlobalGame {
 		if (yPower > hPower) {
 			yours.setAvailable(false);
 			yours.resetAttribs();
+
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
 				if (postCombat()) return true;
@@ -777,10 +778,11 @@ public class Shoukan extends GlobalGame {
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
-			}
+			} else return true;
 		} else if (yPower < hPower) {
 			yours.setAvailable(false);
 			his.resetAttribs();
+
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
 				if (postCombat()) return true;
@@ -809,11 +811,9 @@ public class Shoukan extends GlobalGame {
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
-			}
+			} else return true;
 		} else {
 			yours.setAvailable(false);
-			killCard(next, is[1]);
-			killCard(current, is[0]);
 
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
@@ -823,6 +823,9 @@ public class Shoukan extends GlobalGame {
 				his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 				if (postCombat()) return true;
 			}
+
+			killCard(next, is[1]);
+			killCard(current, is[0]);
 
 			if (!postCombat()) {
 				resetTimerKeepTurn();
@@ -836,8 +839,9 @@ public class Shoukan extends GlobalGame {
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
-			}
+			} else return true;
 		}
+
 		return false;
 	}
 
@@ -872,6 +876,7 @@ public class Shoukan extends GlobalGame {
 		if (yPower > hPower) {
 			yours.setAvailable(false);
 			yours.resetAttribs();
+
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
 				if (postCombat()) return true;
@@ -887,23 +892,10 @@ public class Shoukan extends GlobalGame {
 			}
 
 			killCard(current, is[1]);
-
-			if (!postCombat()) {
-				resetTimerKeepTurn();
-				channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						});
-			}
 		} else if (yPower < hPower) {
 			yours.setAvailable(false);
 			his.resetAttribs();
+
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
 				if (postCombat()) return true;
@@ -919,24 +911,8 @@ public class Shoukan extends GlobalGame {
 			}
 
 			killCard(next, is[0]);
-
-			if (!postCombat()) {
-				resetTimerKeepTurn();
-				channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						});
-			}
 		} else {
 			yours.setAvailable(false);
-			killCard(current, is[1]);
-			killCard(next, is[0]);
 
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
@@ -947,21 +923,11 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return true;
 			}
 
-			if (!postCombat()) {
-				resetTimerKeepTurn();
-				channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						});
-			}
+			killCard(current, is[1]);
+			killCard(next, is[0]);
 		}
-		return false;
+
+		return postCombat();
 	}
 
 	private boolean makeFusion(Hand h) {
