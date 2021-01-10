@@ -15,7 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -979,28 +978,7 @@
       <workItem from="1610164020789" duration="1968000" />
       <workItem from="1610221710952" duration="7890000" />
       <workItem from="1610238738787" duration="17000" />
-      <workItem from="1610249009533" duration="2249000" />
-    </task>
-    <task id="LOCAL-03278" summary="Mudança nas cartas-feitiço">
-      <created>1609818348517</created>
-      <option name="number" value="03278" />
-      <option name="presentableId" value="LOCAL-03278" />
-      <option name="project" value="LOCAL" />
-      <updated>1609818348517</updated>
-    </task>
-    <task id="LOCAL-03279" summary="Mudança nas cartas-feitiço">
-      <created>1609818824368</created>
-      <option name="number" value="03279" />
-      <option name="presentableId" value="LOCAL-03279" />
-      <option name="project" value="LOCAL" />
-      <updated>1609818824368</updated>
-    </task>
-    <task id="LOCAL-03280" summary="Mudança nas cartas-feitiço">
-      <created>1609819220871</created>
-      <option name="number" value="03280" />
-      <option name="presentableId" value="LOCAL-03280" />
-      <option name="project" value="LOCAL" />
-      <updated>1609819220871</updated>
+      <workItem from="1610249009533" duration="2854000" />
     </task>
     <task id="LOCAL-03281" summary="Mudança nas cartas-feitiço">
       <created>1609819782379</created>
@@ -1324,7 +1302,28 @@
       <option name="project" value="LOCAL" />
       <updated>1610250825776</updated>
     </task>
-    <option name="localTasksCounter" value="3327" />
+    <task id="LOCAL-03327" summary="Correções">
+      <created>1610251289306</created>
+      <option name="number" value="03327" />
+      <option name="presentableId" value="LOCAL-03327" />
+      <option name="project" value="LOCAL" />
+      <updated>1610251289306</updated>
+    </task>
+    <task id="LOCAL-03328" summary="Correções">
+      <created>1610251359868</created>
+      <option name="number" value="03328" />
+      <option name="presentableId" value="LOCAL-03328" />
+      <option name="project" value="LOCAL" />
+      <updated>1610251359868</updated>
+    </task>
+    <task id="LOCAL-03329" summary="Correções">
+      <created>1610251589555</created>
+      <option name="number" value="03329" />
+      <option name="presentableId" value="LOCAL-03329" />
+      <option name="project" value="LOCAL" />
+      <updated>1610251589555</updated>
+    </task>
+    <option name="localTasksCounter" value="3330" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1553,11 +1552,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610250836236">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610251594293">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610250836236" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610251594293" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
