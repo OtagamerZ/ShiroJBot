@@ -335,7 +335,8 @@ public class Shoukan extends GlobalGame {
 									return;
 								}
 								int pos = Integer.parseInt(args[2]);
-								Champion target = slots.get(pos).getTop();
+								List<SlotColumn<Champion, Equipment>> eSlots = arena.getSlots().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+								Champion target = eSlots.get(pos).getTop();
 
 								if (target == null) {
 									channel.sendMessage("❌ | Não existe uma carta nessa casa.").queue(null, Helper::doNothing);
@@ -359,7 +360,8 @@ public class Shoukan extends GlobalGame {
 								}
 
 								allyPos = Pair.of(target, pos1);
-								target = slots.get(pos2).getTop();
+								List<SlotColumn<Champion, Equipment>> eSlots = arena.getSlots().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+								target = eSlots.get(pos2).getTop();
 
 								if (target == null) {
 									channel.sendMessage("❌ | Não existe uma carta na segunda casa.").queue(null, Helper::doNothing);
