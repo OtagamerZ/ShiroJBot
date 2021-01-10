@@ -112,14 +112,14 @@ public class BuyCardCommand extends Command {
 				minPrice.set(params.stream()
 						.filter(s -> s.startsWith("-min") && s.length() > 4)
 						.filter(s -> StringUtils.isNumeric(s.substring(4)))
-						.mapToInt(Integer::parseInt)
+						.mapToInt(s -> Integer.parseInt(s.substring(4)))
 						.findFirst()
 						.orElse(-1));
 
 				maxPrice.set(params.stream()
 						.filter(s -> s.startsWith("-max") && s.length() > 4)
 						.filter(s -> StringUtils.isNumeric(s.substring(4)))
-						.mapToInt(Integer::parseInt)
+						.mapToInt(s -> Integer.parseInt(s.substring(4)))
 						.findFirst()
 						.orElse(-1));
 
