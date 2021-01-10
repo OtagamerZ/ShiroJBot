@@ -849,7 +849,7 @@ public class Shoukan extends GlobalGame {
 		Champion yours = getArena().getSlots().get(next).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(current).get(is[1]).getTop();
 
-		if (yours.isDefending() || yours.isFlipped() || !yours.isAvailable()) return false;
+		if (yours.isDefending() || !yours.isAvailable()) return false;
 
 		int yPower = Math.round(
 				yours.getFinAtk() *
