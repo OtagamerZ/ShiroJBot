@@ -473,10 +473,6 @@ public class Shoukan extends GlobalGame {
 									sc.setTop(dp);
 								}
 							}
-							case SACRIFICE -> {
-								h.addMana(Math.max(1, Math.round(t.getMana() / 2f)));
-								destroyCard(h.getSide(), toEquip);
-							}
 						}
 
 						if (postCombat()) return;
@@ -756,7 +752,11 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return true;
 			}
 
-			if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+			if (his.isDefending() && yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.ARMORPIERCING)) {
+				int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+				Hand enemy = getHands().get(next);
+				enemy.removeHp(apDamage);
+			} else if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
 				Hand enemy = getHands().get(next);
 				enemy.removeHp(yPower - hPower);
 			}
