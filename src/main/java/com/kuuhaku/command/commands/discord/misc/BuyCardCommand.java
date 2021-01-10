@@ -75,6 +75,8 @@ public class BuyCardCommand extends Command {
 			AtomicReference<String> byName = new AtomicReference<>(null);
 			AtomicReference<KawaiponRarity> byRarity = new AtomicReference<>(null);
 			AtomicReference<AnimeName[]> byAnime = new AtomicReference<>(null);
+			AtomicReference<Integer> minPrice = new AtomicReference<>(null);
+			AtomicReference<Integer> maxPrice = new AtomicReference<>(null);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
 			AtomicBoolean onlyMine = new AtomicBoolean();
 			AtomicBoolean onlyKawaipon = new AtomicBoolean();
@@ -107,6 +109,20 @@ public class BuyCardCommand extends Command {
 					byAnime.set(an);
 				}
 
+				minPrice.set(params.stream()
+						.filter(s -> s.startsWith("-min") && s.length() > 4)
+						.filter(s -> StringUtils.isNumeric(s.substring(4)))
+						.mapToInt(Integer::parseInt)
+						.findFirst()
+						.orElse(-1));
+
+				maxPrice.set(params.stream()
+						.filter(s -> s.startsWith("-max") && s.length() > 4)
+						.filter(s -> StringUtils.isNumeric(s.substring(4)))
+						.mapToInt(Integer::parseInt)
+						.findFirst()
+						.orElse(-1));
+
 				onlyFoil.set(params.stream().anyMatch("-c"::equalsIgnoreCase));
 
 				onlyMine.set(params.stream().anyMatch("-m"::equalsIgnoreCase));
@@ -132,6 +148,8 @@ public class BuyCardCommand extends Command {
 					`-e` - Busca apenas cartas-equipamento
 					`-f` - Busca apenas cartas de campo
 					`-m` - Busca apenas suas cartas anunciadas
+					`-min` - Define um preço mínimo
+					`-max` - Define um preço máximo
 					       
 					Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`.
 					""".formatted(prefix)
@@ -143,6 +161,8 @@ public class BuyCardCommand extends Command {
 
 			cards.addAll(FieldMarketDAO.getCards().stream()
 					.filter(fm -> byName.get() == null || StringUtils.containsIgnoreCase(fm.getCard().getCard().getName(), byName.get()))
+					.filter(fm -> minPrice.get() == null || fm.getPrice() >= minPrice.get())
+					.filter(fm -> maxPrice.get() == null || fm.getPrice() <= maxPrice.get())
 					.filter(fm -> onlyMine.get() ? fm.getSeller().equals(author.getId()) : fm.getPrice() <= 250000)
 					.sorted(Comparator
 							.comparingInt(FieldMarket::getPrice)
@@ -153,6 +173,8 @@ public class BuyCardCommand extends Command {
 
 			cards.addAll(EquipmentMarketDAO.getCards().stream()
 					.filter(em -> byName.get() == null || StringUtils.containsIgnoreCase(em.getCard().getCard().getName(), byName.get()))
+					.filter(fm -> minPrice.get() == null || fm.getPrice() >= minPrice.get())
+					.filter(fm -> maxPrice.get() == null || fm.getPrice() <= maxPrice.get())
 					.filter(em -> onlyMine.get() ? em.getSeller().equals(author.getId()) : em.getPrice() <= (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50))
 					.sorted(Comparator
 							.comparingInt(EquipmentMarket::getPrice)
@@ -163,6 +185,8 @@ public class BuyCardCommand extends Command {
 
 			cards.addAll(CardMarketDAO.getCards().stream()
 					.filter(cm -> byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get()))
+					.filter(fm -> minPrice.get() == null || fm.getPrice() >= minPrice.get())
+					.filter(fm -> maxPrice.get() == null || fm.getPrice() <= maxPrice.get())
 					.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
 					.filter(cm -> byAnime.get() == null || ArrayUtils.contains(byAnime.get(), cm.getCard().getCard().getAnime()))
 					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())

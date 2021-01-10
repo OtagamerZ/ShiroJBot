@@ -14,8 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/charm/armor-piercing.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,12 +134,12 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\font" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.command.commands.discord.dev" />
@@ -148,12 +148,12 @@
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
       <recent name="com.kuuhaku.command.commands.discord.information" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\font" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -979,14 +979,7 @@
       <workItem from="1610164020789" duration="1968000" />
       <workItem from="1610221710952" duration="7890000" />
       <workItem from="1610238738787" duration="17000" />
-      <workItem from="1610249009533" duration="1521000" />
-    </task>
-    <task id="LOCAL-03277" summary="Mudança nas cartas-feitiço">
-      <created>1609817593854</created>
-      <option name="number" value="03277" />
-      <option name="presentableId" value="LOCAL-03277" />
-      <option name="project" value="LOCAL" />
-      <updated>1609817593854</updated>
+      <workItem from="1610249009533" duration="2249000" />
     </task>
     <task id="LOCAL-03278" summary="Mudança nas cartas-feitiço">
       <created>1609818348517</created>
@@ -1324,7 +1317,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610236656919</updated>
     </task>
-    <option name="localTasksCounter" value="3326" />
+    <task id="LOCAL-03326" summary="Correções">
+      <created>1610250825776</created>
+      <option name="number" value="03326" />
+      <option name="presentableId" value="LOCAL-03326" />
+      <option name="project" value="LOCAL" />
+      <updated>1610250825776</updated>
+    </task>
+    <option name="localTasksCounter" value="3327" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1553,11 +1553,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610236664473">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610250836236">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610236664473" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610250836236" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
