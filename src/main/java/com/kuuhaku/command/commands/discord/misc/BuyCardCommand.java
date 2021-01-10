@@ -75,8 +75,8 @@ public class BuyCardCommand extends Command {
 			AtomicReference<String> byName = new AtomicReference<>(null);
 			AtomicReference<KawaiponRarity> byRarity = new AtomicReference<>(null);
 			AtomicReference<AnimeName[]> byAnime = new AtomicReference<>(null);
-			AtomicReference<Integer> minPrice = new AtomicReference<>(null);
-			AtomicReference<Integer> maxPrice = new AtomicReference<>(null);
+			AtomicReference<Integer> minPrice = new AtomicReference<>(-1);
+			AtomicReference<Integer> maxPrice = new AtomicReference<>(-1);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
 			AtomicBoolean onlyMine = new AtomicBoolean();
 			AtomicBoolean onlyKawaipon = new AtomicBoolean();
