@@ -319,7 +319,7 @@ public class Shoukan extends GlobalGame {
 									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada para usar este feitiço.").queue(null, Helper::doNothing);
 									return;
 								}
-								int pos = Integer.parseInt(args[2]) + 1;
+								int pos = Integer.parseInt(args[2]) - 1;
 								Champion target = slots.get(pos).getTop();
 
 								if (target == null) {
@@ -334,7 +334,7 @@ public class Shoukan extends GlobalGame {
 									channel.sendMessage("❌ | Índice inválido, escolha uma carta inimiga para usar este feitiço.").queue(null, Helper::doNothing);
 									return;
 								}
-								int pos = Integer.parseInt(args[2]) + 1;
+								int pos = Integer.parseInt(args[2]) - 1;
 								List<SlotColumn<Champion, Equipment>> eSlots = arena.getSlots().get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
 								Champion target = eSlots.get(pos).getTop();
 
@@ -350,8 +350,8 @@ public class Shoukan extends GlobalGame {
 									channel.sendMessage("❌ | Índice inválido, escolha uma carta aliada e uma inimiga para usar este feitiço.").queue(null, Helper::doNothing);
 									return;
 								}
-								int pos1 = Integer.parseInt(args[2]) + 1;
-								int pos2 = Integer.parseInt(args[3]) + 1;
+								int pos1 = Integer.parseInt(args[2]) - 1;
+								int pos2 = Integer.parseInt(args[3]) - 1;
 								Champion target = slots.get(pos1).getTop();
 
 								if (target == null) {

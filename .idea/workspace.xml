@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -968,21 +966,7 @@
       <workItem from="1610221710952" duration="7890000" />
       <workItem from="1610238738787" duration="17000" />
       <workItem from="1610249009533" duration="3249000" />
-      <workItem from="1610255743241" duration="695000" />
-    </task>
-    <task id="LOCAL-03282" summary="Mudança nas cartas-feitiço">
-      <created>1609871720522</created>
-      <option name="number" value="03282" />
-      <option name="presentableId" value="LOCAL-03282" />
-      <option name="project" value="LOCAL" />
-      <updated>1609871720522</updated>
-    </task>
-    <task id="LOCAL-03283" summary="Mudança nas cartas-feitiço">
-      <created>1609871840449</created>
-      <option name="number" value="03283" />
-      <option name="presentableId" value="LOCAL-03283" />
-      <option name="project" value="LOCAL" />
-      <updated>1609871840449</updated>
+      <workItem from="1610255743241" duration="1041000" />
     </task>
     <task id="LOCAL-03284" summary="Mudança nas cartas-feitiço">
       <created>1609877629409</created>
@@ -1313,7 +1297,21 @@
       <option name="project" value="LOCAL" />
       <updated>1610251921429</updated>
     </task>
-    <option name="localTasksCounter" value="3331" />
+    <task id="LOCAL-03331" summary="Correções">
+      <created>1610256552512</created>
+      <option name="number" value="03331" />
+      <option name="presentableId" value="LOCAL-03331" />
+      <option name="project" value="LOCAL" />
+      <updated>1610256552512</updated>
+    </task>
+    <task id="LOCAL-03332" summary="Correções">
+      <created>1610256586768</created>
+      <option name="number" value="03332" />
+      <option name="presentableId" value="LOCAL-03332" />
+      <option name="project" value="LOCAL" />
+      <updated>1610256586768</updated>
+    </task>
+    <option name="localTasksCounter" value="3333" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1542,11 +1540,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610251925627">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610256588450">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610251925627" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610256588450" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
