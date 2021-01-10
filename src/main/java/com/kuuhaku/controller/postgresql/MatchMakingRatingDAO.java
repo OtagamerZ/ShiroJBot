@@ -69,6 +69,17 @@ public class MatchMakingRatingDAO {
 		em.close();
 	}
 
+	public static void resetRanks() {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		Query q = em.createQuery("UPDATE MatchMakingRating mmr SET mmr.mmr = mmr.mmr / 2, mmr.tier = :tier, mmr.rankPoints = 0");
+		q.setParameter("tier", RankedTier.UNRANKED);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	@SuppressWarnings("unchecked")
 	public static List<MatchMakingRating> getMMRRank() {
 		EntityManager em = Manager.getEntityManager();
