@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -970,28 +967,7 @@
       <workItem from="1610238738787" duration="17000" />
       <workItem from="1610249009533" duration="3249000" />
       <workItem from="1610255743241" duration="2510000" />
-      <workItem from="1610303808472" duration="1312000" />
-    </task>
-    <task id="LOCAL-03287" summary="Mudança nas cartas-feitiço">
-      <created>1609880262798</created>
-      <option name="number" value="03287" />
-      <option name="presentableId" value="LOCAL-03287" />
-      <option name="project" value="LOCAL" />
-      <updated>1609880262798</updated>
-    </task>
-    <task id="LOCAL-03288" summary="Mudança nas cartas-feitiço">
-      <created>1609880307862</created>
-      <option name="number" value="03288" />
-      <option name="presentableId" value="LOCAL-03288" />
-      <option name="project" value="LOCAL" />
-      <updated>1609880307862</updated>
-    </task>
-    <task id="LOCAL-03289" summary="Mudança nas cartas-feitiço">
-      <created>1609881444579</created>
-      <option name="number" value="03289" />
-      <option name="presentableId" value="LOCAL-03289" />
-      <option name="project" value="LOCAL" />
-      <updated>1609881444579</updated>
+      <workItem from="1610303808472" duration="1621000" />
     </task>
     <task id="LOCAL-03290" summary="Mudança nas cartas-feitiço">
       <created>1609881476131</created>
@@ -1315,7 +1291,28 @@
       <option name="project" value="LOCAL" />
       <updated>1610258246652</updated>
     </task>
-    <option name="localTasksCounter" value="3336" />
+    <task id="LOCAL-03336" summary="Correções">
+      <created>1610305136002</created>
+      <option name="number" value="03336" />
+      <option name="presentableId" value="LOCAL-03336" />
+      <option name="project" value="LOCAL" />
+      <updated>1610305136002</updated>
+    </task>
+    <task id="LOCAL-03337" summary="Correções">
+      <created>1610305155446</created>
+      <option name="number" value="03337" />
+      <option name="presentableId" value="LOCAL-03337" />
+      <option name="project" value="LOCAL" />
+      <updated>1610305155446</updated>
+    </task>
+    <task id="LOCAL-03338" summary="Correções">
+      <created>1610305175130</created>
+      <option name="number" value="03338" />
+      <option name="presentableId" value="LOCAL-03338" />
+      <option name="project" value="LOCAL" />
+      <updated>1610305175130</updated>
+    </task>
+    <option name="localTasksCounter" value="3339" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1536,19 +1533,15 @@
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1606237363422" />
     <state x="303" y="75" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1606877192402" />
-    <state x="92" y="92" width="1496" height="826" key="ShowDiffWithBranchDialog" timestamp="1601645223790">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="92" y="92" width="1496" height="826" key="ShowDiffWithBranchDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1601645223790" />
     <state width="200" height="441" key="SqlResolveConfigurable" timestamp="1603511010647">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610258251486">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610305177857">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610258251486" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610305177857" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1579,7 +1572,6 @@
     <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1610165689488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1601648967281" />
     <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1610165689488" />
     <state x="583" y="194" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1602850230580">
       <screen x="0" y="0" width="1680" height="1010" />
