@@ -29,9 +29,9 @@ public enum Charm {
 	TIMEWARP("Salto temporal"),
 	DOUBLETAP("Toque duplo"),
 	DOPPELGANGER("Clone"),
-	SACRIFICE("Sacrifício"),
 	SOULLINK("Vínculo espiritual"),
-	SPELL("Sortilégio");
+	SPELL("Sortilégio"),
+	ARMORPIERCING("Penetração de armadura");
 
 	private final String name;
 

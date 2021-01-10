@@ -14,6 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/charm/armor-piercing.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -112,7 +113,7 @@
     <property name="extract.method.default.visibility" value="private" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="1000 mil-tan n" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/charm" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -976,14 +977,9 @@
       <workItem from="1610133629880" duration="4163000" />
       <workItem from="1610163406776" duration="576000" />
       <workItem from="1610164020789" duration="1968000" />
-      <workItem from="1610221710952" duration="7573000" />
-    </task>
-    <task id="LOCAL-03276" summary="Várias mudanças no Shoukan">
-      <created>1609812703395</created>
-      <option name="number" value="03276" />
-      <option name="presentableId" value="LOCAL-03276" />
-      <option name="project" value="LOCAL" />
-      <updated>1609812703395</updated>
+      <workItem from="1610221710952" duration="7890000" />
+      <workItem from="1610238738787" duration="17000" />
+      <workItem from="1610249009533" duration="1521000" />
     </task>
     <task id="LOCAL-03277" summary="Mudança nas cartas-feitiço">
       <created>1609817593854</created>
@@ -1321,7 +1317,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610234353126</updated>
     </task>
-    <option name="localTasksCounter" value="3325" />
+    <task id="LOCAL-03325" summary="Correções">
+      <created>1610236656919</created>
+      <option name="number" value="03325" />
+      <option name="presentableId" value="LOCAL-03325" />
+      <option name="project" value="LOCAL" />
+      <updated>1610236656919</updated>
+    </task>
+    <option name="localTasksCounter" value="3326" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1550,11 +1553,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610234353810">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610236664473">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1608318980847" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610234353810" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610236664473" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1614,16 +1617,16 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="540" y="262" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116448554" />
-    <state x="567" y="240" width="768" height="698" key="run.anything.popup" timestamp="1610232869385">
+    <state x="567" y="240" width="768" height="698" key="run.anything.popup" timestamp="1610249849368">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608309711856" />
-    <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610232869385" />
-    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup" timestamp="1610164259061">
+    <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610249849368" />
+    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup" timestamp="1610249812093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608236323401" />
-    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610164259061" />
+    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610249812093" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
