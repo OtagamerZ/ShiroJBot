@@ -127,7 +127,7 @@ public class ShoukanCommand extends Command {
 				channel.sendMessage("❌ | Você já está no saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
 				return;
 			} else if (mmr.isBlocked()) {
-				channel.sendMessage("❌ | Você está impedido de entrar no saguão ranqueado devido a um abandono recente (Tempo restante: %s min).".formatted(mmr.getRemainingBlock())).queue();
+				channel.sendMessage("❌ | Você está impedido de entrar no saguão ranqueado devido a um abandono recente (Tempo restante: %s seg).".formatted(mmr.getRemainingBlock())).queue();
 				return;
 			}
 
