@@ -76,8 +76,14 @@ public class MarkTicketCommand extends Command {
 			return;
 		}
 
-		sr.addTicket();
-		RatingDAO.saveRating(sr);
+		if (ShiroInfo.getStaff().contains(t.getRequestedBy())) {
+			channel.sendMessage(":warning: | Ticket fechado mas sem efeito por ter sido aberto por um membro da equipe.").queue();
+		} else {
+			sr.addTicket();
+			RatingDAO.saveRating(sr);
+
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-solved-ticket")).queue();
+		}
 
 		EmbedBuilder eb = new EmbedBuilder();
 
@@ -104,6 +110,5 @@ public class MarkTicketCommand extends Command {
 				.queue(null, Helper::doNothing);
 
 		TicketDAO.updateTicket(t);
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-solved-ticket")).queue();
 	}
 }
