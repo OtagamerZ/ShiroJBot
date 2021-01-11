@@ -21,6 +21,7 @@ package com.kuuhaku.model.enums;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public enum RankedTier {
@@ -128,5 +129,14 @@ public enum RankedTier {
 			case ORACLE -> MASTER;
 			case ARCHMAGE -> MASTER;
 		};
+	}
+
+	public static String getTierName(int tier) {
+		return Arrays.stream(values())
+				.filter(rt -> rt.getTier() == tier)
+				.map(RankedTier::name)
+				.findFirst()
+				.orElseThrow()
+				.replaceFirst("_.+", "");
 	}
 }

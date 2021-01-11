@@ -81,7 +81,9 @@ public class URankCommand extends Command {
 				getLevelRanking(pages, guild, false);
 
 			m.delete().queue();
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
+					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
+			);
 		});
 	}
 
