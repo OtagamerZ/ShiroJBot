@@ -1912,4 +1912,12 @@ public class Helper {
 	public static String bugText(String text) {
 		return String.join(ANTICOPY, text.split(""));
 	}
+
+	public static String getRegionalIndicator(int i) {
+		return new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)});
+	}
+
+	public static String getNumericEmoji(int i) {
+		return i + "⃣";
+	}
 }

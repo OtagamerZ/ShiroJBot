@@ -107,7 +107,7 @@ public class PollCommand extends Command {
 			opts = m -> {
 				Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 				for (int i = 0; i < finalOptions.length(); i++) {
-					String emote = new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)});
+					String emote = Helper.getRegionalIndicator(i);
 					buttons.put(emote, (mb, msg) -> {
 						if (Main.getInfo().getPolls().get(m.getId()).containsKey(mb.getId())) return;
 						Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), emote);
@@ -125,7 +125,7 @@ public class PollCommand extends Command {
 
 		if (options != null) {
 			for (int i = 0; i < options.length(); i++)
-				eb.addField(new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)}) + " | " + options.getString(i), Helper.VOID, true);
+				eb.addField(Helper.getRegionalIndicator(i) + " | " + options.getString(i), Helper.VOID, true);
 
 			for (int i = 0; i < 3 - eb.getFields().size() % 3; i++)
 				eb.addBlankField(true);

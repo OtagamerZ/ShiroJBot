@@ -33,50 +33,48 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class TierCommand extends Command {
+public class TierRankCommand extends Command {
 
-	public TierCommand(@NonNls String name, String description, Category category, boolean requiresMM) {
+	public TierRankCommand(@NonNls String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public TierCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+	public TierRankCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public TierCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public TierRankCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public TierCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public TierRankCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		List<Page> pages = new ArrayList<>();
+		Map<String, Page> categories = new LinkedHashMap<>();
 
-		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
-		if (mmr.getTier() == RankedTier.UNRANKED) {
-			channel.sendMessage("❌ | Você ainda não possui ranking no Shoukan, jogue mais partidas ranqueadas.").queue();
-			return;
-		}
-
-		List<List<MatchMakingRating>> tier = Helper.chunkify(MatchMakingRatingDAO.getMMRRank(mmr.getTier()), 10);
-
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Ranking do tier %s (%s) ".formatted(mmr.getTier().getTier(), mmr.getTier().getName()));
-
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		StringBuilder sb = new StringBuilder();
 		StringBuilder prom = new StringBuilder();
-		boolean firstPass = true;
-		for (List<MatchMakingRating> chunk : tier) {
-			sb.setLength(0);
 
-			for (MatchMakingRating mm : chunk) {
+		for (RankedTier rt : RankedTier.values()) {
+			eb.clearFields();
+			sb.setLength(0);
+			prom.setLength(0);
+
+			List<MatchMakingRating> top10 = MatchMakingRatingDAO.getMMRRank(rt.getTier()).subList(0, 10);
+
+			eb.setTitle("Top 10 do tier %s (%s)".formatted(rt.getTier(), RankedTier.getTierName(rt.getTier())));
+
+
+			for (MatchMakingRating mm : top10) {
 				if (mm.getRankPoints() == 100) {
 					StringBuilder md = new StringBuilder();
 
@@ -94,14 +92,23 @@ public class TierCommand extends Command {
 					sb.append("%s - %s PDR\n".formatted(mm.getUser().getName(), mm.getRankPoints()));
 			}
 
-			if (firstPass) eb.addField("Promoção de tier", prom.toString(), false);
-			eb.addField(Helper.VOID, sb.toString(), false);
-			pages.add(new Page(PageType.EMBED, eb.build()));
-			firstPass = false;
+			eb.addField("Promoção de tier", prom.toString(), false)
+					.addField(Helper.VOID, sb.toString(), false)
+					.setThumbnail("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/tiers/" + RankedTier.getTierName(rt.getTier()).toLowerCase() + ".png");
+			categories.put(Helper.getNumericEmoji(rt.getTier()), new Page(PageType.EMBED, eb.build()));
 		}
 
-		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
-				Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+		sb.setLength(0);
+		eb.clearFields()
+				.setTitle("Tiers do Shoukan ranqueado")
+				.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
+
+		for (int i = 0; i < 8; i++) {
+			eb.addField(Helper.getNumericEmoji(i) + " | " + RankedTier.getTierName(i), Helper.VOID, true);
+		}
+
+		channel.sendMessage(eb.build()).queue(s ->
+				Pages.categorize(s, categories, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }
