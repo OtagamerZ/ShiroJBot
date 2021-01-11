@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.enums;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -131,12 +133,18 @@ public enum RankedTier {
 		};
 	}
 
-	public static String getTierName(int tier) {
-		return Arrays.stream(values())
+	public static String getTierName(int tier, boolean enumName) {
+		if (enumName) return Arrays.stream(values())
 				.filter(rt -> rt.getTier() == tier)
 				.map(RankedTier::name)
 				.findFirst()
 				.orElseThrow()
 				.replaceFirst("_.+", "");
+		else return Arrays.stream(values())
+				.filter(rt -> rt.getTier() == tier)
+				.map(rt -> StringUtils.capitalize(rt.getName()))
+				.findFirst()
+				.orElseThrow()
+				.replaceFirst("\\s.+", "");
 	}
 }
