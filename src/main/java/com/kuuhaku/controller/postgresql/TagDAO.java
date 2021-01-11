@@ -21,7 +21,6 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.model.persistent.Tags;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -52,21 +51,15 @@ public class TagDAO {
 
 	public static Tags getTagById(String id) {
 		EntityManager em = Manager.getEntityManager();
-		Tags m;
 
 		try {
-			Query q = em.createQuery("SELECT t FROM Tags t WHERE t.id = ?1", Tags.class);
-			q.setParameter(1, id);
-			m = (Tags) q.getSingleResult();
-
+			Tags t = em.find(Tags.class, id);
+			if (t == null) {
+				addUserTagsToDB(id);
+				return getTagById(id);
+			} else return t;
+		} finally {
 			em.close();
-
-			return m;
-		} catch (NoResultException e) {
-			TagDAO.addUserTagsToDB(id);
-			Tags t = new Tags();
-			t.setId(id);
-			return t;
 		}
 	}
 
