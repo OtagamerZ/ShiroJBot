@@ -297,9 +297,6 @@ public class CommandManager {
 			put(UptimeCommand.class, new Argument(
 					"uptime", "cmd_uptime", INFO, false
 			));
-			put(ListScoreCommand.class, new Argument(
-					"notas", new String[]{"scores"}, "cmd_score", INFO, true
-			));
 			put(TagsCommand.class, new Argument(
 					"tags", new String[]{"emblemas", "insignias"}, "cmd_tags", INFO, false
 			));
@@ -394,9 +391,6 @@ public class CommandManager {
 			));
 			put(LinkTesterCommand.class, new Argument(
 					"link", new String[]{"try"}, REQ_LINK, "cmd_link-test", MISC, false
-			));
-			put(RateCommand.class, new Argument(
-					"avaliar", new String[]{"rate"}, "req_mention-positive-negative", "cmd_rate", MISC, false
 			));
 			/*put(TranslateCommand.class, new Argument(
 					"traduzir", new String[]{"translate", "traduza", "trad"}, "req_from-to-text", "cmd_translate", MISC, false

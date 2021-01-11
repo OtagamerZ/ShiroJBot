@@ -20,12 +20,14 @@ package com.kuuhaku.events.cron;
 
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.enums.RankedTier;
+import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Message;
@@ -164,6 +166,12 @@ public class TenthSecondEvent implements Job {
 				Message msg = event.getMessage();
 				if (!msg.getAuthor().getId().equals(p1.getKey().getUserId()) || !msg.getContentRaw().equalsIgnoreCase("aschente"))
 					return;
+
+				Kawaipon kp = KawaiponDAO.getKawaipon(msg.getAuthor().getId());
+				if (kp.getChampions().size() < 30) {
+					p1Channel.sendMessage("❌ | Você está com um deck que possui menos que 30 cartas. Você precisa corrigir antes de poder aceitar a partida.").queue();
+					return;
+				}
 
 				msg.addReaction(Helper.ACCEPT)
 						.flatMap(s -> p1Channel.sendMessage("Você aceitou a partida."))

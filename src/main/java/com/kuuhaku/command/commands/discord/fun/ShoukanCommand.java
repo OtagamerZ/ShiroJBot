@@ -25,7 +25,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
@@ -68,7 +67,6 @@ public class ShoukanCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		boolean practice = args.length > 0 && Helper.equalsAny(args[0], "practice", "treino");
 		boolean ranked = args.length > 0 && Helper.equalsAny(args[0], "ranqueada", "ranked");
-		boolean betaAccess = TagDAO.getTagById(guild.getOwnerId()).isBeta();
 
 		if (practice) {
 			JSONObject custom = Helper.getOr(Helper.findJson(rawCmd), new JSONObject());
@@ -91,7 +89,7 @@ public class ShoukanCommand extends Command {
 
 			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), 0, custom, daily, false, author, author);
 			t.start();
-		} else if (ranked && betaAccess) {
+		} else if (ranked) {
 			MatchMaking mm = Main.getInfo().getMatchMaking();
 
 			if (mm.isLocked()) {
