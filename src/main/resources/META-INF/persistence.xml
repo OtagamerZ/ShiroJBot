@@ -43,7 +43,7 @@
         <class>com.kuuhaku.model.persistent.GlobalMessage</class>
         <class>com.kuuhaku.model.persistent.Account</class>
         <class>com.kuuhaku.model.persistent.Slots</class>
-        <class>com.kuuhaku.model.persistent.DevRating</class>
+        <class>com.kuuhaku.model.persistent.SupportRating</class>
         <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
         <class>com.kuuhaku.model.persistent.Version</class>
         <class>com.kuuhaku.model.persistent.MutedMember</class>

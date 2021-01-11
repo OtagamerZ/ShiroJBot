@@ -21,8 +21,10 @@ package com.kuuhaku.command.commands.discord.support;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.RatingDAO;
 import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.SupportRating;
 import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -63,6 +65,7 @@ public class MarkTicketCommand extends Command {
 			return;
 		}
 
+		SupportRating sr = RatingDAO.getRating(author.getId());
 		Ticket t = TicketDAO.getTicket(Integer.parseInt(args[0]));
 
 		if (t == null) {
@@ -72,6 +75,9 @@ public class MarkTicketCommand extends Command {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_ticket-already-solved")).queue();
 			return;
 		}
+
+		sr.addTicket();
+		RatingDAO.saveRating(sr);
 
 		EmbedBuilder eb = new EmbedBuilder();
 
