@@ -454,11 +454,13 @@ public class Helper {
 			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
 
 			Objects.requireNonNull(g.getTextChannelById(gc.getCanalLog())).sendMessage(eb.build()).queue();
-		} catch (NullPointerException ignore) {
 		} catch (Exception e) {
 			gc.setCanalLog("");
 			GuildDAO.updateGuildSettings(gc);
 			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
+			g.getOwner().getUser().openPrivateChannel()
+					.flatMap(ch -> ch.sendMessage("Canal de log invalidado com o seguinte erro: " + e.getClass().getName()))
+					.queue(null, Helper::doNothing);
 		}
 	}
 
