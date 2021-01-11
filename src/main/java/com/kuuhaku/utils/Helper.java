@@ -458,9 +458,11 @@ public class Helper {
 			gc.setCanalLog("");
 			GuildDAO.updateGuildSettings(gc);
 			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
-			g.getOwner().getUser().openPrivateChannel()
-					.flatMap(ch -> ch.sendMessage("Canal de log invalidado com o seguinte erro: " + e.getClass().getName()))
-					.queue(null, Helper::doNothing);
+			Member owner = g.getOwner();
+			if (owner != null)
+				owner.getUser().openPrivateChannel()
+						.flatMap(ch -> ch.sendMessage("Canal de log invalidado com o seguinte erro: " + e.getClass().getName()))
+						.queue(null, Helper::doNothing);
 		}
 	}
 
@@ -523,10 +525,10 @@ public class Helper {
 				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissionsExplicit(c);
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
-						perms.stream()
-								.map(p -> "✅ -> " + p.getName() + "\n")
-								.sorted()
-								.collect(Collectors.joining());
+							  perms.stream()
+									  .map(p -> "✅ -> " + p.getName() + "\n")
+									  .sorted()
+									  .collect(Collectors.joining());
 			}
 		} catch (NoResultException ignore) {
 		}
@@ -535,11 +537,11 @@ public class Helper {
 		EnumSet<Permission> perms = shiro.getPermissionsExplicit(c);
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
-				perms.stream()
-						.map(p -> "✅ -> " + p.getName() + "\n")
-						.sorted()
-						.collect(Collectors.joining()) +
-				jibrilPerms;
+			   perms.stream()
+					   .map(p -> "✅ -> " + p.getName() + "\n")
+					   .sorted()
+					   .collect(Collectors.joining()) +
+			   jibrilPerms;
 	}
 
 	public static <T> T getOr(T get, T or) {
