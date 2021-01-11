@@ -13,9 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no sistema de avaliação de suportes">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -983,13 +982,6 @@
       <workItem from="1610255743241" duration="2510000" />
       <workItem from="1610303808472" duration="1621000" />
     </task>
-    <task id="LOCAL-03298" summary="Adição de ícones de travas">
-      <created>1609905206775</created>
-      <option name="number" value="03298" />
-      <option name="presentableId" value="LOCAL-03298" />
-      <option name="project" value="LOCAL" />
-      <updated>1609905206775</updated>
-    </task>
     <task id="LOCAL-03299" summary="Adição do modo pequeno para spawns">
       <created>1609964878730</created>
       <option name="number" value="03299" />
@@ -1326,7 +1318,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610372045306</updated>
     </task>
-    <option name="localTasksCounter" value="3347" />
+    <task id="LOCAL-03347" summary="Melhoria no sistema de avaliação de suportes">
+      <created>1610372828378</created>
+      <option name="number" value="03347" />
+      <option name="presentableId" value="LOCAL-03347" />
+      <option name="project" value="LOCAL" />
+      <updated>1610372828379</updated>
+    </task>
+    <option name="localTasksCounter" value="3348" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1503,10 +1502,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610372686751">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610372827415">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610372686751" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610372827415" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1551,10 +1550,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610372046421">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610372829918">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610372046421" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610372829918" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610305177857" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />

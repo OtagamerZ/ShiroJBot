@@ -75,6 +75,7 @@ public class MatchMakingRatingDAO {
 		em.getTransaction().begin();
 		Query q = em.createQuery("UPDATE MatchMakingRating mmr SET mmr.mmr = mmr.mmr / 2, mmr.tier = :tier, mmr.rankPoints = 0");
 		q.setParameter("tier", RankedTier.UNRANKED);
+		q.executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();
