@@ -145,6 +145,6 @@ public enum RankedTier {
 				.map(rt -> StringUtils.capitalize(rt.getName()))
 				.findFirst()
 				.orElseThrow()
-				.replaceFirst("\\s.+", "");
+				.replaceFirst("\\s(I|II|III|IV)", "");
 	}
 }
