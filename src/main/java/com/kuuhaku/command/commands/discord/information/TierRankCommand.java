@@ -69,7 +69,8 @@ public class TierRankCommand extends Command {
 			sb.setLength(0);
 			prom.setLength(0);
 
-			List<MatchMakingRating> top10 = MatchMakingRatingDAO.getMMRRank(rt.getTier()).subList(0, 10);
+			List<MatchMakingRating> top10 = MatchMakingRatingDAO.getMMRRank(rt.getTier());
+			top10 = top10.subList(0, Math.min(10, top10.size()));
 
 			eb.setTitle("Top 10 do tier %s (%s)".formatted(rt.getTier(), RankedTier.getTierName(rt.getTier())));
 
