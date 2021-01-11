@@ -65,6 +65,7 @@ public class MatchMaking {
 	}
 
 	public List<GlobalGame> getGames() {
+		closeGames();
 		return games;
 	}
 
