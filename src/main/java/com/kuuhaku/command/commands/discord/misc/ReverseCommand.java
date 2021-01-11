@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -52,7 +53,7 @@ public class ReverseCommand extends Command {
 		String txt = String.join(" ", args);
 
 		txt = new StringBuilder(txt.trim()).reverse().toString();
-		channel.sendMessage(txt).queue();
+		channel.sendMessage(Helper.makeEmoteFromMention(txt)).queue();
 	}
 
 }
