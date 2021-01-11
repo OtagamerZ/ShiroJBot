@@ -13,7 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/TierRankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/TierRankCommand.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -109,7 +112,7 @@
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="grid.search.filter.rows" value="true" />
-    <property name="last.edited.regexp" value="Adepto I" />
+    <property name="last.edited.regexp" value="Adepto IV" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/tiers" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
@@ -980,27 +983,6 @@
       <workItem from="1610255743241" duration="2510000" />
       <workItem from="1610303808472" duration="1621000" />
     </task>
-    <task id="LOCAL-03308" summary="Adição de códigos promocionais resgatáveis">
-      <created>1609992653573</created>
-      <option name="number" value="03308" />
-      <option name="presentableId" value="LOCAL-03308" />
-      <option name="project" value="LOCAL" />
-      <updated>1609992653573</updated>
-    </task>
-    <task id="LOCAL-03309" summary="Adição de códigos promocionais resgatáveis">
-      <created>1609993851651</created>
-      <option name="number" value="03309" />
-      <option name="presentableId" value="LOCAL-03309" />
-      <option name="project" value="LOCAL" />
-      <updated>1609993851651</updated>
-    </task>
-    <task id="LOCAL-03310" summary="Adição de códigos promocionais resgatáveis">
-      <created>1609994089759</created>
-      <option name="number" value="03310" />
-      <option name="presentableId" value="LOCAL-03310" />
-      <option name="project" value="LOCAL" />
-      <updated>1609994089759</updated>
-    </task>
     <task id="LOCAL-03311" summary="Adição de códigos promocionais resgatáveis">
       <created>1609994579719</created>
       <option name="number" value="03311" />
@@ -1323,7 +1305,28 @@
       <option name="project" value="LOCAL" />
       <updated>1610384941848</updated>
     </task>
-    <option name="localTasksCounter" value="3357" />
+    <task id="LOCAL-03357" summary="Adicionado comando de top 10 de cada tier no Shoukan">
+      <created>1610385091713</created>
+      <option name="number" value="03357" />
+      <option name="presentableId" value="LOCAL-03357" />
+      <option name="project" value="LOCAL" />
+      <updated>1610385091713</updated>
+    </task>
+    <task id="LOCAL-03358" summary="Adicionado comando de top 10 de cada tier no Shoukan">
+      <created>1610385215116</created>
+      <option name="number" value="03358" />
+      <option name="presentableId" value="LOCAL-03358" />
+      <option name="project" value="LOCAL" />
+      <updated>1610385215116</updated>
+    </task>
+    <task id="LOCAL-03359" summary="Adicionado comando de top 10 de cada tier no Shoukan">
+      <created>1610385250722</created>
+      <option name="number" value="03359" />
+      <option name="presentableId" value="LOCAL-03359" />
+      <option name="project" value="LOCAL" />
+      <updated>1610385250722</updated>
+    </task>
+    <option name="localTasksCounter" value="3360" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1500,10 +1503,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610384940834">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610385249903">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610384940834" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610385249903" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1548,10 +1551,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610384943952">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610385252231">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610384943952" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610385252231" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610305177857" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
