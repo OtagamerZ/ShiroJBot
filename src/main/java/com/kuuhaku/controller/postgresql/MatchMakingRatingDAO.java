@@ -28,6 +28,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MatchMakingRatingDAO {
 	public static MatchMakingRating getMMR(String id) {
@@ -89,6 +90,23 @@ public class MatchMakingRatingDAO {
 
 		try {
 			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<MatchMakingRating> getMMRRank(int tier) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT mmr FROM MatchMakingRating mmr ORDER BY mmr.rankPoints DESC, mmr.promWins + mmr.promLosses DESC", MatchMakingRating.class);
+
+		try {
+			return (List<MatchMakingRating>) q.getResultStream()
+					.filter(r -> ((MatchMakingRating) r).getTier().getTier() == tier)
+					.collect(Collectors.toList());
 		} catch (NoResultException e) {
 			return new ArrayList<>();
 		} finally {
