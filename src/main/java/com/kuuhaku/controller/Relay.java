@@ -133,18 +133,25 @@ public class Relay {
 
 		if (!exceed.isEmpty()) {
 			badges.append(TagIcons.getExceed(ExceedEnum.getByName(exceed)));
+			for (Tag t : tags) {
+				badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag(mbr.getLevel()));
+			}
+		} else {
+			for (Tag t : tags) {
+				badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag(mbr.getLevel()));
+			}
 		}
-
-		tags.forEach(t -> badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag(mbr.getLevel())));
 
 		eb.addField("Emblemas:", badges.toString(), false);
 
 		MessageBuilder mb = new MessageBuilder();
 		mb.setEmbed(eb.build());
 
-		relays.forEach((k, r) -> {
+		for (Map.Entry<String, String> entry : relays.entrySet()) {
+			String k = entry.getKey();
+			String r = entry.getValue();
 			if (k.equals(s.getId()) && GuildDAO.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser())
-				return;
+				continue;
 			try {
 				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
 				assert t != null;
@@ -175,41 +182,9 @@ public class Relay {
 				}
 			} catch (NullPointerException e) {
 				GuildDAO.getGuildById(k).setCanalRelay(null);
-			} catch (InsufficientPermissionException ex) {
-				Guild g = Main.getJibril().getGuildById(k);
-				assert g != null;
-				try {
-					Objects.requireNonNull(g.getOwner()).getUser()
-							.openPrivateChannel()
-							.queue(c -> c.sendMessage("""
-									❌ | Me faltam permissões para enviar mensagens globais no servidor %s.
-																
-									Minhas permissões:```
-									%s Ler/Enviar mensagens
-									%s Inserir links
-									%s Anexar arquivos
-									%s Ver histórico de mensagens
-									%s Usar emojis externos
-									%s Gerenciar mensagens
-									%s Gerenciar webhooks
-									```
-									"""
-									.formatted(
-											g.getName(),
-											g.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌",
-											g.getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌"
-									)).queue());
-					Helper.logger(this.getClass()).error(ex + " | Sevidor " + g.getName());
-				} catch (Exception e) {
-					Helper.logger(this.getClass()).error(ex + " | Dono " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag());
-				}
+			} catch (InsufficientPermissionException ignore) {
 			}
-		});
+		}
 		try {
 			if (!GuildDAO.getGuildById(s.getId()).isLiteMode()) {
 				source.delete().queue();
@@ -238,7 +213,9 @@ public class Relay {
 		MessageBuilder mb = new MessageBuilder();
 		mb.setEmbed(eb.build());
 
-		relays.forEach((k, r) -> {
+		for (Map.Entry<String, String> entry : relays.entrySet()) {
+			String k = entry.getKey();
+			String r = entry.getValue();
 			try {
 				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
 				assert t != null;
@@ -299,7 +276,7 @@ public class Relay {
 					Helper.logger(this.getClass()).error(ex + " | Dono " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag());
 				}
 			}
-		});
+		}
 	}
 
 	public MessageEmbed getRelayInfo(GuildConfig gc) {
@@ -330,7 +307,9 @@ public class Relay {
 
 		List<GuildConfig> gc = q.getResultList();
 		gc.removeIf(g -> Main.getJibril().getGuildById(g.getGuildID()) == null);
-		gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
+		for (GuildConfig g : gc) {
+			relays.put(g.getGuildID(), g.getCanalRelay());
+		}
 
 		em.close();
 	}

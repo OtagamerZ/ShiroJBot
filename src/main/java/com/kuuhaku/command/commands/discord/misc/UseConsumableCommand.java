@@ -31,6 +31,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
+import java.util.Map;
+
 public class UseConsumableCommand extends Command {
 
 	public UseConsumableCommand(String name, String description, Category category, boolean requiresMM) {
@@ -56,7 +58,11 @@ public class UseConsumableCommand extends Command {
 		if (args.length < 1) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setTitle(":test_tube: | Inventário");
-			ConsumableShop.getAvailable().forEach((k, v) -> eb.addField("`" + k + "` | " + v.getName(), "Possui: " + acc.getBuffs().getOrDefault(k, 0), false));
+			for (Map.Entry<String, Consumable> entry : ConsumableShop.getAvailable().entrySet()) {
+				String k = entry.getKey();
+				Consumable v = entry.getValue();
+				eb.addField("`" + k + "` | " + v.getName(), "Possui: " + acc.getBuffs().getOrDefault(k, 0), false);
+			}
 
 			channel.sendMessage(eb.build()).queue();
 			return;

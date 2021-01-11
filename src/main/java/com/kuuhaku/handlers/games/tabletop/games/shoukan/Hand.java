@@ -19,6 +19,8 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -53,11 +55,78 @@ public class Hand {
 	private int manaReturn = 0;
 
 	public Hand(Shoukan game, User user, Kawaipon kp, Side side) {
-		List<Drawable> deque = new ArrayList<>(kp.getChampions());
+		deque = new LinkedList<>() {{
+			addAll(kp.getChampions());
+		}};
 		deque.sort(Comparator
 				.comparing(d -> ((Champion) d).getMana()).reversed()
 				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 		);
+		deque.addAll(kp.getEquipments());
+		deque.addAll(kp.getFields());
+		Account acc = AccountDAO.getAccount(user.getId());
+		for (Drawable d : deque) d.setAcc(acc);
+
+		this.user = user;
+		this.side = side;
+		this.game = game;
+
+		if (game.getCustom() != null) {
+			mana = Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
+			hp = Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
+			startingCount = Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
+			manaPerTurn = Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
+
+			if (game.getCustom().optBoolean("semequip"))
+				getDeque().removeIf(d -> d instanceof Equipment);
+			if (game.getCustom().optBoolean("semfield"))
+				getDeque().removeIf(d -> d instanceof Field);
+
+			switch (game.getCustom().optString("arcade")) {
+				case "roleta" -> {
+					for (Drawable d : deque) {
+						if (d instanceof Champion) {
+							Champion c = (Champion) d;
+							c.setRawEffect("""
+									if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
+										int rng = Math.round(Math.random() * 100);
+										if (rng < 25) {
+											Hand h = ep.getHands().get(ep.getSide());
+											h.setHp(h.getHp() / 2);
+										} else if (rng < 50) {
+											Hand h = ep.getHands().get(ep.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+											h.setHp(h.getHp() / 2);
+										}
+									}
+									%s
+									""".formatted(Helper.getOr(c.getRawEffect(), "")));
+						}
+					}
+				}
+				case "blackrock" -> {
+					Field f = CardDAO.getField("OTHERWORLD");
+					assert f != null;
+					f.setAcc(AccountDAO.getAccount(user.getId()));
+					game.getArena().setField(f);
+					this.deque.removeIf(d -> d instanceof Champion || d instanceof Field);
+					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
+						Champion c = CardDAO.getChampion(name);
+						deque.addAll(Collections.nCopies(6, c));
+					}
+					for (Drawable d : deque) d.setAcc(acc);
+				}
+				case "instakill" -> {
+					deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
+					hp = 1;
+				}
+			}
+		} else {
+			mana = 0;
+			hp = 5000;
+			startingCount = 5;
+			manaPerTurn = 5;
+		}
+
 		if (kp.getDestinyDraw() != null) {
 			for (int i : kp.getDestinyDraw()) {
 				if (i > deque.size())
@@ -66,28 +135,11 @@ public class Hand {
 					destinyDeck.add(deque.get(i));
 			}
 		}
-		destinyDeck.forEach(deque::remove);
-		deque.addAll(kp.getEquipments());
-		deque.addAll(kp.getFields());
-		Collections.shuffle(deque);
-
-		this.user = user;
-		this.deque = new LinkedList<>(deque);
-		this.side = side;
-		this.game = game;
-
-		this.mana = game.getCustom() == null ? 0 : Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
-		this.hp = game.getCustom() == null ? 5000 : Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
-		this.startingCount = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
-		this.manaPerTurn = game.getCustom() == null ? 5 : Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
-
-		if (game.getCustom() != null) {
-			if (!game.getCustom().optBoolean("semequip", false))
-				getDeque().removeIf(d -> d instanceof Equipment);
-			if (!game.getCustom().optBoolean("semfield", false))
-				getDeque().removeIf(d -> d instanceof Field);
+		for (Drawable drawable : destinyDeck) {
+			deque.remove(drawable);
 		}
 
+		Collections.shuffle(deque);
 		redrawHand();
 	}
 
@@ -123,9 +175,9 @@ public class Hand {
 	public void draw(Card card) {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -134,9 +186,9 @@ public class Hand {
 		if (lockTime > 0) return;
 		Card card = drawable.getCard();
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -144,9 +196,18 @@ public class Hand {
 	public void drawChampion() {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
+		} catch (NoSuchElementException ignore) {
+		}
+	}
+
+	public void manualDrawChampion() {
+		try {
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
+			getDeque().remove(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -163,9 +224,9 @@ public class Hand {
 	public void drawEquipment() {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -173,9 +234,9 @@ public class Hand {
 	public void drawField() {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -183,15 +244,15 @@ public class Hand {
 	public void drawRace(Race race) {
 		if (lockTime > 0) return;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow().copy();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			cards.add(dr);
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
 
 	public void redrawHand() {
-		for (int i = 0; i < startingCount; i++) draw();
+		for (int i = 0; i < startingCount; i++) manualDraw();
 	}
 
 	public User getUser() {
@@ -230,10 +291,9 @@ public class Hand {
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 90));
 
 		List<Drawable> cards = new ArrayList<>(getCards());
-		Account acc = AccountDAO.getAccount(user.getId());
 
 		for (int i = 0; i < cards.size(); i++) {
-			g2d.drawImage(cards.get(i).drawCard(acc, false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
 			if (cards.get(i).isAvailable())
 				Profile.printCenteredString(String.valueOf(i + 1), 225, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 90, g2d);
 		}
@@ -259,7 +319,7 @@ public class Hand {
 		Account acc = AccountDAO.getAccount(enemy.getUser().getId());
 
 		for (int i = 0; i < cards.size(); i++) {
-			g2d.drawImage(cards.get(i).drawCard(acc, false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
 			try {
 				BufferedImage so = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/shinigami_overlay.png")));
 				g2d.drawImage(so, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);

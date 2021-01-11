@@ -127,6 +127,12 @@ public class CommandManager {
 			put(AuditCommand.class, new Argument(
 					"audit", "req_type-id", "cmd_audit", DEV, true
 			));
+			put(LockRankedCommand.class, new Argument(
+					"rlock", "cmd_ranked-lock", DEV, false
+			));
+			put(CompileChampionsCommand.class, new Argument(
+					"testchamp", "cmd_compile-champions", DEV, false
+			));
 
 			//SUPPORT
 			put(BlockCommand.class, new Argument(
@@ -170,7 +176,7 @@ public class CommandManager {
 
 			//MODERATION
 			put(RemoveAnswerCommand.class, new Argument(
-					"nãofale", "req_id-nothing", "cmd_remove-answer", MODERACAO, false
+					"naofale", "req_id-nothing", "cmd_remove-answer", MODERACAO, false
 			));
 			put(SettingsCommand.class, new Argument(
 					"settings", new String[]{"definicoes", "parametros", "configs"}, "req_parameter", "cmd_settings", MODERACAO, false
@@ -247,6 +253,9 @@ public class CommandManager {
 			put(NQNModeCommand.class, new Argument(
 					"modonqn", new String[]{"nqnmode", "nqn", "autoemotes"}, "cmd_nqn-mode", MODERACAO, true
 			));
+			put(SmallCardsCommand.class, new Argument(
+					"cartaspequenas", new String[]{"smallcards"}, "cmd_small-cards", MODERACAO, false
+			));
 
 			//INFORMATION
 			put(HelpCommand.class, new Argument(
@@ -255,14 +264,14 @@ public class CommandManager {
 			put(ProfileCommand.class, new Argument(
 					"perfil", new String[]{"xp", "profile", "pf"}, "cmd_profile", INFO, false
 			));
-			put(ReportBugCommand.class, new Argument(
-					"bug", new String[]{"sendbug", "feedback"}, REQ_MESSAGE, "cmd_bug", INFO, false
+			put(OpenTicketCommand.class, new Argument(
+					"ticket", new String[]{"openticket", "tkt"}, REQ_MESSAGE, "cmd_ticket", INFO, true
 			));
 			put(ReportUserCommand.class, new Argument(
-					"report", new String[]{"reportar"}, "req_user-reason", "cmd_report", INFO, false
+					"report", new String[]{"reportar"}, "req_user-reason", "cmd_report", INFO, true
 			));
 			put(RequestAssistCommand.class, new Argument(
-					"suporte", new String[]{"support", "assist"}, "cmd_request-assist", INFO, false
+					"suporte", new String[]{"support", "assist"}, "cmd_request-assist", INFO, true
 			));
 			put(BotInfoCommand.class, new Argument(
 					"info", new String[]{"botinfo", "bot"}, "cmd_info", INFO, false
@@ -287,9 +296,6 @@ public class CommandManager {
 			));
 			put(UptimeCommand.class, new Argument(
 					"uptime", "cmd_uptime", INFO, false
-			));
-			put(ListScoreCommand.class, new Argument(
-					"notas", new String[]{"scores"}, "cmd_score", INFO, true
 			));
 			put(TagsCommand.class, new Argument(
 					"tags", new String[]{"emblemas", "insignias"}, "cmd_tags", INFO, false
@@ -329,6 +335,12 @@ public class CommandManager {
 			));
 			put(DeckEvalCommand.class, new Argument(
 					"avaliardeck", new String[]{"deckeval"}, "cmd_deck-eval", INFO, false
+			));
+			put(LobbyCommand.class, new Argument(
+					"saguao", new String[]{"lobby"}, "cmd_lobby", INFO, true
+			));
+			put(TierCommand.class, new Argument(
+					"liga", new String[]{"tier", "ranked"}, "cmd_tier", INFO, true
 			));
 
 			//MISC
@@ -379,9 +391,6 @@ public class CommandManager {
 			));
 			put(LinkTesterCommand.class, new Argument(
 					"link", new String[]{"try"}, REQ_LINK, "cmd_link-test", MISC, false
-			));
-			put(RateCommand.class, new Argument(
-					"avaliar", new String[]{"rate"}, "req_mention-positive-negative", "cmd_rate", MISC, false
 			));
 			/*put(TranslateCommand.class, new Argument(
 					"traduzir", new String[]{"translate", "traduza", "trad"}, "req_from-to-text", "cmd_translate", MISC, false
@@ -462,13 +471,19 @@ public class CommandManager {
 					"sintetizar", new String[]{"synthesize", "synth"}, "req_cards-type", "cmd_synthesize-card", MISC, true
 			));
 			put(AuctionCommand.class, new Argument(
-					"leilão", new String[]{"auction", "leilao", "auct"}, "req_card-type-price", "cmd_auction", MISC, true
+					"leilao", new String[]{"auction", "auct"}, "req_card-type-price", "cmd_auction", MISC, true
 			));
 			put(ProfileTrophyCommand.class, new Argument(
 					"trofeu", new String[]{"trophy"}, "req_id-reset", "cmd_trophy", MISC, true
 			));
 			put(DestinyCardsCommand.class, new Argument(
 					"destino", new String[]{"destiny", "dest"}, "req_positions", "cmd_destiny-cards", MISC, false
+			));
+			put(DeckStashCommand.class, new Argument(
+					"reserva", new String[]{"stash", "estoque"}, "req_slot", "cmd_deck-stash", MISC, true
+			));
+			put(GiftCodeCommand.class, new Argument(
+					"giftcode", "req_type-amount-code", "cmd_gift-code", MISC, false
 			));
 
 			//FUN
@@ -535,9 +550,9 @@ public class CommandManager {
 			put(CrissCrossCommand.class, new Argument(
 					"jogodavelha", new String[]{"jdv", "crisscross", "cc"}, REQ_MENTION_BET, "cmd_criss-cross", FUN, true
 			));
-			put(ChessCommand.class, new Argument(
+			/*put(ChessCommand.class, new Argument(
 					"xadrez", new String[]{"chess"}, REQ_MENTION, "cmd_chess", FUN, true
-			));
+			));*/
 			put(HitotsuCommand.class, new Argument(
 					"hitotsu", new String[]{"uno"}, "req_bet-mentions", "cmd_hitotsu", FUN, true
 			));
@@ -622,13 +637,13 @@ public class CommandManager {
 					"dançar", new String[]{"dancar", "dance", "tuts"}, "cmd_dance", false, "dance"
 			));
 			put(FacedeskReaction.class, new ReactionArgument(
-					"facedesk", new String[]{"mds", "ahnão", "nss"}, "cmd_facedesk", false, "facedesk"
+					"facedesk", new String[]{"mds", "ahnao", "nss"}, "cmd_facedesk", false, "facedesk"
 			));
 			put(LaughReaction.class, new ReactionArgument(
 					"rir", new String[]{"kkk", "laugh", "aiai"}, "cmd_laugh", false, "laugh"
 			));
 			put(NopeReaction.class, new ReactionArgument(
-					"nope", new String[]{"sqn", "hojenão", "esquiva"}, "cmd_nope", false, "nope"
+					"nope", new String[]{"sqn", "hojenao", "esquiva"}, "cmd_nope", false, "nope"
 			));
 			put(RunReaction.class, new ReactionArgument(
 					"corre", new String[]{"saisai", "run", "foge"}, "cmd_run", false, "run"

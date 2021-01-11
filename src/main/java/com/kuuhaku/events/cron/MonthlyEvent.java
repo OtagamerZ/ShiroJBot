@@ -38,7 +38,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MonthlyEvent implements Job {
-	public static JobDetail markWinner;
+	public static JobDetail monthly;
 
 	@Override
 	public void execute(JobExecutionContext context) {
@@ -47,49 +47,52 @@ public class MonthlyEvent implements Job {
 
 	public static void call() {
 		if (ExceedDAO.verifyMonth()) {
+			ExceedDAO.markWinner(ExceedDAO.findWinner());
 			String ex = ExceedDAO.getWinner();
 			ExceedEnum ee = ExceedEnum.getByName(ex);
-			ExceedDAO.getExceedMembers(ee).forEach(em -> {
-						User u = Main.getInfo().getUserByID(em.getId());
-						Account acc = AccountDAO.getAccount(em.getId());
-						if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
-							double share = ExceedDAO.getMemberShare(u.getId());
-							long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).getExp() / 1000f);
-							long prize = Math.round(total * share);
-							try {
-								c.sendMessage("""
-										:tada: :tada: **O seu Exceed foi campeão neste mês, parabéns!** :tada: :tada:
-										Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas e redução de juros de empréstimos.
-										Adicionalmente, por ter sido responsável por **%s%%** da pontuação de seu Exceed, você receberá __**%s créditos**__ como parte do prêmio **(Total: %s)**.
-										""".formatted(ex, Helper.roundToString(share, 2), prize, total)).queue(null, Helper::doNothing);
-							} catch (Exception ignore) {
-							}
-							acc.addCredit(prize, MonthlyEvent.class);
-							AccountDAO.saveAccount(acc);
-						});
+			for (ExceedMember exceedMember : ExceedDAO.getExceedMembers(ee)) {
+				User u = Main.getInfo().getUserByID(exceedMember.getId());
+				Account acc = AccountDAO.getAccount(exceedMember.getId());
+				if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
+					double share = ExceedDAO.getMemberShare(u.getId());
+					long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).getExp() / 1000f);
+					long prize = Math.round(total * share);
+					try {
+						c.sendMessage("""
+								:tada: :tada: **O seu Exceed foi campeão neste mês, parabéns!** :tada: :tada:
+								Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas e redução de juros de empréstimos.
+								Adicionalmente, por ter sido responsável por **%s%%** da pontuação de seu Exceed, você receberá __**%s créditos**__ como parte do prêmio **(Total: %s)**.
+								""".formatted(ex, Helper.roundToString(share, 2), prize, total)).queue(null, Helper::doNothing);
+					} catch (Exception ignore) {
 					}
-			);
+					acc.addCredit(prize, MonthlyEvent.class);
+					AccountDAO.saveAccount(acc);
+				});
+			}
 
-			ExceedDAO.getExceedMembers().forEach(em -> {
+			for (ExceedMember em : ExceedDAO.getExceedMembers()) {
 				if (Main.getInfo().getUserByID(em.getId()) == null || em.getContribution() == 0)
 					ExceedDAO.removeMember(em);
-			});
+				else {
+					em.resetContribution();
+					ExceedDAO.saveExceedMember(em);
+				}
+			}
 
 			ExceedDAO.unblock();
 
-			ExceedDAO.markWinner(ExceedDAO.findWinner());
 			Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
 		}
 
 		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
 
-		kgs.forEach(k -> {
+		for (Kawaigotchi k : kgs) {
 			try {
 				if (k.getDiedAt().plusMonths(1).isBefore(LocalDateTime.now()) || k.getOffSince().plusMonths(1).isBefore(LocalDateTime.now()))
 					com.kuuhaku.controller.postgresql.KGotchiDAO.deleteKawaigotchi(k);
 			} catch (NullPointerException ignore) {
 			}
-		});
+		}
 
 		List<String> ns = List.of(
 				"00", "01", "02", "03", "04", "05",
@@ -134,7 +137,7 @@ public class MonthlyEvent implements Job {
 		chn.sendMessage(msg).queue();
 		Helper.broadcast(msg, null, null);
 
-		winners.forEach(l -> {
+		for (Lottery l : winners) {
 			Account acc = AccountDAO.getAccount(l.getUid());
 			acc.addCredit(value.getValue() / winners.size(), MonthlyEvent.class);
 			AccountDAO.saveAccount(acc);
@@ -142,7 +145,7 @@ public class MonthlyEvent implements Job {
 			Main.getInfo().getUserByID(l.getUid()).openPrivateChannel().queue(c -> {
 				c.sendMessage("Você ganhou " + (value.getValue() / winners.size()) + " créditos na loteria, parabéns!").queue(null, Helper::doNothing);
 			}, Helper::doNothing);
-		});
+		}
 
 		LotteryDAO.closeLotteries();
 
@@ -153,6 +156,7 @@ public class MonthlyEvent implements Job {
 				Trophy tp = TrophyDAO.getTrophies(bl.getId());
 				MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(bl.getId());
 				Kawaipon kp = KawaiponDAO.getKawaipon(bl.getId());
+				List<DeckStash> stashes = DeckStashDAO.getStash(bl.getId());
 				Kawaigotchi kg = KGotchiDAO.getKawaigotchi(bl.getId());
 				ExceedMember em = ExceedDAO.getExceedMember(bl.getId());
 				Tags t = TagDAO.getTagById(bl.getId());
@@ -162,6 +166,9 @@ public class MonthlyEvent implements Job {
 				MatchMakingRatingDAO.removeMMR(mmr);
 				MemberDAO.clearMember(bl.getId());
 				KawaiponDAO.removeKawaipon(kp);
+				for (DeckStash ds : stashes) {
+					DeckStashDAO.removeKawaipon(ds);
+				}
 				if (kg != null)
 					com.kuuhaku.controller.postgresql.KGotchiDAO.deleteKawaigotchi(kg);
 				ExceedDAO.removeMember(em);
@@ -173,11 +180,12 @@ public class MonthlyEvent implements Job {
 
 		for (String id : ShiroInfo.getSupports()) {
 			Account acc = AccountDAO.getAccount(id);
-			DevRating dr = VotesDAO.getRating(id);
-			if (dr.getMonthlyVotes() >= 15)
-				acc.addCredit(Math.round(10000 * Helper.prcnt((dr.getInteraction() + dr.getKnowledge() + dr.getSolution()) / 3, 5)), MonthlyEvent.class);
-			dr.resetVotes();
-			VotesDAO.saveRating(dr);
+			SupportRating sr = RatingDAO.getRating(id);
+			double ticketModif = Math.max(Helper.prcnt(sr.getMonthlyTickets(), 10), 1);
+			double ratingModif = Helper.prcnt((sr.getInteraction() + sr.getKnowledge() + sr.getSolution()) / 3, 5);
+			acc.addCredit(Math.round(20000 * ticketModif * ratingModif), MonthlyEvent.class);
+			sr.resetTickets();
+			RatingDAO.saveRating(sr);
 			AccountDAO.saveAccount(acc);
 		}
 	}

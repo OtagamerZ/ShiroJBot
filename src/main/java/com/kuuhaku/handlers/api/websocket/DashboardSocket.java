@@ -106,14 +106,15 @@ public class DashboardSocket extends WebSocketServer {
 					eb.addField("Mensagem:", "```" + payload.getString("message") + "```", false);
 					eb.setColor(Color.decode("#fefefe"));
 					Map<String, String> ids = new HashMap<>();
-					ShiroInfo.getStaff().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
-							.flatMap(m -> m.sendMessage(eb.build()))
-							.flatMap(m -> {
-								ids.put(dev, m.getId());
-								return m.pin();
-							})
-							.complete()
-					);
+					for (String dev : ShiroInfo.getStaff()) {
+						Main.getInfo().getUserByID(dev).openPrivateChannel()
+								.flatMap(m -> m.sendMessage(eb.build()))
+								.flatMap(m -> {
+									ids.put(dev, m.getId());
+									return m.pin();
+								})
+								.complete();
+					}
 					TicketDAO.setIds(number, ids);
 				}
 				case "validate" -> {
@@ -131,22 +132,22 @@ public class DashboardSocket extends WebSocketServer {
 						put("badges", Tags.getUserBadges(u.getId()));
 					}};
 					List<Guild> g = new ArrayList<>();
-					profiles.forEach(p -> {
-						Guild gd = Main.getInfo().getGuildByID(p.getSid());
+					for (Member profile : profiles) {
+						Guild gd = Main.getInfo().getGuildByID(profile.getSid());
 						if (gd != null) g.add(gd);
-					});
+					}
 					JSONArray guilds = new JSONArray();
-					g.forEach(gd -> {
-						net.dv8tion.jda.api.entities.Member mb = gd.getMember(u);
+					for (Guild gd1 : g) {
+						net.dv8tion.jda.api.entities.Member mb = gd1.getMember(u);
 						if (mb != null) {
 							JSONObject guild = new JSONObject() {{
-								put("guildID", gd.getId());
-								put("name", gd.getName());
+								put("guildID", gd1.getId());
+								put("name", gd1.getName());
 							}};
 
 							guilds.put(guild);
 						}
-					});
+					}
 					profiles.removeIf(p -> g.stream().map(Guild::getId).noneMatch(p.getSid()::equals));
 					g.removeIf(gd -> profiles.stream().map(Member::getSid).noneMatch(gd.getId()::equals));
 					conn.send(new JSONObject() {{
@@ -168,7 +169,7 @@ public class DashboardSocket extends WebSocketServer {
 					for (AnimeName an : AnimeName.validValues()) {
 						List<JSONObject> data = new ArrayList<>();
 
-						CardDAO.getAllCardsByAnime(an).forEach(k -> {
+						for (Card k : CardDAO.getAllCardsByAnime(an)) {
 							boolean normal = cards.contains(new KawaiponCard(k, false));
 							boolean foil = cards.contains(new KawaiponCard(k, true));
 
@@ -182,7 +183,7 @@ public class DashboardSocket extends WebSocketServer {
 								put("cardNormal", normal ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(false), "png")) : "");
 								put("cardFoil", foil ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(true), "png")) : "");
 							}});
-						});
+						}
 
 						JSONObject animeCards = new JSONObject() {{
 							put(an.name(), data);

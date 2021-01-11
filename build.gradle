@@ -97,7 +97,6 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.3.4.RELEASE'
     implementation group: 'org.beanshell', name: 'bsh', version: '2.0b5'
     implementation group: 'com.github.ygimenez', name: 'Pagination-Utils', version: '2.0.0'
-    implementation group: 'com.github.treeder', name: 'kitty-cache', version: '065b8d34e2'
     implementation group: 'com.github.kevinsawicki', name: 'http-request', version: '6.0'
     implementation group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
     implementation group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.5.1'

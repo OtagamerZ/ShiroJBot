@@ -92,8 +92,8 @@ public class TransferCommand extends Command {
 		AccountDAO.saveAccount(from);
 
 		if (victorious)
-			channel.sendMessage(":white_check_mark: | **" + liquidAmount + "** créditos transferidos com sucesso! (Exceed vitorioso isento de taxa)").queue();
+			channel.sendMessage("✅ | **" + liquidAmount + "** créditos transferidos com sucesso! (Exceed vitorioso isento de taxa)").queue();
 		else
-			channel.sendMessage(":white_check_mark: | **" + liquidAmount + "** créditos transferidos com sucesso! (Taxa de transferência: " + Helper.roundToString(tax * 100, 1) + "%)").queue();
+			channel.sendMessage("✅ | **" + liquidAmount + "** créditos transferidos com sucesso! (Taxa de transferência: " + Helper.roundToString(tax * 100, 1) + "%)").queue();
 	}
 }

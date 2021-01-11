@@ -23,12 +23,12 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.RatingDAO;
 import com.kuuhaku.controller.postgresql.TicketDAO;
-import com.kuuhaku.controller.postgresql.VotesDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.DevRating;
+import com.kuuhaku.model.persistent.SupportRating;
 import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -76,6 +76,7 @@ public class RatingCommand extends Command {
 			return;
 		}
 
+		SupportRating sr = RatingDAO.getRating(author.getId());
 		Ticket t = TicketDAO.getTicket(Integer.parseInt(args[0]));
 
 		if (t == null) {
@@ -85,6 +86,9 @@ public class RatingCommand extends Command {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_ticket-already-solved")).queue();
 			return;
 		}
+
+		sr.addTicket();
+		RatingDAO.saveRating(sr);
 
 		EmbedBuilder eb = new EmbedBuilder();
 
@@ -96,16 +100,19 @@ public class RatingCommand extends Command {
 		eb.addField("Fechado em:", Helper.dateformat.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
 		eb.setColor(Color.green);
 
-		ShiroInfo.getStaff().forEach(dev -> {
-					Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
-							.flatMap(m -> m.sendMessage(eb.build()))
-							.complete();
-					msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
-							.flatMap(Message::delete)
-							.queue(null, Helper::doNothing);
-					t.solved();
-				}
-		);
+		for (String dev1 : ShiroInfo.getStaff()) {
+			Message msg = Main.getInfo().getUserByID(dev1).openPrivateChannel()
+					.flatMap(m -> m.sendMessage(eb.build()))
+					.complete();
+			msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev1)))
+					.flatMap(Message::delete)
+					.queue(null, Helper::doNothing);
+			t.solved();
+		}
+
+		Main.getInfo().getUserByID(t.getRequestedBy()).openPrivateChannel()
+				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getName()))
+				.queue(null, Helper::doNothing);
 
 		TicketDAO.updateTicket(t);
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-solved-ticket-with-rating")).queue();
@@ -116,26 +123,17 @@ public class RatingCommand extends Command {
 								c.sendMessage(eval(author)).queue(s1 -> {
 									c.sendMessage(questions()[0])
 											.queue(m -> {
-												addRates(author, m, (dev, i) -> {
-													dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f);
-													dev.setLastHelped();
-												});
+												addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f));
 												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
 											});
 									c.sendMessage(questions()[1])
 											.queue(m -> {
-												addRates(author, m, (dev, i) -> {
-													dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f);
-													dev.setLastHelped();
-												});
+												addRates(author, m, (dev, i) -> dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f));
 												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
 											});
 									c.sendMessage(questions()[2])
 											.queue(m -> {
-												addRates(author, m, (dev, i) -> {
-													dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f);
-													dev.setLastHelped();
-												});
+												addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f));
 												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
 											});
 									s1.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
@@ -171,14 +169,14 @@ public class RatingCommand extends Command {
 		return embeds;
 	}
 
-	private void addRates(User author, Message msg, BiConsumer<DevRating, Integer> act) {
+	private void addRates(User author, Message msg, BiConsumer<SupportRating, Integer> act) {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>() {{
 			put("1️⃣", (mb, ms) -> {
-				DevRating dev = VotesDAO.getRating(author.getId());
+				SupportRating dev = RatingDAO.getRating(author.getId());
 				act.accept(dev, 1);
-				VotesDAO.evaluate(dev);
+				RatingDAO.evaluate(dev);
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
 						.queue(s -> {
@@ -187,9 +185,9 @@ public class RatingCommand extends Command {
 						});
 			});
 			put("2️⃣", (mb, ms) -> {
-				DevRating dev = VotesDAO.getRating(author.getId());
+				SupportRating dev = RatingDAO.getRating(author.getId());
 				act.accept(dev, 2);
-				VotesDAO.evaluate(dev);
+				RatingDAO.evaluate(dev);
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
 						.queue(s -> {
@@ -198,9 +196,9 @@ public class RatingCommand extends Command {
 						});
 			});
 			put("3️⃣", (mb, ms) -> {
-				DevRating dev = VotesDAO.getRating(author.getId());
+				SupportRating dev = RatingDAO.getRating(author.getId());
 				act.accept(dev, 3);
-				VotesDAO.evaluate(dev);
+				RatingDAO.evaluate(dev);
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
 						.queue(s -> {
@@ -209,9 +207,9 @@ public class RatingCommand extends Command {
 						});
 			});
 			put("4️⃣", (mb, ms) -> {
-				DevRating dev = VotesDAO.getRating(author.getId());
+				SupportRating dev = RatingDAO.getRating(author.getId());
 				act.accept(dev, 4);
-				VotesDAO.evaluate(dev);
+				RatingDAO.evaluate(dev);
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
 						.queue(s -> {
@@ -220,9 +218,9 @@ public class RatingCommand extends Command {
 						});
 			});
 			put("5️⃣", (mb, ms) -> {
-				DevRating dev = VotesDAO.getRating(author.getId());
+				SupportRating dev = RatingDAO.getRating(author.getId());
 				act.accept(dev, 5);
-				VotesDAO.evaluate(dev);
+				RatingDAO.evaluate(dev);
 				ms.delete()
 						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
 						.queue(s -> {

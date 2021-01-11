@@ -75,6 +75,6 @@ public class FrameBackgroundCommand extends Command {
 
 		acc.setUltimate(tc.getId());
 		AccountDAO.saveAccount(acc);
-		channel.sendMessage("Ultimate definida com sucesso!").queue();
+		channel.sendMessage("✅ | Ultimate definida com sucesso!").queue();
 	}
 }

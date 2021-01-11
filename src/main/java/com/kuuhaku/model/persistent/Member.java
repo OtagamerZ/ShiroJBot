@@ -53,17 +53,6 @@ public class Member {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String pseudoName = "";
 
-	@Column(columnDefinition = "CHAR(7) NOT NULL DEFAULT ''")
-	private String profileColor = "";
-
-
-	//TEXTS
-	@Column(columnDefinition = "TEXT")
-	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
-
-	@Column(columnDefinition = "TEXT")
-	private String bio = "";
-
 	@Column(columnDefinition = "TEXT")
 	private String pseudoAvatar = "";
 
@@ -121,7 +110,7 @@ public class Member {
 	}
 
 	public static String getWaifu(User u) {
-		Couple c = WaifuDAO.getCouple(u);
+		Couple c = WaifuDAO.getCouple(u.getId());
 		if (c == null) return "";
 		return c.getHusbando().equals(u.getId()) ? c.getWaifu() : c.getHusbando();
 	}
@@ -160,7 +149,7 @@ public class Member {
 
 		ExceedMember em = ExceedDAO.getExceedMember(mid);
 		if (em != null) {
-			em.addContribution((int) (15 * spamModif));
+			em.addContribution((int) (15 * mult.get() * spamModif));
 			ExceedDAO.saveExceedMember(em);
 		}
 
@@ -178,6 +167,12 @@ public class Member {
 		float spamModif = Math.max(0, Math.min((System.currentTimeMillis() - lastEarntXp) / 10000f, 1));
 		xp += amount * spamModif;
 		lastEarntXp = System.currentTimeMillis();
+
+		ExceedMember em = ExceedDAO.getExceedMember(mid);
+		if (em != null) {
+			em.addContribution((int) (amount * spamModif));
+			ExceedDAO.saveExceedMember(em);
+		}
 
 		if (xp >= (long) Math.pow(level, 2) * 100) {
 			level++;
@@ -206,14 +201,6 @@ public class Member {
 		xp = 0;
 	}
 
-	public String getProfileColor() {
-		return profileColor;
-	}
-
-	public void setProfileColor(String profileColor) {
-		this.profileColor = profileColor;
-	}
-
 	public String getId() {
 		return id;
 	}
@@ -230,28 +217,12 @@ public class Member {
 		this.id = id;
 	}
 
-	public String getBg() {
-		return bg;
-	}
-
-	public void setBg(String bg) {
-		this.bg = bg;
-	}
-
 	public boolean isMarkForDelete() {
 		return markForDelete;
 	}
 
 	public void setMarkForDelete(boolean markForDelete) {
 		this.markForDelete = markForDelete;
-	}
-
-	public String getBio() {
-		return bio;
-	}
-
-	public void setBio(String bio) {
-		this.bio = bio;
 	}
 
 	public String getMid() {
@@ -337,14 +308,16 @@ public class Member {
 	}
 
 	public JSONObject toJson() {
+		Account acc = AccountDAO.getAccount(mid);
+
 		return new JSONObject() {{
 			put("id", id);
 			put("mid", mid);
 			put("sid", sid);
 			put("pseudoName", pseudoName);
-			put("profileColor", profileColor);
-			put("bg", bg);
-			put("bio", bio);
+			put("profileColor", acc.getProfileColor());
+			put("bg", acc.getBg());
+			put("bio", acc.getBio());
 			put("pseudoAvatar", pseudoAvatar);
 			put("level", level);
 			put("xp", xp);

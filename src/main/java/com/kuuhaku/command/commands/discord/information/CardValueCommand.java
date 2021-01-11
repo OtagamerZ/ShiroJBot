@@ -35,6 +35,8 @@ import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.Styler;
 
 import java.awt.*;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -82,26 +84,24 @@ public class CardValueCommand extends Command {
 				normalCards = CardMarketDAO.getCardsByCard(c.getId(), false)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
 				foilCards = CardMarketDAO.getCardsByCard(c.getId(), true)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
 			} else {
 				normalCards = CardMarketDAO.getCardsByRarity(r, false)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
 				foilCards = CardMarketDAO.getCardsByRarity(r, true)
 						.stream()
 						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100))
+						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
-			}
-
-			if (normalCards.size() <= 1 && foilCards.size() <= 1) {
-				channel.sendMessage("❌ | Essa carta ainda não foi anunciada no mercado ainda ou possui apenas 1 oferta.").queue();
-				m.delete().queue();
-				return;
 			}
 
 			XYChart chart = new XYChartBuilder()
@@ -124,20 +124,20 @@ public class CardValueCommand extends Command {
 					.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
 
 			Map<Date, Integer> normalValues = new HashMap<>();
-			normalCards.forEach(nc -> {
+			for (CardMarket nc : normalCards) {
 				if (normalValues.containsKey(nc.getPublishDate()))
 					normalValues.computeIfPresent(nc.getPublishDate(), (k, v) -> Math.round(v + nc.getPrice() / 2f));
 				else
 					normalValues.put(nc.getPublishDate(), nc.getPrice());
-			});
+			}
 
 			Map<Date, Integer> foilValues = new HashMap<>();
-			foilCards.forEach(fc -> {
+			for (CardMarket fc : foilCards) {
 				if (foilValues.containsKey(fc.getPublishDate()))
 					foilValues.computeIfPresent(fc.getPublishDate(), (k, v) -> Math.round(v + fc.getPrice() / 2f));
 				else
 					foilValues.put(fc.getPublishDate(), fc.getPrice());
-			});
+			}
 
 			List<Map.Entry<Date, Integer>> normalData = normalValues.entrySet()
 					.stream()
@@ -145,6 +145,12 @@ public class CardValueCommand extends Command {
 			List<Map.Entry<Date, Integer>> foilData = foilValues.entrySet()
 					.stream()
 					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
+
+			if (normalData.size() <= 1 && foilData.size() <= 1) {
+				channel.sendMessage("❌ | Essa carta ainda não foi vendida nos últimos 30 dias ou possui vendas em apenas .").queue();
+				m.delete().queue();
+				return;
+			}
 
 			if (normalCards.size() > 1)
 				chart.addSeries("Normal",

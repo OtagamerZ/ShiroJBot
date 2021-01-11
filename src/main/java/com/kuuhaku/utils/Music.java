@@ -91,7 +91,7 @@ public class Music {
         musicManager.player.destroy();
         channel.getGuild().getAudioManager().closeAudioConnection();
 
-        channel.sendMessage("Fila limpa com sucesso.").queue(s -> Helper.spawnAd(channel));
+        channel.sendMessage("✅ | Fila limpa com sucesso.").queue(s -> Helper.spawnAd(channel));
     }
 
     public static void trackInfo(TextChannel channel) {
@@ -146,7 +146,9 @@ public class Music {
         for (int i = 0; i < Math.ceil(f.size() / 10f); i++) {
             eb.clear();
             List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), Math.min(10 * (i + 1), f.size()));
-            subF.forEach(eb::addField);
+            for (MessageEmbed.Field field : subF) {
+                eb.addField(field);
+            }
 
             eb.setTitle("Fila de músicas:");
             eb.setFooter("Tempo estimado da fila: " + Helper.toDuration(musicManager.scheduler.queue().stream().mapToLong(AudioTrack::getDuration).sum()), null);
@@ -176,7 +178,7 @@ public class Music {
             @Override
             public void trackLoaded(AudioTrack track) {
                 if (Objects.requireNonNull(m.getVoiceState()).inVoiceChannel()) {
-                    channel.sendMessage("Musíca adicionada com sucesso à fila: " + track.getInfo().title).queue();
+                    channel.sendMessage("✅ | Musíca adicionada com sucesso à fila: " + track.getInfo().title).queue();
 
                     track.setUserData(m.getUser());
                     play(m.getVoiceState().getChannel(), channel, channel.getGuild(), musicManager, track);
@@ -191,12 +193,12 @@ public class Music {
                     Collections.shuffle(tracks);
                     tracks = tracks.subList(0, Math.min(tracks.size(), 10));
 
-                    tracks.forEach(p -> {
+                    for (AudioTrack p : tracks) {
                         p.setUserData(m.getUser());
                         play(m.getVoiceState().getChannel(), channel, channel.getGuild(), musicManager, p);
-                    });
+                    }
 
-                    channel.sendMessage("Playlist adicionada com sucesso à fila (max. 10 músicas por playlist, escolhidas aleatoriamente): " + playlist.getName()).queue();
+                    channel.sendMessage("✅ | Playlist adicionada com sucesso à fila (max. 10 músicas por playlist, escolhidas aleatoriamente): " + playlist.getName()).queue();
                 } else
                     channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_not-in-voice-channel")).queue();
             }

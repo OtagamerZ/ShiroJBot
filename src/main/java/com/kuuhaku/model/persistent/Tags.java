@@ -69,19 +69,21 @@ public class Tags {
         String exceed = ExceedDAO.getExceed(id);
         Member mb = MemberDAO.getMemberByMid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).stream().findFirst().orElse(null);
 
-        if (mb == null) return new ArrayList<>();
+		if (mb == null) return new ArrayList<>();
 
-        List<String> badges = new ArrayList<>();
+		List<String> badges = new ArrayList<>();
 
-        if (!exceed.isEmpty()) {
+		if (!exceed.isEmpty()) {
 			badges.add(pattern.formatted(TagIcons.getExceedId(ExceedEnum.getByName(exceed))));
-        }
+		}
 
-        Set<Tag> tags = Tag.getTags(Main.getInfo().getUserByID(mb.getMid()), Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getMid()));
-        tags.forEach(t -> badges.add(t.getEmote(mb) == null ? "" : pattern.replace("{id}", t.getEmote(mb).getId(mb.getLevel()))));
+		Set<Tag> tags = Tag.getTags(Main.getInfo().getUserByID(mb.getMid()), Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getMid()));
+		for (Tag t : tags) {
+			badges.add(t.getEmote(mb) == null ? "" : pattern.replace("{id}", t.getEmote(mb).getId(mb.getLevel())));
+		}
 
-        return badges;
-    }
+		return badges;
+	}
 
     public String getId() {
         return id;

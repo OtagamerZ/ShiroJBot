@@ -28,6 +28,7 @@ import com.kuuhaku.events.ShiroEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.music.GuildMusicManager;
+import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.Version;
@@ -35,7 +36,6 @@ import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.spaceprogram.kittycache.KittyCache;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
@@ -45,10 +45,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -62,6 +59,7 @@ public class ShiroInfo {
 	//CONSTANTS
 	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
 	private static final ThreadPoolExecutor compilationPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
+	private static final ThreadPoolExecutor handlingPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 	private static final String botToken = System.getenv("BOT_TOKEN");
 	private static final String youtubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String dblToken;
@@ -86,7 +84,10 @@ public class ShiroInfo {
 	private static final List<String> supports = List.of(
 			"656542716108472340", //Fenyx
 			"666488799835979786", //Lucas
-			"633774453876326410" //Kurome
+			"633774453876326410", //Kurome
+			"776916405873541130", //Crazy Diamond
+			"406880182624845828", //Angel DK
+			"619214753839185930"  //Botzera
 	);
 	private static final List<String> emoteRepo = List.of(
 			"666619034103447642", //Shiro Emote Repository 1
@@ -116,7 +117,7 @@ public class ShiroInfo {
 			.token(dblToken)
 			.botId("572413282653306901")
 			.build();
-	private final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
+	private final ConcurrentMap<String, Cache<String, Message>> messageCache = new ConcurrentHashMap<>();
 	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
 	private final Cache<String, Boolean> confirmationPending = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, Integer> pendingJoin = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
@@ -127,6 +128,7 @@ public class ShiroInfo {
 	private final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 	private final Set<String> gameLock = new HashSet<>();
+	private final MatchMaking matchMaking = new MatchMaking();
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private boolean isLive = false;
 
@@ -192,21 +194,25 @@ public class ShiroInfo {
 		return emoteRepo;
 	}
 
-    public static List<String> getStaff() {
-        return Stream.concat(developers.stream(), supports.stream()).distinct().collect(Collectors.toList());
-    }
+	public static List<String> getStaff() {
+		return Stream.concat(developers.stream(), supports.stream()).distinct().collect(Collectors.toList());
+	}
 
-    //NON-STATIC
-    public float getCPULoad() {
-        return (float) Helper.round(tBean.getCurrentThreadCpuTime() * 100, 2);
-    }
+	//NON-STATIC
+	public float getCPULoad() {
+		return (float) Helper.round(tBean.getCurrentThreadCpuTime() * 100, 2);
+	}
 
-    public ThreadPoolExecutor getCompilationPool() {
-        return compilationPool;
-    }
+	public ThreadPoolExecutor getCompilationPool() {
+		return compilationPool;
+	}
 
-    public boolean isDev() {
-        return DEV;
+	public static ThreadPoolExecutor getHandlingPool() {
+		return handlingPool;
+	}
+
+	public boolean isDev() {
+		return DEV;
 	}
 
 	public String getBotToken() {
@@ -283,6 +289,10 @@ public class ShiroInfo {
 		return collectionsFolder;
 	}
 
+	public MatchMaking getMatchMaking() {
+		return matchMaking;
+	}
+
 	//VARIABLES
 	public long getStartTime() {
 		return startTime;
@@ -335,16 +345,33 @@ public class ShiroInfo {
 	}
 
 	public void cache(Guild guild, Message message) {
-		messageCache.compute(guild.getId(), (s, cache) -> cache == null ? new KittyCache<>(64) : cache)
-				.put(message.getId(), message, (int) TimeUnit.DAYS.toSeconds(1));
+		messageCache.compute(
+				guild.getId(),
+				(s, cache) -> cache == null ? CacheBuilder.newBuilder()
+						.maximumSize(64)
+						.expireAfterWrite(1, TimeUnit.DAYS)
+						.build() : cache
+		).put(message.getId(), message);
 	}
 
 	public Message retrieveCachedMessage(Guild guild, String id) {
-		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).get(id);
+		return messageCache.getOrDefault(
+				guild.getId(),
+				CacheBuilder.newBuilder()
+						.maximumSize(64)
+						.expireAfterWrite(1, TimeUnit.DAYS)
+						.build()
+		).getIfPresent(id);
 	}
 
-	public KittyCache<String, Message> retrieveCache(Guild guild) {
-		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
+	public Cache<String, Message> retrieveCache(Guild guild) {
+		return messageCache.getOrDefault(
+				guild.getId(),
+				CacheBuilder.newBuilder()
+						.maximumSize(64)
+						.expireAfterWrite(1, TimeUnit.DAYS)
+						.build()
+		);
 	}
 
 	public Set<String> getRequests() {

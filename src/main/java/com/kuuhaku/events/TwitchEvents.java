@@ -110,11 +110,8 @@ public class TwitchEvents {
 				client.getChat().sendMessage(channel.getName(), ad);
 			}
 		} else if (acc != null && Main.getInfo().isLive()) {
-			acc.addCredit(5, this.getClass());
+			acc.addCredit(50, this.getClass());
 			AccountDAO.saveAccount(acc);
-
-			Helper.spawnKawaipon(channel, client.getChat());
-			Helper.spawnDrop(channel, client.getChat());
 
 			try {
 				User u = Main.getInfo().getUserByID(acc.getUserId());
