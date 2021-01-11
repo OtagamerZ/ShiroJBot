@@ -342,6 +342,9 @@ public class CommandManager {
 			put(TierCommand.class, new Argument(
 					"liga", new String[]{"tier", "ranked"}, "cmd_tier", INFO, true
 			));
+			put(TierRankCommand.class, new Argument(
+					"ranqueada", new String[]{"ranked", "top10ranked"}, "cmd_tier-rank", INFO, true
+			));
 
 			//MISC
 			put(BackgroundCommand.class, new Argument(
