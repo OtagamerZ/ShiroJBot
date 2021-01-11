@@ -711,6 +711,48 @@ public class ShiroEvents extends ListenerAdapter {
 							event.getChannel().sendMessage("❌ | ID inválido.").queue();
 						}
 					}
+					case "alert", "a" -> {
+						try {
+							User us = Main.getInfo().getUserByID(args[1]);
+							if (us == null) {
+								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
+								return;
+							}
+
+							EmbedBuilder eb = new EmbedBuilder()
+									.setTitle("Você recebeu um alerta:")
+									.setDescription(msgNoArgs)
+									.setColor(Color.orange)
+									.setThumbnail("https://canopytools.com/wp-content/uploads/2019/10/alert-icon-17.png");
+
+							us.openPrivateChannel().queue(c ->
+									c.sendMessage(eb.build()).queue());
+							for (String d : staffIds) {
+								if (!d.equals(event.getAuthor().getId())) {
+									Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
+											c.sendMessage(event.getAuthor().getName() + " alertou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
+								}
+							}
+							event.getChannel().sendMessage("✅ | Usuário alertado com sucesso!").queue();
+						} catch (NumberFormatException e) {
+							event.getChannel().sendMessage("❌ | ID inválido.").queue();
+						}
+					}
+					case "mark", "m" -> {
+						EmbedBuilder eb = new EmbedBuilder()
+								.setTitle("Marcador de atividade:")
+								.setDescription(event.getAuthor().getName() + " marcou que está acompanhando o chat de suporte.")
+								.setColor(Color.decode("#800080"))
+								.setThumbnail("https://iconsplace.com/wp-content/uploads/_icons/800080/256/png/support-icon-13-256.png");
+
+						for (String d : staffIds) {
+							if (!d.equals(event.getAuthor().getId())) {
+								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
+										c.sendMessage(eb.build()).queue());
+							}
+						}
+						event.getChannel().sendMessage("✅ | Atividade marcada com sucesso!").queue();
+					}
 				}
 			} catch (NullPointerException ignore) {
 			}
