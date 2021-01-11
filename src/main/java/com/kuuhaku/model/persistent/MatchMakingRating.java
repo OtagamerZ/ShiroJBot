@@ -90,12 +90,12 @@ public class MatchMakingRating {
 		return mmr;
 	}
 
-	public void addMMR(long gained, long opponent) {
-		this.mmr += gained * (this.mmr == 0 ? 1 : Helper.prcnt(opponent, this.mmr));
+	public void addMMR(long gained, long opponent, boolean ranked) {
+		this.mmr += gained * (this.mmr == 0 ? 1 : Helper.prcnt(opponent, this.mmr)) * (ranked ? 1 : 0.5);
 	}
 
-	public void removeMMR(long lost, long opponent) {
-		this.mmr -= Math.min(this.mmr, lost * (opponent == 0 ? 1 : Helper.prcnt(this.mmr, opponent)));
+	public void removeMMR(long lost, long opponent, boolean ranked) {
+		this.mmr -= Math.min(this.mmr, lost * (opponent == 0 ? 1 : Helper.prcnt(this.mmr, opponent))) * (ranked ? 1 : 0.5);
 	}
 
 	public void setMMR(long mmr) {
@@ -106,8 +106,8 @@ public class MatchMakingRating {
 		return rankPoints;
 	}
 
-	public void increaseRankPoints(MatchMakingRating op, boolean ranked) {
-		double mmrModif = Helper.prcnt(mmr, Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) op.getMMR(), mmr) * (ranked ? 1 : 0.5);
+	public void increaseRankPoints(MatchMakingRating op) {
+		double mmrModif = Helper.prcnt(mmr, Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) op.getMMR(), mmr);
 		int rpValue = Helper.minMax((int) Math.round(mmrModif * 15), 5, 30);
 		if (tier == RankedTier.UNRANKED) {
 			promWins++;
@@ -143,8 +143,8 @@ public class MatchMakingRating {
 			rankPoints += rpValue;
 	}
 
-	public void decreaseRankPoints(MatchMakingRating op, boolean ranked) {
-		double mmrModif = Helper.prcnt(Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) op.getMMR()) * (ranked ? 1 : 0.5);
+	public void decreaseRankPoints(MatchMakingRating op) {
+		double mmrModif = Helper.prcnt(Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) op.getMMR());
 		int rpValue = Helper.minMax((int) Math.round(mmrModif * 15), 5, 30);
 
 		if (tier == RankedTier.UNRANKED) {
