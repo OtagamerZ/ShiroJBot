@@ -20,8 +20,10 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -71,14 +73,13 @@ public class BackgroundCommand extends Command {
 				return;
 			}
 
+			Account acc = AccountDAO.getAccount(author.getId());
 			List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMemberByMid(author.getId());
-			ms.forEach(m -> {
-				m.setBg(args[0]);
-				MemberDAO.updateMemberConfigs(m);
-			});
+			acc.setBackground(args[0]);
+			AccountDAO.saveAccount(acc);
 			if (args[0].contains("discordapp"))
 				channel.sendMessage(":warning: | Imagens que utilizam o CDN do Discord (postadas no Discord) correm o risco de serem apagadas com o tempo, mas de todo modo: Imagem de fundo trocada com sucesso!").queue();
-			else channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();
+			else channel.sendMessage("✅ | Imagem de fundo trocada com sucesso!").queue();
 		} catch (IOException | NullPointerException e) {
 			if (args[0].contains("google"))
 				channel.sendMessage("❌ | Você pegou o link da **pesquisa do Google** bobo!").queue();

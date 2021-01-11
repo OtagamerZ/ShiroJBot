@@ -85,6 +85,6 @@ public class CatchKawaiponCommand extends Command {
 		KawaiponDAO.saveKawaipon(kp);
 		AccountDAO.saveAccount(acc);
 
-		channel.sendMessage(author.getAsMention() + " adquiriu a carta `" + kc.getName() + "` com sucesso!").queue();
+		channel.sendMessage("✅ | " + author.getAsMention() + " adquiriu a carta `" + kc.getName() + "` com sucesso!").queue();
 	}
 }

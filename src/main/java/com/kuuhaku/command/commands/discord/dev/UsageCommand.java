@@ -65,7 +65,9 @@ public class UsageCommand extends Command {
 			eb.clear();
 
 			eb.setTitle("Quantidade de comandos usados por servidor:");
-			uPages.get(i).forEach(p -> eb.addField("Servidor: " + p[0], "Comandos usados: " + p[1] + "\nÚltimo uso: " + p[2], false));
+			for (Object[] p : uPages.get(i)) {
+				eb.addField("Servidor: " + p[0], "Comandos usados: " + p[1] + "\nÚltimo uso: " + p[2], false);
+			}
 			eb.setFooter("Página " + (i + 1) + " de " + uPages.size() + ". Total de " + uPages.stream().mapToInt(List::size).sum() + " resultados.", null);
 
 			pages.add(new Page(PageType.EMBED, eb.build()));

@@ -59,7 +59,7 @@ public class MakeLogCommand extends Command {
 
 			guild.createTextChannel("shiro-log").queue(c -> {
 				gc.setCanalLog(c.getId());
-				channel.sendMessage("Canal de log criado com sucesso em " + c.getAsMention()).queue(null, Helper::doNothing);
+				channel.sendMessage("✅ | Canal de log criado com sucesso em " + c.getAsMention()).queue(null, Helper::doNothing);
 				GuildDAO.updateGuildSettings(gc);
 			});
 		} catch (InsufficientPermissionException e) {

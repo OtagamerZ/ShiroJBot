@@ -22,15 +22,27 @@ import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.model.persistent.Member;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
 public class MemberDAO {
 	public static Member getMemberById(String id) {
 		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return em.find(Member.class, id);
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Member getHighestProfile(String id) {
+		EntityManager em = Manager.getEntityManager();
 		Member m;
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE id = :id", Member.class);
+		Query q = em.createQuery("SELECT m FROM Member m WHERE mid = :id ORDER BY level DESC", Member.class);
+		q.setMaxResults(1);
 		q.setParameter("id", id);
 		m = (Member) q.getSingleResult();
 
@@ -83,16 +95,18 @@ public class MemberDAO {
 		if (u == null || BlacklistDAO.isBlacklisted(u.getId())) return;
 		EntityManager em = Manager.getEntityManager();
 
-		Member m = new Member();
-		m.setId(u.getUser().getId() + u.getGuild().getId());
-		m.setMid(u.getUser().getId());
-		m.setSid(u.getGuild().getId());
+		if (getMemberById(u.getUser().getId() + u.getGuild().getId()) == null) {
+			Member m = new Member();
+			m.setId(u.getUser().getId() + u.getGuild().getId());
+			m.setMid(u.getUser().getId());
+			m.setSid(u.getGuild().getId());
 
-		em.getTransaction().begin();
-		em.merge(m);
-		em.getTransaction().commit();
+			em.getTransaction().begin();
+			em.merge(m);
+			em.getTransaction().commit();
 
-		em.close();
+			em.close();
+		} 
 	}
 
 	public static void updateMemberConfigs(Member m) {

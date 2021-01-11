@@ -55,7 +55,9 @@ public class RemoveAnswerCommand extends Command {
 			return;
 		} else if (Helper.equalsAny(args[0], "nada", "nothing")) {
 			List<CustomAnswers> cas = CustomAnswerDAO.getCAByGuild(guild.getId());
-			cas.forEach(CustomAnswerDAO::removeCAFromDB);
+			for (CustomAnswers ca : cas) {
+				CustomAnswerDAO.removeCAFromDB(ca);
+			}
 			channel.sendMessage("Não vou mais responder nenhuma mensagem customizada configurada até este momento.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {

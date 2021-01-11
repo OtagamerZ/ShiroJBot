@@ -81,7 +81,7 @@ public class ExceedLeaveCommand extends Command {
                                 em.resetContribution();
                                 ExceedDAO.saveExceedMember(em);
                                 s.delete().queue(null, Helper::doNothing);
-                                channel.sendMessage("Você saiu da " + name + " com sucesso!").queue();
+                                channel.sendMessage("✅ | Você saiu da " + name + " com sucesso!").queue();
                             }
                         }), true, 1, TimeUnit.MINUTES,
                         u -> u.getId().equals(author.getId()),

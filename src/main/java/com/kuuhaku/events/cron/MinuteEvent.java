@@ -23,6 +23,7 @@ import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
+import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -39,7 +40,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MinuteEvent implements Job {
-	public static JobDetail unblock;
+	public static JobDetail minute;
 	public static boolean restarting = false;
 
 	@Override
@@ -77,13 +78,13 @@ public class MinuteEvent implements Job {
 			}
 		}
 
-		MemberDAO.getMutedMembers().forEach(m -> {
+		for (MutedMember m : MemberDAO.getMutedMembers()) {
 			Guild g = Main.getInfo().getGuildByID(m.getGuild());
 			if (g == null) {
 				MemberDAO.removeMutedMember(m);
 			} else {
 				try {
-					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
+					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) continue;
 					Member mb = g.getMemberById(m.getUid());
 					Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoMute());
 					assert r != null;
@@ -101,6 +102,6 @@ public class MinuteEvent implements Job {
 					MemberDAO.removeMutedMember(m);
 				}
 			}
-		});
+		}
 	}
 }

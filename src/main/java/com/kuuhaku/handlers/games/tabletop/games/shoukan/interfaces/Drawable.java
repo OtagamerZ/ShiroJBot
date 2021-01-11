@@ -24,7 +24,7 @@ import com.kuuhaku.model.persistent.Card;
 import java.awt.image.BufferedImage;
 
 public interface Drawable {
-	BufferedImage drawCard(Account acc, boolean flipped);
+	BufferedImage drawCard(boolean flipped);
 
 	Card getCard();
 

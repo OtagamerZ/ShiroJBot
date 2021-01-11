@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
@@ -85,7 +86,7 @@ public class Arena {
 		this.field = field;
 	}
 
-	public BufferedImage render(Map<Side, Hand> hands) {
+	public BufferedImage render(Shoukan game, Map<Side, Hand> hands) {
 		try {
 			BufferedImage back = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/backdrop.jpg")));
 			BufferedImage arena = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/arenas/" + (field == null ? "default" : field.getField().toLowerCase()) + ".png")));
@@ -94,14 +95,20 @@ public class Arena {
 			Graphics2D g2d = back.createGraphics();
 			g2d.drawImage(arena, 0, 0, null);
 
-			slots.forEach((key, value) -> {
+			for (Map.Entry<Side, List<SlotColumn<Champion, Equipment>>> entry : slots.entrySet()) {
+				Side key = entry.getKey();
+				List<SlotColumn<Champion, Equipment>> value = entry.getValue();
 				Hand h = hands.get(key);
 				Account acc = AccountDAO.getAccount(hands.get(key).getUser().getId());
 				LinkedList<Drawable> grv = graveyard.get(key);
 				g2d.setColor(Color.white);
 				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 100));
 
-				Profile.printCenteredString(StringUtils.abbreviate(hands.get(key).getUser().getName(), 18), 626, key == Side.TOP ? 1125 : 499, key == Side.TOP ? 838 : 975, g2d);
+				String name = StringUtils.abbreviate(hands.get(key).getUser().getName(), 18);
+				if (key == Side.TOP)
+					Profile.printCenteredString(name, 626, 1125, 824, g2d);
+				else
+					Profile.printCenteredString(name, 626, 499, 989, g2d);
 
 				for (int i = 0; i < value.size(); i++) {
 					SlotColumn<Champion, Equipment> c = value.get(i);
@@ -109,18 +116,18 @@ public class Arena {
 						case TOP -> {
 							if (c.getTop() != null) {
 								Champion d = c.getTop();
-								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 387, null);
+								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 387, null);
 							}
 							if (c.getBottom() != null) {
 								Equipment d = c.getBottom();
-								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 0, null);
+								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 0, null);
 							}
 							if (grv.size() > 0)
-								g2d.drawImage(grv.peekLast().drawCard(acc, false), 1889, 193, null);
+								g2d.drawImage(grv.peekLast().drawCard(false), 1889, 193, null);
 							if (h.getDeque().size() > 0) {
 								Drawable d = h.getDeque().peek();
 								assert d != null;
-								g2d.drawImage(d.drawCard(acc, true), 137, 193, null);
+								g2d.drawImage(d.drawCard(true), 137, 193, null);
 							}
 							if (h.getLockTime() > 0) {
 								try {
@@ -133,18 +140,18 @@ public class Arena {
 						case BOTTOM -> {
 							if (c.getTop() != null) {
 								Champion d = c.getTop();
-								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 1013, null);
+								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1013, null);
 							}
 							if (c.getBottom() != null) {
 								Equipment d = c.getBottom();
-								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 1400, null);
+								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1400, null);
 							}
 							if (grv.size() > 0)
-								g2d.drawImage(grv.peekLast().drawCard(acc, false), 137, 1206, null);
+								g2d.drawImage(grv.peekLast().drawCard(false), 137, 1206, null);
 							if (h.getDeque().size() > 0) {
 								Drawable d = h.getDeque().peek();
 								assert d != null;
-								g2d.drawImage(d.drawCard(acc, true), 1889, 1206, null);
+								g2d.drawImage(d.drawCard(true), 1889, 1206, null);
 							}
 							if (h.getLockTime() > 0) {
 								try {
@@ -159,22 +166,49 @@ public class Arena {
 					float prcnt = h.getHp() / 5000f;
 					g2d.setColor(prcnt > 0.75d ? Color.green : prcnt > 0.5d ? Color.yellow : Color.red);
 					g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 75));
-					g2d.drawString("HP: " + h.getHp(), key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("HP: " + h.getHp()), key == Side.TOP ? 82 : 1638);
+					Profile.drawOutlinedText("HP: " + h.getHp(), key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("HP: " + h.getHp()), key == Side.TOP ? 82 : 1638, g2d);
 					g2d.setColor(Color.cyan);
-					g2d.drawString("MP: " + h.getMana(), key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + h.getMana()), key == Side.TOP ? 178 : 1735);
+					Profile.drawOutlinedText("MP: " + h.getMana(), key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + h.getMana()), key == Side.TOP ? 178 : 1735, g2d);
 				}
-			});
+			}
 
 			if (field != null) {
-				g2d.drawImage(field.drawCard(field.getAcc(), false), 1889, 700, null);
+				g2d.drawImage(field.drawCard(false), 1889, 700, null);
 			}
 
 			if (banished.peekLast() != null) {
 				Drawable d = banished.peekLast();
-				g2d.drawImage(d.drawCard(d.getAcc(), false), 137, 700, null);
+				g2d.drawImage(d.drawCard(false), 137, 700, null);
 			}
 
 			g2d.drawImage(frames, 0, 0, null);
+
+			Map<String, Integer> locks = Map.of(
+					"fusion", game.getFusionLock(),
+					"spell", game.getSpellLock(),
+					"effect", game.getEffectLock()
+			);
+
+			String[] lockNames = {
+					"fusion",
+					"spell",
+					"effect"
+			};
+
+			g2d.setColor(Color.red);
+			for (int i = 0; i < lockNames.length; i++) {
+				String name = locks.get(lockNames[i]) > 0 ? lockNames[i] + "_lock" : lockNames[i] + "_unlock";
+				BufferedImage icon;
+				try {
+					icon = ImageIO.read(Objects.requireNonNull(Charm.class.getClassLoader().getResourceAsStream("shoukan/" + name + ".png")));
+				} catch (IOException e) {
+					icon = null;
+				}
+				g2d.drawImage(icon, 919 + (i * 166), 835, null);
+				if (locks.get(lockNames[i]) > 0)
+					Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 999 + (i * 166), 835 + g2d.getFontMetrics().getHeight(), g2d);
+			}
+
 			g2d.dispose();
 
 			return back;

@@ -214,34 +214,36 @@ public class AuctionCommand extends Command {
                                     if (phase.get() == 4 && highest.get() != null) {
                                         channel.sendMessage("**" + (type == 1 ? "Carta vendida" : type == 2 ? "Equipamento vendido" : "Arena vendida") + "** para " + highest.get().getLeft().getAsMention() + " por **" + highest.get().getRight() + "** créditos!").queue();
 
-                                        Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
-                                        Kawaipon buyer = KawaiponDAO.getKawaipon(highest.get().getLeft().getId());
+					if (!author.getId().equals(highest.get().getLeft().getId())) {
+                                       		Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
+                                       		Kawaipon buyer = KawaiponDAO.getKawaipon(highest.get().getLeft().getId());
 
-                                        Account acc = AccountDAO.getAccount(author.getId());
-                                        Account bacc = AccountDAO.getAccount(highest.get().getLeft().getId());
+                                      		Account acc = AccountDAO.getAccount(author.getId());
+                                      		Account bacc = AccountDAO.getAccount(highest.get().getLeft().getId());
 
-                                        acc.addCredit(highest.get().getRight(), AuctionCommand.class);
-                                        bacc.removeCredit(highest.get().getRight(), AuctionCommand.class);
+                                       		acc.addCredit(highest.get().getRight(), AuctionCommand.class);
+                                      		bacc.removeCredit(highest.get().getRight(), AuctionCommand.class);
 
-                                        switch (type) {
-                                            case 1 -> {
-                                                k.removeCard((KawaiponCard) obj);
-                                                buyer.addCard((KawaiponCard) obj);
-                                            }
-                                            case 2 -> {
-                                                k.removeEquipment((Equipment) obj);
-                                                buyer.addEquipment((Equipment) obj);
-                                            }
-                                            default -> {
-                                                k.removeField((Field) obj);
-                                                buyer.addField((Field) obj);
-                                            }
-                                        }
+                                       		switch (type) {
+                                           		case 1 -> {
+                                               			k.removeCard((KawaiponCard) obj);
+                                               			buyer.addCard((KawaiponCard) obj);
+                                           		}
+                                           		case 2 -> {
+                                               			k.removeEquipment((Equipment) obj);
+                                               			buyer.addEquipment((Equipment) obj);
+                                           		}
+                                           		default -> {
+                                               			k.removeField((Field) obj);
+                                               			buyer.addField((Field) obj);
+                                           		}
+                                       		}
 
-                                        KawaiponDAO.saveKawaipon(k);
-                                        KawaiponDAO.saveKawaipon(buyer);
-                                        AccountDAO.saveAccount(acc);
-                                        AccountDAO.saveAccount(oacc.get());
+                                       		KawaiponDAO.saveKawaipon(k);
+                                       		KawaiponDAO.saveKawaipon(buyer);
+                                       		AccountDAO.saveAccount(acc);
+                                       		AccountDAO.saveAccount(bacc);
+					}
 
                                         Main.getInfo().getConfirmationPending().invalidate(author.getId());
                                         close();
@@ -281,7 +283,7 @@ public class AuctionCommand extends Command {
                                         }
                                 ));
 
-                                s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Leilão aberto com sucesso, se não houver ofertas maiores que " + price + " dentro de 30 segundos irei fechá-lo!")).queue();
+                                s.delete().flatMap(d -> channel.sendMessage("✅ | Leilão aberto com sucesso, se não houver ofertas maiores que " + price + " dentro de 30 segundos irei fechá-lo!")).queue();
                                 Main.getInfo().getShiroEvents().addHandler(guild, listener);
                             }
                         }), true, 1, TimeUnit.MINUTES,

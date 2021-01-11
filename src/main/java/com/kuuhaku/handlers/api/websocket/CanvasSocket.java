@@ -83,10 +83,14 @@ public class CanvasSocket extends WebSocketServer {
 				PixelCanvas.addPixel(new int[]{pixel.getInt("x"), pixel.getInt("y")}, Color.decode(pixel.getString("color")));
 				notifyUpdate();
 			}
-			case "chat" -> clients.forEach(s -> s.send(new JSONObject() {{
-				put("type", "chat");
-				put("content", jo.getJSONObject("content"));
-			}}.toString()));
+			case "chat" -> {
+				for (WebSocket s : clients) {
+					s.send(new JSONObject() {{
+						put("type", "chat");
+						put("content", jo.getJSONObject("content"));
+					}}.toString());
+				}
+			}
 		}
 	}
 
@@ -101,9 +105,11 @@ public class CanvasSocket extends WebSocketServer {
 	}
 
 	public void notifyUpdate() {
-		clients.forEach(s -> s.send(new JSONObject() {{
-			put("type", "canvas");
-			put("content", Main.getInfo().getCanvas().getRawCanvas());
-		}}.toString()));
+		for (WebSocket s : clients) {
+			s.send(new JSONObject() {{
+				put("type", "canvas");
+				put("content", Main.getInfo().getCanvas().getRawCanvas());
+			}}.toString());
+		}
 	}
 }
