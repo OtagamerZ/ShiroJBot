@@ -285,9 +285,9 @@ public abstract class GlobalGame {
 					long mmr = Math.round(250 * manaEff + (125 * (damageEff / expEff) + 125 * sustainEff));
 
 
-					yourMMR.addMMR(mmr, hisMMR.getMMR());
+					yourMMR.addMMR(mmr, hisMMR.getMMR(), ranked);
 					yourMMR.addWin();
-					if (ranked) yourMMR.increaseRankPoints(hisMMR, ranked);
+					if (ranked) yourMMR.increaseRankPoints(hisMMR);
 				} else if (history.getWinner() == other) {
 					double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
 					double damageEff = (double) -damageDealt / yourResult.size();
@@ -295,9 +295,9 @@ public abstract class GlobalGame {
 					double sustainEff = 1 + yourResult.get("hp") / 5000d;
 					long mmr = Math.round(250 * manaEff - (125 * (damageEff / expEff) + 125 * sustainEff));
 
-					yourMMR.removeMMR(mmr, hisMMR.getMMR());
+					yourMMR.removeMMR(mmr, hisMMR.getMMR(), ranked);
 					yourMMR.addLoss();
-					if (ranked) yourMMR.decreaseRankPoints(hisMMR, ranked);
+					if (ranked) yourMMR.decreaseRankPoints(hisMMR);
 				}
 
 				MatchMakingRatingDAO.saveMMR(yourMMR);
