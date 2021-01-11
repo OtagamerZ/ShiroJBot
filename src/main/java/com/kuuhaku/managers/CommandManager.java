@@ -340,7 +340,7 @@ public class CommandManager {
 					"saguao", new String[]{"lobby"}, "cmd_lobby", INFO, true
 			));
 			put(TierCommand.class, new Argument(
-					"liga", new String[]{"tier", "ranked"}, "cmd_tier", INFO, true
+					"liga", new String[]{"tier", "league"}, "cmd_tier", INFO, true
 			));
 			put(TierRankCommand.class, new Argument(
 					"ranqueada", new String[]{"ranked", "top10ranked"}, "cmd_tier-rank", INFO, true
