@@ -35,7 +35,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public enum VipItem {
-	CARD_ROLL(1, 1, new MessageEmbed.Field("1 - Rodar carta (1 gema)", "Troca a carta por outra aleatória que você não tenha", false),
+	CONVERT_CREDITS(1, 1, new MessageEmbed.Field("1 - Converter para créditos (1 gema)", "Troca 1 gema por 10000 créditos", false),
+			(ch, acc, args) -> {
+				acc.addCredit(10000, VipItem.class);
+				acc.removeGem(1);
+				AccountDAO.saveAccount(acc);
+
+				ch.sendMessage("Gema convertida com sucesso!").queue();
+			}),
+	CARD_ROLL(2, 1, new MessageEmbed.Field("2 - Rodar carta (1 gema)", "Troca a carta por outra aleatória que você não tenha", false),
 			(ch, acc, args) -> {
 				if (args.length < 2) {
 					ch.sendMessage("❌ | Você precisa informar uma carta.").queue();
@@ -96,7 +104,7 @@ public enum VipItem {
 
 				ch.sendMessage("✅ | Você rodou a carta " + oldCard.getName() + " com sucesso e conseguiu....**" + card.getName() + " (" + card.getCard().getRarity().toString() + ")**!").queue();
 			}),
-	CARD_FOIL(2, 5, new MessageEmbed.Field("2 - Melhoria de carta (5 gemas)", "Transforma uma carta em cromada", false),
+	CARD_FOIL(3, 5, new MessageEmbed.Field("3 - Melhoria de carta (5 gemas)", "Transforma uma carta em cromada", false),
 			(ch, acc, args) -> {
 				if (args.length < 2) {
 					ch.sendMessage("❌ | Você precisa informar uma carta.").queue();
@@ -129,7 +137,7 @@ public enum VipItem {
 
 				ch.sendMessage("✅ | Você cromou a carta " + oldCard.getName() + " com sucesso!").queue();
 			}),
-	ANIMATED_BACKGROUND(3, 10, new MessageEmbed.Field("3 - Fundo de perfil animado (10 gemas)", "Permite usar GIFs como fundo de perfil", false),
+	ANIMATED_BACKGROUND(4, 10, new MessageEmbed.Field("4 - Fundo de perfil animado (10 gemas)", "Permite usar GIFs como fundo de perfil", false),
 			(ch, acc, args) -> {
 				acc.setAnimatedBg(true);
 				acc.removeGem(10);
@@ -137,13 +145,13 @@ public enum VipItem {
 
 				ch.sendMessage("Fundo de perfil animado habilitado com sucesso!").queue();
 			}),
-	CONVERT_CREDITS(4, 1, new MessageEmbed.Field("4 - Converter para créditos (1 gema)", "Troca 1 gema por 10000 créditos", false),
+	STASH_SLOT(5, 20, new MessageEmbed.Field("5 - Aumentar capacidade de decks reserva (20 gemas)", "Libera 1 espaço extra nos seus decks reserva", false),
 			(ch, acc, args) -> {
-				acc.addCredit(10000, VipItem.class);
-				acc.removeGem(1);
+				acc.setStashCapacity(acc.getStashCapacity() + 1);
+				acc.removeGem(20);
 				AccountDAO.saveAccount(acc);
 
-				ch.sendMessage("Gema convertida com sucesso com sucesso!").queue();
+				ch.sendMessage("Capacidade aumentada com sucesso!").queue();
 			});
 
 	private final int id;
