@@ -149,7 +149,7 @@ public class Member {
 
 		ExceedMember em = ExceedDAO.getExceedMember(mid);
 		if (em != null) {
-			em.addContribution((int) (15 * spamModif));
+			em.addContribution((int) (15 * mult.get() * spamModif));
 			ExceedDAO.saveExceedMember(em);
 		}
 
@@ -167,6 +167,12 @@ public class Member {
 		float spamModif = Math.max(0, Math.min((System.currentTimeMillis() - lastEarntXp) / 10000f, 1));
 		xp += amount * spamModif;
 		lastEarntXp = System.currentTimeMillis();
+
+		ExceedMember em = ExceedDAO.getExceedMember(mid);
+		if (em != null) {
+			em.addContribution((int) (amount * spamModif));
+			ExceedDAO.saveExceedMember(em);
+		}
 
 		if (xp >= (long) Math.pow(level, 2) * 100) {
 			level++;
