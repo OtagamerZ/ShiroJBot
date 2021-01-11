@@ -687,7 +687,7 @@ public class ShiroEvents extends ListenerAdapter {
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
 									Main.getInfo().getUserByID(d).openPrivateChannel()
-											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs))
+											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " respondeu o usuário " + u.getName() + ":\n>>> " + msgNoArgs))
 											.queue();
 								}
 							}
