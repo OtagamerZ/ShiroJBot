@@ -28,8 +28,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
 @Entity
-@Table(name = "devrating")
-public class DevRating {
+@Table(name = "supportrating")
+public class SupportRating {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
 	private String id;
@@ -44,16 +44,16 @@ public class DevRating {
 	private float knowledge = 0;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int monthlyVotes = 0;
+	private int monthlyTickets = 0;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'Nunca'")
-	private String lastHelped = "Nunca";
+	private String lastTicket = "Nunca";
 
-	public DevRating(String id) {
+	public SupportRating(String id) {
 		this.id = id;
 	}
 
-	public DevRating() {
+	public SupportRating() {
 	}
 
 	public String getId() {
@@ -84,23 +84,20 @@ public class DevRating {
 		this.knowledge = knowledge;
 	}
 
-	public String getLastHelped() {
-		return lastHelped;
+	public String getLastTicket() {
+		return lastTicket;
 	}
 
-	public int getMonthlyVotes() {
-		return monthlyVotes;
+	public int getMonthlyTickets() {
+		return monthlyTickets;
 	}
 
-	public void addVote() {
-		this.monthlyVotes++;
+	public void addTicket() {
+		this.monthlyTickets++;
+		this.lastTicket = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
 	}
 
-	public void resetVotes() {
-		this.monthlyVotes = 0;
-	}
-
-	public void setLastHelped() {
-		this.lastHelped = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
+	public void resetTickets() {
+		this.monthlyTickets = 0;
 	}
 }
