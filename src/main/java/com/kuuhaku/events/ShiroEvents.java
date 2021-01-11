@@ -63,25 +63,30 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
-	private final Map<String, List<SimpleMessageListener>> toHandle = new HashMap<>();
+	private final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 
 	@Override
 	public void onGuildUpdateName(GuildUpdateNameEvent event) {
@@ -143,13 +148,13 @@ public class ShiroEvents extends ListenerAdapter {
 						channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
 					} else {
 						MessageAction send = channel.sendMessage(Helper.makeEmoteFromMention(rawMessage.substring(1).split(" ")));
-						message.getAttachments().forEach(a -> {
+						for (Message.Attachment a : message.getAttachments()) {
 							try {
 								//noinspection ResultOfMethodCallIgnored
 								send.addFile(a.downloadToFile().get());
 							} catch (InterruptedException | ExecutionException ignore) {
 							}
-						});
+						}
 						send.queue();
 						message.delete().queue();
 					}
@@ -275,12 +280,11 @@ public class ShiroEvents extends ListenerAdapter {
 
 			if (!found && !author.isBot() && !blacklisted) {
 				if (toHandle.containsKey(guild.getId())) {
-					Iterator<SimpleMessageListener> evts = toHandle.get(guild.getId()).iterator();
-					while (evts.hasNext()) {
-						SimpleMessageListener sml = evts.next();
-						sml.onGuildMessageReceived(event);
-						if (sml.isClosed()) evts.remove();
+					List<SimpleMessageListener> evts = getHandler().get(guild.getId());
+					for (SimpleMessageListener evt : evts) {
+						evt.onGuildMessageReceived(event);
 					}
+					evts.removeIf(SimpleMessageListener::isClosed);
 				}
 
 				Account acc = AccountDAO.getAccount(author.getId());
@@ -303,9 +307,20 @@ public class ShiroEvents extends ListenerAdapter {
 				} catch (Exception ignore) {
 				}
 				try {
-					Map<String, Object> rawLvls = gc.getCargoslvl().entrySet().stream().filter(e -> MemberDAO.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+					Map<String, Object> rawLvls = gc.getCargoslvl().entrySet()
+							.stream()
+							.filter(e -> {
+								com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
+								return mb != null && mb.getLevel() >= Integer.parseInt(e.getKey());
+							})
+							.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 					Map<Integer, Role> sortedLvls = new TreeMap<>();
-					rawLvls.forEach((k, v) -> sortedLvls.put(Integer.parseInt(k), guild.getRoleById((String) v)));
+					for (Map.Entry<String, Object> entry : rawLvls.entrySet()) {
+						sortedLvls.put(
+								Integer.parseInt(entry.getKey()),
+								guild.getRoleById((String) entry.getValue())
+						);
+					}
 					MessageChannel finalLvlChannel = lvlChannel;
 					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
 						if (gc.isLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
@@ -316,13 +331,13 @@ public class ShiroEvents extends ListenerAdapter {
 									if (finalLvlChannel != null) {
 										finalLvlChannel.getHistory().retrievePast(5).queue(m -> {
 											if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-												finalLvlChannel.sendMessage(content).queue();
+												finalLvlChannel.sendMessage(content).queue(null, Helper::doNothing);
 											}
 										}, Helper::doNothing);
 									} else {
 										channel.getHistory().retrievePast(5).queue(m -> {
 											if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-												channel.sendMessage(content).queue();
+												channel.sendMessage(content).queue(null, Helper::doNothing);
 											}
 										}, Helper::doNothing);
 									}
@@ -336,7 +351,9 @@ public class ShiroEvents extends ListenerAdapter {
 						}
 						rawLvls.remove(String.valueOf(i));
 						List<Role> list = new ArrayList<>();
-						rawLvls.forEach((k, v) -> {
+						for (Map.Entry<String, Object> entry : rawLvls.entrySet()) {
+							String k = entry.getKey();
+							Object v = entry.getValue();
 							Role r = guild.getRoleById((String) v);
 
 							if (r != null) list.add(r);
@@ -345,7 +362,7 @@ public class ShiroEvents extends ListenerAdapter {
 								cl.remove(String.valueOf(i));
 								GuildDAO.updateGuildSettings(gc);
 							}
-						});
+						}
 						guild.modifyMemberRoles(member, null, list).queue(null, Helper::doNothing);
 					});
 				} catch (HierarchyException | InsufficientPermissionException ignore) {
@@ -359,7 +376,10 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(member.getId() + member.getGuild().getId());
-					if (m.getMid() == null) {
+					if (m == null) {
+						MemberDAO.addMemberToDB(member);
+						m = MemberDAO.getMemberById(member.getId() + member.getGuild().getId());
+					} else if (m.getMid() == null) {
 						m.setMid(author.getId());
 						m.setSid(guild.getId());
 					}
@@ -374,8 +394,6 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					MemberDAO.updateMemberConfigs(m);
-				} catch (NoResultException e) {
-					MemberDAO.addMemberToDB(member);
 				} catch (ErrorResponseException | NullPointerException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
@@ -454,22 +472,26 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		}
 
-		ShiroInfo.getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
-			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
-			c.sendMessage(msg).queue();
-		}));
+		for (String d : ShiroInfo.getDevelopers()) {
+			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+				String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
+				c.sendMessage(msg).queue();
+			});
+		}
 		Helper.logger(this.getClass()).info("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
 	}
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
-		ShiroInfo.getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
-			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
-			gc.setMarkForDelete(true);
-			GuildDAO.updateGuildSettings(gc);
-			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
-			c.sendMessage(msg).queue();
-		}));
+		for (String d : ShiroInfo.getDevelopers()) {
+			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+				GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+				gc.setMarkForDelete(true);
+				GuildDAO.updateGuildSettings(gc);
+				String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
+				c.sendMessage(msg).queue();
+			});
+		}
 		Helper.logger(this.getClass()).info("Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
 	}
 
@@ -477,42 +499,82 @@ public class ShiroEvents extends ListenerAdapter {
 	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
 		Guild guild = event.getGuild();
 		Member member = event.getMember();
+		User author = event.getUser();
 		try {
-			if (BlacklistDAO.isBlacklisted(event.getUser())) return;
+			if (BlacklistDAO.isBlacklisted(author)) return;
 			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+
+			if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
+				Helper.logToChannel(author, false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + author.getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", guild);
+				guild.kick(member).queue();
+				return;
+			}
 
 			MemberDAO.addMemberToDB(member);
 
 			if (!gc.getMsgBoasVindas().equals("")) {
-				if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
-					Helper.logToChannel(event.getUser(), false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + event.getUser().getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", guild);
-					guild.kick(member).queue();
-					return;
-				}
-				URL url = new URL(Objects.requireNonNull(event.getUser().getAvatarUrl()));
+				URL url = new URL(Objects.requireNonNull(author.getAvatarUrl()));
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
 
-				EmbedBuilder eb = new EmbedBuilder();
+				JSONObject template = gc.getEmbedTemplate();
+				EmbedBuilder eb;
+				if (!template.isEmpty()) {
+					if (template.has("color")) eb = new EmbedBuilder();
+					else eb = new ColorlessEmbedBuilder();
 
-				eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
-				eb.setColor(Helper.colorThief(image));
-				eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", event.getUser().getName()).replace("%guild%", guild.getName()));
-				eb.setThumbnail(event.getUser().getAvatarUrl());
-				eb.setFooter("ID do usuário: " + event.getUser().getId(), guild.getIconUrl());
-				switch ((int) (Math.random() * 5)) {
-					case 0 -> eb.setTitle("Opa, parece que temos um novo membro?");
-					case 1 -> eb.setTitle("Mais um membro para nosso lindo servidor!");
-					case 2 -> eb.setTitle("Um novo jogador entrou na partida, pressione start 2P!");
-					case 3 -> eb.setTitle("Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!");
-					case 4 -> eb.setTitle("Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!");
+					eb.setTitle(
+							switch (Helper.rng(5, true)) {
+								case 0 -> "Opa, parece que temos um novo membro?";
+								case 1 -> "Mais um membro para nosso lindo servidor!";
+								case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
+								case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
+								case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
+								default -> "";
+							}
+					);
+
+					if (template.has("color")) eb.setColor(Color.decode(template.getString("color")));
+					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
+					if (template.has("image")) eb.setImage(template.getString("image"));
+
+					eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
+
+					if (template.has("fields")) {
+						for (Object j : template.getJSONArray("fields")) {
+							try {
+								JSONObject jo = (JSONObject) j;
+								eb.addField(jo.getString("name"), jo.getString("value"), true);
+							} catch (Exception ignore) {
+							}
+						}
+					}
+
+					if (template.has("footer")) eb.setFooter(template.getString("footer"), null);
+				} else {
+					eb = new EmbedBuilder()
+							.setTitle(
+									switch (Helper.rng(5, true)) {
+										case 0 -> "Opa, parece que temos um novo membro?";
+										case 1 -> "Mais um membro para nosso lindo servidor!";
+										case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
+										case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
+										case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
+										default -> "";
+									}
+							)
+							.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl())
+							.setColor(Helper.colorThief(image))
+							.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()))
+							.setThumbnail(author.getAvatarUrl())
+							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
 
-				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalBV())).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
-				Helper.logToChannel(event.getUser(), false, null, "Um usuário entrou no servidor", guild);
-			} else if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
-				Helper.logToChannel(event.getUser(), false, null, "Um usuário foi bloqueado de entrar no servidor", guild);
+				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalBV())).sendMessage(author.getAsMention()).embed(eb.build()).queue();
+				Helper.logToChannel(author, false, null, "Um usuário entrou no servidor", guild);
+			} else if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
+				Helper.logToChannel(author, false, null, "Um usuário foi bloqueado de entrar no servidor", guild);
 				guild.kick(member).queue();
 			}
 		} catch (Exception ignore) {
@@ -522,39 +584,75 @@ public class ShiroEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
 		Guild guild = event.getGuild();
-		Member member = event.getMember();
+		User author = event.getUser();
 		try {
-			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 			/*com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(event.getMember().getId() + event.getGuild().getId());
 			m.setMarkForDelete(true);
 			MemberDAO.updateMemberConfigs(m);*/
 
 			if (!gc.getMsgAdeus().equals("")) {
-				URL url = new URL(Objects.requireNonNull(event.getUser().getAvatarUrl()));
+				URL url = new URL(Objects.requireNonNull(author.getAvatarUrl()));
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
 
-				int rmsg = (int) (Math.random() * 5);
+				JSONObject template = gc.getEmbedTemplate();
+				EmbedBuilder eb;
+				if (!template.isEmpty()) {
+					if (template.has("color")) eb = new EmbedBuilder();
+					else eb = new ColorlessEmbedBuilder();
 
-				EmbedBuilder eb = new EmbedBuilder();
+					eb.setTitle(
+							switch (Helper.rng(5, true)) {
+								case 0 -> "Nãããoo...um membro deixou este servidor!";
+								case 1 -> "O quê? Temos um membro a menos neste servidor!";
+								case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
+								case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
+								case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
+								default -> "";
+							}
+					);
 
-				eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
-				eb.setColor(Helper.colorThief(image));
-				eb.setThumbnail(event.getUser().getAvatarUrl());
-				eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
-				eb.setFooter("ID do usuário: " + event.getUser().getId() + "\n\nServidor gerenciado por " + Objects.requireNonNull(event.getGuild().getOwner()).getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
-				switch (rmsg) {
-					case 0 -> eb.setTitle("Nãããoo...um membro deixou este servidor!");
-					case 1 -> eb.setTitle("O quê? Temos um membro a menos neste servidor!");
-					case 2 -> eb.setTitle("Alguém saiu do servidor, deve ter acabado a pilha, só pode!");
-					case 3 -> eb.setTitle("Bem, alguém não está mais neste servidor, que pena!");
-					case 4 -> eb.setTitle("Saíram do servidor bem no meio de uma teamfight, da pra acreditar?");
+					if (template.has("color")) eb.setColor(Color.decode(template.getString("color")));
+					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
+					if (template.has("image")) eb.setImage(template.getString("image"));
+
+					eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
+
+					if (template.has("fields")) {
+						for (Object j : template.getJSONArray("fields")) {
+							try {
+								JSONObject jo = (JSONObject) j;
+								eb.addField(jo.getString("name"), jo.getString("value"), true);
+							} catch (Exception ignore) {
+							}
+						}
+					}
+
+					if (template.has("footer")) eb.setFooter(template.getString("footer"), null);
+				} else {
+					eb = new EmbedBuilder()
+							.setTitle(
+									switch (Helper.rng(5, true)) {
+										case 0 -> "Nãããoo...um membro deixou este servidor!";
+										case 1 -> "O quê? Temos um membro a menos neste servidor!";
+										case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
+										case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
+										case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
+										default -> "";
+									}
+							)
+							.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl())
+							.setColor(Helper.colorThief(image))
+							.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()))
+							.setThumbnail(author.getAvatarUrl())
+							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
 
-				Objects.requireNonNull(event.getGuild().getTextChannelById(gc.getCanalAdeus())).sendMessage(eb.build()).queue();
-				Helper.logToChannel(event.getUser(), false, null, "Um usuário saiu do servidor", event.getGuild());
+				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalAdeus())).sendMessage(eb.build()).queue();
+				Helper.logToChannel(author, false, null, "Um usuário saiu do servidor", guild);
 			}
 		} catch (Exception ignore) {
 		}
@@ -567,43 +665,125 @@ public class ShiroEvents extends ListenerAdapter {
 		if (staffIds.contains(event.getAuthor().getId())) {
 			String msg = event.getMessage().getContentRaw();
 			String[] args = msg.split(" ");
-			if (args.length < 2) return;
-			String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
 
 			try {
 				switch (args[0].toLowerCase()) {
 					case "send", "s" -> {
-						User u = Main.getInfo().getUserByID(args[1]);
-						if (u == null) {
-							event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
-							return;
-						}
-						u.openPrivateChannel().queue(c ->
-								c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
-						staffIds.forEach(d -> {
-							if (!d.equals(event.getAuthor().getId())) {
-								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-										c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
+						if (args.length < 2) return;
+						String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
+
+						try {
+							User u = Main.getInfo().getUserByID(args[1]);
+							if (u == null) {
+								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
+								return;
+							} else if (msgNoArgs.length() == 0) {
+								event.getChannel().sendMessage("❌ | Você não pode enviar uma mensagem vazia.").queue();
+								return;
 							}
-						});
-						event.getChannel().sendMessage("Mensagem enviada com sucesso!").queue();
+
+							u.openPrivateChannel().queue(c ->
+									c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
+							for (String d : staffIds) {
+								if (!d.equals(event.getAuthor().getId())) {
+									Main.getInfo().getUserByID(d).openPrivateChannel()
+											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs))
+											.queue();
+								}
+							}
+							event.getChannel().sendMessage("✅ | Mensagem enviada com sucesso!").queue();
+						} catch (NumberFormatException e) {
+							event.getChannel().sendMessage("❌ | ID inválido.").queue();
+						}
 					}
 					case "block", "b" -> {
-						User us = Main.getInfo().getUserByID(args[1]);
-						if (us == null) {
-							event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
-							return;
-						}
-						RelayDAO.permaBlock(new PermaBlock(args[1]));
-						us.openPrivateChannel().queue(c ->
-								c.sendMessage("Você foi bloqueado dos canais de comunicação da Shiro pela seguinte razão: `" + msgNoArgs + "`").queue());
-						staffIds.forEach(d -> {
-							if (!d.equals(event.getAuthor().getId())) {
-								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-										c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
+						if (args.length < 2) return;
+						String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
+
+						try {
+							User us = Main.getInfo().getUserByID(args[1]);
+							if (us == null) {
+								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
+								return;
+							} else if (msgNoArgs.length() == 0) {
+								event.getChannel().sendMessage("❌ | Você precisa especificar uma razão.").queue();
+								return;
 							}
-						});
-						event.getChannel().sendMessage("Usuário bloqueado com sucesso!").queue();
+
+							EmbedBuilder eb = new EmbedBuilder()
+									.setTitle("Você foi bloqueado dos canais de comunicação da Shiro")
+									.setDescription("Razão: ```" + msgNoArgs + "```")
+									.setColor(Color.red)
+									.setThumbnail("https://cdn.icon-icons.com/icons2/1380/PNG/512/vcsconflicting_93497.png")
+									.setTimestamp(Instant.now());
+
+							RelayDAO.permaBlock(new PermaBlock(args[1]));
+							us.openPrivateChannel().queue(c ->
+									c.sendMessage(eb.build()).queue());
+							for (String d : staffIds) {
+								if (!d.equals(event.getAuthor().getId())) {
+									Main.getInfo().getUserByID(d).openPrivateChannel()
+											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs))
+											.queue();
+								}
+							}
+							event.getChannel().sendMessage("✅ | Usuário bloqueado com sucesso!").queue();
+						} catch (NumberFormatException e) {
+							event.getChannel().sendMessage("❌ | ID inválido.").queue();
+						}
+					}
+					case "alert", "a" -> {
+						if (args.length < 2) return;
+						String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
+
+						try {
+							User us = Main.getInfo().getUserByID(args[1]);
+							if (us == null) {
+								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
+								return;
+							} else if (msgNoArgs.length() == 0) {
+								event.getChannel().sendMessage("❌ | Você precisa especificar uma razão.").queue();
+								return;
+							}
+
+							EmbedBuilder eb = new EmbedBuilder()
+									.setTitle("Você recebeu um alerta:")
+									.setDescription(msgNoArgs)
+									.setColor(Color.orange)
+									.setThumbnail("https://canopytools.com/wp-content/uploads/2019/10/alert-icon-17.png")
+									.setTimestamp(Instant.now());
+
+							us.openPrivateChannel().queue(c ->
+									c.sendMessage(eb.build()).queue());
+							for (String d : staffIds) {
+								if (!d.equals(event.getAuthor().getId())) {
+									Main.getInfo().getUserByID(d).openPrivateChannel()
+											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " alertou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs))
+											.queue();
+								}
+							}
+							event.getChannel().sendMessage("✅ | Usuário alertado com sucesso!").queue();
+						} catch (NumberFormatException e) {
+							event.getChannel().sendMessage("❌ | ID inválido.").queue();
+						}
+					}
+					case "mark", "m" -> {
+						EmbedBuilder eb = new EmbedBuilder()
+								.setTitle("Marcador de atividade:")
+								.setDescription(event.getAuthor().getName() + " marcou que está acompanhando o chat de suporte.")
+								.setColor(Color.decode("#800080"))
+								.setThumbnail("https://iconsplace.com/wp-content/uploads/_icons/800080/256/png/support-icon-13-256.png")
+								.setFooter("Aguarde alguns minutos antes de responder as mensagens dos usuários para evitar interferir.")
+								.setTimestamp(Instant.now());
+
+						for (String d : staffIds) {
+							if (!d.equals(event.getAuthor().getId())) {
+								Main.getInfo().getUserByID(d).openPrivateChannel()
+										.flatMap(c -> c.sendMessage(eb.build()))
+										.queue();
+							}
+						}
+						event.getChannel().sendMessage("✅ | Atividade marcada com sucesso!").queue();
 					}
 				}
 			} catch (NullPointerException ignore) {
@@ -624,12 +804,17 @@ public class ShiroEvents extends ListenerAdapter {
 					} else
 						c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
 								.queue(s -> {
-									EmbedBuilder eb = new ColorlessEmbedBuilder();
+									EmbedBuilder eb = new ColorlessEmbedBuilder()
+											.setDescription(event.getMessage().getContentRaw())
+											.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl())
+											.setFooter(event.getAuthor().getId())
+											.setTimestamp(Instant.now());
 
-									eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
-									eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
-									staffIds.forEach(d ->
-											Main.getInfo().getUserByID(d).openPrivateChannel().queue(ch -> ch.sendMessage(event.getMessage()).embed(eb.build()).queue()));
+									for (String d : staffIds) {
+										Main.getInfo().getUserByID(d).openPrivateChannel()
+												.flatMap(ch -> ch.sendMessage(eb.build()))
+												.queue();
+									}
 									s.delete().queueAfter(1, TimeUnit.MINUTES);
 								});
 				});
@@ -715,12 +900,16 @@ public class ShiroEvents extends ListenerAdapter {
 				acc.addVCredit((long) Math.ceil(value * be.getRate()), this.getClass());
 				AccountDAO.saveAccount(acc);
 
-				msg.getChannel().sendMessage("Obrigada, seus " + value + " " + be.getCurrency() + (value != 1 ? "s" : "") + " foram convertidos em " + (long) (value * be.getRate()) + " créditos voláteis com sucesso!").queue();
+				msg.getChannel().sendMessage("✅ | Obrigada, seus " + value + " " + be.getCurrency() + (value != 1 ? "s" : "") + " foram convertidos em " + (long) (value * be.getRate()) + " créditos voláteis com sucesso!").queue();
 			}
 		}
 	}
 
+	public Map<String, CopyOnWriteArrayList<SimpleMessageListener>> getHandler() {
+		return toHandle;
+	}
+
 	public void addHandler(Guild guild, SimpleMessageListener sml) {
-		toHandle.compute(guild.getId(), (s, evts) -> evts == null ? new ArrayList<>() : evts).add(sml);
+		getHandler().compute(guild.getId(), (s, evts) -> evts == null ? new CopyOnWriteArrayList<>() : evts).add(sml);
 	}
 }

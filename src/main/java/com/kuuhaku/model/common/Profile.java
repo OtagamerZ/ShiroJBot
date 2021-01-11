@@ -21,11 +21,14 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.enums.ExceedEnum;
+import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.GifSequenceWriter;
 import com.kuuhaku.utils.Helper;
@@ -54,7 +57,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Profile {
 	public static Font FONT;
 	public static final int WIDTH = 944;
-	public static final int HEIGTH = 600;
+	public static final int HEIGHT = 600;
 
 	static {
 		try {
@@ -75,7 +78,7 @@ public class Profile {
 			avatar = Helper.scaleImage(ImageIO.read(Helper.getImage("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg")), 200, 200);
 		}
 
-		BufferedImage bi = new BufferedImage(WIDTH, HEIGTH, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setBackground(Color.black);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -85,28 +88,28 @@ public class Profile {
 		int yOffset = 0;
 
 		Color main = null;
-		if (!mb.getProfileColor().isBlank()) {
+		if (!acc.getProfileColor().isBlank()) {
 			try {
-				main = Color.decode(mb.getProfileColor());
+				main = Color.decode(acc.getProfileColor());
 			} catch (NumberFormatException ignore) {
 			}
 		}
 		try {
-			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(mb.getBg())), bi.getWidth(), bi.getHeight());
+			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(acc.getBg())), bi.getWidth(), bi.getHeight());
 
 			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
 			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
-			if (!acc.hasAnimatedBg() || !Helper.getFileType(mb.getBg()).contains("gif"))
+			if (!acc.hasAnimatedBg() || !Helper.getFileType(acc.getBg()).contains("gif"))
 				g2d.drawImage(bg, xOffset, yOffset, null);
-			if (main == null) main = Helper.reverseColor(Helper.colorThief(mb.getBg()));
+			if (main == null) main = Helper.reverseColor(Helper.colorThief(acc.getBg()));
 		} catch (IOException e) {
 			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
 			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
 			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
-			if (!acc.hasAnimatedBg() || !Helper.getFileType(mb.getBg()).contains("gif"))
+			if (!acc.hasAnimatedBg() || !Helper.getFileType(acc.getBg()).contains("gif"))
 				g2d.drawImage(bg, xOffset, yOffset, null);
 			if (main == null)
 				main = Helper.reverseColor(Helper.colorThief("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg"));
@@ -203,7 +206,7 @@ public class Profile {
 
 
 		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
-		String s = mb.getBio();
+		String s = acc.getBio();
 		drawStringMultiLine(g2d, s.isEmpty() ? "Sem biografia" : s, 440, 474, 403);
 
 		drawBadges(m, mb, g, g2d);
@@ -217,8 +220,22 @@ public class Profile {
 			g2d.drawImage(mb.getTrophy().getImage(), 665, 22, null);
 
 		g2d.dispose();
+		bi = clipRoundEdges(bi);
 
-		return Helper.scaleImage(clipRoundEdges(bi), 400, 254);
+		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(m.getId());
+		if (mmr.getTier() != RankedTier.UNRANKED) {
+			BufferedImage finalImg = new BufferedImage(983, 600, BufferedImage.TYPE_INT_ARGB);
+			g2d = finalImg.createGraphics();
+
+			g2d.drawImage(bi, 39, 0, null);
+			g2d.drawImage(mmr.getTier().getBanner(), 0, 0, null);
+
+			g2d.dispose();
+
+			bi = finalImg;
+		}
+
+		return Helper.scaleImage(bi, 400, 254);
 	}
 
 	public static BufferedImage clipRoundEdges(BufferedImage image) {
@@ -240,14 +257,14 @@ public class Profile {
 			}
 
 			Set<Tag> tags = Tag.getTags(m.getUser(), m);
-			tags.forEach(t -> {
+			for (Tag t : tags) {
 				try {
 					add(ImageIO.read(t.getPath(mb)));
 				} catch (IOException e) {
 					Helper.logger(Profile.class).error(e + " | " + e.getStackTrace()[0]);
 				} catch (NullPointerException ignore) {
 				}
-			});
+			}
 		}};
 
 		List<int[]> coords = new ArrayList<>() {{
@@ -263,38 +280,38 @@ public class Profile {
 		}
 	}
 
-	public static File applyAnimatedBackground(Member mb, BufferedImage overlay) throws IOException {
+	public static File applyAnimatedBackground(Account acc, BufferedImage overlay) throws IOException {
 		File out = File.createTempFile("profile_", ".gif");
 		try (ImageOutputStream ios = new FileImageOutputStream(out)) {
-			List<Triple<Integer, Integer, BufferedImage>> frames = Helper.readGIF(mb.getBg());
+			List<Triple<Integer, Integer, BufferedImage>> frames = Helper.readGIF(acc.getBg());
 			List<Triple<Integer, Integer, BufferedImage>> toDraw = new ArrayList<>();
 			AtomicInteger xOffset = new AtomicInteger();
 			AtomicInteger yOffset = new AtomicInteger();
 
-			frames.forEach(p -> {
+			for (Triple<Integer, Integer, BufferedImage> frame : frames) {
 				BufferedImage canvas = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
 
-				if (p.getRight().getWidth() > canvas.getWidth())
-					xOffset.set(-(p.getRight().getWidth() - canvas.getWidth()) / 2);
-				if (p.getRight().getHeight() > canvas.getHeight())
-					yOffset.set(-(p.getRight().getHeight() - canvas.getHeight()) / 2);
+				if (frame.getRight().getWidth() > canvas.getWidth())
+					xOffset.set(-(frame.getRight().getWidth() - canvas.getWidth()) / 2);
+				if (frame.getRight().getHeight() > canvas.getHeight())
+					yOffset.set(-(frame.getRight().getHeight() - canvas.getHeight()) / 2);
 
-				g2d.drawImage(p.getRight(), xOffset.get(), yOffset.get(), null);
+				g2d.drawImage(frame.getRight(), xOffset.get(), yOffset.get(), null);
 				g2d.drawImage(overlay, 0, 0, null);
 
 				g2d.dispose();
-				toDraw.add(Triple.of(p.getLeft(), p.getMiddle(), clipRoundEdges(canvas)));
-			});
+				toDraw.add(Triple.of(frame.getLeft(), frame.getMiddle(), clipRoundEdges(canvas)));
+			}
 
 			GifSequenceWriter writer = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
-			toDraw.forEach(p -> {
+			for (Triple<Integer, Integer, BufferedImage> p : toDraw) {
 				try {
 					writer.writeToSequence(p.getRight(), p.getLeft(), p.getMiddle(), true);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			});
+			}
 
 			writer.close();
 		}

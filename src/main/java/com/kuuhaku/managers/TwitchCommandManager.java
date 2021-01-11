@@ -19,7 +19,9 @@
 package com.kuuhaku.managers;
 
 import com.kuuhaku.command.TwitchCommand;
-import com.kuuhaku.command.commands.twitch.*;
+import com.kuuhaku.command.commands.twitch.BindCommand;
+import com.kuuhaku.command.commands.twitch.PingCommand;
+import com.kuuhaku.command.commands.twitch.UnbindCommand;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -38,18 +40,6 @@ public class TwitchCommandManager {
 			));
 			put(UnbindCommand.class, new TwitchArgument(
 					"desvincular", new String[]{"unbind"}, "cmd_unbind", true
-			));
-			put(CatchKawaiponCommand.class, new TwitchArgument(
-					"coletar", new String[]{"collect"}, "cmd_catch-kawaipon", true
-			));
-			put(CatchDropCommand.class, new TwitchArgument(
-					"abrir", new String[]{"open"}, "req_captcha", "cmd_catch-drop", true
-			));
-			put(ChooseCommand.class, new TwitchArgument(
-					"escolha", new String[]{"choose"}, "req_options", "cmd_choose", true
-			));
-			put(EightBallCommand.class, new TwitchArgument(
-					"8ball", "req_question", "cmd_8ball", true
 			));
 		}
 	};

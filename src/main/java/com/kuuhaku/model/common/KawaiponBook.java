@@ -154,20 +154,27 @@ public class KawaiponBook {
 	}
 
 	public BufferedImage view(List<Drawable> cardList, Account acc, String title, boolean senshi) throws IOException, InterruptedException {
+		List<Drawable> cards;
 		if (senshi)
-			cardList.sort(Comparator
-					.comparing(d -> ((Champion) d).getMana())
-					.reversed()
-					.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-			);
+			cards = cardList.stream()
+					.peek(d -> d.setAcc(acc))
+					.sorted(Comparator
+							.comparing(d -> ((Champion) d).getMana())
+							.reversed()
+							.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+					)
+					.collect(Collectors.toList());
 		else
-			cardList.sort(Comparator
-					.comparing(d -> ((Equipment) d).getTier())
-					.reversed()
-					.thenComparing(c -> ((Equipment) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-			);
+			cards = cardList.stream()
+					.peek(d -> d.setAcc(acc))
+					.sorted(Comparator
+							.comparing(d -> ((Equipment) d).getTier())
+							.reversed()
+							.thenComparing(c -> ((Equipment) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+					)
+					.collect(Collectors.toList());
 
-		List<List<Drawable>> chunks = Helper.chunkify(cardList, COLUMN_COUNT);
+		List<List<Drawable>> chunks = Helper.chunkify(cards, COLUMN_COUNT);
 		chunks.removeIf(List::isEmpty);
 
 		BufferedImage header = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/header.png")));
@@ -214,7 +221,7 @@ public class KawaiponBook {
 					for (int i = 0; i < chunks.get(finalC).size(); i++) {
 						g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 
-						g.drawImage(chunks.get(finalC).get(i).drawCard(acc, false), 54 + 198 * i, 24, 160, 250, null);
+						g.drawImage(chunks.get(finalC).get(i).drawCard(false), 54 + 198 * i, 24, 160, 250, null);
 						Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getCard().getName(), 15), 160, 54 + 198 * i, 298, g);
 					}
 

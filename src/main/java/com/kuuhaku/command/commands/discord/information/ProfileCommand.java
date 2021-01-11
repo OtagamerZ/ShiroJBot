@@ -59,8 +59,8 @@ public class ProfileCommand extends Command {
 		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-profile")).queue(m -> {
 			try {
-				if (acc.hasAnimatedBg() && Helper.getFileType(mb.getBg()).contains("gif")) {
-					File pf = Profile.applyAnimatedBackground(MemberDAO.getMemberById(author.getId() + guild.getId()), Profile.makeProfile(member, guild));
+				if (acc.hasAnimatedBg() && Helper.getFileType(acc.getBg()).contains("gif")) {
+					File pf = Profile.applyAnimatedBackground(acc, Profile.makeProfile(member, guild));
 					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(pf, "perfil.gif").queue(s -> m.delete().queue());
 				} else
 					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(Helper.getBytes(Profile.makeProfile(member, guild), "png"), "perfil.png").queue(s -> m.delete().queue());

@@ -151,7 +151,7 @@ public class Chess extends Game {
 	}
 
 	@Override
-	public void play(GuildMessageReceivedEvent evt) {
+	public synchronized void play(GuildMessageReceivedEvent evt) {
 		Message message = evt.getMessage();
 		String[] command = {message.getContentRaw().substring(0, 2), message.getContentRaw().substring(2)};
 

@@ -89,6 +89,7 @@ public class SeeCardCommand extends Command {
 
 			List<Drawable> cards = kp.getDrawables();
 			Drawable d = ch == null ? eq == null ? f : eq : ch;
+			d.setAcc(acc);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -99,7 +100,7 @@ public class SeeCardCommand extends Command {
 				eb.addField("Amuleto:", ((Equipment) d).getCharm().getName(), true);
 			eb.setImage("attachment://kawaipon.png");
 
-			channel.sendMessage(eb.build()).addFile(Helper.getBytes(d.drawCard(acc, false), "png"), "kawaipon.png").queue();
+			channel.sendMessage(eb.build()).addFile(Helper.getBytes(d.drawCard(false), "png"), "kawaipon.png").queue();
 		} else {
 			Card tc = CardDAO.getCard(args[0], true);
 			if (tc == null) {

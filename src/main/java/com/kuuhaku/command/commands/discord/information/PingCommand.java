@@ -21,16 +21,12 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
-import com.kuuhaku.events.cron.MonthlyEvent;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.text.MessageFormat;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 
 public class PingCommand extends Command {
 
@@ -64,11 +60,5 @@ public class PingCommand extends Command {
 						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_listeners"), Main.getShiroShards().getShards().get(0).getEventManager().getRegisteredListeners().size())
 				)))
 				.queue();
-
-		if (author.getId().equals(ShiroInfo.getNiiChan())) {
-			int month = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).getMonthValue();
-			if (!DynamicParameterDAO.getParam("last_upd_month").getValue().equals(String.valueOf(month)))
-				MonthlyEvent.call();
-		}
 	}
 }

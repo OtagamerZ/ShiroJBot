@@ -63,10 +63,11 @@ public class DonationHandler {
 					.setDescription("Por favor verifique a razão do ocorrido e entre em contato com o usuário em questão o mais breve possível.")
 					.addField("Email de contato:", data.getString("buyer_email"), true);
 
-			ShiroInfo.getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel()
-					.flatMap(c -> c.sendMessage(eb.build()))
-					.queue()
-			);
+			for (String d : ShiroInfo.getDevelopers()) {
+				Main.getInfo().getUserByID(d).openPrivateChannel()
+						.flatMap(c -> c.sendMessage(eb.build()))
+						.queue();
+			}
 
 			return;
 		}
@@ -91,7 +92,7 @@ public class DonationHandler {
 						.setDescription("Nós da OtagamerZ ficamos feliz que esteja apoiando o desenvolvimento de nossa querida bot Shiro, e agradecemos de coração por todo o tempo que você esteve conosco!")
 						.addField("Você recebeu:",
 								(amount > 0 ? "- " + amount + " créditos.\n" : "") +
-								(db.getGems() > 0 ? "- " + db.getGems() + " gemas." : ""),
+										(db.getGems() > 0 ? "- " + db.getGems() + " gemas." : ""),
 								true
 						)
 						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(), d.getTransaction(), d.getUid()));
@@ -100,10 +101,11 @@ public class DonationHandler {
 						.flatMap(c -> c.sendMessage(eb.build()))
 						.queue(null, Helper::doNothing);
 
-				ShiroInfo.getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
-						.flatMap(c -> c.sendMessage("**" + u.getAsTag() + "** fez uma doação de **R$ " + d.getValue() + "**."))
-						.queue()
-				);
+				for (String dev : ShiroInfo.getDevelopers()) {
+					Main.getInfo().getUserByID(dev).openPrivateChannel()
+							.flatMap(c -> c.sendMessage("**" + u.getAsTag() + "** fez uma doação de **R$ " + d.getValue() + "**."))
+							.queue();
+				}
 			}
 			case "Reversed", "Refunded" -> {
 				if (acc.getBalance() < amount)
@@ -123,7 +125,7 @@ public class DonationHandler {
 						.setDescription("Não foi possível confirmar seu pagamento ou houve um pedido de reembolso, a transação foi revertida e os créditos/gemas ganhos foram removidos de sua conta.")
 						.addField("Revertido:",
 								(amount > 0 ? "- " + amount + " créditos.\n" : "") +
-								(db.getGems() > 0 ? "- " + db.getGems() + " gemas." : ""),
+										(db.getGems() > 0 ? "- " + db.getGems() + " gemas." : ""),
 								true
 						)
 						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(), d.getTransaction(), d.getUid()));
@@ -132,10 +134,11 @@ public class DonationHandler {
 						.flatMap(c -> c.sendMessage(eb.build()))
 						.queue(null, Helper::doNothing);
 
-				ShiroInfo.getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
-						.flatMap(c -> c.sendMessage("**" + u.getAsTag() + "** teve sua doação de **R$ " + d.getValue() + "** recusada/reembolsada."))
-						.queue()
-				);
+				for (String dev : ShiroInfo.getDevelopers()) {
+					Main.getInfo().getUserByID(dev).openPrivateChannel()
+							.flatMap(c -> c.sendMessage("**" + u.getAsTag() + "** teve sua doação de **R$ " + d.getValue() + "** recusada/reembolsada."))
+							.queue();
+				}
 			}
 			case "sub_ended" -> {
 				eb.setColor(Helper.getRandomColor())

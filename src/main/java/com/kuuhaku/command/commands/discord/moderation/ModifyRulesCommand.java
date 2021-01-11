@@ -71,7 +71,7 @@ public class ModifyRulesCommand extends Command {
 
 			gc.removeRule(index);
 			GuildDAO.updateGuildSettings(gc);
-			channel.sendMessage("Regra removida com sucesso!").queue();
+			channel.sendMessage("✅ | Regra removida com sucesso!").queue();
 		} else {
 			if (rule.split(";").length != 2) {
 				channel.sendMessage("❌ | A regra deve ter exatamente 1 separador (`;`).").queue();
@@ -92,7 +92,7 @@ public class ModifyRulesCommand extends Command {
 
 			gc.addRule(rule);
 			GuildDAO.updateGuildSettings(gc);
-			channel.sendMessage("Regra adicionada com sucesso!").queue();
+			channel.sendMessage("✅ | Regra adicionada com sucesso!").queue();
 		}
 	}
 }

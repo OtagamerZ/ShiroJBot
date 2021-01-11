@@ -54,7 +54,7 @@ public class Field implements Drawable, Cloneable {
 	private transient boolean available = true;
 
 	@Override
-	public BufferedImage drawCard(Account acc, boolean flipped) {
+	public BufferedImage drawCard(boolean flipped) {
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		if (flipped) {
@@ -212,12 +212,12 @@ public class Field implements Drawable, Cloneable {
 		}
 	}
 
-	public String toString(Account acc) {
+	public String toString() {
 		return new JSONObject() {{
 			put("id", id);
 			put("name", card.getName());
 			put("modifiers", getModifiers());
-			put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(acc, false), "png")));
+			put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(false), "png")));
 		}}.toString();
 	}
 }

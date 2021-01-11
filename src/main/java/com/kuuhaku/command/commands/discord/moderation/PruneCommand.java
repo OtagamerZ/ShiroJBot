@@ -84,7 +84,7 @@ public class PruneCommand extends Command {
 			((TextChannel) channel).createCopy().queue(s -> {
 				try {
 					((GuildChannel) channel).delete().queue();
-					s.sendMessage("Canal limpo com sucesso!").queue(null, Helper::doNothing);
+					s.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
 				} catch (InsufficientPermissionException e) {
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
 				}

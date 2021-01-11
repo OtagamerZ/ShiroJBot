@@ -72,11 +72,11 @@ public class WaifuDAO {
 		em.close();
 	}
 
-	public static Couple getCouple(User u) {
+	public static Couple getCouple(String id) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando = :id OR waifu = :id");
-		q.setParameter("id", u.getId());
+		q.setParameter("id", id);
 		q.setMaxResults(1);
 
 		try {
@@ -88,11 +88,11 @@ public class WaifuDAO {
 		}
 	}
 
-	public static boolean isWaifued(User u) {
+	public static boolean isWaifued(String id) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando = :id OR waifu = :id");
-		q.setParameter("id", u.getId());
+		q.setParameter("id", id);
 
 		try {
 			q.getSingleResult();

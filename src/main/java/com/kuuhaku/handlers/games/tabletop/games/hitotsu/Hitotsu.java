@@ -99,7 +99,7 @@ public class Hitotsu extends Game {
 		}
 
 		Collections.shuffle(available);
-		deque.addAll(available);
+		deque.addAll(available.subList(0, Math.min(available.size(), 150)));
 
 		for (User u : players) {
 			seats.put(new Hand(u, deque));
@@ -128,7 +128,7 @@ public class Hitotsu extends Game {
 	}
 
 	@Override
-	public void play(GuildMessageReceivedEvent evt) {
+	public synchronized void play(GuildMessageReceivedEvent evt) {
 		Message message = evt.getMessage();
 		String command = message.getContentRaw();
 
@@ -241,13 +241,13 @@ public class Hitotsu extends Game {
 		for (KawaiponCard cd : c)
 			if (!c.get(0).getCard().getAnime().equals(cd.getCard().getAnime())) throw new IllegalChainException();
 
-		c.forEach(cd -> {
+		for (KawaiponCard cd : c) {
 			played.add(cd);
 			justPut(cd);
 			hand.getCards().remove(cd);
 			if (cd.isFoil())
 				CardEffect.getEffect(cd.getCard().getRarity()).accept(this, seats.get(getBoard().getInGamePlayers().peekNext().getId()));
-		});
+		}
 
 		User winner = seats.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null);
 		if (winner != null) {
@@ -345,7 +345,6 @@ public class Hitotsu extends Game {
 
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83D\uDCCB", (mb, ms) -> {
-			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			StringBuilder sb = new StringBuilder();
 			List<KawaiponCard> cards = seats.get(getCurrent().getId()).getCards();
@@ -373,7 +372,7 @@ public class Hitotsu extends Game {
 
 			User u = getCurrent();
 			resetTimer();
-			channel.sendMessage(u + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
+			channel.sendMessage(u.getName() + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
 					.addFile(Helper.getBytes(mount, "png"), "mount.png")
 					.queue(s -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);

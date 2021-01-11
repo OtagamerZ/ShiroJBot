@@ -60,11 +60,14 @@ public class Account {
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
     private int gems = 0;
 
-    @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'Nunca'")
-    private String lastVoted = "Nunca";
-
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
     private int streak = 0;
+
+    @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+    private int bugs = 0;
+
+    @Column(columnDefinition = "INT NOT NULL DEFAULT 1")
+    private int stashCapacity = 1;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean remind = false;
@@ -84,17 +87,26 @@ public class Account {
     @Column(columnDefinition = "TEXT")
     private String buffs = "{}";
 
-    @Enumerated(value = EnumType.STRING)
-    private FrameColor frame = FrameColor.PINK;
+    @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'Nunca'")
+    private String lastVoted = "Nunca";
 
     @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
     private String ultimate = "";
 
+    @Column(columnDefinition = "CHAR(7) NOT NULL DEFAULT ''")
+    private String profileColor = "";
+
+    @Column(columnDefinition = "TEXT")
+    private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
+
+    @Column(columnDefinition = "TEXT")
+    private String bio = "";
+
+    @Enumerated(value = EnumType.STRING)
+    private FrameColor frame = FrameColor.PINK;
+
     @Temporal(TemporalType.DATE)
     private Calendar lastDaily = null;
-
-    @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-    private int bugs = 0;
 
     public String getUserId() {
         return userId;
@@ -256,8 +268,7 @@ public class Account {
                     Main.getInfo().getUserByID(userId).openPrivateChannel()
                             .flatMap(s -> s.sendMessage(eb.build()))
                             .queue(null, e -> Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]));
-                } catch (NullPointerException e) {
-                    Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
+                } catch (NullPointerException ignore) {
                 } finally {
                     notified = true;
                     AccountDAO.saveAccount(this);
@@ -387,6 +398,30 @@ public class Account {
         this.ultimate = ultimate;
     }
 
+    public String getProfileColor() {
+        return profileColor;
+    }
+
+    public void setProfileColor(String profileColor) {
+        this.profileColor = profileColor;
+    }
+
+    public String getBg() {
+        return bg;
+    }
+
+    public void setBackground(String bg) {
+        this.bg = bg;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
     public int getBugs() {
         return bugs;
     }
@@ -397,5 +432,13 @@ public class Account {
 
     public void setBugs(int bugs) {
         this.bugs = bugs;
+    }
+
+    public int getStashCapacity() {
+        return stashCapacity;
+    }
+
+    public void setStashCapacity(int stashCapacity) {
+        this.stashCapacity = stashCapacity;
     }
 }

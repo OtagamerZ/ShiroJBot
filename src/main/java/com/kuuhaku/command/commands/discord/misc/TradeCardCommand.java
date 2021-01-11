@@ -84,7 +84,7 @@ public class TradeCardCommand extends Command {
 
         User other = message.getMentionedUsers().get(0);
         String text = StringUtils.normalizeSpace(String.join(" ", ArrayUtils.subarray(args, 1, args.length)));
-        if (Helper.regex(text, "(\\d+)[ ]+[\\w ]+[NnCcEeFf]")) { //Purchase
+        if (Helper.regex(text, "(\\d+)[ ]+[\\w- ]+[NnCcEeFf]")) { //Purchase
             int type = switch (args[3].toUpperCase()) {
                 case "N", "C" -> 1;
                 case "E" -> 2;
@@ -193,7 +193,7 @@ public class TradeCardCommand extends Command {
 
             if (price < min) {
                 if (hasLoan)
-                    channel.sendMessage("❌ | Como esse usuário possui dívida ativa, você não pode oferecer menos que " + min + " créditos por " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + ".").queue();
+                    channel.sendMessage("❌ | Como esse usuário possui uma dívida ativa, você não pode oferecer menos que " + min + " créditos por " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + ".").queue();
                 else
                     channel.sendMessage("❌ | Você não pode oferecer menos que " + min + " créditos por " + (type == 1 ? "essa carta" : type == 2 ? "esse equipamento" : "essa arena") + ".").queue();
                 return;
@@ -239,7 +239,7 @@ public class TradeCardCommand extends Command {
                                 AccountDAO.saveAccount(acc);
                                 AccountDAO.saveAccount(tacc);
 
-                                s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
+                                s.delete().flatMap(n -> channel.sendMessage("✅ | Troca concluída com sucesso!")).queue(null, Helper::doNothing);
                             }), true, 1, TimeUnit.MINUTES,
                             u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
                             ms -> {
@@ -247,7 +247,7 @@ public class TradeCardCommand extends Command {
                                 Main.getInfo().getConfirmationPending().invalidate(author.getId());
                             })
                     );
-        } else if (Helper.regex(text, "[\\w ]+[NnCcEeFf][ ]+(\\d+)")) { //Selling
+        } else if (Helper.regex(text, "[\\w- ]+[NnCcEeFf][ ]+(\\d+)")) { //Selling
             int type = switch (args[2].toUpperCase()) {
                 case "N", "C" -> 1;
                 case "E" -> 2;
@@ -343,7 +343,7 @@ public class TradeCardCommand extends Command {
                 }
             }
 
-            boolean hasLoan = tacc.getLoan() > 0;
+            boolean hasLoan = acc.getLoan() > 0;
             int min = switch (type) {
                 case 1 -> ((KawaiponCard) product.getRight())
                         .getCard()
@@ -402,7 +402,7 @@ public class TradeCardCommand extends Command {
                                 AccountDAO.saveAccount(acc);
                                 AccountDAO.saveAccount(tacc);
 
-                                s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
+                                s.delete().flatMap(n -> channel.sendMessage("✅ | Troca concluída com sucesso!")).queue(null, Helper::doNothing);
                             }), true, 1, TimeUnit.MINUTES,
                             u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
                             ms -> {
@@ -410,7 +410,7 @@ public class TradeCardCommand extends Command {
                                 Main.getInfo().getConfirmationPending().invalidate(author.getId());
                             })
                     );
-        } else if (Helper.regex(text, "([\\w ]+[NnCcEeFf]){2}")) { //Trade
+        } else if (Helper.regex(text, "([\\w- ]+[NnCcEeFf]){2}")) { //Trade
             if (args.length < 5) {
                 channel.sendMessage("❌ | Você precisa mencionar uma carta, o tipo, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) para realizar a troca.").queue();
                 return;
@@ -646,7 +646,7 @@ public class TradeCardCommand extends Command {
                                 KawaiponDAO.saveKawaipon(kp);
                                 KawaiponDAO.saveKawaipon(target);
 
-                                s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
+                                s.delete().flatMap(n -> channel.sendMessage("✅ | Troca concluída com sucesso!")).queue(null, Helper::doNothing);
                             }), true, 1, TimeUnit.MINUTES,
                             u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
                             ms -> {

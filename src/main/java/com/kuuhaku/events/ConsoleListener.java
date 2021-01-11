@@ -68,21 +68,23 @@ public class ConsoleListener extends BufferedReader {
             case "kill" -> {
                 System.out.println("Sayonara, Nii-chan <3");
                 Executors.newSingleThreadExecutor().execute(() ->
-                        BackupDAO.dumpData(new DataDump(
-                                com.kuuhaku.controller.sqlite.BackupDAO.getCADump(),
-                                com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump(),
-                                com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(),
-                                com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump(),
-                                com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump(),
-                                null
-                        ), true)
-                );
-            }
-            case "notifyNoMemo" -> ShiroInfo.getDevelopers().forEach(s ->
-                    Main.getInfo().getUserByID(s).openPrivateChannel()
-                            .flatMap(ch -> ch.sendMessage("Alerta, minha memória esgotou, causando um erro OutOfMemory. Por favor leia o arquivo de profile gerado na pasta de logs para mais informações."))
-                            .queue()
-            );
-        }
+						BackupDAO.dumpData(new DataDump(
+								com.kuuhaku.controller.sqlite.BackupDAO.getCADump(),
+								com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump(),
+								com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(),
+								com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump(),
+								com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump(),
+								null
+						), true)
+				);
+			}
+			case "notifyNoMemo" -> {
+				for (String s : ShiroInfo.getDevelopers()) {
+					Main.getInfo().getUserByID(s).openPrivateChannel()
+							.flatMap(ch -> ch.sendMessage("Alerta, minha memória esgotou, causando um erro OutOfMemory. Por favor leia o arquivo de profile gerado na pasta de logs para mais informações."))
+							.queue();
+				}
+			}
+		}
     }
 }

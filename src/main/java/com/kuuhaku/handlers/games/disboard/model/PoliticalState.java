@@ -61,7 +61,9 @@ public class PoliticalState {
 	public void addCountry(Country country) {
 		List<String> cs = new ArrayList<>();
 		List<Country> current = getCountries().stream().map(c -> Country.valueOf(Country.class, String.valueOf(c))).collect(Collectors.toList());
-		current.forEach(c -> cs.add(c.name()));
+		for (Country c : current) {
+			cs.add(c.name());
+		}
 
 		cs.add(country.name());
 		this.countries = cs.toString();
@@ -70,7 +72,9 @@ public class PoliticalState {
 	public void removeCountry(Country country) {
 		List<String> cs = new ArrayList<>();
 		List<Country> current = getCountries().stream().map(c -> Country.valueOf(Country.class, String.valueOf(c))).collect(Collectors.toList());
-		current.forEach(c -> cs.add(c.name()));
+		for (Country c : current) {
+			cs.add(c.name());
+		}
 
 		cs.remove(country.name());
 		this.countries = cs.toString();

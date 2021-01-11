@@ -63,6 +63,6 @@ public class BlacklistCommand extends Command {
 		Blacklist bl = new Blacklist(u.getId(), author.getName());
 		BlacklistDAO.blacklist(bl);
 
-		channel.sendMessage("Usuário adicionado à lista negra com sucesso!").queue();
+		channel.sendMessage("✅ | Usuário adicionado à lista negra com sucesso!").queue();
 	}
 }
