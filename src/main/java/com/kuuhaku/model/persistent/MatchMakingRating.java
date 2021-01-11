@@ -227,7 +227,7 @@ public class MatchMakingRating {
 
 	public int getRemainingBlock() {
 		if (blockedUntil == null) return 0;
-		return (int) TimeUnit.MINUTES.convert(Math.max(0, blockedUntil.getTime() - Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3")))).getTime()), TimeUnit.MILLISECONDS);
+		return (int) TimeUnit.SECONDS.convert(Math.max(0, blockedUntil.getTime() - Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3")))).getTime()), TimeUnit.MILLISECONDS);
 	}
 
 	public void block(int time, TemporalUnit unit) {
