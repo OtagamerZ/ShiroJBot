@@ -105,8 +105,10 @@ public class TierRankCommand extends Command {
 				.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 
 		for (int i = 0; i < 8; i++) {
-			eb.addField(Helper.getNumericEmoji(i) + " | " + RankedTier.getTierName(i, false), Helper.VOID, true);
+			sb.append("%s | %s\n".formatted(Helper.getNumericEmoji(i), RankedTier.getTierName(i, false)));
 		}
+
+		eb.setDescription(sb.toString());
 
 		channel.sendMessage(eb.build()).queue(s ->
 				Pages.categorize(s, categories, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
