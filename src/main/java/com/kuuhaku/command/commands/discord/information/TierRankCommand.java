@@ -65,6 +65,7 @@ public class TierRankCommand extends Command {
 		StringBuilder prom = new StringBuilder();
 
 		for (RankedTier rt : RankedTier.values()) {
+			if (rt == RankedTier.UNRANKED) continue;
 			eb.clearFields();
 			sb.setLength(0);
 			prom.setLength(0);
@@ -104,7 +105,7 @@ public class TierRankCommand extends Command {
 				.setTitle("Tiers do Shoukan ranqueado")
 				.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 
-		for (int i = 0; i < 8; i++) {
+		for (int i = 1; i < 8; i++) {
 			sb.append("%s | %s\n".formatted(Helper.getNumericEmoji(i), RankedTier.getTierName(i, false)));
 		}
 
