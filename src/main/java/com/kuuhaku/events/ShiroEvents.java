@@ -116,9 +116,8 @@ public class ShiroEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMessageUpdate(@NotNull GuildMessageUpdateEvent event) {
 		if (event.getAuthor().isBot()) return;
-		onGuildMessageReceived(new GuildMessageReceivedEvent(event.getJDA(), event.getResponseNumber(), event.getMessage()));
-
 		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
+		onGuildMessageReceived(new GuildMessageReceivedEvent(event.getJDA(), event.getResponseNumber(), event.getMessage()));
 
 		if (msg != null)
 			Helper.logToChannel(event.getAuthor(), false, null, "Uma mensagem foi editada no canal " + event.getChannel().getAsMention() + ":```diff\n- " + msg.getContentRaw() + "\n+ " + event.getMessage().getContentRaw() + "```", msg.getGuild());
