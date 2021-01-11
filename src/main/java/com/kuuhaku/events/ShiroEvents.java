@@ -665,18 +665,23 @@ public class ShiroEvents extends ListenerAdapter {
 		if (staffIds.contains(event.getAuthor().getId())) {
 			String msg = event.getMessage().getContentRaw();
 			String[] args = msg.split(" ");
-			if (args.length < 2) return;
-			String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
 
 			try {
 				switch (args[0].toLowerCase()) {
 					case "send", "s" -> {
+						if (args.length < 2) return;
+						String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
+
 						try {
 							User u = Main.getInfo().getUserByID(args[1]);
 							if (u == null) {
 								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
 								return;
+							} else if (msgNoArgs.length() == 0) {
+								event.getChannel().sendMessage("❌ | Você não pode enviar uma mensagem vazia.").queue();
+								return;
 							}
+
 							u.openPrivateChannel().queue(c ->
 									c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
 							for (String d : staffIds) {
@@ -692,15 +697,29 @@ public class ShiroEvents extends ListenerAdapter {
 						}
 					}
 					case "block", "b" -> {
+						if (args.length < 2) return;
+						String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
+
 						try {
 							User us = Main.getInfo().getUserByID(args[1]);
 							if (us == null) {
 								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
 								return;
+							} else if (msgNoArgs.length() == 0) {
+								event.getChannel().sendMessage("❌ | Você precisa especificar uma razão.").queue();
+								return;
 							}
+
+							EmbedBuilder eb = new EmbedBuilder()
+									.setTitle("Você foi bloqueado dos canais de comunicação da Shiro")
+									.setDescription("Razão: ```" + msgNoArgs + "```")
+									.setColor(Color.red)
+									.setThumbnail("https://cdn.icon-icons.com/icons2/1380/PNG/512/vcsconflicting_93497.png")
+									.setTimestamp(Instant.now());
+
 							RelayDAO.permaBlock(new PermaBlock(args[1]));
 							us.openPrivateChannel().queue(c ->
-									c.sendMessage("Você foi bloqueado dos canais de comunicação da Shiro pela seguinte razão: `" + msgNoArgs + "`").queue());
+									c.sendMessage(eb.build()).queue());
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
 									Main.getInfo().getUserByID(d).openPrivateChannel()
@@ -714,10 +733,16 @@ public class ShiroEvents extends ListenerAdapter {
 						}
 					}
 					case "alert", "a" -> {
+						if (args.length < 2) return;
+						String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
+
 						try {
 							User us = Main.getInfo().getUserByID(args[1]);
 							if (us == null) {
 								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
+								return;
+							} else if (msgNoArgs.length() == 0) {
+								event.getChannel().sendMessage("❌ | Você precisa especificar uma razão.").queue();
 								return;
 							}
 
@@ -725,7 +750,8 @@ public class ShiroEvents extends ListenerAdapter {
 									.setTitle("Você recebeu um alerta:")
 									.setDescription(msgNoArgs)
 									.setColor(Color.orange)
-									.setThumbnail("https://canopytools.com/wp-content/uploads/2019/10/alert-icon-17.png");
+									.setThumbnail("https://canopytools.com/wp-content/uploads/2019/10/alert-icon-17.png")
+									.setTimestamp(Instant.now());
 
 							us.openPrivateChannel().queue(c ->
 									c.sendMessage(eb.build()).queue());
@@ -746,7 +772,9 @@ public class ShiroEvents extends ListenerAdapter {
 								.setTitle("Marcador de atividade:")
 								.setDescription(event.getAuthor().getName() + " marcou que está acompanhando o chat de suporte.")
 								.setColor(Color.decode("#800080"))
-								.setThumbnail("https://iconsplace.com/wp-content/uploads/_icons/800080/256/png/support-icon-13-256.png");
+								.setThumbnail("https://iconsplace.com/wp-content/uploads/_icons/800080/256/png/support-icon-13-256.png")
+								.setFooter("Aguarde alguns minutos antes de responder as mensagens dos usuários para evitar interferir.")
+								.setTimestamp(Instant.now());
 
 						for (String d : staffIds) {
 							if (!d.equals(event.getAuthor().getId())) {
