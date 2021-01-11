@@ -72,7 +72,7 @@ public class TierRankCommand extends Command {
 			List<MatchMakingRating> top10 = MatchMakingRatingDAO.getMMRRank(rt.getTier());
 			top10 = top10.subList(0, Math.min(10, top10.size()));
 
-			eb.setTitle("Top 10 do tier %s (%s)".formatted(rt.getTier(), RankedTier.getTierName(rt.getTier())));
+			eb.setTitle("Top 10 do tier %s (%s)".formatted(rt.getTier(), RankedTier.getTierName(rt.getTier(), false)));
 
 
 			for (MatchMakingRating mm : top10) {
@@ -95,7 +95,7 @@ public class TierRankCommand extends Command {
 
 			eb.addField("Promoção de tier", prom.toString(), false)
 					.addField(Helper.VOID, sb.toString(), false)
-					.setThumbnail("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/tiers/" + RankedTier.getTierName(rt.getTier()).toLowerCase() + ".png");
+					.setThumbnail("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/tiers/" + RankedTier.getTierName(rt.getTier(), true).toLowerCase() + ".png");
 			categories.put(Helper.getNumericEmoji(rt.getTier()), new Page(PageType.EMBED, eb.build()));
 		}
 
@@ -105,7 +105,7 @@ public class TierRankCommand extends Command {
 				.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 
 		for (int i = 0; i < 8; i++) {
-			eb.addField(Helper.getNumericEmoji(i) + " | " + RankedTier.getTierName(i), Helper.VOID, true);
+			eb.addField(Helper.getNumericEmoji(i) + " | " + RankedTier.getTierName(i, false), Helper.VOID, true);
 		}
 
 		channel.sendMessage(eb.build()).queue(s ->
