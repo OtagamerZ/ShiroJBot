@@ -72,7 +72,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -681,8 +681,9 @@ public class ShiroEvents extends ListenerAdapter {
 									c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
-									Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-											c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
+									Main.getInfo().getUserByID(d).openPrivateChannel()
+											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs))
+											.queue();
 								}
 							}
 							event.getChannel().sendMessage("✅ | Mensagem enviada com sucesso!").queue();
@@ -702,8 +703,9 @@ public class ShiroEvents extends ListenerAdapter {
 									c.sendMessage("Você foi bloqueado dos canais de comunicação da Shiro pela seguinte razão: `" + msgNoArgs + "`").queue());
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
-									Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-											c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
+									Main.getInfo().getUserByID(d).openPrivateChannel()
+											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs))
+											.queue();
 								}
 							}
 							event.getChannel().sendMessage("✅ | Usuário bloqueado com sucesso!").queue();
@@ -729,8 +731,9 @@ public class ShiroEvents extends ListenerAdapter {
 									c.sendMessage(eb.build()).queue());
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
-									Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-											c.sendMessage(event.getAuthor().getName() + " alertou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
+									Main.getInfo().getUserByID(d).openPrivateChannel()
+											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " alertou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs))
+											.queue();
 								}
 							}
 							event.getChannel().sendMessage("✅ | Usuário alertado com sucesso!").queue();
@@ -747,8 +750,9 @@ public class ShiroEvents extends ListenerAdapter {
 
 						for (String d : staffIds) {
 							if (!d.equals(event.getAuthor().getId())) {
-								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-										c.sendMessage(eb.build()).queue());
+								Main.getInfo().getUserByID(d).openPrivateChannel()
+										.flatMap(c -> c.sendMessage(eb.build()))
+										.queue();
 							}
 						}
 						event.getChannel().sendMessage("✅ | Atividade marcada com sucesso!").queue();
@@ -772,12 +776,16 @@ public class ShiroEvents extends ListenerAdapter {
 					} else
 						c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
 								.queue(s -> {
-									EmbedBuilder eb = new ColorlessEmbedBuilder();
+									EmbedBuilder eb = new ColorlessEmbedBuilder()
+											.setDescription(event.getMessage().getContentRaw())
+											.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl())
+											.setFooter(event.getAuthor().getId())
+											.setTimestamp(Instant.now());
 
-									eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
-									eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
 									for (String d : staffIds) {
-										Main.getInfo().getUserByID(d).openPrivateChannel().queue(ch -> ch.sendMessage(event.getMessage()).embed(eb.build()).queue());
+										Main.getInfo().getUserByID(d).openPrivateChannel()
+												.flatMap(ch -> ch.sendMessage(eb.build()))
+												.queue();
 									}
 									s.delete().queueAfter(1, TimeUnit.MINUTES);
 								});
