@@ -212,6 +212,15 @@ public class Hand {
 		}
 	}
 
+	public void manualDrawChampion() {
+		try {
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow().copy();
+			getDeque().remove(dr);
+			cards.add(dr);
+		} catch (NoSuchElementException ignore) {
+		}
+	}
+
 	public void drawEquipment() {
 		if (lockTime > 0) return;
 		try {
