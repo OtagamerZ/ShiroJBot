@@ -99,7 +99,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -418,7 +418,13 @@ public class Helper {
 	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
 		GuildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
-		else if (g.getTextChannelById(gc.getCanalLog()) == null) gc.setCanalLog("");
+
+		TextChannel tc = g.getTextChannelById(gc.getCanalLog());
+		if (tc == null) {
+			gc.setCanalLog("");
+			return;
+		}
+
 		try {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -426,21 +432,31 @@ public class Helper {
 			eb.setDescription(StringUtils.abbreviate(msg, 2048));
 			eb.addField("Referente:", u.getAsMention(), true);
 			if (isCommand) eb.addField("Comando:", gc.getPrefix() + c.getName(), true);
-			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
+			eb.setTimestamp(Instant.now());
 
-			Objects.requireNonNull(g.getTextChannelById(gc.getCanalLog())).sendMessage(eb.build()).queue(null, Helper::doNothing);
-		} catch (NullPointerException ignore) {
+			tc.sendMessage(eb.build()).queue(null, Helper::doNothing);
 		} catch (Exception e) {
 			gc.setCanalLog("");
 			GuildDAO.updateGuildSettings(gc);
 			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
+			Member owner = g.getOwner();
+			if (owner != null)
+				owner.getUser().openPrivateChannel()
+						.flatMap(ch -> ch.sendMessage("Canal de log invalidado com o seguinte erro: `%s | %s`".formatted(e.getClass().getSimpleName(), e)))
+						.queue(null, Helper::doNothing);
 		}
 	}
 
 	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g, String args) {
 		GuildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
-		else if (g.getTextChannelById(gc.getCanalLog()) == null) gc.setCanalLog("");
+
+		TextChannel tc = g.getTextChannelById(gc.getCanalLog());
+		if (tc == null) {
+			gc.setCanalLog("");
+			return;
+		}
+
 		try {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -451,9 +467,9 @@ public class Helper {
 				eb.addField("Comando:", gc.getPrefix() + c.getName(), true);
 				eb.addField("Argumentos:", args, true);
 			}
-			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
+			eb.setTimestamp(Instant.now());
 
-			Objects.requireNonNull(g.getTextChannelById(gc.getCanalLog())).sendMessage(eb.build()).queue();
+			tc.sendMessage(eb.build()).queue();
 		} catch (Exception e) {
 			gc.setCanalLog("");
 			GuildDAO.updateGuildSettings(gc);
@@ -461,7 +477,7 @@ public class Helper {
 			Member owner = g.getOwner();
 			if (owner != null)
 				owner.getUser().openPrivateChannel()
-						.flatMap(ch -> ch.sendMessage("Canal de log invalidado com o seguinte erro: " + e.getClass().getName()))
+						.flatMap(ch -> ch.sendMessage("Canal de log invalidado com o seguinte erro: `%s | %s`".formatted(e.getClass().getSimpleName(), e)))
 						.queue(null, Helper::doNothing);
 		}
 	}
