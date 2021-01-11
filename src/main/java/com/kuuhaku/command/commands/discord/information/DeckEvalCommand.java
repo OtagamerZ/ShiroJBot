@@ -18,10 +18,11 @@
 
 package com.kuuhaku.command.commands.discord.information;
 
+import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Category;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Kawaipon;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -34,19 +35,19 @@ import java.util.Map;
 
 public class DeckEvalCommand extends Command {
 
-	public DeckEvalCommand(@NonNls String name, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
+	public DeckEvalCommand(@NonNls String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public DeckEvalCommand(String name, String[] aliases, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
+	public DeckEvalCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public DeckEvalCommand(String name, String usage, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
+	public DeckEvalCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public DeckEvalCommand(String name, String[] aliases, String usage, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
+	public DeckEvalCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
@@ -54,14 +55,14 @@ public class DeckEvalCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		Map<Category, Integer> count = new HashMap<>() {{
-			put(Category.DUELIST, 0);
-			put(Category.SUPPORT, 0);
-			put(Category.TANK, 0);
-			put(Category.SPECIALIST, 0);
-			put(Category.NUKE, 0);
-			put(Category.TRAP, 0);
-			put(Category.LEVELER, 0);
+		Map<Class, Integer> count = new HashMap<>() {{
+			put(Class.DUELIST, 0);
+			put(Class.SUPPORT, 0);
+			put(Class.TANK, 0);
+			put(Class.SPECIALIST, 0);
+			put(Class.NUKE, 0);
+			put(Class.TRAP, 0);
+			put(Class.LEVELER, 0);
 		}};
 		for (Champion c : kp.getChampions())
 			count.compute(c.getCategory(), (cl, ct) -> ct == null ? 1 : ct + 1);
@@ -69,8 +70,8 @@ public class DeckEvalCommand extends Command {
 		count.remove(null);
 
 		String[] data = new String[14];
-		for (int i = 0; i < Category.values().length; i++) {
-			int ct = count.getOrDefault(Category.values()[i], 0);
+		for (int i = 0; i < Class.values().length; i++) {
+			int ct = count.getOrDefault(Class.values()[i], 0);
 			data[i * 2] = String.valueOf(ct);
 			data[i * 2 + 1] = ct != 1 ? "s" : "";
 		}
@@ -89,7 +90,7 @@ public class DeckEvalCommand extends Command {
 						""".formatted((Object[]) data), false);
 
 		StringBuilder sb = new StringBuilder();
-		for (Map.Entry<Category, Integer> e : count.entrySet()) {
+		for (Map.Entry<Class, Integer> e : count.entrySet()) {
 			switch (e.getKey()) {
 				case DUELIST -> {
 					if (e.getValue() < 6)

@@ -64,21 +64,23 @@ public class BotInfoCommand extends Command {
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-1"), Main.getInfo().getUserByID(ShiroInfo.getNiiChan()).getAsTag(), false);
 
 		StringBuilder sb = new StringBuilder();
-		ShiroInfo.getDevelopers().forEach(d -> sb.append("`").append(Main.getInfo().getUserByID(d).getAsTag()).append("`  "));
+		for (String d : ShiroInfo.getDevelopers()) {
+			sb.append("`").append(Main.getInfo().getUserByID(d).getAsTag()).append("`  ");
+		}
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-2"), sb.toString(), false);
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-3"), Main.getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern(ShiroInfo.getLocale(I18n.PT).getString("date-format"))), false);
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-4"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_BOT_INFO_SERVERS), Main.getShiroShards().getGuilds().size()), false);
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-5"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-registered-users"), MemberDAO.getAllMembers().size()), false);
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-6"), Main.getInfo().getVersion(), false);
 		eb.addField("Links:", """
-									[%s](https://discordapp.com/invite/9sgkzna)
-									[Top.GG](https://top.gg/bot/572413282653306901)
-									[%s](https://top.gg/bot/572413282653306901/vote)
-									[GitHub](https://github.com/OtagamerZ/ShiroJBot)
-									[%s](https://github.com/OtagamerZ/ShiroJBot/blob/master/PRIVACY_POLICY.md)
-									[Reddit](https://www.reddit.com/r/ShiroJBot/)
-									[%s](https://top.gg/bot/572413282653306901/invite)
-									[%s](https://donatebot.io/checkout/421495229594730496)
+						[%s](https://discordapp.com/invite/9sgkzna)
+						[Top.GG](https://top.gg/bot/572413282653306901)
+						[%s](https://top.gg/bot/572413282653306901/vote)
+						[GitHub](https://github.com/OtagamerZ/ShiroJBot)
+						[%s](https://github.com/OtagamerZ/ShiroJBot/blob/master/PRIVACY_POLICY.md)
+						[Reddit](https://www.reddit.com/r/ShiroJBot/)
+						[%s](https://top.gg/bot/572413282653306901/invite)
+						[%s](https://donatebot.io/checkout/421495229594730496)
 						"""
 						.formatted(
 								ShiroInfo.getLocale(I18n.PT).getString("str_support"),

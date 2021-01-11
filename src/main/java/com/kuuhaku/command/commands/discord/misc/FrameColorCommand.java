@@ -83,6 +83,6 @@ public class FrameColorCommand extends Command {
 
 		acc.setFrame(fc);
 		AccountDAO.saveAccount(acc);
-		channel.sendMessage("Cor definida com sucesso!").queue();
+		channel.sendMessage("✅ | Cor definida com sucesso!").queue();
 	}
 }

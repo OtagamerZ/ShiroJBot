@@ -72,6 +72,7 @@ public class BroadcastCommand extends Command {
 		String msg = rawCmd
 				.replaceFirst("[^\\s]+", "")
 				.replaceFirst("[^\\s]+", "")
+				.replace("\\n", "\n")
 				.trim();
 		Map<String, Boolean> result = new HashMap<>();
 		StringBuilder sb = new StringBuilder();
@@ -104,7 +105,11 @@ public class BroadcastCommand extends Command {
 					}
 
 					sb.append("```diff\n");
-					result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
+					for (Map.Entry<String, Boolean> entry : result.entrySet()) {
+						String key = entry.getKey();
+						Boolean value = entry.getValue();
+						sb.append(value ? "+ " : "- ").append(key).append("\n");
+					}
 					sb.append("```");
 
 					eb.setTitle("__**STATUS**__ ");

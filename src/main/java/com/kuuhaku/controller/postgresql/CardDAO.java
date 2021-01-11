@@ -21,7 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Category;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.CardType;
@@ -205,10 +205,14 @@ public class CardDAO {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Champion> getAllChampions() {
+    public static List<Champion> getAllChampions(boolean withFusion) {
         EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = FALSE", Champion.class);
+        Query q;
+        if (withFusion)
+            q = em.createQuery("SELECT c FROM Champion c", Champion.class);
+        else
+            q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = FALSE", Champion.class);
 
         try {
             return q.getResultList();
@@ -379,7 +383,7 @@ public class CardDAO {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Champion> getChampions(Category c) {
+    public static List<Champion> getChampions(Class c) {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Champion.class);
@@ -444,6 +448,22 @@ public class CardDAO {
         EntityManager em = Manager.getEntityManager();
 
         Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' ORDER BY RANDOM()", Champion.class);
+        q.setMaxResults(1);
+
+        try {
+            return (Champion) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public static Champion getRandomChampion(int mana) {
+        EntityManager em = Manager.getEntityManager();
+
+        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' AND c.mana = :mana ORDER BY RANDOM()", Champion.class);
+        q.setParameter("mana", mana);
         q.setMaxResults(1);
 
         try {

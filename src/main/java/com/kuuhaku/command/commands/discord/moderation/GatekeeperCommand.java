@@ -66,7 +66,7 @@ public class GatekeeperCommand extends Command {
 		try {
 			Helper.addButton(args, message, channel, gc, "☑", true);
 
-			channel.sendMessage("Porteiro adicionado com sucesso!").queue(s -> Helper.gatekeep(gc));
+			channel.sendMessage("✅ | Porteiro adicionado com sucesso!").queue(s -> Helper.gatekeep(gc));
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage("❌ | Erro em um dos argumentos: " + e).queue();
 		} catch (ErrorResponseException e) {

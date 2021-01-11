@@ -75,6 +75,8 @@ public class BuyCardCommand extends Command {
 			AtomicReference<String> byName = new AtomicReference<>(null);
 			AtomicReference<KawaiponRarity> byRarity = new AtomicReference<>(null);
 			AtomicReference<AnimeName[]> byAnime = new AtomicReference<>(null);
+			AtomicReference<Integer> minPrice = new AtomicReference<>(-1);
+			AtomicReference<Integer> maxPrice = new AtomicReference<>(-1);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
 			AtomicBoolean onlyMine = new AtomicBoolean();
 			AtomicBoolean onlyKawaipon = new AtomicBoolean();
@@ -107,6 +109,20 @@ public class BuyCardCommand extends Command {
 					byAnime.set(an);
 				}
 
+				minPrice.set(params.stream()
+						.filter(s -> s.startsWith("-min") && s.length() > 4)
+						.filter(s -> StringUtils.isNumeric(s.substring(4)))
+						.mapToInt(s -> Integer.parseInt(s.substring(4)))
+						.findFirst()
+						.orElse(-1));
+
+				maxPrice.set(params.stream()
+						.filter(s -> s.startsWith("-max") && s.length() > 4)
+						.filter(s -> StringUtils.isNumeric(s.substring(4)))
+						.mapToInt(s -> Integer.parseInt(s.substring(4)))
+						.findFirst()
+						.orElse(-1));
+
 				onlyFoil.set(params.stream().anyMatch("-c"::equalsIgnoreCase));
 
 				onlyMine.set(params.stream().anyMatch("-m"::equalsIgnoreCase));
@@ -132,6 +148,8 @@ public class BuyCardCommand extends Command {
 					`-e` - Busca apenas cartas-equipamento
 					`-f` - Busca apenas cartas de campo
 					`-m` - Busca apenas suas cartas anunciadas
+					`-min` - Define um preço mínimo
+					`-max` - Define um preço máximo
 					       
 					Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`.
 					""".formatted(prefix)
@@ -143,6 +161,8 @@ public class BuyCardCommand extends Command {
 
 			cards.addAll(FieldMarketDAO.getCards().stream()
 					.filter(fm -> byName.get() == null || StringUtils.containsIgnoreCase(fm.getCard().getCard().getName(), byName.get()))
+					.filter(fm -> minPrice.get() == -1 || fm.getPrice() >= minPrice.get())
+					.filter(fm -> maxPrice.get() == -1 || fm.getPrice() <= maxPrice.get())
 					.filter(fm -> onlyMine.get() ? fm.getSeller().equals(author.getId()) : fm.getPrice() <= 250000)
 					.sorted(Comparator
 							.comparingInt(FieldMarket::getPrice)
@@ -153,6 +173,8 @@ public class BuyCardCommand extends Command {
 
 			cards.addAll(EquipmentMarketDAO.getCards().stream()
 					.filter(em -> byName.get() == null || StringUtils.containsIgnoreCase(em.getCard().getCard().getName(), byName.get()))
+					.filter(fm -> minPrice.get() == -1 || fm.getPrice() >= minPrice.get())
+					.filter(fm -> maxPrice.get() == -1 || fm.getPrice() <= maxPrice.get())
 					.filter(em -> onlyMine.get() ? em.getSeller().equals(author.getId()) : em.getPrice() <= (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50))
 					.sorted(Comparator
 							.comparingInt(EquipmentMarket::getPrice)
@@ -163,6 +185,8 @@ public class BuyCardCommand extends Command {
 
 			cards.addAll(CardMarketDAO.getCards().stream()
 					.filter(cm -> byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get()))
+					.filter(fm -> minPrice.get() == -1 || fm.getPrice() >= minPrice.get())
+					.filter(fm -> maxPrice.get() == -1 || fm.getPrice() <= maxPrice.get())
 					.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
 					.filter(cm -> byAnime.get() == null || ArrayUtils.contains(byAnime.get(), cm.getCard().getCard().getAnime()))
 					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
@@ -274,10 +298,10 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(cm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(cm.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage(":white_check_mark: | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + cm.getPrice() + " créditos.").queue(null, Helper::doNothing),
+									c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + cm.getPrice() + " créditos.").queue(null, Helper::doNothing),
 							Helper::doNothing
 					);
-					channel.sendMessage(":white_check_mark: | Carta comprada com sucesso!").queue();
+					channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
@@ -292,7 +316,7 @@ public class BuyCardCommand extends Command {
 					cm.setBuyer(author.getId());
 					CardMarketDAO.saveCard(cm);
 
-					channel.sendMessage(":white_check_mark: | Carta retirada com sucesso!").queue();
+					channel.sendMessage("✅ | Carta retirada com sucesso!").queue();
 				}
 			}
 			case 2 -> {
@@ -331,10 +355,10 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(em.getSeller());
 					User buyerU = Main.getInfo().getUserByID(em.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage(":white_check_mark: | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + em.getPrice() + " créditos.").queue(),
+									c.sendMessage("✅ | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + em.getPrice() + " créditos.").queue(),
 							Helper::doNothing
 					);
-					channel.sendMessage(":white_check_mark: | Equipamento comprado com sucesso!").queue();
+					channel.sendMessage("✅ | Equipamento comprado com sucesso!").queue();
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
@@ -355,7 +379,7 @@ public class BuyCardCommand extends Command {
 					em.setBuyer(author.getId());
 					EquipmentMarketDAO.saveCard(em);
 
-					channel.sendMessage(":white_check_mark: | Equipamento retirado com sucesso!").queue();
+					channel.sendMessage("✅ | Equipamento retirado com sucesso!").queue();
 				}
 			}
 			case 3 -> {
@@ -391,10 +415,10 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(fm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(fm.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage(":white_check_mark: | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + fm.getPrice() + " créditos.").queue(),
+									c.sendMessage("✅ | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + fm.getPrice() + " créditos.").queue(),
 							Helper::doNothing
 					);
-					channel.sendMessage(":white_check_mark: | Arena comprada com sucesso!").queue();
+					channel.sendMessage("✅ | Arena comprada com sucesso!").queue();
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
@@ -412,7 +436,7 @@ public class BuyCardCommand extends Command {
 					fm.setBuyer(author.getId());
 					FieldMarketDAO.saveCard(fm);
 
-					channel.sendMessage(":white_check_mark: | Arena retirada com sucesso!").queue();
+					channel.sendMessage("✅ | Arena retirada com sucesso!").queue();
 				}
 			}
 			case -1 -> channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();

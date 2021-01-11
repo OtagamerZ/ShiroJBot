@@ -111,7 +111,7 @@ public class MuteMemberCommand extends Command {
 
 			guild.modifyMemberRoles(mb, rls).complete();
 			Helper.logToChannel(author, false, null, mb.getAsMention() + " foi silenciado pela seguinte razão: `" + reason + "`", guild);
-			channel.sendMessage("Usuário silenciado por " + time + " minutos com sucesso!\nMotivo: `" + reason + "`").queue();
+			channel.sendMessage("✅ | Usuário silenciado por " + time + " minutos com sucesso!\nMotivo: `" + reason + "`").queue();
 		} catch (InsufficientPermissionException e) {
 			channel.sendMessage("❌ | Não possuo a permissão para silenciar membros.").queue();
 		}

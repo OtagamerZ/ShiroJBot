@@ -34,6 +34,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.quartz.Job;
@@ -45,12 +46,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TenthMinuteEvent implements Job {
-	public static JobDetail check;
+	public static JobDetail tenthMinute;
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		Main.getJibril().getGuilds().forEach(TenthMinuteEvent::notif);
-		AccountDAO.getNotifiableAccounts().forEach(Account::notifyVote);
+		for (Guild guild1 : Main.getJibril().getGuilds()) {
+			notif(guild1);
+		}
+		for (Account account : AccountDAO.getNotifiableAccounts()) {
+			account.notifyVote();
+		}
 
 		for (Guild g : Main.getShiroShards().getGuilds()) {
 			GuildMusicManager gmm = Music.getGuildAudioPlayer(g, null);
@@ -63,7 +68,7 @@ public class TenthMinuteEvent implements Job {
 		}
 
 		List<GuildConfig> guilds = GuildDAO.getAllGuildsWithExceedRoles();
-		List<ExceedMember> ems = ExceedDAO.getExceedMembers().stream().filter(em -> !em.getExceed().isBlank()).collect(Collectors.toList());
+		List<ExceedMember> ems = ExceedDAO.getExceedMembers();
 		String[] exNames = {"imanity", "ex-machina", "exmachina", "flugel", "flügel", "werebeast", "elf", "seiren"};
 
 		for (GuildConfig gc : guilds) {
@@ -93,7 +98,7 @@ public class TenthMinuteEvent implements Job {
 						.add(addRole.getRight());
 			}
 
-			mbs.forEach(mb -> {
+			for (Member mb : mbs) {
 				ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
 				if (ex != null) {
 					List<Role> validRoles = roles.get(ex);
@@ -105,8 +110,28 @@ public class TenthMinuteEvent implements Job {
 							.collect(Collectors.toList());
 
 					guild.modifyMemberRoles(mb, validRoles, invalidRoles).queue();
+				} else {
+					List<Role> invalidRoles = roles.values()
+							.stream()
+							.flatMap(List::stream)
+							.collect(Collectors.toList());
+
+					guild.modifyMemberRoles(mb, null, invalidRoles).queue();
 				}
-			});
+			}
+		}
+
+		for (GuildConfig gc : GuildDAO.getAllGuildsWithGeneralChannel()) {
+			Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+			if (g != null && !Helper.getOr(gc.getGeneralTopic(), "").isBlank()) {
+				TextChannel tc = g.getTextChannelById(gc.getCanalGeral());
+				if (tc != null)
+					tc.getManager().setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount(), false))).queue();
+				else {
+					gc.setCanalGeral(null);
+					GuildDAO.updateGuildSettings(gc);
+				}
+			}
 		}
 	}
 

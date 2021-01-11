@@ -28,17 +28,17 @@ import org.quartz.JobExecutionContext;
 import java.util.List;
 
 public class OddSecondEvent implements Job {
-	public static JobDetail updateKawaigotchi;
+	public static JobDetail oddSecond;
 
 	@Override
 	public void execute(JobExecutionContext context) {
 		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
 
-		kgs.forEach(k -> {
+		for (Kawaigotchi kg : kgs) {
 			try {
-				k.update(Main.getInfo().getUserByID(k.getUserId()));
+				kg.update(Main.getInfo().getUserByID(kg.getUserId()));
 			} catch (NullPointerException ignore) {
 			}
-		});
+		}
 	}
 }

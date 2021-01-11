@@ -54,6 +54,6 @@ public class UnbindCommand extends Command {
 
 		acc.setTwitchId("");
 		AccountDAO.saveAccount(acc);
-		channel.sendMessage("Conta desvinculada com sucesso").queue();
+		channel.sendMessage("✅ | Conta desvinculada com sucesso").queue();
 	}
 }

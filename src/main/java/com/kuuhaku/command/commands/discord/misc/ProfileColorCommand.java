@@ -20,14 +20,13 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
-
-import java.util.List;
 
 public class ProfileColorCommand extends Command {
 
@@ -49,16 +48,14 @@ public class ProfileColorCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMemberByMid(author.getId());
+		Account acc = AccountDAO.getAccount(author.getId());
 		if (args.length == 0) {
 			channel.sendMessage("❌ | O primeiro argumento deve ser uma cor em formato hexadecimal (#RRGGBB) ou `reset`.").queue();
 			return;
 		} else if (Helper.equalsAny(args[0], "none", "reset", "resetar", "limpar")) {
-			ms.forEach(m -> {
-				m.setProfileColor("");
-				MemberDAO.updateMemberConfigs(m);
-			});
-			channel.sendMessage("Cor de perfil restaurada ao padrão com sucesso!").queue();
+			acc.setProfileColor("");
+			AccountDAO.saveAccount(acc);
+			channel.sendMessage("✅ | Cor de perfil restaurada ao padrão com sucesso!").queue();
 			return;
 		} else if (!args[0].contains("#") || !Helper.between(args[0].length(), 7, 8)) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
@@ -66,11 +63,9 @@ public class ProfileColorCommand extends Command {
 		}
 
 		try {
-			ms.forEach(m -> {
-				m.setProfileColor(args[0].toUpperCase());
-				MemberDAO.updateMemberConfigs(m);
-			});
-			channel.sendMessage("Cor de perfil definida com sucesso!").queue();
+			acc.setProfileColor(args[0].toUpperCase());
+			AccountDAO.saveAccount(acc);
+			channel.sendMessage("✅ | Cor de perfil definida com sucesso!").queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
 		}

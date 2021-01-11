@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.Consumable;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.ConsumableShop;
@@ -29,6 +30,8 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
+
+import java.util.Map;
 
 public class BuyConsumableCommand extends Command {
 
@@ -56,7 +59,11 @@ public class BuyConsumableCommand extends Command {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setTitle(":test_tube: | Loja de itens");
 			eb.setDescription("Esta loja possui vários artefatos que podem lhe dar uma vantagem rápida em certas coisas, a um preço justo claro!");
-			ConsumableShop.getAvailable().forEach((k, v) -> eb.addField("`" + k + "` | " + v.getName() + " (" + v.getPrice() + " créditos)", v.getDescription(), false));
+			for (Map.Entry<String, Consumable> entry : ConsumableShop.getAvailable().entrySet()) {
+				String k = entry.getKey();
+				Consumable v = entry.getValue();
+				eb.addField("`" + k + "` | " + v.getName() + " (" + v.getPrice() + " créditos)", v.getDescription(), false);
+			}
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 			channel.sendMessage(eb.build()).queue();
@@ -74,6 +81,6 @@ public class BuyConsumableCommand extends Command {
 		acc.addBuff(args[0]);
 		acc.consumeCredit(ConsumableShop.getAvailable().get(args[0]).getPrice(), this.getClass());
 		AccountDAO.saveAccount(acc);
-		channel.sendMessage("Item comprado com sucesso, use `" + prefix + "usar " + args[0] + "` para usá-lo.").queue();
+		channel.sendMessage("✅ | Item comprado com sucesso, use `" + prefix + "usar " + args[0] + "` para usá-lo.").queue();
 	}
 }

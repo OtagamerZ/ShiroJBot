@@ -20,7 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import bsh.EvalError;
 import bsh.Interpreter;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Category;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
@@ -34,7 +34,6 @@ import org.json.JSONObject;
 import javax.imageio.ImageIO;
 import javax.persistence.*;
 import java.awt.*;
-import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
@@ -62,14 +61,14 @@ public class Champion implements Drawable, Cloneable {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int def;
 
-	@Column(columnDefinition = "VARCHAR(130) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(140) NOT NULL DEFAULT ''")
 	private String description;
 
 	@Column(columnDefinition = "TEXT")
 	private String effect = "";
 
 	@Enumerated(EnumType.STRING)
-	private Category category = null;
+	private Class category = null;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> requiredCards = new HashSet<>();
@@ -86,8 +85,11 @@ public class Champion implements Drawable, Cloneable {
 	private transient Champion fakeCard = null;
 	private transient int altAtk = -1;
 	private transient int altDef = -1;
+	private transient String altDescription = null;
+	private transient String altEffect = null;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
+	private transient int mMana = 0;
 	private transient int redAtk = 0;
 	private transient int redDef = 0;
 	private transient int stun = 0;
@@ -106,7 +108,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	@Override
-	public BufferedImage drawCard(Account acc, boolean flipped) {
+	public BufferedImage drawCard(boolean flipped) {
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -132,7 +134,7 @@ public class Champion implements Drawable, Cloneable {
 			}
 
 			g2d.setColor(Color.cyan);
-			Profile.drawOutlinedText(String.valueOf(mana), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 66, g2d);
+			Profile.drawOutlinedText(String.valueOf(getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getMana())), 66, g2d);
 
 			String data = bonus.getSpecialData().optString("write");
 			if (!data.isBlank()) {
@@ -179,11 +181,8 @@ public class Champion implements Drawable, Cloneable {
 			g2d.setColor(Color.black);
 			g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 9, 277);
 
-			g2d.setFont(Helper.HAMLIN.deriveFont(Map.of(
-					TextAttribute.SIZE, 11,
-					TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY
-			)));
-			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : description, 205, 9, 293);
+			g2d.setFont(Helper.HAMMERSMITH.deriveFont(Font.PLAIN, 11));
+			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : Helper.getOr(altDescription, description), 205, 9, 293);
 
 			if (stun > 0) {
 				available = false;
@@ -255,7 +254,9 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setLinkedTo(List<Equipment> linkedTo) {
 		this.linkedTo = linkedTo;
-		this.linkedTo.forEach(e -> e.setLinkedTo(Pair.of(e.getLinkedTo().getLeft(), this)));
+		for (Equipment e : this.linkedTo) {
+			e.setLinkedTo(Pair.of(e.getLinkedTo().getLeft(), this));
+		}
 	}
 
 	public List<Equipment> getLinkedTo() {
@@ -291,7 +292,11 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getMana() {
-		return mana;
+		return mana + mMana;
+	}
+
+	public void setModMana(int mana) {
+		this.mMana = mana;
 	}
 
 	public int getBaseAtk() {
@@ -333,7 +338,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setRedAtk(int redAtk) {
-		this.redAtk = redAtk;
+		this.redAtk += redAtk;
 	}
 
 	public int getRedDef() {
@@ -341,28 +346,40 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setRedDef(int redDef) {
-		this.redDef = redDef;
+		this.redDef += redDef;
 	}
 
-	public int getEAtk() {
+	public int getFinAtk() {
+		return getEffAtk() + getLinkedTo().stream().mapToInt(Equipment::getAtk).sum();
+	}
+
+	public int getEffAtk() {
 		return Math.max(0, getAtk() + mAtk + bonus.getAtk());
 	}
 
-	public void setMAtk(int mAtk) {
+	public void setModAtk(int mAtk) {
 		this.mAtk = mAtk;
 	}
 
-	public int getEDef() {
+	public int getFinDef() {
+		return getEffDef() + getLinkedTo().stream().mapToInt(Equipment::getDef).sum();
+	}
+
+	public int getEffDef() {
 		return Math.max(0, getDef() + mDef + bonus.getDef());
 	}
 
-	public void setMDef(int mDef) {
+	public void setModDef(int mDef) {
 		this.mDef = mDef;
 	}
 
 	public void resetAttribs() {
 		this.mAtk = 0;
 		this.mDef = 0;
+	}
+
+	public String getName() {
+		return fakeCard != null ? fakeCard.getCard().getName() : card.getName();
 	}
 
 	public Bonus getBonus() {
@@ -381,6 +398,10 @@ public class Champion implements Drawable, Cloneable {
 		return description;
 	}
 
+	public void setAltDescription(String description) {
+		this.altDescription = description;
+	}
+
 	public boolean hasEffect() {
 		return effect != null;
 	}
@@ -395,6 +416,18 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setFusion(boolean fusion) {
 		this.fusion = fusion;
+	}
+
+	public String getRawEffect() {
+		return effect;
+	}
+
+	public void setRawEffect(String effect) {
+		this.effect = effect;
+	}
+
+	public void setAltEffect(String effect) {
+		this.altEffect = effect;
 	}
 
 	public void getEffect(EffectParameters ep) {
@@ -423,13 +456,13 @@ public class Champion implements Drawable, Cloneable {
 			Interpreter i = new Interpreter();
 			i.setStrictJava(true);
 			i.set("ep", ep);
-			i.eval(imports + effect);
+			i.eval(imports + Helper.getOr(altEffect, effect));
 		} catch (EvalError e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
-	public Category getCategory() {
+	public Class getCategory() {
 		return category;
 	}
 
@@ -450,8 +483,11 @@ public class Champion implements Drawable, Cloneable {
 		fakeCard = null;
 		mAtk = 0;
 		mDef = 0;
+		mMana = 0;
 		altAtk = atk;
 		altDef = def;
+		altDescription = null;
+		altEffect = null;
 		redAtk = 0;
 		redDef = 0;
 		stun = 0;
@@ -498,7 +534,7 @@ public class Champion implements Drawable, Cloneable {
 		}
 	}
 
-	public String toString(Account acc) {
+	public String toString() {
 		return new JSONObject() {{
 			put("id", id);
 			put("name", card.getName());
@@ -507,7 +543,7 @@ public class Champion implements Drawable, Cloneable {
 			put("attack", atk);
 			put("defense", def);
 			put("description", description);
-			put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(acc, false), "png")));
+			put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(false), "png")));
 		}}.toString();
 	}
 }

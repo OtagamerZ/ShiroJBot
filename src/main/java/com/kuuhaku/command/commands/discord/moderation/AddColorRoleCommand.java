@@ -26,6 +26,7 @@ import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
@@ -73,15 +74,20 @@ public class AddColorRoleCommand extends Command {
 			JSONObject jo = gc.getColorRoles();
 
 			if (jo.has(name) && guild.getRoleById(jo.getJSONObject(name).getString("role")) != null) {
-				Role r = guild.getRoleById(jo.getJSONObject(name).getString("role"));
-				assert r != null;
-				r.getManager()
-						.setColor(Color.decode(args[1]))
-						.complete();
+				try {
+					Role r = guild.getRoleById(jo.getJSONObject(name).getString("role"));
+					assert r != null;
+					r.getManager()
+							.setColor(Color.decode(args[1]))
+							.complete();
 
-				gc.addColorRole(name, args[1], r);
-				channel.sendMessage("Cor modificada com sucesso!").queue();
-				return;
+					gc.addColorRole(name, args[1], r);
+					channel.sendMessage("✅ | Cor modificada com sucesso!").queue();
+					return;
+				} catch (HierarchyException e) {
+					channel.sendMessage("❌ | Não posso modificar um cargo de cor que está acima de mim.").queue();
+					return;
+				}
 			}
 
 			Role r = guild.createRole()
@@ -95,7 +101,7 @@ public class AddColorRoleCommand extends Command {
 					.complete();
 			gc.addColorRole(name, args[1], r);
 
-			channel.sendMessage("Cor adicionada com sucesso!").queue();
+			channel.sendMessage("✅ | Cor adicionada com sucesso!").queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -109,7 +115,7 @@ public class AddColorRoleCommand extends Command {
 			if (r != null) r.delete().queue();
 			gc.removeColorRole(name);
 
-			channel.sendMessage("Cor removida com sucesso!").queue();
+			channel.sendMessage("✅ | Cor removida com sucesso!").queue();
 		} finally {
 			GuildDAO.updateGuildSettings(gc);
 		}

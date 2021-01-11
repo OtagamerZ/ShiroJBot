@@ -44,7 +44,7 @@ public class Manager {
 		emf.getCache().evictAll();
 	}
 
-	public static EntityManager getEntityManager() {
+	public static synchronized EntityManager getEntityManager() {
 		try {
 			if (emf == null) connect();
 			return emf.createEntityManager();
@@ -55,7 +55,7 @@ public class Manager {
 		}
 	}
 
-	public static void disconnect() {
+	public static synchronized void disconnect() {
 		if (emf != null) {
 			emf.close();
 			Helper.logger(Manager.class).info("Ligação à base de dados desfeita.");

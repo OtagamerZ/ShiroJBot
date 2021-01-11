@@ -24,8 +24,6 @@ import club.minnced.discord.webhook.WebhookCluster;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.coder4.emoji.EmojiUtils;
 import com.github.kevinsawicki.http.HttpRequest;
-import com.github.twitch4j.chat.TwitchChat;
-import com.github.twitch4j.common.events.domain.EventChannel;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
@@ -37,6 +35,7 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
+import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.common.drop.CreditDrop;
@@ -129,11 +128,11 @@ public class Helper {
 	public static final int BASE_CARD_PRICE = 350;
 	public static final int BASE_EQUIPMENT_PRICE = 500;
 
-	public static Font HAMLIN;
+	public static Font HAMMERSMITH;
 
 	static {
 		try {
-			HAMLIN = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Helper.class.getClassLoader().getResourceAsStream("font/Hamlin.ttf")));
+			HAMMERSMITH = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Helper.class.getClassLoader().getResourceAsStream("font/HammersmithOne.ttf")));
 		} catch (FontFormatException | IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 		}
@@ -169,6 +168,10 @@ public class Helper {
 		if (places < 0) throw new IllegalArgumentException();
 
 		return new DecimalFormat("0" + (places > 0 ? "." : "") + StringUtils.repeat("#", places)).format(value);
+	}
+
+	public static double avg(double... values) {
+		return Arrays.stream(values).average().orElse(0);
 	}
 
 	public static float clamp(float val, float min, float max) {
@@ -267,7 +270,9 @@ public class Helper {
 			} else
 				return RestAction::queue;
 		} catch (Exception e) {
-			ShiroInfo.getStaff().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF com erro: " + imageURL).queue()));
+			for (String d : ShiroInfo.getStaff()) {
+				Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF com erro: " + imageURL).queue());
+			}
 			logger(Helper.class).error("Erro ao carregar a imagem: " + imageURL + " -> " + e + " | " + e.getStackTrace()[0]);
 			throw new IllegalAccessException();
 		}
@@ -392,7 +397,7 @@ public class Helper {
 				chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
 			else chkdSrc[i] = source[i];
 		}
-		return String.join(" ", chkdSrc).trim().replace("@everyone", "everyone").replace("@here", "here");
+		return String.join(" ", chkdSrc).trim().replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here"));
 	}
 
 	public static String makeEmoteFromMention(String sourceNoSplit) {
@@ -403,11 +408,11 @@ public class Helper {
 				chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
 			else chkdSrc[i] = source[i];
 		}
-		return String.join(" ", chkdSrc).trim().replace("@everyone", "everyone").replace("@here", "here");
+		return String.join(" ", chkdSrc).trim().replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here"));
 	}
 
 	public static String stripEmotesAndMentions(String source) {
-		return Helper.getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", "everyone").replace("@here", "here"), "...");
+		return Helper.getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here")), "...");
 	}
 
 	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
@@ -449,11 +454,15 @@ public class Helper {
 			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
 
 			Objects.requireNonNull(g.getTextChannelById(gc.getCanalLog())).sendMessage(eb.build()).queue();
-		} catch (NullPointerException ignore) {
 		} catch (Exception e) {
 			gc.setCanalLog("");
 			GuildDAO.updateGuildSettings(gc);
 			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
+			Member owner = g.getOwner();
+			if (owner != null)
+				owner.getUser().openPrivateChannel()
+						.flatMap(ch -> ch.sendMessage("Canal de log invalidado com o seguinte erro: " + e.getClass().getName()))
+						.queue(null, Helper::doNothing);
 		}
 	}
 
@@ -517,7 +526,7 @@ public class Helper {
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
 							  perms.stream()
-									  .map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+									  .map(p -> "✅ -> " + p.getName() + "\n")
 									  .sorted()
 									  .collect(Collectors.joining());
 			}
@@ -529,7 +538,7 @@ public class Helper {
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
 			   perms.stream()
-					   .map(p -> ":white_check_mark: -> " + p.getName() + "\n")
+					   .map(p -> "✅ -> " + p.getName() + "\n")
 					   .sorted()
 					   .collect(Collectors.joining()) +
 			   jibrilPerms;
@@ -552,6 +561,20 @@ public class Helper {
 		else return usrRoles.get(0).getPosition() > tgtRoles.get(0).getPosition();
 	}
 
+	public static <T> List<List<T>> chunkify(Collection<T> col, int chunkSize) {
+		List<T> list = new ArrayList<>(col);
+		int overflow = list.size() % chunkSize;
+		List<List<T>> chunks = new ArrayList<>();
+
+		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
+			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
+		}
+
+		chunks.add(list.subList(list.size() - overflow, list.size()));
+
+		return chunks;
+	}
+
 	public static <T> List<List<T>> chunkify(List<T> list, int chunkSize) {
 		int overflow = list.size() % chunkSize;
 		List<List<T>> chunks = new ArrayList<>();
@@ -569,6 +592,20 @@ public class Helper {
 		List<T> list = new ArrayList<>(set);
 		int overflow = list.size() % chunkSize;
 		List<List<T>> chunks = new ArrayList<>();
+
+		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
+			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
+		}
+
+		chunks.add(list.subList(list.size() - overflow, list.size()));
+
+		return chunks;
+	}
+
+	public static <K, V> List<List<Map.Entry<K, V>>> chunkify(Map<K, V> map, int chunkSize) {
+		List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
+		int overflow = list.size() % chunkSize;
+		List<List<Map.Entry<K, V>>> chunks = new ArrayList<>();
 
 		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
 			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
@@ -617,8 +654,8 @@ public class Helper {
 		if (btns.isEmpty()) return;
 
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
-		if (g != null)
-			source.keySet().forEach(k -> {
+		if (g != null) {
+			for (String k : source.keySet()) {
 				try {
 					JSONObject jo = btns.getJSONObject(k);
 					Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
@@ -664,11 +701,12 @@ public class Helper {
 				} catch (JSONException e) {
 					logger(Helper.class).info("Error in buttons JSON: " + source.toString());
 				}
-			});
+			}
+		}
 	}
 
 	public static void resolveButton(Guild g, JSONObject jo, Map<String, BiConsumer<Member, Message>> buttons) {
-		jo.getJSONObject("buttons").keySet().forEach(b -> {
+		for (String b : jo.getJSONObject("buttons").keySet()) {
 			JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
 			Role role = g.getRoleById(btns.getString("role"));
 			buttons.put(btns.getString("emote"), (m, ms) -> {
@@ -690,7 +728,7 @@ public class Helper {
 					});
 				}
 			});
-		});
+		}
 	}
 
 	public static void gatekeep(GuildConfig gc) {
@@ -700,7 +738,7 @@ public class Helper {
 
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 
-		ja.keySet().forEach(k -> {
+		for (String k : ja.keySet()) {
 			JSONObject jo = ja.getJSONObject(k);
 			Map<String, BiConsumer<Member, Message>> buttons = new HashMap<>();
 
@@ -717,7 +755,7 @@ public class Helper {
 
 				Pages.buttonize(msg, buttons, false);
 			}, Helper::doNothing);
-		});
+		}
 	}
 
 	public static void addButton(String[] args, Message message, MessageChannel channel, GuildConfig gc, String s2, boolean gatekeeper) {
@@ -773,11 +811,13 @@ public class Helper {
 
 		for (Guild g : spGuilds) {
 			AtomicReference<Invite> i = new AtomicReference<>();
-			g.retrieveInvites().queue(invs -> invs.forEach(inv -> {
-				if (inv.getInviter() == Main.getSelfUser()) {
-					i.set(inv);
+			g.retrieveInvites().queue(invs -> {
+				for (Invite inv : invs) {
+					if (inv.getInviter() == Main.getSelfUser()) {
+						i.set(inv);
+					}
 				}
-			}));
+			});
 
 			if (i.get() == null) {
 				try {
@@ -948,7 +988,11 @@ public class Helper {
 			newLines[l] = String.join(" ", newWords);
 		}
 
-		return Collections.singletonMap(String.join("\n", newLines), () -> queue.forEach(q -> q.accept(null)));
+		return Collections.singletonMap(String.join("\n", newLines), () -> {
+			for (Consumer<Void> q : queue) {
+				q.accept(null);
+			}
+		});
 	}
 
 	public static boolean isEmpty(String... values) {
@@ -1153,7 +1197,11 @@ public class Helper {
 
 	public static String replaceWith(String source, Map<String, String> replaces) {
 		AtomicReference<String> toChange = new AtomicReference<>();
-		replaces.forEach((k, v) -> toChange.set(source.replace(k, v)));
+		for (Map.Entry<String, String> entry : replaces.entrySet()) {
+			String k = entry.getKey();
+			String v = entry.getValue();
+			toChange.set(source.replace(k, v));
+		}
 		return toChange.get();
 	}
 
@@ -1222,11 +1270,15 @@ public class Helper {
 			BufferedImage img = c.drawCard(foil);
 
 			EmbedBuilder eb = new EmbedBuilder()
-					.setImage("attachment://kawaipon.png")
 					.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!")
 					.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 					.setColor(colorThief(img))
 					.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
+
+			if (gc.isSmallCards())
+				eb.setThumbnail("attachment://kawaipon.png");
+			else
+				eb.setImage("attachment://kawaipon.png");
 
 			if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
 				channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1280,11 +1332,15 @@ public class Helper {
 		BufferedImage img = c.drawCard(foil);
 
 		EmbedBuilder eb = new EmbedBuilder()
-				.setImage("attachment://kawaipon.png")
 				.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase() + " neste servidor!")
 				.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 				.setColor(colorThief(img))
 				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
+
+		if (gc.isSmallCards())
+			eb.setThumbnail("attachment://kawaipon.png");
+		else
+			eb.setImage("attachment://kawaipon.png");
 
 		if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
 			channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1301,26 +1357,6 @@ public class Helper {
 		}
 		Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
 		Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildID(), true);
-	}
-
-	public static void spawnKawaipon(EventChannel channel, TwitchChat chat) {
-		if (chance(2.5)) {
-			KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
-					.filter(r -> r != KawaiponRarity.ULTIMATE)
-					.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
-					.collect(Collectors.toList())
-			);
-
-			List<Card> cards = CardDAO.getCardsByRarity(kr);
-			Card c = cards.get(Helper.rng(cards.size(), true));
-			boolean foil = chance(1);
-			KawaiponCard kc = new KawaiponCard(c, foil);
-
-			chat.sendMessage(channel.getName(),
-					"FootYellow | " + kc.getName() + " (" + c.getRarity().toString() + " | " + c.getAnime().toString() + ") | Digite \"s!coletar\" para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos)."
-			);
-			Main.getInfo().getCurrentCard().put("twitch", kc);
-		}
 	}
 
 	public static void spawnDrop(GuildConfig gc, TextChannel channel) {
@@ -1363,24 +1399,13 @@ public class Helper {
 		}
 	}
 
-	public static void spawnDrop(EventChannel channel, TwitchChat chat) {
-		if (chance(2)) {
-			Prize drop = new CreditDrop();
-
-			chat.sendMessage(channel.getName(),
-					"HolidayPresent | Digite \"s!abrir " + drop.getCaptcha() + "\" para receber o prêmio (" + drop.getPrize() + " créditos | requisito: " + drop.getRequirement().getKey() + ")."
-			);
-			Main.getInfo().getCurrentDrop().put("twitch", drop);
-		}
-	}
-
 	public static void spawnPadoru(GuildConfig gc, TextChannel channel) {
 		if (Main.getInfo().getPadoruLimit().getIfPresent(gc.getGuildID()) != null) return;
 
 		if (chance(0.1 - minMax(prcnt(channel.getGuild().getMemberCount() * 0.09f, 5000), 0, 0.09))) {
 			int rolled = Helper.rng(100, false);
 			List<Prize> prizes = new ArrayList<>();
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 6; i++) {
 				prizes.add(rolled > 80 ? new ItemDrop() : new CreditDrop());
 			}
 
@@ -1435,7 +1460,8 @@ public class Helper {
 								acc.addBuff(prize.getPrizeAsItem().getId());
 						}
 
-						EmbedBuilder neb = new ColorlessEmbedBuilder();
+						EmbedBuilder neb = new ColorlessEmbedBuilder()
+								.setImage("attachment://padoru_padoru.gif");
 						for (int i = 0; i < prizes.size(); i++) {
 							Prize prize = prizes.get(i);
 							if (prize instanceof CreditDrop)
@@ -1686,6 +1712,10 @@ public class Helper {
 		return hash((game.hashCode() + "" + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-256");
 	}
 
+	public static String generateHash(GlobalGame game) {
+		return hash((game.hashCode() + "" + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-256");
+	}
+
 	public static JSONObject findJson(String text) {
 		Matcher m = Pattern.compile("\\{.*}").matcher(text);
 		List<MatchResult> results = m.results().collect(Collectors.toList());
@@ -1720,7 +1750,7 @@ public class Helper {
 		long seed = Long.parseLong("" + today.getYear() + today.getMonthValue() + today.getDayOfMonth());
 		Kawaipon kp = new Kawaipon();
 
-		kp.setChampions(getRandomN(CardDAO.getAllChampions(), 30, 3, seed));
+		kp.setChampions(getRandomN(CardDAO.getAllChampions(false), 30, 3, seed));
 		kp.setEquipments(getRandomN(CardDAO.getAllEquipments(), 6, 3, seed));
 		kp.setFields(getRandomN(CardDAO.getAllAvailableFields(), 1, 3, seed));
 
@@ -1782,7 +1812,11 @@ public class Helper {
 			}
 
 			sb.append("```diff\n");
-			result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
+			for (Map.Entry<String, Boolean> entry : result.entrySet()) {
+				String key = entry.getKey();
+				Boolean value = entry.getValue();
+				sb.append(value ? "+ " : "- ").append(key).append("\n");
+			}
 			sb.append("```");
 
 			eb.setTitle("__**STATUS**__ ");
@@ -1851,5 +1885,31 @@ public class Helper {
 		}
 
 		return false;
+	}
+
+	public static String getFancyNumber(int number, boolean animated) {
+		Map<Character, String> emotes = Map.of(
+				'0', "<:0_n:795486513541939230>",
+				'1', "<:1_n:795486513618092042>",
+				'2', "<:2_n:795486513412046908>",
+				'3', "<:3_n:795486513319772211>",
+				'4', "<:4_n:795486513197744178>",
+				'5', "<:5_n:795486513235492875>",
+				'6', "<:6_n:795486513328554008>",
+				'7', "<:7_n:795486513067720755>",
+				'8', "<:8_n:795486513428824075>",
+				'9', "<:9_n:795486513143742465>"
+		);
+
+		String sNumber = String.valueOf(number);
+		StringBuilder sb = new StringBuilder();
+		for (char c : sNumber.toCharArray())
+			sb.append(emotes.get(c));
+
+		return sb.toString();
+	}
+
+	public static String bugText(String text) {
+		return String.join(ANTICOPY, text.split(""));
 	}
 }

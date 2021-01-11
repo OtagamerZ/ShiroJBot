@@ -69,20 +69,20 @@ public class SweepCommand extends Command {
 
             s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + gds.size() + " guilds)").queue();
 
-            gds.forEach(gd -> {
+            for (GuildConfig gd : gds) {
                 if (Main.getInfo().getGuildByID(gd.getGuildID()) == null) {
                     guildTrashBin.add(gd.getGuildID());
                     Helper.logger(this.getClass()).debug(gd.getName() + " is null, added to trash bin");
                 }
-            });
+            }
 
             s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + mbs.size() + " membros)").queue();
 
             Map<String, List<String>> members = new HashMap<>();
-            mbs.forEach(mb -> {
-                members.putIfAbsent(mb.getSid(), new ArrayList<>());
-                members.get(mb.getSid()).add(mb.getMid());
-            });
+            for (com.kuuhaku.model.persistent.Member mb1 : mbs) {
+                members.putIfAbsent(mb1.getSid(), new ArrayList<>());
+                members.get(mb1.getSid()).add(mb1.getMid());
+            }
 
             Set<String> foundIds = new HashSet<>();
             Map<String, Set<String>> missingIds = new HashMap<>();
@@ -110,18 +110,20 @@ public class SweepCommand extends Command {
                 }
             }
 
-            mbs.stream()
-                    .filter(mb -> !foundIds.contains(mb.getId()))
-                    .forEach(mb -> {
-                        missingIds.putIfAbsent(mb.getSid(), new HashSet<>());
-                        missingIds.get(mb.getSid()).add(mb.getMid());
-                    });
+            for (com.kuuhaku.model.persistent.Member mb1 : mbs) {
+                if (!foundIds.contains(mb1.getId())) {
+                    missingIds.putIfAbsent(mb1.getSid(), new HashSet<>());
+                    missingIds.get(mb1.getSid()).add(mb1.getMid());
+                }
+            }
 
-            missingIds.forEach((k, v) -> {
+            for (Map.Entry<String, Set<String>> entry : missingIds.entrySet()) {
+                String k = entry.getKey();
+                Set<String> v = entry.getValue();
                 for (String id : v) {
                     memberTrashBin.add(id + k);
                 }
-            });
+            }
 
             if (guildTrashBin.size() + memberTrashBin.size() > 0) {
                 String hash = Helper.generateHash(guild, author);
@@ -137,7 +139,7 @@ public class SweepCommand extends Command {
                                     Sweeper.sweep(guildTrashBin, memberTrashBin);
 
                                     m.delete().queue(null, Helper::doNothing);
-                                    channel.sendMessage(Helper.ACCEPT + " | Entradas limpas com sucesso!").queue();
+                                    channel.sendMessage("✅ | Entradas limpas com sucesso!").queue();
                                 }), true, 1, TimeUnit.MINUTES,
                                 u -> u.getId().equals(author.getId()),
                                 ms -> {
@@ -145,7 +147,7 @@ public class SweepCommand extends Command {
                                     Main.getInfo().getConfirmationPending().invalidate(author.getId());
                                 })
                         );
-            } else s.editMessage(Helper.ACCEPT + " | Não há entradas para serem limpas.").queue();
+            } else s.editMessage("✅ | Não há entradas para serem limpas.").queue();
         });
     }
 }

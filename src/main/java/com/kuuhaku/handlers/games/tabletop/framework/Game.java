@@ -18,14 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
-import com.kuuhaku.controller.postgresql.MatchDAO;
-import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.persistent.MatchHistory;
-import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.MatchRound;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -33,7 +26,6 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
-import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -86,82 +78,6 @@ public abstract class Game {
 	public void resetTimer() {
 		if (timeout != null) timeout.cancel(true);
 		timeout = null;
-		round++;
-		Player p = null;
-		while (p == null || !p.isInGame()) {
-			p = board.getPlayers().getNext();
-		}
-		current = handler.getUserById(p.getId());
-		assert current != null;
-		if (round > 0)
-			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
-					.queueAfter(3, TimeUnit.MINUTES, s -> {
-						onWO.accept(s);
-						closed = true;
-					});
-		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
-				.queueAfter(3, TimeUnit.MINUTES, s -> {
-					onExpiration.accept(s);
-					closed = true;
-				});
-
-		for (int y = 0; y < board.getMatrix().length; y++) {
-			for (int x = 0; x < board.getMatrix().length; x++) {
-				Piece pc = board.getPieceOrDecoyAt(Spot.of(x, y));
-				if (pc instanceof Decoy && current.getId().equals(pc.getOwnerId()))
-					board.setPieceAt(Spot.of(x, y), null);
-			}
-		}
-	}
-
-	public void resetTimer(Shoukan shkn) {
-		if (timeout != null) timeout.cancel(true);
-		timeout = null;
-
-		Hand top = shkn.getHands().get(Side.TOP);
-		Hand bot = shkn.getHands().get(Side.BOTTOM);
-		getCurrRound().setScript(new JSONObject() {{
-			put("top", new JSONObject() {{
-				put("id", top.getUser().getId());
-				put("hp", top.getHp());
-				put("mana", top.getMana());
-				put("champions", shkn.getArena().getSlots().get(Side.TOP)
-						.stream()
-						.map(SlotColumn::getTop)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("equipments", shkn.getArena().getSlots().get(Side.TOP)
-						.stream()
-						.map(SlotColumn::getBottom)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("inHand", top.getCards().size());
-				put("deck", top.getDeque().size());
-			}});
-
-			put("bottom", new JSONObject() {{
-				put("id", bot.getUser().getId());
-				put("hp", bot.getHp());
-				put("mana", bot.getMana());
-				put("champions", shkn.getArena().getSlots().get(Side.BOTTOM)
-						.stream()
-						.map(SlotColumn::getTop)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("equipments", shkn.getArena().getSlots().get(Side.BOTTOM)
-						.stream()
-						.map(SlotColumn::getBottom)
-						.filter(Objects::nonNull)
-						.count()
-				);
-				put("inHand", bot.getCards().size());
-				put("deck", bot.getDeque().size());
-			}});
-		}});
-
 		round++;
 		Player p = null;
 		while (p == null || !p.isInGame()) {
@@ -246,44 +162,6 @@ public abstract class Game {
 	public void close() {
 		if (timeout != null) timeout.cancel(true);
 		timeout = null;
-
-		if (round > 0 && custom == null) {
-			MatchDAO.saveMatch(history);
-
-			Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcMMR(history);
-			for (Side s : Side.values()) {
-				Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
-				Map<String, Integer> yourResult = result.get(s).getRight();
-				Map<String, Integer> hisResult = result.get(other).getRight();
-				MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(result.get(s).getLeft());
-				MatchMakingRating hisMMR = MatchMakingRatingDAO.getMMR(result.get(other).getLeft());
-				int spentMana = yourResult.get("mana");
-				int damageDealt = hisResult.get("hp");
-
-				if (history.getWinner() == s) {
-					double manaEff = 1 + Math.max(-0.75, Math.min(spentMana * 0.5 / 5, 0.25));
-					double damageEff = (double) -damageDealt / yourResult.size();
-					double expEff = 5000d / yourResult.size();
-					double sustainEff = 1 + yourResult.get("hp") / 5000f;
-					long mmr = Math.round(250 * manaEff + (125 * (damageEff / expEff) + 125 * sustainEff));
-
-
-					yourMMR.addMMR(mmr, hisMMR.getMMR());
-					yourMMR.increaseRankPoints();
-				} else if (history.getWinner() == other) {
-					double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
-					double damageEff = (double) -damageDealt / yourResult.size();
-					double expEff = 5000d / yourResult.size();
-					double sustainEff = 1 + yourResult.get("hp") / 5000d;
-					long mmr = Math.round(250 * manaEff - (125 * (damageEff / expEff) + 125 * sustainEff));
-
-					yourMMR.removeMMR(mmr, hisMMR.getMMR());
-					yourMMR.decreaseRankPoints();
-				}
-
-				MatchMakingRatingDAO.saveMMR(yourMMR);
-			}
-		}
 
 		closed = true;
 	}

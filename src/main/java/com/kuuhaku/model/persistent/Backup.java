@@ -83,28 +83,30 @@ public class Backup {
 		Map<Long, Role> newRoles = new HashMap<>();
 		Map<GuildCategory, Category> newCategories = new HashMap<>();
 
-		g.getChannels().forEach(chn -> {
+		for (GuildChannel guildChannel : g.getChannels()) {
 			try {
-				queue.offer(chn.delete());
+				queue.offer(guildChannel.delete());
 			} catch (Exception ignore) {
 			}
-		});
+		}
 
-		g.getRoles().forEach(r -> {
+		for (Role role : g.getRoles()) {
 			try {
-				if (!r.isPublicRole()) queue.offer(r.delete());
+				if (!role.isPublicRole()) queue.offer(role.delete());
 			} catch (Exception ignore) {
 			}
-		});
+		}
 
 		TextChannel progress = g.createTextChannel("progresso").complete();
 
 		progress.sendMessage("Preparando backup, isso pode demorar vários minutos, aguarde...").queue();
 
-		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
-				.map(c -> newCategories.put(gc, c))));
+		for (GuildCategory guildCategory : gdata.getCategories()) {
+			queue.offer(g.createCategory(guildCategory.getName())
+					.map(c -> newCategories.put(guildCategory, c)));
+		}
 
-		gdata.getRoles().forEach(gr -> {
+		for (GuildRole gr : gdata.getRoles()) {
 			if (gr.isPublicRole()) queue.offer(g.getPublicRole()
 					.getManager()
 					.setPermissions(gr.getPermission())
@@ -116,7 +118,7 @@ public class Backup {
 					.setPermissions(gr.getPermission())
 					.map(r -> newRoles.put(gr.getOldId(), r))
 			);
-		});
+		}
 
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
@@ -131,14 +133,19 @@ public class Backup {
 
 			progress.sendMessage("Preparação do backup conclúida.\nCriando canais...").queue();
 
-			newCategories.forEach((gc, c) -> {
-				gc.getPermission().forEach((k, v) -> c.putPermissionOverride(newRoles.get(k))
-						.setAllow(v[0])
-						.setDeny(v[1])
-						.complete()
-				);
+			for (Map.Entry<GuildCategory, Category> entry : newCategories.entrySet()) {
+				GuildCategory gc = entry.getKey();
+				Category c = entry.getValue();
+				for (Map.Entry<Long, long[]> mapEntry : gc.getPermission().entrySet()) {
+					Long key = mapEntry.getKey();
+					long[] value = mapEntry.getValue();
+					c.putPermissionOverride(newRoles.get(key))
+							.setAllow(value[0])
+							.setDeny(value[1])
+							.complete();
+				}
 
-				gc.getChannels().forEach(chn -> {
+				for (com.kuuhaku.model.common.backup.GuildChannel chn : gc.getChannels()) {
 					try {
 						if (chn.isText()) {
 							TextChannel tchn = g.createTextChannel(chn.getName())
@@ -147,11 +154,14 @@ public class Backup {
 									.setParent(c)
 									.complete();
 
-							chn.getPermission().forEach((k, v) -> tchn.putPermissionOverride(newRoles.get(k))
-									.setAllow(v[0])
-									.setDeny(v[1])
-									.complete()
-							);
+							for (Map.Entry<Long, long[]> e : chn.getPermission().entrySet()) {
+								Long k = e.getKey();
+								long[] v = e.getValue();
+								tchn.putPermissionOverride(newRoles.get(k))
+										.setAllow(v[0])
+										.setDeny(v[1])
+										.complete();
+							}
 
 							Thread.sleep(5000);
 						} else {
@@ -161,20 +171,23 @@ public class Backup {
 									.setParent(c)
 									.complete();
 
-							chn.getPermission().forEach((k, v) -> vchn.putPermissionOverride(newRoles.get(k))
-									.setAllow(v[0])
-									.setDeny(v[1])
-									.complete()
-							);
+							for (Map.Entry<Long, long[]> e : chn.getPermission().entrySet()) {
+								Long k = e.getKey();
+								long[] v = e.getValue();
+								vchn.putPermissionOverride(newRoles.get(k))
+										.setAllow(v[0])
+										.setDeny(v[1])
+										.complete();
+							}
 
 							Thread.sleep(5000);
 						}
 					} catch (InterruptedException e) {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					}
-				});
+				}
 				progress.sendMessage("Categoria `" + c.getName() + "` concluída.").queue();
-			});
+			}
 
 			long duration = lastRestored.toLocalDateTime().until(LocalDateTime.now(), ChronoUnit.MILLIS);
 
@@ -189,26 +202,26 @@ public class Backup {
 		List<GuildCategory> gcats = new ArrayList<>();
 		List<GuildRole> groles = g.getRoles().stream().map(r -> new GuildRole(r.getName(), r.getColorRaw(), r.getPermissionsRaw(), r.getIdLong(), r.isPublicRole())).collect(Collectors.toList());
 
-		g.getCategories().forEach(cat -> {
+		for (Category cat : g.getCategories()) {
 			List<com.kuuhaku.model.common.backup.GuildChannel> channels = new ArrayList<>();
 			Map<Long, long[]> catperms = new HashMap<>();
 
-			cat.getPermissionOverrides().forEach(ovr -> {
-				if (ovr.isRoleOverride()) {
-					Role r = ovr.getRole();
+			for (PermissionOverride permissionOverride : cat.getPermissionOverrides()) {
+				if (permissionOverride.isRoleOverride()) {
+					Role r = permissionOverride.getRole();
 					assert r != null;
-					catperms.put(r.getIdLong(), new long[]{ovr.getAllowedRaw(), ovr.getDeniedRaw()});
+					catperms.put(r.getIdLong(), new long[]{permissionOverride.getAllowedRaw(), permissionOverride.getDeniedRaw()});
 				}
-			});
-			cat.getChannels().forEach(chn -> {
+			}
+			for (GuildChannel chn : cat.getChannels()) {
 				Map<Long, long[]> chnperms = new HashMap<>();
-				chn.getPermissionOverrides().forEach(ovr -> {
+				for (PermissionOverride ovr : chn.getPermissionOverrides()) {
 					if (ovr.isRoleOverride()) {
 						Role r = ovr.getRole();
 						assert r != null;
 						chnperms.put(r.getIdLong(), new long[]{ovr.getAllowedRaw(), ovr.getDeniedRaw()});
 					}
-				});
+				}
 				switch (chn.getType()) {
 					case TEXT -> {
 						TextChannel tchannel = (TextChannel) chn;
@@ -219,9 +232,9 @@ public class Backup {
 						channels.add(new com.kuuhaku.model.common.backup.GuildChannel(vchannel.getName(), chnperms, vchannel.getUserLimit(), vchannel.getBitrate()));
 					}
 				}
-			});
+			}
 			gcats.add(new GuildCategory(cat.getName(), channels, catperms));
-		});
+		}
 
 		this.serverData = ShiroInfo.getJSONFactory().create().toJson(new GuildData(gcats, groles));
 		BackupDAO.saveBackup(this);

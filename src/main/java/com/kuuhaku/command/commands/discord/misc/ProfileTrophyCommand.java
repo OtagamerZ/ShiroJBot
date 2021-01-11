@@ -89,11 +89,11 @@ public class ProfileTrophyCommand extends Command {
 
 		if (Helper.equalsAny(args[0], "none", "reset", "resetar", "limpar")) {
 			List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMemberByMid(author.getId());
-			ms.forEach(m -> {
+			for (com.kuuhaku.model.persistent.Member m : ms) {
 				m.setTrophy(null);
 				MemberDAO.updateMemberConfigs(m);
-			});
-			channel.sendMessage(":white_check_mark: | Troféu removido com sucesso!").queue();
+			}
+			channel.sendMessage("✅ | Troféu removido com sucesso!").queue();
 			return;
 		}
 
@@ -106,11 +106,11 @@ public class ProfileTrophyCommand extends Command {
 			}
 
 			List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMemberByMid(author.getId());
-			ms.forEach(m -> {
+			for (com.kuuhaku.model.persistent.Member m : ms) {
 				m.setTrophy(tt);
 				MemberDAO.updateMemberConfigs(m);
-			});
-			channel.sendMessage(":white_check_mark: | Troféu definido com sucesso!").queue();
+			}
+			channel.sendMessage("✅ | Troféu definido com sucesso!").queue();
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage("❌ | Troféu inválido, verifique se você digitou o ID corretamente.").queue();
 		}

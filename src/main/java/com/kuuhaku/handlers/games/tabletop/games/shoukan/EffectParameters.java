@@ -22,8 +22,8 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
+import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -41,7 +41,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class EffectParameters {
-	private final Phase phase;
 	private final EffectTrigger trigger;
 	private final Shoukan shoukan;
 	private final int index;
@@ -50,10 +49,9 @@ public class EffectParameters {
 	private final Map<Side, List<SlotColumn<Champion, Equipment>>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
 	private final Duelists duelists;
-	private final TextChannel channel;
+	private final GameChannel channel;
 
-	public EffectParameters(Phase phase, EffectTrigger trigger, Shoukan shoukan, int index, Side side, Duelists duelists, TextChannel channel) {
-		this.phase = phase;
+	public EffectParameters(EffectTrigger trigger, Shoukan shoukan, int index, Side side, Duelists duelists, GameChannel channel) {
 		this.trigger = trigger;
 		this.shoukan = shoukan;
 		this.index = index;
@@ -65,8 +63,16 @@ public class EffectParameters {
 		this.channel = channel;
 	}
 
-	public Phase getPhase() {
-		return phase;
+	public EffectParameters() {
+		this.trigger = EffectTrigger.NONE;
+		this.shoukan = null;
+		this.index = -1;
+		this.side = null;
+		this.hands = new HashMap<>();
+		this.slots = new HashMap<>();
+		this.graveyard = new HashMap<>();
+		this.duelists = null;
+		this.channel = null;
 	}
 
 	public EffectTrigger getTrigger() {
@@ -98,21 +104,11 @@ public class EffectParameters {
 	}
 
 	public Champion getChampionFromGrave(Side s) {
-		LinkedList<Drawable> grv = graveyard.get(s);
-		for (int i = grv.size() - 1; i >= 0; i--)
-			if (grv.get(i) instanceof Champion)
-				return (Champion) grv.remove(i);
-
-		return null;
+		return shoukan.getChampionFromGrave(s);
 	}
 
 	public Equipment getEquipmentFromGrave(Side s) {
-		LinkedList<Drawable> grv = graveyard.get(s);
-		for (int i = grv.size() - 1; i >= 0; i--)
-			if (grv.get(i) instanceof Equipment)
-				return (Equipment) grv.remove(i);
-
-		return null;
+		return shoukan.getEquipmentFromGrave(s);
 	}
 
 	public Duelists getDuelists() {
@@ -133,33 +129,35 @@ public class EffectParameters {
 		return types;
 	}
 
-	public TextChannel getChannel() {
+	public GameChannel getChannel() {
 		return channel;
 	}
 
 	public void sendWebhookMessage(String message, String gif, Champion champion) {
-		try {
-			Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
-			Card c = champion.getCard();
-
-			WebhookMessageBuilder wmb = new WebhookMessageBuilder()
-					.setContent(message)
-					.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().name()))
-					.setUsername(c.getName());
-
-			if (gif != null) {
-				InputStream is = this.getClass().getClassLoader().getResourceAsStream("shoukan/gifs/" + gif + ".gif");
-				if (is != null) wmb.addFile("effect.gif", is);
-			}
-
+		for (TextChannel channel : channel.getChannels()) {
 			try {
-				if (wh == null) return;
-				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
-				wc.send(wmb.build()).get();
-			} catch (InterruptedException | ExecutionException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
+				Card c = champion.getCard();
+
+				WebhookMessageBuilder wmb = new WebhookMessageBuilder()
+						.setContent(message)
+						.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().name()))
+						.setUsername(c.getName());
+
+				if (gif != null) {
+					InputStream is = this.getClass().getClassLoader().getResourceAsStream("shoukan/gifs/" + gif + ".gif");
+					if (is != null) wmb.addFile("effect.gif", is);
+				}
+
+				try {
+					if (wh == null) return;
+					WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
+					wc.send(wmb.build()).get();
+				} catch (InterruptedException | ExecutionException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
+			} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
 			}
-		} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
 		}
 	}
 }

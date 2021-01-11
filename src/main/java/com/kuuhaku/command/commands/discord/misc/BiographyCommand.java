@@ -20,13 +20,12 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
-
-import java.util.List;
 
 public class BiographyCommand extends Command {
 
@@ -61,12 +60,10 @@ public class BiographyCommand extends Command {
 
 		String text = String.join(" ", args);
 
-		List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMemberByMid(author.getId());
-		ms.forEach(m -> {
-			m.setBio(text);
-			MemberDAO.updateMemberConfigs(m);
-		});
-		if (text.length() > 0) channel.sendMessage("Biografia definida com sucesso!").queue();
-		else channel.sendMessage("Biografia limpa com sucesso!").queue();
+		Account acc = AccountDAO.getAccount(author.getId());
+		acc.setBio(text);
+		AccountDAO.saveAccount(acc);
+		if (text.length() > 0) channel.sendMessage("✅ | Biografia definida com sucesso!").queue();
+		else channel.sendMessage("✅ | Biografia limpa com sucesso!").queue();
 	}
 }

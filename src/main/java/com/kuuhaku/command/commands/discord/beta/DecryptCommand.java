@@ -95,5 +95,4 @@ public class DecryptCommand extends Command {
 			}
 		});
 	}
-
 }

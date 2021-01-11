@@ -69,6 +69,18 @@ public class MatchMakingRatingDAO {
 		em.close();
 	}
 
+	public static void resetRanks() {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		Query q = em.createQuery("UPDATE MatchMakingRating mmr SET mmr.mmr = mmr.mmr / 2, mmr.tier = :tier, mmr.rankPoints = 0");
+		q.setParameter("tier", RankedTier.UNRANKED);
+		q.executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	@SuppressWarnings("unchecked")
 	public static List<MatchMakingRating> getMMRRank() {
 		EntityManager em = Manager.getEntityManager();
@@ -85,6 +97,21 @@ public class MatchMakingRatingDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<MatchMakingRating> getMMRRank(RankedTier tier) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT mmr FROM MatchMakingRating mmr WHERE mmr.tier = :tier ORDER BY mmr.rankPoints DESC, mmr.promWins + mmr.promLosses DESC", MatchMakingRating.class);
+		q.setParameter("tier", tier);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static double getAverageMMR(RankedTier tier) {
 		EntityManager em = Manager.getEntityManager();
 

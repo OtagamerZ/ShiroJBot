@@ -90,6 +90,14 @@ public enum FrameColor {
 		}
 	}
 
+	public BufferedImage getFrontSpell() {
+		try {
+			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/frames/card_front_spell_" + name().toLowerCase() + ".png")));
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
 	public String getDescription() {
 		return description;
 	}
