@@ -14,23 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/TierRankCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/shoukan.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/tiers/adept.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/tiers/apprentice.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/tiers/archmage.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/tiers/disciple.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/tiers/initiate.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/tiers/master.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/tiers/oracle.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/tiers/unranked.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/TierCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/TierCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/URankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/URankCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PollCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PollCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MatchMakingRatingDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MatchMakingRatingDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/RankedTier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/RankedTier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +69,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="master-ranked" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -149,12 +135,12 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\tiers" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\font" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.command.commands.discord.information" />
@@ -163,12 +149,12 @@
       <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\tiers" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\font" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -296,11 +282,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.ShiroJBot [build]" />
-        <item itemvalue="Gradle.ShiroJBot" />
         <item itemvalue="Gradle.ShiroJBot [shadowJar]" />
         <item itemvalue="Gradle.ShiroJBot [clean]" />
+        <item itemvalue="Gradle.ShiroJBot [build]" />
         <item itemvalue="Gradle.ShiroJBot [:javadoc]" />
+        <item itemvalue="Gradle.ShiroJBot" />
       </list>
     </recent_temporary>
   </component>
@@ -1427,7 +1413,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Implementação de threading nos jogos" />
     <MESSAGE value="Implementação de threading" />
     <MESSAGE value="Mudança no comando de reportar bugs" />
     <MESSAGE value="Tentativa de correção das coleções borradas" />
@@ -1452,7 +1437,8 @@
     <MESSAGE value="Mudança no descarte de cartas no Shoukan" />
     <MESSAGE value="Correções" />
     <MESSAGE value="Melhoria no sistema de avaliação de suportes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no sistema de avaliação de suportes" />
+    <MESSAGE value="Adicionado comando de top 10 de cada tier no Shoukan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionado comando de top 10 de cada tier no Shoukan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1518,10 +1504,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610383471271">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610384044552">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610383471271" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610384044552" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
