@@ -450,7 +450,7 @@ public class TradeCardCommand extends Command {
 											return;
 										}
 
-										finalkp.removeField(f);
+										finalKp.removeField(f);
 										finalTarget.addField(f);
 									}
 								}
