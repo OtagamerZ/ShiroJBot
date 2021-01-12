@@ -213,58 +213,58 @@ public class TradeCardCommand extends Command {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								kp = KawaiponDAO.getKawaipon(author.getId());
-								target = KawaiponDAO.getKawaipon(other.getId());
+								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
+								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 								acc.removeCredit(price, this.getClass());
 								tacc.addCredit(price, this.getClass());
 
 								switch (type) {
 									case 1 -> {
 										KawaiponCard kc = (KawaiponCard) finalProduct.getRight();
-										if (!target.getCards().contains(kc)) {
+										if (!finalTarget.getCards().contains(kc)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui essa carta).")).queue(null, Helper::doNothing);
 											return;
-										} else if (kp.getCards().contains(kc)) {
+										} else if (finalKp.getCards().contains(kc)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui essa carta).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										target.removeCard(kc);
-										kp.addCard(kc);
+										finalTrget.removeCard(kc);
+										finalKp.addCard(kc);
 									}
 									case 2 -> {
 										Equipment eq = (Equipment) finalProduct.getRight();
-										if (!target.getEquipments().contains(eq)) {
+										if (!finalTarget.getEquipments().contains(eq)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui esse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(kp.getEquipments(), eq) == 3) {
+										} else if (Collections.frequency(finalKp.getEquipments(), eq) == 3) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (eq.getTier() == 4 && kp.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
+										} else if (eq.getTier() == 4 && finalKp.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										target.removeEquipment(eq);
-										kp.addEquipment(eq);
+										finalTarget.removeEquipment(eq);
+										finalKp.addEquipment(eq);
 									}
 									default -> {
 										Field f = (Field) finalProduct.getRight();
-										if (!target.getFields().contains(f)) {
+										if (!finalTarget.getFields().contains(f)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui essa arena).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(kp.getFields(), f) == 3) {
+										} else if (Collections.frequency(finalKp.getFields(), f) == 3) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										target.removeField(f);
-										kp.addField(f);
+										finalTarget.removeField(f);
+										finalKp.addField(f);
 									}
 								}
 
-								KawaiponDAO.saveKawaipon(kp);
-								KawaiponDAO.saveKawaipon(target);
+								KawaiponDAO.saveKawaipon(finalKp);
+								KawaiponDAO.saveKawaipon(finalTarget);
 								AccountDAO.saveAccount(acc);
 								AccountDAO.saveAccount(tacc);
 
@@ -405,58 +405,58 @@ public class TradeCardCommand extends Command {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								kp = KawaiponDAO.getKawaipon(author.getId());
-								target = KawaiponDAO.getKawaipon(other.getId());
+								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
+								Kawapon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 								acc.addCredit(price, this.getClass());
 								tacc.removeCredit(price, this.getClass());
 
 								switch (type) {
 									case 1 -> {
 										KawaiponCard kc = (KawaiponCard) finalProduct.getRight();
-										if (!kp.getCards().contains(kc)) {
+										if (!finalKp.getCards().contains(kc)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui essa carta).")).queue(null, Helper::doNothing);
 											return;
-										} else if (target.getCards().contains(kc)) {
+										} else if (finalTarget.getCards().contains(kc)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui essa carta).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										kp.removeCard(kc);
-										target.addCard(kc);
+										finalKp.removeCard(kc);
+										finalTarget.addCard(kc);
 									}
 									case 2 -> {
 										Equipment eq = (Equipment) finalProduct.getRight();
-										if (!kp.getEquipments().contains(eq)) {
+										if (!finalKp.getEquipments().contains(eq)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui esse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(target.getEquipments(), eq) == 3) {
+										} else if (Collections.frequency(finalTarget.getEquipments(), eq) == 3) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (eq.getTier() == 4 && target.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
+										} else if (eq.getTier() == 4 && finalTarget.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										kp.removeEquipment(eq);
-										target.addEquipment(eq);
+										finalKp.removeEquipment(eq);
+										finalTarget.addEquipment(eq);
 									}
 									default -> {
 										Field f = (Field) finalProduct.getRight();
-										if (!kp.getFields().contains(f)) {
+										if (!finalKp.getFields().contains(f)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui essa arena).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(target.getFields(), f) == 3) {
+										} else if (Collections.frequency(finalTarget.getFields(), f) == 3) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										kp.removeField(f);
-										target.addField(f);
+										finaLkp.removeField(f);
+										finalTarget.addField(f);
 									}
 								}
 
-								KawaiponDAO.saveKawaipon(kp);
-								KawaiponDAO.saveKawaipon(target);
+								KawaiponDAO.saveKawaipon(finalKp);
+								KawaiponDAO.saveKawaipon(finalTarget);
 								AccountDAO.saveAccount(acc);
 								AccountDAO.saveAccount(tacc);
 
@@ -664,101 +664,101 @@ public class TradeCardCommand extends Command {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								kp = KawaiponDAO.getKawaipon(author.getId());
-								target = KawaiponDAO.getKawaipon(other.getId());
+								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
+								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 
 								switch (types[0]) {
 									case 1 -> {
 										KawaiponCard kc = (KawaiponCard) products[0].getRight();
-										if (!kp.getCards().contains(kc)) {
+										if (!finalKp.getCards().contains(kc)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui essa carta).")).queue(null, Helper::doNothing);
 											return;
-										} else if (target.getCards().contains(kc)) {
+										} else if (finalTarget.getCards().contains(kc)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui essa carta).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										kp.removeCard(kc);
-										target.addCard(kc);
+										finalKp.removeCard(kc);
+										finalTarget.addCard(kc);
 									}
 									case 2 -> {
 										Equipment eq = (Equipment) products[0].getRight();
-										if (!kp.getEquipments().contains(eq)) {
+										if (!finalKp.getEquipments().contains(eq)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui esse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(target.getEquipments(), eq) == 3) {
+										} else if (Collections.frequency(finalTarget.getEquipments(), eq) == 3) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (eq.getTier() == 4 && target.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
+										} else if (eq.getTier() == 4 && finalTarget.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										kp.removeEquipment(eq);
-										target.addEquipment(eq);
+										finalKp.removeEquipment(eq);
+										finalTarget.addEquipment(eq);
 									}
 									default -> {
 										Field f = (Field) products[0].getRight();
-										if (!kp.getFields().contains(f)) {
+										if (!finalKp.getFields().contains(f)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui essa arena).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(target.getFields(), f) == 3) {
+										} else if (Collections.frequency(finalTarget.getFields(), f) == 3) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										kp.removeField(f);
-										target.addField(f);
+										finalKp.removeField(f);
+										finalTarget.addField(f);
 									}
 								}
 
 								switch (types[1]) {
 									case 1 -> {
 										KawaiponCard kc = (KawaiponCard) products[1].getRight();
-										if (!target.getCards().contains(kc)) {
+										if (!finalTarget.getCards().contains(kc)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui essa carta).")).queue(null, Helper::doNothing);
 											return;
-										} else if (kp.getCards().contains(kc)) {
+										} else if (finalKp.getCards().contains(kc)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui essa carta).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										target.removeCard(kc);
-										kp.addCard(kc);
+										finalTarget.removeCard(kc);
+										finalKp.addCard(kc);
 									}
 									case 2 -> {
 										Equipment eq = (Equipment) products[1].getRight();
-										if (!target.getEquipments().contains(eq)) {
+										if (!finalTarget.getEquipments().contains(eq)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui esse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(kp.getEquipments(), eq) == 3) {
+										} else if (Collections.frequency(finalKp.getEquipments(), eq) == 3) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (eq.getTier() == 4 && kp.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
+										} else if (eq.getTier() == 4 && finalKp.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										target.removeEquipment(eq);
-										kp.addEquipment(eq);
+										finalTarget.removeEquipment(eq);
+										finalKp.addEquipment(eq);
 									}
 									default -> {
 										Field f = (Field) products[1].getRight();
-										if (!target.getFields().contains(f)) {
+										if (!finalTarget.getFields().contains(f)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui essa arena).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(kp.getFields(), f) == 3) {
+										} else if (Collections.frequency(finalKp.getFields(), f) == 3) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
 											return;
 										}
 
-										target.removeField(f);
-										kp.addField(f);
+										finalTarget.removeField(f);
+										finalKp.addField(f);
 									}
 								}
 
-								KawaiponDAO.saveKawaipon(kp);
-								KawaiponDAO.saveKawaipon(target);
+								KawaiponDAO.saveKawaipon(finalKp);
+								KawaiponDAO.saveKawaipon(finalTarget);
 
 								s.delete().flatMap(n -> channel.sendMessage("✅ | Troca concluída com sucesso!")).queue(null, Helper::doNothing);
 							}), true, 1, TimeUnit.MINUTES,
