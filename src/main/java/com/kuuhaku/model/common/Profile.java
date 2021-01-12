@@ -216,8 +216,10 @@ public class Profile {
 		g2d.drawImage(avatar, null, 50, 200);
 
 		g2d.setClip(null);
-		if (mb.getTrophy() != null)
-			g2d.drawImage(mb.getTrophy().getImage(), 665, 22, null);
+		if (mb.getTrophy() != null) {
+			g2d.drawImage(mb.getTrophy().getBackground(), 0, 0, null);
+			g2d.drawImage(mb.getTrophy().getForeground(), 0, 0, null);
+		}
 
 		g2d.dispose();
 		bi = clipRoundEdges(bi);

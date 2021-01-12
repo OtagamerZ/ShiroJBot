@@ -42,9 +42,17 @@ public enum TrophyType {
 		return description;
 	}
 
-	public BufferedImage getImage() {
+	public BufferedImage getBackground() {
 		try {
-			return ImageIO.read(Objects.requireNonNull(TrophyType.class.getClassLoader().getResourceAsStream("shoukan/trophy/" + name().toLowerCase() + ".png")));
+			return ImageIO.read(Objects.requireNonNull(TrophyType.class.getClassLoader().getResourceAsStream("shoukan/trophy/" + name().toLowerCase() + "_bg.png")));
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	public BufferedImage getForeground() {
+		try {
+			return ImageIO.read(Objects.requireNonNull(TrophyType.class.getClassLoader().getResourceAsStream("shoukan/trophy/" + name().toLowerCase() + "_fg.png")));
 		} catch (IOException e) {
 			return null;
 		}
