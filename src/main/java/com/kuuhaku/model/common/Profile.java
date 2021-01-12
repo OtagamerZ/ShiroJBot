@@ -227,7 +227,7 @@ public class Profile {
 			BufferedImage finalImg = new BufferedImage(983, 600, BufferedImage.TYPE_INT_ARGB);
 			g2d = finalImg.createGraphics();
 
-			g2d.drawImage(bi, 39, 0, null);
+			g2d.drawImage(bi, 0, 0, null);
 			g2d.drawImage(mmr.getTier().getBanner(), 0, 0, null);
 
 			g2d.dispose();
