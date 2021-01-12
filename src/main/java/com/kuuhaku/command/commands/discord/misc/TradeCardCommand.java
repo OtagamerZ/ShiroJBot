@@ -229,7 +229,7 @@ public class TradeCardCommand extends Command {
 											return;
 										}
 
-										finalTrget.removeCard(kc);
+										finalTarget.removeCard(kc);
 										finalKp.addCard(kc);
 									}
 									case 2 -> {
