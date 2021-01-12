@@ -213,6 +213,8 @@ public class TradeCardCommand extends Command {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								kp = KawaiponDAO.getKawaipon(author.getId());
+								target = KawaiponDAO.getKawaipon(other.getId());
 								acc.removeCredit(price, this.getClass());
 								tacc.addCredit(price, this.getClass());
 
@@ -403,6 +405,8 @@ public class TradeCardCommand extends Command {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								kp = KawaiponDAO.getKawaipon(author.getId());
+								target = KawaiponDAO.getKawaipon(other.getId());
 								acc.addCredit(price, this.getClass());
 								tacc.removeCredit(price, this.getClass());
 
@@ -660,6 +664,8 @@ public class TradeCardCommand extends Command {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								kp = KawaiponDAO.getKawaipon(author.getId());
+								target = KawaiponDAO.getKawaipon(other.getId());
 
 								switch (types[0]) {
 									case 1 -> {
