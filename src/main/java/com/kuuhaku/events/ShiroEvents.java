@@ -386,10 +386,10 @@ public class ShiroEvents extends ListenerAdapter {
 					boolean lvlUp = m.addXp(guild);
 					try {
 						if (lvlUp && gc.isLvlNotif()) {
-							Objects.requireNonNullElse(lvlChannel, channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+							Objects.requireNonNullElse(lvlChannel, channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
 						}
 					} catch (InsufficientPermissionException e) {
-						channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+						channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
 					}
 
 					MemberDAO.updateMemberConfigs(m);
