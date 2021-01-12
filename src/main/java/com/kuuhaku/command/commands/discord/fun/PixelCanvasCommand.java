@@ -92,7 +92,11 @@ public class PixelCanvasCommand extends Command {
 
 			Token t = TokenDAO.getTokenById(author.getId());
 
-			if (t == null || t.isDisabled()) {
+			if (t == null) {
+				channel.sendMessage("❌ | Você ainda não possui um token de acesso ao ShiroCanvas, por favor faça login em https://shirojbot.site para gerar um automaticamente.").queue();
+				return;
+			}
+			if (t.isDisabled()) {
 				channel.sendMessage("❌ | Seu token foi proibido de interagir com o canvas.").queue();
 				return;
 			}
