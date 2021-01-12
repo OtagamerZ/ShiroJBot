@@ -406,7 +406,7 @@ public class TradeCardCommand extends Command {
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
-								Kawapon finalTarget = KawaiponDAO.getKawaipon(other.getId());
+								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 								acc.addCredit(price, this.getClass());
 								tacc.removeCredit(price, this.getClass());
 
