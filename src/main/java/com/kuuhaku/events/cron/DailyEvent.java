@@ -26,6 +26,7 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class DailyEvent implements Job {
@@ -33,12 +34,15 @@ public class DailyEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		List<MatchMakingRating> mmrs = MatchMakingRatingDAO.getMMRRank();
-		for (MatchMakingRating mmr : mmrs) {
-			Account acc = AccountDAO.getAccount(mmr.getUserId());
-			acc.addCredit(10000 * mmr.getTier().getTier(), this.getClass());
-			AccountDAO.saveAccount(acc);
+		Calendar c = Calendar.getInstance();
+		if (c.get(Calendar.MONTH) == Calendar.JANUARY && c.get(Calendar.DAY_OF_MONTH) == 11) {
+			List<MatchMakingRating> mmrs = MatchMakingRatingDAO.getMMRRank();
+			for (MatchMakingRating mmr : mmrs) {
+				Account acc = AccountDAO.getAccount(mmr.getUserId());
+				acc.addCredit(10000 * mmr.getTier().getTier(), this.getClass());
+				AccountDAO.saveAccount(acc);
+			}
+			MatchMakingRatingDAO.resetRanks();
 		}
-		MatchMakingRatingDAO.resetRanks();
 	}
 }
