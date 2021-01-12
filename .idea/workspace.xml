@@ -15,6 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/DailyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/DailyEvent.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -971,13 +973,7 @@
       <workItem from="1610255743241" duration="2510000" />
       <workItem from="1610303808472" duration="1621000" />
       <workItem from="1610452891486" duration="1330000" />
-    </task>
-    <task id="LOCAL-03323" summary="Correções">
-      <created>1610230759427</created>
-      <option name="number" value="03323" />
-      <option name="presentableId" value="LOCAL-03323" />
-      <option name="project" value="LOCAL" />
-      <updated>1610230759427</updated>
+      <workItem from="1610455701762" duration="1111000" />
     </task>
     <task id="LOCAL-03324" summary="Correções">
       <created>1610234353126</created>
@@ -1315,7 +1311,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610453546106</updated>
     </task>
-    <option name="localTasksCounter" value="3372" />
+    <task id="LOCAL-03372" summary="Correção menor">
+      <created>1610455806131</created>
+      <option name="number" value="03372" />
+      <option name="presentableId" value="LOCAL-03372" />
+      <option name="project" value="LOCAL" />
+      <updated>1610455806131</updated>
+    </task>
+    <option name="localTasksCounter" value="3373" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1492,10 +1495,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610453544996">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610455805283">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610453544996" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610455805283" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1540,10 +1543,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610453635497">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610455808530">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610453635497" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610455808530" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610305177857" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
