@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -975,14 +976,7 @@
       <workItem from="1610455701762" duration="5528000" />
       <workItem from="1610472923820" duration="10013000" />
       <workItem from="1610539366868" duration="1394000" />
-      <workItem from="1610541609087" duration="10484000" />
-    </task>
-    <task id="LOCAL-03337" summary="Correções">
-      <created>1610305155446</created>
-      <option name="number" value="03337" />
-      <option name="presentableId" value="LOCAL-03337" />
-      <option name="project" value="LOCAL" />
-      <updated>1610305155446</updated>
+      <workItem from="1610541609087" duration="21389000" />
     </task>
     <task id="LOCAL-03338" summary="Correções">
       <created>1610305175130</created>
@@ -1320,7 +1314,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610558086585</updated>
     </task>
-    <option name="localTasksCounter" value="3386" />
+    <task id="LOCAL-03386" summary="Correções menores">
+      <created>1610559397456</created>
+      <option name="number" value="03386" />
+      <option name="presentableId" value="LOCAL-03386" />
+      <option name="project" value="LOCAL" />
+      <updated>1610559397456</updated>
+    </task>
+    <option name="localTasksCounter" value="3387" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1421,7 +1422,6 @@
     <MESSAGE value="Adição de ícones de travas" />
     <MESSAGE value="Adição do modo pequeno para spawns" />
     <MESSAGE value="Melhoria no modo roleta" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Adição de códigos promocionais resgatáveis" />
     <MESSAGE value="Adição de comando para testar efeitos dos campeões" />
     <MESSAGE value="Mudança no descarte de cartas no Shoukan" />
@@ -1431,7 +1431,8 @@
     <MESSAGE value="Correção menor" />
     <MESSAGE value="Mudança no troféu de campeão" />
     <MESSAGE value="Adição de iscas no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de iscas no Shoukan" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1467,10 +1468,10 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1610540074593">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1610568990996">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1610540074593" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1610568990996" />
     <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1610233220127" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1497,10 +1498,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610558085652">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610559396388">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610558085652" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610559396388" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1545,10 +1546,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610558088893">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610559398571">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610558088893" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610559398571" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610305177857" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1613,10 +1614,10 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608309711856" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610249849368" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1610558155500">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1610569680957">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1610558155500" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1610569680957" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610249812093" />
   </component>
   <component name="XDebuggerManager">

@@ -772,7 +772,10 @@ public class Shoukan extends GlobalGame {
 					enemy.removeHp(apDamage);
 				} else if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
 					Hand enemy = getHands().get(next);
-					enemy.removeHp(yPower - hPower);
+					if (yours.getBonus().getSpecialData().has("totalDamage"))
+						enemy.removeHp(yPower);
+					else
+						enemy.removeHp(yPower - hPower);
 				}
 			}
 
@@ -2005,6 +2008,10 @@ public class Shoukan extends GlobalGame {
 
 	public void decreaseELockTime() {
 		effectLock = Math.max(0, effectLock - 1);
+	}
+
+	public List<Drawable> getDiscardBatch() {
+		return discardBatch;
 	}
 
 	@Override
