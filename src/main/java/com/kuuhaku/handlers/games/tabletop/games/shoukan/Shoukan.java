@@ -1260,14 +1260,13 @@ public class Shoukan extends GlobalGame {
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
 
 		slts.get(index).setTop(null);
-		for (SlotColumn<Champion, Equipment> sd : slts) {
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
-				Equipment eq = sd.getBottom();
-				eq.setLinkedTo(null);
-				if (eq.getTier() >= 4) arena.getBanished().add(eq);
-				else arena.getGraveyard().get(side).add(eq);
-				sd.setBottom(null);
-			}
+		for (int i = 0; i < slts.size(); i++) {
+			SlotColumn<Champion, Equipment> sd = slts.get(i);
+			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
+				killCard(side, i);
+
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
+				unequipCard(side, i, slts);
 		}
 
 		ch.reset();
@@ -1295,14 +1294,13 @@ public class Shoukan extends GlobalGame {
 		}
 
 		slts.get(index).setTop(null);
-		for (SlotColumn<Champion, Equipment> sd : slts) {
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
-				Equipment eq = sd.getBottom();
-				eq.setLinkedTo(null);
-				if (eq.getTier() >= 4) arena.getBanished().add(eq);
-				else arena.getGraveyard().get(side).add(eq);
-				sd.setBottom(null);
-			}
+		for (int i = 0; i < slts.size(); i++) {
+			SlotColumn<Champion, Equipment> sd = slts.get(i);
+			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
+				killCard(side, i);
+
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
+				unequipCard(side, i, slts);
 		}
 
 		ch.reset();
@@ -1316,14 +1314,13 @@ public class Shoukan extends GlobalGame {
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
 
 		slts.get(index).setTop(null);
-		for (SlotColumn<Champion, Equipment> sd : slts) {
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
-				Equipment eq = sd.getBottom();
-				eq.setLinkedTo(null);
-				if (eq.getTier() >= 4) arena.getBanished().add(eq);
-				else arena.getGraveyard().get(side).add(eq);
-				sd.setBottom(null);
-			}
+		for (int i = 0; i < slts.size(); i++) {
+			SlotColumn<Champion, Equipment> sd = slts.get(i);
+			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
+				killCard(side, i);
+
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
+				unequipCard(side, i, slts);
 		}
 
 		ch.reset();
@@ -1351,14 +1348,13 @@ public class Shoukan extends GlobalGame {
 		}
 
 		slts.get(index).setTop(null);
-		for (SlotColumn<Champion, Equipment> sd : slts) {
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
-				Equipment eq = sd.getBottom();
-				eq.setLinkedTo(null);
-				if (eq.getTier() >= 4) arena.getBanished().add(eq);
-				else arena.getGraveyard().get(side).add(eq);
-				sd.setBottom(null);
-			}
+		for (int i = 0; i < slts.size(); i++) {
+			SlotColumn<Champion, Equipment> sd = slts.get(i);
+			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
+				killCard(side, i);
+
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
+				unequipCard(side, i, slts);
 		}
 
 		ch.reset();
@@ -1384,13 +1380,13 @@ public class Shoukan extends GlobalGame {
 			if (ch == null) return;
 
 			slts.get(index).setTop(null);
-			for (SlotColumn<Champion, Equipment> sd : slts) {
-				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index) {
-					Equipment eq = sd.getBottom();
-					eq.setLinkedTo(null);
-					arena.getBanished().add(eq);
-					sd.setBottom(null);
-				}
+			for (int i = 0; i < slts.size(); i++) {
+				SlotColumn<Champion, Equipment> sd = slts.get(i);
+				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
+					killCard(side, i);
+
+				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
+					banishCard(side, i, true);
 			}
 
 			ch.reset();
@@ -1455,7 +1451,11 @@ public class Shoukan extends GlobalGame {
 			sc.setTop(ch);
 			slts.get(index).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
-				if (slts.get(i).getBottom() != null && slts.get(i).getBottom().getLinkedTo().getLeft() == index)
+				SlotColumn<Champion, Equipment> sd = slts.get(i);
+				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
+					killCard(side, i);
+
+				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
 					unequipCard(his, i, slts);
 			}
 		}
@@ -1481,7 +1481,11 @@ public class Shoukan extends GlobalGame {
 		ch.setAcc(AccountDAO.getAccount(getHands().get(side).getUser().getId()));
 		slts.get(index).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
-			if (slts.get(i).getBottom() != null && slts.get(i).getBottom().getLinkedTo().getLeft() == index)
+			SlotColumn<Champion, Equipment> sd = slts.get(i);
+			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
+				killCard(side, i);
+
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
 				unequipCard(his, i, slts);
 		}
 
@@ -1491,9 +1495,13 @@ public class Shoukan extends GlobalGame {
 		yours.clearLinkedTo();
 		yours.setAcc(AccountDAO.getAccount(getHands().get(his).getUser().getId()));
 		slots.get(source).setTop(null);
-		for (int i = 0; i < slots.size(); i++) {
-			if (slots.get(i).getBottom() != null && slots.get(i).getBottom().getLinkedTo().getLeft() == source)
-				unequipCard(side, i, slots);
+		for (int i = 0; i < slts.size(); i++) {
+			SlotColumn<Champion, Equipment> sd = slts.get(i);
+			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
+				killCard(side, i);
+
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
+				unequipCard(his, i, slts);
 		}
 
 		slts.get(index).setTop(yours);
