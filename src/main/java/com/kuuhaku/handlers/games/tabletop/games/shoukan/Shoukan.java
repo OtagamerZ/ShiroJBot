@@ -660,7 +660,7 @@ public class Shoukan extends GlobalGame {
 				if (yours.hasEffect() && effectLock == 0) {
 					yours.getEffect(new EffectParameters(EffectTrigger.ON_ATTACK, this, is[0], h.getSide(), Duelists.of(yours, is[0], his, is[1]), channel));
 
-					if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
+					if (yours.getBonus().getSpecialData().remove("skipCombat") != null || yours.getCard().getId().equals("DECOY")) {
 						yours.setAvailable(false);
 						yours.resetAttribs();
 						if (yours.hasEffect()) {
@@ -688,7 +688,7 @@ public class Shoukan extends GlobalGame {
 				if (his.hasEffect() && effectLock == 0) {
 					his.getEffect(new EffectParameters(EffectTrigger.ON_DEFEND, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 
-					if (his.getBonus().getSpecialData().remove("skipCombat") != null) {
+					if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
 						if (!postCombat()) {
 							resetTimerKeepTurn();
 							channel.sendMessage("Cálculo de combate ignorado por efeito do defensor!")
@@ -1254,7 +1254,8 @@ public class Shoukan extends GlobalGame {
 
 	public void killCard(Side side, int index) {
 		Champion ch = getArena().getSlots().get(side).get(index).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath")) return;
+		if (ch == null || (ch.getBonus().getSpecialData().optBoolean("preventDeath") && !ch.getCard().getId().equals("DECOY")))
+			return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
 
 		slts.get(index).setTop(null);
