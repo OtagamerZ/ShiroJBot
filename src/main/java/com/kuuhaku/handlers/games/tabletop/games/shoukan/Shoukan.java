@@ -804,6 +804,7 @@ public class Shoukan extends GlobalGame {
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 						});
 			} else {
+				killCard(next, is[1]);
 				resetTimerKeepTurn();
 				channel.sendMessage(his.getName() + " era na verdade uma isca!")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
@@ -836,8 +837,8 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 
-			killCard(current, is[0]);
 			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+				killCard(current, is[0]);
 				if (!postCombat()) {
 					resetTimerKeepTurn();
 					channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")")
@@ -852,6 +853,7 @@ public class Shoukan extends GlobalGame {
 							});
 				}
 			} else if (his.getCard().getId().equals("DECOY")) {
+				killCard(current, is[0]);
 				resetTimerKeepTurn();
 				channel.sendMessage(yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
