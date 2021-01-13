@@ -1489,7 +1489,7 @@ public class Shoukan extends GlobalGame {
 				killCard(side, i);
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
-				unequipCard(his, i, slts);
+				unequipCard(side, i, slts);
 		}
 
 		Champion yours = getArena().getSlots().get(side).get(source).getTop();
@@ -1501,7 +1501,7 @@ public class Shoukan extends GlobalGame {
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn<Champion, Equipment> sd = slts.get(i);
 			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
-				killCard(side, i);
+				killCard(his, i);
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
 				unequipCard(his, i, slts);
