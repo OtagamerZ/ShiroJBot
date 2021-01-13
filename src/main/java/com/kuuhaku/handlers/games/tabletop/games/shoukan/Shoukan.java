@@ -1254,8 +1254,7 @@ public class Shoukan extends GlobalGame {
 
 	public void killCard(Side side, int index) {
 		Champion ch = getArena().getSlots().get(side).get(index).getTop();
-		if (ch == null || (ch.getBonus().getSpecialData().optBoolean("preventDeath") && !ch.getCard().getId().equals("DECOY")))
-			return;
+		if (ch == null || (ch.getBonus().getSpecialData().optBoolean("preventDeath"))) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
 
 		slts.get(index).setTop(null);
