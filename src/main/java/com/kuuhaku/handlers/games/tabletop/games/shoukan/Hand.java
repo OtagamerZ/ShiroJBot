@@ -222,6 +222,26 @@ public class Hand {
 		}
 	}
 
+	public void drawSpell() {
+		if (lockTime > 0) return;
+		try {
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() == Charm.SPELL).findFirst().orElseThrow();
+			getDeque().remove(dr);
+			cards.add(dr.copy());
+		} catch (NoSuchElementException ignore) {
+		}
+	}
+
+	public void drawHighest(boolean attack) {
+		if (lockTime > 0) return;
+		try {
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
+			getDeque().remove(dr);
+			cards.add(dr.copy());
+		} catch (NoSuchElementException ignore) {
+		}
+	}
+
 	public void drawField() {
 		if (lockTime > 0) return;
 		try {
