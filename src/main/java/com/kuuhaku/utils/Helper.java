@@ -465,7 +465,7 @@ public class Helper {
 			eb.addField("Referente:", u.getAsMention(), true);
 			if (isCommand) {
 				eb.addField("Comando:", gc.getPrefix() + c.getName(), true);
-				eb.addField("Argumentos:", args, true);
+				eb.addField("Argumentos:", StringUtils.abbreviate(args, 1024), true);
 			}
 			eb.setTimestamp(Instant.now());
 
