@@ -806,7 +806,7 @@ public class Shoukan extends GlobalGame {
 			} else {
 				killCard(next, is[1]);
 				resetTimerKeepTurn();
-				channel.sendMessage(his.getName() + " era na verdade uma isca!")
+				channel.sendMessage("Essa carta era na verdade uma isca!")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -867,7 +867,7 @@ public class Shoukan extends GlobalGame {
 						});
 			} else {
 				resetTimerKeepTurn();
-				channel.sendMessage(yours.getName() + " era na verdade uma isca!")
+				channel.sendMessage("Essa carta era na verdade uma isca!")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -1040,7 +1040,7 @@ public class Shoukan extends GlobalGame {
 						});
 			} else {
 				resetTimerKeepTurn();
-				channel.sendMessage(his.getName() + " era na verdade uma isca!")
+				channel.sendMessage("Essa carta era na verdade uma isca!")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -1100,7 +1100,7 @@ public class Shoukan extends GlobalGame {
 						});
 			} else {
 				resetTimerKeepTurn();
-				channel.sendMessage(yours.getName() + " era na verdade uma isca!")
+				channel.sendMessage("Essa carta era na verdade uma isca!")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
