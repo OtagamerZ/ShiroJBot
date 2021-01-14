@@ -93,6 +93,8 @@ public class Champion implements Drawable, Cloneable {
 	private transient int mMana = 0;
 	private transient int redAtk = 0;
 	private transient int redDef = 0;
+	private transient int efctAtk = -1;
+	private transient int efctDef = -1;
 	private transient int stun = 0;
 
 	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
@@ -313,12 +315,12 @@ public class Champion implements Drawable, Cloneable {
 
 	public int getAtk() {
 		if (altAtk == -1) altAtk = atk;
-		return Math.max(0, altAtk - redAtk);
+		return Math.max(0, altAtk - redAtk + efctAtk);
 	}
 
 	public int getDef() {
 		if (altDef == -1) altDef = def;
-		return Math.max(0, altDef - redDef);
+		return Math.max(0, altDef - redDef + efctDef);
 	}
 
 	public int getAltAtk() {
@@ -351,6 +353,14 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setRedDef(int redDef) {
 		this.redDef += redDef;
+	}
+
+	public void setEfctAtk(int efctAtk) {
+		this.efctAtk += efctAtk;
+	}
+
+	public void setEfctDef(int efctDef) {
+		this.efctDef += efctDef;
 	}
 
 	public int getFinAtk() {
@@ -434,6 +444,10 @@ public class Champion implements Drawable, Cloneable {
 		this.altEffect = effect;
 	}
 
+	public void setAltRace(Race race) {
+		this.altRace = race;
+	}
+
 	public void getEffect(EffectParameters ep) {
 		String imports = """
 				//%s
@@ -495,6 +509,8 @@ public class Champion implements Drawable, Cloneable {
 		altRace = null;
 		redAtk = 0;
 		redDef = 0;
+		efctAtk = 0;
+		efctDef = 0;
 		stun = 0;
 	}
 
