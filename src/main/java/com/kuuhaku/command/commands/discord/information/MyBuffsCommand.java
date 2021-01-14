@@ -64,7 +64,7 @@ public class MyBuffsCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		boolean exceed = Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
-		boolean waifu = guild.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author));
+		boolean waifu = guild.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 		boolean kgotchi = kg != null;
 
 		eb.setTitle(":level_slider: Modificadores ativos");

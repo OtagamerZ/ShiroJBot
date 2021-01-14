@@ -98,13 +98,13 @@ public class MyStatsCommand extends Command {
 			eb.addField("Progresso para o próximo tier", mmr.getRankPoints() + "/100 Pontos de Ranking", false);
 
 		boolean victorious = Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
-		boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author));
+		boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
 		boolean kgotchi = kg != null;
 
 		int xp = (int) (15
-				* (victorious ? 2 : 1)
-				* (waifu ? WaifuDAO.getMultiplier(author).getMult() : 1)
-				* (gb.getBuff(1) != null ? gb.getBuff(1).getMult() : 1)
+						* (victorious ? 2 : 1)
+						* (waifu ? WaifuDAO.getMultiplier(author).getMult() : 1)
+						* (gb.getBuff(1) != null ? gb.getBuff(1).getMult() : 1)
 		);
 
 		if (kgotchi) {

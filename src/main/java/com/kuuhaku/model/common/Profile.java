@@ -169,9 +169,9 @@ public class Profile {
 		drawOutlinedText(name, 270, 342, g2d);
 
 		try {
-			if (!Member.getWaifu(m.getUser()).isEmpty()) {
+			if (!Member.getWaifu(m.getUser().getId()).isEmpty()) {
 				g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
-				drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(Member.getWaifu(m.getUser())).getName(), 270, 298, g2d);
+				drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(Member.getWaifu(m.getUser().getId())).getName(), 270, 298, g2d);
 			}
 		} catch (NullPointerException ignore) {
 		}

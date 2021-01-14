@@ -89,7 +89,7 @@ public class Member {
 
 		if (ExceedDAO.hasExceed(u.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(u.getId())))
 			bonuses.add(new Bonus(0, "Exceed Vitorioso", 2));
-		if (!getWaifu(u).isEmpty())
+		if (!getWaifu(u.getId()).isEmpty())
 			bonuses.add(new Bonus(1, "Waifu", WaifuDAO.getMultiplier(u).getMult()));
 		if (kg != null && kg.isAlive() && kg.getTier() != Tier.CHILD)
 			bonuses.add(new Bonus(2, "Kawaigotchi", kg.getTier().getUserXpMult()));
@@ -109,10 +109,10 @@ public class Member {
 		return bonuses;
 	}
 
-	public static String getWaifu(User u) {
-		Couple c = WaifuDAO.getCouple(u.getId());
+	public static String getWaifu(String id) {
+		Couple c = WaifuDAO.getCouple(id);
 		if (c == null) return "";
-		return c.getHusbando().equals(u.getId()) ? c.getWaifu() : c.getHusbando();
+		return c.getHusbando().equals(id) ? c.getWaifu() : c.getHusbando();
 	}
 
 	public synchronized boolean addXp(Guild g) {
@@ -122,7 +122,7 @@ public class Member {
 
 		if (ExceedDAO.hasExceed(mid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(mid)))
 			mult.updateAndGet(v -> v * 2);
-		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(Member.getWaifu(u)))
+		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(Member.getWaifu(u.getId())))
 			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(u).getMult());
 		if (kg != null && kg.isAlive() && kg.getTier() != Tier.CHILD)
 			mult.updateAndGet(v -> v * kg.getTier().getUserXpMult());
