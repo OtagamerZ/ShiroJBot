@@ -54,13 +54,13 @@ public class ServerInfoCommand extends Command {
 		eb.setTitle(":dividers: | Dados sobre o servidor")
 				.setThumbnail(guild.getIconUrl())
 				.setImage(guild.getBannerUrl())
-				.addField(":beginner: | Nome do servidor", guild.getName(), true)
-				.addField(":card_box: | Shard", "Nº " + guild.getJDA().getShardInfo().getShardId(), true)
-				.addField(":name_badge: | Dono do servidor", guild.getOwner() == null ? "Desconhecido" : guild.getOwner().getUser().getAsTag(), true)
+				.addField(":beginner: | Nome do servidor", guild.getName(), false)
+				.addField(":card_box: | Shard", "Nº " + guild.getJDA().getShardInfo().getShardId(), false)
+				.addField(":name_badge: | Dono do servidor", guild.getOwner() == null ? "Desconhecido" : guild.getOwner().getUser().getAsTag(), false)
 				.addField(":busts_in_silhouette: | Membros", """
 						Usuários: %s
 						Bots: %s
-						""".formatted(guild.getMemberCount() - bots, bots), true)
+						""".formatted(guild.getMemberCount() - bots, bots), false)
 				.addField(":calendar: | Estou aqui desde", guild.getSelfMember().hasTimeJoined() ? guild.getSelfMember().getTimeJoined().format(Helper.onlyDate) : "Não lembro", true);
 
 		channel.sendMessage(eb.build()).queue();
