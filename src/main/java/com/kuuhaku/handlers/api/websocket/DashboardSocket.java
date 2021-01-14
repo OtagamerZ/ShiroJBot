@@ -119,7 +119,7 @@ public class DashboardSocket extends WebSocketServer {
 				}
 				case "validate" -> {
 					User u = Main.getInfo().getUserByID(t.getUid());
-					User w = Member.getWaifu(u).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u));
+					User w = Member.getWaifu(u.getId()).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u.getId()));
 					CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
 					List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
 					JSONObject user = new JSONObject() {{

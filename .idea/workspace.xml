@@ -14,8 +14,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/arenas/great_tomb_of_nazarick.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ColorRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ColorRoleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -988,13 +994,6 @@
       <workItem from="1610539366868" duration="1394000" />
       <workItem from="1610541609087" duration="21389000" />
     </task>
-    <task id="LOCAL-03343" summary="Melhoria no sistema de avaliação de suportes">
-      <created>1610371713055</created>
-      <option name="number" value="03343" />
-      <option name="presentableId" value="LOCAL-03343" />
-      <option name="project" value="LOCAL" />
-      <updated>1610371713055</updated>
-    </task>
     <task id="LOCAL-03344" summary="Melhoria no sistema de avaliação de suportes">
       <created>1610371897135</created>
       <option name="number" value="03344" />
@@ -1331,7 +1330,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610629254747</updated>
     </task>
-    <option name="localTasksCounter" value="3392" />
+    <task id="LOCAL-03392" summary="Correções">
+      <created>1610629851945</created>
+      <option name="number" value="03392" />
+      <option name="presentableId" value="LOCAL-03392" />
+      <option name="project" value="LOCAL" />
+      <updated>1610629851945</updated>
+    </task>
+    <option name="localTasksCounter" value="3393" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1508,34 +1514,34 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610629253898">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610629850939">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610629253898" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610629850939" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608208920619" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728513022" />
-    <state width="1387" height="315" key="GridCell.Tab.0.bottom" timestamp="1610457427880">
+    <state width="1387" height="217" key="GridCell.Tab.0.bottom" timestamp="1610633385008">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1610457427880" />
+    <state width="1387" height="217" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1610633385008" />
     <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
-    <state width="1387" height="315" key="GridCell.Tab.0.center" timestamp="1610457427880">
+    <state width="1387" height="217" key="GridCell.Tab.0.center" timestamp="1610633385008">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1610457427880" />
+    <state width="1387" height="217" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1610633385008" />
     <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
-    <state width="1387" height="315" key="GridCell.Tab.0.left" timestamp="1610457427880">
+    <state width="1387" height="217" key="GridCell.Tab.0.left" timestamp="1610633385007">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1610457427880" />
+    <state width="1387" height="217" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1610633385007" />
     <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
-    <state width="1387" height="315" key="GridCell.Tab.0.right" timestamp="1610457427880">
+    <state width="1387" height="217" key="GridCell.Tab.0.right" timestamp="1610633385008">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="315" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1610457427880" />
+    <state width="1387" height="217" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1610633385008" />
     <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1607347986126">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1556,10 +1562,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610629297450">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610629860336">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610629297450" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610629860336" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610305177857" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
