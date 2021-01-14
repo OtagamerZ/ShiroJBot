@@ -615,7 +615,8 @@ public class Shoukan extends GlobalGame {
 
 					int yPower = Math.round(
 							c.getFinAtk() *
-							(arena.getField() == null || c.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f))
+							(arena.getField() == null || c.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f)) *
+							(getRound() < 2 ? 0.5f : 1)
 					);
 
 					if (!c.getCard().getId().equals("DECOY")) enemy.removeHp(yPower);
@@ -623,7 +624,7 @@ public class Shoukan extends GlobalGame {
 
 					if (!postCombat()) {
 						resetTimerKeepTurn();
-						channel.sendMessage(h.getUser().getName() + " atacou diretamente " + getHands().get(next).getUser().getName() + ".")
+						channel.sendMessage(h.getUser().getName() + " atacou diretamente " + getHands().get(next).getUser().getName() + (getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "") + ".")
 								.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
 									this.message.compute(s.getChannel().getId(), (id, m) -> {
