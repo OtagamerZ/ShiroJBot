@@ -69,19 +69,19 @@ public class ColorRoleCommand extends Command {
         } else if (args.length < 1) {
 			JSONObject jo = gc.getColorRoles();
 			if (jo.keySet().size() == 0) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-found")).queue();
-                return;
-            }
-			BufferedImage bi = new BufferedImage(900, 30 + 30 * (jo.keySet().size() / 3), BufferedImage.TYPE_INT_ARGB);
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-found")).queue();
+				return;
+			}
+			BufferedImage bi = new BufferedImage(960, 60 + 30 * (jo.keySet().size() / 3), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2d.setFont(new Font("arial", Font.BOLD, 30));
 
 			AtomicInteger i = new AtomicInteger();
 			jo.keys().forEachRemaining(k -> {
 				JSONObject color = jo.getJSONObject(k);
-				g2d.setFont(new Font("arial", Font.BOLD, 30));
 				g2d.setColor(Color.decode(color.getString("color")));
-				g2d.drawString(k, (i.get() % 3) * 300, 30 + (30 * (i.get() / 3)));
+				g2d.drawString(k, 30 + (i.get() % 3) * 300, 45 + (30 * (i.get() / 3)));
 				i.getAndIncrement();
 			});
 
