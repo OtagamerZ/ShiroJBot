@@ -97,6 +97,7 @@ public class DeckStashCommand extends Command {
 				double manaCost = ListUtils.union(ds.getChampions(), ds.getEquipments())
 						.stream()
 						.mapToInt(d -> d instanceof Champion ? ((Champion) d).getMana() : ((Equipment) d).getMana())
+						.filter(i -> i != 0)
 						.average()
 						.orElse(0);
 
