@@ -959,6 +959,8 @@ public class Shoukan extends GlobalGame {
 		Champion yours = getArena().getSlots().get(next).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(current).get(is[1]).getTop();
 
+		if (yours.isDefending() || yours.isFlipped()) return;
+
 		int yPower;
 		if (!yours.getCard().getId().equals("DECOY")) {
 			yPower = Math.round(
@@ -1015,46 +1017,10 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 
-			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId()))
 				killCard(current, is[1]);
-				if (!postCombat()) {
-					resetTimerKeepTurn();
-					channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							});
-				}
-			} else if (yours.getCard().getId().equals("DECOY")) {
-				resetTimerKeepTurn();
-				channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						});
-			} else {
-				resetTimerKeepTurn();
-				channel.sendMessage("Essa carta era na verdade uma isca!")
-						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						});
-			}
+
+			postCombat();
 		} else if (yPower < hPower) {
 			yours.setAvailable(false);
 			his.resetAttribs();
@@ -1076,45 +1042,7 @@ public class Shoukan extends GlobalGame {
 			}
 
 			killCard(next, is[0]);
-			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-				if (!postCombat()) {
-					resetTimerKeepTurn();
-					channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							});
-				}
-			} else if (his.getCard().getId().equals("DECOY")) {
-				resetTimerKeepTurn();
-				channel.sendMessage(yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						});
-			} else {
-				resetTimerKeepTurn();
-				channel.sendMessage("Essa carta era na verdade uma isca!")
-						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						});
-			}
+			postCombat();
 		} else {
 			yours.setAvailable(false);
 
@@ -1130,61 +1058,12 @@ public class Shoukan extends GlobalGame {
 			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 				killCard(current, is[1]);
 				killCard(next, is[0]);
+			} else if (his.getCard().getId().equals("DECOY"))
+				killCard(current, is[1]);
+			else
+				killCard(next, is[0]);
 
-				if (!postCombat()) {
-					resetTimerKeepTurn();
-					channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							});
-				}
-			} else if (Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-				killCard(current, is[1]);
-				killCard(next, is[0]);
-				resetTimerKeepTurn();
-				channel.sendMessage("As duas cartas na verdade eram iscas! (" + yPower + " = " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						});
-			} else if (his.getCard().getId().equals("DECOY")) {
-				killCard(current, is[1]);
-				resetTimerKeepTurn();
-				channel.sendMessage("As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						});
-			} else {
-				killCard(next, is[0]);
-				resetTimerKeepTurn();
-				channel.sendMessage("As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						});
-			}
+			postCombat();
 		}
 	}
 
