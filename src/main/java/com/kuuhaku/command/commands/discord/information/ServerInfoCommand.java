@@ -53,7 +53,7 @@ public class ServerInfoCommand extends Command {
 
 		eb.setTitle(":dividers: | Dados sobre o servidor")
 				.setThumbnail(guild.getIconUrl())
-				.setImage(guild.getBannerUrl())
+				.setImage(guild.getBannerUrl() != null ? guild.getBannerUrl() + "?size=512" : null)
 				.addField(":beginner: | Nome", guild.getName(), false)
 				.addField(":name_badge: | Dono", guild.getOwner() == null ? "Desconhecido" : guild.getOwner().getUser().getAsTag(), false)
 				.addField(":card_box: | Shard", "Nº " + guild.getJDA().getShardInfo().getShardId(), false)

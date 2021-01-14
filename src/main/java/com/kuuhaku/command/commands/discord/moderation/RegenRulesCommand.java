@@ -82,7 +82,7 @@ public class RegenRulesCommand extends Command {
 				channel.sendMessage("Seja bem-vindo(a) ao meu servidor oficial de suporte, qualquer duvida que tenha sobre como me utilizar será esclarecida por um de nossos membros, fique à vontade e lembre-se de sempre relatar quando achar algo suspeito.").complete();
 			} else {
 				if (guild.getBannerUrl() != null)
-					channel.sendFile(Helper.getImage(guild.getBannerUrl()), "title.png").complete();
+					channel.sendFile(Helper.getImage(guild.getBannerUrl() != null ? guild.getBannerUrl() + "?size=512" : null), "title.png").complete();
 				channel.sendFile(Helper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").complete();
 				channel.sendMessage("Seja bem-vindo(a) ao servidor " + guild.getName() + ", fique à vontade e lembre-se de sempre relatar quando achar algo suspeito.").complete();
 			}
