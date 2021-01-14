@@ -22,15 +22,19 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.jetbrains.annotations.NonNls;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DeckEvalCommand extends Command {
@@ -76,9 +80,19 @@ public class DeckEvalCommand extends Command {
 			data[i * 2 + 1] = ct != 1 ? "s" : "";
 		}
 
+		double manaCost = ListUtils.union(kp.getChampions(), kp.getEquipments())
+				.stream()
+				.mapToInt(d -> d instanceof Champion ? ((Champion) d).getMana() : ((Equipment) d).getMana())
+				.average()
+				.orElse(0);
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Análise do deck de " + author.getName())
-				.addField(":crossed_swords: | Cartas Senshi: " + kp.getChampions().size(), ":shield: | Cartas EvoGear: " + kp.getEquipments().size(), false)
+				.addField(
+						":crossed_swords: | Cartas Senshi: " + kp.getChampions().size(),
+						":shield: | Cartas EvoGear: %s\n:thermometer: | Custo médio de mana: %s".formatted(kp.getEquipments().size(), Helper.round(manaCost, 2)),
+						false
+				)
 				.addField(":abacus: | Classes", """
 						**Duelista:** %s carta%s
 						**Tanque:** %s carta%s
@@ -89,44 +103,47 @@ public class DeckEvalCommand extends Command {
 						**Especialista:** %s carta%s
 						""".formatted((Object[]) data), false);
 
-		StringBuilder sb = new StringBuilder();
+		List<String> tips = new ArrayList<>();
 		for (Map.Entry<Class, Integer> e : count.entrySet()) {
 			switch (e.getKey()) {
 				case DUELIST -> {
 					if (e.getValue() < 6)
-						sb.append("É importante ter várias cartas do tipo duelista, pois elas costumam ser as mais baratas e oferecem versatilidade durante as partidas.\n\n");
+						tips.add("É importante ter várias cartas do tipo duelista, pois elas costumam ser as mais baratas e oferecem versatilidade durante as partidas.");
 				}
 				case SUPPORT -> {
 					if (e.getValue() < 3)
-						sb.append("Decks que possuem cartas de suporte costumam sobressair em partidas extensas, lembre-se que nem sempre dano é o fator vitorioso.\n\n");
+						tips.add("Decks que possuem cartas de suporte costumam sobressair em partidas extensas, lembre-se que nem sempre dano é o fator vitorioso.");
 				}
 				case TANK -> {
 					if (e.getValue() < 3)
-						sb.append("Um deck sem tanques possui uma defesa muito fraca, lembre-se que após cada turno será a vez do oponente.\n\n");
+						tips.add("Um deck sem tanques possui uma defesa muito fraca, lembre-se que após cada turno será a vez do oponente.");
 				}
 				case SPECIALIST -> {
 					if (e.getValue() < 1)
-						sb.append("Apesar de serem cartas situacionais, as cartas-especialista são essenciais em qualquer deck pois nunca se sabe que rumo a partida irá tomar.\n\n");
+						tips.add("Apesar de serem cartas situacionais, as cartas-especialista são essenciais em qualquer deck pois nunca se sabe que rumo a partida irá tomar.");
 				}
 				case NUKE -> {
 					if (e.getValue() < 1)
-						sb.append("Existem cartas com alto ataque ou defesa, seu deck estará vulnerável sem uma carta para explodi-las.\n\n");
+						tips.add("Existem cartas com alto ataque ou defesa, seu deck estará vulnerável sem uma carta para explodi-las.");
 				}
 				case TRAP -> {
 					if (e.getValue() < 5)
-						sb.append("Sem cartas-armadilha à sua disposição, o oponente não precisará se preocupar em atacar cartas viradas para baixo, o que te torna um alvo fácil.\n\n");
+						tips.add("Sem cartas-armadilha à sua disposição, o oponente não precisará se preocupar em atacar cartas viradas para baixo, o que te torna um alvo fácil.");
 				}
 				case LEVELER -> {
 					if (e.getValue() < 5)
-						sb.append("Cartas niveladoras são essenciais para defender-se de um turno ruim, não subestime o poder delas.\n\n");
+						tips.add("Cartas niveladoras são essenciais para defender-se de um turno ruim, não subestime o poder delas.");
 				}
 			}
 		}
 
+		if (manaCost >= 4)
+			tips.add("Seu deck possui um custo de mana muito alto. Apesar das cartas de custo alto serem mais forte, não adianta nada se você conseguir invocar apenas 1 por turno.");
+
 		if (kp.getChampions().size() < 30)
 			eb.setDescription("Seu deck ainda não está pronto para duelos.");
 		else
-			eb.setDescription(sb.toString().isBlank() ? "Seu deck está bem distribuído, parabéns!" : StringUtils.trim(sb.toString()));
+			eb.setDescription(tips.size() == 0 ? "Seu deck está bem distribuído, parabéns!" : String.join("\n\n", tips));
 
 		channel.sendMessage(eb.build()).queue();
 	}

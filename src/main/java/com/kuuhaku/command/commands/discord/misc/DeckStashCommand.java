@@ -31,8 +31,10 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.DeckStash;
 import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.collections4.ListUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
@@ -92,16 +94,24 @@ public class DeckStashCommand extends Command {
 					data[i * 2 + 1] = ct != 1 ? "s" : "";
 				}
 
+				double manaCost = ListUtils.union(ds.getChampions(), ds.getEquipments())
+						.stream()
+						.mapToInt(d -> d instanceof Champion ? ((Champion) d).getMana() : ((Equipment) d).getMana())
+						.average()
+						.orElse(0);
+
 				eb.addField(
 						"`Slot %s | %sreserva %s`".formatted(j, prefix, j),
 						"""
 								:crossed_swords: | Cartas Senshi: %s
 								:shield: | Cartas EvoGear: %s
+								:thermometer: | Custo médio de mana: %s
 																	
 								%s
 								""".formatted(
 								ds.getChampions().size(),
 								ds.getEquipments().size(),
+								Helper.round(manaCost, 2),
 								"""
 										:abacus: | Classes
 											**├─Duelista:** %s carta%s
