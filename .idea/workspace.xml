@@ -13,13 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BiographyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BiographyCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MatchDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MatchDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -991,20 +985,6 @@
       <workItem from="1610539366868" duration="1394000" />
       <workItem from="1610541609087" duration="21389000" />
     </task>
-    <task id="LOCAL-03340" summary="Melhoria no sistema de avaliação de suportes">
-      <created>1610369994855</created>
-      <option name="number" value="03340" />
-      <option name="presentableId" value="LOCAL-03340" />
-      <option name="project" value="LOCAL" />
-      <updated>1610369994855</updated>
-    </task>
-    <task id="LOCAL-03341" summary="Melhoria no sistema de avaliação de suportes">
-      <created>1610370128179</created>
-      <option name="number" value="03341" />
-      <option name="presentableId" value="LOCAL-03341" />
-      <option name="project" value="LOCAL" />
-      <updated>1610370128179</updated>
-    </task>
     <task id="LOCAL-03342" summary="Melhoria no sistema de avaliação de suportes">
       <created>1610371440744</created>
       <option name="number" value="03342" />
@@ -1334,7 +1314,21 @@
       <option name="project" value="LOCAL" />
       <updated>1610627799925</updated>
     </task>
-    <option name="localTasksCounter" value="3389" />
+    <task id="LOCAL-03389" summary="Correções">
+      <created>1610627953270</created>
+      <option name="number" value="03389" />
+      <option name="presentableId" value="LOCAL-03389" />
+      <option name="project" value="LOCAL" />
+      <updated>1610627953270</updated>
+    </task>
+    <task id="LOCAL-03390" summary="Correções">
+      <created>1610628024486</created>
+      <option name="number" value="03390" />
+      <option name="presentableId" value="LOCAL-03390" />
+      <option name="project" value="LOCAL" />
+      <updated>1610628024486</updated>
+    </task>
+    <option name="localTasksCounter" value="3391" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1511,10 +1505,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610627854831">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610628023845">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610627854831" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610628023845" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1559,10 +1553,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610627864505">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610628029723">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610627864505" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610628029723" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610305177857" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
