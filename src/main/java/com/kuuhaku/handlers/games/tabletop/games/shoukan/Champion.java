@@ -87,6 +87,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient int altDef = -1;
 	private transient String altDescription = null;
 	private transient String altEffect = null;
+	private transient Race altRace = null;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
 	private transient int mMana = 0;
@@ -130,7 +131,7 @@ public class Champion implements Drawable, Cloneable {
 				g2d.drawImage(fakeCard.getRace().getIcon(), 11, 12, null);
 			} else {
 				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 16), 181, 38, 32, g2d);
-				g2d.drawImage(race.getIcon(), 11, 12, null);
+				g2d.drawImage(getRace().getIcon(), 11, 12, null);
 			}
 
 			g2d.setColor(Color.cyan);
@@ -182,7 +183,7 @@ public class Champion implements Drawable, Cloneable {
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(Color.black);
-			g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 9, 277);
+			g2d.drawString("[" + getRace().toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 9, 277);
 
 			g2d.setFont(Helper.HAMMERSMITH.deriveFont(Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : Helper.getOr(altDescription, description), 205, 9, 293);
@@ -291,7 +292,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public Race getRace() {
-		return race;
+		return Helper.getOr(altRace, race);
 	}
 
 	public int getMana() {
@@ -491,6 +492,7 @@ public class Champion implements Drawable, Cloneable {
 		altDef = def;
 		altDescription = null;
 		altEffect = null;
+		altRace = null;
 		redAtk = 0;
 		redDef = 0;
 		stun = 0;
