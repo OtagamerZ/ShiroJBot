@@ -53,7 +53,7 @@ public class BiographyCommand extends Command {
 		}
 
 		for (String s : args)
-			if (s.length() > 29) {
+			if (s.length() > 20) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_biography-big-words")).queue();
 				return;
 			}
