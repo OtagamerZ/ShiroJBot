@@ -54,9 +54,9 @@ public class ServerInfoCommand extends Command {
 		eb.setTitle(":dividers: | Dados sobre o servidor")
 				.setThumbnail(guild.getIconUrl())
 				.setImage(guild.getBannerUrl())
-				.addField(":beginner: | Nome do servidor", guild.getName(), false)
+				.addField(":beginner: | Nome", guild.getName(), false)
+				.addField(":name_badge: | Dono", guild.getOwner() == null ? "Desconhecido" : guild.getOwner().getUser().getAsTag(), false)
 				.addField(":card_box: | Shard", "Nº " + guild.getJDA().getShardInfo().getShardId(), false)
-				.addField(":name_badge: | Dono do servidor", guild.getOwner() == null ? "Desconhecido" : guild.getOwner().getUser().getAsTag(), false)
 				.addField(":busts_in_silhouette: | Membros", """
 						Usuários: %s
 						Bots: %s
