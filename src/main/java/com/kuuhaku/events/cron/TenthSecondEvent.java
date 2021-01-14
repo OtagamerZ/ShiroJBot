@@ -76,7 +76,6 @@ public class TenthSecondEvent implements Job {
 			Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2 = lobby.get(b);
 
 			if (!p1.getKey().equals(p2.getKey())
-				//&& p1.getKey().getMMR() <= p2.getKey().getMMR()
 				&& Helper.prcnt(p1.getKey().getMMR(), p2.getKey().getMMR() == 0 ? 1 : p2.getKey().getMMR()) * 100 <= p1.getValue().getLeft() * 10
 				&& (Math.abs(p1.getKey().getTier().getTier() - p2.getKey().getTier().getTier()) < 2 || p2.getKey().getTier() == RankedTier.UNRANKED)) {
 				Main.getInfo().getMatchMaking().getLobby().remove(p1.getKey());
@@ -87,8 +86,7 @@ public class TenthSecondEvent implements Job {
 				List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
 
 				Runnable result = () -> {
-					System.gc();
-
+					boolean p1Starts = Helper.chance(50);
 					if (match.stream().allMatch(Pair::getRight)) {
 						GlobalGame g = new Shoukan(
 								Main.getShiroShards(),
@@ -97,8 +95,8 @@ public class TenthSecondEvent implements Job {
 								null,
 								false,
 								true,
-								p2.getKey().getUser(),
-								p1.getKey().getUser()
+								p1Starts ? p1.getKey().getUser() : p2.getKey().getUser(),
+								p1Starts ? p2.getKey().getUser() : p1.getKey().getUser()
 						);
 						g.start();
 						Main.getInfo().getMatchMaking().getGames().add(g);
