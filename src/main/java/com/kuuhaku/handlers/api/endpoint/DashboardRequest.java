@@ -143,7 +143,7 @@ public class DashboardRequest {
 
 		PixelCanvas.addPixel(new int[]{x, y}, Color.decode(color));
 
-		Main.getInfo().getSockets().getCanvas().notifyUpdate();
+		Main.getInfo().getSockets().getCanvas().notifyUpdate(color, x, y);
 		ratelimit.put(token, false);
 		return new JSONObject() {{
 			put("code", 200);

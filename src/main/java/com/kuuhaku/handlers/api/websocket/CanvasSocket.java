@@ -46,7 +46,7 @@ public class CanvasSocket extends WebSocketServer {
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
 		clients.add(conn);
 		conn.send(new JSONObject() {{
-			put("type", "canvas");
+			put("type", "canvas_init");
 			put("content", Main.getInfo().getCanvas().getRawCanvas());
 		}}.toString());
 	}
@@ -80,8 +80,12 @@ public class CanvasSocket extends WebSocketServer {
 				} catch (NullPointerException e) {
 					return;
 				}
-				PixelCanvas.addPixel(new int[]{pixel.getInt("x"), pixel.getInt("y")}, Color.decode(pixel.getString("color")));
-				notifyUpdate();
+
+				String color = pixel.getString("color");
+				int x = pixel.getInt("x");
+				int y = pixel.getInt("y");
+				PixelCanvas.addPixel(new int[]{x, y}, Color.decode(color));
+				notifyUpdate(color, x, y);
 			}
 			case "chat" -> {
 				for (WebSocket s : clients) {
@@ -104,11 +108,13 @@ public class CanvasSocket extends WebSocketServer {
 		Helper.logger(this.getClass()).info("WebSocket \"canvas\" iniciado na porta " + this.getPort());
 	}
 
-	public void notifyUpdate() {
+	public void notifyUpdate(String color, int x, int y) {
 		for (WebSocket s : clients) {
 			s.send(new JSONObject() {{
-				put("type", "canvas");
-				put("content", Main.getInfo().getCanvas().getRawCanvas());
+				put("type", "canvas_update");
+				put("color", color);
+				put("x", x);
+				put("y", y);
 			}}.toString());
 		}
 	}
