@@ -35,6 +35,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -112,7 +113,7 @@ public class GuessTheCardsCommand extends Command {
 								if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
 									return;
 
-								if (event.getMessage().getContentRaw().equalsIgnoreCase("desistir")) {
+								if (event.getMessage().getContentRaw().equalsIgnoreCase("desistir") || Helper.equalsAny(prefix + rawCmd.split(" ")[0], ArrayUtils.addAll(getAliases(), getName()))) {
 									channel.sendMessage("Você desistiu, as cartas eram `%s`, `%s` e `%s`".formatted(
 											names.get(0),
 											names.get(1),
@@ -142,7 +143,7 @@ public class GuessTheCardsCommand extends Command {
 								for (String s : answers)
 									points += names.remove(s.toUpperCase()) ? 1 : 0;
 
-								int reward = 100 * points + Helper.rng(150, false) * points;
+								int reward = 50 * points + Helper.rng(150, false) * points;
 
 								Account acc = AccountDAO.getAccount(author.getId());
 								acc.addCredit(reward, GuessTheCardsCommand.class);

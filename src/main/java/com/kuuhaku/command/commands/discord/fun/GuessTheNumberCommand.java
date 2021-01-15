@@ -33,6 +33,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
@@ -83,7 +84,7 @@ public class GuessTheNumberCommand extends Command {
 					return;
 
 				String value = event.getMessage().getContentRaw();
-				if (value.equalsIgnoreCase("desistir")) {
+				if (value.equalsIgnoreCase("desistir") || Helper.equalsAny(prefix + rawCmd.split(" ")[0], ArrayUtils.addAll(getAliases(), getName()))) {
 					channel.sendMessage("Você desistiu, o número escolhido por mim era **" + theValue + "**.").queue();
 					success.accept(null);
 					timeout.cancel(true);
