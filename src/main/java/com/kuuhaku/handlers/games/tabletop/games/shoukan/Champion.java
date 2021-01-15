@@ -93,8 +93,8 @@ public class Champion implements Drawable, Cloneable {
 	private transient int mMana = 0;
 	private transient int redAtk = 0;
 	private transient int redDef = 0;
-	private transient int efctAtk = -1;
-	private transient int efctDef = -1;
+	private transient int efctAtk = 0;
+	private transient int efctDef = 0;
 	private transient int stun = 0;
 
 	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
