@@ -97,7 +97,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
 				.setAudioSendFactory(new NativeAudioSendFactory())
-				.setMaxReconnectDelay(32)
 				.setEventPool(Executors.newCachedThreadPool(), true)
 				.build();
 
