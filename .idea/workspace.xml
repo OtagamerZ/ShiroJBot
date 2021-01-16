@@ -13,8 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no endpoint do ShiroCanvas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -980,13 +982,6 @@
       <workItem from="1610714861154" duration="68000" />
       <workItem from="1610736912034" duration="2153000" />
     </task>
-    <task id="LOCAL-03356" summary="Adicionado comando de top 10 de cada tier no Shoukan">
-      <created>1610384941848</created>
-      <option name="number" value="03356" />
-      <option name="presentableId" value="LOCAL-03356" />
-      <option name="project" value="LOCAL" />
-      <updated>1610384941848</updated>
-    </task>
     <task id="LOCAL-03357" summary="Adicionado comando de top 10 de cada tier no Shoukan">
       <created>1610385091713</created>
       <option name="number" value="03357" />
@@ -1323,7 +1318,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610737582135</updated>
     </task>
-    <option name="localTasksCounter" value="3405" />
+    <task id="LOCAL-03405" summary="Melhoria no endpoint do ShiroCanvas">
+      <created>1610750177206</created>
+      <option name="number" value="03405" />
+      <option name="presentableId" value="LOCAL-03405" />
+      <option name="project" value="LOCAL" />
+      <updated>1610750177206</updated>
+    </task>
+    <option name="localTasksCounter" value="3406" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1544,11 +1546,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610737609567">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610750178415">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610737609567" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610305177857" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610750178415" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
