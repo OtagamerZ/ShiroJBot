@@ -1368,7 +1368,7 @@ public class Shoukan extends GlobalGame {
 			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
 				killCard(side, i);
 
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == source)
 				unequipCard(side, i, slts);
 		}
 
@@ -1378,13 +1378,13 @@ public class Shoukan extends GlobalGame {
 		yours.clearLinkedTo();
 		yours.setAcc(AccountDAO.getAccount(getHands().get(his).getUser().getId()));
 		slots.get(source).setTop(null);
-		for (int i = 0; i < slts.size(); i++) {
-			SlotColumn<Champion, Equipment> sd = slts.get(i);
+		for (int i = 0; i < slots.size(); i++) {
+			SlotColumn<Champion, Equipment> sd = slots.get(i);
 			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
 				killCard(his, i);
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
-				unequipCard(his, i, slts);
+				unequipCard(his, i, slots);
 		}
 
 		slts.get(index).setTop(yours);
