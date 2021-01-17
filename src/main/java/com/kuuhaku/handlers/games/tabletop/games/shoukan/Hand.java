@@ -344,7 +344,7 @@ public class Hand {
 				.queue(null, Helper::doNothing);
 	}
 
-	public void showEnemyHand(int amount) {
+	public void showEnemyDeck(int amount) {
 		Hand op = game.getHands().get(side == Side.TOP ? Side.BOTTOM : Side.TOP);
 		BufferedImage bi = new BufferedImage(Math.max(5, amount) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
