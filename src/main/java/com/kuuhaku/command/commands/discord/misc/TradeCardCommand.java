@@ -214,6 +214,7 @@ public class TradeCardCommand extends Command {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().invalidate(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 								acc.removeCredit(price, this.getClass());
@@ -275,6 +276,7 @@ public class TradeCardCommand extends Command {
 							ms -> {
 								ShiroInfo.getHashes().remove(hash);
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().invalidate(other.getId());
 							})
 					);
 		} else if (Helper.regex(text, "[\\w- ]+[NnCcEeFf][ ]+(\\d+)")) { //Selling
@@ -407,6 +409,7 @@ public class TradeCardCommand extends Command {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().invalidate(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 								acc.addCredit(price, this.getClass());
@@ -468,6 +471,7 @@ public class TradeCardCommand extends Command {
 							ms -> {
 								ShiroInfo.getHashes().remove(hash);
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().invalidate(other.getId());
 							})
 					);
 		} else if (Helper.regex(text, "([\\w- ]+[NnCcEeFf]){2}")) { //Trade
@@ -667,6 +671,7 @@ public class TradeCardCommand extends Command {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().invalidate(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 
@@ -769,6 +774,7 @@ public class TradeCardCommand extends Command {
 							ms -> {
 								ShiroInfo.getHashes().remove(hash);
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().invalidate(other.getId());
 							})
 					);
 		}
