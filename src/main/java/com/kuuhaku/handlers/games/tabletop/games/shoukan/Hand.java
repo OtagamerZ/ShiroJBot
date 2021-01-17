@@ -301,8 +301,6 @@ public class Hand {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 90));
 
-		List<Drawable> cards = new ArrayList<>(getCards());
-
 		for (int i = 0; i < cards.size(); i++) {
 			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
 			if (cards.get(i).isAvailable())
@@ -326,8 +324,7 @@ public class Hand {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 90));
 
-		List<Drawable> cards = new ArrayList<>(enemy.getCards());
-		Account acc = AccountDAO.getAccount(enemy.getUser().getId());
+		List<Drawable> cards = enemy.getCards();
 
 		for (int i = 0; i < cards.size(); i++) {
 			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
@@ -341,7 +338,35 @@ public class Hand {
 		g2d.dispose();
 
 		user.openPrivateChannel()
-				.flatMap(c -> c.sendMessage("Visualizando as cartas na mão inimiga.")
+				.flatMap(c -> c.sendMessage("Visualizando as cartas na mão do oponente.")
+						.addFile(Helper.getBytes(bi, "png"), "hand.png")
+				)
+				.queue(null, Helper::doNothing);
+	}
+
+	public void showEnemyHand(int amount) {
+		Hand op = game.getHands().get(side == Side.TOP ? Side.BOTTOM : Side.TOP);
+		BufferedImage bi = new BufferedImage(Math.max(5, amount) * 300, 450, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 90));
+
+		List<Drawable> cards = op.getDeque();
+
+		for (int i = 0; i < amount; i++) {
+			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			try {
+				BufferedImage so = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/shinigami_overlay.png")));
+				g2d.drawImage(so, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			} catch (IOException ignore) {
+			}
+		}
+
+		g2d.dispose();
+
+		user.openPrivateChannel()
+				.flatMap(c -> c.sendMessage("Visualizando as próximas " + amount + " cartas do oponente.")
 						.addFile(Helper.getBytes(bi, "png"), "hand.png")
 				)
 				.queue(null, Helper::doNothing);
