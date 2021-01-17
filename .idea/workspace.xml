@@ -13,9 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhorias nas funções disponíveis">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas trocas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +112,7 @@
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="grid.search.filter.rows" value="true" />
-    <property name="last.edited.regexp" value="Adepto IV" />
+    <property name="last.edited.regexp" value="090 n zero c" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
@@ -985,14 +985,7 @@
       <workItem from="1610855174640" duration="623000" />
       <workItem from="1610856412146" duration="1193000" />
       <workItem from="1610857763090" duration="56000" />
-      <workItem from="1610908097889" duration="2079000" />
-    </task>
-    <task id="LOCAL-03363" summary="Adicionado comando de top 10 de cada tier no Shoukan">
-      <created>1610387351043</created>
-      <option name="number" value="03363" />
-      <option name="presentableId" value="LOCAL-03363" />
-      <option name="project" value="LOCAL" />
-      <updated>1610387351043</updated>
+      <workItem from="1610908097889" duration="3105000" />
     </task>
     <task id="LOCAL-03364" summary="Adicionado comando de top 10 de cada tier no Shoukan">
       <created>1610387500950</created>
@@ -1330,7 +1323,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610908468654</updated>
     </task>
-    <option name="localTasksCounter" value="3412" />
+    <task id="LOCAL-03412" summary="Correção nas trocas">
+      <created>1610910371701</created>
+      <option name="number" value="03412" />
+      <option name="presentableId" value="LOCAL-03412" />
+      <option name="project" value="LOCAL" />
+      <updated>1610910371701</updated>
+    </task>
+    <option name="localTasksCounter" value="3413" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1416,7 +1416,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhorias gerais" />
     <MESSAGE value="Correnção nos caches" />
     <MESSAGE value="Melhorias gerais e remoção completa do forEach" />
     <MESSAGE value="Várias mudanças no Shoukan" />
@@ -1441,7 +1440,8 @@
     <MESSAGE value="Melhoria no endpoint do ShiroCanvas" />
     <MESSAGE value="Correção nos efeitos" />
     <MESSAGE value="Melhorias nas funções disponíveis" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhorias nas funções disponíveis" />
+    <MESSAGE value="Correção nas trocas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nas trocas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1551,11 +1551,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610910190749">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610910372934">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610737609567" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610910190749" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610910372934" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1618,11 +1618,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="540" y="262" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116448554" />
-    <state x="567" y="240" width="768" height="698" key="run.anything.popup" timestamp="1610249849368">
+    <state x="567" y="240" width="768" height="698" key="run.anything.popup" timestamp="1610912537034">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608309711856" />
-    <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610249849368" />
+    <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610912537034" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1610740070981">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
