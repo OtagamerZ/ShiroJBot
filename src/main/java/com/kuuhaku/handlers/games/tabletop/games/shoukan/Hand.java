@@ -128,10 +128,12 @@ public class Hand {
 		}
 
 		if (kp.getDestinyDraw() != null) {
+			int champs = kp.getChampions().size();
 			for (int i : kp.getDestinyDraw()) {
-				if (i > deque.size())
-					destinyDeck.add(deque.get(Helper.rng(deque.size(), true)));
-				else
+				if (i > champs) {
+					destinyDeck.clear();
+					break;
+				} else
 					destinyDeck.add(deque.get(i));
 			}
 		}
