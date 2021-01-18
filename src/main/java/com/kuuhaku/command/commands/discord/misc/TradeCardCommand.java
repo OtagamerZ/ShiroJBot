@@ -84,7 +84,7 @@ public class TradeCardCommand extends Command {
 
 		User other = message.getMentionedUsers().get(0);
 		String text = StringUtils.normalizeSpace(String.join(" ", ArrayUtils.subarray(args, 1, args.length)));
-		if (Helper.regex(text, "([\\w- ]+[NnCcEeFf]){2}")) { //Trade
+		if (Helper.regex(text, "[\\w-]+ [NnCcEeFf] [\\w-]+ [NnCcEeFf]")) { //Trade
 			if (args.length < 5) {
 				channel.sendMessage("❌ | Você precisa mencionar uma carta, o tipo, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) para realizar a troca.").queue();
 				return;
