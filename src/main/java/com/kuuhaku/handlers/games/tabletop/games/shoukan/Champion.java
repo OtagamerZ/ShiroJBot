@@ -286,7 +286,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean isDefending() {
-		return defending;
+		return defending || flipped;
 	}
 
 	public void setDefending(boolean defending) {
