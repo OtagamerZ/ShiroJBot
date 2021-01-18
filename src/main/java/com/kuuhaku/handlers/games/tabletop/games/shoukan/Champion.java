@@ -21,7 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 import bsh.EvalError;
 import bsh.Interpreter;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
@@ -471,53 +471,6 @@ public class Champion implements Drawable, Cloneable {
 				import org.json.JSONArray;
 				          				
 				          """.formatted(card.getName());
-
-		if (ep.getTrigger() == EffectTrigger.AFTER_TURN) {
-			Champion c = ep.getDuelists().getAttacker();
-			Charm bonus = Charm.values()[Helper.rng(Charm.values().length, true)];
-			c.getBonus().getSpecialData().put("charm", bonus);
-			switch (bonus) {
-				case SPELLSHIELD:
-					c.getBonus().getSpecialData().put("write", "Imunidade a efeitos");
-					break;
-				case SPELLMIRROR:
-					c.getBonus().getSpecialData().put("write", "Reflexão de efeitos");
-					break;
-				case TIMEWARP:
-					c.getBonus().getSpecialData().put("write", "Mana extra");
-					ep.getHands().get(ep.getSide()).addMana(3);
-					break;
-				case DOUBLETAP:
-					c.getBonus().getSpecialData().put("write", "Ataque duplo");
-					break;
-				case DOPPELGANGER:
-					c.getBonus().getSpecialData().put("write", "Dano duplo");
-					break;
-				case SOULLINK:
-					c.getBonus().getSpecialData().put("write", "Imunidade a campo");
-					break;
-				case SPELL:
-					c.getBonus().getSpecialData().put("write", "Defesa dupla");
-					break;
-				case ARMORPIERCING:
-					c.getBonus().getSpecialData().put("write", "Penetração de armadura");
-					break;
-			}
-		} else if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
-			Champion c = ep.getDuelists().getAttacker();
-			if (c.getBonus().getSpecialData().opt("charm") == Charm.DOPPELGANGER)
-				c.setModAtk(c.getAtk());
-		} else if (ep.getTrigger() == EffectTrigger.ON_DEFEND) {
-			Champion c = ep.getDuelists().getAttacker();
-			if (c.getBonus().getSpecialData().opt("charm") == Charm.SPELL)
-				c.setModDef(c.getDef());
-		} else if (ep.getTrigger() == EffectTrigger.POST_ATTACK) {
-			Champion c = ep.getDuelists().getAttacker();
-			if (c.getBonus().getSpecialData().opt("charm") == Charm.DOUBLETAP)
-				c.setAvailable(true);
-			else if (c.getBonus().getSpecialData().opt("charm") == Charm.ARMORPIERCING)
-				ep.getHands().get(ep.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP).removeHp(c.getAtk() / 2);
-		}
 
 		try {
 			Interpreter i = new Interpreter();
