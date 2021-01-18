@@ -86,6 +86,9 @@ public class TenthSecondEvent implements Job {
 				List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
 
 				Runnable result = () -> {
+					Main.getInfo().getMatchMaking().getLobby().remove(p1.getKey());
+					Main.getInfo().getMatchMaking().getLobby().remove(p2.getKey());
+
 					boolean p1Starts = Helper.chance(50);
 					if (match.stream().allMatch(Pair::getRight)) {
 						GlobalGame g = new Shoukan(
