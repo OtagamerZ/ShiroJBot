@@ -275,6 +275,7 @@ public class Equipment implements Drawable, Cloneable {
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 				import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 				import com.kuuhaku.controller.postgresql.AccountDAO;
 				import com.kuuhaku.controller.postgresql.CardDAO;
 				import org.apache.commons.lang3.tuple.Pair;
