@@ -13,12 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/mako_power.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -990,13 +985,6 @@
       <workItem from="1610908097889" duration="3845000" />
       <workItem from="1610936571129" duration="1094000" />
     </task>
-    <task id="LOCAL-03365" summary="Adicionado comando de top 10 de cada tier no Shoukan">
-      <created>1610388978378</created>
-      <option name="number" value="03365" />
-      <option name="presentableId" value="LOCAL-03365" />
-      <option name="project" value="LOCAL" />
-      <updated>1610388978378</updated>
-    </task>
     <task id="LOCAL-03366" summary="Adicionado comando de top 10 de cada tier no Shoukan">
       <created>1610389210943</created>
       <option name="number" value="03366" />
@@ -1333,7 +1321,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610912786987</updated>
     </task>
-    <option name="localTasksCounter" value="3414" />
+    <task id="LOCAL-03414" summary="Melhorias nos metodos disponíveis">
+      <created>1610990471454</created>
+      <option name="number" value="03414" />
+      <option name="presentableId" value="LOCAL-03414" />
+      <option name="project" value="LOCAL" />
+      <updated>1610990471455</updated>
+    </task>
+    <option name="localTasksCounter" value="3415" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1419,7 +1414,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correnção nos caches" />
     <MESSAGE value="Melhorias gerais e remoção completa do forEach" />
     <MESSAGE value="Várias mudanças no Shoukan" />
     <MESSAGE value="Mudança nas cartas-feitiço" />
@@ -1444,7 +1438,8 @@
     <MESSAGE value="Correção nos efeitos" />
     <MESSAGE value="Melhorias nas funções disponíveis" />
     <MESSAGE value="Correção nas trocas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nas trocas" />
+    <MESSAGE value="Melhorias nos metodos disponíveis" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhorias nos metodos disponíveis" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1506,10 +1501,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610737581276">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1610990469877">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610737581276" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1610990469877" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1554,10 +1549,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610912798254">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1610990472605">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610737609567" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610990472605" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610912798254" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
