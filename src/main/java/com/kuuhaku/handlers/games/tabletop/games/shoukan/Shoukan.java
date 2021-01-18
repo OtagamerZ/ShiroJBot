@@ -732,7 +732,7 @@ public class Shoukan extends GlobalGame {
 		}
 
 		int hPower;
-		if (his.isDefending() || his.isFlipped() || his.getStun() > 0) {
+		if (his.isDefending() || his.getStun() > 0) {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
 				if (his.hasEffect() && effectLock == 0) {
@@ -959,7 +959,7 @@ public class Shoukan extends GlobalGame {
 		Champion yours = getArena().getSlots().get(next).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(current).get(is[1]).getTop();
 
-		if (yours.isDefending() || yours.isFlipped()) return;
+		if (yours.isDefending()) return;
 
 		int yPower;
 		if (!yours.getCard().getId().equals("DECOY")) {
@@ -972,7 +972,7 @@ public class Shoukan extends GlobalGame {
 		}
 
 		int hPower;
-		if (his.isDefending() || his.isFlipped() || his.getStun() > 0) {
+		if (his.isDefending() || his.getStun() > 0) {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
 				if (his.hasEffect() && effectLock == 0) {
