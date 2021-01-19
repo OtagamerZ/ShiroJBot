@@ -20,7 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import org.json.JSONObject;
 
-public class Bonus {
+public class Bonus implements Cloneable {
 	private int atk = 0;
 	private int def = 0;
 	private final JSONObject specialData = new JSONObject();
@@ -59,5 +59,13 @@ public class Bonus {
 
 	public JSONObject getSpecialData() {
 		return specialData;
+	}
+
+	public Bonus copy() {
+		try {
+			return (Bonus) clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 }
