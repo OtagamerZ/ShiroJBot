@@ -29,6 +29,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -114,6 +115,8 @@ public class MuteMemberCommand extends Command {
 			channel.sendMessage("✅ | Usuário silenciado por " + time + " minutos com sucesso!\nMotivo: `" + reason + "`").queue();
 		} catch (InsufficientPermissionException e) {
 			channel.sendMessage("❌ | Não possuo a permissão para silenciar membros.").queue();
+		} catch (HierarchyException e) {
+			channel.sendMessage("❌ | O cargo de mute está acima de mim.").queue();
 		}
 	}
 }
