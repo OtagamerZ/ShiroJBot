@@ -21,6 +21,7 @@ package com.kuuhaku.managers;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.discord.beta.*;
+import com.kuuhaku.command.commands.discord.clan.*;
 import com.kuuhaku.command.commands.discord.dev.*;
 import com.kuuhaku.command.commands.discord.exceed.*;
 import com.kuuhaku.command.commands.discord.fun.*;
@@ -68,7 +69,7 @@ public class CommandManager {
 					"desligar", new String[]{"kill"}, "cmd_kill", DEV, false
 			));
 			put(LeaveCommand.class, new Argument(
-					"sair", new String[]{"leave"}, REQ_SERVER_ID, "cmd_leave", DEV, true
+					"leave", REQ_SERVER_ID, "cmd_leave", DEV, true
 			));
 			put(ToxicTagCommand.class, new Argument(
 					"toxico", new String[]{"toxic"}, REQ_MENTION, "cmd_toxic-tag", DEV, false
@@ -185,7 +186,7 @@ public class CommandManager {
 					"ouçatodos", "cmd_allow-community", MODERACAO, false
 			));
 			put(KickMemberCommand.class, new Argument(
-					"kick", new String[]{"expulsar", "remover"}, REQ_MENTION_REASON, "cmd_kick", MODERACAO, false
+					"kick", new String[]{"expulsar"}, REQ_MENTION_REASON, "cmd_kick", MODERACAO, false
 			));
 			put(BanMemberCommand.class, new Argument(
 					"ban", new String[]{"banir"}, REQ_MENTION_REASON, "cmd_ban", MODERACAO, false
@@ -298,7 +299,7 @@ public class CommandManager {
 					"uptime", "cmd_uptime", INFO, false
 			));
 			put(TagsCommand.class, new Argument(
-					"tags", new String[]{"emblemas", "insignias"}, "cmd_tags", INFO, false
+					"tags", new String[]{"insignias"}, "cmd_tags", INFO, false
 			));
 			put(MyStatsCommand.class, new Argument(
 					"eu", new String[]{"meustatus", "mystats"}, "cmd_my-stats", INFO, false
@@ -653,6 +654,47 @@ public class CommandManager {
 			));
 			put(RunReaction.class, new ReactionArgument(
 					"corre", new String[]{"saisai", "run", "foge"}, "cmd_run", false, "run"
+			));
+
+			//CLAN
+			put(ClanBannerCommand.class, new Argument(
+					"faixada", new String[]{"banner"}, "cmd_exceed-members", CLAN, true
+			));
+			put(ClanCommand.class, new Argument(
+					"cla", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_exceed-members", CLAN, true
+			));
+			put(ClanDepositCommand.class, new Argument(
+					"depositar", new String[]{"deposit", "dep"}, "cmd_exceed-members", CLAN, true
+			));
+			put(ClanIconCommand.class, new Argument(
+					"emblema", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_exceed-members", CLAN, true
+			));
+			put(ClanMotdCommand.class, new Argument(
+					"motd", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_exceed-members", CLAN, true
+			));
+			put(ClanPermissionCommand.class, new Argument(
+					"permissoes", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_exceed-members", CLAN, true
+			));
+			put(ClanWithdrawCommand.class, new Argument(
+					"sacar", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_exceed-members", CLAN, true
+			));
+			put(CreateClanCommand.class, new Argument(
+					"criar", new String[]{"create"}, "cmd_exceed-members", CLAN, true
+			));
+			put(DemoteClanMemberCommand.class, new Argument(
+					"rebaixar", new String[]{"demote", "dem"}, "cmd_exceed-members", CLAN, true
+			));
+			put(InviteClanMemberCommand.class, new Argument(
+					"convidar", "cmd_exceed-members", CLAN, true
+			));
+			put(KickClanMemberCommand.class, new Argument(
+					"remover", new String[]{"remove"}, "cmd_exceed-members", CLAN, true
+			));
+			put(LeaveClanCommand.class, new Argument(
+					"sair", new String[]{"exit", "abandonar"}, "cmd_exceed-members", CLAN, true
+			));
+			put(PromoteClanMemberCommand.class, new Argument(
+					"promover", new String[]{"promote", "prom"}, "cmd_exceed-members", CLAN, true
 			));
 		}
 	};

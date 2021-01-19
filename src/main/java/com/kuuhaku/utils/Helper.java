@@ -1936,4 +1936,24 @@ public class Helper {
 	public static String getNumericEmoji(int i) {
 		return i + "⃣";
 	}
+
+	public static <T> T getNext(T current, List<T> sequence) {
+		int index = sequence.indexOf(current);
+		return index == -1 ? null : sequence.get(Math.min(index + 1, sequence.size()));
+	}
+
+	public static <T> T getNext(T current, T... sequence) {
+		int index = ArrayUtils.indexOf(sequence, current);
+		return index == -1 ? null : sequence[Math.min(index + 1, sequence.length)];
+	}
+
+	public static <T> T getPrevious(T current, List<T> sequence) {
+		int index = sequence.indexOf(current);
+		return index == -1 ? null : sequence.get(Math.max(index - 1, 0));
+	}
+
+	public static <T> T getPrevious(T current, T... sequence) {
+		int index = ArrayUtils.indexOf(sequence, current);
+		return index == -1 ? null : sequence[Math.max(index - 1, 0)];
+	}
 }
