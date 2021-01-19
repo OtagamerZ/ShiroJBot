@@ -18,31 +18,37 @@
 
 package com.kuuhaku.model.enums;
 
-public enum ClanTier {
-	PARTY("Grupo", 10, 50000),
-	FACTION("Facção", 50, 125000),
-	GUILD("Guilda", 100, 1000000),
-	DYNASTY("Dinastia", 500, 0);
+import com.kuuhaku.utils.Helper;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
+
+public enum ClanHierarchy {
+	LEADER("Líder", "🔱"),
+	SUBLEADER("Sub-líder", "⚜️"),
+	CAPTAIN("Capitão", "🔰"),
+	MEMBER("Membro", Helper.VOID);
 
 	private final String name;
-	private final int capacity;
-	private final long cost;
+	private final String icon;
 
-	ClanTier(String name, int capacity, long cost) {
+	ClanHierarchy(String name, String icon) {
 		this.name = name;
-		this.capacity = capacity;
-		this.cost = cost;
+		this.icon = icon;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public int getCapacity() {
-		return capacity;
+	public String getIcon() {
+		return icon;
 	}
 
-	public long getCost() {
-		return cost;
+	public static ClanHierarchy getByName(String name) {
+		return Arrays.stream(ClanHierarchy.values())
+				.filter(e -> Helper.equalsAny(name, StringUtils.stripAccents(e.name), e.name, e.name()))
+				.findFirst()
+				.orElse(null);
 	}
 }
