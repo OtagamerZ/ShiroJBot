@@ -84,7 +84,7 @@ public class FieldMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT CAST(fm.price AS DOUBLE)
+				SELECT fm.price * 1.0
 				FROM FieldMarket fm
 				WHERE fm.card.card = :card
 				AND fm.buyer <> ''
@@ -112,7 +112,7 @@ public class FieldMarketDAO {
 			cal.add(Calendar.MONTH, -1);
 
 			Query q = em.createQuery("""
-					SELECT CAST(fc.price AS DOUBLE)
+					SELECT fc.price * 1.0
 					FROM FieldMarket fc
 					WHERE fc.card.card = :card
 					AND fc.publishDate >= :date
@@ -126,7 +126,7 @@ public class FieldMarketDAO {
 
 
 			q = em.createQuery("""
-					SELECT CAST(fc.price AS DOUBLE)
+					SELECT fc.price * 1.0
 					FROM FieldMarket fc
 					WHERE fc.card.card = :card
 					AND fc.publishDate < :date
