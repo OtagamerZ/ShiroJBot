@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 
 import javax.imageio.ImageIO;
@@ -54,14 +55,16 @@ public enum FrameColor {
 		}
 	}
 
-	public BufferedImage getBack(Account acc) {
+	public BufferedImage getBack(Account acc, Clan clan) {
 		try {
 			boolean withUlt = !acc.getUltimate().isBlank();
 			BufferedImage cover = ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/frames/card_back_" + name().toLowerCase() + (withUlt ? "_t" : "") + ".png")));
 			BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = canvas.createGraphics();
 
-			if (withUlt) {
+			if (clan != null && clan.getIcon() != null) {
+				g2d.drawImage(clan.getIcon(), 26, 43, 172, 268, null);
+			} else if (withUlt) {
 				AnimeName an = AnimeName.valueOf(acc.getUltimate());
 				g2d.drawImage(CardDAO.getUltimate(an).drawCardNoBorder(), 26, 43, 172, 268, null);
 			}

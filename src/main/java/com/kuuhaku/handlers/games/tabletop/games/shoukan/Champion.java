@@ -26,6 +26,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -79,6 +80,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient boolean flipped = false;
 	private transient boolean available = true;
 	private transient Account acc = null;
+	private transient Clan clan = null;
 	private transient boolean defending = false;
 	private transient List<Equipment> linkedTo = new ArrayList<>();
 	private transient Bonus bonus = new Bonus();
@@ -119,7 +121,7 @@ public class Champion implements Drawable, Cloneable {
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
 		if (flipped) {
-			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
+			g2d.drawImage(acc.getFrame().getBack(acc, clan), 0, 0, null);
 		} else {
 			if (fakeCard != null)
 				g2d.drawImage(fakeCard.getCard().drawCardNoBorder(), 0, 0, null);
@@ -256,6 +258,16 @@ public class Champion implements Drawable, Cloneable {
 	@Override
 	public void setAcc(Account acc) {
 		this.acc = acc;
+	}
+
+	@Override
+	public Clan getClan() {
+		return clan;
+	}
+
+	@Override
+	public void setClan(Clan clan) {
+		this.clan = clan;
 	}
 
 	public void setLinkedTo(List<Equipment> linkedTo) {

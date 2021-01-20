@@ -24,7 +24,8 @@ public enum ClanPermission {
 	ALTER_HIERARCHY("Promover/rebaixar membros", 0x1),
 	KICK("Expulsar membros", 0x2),
 	WITHDRAW("Sacar créditos do cofre", 0x4),
-	INVITE("Convidar membros", 0x8);
+	INVITE("Convidar membros", 0x8),
+	DECK("Alterar o deck", 0x16);
 
 	private final String name;
 	private final int flag;
@@ -40,17 +41,10 @@ public enum ClanPermission {
 
 	public static int getFlags(EnumSet<ClanPermission> perms) {
 		int flags = 0;
-		if (perms.contains(ALTER_HIERARCHY)) {
-			flags |= ALTER_HIERARCHY.flag;
-		}
-		if (perms.contains(KICK)) {
-			flags |= KICK.flag;
-		}
-		if (perms.contains(WITHDRAW)) {
-			flags |= WITHDRAW.flag;
-		}
-		if (perms.contains(INVITE)) {
-			flags |= INVITE.flag;
+		for (ClanPermission cp : values()) {
+			if (perms.contains(cp)) {
+				flags |= cp.flag;
+			}
 		}
 
 		return flags;
@@ -58,17 +52,10 @@ public enum ClanPermission {
 
 	public static EnumSet<ClanPermission> getPermissions(int flags) {
 		EnumSet<ClanPermission> perms = EnumSet.noneOf(ClanPermission.class);
-		if ((flags & ALTER_HIERARCHY.flag) == ALTER_HIERARCHY.flag) {
-			perms.add(ALTER_HIERARCHY);
-		}
-		if ((flags & KICK.flag) == KICK.flag) {
-			perms.add(KICK);
-		}
-		if ((flags & WITHDRAW.flag) == WITHDRAW.flag) {
-			perms.add(WITHDRAW);
-		}
-		if ((flags & INVITE.flag) == INVITE.flag) {
-			perms.add(INVITE);
+		for (ClanPermission cp : values()) {
+			if ((flags & cp.flag) == cp.flag) {
+				perms.add(cp);
+			}
 		}
 
 		return perms;

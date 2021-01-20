@@ -78,11 +78,13 @@ public class ClanPermissionCommand extends Command {
 						Expulsar membros: %s
 						Sacar créditos do cofre: %s
 						Convidar membros: %s
+						Alterar o deck: %s
 						""".formatted(
 						perms.contains(ClanPermission.ALTER_HIERARCHY) ? "✅" : "❌",
 						perms.contains(ClanPermission.KICK) ? "✅" : "❌",
 						perms.contains(ClanPermission.WITHDRAW) ? "✅" : "❌",
-						perms.contains(ClanPermission.INVITE) ? "✅" : "❌"
+						perms.contains(ClanPermission.INVITE) ? "✅" : "❌",
+						perms.contains(ClanPermission.DECK) ? "✅" : "❌"
 				), false);
 			}
 
@@ -101,7 +103,8 @@ public class ClanPermissionCommand extends Command {
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(c.getTier().getName() + " " + c.getName())
-					.setThumbnail("attachment://icon.png");
+					.setThumbnail("attachment://icon.png")
+					.setFooter("Digite `" + prefix + "permissoes CARGO` para alterar as permissões de um cargo do clã.");
 
 			EnumSet<ClanPermission> perms = c.getPermissions(ch);
 			refreshPermField(eb, ch, perms);
@@ -151,6 +154,16 @@ public class ClanPermissionCommand extends Command {
 							refreshPermField(eb, ch, p);
 							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
 						});
+						put(Helper.getNumericEmoji(5), (mb, ms) -> {
+							EnumSet<ClanPermission> p = c.getPermissions(ch);
+							boolean enabled = p.contains(ClanPermission.DECK);
+							if (!enabled) p.add(ClanPermission.DECK);
+							else p.remove(ClanPermission.DECK);
+							c.setPermissions(ch, p);
+
+							refreshPermField(eb, ch, p);
+							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
+						});
 					}},
 					true,
 					1, TimeUnit.MINUTES,
@@ -171,11 +184,13 @@ public class ClanPermissionCommand extends Command {
 						Expulsar membros: %s
 						Sacar créditos do cofre: %s
 						Convidar membros: %s
+						Alterar o deck: %s
 						""".formatted(
 						p.contains(ClanPermission.ALTER_HIERARCHY) ? "✅" : "❌",
 						p.contains(ClanPermission.KICK) ? "✅" : "❌",
 						p.contains(ClanPermission.WITHDRAW) ? "✅" : "❌",
-						p.contains(ClanPermission.INVITE) ? "✅" : "❌"
+						p.contains(ClanPermission.INVITE) ? "✅" : "❌",
+						p.contains(ClanPermission.DECK) ? "✅" : "❌"
 				), false);
 	}
 }

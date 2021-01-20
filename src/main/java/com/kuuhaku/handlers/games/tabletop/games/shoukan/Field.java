@@ -24,6 +24,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -51,6 +52,7 @@ public class Field implements Drawable, Cloneable {
 	private boolean effectOnly = false;
 
 	private transient Account acc = null;
+	private transient Clan clan = null;
 	private transient boolean available = true;
 
 	@Override
@@ -58,7 +60,7 @@ public class Field implements Drawable, Cloneable {
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		if (flipped) {
-			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
+			g2d.drawImage(acc.getFrame().getBack(acc, clan), 0, 0, null);
 		} else {
 			g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
 
@@ -188,6 +190,16 @@ public class Field implements Drawable, Cloneable {
 	@Override
 	public void setAcc(Account acc) {
 		this.acc = acc;
+	}
+
+	@Override
+	public Clan getClan() {
+		return clan;
+	}
+
+	@Override
+	public void setClan(Clan clan) {
+		this.clan = clan;
 	}
 
 	@Override
