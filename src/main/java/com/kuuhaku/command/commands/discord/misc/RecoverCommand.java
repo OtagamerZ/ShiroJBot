@@ -97,7 +97,7 @@ public class RecoverCommand extends Command {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
-							acc.consumeCredit(readjust, this.getClass());
+							acc.addCredit(readjust, this.getClass());
 							AccountDAO.saveAccount(acc);
 
 							StockMarketDAO.saveInvestment(sm);
