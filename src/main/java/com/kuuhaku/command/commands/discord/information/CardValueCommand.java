@@ -149,7 +149,7 @@ public class CardValueCommand extends Command {
 					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
 
 			if (normalData.size() <= 1 && foilData.size() <= 1) {
-				channel.sendMessage("❌ | Essa carta ainda não foi vendida nos últimos 30 dias ou possui vendas em apenas .").queue();
+				channel.sendMessage("❌ | Essa carta ainda não foi vendida nos últimos 30 dias ou possui apenas 1 venda .").queue();
 				m.delete().queue();
 				return;
 			}
