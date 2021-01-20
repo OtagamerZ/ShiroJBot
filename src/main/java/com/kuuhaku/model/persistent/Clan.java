@@ -101,7 +101,7 @@ public class Clan {
 	public BufferedImage getIcon() {
 		try (ByteArrayInputStream bais = new ByteArrayInputStream(icon)) {
 			return ImageIO.read(bais);
-		} catch (IOException e) {
+		} catch (IOException | NullPointerException e) {
 			return null;
 		}
 	}
@@ -113,7 +113,7 @@ public class Clan {
 	public BufferedImage getBanner() {
 		try (ByteArrayInputStream bais = new ByteArrayInputStream(banner)) {
 			return ImageIO.read(bais);
-		} catch (IOException e) {
+		} catch (IOException | NullPointerException e) {
 			return null;
 		}
 	}
