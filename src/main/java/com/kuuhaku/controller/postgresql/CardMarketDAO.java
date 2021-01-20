@@ -116,6 +116,20 @@ public class CardMarketDAO {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -1);
 
+		double average;
+		try {
+			average = (double) em.createQuery("""
+					SELECT AVG(cm.price)
+					FROM CardMarket cm
+					WHERE cm.card.card = :card
+					AND cm.buyer <> ''
+					AND cm.buyer <> cm.seller
+					""").setParameter("card", c)
+					.getSingleResult();
+		} catch (NullPointerException e) {
+			average = 0;
+		}
+
 		Query q = em.createQuery("""
 				SELECT AVG(cm.price)
 				FROM CardMarket cm
@@ -123,10 +137,11 @@ public class CardMarketDAO {
 				AND cm.publishDate >= :date
 				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
-				AND cm.price / AVG(cm.price) BETWEEN -0.5 AND 0.5 
+				AND cm.price / :average BETWEEN -0.5 AND 0.5 
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
+		q.setParameter("average", average);
 
 		try {
 			return (Double) q.getSingleResult();
@@ -140,6 +155,20 @@ public class CardMarketDAO {
 	public static double getStockValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
+		double average;
+		try {
+			average = (double) em.createQuery("""
+					SELECT AVG(cm.price)
+					FROM CardMarket cm
+					WHERE cm.card.card = :card
+					AND cm.buyer <> ''
+					AND cm.buyer <> cm.seller
+					""").setParameter("card", c)
+					.getSingleResult();
+		} catch (NullPointerException e) {
+			average = 0;
+		}
+
 		try {
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.MONTH, -1);
@@ -151,10 +180,11 @@ public class CardMarketDAO {
 					AND cm.publishDate >= :date
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
-					AND cm.price / AVG(cm.price) BETWEEN -0.5 AND 0.5 
+					AND cm.price / :average BETWEEN -0.5 AND 0.5 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
+			q.setParameter("average", average);
 
 			double before = Helper.round((Double) q.getSingleResult(), 3);
 
@@ -165,10 +195,11 @@ public class CardMarketDAO {
 					AND cm.publishDate < :date
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
-					AND cm.price / AVG(cm.price) BETWEEN -0.5 AND 0.5 
+					AND cm.price / :average BETWEEN -0.5 AND 0.5 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
+			q.setParameter("average", average);
 
 			double now = Helper.round((Double) q.getSingleResult(), 3);
 
