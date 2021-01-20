@@ -45,7 +45,7 @@ public class FieldMarketDAO {
 	public static List<FieldMarket> getCardsByCard(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT fm FROM EquipmentMarket fm WHERE fm.card.card.id = UPPER(:id) AND fm.publishDate IS NOT NULL", FieldMarket.class);
+		Query q = em.createQuery("SELECT fm FROM FieldMarket fm WHERE fm.card.card.id = UPPER(:id) AND fm.publishDate IS NOT NULL", FieldMarket.class);
 		q.setParameter("id", id);
 
 		try {
