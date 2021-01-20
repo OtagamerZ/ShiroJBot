@@ -83,9 +83,9 @@ public class EquipmentMarketDAO {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -1);
 
-		double average;
+		int average;
 		try {
-			average = (int) em.createQuery("""
+			average = (int) (double) em.createQuery("""
 					SELECT AVG(em.price)
 					FROM EquipmentMarket em
 					WHERE em.card.card = :card
@@ -122,9 +122,9 @@ public class EquipmentMarketDAO {
 	public static double getStockValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
-		double average;
+		int average;
 		try {
-			average = (int) em.createQuery("""
+			average = (int) (double) em.createQuery("""
 					SELECT AVG(em.price)
 					FROM EquipmentMarket em
 					WHERE em.card.card = :card
