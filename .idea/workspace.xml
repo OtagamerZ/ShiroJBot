@@ -15,6 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1004,13 +1006,6 @@
       <workItem from="1611082999983" duration="6611000" />
       <workItem from="1611109542772" duration="4756000" />
     </task>
-    <task id="LOCAL-03382" summary="Adição de iscas no Shoukan">
-      <created>1610556355157</created>
-      <option name="number" value="03382" />
-      <option name="presentableId" value="LOCAL-03382" />
-      <option name="project" value="LOCAL" />
-      <updated>1610556355157</updated>
-    </task>
     <task id="LOCAL-03383" summary="Adição de iscas no Shoukan">
       <created>1610557707982</created>
       <option name="number" value="03383" />
@@ -1347,7 +1342,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611149995978</updated>
     </task>
-    <option name="localTasksCounter" value="3431" />
+    <task id="LOCAL-03431" summary="Melhorias no sistema de clãs">
+      <created>1611150713736</created>
+      <option name="number" value="03431" />
+      <option name="presentableId" value="LOCAL-03431" />
+      <option name="project" value="LOCAL" />
+      <updated>1611150713736</updated>
+    </task>
+    <option name="localTasksCounter" value="3432" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1520,10 +1522,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611149994652">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611150712891">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611149994652" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611150712891" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1554,10 +1556,10 @@
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1610652298040" />
     <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1603507846095" />
-    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1610257425487">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1611150799648">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608208921507" />
+    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611150799648" />
     <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1610257425487" />
     <state x="303" y="75" key="SettingsEditor" timestamp="1606877192402">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1568,10 +1570,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611150021225">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611150714864">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611150021225" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611150714864" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611114139980" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1640,10 +1642,10 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608309711856" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1611093407069" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1610992211208">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1611151117093">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1610992211208" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1611151117093" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610249812093" />
   </component>
   <component name="XDebuggerManager">
