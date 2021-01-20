@@ -135,33 +135,35 @@ public class CardMarketDAO {
 	public static double getStockValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MONTH, -1);
-
-		Query q = em.createQuery("""
-				SELECT AVG(cm.price)
-				FROM CardMarket cm
-				WHERE cm.card.card = :card
-				AND cm.publishDate >= :date
-				""");
-		q.setParameter("card", c);
-		q.setParameter("date", cal.getTime());
-
-		double before = Helper.round((Double) q.getSingleResult(), 3);
-
-		q = em.createQuery("""
-				SELECT AVG(cm.price)
-				FROM CardMarket cm
-				WHERE cm.card.card = :card
-				AND cm.publishDate < :date
-				""");
-		q.setParameter("card", c);
-		q.setParameter("date", cal.getTime());
-
-		double now = Helper.round((Double) q.getSingleResult(), 3);
-
 		try {
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.MONTH, -1);
+
+			Query q = em.createQuery("""
+					SELECT AVG(cm.price)
+					FROM CardMarket cm
+					WHERE cm.card.card = :card
+					AND cm.publishDate >= :date
+					""");
+			q.setParameter("card", c);
+			q.setParameter("date", cal.getTime());
+
+			double before = Helper.round((Double) q.getSingleResult(), 3);
+
+			q = em.createQuery("""
+					SELECT AVG(cm.price)
+					FROM CardMarket cm
+					WHERE cm.card.card = :card
+					AND cm.publishDate < :date
+					""");
+			q.setParameter("card", c);
+			q.setParameter("date", cal.getTime());
+
+			double now = Helper.round((Double) q.getSingleResult(), 3);
+
 			return Helper.prcnt(now, before) - 1;
+		} catch (NullPointerException e) {
+			return 0;
 		} finally {
 			em.close();
 		}
