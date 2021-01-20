@@ -152,7 +152,7 @@ public class ClanRevertCardCommand extends Command {
 				if (kp.getEquipments().stream().filter(e::equals).count() == 3) {
 					channel.sendMessage("❌ | Você só pode ter no máximo 3 cópias de cada equipamento no deck.").queue();
 					return;
-				} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) {
+				} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
 					channel.sendMessage("❌ | Você já possui 1 equipamento tier 4!").queue();
 					return;
 				} else if (kp.getEquipments().size() == 18) {

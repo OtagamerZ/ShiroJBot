@@ -155,7 +155,7 @@ public class ClanConvertCardCommand extends Command {
 				if (cl.getDeck().getEquipments().stream().filter(e::equals).count() == 3) {
 					channel.sendMessage("❌ | Seu clã só pode ter no máximo 3 cópias de cada equipamento no deck.").queue();
 					return;
-				} else if (cl.getDeck().getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) {
+				} else if (cl.getDeck().getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
 					channel.sendMessage("❌ | Seu clã já possui 1 equipamento tier 4!").queue();
 					return;
 				} else if (cl.getDeck().getEquipments().size() == 18) {

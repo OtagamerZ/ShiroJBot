@@ -199,7 +199,7 @@ public class SynthesizeCardCommand extends Command {
 									String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 									DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
 
-									if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4) || kp.getEquipments().size() == 18) {
+									if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) || kp.getEquipments().size() == 18) {
 										int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
 
 										Account acc = AccountDAO.getAccount(author.getId());
@@ -210,7 +210,7 @@ public class SynthesizeCardCommand extends Command {
 											channel.sendMessage("❌ | Você já possui 18 equipamentos, as cartas usadas cartas foram convertidas em " + change + " créditos.").queue();
 										else if (kp.getEquipments().stream().filter(e::equals).count() == 3)
 											channel.sendMessage("❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + change + " créditos.").queue();
-										else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() == 1 && e.getTier() == 4)
+										else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4)
 											channel.sendMessage("❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + change + " créditos.").queue();
 
 										if (dp.getValue().isBlank()) {
