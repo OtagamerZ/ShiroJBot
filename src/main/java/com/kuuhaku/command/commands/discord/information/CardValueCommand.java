@@ -22,10 +22,12 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.CardMarketDAO;
+import com.kuuhaku.controller.postgresql.EquipmentMarketDAO;
+import com.kuuhaku.controller.postgresql.FieldMarketDAO;
+import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.CardMarket;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -40,6 +42,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CardValueCommand extends Command {
 
@@ -68,7 +71,7 @@ public class CardValueCommand extends Command {
 				return;
 			}
 
-			Card c = CardDAO.getCard(args[0], false);
+			Card c = CardDAO.getRawCard(args[0]);
 			KawaiponRarity r = KawaiponRarity.getByName(args[0]);
 
 			if (c == null && r == null) {
@@ -77,29 +80,28 @@ public class CardValueCommand extends Command {
 				return;
 			}
 
-			List<CardMarket> normalCards;
-			List<CardMarket> foilCards;
+			List<Market> normalCards;
+			List<Market> foilCards;
 
 			if (c != null) {
-				normalCards = CardMarketDAO.getCardsByCard(c.getId(), false)
-						.stream()
-						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50))
+				normalCards = Stream.of(
+						CardMarketDAO.getCardsByCard(c.getId(), false),
+						EquipmentMarketDAO.getCardsByCard(c.getId()),
+						FieldMarketDAO.getCardsByCard(c.getId())
+				).flatMap(List::stream)
 						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
 				foilCards = CardMarketDAO.getCardsByCard(c.getId(), true)
 						.stream()
-						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100))
 						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
 			} else {
 				normalCards = CardMarketDAO.getCardsByRarity(r, false)
 						.stream()
-						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50))
 						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
 				foilCards = CardMarketDAO.getCardsByRarity(r, true)
 						.stream()
-						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100))
 						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
 						.collect(Collectors.toList());
 			}
@@ -124,7 +126,7 @@ public class CardValueCommand extends Command {
 					.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
 
 			Map<Date, Integer> normalValues = new HashMap<>();
-			for (CardMarket nc : normalCards) {
+			for (Market nc : normalCards) {
 				if (normalValues.containsKey(nc.getPublishDate()))
 					normalValues.computeIfPresent(nc.getPublishDate(), (k, v) -> Math.round(v + nc.getPrice() / 2f));
 				else
@@ -132,7 +134,7 @@ public class CardValueCommand extends Command {
 			}
 
 			Map<Date, Integer> foilValues = new HashMap<>();
-			for (CardMarket fc : foilCards) {
+			for (Market fc : foilCards) {
 				if (foilValues.containsKey(fc.getPublishDate()))
 					foilValues.computeIfPresent(fc.getPublishDate(), (k, v) -> Math.round(v + fc.getPrice() / 2f));
 				else

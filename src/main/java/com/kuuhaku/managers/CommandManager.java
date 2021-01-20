@@ -218,9 +218,6 @@ public class CommandManager {
 			put(GatekeeperCommand.class, new Argument(
 					"porteiro", new String[]{"gatekeeper", "gk"}, "req_id-role", "cmd_gatekeeper", MODERACAO, false
 			));
-			put(BackupCommand.class, new Argument(
-					"backup", new String[]{"dados"}, "req_save-restore", "cmd_backup", MODERACAO, false
-			));
 			put(RegenRulesCommand.class, new Argument(
 					"rrules", new String[]{"makerules"}, "cmd_regen-rules", MODERACAO, true
 			));
@@ -348,6 +345,12 @@ public class CommandManager {
 			));
 			put(ServerInfoCommand.class, new Argument(
 					"servidor", new String[]{"server", "sv"}, "cmd_server-info", INFO, false
+			));
+			put(ActionsCommand.class, new Argument(
+					"acoes", new String[]{"actions", "invertment"}, "cmd_actions", INFO, true
+			));
+			put(StockMarketCommand.class, new Argument(
+					"bolsa", new String[]{"stockmarket", "stocks"}, "req_card", "cmd_stock-market", INFO, false
 			));
 
 			//MISC
@@ -491,6 +494,12 @@ public class CommandManager {
 			));
 			put(GiftCodeCommand.class, new Argument(
 					"giftcode", "req_type-amount-code", "cmd_gift-code", MISC, false
+			));
+			put(InvestCommand.class, new Argument(
+					"investir", new String[]{"invest"}, "req_card-value", "cmd_invest", MISC, true
+			));
+			put(RecoverCommand.class, new Argument(
+					"recuperar", new String[]{"recover"}, "req_card-value", "cmd_recover", MISC, true
 			));
 
 			//FUN

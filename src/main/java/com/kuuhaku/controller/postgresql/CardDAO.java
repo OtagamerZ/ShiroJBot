@@ -70,6 +70,21 @@ public class CardDAO {
         }
     }
 
+    public static Card getRawCard(String name) {
+        EntityManager em = Manager.getEntityManager();
+
+        Query q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name)", Card.class);
+        q.setParameter("name", name);
+
+        try {
+            return (Card) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
     public static String getCardAnime(String name) {
         EntityManager em = Manager.getEntityManager();
 
