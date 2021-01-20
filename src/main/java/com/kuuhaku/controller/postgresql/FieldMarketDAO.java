@@ -83,9 +83,9 @@ public class FieldMarketDAO {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -1);
 
-		double average;
+		int average;
 		try {
-			average = (int) em.createQuery("""
+			average = (int) (double) em.createQuery("""
 					SELECT AVG(fm.price)
 					FROM FieldMarket fm
 					WHERE fm.card.card = :card
@@ -122,9 +122,9 @@ public class FieldMarketDAO {
 	public static double getStockValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
-		double average;
+		int average;
 		try {
-			average = (int) em.createQuery("""
+			average = (int) (double) em.createQuery("""
 					SELECT AVG(fm.price)
 					FROM FieldMarket fm
 					WHERE fm.card.card = :card
