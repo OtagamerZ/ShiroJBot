@@ -81,7 +81,7 @@ public class InvestCommand extends Command {
 				FieldMarketDAO.getStockValue(c)
 		).filter(d -> d > 0).average().orElse(0);
 
-		int readjust = (int) Math.round(amount * stock);
+		int readjust = (int) Math.round(amount * (1 + stock));
 
 		StockMarket sm = StockMarketDAO.getCardInvestment(author.getId(), c);
 		sm.setInvestment(sm.getInvestment() + readjust);
