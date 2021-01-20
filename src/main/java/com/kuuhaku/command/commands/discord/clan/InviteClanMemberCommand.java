@@ -82,7 +82,7 @@ public class InviteClanMemberCommand extends Command {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 
-							c.invite(args[0], author);
+							c.invite(usr.getId(), author);
 
 							ClanDAO.saveClan(c);
 
