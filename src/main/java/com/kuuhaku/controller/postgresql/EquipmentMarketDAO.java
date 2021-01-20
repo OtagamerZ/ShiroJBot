@@ -91,7 +91,6 @@ public class EquipmentMarketDAO {
 				AND em.publishDate >= :date
 				AND em.buyer <> ''
 				AND em.buyer <> em.seller
-				AND em.price / :average BETWEEN -0.75 AND 0.75 
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
@@ -127,7 +126,6 @@ public class EquipmentMarketDAO {
 					AND em.publishDate >= :date
 					AND em.buyer <> ''
 					AND em.buyer <> em.seller
-					AND em.price / :average BETWEEN -0.75 AND 0.75 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
@@ -145,7 +143,6 @@ public class EquipmentMarketDAO {
 					AND em.publishDate < :date
 					AND em.buyer <> ''
 					AND em.buyer <> em.seller
-					AND em.price / :average BETWEEN -0.75 AND 0.75 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
