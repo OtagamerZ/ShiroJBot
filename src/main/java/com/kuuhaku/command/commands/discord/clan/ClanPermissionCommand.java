@@ -34,7 +34,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.EnumSet;
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class ClanPermissionCommand extends Command {
@@ -110,48 +110,48 @@ public class ClanPermissionCommand extends Command {
 			MessageAction ma = channel.sendMessage(eb.build());
 			if (c.getIcon() != null) ma = ma.addFile(Helper.getBytes(c.getIcon()), "icon.jpg");
 			ma.queue(s -> Pages.buttonize(s,
-					Map.of(
-							Helper.getNumericEmoji(1), (mb, ms) -> {
-								EnumSet<ClanPermission> p = c.getPermissions(ch);
-								boolean enabled = p.contains(ClanPermission.ALTER_HIERARCHY);
-								if (!enabled) p.add(ClanPermission.ALTER_HIERARCHY);
-								else p.remove(ClanPermission.ALTER_HIERARCHY);
-								c.setPermissions(ch, p);
+					new LinkedHashMap<>() {{
+						put(Helper.getNumericEmoji(1), (mb, ms) -> {
+							EnumSet<ClanPermission> p = c.getPermissions(ch);
+							boolean enabled = p.contains(ClanPermission.ALTER_HIERARCHY);
+							if (!enabled) p.add(ClanPermission.ALTER_HIERARCHY);
+							else p.remove(ClanPermission.ALTER_HIERARCHY);
+							c.setPermissions(ch, p);
 
-								refreshPermField(eb, ch, p);
-								ms.editMessage(eb.build()).queue(null, Helper::doNothing);
-							},
-							Helper.getNumericEmoji(2), (mb, ms) -> {
-								EnumSet<ClanPermission> p = c.getPermissions(ch);
-								boolean enabled = p.contains(ClanPermission.KICK);
-								if (!enabled) p.add(ClanPermission.KICK);
-								else p.remove(ClanPermission.KICK);
-								c.setPermissions(ch, p);
+							refreshPermField(eb, ch, p);
+							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
+						});
+						put(Helper.getNumericEmoji(2), (mb, ms) -> {
+							EnumSet<ClanPermission> p = c.getPermissions(ch);
+							boolean enabled = p.contains(ClanPermission.KICK);
+							if (!enabled) p.add(ClanPermission.KICK);
+							else p.remove(ClanPermission.KICK);
+							c.setPermissions(ch, p);
 
-								refreshPermField(eb, ch, p);
-								ms.editMessage(eb.build()).queue(null, Helper::doNothing);
-							},
-							Helper.getNumericEmoji(3), (mb, ms) -> {
-								EnumSet<ClanPermission> p = c.getPermissions(ch);
-								boolean enabled = p.contains(ClanPermission.WITHDRAW);
-								if (!enabled) p.add(ClanPermission.WITHDRAW);
-								else p.remove(ClanPermission.WITHDRAW);
-								c.setPermissions(ch, p);
+							refreshPermField(eb, ch, p);
+							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
+						});
+						put(Helper.getNumericEmoji(3), (mb, ms) -> {
+							EnumSet<ClanPermission> p = c.getPermissions(ch);
+							boolean enabled = p.contains(ClanPermission.WITHDRAW);
+							if (!enabled) p.add(ClanPermission.WITHDRAW);
+							else p.remove(ClanPermission.WITHDRAW);
+							c.setPermissions(ch, p);
 
-								refreshPermField(eb, ch, p);
-								ms.editMessage(eb.build()).queue(null, Helper::doNothing);
-							},
-							Helper.getNumericEmoji(4), (mb, ms) -> {
-								EnumSet<ClanPermission> p = c.getPermissions(ch);
-								boolean enabled = p.contains(ClanPermission.INVITE);
-								if (!enabled) p.add(ClanPermission.INVITE);
-								else p.remove(ClanPermission.INVITE);
-								c.setPermissions(ch, p);
+							refreshPermField(eb, ch, p);
+							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
+						});
+						put(Helper.getNumericEmoji(4), (mb, ms) -> {
+							EnumSet<ClanPermission> p = c.getPermissions(ch);
+							boolean enabled = p.contains(ClanPermission.INVITE);
+							if (!enabled) p.add(ClanPermission.INVITE);
+							else p.remove(ClanPermission.INVITE);
+							c.setPermissions(ch, p);
 
-								refreshPermField(eb, ch, p);
-								ms.editMessage(eb.build()).queue(null, Helper::doNothing);
-							}
-					),
+							refreshPermField(eb, ch, p);
+							ms.editMessage(eb.build()).queue(null, Helper::doNothing);
+						});
+					}},
 					true,
 					1, TimeUnit.MINUTES,
 					u -> u.getId().equals(author.getId()),
