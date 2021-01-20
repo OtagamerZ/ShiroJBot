@@ -86,7 +86,7 @@ public class RecoverCommand extends Command {
 				FieldMarketDAO.getStockValue(c)
 		).filter(d -> d > 0).average().orElse(0);
 
-		int readjust = stock == 0 ? 0 : (int) Math.round(amount / stock);
+		int readjust = (1 + stock) == 0 ? 0 : (int) Math.round(amount / (1 + stock));
 
 		sm.setInvestment(sm.getInvestment() - amount);
 
