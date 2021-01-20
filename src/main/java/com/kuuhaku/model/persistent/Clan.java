@@ -69,7 +69,6 @@ public class Clan {
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Map<String, ClanHierarchy> members = new HashMap<>();
 
-	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Map<ClanHierarchy, Integer> permissions = new HashMap<>() {{
 		put(ClanHierarchy.LEADER, 0xf);
