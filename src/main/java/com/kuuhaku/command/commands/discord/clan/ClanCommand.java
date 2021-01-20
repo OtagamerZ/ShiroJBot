@@ -36,6 +36,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -105,8 +106,13 @@ public class ClanCommand extends Command {
 			), false);
 
 		StringBuilder sb = new StringBuilder();
-		List<List<Map.Entry<String, ClanHierarchy>>> mbs = Helper.chunkify(c.getMembers().entrySet(), 10);
-		for (List<Map.Entry<String, ClanHierarchy>> chunk : mbs) {
+		List<Map.Entry<String, ClanHierarchy>> mbs = new ArrayList<>(c.getMembers().entrySet());
+		mbs.sort(Map.Entry.
+				<String, ClanHierarchy>comparingByValue(Comparator.comparingInt(ClanHierarchy::ordinal))
+				.thenComparing(Map.Entry::getKey, String.CASE_INSENSITIVE_ORDER)
+		);
+		List<List<Map.Entry<String, ClanHierarchy>>> chunks = Helper.chunkify(mbs, 10);
+		for (List<Map.Entry<String, ClanHierarchy>> chunk : chunks) {
 			sb.setLength(0);
 
 			for (Map.Entry<String, ClanHierarchy> mb : chunk) {
