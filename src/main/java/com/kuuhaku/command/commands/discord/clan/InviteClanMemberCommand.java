@@ -63,6 +63,9 @@ public class InviteClanMemberCommand extends Command {
 		} else if (message.getMentionedUsers().size() == 0) {
 			channel.sendMessage("❌ | Você precisa mencionar o usuário a ser convidado.").queue();
 			return;
+		} else if (c.getMembers().size() >= c.getTier().getCapacity()) {
+			channel.sendMessage("❌ | Seu clã já atingiu o número máximo de membros.").queue();
+			return;
 		}
 
 		User usr = message.getMentionedUsers().get(0);
