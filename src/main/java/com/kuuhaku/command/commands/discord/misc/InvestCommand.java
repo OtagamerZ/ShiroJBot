@@ -22,9 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.StockMarketDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
@@ -37,6 +35,7 @@ import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.DoubleStream;
 
 
 public class InvestCommand extends Command {
@@ -75,18 +74,22 @@ public class InvestCommand extends Command {
 
 		Account acc = AccountDAO.getAccount(author.getId());
 		int amount = Integer.parseInt(args[1]);
-		if (acc.getTotalBalance() < amount) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
-			return;
-		}
+
+		double stock = DoubleStream.of(
+				CardMarketDAO.getStockValue(c),
+				EquipmentMarketDAO.getStockValue(c),
+				FieldMarketDAO.getStockValue(c)
+		).filter(d -> d > 0).average().orElse(0);
+
+		int readjust = (int) Math.round(amount * (1 + stock));
 
 		StockMarket sm = StockMarketDAO.getCardInvestment(author.getId(), c);
-		sm.setInvestment(sm.getInvestment() + amount);
+		sm.setInvestment(sm.getInvestment() + readjust);
 
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes comprar " + amount + " créditos em ações da carta " + c.getName() + ", deseja confirmar?")
+		channel.sendMessage("Você está prestes comprar " + readjust + " ações (" + amount + " créditos) da carta " + c.getName() + ", deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
