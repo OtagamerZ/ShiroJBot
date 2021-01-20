@@ -85,7 +85,7 @@ public class FieldMarketDAO {
 
 		double average;
 		try {
-			average = (double) em.createQuery("""
+			average = (int) em.createQuery("""
 					SELECT AVG(fm.price)
 					FROM FieldMarket fm
 					WHERE fm.card.card = :card
@@ -124,7 +124,7 @@ public class FieldMarketDAO {
 
 		double average;
 		try {
-			average = (double) em.createQuery("""
+			average = (int) em.createQuery("""
 					SELECT AVG(fm.price)
 					FROM FieldMarket fm
 					WHERE fm.card.card = :card

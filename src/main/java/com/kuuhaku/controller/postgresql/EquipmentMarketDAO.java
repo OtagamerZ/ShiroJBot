@@ -85,7 +85,7 @@ public class EquipmentMarketDAO {
 
 		double average;
 		try {
-			average = (double) em.createQuery("""
+			average = (int) em.createQuery("""
 					SELECT AVG(em.price)
 					FROM EquipmentMarket em
 					WHERE em.card.card = :card
@@ -124,7 +124,7 @@ public class EquipmentMarketDAO {
 
 		double average;
 		try {
-			average = (double) em.createQuery("""
+			average = (int) em.createQuery("""
 					SELECT AVG(em.price)
 					FROM EquipmentMarket em
 					WHERE em.card.card = :card
