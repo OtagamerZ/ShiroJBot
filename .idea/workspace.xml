@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1007,13 +1005,6 @@
       <workItem from="1611109542772" duration="4756000" />
       <workItem from="1611158766585" duration="708000" />
     </task>
-    <task id="LOCAL-03389" summary="Correções">
-      <created>1610627953270</created>
-      <option name="number" value="03389" />
-      <option name="presentableId" value="LOCAL-03389" />
-      <option name="project" value="LOCAL" />
-      <updated>1610627953270</updated>
-    </task>
     <task id="LOCAL-03390" summary="Correções">
       <created>1610628024486</created>
       <option name="number" value="03390" />
@@ -1350,7 +1341,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611166539444</updated>
     </task>
-    <option name="localTasksCounter" value="3438" />
+    <task id="LOCAL-03438" summary="Criação de sistema de bolsa de valores">
+      <created>1611166799596</created>
+      <option name="number" value="03438" />
+      <option name="presentableId" value="LOCAL-03438" />
+      <option name="project" value="LOCAL" />
+      <updated>1611166799596</updated>
+    </task>
+    <option name="localTasksCounter" value="3439" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1527,10 +1525,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611166538376">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611166798641">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611166538376" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611166798641" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1575,10 +1573,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611166550541">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611166800936">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611166550541" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611166800936" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611114139980" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
