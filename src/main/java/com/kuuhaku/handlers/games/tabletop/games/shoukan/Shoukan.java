@@ -1536,7 +1536,7 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 
-				arena.getGraveyard().get(h.get().getSide()).addAll(discardBatch);
+				arena.getGraveyard().get(current).addAll(discardBatch);
 				discardBatch.clear();
 				resetTimer(this);
 
