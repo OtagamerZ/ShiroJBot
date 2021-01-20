@@ -80,13 +80,13 @@ public class RecoverCommand extends Command {
 			return;
 		}
 
-		double stock = DoubleStream.of(
+		double stock = 1 + DoubleStream.of(
 				CardMarketDAO.getStockValue(c),
 				EquipmentMarketDAO.getStockValue(c),
 				FieldMarketDAO.getStockValue(c)
 		).filter(d -> d > 0).average().orElse(0);
 
-		int readjust = (1 + stock) == 0 ? 0 : (int) Math.round(amount / (1 + stock));
+		int readjust = (int) Math.round(amount * stock);
 
 		sm.setInvestment(sm.getInvestment() - amount);
 
