@@ -82,6 +82,10 @@ public class InvestCommand extends Command {
 		).filter(d -> d > 0).average().orElse(0);
 
 		int readjust = stock == 0 ? 0 : (int) Math.round(amount / stock);
+		if (acc.getBalance() < readjust) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+			return;
+		}
 
 		StockMarket sm = StockMarketDAO.getCardInvestment(author.getId(), c);
 		sm.setInvestment(sm.getInvestment() + readjust);
@@ -93,7 +97,7 @@ public class InvestCommand extends Command {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
-							acc.consumeCredit(amount, this.getClass());
+							acc.removeCredit(amount, this.getClass());
 							AccountDAO.saveAccount(acc);
 
 							StockMarketDAO.saveInvestment(sm);
