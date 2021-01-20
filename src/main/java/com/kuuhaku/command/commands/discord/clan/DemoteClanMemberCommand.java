@@ -67,12 +67,22 @@ public class DemoteClanMemberCommand extends Command {
 
 		User usr = message.getMentionedUsers().size() == 0 ? Main.getInfo().getUserByID(args[0]) : message.getMentionedUsers().get(0);
 
-		if (c.getMembers().get(args[0]) == null) {
-			channel.sendMessage("❌ | Membro inexistente.").queue();
-			return;
-		} else if (c.getMembers().get(args[0]).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
-			channel.sendMessage("❌ | Você não pode rebaixar membros com hierarquia maior ou igual à sua.").queue();
-			return;
+		if (usr == null) {
+			if (c.getMembers().get(args[0]) == null) {
+				channel.sendMessage("❌ | Membro inexistente.").queue();
+				return;
+			} else if (c.getMembers().get(args[0]).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
+				channel.sendMessage("❌ | Você não pode rebaixar membros com hierarquia maior ou igual à sua.").queue();
+				return;
+			}
+		} else {
+			if (c.getMembers().get(usr.getId()) == null) {
+				channel.sendMessage("❌ | Membro inexistente.").queue();
+				return;
+			} else if (c.getMembers().get(usr.getId()).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
+				channel.sendMessage("❌ | Você não pode rebaixar membros com hierarquia maior ou igual à sua.").queue();
+				return;
+			}
 		}
 
 		String hash = Helper.generateHash(guild, author);
