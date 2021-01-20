@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.model.common.Market;
+
 import javax.persistence.*;
 import java.time.Clock;
 import java.time.Instant;
@@ -26,10 +28,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "cardmarket")
-public class CardMarket {
+public class CardMarket implements Market {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "market_id_seq")
-	@SequenceGenerator(name = "market_id_seq", initialValue = 3263, allocationSize = 1, schema = "shiro")
+	@SequenceGenerator(name = "market_id_seq", allocationSize = 1, schema = "shiro")
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
@@ -82,6 +84,11 @@ public class CardMarket {
 
 	public KawaiponCard getCard() {
 		return card;
+	}
+
+	@Override
+	public Card getRawCard() {
+		return card.getCard();
 	}
 
 	public void setCard(KawaiponCard card) {

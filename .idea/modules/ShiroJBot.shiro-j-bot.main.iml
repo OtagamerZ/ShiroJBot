@@ -10,7 +10,11 @@
           <factory-entry name="shiro_local" />
           <factory-entry name="shiro_remote" value="d22aba9a-bc76-4f6b-a978-2c6c8a76889a" />
         </datasource-mapping>
-        <naming-strategy-map />
+        <naming-strategy-map>
+          <unit-entry name="entityManagerFactory" />
+          <unit-entry name="shiro_local" />
+          <unit-entry name="shiro_remote" />
+        </naming-strategy-map>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/../../src/main/resources/META-INF/persistence.xml" />
       </configuration>
     </facet>

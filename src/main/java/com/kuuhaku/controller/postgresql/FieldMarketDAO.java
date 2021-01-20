@@ -18,10 +18,15 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.FieldMarket;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public class FieldMarketDAO {
@@ -72,5 +77,56 @@ public class FieldMarketDAO {
 		em.getTransaction().commit();
 
 		em.close();
+	}
+
+	public static double getAverageValue(Card c) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT AVG(fm.price)
+				FROM FieldMarket fm
+				WHERE fm.card = :card
+				AND fm.publishDate >= :date
+				""");
+		q.setParameter("card", c);
+		q.setParameter("date", OffsetDateTime.now().minusMonths(1));
+
+		try {
+			return ((BigDecimal) q.getSingleResult()).doubleValue();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static double getStockValue(Card c) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT AVG(fm.price)
+				FROM FieldMarket fm
+				WHERE fm.card = :card
+				AND fm.publishDate >= :date
+				""");
+		q.setParameter("card", c);
+		q.setParameter("date", OffsetDateTime.now().minusMonths(1));
+
+		double before = ((BigDecimal) q.getSingleResult()).setScale(3, RoundingMode.HALF_EVEN).doubleValue();
+
+		q = em.createQuery("""
+				SELECT AVG(fm.price)
+				FROM FieldMarket fm
+				WHERE fm.card = :card
+				AND fm.publishDate < :date
+				""");
+		q.setParameter("card", c);
+		q.setParameter("date", OffsetDateTime.now().minusMonths(1));
+
+		double now = ((BigDecimal) q.getSingleResult()).setScale(3, RoundingMode.HALF_EVEN).doubleValue();
+
+		try {
+			return Helper.prcnt(now, before) - 1;
+		} finally {
+			em.close();
+		}
 	}
 }

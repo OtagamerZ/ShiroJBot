@@ -13,7 +13,29 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ActionsCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/StockMarketCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/InvestCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RecoverCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StockMarketDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Market.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/StockMarket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/ShiroJBot.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/ShiroJBot.shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/EquipmentMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/EquipmentMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/FieldMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/FieldMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CardMarket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CardMarket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/EquipmentMarket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/EquipmentMarket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/FieldMarket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/FieldMarket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -131,26 +153,26 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\tiers" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.command.commands.discord.clan" />
-      <recent name="com.kuuhaku.command.commands.discord.misc" />
-      <recent name="com.kuuhaku.controller.postgresql" />
-      <recent name="com.kuuhaku.command.commands.discord.information" />
-      <recent name="com.kuuhaku.command.commands.discord.dev" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners\apprentice" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners\initiate" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.misc" />
+      <recent name="com.kuuhaku.controller.postgresql" />
+      <recent name="com.kuuhaku.model.common" />
+      <recent name="com.kuuhaku.command.commands.discord.clan" />
+      <recent name="com.kuuhaku.command.commands.discord.information" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\tiers" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -1473,6 +1495,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="586" y="198" key="#Inspections/0.0.1920.1040@0.0.1920.1040" timestamp="1603512953712" />
+    <state x="432" y="163" width="816" height="729" key="#Intentions" timestamp="1611162276137">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="432" y="163" width="816" height="729" key="#Intentions/0.0.1680.1010@0.0.1680.1010" timestamp="1611162276137" />
     <state x="550" y="59" key="#Java" timestamp="1607653633371">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1495,10 +1521,10 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1611149622838">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1611160663669">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1611149622838" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1611160663669" />
     <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1611027065629" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1530,25 +1556,25 @@
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608208920619" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728513022" />
-    <state width="1387" height="351" key="GridCell.Tab.0.bottom" timestamp="1611000336340">
+    <state width="1637" height="272" key="GridCell.Tab.0.bottom" timestamp="1611162360156">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1611000336340" />
+    <state width="1637" height="272" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360156" />
     <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
-    <state width="1387" height="351" key="GridCell.Tab.0.center" timestamp="1611000336340">
+    <state width="1637" height="272" key="GridCell.Tab.0.center" timestamp="1611162360155">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1611000336340" />
+    <state width="1637" height="272" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360155" />
     <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
-    <state width="1387" height="351" key="GridCell.Tab.0.left" timestamp="1611000336340">
+    <state width="1637" height="272" key="GridCell.Tab.0.left" timestamp="1611162360155">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1611000336340" />
+    <state width="1637" height="272" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360155" />
     <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
-    <state width="1387" height="351" key="GridCell.Tab.0.right" timestamp="1611000336340">
+    <state width="1637" height="272" key="GridCell.Tab.0.right" timestamp="1611162360156">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1611000336340" />
+    <state width="1637" height="272" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360156" />
     <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1610652298040">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1641,10 +1667,10 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608309711856" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1611093407069" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1611154283730">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1611165986066">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1611154283730" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1611165986066" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610249812093" />
   </component>
   <component name="XDebuggerManager">
