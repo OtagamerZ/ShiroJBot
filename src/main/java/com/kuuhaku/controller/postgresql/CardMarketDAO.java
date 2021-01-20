@@ -118,7 +118,7 @@ public class CardMarketDAO {
 		Query q = em.createQuery("""
 				SELECT AVG(cm.price)
 				FROM CardMarket cm
-				WHERE cm.card = :card
+				WHERE cm.card.card = :card
 				AND cm.publishDate >= :date
 				""");
 		q.setParameter("card", c);
@@ -137,7 +137,7 @@ public class CardMarketDAO {
 		Query q = em.createQuery("""
 				SELECT AVG(cm.price)
 				FROM CardMarket cm
-				WHERE cm.card = :card
+				WHERE cm.card.card = :card
 				AND cm.publishDate >= :date
 				""");
 		q.setParameter("card", c);
@@ -148,7 +148,7 @@ public class CardMarketDAO {
 		q = em.createQuery("""
 				SELECT AVG(cm.price)
 				FROM CardMarket cm
-				WHERE cm.card = :card
+				WHERE cm.card.card = :card
 				AND cm.publishDate < :date
 				""");
 		q.setParameter("card", c);
