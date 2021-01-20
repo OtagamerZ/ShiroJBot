@@ -75,13 +75,13 @@ public class InvestCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 		int amount = Integer.parseInt(args[1]);
 
-		double stock = DoubleStream.of(
+		double stock = 1 + DoubleStream.of(
 				CardMarketDAO.getStockValue(c),
 				EquipmentMarketDAO.getStockValue(c),
 				FieldMarketDAO.getStockValue(c)
 		).filter(d -> d > 0).average().orElse(0);
 
-		int readjust = (int) Math.round(amount * (1 + stock));
+		int readjust = stock == 0 ? 0 : (int) Math.round(amount / stock);
 
 		StockMarket sm = StockMarketDAO.getCardInvestment(author.getId(), c);
 		sm.setInvestment(sm.getInvestment() + readjust);
