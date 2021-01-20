@@ -89,7 +89,7 @@ public class StockMarketCommand extends Command {
 				.setTitle(c.getName())
 				.setImage("attachment://card.png")
 				.addField("Valor de mercado", current == 0 ? "desconhecido" : Math.round(current) + " créditos", true)
-				.addField("Variação de valor", emote + (stock > 0 ? " +" : " ") + (Helper.round(stock, 3) * 100) + "%", true);
+				.addField("Variação de valor", emote + (stock > 0 ? " +" : " ") + (Helper.round(stock * 100, 3)) + "%", true);
 
 		channel.sendMessage(eb.build())
 				.addFile(Helper.getBytes(c.drawCardNoBorder(), "png"), "card.png")
