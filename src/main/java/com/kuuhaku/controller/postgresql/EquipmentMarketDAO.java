@@ -94,6 +94,8 @@ public class EquipmentMarketDAO {
 
 		try {
 			return (Double) q.getSingleResult();
+		} catch (NullPointerException e) {
+			return 0;
 		} finally {
 			em.close();
 		}
