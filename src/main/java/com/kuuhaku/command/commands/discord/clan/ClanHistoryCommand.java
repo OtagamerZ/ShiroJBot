@@ -33,6 +33,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -69,7 +70,9 @@ public class ClanHistoryCommand extends Command {
 				.setImage("attachment://banner.jpg");
 
 		StringBuilder sb = new StringBuilder();
-		List<List<String>> chunks = Helper.chunkify(c.getTransactions(), 10);
+		List<String> trans = c.getTransactions();
+		Collections.reverse(trans);
+		List<List<String>> chunks = Helper.chunkify(trans, 10);
 		for (List<String> chunk : chunks) {
 			sb.setLength(0);
 
