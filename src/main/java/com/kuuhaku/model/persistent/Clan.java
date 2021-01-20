@@ -59,7 +59,7 @@ public class Clan {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long vault = 0;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private DeckStash deck = new DeckStash();
 
 	@ElementCollection(fetch = FetchType.EAGER)
