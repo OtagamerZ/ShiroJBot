@@ -66,7 +66,7 @@ public class DemoteClanMemberCommand extends Command {
 		} else if (c.getMembers().get(args[0]) == null) {
 			channel.sendMessage("❌ | Membro inexistente.").queue();
 			return;
-		} else if (c.getMembers().get(args[0]).ordinal() >= c.getMembers().get(author.getId()).ordinal()) {
+		} else if (c.getMembers().get(args[0]).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
 			channel.sendMessage("❌ | Você não pode rebaixar membros com hierarquia maior ou igual à sua.").queue();
 			return;
 		}
