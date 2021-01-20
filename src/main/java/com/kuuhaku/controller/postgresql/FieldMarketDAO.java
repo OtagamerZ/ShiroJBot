@@ -88,6 +88,8 @@ public class FieldMarketDAO {
 				FROM FieldMarket fm
 				WHERE fm.card.card = :card
 				AND fm.publishDate >= :date
+				AND fm.buyer <> ''
+				AND fm.buyer <> fm.seller
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
@@ -113,6 +115,8 @@ public class FieldMarketDAO {
 					FROM FieldMarket fm
 					WHERE fm.card.card = :card
 					AND fm.publishDate >= :date
+					AND fm.buyer <> ''
+					AND fm.buyer <> fm.seller
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
@@ -124,6 +128,8 @@ public class FieldMarketDAO {
 					FROM FieldMarket fm
 					WHERE fm.card.card = :card
 					AND fm.publishDate < :date
+					AND fm.buyer <> ''
+					AND fm.buyer <> fm.seller
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());

@@ -121,6 +121,8 @@ public class CardMarketDAO {
 				FROM CardMarket cm
 				WHERE cm.card.card = :card
 				AND cm.publishDate >= :date
+				AND cm.buyer <> ''
+				AND cm.buyer <> cm.seller
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
@@ -146,6 +148,8 @@ public class CardMarketDAO {
 					FROM CardMarket cm
 					WHERE cm.card.card = :card
 					AND cm.publishDate >= :date
+					AND cm.buyer <> ''
+					AND cm.buyer <> cm.seller
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
@@ -157,6 +161,8 @@ public class CardMarketDAO {
 					FROM CardMarket cm
 					WHERE cm.card.card = :card
 					AND cm.publishDate < :date
+					AND cm.buyer <> ''
+					AND cm.buyer <> cm.seller
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
