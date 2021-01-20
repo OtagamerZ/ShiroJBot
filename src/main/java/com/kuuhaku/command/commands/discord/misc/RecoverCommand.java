@@ -86,7 +86,7 @@ public class RecoverCommand extends Command {
 				FieldMarketDAO.getStockValue(c)
 		).filter(d -> d > 0).average().orElse(0);
 
-		int readjust = (int) Math.round(amount * (1 + stock));
+		int readjust = (int) Math.round(amount + amount * stock);
 
 		sm.setInvestment(sm.getInvestment() - amount);
 
@@ -97,7 +97,7 @@ public class RecoverCommand extends Command {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
-							acc.consumeCredit(amount, this.getClass());
+							acc.consumeCredit(readjust, this.getClass());
 							AccountDAO.saveAccount(acc);
 
 							StockMarketDAO.saveInvestment(sm);
