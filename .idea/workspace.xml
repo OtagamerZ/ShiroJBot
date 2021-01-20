@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Comandos de clã" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Comandos de clã">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -989,14 +991,7 @@
       <workItem from="1611003302834" duration="246000" />
       <workItem from="1611072305808" duration="10501000" />
       <workItem from="1611082999983" duration="6611000" />
-      <workItem from="1611109542772" duration="1276000" />
-    </task>
-    <task id="LOCAL-03371" summary="Correção menor">
-      <created>1610453546106</created>
-      <option name="number" value="03371" />
-      <option name="presentableId" value="LOCAL-03371" />
-      <option name="project" value="LOCAL" />
-      <updated>1610453546106</updated>
+      <workItem from="1611109542772" duration="1610000" />
     </task>
     <task id="LOCAL-03372" summary="Correção menor">
       <created>1610455806131</created>
@@ -1334,7 +1329,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611110260212</updated>
     </task>
-    <option name="localTasksCounter" value="3420" />
+    <task id="LOCAL-03420" summary="Comandos de clã">
+      <created>1611111004572</created>
+      <option name="number" value="03420" />
+      <option name="presentableId" value="LOCAL-03420" />
+      <option name="project" value="LOCAL" />
+      <updated>1611111004572</updated>
+    </task>
+    <option name="localTasksCounter" value="3421" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1555,11 +1557,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611110261819">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611111008685">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610998297521" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611110261819" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611111008685" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
