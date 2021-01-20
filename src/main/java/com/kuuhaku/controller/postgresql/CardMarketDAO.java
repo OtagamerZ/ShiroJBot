@@ -127,7 +127,7 @@ public class CardMarketDAO {
 					""").setParameter("card", c)
 					.getSingleResult();
 		} catch (NullPointerException e) {
-			average = 0;
+			average = 1;
 		}
 
 		Query q = em.createQuery("""
@@ -137,7 +137,7 @@ public class CardMarketDAO {
 				AND cm.publishDate >= :date
 				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
-				AND cm.price / :average BETWEEN -0.5 AND 0.5 
+				AND cm.price / :average BETWEEN -0.75 AND 0.75 
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
@@ -166,7 +166,7 @@ public class CardMarketDAO {
 					""").setParameter("card", c)
 					.getSingleResult();
 		} catch (NullPointerException e) {
-			average = 0;
+			average = 1;
 		}
 
 		try {
@@ -180,7 +180,7 @@ public class CardMarketDAO {
 					AND cm.publishDate >= :date
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
-					AND cm.price / :average BETWEEN -0.5 AND 0.5 
+					AND cm.price / :average BETWEEN -0.75 AND 0.75 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
@@ -195,7 +195,7 @@ public class CardMarketDAO {
 					AND cm.publishDate < :date
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
-					AND cm.price / :average BETWEEN -0.5 AND 0.5 
+					AND cm.price / :average BETWEEN -0.75 AND 0.75 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
