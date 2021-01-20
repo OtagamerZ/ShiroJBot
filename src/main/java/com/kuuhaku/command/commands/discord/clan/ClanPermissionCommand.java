@@ -74,16 +74,16 @@ public class ClanPermissionCommand extends Command {
 			for (ClanHierarchy ch : ClanHierarchy.values()) {
 				EnumSet<ClanPermission> perms = c.getPermissions(ch);
 				eb.addField(ch.getName(), """
-						**Promover/rebaixar membros:** %s
-						**Expulsar membros:** %s
-						**Sacar créditos do cofre:** %s
-						**Convidar membros:** %s
+						Promover/rebaixar membros: %s
+						Expulsar membros: %s
+						Sacar créditos do cofre: %s
+						Convidar membros: %s
 						""".formatted(
 						perms.contains(ClanPermission.ALTER_HIERARCHY) ? "✅" : "❌",
 						perms.contains(ClanPermission.KICK) ? "✅" : "❌",
 						perms.contains(ClanPermission.WITHDRAW) ? "✅" : "❌",
 						perms.contains(ClanPermission.INVITE) ? "✅" : "❌"
-				), true);
+				), false);
 			}
 
 			MessageAction ma = channel.sendMessage(eb.build());
@@ -167,10 +167,10 @@ public class ClanPermissionCommand extends Command {
 	private static void refreshPermField(EmbedBuilder eb, ClanHierarchy ch, EnumSet<ClanPermission> p) {
 		eb.clearFields()
 				.addField(ch.getName(), """
-						**Promover/rebaixar membros:** %s
-						**Expulsar membros:** %s
-						**Sacar créditos do cofre:** %s
-						**Convidar membros:** %s
+						Promover/rebaixar membros: %s
+						Expulsar membros: %s
+						Sacar créditos do cofre: %s
+						Convidar membros: %s
 						""".formatted(
 						p.contains(ClanPermission.ALTER_HIERARCHY) ? "✅" : "❌",
 						p.contains(ClanPermission.KICK) ? "✅" : "❌",
