@@ -83,6 +83,20 @@ public class EquipmentMarketDAO {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -1);
 
+		double average;
+		try {
+			average = (double) em.createQuery("""
+					SELECT AVG(em.price)
+					FROM EquipmentMarket em
+					WHERE em.card.card = :card
+					AND em.buyer <> ''
+					AND em.buyer <> em.seller
+					""").setParameter("card", c)
+					.getSingleResult();
+		} catch (NullPointerException e) {
+			average = 0;
+		}
+
 		Query q = em.createQuery("""
 				SELECT AVG(em.price)
 				FROM EquipmentMarket em
@@ -90,10 +104,11 @@ public class EquipmentMarketDAO {
 				AND em.publishDate >= :date
 				AND em.buyer <> ''
 				AND em.buyer <> em.seller
-				AND em.price / AVG(em.price) BETWEEN -0.5 AND 0.5 
+				AND em.price / :average BETWEEN -0.5 AND 0.5 
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
+		q.setParameter("average", average);
 
 		try {
 			return (Double) q.getSingleResult();
@@ -107,6 +122,20 @@ public class EquipmentMarketDAO {
 	public static double getStockValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
+		double average;
+		try {
+			average = (double) em.createQuery("""
+					SELECT AVG(em.price)
+					FROM EquipmentMarket em
+					WHERE em.card.card = :card
+					AND em.buyer <> ''
+					AND em.buyer <> em.seller
+					""").setParameter("card", c)
+					.getSingleResult();
+		} catch (NullPointerException e) {
+			average = 0;
+		}
+
 		try {
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.MONTH, -1);
@@ -118,10 +147,11 @@ public class EquipmentMarketDAO {
 					AND em.publishDate >= :date
 					AND em.buyer <> ''
 					AND em.buyer <> em.seller
-					AND em.price / AVG(em.price) BETWEEN -0.5 AND 0.5 
+					AND em.price / :average BETWEEN -0.5 AND 0.5 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
+			q.setParameter("average", average);
 
 			double before = Helper.round((Double) q.getSingleResult(), 3);
 
@@ -132,10 +162,11 @@ public class EquipmentMarketDAO {
 					AND em.publishDate < :date
 					AND em.buyer <> ''
 					AND em.buyer <> em.seller
-					AND em.price / AVG(em.price) BETWEEN -0.5 AND 0.5 
+					AND em.price / :average BETWEEN -0.5 AND 0.5 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
+			q.setParameter("average", average);
 
 			double now = Helper.round((Double) q.getSingleResult(), 3);
 
