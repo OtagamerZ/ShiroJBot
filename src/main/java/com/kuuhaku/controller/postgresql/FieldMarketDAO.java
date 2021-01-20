@@ -85,7 +85,7 @@ public class FieldMarketDAO {
 		Query q = em.createQuery("""
 				SELECT AVG(fm.price)
 				FROM FieldMarket fm
-				WHERE fm.card = :card
+				WHERE fm.card.card = :card
 				AND fm.publishDate >= :date
 				""");
 		q.setParameter("card", c);
@@ -104,7 +104,7 @@ public class FieldMarketDAO {
 		Query q = em.createQuery("""
 				SELECT AVG(fm.price)
 				FROM FieldMarket fm
-				WHERE fm.card = :card
+				WHERE fm.card.card = :card
 				AND fm.publishDate >= :date
 				""");
 		q.setParameter("card", c);
@@ -115,7 +115,7 @@ public class FieldMarketDAO {
 		q = em.createQuery("""
 				SELECT AVG(fm.price)
 				FROM FieldMarket fm
-				WHERE fm.card = :card
+				WHERE fm.card.card = :card
 				AND fm.publishDate < :date
 				""");
 		q.setParameter("card", c);

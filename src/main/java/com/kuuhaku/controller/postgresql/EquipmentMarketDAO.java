@@ -85,7 +85,7 @@ public class EquipmentMarketDAO {
 		Query q = em.createQuery("""
 				SELECT AVG(em.price)
 				FROM EquipmentMarket em
-				WHERE em.card = :card
+				WHERE em.card.card = :card
 				AND em.publishDate >= :date
 				""");
 		q.setParameter("card", c);
@@ -104,7 +104,7 @@ public class EquipmentMarketDAO {
 		Query q = em.createQuery("""
 				SELECT AVG(em.price)
 				FROM EquipmentMarket em
-				WHERE em.card = :card
+				WHERE em.card.card = :card
 				AND em.publishDate >= :date
 				""");
 		q.setParameter("card", c);
@@ -115,7 +115,7 @@ public class EquipmentMarketDAO {
 		q = em.createQuery("""
 				SELECT AVG(em.price)
 				FROM EquipmentMarket em
-				WHERE em.card = :card
+				WHERE em.card.card = :card
 				AND em.publishDate < :date
 				""");
 		q.setParameter("card", c);
