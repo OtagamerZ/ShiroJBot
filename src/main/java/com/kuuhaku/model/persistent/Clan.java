@@ -56,7 +56,7 @@ public class Clan {
 	@Enumerated(value = EnumType.STRING)
 	private ClanTier tier = ClanTier.PARTY;
 
-	@Column(columnDefinition = "LONG NOT NULL DEFAULT 0")
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long vault = 0;
 
 	@OneToOne(fetch = FetchType.EAGER)
