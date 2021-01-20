@@ -119,7 +119,8 @@ public class ClanCommand extends Command {
 				sb.append("`%s` | %s %s\n".formatted(mb.getKey(), mb.getValue().getIcon(), checkUser(mb.getKey())));
 			}
 
-			eb.addField("Membros (%s/%s)".formatted(c.getMembers().size(), c.getTier().getCapacity()), sb.toString(), false);
+			eb.clearFields()
+					.addField("Membros (%s/%s)".formatted(c.getMembers().size(), c.getTier().getCapacity()), sb.toString(), false);
 			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
 
