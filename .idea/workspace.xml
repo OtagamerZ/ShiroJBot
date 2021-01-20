@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Comandos de clã" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Comandos de clã">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/CreateClanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/CreateClanCommand.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -989,14 +991,7 @@
       <workItem from="1611003302834" duration="246000" />
       <workItem from="1611072305808" duration="10501000" />
       <workItem from="1611082999983" duration="6611000" />
-      <workItem from="1611109542772" duration="2743000" />
-    </task>
-    <task id="LOCAL-03375" summary="Mudança no troféu de campeão">
-      <created>1610473941272</created>
-      <option name="number" value="03375" />
-      <option name="presentableId" value="LOCAL-03375" />
-      <option name="project" value="LOCAL" />
-      <updated>1610473941272</updated>
+      <workItem from="1611109542772" duration="3094000" />
     </task>
     <task id="LOCAL-03376" summary="Mudança no troféu de campeão">
       <created>1610474514152</created>
@@ -1334,7 +1329,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611112153700</updated>
     </task>
-    <option name="localTasksCounter" value="3424" />
+    <task id="LOCAL-03424" summary="Comandos de clã">
+      <created>1611112440284</created>
+      <option name="number" value="03424" />
+      <option name="presentableId" value="LOCAL-03424" />
+      <option name="project" value="LOCAL" />
+      <updated>1611112440284</updated>
+    </task>
+    <option name="localTasksCounter" value="3425" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1555,11 +1557,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611112158216">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611112445435">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1610998297521" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611112158216" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611112445435" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

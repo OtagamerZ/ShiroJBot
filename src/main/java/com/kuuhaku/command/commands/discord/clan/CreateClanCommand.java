@@ -18,15 +18,22 @@
 
 package com.kuuhaku.command.commands.discord.clan;
 
+import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
+
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class CreateClanCommand extends Command {
 
@@ -76,9 +83,28 @@ public class CreateClanCommand extends Command {
 			return;
 		}
 
-		Clan c = new Clan(name, author.getId());
-		ClanDAO.saveClan(c);
 
-		channel.sendMessage("✅ | Clã " + name + " criado com sucesso.").queue();
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
+		channel.sendMessage("Tem certeza que deseja criar o clã " + name + " por 10000 créditos?")
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+							if (!ShiroInfo.getHashes().remove(hash)) return;
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+
+							Clan c = new Clan(name, author.getId());
+							acc.consumeCredit(10000, CreateClanCommand.class);
+
+							ClanDAO.saveClan(c);
+							AccountDAO.saveAccount(acc);
+
+							s.delete().flatMap(d -> channel.sendMessage("✅ | Clã " + name + " criado com sucesso.")).queue();
+						}), true, 1, TimeUnit.MINUTES,
+						u -> u.getId().equals(author.getId()),
+						ms -> {
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+						})
+				);
 	}
 }
