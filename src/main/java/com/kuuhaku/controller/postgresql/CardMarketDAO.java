@@ -117,7 +117,7 @@ public class CardMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT CAST(cm.price AS DOUBLE)
+				SELECT cm.price * 1.0
 				FROM CardMarket cm
 				WHERE cm.card.card = :card
 				AND cm.buyer <> ''
@@ -145,7 +145,7 @@ public class CardMarketDAO {
 			cal.add(Calendar.MONTH, -1);
 
 			Query q = em.createQuery("""
-					SELECT CAST(cm.price AS DOUBLE)
+					SELECT cm.price * 1.0
 					FROM CardMarket cm
 					WHERE cm.card.card = :card
 					AND cm.publishDate >= :date
@@ -159,7 +159,7 @@ public class CardMarketDAO {
 
 
 			q = em.createQuery("""
-					SELECT CAST(cm.price AS DOUBLE)
+					SELECT cm.price * 1.0
 					FROM CardMarket cm
 					WHERE cm.card.card = :card
 					AND cm.publishDate < :date
