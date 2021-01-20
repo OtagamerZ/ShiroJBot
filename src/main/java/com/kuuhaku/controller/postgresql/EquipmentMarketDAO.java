@@ -24,8 +24,6 @@ import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.List;
 
@@ -95,7 +93,7 @@ public class EquipmentMarketDAO {
 		q.setParameter("date", cal.getTime());
 
 		try {
-			return ((BigDecimal) q.getSingleResult()).doubleValue();
+			return (Double) q.getSingleResult();
 		} finally {
 			em.close();
 		}
@@ -116,7 +114,7 @@ public class EquipmentMarketDAO {
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
 
-		double before = ((BigDecimal) q.getSingleResult()).setScale(3, RoundingMode.HALF_EVEN).doubleValue();
+		double before = Helper.round((Double) q.getSingleResult(), 3);
 
 		q = em.createQuery("""
 				SELECT AVG(em.price)
@@ -127,7 +125,7 @@ public class EquipmentMarketDAO {
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
 
-		double now = ((BigDecimal) q.getSingleResult()).setScale(3, RoundingMode.HALF_EVEN).doubleValue();
+		double now = Helper.round((Double) q.getSingleResult(), 3);
 
 		try {
 			return Helper.prcnt(now, before) - 1;
