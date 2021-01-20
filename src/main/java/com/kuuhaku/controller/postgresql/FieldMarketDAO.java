@@ -90,6 +90,7 @@ public class FieldMarketDAO {
 				AND fm.publishDate >= :date
 				AND fm.buyer <> ''
 				AND fm.buyer <> fm.seller
+				AND fm.price / AVG(fm.price) BETWEEN -0.5 AND 0.5 
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
@@ -117,6 +118,7 @@ public class FieldMarketDAO {
 					AND fm.publishDate >= :date
 					AND fm.buyer <> ''
 					AND fm.buyer <> fm.seller
+					AND fm.price / AVG(fm.price) BETWEEN -0.5 AND 0.5 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
@@ -130,6 +132,7 @@ public class FieldMarketDAO {
 					AND fm.publishDate < :date
 					AND fm.buyer <> ''
 					AND fm.buyer <> fm.seller
+					AND fm.price / AVG(fm.price) BETWEEN -0.5 AND 0.5 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
