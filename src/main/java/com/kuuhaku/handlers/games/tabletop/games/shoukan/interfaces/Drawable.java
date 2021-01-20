@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces;
 
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Clan;
 
 import java.awt.image.BufferedImage;
 
@@ -39,6 +40,10 @@ public interface Drawable {
 	Account getAcc();
 
 	void setAcc(Account acc);
+
+	Clan getClan();
+
+	void setClan(Clan clan);
 
 	Drawable copy();
 }

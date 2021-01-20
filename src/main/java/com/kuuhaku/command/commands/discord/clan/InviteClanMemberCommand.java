@@ -77,16 +77,16 @@ public class InviteClanMemberCommand extends Command {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você foi convidado(a) a juntar-se ao clã " + c.getName() + ", deseja aceitar?")
+		channel.sendMessage(usr.getAsMention() + ", você foi convidado(a) a juntar-se ao clã " + c.getName() + ", deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 
-							c.invite(usr.getId(), author);
+							c.invite(usr, author);
 
 							ClanDAO.saveClan(c);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Agora você é membro do clã " + c.getName() + ".")).queue();
+							s.delete().flatMap(d -> channel.sendMessage("✅ | " + usr.getAsMention() + " agora é membro do clã " + c.getName() + ".")).queue();
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(usr.getId()),
 						ms -> {

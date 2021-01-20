@@ -18,12 +18,10 @@
 
 package com.kuuhaku.model.common.drop;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.enums.AnimeName;
+import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -36,6 +34,7 @@ import java.util.function.Function;
 public abstract class Drop implements Prize {
 	private final AnimeName anime = AnimeName.validValues()[Helper.rng(AnimeName.validValues().length, true)];
 	private final ExceedEnum exceed = ExceedEnum.values()[Helper.rng(ExceedEnum.values().length, true)];
+	private final ClanTier tier = ClanTier.values()[Helper.rng(ClanTier.values().length, true)];
 	private final int[] values = {
 			1 + Helper.rng((int) CardDAO.totalCards(anime) - 1, false),
 			1 + Helper.rng(6, false),
@@ -66,6 +65,9 @@ public abstract class Drop implements Prize {
 
 		add(Pair.of("Ter conta vinculada com o canal do meu Nii-chan.", u ->
 				!AccountDAO.getAccount(u.getId()).getTwitchId().isBlank()));
+
+		add(Pair.of("Estar em um clã com tier " + tier.getName().toLowerCase() + ".", u ->
+				ClanDAO.isMember(u.getId())));
 	}};
 	private final Pair<String, Function<User, Boolean>> chosen = condition.get(Helper.rng(condition.size(), true));
 

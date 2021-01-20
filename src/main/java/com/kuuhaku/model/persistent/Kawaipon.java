@@ -148,6 +148,10 @@ public class Kawaipon {
 		this.fields.remove(field);
 	}
 
+	public Field getField(Card card) {
+		return fields.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
+	}
+
 	public List<Drawable> getDrawables() {
 		return ListUtils.union(ListUtils.union(champions, equipments), fields);
 	}

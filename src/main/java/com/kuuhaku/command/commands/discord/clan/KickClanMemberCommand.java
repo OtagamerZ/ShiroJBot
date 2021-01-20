@@ -57,16 +57,20 @@ public class KickClanMemberCommand extends Command {
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
-		} else if (!c.hasPermission(author.getId(), ClanPermission.KICK)) {
+		} else if (!c.hasPermission(author.getId(), ClanPermission.ALTER_HIERARCHY)) {
 			channel.sendMessage("❌ | Você não tem permissão para expulsar membros.").queue();
 			return;
 		} else if (args.length < 1) {
-			channel.sendMessage("❌ | Você precisa informar o ID do membro a ser expulso.").queue();
+			channel.sendMessage("❌ | Você precisa mencionar ou informar o ID do membro a ser expulso.").queue();
 			return;
-		} else if (c.getMembers().get(args[0]) == null) {
+		}
+
+		User usr = message.getMentionedUsers().size() == 0 ? Main.getInfo().getUserByID(args[0]) : message.getMentionedUsers().get(0);
+
+		if (c.getMembers().get(args[0]) == null) {
 			channel.sendMessage("❌ | Membro inexistente.").queue();
 			return;
-		} else if (c.getMembers().get(args[0]).ordinal() >= c.getMembers().get(author.getId()).ordinal()) {
+		} else if (c.getMembers().get(args[0]).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
 			channel.sendMessage("❌ | Você não pode expulsar membros com hierarquia maior ou igual à sua.").queue();
 			return;
 		}
@@ -74,12 +78,13 @@ public class KickClanMemberCommand extends Command {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja expulsar o membro com ID " + args[0] + "?")
+		channel.sendMessage("Tem certeza que deseja expulsar o membro " + (usr == null ? "ID " + args[0] : usr.getName()) + "?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 
-							c.kick(args[0], author);
+							if (usr != null) c.kick(usr, author);
+							else c.kick(args[0], author);
 
 							ClanDAO.saveClan(c);
 

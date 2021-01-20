@@ -61,9 +61,13 @@ public class DemoteClanMemberCommand extends Command {
 			channel.sendMessage("❌ | Você não tem permissão para rebaixar membros.").queue();
 			return;
 		} else if (args.length < 1) {
-			channel.sendMessage("❌ | Você precisa informar o ID do membro a ser rebaixado.").queue();
+			channel.sendMessage("❌ | Você precisa mencionar ou informar o ID do membro a ser rebaixado.").queue();
 			return;
-		} else if (c.getMembers().get(args[0]) == null) {
+		}
+
+		User usr = message.getMentionedUsers().size() == 0 ? Main.getInfo().getUserByID(args[0]) : message.getMentionedUsers().get(0);
+
+		if (c.getMembers().get(args[0]) == null) {
 			channel.sendMessage("❌ | Membro inexistente.").queue();
 			return;
 		} else if (c.getMembers().get(args[0]).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
@@ -74,12 +78,13 @@ public class DemoteClanMemberCommand extends Command {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja rebaixar o membro com ID " + args[0] + "?")
+		channel.sendMessage("Tem certeza que deseja rebaixar o membro " + (usr == null ? "ID " + args[0] : usr.getName()) + "?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 
-							c.demote(args[0], author);
+							if (usr != null) c.demote(usr, author);
+							else c.demote(args[0], author);
 
 							ClanDAO.saveClan(c);
 
