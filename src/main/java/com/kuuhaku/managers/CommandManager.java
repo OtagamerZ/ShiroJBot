@@ -499,7 +499,7 @@ public class CommandManager {
 					"investir", new String[]{"invest"}, "req_card-value", "cmd_invest", MISC, true
 			));
 			put(RecoverCommand.class, new Argument(
-					"recuperar", new String[]{"recover"}, "req_card-value", "cmd_recover", MISC, true
+					"retirar", new String[]{"recover"}, "req_card-value", "cmd_recover", MISC, true
 			));
 
 			//FUN
