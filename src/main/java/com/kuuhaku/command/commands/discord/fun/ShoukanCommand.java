@@ -23,6 +23,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
@@ -32,6 +33,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
@@ -42,6 +44,7 @@ import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -172,9 +175,26 @@ public class ShoukanCommand extends Command {
 				}
 			}
 
-			boolean daily = (args.length > 1 && Helper.equalsAny(args[1], "daily", "diario")) || (args.length > 2 && Helper.equalsAny(args[2], "daily", "diario"));
+			boolean clan = (args.length > 1 && args[1].equalsIgnoreCase("clan")) || (args.length > 2 && args[2].equalsIgnoreCase("clan"));
+			boolean daily = !clan && (args.length > 1 && Helper.equalsAny(args[1], "daily", "diario")) || (args.length > 2 && Helper.equalsAny(args[2], "daily", "diario"));
 
-			if (!daily) {
+			Clan c = ClanDAO.getUserClan(author.getId());
+			Clan other = ClanDAO.getUserClan(message.getMentionedUsers().get(0).getId());
+			if (clan) {
+				if (c == null) {
+					channel.sendMessage("❌ | Você não possui um clã.").queue();
+					return;
+				} else if (other == null) {
+					channel.sendMessage("❌ | Ele/ela não possui um clã.").queue();
+					return;
+				} else if (c.getDeck().getChampions().size() < 30) {
+					channel.sendMessage("❌ | " + c.getName() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
+					return;
+				} else if (other.getDeck().getChampions().size() < 30) {
+					channel.sendMessage("❌ | " + other.getName() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
+					return;
+				}
+			} else if (!daily) {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 				Kawaipon target = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
 				if (kp.getChampions().size() < 30) {
@@ -202,28 +222,53 @@ public class ShoukanCommand extends Command {
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), bet, custom, daily, false, author, message.getMentionedUsers().get(0));
-			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-								if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
-									if (!ShiroInfo.getHashes().remove(hash)) return;
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
-									if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
-										channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
-										return;
-									}
+			if (clan) {
+				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), bet, custom, daily, false, List.of(c, other), author, message.getMentionedUsers().get(0));
+				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " seu clã foi desafiado a uma partida de Shoukan, deseja aceitar?" + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+										if (!ShiroInfo.getHashes().remove(hash)) return;
+										Main.getInfo().getConfirmationPending().invalidate(author.getId());
+										if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
+											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+											return;
+										}
 
-									//Main.getInfo().getGames().put(id, t);
-									s.delete().queue(null, Helper::doNothing);
-									t.start();
-								}
-							}), true, 1, TimeUnit.MINUTES,
-							u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
-							ms -> {
-								ShiroInfo.getHashes().remove(hash);
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-							})
-					);
+										//Main.getInfo().getGames().put(id, t);
+										s.delete().queue(null, Helper::doNothing);
+										t.start();
+									}
+								}), true, 1, TimeUnit.MINUTES,
+								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
+								ms -> {
+									ShiroInfo.getHashes().remove(hash);
+									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								})
+						);
+			} else {
+				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), bet, custom, daily, false, author, message.getMentionedUsers().get(0));
+				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+										if (!ShiroInfo.getHashes().remove(hash)) return;
+										Main.getInfo().getConfirmationPending().invalidate(author.getId());
+										if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
+											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+											return;
+										}
+
+										//Main.getInfo().getGames().put(id, t);
+										s.delete().queue(null, Helper::doNothing);
+										t.start();
+									}
+								}), true, 1, TimeUnit.MINUTES,
+								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
+								ms -> {
+									ShiroInfo.getHashes().remove(hash);
+									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								})
+						);
+			}
 		}
 	}
 }

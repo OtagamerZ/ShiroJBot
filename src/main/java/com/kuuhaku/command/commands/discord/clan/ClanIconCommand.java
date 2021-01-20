@@ -63,20 +63,20 @@ public class ClanIconCommand extends Command {
 			channel.sendMessage("❌ | Seu clã ainda não desbloqueou o emblema.").queue();
 			return;
 		} else if (message.getAttachments().size() == 0) {
-			channel.sendMessage("❌ | Você precisa enviar uma imagem com dimensões 128x128.").queue();
+			channel.sendMessage("❌ | Você precisa enviar uma imagem com dimensões 225x350.").queue();
 			return;
 		}
 
 		try {
 			Message.Attachment a = message.getAttachments().get(0);
 			if (!a.isImage()) {
-				channel.sendMessage("❌ | Você precisa enviar uma imagem com dimensões 128x128.").queue();
+				channel.sendMessage("❌ | Você precisa enviar uma imagem com dimensões 225x350.").queue();
 				return;
 			}
 
 			BufferedImage bi = ImageIO.read(a.retrieveInputStream().get());
-			if (bi.getHeight() != 128 || bi.getWidth() != 128) {
-				channel.sendMessage("❌ | As dimensões da imagem devem ser exatamente 128x128.").queue();
+			if (bi.getWidth() != 225 || bi.getHeight() != 350) {
+				channel.sendMessage("❌ | As dimensões da imagem devem ser exatamente 225x350.").queue();
 				return;
 			}
 

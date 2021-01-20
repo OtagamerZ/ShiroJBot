@@ -18,12 +18,10 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
-import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 
@@ -99,16 +97,21 @@ public class Arena {
 				Side key = entry.getKey();
 				List<SlotColumn<Champion, Equipment>> value = entry.getValue();
 				Hand h = hands.get(key);
-				Account acc = AccountDAO.getAccount(hands.get(key).getUser().getId());
 				LinkedList<Drawable> grv = graveyard.get(key);
 				g2d.setColor(Color.white);
 				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 100));
 
-				String name = StringUtils.abbreviate(hands.get(key).getUser().getName(), 18);
+				String name;
+				if (game.getClans() != null) {
+					name = game.getClans().get(key).getName();
+				} else {
+					name = StringUtils.abbreviate(hands.get(key).getUser().getName(), 32);
+				}
+
 				if (key == Side.TOP)
-					Profile.printCenteredString(name, 626, 1125, 824, g2d);
+					Profile.printCenteredString(name, 1253, 499, 824, g2d);
 				else
-					Profile.printCenteredString(name, 626, 499, 989, g2d);
+					Profile.printCenteredString(name, 1253, 499, 989, g2d);
 
 				for (int i = 0; i < value.size(); i++) {
 					SlotColumn<Champion, Equipment> c = value.get(i);
