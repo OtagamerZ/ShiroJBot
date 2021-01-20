@@ -88,6 +88,8 @@ public class EquipmentMarketDAO {
 				FROM EquipmentMarket em
 				WHERE em.card.card = :card
 				AND em.publishDate >= :date
+				AND em.buyer <> ''
+				AND em.buyer <> em.seller
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
@@ -113,6 +115,8 @@ public class EquipmentMarketDAO {
 					FROM EquipmentMarket em
 					WHERE em.card.card = :card
 					AND em.publishDate >= :date
+					AND em.buyer <> ''
+					AND em.buyer <> em.seller
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
@@ -124,6 +128,8 @@ public class EquipmentMarketDAO {
 					FROM EquipmentMarket em
 					WHERE em.card.card = :card
 					AND em.publishDate < :date
+					AND em.buyer <> ''
+					AND em.buyer <> em.seller
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
