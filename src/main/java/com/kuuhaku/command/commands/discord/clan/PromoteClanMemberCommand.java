@@ -79,7 +79,7 @@ public class PromoteClanMemberCommand extends Command {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 
-							c.promote(args[0]);
+							c.promote(args[0], author);
 
 							ClanDAO.saveClan(c);
 

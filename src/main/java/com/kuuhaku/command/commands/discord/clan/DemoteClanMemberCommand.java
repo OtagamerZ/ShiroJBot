@@ -79,7 +79,7 @@ public class DemoteClanMemberCommand extends Command {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 
-							c.demote(args[0]);
+							c.demote(args[0], author);
 
 							ClanDAO.saveClan(c);
 
