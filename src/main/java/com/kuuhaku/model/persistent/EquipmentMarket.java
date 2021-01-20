@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.model.common.Market;
 
 import javax.persistence.*;
 import java.time.Clock;
@@ -28,7 +29,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "equipmentmarket")
-public class EquipmentMarket {
+public class EquipmentMarket implements Market {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "market_id_seq")
 	private int id;
@@ -83,6 +84,11 @@ public class EquipmentMarket {
 
 	public Equipment getCard() {
 		return card;
+	}
+
+	@Override
+	public Card getRawCard() {
+		return card.getCard();
 	}
 
 	public void setCard(Equipment card) {

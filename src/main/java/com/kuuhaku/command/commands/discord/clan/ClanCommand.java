@@ -111,6 +111,7 @@ public class ClanCommand extends Command {
 				<String, ClanHierarchy>comparingByValue(Comparator.comparingInt(ClanHierarchy::ordinal))
 				.thenComparing(Map.Entry::getKey, String.CASE_INSENSITIVE_ORDER)
 		);
+		List<MessageEmbed.Field> fixed = new ArrayList<>(eb.getFields());
 		List<List<Map.Entry<String, ClanHierarchy>>> chunks = Helper.chunkify(mbs, 10);
 		for (List<Map.Entry<String, ClanHierarchy>> chunk : chunks) {
 			sb.setLength(0);
@@ -119,8 +120,8 @@ public class ClanCommand extends Command {
 				sb.append("`%s` | %s %s\n".formatted(mb.getKey(), mb.getValue().getIcon(), checkUser(mb.getKey())));
 			}
 
-			eb.clearFields()
-					.addField("Membros (%s/%s)".formatted(c.getMembers().size(), c.getTier().getCapacity()), sb.toString(), false);
+			eb.clearFields().getFields().addAll(fixed);
+			eb.addField("Membros (%s/%s)".formatted(c.getMembers().size(), c.getTier().getCapacity()), sb.toString(), false);
 			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
 
