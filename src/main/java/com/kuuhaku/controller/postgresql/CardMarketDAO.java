@@ -27,7 +27,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.OffsetDateTime;
+import java.util.Calendar;
 import java.util.List;
 
 public class CardMarketDAO {
@@ -115,6 +115,9 @@ public class CardMarketDAO {
 	public static double getAverageValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -1);
+
 		Query q = em.createQuery("""
 				SELECT AVG(cm.price)
 				FROM CardMarket cm
@@ -122,7 +125,7 @@ public class CardMarketDAO {
 				AND cm.publishDate >= :date
 				""");
 		q.setParameter("card", c);
-		q.setParameter("date", OffsetDateTime.now().minusMonths(1));
+		q.setParameter("date", cal.getTime());
 
 		try {
 			return ((BigDecimal) q.getSingleResult()).doubleValue();
@@ -134,6 +137,9 @@ public class CardMarketDAO {
 	public static double getStockValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -1);
+
 		Query q = em.createQuery("""
 				SELECT AVG(cm.price)
 				FROM CardMarket cm
@@ -141,7 +147,7 @@ public class CardMarketDAO {
 				AND cm.publishDate >= :date
 				""");
 		q.setParameter("card", c);
-		q.setParameter("date", OffsetDateTime.now().minusMonths(1));
+		q.setParameter("date", cal.getTime());
 
 		double before = ((BigDecimal) q.getSingleResult()).setScale(3, RoundingMode.HALF_EVEN).doubleValue();
 
@@ -152,7 +158,7 @@ public class CardMarketDAO {
 				AND cm.publishDate < :date
 				""");
 		q.setParameter("card", c);
-		q.setParameter("date", OffsetDateTime.now().minusMonths(1));
+		q.setParameter("date", cal.getTime());
 
 		double now = ((BigDecimal) q.getSingleResult()).setScale(3, RoundingMode.HALF_EVEN).doubleValue();
 
