@@ -22,6 +22,8 @@ import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.CardMarket;
 import com.kuuhaku.utils.Helper;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -114,29 +116,19 @@ public class CardMarketDAO {
 	public static double getAverageValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MONTH, -1);
-
 		Query q = em.createQuery("""
-				SELECT cm.price
+				SELECT CAST(cm.price AS DOUBLE)
 				FROM CardMarket cm
 				WHERE cm.card.card = :card
-				AND cm.publishDate >= :date
 				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
 				""");
 		q.setParameter("card", c);
-		q.setParameter("date", cal.getTime());
 
-		List<Integer> values = (List<Integer>) q.getResultList();
-
-		double avg = values.stream()
-				.mapToInt(i -> i)
-				.average()
-				.orElse(0);
+		double[] values = ArrayUtils.toPrimitive(((List<Double>) q.getResultList()).toArray(Double[]::new));
 
 		try {
-			return values.stream().filter(i -> i / (avg == 0 ? i / 2d : avg) <= 0.75).mapToInt(i -> i).average().orElse(0);
+			return new GeometricMean().evaluate(values);
 		} catch (NullPointerException e) {
 			return 0;
 		} finally {
@@ -153,7 +145,7 @@ public class CardMarketDAO {
 			cal.add(Calendar.MONTH, -1);
 
 			Query q = em.createQuery("""
-					SELECT cm.price
+					SELECT CAST(cm.price AS DOUBLE)
 					FROM CardMarket cm
 					WHERE cm.card.card = :card
 					AND cm.publishDate >= :date
@@ -163,14 +155,11 @@ public class CardMarketDAO {
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
 
-			List<Integer> before = (List<Integer>) q.getResultList();
-			double avgb = before.stream()
-					.mapToInt(i -> i)
-					.average()
-					.orElse(0);
+			double[] before = ArrayUtils.toPrimitive(((List<Double>) q.getResultList()).toArray(Double[]::new));
+
 
 			q = em.createQuery("""
-					SELECT cm.price
+					SELECT CAST(cm.price AS DOUBLE)
 					FROM CardMarket cm
 					WHERE cm.card.card = :card
 					AND cm.publishDate < :date
@@ -180,16 +169,10 @@ public class CardMarketDAO {
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
 
-			List<Integer> now = (List<Integer>) q.getResultList();
-			double avgn = now.stream()
-					.mapToInt(i -> i)
-					.average()
-					.orElse(0);
+			double[] now = ArrayUtils.toPrimitive(((List<Double>) q.getResultList()).toArray(Double[]::new));
 
-			double aBefore = before.stream().filter(i -> i / (avgb == 0 ? i / 2d : avgb) <= 0.75).mapToInt(i -> i).average().orElse(0);
-			double aNow = now.stream().filter(i -> i / (avgn == 0 ? i / 2d : avgn) <= 0.75).mapToInt(i -> i).average().orElse(0);
-
-			return Helper.prcnt(aNow, aBefore) - 1;
+			GeometricMean gm = new GeometricMean();
+			return Helper.prcnt(gm.evaluate(now), gm.evaluate(before)) - 1;
 		} catch (NullPointerException e) {
 			return 0;
 		} finally {
