@@ -42,11 +42,14 @@ public enum ClanPermission {
 		int flags = 0;
 		if (perms.contains(ALTER_HIERARCHY)) {
 			flags |= ALTER_HIERARCHY.flag;
-		} else if (perms.contains(KICK)) {
+		}
+		if (perms.contains(KICK)) {
 			flags |= KICK.flag;
-		} else if (perms.contains(WITHDRAW)) {
+		}
+		if (perms.contains(WITHDRAW)) {
 			flags |= WITHDRAW.flag;
-		} else if (perms.contains(INVITE)) {
+		}
+		if (perms.contains(INVITE)) {
 			flags |= INVITE.flag;
 		}
 
@@ -57,11 +60,14 @@ public enum ClanPermission {
 		EnumSet<ClanPermission> perms = EnumSet.noneOf(ClanPermission.class);
 		if ((flags & ALTER_HIERARCHY.flag) == ALTER_HIERARCHY.flag) {
 			perms.add(ALTER_HIERARCHY);
-		} else if ((flags & KICK.flag) == KICK.flag) {
+		}
+		if ((flags & KICK.flag) == KICK.flag) {
 			perms.add(KICK);
-		} else if ((flags & WITHDRAW.flag) == WITHDRAW.flag) {
+		}
+		if ((flags & WITHDRAW.flag) == WITHDRAW.flag) {
 			perms.add(WITHDRAW);
-		} else if ((flags & INVITE.flag) == INVITE.flag) {
+		}
+		if ((flags & INVITE.flag) == INVITE.flag) {
 			perms.add(INVITE);
 		}
 
