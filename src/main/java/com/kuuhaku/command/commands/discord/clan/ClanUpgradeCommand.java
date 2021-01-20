@@ -22,35 +22,32 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
-import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class ClanDepositCommand extends Command {
+public class ClanUpgradeCommand extends Command {
 
-	public ClanDepositCommand(String name, String description, Category category, boolean requiresMM) {
+	public ClanUpgradeCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public ClanDepositCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+	public ClanUpgradeCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public ClanDepositCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public ClanUpgradeCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public ClanDepositCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public ClanUpgradeCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
@@ -60,40 +57,33 @@ public class ClanDepositCommand extends Command {
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
-		} else if (args.length < 1) {
-			channel.sendMessage("❌ | Você precisa especificar uma quantia de créditos para serem depositados.").queue();
+		} else if (c.getMembers().get(author.getId()).ordinal() != 0) {
+			channel.sendMessage("❌ | Apenas o líder pode evoluir o tier do clã clã.").queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_amount-not-valid")).queue();
+		} else if (c.getTier() == ClanTier.DYNASTY) {
+			channel.sendMessage("❌ | Seu clã já está no tier máximo.").queue();
 			return;
-		}
-
-		Account acc = AccountDAO.getAccount(author.getId());
-		int amount = Integer.parseInt(args[0]);
-
-		if (acc.getBalance() < amount) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
-			return;
-		} else if (acc.getLoan() > 0) {
-			channel.sendMessage("❌ | Você não pode depositar se possuir dívida ativa.").queue();
+		} else if (c.getVault() < c.getTier().getCost() || c.getMembers().size() < c.getTier().getCapacity() / 2) {
+			channel.sendMessage("❌ | Seu clã ainda não cumpriu os requisitos para evolução.").queue();
 			return;
 		}
 
+		ClanTier next = Helper.getNext(c.getTier(), ClanTier.PARTY, ClanTier.FACTION, ClanTier.GUILD, ClanTier.DYNASTY);
+		assert next != null;
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja depositar " + amount + " créditos no cofre do clã?")
+		channel.sendMessage("Tem certeza que deseja evoluir o tier do clã para " + next.getName() + "?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 
-							acc.removeCredit(amount, this.getClass());
-							c.deposit(amount, author);
+							c.withdraw(c.getTier().getCost(), author);
+							c.setTier(next);
 
 							ClanDAO.saveClan(c);
-							AccountDAO.saveAccount(acc);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Valor depositado com sucesso.")).queue();
+							s.delete().flatMap(d -> channel.sendMessage("✅ | Tier evoluído com sucesso.")).queue();
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> {

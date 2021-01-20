@@ -658,43 +658,43 @@ public class CommandManager {
 
 			//CLAN
 			put(ClanBannerCommand.class, new Argument(
-					"faixada", new String[]{"banner"}, "cmd_exceed-members", CLAN, true
+					"faixada", new String[]{"banner"}, "cmd_clan-banner", CLAN, false
 			));
 			put(ClanCommand.class, new Argument(
-					"cla", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_exceed-members", CLAN, true
+					"cla", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_clan", CLAN, true
 			));
 			put(ClanDepositCommand.class, new Argument(
-					"depositar", new String[]{"deposit", "dep"}, "cmd_exceed-members", CLAN, true
+					"depositar", new String[]{"deposit", "dep"}, "req_qtd", "cmd_clan-deposit", CLAN, true
 			));
 			put(ClanIconCommand.class, new Argument(
-					"emblema", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_exceed-members", CLAN, true
+					"emblema", new String[]{"icon", "icone"}, "cmd_clan-icon", CLAN, false
 			));
 			put(ClanMotdCommand.class, new Argument(
-					"motd", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_exceed-members", CLAN, true
+					"motd", new String[]{"mdd", "anuncio"}, "req_msg", "cmd_clan-motd", CLAN, false
 			));
 			put(ClanPermissionCommand.class, new Argument(
-					"permissoes", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_exceed-members", CLAN, true
+					"permissoes", new String[]{"hierarchy"}, "req_hierarchy", "cmd_clan-permission", CLAN, true
 			));
 			put(ClanWithdrawCommand.class, new Argument(
-					"sacar", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_exceed-members", CLAN, true
+					"sacar", new String[]{"withdraw", "sac", "with"}, "req_qtd", "cmd_clan-withdraw", CLAN, true
 			));
 			put(CreateClanCommand.class, new Argument(
-					"criar", new String[]{"create"}, "cmd_exceed-members", CLAN, true
+					"criar", new String[]{"create"}, REQ_NAME, "cmd_create-clan", CLAN, true
 			));
 			put(DemoteClanMemberCommand.class, new Argument(
-					"rebaixar", new String[]{"demote", "dem"}, "cmd_exceed-members", CLAN, true
+					"rebaixar", new String[]{"demote", "dem"}, REQ_ID, "cmd_demote-clan-member", CLAN, true
 			));
 			put(InviteClanMemberCommand.class, new Argument(
-					"convidar", "cmd_exceed-members", CLAN, true
+					"convidar", REQ_MENTION, "cmd_invite-clan-member", CLAN, true
 			));
 			put(KickClanMemberCommand.class, new Argument(
-					"remover", new String[]{"remove"}, "cmd_exceed-members", CLAN, true
+					"remover", new String[]{"remove"}, REQ_ID, "cmd_kick-clan-member", CLAN, true
 			));
 			put(LeaveClanCommand.class, new Argument(
-					"sair", new String[]{"exit", "abandonar"}, "cmd_exceed-members", CLAN, true
+					"sair", new String[]{"exit", "abandonar"}, "cmd_leave-clan", CLAN, true
 			));
 			put(PromoteClanMemberCommand.class, new Argument(
-					"promover", new String[]{"promote", "prom"}, "cmd_exceed-members", CLAN, true
+					"promover", new String[]{"promote", "prom"}, REQ_ID, "cmd_promote-clan-member", CLAN, true
 			));
 		}
 	};
