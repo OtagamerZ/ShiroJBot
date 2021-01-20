@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.clan;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ClanDAO;
@@ -109,7 +110,7 @@ public class ClanCommand extends Command {
 			sb.setLength(0);
 
 			for (Map.Entry<String, ClanHierarchy> mb : chunk) {
-				sb.append("%s %s\n".formatted(mb.getValue().getIcon(), mb.getKey()));
+				sb.append("`%s` | %s %s\n".formatted(mb.getKey(), mb.getValue().getIcon(), checkUser(mb.getKey())));
 			}
 
 			eb.addField("Membros", sb.toString(), false);
@@ -122,5 +123,13 @@ public class ClanCommand extends Command {
 		ma.queue(s ->
 				Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
+	}
+
+	private static String checkUser(String id) {
+		try {
+			return Main.getInfo().getUserByID(id).getName();
+		} catch (Exception e) {
+			return "`Desconhecido`";
+		}
 	}
 }
