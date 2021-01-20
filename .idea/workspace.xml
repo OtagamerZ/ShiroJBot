@@ -14,9 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/InvestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/InvestCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/DemoteClanMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/DemoteClanMemberCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/KickClanMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/KickClanMemberCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/PromoteClanMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/PromoteClanMemberCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1009,20 +1009,6 @@
       <workItem from="1611109542772" duration="4756000" />
       <workItem from="1611158766585" duration="708000" />
     </task>
-    <task id="LOCAL-03400" summary="Mais informações no avaliador de deck e no menu de decks reserva">
-      <created>1610654428366</created>
-      <option name="number" value="03400" />
-      <option name="presentableId" value="LOCAL-03400" />
-      <option name="project" value="LOCAL" />
-      <updated>1610654428366</updated>
-    </task>
-    <task id="LOCAL-03401" summary="Mais informações no avaliador de deck e no menu de decks reserva">
-      <created>1610655904005</created>
-      <option name="number" value="03401" />
-      <option name="presentableId" value="LOCAL-03401" />
-      <option name="project" value="LOCAL" />
-      <updated>1610655904006</updated>
-    </task>
     <task id="LOCAL-03402" summary="Mais informações no avaliador de deck e no menu de decks reserva">
       <created>1610656806094</created>
       <option name="number" value="03402" />
@@ -1352,7 +1338,21 @@
       <option name="project" value="LOCAL" />
       <updated>1611169102477</updated>
     </task>
-    <option name="localTasksCounter" value="3449" />
+    <task id="LOCAL-03449" summary="Criação de sistema de bolsa de valores">
+      <created>1611169524001</created>
+      <option name="number" value="03449" />
+      <option name="presentableId" value="LOCAL-03449" />
+      <option name="project" value="LOCAL" />
+      <updated>1611169524002</updated>
+    </task>
+    <task id="LOCAL-03450" summary="Criação de sistema de bolsa de valores">
+      <created>1611169638325</created>
+      <option name="number" value="03450" />
+      <option name="presentableId" value="LOCAL-03450" />
+      <option name="project" value="LOCAL" />
+      <updated>1611169638325</updated>
+    </task>
+    <option name="localTasksCounter" value="3451" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1529,10 +1529,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611169101496">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611169637335">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611169101496" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611169637335" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1577,10 +1577,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611169109520">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611169646094">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611169109520" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611169646094" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611114139980" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
