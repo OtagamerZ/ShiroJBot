@@ -94,7 +94,7 @@ public class FieldMarketDAO {
 					""").setParameter("card", c)
 					.getSingleResult();
 		} catch (NullPointerException e) {
-			average = 0;
+			average = 1;
 		}
 
 		Query q = em.createQuery("""
@@ -104,7 +104,7 @@ public class FieldMarketDAO {
 				AND fm.publishDate >= :date
 				AND fm.buyer <> ''
 				AND fm.buyer <> fm.seller
-				AND fm.price / :average BETWEEN -0.5 AND 0.5 
+				AND fm.price / :average BETWEEN -0.75 AND 0.75 
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
@@ -133,7 +133,7 @@ public class FieldMarketDAO {
 					""").setParameter("card", c)
 					.getSingleResult();
 		} catch (NullPointerException e) {
-			average = 0;
+			average = 1;
 		}
 
 		try {
@@ -147,7 +147,7 @@ public class FieldMarketDAO {
 					AND fm.publishDate >= :date
 					AND fm.buyer <> ''
 					AND fm.buyer <> fm.seller
-					AND fm.price / :average BETWEEN -0.5 AND 0.5 
+					AND fm.price / :average BETWEEN -0.75 AND 0.75 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
@@ -162,7 +162,7 @@ public class FieldMarketDAO {
 					AND fm.publishDate < :date
 					AND fm.buyer <> ''
 					AND fm.buyer <> fm.seller
-					AND fm.price / :average BETWEEN -0.5 AND 0.5 
+					AND fm.price / :average BETWEEN -0.75 AND 0.75 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
