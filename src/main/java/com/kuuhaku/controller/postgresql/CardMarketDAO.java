@@ -110,41 +110,33 @@ public class CardMarketDAO {
 		em.close();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static double getAverageValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -1);
 
-		int average;
-		try {
-			average = (int) (double) em.createQuery("""
-					SELECT AVG(cm.price)
-					FROM CardMarket cm
-					WHERE cm.card.card = :card
-					AND cm.buyer <> ''
-					AND cm.buyer <> cm.seller
-					""").setParameter("card", c)
-					.getSingleResult();
-		} catch (NullPointerException e) {
-			average = 1;
-		}
-
 		Query q = em.createQuery("""
-				SELECT AVG(cm.price)
+				SELECT cm.price
 				FROM CardMarket cm
 				WHERE cm.card.card = :card
 				AND cm.publishDate >= :date
 				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
-				AND cm.price / :average BETWEEN -0.75 AND 0.75 
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
-		q.setParameter("average", average);
+
+		List<Integer> values = (List<Integer>) q.getResultList();
+
+		double avg = values.stream()
+				.mapToInt(i -> i)
+				.average()
+				.orElse(0);
 
 		try {
-			return (Double) q.getSingleResult();
+			return values.stream().filter(i -> i / (avg == 0 ? i / 2d : avg) <= 0.75).mapToInt(i -> i).average().orElse(0);
 		} catch (NullPointerException e) {
 			return 0;
 		} finally {
@@ -152,58 +144,52 @@ public class CardMarketDAO {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static double getStockValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
-
-		int average;
-		try {
-			average = (int) (double) em.createQuery("""
-					SELECT AVG(cm.price)
-					FROM CardMarket cm
-					WHERE cm.card.card = :card
-					AND cm.buyer <> ''
-					AND cm.buyer <> cm.seller
-					""").setParameter("card", c)
-					.getSingleResult();
-		} catch (NullPointerException e) {
-			average = 1;
-		}
 
 		try {
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.MONTH, -1);
 
 			Query q = em.createQuery("""
-					SELECT AVG(cm.price)
+					SELECT cm.price
 					FROM CardMarket cm
 					WHERE cm.card.card = :card
 					AND cm.publishDate >= :date
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
-					AND cm.price / :average BETWEEN -0.75 AND 0.75 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
-			q.setParameter("average", average);
 
-			double before = Helper.round((Double) q.getSingleResult(), 3);
+			List<Integer> before = (List<Integer>) q.getResultList();
+			double avgb = before.stream()
+					.mapToInt(i -> i)
+					.average()
+					.orElse(0);
 
 			q = em.createQuery("""
-					SELECT AVG(cm.price)
+					SELECT cm.price
 					FROM CardMarket cm
 					WHERE cm.card.card = :card
 					AND cm.publishDate < :date
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
-					AND cm.price / :average BETWEEN -0.75 AND 0.75 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
-			q.setParameter("average", average);
 
-			double now = Helper.round((Double) q.getSingleResult(), 3);
+			List<Integer> now = (List<Integer>) q.getResultList();
+			double avgn = now.stream()
+					.mapToInt(i -> i)
+					.average()
+					.orElse(0);
 
-			return Helper.prcnt(now, before) - 1;
+			double aBefore = before.stream().filter(i -> i / (avgb == 0 ? i / 2d : avgb) <= 0.75).mapToInt(i -> i).average().orElse(0);
+			double aNow = now.stream().filter(i -> i / (avgn == 0 ? i / 2d : avgn) <= 0.75).mapToInt(i -> i).average().orElse(0);
+
+			return Helper.prcnt(aNow, aBefore) - 1;
 		} catch (NullPointerException e) {
 			return 0;
 		} finally {
@@ -211,3 +197,4 @@ public class CardMarketDAO {
 		}
 	}
 }
+

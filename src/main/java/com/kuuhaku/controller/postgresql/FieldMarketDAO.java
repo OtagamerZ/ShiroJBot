@@ -77,28 +77,15 @@ public class FieldMarketDAO {
 		em.close();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static double getAverageValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -1);
 
-		int average;
-		try {
-			average = (int) (double) em.createQuery("""
-					SELECT AVG(fm.price)
-					FROM FieldMarket fm
-					WHERE fm.card.card = :card
-					AND fm.buyer <> ''
-					AND fm.buyer <> fm.seller
-					""").setParameter("card", c)
-					.getSingleResult();
-		} catch (NullPointerException e) {
-			average = 1;
-		}
-
 		Query q = em.createQuery("""
-				SELECT AVG(fm.price)
+				SELECT fm.price
 				FROM FieldMarket fm
 				WHERE fm.card.card = :card
 				AND fm.publishDate >= :date
@@ -108,10 +95,16 @@ public class FieldMarketDAO {
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
-		q.setParameter("average", average);
+
+		List<Integer> values = (List<Integer>) q.getResultList();
+
+		double avg = values.stream()
+				.mapToInt(i -> i)
+				.average()
+				.orElse(0);
 
 		try {
-			return (Double) q.getSingleResult();
+			return values.stream().filter(i -> i / (avg == 0 ? i / 2d : avg) <= 0.75).mapToInt(i -> i).average().orElse(0);
 		} catch (NullPointerException e) {
 			return 0;
 		} finally {
@@ -119,29 +112,16 @@ public class FieldMarketDAO {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static double getStockValue(Card c) {
 		EntityManager em = Manager.getEntityManager();
-
-		int average;
-		try {
-			average = (int) (double) em.createQuery("""
-					SELECT AVG(fm.price)
-					FROM FieldMarket fm
-					WHERE fm.card.card = :card
-					AND fm.buyer <> ''
-					AND fm.buyer <> fm.seller
-					""").setParameter("card", c)
-					.getSingleResult();
-		} catch (NullPointerException e) {
-			average = 1;
-		}
 
 		try {
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.MONTH, -1);
 
 			Query q = em.createQuery("""
-					SELECT AVG(fm.price)
+					SELECT fm.price
 					FROM FieldMarket fm
 					WHERE fm.card.card = :card
 					AND fm.publishDate >= :date
@@ -151,12 +131,15 @@ public class FieldMarketDAO {
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
-			q.setParameter("average", average);
 
-			double before = Helper.round((Double) q.getSingleResult(), 3);
+			List<Integer> before = (List<Integer>) q.getResultList();
+			double avgb = before.stream()
+					.mapToInt(i -> i)
+					.average()
+					.orElse(0);
 
 			q = em.createQuery("""
-					SELECT AVG(fm.price)
+					SELECT fm.price
 					FROM FieldMarket fm
 					WHERE fm.card.card = :card
 					AND fm.publishDate < :date
@@ -166,11 +149,17 @@ public class FieldMarketDAO {
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
-			q.setParameter("average", average);
 
-			double now = Helper.round((Double) q.getSingleResult(), 3);
+			List<Integer> now = (List<Integer>) q.getResultList();
+			double avgn = now.stream()
+					.mapToInt(i -> i)
+					.average()
+					.orElse(0);
 
-			return Helper.prcnt(now, before) - 1;
+			double aBefore = before.stream().filter(i -> i / (avgb == 0 ? i / 2d : avgb) <= 0.75).mapToInt(i -> i).average().orElse(0);
+			double aNow = now.stream().filter(i -> i / (avgn == 0 ? i / 2d : avgn) <= 0.75).mapToInt(i -> i).average().orElse(0);
+
+			return Helper.prcnt(aNow, aBefore) - 1;
 		} catch (NullPointerException e) {
 			return 0;
 		} finally {
