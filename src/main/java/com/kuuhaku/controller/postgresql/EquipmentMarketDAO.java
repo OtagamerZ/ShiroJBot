@@ -84,7 +84,7 @@ public class EquipmentMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT CAST(em.price AS DOUBLE)
+				SELECT em.price * 1.0
 				FROM EquipmentMarket em
 				WHERE em.card.card = :card
 				AND em.buyer <> ''
@@ -112,7 +112,7 @@ public class EquipmentMarketDAO {
 			cal.add(Calendar.MONTH, -1);
 
 			Query q = em.createQuery("""
-					SELECT CAST(em.price AS DOUBLE)
+					SELECT em.price * 1.0
 					FROM EquipmentMarket em
 					WHERE em.card.card = :card
 					AND em.publishDate >= :date
@@ -126,7 +126,7 @@ public class EquipmentMarketDAO {
 
 
 			q = em.createQuery("""
-					SELECT CAST(em.price AS DOUBLE)
+					SELECT em.price * 1.0
 					FROM EquipmentMarket em
 					WHERE em.card.card = :card
 					AND em.publishDate < :date
