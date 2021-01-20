@@ -88,7 +88,7 @@ public class StockMarketCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(c.getName())
 				.setImage("attachment://card.png")
-				.addField("Valor de mercado", Math.round(current) + " créditos", true)
+				.addField("Valor de mercado", current == 0 ? "desconhecido" : Math.round(current) + " créditos", true)
 				.addField("Variação de valor", emote + (stock > 0 ? "+" : "") + (stock * 100) + "%", true);
 
 		channel.sendMessage(eb.build())
