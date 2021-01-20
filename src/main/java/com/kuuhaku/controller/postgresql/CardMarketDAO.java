@@ -123,6 +123,7 @@ public class CardMarketDAO {
 				AND cm.publishDate >= :date
 				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
+				AND cm.price / AVG(cm.price) BETWEEN -0.5 AND 0.5 
 				""");
 		q.setParameter("card", c);
 		q.setParameter("date", cal.getTime());
@@ -150,6 +151,7 @@ public class CardMarketDAO {
 					AND cm.publishDate >= :date
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
+					AND cm.price / AVG(cm.price) BETWEEN -0.5 AND 0.5 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
@@ -163,6 +165,7 @@ public class CardMarketDAO {
 					AND cm.publishDate < :date
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
+					AND cm.price / AVG(cm.price) BETWEEN -0.5 AND 0.5 
 					""");
 			q.setParameter("card", c);
 			q.setParameter("date", cal.getTime());
