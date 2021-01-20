@@ -27,6 +27,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -142,6 +143,101 @@ public class Hand {
 		}
 
 		Collections.shuffle(deque);
+		redrawHand();
+	}
+
+	public Hand(Shoukan game, User user, Clan cl, Side side) {
+
+		deque = new LinkedList<>() {{
+			addAll(cl.getDeck().getChampions());
+		}};
+		deque.sort(Comparator
+				.comparing(d -> ((Champion) d).getMana()).reversed()
+				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+		);
+		deque.addAll(cl.getDeck().getEquipments());
+		deque.addAll(cl.getDeck().getFields());
+		Account acc = AccountDAO.getAccount(user.getId());
+		for (Drawable d : deque) d.setAcc(acc);
+
+		this.user = user;
+		this.side = side;
+		this.game = game;
+
+		if (game.getCustom() != null) {
+			mana = Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
+			hp = Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
+			startingCount = Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
+			manaPerTurn = Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
+
+			if (game.getCustom().optBoolean("semequip"))
+				getDeque().removeIf(d -> d instanceof Equipment);
+			if (game.getCustom().optBoolean("semfield"))
+				getDeque().removeIf(d -> d instanceof Field);
+
+			switch (game.getCustom().optString("arcade")) {
+				case "roleta" -> {
+					for (Drawable d : deque) {
+						if (d instanceof Champion) {
+							Champion c = (Champion) d;
+							c.setRawEffect("""
+									if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
+										int rng = Math.round(Math.random() * 100);
+										if (rng < 25) {
+											Hand h = ep.getHands().get(ep.getSide());
+											h.setHp(h.getHp() / 2);
+										} else if (rng < 50) {
+											Hand h = ep.getHands().get(ep.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+											h.setHp(h.getHp() / 2);
+										}
+									}
+									%s
+									""".formatted(Helper.getOr(c.getRawEffect(), "")));
+						}
+					}
+				}
+				case "blackrock" -> {
+					Field f = CardDAO.getField("OTHERWORLD");
+					assert f != null;
+					f.setAcc(AccountDAO.getAccount(user.getId()));
+					game.getArena().setField(f);
+					this.deque.removeIf(d -> d instanceof Champion || d instanceof Field);
+					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
+						Champion c = CardDAO.getChampion(name);
+						deque.addAll(Collections.nCopies(6, c));
+					}
+					for (Drawable d : deque) d.setAcc(acc);
+				}
+				case "instakill" -> {
+					deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
+					hp = 1;
+				}
+			}
+		} else {
+			mana = 0;
+			hp = 5000;
+			startingCount = 5;
+			manaPerTurn = 5;
+		}
+
+		if (cl.getDeck().getDestinyDraw() != null) {
+			int champs = cl.getDeck().getChampions().size();
+			for (int i : cl.getDeck().getDestinyDraw()) {
+				if (i > champs) {
+					destinyDeck.clear();
+					break;
+				} else
+					destinyDeck.add(deque.get(i));
+			}
+		}
+		for (Drawable drawable : destinyDeck) {
+			deque.remove(drawable);
+		}
+
+		Collections.shuffle(deque);
+		for (Drawable drawable : deque) {
+			drawable.setClan(cl);
+		}
 		redrawHand();
 	}
 

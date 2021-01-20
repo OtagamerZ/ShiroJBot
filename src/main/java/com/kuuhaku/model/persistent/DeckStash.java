@@ -78,6 +78,14 @@ public class DeckStash {
 		this.champions = champions;
 	}
 
+	public void addChampion(Champion champion) {
+		this.champions.add(champion);
+	}
+
+	public void removeChampion(Champion champion) {
+		this.champions.remove(champion);
+	}
+
 	public List<Equipment> getEquipments() {
 		return equipments;
 	}
@@ -86,12 +94,28 @@ public class DeckStash {
 		this.equipments = equipments;
 	}
 
+	public void addEquipment(Equipment equipment) {
+		this.equipments.add(equipment);
+	}
+
+	public void removeEquipment(Equipment equipment) {
+		this.equipments.remove(equipment);
+	}
+
 	public List<Field> getFields() {
 		return fields;
 	}
 
 	public void setFields(List<Field> fields) {
 		this.fields = fields;
+	}
+
+	public void addField(Field field) {
+		this.fields.add(field);
+	}
+
+	public void removeField(Field field) {
+		this.fields.remove(field);
 	}
 
 	public List<Integer> getDestinyDraw() {

@@ -21,10 +21,13 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.persistent.Clan;
+import com.kuuhaku.model.persistent.DeckStash;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -55,7 +58,8 @@ public class ShoukanDeckCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		boolean showPrivate = args.length > 0 && args[0].equalsIgnoreCase("p");
+		boolean showPrivate = Helper.equalsAny("p", args);
+		boolean showClan = Helper.equalsAny("c", args) && ClanDAO.isMember(author.getId());
 
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-deck")).queue(m -> {
 			if (Helper.containsAny(args, "daily", "diario")) {
@@ -72,34 +76,63 @@ public class ShoukanDeckCommand extends Command {
 
 					m.delete().queue();
 					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg").queue();
-				} catch (IOException | InterruptedException e) {
+				} catch (IOException e) {
 					m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			} else {
-				try {
-					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+				if (showClan) {
+					try {
+						Clan cl = ClanDAO.getUserClan(author.getId());
+						assert cl != null;
+						DeckStash kp = cl.getDeck();
 
-					ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
-					BufferedImage cards = kb.view(kp);
+						ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+						BufferedImage cards = kb.view(kp);
 
-					EmbedBuilder eb = new ColorlessEmbedBuilder()
-							.setTitle(":beginner: | Deck de " + author.getName())
-							.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 36", true)
-							.addField(":shield: | Cartas EvoGear:", kp.getEquipments().size() + " de 18", true)
-							.setImage("attachment://deck.jpg");
+						EmbedBuilder eb = new ColorlessEmbedBuilder()
+								.setTitle(":beginner: | Deck do clã " + cl.getName())
+								.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 36", true)
+								.addField(":shield: | Cartas EvoGear:", kp.getEquipments().size() + " de 18", true)
+								.setImage("attachment://deck.jpg");
 
-					m.delete().queue();
-					if (showPrivate) {
-						author.openPrivateChannel()
-								.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg"))
-								.queue(null, Helper::doNothing);
-						channel.sendMessage("Deck enviado nas suas mensagens privadas.").queue();
-					} else
-						channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg").queue();
-				} catch (IOException | InterruptedException e) {
-					m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+						m.delete().queue();
+						if (showPrivate) {
+							author.openPrivateChannel()
+									.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg"))
+									.queue(null, Helper::doNothing);
+							channel.sendMessage("Deck enviado nas suas mensagens privadas.").queue();
+						} else
+							channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg").queue();
+					} catch (IOException e) {
+						m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
+						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+					}
+				} else {
+					try {
+						Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+
+						ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+						BufferedImage cards = kb.view(kp);
+
+						EmbedBuilder eb = new ColorlessEmbedBuilder()
+								.setTitle(":beginner: | Deck de " + author.getName())
+								.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 36", true)
+								.addField(":shield: | Cartas EvoGear:", kp.getEquipments().size() + " de 18", true)
+								.setImage("attachment://deck.jpg");
+
+						m.delete().queue();
+						if (showPrivate) {
+							author.openPrivateChannel()
+									.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg"))
+									.queue(null, Helper::doNothing);
+							channel.sendMessage("Deck enviado nas suas mensagens privadas.").queue();
+						} else
+							channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "jpg", 0.5f), "deck.jpg").queue();
+					} catch (IOException e) {
+						m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
+						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+					}
 				}
 			}
 		});

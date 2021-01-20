@@ -682,19 +682,31 @@ public class CommandManager {
 					"criar", new String[]{"create"}, REQ_NAME, "cmd_create-clan", CLAN, true
 			));
 			put(DemoteClanMemberCommand.class, new Argument(
-					"rebaixar", new String[]{"demote", "dem"}, REQ_ID, "cmd_demote-clan-member", CLAN, true
+					"rebaixar", new String[]{"demote", "dem"}, "req_mention-id", "cmd_demote-clan-member", CLAN, true
 			));
 			put(InviteClanMemberCommand.class, new Argument(
 					"convidar", REQ_MENTION, "cmd_invite-clan-member", CLAN, true
 			));
 			put(KickClanMemberCommand.class, new Argument(
-					"remover", new String[]{"remove"}, REQ_ID, "cmd_kick-clan-member", CLAN, true
+					"remover", new String[]{"remove"}, "req_mention-id", "cmd_kick-clan-member", CLAN, true
 			));
 			put(LeaveClanCommand.class, new Argument(
 					"sair", new String[]{"exit", "abandonar"}, "cmd_leave-clan", CLAN, true
 			));
 			put(PromoteClanMemberCommand.class, new Argument(
-					"promover", new String[]{"promote", "prom"}, REQ_ID, "cmd_promote-clan-member", CLAN, true
+					"promover", new String[]{"promote", "prom"}, "req_mention-id", "cmd_promote-clan-member", CLAN, true
+			));
+			put(ClanHistoryCommand.class, new Argument(
+					"historico", new String[]{"history", "hist"}, "cmd_clan-history", CLAN, true
+			));
+			put(ClanUpgradeCommand.class, new Argument(
+					"evoluir", new String[]{"evolve"}, "cmd_clan-upgrade", CLAN, true
+			));
+			put(ClanConvertCardCommand.class, new Argument(
+					"cconverter", new String[]{"cconvert"}, "req_card", "cmd_clan-convert-card", CLAN, true
+			));
+			put(ClanRevertCardCommand.class, new Argument(
+					"creverter", new String[]{"crevert"}, "req_card", "cmd_clan-revert-card", CLAN, true
 			));
 		}
 	};
