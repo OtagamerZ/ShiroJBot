@@ -176,6 +176,6 @@ public class ClanPermissionCommand extends Command {
 						p.contains(ClanPermission.KICK) ? "✅" : "❌",
 						p.contains(ClanPermission.WITHDRAW) ? "✅" : "❌",
 						p.contains(ClanPermission.INVITE) ? "✅" : "❌"
-				), true);
+				), false);
 	}
 }
