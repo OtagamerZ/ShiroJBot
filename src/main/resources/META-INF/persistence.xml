@@ -81,6 +81,7 @@
         <class>com.kuuhaku.model.persistent.DeckStash</class>
         <class>com.kuuhaku.model.persistent.GiftCode</class>
         <class>com.kuuhaku.model.persistent.Clan</class>
+        <class>com.kuuhaku.model.persistent.StockMarket</class>
 
         <properties>
             <!-- dados da conexao -->
