@@ -1598,7 +1598,7 @@ public class Shoukan extends GlobalGame {
 						});
 			});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
-			if (!ShiroInfo.getHashes().remove(hash.get())) return;
+			if (!ShiroInfo.getHashes().contains(hash.get())) return;
 			if (phase != Phase.PLAN) {
 				channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 				return;
@@ -1613,6 +1613,7 @@ public class Shoukan extends GlobalGame {
 				return;
 			}
 
+			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			if (!h.manualDraw()) {
 				if (getCustom() == null) {
 					getHistory().setWinner(next);
