@@ -138,7 +138,7 @@ public class DeckEvalCommand extends Command {
 			}
 		}
 
-		if (manaCost >= 4)
+		if (manaCost >= 3.5)
 			tips.add("Seu deck possui um custo de mana muito alto. Apesar das cartas de custo alto serem mais forte, não adianta nada se você conseguir invocar apenas 1 por turno.");
 
 		if (kp.getChampions().size() < 30)
