@@ -831,8 +831,15 @@ public class Shoukan extends GlobalGame {
 					Hand enemy = getHands().get(next);
 					if (yours.getBonus().getSpecialData().has("totalDamage"))
 						enemy.removeHp(yPower);
-					else
-						enemy.removeHp(yPower - hPower);
+					else {
+						float mob = 1;
+						for (SlotColumn<Champion, Equipment> slot : arena.getSlots().get(next)) {
+							Champion c = slot.getTop();
+							if (c != null && c.getMana() == 1 && !c.isFusion())
+								mob -= 0.05;
+						}
+						enemy.removeHp(Math.round((yPower - hPower) * mob));
+					}
 				}
 			}
 
