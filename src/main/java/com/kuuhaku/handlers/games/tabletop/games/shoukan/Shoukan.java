@@ -1669,7 +1669,7 @@ public class Shoukan extends GlobalGame {
 						}
 					});
 		});
-		if (reroll)
+		if (reroll && getRound() == 1)
 			buttons.put("\uD83D\uDD04", (mb, ms) -> {
 				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				if (phase != Phase.PLAN) {

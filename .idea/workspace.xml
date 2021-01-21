@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1005,14 +1003,7 @@
       <workItem from="1611109542772" duration="4756000" />
       <workItem from="1611158766585" duration="708000" />
       <workItem from="1611230435586" duration="8840000" />
-      <workItem from="1611246269428" duration="9750000" />
-    </task>
-    <task id="LOCAL-03437" summary="Criação de sistema de bolsa de valores">
-      <created>1611166539443</created>
-      <option name="number" value="03437" />
-      <option name="presentableId" value="LOCAL-03437" />
-      <option name="project" value="LOCAL" />
-      <updated>1611166539444</updated>
+      <workItem from="1611246269428" duration="10412000" />
     </task>
     <task id="LOCAL-03438" summary="Criação de sistema de bolsa de valores">
       <created>1611166799596</created>
@@ -1350,7 +1341,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611259386480</updated>
     </task>
-    <option name="localTasksCounter" value="3486" />
+    <task id="LOCAL-03486" summary="Adicionado botão de reroll caso oponente não faça nada no primeiro turno">
+      <created>1611259625259</created>
+      <option name="number" value="03486" />
+      <option name="presentableId" value="LOCAL-03486" />
+      <option name="project" value="LOCAL" />
+      <updated>1611259625259</updated>
+    </task>
+    <option name="localTasksCounter" value="3487" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1523,10 +1521,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611259385500">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611259624291">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611259385500" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611259624291" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1571,10 +1569,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611259388341">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611259628303">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611259388341" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611259628303" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611114139980" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
