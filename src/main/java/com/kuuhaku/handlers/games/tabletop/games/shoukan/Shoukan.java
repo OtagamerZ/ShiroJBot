@@ -1699,6 +1699,9 @@ public class Shoukan extends GlobalGame {
 			} else {
 				User u = getCurrent();
 
+				arena.getGraveyard().get(current).addAll(discardBatch);
+				discardBatch.clear();
+
 				AtomicReference<Hand> h = new AtomicReference<>(getHands().get(current));
 				h.get().getCards().removeIf(d -> !d.isAvailable());
 				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(h.get().getSide());
