@@ -1525,9 +1525,6 @@ public class Shoukan extends GlobalGame {
 				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				User u = getCurrent();
 
-				arena.getGraveyard().get(current).addAll(discardBatch);
-				discardBatch.clear();
-
 				AtomicReference<Hand> h = new AtomicReference<>(getHands().get(current));
 				h.get().getCards().removeIf(d -> !d.isAvailable());
 				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(h.get().getSide());
@@ -1545,6 +1542,9 @@ public class Shoukan extends GlobalGame {
 						}
 					}
 				}
+
+				arena.getGraveyard().get(current).addAll(discardBatch);
+				discardBatch.clear();
 
 				resetTimer(this);
 
@@ -1699,9 +1699,6 @@ public class Shoukan extends GlobalGame {
 			} else {
 				User u = getCurrent();
 
-				arena.getGraveyard().get(current).addAll(discardBatch);
-				discardBatch.clear();
-
 				AtomicReference<Hand> h = new AtomicReference<>(getHands().get(current));
 				h.get().getCards().removeIf(d -> !d.isAvailable());
 				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(h.get().getSide());
@@ -1714,6 +1711,9 @@ public class Shoukan extends GlobalGame {
 						c.resetAttribs();
 					}
 				}
+
+				arena.getGraveyard().get(current).addAll(discardBatch);
+				discardBatch.clear();
 
 				resetTimer(this);
 
