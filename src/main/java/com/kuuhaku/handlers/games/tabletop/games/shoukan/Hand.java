@@ -385,6 +385,7 @@ public class Hand {
 
 	public void redrawHand() {
 		deque.addAll(cards);
+		cards.clear();
 		Collections.shuffle(deque);
 		for (int i = 0; i < startingCount; i++) manualDraw();
 	}
