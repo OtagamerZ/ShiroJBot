@@ -252,52 +252,67 @@ public class Hand {
 		}
 	}
 
-	public void destinyDraw() {
+	public Drawable destinyDraw() {
 		if (destinyDeck.size() > 0) {
-			cards.add(destinyDeck.remove(Helper.rng(destinyDeck.size(), true)).copy());
+			Drawable dr = destinyDeck.remove(Helper.rng(destinyDeck.size(), true));
+			cards.add(dr.copy());
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();
+			return dr;
 		}
+		return null;
 	}
 
-	public void draw() {
-		if (lockTime > 0) return;
+	public Drawable draw() {
+		if (lockTime > 0) return null;
 		try {
+			Drawable dr;
 			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
-				drawChampion();
-			else cards.add(getDeque().removeFirst().copy());
+				dr = drawChampion();
+			else {
+				dr = getDeque().removeFirst();
+				cards.add(dr.copy());
+			}
+			return dr;
 		} catch (NoSuchElementException ignore) {
+			return null;
 		}
 	}
 
-	public void draw(Card card) {
-		if (lockTime > 0) return;
+	public Drawable draw(Card card) {
+		if (lockTime > 0) return null;
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+			return dr;
 		} catch (NoSuchElementException ignore) {
+			return null;
 		}
 	}
 
-	public void draw(Drawable drawable) {
-		if (lockTime > 0) return;
+	public Drawable draw(Drawable drawable) {
+		if (lockTime > 0) return null;
 		Card card = drawable.getCard();
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+			return dr;
 		} catch (NoSuchElementException ignore) {
+			return null;
 		}
 	}
 
-	public void drawChampion() {
-		if (lockTime > 0) return;
+	public Drawable drawChampion() {
+		if (lockTime > 0) return null;
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+			return dr;
 		} catch (NoSuchElementException ignore) {
+			return null;
 		}
 	}
 
@@ -310,53 +325,63 @@ public class Hand {
 		}
 	}
 
-	public void drawEquipment() {
-		if (lockTime > 0) return;
+	public Drawable drawEquipment() {
+		if (lockTime > 0) return null;
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+			return dr;
 		} catch (NoSuchElementException ignore) {
+			return null;
 		}
 	}
 
-	public void drawSpell() {
-		if (lockTime > 0) return;
+	public Drawable drawSpell() {
+		if (lockTime > 0) return null;
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() == Charm.SPELL).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+			return dr;
 		} catch (NoSuchElementException ignore) {
+			return null;
 		}
 	}
 
-	public void drawHighest(boolean attack) {
-		if (lockTime > 0) return;
+	public Drawable drawHighest(boolean attack) {
+		if (lockTime > 0) return null;
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+			return dr;
 		} catch (NoSuchElementException ignore) {
+			return null;
 		}
 	}
 
-	public void drawField() {
-		if (lockTime > 0) return;
+	public Drawable drawField() {
+		if (lockTime > 0) return null;
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+			return dr;
 		} catch (NoSuchElementException ignore) {
+			return null;
 		}
 	}
 
-	public void drawRace(Race race) {
-		if (lockTime > 0) return;
+	public Drawable drawRace(Race race) {
+		if (lockTime > 0) return null;
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+			return dr;
 		} catch (NoSuchElementException ignore) {
+			return null;
 		}
 	}
 
