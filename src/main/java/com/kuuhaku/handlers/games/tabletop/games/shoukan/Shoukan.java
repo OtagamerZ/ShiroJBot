@@ -507,8 +507,10 @@ public class Shoukan extends GlobalGame {
 					d.setAvailable(false);
 					slot.setBottom(e);
 					Champion t = target.getTop();
-					t.setFlipped(false);
-					t.setDefending(true);
+					if (t.isFlipped()) {
+						t.setFlipped(false);
+						t.setDefending(true);
+					}
 					t.addLinkedTo(e);
 					e.setLinkedTo(Pair.of(toEquip, t));
 					if (t.hasEffect() && effectLock == 0) {
