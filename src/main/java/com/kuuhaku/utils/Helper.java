@@ -1053,7 +1053,7 @@ public class Helper {
 	}
 
 	public static float offsetPrcnt(float value, float max, float offset) {
-		return Math.max(0, value - offset) / (max - offset);
+		return (value - offset) / (max - offset);
 	}
 
 	public static float prcnt(float value, float max) {
