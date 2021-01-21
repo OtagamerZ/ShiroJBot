@@ -142,7 +142,6 @@ public class Hand {
 			deque.remove(drawable);
 		}
 
-		Collections.shuffle(deque);
 		redrawHand();
 	}
 
@@ -234,7 +233,6 @@ public class Hand {
 			deque.remove(drawable);
 		}
 
-		Collections.shuffle(deque);
 		for (Drawable drawable : deque) {
 			drawable.setClan(cl);
 		}
@@ -386,6 +384,8 @@ public class Hand {
 	}
 
 	public void redrawHand() {
+		deque.addAll(cards);
+		Collections.shuffle(deque);
 		for (int i = 0; i < startingCount; i++) manualDraw();
 	}
 
