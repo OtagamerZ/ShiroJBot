@@ -166,7 +166,6 @@ public class CardMarketDAO {
 					AND cm.buyer <> cm.seller
 					""");
 			q.setParameter("card", c);
-			q.setParameter("date", cal.getTime());
 
 			double[] now = ArrayUtils.toPrimitive(((List<Double>) q.getResultList()).toArray(Double[]::new));
 
