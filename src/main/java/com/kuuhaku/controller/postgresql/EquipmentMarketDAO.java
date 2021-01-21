@@ -115,7 +115,7 @@ public class EquipmentMarketDAO {
 					SELECT em.price * 1.0
 					FROM EquipmentMarket em
 					WHERE em.card.card = :card
-					AND em.publishDate >= :date
+					AND em.publishDate < :date
 					AND em.buyer <> ''
 					AND em.buyer <> em.seller
 					""");
@@ -129,7 +129,6 @@ public class EquipmentMarketDAO {
 					SELECT em.price * 1.0
 					FROM EquipmentMarket em
 					WHERE em.card.card = :card
-					AND em.publishDate < :date
 					AND em.buyer <> ''
 					AND em.buyer <> em.seller
 					""");
