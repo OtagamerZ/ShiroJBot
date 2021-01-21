@@ -278,6 +278,7 @@ public class Shoukan extends GlobalGame {
 					ClusterAction act;
 					if (c.isFlipped()) {
 						c.setFlipped(false);
+						c.setDefending(true);
 						act = channel.sendMessage("Carta virada para cima em modo de defesa.");
 					} else if (c.isDefending()) {
 						c.setDefending(false);
