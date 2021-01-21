@@ -508,6 +508,7 @@ public class Shoukan extends GlobalGame {
 					slot.setBottom(e);
 					Champion t = target.getTop();
 					t.setFlipped(false);
+					t.setDefending(true);
 					t.addLinkedTo(e);
 					e.setLinkedTo(Pair.of(toEquip, t));
 					if (t.hasEffect() && effectLock == 0) {
@@ -792,6 +793,7 @@ public class Shoukan extends GlobalGame {
 		if (his.isDefending() || his.getStun() > 0) {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
+				his.setDefending(true);
 				if (his.hasEffect() && effectLock == 0) {
 					his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 					if (postCombat()) return;
@@ -1039,6 +1041,7 @@ public class Shoukan extends GlobalGame {
 		if (his.isDefending() || his.getStun() > 0) {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
+				his.setDefending(true);
 				if (his.hasEffect() && effectLock == 0) {
 					his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
 					if (postCombat()) return;
