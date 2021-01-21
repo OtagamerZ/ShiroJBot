@@ -133,7 +133,6 @@ public class EquipmentMarketDAO {
 					AND em.buyer <> em.seller
 					""");
 			q.setParameter("card", c);
-			q.setParameter("date", cal.getTime());
 
 			double[] now = ArrayUtils.toPrimitive(((List<Double>) q.getResultList()).toArray(Double[]::new));
 
