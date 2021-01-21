@@ -173,8 +173,8 @@ public class ClanRevertCardCommand extends Command {
 						Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 									if (!ShiroInfo.getHashes().remove(hash)) return;
 									Main.getInfo().getConfirmationPending().invalidate(author.getId());
-									kp.removeEquipment(e);
-									cl.getDeck().addEquipment(e);
+									kp.addEquipment(e);
+									cl.getDeck().removeEquipment(e);
 									KawaiponDAO.saveKawaipon(kp);
 									cl.getTransactions().add(author.getAsTag() + " removeu a carta " + tc.getCard().getName() + " do deck");
 									ClanDAO.saveClan(cl);
