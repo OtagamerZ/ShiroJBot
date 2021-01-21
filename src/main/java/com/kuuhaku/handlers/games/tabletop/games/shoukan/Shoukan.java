@@ -1275,7 +1275,7 @@ public class Shoukan extends GlobalGame {
 			arena.getGraveyard().get(side).add(ch);
 	}
 
-	public void captureCard(Side side, int index, int source) {
+	public void captureCard(Side side, int index, int source, boolean withFusion) {
 		Champion ch = getArena().getSlots().get(side).get(index).getTop();
 		if (ch == null) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
@@ -1305,7 +1305,7 @@ public class Shoukan extends GlobalGame {
 		}
 
 		ch.reset();
-		if (!ch.isFusion())
+		if (!ch.isFusion() || withFusion)
 			getHands().get(side == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch);
 	}
 
