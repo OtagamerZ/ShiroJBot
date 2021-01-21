@@ -83,6 +83,7 @@ public class Shoukan extends GlobalGame {
 	private int spellLock = 0;
 	private int effectLock = 0;
 	private final List<Drawable> discardBatch = new ArrayList<>();
+	private boolean reroll = true;
 
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, List<Clan> clans, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
@@ -429,6 +430,7 @@ public class Shoukan extends GlobalGame {
 							}
 						}
 
+						reroll = false;
 						d.setAvailable(false);
 						h.removeMana(e.getMana());
 						e.activate(h, getHands().get(next), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
@@ -504,6 +506,7 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
+					reroll = false;
 					d.setAvailable(false);
 					slot.setBottom(e);
 					Champion t = target.getTop();
@@ -585,6 +588,7 @@ public class Shoukan extends GlobalGame {
 						}
 					}
 
+					reroll = false;
 					d.setAvailable(false);
 					slot.setTop(c);
 					if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
@@ -599,6 +603,7 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
+					reroll = false;
 					Field f = (Field) d.copy();
 					d.setAvailable(false);
 					arena.setField(f);
@@ -1662,6 +1667,35 @@ public class Shoukan extends GlobalGame {
 						}
 					});
 		});
+		if (reroll)
+			buttons.put("\uD83D\uDD04", (mb, ms) -> {
+				if (!ShiroInfo.getHashes().remove(hash.get())) return;
+				if (phase != Phase.PLAN) {
+					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
+					return;
+				}
+
+				Hand h = getHands().get(current);
+				h.redrawHand();
+
+				reroll = false;
+				resetTimerKeepTurn();
+				AtomicBoolean shownHand = new AtomicBoolean(false);
+				channel.sendMessage(getCurrent().getName() + " rolou novamente as cartas na mão!")
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							if (!shownHand.get()) {
+								shownHand.set(true);
+								h.showHand();
+							}
+						});
+			});
 		if (getHands().get(current).getHp() < 1500 && getHands().get(current).getDestinyDeck().size() > 0)
 			buttons.put("\uD83E\uDDE7", (mb, ms) -> {
 				if (!ShiroInfo.getHashes().remove(hash.get())) return;
