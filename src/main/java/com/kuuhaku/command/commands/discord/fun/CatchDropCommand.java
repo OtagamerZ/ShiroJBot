@@ -50,25 +50,27 @@ public class CatchDropCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Prize p = Main.getInfo().getCurrentDrop().getIfPresent(guild.getId());
-
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		TextChannel chn = gc.getCanalDrop().isBlank() ? null : guild.getTextChannelById(gc.getCanalDrop());
 
 		if (chn != null && !channel.getId().equals(chn.getId())) {
 			channel.sendMessage("❌ | O spawn de drops está configurado no canal " + chn.getAsMention() + ", você não pode coletá-los aqui.").queue();
 			return;
-		} else if (p == null) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-drop")).queue();
-			return;
-		} else if (!p.getRequirement().getValue().apply(author)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_requirements-not-fulfilled")).queue();
-			return;
 		} else if (args.length < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-captcha")).queue();
 			return;
 		} else if (args[0].contains(Helper.ANTICOPY)) {
 			channel.sendMessage("❌ | Espertinho né? Que tal tentarmos sem `Ctrl+C / Ctrl+V` para ficar justo?").queue();
+			return;
+		}
+
+		Prize p = Main.getInfo().getCurrentDrop().getIfPresent(guild.getId());
+
+		if (p == null) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-drop")).queue();
+			return;
+		} else if (!p.getRequirement().getValue().apply(author)) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_requirements-not-fulfilled")).queue();
 			return;
 		} else if (!p.getRealCaptcha().equals(args[0])) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-captcha")).queue();
