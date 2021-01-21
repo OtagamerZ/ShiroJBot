@@ -1557,6 +1557,7 @@ public class Shoukan extends GlobalGame {
 				arena.getGraveyard().get(current).addAll(discardBatch);
 				discardBatch.clear();
 
+				if (getRound() > 0) reroll = false;
 				resetTimer(this);
 
 				phase = Phase.PLAN;
@@ -1604,6 +1605,7 @@ public class Shoukan extends GlobalGame {
 				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				phase = Phase.ATTACK;
 				draw = false;
+				reroll = false;
 				resetTimerKeepTurn();
 				channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
@@ -1755,6 +1757,7 @@ public class Shoukan extends GlobalGame {
 				arena.getGraveyard().get(current).addAll(discardBatch);
 				discardBatch.clear();
 
+				if (getRound() > 0) reroll = false;
 				resetTimer(this);
 
 				phase = Phase.PLAN;
