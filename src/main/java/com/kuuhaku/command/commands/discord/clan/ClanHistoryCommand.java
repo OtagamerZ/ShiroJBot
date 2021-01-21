@@ -78,11 +78,12 @@ public class ClanHistoryCommand extends Command {
 			sb.setLength(0);
 
 			for (String h : chunk) {
-				if (first) sb.append("**ÚLTIMO | %s**\n".formatted(h));
-				else sb.append("%s\n".formatted(h));
+				if (first) {
+					sb.append("**ÚLTIMO | %s**\n".formatted(h));
+					first = false;
+				} else sb.append("%s\n".formatted(h));
 			}
 
-			first = false;
 			eb.setDescription(sb.toString());
 			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
