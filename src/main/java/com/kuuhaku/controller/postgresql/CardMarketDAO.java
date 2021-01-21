@@ -148,7 +148,7 @@ public class CardMarketDAO {
 					SELECT cm.price * 1.0
 					FROM CardMarket cm
 					WHERE cm.card.card = :card
-					AND cm.publishDate >= :date
+					AND cm.publishDate < :date
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
 					""");
@@ -162,7 +162,6 @@ public class CardMarketDAO {
 					SELECT cm.price * 1.0
 					FROM CardMarket cm
 					WHERE cm.card.card = :card
-					AND cm.publishDate < :date
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
 					""");
