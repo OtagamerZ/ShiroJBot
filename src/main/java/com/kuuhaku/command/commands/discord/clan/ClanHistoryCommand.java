@@ -73,13 +73,16 @@ public class ClanHistoryCommand extends Command {
 		List<String> trans = c.getTransactions();
 		Collections.reverse(trans);
 		List<List<String>> chunks = Helper.chunkify(trans, 10);
+		boolean first = true;
 		for (List<String> chunk : chunks) {
 			sb.setLength(0);
 
 			for (String h : chunk) {
-				sb.append("%s\n".formatted(h));
+				if (first) sb.append("**ÚLTIMO | %s**\n".formatted(h));
+				else sb.append("%s\n".formatted(h));
 			}
 
+			first = false;
 			eb.setDescription(sb.toString());
 			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
