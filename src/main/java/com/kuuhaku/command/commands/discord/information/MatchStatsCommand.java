@@ -147,8 +147,8 @@ public class MatchStatsCommand extends Command {
 				.addField("Duração", mh.getRounds().size() + " turnos", true)
 				.addField("Eficiencia de " + p1 + " (BAIXO)", """
 						Eficiência de mana: %s%%
-						Turno X dano: %s%%
-						Turno X cura: %s%%
+						Dano X turno: %s%%
+						Vida X turno: %s%%
 						""".formatted(
 						Math.round(bottom.getDouble("manaEff") * 100),
 						Math.round(bottom.getDouble("damageEff") * 100),
@@ -156,8 +156,8 @@ public class MatchStatsCommand extends Command {
 				), true)
 				.addField("Eficiencia de " + p2 + " (CIMA)", """
 						Eficiência de mana: %s%%
-						Turno X dano: %s%%
-						Turno X cura: %s%%
+						Dano X turno: %s%%
+						Vida X turno: %s%%
 						""".formatted(
 						Math.round(top.getDouble("manaEff") * 100),
 						Math.round(top.getDouble("damageEff") * 100),
