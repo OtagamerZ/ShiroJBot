@@ -226,9 +226,10 @@ public class AuctionCommand extends Command {
 
                                        		switch (type) {
                                            		case 1 -> {
-                                               			k.removeCard((KawaiponCard) obj);
-                                               			buyer.addCard((KawaiponCard) obj);
-                                           		}
+                                                    k.removeCard((KawaiponCard) obj);
+                                                    KawaiponCard kc = (KawaiponCard) obj;
+                                                    buyer.addCard(new KawaiponCard(kc.getCard(), kc.isFoil()));
+                                                }
                                            		case 2 -> {
                                                			k.removeEquipment((Equipment) obj);
                                                			buyer.addEquipment((Equipment) obj);
