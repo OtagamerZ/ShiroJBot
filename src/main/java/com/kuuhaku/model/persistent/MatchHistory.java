@@ -21,12 +21,11 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 
 import javax.persistence.*;
-import java.time.Clock;
-import java.time.Instant;
 import java.time.ZoneId;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 @Entity
 @Table(name = "matchhistory")
@@ -46,7 +45,7 @@ public class MatchHistory {
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 
 	@Temporal(TemporalType.DATE)
-	private Date timestamp = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
+	private Calendar timestamp = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
 
 	public int getId() {
 		return id;
@@ -72,11 +71,11 @@ public class MatchHistory {
 		this.rounds = rounds;
 	}
 
-	public Date getTimestamp() {
+	public Calendar getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Date timestamp) {
+	public void setTimestamp(Calendar timestamp) {
 		this.timestamp = timestamp;
 	}
 
