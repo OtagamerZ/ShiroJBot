@@ -13,9 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na bolsa de valores">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de mais taxas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -996,13 +996,7 @@
       <workItem from="1611158766585" duration="708000" />
       <workItem from="1611230435586" duration="8840000" />
       <workItem from="1611246269428" duration="10412000" />
-    </task>
-    <task id="LOCAL-03440" summary="Criação de sistema de bolsa de valores">
-      <created>1611167556531</created>
-      <option name="number" value="03440" />
-      <option name="presentableId" value="LOCAL-03440" />
-      <option name="project" value="LOCAL" />
-      <updated>1611167556531</updated>
+      <workItem from="1611289248402" duration="1166000" />
     </task>
     <task id="LOCAL-03441" summary="Criação de sistema de bolsa de valores">
       <created>1611167761232</created>
@@ -1340,7 +1334,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611286595378</updated>
     </task>
-    <option name="localTasksCounter" value="3489" />
+    <task id="LOCAL-03489" summary="Adição de mais taxas">
+      <created>1611287984248</created>
+      <option name="number" value="03489" />
+      <option name="presentableId" value="LOCAL-03489" />
+      <option name="project" value="LOCAL" />
+      <updated>1611287984248</updated>
+    </task>
+    <option name="localTasksCounter" value="3490" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1426,7 +1427,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria no modo roleta" />
     <MESSAGE value="Adição de códigos promocionais resgatáveis" />
     <MESSAGE value="Adição de comando para testar efeitos dos campeões" />
     <MESSAGE value="Mudança no descarte de cartas no Shoukan" />
@@ -1451,7 +1451,8 @@
     <MESSAGE value="Melhorias no Shoukan" />
     <MESSAGE value="Adicionado botão de reroll caso oponente não faça nada no primeiro turno" />
     <MESSAGE value="Correção na bolsa de valores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na bolsa de valores" />
+    <MESSAGE value="Adição de mais taxas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de mais taxas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1522,26 +1523,26 @@
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608208920619" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728513022" />
-    <state width="1648" height="322" key="GridCell.Tab.0.bottom" timestamp="1611287611324">
+    <state width="1648" height="322" key="GridCell.Tab.0.bottom" timestamp="1611289516890">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360156" />
-    <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1611287611324" />
-    <state width="1648" height="322" key="GridCell.Tab.0.center" timestamp="1611287611324">
+    <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516890" />
+    <state width="1648" height="322" key="GridCell.Tab.0.center" timestamp="1611289516875">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360155" />
-    <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1611287611324" />
-    <state width="1648" height="322" key="GridCell.Tab.0.left" timestamp="1611287611324">
+    <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516875" />
+    <state width="1648" height="322" key="GridCell.Tab.0.left" timestamp="1611289516875">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360155" />
-    <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1611287611324" />
-    <state width="1648" height="322" key="GridCell.Tab.0.right" timestamp="1611287611324">
+    <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516875" />
+    <state width="1648" height="322" key="GridCell.Tab.0.right" timestamp="1611289516875">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360156" />
-    <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1611287611324" />
+    <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516875" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1610652298040">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1561,11 +1562,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611286596264">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611287996178">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611259628303" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611286596264" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611287996178" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1588,11 +1589,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="679" y="268" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1920.1040@0.0.1920.1040" timestamp="1603511313028" />
-    <state x="1025" y="162" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1611285482939">
+    <state x="1210" y="132" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1611289973964">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608140501516" />
-    <state x="1025" y="162" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1611285482939" />
+    <state x="1210" y="132" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1611289973964" />
     <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1611286408155">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

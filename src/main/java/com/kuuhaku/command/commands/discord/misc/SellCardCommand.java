@@ -106,10 +106,10 @@ public class SellCardCommand extends Command {
                                             if (!ShiroInfo.getHashes().remove(hash)) return;
                                             Main.getInfo().getConfirmationPending().invalidate(author.getId());
                                             kp.removeCard(card);
-                                            KawaiponDAO.saveKawaipon(kp);
 
-                                            CardMarket cm = new CardMarket(author.getId(), card, price);
+                                            CardMarket cm = new CardMarket(author.getId(), new KawaiponCard(card.getCard(), card.isFoil()), price);
                                             CardMarketDAO.saveCard(cm);
+                                            KawaiponDAO.saveKawaipon(kp);
 
                                             s.delete().flatMap(d -> channel.sendMessage("✅ | Carta anunciada com sucesso!")).queue();
                                         }
