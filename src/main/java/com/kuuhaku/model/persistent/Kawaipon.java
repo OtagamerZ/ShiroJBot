@@ -41,7 +41,7 @@ public class Kawaipon {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''", unique = true)
 	private String uid = "";
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "kawaipon_id")
 	private Set<KawaiponCard> cards = new HashSet<>();
 
