@@ -49,6 +49,13 @@ public class EquipmentMarket implements Market {
 	@Temporal(TemporalType.DATE)
 	private Date publishDate = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
 
+	public EquipmentMarket(String seller, String buyer, Equipment card, int price) {
+		this.seller = seller;
+		this.buyer = buyer;
+		this.card = card;
+		this.price = price;
+	}
+
 	public EquipmentMarket(String seller, Equipment card, int price) {
 		this.seller = seller;
 		this.card = card;

@@ -41,6 +41,7 @@ public class CardMarket implements Market {
 	private String buyer = "";
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "market")
 	private KawaiponCard card;
 
 	@Column(columnDefinition = "INT NOT NULL")
@@ -48,6 +49,13 @@ public class CardMarket implements Market {
 
 	@Temporal(TemporalType.DATE)
 	private Date publishDate = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
+
+	public CardMarket(String seller, String buyer, KawaiponCard card, int price) {
+		this.seller = seller;
+		this.buyer = buyer;
+		this.card = card;
+		this.price = price;
+	}
 
 	public CardMarket(String seller, KawaiponCard card, int price) {
 		this.seller = seller;
