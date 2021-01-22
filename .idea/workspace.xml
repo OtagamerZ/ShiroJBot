@@ -13,11 +13,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na bolsa de valores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/EquipmentMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/EquipmentMarketDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/FieldMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/FieldMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CardMarket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CardMarket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/EquipmentMarket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/EquipmentMarket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/FieldMarket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/FieldMarket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/KawaiponCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/KawaiponCard.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,19 +171,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1009,20 +999,8 @@
       <workItem from="1611082999983" duration="6611000" />
       <workItem from="1611109542772" duration="4756000" />
       <workItem from="1611158766585" duration="708000" />
-    </task>
-    <task id="LOCAL-03417" summary="Melhorias nos metodos disponíveis">
-      <created>1610995298558</created>
-      <option name="number" value="03417" />
-      <option name="presentableId" value="LOCAL-03417" />
-      <option name="project" value="LOCAL" />
-      <updated>1610995298558</updated>
-    </task>
-    <task id="LOCAL-03418" summary="Correções no Shoukan">
-      <created>1610998290594</created>
-      <option name="number" value="03418" />
-      <option name="presentableId" value="LOCAL-03418" />
-      <option name="project" value="LOCAL" />
-      <updated>1610998290594</updated>
+      <workItem from="1611268320963" duration="3324000" />
+      <workItem from="1611282226636" duration="2360000" />
     </task>
     <task id="LOCAL-03419" summary="Comandos de clã">
       <created>1611110260212</created>
@@ -1353,7 +1331,21 @@
       <option name="project" value="LOCAL" />
       <updated>1611174936144</updated>
     </task>
-    <option name="localTasksCounter" value="3466" />
+    <task id="LOCAL-03466" summary="Correção na bolsa de valores">
+      <created>1611178730437</created>
+      <option name="number" value="03466" />
+      <option name="presentableId" value="LOCAL-03466" />
+      <option name="project" value="LOCAL" />
+      <updated>1611178730438</updated>
+    </task>
+    <task id="LOCAL-03467" summary="Correção na bolsa de valores">
+      <created>1611179594662</created>
+      <option name="number" value="03467" />
+      <option name="presentableId" value="LOCAL-03467" />
+      <option name="project" value="LOCAL" />
+      <updated>1611179594662</updated>
+    </task>
+    <option name="localTasksCounter" value="3468" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1439,7 +1431,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Remoção do xadrez;&#10;Remoção do spawn de cartas/drops no canal da Twitch;&#10;Correção no Hitotsu;&#10;Mudança na fonte das cartas;" />
     <MESSAGE value="Remoção do xadrez" />
     <MESSAGE value="Adição de ícones de travas" />
     <MESSAGE value="Adição do modo pequeno para spawns" />
@@ -1461,10 +1452,11 @@
     <MESSAGE value="Correção nas trocas" />
     <MESSAGE value="Melhorias nos metodos disponíveis" />
     <MESSAGE value="Correções no Shoukan" />
-    <MESSAGE value="Comandos de clã" />
     <MESSAGE value="Melhorias no sistema de clãs" />
     <MESSAGE value="Criação de sistema de bolsa de valores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Criação de sistema de bolsa de valores" />
+    <MESSAGE value="Comandos de clã" />
+    <MESSAGE value="Correção na bolsa de valores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na bolsa de valores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1504,15 +1496,11 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1611160663669">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1611282685298">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1611160663669" />
-    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1611027065629" />
-    <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602590942509">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1602590942509" />
+    <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1611282685298" />
     <state x="551" y="216" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1604694130886">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1539,26 +1527,26 @@
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608208920619" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728513022" />
-    <state width="1637" height="272" key="GridCell.Tab.0.bottom" timestamp="1611162360156">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1648" height="322" key="GridCell.Tab.0.bottom" timestamp="1611282269535">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360156" />
-    <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
-    <state width="1637" height="272" key="GridCell.Tab.0.center" timestamp="1611162360155">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1611282269535" />
+    <state width="1648" height="322" key="GridCell.Tab.0.center" timestamp="1611282269535">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360155" />
-    <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
-    <state width="1637" height="272" key="GridCell.Tab.0.left" timestamp="1611162360155">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1611282269535" />
+    <state width="1648" height="322" key="GridCell.Tab.0.left" timestamp="1611282269535">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360155" />
-    <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
-    <state width="1637" height="272" key="GridCell.Tab.0.right" timestamp="1611162360156">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1611282269535" />
+    <state width="1648" height="322" key="GridCell.Tab.0.right" timestamp="1611282269535">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360156" />
-    <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1610165753290" />
+    <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1611282269535" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1610652298040">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1578,11 +1566,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611174937494">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611179850986">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611174937494" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611114139980" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611179850986" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1623,11 +1611,11 @@
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608122622979" />
     <state x="651" y="274" key="extract.method.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1610233562159" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1611158999145">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup" timestamp="1611273410740">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1611158999145" />
-    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1611027053975" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1611273410740" />
     <state x="639" y="399" key="git4idea.ui.GitResetDialog" timestamp="1610627908008">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1645,11 +1633,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="540" y="262" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1605116448554" />
-    <state x="567" y="240" width="768" height="698" key="run.anything.popup" timestamp="1611093407069">
+    <state x="567" y="240" width="768" height="698" key="run.anything.popup" timestamp="1611284557689">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608309711856" />
-    <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1611093407069" />
+    <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1611284557689" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1611173879112">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

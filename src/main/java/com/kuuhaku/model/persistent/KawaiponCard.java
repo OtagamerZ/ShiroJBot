@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -27,6 +28,12 @@ public class KawaiponCard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
+	@OneToOne
+	private Kawaipon collection;
+
+	@OneToMany(mappedBy = "card")
+	private List<CardMarket> market;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Card card;
