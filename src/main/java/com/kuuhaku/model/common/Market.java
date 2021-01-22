@@ -33,5 +33,5 @@ public interface Market {
 
 	int getPrice();
 
-	Calendar getPublishDate();
+	Date getPublishDate();
 }
