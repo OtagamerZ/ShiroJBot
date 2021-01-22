@@ -14,8 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CardMarket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CardMarket.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -998,20 +997,6 @@
       <workItem from="1611246269428" duration="10412000" />
       <workItem from="1611289248402" duration="1884000" />
     </task>
-    <task id="LOCAL-03445" summary="Criação de sistema de bolsa de valores">
-      <created>1611168670499</created>
-      <option name="number" value="03445" />
-      <option name="presentableId" value="LOCAL-03445" />
-      <option name="project" value="LOCAL" />
-      <updated>1611168670499</updated>
-    </task>
-    <task id="LOCAL-03446" summary="Criação de sistema de bolsa de valores">
-      <created>1611168819090</created>
-      <option name="number" value="03446" />
-      <option name="presentableId" value="LOCAL-03446" />
-      <option name="project" value="LOCAL" />
-      <updated>1611168819091</updated>
-    </task>
     <task id="LOCAL-03447" summary="Criação de sistema de bolsa de valores">
       <created>1611168976857</created>
       <option name="number" value="03447" />
@@ -1341,7 +1326,21 @@
       <option name="project" value="LOCAL" />
       <updated>1611318179028</updated>
     </task>
-    <option name="localTasksCounter" value="3494" />
+    <task id="LOCAL-03494" summary="Correção no logger">
+      <created>1611318633844</created>
+      <option name="number" value="03494" />
+      <option name="presentableId" value="LOCAL-03494" />
+      <option name="project" value="LOCAL" />
+      <updated>1611318633844</updated>
+    </task>
+    <task id="LOCAL-03495" summary="Correção no logger">
+      <created>1611318837112</created>
+      <option name="number" value="03495" />
+      <option name="presentableId" value="LOCAL-03495" />
+      <option name="project" value="LOCAL" />
+      <updated>1611318837112</updated>
+    </task>
+    <option name="localTasksCounter" value="3496" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1514,10 +1513,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611318178172">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611318836283">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611318178172" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611318836283" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1562,10 +1561,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611318180766">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611318838548">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611318180766" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611318838548" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611291029366" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1635,10 +1634,10 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608309711856" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1611093407069" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1611253123435">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1611318953887">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1611253123435" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1611318953887" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610249812093" />
   </component>
   <component name="XDebuggerManager">
