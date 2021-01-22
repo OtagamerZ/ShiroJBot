@@ -57,9 +57,9 @@ public class CatchKawaiponCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		KawaiponCard kc = Main.getInfo().getCurrentCard().getIfPresent(guild.getId());
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		TextChannel chn = gc.getCanalKawaipon().isBlank() ? null : guild.getTextChannelById(gc.getCanalKawaipon());
+		KawaiponCard kc = Main.getInfo().getCurrentCard().getIfPresent(guild.getId());
 
 		if (chn != null && !channel.getId().equals(chn.getId())) {
 			channel.sendMessage("❌ | O spawn de Kawaipons está configurado no canal " + chn.getAsMention() + ", você não pode coletá-los aqui.").queue();
