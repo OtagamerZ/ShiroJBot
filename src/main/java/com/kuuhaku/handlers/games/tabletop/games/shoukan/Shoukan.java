@@ -314,7 +314,7 @@ public class Shoukan extends GlobalGame {
 				Drawable d = h.getCards().get(index);
 				String msg;
 
-				if (args[1].equalsIgnoreCase("d")) {
+				if (args[1].equalsIgnoreCase("d") && args.length < 3) {
 					discardBatch.add(d.copy());
 					d.setAvailable(false);
 
