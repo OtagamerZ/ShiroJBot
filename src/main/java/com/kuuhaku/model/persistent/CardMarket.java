@@ -22,7 +22,7 @@ import com.kuuhaku.model.common.Market;
 
 import javax.persistence.*;
 import java.time.ZoneId;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 @Entity
@@ -48,8 +48,8 @@ public class CardMarket implements Market {
 	@Column(columnDefinition = "INT NOT NULL")
 	private int price;
 
-	@Temporal(TemporalType.DATE)
-	private Calendar publishDate = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date publishDate = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
 
 	public CardMarket(String seller, String buyer, KawaiponCard card, int price) {
 		this.seller = seller;
@@ -115,11 +115,11 @@ public class CardMarket implements Market {
 		this.price = price;
 	}
 
-	public Calendar getPublishDate() {
+	public Date getPublishDate() {
 		return publishDate;
 	}
 
-	public void setPublishDate(Calendar publishDate) {
+	public void setPublishDate(Date publishDate) {
 		this.publishDate = publishDate;
 	}
 }
