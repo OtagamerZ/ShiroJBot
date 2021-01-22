@@ -133,7 +133,7 @@ public class MatchStatsCommand extends Command {
 		boolean p2WO = wo && mh.getRounds().size() % 2 != 0;
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Partida de " + p1 + " VS" + p2)
+				.setTitle("Partida de " + p1 + " VS " + p2)
 				.addField("Jogada em", date.format(Helper.onlyDate), true)
 				.addField("Ordem de jogada", """
 						1º: %s %s
