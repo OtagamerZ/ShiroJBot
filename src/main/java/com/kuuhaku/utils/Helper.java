@@ -83,10 +83,7 @@ import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
@@ -1955,5 +1952,17 @@ public class Helper {
 	public static <T> T getPrevious(T current, T... sequence) {
 		int index = ArrayUtils.indexOf(sequence, current);
 		return index == -1 ? null : sequence[Math.max(index - 1, 0)];
+	}
+
+	public static String atob(BufferedImage bi, String encoding) {
+		return Base64.getEncoder().encodeToString(getBytes(bi, encoding));
+	}
+
+	public static BufferedImage btoa(String b64) {
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(Base64.getDecoder().decode(b64))) {
+			return ImageIO.read(bais);
+		} catch (IOException | NullPointerException e) {
+			return null;
+		}
 	}
 }
