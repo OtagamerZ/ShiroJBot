@@ -42,7 +42,7 @@ public class Kawaipon {
 	private String uid = "";
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "collection")
+	@JoinColumn(name = "kawaipon_id")
 	private Set<KawaiponCard> cards = new HashSet<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
