@@ -41,7 +41,7 @@ public class MatchDAO {
 	public static List<MatchHistory> getMatchesByPlayer(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT h FROM MatchHistory h WHERE KEY(h.players) = :id AND winner IS NOT NULL", MatchHistory.class);
+		Query q = em.createQuery("SELECT h FROM MatchHistory h JOIN h.players p WHERE KEY(p) = :id AND h.winner IS NOT NULL", MatchHistory.class);
 		q.setParameter("id", id);
 
 		try {

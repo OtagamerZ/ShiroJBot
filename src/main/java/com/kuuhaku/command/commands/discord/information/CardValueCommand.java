@@ -125,7 +125,7 @@ public class CardValueCommand extends Command {
 					.setLegendBackgroundColor(new Color(16, 17, 20, 100))
 					.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
 
-			Map<Date, Integer> normalValues = new HashMap<>();
+			Map<Calendar, Integer> normalValues = new HashMap<>();
 			for (Market nc : normalCards) {
 				if (normalValues.containsKey(nc.getPublishDate()))
 					normalValues.computeIfPresent(nc.getPublishDate(), (k, v) -> Math.round(v + nc.getPrice() / 2f));
@@ -133,7 +133,7 @@ public class CardValueCommand extends Command {
 					normalValues.put(nc.getPublishDate(), nc.getPrice());
 			}
 
-			Map<Date, Integer> foilValues = new HashMap<>();
+			Map<Calendar, Integer> foilValues = new HashMap<>();
 			for (Market fc : foilCards) {
 				if (foilValues.containsKey(fc.getPublishDate()))
 					foilValues.computeIfPresent(fc.getPublishDate(), (k, v) -> Math.round(v + fc.getPrice() / 2f));
@@ -141,10 +141,10 @@ public class CardValueCommand extends Command {
 					foilValues.put(fc.getPublishDate(), fc.getPrice());
 			}
 
-			List<Map.Entry<Date, Integer>> normalData = normalValues.entrySet()
+			List<Map.Entry<Calendar, Integer>> normalData = normalValues.entrySet()
 					.stream()
 					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
-			List<Map.Entry<Date, Integer>> foilData = foilValues.entrySet()
+			List<Map.Entry<Calendar, Integer>> foilData = foilValues.entrySet()
 					.stream()
 					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
 
