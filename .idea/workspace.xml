@@ -15,7 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de mais taxas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,6 +166,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -996,28 +1007,7 @@
       <workItem from="1611158766585" duration="708000" />
       <workItem from="1611230435586" duration="8840000" />
       <workItem from="1611246269428" duration="10412000" />
-      <workItem from="1611289248402" duration="1166000" />
-    </task>
-    <task id="LOCAL-03441" summary="Criação de sistema de bolsa de valores">
-      <created>1611167761232</created>
-      <option name="number" value="03441" />
-      <option name="presentableId" value="LOCAL-03441" />
-      <option name="project" value="LOCAL" />
-      <updated>1611167761232</updated>
-    </task>
-    <task id="LOCAL-03442" summary="Criação de sistema de bolsa de valores">
-      <created>1611168157617</created>
-      <option name="number" value="03442" />
-      <option name="presentableId" value="LOCAL-03442" />
-      <option name="project" value="LOCAL" />
-      <updated>1611168157617</updated>
-    </task>
-    <task id="LOCAL-03443" summary="Criação de sistema de bolsa de valores">
-      <created>1611168329444</created>
-      <option name="number" value="03443" />
-      <option name="presentableId" value="LOCAL-03443" />
-      <option name="project" value="LOCAL" />
-      <updated>1611168329444</updated>
+      <workItem from="1611289248402" duration="1884000" />
     </task>
     <task id="LOCAL-03444" summary="Criação de sistema de bolsa de valores">
       <created>1611168528712</created>
@@ -1341,7 +1331,28 @@
       <option name="project" value="LOCAL" />
       <updated>1611287984248</updated>
     </task>
-    <option name="localTasksCounter" value="3490" />
+    <task id="LOCAL-03490" summary="Adição de mais taxas">
+      <created>1611290430860</created>
+      <option name="number" value="03490" />
+      <option name="presentableId" value="LOCAL-03490" />
+      <option name="project" value="LOCAL" />
+      <updated>1611290430860</updated>
+    </task>
+    <task id="LOCAL-03491" summary="Adição de mais taxas">
+      <created>1611290665991</created>
+      <option name="number" value="03491" />
+      <option name="presentableId" value="LOCAL-03491" />
+      <option name="project" value="LOCAL" />
+      <updated>1611290665991</updated>
+    </task>
+    <task id="LOCAL-03492" summary="Adição de mais taxas">
+      <created>1611291024353</created>
+      <option name="number" value="03492" />
+      <option name="presentableId" value="LOCAL-03492" />
+      <option name="project" value="LOCAL" />
+      <updated>1611291024353</updated>
+    </task>
+    <option name="localTasksCounter" value="3493" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1548,11 +1559,11 @@
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1610652298040" />
     <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1603507846095" />
-    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1611150799648">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="626" y="235" key="RollbackChangesDialog" timestamp="1611290490285">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611150799648" />
-    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1610257425487" />
+    <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1611290490285" />
     <state x="303" y="75" key="SettingsEditor" timestamp="1606877192402">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1562,11 +1573,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611287996178">
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611291029366">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611259628303" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611287996178" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611291029366" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1608,11 +1619,11 @@
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608122622979" />
     <state x="651" y="274" key="extract.method.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1610233562159" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1611248678725">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup" timestamp="1611290852269">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1611248678725" />
-    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1611027053975" />
+    <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1611290852269" />
     <state x="639" y="399" key="git4idea.ui.GitResetDialog" timestamp="1610627908008">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
