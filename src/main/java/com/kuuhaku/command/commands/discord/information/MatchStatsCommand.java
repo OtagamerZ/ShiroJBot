@@ -39,8 +39,8 @@ import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -86,9 +86,7 @@ public class MatchStatsCommand extends Command {
 				sb.setLength(0);
 
 				for (MatchHistory mh : chunk) {
-					Calendar c = Calendar.getInstance();
-					c.setTime(mh.getTimestamp());
-					LocalDate date = LocalDate.of(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+					LocalDate date = mh.getTimestamp().toInstant().atZone(ZoneId.of("GMT-3")).toLocalDate();
 					Map<Side, String> players = mh.getPlayers().entrySet().stream()
 							.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 					sb.append("(**%s**) `ID: %s` - %s VS %s\n".formatted(
@@ -118,9 +116,7 @@ public class MatchStatsCommand extends Command {
 			return;
 		}
 
-		Calendar c = Calendar.getInstance();
-		c.setTime(mh.getTimestamp());
-		LocalDate date = LocalDate.of(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+		LocalDate date = mh.getTimestamp().toInstant().atZone(ZoneId.of("GMT-3")).toLocalDate();
 		Map<Side, String> players = mh.getPlayers().entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 		Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcMMR(mh);
