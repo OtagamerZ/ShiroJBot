@@ -67,7 +67,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	private static ShiroInfo info;
 	private static Relay relay;
-	private static ConsoleListener console;
 	private static CommandManager cmdManager;
 	private static TwitchCommandManager tCmdManager;
 	private static ShardManager shiroShards;
@@ -166,7 +165,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			}
 		}
 
-		console = new ConsoleListener();
+		ConsoleListener console = new ConsoleListener();
 		shiroShards.addEventListener(info.getShiroEvents());
 		jbr.addEventListener(new JibrilEvents());
 
