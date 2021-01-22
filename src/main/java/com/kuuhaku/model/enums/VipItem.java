@@ -95,8 +95,7 @@ public enum VipItem {
 				Card chosen = cards.get(Helper.rng(cards.size(), true));
 
 				kp.removeCard(card);
-				card.setCard(chosen);
-				kp.addCard(card);
+				kp.addCard(new KawaiponCard(chosen, true));
 
 				KawaiponDAO.saveKawaipon(kp);
 				acc.removeGem(1);
@@ -128,8 +127,7 @@ public enum VipItem {
 				}
 
 				kp.removeCard(card);
-				card.setFoil(true);
-				kp.addCard(card);
+				kp.addCard(new KawaiponCard(card.getCard(), true));
 
 				KawaiponDAO.saveKawaipon(kp);
 				acc.removeGem(5);
