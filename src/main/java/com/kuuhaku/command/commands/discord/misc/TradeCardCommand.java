@@ -518,6 +518,8 @@ public class TradeCardCommand extends Command {
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 								acc.removeCredit(price, this.getClass());
 								tacc.addCredit(Math.round(price * 0.9), this.getClass());
+								long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+								DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(price * 0.1)));
 
 								switch (type) {
 									case 1 -> {
@@ -714,8 +716,10 @@ public class TradeCardCommand extends Command {
 								Main.getInfo().getConfirmationPending().invalidate(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
-								acc.addCredit(Math.round(price * 0.9), this.getClass());
 								tacc.removeCredit(price, this.getClass());
+								acc.addCredit(Math.round(price * 0.9), this.getClass());
+								long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+								DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(price * 0.1)));
 
 								switch (type) {
 									case 1 -> {
