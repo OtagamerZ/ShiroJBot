@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
@@ -87,6 +88,8 @@ public class TransferCommand extends Command {
 
 		to.addCredit(liquidAmount, this.getClass());
 		from.removeCredit(rawAmount, this.getClass());
+		long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+		DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.floor(rawAmount * tax)));
 
 		AccountDAO.saveAccount(to);
 		AccountDAO.saveAccount(from);
