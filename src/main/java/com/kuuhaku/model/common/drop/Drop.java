@@ -23,6 +23,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.enums.ExceedEnum;
+import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
@@ -66,8 +67,11 @@ public abstract class Drop implements Prize {
 		add(Pair.of("Ter conta vinculada com o canal do meu Nii-chan.", u ->
 				!AccountDAO.getAccount(u.getId()).getTwitchId().isBlank()));
 
-		add(Pair.of("Estar em um clã com tier " + tier.getName().toLowerCase() + ".", u ->
-				ClanDAO.isMember(u.getId())));
+		add(Pair.of("Estar em um clã com tier " + tier.getName().toLowerCase() + ".", u -> {
+			Clan c = ClanDAO.getUserClan(u.getId());
+			if (c == null) return false;
+			else return c.getTier() == tier;
+		}));
 	}};
 	private final Pair<String, Function<User, Boolean>> chosen = condition.get(Helper.rng(condition.size(), true));
 
