@@ -87,7 +87,7 @@ public class ShoukanDeckCommand extends Command {
 						assert cl != null;
 						DeckStash kp = cl.getDeck();
 
-						ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+						ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()), cl);
 						BufferedImage cards = kb.view(kp);
 
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
