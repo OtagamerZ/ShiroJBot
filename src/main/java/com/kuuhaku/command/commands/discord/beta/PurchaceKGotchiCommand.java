@@ -26,6 +26,7 @@ import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Race;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -63,11 +64,11 @@ public class PurchaceKGotchiCommand extends Command {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle("Bem vindo(a) à loja de Kawaigotchis!");
-			eb.setDescription("Kawaigotchis são animais fofinhos que lhe ajudarão a ganhar mais experiência para o seu perfil, assim como acompanhá-lo nos servidores que eu estou.\n\nValhe a pena notar que ele será \"pausado\" enquanto você estiver offline, então não precisa se preocupar!");
+			eb.setDescription("Kawaigotchis são animais fofinhos que lhe ajudarão a ganhar mais experiência para o seu perfil, assim como acompanhá-lo nos servidores que eu estou!");
 			eb.addField("Aleatório (500 créditos)\n`" + prefix + "pkgotchi aleatorio NOME`", "Você ganha um Kawaigotchi de raça, natureza e cor aleatórias.", true);
 			//eb.addField("Escolher (2500 créditos)\n`" + prefix + "pkgotchi escolher RAÇA NOME`", "Você escolhe a raça de seu Kawaigotchi, ele ainda terá natureza e cor aleatórias.", true);
 			eb.setThumbnail("https://lens-storage.storage.googleapis.com/png/7314bb86-3d18-425c-8e95-0bebf4135060");
-			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+			eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 			channel.sendMessage(eb.build()).queue();
 			return;
@@ -76,7 +77,7 @@ public class PurchaceKGotchiCommand extends Command {
 		switch (args[0]) {
 			/*case "escolher" -> {
 				if (acc.getTotalBalance() < 2500) {
-					channel.sendMessage("❌ | Você não possui créditos suficientes (seus créditos: " + acc.getBalance() + ")!").queue();
+					channel.sendMessage("❌ | Você não possui créditos suficientes (seus créditos: " + Helper.tSeparator(acc.getBalance()) + ")!").queue();
 					return;
 				} else if (args.length == 2) {
 					String[] image = {
@@ -133,7 +134,7 @@ public class PurchaceKGotchiCommand extends Command {
 			}*/
 			case "aleatorio" -> {
 				if (acc.getTotalBalance() < 500) {
-					channel.sendMessage("❌ | Você não possui créditos suficientes (seus créditos: " + acc.getBalance() + ")!").queue();
+					channel.sendMessage("❌ | Você não possui créditos suficientes (seus créditos: " + Helper.separate(acc.getBalance()) + ")!").queue();
 					return;
 				} else if (args.length < 2) {
 					channel.sendMessage("❌ | Você precisa dar um nome ao seu Kawaigotchi!").queue();

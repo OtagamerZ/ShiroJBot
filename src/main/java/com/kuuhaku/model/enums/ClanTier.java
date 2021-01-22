@@ -19,18 +19,20 @@
 package com.kuuhaku.model.enums;
 
 public enum ClanTier {
-	PARTY("Grupo", 10, 50000),
-	FACTION("Facção", 50, 125000),
-	GUILD("Guilda", 100, 1000000),
-	DYNASTY("Dinastia", 500, 0);
+	PARTY("Grupo", 10, 100000, 50000),
+	FACTION("Facção", 50, 500000, 125000),
+	GUILD("Guilda", 100, 2000000, 1000000),
+	DYNASTY("Dinastia", 500, 0, 0);
 
 	private final String name;
 	private final int capacity;
+	private final int vaultSize;
 	private final long cost;
 
-	ClanTier(String name, int capacity, long cost) {
+	ClanTier(String name, int capacity, int vaultSize, long cost) {
 		this.name = name;
 		this.capacity = capacity;
+		this.vaultSize = vaultSize;
 		this.cost = cost;
 	}
 
@@ -40,6 +42,10 @@ public enum ClanTier {
 
 	public int getCapacity() {
 		return capacity;
+	}
+
+	public int getVaultSize() {
+		return vaultSize;
 	}
 
 	public long getCost() {

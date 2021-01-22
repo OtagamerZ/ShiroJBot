@@ -160,7 +160,7 @@ public class QuizCommand extends Command {
 					AccountDAO.saveAccount(acc);
 
 					eb.setTitle("Resposta correta!");
-					eb.setDescription("Seu prêmio é de " + p + " créditos!");
+					eb.setDescription("Seu prêmio é de " + Helper.separate(p) + " créditos!");
 					eb.setColor(Color.green);
 
 					if (ExceedDAO.hasExceed(author.getId())) {

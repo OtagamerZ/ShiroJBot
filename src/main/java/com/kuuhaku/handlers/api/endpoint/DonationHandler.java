@@ -91,8 +91,8 @@ public class DonationHandler {
 						.setTitle("Obrigada por me ajudar a ficar online! <3")
 						.setDescription("Nós da OtagamerZ ficamos feliz que esteja apoiando o desenvolvimento de nossa querida bot Shiro, e agradecemos de coração por todo o tempo que você esteve conosco!")
 						.addField("Você recebeu:",
-								(amount > 0 ? "- " + amount + " créditos.\n" : "") +
-										(db.getGems() > 0 ? "- " + db.getGems() + " gemas." : ""),
+								(amount > 0 ? "- " + Helper.separate(amount) + " créditos.\n" : "") +
+								(db.getGems() > 0 ? "- " + db.getGems() + " gemas." : ""),
 								true
 						)
 						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(), d.getTransaction(), d.getUid()));
@@ -124,8 +124,8 @@ public class DonationHandler {
 						.setTitle("Sua doação foi recusada/reembolsada")
 						.setDescription("Não foi possível confirmar seu pagamento ou houve um pedido de reembolso, a transação foi revertida e os créditos/gemas ganhos foram removidos de sua conta.")
 						.addField("Revertido:",
-								(amount > 0 ? "- " + amount + " créditos.\n" : "") +
-										(db.getGems() > 0 ? "- " + db.getGems() + " gemas." : ""),
+								(amount > 0 ? "- " + Helper.separate(amount) + " créditos.\n" : "") +
+								(db.getGems() > 0 ? "- " + db.getGems() + " gemas." : ""),
 								true
 						)
 						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(), d.getTransaction(), d.getUid()));

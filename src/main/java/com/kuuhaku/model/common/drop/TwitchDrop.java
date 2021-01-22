@@ -79,7 +79,7 @@ public class TwitchDrop implements Prize {
 				)
 		);
 
-		add(Pair.of("Ter até 1000 créditos.", u ->
+		add(Pair.of("Ter até 1.000 créditos.", u ->
 				Objects.requireNonNull(AccountDAO.getAccountByTwitchId(u.getId())).getBalance() <= 1000));
 
 		add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguida" + (values[1] != 1 ? "s" : "") + " ou mais.", u ->

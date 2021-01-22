@@ -221,12 +221,12 @@ public class Clan {
 
 	public void deposit(long amount, User u) {
 		this.vault += amount;
-		transactions.add(u.getAsTag() + " depositou " + amount + " créditos");
+		transactions.add(u.getAsTag() + " depositou " + Helper.separate(amount) + " créditos");
 	}
 
 	public void withdraw(long amount, User u) {
 		this.vault -= amount;
-		transactions.add(u.getAsTag() + " sacou " + amount + " créditos");
+		transactions.add(u.getAsTag() + " sacou " + Helper.separate(amount) + " créditos");
 	}
 
 	public DeckStash getDeck() {

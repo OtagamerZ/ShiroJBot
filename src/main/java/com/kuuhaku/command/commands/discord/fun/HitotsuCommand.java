@@ -136,9 +136,9 @@ public class HitotsuCommand extends Command {
         Game t = new Hitotsu(Main.getShiroShards(), (TextChannel) channel, bet, players.toArray(User[]::new));
 		String msg;
         if (players.size() > 2)
-            msg = message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : "");
+            msg = message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
         else
-            msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : "");
+			msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
 
         String hash = Helper.generateHash(guild, author);
         ShiroInfo.getHashes().add(hash);

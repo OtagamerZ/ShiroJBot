@@ -82,8 +82,8 @@ public class JokerDrop extends Drop {
 	@Override
 	public String[] getPrizeWithPenalty() {
 		return new String[]{
-				item ? prize.getName() : amount + " créditos",
-				penalty + " de dívida"
+				item ? prize.getName() : Helper.separate(amount) + " créditos",
+				Helper.separate(penalty) + " de dívida"
 		};
 	}
 

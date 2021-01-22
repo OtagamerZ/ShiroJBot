@@ -207,12 +207,12 @@ public class AuctionCommand extends Command {
                                 highest.set(Pair.of(evt.getAuthor(), offer));
                                 phase.set(1);
 
-                                channel.sendMessage(evt.getAuthor().getAsMention() + " ofereceu **" + offer + " créditos**!").queue();
+                                channel.sendMessage(evt.getAuthor().getAsMention() + " ofereceu **" + Helper.separate(offer) + " créditos**!").queue();
 
                                 event.get().cancel(true);
                                 event.set(exec.scheduleWithFixedDelay(() -> {
                                     if (phase.get() == 4 && highest.get() != null) {
-                                        channel.sendMessage("**" + (type == 1 ? "Carta vendida" : type == 2 ? "Equipamento vendido" : "Arena vendida") + "** para " + highest.get().getLeft().getAsMention() + " por **" + highest.get().getRight() + "** créditos!").queue();
+										channel.sendMessage("**" + (type == 1 ? "Carta vendida" : type == 2 ? "Equipamento vendido" : "Arena vendida") + "** para " + highest.get().getLeft().getAsMention() + " por **" + Helper.separate(highest.get().getRight()) + "** créditos!").queue();
 
 					if (!author.getId().equals(highest.get().getLeft().getId())) {
                                        		Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
@@ -252,9 +252,9 @@ public class AuctionCommand extends Command {
                                         switch (phase.get()) {
                                             case 1 -> channel.sendMessage("Dou-lhe 1...").queue();
                                             case 2 -> channel.sendMessage("""
-                                                    Dou-lhe 2...
-                                                    Vamos lá pessoal, será que eu ouvi um %s?
-                                                    """.formatted(highest.get().getRight() + 250)).queue();
+													Dou-lhe 2...
+													Vamos lá pessoal, será que eu ouvi um %s?
+													""".formatted(Helper.separate(highest.get().getRight() + 250))).queue();
                                             case 3 -> channel.sendMessage("Dou-lhe 3...").queue();
                                         }
 
@@ -263,7 +263,7 @@ public class AuctionCommand extends Command {
                                 }, 5, 5, TimeUnit.SECONDS));
                             }
                         } catch (NumberFormatException e) {
-                            channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
+							channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
                         }
                     }
                 }

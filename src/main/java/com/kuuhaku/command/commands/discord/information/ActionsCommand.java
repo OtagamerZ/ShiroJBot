@@ -57,7 +57,14 @@ public class ActionsCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		List<Page> pages = new ArrayList<>();
-		List<List<StockMarket>> actions = Helper.chunkify(StockMarketDAO.getInvestments(author.getId()), 10);
+		List<StockMarket> act = StockMarketDAO.getInvestments(author.getId());
+
+		if (act.size() == 0) {
+			channel.sendMessage("❌ | Você não possui nenhuma ação.").queue();
+			return;
+		}
+
+		List<List<StockMarket>> actions = Helper.chunkify(act, 10);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(":chart_with_upwards_trend: | Ações de " + author.getName());

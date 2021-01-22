@@ -69,11 +69,11 @@ public class SlotsCommand extends Command {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setDescription(prizeTable());
 			eb.setTitle("Tabela de prêmios");
-			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (Valor mínimo: 25 créditos. Para utilizar as 5 casas da roleta, aposte 500 créditos ou mais)");
+			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (Valor mínimo: 100 créditos. Para utilizar as 5 casas da roleta, aposte 500 créditos ou mais)");
 
 			channel.sendMessage(eb.build()).queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 25) {
+		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 100) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_slots-invalid-number")).queue();
 			return;
 		} else if (Main.getInfo().gameInProgress(author.getId())) {
@@ -213,7 +213,7 @@ public class SlotsCommand extends Command {
 			if (win) {
 				if (pot)
 					msg += "\n\n<a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503>\n";
-				msg += "\nSeu prêmio é de __**" + bet + " créditos.**__";
+				msg += "\nSeu prêmio é de __**" + Helper.separate(bet.longValue()) + " créditos.**__";
 				if (pot)
 					msg += "\n\n<a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360>";
 			} else {
@@ -242,13 +242,13 @@ public class SlotsCommand extends Command {
 		final String top = "<:corner_down_right:747882840451973170><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:corner_down_left:747882840380932286>";
 		final String bottom = "<:corner_up_right:747882840439652522><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:corner_up_left:747882840326406246>";
 
-		channel.sendMessage(":white_flower: | **Aposta de " + author.getAsMention() + ": __" + args[0] + "__**").queue(s -> {
-			s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? highHeader : lowHeader) + "\n" + top + "\n" + showSlots(0) + "\n" + bottom + "\n").queue(null, Helper::doNothing);
+		channel.sendMessage(":white_flower: | **Aposta de " + author.getAsMention() + ": __" + Helper.separate(args[0]) + "__**").queue(s -> {
+			s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + Helper.separate(slt.getPot()) + "__**\n" + (highbet ? highHeader : lowHeader) + "\n" + top + "\n" + showSlots(0) + "\n" + bottom + "\n").queue(null, Helper::doNothing);
 			for (int i = 1; i < 6; i++) {
 				if (i != 5)
-					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? highHeader : lowHeader) + "\n" + top + "\n" + showSlots(i) + "\n" + bottom + "\n").queueAfter(3 + (3 * i), TimeUnit.SECONDS, null, Helper::doNothing);
+					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + Helper.separate(slt.getPot()) + "__**\n" + (highbet ? highHeader : lowHeader) + "\n" + top + "\n" + showSlots(i) + "\n" + bottom + "\n").queueAfter(3 + (3 * i), TimeUnit.SECONDS, null, Helper::doNothing);
 				else
-					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? highHeader : lowHeader) + "\n" + top + "\n" + showSlots(i) + "\n" + bottom + "\n").queueAfter(3 + (3 * i), TimeUnit.SECONDS, f -> r.run(), Helper::doNothing);
+					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + Helper.separate(slt.getPot()) + "__**\n" + (highbet ? highHeader : lowHeader) + "\n" + top + "\n" + showSlots(i) + "\n" + bottom + "\n").queueAfter(3 + (3 * i), TimeUnit.SECONDS, f -> r.run(), Helper::doNothing);
 			}
 		});
 	}
