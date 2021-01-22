@@ -107,7 +107,7 @@ public class SellCardCommand extends Command {
                                             Main.getInfo().getConfirmationPending().invalidate(author.getId());
                                             kp.removeCard(card);
 
-                                            CardMarket cm = new CardMarket(author.getId(), new KawaiponCard(card.getCard(), card.isFoil()), price);
+                                            CardMarket cm = new CardMarket(author.getId(), card, price);
                                             CardMarketDAO.saveCard(cm);
                                             KawaiponDAO.saveKawaipon(kp);
 
