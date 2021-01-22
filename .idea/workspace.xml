@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1010,20 +1008,6 @@
       <workItem from="1611246269428" duration="10412000" />
       <workItem from="1611289248402" duration="1884000" />
     </task>
-    <task id="LOCAL-03452" summary="Criação de sistema de bolsa de valores">
-      <created>1611170420448</created>
-      <option name="number" value="03452" />
-      <option name="presentableId" value="LOCAL-03452" />
-      <option name="project" value="LOCAL" />
-      <updated>1611170420448</updated>
-    </task>
-    <task id="LOCAL-03453" summary="Criação de sistema de bolsa de valores">
-      <created>1611170808371</created>
-      <option name="number" value="03453" />
-      <option name="presentableId" value="LOCAL-03453" />
-      <option name="project" value="LOCAL" />
-      <updated>1611170808371</updated>
-    </task>
     <task id="LOCAL-03454" summary="Criação de sistema de bolsa de valores">
       <created>1611170867401</created>
       <option name="number" value="03454" />
@@ -1353,7 +1337,21 @@
       <option name="project" value="LOCAL" />
       <updated>1611321371827</updated>
     </task>
-    <option name="localTasksCounter" value="3501" />
+    <task id="LOCAL-03501" summary="Correção no logger">
+      <created>1611323466962</created>
+      <option name="number" value="03501" />
+      <option name="presentableId" value="LOCAL-03501" />
+      <option name="project" value="LOCAL" />
+      <updated>1611323466962</updated>
+    </task>
+    <task id="LOCAL-03502" summary="Correção no logger">
+      <created>1611323713459</created>
+      <option name="number" value="03502" />
+      <option name="presentableId" value="LOCAL-03502" />
+      <option name="project" value="LOCAL" />
+      <updated>1611323713459</updated>
+    </task>
+    <option name="localTasksCounter" value="3503" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1513,10 +1511,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="551" y="216" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604694130886" />
-    <state x="35" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1610657698109">
+    <state x="35" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1611323640208">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="35" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1610657698109" />
+    <state x="35" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611323640208" />
     <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1609390445655" />
     <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1609901174869">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1526,10 +1524,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611321371086">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611323712249">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611321371086" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611323712249" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1574,10 +1572,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611321373060">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611323724296">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611321373060" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611323724296" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611291029366" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1621,10 +1619,10 @@
     </state>
     <state x="570" y="266" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608122622979" />
     <state x="651" y="274" key="extract.method.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1610233562159" />
-    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1611323459122">
+    <state x="297" y="114" width="957" height="784" key="find.popup" timestamp="1611323585984">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1611323459122" />
+    <state x="297" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1611323585984" />
     <state x="339" y="117" width="1094" height="808" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1611290852269" />
     <state x="639" y="399" key="git4idea.ui.GitResetDialog" timestamp="1610627908008">
       <screen x="0" y="0" width="1680" height="1010" />
