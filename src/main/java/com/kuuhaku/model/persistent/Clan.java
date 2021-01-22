@@ -100,7 +100,7 @@ public class Clan {
 	}
 
 	public void setIcon(BufferedImage icon) {
-		this.icon = Helper.atob(icon, "png");
+		this.icon = Helper.atob(Helper.removeAlpha(icon), "jpg");
 	}
 
 	public BufferedImage getBanner() {
@@ -108,7 +108,7 @@ public class Clan {
 	}
 
 	public void setBanner(BufferedImage banner) {
-		this.banner = Helper.atob(banner, "png");
+		this.banner = Helper.atob(Helper.removeAlpha(banner), "jpg");
 	}
 
 	public String getLeader() {
