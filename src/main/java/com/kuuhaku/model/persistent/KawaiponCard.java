@@ -29,9 +29,6 @@ public class KawaiponCard {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@OneToOne
-	private Kawaipon collection;
-
 	@OneToMany(mappedBy = "card")
 	private List<CardMarket> market;
 
