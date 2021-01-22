@@ -41,7 +41,6 @@ public class CardMarket implements Market {
 	private String buyer = "";
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "market")
 	private KawaiponCard card;
 
 	@Column(columnDefinition = "INT NOT NULL")
