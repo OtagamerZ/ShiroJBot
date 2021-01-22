@@ -90,7 +90,7 @@ public class MatchStatsCommand extends Command {
 					LocalDate date = mh.getTimestamp().toInstant().atZone(ZoneId.of("GMT-3")).toLocalDate();
 					Map<Side, String> players = mh.getPlayers().entrySet().stream()
 							.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
-					sb.append("(**%s**) `ID: %s` - %s VS %s\n".formatted(
+					sb.append("(**%s**) `ID: %s` - %s **VS** %s\n".formatted(
 							date.format(Helper.onlyDate),
 							mh.getId(),
 							checkUser(players.get(Side.BOTTOM)),
