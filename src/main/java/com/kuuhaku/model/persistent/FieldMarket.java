@@ -49,6 +49,13 @@ public class FieldMarket implements Market {
 	@Temporal(TemporalType.DATE)
 	private Date publishDate = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
 
+	public FieldMarket(String seller, String buyer, Field card, int price) {
+		this.seller = seller;
+		this.buyer = buyer;
+		this.card = card;
+		this.price = price;
+	}
+
 	public FieldMarket(String seller, Field card, int price) {
 		this.seller = seller;
 		this.card = card;

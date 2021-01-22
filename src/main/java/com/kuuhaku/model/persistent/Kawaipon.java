@@ -41,7 +41,8 @@ public class Kawaipon {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''", unique = true)
 	private String uid = "";
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "collection")
 	private Set<KawaiponCard> cards = new HashSet<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
