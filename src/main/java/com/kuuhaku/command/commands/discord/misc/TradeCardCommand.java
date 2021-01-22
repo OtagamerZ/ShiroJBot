@@ -517,7 +517,7 @@ public class TradeCardCommand extends Command {
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 								acc.removeCredit(price, this.getClass());
-								tacc.addCredit(price, this.getClass());
+								tacc.addCredit(Math.round(price * 0.9), this.getClass());
 
 								switch (type) {
 									case 1 -> {
@@ -572,7 +572,7 @@ public class TradeCardCommand extends Command {
 								AccountDAO.saveAccount(acc);
 								AccountDAO.saveAccount(tacc);
 
-								s.delete().flatMap(n -> channel.sendMessage("✅ | Troca concluída com sucesso!")).queue(null, Helper::doNothing);
+								s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso (taxa de 10%)!")).queue(null, Helper::doNothing);
 							}), true, 1, TimeUnit.MINUTES,
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {
@@ -714,7 +714,7 @@ public class TradeCardCommand extends Command {
 								Main.getInfo().getConfirmationPending().invalidate(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
-								acc.addCredit(price, this.getClass());
+								acc.addCredit(Math.round(price * 0.9), this.getClass());
 								tacc.removeCredit(price, this.getClass());
 
 								switch (type) {
@@ -770,7 +770,7 @@ public class TradeCardCommand extends Command {
 								AccountDAO.saveAccount(acc);
 								AccountDAO.saveAccount(tacc);
 
-								s.delete().flatMap(n -> channel.sendMessage("✅ | Troca concluída com sucesso!")).queue(null, Helper::doNothing);
+								s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso (taxa de 10%)!")).queue(null, Helper::doNothing);
 							}), true, 1, TimeUnit.MINUTES,
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {

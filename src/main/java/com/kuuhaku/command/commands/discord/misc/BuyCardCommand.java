@@ -286,7 +286,7 @@ public class BuyCardCommand extends Command {
 					kp.addCard(cm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					seller.addCredit(cm.getPrice(), this.getClass());
+					seller.addCredit(Math.round(cm.getPrice() * 0.9), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(cm.getPrice() * 0.75) : cm.getPrice(), this.getClass());
 
 					AccountDAO.saveAccount(seller);
@@ -298,7 +298,7 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(cm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(cm.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + cm.getPrice() + " créditos.").queue(null, Helper::doNothing),
+									c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + cm.getPrice() + " créditos  (" + Math.round(cm.getPrice() * 0.1) + " de taxa).").queue(null, Helper::doNothing),
 							Helper::doNothing
 					);
 					channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
@@ -343,7 +343,7 @@ public class BuyCardCommand extends Command {
 					kp.addEquipment(em.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					seller.addCredit(em.getPrice(), this.getClass());
+					seller.addCredit(Math.round(em.getPrice() * 0.9), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(em.getPrice() * 0.75) : em.getPrice(), this.getClass());
 
 					AccountDAO.saveAccount(seller);
@@ -355,7 +355,7 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(em.getSeller());
 					User buyerU = Main.getInfo().getUserByID(em.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + em.getPrice() + " créditos.").queue(),
+									c.sendMessage("✅ | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + em.getPrice() + " créditos (" + Math.round(em.getPrice() * 0.1) + " de taxa).").queue(),
 							Helper::doNothing
 					);
 					channel.sendMessage("✅ | Equipamento comprado com sucesso!").queue();
@@ -403,7 +403,7 @@ public class BuyCardCommand extends Command {
 					kp.addField(fm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					seller.addCredit(fm.getPrice(), this.getClass());
+					seller.addCredit(Math.round(fm.getPrice() * 0.9), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(fm.getPrice() * 0.75) : fm.getPrice(), this.getClass());
 
 					AccountDAO.saveAccount(seller);
@@ -415,7 +415,7 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(fm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(fm.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + fm.getPrice() + " créditos.").queue(),
+									c.sendMessage("✅ | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + fm.getPrice() + " créditos (" + Math.round(fm.getPrice() * 0.1) + " de taxa).").queue(),
 							Helper::doNothing
 					);
 					channel.sendMessage("✅ | Arena comprada com sucesso!").queue();
