@@ -21,7 +21,7 @@ package com.kuuhaku.controller.sqlite;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
-import com.kuuhaku.model.persistent.CustomAnswers;
+import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
@@ -36,8 +36,8 @@ public class BackupDAO {
 
 		try {
 			em.getTransaction().begin();
-			for (CustomAnswers customAnswers : data.getCaDump()) {
-				em.merge(customAnswers);
+			for (CustomAnswer customAnswer : data.getCaDump()) {
+				em.merge(customAnswer);
 			}
 			for (Member member : data.getmDump()) {
 				em.merge(member);
@@ -63,10 +63,10 @@ public class BackupDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<CustomAnswers> getCADump() {
+	public static List<CustomAnswer> getCADump() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
+		Query q = em.createQuery("SELECT c FROM CustomAnswer c", CustomAnswer.class);
 
 		try {
 			return q.getResultList();
