@@ -293,7 +293,7 @@ public class TradeCardCommand extends Command {
 										}
 
 										finalKp.removeCard(kc);
-										finalTarget.addCard(kc);
+										finalTarget.addCard(new KawaiponCard(kc.getCard(), kc.isFoil()));
 									}
 									case 2 -> {
 										Equipment eq = (Equipment) products[0].getRight();
@@ -338,7 +338,7 @@ public class TradeCardCommand extends Command {
 										}
 
 										finalTarget.removeCard(kc);
-										finalKp.addCard(kc);
+										finalKp.addCard(new KawaiponCard(kc.getCard(), kc.isFoil()));
 									}
 									case 2 -> {
 										Equipment eq = (Equipment) products[1].getRight();
@@ -531,7 +531,7 @@ public class TradeCardCommand extends Command {
 										}
 
 										finalTarget.removeCard(kc);
-										finalKp.addCard(kc);
+										finalKp.addCard(new KawaiponCard(kc.getCard(), kc.isFoil()));
 										CardMarketDAO.saveCard(new CardMarket(other.getId(), author.getId(), kc, price));
 									}
 									case 2 -> {
@@ -729,7 +729,7 @@ public class TradeCardCommand extends Command {
 										}
 
 										finalKp.removeCard(kc);
-										finalTarget.addCard(kc);
+										finalTarget.addCard(new KawaiponCard(kc.getCard(), kc.isFoil()));
 										CardMarketDAO.saveCard(new CardMarket(author.getId(), other.getId(), kc, price));
 									}
 									case 2 -> {
