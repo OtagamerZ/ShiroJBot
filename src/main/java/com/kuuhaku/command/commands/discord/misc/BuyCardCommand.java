@@ -288,6 +288,8 @@ public class BuyCardCommand extends Command {
 
 					seller.addCredit(Math.round(cm.getPrice() * 0.9), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(cm.getPrice() * 0.75) : cm.getPrice(), this.getClass());
+					long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(cm.getPrice() * 0.1)));
 
 					AccountDAO.saveAccount(seller);
 					AccountDAO.saveAccount(buyer);
@@ -345,6 +347,8 @@ public class BuyCardCommand extends Command {
 
 					seller.addCredit(Math.round(em.getPrice() * 0.9), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(em.getPrice() * 0.75) : em.getPrice(), this.getClass());
+					long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(em.getPrice() * 0.1)));
 
 					AccountDAO.saveAccount(seller);
 					AccountDAO.saveAccount(buyer);
@@ -405,6 +409,8 @@ public class BuyCardCommand extends Command {
 
 					seller.addCredit(Math.round(fm.getPrice() * 0.9), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(fm.getPrice() * 0.75) : fm.getPrice(), this.getClass());
+					long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(fm.getPrice() * 0.1)));
 
 					AccountDAO.saveAccount(seller);
 					AccountDAO.saveAccount(buyer);
