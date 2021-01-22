@@ -111,7 +111,7 @@ public class RPSCommand extends Command {
 							ps.modifyInfluence(2);
 							PStateDAO.savePoliticalState(ps);
 						}
-						yield "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!";
+						yield "\nVocê ganhou! Aqui, " + Helper.separate(crd) + " créditos por ter jogado comigo!";
 					}
 					case 2 -> "\nEmpate!";
 					default -> throw new IllegalStateException("Unexpected value: " + finalWin);

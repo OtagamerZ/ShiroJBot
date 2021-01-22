@@ -73,7 +73,7 @@ public class ClanCommand extends Command {
 				.setThumbnail("attachment://icon.jpg")
 				.setImage("attachment://banner.jpg")
 				.setDescription(c.getMotd())
-				.addField("Cofre", ":coin: | %s créditos".formatted(c.getVault()), false);
+				.addField("Cofre", ":coin: | %s%s créditos".formatted(Helper.separate(c.getVault()), c.getTier() != ClanTier.DYNASTY ? "/" + Helper.separate(c.getTier().getVaultSize()) : ""), false);
 
 		if (c.getTier() != ClanTier.DYNASTY)
 			eb.addField("Metas para promoção", """
@@ -89,16 +89,19 @@ public class ClanCommand extends Command {
 						case PARTY -> """
 								Título de facção
 								Capacidade de membros (~~10~~ -> 50)
+								Capacidade do cofre (~~100.000~~ -> 500.000)
 								Mensagem do dia
 								""";
 						case FACTION -> """
 								Título de guilda
 								Capacidade de membros (~~50~~ -> 100)
+								Capacidade do cofre (~~500.000~~ -> 2.000.000)
 								Emblema
 								""";
 						case GUILD -> """
 								Título de dinastia
 								Capacidade de membros (~~100~~ -> 500)
+								Capacidade do cofre (~~2.000.000~~ -> ilimitado)
 								Banner
 								""";
 						default -> "";

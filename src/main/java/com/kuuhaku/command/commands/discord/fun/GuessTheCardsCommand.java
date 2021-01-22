@@ -165,17 +165,17 @@ public class GuessTheCardsCommand extends Command {
 													.formatted(
 															names.get(0),
 															names.get(1),
-															reward
+															Helper.separate(reward)
 													)).queue();
 									case 2 -> channel.sendMessage(
 											"Você acertou 2 dos 3 nomes, o outro era `%s`. (Recebeu %s créditos)."
 													.formatted(
 															names.get(0),
-															reward
+															Helper.separate(reward)
 													)).queue();
 									case 3 -> channel.sendMessage(
 											"Você acertou todos os nomes, parabéns! (Recebeu %s créditos)."
-													.formatted(reward)).queue();
+													.formatted(Helper.separate(reward))).queue();
 								}
 
 								AccountDAO.saveAccount(acc);

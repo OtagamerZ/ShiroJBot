@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public enum VipItem {
-	CONVERT_CREDITS(1, 1, new MessageEmbed.Field("1 - Converter para créditos (1 gema)", "Troca 1 gema por 10000 créditos", false),
+	CONVERT_CREDITS(1, 1, new MessageEmbed.Field("1 - Converter para créditos (1 gema)", "Troca 1 gema por 10.000 créditos", false),
 			(ch, acc, args) -> {
 				acc.addCredit(10000, VipItem.class);
 				acc.removeGem(1);

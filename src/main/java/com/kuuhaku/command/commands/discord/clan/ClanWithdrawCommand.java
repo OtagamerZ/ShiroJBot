@@ -83,7 +83,7 @@ public class ClanWithdrawCommand extends Command {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja sacar " + amount + " créditos do cofre do clã?")
+		channel.sendMessage("Tem certeza que deseja sacar " + Helper.separate(amount) + " créditos do cofre do clã?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());

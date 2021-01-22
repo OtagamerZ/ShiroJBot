@@ -135,7 +135,7 @@ public class Settings {
 			eb.addField("\uD83D\uDCD6 » Canal de sugestões", canalSUG, true);
 			eb.addField("\uD83D\uDCD6 » Canal de notificação nível", canalLvlUpNotif, true);
 			eb.addField("\uD83D\uDCD6 » Canal de cartas Kawaipon", canalKawaipon, true);
-			eb.addField("\uD83D\uDCD6 » Canal de drops de créditos", canalDrop, true);
+			eb.addField("\uD83D\uDCD6 » Canal de drops", canalDrop, true);
 			eb.addField("\uD83D\uDCD6 » Canal de avisos", canalAvisos, true);
 			try {
 				if (TagDAO.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isBeta()) {

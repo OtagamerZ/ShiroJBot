@@ -52,7 +52,7 @@ public abstract class Drop implements Prize {
 		add(Pair.of("Ser level " + values[3] + " ou maior.", u ->
 				MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
 
-		add(Pair.of("Ter até 1000 créditos.", u ->
+		add(Pair.of("Ter até 1.000 créditos.", u ->
 				AccountDAO.getAccount(u.getId()).getBalance() <= 1000));
 
 		add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguida" + (values[1] != 1 ? "s" : "") + " ou mais.", u ->

@@ -91,9 +91,9 @@ public class SellCardCommand extends Command {
 
                     if (price < min) {
                         if (hasLoan)
-                            channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + min + " créditos.").queue();
+                            channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
                         else
-                            channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + min + " créditos.").queue();
+							channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
                         return;
                     }
 
@@ -121,7 +121,7 @@ public class SellCardCommand extends Command {
                                     })
                             );
                 } catch (NumberFormatException e) {
-                    channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
+					channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
                 }
             }
             case "E" -> {
@@ -141,9 +141,9 @@ public class SellCardCommand extends Command {
 
                     if (price < min) {
                         if (hasLoan)
-                            channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
                         else
-                            channel.sendMessage("❌ | Você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+							channel.sendMessage("❌ | Você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
                         return;
                     }
 
@@ -171,7 +171,7 @@ public class SellCardCommand extends Command {
                                     })
                             );
                 } catch (NumberFormatException e) {
-                    channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
+					channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
                 }
             }
             case "F" -> {
@@ -191,9 +191,9 @@ public class SellCardCommand extends Command {
 
                     if (price < min) {
                         if (hasLoan)
-                            channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + min + " créditos.").queue();
+							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
                         else
-                            channel.sendMessage("❌ | Você não pode vender essa arena por menos que " + min + " créditos.").queue();
+							channel.sendMessage("❌ | Você não pode vender essa arena por menos que " + Helper.separate(min) + " créditos.").queue();
                         return;
                     }
 
@@ -221,7 +221,7 @@ public class SellCardCommand extends Command {
                                     })
                             );
                 } catch (NumberFormatException e) {
-                    channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
+					channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
                 }
             }
             default -> channel.sendMessage("❌ | Tipo inválido, o tipo deve ser um dos seguntes valores: `N` = normal, `C` = cromada, `E` = evogear e `F` = campo.").queue();

@@ -58,7 +58,7 @@ public class LotteryCommand extends Command {
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
         if (args.length < 1) {
-            channel.sendMessage("O prêmio atual é __**" + LotteryDAO.getLotteryValue().getValue() + " créditos**__.").queue();
+            channel.sendMessage("O prêmio atual é __**" + Helper.separate(LotteryDAO.getLotteryValue().getValue()) + " créditos**__.").queue();
             return;
         } else if (args[0].split(",").length != 6 || args[0].length() != 17) {
             channel.sendMessage("❌ | Você precisa informar 6 dezenas separadas por vírgula.").queue();
@@ -89,7 +89,7 @@ public class LotteryCommand extends Command {
         String hash = Helper.generateHash(guild, author);
         ShiroInfo.getHashes().add(hash);
         Main.getInfo().getConfirmationPending().put(author.getId(), true);
-        channel.sendMessage("Você está prestes a comprar um bilhete de loteria com as dezenas `" + args[0].replace(",", " ") + "` por " + cost + " créditos, deseja confirmar?")
+		channel.sendMessage("Você está prestes a comprar um bilhete de loteria com as dezenas `" + args[0].replace(",", " ") + "` por " + Helper.separate(cost) + " créditos, deseja confirmar?")
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                             if (!ShiroInfo.getHashes().remove(hash)) return;
                             Main.getInfo().getConfirmationPending().invalidate(author.getId());

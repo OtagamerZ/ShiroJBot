@@ -79,7 +79,7 @@ public class BugHuntCommand extends Command {
         acc.addBug();
         acc.addCredit(1000, this.getClass());
         AccountDAO.saveAccount(acc);
-        channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (Ganhou 1000 créditos)").queue();
+		channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (Ganhou 1.000 créditos)").queue();
     }
 
     private void resolveBugHuntByMention(Message message, MessageChannel channel) {
@@ -87,7 +87,7 @@ public class BugHuntCommand extends Command {
 
         acc.addBug();
         acc.addCredit(1000, this.getClass());
-        AccountDAO.saveAccount(acc);
-        channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " ajudou a matar um bug! (Ganhou 1000 créditos)").queue();
+		AccountDAO.saveAccount(acc);
+		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " ajudou a matar um bug! (Ganhou 1.000 créditos)").queue();
     }
 }
