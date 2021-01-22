@@ -88,7 +88,7 @@ public class TransferCommand extends Command {
 
 		to.addCredit(liquidAmount, this.getClass());
 		from.removeCredit(rawAmount, this.getClass());
-		long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+		long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
 		DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(rawAmount * tax)));
 
 		AccountDAO.saveAccount(to);

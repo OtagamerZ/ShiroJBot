@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
-import com.kuuhaku.model.persistent.CustomAnswers;
+import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -54,8 +54,8 @@ public class RemoveAnswerCommand extends Command {
 			channel.sendMessage("❌ | Você precisa especificar um ID.").queue();
 			return;
 		} else if (Helper.equalsAny(args[0], "nada", "nothing")) {
-			List<CustomAnswers> cas = CustomAnswerDAO.getCAByGuild(guild.getId());
-			for (CustomAnswers ca : cas) {
+			List<CustomAnswer> cas = CustomAnswerDAO.getCAByGuild(guild.getId());
+			for (CustomAnswer ca : cas) {
 				CustomAnswerDAO.removeCAFromDB(ca);
 			}
 			channel.sendMessage("Não vou mais responder nenhuma mensagem customizada configurada até este momento.").queue();

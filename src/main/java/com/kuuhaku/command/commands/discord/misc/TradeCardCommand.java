@@ -34,6 +34,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NonNls;
 
@@ -518,7 +519,7 @@ public class TradeCardCommand extends Command {
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 								acc.removeCredit(price, this.getClass());
 								tacc.addCredit(Math.round(price * 0.9), this.getClass());
-								long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+								long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
 								DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(price * 0.1)));
 
 								switch (type) {
@@ -718,7 +719,7 @@ public class TradeCardCommand extends Command {
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 								tacc.removeCredit(price, this.getClass());
 								acc.addCredit(Math.round(price * 0.9), this.getClass());
-								long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+								long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
 								DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(price * 0.1)));
 
 								switch (type) {
