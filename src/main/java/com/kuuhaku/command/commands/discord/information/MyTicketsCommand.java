@@ -23,6 +23,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Lottery;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -72,7 +73,7 @@ public class MyTicketsCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(":tickets: | Seus bilhetes da loteria")
 				.setDescription(sb.toString())
-				.setFooter("Prêmio atual: %s créditos".formatted(LotteryDAO.getLotteryValue().getValue()));
+				.setFooter("Prêmio atual: %s créditos".formatted(Helper.separate(LotteryDAO.getLotteryValue().getValue())));
 
 		channel.sendMessage(eb.build()).queue();
 	}

@@ -61,8 +61,8 @@ public class MonthlyEvent implements Job {
 						c.sendMessage("""
 								:tada: :tada: **O seu Exceed foi campeão neste mês, parabéns!** :tada: :tada:
 								Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas e redução de juros de empréstimos.
-								Adicionalmente, por ter sido responsável por **%s%%** da pontuação de seu Exceed, você receberá __**%s créditos**__ como parte do prêmio **(Total: %s)**.
-								""".formatted(ex, Helper.roundToString(share, 2), prize, total)).queue(null, Helper::doNothing);
+								Adicionalmente, por ter sido responsável por **%s%%** da pontuação de seu Exceed, você receberá __**%s créditos**__ como parte do prêmio **(Total: %s pontos)**.
+								""".formatted(ex, Helper.roundToString(share, 2), Helper.separate(prize), total)).queue(null, Helper::doNothing);
 					} catch (Exception ignore) {
 					}
 					acc.addCredit(prize, MonthlyEvent.class);
@@ -121,18 +121,18 @@ public class MonthlyEvent implements Job {
 		if (winners.size() == 0)
 			msg = """
 					As dezenas sorteadas foram `%s`.
-					Como não houveram vencedores, o prêmio de %d créditos será acumulado para o próximo mês!
-					""".formatted(String.join(" ", dozens), value.getValue());
+					Como não houveram vencedores, o prêmio de %s créditos será acumulado para o próximo mês!
+					""".formatted(String.join(" ", dozens), Helper.separate(value.getValue()));
 		else if (winners.size() == 1)
 			msg = """
 					As dezenas sorteadas foram `%s`.
-					O vencedor de %d créditos foi %s, parabéns!
-					""".formatted(String.join(" ", dozens), value.getValue(), Main.getInfo().getUserByID(winners.get(0).getUid()).getName());
+					O vencedor de %s créditos foi %s, parabéns!
+					""".formatted(String.join(" ", dozens), Helper.separate(value.getValue()), Main.getInfo().getUserByID(winners.get(0).getUid()).getName());
 		else
 			msg = """
 					As dezenas sorteadas foram `%s`.
-					Os %d vencedores dividirão em partes iguais o prêmio de %d créditos, parabéns!!
-					""".formatted(String.join(" ", dozens), winners.size(), value.getValue());
+					Os %s vencedores dividirão em partes iguais o prêmio de %s créditos, parabéns!!
+					""".formatted(String.join(" ", dozens), winners.size(), Helper.separate(value.getValue()));
 
 		chn.sendMessage(msg).queue();
 		Helper.broadcast(msg, null, null);
@@ -143,7 +143,7 @@ public class MonthlyEvent implements Job {
 			AccountDAO.saveAccount(acc);
 
 			Main.getInfo().getUserByID(l.getUid()).openPrivateChannel().queue(c -> {
-				c.sendMessage("Você ganhou " + (value.getValue() / winners.size()) + " créditos na loteria, parabéns!").queue(null, Helper::doNothing);
+				c.sendMessage("Você ganhou " + Helper.separate(value.getValue() / winners.size()) + " créditos na loteria, parabéns!").queue(null, Helper::doNothing);
 			}, Helper::doNothing);
 		}
 

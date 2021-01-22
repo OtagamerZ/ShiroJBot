@@ -50,7 +50,7 @@ public class DailyEvent implements Job {
 				AccountDAO.saveAccount(acc);
 
 				Main.getInfo().getUserByID(mmr.getUserId()).openPrivateChannel()
-						.flatMap(ch -> ch.sendMessage("Parabéns por alcançar o ranking **%s** nesta temporada, como recompensa você recebeu **%s créditos**. GG WP!".formatted(mmr.getTier().getName(), credits)))
+						.flatMap(ch -> ch.sendMessage("Parabéns por alcançar o ranking **%s** nesta temporada, como recompensa você recebeu **%s créditos**. GG WP!".formatted(mmr.getTier().getName(), Helper.separate(credits))))
 						.queue(null, Helper::doNothing);
 			}
 		}

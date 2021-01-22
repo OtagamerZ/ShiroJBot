@@ -1286,7 +1286,7 @@ public class Helper {
 					.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!")
 					.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 					.setColor(colorThief(img))
-					.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
+					.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + Helper.separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
 
 			if (gc.isSmallCards())
 				eb.setThumbnail("attachment://kawaipon.png");
@@ -1348,7 +1348,7 @@ public class Helper {
 				.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase() + " neste servidor!")
 				.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 				.setColor(colorThief(img))
-				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
+				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + Helper.separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
 
 		if (gc.isSmallCards())
 			eb.setThumbnail("attachment://kawaipon.png");
@@ -1386,7 +1386,7 @@ public class Helper {
 					.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png")
 					.setTitle("Um drop apareceu neste servidor!");
 			if (drop instanceof CreditDrop)
-				eb.addField("Conteúdo:", drop.getPrize() + " créditos", true);
+				eb.addField("Conteúdo:", Helper.separate(drop.getPrize()) + " créditos", true);
 			else if (drop instanceof JokerDrop)
 				eb.addField("Conteúdo:", drop.getPrizeWithPenalty()[0] + "\n__**MAS**__\n" + drop.getPrizeWithPenalty()[1], true);
 			else
@@ -1434,7 +1434,7 @@ public class Helper {
 			for (int i = 0; i < prizes.size(); i++) {
 				Prize prize = prizes.get(i);
 				if (prize instanceof CreditDrop)
-					eb.addField("Presente " + (i + 1) + ":", prize.getPrize() + " créditos", true);
+					eb.addField("Presente " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
 				else
 					eb.addField("Presente " + (i + 1) + ":", prize.getPrizeAsItem().getName(), true);
 			}
@@ -1478,7 +1478,7 @@ public class Helper {
 						for (int i = 0; i < prizes.size(); i++) {
 							Prize prize = prizes.get(i);
 							if (prize instanceof CreditDrop)
-								neb.addField("Presente " + (i + 1) + ":", prize.getPrize() + " créditos", true);
+								neb.addField("Presente " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
 							else
 								neb.addField("Presente " + (i + 1) + ":", prize.getPrizeAsItem().getName(), true);
 						}
@@ -1964,5 +1964,15 @@ public class Helper {
 		} catch (IOException | NullPointerException e) {
 			return null;
 		}
+	}
+
+	public static String separate(Object value) {
+		String n = StringUtils.reverse(String.valueOf(value));
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < n.length(); i++) {
+			sb.append(n.charAt(i));
+			if (i > 0 && i % 3 == 0) sb.append(".");
+		}
+		return sb.reverse().toString();
 	}
 }

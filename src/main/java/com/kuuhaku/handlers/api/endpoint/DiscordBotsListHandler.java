@@ -65,8 +65,8 @@ public class DiscordBotsListHandler {
 
 				eb.setThumbnail("https://i.imgur.com/A0jXqpe.png");
 				eb.setTitle("Opa, obrigada por votar em mim! (combo " + acc.getStreak() + "/7 -> bônus " + (100 * acc.getStreak()) + "c)");
-				eb.setDescription("Como agradecimento, aqui estão " + credit + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.\n\n(Nota: você perderá os acúmulos de votos se houver uma diferença de 24h entre este e o próximo voto)");
-				eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+				eb.setDescription("Como agradecimento, aqui estão " + Helper.separate(credit) + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.\n\n(Nota: você perderá os acúmulos de votos se houver uma diferença de 24h entre este e o próximo voto)");
+				eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 				eb.addField("Pode resgatar uma gema?", acc.getStreak() == 7 ? "SIM!!" : "Não", true);
 				eb.setColor(Color.cyan);
 
