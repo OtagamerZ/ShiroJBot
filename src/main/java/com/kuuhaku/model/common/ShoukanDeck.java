@@ -22,6 +22,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.DeckStash;
 import com.kuuhaku.model.persistent.Kawaipon;
 import org.apache.commons.lang3.StringUtils;
@@ -37,9 +38,16 @@ import java.util.stream.Collectors;
 
 public class ShoukanDeck {
 	private final Account acc;
+	private final Clan clan;
+
+	public ShoukanDeck(Account acc, Clan clan) {
+		this.acc = acc;
+		this.clan = clan;
+	}
 
 	public ShoukanDeck(Account acc) {
 		this.acc = acc;
+		this.clan = null;
 	}
 
 	public BufferedImage view(Kawaipon kp) throws IOException {
@@ -76,7 +84,7 @@ public class ShoukanDeck {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 30));
 
-		g2d.drawImage(acc.getFrame().getBack(acc, null), 1746, 2241, null);
+		g2d.drawImage(acc.getFrame().getBack(acc, clan), 1746, 2241, null);
 
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / 6) {
 			g2d.drawImage(champs.get(i).drawCard(false), 76 + 279 * (i - 6 * y), 350 + 420 * y, null);
@@ -132,7 +140,7 @@ public class ShoukanDeck {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 30));
 
-		g2d.drawImage(acc.getFrame().getBack(acc, null), 1746, 2241, null);
+		g2d.drawImage(acc.getFrame().getBack(acc, clan), 1746, 2241, null);
 
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / 6) {
 			g2d.drawImage(champs.get(i).drawCard(false), 76 + 279 * (i - 6 * y), 350 + 420 * y, null);

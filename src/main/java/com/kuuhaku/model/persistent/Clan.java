@@ -25,11 +25,8 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.imageio.ImageIO;
 import javax.persistence.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,11 +44,11 @@ public class Clan {
 	@Column(columnDefinition = "VARCHAR(256)")
 	private String motd;
 
-	@Lob
-	private byte[] icon = null;
+	@Column(columnDefinition = "TEXT")
+	private String icon = null;
 
-	@Lob
-	private byte[] banner = null;
+	@Column(columnDefinition = "TEXT")
+	private String banner = null;
 
 	@Enumerated(value = EnumType.STRING)
 	private ClanTier tier = ClanTier.PARTY;
@@ -99,27 +96,19 @@ public class Clan {
 	}
 
 	public BufferedImage getIcon() {
-		try (ByteArrayInputStream bais = new ByteArrayInputStream(icon)) {
-			return ImageIO.read(bais);
-		} catch (IOException | NullPointerException e) {
-			return null;
-		}
+		return Helper.btoa(icon);
 	}
 
 	public void setIcon(BufferedImage icon) {
-		this.icon = Helper.getBytes(icon);
+		this.icon = Helper.atob(icon, "jpg");
 	}
 
 	public BufferedImage getBanner() {
-		try (ByteArrayInputStream bais = new ByteArrayInputStream(banner)) {
-			return ImageIO.read(bais);
-		} catch (IOException | NullPointerException e) {
-			return null;
-		}
+		return Helper.btoa(banner);
 	}
 
 	public void setBanner(BufferedImage banner) {
-		this.banner = Helper.getBytes(banner);
+		this.banner = Helper.atob(banner, "jpg");
 	}
 
 	public String getLeader() {
