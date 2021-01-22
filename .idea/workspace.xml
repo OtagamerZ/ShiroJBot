@@ -163,17 +163,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1007,14 +996,7 @@
       <workItem from="1611289248402" duration="1884000" />
       <workItem from="1611332012065" duration="3269000" />
       <workItem from="1611342101712" duration="107000" />
-      <workItem from="1611342273935" duration="6430000" />
-    </task>
-    <task id="LOCAL-03464" summary="Criação de sistema de bolsa de valores">
-      <created>1611174527194</created>
-      <option name="number" value="03464" />
-      <option name="presentableId" value="LOCAL-03464" />
-      <option name="project" value="LOCAL" />
-      <updated>1611174527194</updated>
+      <workItem from="1611342273935" duration="6536000" />
     </task>
     <task id="LOCAL-03465" summary="Criação de sistema de bolsa de valores">
       <created>1611174936144</created>
@@ -1352,7 +1334,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611348659173</updated>
     </task>
-    <option name="localTasksCounter" value="3513" />
+    <task id="LOCAL-03513" summary="Adicionado comando de estatísticas de partida">
+      <created>1611348842272</created>
+      <option name="number" value="03513" />
+      <option name="presentableId" value="LOCAL-03513" />
+      <option name="project" value="LOCAL" />
+      <updated>1611348842272</updated>
+    </task>
+    <option name="localTasksCounter" value="3514" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1525,10 +1514,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611348658266">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611348841429">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611348658266" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611348841429" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1611348469197">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1573,10 +1562,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611348661227">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611348844903">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611348661227" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611348844903" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611291029366" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />

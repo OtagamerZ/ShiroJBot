@@ -140,8 +140,8 @@ public class MatchStatsCommand extends Command {
 						2º: %s %s
 						""".formatted(
 						p1,
-						p2,
 						mh.getWinner() == Side.BOTTOM ? "(VENCEDOR)" : p1WO ? "(W.O.)" : "",
+						p2,
 						mh.getWinner() == Side.TOP ? "(VENCEDOR)" : p2WO ? "(W.O.)" : ""
 				), true)
 				.addField("Duração", mh.getRounds().size() + " turnos", true)
