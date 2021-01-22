@@ -58,7 +58,7 @@ public class ClanUpgradeCommand extends Command {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
 		} else if (c.getMembers().get(author.getId()).ordinal() != 0) {
-			channel.sendMessage("❌ | Apenas o líder pode evoluir o tier do clã clã.").queue();
+			channel.sendMessage("❌ | Apenas o líder pode evoluir o tier do clã.").queue();
 			return;
 		} else if (c.getTier() == ClanTier.DYNASTY) {
 			channel.sendMessage("❌ | Seu clã já está no tier máximo.").queue();

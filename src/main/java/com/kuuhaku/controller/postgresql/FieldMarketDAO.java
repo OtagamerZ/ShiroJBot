@@ -115,7 +115,7 @@ public class FieldMarketDAO {
 					SELECT fc.price * 1.0
 					FROM FieldMarket fc
 					WHERE fc.card.card = :card
-					AND fc.publishDate >= :date
+					AND fc.publishDate < :date
 					AND fc.buyer <> ''
 					AND fc.buyer <> fc.seller
 					""");
@@ -129,12 +129,10 @@ public class FieldMarketDAO {
 					SELECT fc.price * 1.0
 					FROM FieldMarket fc
 					WHERE fc.card.card = :card
-					AND fc.publishDate < :date
 					AND fc.buyer <> ''
 					AND fc.buyer <> fc.seller
 					""");
 			q.setParameter("card", c);
-			q.setParameter("date", cal.getTime());
 
 			double[] now = ArrayUtils.toPrimitive(((List<Double>) q.getResultList()).toArray(Double[]::new));
 

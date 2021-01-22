@@ -83,6 +83,7 @@ public class Shoukan extends GlobalGame {
 	private int spellLock = 0;
 	private int effectLock = 0;
 	private final List<Drawable> discardBatch = new ArrayList<>();
+	private boolean reroll = true;
 
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, List<Clan> clans, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
@@ -278,6 +279,7 @@ public class Shoukan extends GlobalGame {
 					ClusterAction act;
 					if (c.isFlipped()) {
 						c.setFlipped(false);
+						c.setDefending(true);
 						act = channel.sendMessage("Carta virada para cima em modo de defesa.");
 					} else if (c.isDefending()) {
 						c.setDefending(false);
@@ -428,6 +430,7 @@ public class Shoukan extends GlobalGame {
 							}
 						}
 
+						reroll = false;
 						d.setAvailable(false);
 						h.removeMana(e.getMana());
 						e.activate(h, getHands().get(next), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
@@ -503,10 +506,14 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
+					reroll = false;
 					d.setAvailable(false);
 					slot.setBottom(e);
 					Champion t = target.getTop();
-					t.setFlipped(false);
+					if (t.isFlipped()) {
+						t.setFlipped(false);
+						t.setDefending(true);
+					}
 					t.addLinkedTo(e);
 					e.setLinkedTo(Pair.of(toEquip, t));
 					if (t.hasEffect() && effectLock == 0) {
@@ -581,6 +588,7 @@ public class Shoukan extends GlobalGame {
 						}
 					}
 
+					reroll = false;
 					d.setAvailable(false);
 					slot.setTop(c);
 					if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
@@ -595,6 +603,7 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
+					reroll = false;
 					Field f = (Field) d.copy();
 					d.setAvailable(false);
 					arena.setField(f);
@@ -791,6 +800,7 @@ public class Shoukan extends GlobalGame {
 		if (his.isDefending() || his.getStun() > 0) {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
+				his.setDefending(true);
 				if (his.hasEffect() && effectLock == 0) {
 					his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 					if (postCombat()) return;
@@ -831,8 +841,15 @@ public class Shoukan extends GlobalGame {
 					Hand enemy = getHands().get(next);
 					if (yours.getBonus().getSpecialData().has("totalDamage"))
 						enemy.removeHp(yPower);
-					else
-						enemy.removeHp(yPower - hPower);
+					else {
+						float mob = 1;
+						for (SlotColumn<Champion, Equipment> slot : arena.getSlots().get(next)) {
+							Champion c = slot.getTop();
+							if (c != null && c.getMana() == 1 && !c.isFusion())
+								mob -= 0.05;
+						}
+						enemy.removeHp(Math.round((yPower - hPower) * mob));
+					}
 				}
 			}
 
@@ -1031,6 +1048,7 @@ public class Shoukan extends GlobalGame {
 		if (his.isDefending() || his.getStun() > 0) {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
+				his.setDefending(true);
 				if (his.hasEffect() && effectLock == 0) {
 					his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
 					if (postCombat()) return;
@@ -1267,7 +1285,7 @@ public class Shoukan extends GlobalGame {
 			arena.getGraveyard().get(side).add(ch);
 	}
 
-	public void captureCard(Side side, int index, int source) {
+	public void captureCard(Side side, int index, int source, boolean withFusion) {
 		Champion ch = getArena().getSlots().get(side).get(index).getTop();
 		if (ch == null) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
@@ -1297,7 +1315,7 @@ public class Shoukan extends GlobalGame {
 		}
 
 		ch.reset();
-		if (!ch.isFusion())
+		if (!ch.isFusion() || withFusion)
 			getHands().get(side == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch);
 	}
 
@@ -1538,6 +1556,8 @@ public class Shoukan extends GlobalGame {
 
 				arena.getGraveyard().get(current).addAll(discardBatch);
 				discardBatch.clear();
+
+				if (getRound() > 0) reroll = false;
 				resetTimer(this);
 
 				phase = Phase.PLAN;
@@ -1585,6 +1605,7 @@ public class Shoukan extends GlobalGame {
 				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				phase = Phase.ATTACK;
 				draw = false;
+				reroll = false;
 				resetTimerKeepTurn();
 				channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
@@ -1648,6 +1669,35 @@ public class Shoukan extends GlobalGame {
 						}
 					});
 		});
+		if (reroll && getRound() == 1)
+			buttons.put("\uD83D\uDD04", (mb, ms) -> {
+				if (!ShiroInfo.getHashes().remove(hash.get())) return;
+				if (phase != Phase.PLAN) {
+					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
+					return;
+				}
+
+				Hand h = getHands().get(current);
+				h.redrawHand();
+
+				reroll = false;
+				resetTimerKeepTurn();
+				AtomicBoolean shownHand = new AtomicBoolean(false);
+				channel.sendMessage(getCurrent().getName() + " rolou novamente as cartas na mão!")
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							if (!shownHand.get()) {
+								shownHand.set(true);
+								h.showHand();
+							}
+						});
+			});
 		if (getHands().get(current).getHp() < 1500 && getHands().get(current).getDestinyDeck().size() > 0)
 			buttons.put("\uD83E\uDDE7", (mb, ms) -> {
 				if (!ShiroInfo.getHashes().remove(hash.get())) return;
@@ -1704,6 +1754,10 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 
+				arena.getGraveyard().get(current).addAll(discardBatch);
+				discardBatch.clear();
+
+				if (getRound() > 0) reroll = false;
 				resetTimer(this);
 
 				phase = Phase.PLAN;
