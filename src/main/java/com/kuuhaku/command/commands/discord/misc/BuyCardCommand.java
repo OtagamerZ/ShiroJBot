@@ -215,9 +215,9 @@ public class BuyCardCommand extends Command {
 							eb.addField(
 									"`ID: " + cm.getId() + "` | " + cm.getCard().getName() + " (" + cm.getCard().getCard().getRarity().toString() + ")",
 									blackfriday ?
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "**`valor muito alto`**" : "~~" + cm.getPrice() + "~~ **" + Math.round(cm.getPrice() * 0.75) + "** créditos")
+											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "**`valor muito alto`**" : "~~" + Helper.separate(cm.getPrice()) + "~~ **" + Helper.separate(Math.round(cm.getPrice() * 0.75)) + "** créditos")
 											:
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "**`valor muito alto`**" : "**" + cm.getPrice() + "** créditos"),
+											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "**`valor muito alto`**" : "**" + Helper.separate(cm.getPrice()) + "** créditos"),
 									false
 							);
 						}
@@ -227,9 +227,9 @@ public class BuyCardCommand extends Command {
 							eb.addField(
 									"`ID: " + fm.getId() + "` | " + fm.getCard().getCard().getName() + " (" + fm.getCard().getCard().getRarity().toString() + ")",
 									blackfriday ?
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (fm.getPrice() > 250000 ? "**`valor muito alto`**" : "~~" + fm.getPrice() + "~~ **" + Math.round(fm.getPrice() * 0.75) + "** créditos")
+											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (fm.getPrice() > 250000 ? "**`valor muito alto`**" : "~~" + Helper.separate(fm.getPrice()) + "~~ **" + Helper.separate(Math.round(fm.getPrice() * 0.75)) + "** créditos")
 											:
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (fm.getPrice() > 250000 ? "**`valor muito alto`**" : "**" + fm.getPrice() + "** créditos"),
+											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (fm.getPrice() > 250000 ? "**`valor muito alto`**" : "**" + Helper.separate(fm.getPrice()) + "** créditos"),
 									false
 							);
 						}
@@ -239,9 +239,9 @@ public class BuyCardCommand extends Command {
 							eb.addField(
 									"`ID: " + em.getId() + "` | " + em.getCard().getCard().getName() + " (" + em.getCard().getCard().getRarity().toString() + ")",
 									blackfriday ?
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50) ? "**`valor muito alto`**" : "~~" + em.getPrice() + "~~ **" + Math.round(em.getPrice() * 0.75) + "** créditos")
+											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50) ? "**`valor muito alto`**" : "~~" + Helper.separate(em.getPrice()) + "~~ **" + Helper.separate(Math.round(em.getPrice() * 0.75)) + "** créditos")
 											:
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50) ? "**`valor muito alto`**" : "**" + em.getPrice() + "** créditos"),
+											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50) ? "**`valor muito alto`**" : "**" + Helper.separate(em.getPrice()) + "** créditos"),
 									false
 							);
 						}
@@ -254,7 +254,9 @@ public class BuyCardCommand extends Command {
 			if (pages.size() == 0) {
 				channel.sendMessage("Ainda não há nenhuma carta anunciada.").queue();
 			} else
-				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
+						Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
+				);
 			return;
 		}
 
@@ -301,7 +303,7 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(cm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(cm.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + cm.getPrice() + " créditos  (" + Math.round(cm.getPrice() * 0.1) + " de taxa).").queue(null, Helper::doNothing),
+									c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos  (" + Helper.separate(Math.round(cm.getPrice() * 0.1)) + " de taxa).").queue(null, Helper::doNothing),
 							Helper::doNothing
 					);
 					channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
@@ -360,7 +362,7 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(em.getSeller());
 					User buyerU = Main.getInfo().getUserByID(em.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + em.getPrice() + " créditos (" + Math.round(em.getPrice() * 0.1) + " de taxa).").queue(),
+									c.sendMessage("✅ | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos (" + Helper.separate(Math.round(em.getPrice() * 0.1)) + " de taxa).").queue(),
 							Helper::doNothing
 					);
 					channel.sendMessage("✅ | Equipamento comprado com sucesso!").queue();
@@ -422,7 +424,7 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(fm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(fm.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + fm.getPrice() + " créditos (" + Math.round(fm.getPrice() * 0.1) + " de taxa).").queue(),
+									c.sendMessage("✅ | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos (" + Helper.separate(Math.round(fm.getPrice() * 0.1)) + " de taxa).").queue(),
 							Helper::doNothing
 					);
 					channel.sendMessage("✅ | Arena comprada com sucesso!").queue();

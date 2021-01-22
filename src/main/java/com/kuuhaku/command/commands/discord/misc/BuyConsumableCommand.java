@@ -26,6 +26,7 @@ import com.kuuhaku.model.common.Consumable;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.ConsumableShop;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -62,9 +63,9 @@ public class BuyConsumableCommand extends Command {
 			for (Map.Entry<String, Consumable> entry : ConsumableShop.getAvailable().entrySet()) {
 				String k = entry.getKey();
 				Consumable v = entry.getValue();
-				eb.addField("`" + k + "` | " + v.getName() + " (" + v.getPrice() + " créditos)", v.getDescription(), false);
+				eb.addField("`" + k + "` | " + v.getName() + " (" + Helper.separate(v.getPrice()) + " créditos)", v.getDescription(), false);
 			}
-			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+			eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 			channel.sendMessage(eb.build()).queue();
 			return;

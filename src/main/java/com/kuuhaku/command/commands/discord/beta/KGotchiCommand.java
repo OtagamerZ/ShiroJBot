@@ -114,7 +114,7 @@ public class KGotchiCommand extends Command {
 						eb.addField(field);
 					}
 					eb.setThumbnail(t.getIcon());
-					eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+					eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 					pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 				}
@@ -258,7 +258,7 @@ public class KGotchiCommand extends Command {
 								String n = e.getKey();
 								Vanity vanity = e.getValue();
 								fields.compute(vanity.getType(), (vt, fd) -> fd == null ? new ArrayList<>() : fd)
-										.add(new MessageEmbed.Field(vanity.getName() + " - " + vanity.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar extra " + n + "`)", "Bônus de " + vanity.getType().getBonus().toLowerCase() + ": " + (int) (vanity.getModifier() * 100) + "%", true));
+										.add(new MessageEmbed.Field(vanity.getName() + " - " + Helper.separate(vanity.getPrice()) + " créditos\n(`" + prefix + "kgotchi comprar extra " + n + "`)", "Bônus de " + vanity.getType().getBonus().toLowerCase() + ": " + (int) (vanity.getModifier() * 100) + "%", true));
 							}
 
 							Map<String, Page> pages = new HashMap<>();
@@ -272,7 +272,7 @@ public class KGotchiCommand extends Command {
 									eb.addField(field);
 								}
 								eb.setThumbnail(t.getIcon());
-								eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+								eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 								pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 							}
@@ -292,7 +292,7 @@ public class KGotchiCommand extends Command {
 							k.addVanity(v);
 							acc.consumeCredit(v.getPrice(), this.getClass());
 
-							channel.sendMessage("Você comprou uma " + v.getName().toLowerCase() + " por " + v.getPrice() + " créditos.").queue();
+							channel.sendMessage("Você comprou uma " + v.getName().toLowerCase() + " por " + Helper.separate(v.getPrice()) + " créditos.").queue();
 
 							AccountDAO.saveAccount(acc);
 						}
@@ -307,7 +307,7 @@ public class KGotchiCommand extends Command {
 								String n = entry.getKey();
 								Food food = entry.getValue();
 								fields.compute(food.getType(), (ft, fd) -> fd == null ? new ArrayList<>() : fd)
-										.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar comida " + n + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
+										.add(new MessageEmbed.Field(food.getName() + " - " + Helper.separate(food.getPrice()) + " créditos\n(`" + prefix + "kgotchi comprar comida " + n + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
 							}
 
 							Map<String, Page> pages = new HashMap<>();
@@ -321,7 +321,7 @@ public class KGotchiCommand extends Command {
 									eb.addField(field);
 								}
 								eb.setThumbnail(t.getIcon());
-								eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+								eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
 
 								pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 							}
@@ -342,7 +342,7 @@ public class KGotchiCommand extends Command {
 								k.addToBag(f);
 								acc.consumeCredit(f.getPrice(), this.getClass());
 
-								channel.sendMessage("Você comprou 1 unidade de " + f.getName().toLowerCase() + " por " + f.getPrice() + " créditos.").queue();
+								channel.sendMessage("Você comprou 1 unidade de " + f.getName().toLowerCase() + " por " + Helper.separate(f.getPrice()) + " créditos.").queue();
 
 							} else {
 								if (!StringUtils.isNumeric(args[3])) {
@@ -359,7 +359,7 @@ public class KGotchiCommand extends Command {
 								k.addToBag(f, Integer.parseInt(args[3]));
 								acc.consumeCredit(f.getPrice() * Integer.parseInt(args[3]), this.getClass());
 
-								channel.sendMessage("Você comprou " + args[3] + " unidades de " + f.getName().toLowerCase() + " por " + (f.getPrice() * Integer.parseInt(args[3])) + " créditos.").queue();
+								channel.sendMessage("Você comprou " + args[3] + " unidades de " + f.getName().toLowerCase() + " por " + Helper.separate(f.getPrice() * Integer.parseInt(args[3])) + " créditos.").queue();
 							}
 
 							AccountDAO.saveAccount(acc);
@@ -378,7 +378,7 @@ public class KGotchiCommand extends Command {
 		if (rng > 50 && rng <= 75) {
 			acc.addCredit(2 * rng, this.getClass());
 			AccountDAO.saveAccount(acc);
-			channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + (4 * rng) + " créditos!").queue();
+			channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + Helper.separate(4 * rng) + " créditos!").queue();
 		} else if (rng > 85) {
 			int amount = (rng - 80) / 5;
 			Food randFood = (Food) FoodMenu.getMenu().values().toArray()[Helper.rng(FoodMenu.getMenu().size(), true)];

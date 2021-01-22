@@ -67,7 +67,7 @@ public class CreateClanCommand extends Command {
 
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (acc.getBalance() + acc.getVBalance() < 10000) {
-			channel.sendMessage("❌ | Você precisa de 10000 créditos para poder criar um clã.").queue();
+			channel.sendMessage("❌ | Você precisa de 10.000 créditos para poder criar um clã.").queue();
 			return;
 		}
 
@@ -87,7 +87,7 @@ public class CreateClanCommand extends Command {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja criar o clã " + name + " por 10000 créditos?")
+		channel.sendMessage("Tem certeza que deseja criar o clã " + name + " por 10.000 créditos?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());

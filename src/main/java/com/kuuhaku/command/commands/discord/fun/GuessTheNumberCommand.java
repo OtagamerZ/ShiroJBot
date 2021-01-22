@@ -112,7 +112,7 @@ public class GuessTheNumberCommand extends Command {
 
 				if (guess == theValue) {
 					int prize = Helper.clamp(Helper.rng(750, false), 350, 750);
-					channel.sendMessage("Você acertou! Como prêmio você receberá **" + prize + "** créditos.").queue();
+					channel.sendMessage("Você acertou! Como prêmio você receberá **" + Helper.separate(prize) + "** créditos.").queue();
 					acc.addCredit(prize, this.getClass());
 					AccountDAO.saveAccount(acc);
 

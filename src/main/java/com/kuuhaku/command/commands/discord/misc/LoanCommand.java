@@ -65,26 +65,26 @@ public class LoanCommand extends Command {
 
         ExceedMember ex = ExceedDAO.getExceedMember(author.getId());
         if (args.length < 1) {
-            EmbedBuilder eb = new ColorlessEmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-            eb.setTitle(":bank: | Empréstimo de créditos");
-            eb.setThumbnail("https://image.flaticon.com/icons/png/512/1462/1462438.png");
-            eb.setDescription("""
-                    Está precisando de créditos rápidos? Estão aparecendo muitas cartas que você deseja obter? Talvez seu Kawaigotchi esteja morrendo?
-                    Não se preocupe, nós podemos resolver!
-                         
-                    Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar a dívida mais tarde.
-                    """);
-            eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1000 créditos (juros de " + Helper.round(CreditLoan.LOAN_1.getInterest(ex) * 100 - 100, 1) + "%)", false);
-            eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2500 créditos (juros de " + Helper.round(CreditLoan.LOAN_2.getInterest(ex) * 100 - 100, 1) + "%)", false);
-            eb.addField("Plano Bate-papo: `" + prefix + "emprestimo 3`", "5000 créditos (juros de " + Helper.round(CreditLoan.LOAN_3.getInterest(ex) * 100 - 100, 1) + "%)", false);
-            eb.addField("Plano Animador de Chat: `" + prefix + "emprestimo 4`", "10000 créditos (juros de " + Helper.round(CreditLoan.LOAN_4.getInterest(ex) * 100 - 100, 1) + "%)", false);
-            eb.addField("Plano Ultimate: `" + prefix + "emprestimo 5`", "25000 créditos (juros de " + Helper.round(CreditLoan.LOAN_5.getInterest(ex) * 100 - 100, 1) + "%)", false);
-            eb.setFooter("Não há prazo para debitar a dívida, todo crédito que você ganhar reduzirá a dívida.");
+			eb.setTitle(":bank: | Empréstimo de créditos");
+			eb.setThumbnail("https://image.flaticon.com/icons/png/512/1462/1462438.png");
+			eb.setDescription("""
+					Está precisando de créditos rápidos? Estão aparecendo muitas cartas que você deseja obter? Talvez seu Kawaigotchi esteja morrendo?
+					Não se preocupe, nós podemos resolver!
+					     
+					Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar a dívida mais tarde.
+					""");
+			eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_1.getInterest(ex) * 100 - 100, 1) + "%)", false);
+			eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2.500 créditos (juros de " + Helper.round(CreditLoan.LOAN_2.getInterest(ex) * 100 - 100, 1) + "%)", false);
+			eb.addField("Plano Bate-papo: `" + prefix + "emprestimo 3`", "5.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_3.getInterest(ex) * 100 - 100, 1) + "%)", false);
+			eb.addField("Plano Animador de Chat: `" + prefix + "emprestimo 4`", "10.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_4.getInterest(ex) * 100 - 100, 1) + "%)", false);
+			eb.addField("Plano Ultimate: `" + prefix + "emprestimo 5`", "25.000 créditos (juros de " + Helper.round(CreditLoan.LOAN_5.getInterest(ex) * 100 - 100, 1) + "%)", false);
+			eb.setFooter("Não há prazo para debitar a dívida, todo crédito que você ganhar reduzirá a dívida.");
 
-            channel.sendMessage(eb.build()).queue();
-            return;
-        } else if (!StringUtils.isNumeric(args[0])) {
+			channel.sendMessage(eb.build()).queue();
+			return;
+		} else if (!StringUtils.isNumeric(args[0])) {
             channel.sendMessage("❌ | O plano precisa ser um valor numérico de 1 à 5.").queue();
             return;
         }
@@ -108,7 +108,7 @@ public class LoanCommand extends Command {
         String hash = Helper.generateHash(guild, author);
         ShiroInfo.getHashes().add(hash);
         Main.getInfo().getConfirmationPending().put(author.getId(), true);
-        channel.sendMessage("Você está prestes a obter __**" + cl.getLoan() + " créditos**__ a um juros de __" + Helper.round(cl.getInterest(ex) * 100 - 100, 1) + "%__ (__**" + Math.round(cl.getLoan() * cl.getInterest(ex)) + " de dívida**__), deseja confirmar?")
+		channel.sendMessage("Você está prestes a obter __**" + Helper.separate(cl.getLoan()) + " créditos**__ a um juros de __" + Helper.round(cl.getInterest(ex) * 100 - 100, 1) + "%__ (__**" + Helper.separate(Math.round(cl.getLoan() * cl.getInterest(ex))) + " de dívida**__), deseja confirmar?")
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                             if (!ShiroInfo.getHashes().remove(hash)) return;
                             Main.getInfo().getConfirmationPending().invalidate(author.getId());

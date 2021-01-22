@@ -138,17 +138,17 @@ public class URankCommand extends Command {
 		List<Account> accs = AccountDAO.getAccountRank();
 		accs.removeIf(acc -> checkUser(acc).isBlank());
 
-		String champ = "1 - %s %s".formatted(
+		String champ = "1 - %s %s créditos".formatted(
 				checkUser(accs.get(0)),
-				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), accs.get(0).getBalance())
+				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), Helper.separate(accs.get(0).getBalance()))
 		);
 		List<Account> sub9 = accs.subList(1, Math.min(accs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
-			sub9Formatted.append("%s - %s %s\n".formatted(
+			sub9Formatted.append("%s - %s %s créditos\n".formatted(
 					i + 2,
 					checkUser(sub9.get(i)),
-					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), sub9.get(i).getBalance())
+					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), Helper.separate(sub9.get(i).getBalance()))
 			));
 		}
 

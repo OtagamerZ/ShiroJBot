@@ -101,7 +101,7 @@ public class ReversiCommand extends Command {
         ShiroInfo.getHashes().add(hash);
         Main.getInfo().getConfirmationPending().put(author.getId(), true);
         Game t = new Reversi(Main.getShiroShards(), (TextChannel) channel, bet, author, message.getMentionedUsers().get(0));
-        channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Reversi, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
+        channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Reversi, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : ""))
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                             if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
                                 if (!ShiroInfo.getHashes().remove(hash)) return;

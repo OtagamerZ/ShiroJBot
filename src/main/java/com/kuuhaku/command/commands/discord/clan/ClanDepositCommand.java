@@ -77,12 +77,15 @@ public class ClanDepositCommand extends Command {
 		} else if (acc.getLoan() > 0) {
 			channel.sendMessage("❌ | Você não pode depositar se possuir dívida ativa.").queue();
 			return;
+		} else if (c.getVault() + amount >= c.getTier().getVaultSize()) {
+			channel.sendMessage("❌ | Depositar essa quantidade ultrapassa a capacidade do cofre do clã.").queue();
+			return;
 		}
 
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja depositar " + amount + " créditos no cofre do clã?")
+		channel.sendMessage("Tem certeza que deseja depositar " + Helper.separate(amount) + " créditos no cofre do clã?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
