@@ -40,7 +40,7 @@ public class BackupDAO {
 	private static ExecutorService backupQueue = Executors.newFixedThreadPool(5);
 
 	public static void dumpData(DataDump data, boolean exitAfter) {
-		List<CustomAnswers> caDump = data.getCaDump();
+		List<CustomAnswer> caDump = data.getCaDump();
 		List<GuildConfig> gcDump = data.getGcDump();
 		List<Member> mDump = data.getmDump();
 		List<Kawaigotchi> kgDump = data.getKgDump();
@@ -156,7 +156,7 @@ public class BackupDAO {
 	public static DataDump getData() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query ca = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
+		Query ca = em.createQuery("SELECT c FROM CustomAnswer c", CustomAnswer.class);
 		Query m = em.createQuery("SELECT m FROM Member m", Member.class);
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
 		Query kg = em.createQuery("SELECT k FROM Kawaigotchi k", Kawaigotchi.class);

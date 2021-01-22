@@ -29,7 +29,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
-import com.kuuhaku.model.persistent.CustomAnswers;
+import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -70,7 +70,7 @@ public class CustomAnswerCommand extends Command {
 		} else if (args[0].equals("lista")) {
 			List<Page> pages = new ArrayList<>();
 
-			List<CustomAnswers> ca = BackupDAO.getCADump();
+			List<CustomAnswer> ca = BackupDAO.getCADump();
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			ca.removeIf(a -> !a.getGuildID().equals(guild.getId()) || a.isMarkForDelete());
 
@@ -91,13 +91,13 @@ public class CustomAnswerCommand extends Command {
 			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 			return;
 		} else if (StringUtils.isNumeric(args[0]) && !args[0].contains(";")) {
-			List<CustomAnswers> ca = BackupDAO.getCADump();
+			List<CustomAnswer> ca = BackupDAO.getCADump();
 			ca.removeIf(a -> !String.valueOf(a.getId()).equals(args[0]) || !a.getGuildID().equals(guild.getId()));
 			if (ca.size() == 0) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-not-found")).queue();
 				return;
 			}
-			CustomAnswers c = ca.get(0);
+			CustomAnswer c = ca.get(0);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 

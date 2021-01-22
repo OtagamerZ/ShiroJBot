@@ -21,7 +21,7 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.persistent.Blacklist;
-import com.kuuhaku.model.persistent.CustomAnswers;
+import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
@@ -30,14 +30,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataDump {
-	private final List<CustomAnswers> caDump;
+	private final List<CustomAnswer> caDump;
 	private final List<Member> mDump;
 	private final List<GuildConfig> gcDump;
 	private final List<Kawaigotchi> kgDump;
 	private final List<PoliticalState> psDump;
 	private final List<Blacklist> blDump;
 
-	public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump, List<Blacklist> blDump) {
+	public DataDump(List<CustomAnswer> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump, List<Blacklist> blDump) {
 		this.caDump = caDump;
 		this.gcDump = gcDump;
 		this.mDump = mDump;
@@ -46,9 +46,9 @@ public class DataDump {
 		this.blDump = Helper.getOr(blDump, new ArrayList<>());
 	}
 
-    public List<CustomAnswers> getCaDump() {
-        return caDump;
-    }
+	public List<CustomAnswer> getCaDump() {
+		return caDump;
+	}
 
     public List<Member> getmDump() {
 		return mDump;
