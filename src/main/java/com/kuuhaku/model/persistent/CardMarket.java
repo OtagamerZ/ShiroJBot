@@ -49,7 +49,7 @@ public class CardMarket implements Market {
 	private int price;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date publishDate = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+	private Date publishDate = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
 
 	public CardMarket(String seller, String buyer, KawaiponCard card, int price) {
 		this.seller = seller;
