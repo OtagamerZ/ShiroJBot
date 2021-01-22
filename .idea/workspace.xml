@@ -13,11 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ShoukanDeckCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ShoukanDeckCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1009,14 +1005,7 @@
       <workItem from="1611230435586" duration="8840000" />
       <workItem from="1611246269428" duration="10412000" />
       <workItem from="1611289248402" duration="1884000" />
-      <workItem from="1611332012065" duration="1657000" />
-    </task>
-    <task id="LOCAL-03456" summary="Criação de sistema de bolsa de valores">
-      <created>1611171350197</created>
-      <option name="number" value="03456" />
-      <option name="presentableId" value="LOCAL-03456" />
-      <option name="project" value="LOCAL" />
-      <updated>1611171350197</updated>
+      <workItem from="1611332012065" duration="1966000" />
     </task>
     <task id="LOCAL-03457" summary="Criação de sistema de bolsa de valores">
       <created>1611171489630</created>
@@ -1354,7 +1343,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611325204444</updated>
     </task>
-    <option name="localTasksCounter" value="3505" />
+    <task id="LOCAL-03505" summary="Correção no icone e banner dos clãs">
+      <created>1611335327114</created>
+      <option name="number" value="03505" />
+      <option name="presentableId" value="LOCAL-03505" />
+      <option name="project" value="LOCAL" />
+      <updated>1611335327115</updated>
+    </task>
+    <option name="localTasksCounter" value="3506" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1440,7 +1436,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de comando para testar efeitos dos campeões" />
     <MESSAGE value="Mudança no descarte de cartas no Shoukan" />
     <MESSAGE value="Melhoria no sistema de avaliação de suportes" />
     <MESSAGE value="Adicionado comando de top 10 de cada tier no Shoukan" />
@@ -1465,7 +1460,8 @@
     <MESSAGE value="Correção na bolsa de valores" />
     <MESSAGE value="Adição de mais taxas" />
     <MESSAGE value="Correção no logger" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no logger" />
+    <MESSAGE value="Correção no icone e banner dos clãs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no icone e banner dos clãs" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
