@@ -41,6 +41,7 @@ import org.json.JSONObject;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -75,6 +76,7 @@ public class MatchStatsCommand extends Command {
 				return;
 			}
 
+			hist.sort(Comparator.comparing(MatchHistory::getTimestamp).reversed());
 			List<List<MatchHistory>> history = Helper.chunkify(hist, 10);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()

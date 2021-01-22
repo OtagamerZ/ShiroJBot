@@ -19,6 +19,8 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.ZoneId;
@@ -41,6 +43,7 @@ public class MatchHistory {
 	@Enumerated(value = EnumType.STRING)
 	private Side winner = null;
 
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 
