@@ -20,7 +20,7 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.model.persistent.Card;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public interface Market {
 	int getId();
