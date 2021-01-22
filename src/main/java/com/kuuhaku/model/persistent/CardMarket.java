@@ -41,10 +41,7 @@ public class CardMarket implements Market {
 	private String buyer = "";
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Card card;
-
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean foil = false;
+	private KawaiponCard card;
 
 	@Column(columnDefinition = "INT NOT NULL")
 	private int price;
@@ -55,15 +52,13 @@ public class CardMarket implements Market {
 	public CardMarket(String seller, String buyer, KawaiponCard card, int price) {
 		this.seller = seller;
 		this.buyer = buyer;
-		this.card = card.getCard();
-		this.foil = card.isFoil();
+		this.card = card;
 		this.price = price;
 	}
 
 	public CardMarket(String seller, KawaiponCard card, int price) {
 		this.seller = seller;
-		this.card = card.getCard();
-		this.foil = card.isFoil();
+		this.card = card;
 		this.price = price;
 	}
 
@@ -95,17 +90,16 @@ public class CardMarket implements Market {
 	}
 
 	public KawaiponCard getCard() {
-		return new KawaiponCard(card, foil);
+		return card;
 	}
 
 	@Override
 	public Card getRawCard() {
-		return card;
+		return card.getCard();
 	}
 
 	public void setCard(KawaiponCard card) {
-		this.card = card.getCard();
-		this.foil = card.isFoil();
+		this.card = card;
 	}
 
 	public int getPrice() {
