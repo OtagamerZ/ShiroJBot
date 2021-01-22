@@ -1970,8 +1970,8 @@ public class Helper {
 		String n = StringUtils.reverse(String.valueOf(value));
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < n.length(); i++) {
-			sb.append(n.charAt(i));
 			if (i > 0 && i % 3 == 0) sb.append(".");
+			sb.append(n.charAt(i));
 		}
 		return sb.reverse().toString();
 	}
