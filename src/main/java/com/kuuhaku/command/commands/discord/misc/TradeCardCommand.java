@@ -22,19 +22,15 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -536,6 +532,7 @@ public class TradeCardCommand extends Command {
 
 										finalTarget.removeCard(kc);
 										finalKp.addCard(kc);
+										CardMarketDAO.saveCard(new CardMarket(other.getId(), author.getId(), kc, price));
 									}
 									case 2 -> {
 										Equipment eq = (Equipment) finalProduct.getRight();
@@ -552,6 +549,7 @@ public class TradeCardCommand extends Command {
 
 										finalTarget.removeEquipment(eq);
 										finalKp.addEquipment(eq);
+										EquipmentMarketDAO.saveCard(new EquipmentMarket(other.getId(), author.getId(), eq, price));
 									}
 									default -> {
 										Field f = (Field) finalProduct.getRight();
@@ -565,6 +563,7 @@ public class TradeCardCommand extends Command {
 
 										finalTarget.removeField(f);
 										finalKp.addField(f);
+										FieldMarketDAO.saveCard(new FieldMarket(other.getId(), author.getId(), f, price));
 									}
 								}
 
@@ -731,6 +730,7 @@ public class TradeCardCommand extends Command {
 
 										finalKp.removeCard(kc);
 										finalTarget.addCard(kc);
+										CardMarketDAO.saveCard(new CardMarket(author.getId(), other.getId(), kc, price));
 									}
 									case 2 -> {
 										Equipment eq = (Equipment) finalProduct.getRight();
@@ -747,6 +747,7 @@ public class TradeCardCommand extends Command {
 
 										finalKp.removeEquipment(eq);
 										finalTarget.addEquipment(eq);
+										EquipmentMarketDAO.saveCard(new EquipmentMarket(author.getId(), other.getId(), eq, price));
 									}
 									default -> {
 										Field f = (Field) finalProduct.getRight();
@@ -760,6 +761,7 @@ public class TradeCardCommand extends Command {
 
 										finalKp.removeField(f);
 										finalTarget.addField(f);
+										FieldMarketDAO.saveCard(new FieldMarket(author.getId(), other.getId(), f, price));
 									}
 								}
 
