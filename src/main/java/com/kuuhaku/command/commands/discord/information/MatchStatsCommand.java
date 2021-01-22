@@ -25,7 +25,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.MatchDAO;
-import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.MatchHistory;
@@ -146,7 +145,6 @@ public class MatchStatsCommand extends Command {
 						mh.getWinner() == Side.TOP ? "(VENCEDOR)" : p2WO ? "(W.O.)" : ""
 				), true)
 				.addField("Duração", mh.getRounds().size() + " turnos", true)
-				.addBlankField(false)
 				.addField("Eficiencia de " + p1 + " (BAIXO)", """
 						Eficiência de mana: %s%%
 						Turno X dano: %s%%
@@ -184,8 +182,6 @@ public class MatchStatsCommand extends Command {
 			Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
 			Map<String, Integer> yourResult = result.get(s).getRight();
 			Map<String, Integer> hisResult = result.get(other).getRight();
-			MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(result.get(s).getLeft());
-			MatchMakingRating hisMMR = MatchMakingRatingDAO.getMMR(result.get(other).getLeft());
 			int spentMana = yourResult.get("mana");
 			int damageDealt = hisResult.get("hp");
 
@@ -194,11 +190,10 @@ public class MatchStatsCommand extends Command {
 				double damageEff = (double) -damageDealt / yourResult.size();
 				double expEff = 5000d / yourResult.size();
 				double sustainEff = 1 + yourResult.get("hp") / 5000f;
-				long mmr = Math.round(250 * manaEff + (125 * (damageEff / expEff) + 125 * sustainEff));
 
 				out.put(s.name(), new JSONObject() {{
 					put("manaEff", manaEff);
-					put("damageEff", damageEff);
+					put("damageEff", damageEff / expEff);
 					put("sustainEff", sustainEff);
 				}});
 			} else if (history.getWinner() == other) {
@@ -206,11 +201,10 @@ public class MatchStatsCommand extends Command {
 				double damageEff = (double) -damageDealt / yourResult.size();
 				double expEff = 5000d / yourResult.size();
 				double sustainEff = 1 + yourResult.get("hp") / 5000d;
-				long mmr = Math.round(250 * manaEff - (125 * (damageEff / expEff) + 125 * sustainEff));
 
 				out.put(s.name(), new JSONObject() {{
 					put("manaEff", manaEff);
-					put("damageEff", damageEff);
+					put("damageEff", damageEff / expEff);
 					put("sustainEff", sustainEff);
 				}});
 			}
