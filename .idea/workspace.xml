@@ -997,20 +997,6 @@
       <workItem from="1611246269428" duration="10412000" />
       <workItem from="1611289248402" duration="1884000" />
     </task>
-    <task id="LOCAL-03447" summary="Criação de sistema de bolsa de valores">
-      <created>1611168976857</created>
-      <option name="number" value="03447" />
-      <option name="presentableId" value="LOCAL-03447" />
-      <option name="project" value="LOCAL" />
-      <updated>1611168976857</updated>
-    </task>
-    <task id="LOCAL-03448" summary="Criação de sistema de bolsa de valores">
-      <created>1611169102476</created>
-      <option name="number" value="03448" />
-      <option name="presentableId" value="LOCAL-03448" />
-      <option name="project" value="LOCAL" />
-      <updated>1611169102477</updated>
-    </task>
     <task id="LOCAL-03449" summary="Criação de sistema de bolsa de valores">
       <created>1611169524001</created>
       <option name="number" value="03449" />
@@ -1340,7 +1326,21 @@
       <option name="project" value="LOCAL" />
       <updated>1611318837112</updated>
     </task>
-    <option name="localTasksCounter" value="3496" />
+    <task id="LOCAL-03496" summary="Correção no logger">
+      <created>1611319387278</created>
+      <option name="number" value="03496" />
+      <option name="presentableId" value="LOCAL-03496" />
+      <option name="project" value="LOCAL" />
+      <updated>1611319387278</updated>
+    </task>
+    <task id="LOCAL-03497" summary="Correção no logger">
+      <created>1611319486507</created>
+      <option name="number" value="03497" />
+      <option name="presentableId" value="LOCAL-03497" />
+      <option name="project" value="LOCAL" />
+      <updated>1611319486507</updated>
+    </task>
+    <option name="localTasksCounter" value="3498" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1513,34 +1513,34 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611318836283">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611319485617">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611318836283" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611319485617" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1608208920619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608208920619" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728513022" />
-    <state width="1648" height="322" key="GridCell.Tab.0.bottom" timestamp="1611289516890">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="351" key="GridCell.Tab.0.bottom" timestamp="1611319764718">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="272" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360156" />
+    <state width="1387" height="351" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1611319764718" />
     <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516890" />
-    <state width="1648" height="322" key="GridCell.Tab.0.center" timestamp="1611289516875">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="351" key="GridCell.Tab.0.center" timestamp="1611319764718">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="272" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360155" />
+    <state width="1387" height="351" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1611319764718" />
     <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516875" />
-    <state width="1648" height="322" key="GridCell.Tab.0.left" timestamp="1611289516875">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="351" key="GridCell.Tab.0.left" timestamp="1611319764718">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="272" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360155" />
+    <state width="1387" height="351" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1611319764718" />
     <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516875" />
-    <state width="1648" height="322" key="GridCell.Tab.0.right" timestamp="1611289516875">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1387" height="351" key="GridCell.Tab.0.right" timestamp="1611319764718">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="272" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1611162360156" />
+    <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1611319764718" />
     <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516875" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1610652298040">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1561,10 +1561,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611318838548">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611319489437">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611318838548" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611319489437" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611291029366" />
     <state x="806" y="358" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1607036605289">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1588,10 +1588,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="679" y="268" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1920.1040@0.0.1920.1040" timestamp="1603511313028" />
-    <state x="1210" y="132" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1611289973964">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="305" y="160" width="739" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1611319755914">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="305" y="160" width="413" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1608140501516" />
+    <state x="305" y="160" width="739" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611319755914" />
     <state x="1210" y="132" width="437" height="664" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1611289973964" />
     <state x="583" y="139" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1611286408155">
       <screen x="0" y="0" width="1920" height="1040" />
