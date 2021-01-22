@@ -51,8 +51,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.core.config.Configurator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -79,8 +77,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static void main(String[] args) throws Exception {
 		//Locale.setDefault(new Locale("pt", "BR"));
-
-		Configurator.setLevel("org.hibernate.SQL", Level.ERROR);
 
 		Helper.logger(Main.class).info("""
 				Shiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)
