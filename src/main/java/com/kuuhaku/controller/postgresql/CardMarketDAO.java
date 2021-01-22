@@ -119,7 +119,7 @@ public class CardMarketDAO {
 		Query q = em.createQuery("""
 				SELECT cm.price * 1.0
 				FROM CardMarket cm
-				WHERE cm.card.card = :card
+				WHERE cm.card = :card
 				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
 				""");
@@ -147,7 +147,7 @@ public class CardMarketDAO {
 			Query q = em.createQuery("""
 					SELECT cm.price * 1.0
 					FROM CardMarket cm
-					WHERE cm.card.card = :card
+					WHERE cm.card = :card
 					AND cm.publishDate < :date
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
@@ -161,7 +161,7 @@ public class CardMarketDAO {
 			q = em.createQuery("""
 					SELECT cm.price * 1.0
 					FROM CardMarket cm
-					WHERE cm.card.card = :card
+					WHERE cm.card = :card
 					AND cm.buyer <> ''
 					AND cm.buyer <> cm.seller
 					""");
