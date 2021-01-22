@@ -90,7 +90,7 @@
             <!--  propriedades do hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect"/>
             <property name="hibernate.jdbc.batch_size" value="30"/>
-            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.show_sql" value="true"/>
 
             <!--  propriedade do C3P0 -->
             <property name="hibernate.c3p0.min_size" value="1"/>
