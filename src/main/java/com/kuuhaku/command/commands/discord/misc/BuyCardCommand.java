@@ -38,6 +38,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NonNls;
 
@@ -288,7 +289,7 @@ public class BuyCardCommand extends Command {
 
 					seller.addCredit(Math.round(cm.getPrice() * 0.9), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(cm.getPrice() * 0.75) : cm.getPrice(), this.getClass());
-					long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+					long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
 					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(cm.getPrice() * 0.1)));
 
 					AccountDAO.saveAccount(seller);
@@ -347,7 +348,7 @@ public class BuyCardCommand extends Command {
 
 					seller.addCredit(Math.round(em.getPrice() * 0.9), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(em.getPrice() * 0.75) : em.getPrice(), this.getClass());
-					long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+					long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
 					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(em.getPrice() * 0.1)));
 
 					AccountDAO.saveAccount(seller);
@@ -409,7 +410,7 @@ public class BuyCardCommand extends Command {
 
 					seller.addCredit(Math.round(fm.getPrice() * 0.9), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(fm.getPrice() * 0.75) : fm.getPrice(), this.getClass());
-					long accumulated = Long.parseLong(DynamicParameterDAO.getParam("tributes").getValue());
+					long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
 					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(fm.getPrice() * 0.1)));
 
 					AccountDAO.saveAccount(seller);

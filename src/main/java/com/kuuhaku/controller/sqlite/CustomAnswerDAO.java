@@ -18,7 +18,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.model.persistent.CustomAnswers;
+import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 
@@ -28,11 +28,11 @@ import java.util.List;
 
 public class CustomAnswerDAO {
 	@SuppressWarnings("unchecked")
-	public static CustomAnswers getCAByTrigger(String trigger, String guild) {
+	public static CustomAnswer getCAByTrigger(String trigger, String guild) {
 		EntityManager em = Manager.getEntityManager();
-		List<CustomAnswers> ca;
+		List<CustomAnswer> ca;
 
-		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) = :trigger AND guildID = :guild AND markForDelete = FALSE", CustomAnswers.class);
+		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE LOWER(gatilho) = :trigger AND guildID = :guild AND markForDelete = FALSE", CustomAnswer.class);
 		q.setParameter("trigger", trigger.toLowerCase());
 		q.setParameter("guild", guild);
 		ca = q.getResultList();
@@ -42,13 +42,13 @@ public class CustomAnswerDAO {
 		return ca.size() > 0 ? ca.get(Helper.rng(ca.size(), true)) : null;
 	}
 
-	public static CustomAnswers getCAByID(Long id) {
+	public static CustomAnswer getCAByID(Long id) {
 		EntityManager em = Manager.getEntityManager();
-		CustomAnswers ca;
+		CustomAnswer ca;
 
-		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE id = :id AND markForDelete = FALSE", CustomAnswers.class);
+		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE id = :id AND markForDelete = FALSE", CustomAnswer.class);
 		q.setParameter("id", id);
-		ca = (CustomAnswers) q.getSingleResult();
+		ca = (CustomAnswer) q.getSingleResult();
 
 		em.close();
 
@@ -56,11 +56,11 @@ public class CustomAnswerDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<CustomAnswers> getCAByGuild(String id) {
+	public static List<CustomAnswer> getCAByGuild(String id) {
 		EntityManager em = Manager.getEntityManager();
-		CustomAnswers ca;
+		CustomAnswer ca;
 
-		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE guildID = :guild AND markForDelete = FALSE", CustomAnswers.class);
+		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE guildID = :guild AND markForDelete = FALSE", CustomAnswer.class);
 		q.setParameter("guild", id);
 
 		try {
@@ -73,7 +73,7 @@ public class CustomAnswerDAO {
 	public static void addCAtoDB(Guild g, String trigger, String answer) {
 		EntityManager em = Manager.getEntityManager();
 
-		CustomAnswers ca = new CustomAnswers();
+		CustomAnswer ca = new CustomAnswer();
 		ca.setGuildID(g.getId());
 		ca.setGatilho(trigger);
 		ca.setAnswer(answer);
@@ -85,7 +85,7 @@ public class CustomAnswerDAO {
 		em.close();
 	}
 
-	public static void removeCAFromDB(CustomAnswers ca) {
+	public static void removeCAFromDB(CustomAnswer ca) {
 		EntityManager em = Manager.getEntityManager();
 
 		ca.setMarkForDelete(true);

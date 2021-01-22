@@ -18,17 +18,14 @@
 
 package com.kuuhaku.model.persistent;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "customanswers")
-public class CustomAnswers {
+@Table(name = "customanswer")
+public class CustomAnswer {
     @Id
-    @Column(columnDefinition = "BIGINT")
-    private long id = System.currentTimeMillis();
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
     private String guildID = "";
@@ -42,7 +39,7 @@ public class CustomAnswers {
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean markForDelete = false;
 
-    public CustomAnswers() {
+    public CustomAnswer() {
 
     }
 

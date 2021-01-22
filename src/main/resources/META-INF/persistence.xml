@@ -31,7 +31,7 @@
         <!-- entidade mapeada -->
         <class>com.kuuhaku.model.persistent.GuildConfig</class>
         <class>com.kuuhaku.model.persistent.Member</class>
-        <class>com.kuuhaku.model.persistent.CustomAnswers</class>
+        <class>com.kuuhaku.model.persistent.CustomAnswer</class>
         <class>com.kuuhaku.model.persistent.Tags</class>
         <class>com.kuuhaku.model.persistent.PermaBlock</class>
         <class>com.kuuhaku.model.persistent.MonthWinner</class>
@@ -115,7 +115,7 @@
         <!-- entidade mapeada -->
         <class>com.kuuhaku.model.persistent.GuildConfig</class>
         <class>com.kuuhaku.model.persistent.Member</class>
-        <class>com.kuuhaku.model.persistent.CustomAnswers</class>
+        <class>com.kuuhaku.model.persistent.CustomAnswer</class>
         <class>com.kuuhaku.model.persistent.Tags</class>
         <class>com.kuuhaku.model.persistent.PermaBlock</class>
         <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
