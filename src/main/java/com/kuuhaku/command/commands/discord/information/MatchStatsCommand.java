@@ -39,8 +39,8 @@ import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -86,7 +86,9 @@ public class MatchStatsCommand extends Command {
 				sb.setLength(0);
 
 				for (MatchHistory mh : chunk) {
-					LocalDate date = mh.getTimestamp().toInstant().atZone(ZoneId.of("GMT-3")).toLocalDate();
+					Calendar c = Calendar.getInstance();
+					c.setTime(mh.getTimestamp());
+					LocalDate date = LocalDate.of(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 					Map<Side, String> players = mh.getPlayers().entrySet().stream()
 							.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 					sb.append("(**%s**) `ID: %s` - %s VS %s\n".formatted(
@@ -116,7 +118,9 @@ public class MatchStatsCommand extends Command {
 			return;
 		}
 
-		LocalDate date = mh.getTimestamp().toInstant().atZone(ZoneId.of("GMT-3")).toLocalDate();
+		Calendar c = Calendar.getInstance();
+		c.setTime(mh.getTimestamp());
+		LocalDate date = LocalDate.of(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 		Map<Side, String> players = mh.getPlayers().entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 		Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcMMR(mh);
@@ -133,7 +137,7 @@ public class MatchStatsCommand extends Command {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Partida de " + p1 + " VS" + p2)
-				.addField("Jogada em", date.format(Helper.dateformat), true)
+				.addField("Jogada em", date.format(Helper.onlyDate), true)
 				.addField("Ordem de jogada", """
 						1º: %s %s
 						2º: %s %s
