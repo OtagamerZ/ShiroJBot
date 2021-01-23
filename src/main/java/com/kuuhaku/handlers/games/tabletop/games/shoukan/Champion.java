@@ -376,7 +376,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getFinAtk() {
-		return getEffAtk() + getLinkedTo().stream().mapToInt(Equipment::getAtk).sum();
+		return Math.max(0, getEffAtk() + getLinkedTo().stream().mapToInt(Equipment::getAtk).sum());
 	}
 
 	public int getEffAtk() {
