@@ -689,7 +689,7 @@ public class Shoukan extends GlobalGame {
 
 					if (!postCombat()) {
 						resetTimerKeepTurn();
-						channel.sendMessage(h.getUser().getName() + " atacou diretamente " + getHands().get(next).getUser().getName() + (getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "") + ".")
+						channel.sendMessage(c.getName() + " atacou diretamente " + getHands().get(next).getUser().getName() + (getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "") + ".")
 								.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
 									this.message.compute(s.getChannel().getId(), (id, m) -> {
