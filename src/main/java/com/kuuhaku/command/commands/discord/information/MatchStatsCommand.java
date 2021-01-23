@@ -75,7 +75,7 @@ public class MatchStatsCommand extends Command {
 				return;
 			}
 
-			hist.sort(Comparator.comparing(MatchHistory::getTimestamp).reversed());
+			hist.sort(Comparator.comparingInt(MatchHistory::getId).reversed());
 			List<List<MatchHistory>> history = Helper.chunkify(hist, 10);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
