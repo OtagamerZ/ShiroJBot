@@ -84,7 +84,7 @@ public class ClanCommand extends Command {
 					%s
 					""".formatted(
 					c.getMembers().size(), c.getTier().getCapacity() / 2,
-					c.getVault(), c.getTier().getCost(),
+					Helper.separate(c.getVault()), Helper.separate(c.getTier().getCost()),
 					switch (c.getTier()) {
 						case PARTY -> """
 								Título de facção
