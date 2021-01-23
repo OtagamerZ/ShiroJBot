@@ -388,7 +388,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getFinDef() {
-		return getEffDef() + getLinkedTo().stream().mapToInt(Equipment::getDef).sum();
+		return Math.max(getEffDef() + getLinkedTo().stream().mapToInt(Equipment::getDef).sum());
 	}
 
 	public int getEffDef() {
