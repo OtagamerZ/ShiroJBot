@@ -225,7 +225,7 @@ public class ShiroEvents extends ListenerAdapter {
 			try {
 				CustomAnswer ca = CustomAnswerDAO.getCAByTrigger(rawMessage, guild.getId());
 				if (ca != null && !ca.isMarkForDelete() && !Main.getSelfUser().getId().equals(author.getId()))
-					Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer().replace("%user%", author.getAsMention()).replace("%guild%", guild.getName()));
+					Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer().replace("%user%", author.getAsMention()).replace("%guild%", guild.getName()).replace("%count%", guild.getMemberCount()));
 			} catch (NoResultException | NullPointerException ignore) {
 			}
 
@@ -543,7 +543,7 @@ public class ShiroEvents extends ListenerAdapter {
 					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
 					if (template.has("image")) eb.setImage(template.getString("image"));
 
-					eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
+					eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()).replace("%count%", guild.getMemberCount()));
 
 					if (template.has("fields")) {
 						for (Object j : template.getJSONArray("fields")) {
@@ -570,7 +570,7 @@ public class ShiroEvents extends ListenerAdapter {
 							)
 							.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl())
 							.setColor(Helper.colorThief(image))
-							.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()))
+							.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()).replace("%count%", guild.getMemberCount()))
 							.setThumbnail(author.getAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
@@ -623,7 +623,7 @@ public class ShiroEvents extends ListenerAdapter {
 					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
 					if (template.has("image")) eb.setImage(template.getString("image"));
 
-					eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()));
+					eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()).replace("%count%", guild.getMemberCount()));
 
 					if (template.has("fields")) {
 						for (Object j : template.getJSONArray("fields")) {
@@ -650,7 +650,7 @@ public class ShiroEvents extends ListenerAdapter {
 							)
 							.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl())
 							.setColor(Helper.colorThief(image))
-							.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()))
+							.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()).replace("%count%", guild.getMemberCount()))
 							.setThumbnail(author.getAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
