@@ -55,7 +55,7 @@ public class EmbedCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Construindo embed...").queue(m -> {
 			if (Helper.hasPermission(member, PrivilegeLevel.MOD) && args.length > 0 && Helper.equalsAny(args[0], "reset", "resetar")) {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());

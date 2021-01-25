@@ -59,17 +59,17 @@ public class HitotsuCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (message.getMentionedUsers().size() == 0) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
-            return;
-        } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        } else if (Main.getInfo().getConfirmationPending().getIfPresent(message.getMentionedUsers().get(0).getId()) != null) {
-            channel.sendMessage("❌ | Este usuário possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
-            return;
-        }
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (message.getMentionedUsers().size() == 0) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			return;
+		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		} else if (Main.getInfo().getConfirmationPending().getIfPresent(message.getMentionedUsers().get(0).getId()) != null) {
+			channel.sendMessage("❌ | Este usuário possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
+			return;
+		}
 
         Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 

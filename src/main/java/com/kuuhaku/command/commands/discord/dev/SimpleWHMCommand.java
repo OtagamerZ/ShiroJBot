@@ -52,7 +52,7 @@ public class SimpleWHMCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		try {
 			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Webhook Test", Main.getShiroShards());
 			Map<String, Runnable> s = Helper.sendEmotifiedString(guild, String.join(" ", args));

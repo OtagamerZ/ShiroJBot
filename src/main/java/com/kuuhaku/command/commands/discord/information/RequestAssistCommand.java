@@ -55,7 +55,7 @@ public class RequestAssistCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().getRequests().contains(guild.getId())) {
 			channel.sendMessage("❌ | Este servidor já possui um pedido de auxílio em aberto, aguarde até que um membro da equipe de suporte feche-o.").queue();
 			return;

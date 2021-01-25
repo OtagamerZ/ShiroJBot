@@ -43,7 +43,7 @@ public class RelaysCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("```\n");
 		for (String s : Main.getRelay().getRelayMap().values()) {

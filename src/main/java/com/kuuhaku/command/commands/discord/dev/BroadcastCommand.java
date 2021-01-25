@@ -60,7 +60,7 @@ public class BroadcastCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-no-type")).queue();
 			return;
@@ -69,18 +69,13 @@ public class BroadcastCommand extends Command {
 			return;
 		}
 
-		String msg = rawCmd
-				.replaceFirst("[^\\s]+", "")
-				.replaceFirst("[^\\s]+", "")
-				.replace("\\n", "\n")
-				.trim();
 		Map<String, Boolean> result = new HashMap<>();
 		StringBuilder sb = new StringBuilder();
 		List<Page> pages = new ArrayList<>();
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		switch (args[0].toLowerCase()) {
-			case "geral" -> Helper.broadcast(msg, (TextChannel) channel, author);
+			case "geral" -> Helper.broadcast(argsAsText, (TextChannel) channel, author);
 			case "beta" -> {
 				List<Tags> ps = TagDAO.getAllBetas();
 				List<List<Tags>> psPages = Helper.chunkify(ps, 10);
@@ -96,7 +91,7 @@ public class BroadcastCommand extends Command {
 							result.put("Desconhecido (" + t.getId() + ")", false);
 						} else {
 							try {
-								u.openPrivateChannel().complete().sendMessage(msg).complete();
+								u.openPrivateChannel().complete().sendMessage(argsAsText).complete();
 								result.put(u.getAsTag(), true);
 							} catch (ErrorResponseException e) {
 								result.put(u.getAsTag(), false);

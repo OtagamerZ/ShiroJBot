@@ -55,14 +55,14 @@ public class DrawRaffleCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-period")).queue();
-            return;
-        } else if (!StringUtils.isNumeric(args[0])) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-period")).queue();
+			return;
+		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-period")).queue();
-            return;
-        }
+			return;
+		}
 
 		int days = Integer.parseInt(args[0]);
 		List<String> votes = UpvoteDAO.getVotes().stream().filter(u -> u.getVotedAt().isAfter(LocalDateTime.now().minusDays(days)) && Main.getInfo().getUserByID(u.getUid()) != null).map(Upvote::getUid).collect(Collectors.toList());

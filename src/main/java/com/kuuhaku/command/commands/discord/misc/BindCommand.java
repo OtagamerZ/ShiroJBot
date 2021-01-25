@@ -52,17 +52,17 @@ public class BindCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        Account acc = AccountDAO.getAccount(author.getId());
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		Account acc = AccountDAO.getAccount(author.getId());
 
-        if (!acc.getTwitchId().isBlank()) {
-            channel.sendMessage("❌ | Você já vinculou esta conta a um perfil da Twitch.").queue();
-            return;
-        }
+		if (!acc.getTwitchId().isBlank()) {
+			channel.sendMessage("❌ | Você já vinculou esta conta a um perfil da Twitch.").queue();
+			return;
+		}
 
-        try {
-            String code = Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(author.getId().getBytes(StandardCharsets.UTF_8)));
-            PendingBinding pb = PendingBindingDAO.getPendingBinding(code);
+		try {
+			String code = Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(author.getId().getBytes(StandardCharsets.UTF_8)));
+			PendingBinding pb = PendingBindingDAO.getPendingBinding(code);
 
             if (pb != null) {
                 channel.sendMessage("Código e instruções reenviados nas mensagens privadas.").queue();

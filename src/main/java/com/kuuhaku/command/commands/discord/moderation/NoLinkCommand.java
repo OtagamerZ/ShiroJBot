@@ -44,7 +44,7 @@ public class NoLinkCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (gc.getNoLinkChannels().contains(channel.getId())) gc.removeNoLinkChannel(message.getTextChannel());
@@ -52,6 +52,6 @@ public class NoLinkCommand extends Command {
 
 		GuildDAO.updateGuildSettings(gc);
 
-        channel.sendMessage("Agora os links neste canal estão " + (gc.getNoLinkChannels().contains(channel.getId()) ? "**bloqueados**" : "**liberados**")).queue();
-    }
+		channel.sendMessage("Agora os links neste canal estão " + (gc.getNoLinkChannels().contains(channel.getId()) ? "**bloqueados**" : "**liberados**")).queue();
+	}
 }

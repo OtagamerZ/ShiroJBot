@@ -60,13 +60,13 @@ public class ColorRoleCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (!guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_manage-roles")).queue();
-            return;
-        } else if (args.length < 1) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_manage-roles")).queue();
+			return;
+		} else if (args.length < 1) {
 			JSONObject jo = gc.getColorRoles();
 			if (jo.keySet().size() == 0) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-found")).queue();

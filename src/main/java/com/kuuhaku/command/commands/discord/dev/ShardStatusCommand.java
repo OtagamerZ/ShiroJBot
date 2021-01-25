@@ -54,7 +54,7 @@ public class ShardStatusCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		List<Page> pages = new ArrayList<>();
 
 		List<List<JDA>> shards = Helper.chunkify(Main.getShiroShards().getShards(), 10);

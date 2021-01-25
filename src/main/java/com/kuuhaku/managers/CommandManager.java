@@ -355,6 +355,9 @@ public class CommandManager {
 			put(MatchStatsCommand.class, new Argument(
 					"dadosdapartida", new String[]{"matchstats", "mstats", "estatisticas"}, REQ_ID, "cmd_match-stats", INFO, true
 			));
+			put(MerchantLicenseCommand.class, new Argument(
+					"licença", new String[]{"license", "merchantlicense", "licençadecomercio"}, "cmd_merchant-license", INFO, false
+			));
 
 			//MISC
 			put(BackgroundCommand.class, new Argument(

@@ -61,7 +61,7 @@ public class ExceedRankCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Gerando placares...").queue(m -> {
 			if (ExceedDAO.getExceed(author.getId()).isBlank()) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-rank-no-exceed")).queue();

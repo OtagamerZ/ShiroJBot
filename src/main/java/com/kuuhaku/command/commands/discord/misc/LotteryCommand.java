@@ -56,17 +56,17 @@ public class LotteryCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (args.length < 1) {
-            channel.sendMessage("O prêmio atual é __**" + Helper.separate(LotteryDAO.getLotteryValue().getValue()) + " créditos**__.").queue();
-            return;
-        } else if (args[0].split(",").length != 6 || args[0].length() != 17) {
-            channel.sendMessage("❌ | Você precisa informar 6 dezenas separadas por vírgula.").queue();
-            return;
-        } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        }
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (args.length < 1) {
+			channel.sendMessage("O prêmio atual é __**" + Helper.separate(LotteryDAO.getLotteryValue().getValue()) + " créditos**__.").queue();
+			return;
+		} else if (args[0].split(",").length != 6 || args[0].length() != 17) {
+			channel.sendMessage("❌ | Você precisa informar 6 dezenas separadas por vírgula.").queue();
+			return;
+		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
 
         Account acc = AccountDAO.getAccount(author.getId());
 

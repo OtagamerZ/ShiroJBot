@@ -47,7 +47,7 @@ public class ProfileColorCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (args.length == 0) {
 			channel.sendMessage("❌ | O primeiro argumento deve ser uma cor em formato hexadecimal (#RRGGBB) ou `reset`.").queue();

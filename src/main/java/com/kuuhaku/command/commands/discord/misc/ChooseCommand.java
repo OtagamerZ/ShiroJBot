@@ -44,7 +44,7 @@ public class ChooseCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você não me deu nenhuma opção.").queue();
 			return;

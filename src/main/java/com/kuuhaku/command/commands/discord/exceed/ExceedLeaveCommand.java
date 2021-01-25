@@ -53,17 +53,17 @@ public class ExceedLeaveCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        }
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
 
-        ExceedMember em = ExceedDAO.getExceedMember(author.getId());
+		ExceedMember em = ExceedDAO.getExceedMember(author.getId());
 
-        if (em == null || em.getExceed().isBlank()) {
-            channel.sendMessage("❌ | Você não faz parte de nenhum Exceed atualmente.").queue();
-            return;
+		if (em == null || em.getExceed().isBlank()) {
+			channel.sendMessage("❌ | Você não faz parte de nenhum Exceed atualmente.").queue();
+			return;
         }
 
         boolean willLock = ZonedDateTime.now(ZoneId.of("GMT-3")).getDayOfMonth() > 5;

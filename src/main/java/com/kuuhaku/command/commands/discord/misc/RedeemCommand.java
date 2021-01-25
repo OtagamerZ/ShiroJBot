@@ -51,17 +51,17 @@ public class RedeemCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        }
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
 
-        Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = AccountDAO.getAccount(author.getId());
 
-        if (acc.getStreak() < 7) {
-            channel.sendMessage("❌ | Você não chegou no acúmulo máximo de votos ainda (" + acc.getStreak() + " de 7)").queue();
-            return;
+		if (acc.getStreak() < 7) {
+			channel.sendMessage("❌ | Você não chegou no acúmulo máximo de votos ainda (" + acc.getStreak() + " de 7)").queue();
+			return;
         }
 
         String hash = Helper.generateHash(guild, author);
