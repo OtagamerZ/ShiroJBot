@@ -62,17 +62,17 @@ public class YoutubeCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (args.length < 1) {
-            channel.sendMessage("❌ | Você precisa digitar um nome para pesquisar.").queue();
-            return;
-        } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        }
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (args.length < 1) {
+			channel.sendMessage("❌ | Você precisa digitar um nome para pesquisar.").queue();
+			return;
+		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
 
-        channel.sendMessage("<a:loading:697879726630502401> Buscando videos...").queue(m -> {
-            try {
+		channel.sendMessage("<a:loading:697879726630502401> Buscando videos...").queue(m -> {
+			try {
                 List<YoutubeVideo> videos = Youtube.getData(String.join(" ", args));
                 EmbedBuilder eb = new ColorlessEmbedBuilder();
 

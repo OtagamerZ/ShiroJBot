@@ -62,7 +62,7 @@ public class RemainingCardsCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage("❌ | Você precisa especificar um anime para as cartas que faltam (colocar `_` no lugar de espaços).").queue();
 			return;

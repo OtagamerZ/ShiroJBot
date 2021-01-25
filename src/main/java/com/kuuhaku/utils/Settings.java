@@ -178,7 +178,7 @@ public class Settings {
 		}
 	}
 
-	public static void updatePrefix(String[] args, Message message, GuildConfig gc) {
+	public static void updatePrefix(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		if (args.length < 2) {
 			message.getTextChannel().sendMessage("O prefixo atual deste servidor é `" + gc.getPrefix() + "`.").queue();
 			return;
@@ -198,7 +198,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O prefixo deste servidor foi trocado para `" + newPrefix + "` com sucesso.").queue();
 	}
 
-	public static void updateCanalBV(String[] args, Message message, GuildConfig gc) {
+	public static void updateCanalBV(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigoCanalBVID = gc.getCanalBV();
 
 		if (args.length < 2) {
@@ -225,7 +225,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O canal de boas-vindas do servidor foi trocado para " + newCanalBV.getAsMention() + " com sucesso.").queue();
 	}
 
-	public static void updateMsgBV(String[] args, Message message, GuildConfig gc) {
+	public static void updateMsgBV(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigaMsgBV = gc.getMsgBoasVindas();
 
 		if (args.length < 2) {
@@ -238,17 +238,12 @@ public class Settings {
 			return;
 		}
 
-		String newMsgBv = String.join(" ", args)
-				.replace(args[0], "")
-				.replace("\\n", "\n")
-				.trim();
-
-		gc.setMsgBoasVindas(newMsgBv);
+		gc.setMsgBoasVindas(argsAsText);
 		GuildDAO.updateGuildSettings(gc);
-		message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi trocado para " + newMsgBv + " com sucesso.").queue();
+		message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi trocado para ```" + argsAsText + "``` com sucesso.").queue();
 	}
 
-	public static void updateCanalAdeus(String[] args, Message message, GuildConfig gc) {
+	public static void updateCanalAdeus(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigoCanalAdeusID = gc.getCanalAdeus();
 
 		if (args.length < 2) {
@@ -275,7 +270,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O canal de adeus do servidor foi trocado para " + newCanalAdeus.getAsMention() + " com sucesso.").queue();
 	}
 
-	public static void updateMsgAdeus(String[] args, Message message, GuildConfig gc) {
+	public static void updateMsgAdeus(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigaMsgAdeus = gc.getMsgAdeus();
 
 		if (args.length < 2) {
@@ -288,17 +283,12 @@ public class Settings {
 			return;
 		}
 
-		String newMsgAdeus = String.join(" ", args)
-				.replace(args[0], "")
-				.replace("\\n", "\n")
-				.trim();
-
-		gc.setMsgAdeus(newMsgAdeus);
+		gc.setMsgAdeus(argsAsText);
 		GuildDAO.updateGuildSettings(gc);
-		message.getTextChannel().sendMessage("✅ | A mensagem de adeus do servidor foi trocada para " + newMsgAdeus + " com sucesso.").queue();
+		message.getTextChannel().sendMessage("✅ | A mensagem de adeus do servidor foi trocada para ```" + argsAsText + "``` com sucesso.").queue();
 	}
 
-	public static void updateGeneralTopic(String[] args, Message message, GuildConfig gc) {
+	public static void updateGeneralTopic(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigoGeneralTopic = gc.getGeneralTopic();
 
 		if (args.length < 2) {
@@ -311,17 +301,12 @@ public class Settings {
 			return;
 		}
 
-		String newGeneralTopic = String.join(" ", args)
-				.replace(args[0], "")
-				.replace("\\n", "\n")
-				.trim();
-
-		gc.setGeneralTopic(newGeneralTopic);
+		gc.setGeneralTopic(argsAsText);
 		GuildDAO.updateGuildSettings(gc);
-		message.getTextChannel().sendMessage("✅ | O tópico do canal geral foi trocado para " + newGeneralTopic + " com sucesso.").queue();
+		message.getTextChannel().sendMessage("✅ | O tópico do canal geral foi trocado para ```" + argsAsText + "``` com sucesso.").queue();
 	}
 
-	public static void updateCanalSUG(String[] args, Message message, GuildConfig gc) {
+	public static void updateCanalSUG(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigoCanalSUGID = gc.getCanalSUG();
 
 		if (args.length < 2) {
@@ -348,7 +333,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O canal de sugestões do servidor foi trocado para " + newCanalSUG.getAsMention() + " com sucesso.").queue();
 	}
 
-	public static void updateWarnTime(String[] args, Message message, GuildConfig gc) {
+	public static void updateWarnTime(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		int antigoWarnTime = gc.getWarnTime();
 
 		if (args.length < 2) {
@@ -371,7 +356,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O tempo de punições do servidor foi trocado para " + newWarnTime + " minutos com sucesso.").queue();
 	}
 
-	public static void updatePollTime(String[] args, Message message, GuildConfig gc) {
+	public static void updatePollTime(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		int antigoPollTime = gc.getPollTime();
 
 		if (args.length < 2) {
@@ -394,7 +379,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O tempo de enquetes do servidor foi trocado para " + newPollTime + " segundos com sucesso.").queue();
 	}
 
-	public static void updateCargoMute(String[] args, Message message, GuildConfig gc) {
+	public static void updateCargoMute(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigoCargoMute = gc.getCargoMute();
 
 		if (args.length < 2) {
@@ -422,7 +407,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O cargo de punição do servidor foi trocado para " + newCargoMute.getAsMention() + " com sucesso.").queue();
 	}
 
-	public static void updateCargoVip(String[] args, Message message, GuildConfig gc) {
+	public static void updateCargoVip(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigoCargoVip = gc.getCargoVip();
 
 		if (args.length < 2) {
@@ -450,7 +435,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O cargo VIP do servidor foi trocado para " + newRoleVip.getAsMention() + " com sucesso.").queue();
 	}
 
-	public static void updateLevelNotif(String[] args, Message message, GuildConfig gc) {
+	public static void updateLevelNotif(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		boolean LevelUpNotif = gc.isLvlNotif();
 
 		if (args.length < 2) {
@@ -475,7 +460,7 @@ public class Settings {
 		}
 	}
 
-	public static void updateCanalLevelUp(String[] args, Message message, GuildConfig gc) {
+	public static void updateCanalLevelUp(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigoCanalLvlUpID = gc.getCanalLvl();
 
 		if (args.length < 2) {
@@ -502,7 +487,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O canal de level up do servidor foi trocado para " + newCanalLvlUp.getAsMention() + " com sucesso.").queue();
 	}
 
-	public static void updateCanalRelay(String[] args, Message message, GuildConfig gc) {
+	public static void updateCanalRelay(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigoCanalRelayID = gc.getCanalRelay();
 
 		if (args.length < 2) {
@@ -529,7 +514,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi trocado para " + newCanalRelay.getAsMention() + " com sucesso.").queue();
 	}
 
-	public static void updateCanalAvisos(String[] args, Message message, GuildConfig gc) {
+	public static void updateCanalAvisos(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigoCanalAvisosID = gc.getCanalAvisos();
 
 		if (args.length < 2) {
@@ -556,7 +541,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O canal de avisos do servidor foi trocado para " + newCanalAvisos.getAsMention() + " com sucesso.").queue();
 	}
 
-	public static void updateCanalGeral(String[] args, Message message, GuildConfig gc) {
+	public static void updateCanalGeral(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigoCanalGeral = gc.getCanalAvisos();
 
 		if (args.length < 2) {
@@ -583,7 +568,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O canal geral do servidor foi trocado para " + newCanalGeral.getAsMention() + " com sucesso.").queue();
 	}
 
-	public static void updateCargoLvl(String[] args, Message message, GuildConfig gc) {
+	public static void updateCargoLvl(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		Map<String, Object> antigoCargoLvl = gc.getCargoslvl();
 		List<Integer> lvls = antigoCargoLvl.keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
 		StringBuilder cargosLvl = new StringBuilder();
@@ -626,7 +611,7 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O cargo " + newRole.getAsMention() + " foi atribuido ao level " + args[2] + " com sucesso.").queue();
 	}
 
-	public static void updateModules(String[] args, Message message, GuildConfig gc) {
+	public static void updateModules(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		List<String> antigoModulo = gc.getDisabledModules();
 
 		if (Helper.equalsAny(args[1], "list", "lista")) {

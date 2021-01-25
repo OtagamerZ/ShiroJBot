@@ -69,17 +69,17 @@ public class KawaiponsCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-collection")).queue(m -> {
-            try {
-                Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-collection")).queue(m -> {
+			try {
+				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-                if (kp.getCards().size() == 0) {
-                    m.editMessage("❌ | Você ainda não coletou nenhum Kawaipon.").queue();
-                    return;
-                } else if (args.length == 0) {
-                    Set<KawaiponCard> collection = new HashSet<>();
-                    for (AnimeName anime : AnimeName.validValues()) {
+				if (kp.getCards().size() == 0) {
+					m.editMessage("❌ | Você ainda não coletou nenhum Kawaipon.").queue();
+					return;
+				} else if (args.length == 0) {
+					Set<KawaiponCard> collection = new HashSet<>();
+					for (AnimeName anime : AnimeName.validValues()) {
                         if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
                             collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
                     }

@@ -28,15 +28,15 @@ public class FacedeskReaction extends Reaction {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        this.setReaction(new String[]{
-                "Nuss.",
-                "Bah.",
-                "Meeeeee."
-        });
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		this.setReaction(new String[]{
+				"Nuss.",
+				"Bah.",
+				"Meeeeee."
+		});
 
-        sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " não ta acreditando nisso! - " + this.getReaction(), false);
-    }
+		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " não ta acreditando nisso! - " + this.getReaction(), false);
+	}
 
     @Override
     public void answer(TextChannel chn) {

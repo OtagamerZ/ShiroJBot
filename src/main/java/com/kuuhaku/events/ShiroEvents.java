@@ -59,7 +59,6 @@ import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -229,11 +228,11 @@ public class ShiroEvents extends ListenerAdapter {
 			} catch (NoResultException | NullPointerException ignore) {
 			}
 
-			boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
-			String[] args = new String[]{};
+			String[] args = rawMsgNoPrefix.split(" ");
+			String argsAsText = rawMsgNoPrefix.replaceFirst(commandName, "").trim();
+			boolean hasArgs = (args.length > 1);
 			if (hasArgs) {
-				args = Arrays.copyOfRange(rawMsgNoPrefix.split(" "), 1, rawMsgNoPrefix.split(" ").length);
-				args = ArrayUtils.removeAllOccurences(args, "");
+				args = Arrays.copyOfRange(args, 1, args.length);
 			}
 
 			boolean found = false;
@@ -272,7 +271,7 @@ public class ShiroEvents extends ListenerAdapter {
 					if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
 						Main.getInfo().getRatelimit().put(author.getId(), true);
 
-					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
+					command.execute(author, member, commandName, argsAsText, args, message, channel, guild, prefix);
 					Helper.spawnAd(channel);
 				}
 			}
@@ -543,7 +542,7 @@ public class ShiroEvents extends ListenerAdapter {
 					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
 					if (template.has("image")) eb.setImage(template.getString("image"));
 
-					eb.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()).replace("%count%", String.valueOf(guild.getMemberCount())));
+					eb.setDescription(Helper.replaceTags(gc.getMsgBoasVindas(), author, guild));
 
 					if (template.has("fields")) {
 						for (Object j : template.getJSONArray("fields")) {
@@ -570,7 +569,7 @@ public class ShiroEvents extends ListenerAdapter {
 							)
 							.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl())
 							.setColor(Helper.colorThief(image))
-							.setDescription(gc.getMsgBoasVindas().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()).replace("%count%", String.valueOf(guild.getMemberCount())))
+							.setDescription(Helper.replaceTags(gc.getMsgBoasVindas(), author, guild))
 							.setThumbnail(author.getAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
@@ -623,7 +622,7 @@ public class ShiroEvents extends ListenerAdapter {
 					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
 					if (template.has("image")) eb.setImage(template.getString("image"));
 
-					eb.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()).replace("%count%", String.valueOf(guild.getMemberCount())));
+					eb.setDescription(Helper.replaceTags(gc.getMsgAdeus(), author, guild));
 
 					if (template.has("fields")) {
 						for (Object j : template.getJSONArray("fields")) {
@@ -650,7 +649,7 @@ public class ShiroEvents extends ListenerAdapter {
 							)
 							.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl())
 							.setColor(Helper.colorThief(image))
-							.setDescription(gc.getMsgAdeus().replace("\\n", "\n").replace("%user%", author.getName()).replace("%guild%", guild.getName()).replace("%count%", String.valueOf(guild.getMemberCount())))
+							.setDescription(Helper.replaceTags(gc.getMsgAdeus(), author, guild))
 							.setThumbnail(author.getAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}

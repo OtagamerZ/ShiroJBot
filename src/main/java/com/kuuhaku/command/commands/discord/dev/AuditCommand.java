@@ -57,7 +57,7 @@ public class AuditCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | É necessário informar o tipo de auditoria (`T` = transações e `C` = comandos) e o ID do usuário.").queue();
 			return;

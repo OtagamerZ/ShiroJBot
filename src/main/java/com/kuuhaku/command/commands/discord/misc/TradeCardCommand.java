@@ -61,7 +61,7 @@ public class TradeCardCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 			return;
@@ -517,10 +517,6 @@ public class TradeCardCommand extends Command {
 								Main.getInfo().getConfirmationPending().invalidate(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
-								acc.removeCredit(price, this.getClass());
-								tacc.addCredit(Math.round(price * 0.9), this.getClass());
-								long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
-								DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(price * 0.1)));
 
 								switch (type) {
 									case 1 -> {
@@ -570,12 +566,20 @@ public class TradeCardCommand extends Command {
 									}
 								}
 
+								boolean trusted = Helper.isTrustedMerchant(other.getId());
+								double tax = trusted ? 0.05 : 0.1;
+
+								acc.removeCredit(price, this.getClass());
+								tacc.addCredit(Math.round(price * (1 - tax)), this.getClass());
+								long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
+								DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(price * tax)));
+
 								KawaiponDAO.saveKawaipon(finalKp);
 								KawaiponDAO.saveKawaipon(finalTarget);
 								AccountDAO.saveAccount(acc);
 								AccountDAO.saveAccount(tacc);
 
-								s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso (taxa de 10%)!")).queue(null, Helper::doNothing);
+								s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso (taxa de " + (int) (tax * 100) + "%)!")).queue(null, Helper::doNothing);
 							}), true, 1, TimeUnit.MINUTES,
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {
@@ -717,10 +721,6 @@ public class TradeCardCommand extends Command {
 								Main.getInfo().getConfirmationPending().invalidate(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
-								tacc.removeCredit(price, this.getClass());
-								acc.addCredit(Math.round(price * 0.9), this.getClass());
-								long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
-								DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(price * 0.1)));
 
 								switch (type) {
 									case 1 -> {
@@ -770,12 +770,20 @@ public class TradeCardCommand extends Command {
 									}
 								}
 
+								boolean trusted = Helper.isTrustedMerchant(author.getId());
+								double tax = trusted ? 0.05 : 0.1;
+
+								tacc.removeCredit(price, this.getClass());
+								acc.addCredit(Math.round(price * (1 - tax)), this.getClass());
+								long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
+								DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(price * tax)));
+
 								KawaiponDAO.saveKawaipon(finalKp);
 								KawaiponDAO.saveKawaipon(finalTarget);
 								AccountDAO.saveAccount(acc);
 								AccountDAO.saveAccount(tacc);
 
-								s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso (taxa de 10%)!")).queue(null, Helper::doNothing);
+								s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso (taxa de " + (int) (tax * 100) + "%)!")).queue(null, Helper::doNothing);
 							}), true, 1, TimeUnit.MINUTES,
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {

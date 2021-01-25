@@ -56,7 +56,7 @@ public class ProfileTrophyCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Trophy t = TrophyDAO.getTrophies(author.getId());
 
 		if (args.length == 0) {

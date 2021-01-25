@@ -45,7 +45,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -81,11 +80,11 @@ public class TwitchEvents {
 			commandName = rawMsgNoPrefix.split(" ")[0].trim();
 		}
 
-		boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
-		String[] args = new String[]{};
+		String[] args = rawMsgNoPrefix.split(" ");
+		String argsAsText = rawMsgNoPrefix.replaceFirst(commandName, "").trim();
+		boolean hasArgs = (args.length > 1);
 		if (hasArgs) {
-			args = Arrays.copyOfRange(rawMsgNoPrefix.split(" "), 1, rawMsgNoPrefix.split(" ").length);
-			args = ArrayUtils.removeAllOccurences(args, "");
+			args = Arrays.copyOfRange(args, 1, args.length);
 		}
 
 		TwitchCommand command = Main.getTwitchCommandManager().getCommand(commandName);
@@ -103,7 +102,7 @@ public class TwitchEvents {
 
 			Main.getInfo().getRatelimit().put(author.getId(), true);
 
-			command.execute(author, acc, rawMsgNoPrefix, args, message, channel, client.getChat(), message.getPermissions());
+			command.execute(author, acc, commandName, argsAsText, args, message, channel, client.getChat(), message.getPermissions());
 
 			String ad = Helper.getAd();
 			if (ad != null) {

@@ -54,7 +54,7 @@ public class CreateClanCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (ClanDAO.isMember(author.getId())) {
 			channel.sendMessage("❌ | Você já possui um clã.").queue();
 			return;

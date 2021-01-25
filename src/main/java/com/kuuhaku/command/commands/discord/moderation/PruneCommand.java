@@ -49,7 +49,7 @@ public class PruneCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
 			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
 			msgs.removeIf(m -> !m.getAuthor().isBot());

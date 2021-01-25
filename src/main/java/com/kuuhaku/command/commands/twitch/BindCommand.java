@@ -50,7 +50,7 @@ public class BindCommand extends TwitchCommand {
 	}
 
 	@Override
-	public void execute(EventUser author, Account account, String rawCmd, String[] args, ChannelMessageEvent message, EventChannel channel, TwitchChat chat, Set<CommandPermission> permissions) {
+	public void execute(EventUser author, Account account, String command, String argsAsText, String[] args, ChannelMessageEvent message, EventChannel channel, TwitchChat chat, Set<CommandPermission> permissions) {
 		if (args.length < 1) {
 			chat.sendMessage(channel.getName(), "❌ | Você precisa informar o código fornecido pelo comando vincular usado no Discord.");
 			return;

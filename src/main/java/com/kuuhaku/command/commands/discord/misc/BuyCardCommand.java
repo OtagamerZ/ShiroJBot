@@ -68,7 +68,7 @@ public class BuyCardCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Calendar today = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
 		boolean blackfriday = today.get(Calendar.MONTH) == Calendar.NOVEMBER && today.get(Calendar.DAY_OF_MONTH) == 27;
 		Account buyer = AccountDAO.getAccount(author.getId());
@@ -289,10 +289,13 @@ public class BuyCardCommand extends Command {
 					kp.addCard(cm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					seller.addCredit(Math.round(cm.getPrice() * 0.9), this.getClass());
+					boolean trusted = Helper.isTrustedMerchant(author.getId());
+					double tax = trusted ? 0.05 : 0.1;
+
+					seller.addCredit(Math.round(cm.getPrice() * (1 - tax)), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(cm.getPrice() * 0.75) : cm.getPrice(), this.getClass());
 					long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
-					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(cm.getPrice() * 0.1)));
+					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(cm.getPrice() * tax)));
 
 					AccountDAO.saveAccount(seller);
 					AccountDAO.saveAccount(buyer);
@@ -303,7 +306,7 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(cm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(cm.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos  (" + Helper.separate(Math.round(cm.getPrice() * 0.1)) + " de taxa).").queue(null, Helper::doNothing),
+									c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos  (" + (int) (100 * tax) + "% de taxa).").queue(null, Helper::doNothing),
 							Helper::doNothing
 					);
 					channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
@@ -348,10 +351,13 @@ public class BuyCardCommand extends Command {
 					kp.addEquipment(em.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					seller.addCredit(Math.round(em.getPrice() * 0.9), this.getClass());
+					boolean trusted = Helper.isTrustedMerchant(author.getId());
+					double tax = trusted ? 0.05 : 0.1;
+
+					seller.addCredit(Math.round(em.getPrice() * (1 - tax)), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(em.getPrice() * 0.75) : em.getPrice(), this.getClass());
 					long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
-					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(em.getPrice() * 0.1)));
+					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(em.getPrice() * tax)));
 
 					AccountDAO.saveAccount(seller);
 					AccountDAO.saveAccount(buyer);
@@ -362,7 +368,7 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(em.getSeller());
 					User buyerU = Main.getInfo().getUserByID(em.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos (" + Helper.separate(Math.round(em.getPrice() * 0.1)) + " de taxa).").queue(),
+									c.sendMessage("✅ | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos (" + (int) (100 * tax) + "% de taxa).").queue(),
 							Helper::doNothing
 					);
 					channel.sendMessage("✅ | Equipamento comprado com sucesso!").queue();
@@ -410,10 +416,13 @@ public class BuyCardCommand extends Command {
 					kp.addField(fm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					seller.addCredit(Math.round(fm.getPrice() * 0.9), this.getClass());
+					boolean trusted = Helper.isTrustedMerchant(author.getId());
+					double tax = trusted ? 0.05 : 0.1;
+
+					seller.addCredit(Math.round(fm.getPrice() * (1 - tax)), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(fm.getPrice() * 0.75) : fm.getPrice(), this.getClass());
 					long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
-					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(fm.getPrice() * 0.1)));
+					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(fm.getPrice() * tax)));
 
 					AccountDAO.saveAccount(seller);
 					AccountDAO.saveAccount(buyer);
@@ -424,7 +433,7 @@ public class BuyCardCommand extends Command {
 					User sellerU = Main.getInfo().getUserByID(fm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(fm.getBuyer());
 					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos (" + Helper.separate(Math.round(fm.getPrice() * 0.1)) + " de taxa).").queue(),
+									c.sendMessage("✅ | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos (" + (int) (100 * tax) + "% de taxa).").queue(),
 							Helper::doNothing
 					);
 					channel.sendMessage("✅ | Arena comprada com sucesso!").queue();

@@ -56,7 +56,7 @@ public class ClanWithdrawCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Clan c = ClanDAO.getUserClan(author.getId());
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
