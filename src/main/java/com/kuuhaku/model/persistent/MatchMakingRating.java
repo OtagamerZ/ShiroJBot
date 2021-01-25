@@ -70,6 +70,9 @@ public class MatchMakingRating {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int evades = 0;
 
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String master = "";
+
 	public MatchMakingRating(String userId) {
 		this.userId = userId;
 	}
@@ -95,10 +98,12 @@ public class MatchMakingRating {
 
 	public void addMMR(long gained, long opponent, boolean ranked) {
 		this.mmr += gained * (this.mmr == 0 ? 1 : Helper.prcnt(opponent, this.mmr)) * (ranked ? 1 : 0.5);
+		if (this.master.isBlank()) this.master = "none";
 	}
 
 	public void removeMMR(long lost, long opponent, boolean ranked) {
 		this.mmr -= Math.min(this.mmr, lost * (opponent == 0 ? 1 : Helper.prcnt(this.mmr, opponent))) * (ranked ? 1 : 0.5);
+		if (this.master.isBlank()) this.master = "none";
 	}
 
 	public void setMMR(long mmr) {
@@ -243,6 +248,14 @@ public class MatchMakingRating {
 
 	public void setEvades(int evades) {
 		this.evades = evades;
+	}
+
+	public String getMaster() {
+		return master;
+	}
+
+	public void setMaster(String master) {
+		this.master = master;
 	}
 
 	public static Map<Side, Pair<String, Map<String, Integer>>> calcMMR(MatchHistory mh) {
