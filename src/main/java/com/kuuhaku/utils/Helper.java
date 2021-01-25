@@ -1990,4 +1990,13 @@ public class Helper {
 		if (ms == null || avg == null) return false;
 		return prcnt(ms.getSold(), avg.getSold()) > 0.75 && prcnt(ms.getUniqueBuyers(), avg.getUniqueBuyers()) > 0.5;
 	}
+
+	public static boolean isPureMention(String msg) {
+		return regex(msg, "<(@|@!)\\d+>");
+	}
+
+	public static boolean isPinging(Message msg, String id) {
+		User u = Main.getInfo().getUserByID(id);
+		return msg.isMentioned(u, Message.MentionType.USER);
+	}
 }

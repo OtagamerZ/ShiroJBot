@@ -64,7 +64,7 @@ stage.dependsOn(copyToLib)
 dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.3.4.RELEASE'
-    implementation group: 'net.dv8tion', name: 'JDA', version: '4.2.0_222'
+    implementation group: 'net.dv8tion', name: 'JDA', version: '4.2.0_227'
     implementation group: 'club.minnced', name: 'discord-webhooks', version: '0.3.1'
     implementation group: 'com.github.SvenWoltmann', name: 'color-thief-java', version: 'v1.1.2'
     implementation group: 'com.enigmabridge', name: 'hibernate4-sqlite-dialect', version: '0.1.2'

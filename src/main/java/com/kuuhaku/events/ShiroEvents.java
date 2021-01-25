@@ -208,7 +208,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 			}
 
-			if (rawMessage.trim().equals("<@" + Main.getSelfUser().getId() + ">") || rawMessage.trim().equals("<@!" + Main.getSelfUser().getId() + ">")) {
+			if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getSelfUser().getId())) {
 				channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!").queue(null, Helper::doNothing);
 				return;
 			}
@@ -294,7 +294,7 @@ public class ShiroEvents extends ListenerAdapter {
 					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.stripEmotesAndMentions(rawMessage));
 				}
 
-				if (!ShiroInfo.getStaff().contains(author.getId()) && Helper.containsAny(rawMessage, "<@" + ShiroInfo.getNiiChan() + ">", "<@!" + ShiroInfo.getNiiChan() + ">")) {
+				if (!ShiroInfo.getStaff().contains(author.getId()) && Helper.isPinging(message, ShiroInfo.getNiiChan())) {
 					channel.sendMessage("✅ | Você comprou um \"Pingue o Sora por **1.000 de dívida**\" com sucesso!").queue();
 					acc.addLoan(1000);
 				}
