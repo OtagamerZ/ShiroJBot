@@ -37,6 +37,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.math3.util.Pair;
 import org.jetbrains.annotations.NonNls;
 
@@ -105,17 +106,19 @@ public class SynthesizeCardCommand extends Command {
 			List<Field> fs = CardDAO.getAllAvailableFields();
 			Field f = fs.get(Helper.rng(fs.size(), true));
 
+			DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
+			int freeRolls = NumberUtils.toInt(dp.getValue());
+
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (elas serão destruídas no processo). Deseja continuar?")
+			channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 					.queue(s ->
 							{
 								Map<String, java.util.function.BiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
 								buttons.put(Helper.ACCEPT, (ms, mb) -> {
 									if (!ShiroInfo.getHashes().remove(hash)) return;
 									Main.getInfo().getConfirmationPending().invalidate(author.getId());
-									DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
 
 									if (kp.getFields().size() == 3) {
 										int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
@@ -131,8 +134,8 @@ public class SynthesizeCardCommand extends Command {
 											for (Card t : tributes) {
 												kp.removeCard(new KawaiponCard(t, true));
 											}
-										} else if (Integer.parseInt(dp.getValue()) >= 1)
-											DynamicParameterDAO.setParam("freeSynth_" + author.getId(), String.valueOf(Integer.parseInt(dp.getValue()) - 1));
+										} else if (freeRolls > 0)
+											DynamicParameterDAO.setParam("freeSynth_" + author.getId(), String.valueOf(freeRolls - 1));
 										else
 											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
 
@@ -185,10 +188,13 @@ public class SynthesizeCardCommand extends Command {
 					.addField(KawaiponRarity.ULTRA_RARE.getEmote() + " | Equipamento tier 3 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier3 * 100, 1)) + "%", false)
 					.addField(KawaiponRarity.LEGENDARY.getEmote() + " | Equipamento tier 4 (\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA\uD83D\uDFCA)", "Chance de " + (Helper.round(tier4 * 100, 1)) + "%", false);
 
+			DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
+			int freeRolls = NumberUtils.toInt(dp.getValue());
+
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Você está prester a sintetizar um equipamento usando essas cartas (elas serão destruídas no processo). Deseja continuar?")
+			channel.sendMessage("Você está prester a sintetizar um equipamento usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 					.embed(eb.build())
 					.queue(s ->
 							{
@@ -197,7 +203,6 @@ public class SynthesizeCardCommand extends Command {
 									if (!ShiroInfo.getHashes().remove(hash)) return;
 									Main.getInfo().getConfirmationPending().invalidate(author.getId());
 									String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
-									DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
 
 									if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) || kp.getEquipments().size() == 18) {
 										int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
@@ -217,8 +222,8 @@ public class SynthesizeCardCommand extends Command {
 											for (Card t : tributes) {
 												kp.removeCard(new KawaiponCard(t, false));
 											}
-										} else if (Integer.parseInt(dp.getValue()) >= 1)
-											DynamicParameterDAO.setParam("freeSynth_" + author.getId(), String.valueOf(Integer.parseInt(dp.getValue()) - 1));
+										} else if (freeRolls > 0)
+											DynamicParameterDAO.setParam("freeSynth_" + author.getId(), String.valueOf(freeRolls - 1));
 										else
 											DynamicParameterDAO.clearParam("freeSynth_" + author.getId());
 

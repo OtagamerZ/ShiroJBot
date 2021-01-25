@@ -120,7 +120,7 @@ public class MyStatsCommand extends Command {
 
 		String mult = """
 				**XP por mensagem:** %s (Base: 15)
-				**Taxa de venda:** %s (Base: 10%%)
+				**Taxa de venda:** %s%% (Base: 10%%)
 				**Chance de spawn de cartas:** %s%% (Base: 3%%)
 				**Chance de spawn de drops:** %s%% (Base: 2.5%%)
 				**Chance de spawn de cromadas:** %s%% (Base: 0.5%%)
