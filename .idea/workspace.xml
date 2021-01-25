@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BroadcastCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BroadcastCommand.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1013,28 +1010,7 @@
       <workItem from="1611342273935" duration="6536000" />
       <workItem from="1611348917244" duration="55000" />
       <workItem from="1611349014004" duration="56000" />
-      <workItem from="1611576359013" duration="7611000" />
-    </task>
-    <task id="LOCAL-03469" summary="Correção na bolsa">
-      <created>1611231418300</created>
-      <option name="number" value="03469" />
-      <option name="presentableId" value="LOCAL-03469" />
-      <option name="project" value="LOCAL" />
-      <updated>1611231418300</updated>
-    </task>
-    <task id="LOCAL-03470" summary="Melhorias no Shoukan">
-      <created>1611235345799</created>
-      <option name="number" value="03470" />
-      <option name="presentableId" value="LOCAL-03470" />
-      <option name="project" value="LOCAL" />
-      <updated>1611235345799</updated>
-    </task>
-    <task id="LOCAL-03471" summary="Melhorias no Shoukan">
-      <created>1611238040184</created>
-      <option name="number" value="03471" />
-      <option name="presentableId" value="LOCAL-03471" />
-      <option name="project" value="LOCAL" />
-      <updated>1611238040184</updated>
+      <workItem from="1611576359013" duration="7786000" />
     </task>
     <task id="LOCAL-03472" summary="Melhorias no Shoukan">
       <created>1611238182245</created>
@@ -1358,7 +1334,28 @@
       <option name="project" value="LOCAL" />
       <updated>1611586364974</updated>
     </task>
-    <option name="localTasksCounter" value="3518" />
+    <task id="LOCAL-03518" summary="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;">
+      <created>1611586699812</created>
+      <option name="number" value="03518" />
+      <option name="presentableId" value="LOCAL-03518" />
+      <option name="project" value="LOCAL" />
+      <updated>1611586699812</updated>
+    </task>
+    <task id="LOCAL-03519" summary="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;">
+      <created>1611586776638</created>
+      <option name="number" value="03519" />
+      <option name="presentableId" value="LOCAL-03519" />
+      <option name="project" value="LOCAL" />
+      <updated>1611586776639</updated>
+    </task>
+    <task id="LOCAL-03520" summary="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;">
+      <created>1611586850326</created>
+      <option name="number" value="03520" />
+      <option name="presentableId" value="LOCAL-03520" />
+      <option name="project" value="LOCAL" />
+      <updated>1611586850326</updated>
+    </task>
+    <option name="localTasksCounter" value="3521" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1531,10 +1528,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611586360595">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611586849539">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611586360595" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611586849539" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1611348469197">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1579,10 +1576,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611586482127">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611586851797">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611586482127" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611586851797" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611291029366" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1611584154385">
       <screen x="0" y="0" width="1680" height="1010" />
