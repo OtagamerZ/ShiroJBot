@@ -1988,7 +1988,7 @@ public class Helper {
 		MerchantStats avg = CardMarketDAO.getAverageMerchantStats();
 
 		if (ms == null || avg == null) return false;
-		return prcnt(ms.getSold(), avg.getSold()) > 1 && prcnt(ms.getUniqueBuyers(), avg.getUniqueBuyers()) > 1;
+		return prcnt(ms.getSold(), avg.getSold()) > 2 && prcnt(ms.getUniqueBuyers(), avg.getUniqueBuyers()) > 1;
 	}
 
 	public static boolean isPureMention(String msg) {
