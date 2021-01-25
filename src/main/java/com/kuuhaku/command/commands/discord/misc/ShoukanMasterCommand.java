@@ -77,7 +77,7 @@ public class ShoukanMasterCommand extends Command {
 		String hash1 = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash1);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes a definir " + u.getName() + " como seu tutor, ao alcançar seu primeiro ranking de Shoukan você receberá 5 sínteses gratúitas. Deseja confirmar?")
+		channel.sendMessage("Você está prestes a definir " + u.getName() + " como seu tutor, ao alcançar seu primeiro ranking de Shoukan você receberá **5 sínteses gratúitas**. Deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(author.getId())) {
 								if (!ShiroInfo.getHashes().remove(hash1)) return;
@@ -87,7 +87,7 @@ public class ShoukanMasterCommand extends Command {
 								ShiroInfo.getHashes().add(hash2);
 								Main.getInfo().getConfirmationPending().put(u.getId(), true);
 								s.delete().flatMap(d ->
-										channel.sendMessage(u.getAsMention() + ", " + author.getName() + " deseja tornar-se seu discípulo de Shoukan, você receberá 25.000 créditos caso ele(a) alcance o ranking de Aprendiz IV. Deseja aceitar?")
+										channel.sendMessage(u.getAsMention() + ", " + author.getName() + " deseja tornar-se seu discípulo de Shoukan, você receberá **25.000 créditos** caso ele(a) alcance o ranking de Aprendiz IV. Deseja aceitar?")
 								).queue(s2 -> Pages.buttonize(s2, Map.of(Helper.ACCEPT, (mb2, ms2) -> {
 											if (mb.getId().equals(u.getId())) {
 												if (!ShiroInfo.getHashes().remove(hash1)) return;
