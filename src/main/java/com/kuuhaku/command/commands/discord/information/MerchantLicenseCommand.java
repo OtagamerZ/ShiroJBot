@@ -58,9 +58,9 @@ public class MerchantLicenseCommand extends Command {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Progresso para licença de " + author.getName())
-				.setDescription("Possuir a licença de comércio reduz a taxa sob vendas pela metade.")
-				.addField("Cartas vendidas/necessário", (long) ms.getSold() + "/" + Math.round(avg.getSold() * 0.75), true)
-				.addField("Compradores únicos/necessário", (int) ms.getUniqueBuyers() + "/" + Math.round(avg.getUniqueBuyers() * 0.5), true)
+				.setDescription("Possuir a licença de comércio reduz a taxa sobre vendas pela metade.")
+				.addField("Cartas vendidas/necessário", (long) ms.getSold() + "/" + Math.round(avg.getSold()), true)
+				.addField("Compradores únicos/necessário", (int) ms.getUniqueBuyers() + "/" + Math.round(avg.getUniqueBuyers()), true)
 				.setFooter("A licença ficará ativa enquanto você cumprir os requisitos, resetando todo mês.");
 
 		channel.sendMessage(eb.build()).queue();
