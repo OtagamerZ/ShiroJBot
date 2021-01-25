@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.common;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 public class MerchantStats {
 	private final String uid;
@@ -29,8 +29,8 @@ public class MerchantStats {
 	private MerchantStats(Object uid, Object month, Object sold, Object uniqueBuyers) {
 		this.uid = (String) uid;
 		this.month = (int) (double) month;
-		this.sold = ((BigInteger) sold).longValue();
-		this.uniqueBuyers = ((BigInteger) uniqueBuyers).longValue();
+		this.sold = ((BigDecimal) sold).longValue();
+		this.uniqueBuyers = ((BigDecimal) uniqueBuyers).longValue();
 	}
 
 	public static MerchantStats of(Object[] values) {
