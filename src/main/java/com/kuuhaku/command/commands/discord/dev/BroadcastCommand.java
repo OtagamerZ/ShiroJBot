@@ -75,7 +75,7 @@ public class BroadcastCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		switch (args[0].toLowerCase()) {
-			case "geral" -> Helper.broadcast(argsAsText, (TextChannel) channel, author);
+			case "geral" -> Helper.broadcast(argsAsText.replaceFirst("geral", "").trim(), (TextChannel) channel, author);
 			case "beta" -> {
 				List<Tags> ps = TagDAO.getAllBetas();
 				List<List<Tags>> psPages = Helper.chunkify(ps, 10);
@@ -91,7 +91,7 @@ public class BroadcastCommand extends Command {
 							result.put("Desconhecido (" + t.getId() + ")", false);
 						} else {
 							try {
-								u.openPrivateChannel().complete().sendMessage(argsAsText).complete();
+								u.openPrivateChannel().complete().sendMessage(argsAsText.replaceFirst("beta", "").trim()).complete();
 								result.put(u.getAsTag(), true);
 							} catch (ErrorResponseException e) {
 								result.put(u.getAsTag(), false);
