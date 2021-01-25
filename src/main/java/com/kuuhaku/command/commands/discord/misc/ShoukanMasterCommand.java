@@ -25,6 +25,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.utils.BiContract;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -74,43 +75,57 @@ public class ShoukanMasterCommand extends Command {
 			return;
 		}
 
-		String hash1 = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash1);
+		BiContract<Boolean, Boolean> contract = new BiContract<>((b1, b2) -> {
+			mmr.setMaster(u.getId());
+			MatchMakingRatingDAO.saveMMR(mmr);
+
+			channel.sendMessage("✅ | Contrato efetuado com sucesso!").queue();
+		});
+
+		firstStep(contract, guild, author, u, channel);
+	}
+
+	private void firstStep(BiContract<Boolean, Boolean> contract, Guild guild, User author, User target, MessageChannel channel) {
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes a definir " + u.getName() + " como seu tutor, ao alcançar seu primeiro ranking de Shoukan você receberá **5 sínteses gratúitas**. Deseja confirmar?")
+		channel.sendMessage("Você está prestes a definir " + target.getName() + " como seu tutor, ao alcançar seu primeiro ranking no Shoukan você receberá **5 sínteses gratúitas**. Deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(author.getId())) {
-								if (!ShiroInfo.getHashes().remove(hash1)) return;
+								if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().invalidate(author.getId());
 
-								String hash2 = Helper.generateHash(guild, u);
-								ShiroInfo.getHashes().add(hash2);
-								Main.getInfo().getConfirmationPending().put(u.getId(), true);
-								s.delete().flatMap(d ->
-										channel.sendMessage(u.getAsMention() + ", " + author.getName() + " deseja tornar-se seu discípulo de Shoukan, você receberá **25.000 créditos** caso ele(a) alcance o ranking de Aprendiz IV. Deseja aceitar?")
-								).queue(s2 -> Pages.buttonize(s2, Map.of(Helper.ACCEPT, (mb2, ms2) -> {
-											if (mb.getId().equals(u.getId())) {
-												if (!ShiroInfo.getHashes().remove(hash1)) return;
-												Main.getInfo().getConfirmationPending().invalidate(u.getId());
-
-												mmr.setMaster(u.getId());
-												MatchMakingRatingDAO.saveMMR(mmr);
-
-												s.delete().flatMap(d -> channel.sendMessage("✅ | Contrato feito com sucesso!")).queue();
-											}
-										}), true, 1, TimeUnit.MINUTES,
-										usr -> u.getId().equals(u.getId()),
-										msg -> {
-											ShiroInfo.getHashes().remove(hash2);
-											Main.getInfo().getConfirmationPending().invalidate(u.getId());
-										})
-								);
+								s.delete().queue();
+								contract.setSignatureA(true);
+								secondStep(contract, guild, author, target, channel);
 							}
 						}), true, 1, TimeUnit.MINUTES,
-						usr -> u.getId().equals(author.getId()),
+						u -> u.getId().equals(author.getId()),
 						msg -> {
-							ShiroInfo.getHashes().remove(hash1);
+							ShiroInfo.getHashes().remove(hash);
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+						})
+				);
+	}
+
+	private void secondStep(BiContract<Boolean, Boolean> contract, Guild guild, User author, User target, MessageChannel channel) {
+		String hash = Helper.generateHash(guild, target);
+		ShiroInfo.getHashes().add(hash);
+		Main.getInfo().getConfirmationPending().put(target.getId(), true);
+		channel.sendMessage(target.getAsMention() + ", " + author.getName() + " deseja tornar-se seu discípulo de Shoukan, você receberá **25.000 créditos** caso ele(a) alcance o ranking de Iniciado IV. Deseja aceitar?")
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+							if (mb.getId().equals(target.getId())) {
+								if (!ShiroInfo.getHashes().remove(hash)) return;
+								Main.getInfo().getConfirmationPending().invalidate(target.getId());
+
+								s.delete().queue();
+								contract.setSignatureB(true);
+							}
+						}), true, 1, TimeUnit.MINUTES,
+						u -> u.getId().equals(target.getId()),
+						msg -> {
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().invalidate(target.getId());
 						})
 				);
 	}

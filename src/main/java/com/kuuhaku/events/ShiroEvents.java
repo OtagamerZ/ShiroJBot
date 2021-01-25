@@ -230,7 +230,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			String[] args = rawMsgNoPrefix.split(" ");
-			String argsAsText = rawMsgNoPrefix.replaceFirst(commandName, "").trim();
+			String argsAsText = message.getContentRaw().replaceFirst(prefix + commandName, "").trim();
 			boolean hasArgs = (args.length > 1);
 			if (hasArgs) {
 				args = Arrays.copyOfRange(args, 1, args.length);
