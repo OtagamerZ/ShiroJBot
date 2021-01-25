@@ -15,8 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MerchantLicenseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MerchantLicenseCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1014,14 +1012,7 @@
       <workItem from="1611342273935" duration="6536000" />
       <workItem from="1611348917244" duration="55000" />
       <workItem from="1611349014004" duration="56000" />
-      <workItem from="1611576359013" duration="8291000" />
-    </task>
-    <task id="LOCAL-03473" summary="Melhorias no Shoukan">
-      <created>1611238240904</created>
-      <option name="number" value="03473" />
-      <option name="presentableId" value="LOCAL-03473" />
-      <option name="project" value="LOCAL" />
-      <updated>1611238240904</updated>
+      <workItem from="1611576359013" duration="9164000" />
     </task>
     <task id="LOCAL-03474" summary="Melhorias no Shoukan">
       <created>1611241089747</created>
@@ -1359,7 +1350,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611590724112</updated>
     </task>
-    <option name="localTasksCounter" value="3522" />
+    <task id="LOCAL-03522" summary="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;">
+      <created>1611591213043</created>
+      <option name="number" value="03522" />
+      <option name="presentableId" value="LOCAL-03522" />
+      <option name="project" value="LOCAL" />
+      <updated>1611591213044</updated>
+    </task>
+    <option name="localTasksCounter" value="3523" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1532,34 +1530,34 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611590723041">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611591212123">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611590723041" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611591212123" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1611348469197">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611348469197" />
     <state x="105" y="95" width="1710" height="851" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607728513022" />
-    <state width="1387" height="351" key="GridCell.Tab.0.bottom" timestamp="1611584128651">
+    <state width="1387" height="351" key="GridCell.Tab.0.bottom" timestamp="1611591108720">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1611584128651" />
+    <state width="1387" height="351" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1611591108720" />
     <state width="1648" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516890" />
-    <state width="1387" height="351" key="GridCell.Tab.0.center" timestamp="1611584128650">
+    <state width="1387" height="351" key="GridCell.Tab.0.center" timestamp="1611591108720">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1611584128650" />
+    <state width="1387" height="351" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1611591108720" />
     <state width="1648" height="322" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516875" />
-    <state width="1387" height="351" key="GridCell.Tab.0.left" timestamp="1611584128650">
+    <state width="1387" height="351" key="GridCell.Tab.0.left" timestamp="1611591108720">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1611584128650" />
+    <state width="1387" height="351" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1611591108720" />
     <state width="1648" height="322" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516875" />
-    <state width="1387" height="351" key="GridCell.Tab.0.right" timestamp="1611584128650">
+    <state width="1387" height="351" key="GridCell.Tab.0.right" timestamp="1611591108720">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1611584128650" />
+    <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1611591108720" />
     <state width="1648" height="322" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1611289516875" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1610652298040">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1580,10 +1578,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611591039436">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611591226114">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611591039436" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611591226114" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611291029366" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1611584154385">
       <screen x="0" y="0" width="1680" height="1010" />

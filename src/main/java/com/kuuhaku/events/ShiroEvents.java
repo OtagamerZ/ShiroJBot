@@ -233,8 +233,7 @@ public class ShiroEvents extends ListenerAdapter {
 			String argsAsText = rawMsgNoPrefix.replaceFirst(commandName, "").trim();
 			boolean hasArgs = (args.length > 1);
 			if (hasArgs) {
-				args = Arrays.copyOfRange(args, 1, args.length);
-				args = ArrayUtils.removeAllOccurences(args, "");
+				args = ArrayUtils.removeAllOccurences(Arrays.copyOfRange(args, 1, args.length), "");
 			}
 
 			boolean found = false;
