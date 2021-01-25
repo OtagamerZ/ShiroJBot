@@ -45,6 +45,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -85,6 +86,7 @@ public class TwitchEvents {
 		boolean hasArgs = (args.length > 1);
 		if (hasArgs) {
 			args = Arrays.copyOfRange(args, 1, args.length);
+			args = ArrayUtils.removeAllOccurences(args, "");
 		}
 
 		TwitchCommand command = Main.getTwitchCommandManager().getCommand(commandName);

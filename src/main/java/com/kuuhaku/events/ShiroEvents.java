@@ -59,6 +59,7 @@ import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -233,6 +234,7 @@ public class ShiroEvents extends ListenerAdapter {
 			boolean hasArgs = (args.length > 1);
 			if (hasArgs) {
 				args = Arrays.copyOfRange(args, 1, args.length);
+				args = ArrayUtils.removeAllOccurences(args, "");
 			}
 
 			boolean found = false;
