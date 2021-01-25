@@ -110,40 +110,44 @@ public class RatingCommand extends Command {
 			t.solved();
 		}
 
-		Main.getInfo().getUserByID(t.getRequestedBy()).openPrivateChannel()
-				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getName()))
-				.queue(null, Helper::doNothing);
+		if (ShiroInfo.getStaff().contains(t.getRequestedBy())) {
+			channel.sendMessage(":warning: | Ticket fechado mas sem efeito por ter sido aberto por um membro da equipe.").queue();
+		} else {
+			sr.addTicket();
+			RatingDAO.saveRating(sr);
+
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-solved-ticket-with-rating")).queue();
+			Main.getInfo().getUserByID(t.getRequestedBy()).openPrivateChannel().queue(c ->
+							c.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getName())
+									.addFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("assets/feedback.png")).getPath()))
+									.queue(s -> {
+										c.sendMessage(eval(author)).queue(s1 -> {
+											c.sendMessage(questions()[0])
+													.queue(m -> {
+														addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f));
+														m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
+													});
+											c.sendMessage(questions()[1])
+													.queue(m -> {
+														addRates(author, m, (dev, i) -> dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f));
+														m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
+													});
+											c.sendMessage(questions()[2])
+													.queue(m -> {
+														addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f));
+														m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
+													});
+											s1.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
+										});
+
+										s.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
+									})
+					,
+					ex -> channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-request-rating"), ex)).queue()
+			);
+		}
 
 		TicketDAO.updateTicket(t);
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-solved-ticket-with-rating")).queue();
-
-		Main.getInfo().getUserByID(t.getRequestedBy()).openPrivateChannel().queue(c -> {
-					c.sendFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("assets/feedback.png")).getPath()))
-							.queue(s -> {
-								c.sendMessage(eval(author)).queue(s1 -> {
-									c.sendMessage(questions()[0])
-											.queue(m -> {
-												addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f));
-												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
-											});
-									c.sendMessage(questions()[1])
-											.queue(m -> {
-												addRates(author, m, (dev, i) -> dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f));
-												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
-											});
-									c.sendMessage(questions()[2])
-											.queue(m -> {
-												addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f));
-												m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
-											});
-									s1.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
-								});
-
-								s.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(null, Helper::doNothing), Helper::doNothing);
-							});
-				},
-				ex -> channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-request-rating"), ex)).queue()
-		);
 	}
 
 	private String eval(User author) {
