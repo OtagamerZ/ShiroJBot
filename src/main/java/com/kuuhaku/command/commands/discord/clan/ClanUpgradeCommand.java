@@ -78,9 +78,7 @@ public class ClanUpgradeCommand extends Command {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().invalidate(author.getId());
 
-							c.withdraw(c.getTier().getCost(), author);
-							c.setTier(next);
-
+							c.upgrade(author);
 							ClanDAO.saveClan(c);
 
 							s.delete().flatMap(d -> channel.sendMessage("✅ | Tier evoluído com sucesso.")).queue();
