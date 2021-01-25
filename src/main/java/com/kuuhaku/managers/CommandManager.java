@@ -507,6 +507,9 @@ public class CommandManager {
 			put(RecoverCommand.class, new Argument(
 					"retirar", new String[]{"recover"}, "req_card-value", "cmd_recover", MISC, true
 			));
+			put(ShoukanMasterCommand.class, new Argument(
+					"tutor", new String[]{"teacher", "mestre", "master"}, REQ_MENTION, "cmd_shoukan-master", MISC, true
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(
