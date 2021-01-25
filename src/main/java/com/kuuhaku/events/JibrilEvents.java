@@ -27,6 +27,7 @@ import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -86,8 +87,9 @@ public class JibrilEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		try {
+			Message message = event.getMessage();
 			String prefix = GuildDAO.getGuildById(event.getGuild().getId()).getPrefix();
-			String rawMessage = event.getMessage().getContentRaw();
+			String rawMessage = message.getContentRaw();
 			String rawMsgNoPrefix = "";
 			String commandName = "";
 			if (rawMessage.toLowerCase().startsWith(prefix)) {
@@ -108,7 +110,7 @@ public class JibrilEvents extends ListenerAdapter {
 				} else return;
 			}
 
-			if (event.getMessage().getContentRaw().trim().equals("<@" + Main.getJibril().getSelfUser().getId() + ">") || event.getMessage().getContentRaw().trim().equals("<@!" + Main.getJibril().getSelfUser().getId() + ">")) {
+			if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getJibril().getSelfUser().getId())) {
 				event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores deste servidor usando `" + GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue(null, Helper::doNothing);
 				return;
 			}
