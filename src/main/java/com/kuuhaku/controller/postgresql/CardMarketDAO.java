@@ -190,7 +190,7 @@ public class CardMarketDAO {
 						 , ms.sold
 						 , ms.unique_buyers 
 					FROM \"GetMerchantStats\" ms 
-					WHERE ms.month = EXTRACT(MONTH FROM current_date) - 1
+					WHERE ms.month = EXTRACT(MONTH FROM current_date)
 					""");
 
 			return MerchantStats.of((Object[]) q.getSingleResult());
@@ -212,7 +212,7 @@ public class CardMarketDAO {
 						 , ms.unique_buyers 
 					FROM \"GetMerchantStats\" ms 
 					WHERE ms.seller = :id
-					AND ms.month = EXTRACT(MONTH FROM current_date) - 1
+					AND ms.month = EXTRACT(MONTH FROM current_date)
 					""");
 			q.setParameter("id", id);
 
