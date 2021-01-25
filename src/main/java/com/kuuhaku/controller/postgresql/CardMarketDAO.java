@@ -186,9 +186,9 @@ public class CardMarketDAO {
 		try {
 			Query q = em.createNativeQuery("""
 					SELECT ''
-						 , AVG(ms.month)
-						 , AVG(ms.sold)
-						 , AVG(ms.unique_buyers) 
+						 , AVG(ms.month) AS avg_month
+						 , AVG(ms.sold) AS avg_sold
+						 , AVG(ms.unique_buyers) AS avg_unique_buyers 
 					FROM \"GetMerchantStats\" ms 
 					WHERE ms.month = EXTRACT(MONTH FROM current_date)
 					""");
