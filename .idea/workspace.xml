@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1012,14 +1010,7 @@
       <workItem from="1611342273935" duration="6536000" />
       <workItem from="1611348917244" duration="55000" />
       <workItem from="1611349014004" duration="56000" />
-      <workItem from="1611576359013" duration="21604000" />
-    </task>
-    <task id="LOCAL-03490" summary="Adição de mais taxas">
-      <created>1611290430860</created>
-      <option name="number" value="03490" />
-      <option name="presentableId" value="LOCAL-03490" />
-      <option name="project" value="LOCAL" />
-      <updated>1611290430860</updated>
+      <workItem from="1611576359013" duration="21998000" />
     </task>
     <task id="LOCAL-03491" summary="Adição de mais taxas">
       <created>1611290665991</created>
@@ -1357,7 +1348,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611603782145</updated>
     </task>
-    <option name="localTasksCounter" value="3539" />
+    <task id="LOCAL-03539" summary="Correção nos tickets">
+      <created>1611604767499</created>
+      <option name="number" value="03539" />
+      <option name="presentableId" value="LOCAL-03539" />
+      <option name="project" value="LOCAL" />
+      <updated>1611604767499</updated>
+    </task>
+    <option name="localTasksCounter" value="3540" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1443,7 +1441,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de iscas no Shoukan" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Correções" />
     <MESSAGE value="Mais informações no avaliador de deck e no menu de decks reserva" />
@@ -1468,7 +1465,8 @@
     <MESSAGE value="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;" />
     <MESSAGE value="Não pingue o Sora" />
     <MESSAGE value="Correção nos requisitos da licença de comércio" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nos requisitos da licença de comércio" />
+    <MESSAGE value="Correção nos tickets" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nos tickets" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1530,10 +1528,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1604695270131" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611603781152">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611604766584">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611603781152" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611604766584" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1611348469197">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1578,10 +1576,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611603783842">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611604769729">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611603783842" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611604769729" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611291029366" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1611584154385">
       <screen x="0" y="0" width="1680" height="1010" />
