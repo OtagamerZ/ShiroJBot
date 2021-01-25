@@ -67,12 +67,12 @@ public class ShoukanCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		boolean practice = args.length > 0 && Helper.equalsAny(args[0], "practice", "treino");
 		boolean ranked = args.length > 0 && Helper.equalsAny(args[0], "ranqueada", "ranked");
 
 		if (practice) {
-			JSONObject custom = Helper.getOr(Helper.findJson(rawCmd), new JSONObject());
+			JSONObject custom = Helper.getOr(Helper.findJson(argsAsText), new JSONObject());
 			boolean daily = args.length > 1 && Helper.equalsAny(args[1], "daily", "diario");
 
 			if (!daily) {
@@ -158,7 +158,7 @@ public class ShoukanCommand extends Command {
 
 			Account uacc = AccountDAO.getAccount(author.getId());
 			Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
-			JSONObject custom = Helper.findJson(rawCmd);
+			JSONObject custom = Helper.findJson(argsAsText);
 
 			int bet = 0;
 			if (args.length > 1 && StringUtils.isNumeric(args[1]) && custom == null) {

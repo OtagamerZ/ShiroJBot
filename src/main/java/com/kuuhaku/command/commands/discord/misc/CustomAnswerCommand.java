@@ -60,7 +60,7 @@ public class CustomAnswerCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && GuildDAO.getGuildById(guild.getId()).isNotAnyTell()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-community-disabled")).queue();
 			return;

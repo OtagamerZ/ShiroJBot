@@ -49,13 +49,13 @@ public class GatekeeperCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length < 2) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_gatekeeper-no-id")).queue();
-            return;
-        } else if (!StringUtils.isNumeric(args[0])) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_gatekeeper-no-id")).queue();
+			return;
+		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-message-id")).queue();
 			return;
 		} else if (message.getMentionedRoles().size() == 0) {

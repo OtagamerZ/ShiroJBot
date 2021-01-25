@@ -51,17 +51,17 @@ public class VIPShopCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (args.length == 0) {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setTitle(":diamonds: | Loja VIP");
-            eb.setDescription("""
-                    Gemas podem ser obtidas ao resgatar um acúmulo de 7 votos seguidos com o comando `%sresgatar`. Para utilizar as gemas basta usar `%svip ID`!
-                         
-                    Muito obrigada por me apoiar!
-                    """.formatted(prefix, prefix));
+			eb.setDescription("""
+					Gemas podem ser obtidas ao resgatar um acúmulo de 7 votos seguidos com o comando `%sresgatar`. Para utilizar as gemas basta usar `%svip ID`!
+					     
+					Muito obrigada por me apoiar!
+					""".formatted(prefix, prefix));
 			for (VipItem v : VipItem.values()) eb.addField(v.getField());
 			eb.setColor(Color.red);
 			eb.setFooter("Suas gemas: " + acc.getGems(), "https://bgasparotto.com/wp-content/uploads/2016/03/ruby-logo.png");

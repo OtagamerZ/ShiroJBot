@@ -84,6 +84,9 @@ public class Account {
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
     private boolean receiveNotifs = true;
 
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+    private boolean merchantLicense = false;
+
     @Column(columnDefinition = "TEXT")
     private String buffs = "{}";
 
@@ -440,5 +443,13 @@ public class Account {
 
     public void setStashCapacity(int stashCapacity) {
         this.stashCapacity = stashCapacity;
+    }
+
+    public boolean hasMerchantLicense() {
+        return merchantLicense;
+    }
+
+    public void setMerchantLicense(boolean merchantLicense) {
+        this.merchantLicense = merchantLicense;
     }
 }

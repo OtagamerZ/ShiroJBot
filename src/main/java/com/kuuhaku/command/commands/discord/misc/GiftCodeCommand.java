@@ -46,7 +46,7 @@ public class GiftCodeCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar o tipo da operação (gerar ou resgatar) e a quantidade/código.").queue();
 			return;

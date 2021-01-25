@@ -53,16 +53,16 @@ public class CompileCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> | Compilando...").queue(m -> {
 			try {
-                Future<?> execute = Main.getInfo().getCompilationPool().submit(() -> {
-                    final long start = System.currentTimeMillis();
-                    try {
-                        String code = String.join(" ", args);
-                        if (!code.contains("out")) throw new IllegalArgumentException("Código sem retorno.");
-                        else if (Helper.containsAny(code, BannedVars.vars) && !ShiroInfo.getDevelopers().contains(author.getId()))
-                            throw new IllegalAccessException("Código com variáveis ou métodos proibidos.");
+				Future<?> execute = Main.getInfo().getCompilationPool().submit(() -> {
+					final long start = System.currentTimeMillis();
+					try {
+						String code = String.join(" ", args);
+						if (!code.contains("out")) throw new IllegalArgumentException("Código sem retorno.");
+						else if (Helper.containsAny(code, BannedVars.vars) && !ShiroInfo.getDevelopers().contains(author.getId()))
+							throw new IllegalAccessException("Código com variáveis ou métodos proibidos.");
 
                         if (code.startsWith("```") && code.endsWith("```")) {
                             code = code.replace("```java", "").replace("```", "");

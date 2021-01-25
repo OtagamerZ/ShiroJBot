@@ -48,7 +48,7 @@ public class PingCommand extends TwitchCommand {
 	}
 
 	@Override
-	public void execute(EventUser author, Account account, String rawCmd, String[] args, ChannelMessageEvent message, EventChannel channel, TwitchChat chat, Set<CommandPermission> permissions) {
+	public void execute(EventUser author, Account account, String command, String argsAsText, String[] args, ChannelMessageEvent message, EventChannel channel, TwitchChat chat, Set<CommandPermission> permissions) {
 		int fp = (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024);
 		chat.sendMessage(channel.getName(), "MrDestructoid Pong! " + (int) Main.getShiroShards().getAverageGatewayPing() + " | copyThis " + fp + " MB!");
 	}

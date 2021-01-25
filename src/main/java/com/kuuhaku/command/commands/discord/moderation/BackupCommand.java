@@ -57,17 +57,17 @@ public class BackupCommand extends Command {
 
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        }
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
 
-        Backup data = BackupDAO.getGuildBackup(guild);
+		Backup data = BackupDAO.getGuildBackup(guild);
 
-        if (args.length < 1) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backup-no-mode")).queue();
-            return;
+		if (args.length < 1) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backup-no-mode")).queue();
+			return;
         } else if (!Helper.equalsAny(args[0], "salvar", "recuperar")) {
             channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backup-invalid-mode")).queue();
             return;

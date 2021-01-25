@@ -42,7 +42,7 @@ public class TetCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage(":warning: | O módulo de RPG (Tet) está temporariamente desabilitado, por favor aguarde o pronunciamento oficial de lançamento do Tet 2.0.").queue();
 		//Helper.nonBetaAlert(author, member, channel, "Para chamar o Tet para seu servidor, utilize este link:\n", "TET_LINK");
 	}

@@ -57,7 +57,7 @@ public class TierRankCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Map<String, Page> categories = new LinkedHashMap<>();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();

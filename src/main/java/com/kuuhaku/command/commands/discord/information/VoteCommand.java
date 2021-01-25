@@ -42,7 +42,7 @@ public class VoteCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("Vote em mim para receber créditos e acúmulos de voto!\nhttps://top.gg/bot/572413282653306901/vote").queue();
 	}
 }

@@ -61,7 +61,7 @@ public class GuessTheNumberCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().gameInProgress(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 			return;
@@ -84,7 +84,7 @@ public class GuessTheNumberCommand extends Command {
 					return;
 
 				String value = event.getMessage().getContentRaw();
-				if (value.equalsIgnoreCase("desistir") || Helper.equalsAny(prefix + rawCmd.split(" ")[0], ArrayUtils.addAll(getAliases(), getName()))) {
+				if (value.equalsIgnoreCase("desistir") || Helper.equalsAny(prefix + command, ArrayUtils.addAll(getAliases(), getName()))) {
 					channel.sendMessage("Você desistiu, o número escolhido por mim era **" + theValue + "**.").queue();
 					success.accept(null);
 					timeout.cancel(true);

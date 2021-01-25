@@ -45,7 +45,7 @@ public class SettingsCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length == 0) {
@@ -71,42 +71,42 @@ public class SettingsCommand extends Command {
 					channel.sendMessage("❌ | Prefixo muito longo (Max. 5)").queue();
 					return;
 				}
-				Settings.updatePrefix(args, message, gc);
+				Settings.updatePrefix(args, argsAsText, message, gc);
 			}
-			case "cbv", "canalbv" -> Settings.updateCanalBV(args, message, gc);
+			case "cbv", "canalbv" -> Settings.updateCanalBV(args, argsAsText, message, gc);
 			case "mensagembemvindo", "mensagembv", "msgbv" -> {
 				if (msg.length() > 2000) {
 					channel.sendMessage("❌ | Mensagem muito longa (Max. 2000 caractéres)").queue();
 					return;
 				}
-				Settings.updateMsgBV(args, message, gc);
+				Settings.updateMsgBV(args, argsAsText, message, gc);
 			}
-			case "cadeus", "canaladeus" -> Settings.updateCanalAdeus(args, message, gc);
+			case "cadeus", "canaladeus" -> Settings.updateCanalAdeus(args, argsAsText, message, gc);
 			case "mensagemadeus", "mensagema", "msgadeus" -> {
 				if (msg.length() > 2000) {
 					channel.sendMessage("❌ | Mensagem muito longa (Max. 2000 caractéres)").queue();
 					return;
 				}
-				Settings.updateMsgAdeus(args, message, gc);
+				Settings.updateMsgAdeus(args, argsAsText, message, gc);
 			}
-			case "cg", "canalgeral" -> Settings.updateCanalGeral(args, message, gc);
+			case "cg", "canalgeral" -> Settings.updateCanalGeral(args, argsAsText, message, gc);
 			case "topico", "tp", "tpgeral" -> {
 				if (msg.length() > 500) {
 					channel.sendMessage("❌ | Tópico muito longo (Max. 500 caractéres)").queue();
 					return;
 				}
-				Settings.updateGeneralTopic(args, message, gc);
+				Settings.updateGeneralTopic(args, argsAsText, message, gc);
 			}
-			case "tmute", "tempomute", "tmu" -> Settings.updateWarnTime(args, message, gc);
-			case "tpoll", "tempopoll" -> Settings.updatePollTime(args, message, gc);
-			case "csug", "canalsug" -> Settings.updateCanalSUG(args, message, gc);
-			case "cmute", "cargomute", "rmute", "rolemute" -> Settings.updateCargoMute(args, message, gc);
-			case "ln", "levelnotif" -> Settings.updateLevelNotif(args, message, gc);
-			case "canallevelup", "canallvlup", "clvlup" -> Settings.updateCanalLevelUp(args, message, gc);
-			case "canalrelay", "canalrly", "crelay" -> Settings.updateCanalRelay(args, message, gc);
-			case "canalavisos", "canalav", "cavisos" -> Settings.updateCanalAvisos(args, message, gc);
-			case "clvl", "cargolevel", "rlvl", "rolelevel" -> Settings.updateCargoLvl(args, message, gc);
-			case "mod", "module", "categoria", "cat:" -> Settings.updateModules(args, message, gc);
+			case "tmute", "tempomute", "tmu" -> Settings.updateWarnTime(args, argsAsText, message, gc);
+			case "tpoll", "tempopoll" -> Settings.updatePollTime(args, argsAsText, message, gc);
+			case "csug", "canalsug" -> Settings.updateCanalSUG(args, argsAsText, message, gc);
+			case "cmute", "cargomute", "rmute", "rolemute" -> Settings.updateCargoMute(args, argsAsText, message, gc);
+			case "ln", "levelnotif" -> Settings.updateLevelNotif(args, argsAsText, message, gc);
+			case "canallevelup", "canallvlup", "clvlup" -> Settings.updateCanalLevelUp(args, argsAsText, message, gc);
+			case "canalrelay", "canalrly", "crelay" -> Settings.updateCanalRelay(args, argsAsText, message, gc);
+			case "canalavisos", "canalav", "cavisos" -> Settings.updateCanalAvisos(args, argsAsText, message, gc);
+			case "clvl", "cargolevel", "rlvl", "rolelevel" -> Settings.updateCargoLvl(args, argsAsText, message, gc);
+			case "mod", "module", "categoria", "cat:" -> Settings.updateModules(args, argsAsText, message, gc);
 			case "help", "ajuda" -> Settings.settingsHelp(message, gc);
 			default -> Settings.embedConfig(message);
 		}

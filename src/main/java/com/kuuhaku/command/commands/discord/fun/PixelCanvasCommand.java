@@ -57,7 +57,7 @@ public class PixelCanvasCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			Main.getInfo().getCanvas().viewCanvas(message.getTextChannel()).queue();
 			return;
@@ -67,7 +67,7 @@ public class PixelCanvasCommand extends Command {
 
 		try {
 			if (opts.length == 1) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-arguments")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-arguments")).queue();
                 return;
             } else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
 				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-coordinates-out-of-bounds"), CANVAS_SIZE / 2, CANVAS_SIZE / 2)).queue();

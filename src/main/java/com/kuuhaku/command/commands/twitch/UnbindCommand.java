@@ -48,7 +48,7 @@ public class UnbindCommand extends TwitchCommand {
 	}
 
 	@Override
-	public void execute(EventUser author, Account account, String rawCmd, String[] args, ChannelMessageEvent message, EventChannel channel, TwitchChat chat, Set<CommandPermission> permissions) {
+	public void execute(EventUser author, Account account, String command, String argsAsText, String[] args, ChannelMessageEvent message, EventChannel channel, TwitchChat chat, Set<CommandPermission> permissions) {
 		Account acc = AccountDAO.getAccountByTwitchId(author.getId());
 
 		assert acc != null;

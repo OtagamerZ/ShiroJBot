@@ -57,7 +57,7 @@ public class ShipCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() < 2) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_two-mention-required")).queue();
 			return;

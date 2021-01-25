@@ -47,17 +47,17 @@ public class BanMemberCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() == 0) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-member-to-ban")).queue();
-            return;
-        } else if (message.getMentionedUsers().size() > 1) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-member-to-ban")).queue();
+			return;
+		} else if (message.getMentionedUsers().size() > 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_too-many-mentions")).queue();
-            return;
-        } else if (!member.hasPermission(Permission.BAN_MEMBERS)) {
+			return;
+		} else if (!member.hasPermission(Permission.BAN_MEMBERS)) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_ban-not-allowed")).queue();
-            return;
-        } else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0)) || !Helper.hasRoleHigherThan(guild.getSelfMember(), message.getMentionedMembers().get(0))) {
+			return;
+		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0)) || !Helper.hasRoleHigherThan(guild.getSelfMember(), message.getMentionedMembers().get(0))) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cant-ban-high-role")).queue();
 			return;
 		} else if (ShiroInfo.getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {

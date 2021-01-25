@@ -54,7 +54,7 @@ public class EncryptCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getAttachments().size() < 1) {
 			channel.sendMessage("❌ | Você precisa adicionar um arquivo para criptografar.").queue();
 			return;
