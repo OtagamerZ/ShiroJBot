@@ -19,11 +19,15 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
@@ -121,12 +125,30 @@ public class MatchMakingRating {
 			promWins++;
 
 			if (promWins + promLosses == tier.getMd()) {
-				tier = RankedTier.APPRENTICE_IV;
+				tier = RankedTier.INITIATE_IV;
 				rankPoints = 0;
 				promWins = promLosses = 0;
-				Main.getInfo().getUserByID(userId).openPrivateChannel()
-						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
-						.queue(null, Helper::doNothing);
+
+				if (StringUtils.isNumeric(master)) {
+					Account acc = AccountDAO.getAccount(master);
+					master = "FULFILLED_" + master;
+					User u = Main.getInfo().getUserByID(userId);
+					u.openPrivateChannel()
+							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratúitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
+							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
+							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Aprendiz IV, você recebeu **25.000 créditos**!"))
+							.queue(null, Helper::doNothing);
+
+					acc.addCredit(25000, this.getClass());
+					AccountDAO.saveAccount(acc);
+
+					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + userId);
+					DynamicParameterDAO.setParam("freeSynth_" + userId, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
+				} else {
+					Main.getInfo().getUserByID(userId).openPrivateChannel()
+							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+							.queue(null, Helper::doNothing);
+				}
 				return;
 			}
 			return;
@@ -159,13 +181,30 @@ public class MatchMakingRating {
 			promLosses++;
 
 			if (promWins + promLosses == tier.getMd()) {
-				tier = RankedTier.APPRENTICE_IV;
+				tier = RankedTier.INITIATE_IV;
 				rankPoints = 0;
 				promWins = promLosses = 0;
-				Main.getInfo().getUserByID(userId).openPrivateChannel()
-						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
-						.queue(null, Helper::doNothing);
-				return;
+
+				if (StringUtils.isNumeric(master)) {
+					Account acc = AccountDAO.getAccount(master);
+					master = "FULFILLED_" + master;
+					User u = Main.getInfo().getUserByID(userId);
+					u.openPrivateChannel()
+							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratúitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
+							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
+							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Aprendiz IV, você recebeu **25.000 créditos**!"))
+							.queue(null, Helper::doNothing);
+
+					acc.addCredit(25000, this.getClass());
+					AccountDAO.saveAccount(acc);
+
+					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + userId);
+					DynamicParameterDAO.setParam("freeSynth_" + userId, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
+				} else {
+					Main.getInfo().getUserByID(userId).openPrivateChannel()
+							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+							.queue(null, Helper::doNothing);
+				}
 			}
 			return;
 		} else if (rankPoints == 100) {
@@ -179,7 +218,7 @@ public class MatchMakingRating {
 			return;
 		}
 
-		if (rankPoints == 0 && Helper.chance(20 * mmrModif) && tier != RankedTier.APPRENTICE_IV) {
+		if (rankPoints == 0 && Helper.chance(20 * mmrModif) && tier != RankedTier.INITIATE_IV) {
 			tier = tier.getPrevious();
 			rankPoints = 75;
 			Main.getInfo().getUserByID(userId).openPrivateChannel()
