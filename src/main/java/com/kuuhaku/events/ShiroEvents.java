@@ -677,7 +677,7 @@ public class ShiroEvents extends ListenerAdapter {
 				switch (args[0].toLowerCase()) {
 					case "send", "s" -> {
 						if (args.length < 2) return;
-						String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
+						String msgNoArgs = Helper.makeEmoteFromMention(msg.replaceFirst(args[0] + " " + args[1], "")).trim();
 
 						try {
 							User u = Main.getInfo().getUserByID(args[1]);
@@ -705,7 +705,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 					case "block", "b" -> {
 						if (args.length < 2) return;
-						String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
+						String msgNoArgs = Helper.makeEmoteFromMention(msg.replaceFirst(args[0] + " " + args[1], "")).trim();
 
 						try {
 							User us = Main.getInfo().getUserByID(args[1]);
@@ -741,7 +741,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 					case "alert", "a" -> {
 						if (args.length < 2) return;
-						String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
+						String msgNoArgs = Helper.makeEmoteFromMention(msg.replaceFirst(args[0] + " " + args[1], "")).trim();
 
 						try {
 							User us = Main.getInfo().getUserByID(args[1]);
