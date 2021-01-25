@@ -18,6 +18,7 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.kuuhaku.model.common.MerchantStats;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.CardMarket;
@@ -26,6 +27,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.Calendar;
 import java.util.List;
@@ -173,6 +175,50 @@ public class CardMarketDAO {
 			return Helper.prcnt(gm.evaluate(now), gm.evaluate(before)) - 1;
 		} catch (NullPointerException e) {
 			return 0;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static MerchantStats getAverageMerchantStats() {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			Query q = em.createNativeQuery("""
+					SELECT ''
+						 , ms.month
+						 , ms.sold
+						 , ms.unique_buyers 
+					FROM \"GetMerchantStats\" ms 
+					WHERE ms.month = EXTRACT(MONTH FROM current_date) - 1
+					""");
+
+			return MerchantStats.of((Object[]) q.getSingleResult());
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static MerchantStats getMerchantStats(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			Query q = em.createNativeQuery("""
+					SELECT ms.seller
+						 , ms.month
+						 , ms.sold
+						 , ms.unique_buyers 
+					FROM \"GetMerchantStats\" ms 
+					WHERE ms.seller = :id
+					AND ms.month = EXTRACT(MONTH FROM current_date) - 1
+					""");
+			q.setParameter("id", id);
+
+			return MerchantStats.of((Object[]) q.getSingleResult());
+		} catch (NoResultException e) {
+			return null;
 		} finally {
 			em.close();
 		}

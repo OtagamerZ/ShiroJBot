@@ -28,15 +28,15 @@ public class CryReaction extends Reaction {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        this.setReaction(new String[]{
-                "Faça isso parar!",
-                "Sadboy feels.",
-                "Me deixa sozinho(a)."
-        });
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		this.setReaction(new String[]{
+				"Faça isso parar!",
+				"Sadboy feels.",
+				"Me deixa sozinho(a)."
+		});
 
-        sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " está chorando! - " + this.getReaction(), false);
-    }
+		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " está chorando! - " + this.getReaction(), false);
+	}
 
     @Override
     public void answer(TextChannel chn) {

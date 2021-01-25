@@ -47,7 +47,7 @@ public class KillCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (author.getId().equals(ShiroInfo.getNiiChan())) {
 			channel.sendMessage("Sayonara, Nii-chan! <3").queue();
 		} else {

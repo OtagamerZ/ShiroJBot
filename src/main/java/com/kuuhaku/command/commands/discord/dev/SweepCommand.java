@@ -54,17 +54,17 @@ public class SweepCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        }
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
 
-        channel.sendMessage("<a:loading:697879726630502401> | Comparando índices...").queue(s -> {
-            Set<GuildConfig> gds = new HashSet<>(GuildDAO.getAllGuilds());
-            Set<com.kuuhaku.model.persistent.Member> mbs = new HashSet<>(MemberDAO.getAllMembers());
+		channel.sendMessage("<a:loading:697879726630502401> | Comparando índices...").queue(s -> {
+			Set<GuildConfig> gds = new HashSet<>(GuildDAO.getAllGuilds());
+			Set<com.kuuhaku.model.persistent.Member> mbs = new HashSet<>(MemberDAO.getAllMembers());
 
-            Set<String> guildTrashBin = new HashSet<>();
+			Set<String> guildTrashBin = new HashSet<>();
             Set<String> memberTrashBin = new HashSet<>();
 
             s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + gds.size() + " guilds)").queue();

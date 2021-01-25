@@ -44,15 +44,15 @@ public class AllowCommunityCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		if (gc.isNotAnyTell()) {
 			channel.sendMessage(":loud_sound: | Agora irei ouvir as respostas da comunidade!").queue();
 			gc.setAnyTell(true);
 		} else {
 			channel.sendMessage(":mute: | Não irei mais ouvir as respostas da comunidade!").queue();
-            gc.setAnyTell(false);
-        }
-        GuildDAO.updateGuildSettings(gc);
-    }
+			gc.setAnyTell(false);
+		}
+		GuildDAO.updateGuildSettings(gc);
+	}
 }

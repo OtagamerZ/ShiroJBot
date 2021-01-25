@@ -55,7 +55,7 @@ public class LeaveCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		List<String[]> servers = new ArrayList<>();
@@ -79,7 +79,7 @@ public class LeaveCommand extends Command {
 		}
 
 		try {
-			Guild guildToLeave = Main.getInfo().getGuildByID(rawCmd.split(" ")[1]);
+			Guild guildToLeave = Main.getInfo().getGuildByID(args[0]);
 			guildToLeave.leave().queue();
 			channel.sendMessage("Ok, acabei de sair desse servidor!").queue();
 		} catch (ArrayIndexOutOfBoundsException e) {

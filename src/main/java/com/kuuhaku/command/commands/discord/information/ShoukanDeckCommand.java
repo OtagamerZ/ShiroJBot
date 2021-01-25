@@ -57,7 +57,7 @@ public class ShoukanDeckCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		boolean showPrivate = Helper.equalsAny("p", args);
 		boolean showClan = Helper.equalsAny("c", args) && ClanDAO.isMember(author.getId());
 

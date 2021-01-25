@@ -38,6 +38,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Extensions;
+import com.kuuhaku.model.common.MerchantStats;
 import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.ItemDrop;
 import com.kuuhaku.model.common.drop.JokerDrop;
@@ -1974,5 +1975,19 @@ public class Helper {
 			sb.append(n.charAt(i));
 		}
 		return sb.reverse().toString();
+	}
+
+	public static String replaceTags(String text, User author, Guild guild) {
+		return text.replace("%user%", author.getName())
+				.replace("%guild%", guild.getName())
+				.replace("%count%", String.valueOf(guild.getMemberCount()));
+	}
+
+	public static boolean isTrustedMerchant(String id) {
+		MerchantStats ms = CardMarketDAO.getMerchantStats(id);
+		MerchantStats avg = CardMarketDAO.getAverageMerchantStats();
+
+		if (ms == null || avg == null) return false;
+		return prcnt(ms.getSold(), avg.getSold()) > 0.75 && prcnt(ms.getUniqueBuyers(), avg.getUniqueBuyers()) > 0.5;
 	}
 }

@@ -314,6 +314,11 @@ public class Shoukan extends GlobalGame {
 				Drawable d = h.getCards().get(index);
 				String msg;
 
+				if (!d.isAvailable()) {
+					channel.sendMessage("❌ | Essa carta já foi jogada neste turno.").queue(null, Helper::doNothing);
+					return;
+				}
+
 				if (args[1].equalsIgnoreCase("d") && args.length < 3) {
 					discardBatch.add(d.copy());
 					d.setAvailable(false);
@@ -336,11 +341,6 @@ public class Shoukan extends GlobalGame {
 									h.showHand();
 								}
 							});
-					return;
-				}
-
-				if (!d.isAvailable()) {
-					channel.sendMessage("❌ | Essa carta já foi jogada neste turno.").queue(null, Helper::doNothing);
 					return;
 				}
 

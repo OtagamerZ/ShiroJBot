@@ -69,7 +69,7 @@ public class GuessTheCardsCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().gameInProgress(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 			return;
@@ -113,7 +113,7 @@ public class GuessTheCardsCommand extends Command {
 								if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
 									return;
 
-								if (event.getMessage().getContentRaw().equalsIgnoreCase("desistir") || Helper.equalsAny(prefix + rawCmd.split(" ")[0], ArrayUtils.addAll(getAliases(), getName()))) {
+								if (event.getMessage().getContentRaw().equalsIgnoreCase("desistir") || Helper.equalsAny(prefix + command, ArrayUtils.addAll(getAliases(), getName()))) {
 									channel.sendMessage("Você desistiu, as cartas eram `%s`, `%s` e `%s`".formatted(
 											names.get(0),
 											names.get(1),

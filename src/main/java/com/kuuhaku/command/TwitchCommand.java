@@ -88,5 +88,5 @@ public abstract class TwitchCommand {
 		return requiresBinding;
 	}
 
-	public abstract void execute(EventUser author, Account account, String rawCmd, String[] args, ChannelMessageEvent message, EventChannel channel, TwitchChat chat, Set<CommandPermission> permissions);
+	public abstract void execute(EventUser author, Account account, String command, String argsAsText, String[] args, ChannelMessageEvent message, EventChannel channel, TwitchChat chat, Set<CommandPermission> permissions);
 }

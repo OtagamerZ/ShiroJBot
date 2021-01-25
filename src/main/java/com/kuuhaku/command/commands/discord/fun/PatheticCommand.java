@@ -51,17 +51,17 @@ public class PatheticCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (args.length < 1) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_meme-no-message")).queue();
-            return;
-        }
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (args.length < 1) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_meme-no-message")).queue();
+			return;
+		}
 
-        try {
-            String text = String.join(" ", args);
-            BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/pathetic.jpg")));
+		try {
+			String text = String.join(" ", args);
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/pathetic.jpg")));
 
-            ByteArrayOutputStream baos = Helper.renderMeme(text, bi);
+			ByteArrayOutputStream baos = Helper.renderMeme(text, bi);
 
             channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "pathetic.jpg").queue();
             baos.close();

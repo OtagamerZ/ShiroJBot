@@ -63,7 +63,7 @@ public class CardValueCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Gerando gráfico...").queue(m -> {
 			if (args.length < 1) {
 				channel.sendMessage("❌ | Você precisa informar uma carta para ver o gráfico de preços.").queue();

@@ -50,17 +50,17 @@ public class BugHuntCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (message.getMentionedUsers().size() > 0) {
-            if (message.getMentionedUsers().size() == 1) {
-                resolveBugHuntByMention(message, channel);
-            } else {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_too-many-users-nv")).queue();
-            }
-        } else {
-            try {
-                if (Main.getInfo().getUserByID(args[0]) != null) {
-                    try {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (message.getMentionedUsers().size() > 0) {
+			if (message.getMentionedUsers().size() == 1) {
+				resolveBugHuntByMention(message, channel);
+			} else {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_too-many-users-nv")).queue();
+			}
+		} else {
+			try {
+				if (Main.getInfo().getUserByID(args[0]) != null) {
+					try {
                         resolveBugHuntById(args, channel);
                     } catch (NoResultException e) {
                         TagDAO.addUserTagsToDB(args[0]);

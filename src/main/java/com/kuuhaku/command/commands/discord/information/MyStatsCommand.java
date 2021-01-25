@@ -62,7 +62,7 @@ public class MyStatsCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
 		Kawaigotchi kg = KGotchiDAO.getKawaigotchi(author.getId());
@@ -120,12 +120,14 @@ public class MyStatsCommand extends Command {
 
 		String mult = """
 				**XP por mensagem:** %s (Base: 15)
+				**Taxa de venda:** %s (Base: 10%%)
 				**Chance de spawn de cartas:** %s%% (Base: 3%%)
 				**Chance de spawn de drops:** %s%% (Base: 2.5%%)
 				**Chance de spawn de cromadas:** %s%% (Base: 0.5%%)
 				"""
 				.formatted(
 						xp,
+						(Helper.isTrustedMerchant(author.getId()) ? 5 : 10) + " `LICENÇA DE COMÉRCIO`",
 						Helper.round((3 - Helper.minMax(Helper.prcnt(guild.getMemberCount(), 5000), 0, 1)) * (gb.getBuff(2) != null ? gb.getBuff(2).getMult() : 1), 1),
 						Helper.round((2.5 - Helper.minMax(Helper.prcnt(guild.getMemberCount() * 0.75f, 5000), 0, 0.75)) * (gb.getBuff(3) != null ? gb.getBuff(3).getMult() : 1), 1),
 						Helper.round(0.5 * (gb.getBuff(4) != null ? gb.getBuff(4).getMult() : 1), 1)
