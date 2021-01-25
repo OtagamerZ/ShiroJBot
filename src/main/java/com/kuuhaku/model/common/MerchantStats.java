@@ -26,7 +26,7 @@ public class MerchantStats {
 
 	private MerchantStats(Object uid, Object month, Object sold, Object uniqueBuyers) {
 		this.uid = (String) uid;
-		this.month = (int) month;
+		this.month = (int) (double) month;
 		this.sold = (long) sold;
 		this.uniqueBuyers = (long) uniqueBuyers;
 	}
