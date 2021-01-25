@@ -23,14 +23,14 @@ import java.math.BigDecimal;
 public class MerchantStats {
 	private final String uid;
 	private final int month;
-	private final long sold;
-	private final long uniqueBuyers;
+	private final double sold;
+	private final double uniqueBuyers;
 
 	private MerchantStats(Object uid, Object month, Object sold, Object uniqueBuyers) {
 		this.uid = (String) uid;
 		this.month = (int) (double) month;
-		this.sold = ((BigDecimal) sold).longValue();
-		this.uniqueBuyers = ((BigDecimal) uniqueBuyers).longValue();
+		this.sold = ((BigDecimal) sold).doubleValue();
+		this.uniqueBuyers = ((BigDecimal) uniqueBuyers).doubleValue();
 	}
 
 	public static MerchantStats of(Object[] values) {
@@ -45,11 +45,11 @@ public class MerchantStats {
 		return month;
 	}
 
-	public long getSold() {
+	public double getSold() {
 		return sold;
 	}
 
-	public long getUniqueBuyers() {
+	public double getUniqueBuyers() {
 		return uniqueBuyers;
 	}
 }
