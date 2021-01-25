@@ -85,7 +85,10 @@ public class TwitchEvents {
 		String argsAsText = rawMsgNoPrefix.replaceFirst(commandName, "").trim();
 		boolean hasArgs = (args.length > 1);
 		if (hasArgs) {
-			args = ArrayUtils.removeAllOccurences(Arrays.copyOfRange(args, 1, args.length), "");
+			args = Arrays.copyOfRange(args, 1, args.length);
+			args = ArrayUtils.removeAllOccurences(args, "");
+		} else {
+			args = new String[0];
 		}
 
 		TwitchCommand command = Main.getTwitchCommandManager().getCommand(commandName);
