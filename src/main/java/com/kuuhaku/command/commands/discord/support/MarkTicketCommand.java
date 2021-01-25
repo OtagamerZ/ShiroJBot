@@ -78,7 +78,7 @@ public class MarkTicketCommand extends Command {
 
 		if (ShiroInfo.getStaff().contains(t.getRequestedBy())) {
 			channel.sendMessage(":warning: | Ticket fechado mas sem efeito por ter sido aberto por um membro da equipe.").queue();
-		} else if (ShiroInfo.getSupports().contains(author.getId())) {
+		} else {
 			sr.addTicket();
 			RatingDAO.saveRating(sr);
 
