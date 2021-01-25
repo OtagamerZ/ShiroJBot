@@ -18,8 +18,6 @@
 
 package com.kuuhaku.model.common;
 
-import java.math.BigDecimal;
-
 public class MerchantStats {
 	private final String uid;
 	private final int month;
@@ -28,9 +26,9 @@ public class MerchantStats {
 
 	private MerchantStats(Object uid, Object month, Object sold, Object uniqueBuyers) {
 		this.uid = (String) uid;
-		this.month = (int) (double) month;
-		this.sold = ((BigDecimal) sold).doubleValue();
-		this.uniqueBuyers = ((BigDecimal) uniqueBuyers).doubleValue();
+		this.month = ((Number) month).intValue();
+		this.sold = ((Number) sold).doubleValue();
+		this.uniqueBuyers = ((Number) uniqueBuyers).doubleValue();
 	}
 
 	public static MerchantStats of(Object[] values) {
