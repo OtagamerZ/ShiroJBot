@@ -58,6 +58,7 @@ public abstract class GlobalGame {
 	private int round = 0;
 	private User current;
 	private boolean closed = false;
+	private boolean wo = false;
 
 	public GlobalGame(ShardManager handler, Board board, GameChannel channel, boolean ranked) {
 		this.handler = handler;
@@ -104,6 +105,7 @@ public abstract class GlobalGame {
 							.queue(s -> {
 								onWO.accept(s);
 								closed = true;
+								wo = true;
 							}), 3, TimeUnit.MINUTES);
 		else timeout = executor.schedule(() ->
 				channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
@@ -182,6 +184,7 @@ public abstract class GlobalGame {
 							.queue(s -> {
 								onWO.accept(s);
 								closed = true;
+								wo = true;
 							}), 3, TimeUnit.MINUTES);
 		else timeout = executor.schedule(() ->
 				channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
@@ -207,6 +210,7 @@ public abstract class GlobalGame {
 							.queue(s -> {
 								onWO.accept(s);
 								closed = true;
+								wo = true;
 							}), 3, TimeUnit.MINUTES);
 		else timeout = executor.schedule(() ->
 				channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
@@ -285,7 +289,7 @@ public abstract class GlobalGame {
 					long mmr = Math.round(250 * manaEff + (125 * (damageEff / expEff) + 125 * sustainEff));
 
 
-					yourMMR.addMMR(mmr, hisMMR.getMMR(), ranked);
+					yourMMR.addMMR(mmr / (wo ? 2 : 1), hisMMR.getMMR(), ranked);
 					yourMMR.addWin();
 					if (ranked) yourMMR.increaseRankPoints(hisMMR);
 				} else if (history.getWinner() == other) {
@@ -295,7 +299,7 @@ public abstract class GlobalGame {
 					double sustainEff = 1 + yourResult.get("hp") / 5000d;
 					long mmr = Math.round(250 * manaEff - (125 * (damageEff / expEff) + 125 * sustainEff));
 
-					yourMMR.removeMMR(mmr, hisMMR.getMMR(), ranked);
+					yourMMR.removeMMR(mmr * (wo ? 2 : 1), hisMMR.getMMR(), ranked);
 					yourMMR.addLoss();
 					if (ranked) yourMMR.decreaseRankPoints(hisMMR);
 				}

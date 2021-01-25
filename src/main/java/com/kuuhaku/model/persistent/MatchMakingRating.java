@@ -67,6 +67,9 @@ public class MatchMakingRating {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date blockedUntil = null;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int evades = 0;
+
 	public MatchMakingRating(String userId) {
 		this.userId = userId;
 	}
@@ -232,6 +235,14 @@ public class MatchMakingRating {
 
 	public void block(int time, TemporalUnit unit) {
 		blockedUntil = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))).plus(time, unit));
+	}
+
+	public int getEvades() {
+		return evades;
+	}
+
+	public void setEvades(int evades) {
+		this.evades = evades;
 	}
 
 	public static Map<Side, Pair<String, Map<String, Integer>>> calcMMR(MatchHistory mh) {
