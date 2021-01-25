@@ -52,7 +52,7 @@ public class MerchantLicenseCommand extends Command {
 		MerchantStats avg = CardMarketDAO.getAverageMerchantStats();
 
 		if (ms == null || avg == null) {
-			channel.sendMessage("❌ | Você não possui dados de vendas suficientes!").queue();
+			channel.sendMessage("❌ | Você não possui dados de vendas suficientes neste mês.").queue();
 			return;
 		}
 
