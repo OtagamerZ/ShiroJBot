@@ -23,6 +23,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
+import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -67,6 +68,12 @@ public class ShoukanMasterCommand extends Command {
 		}
 
 		User u = message.getMentionedUsers().get(0);
+		MatchMakingRating master = MatchMakingRatingDAO.getMMR(u.getId());
+		if (master.getTier() == RankedTier.UNRANKED) {
+			channel.sendMessage("❌ | O usuário escolhido precisa possuir ranking no Shoukan.").queue();
+			return;
+		}
+
 		String hash1 = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash1);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
