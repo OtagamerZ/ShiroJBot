@@ -136,7 +136,7 @@ public class MatchMakingRating {
 					u.openPrivateChannel()
 							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratúitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
 							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
-							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Aprendiz IV, você recebeu **25.000 créditos**!"))
+							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Iniciado IV, você recebeu **25.000 créditos**!"))
 							.queue(null, Helper::doNothing);
 
 					acc.addCredit(25000, this.getClass());
@@ -192,7 +192,7 @@ public class MatchMakingRating {
 					u.openPrivateChannel()
 							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratúitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
 							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
-							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Aprendiz IV, você recebeu **25.000 créditos**!"))
+							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Iniciado IV, você recebeu **25.000 créditos**!"))
 							.queue(null, Helper::doNothing);
 
 					acc.addCredit(25000, this.getClass());
