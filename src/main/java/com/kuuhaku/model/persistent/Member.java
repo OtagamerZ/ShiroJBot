@@ -25,7 +25,9 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.Bonus;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
+import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.TrophyType;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
@@ -33,6 +35,7 @@ import org.json.JSONObject;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -147,6 +150,12 @@ public class Member {
 		xp += 15 * mult.get() * spamModif;
 		lastEarntXp = System.currentTimeMillis();
 
+		Account acc = AccountDAO.getAccount(mid);
+		Map<DailyTask, Integer> pg = acc.getDailyProgress();
+		pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+		acc.setDailyProgress(pg);
+		AccountDAO.saveAccount(acc);
+
 		ExceedMember em = ExceedDAO.getExceedMember(mid);
 		if (em != null) {
 			em.addContribution((int) (15 * mult.get() * spamModif));
@@ -155,7 +164,6 @@ public class Member {
 
 		if (xp >= (long) Math.pow(level, 2) * 100) {
 			level++;
-			Account acc = AccountDAO.getAccount(mid);
 			acc.addCredit(75 + (8 * level), this.getClass());
 			AccountDAO.saveAccount(acc);
 			return true;
@@ -174,9 +182,14 @@ public class Member {
 			ExceedDAO.saveExceedMember(em);
 		}
 
+		Account acc = AccountDAO.getAccount(mid);
+		Map<DailyTask, Integer> pg = acc.getDailyProgress();
+		pg.compute(DailyTask.WINS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+		acc.setDailyProgress(pg);
+		AccountDAO.saveAccount(acc);
+
 		if (xp >= (long) Math.pow(level, 2) * 100) {
 			level++;
-			Account acc = AccountDAO.getAccount(mid);
 			acc.addCredit(75 + (8 * level), this.getClass());
 			AccountDAO.saveAccount(acc);
 		}

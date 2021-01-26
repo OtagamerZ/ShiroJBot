@@ -55,10 +55,10 @@ public class DestinyCardsCommand extends Command {
 
 			channel.sendMessage("✅ | Cartas do destino limpas com sucesso.").queue();
 		} else {
-			String[] inds = args[0].split(",");
+			String[] inds = Arrays.stream(args[0].split(",")).distinct().toArray(String[]::new);
 
 			if (inds.length != 4) {
-				channel.sendMessage("❌ | Você precisa digitar 4 posíções do deck (separadas por vírgula) para serem usadas no saque do destino.").queue();
+				channel.sendMessage("❌ | Você precisa digitar 4 posíções distintas do deck (separadas por vírgula) para serem usadas no saque do destino.").queue();
 				return;
 			}
 
