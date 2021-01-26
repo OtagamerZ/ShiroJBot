@@ -500,7 +500,7 @@ public class Account {
 
 	public Map<DailyTask, Integer> getDailyProgress() {
 		Calendar c = Calendar.getInstance();
-		if (lastQuest == null || lastDaily.equals(c)) return new HashMap<>();
+		if (dailyProgress == null || lastQuest == null || lastDaily.equals(c)) return new HashMap<>();
 		else {
 			this.completedQuests = false;
 			return new JSONObject(dailyProgress).toMap().entrySet().stream()
