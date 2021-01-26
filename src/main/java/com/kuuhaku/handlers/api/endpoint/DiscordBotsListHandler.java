@@ -86,4 +86,47 @@ public class DiscordBotsListHandler {
 			if (u != null) UpvoteDAO.voted(u);
 		}
 	}
+
+	public static void retry(String uid) {
+		Main.getInfo().getDblApi().getVotingMultiplier()
+				.thenAccept(mult -> {
+					int credit = mult.isWeekend() ? 500 : 250;
+
+					Account acc = AccountDAO.getAccount(uid);
+
+					acc.addCredit(credit + (100 * (acc.getStreak() + 1)), DiscordBotsListHandler.class);
+					acc.voted();
+
+					User u = Main.getInfo().getUserByID(uid);
+					try {
+						if (u != null) {
+							MessageChannel chn = u.openPrivateChannel().complete();
+							Helper.logger(DiscordBotsListHandler.class).info(u.getName() + " teve o voto contabilizado!");
+
+							EmbedBuilder eb = new EmbedBuilder();
+
+							eb.setThumbnail("https://i.imgur.com/A0jXqpe.png");
+							eb.setTitle("Opa, obrigada por votar em mim! (combo " + acc.getStreak() + "/7 -> bônus " + (100 * acc.getStreak()) + "c)");
+							eb.setDescription("Como agradecimento, aqui estão " + Helper.separate(credit) + (mult.isWeekend() ? " (bônus x2)" : "") + " créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.\n\n(Nota: você perderá os acúmulos de votos se houver uma diferença de 24h entre este e o próximo voto)");
+							eb.setFooter("Seus créditos: " + Helper.separate(acc.getBalance()), "https://i.imgur.com/U0nPjLx.gif");
+							eb.addField("Pode resgatar uma gema?", acc.getStreak() == 7 ? "SIM!!" : "Não", true);
+							eb.setColor(Color.cyan);
+
+							if (ExceedDAO.hasExceed(u.getId())) {
+								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(u.getId())));
+								ps.modifyInfluence(5);
+								PStateDAO.savePoliticalState(ps);
+
+								eb.addField("Bonus ao seu Exceed", "Adicionalmente, seu Exceed recebeu 5 pontos de influência adicionais!", false);
+							}
+
+							chn.sendMessage(eb.build()).queue(null, Helper::doNothing);
+						}
+					} catch (RuntimeException e) {
+						Helper.logger(DiscordBotsListHandler.class).error(e + " | " + e.getStackTrace()[0]);
+					} finally {
+						if (u != null) UpvoteDAO.voted(u);
+					}
+				});
+	}
 }
