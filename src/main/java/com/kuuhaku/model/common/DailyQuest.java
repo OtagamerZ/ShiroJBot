@@ -55,7 +55,7 @@ public class DailyQuest {
 		float mod = 1;
 		for (Map.Entry<DailyTask, Integer> task : tasks.entrySet()) {
 			DailyTask dt = task.getKey();
-			mod *= 1 + switch (dt) {
+			mod += 1 * switch (dt) {
 				case CREDIT_TASK -> Helper.prcnt(task.getValue(), 50000);
 				case CARD_TASK -> Helper.prcnt(task.getValue(), 15);
 				case DROP_TASK -> Helper.prcnt(task.getValue(), 20);
