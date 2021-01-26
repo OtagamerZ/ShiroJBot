@@ -19,8 +19,11 @@
 package com.kuuhaku.handlers.api.websocket;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
+import com.kuuhaku.model.enums.DailyTask;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
@@ -33,6 +36,7 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.net.InetSocketAddress;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class CanvasSocket extends WebSocketServer {
@@ -75,6 +79,12 @@ public class CanvasSocket extends WebSocketServer {
 							pixel.getInt("y"),
 							pixel.getString("color")
 					);
+
+					Account acc = AccountDAO.getAccount(t.getUid());
+					Map<DailyTask, Integer> pg = acc.getDailyProgress();
+					pg.compute(DailyTask.CANVAS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+					acc.setDailyProgress(pg);
+					AccountDAO.saveAccount(acc);
 
 					CanvasDAO.saveOperation(op);
 				} catch (NullPointerException e) {

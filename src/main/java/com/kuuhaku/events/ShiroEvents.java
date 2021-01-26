@@ -32,7 +32,9 @@ import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.BotExchange;
+import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.*;
@@ -441,6 +443,25 @@ public class ShiroEvents extends ListenerAdapter {
 						}, Helper::doNothing);
 					} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException | NullPointerException | InterruptedException | ExecutionException ignore) {
 					}
+			}
+
+			Account acc = AccountDAO.getAccount(author.getId());
+			if (!acc.hasCompletedQuests()) {
+				DailyQuest tasks = DailyQuest.getQuest(author.getId());
+				Map<DailyTask, Integer> pg = acc.getDailyProgress();
+
+				if (tasks.checkTasks(pg)) {
+					acc.setCompletedQuests(true);
+					channel.sendMessage(author.getAsMention() + " completou todos os desafios diários, parabéns! :confetti_ball:").queue();
+
+					float mod = tasks.getDifficultyMod();
+					if (mod >= 2.5)
+						acc.addGem(1);
+					else
+						acc.addCredit(Math.round(3500 * mod), this.getClass());
+				}
+
+				AccountDAO.saveAccount(acc);
 			}
 		} catch (InsufficientPermissionException | ErrorResponseException ignore) {
 		}

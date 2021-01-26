@@ -358,6 +358,9 @@ public class CommandManager {
 			put(MerchantLicenseCommand.class, new Argument(
 					"licença", new String[]{"license", "merchantlicense", "licençadecomercio"}, "cmd_merchant-license", INFO, false
 			));
+			put(DailyQuestCommand.class, new Argument(
+					"desafios", new String[]{"challenges", "tasks", "quest", "missao", "tarefas"}, "cmd_daily-quest", INFO, false
+			));
 
 			//MISC
 			put(BackgroundCommand.class, new Argument(
@@ -691,7 +694,7 @@ public class CommandManager {
 					"motd", new String[]{"mdd", "anuncio"}, "req_msg", "cmd_clan-motd", CLAN, false
 			));
 			put(ClanPermissionCommand.class, new Argument(
-					"permissoes", new String[]{"hierarchy"}, "req_hierarchy", "cmd_clan-permission", CLAN, true
+					"cargos", new String[]{"hierarquia", "hierarchy", "roles"}, "req_hierarchy", "cmd_clan-permission", CLAN, true
 			));
 			put(ClanWithdrawCommand.class, new Argument(
 					"sacar", new String[]{"withdraw", "sac", "with"}, "req_qtd", "cmd_clan-withdraw", CLAN, true
