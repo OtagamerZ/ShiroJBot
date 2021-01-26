@@ -152,7 +152,7 @@ public class Member {
 
 		Account acc = AccountDAO.getAccount(mid);
 		Map<DailyTask, Integer> pg = acc.getDailyProgress();
-		pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+		pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + (int) Math.round(15 * mult.get() * spamModif));
 		acc.setDailyProgress(pg);
 		AccountDAO.saveAccount(acc);
 
@@ -184,7 +184,7 @@ public class Member {
 
 		Account acc = AccountDAO.getAccount(mid);
 		Map<DailyTask, Integer> pg = acc.getDailyProgress();
-		pg.compute(DailyTask.WINS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+		pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + Math.round(amount * spamModif));
 		acc.setDailyProgress(pg);
 		AccountDAO.saveAccount(acc);
 
