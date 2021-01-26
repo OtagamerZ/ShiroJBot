@@ -21,6 +21,7 @@ package com.kuuhaku.model.common.drop;
 import com.github.twitch4j.common.events.domain.EventUser;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.common.Consumable;
+import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -54,6 +55,11 @@ public class CreditDrop extends Drop {
 	public void award(User u) {
 		Account acc = AccountDAO.getAccount(u.getId());
 		acc.addCredit(amount, this.getClass());
+
+		Map<DailyTask, Integer> pg = acc.getDailyProgress();
+		pg.compute(DailyTask.DROP_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+		acc.setDailyProgress(pg);
+
 		AccountDAO.saveAccount(acc);
 	}
 

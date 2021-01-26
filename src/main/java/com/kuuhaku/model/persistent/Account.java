@@ -25,8 +25,10 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.CreditLoan;
+import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
@@ -89,6 +91,9 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean voted = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean completedQuests = false;
+
 	@Column(columnDefinition = "TEXT")
 	private String buffs = "{}";
 
@@ -106,6 +111,12 @@ public class Account {
 
 	@Column(columnDefinition = "TEXT")
 	private String bio = "";
+
+	@Column(columnDefinition = "TEXT")
+	private String dailyProgress = "{}";
+
+	@Temporal(TemporalType.DATE)
+	private Calendar lastQuest = null;
 
 	@Enumerated(value = EnumType.STRING)
 	private FrameColor frame = FrameColor.PINK;
@@ -159,6 +170,10 @@ public class Account {
 		} else {
 			TransactionDAO.register(userId, from, credit);
 			balance += credit;
+
+			Map<DailyTask, Integer> pg = getDailyProgress();
+			pg.compute(DailyTask.CREDIT_TASK, (k, v) -> Helper.getOr(v, 0) + (int) credit);
+			setDailyProgress(pg);
 		}
 
 		if (loan < 0) {
@@ -481,5 +496,28 @@ public class Account {
 
 	public void setVoted(boolean voted) {
 		this.voted = voted;
+	}
+
+	public Map<DailyTask, Integer> getDailyProgress() {
+		Calendar c = Calendar.getInstance();
+		if (lastQuest == null || lastDaily.equals(c)) return new HashMap<>();
+		else {
+			this.completedQuests = false;
+			return new JSONObject(dailyProgress).toMap().entrySet().stream()
+					.map(e -> Pair.of(e.getKey(), NumberUtils.toInt(String.valueOf(e.getValue()))))
+					.collect(Collectors.toMap(p -> DailyTask.valueOf(p.getLeft()), Pair::getRight));
+		}
+	}
+
+	public void setDailyProgress(Map<DailyTask, Integer> progress) {
+		this.dailyProgress = new JSONObject(progress).toString();
+	}
+
+	public boolean hasCompletedQuests() {
+		return completedQuests;
+	}
+
+	public void setCompletedQuests(boolean completed) {
+		this.completedQuests = completed;
 	}
 }

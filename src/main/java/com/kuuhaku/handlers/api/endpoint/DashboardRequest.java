@@ -21,11 +21,14 @@ package com.kuuhaku.handlers.api.endpoint;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.exception.RatelimitException;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.enums.DailyTask;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
@@ -43,6 +46,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -135,6 +139,12 @@ public class DashboardRequest {
 					y,
 					color
 			);
+
+			Account acc = AccountDAO.getAccount(t.getUid());
+			Map<DailyTask, Integer> pg = acc.getDailyProgress();
+			pg.compute(DailyTask.CANVAS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+			acc.setDailyProgress(pg);
+			AccountDAO.saveAccount(acc);
 
 			CanvasDAO.saveOperation(op);
 		} catch (NullPointerException e) {

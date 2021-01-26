@@ -18,15 +18,19 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.model.enums.DailyTask;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.MatchRound;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -292,6 +296,12 @@ public abstract class GlobalGame {
 					yourMMR.addMMR(mmr / (wo ? 2 : 1), hisMMR.getMMR(), ranked);
 					yourMMR.addWin();
 					if (ranked) yourMMR.increaseRankPoints(hisMMR);
+
+					Account acc = AccountDAO.getAccount(yourMMR.getUserId());
+					Map<DailyTask, Integer> pg = acc.getDailyProgress();
+					pg.compute(DailyTask.WINS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+					acc.setDailyProgress(pg);
+					AccountDAO.saveAccount(acc);
 				} else if (history.getWinner() == other) {
 					double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
 					double damageEff = (double) -damageDealt / yourResult.size();

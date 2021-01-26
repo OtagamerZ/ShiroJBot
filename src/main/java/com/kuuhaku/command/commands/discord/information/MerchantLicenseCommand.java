@@ -23,6 +23,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CardMarketDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.MerchantStats;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -59,6 +60,7 @@ public class MerchantLicenseCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Progresso para licença de " + author.getName())
 				.setDescription("Possuir a licença de comércio reduz a taxa sobre vendas pela metade.")
+				.addField("Obtida?", Helper.isTrustedMerchant(author.getId()) ? "SIM!!" : "Não", false)
 				.addField("Cartas vendidas/necessário", (long) ms.getSold() + "/" + Math.round(avg.getSold() * 2), true)
 				.addField("Compradores únicos/necessário", (int) ms.getUniqueBuyers() + "/" + Math.round(avg.getUniqueBuyers()), true)
 				.setFooter("A licença ficará ativa enquanto você cumprir os requisitos, resetando todo mês.");
