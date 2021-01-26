@@ -20,6 +20,10 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.persistent.Account;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -43,6 +47,17 @@ public class VoteCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		channel.sendMessage("Vote em mim para receber créditos e acúmulos de voto!\nhttps://top.gg/bot/572413282653306901/vote").queue();
+		Account acc = AccountDAO.getAccount(author.getId());
+
+		if (acc.hasVoted()) {
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.addField("Acúmulos de voto", acc.getStreak() + " acúmulos", false);
+
+			channel.sendMessage("Você já votou nas últimas 12 horas, volte mais tarde para poder votar novamente.")
+					.embed(eb.build())
+					.queue();
+		} else {
+			channel.sendMessage("Vote em mim para receber créditos e acúmulos de voto!\nhttps://top.gg/bot/572413282653306901/vote").queue();
+		}
 	}
 }

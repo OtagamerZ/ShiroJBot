@@ -53,8 +53,8 @@ public class CardMarketDAO {
 		Query q = em.createQuery("""
 				SELECT cm 
 				FROM CardMarket cm 
-				WHERE cm.card.card.id = UPPER(:id) 
-				AND cm.card.foil = :foil 
+				WHERE cm.card.id = UPPER(:id) 
+				AND cm.foil = :foil 
 				AND cm.publishDate IS NOT NULL
 				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
@@ -76,8 +76,8 @@ public class CardMarketDAO {
 		Query q = em.createQuery("""
 				SELECT cm 
 				FROM CardMarket cm 
-				WHERE cm.card.card.rarity = :rarity 
-				AND cm.card.foil = :foil 
+				WHERE cm.card.rarity = :rarity 
+				AND cm.foil = :foil 
 				AND cm.publishDate IS NOT NULL
 				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
