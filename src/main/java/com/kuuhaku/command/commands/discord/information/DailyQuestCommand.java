@@ -55,8 +55,9 @@ public class DailyQuestCommand extends Command {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		DailyQuest dq = DailyQuest.getQuest(author.getId());
 		Account acc = AccountDAO.getAccount(author.getId());
+		Map<DailyTask, Integer> pg = acc.getDailyProgress();
 
-		if (dq.checkTasks(acc.getDailyProgress())) {
+		if (dq.checkTasks(pg)) {
 			channel.sendMessage("Você já completou os desafios diários de hoje, volte amanhã!").queue();
 			return;
 		}
@@ -64,12 +65,19 @@ public class DailyQuestCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Desafios diários de " + author.getName())
 				.setThumbnail("https://static.wikia.nocookie.net/dauntless_gamepedia_en/images/6/60/Quest_Main_Available_Icon_001.png")
-				.setDescription("Completar estes desafios lhe dará créditos (3500 multiplicado pela dificuldade) e 1 gema caso a dificuldade esteja acima de 2.5x.")
+				.setDescription("Completar estes desafios lhe dará créditos (3500 multiplicado pela dificuldade) e 1 gema caso a dificuldade esteja acima de 3.5x.")
 				.addField("Obtida?", Helper.isTrustedMerchant(author.getId()) ? "SIM!!" : "Não", true)
 				.addField("Modificador de dificuldade", Helper.roundToString(dq.getDifficultyMod(), 1) + "x", true);
 
 		for (Map.Entry<DailyTask, Integer> task : dq.getTasks().entrySet()) {
-			eb.addField(task.getKey().getName(), task.getKey().getDescription().formatted(Helper.separate(task.getValue())), false);
+			eb.addField(
+					task.getKey().getName(),
+					(pg.get(task.getKey()) >= task.getValue() ? "`COMPLETADO`" : "%s | Atual: %s").formatted(
+							task.getKey().getDescription().formatted(Helper.separate(task.getValue())),
+							Helper.separate(pg.getOrDefault(task.getKey(), 0))
+					),
+					false
+			);
 		}
 
 		channel.sendMessage(eb.build()).queue();
