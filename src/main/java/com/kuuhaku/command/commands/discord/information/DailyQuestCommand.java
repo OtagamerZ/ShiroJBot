@@ -72,7 +72,7 @@ public class DailyQuestCommand extends Command {
 		for (Map.Entry<DailyTask, Integer> task : dq.getTasks().entrySet()) {
 			eb.addField(
 					task.getKey().getName(),
-					(pg.get(task.getKey()) >= task.getValue() ? "`COMPLETADO`" : "%s | Atual: %s").formatted(
+					(pg.getOrDefault(task.getKey(), 0) >= task.getValue() ? "`COMPLETADO`" : "%s | Atual: %s").formatted(
 							task.getKey().getDescription().formatted(Helper.separate(task.getValue())),
 							Helper.separate(pg.getOrDefault(task.getKey(), 0))
 					),
