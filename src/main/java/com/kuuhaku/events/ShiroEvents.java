@@ -455,7 +455,7 @@ public class ShiroEvents extends ListenerAdapter {
 					channel.sendMessage(author.getAsMention() + " completou todos os desafios diários, parabéns! :confetti_ball:").queue();
 
 					float mod = tasks.getDifficultyMod();
-					if (mod >= 2.5)
+					if (mod >= 3.5)
 						acc.addGem(1);
 					else
 						acc.addCredit(Math.round(3500 * mod), this.getClass());
