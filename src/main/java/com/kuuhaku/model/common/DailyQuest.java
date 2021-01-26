@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class DailyQuest {
 	private final HashMap<DailyTask, Integer> tasks = new HashMap<>();
@@ -33,15 +34,16 @@ public class DailyQuest {
 		long seed = LocalDate.now().toEpochDay() / Long.parseLong(id);
 		List<DailyTask> tasks = Helper.getRandomN(List.of(DailyTask.values()), 3, 1, seed);
 
+		Random r = new Random(seed);
 		for (DailyTask task : tasks) {
 			this.tasks.put(task,
 					switch (task) {
-						case CREDIT_TASK -> 5000 + Helper.rng(45000, false);
-						case CARD_TASK -> 5 + Helper.rng(10, false);
-						case DROP_TASK -> 10 + Helper.rng(10, false);
-						case WINS_TASK -> 1 + Helper.rng(4, false);
-						case XP_TASK -> 1000 + Helper.rng(4000, false);
-						case CANVAS_TASK -> 10 + Helper.rng(40, false);
+						case CREDIT_TASK -> 5000 + Helper.rng(45000, r, false);
+						case CARD_TASK -> 5 + Helper.rng(10, r, false);
+						case DROP_TASK -> 10 + Helper.rng(10, r, false);
+						case WINS_TASK -> 1 + Helper.rng(4, r, false);
+						case XP_TASK -> 1000 + Helper.rng(4000, r, false);
+						case CANVAS_TASK -> 10 + Helper.rng(40, r, false);
 					}
 			);
 		}
