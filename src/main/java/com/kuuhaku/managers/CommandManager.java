@@ -35,7 +35,6 @@ import com.kuuhaku.command.commands.discord.reactions.answerable.*;
 import com.kuuhaku.command.commands.discord.support.BlockCommand;
 import com.kuuhaku.command.commands.discord.support.InviteCommand;
 import com.kuuhaku.command.commands.discord.support.MarkTicketCommand;
-import com.kuuhaku.command.commands.discord.support.RatingCommand;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -141,9 +140,6 @@ public class CommandManager {
 			));
 			put(InviteCommand.class, new Argument(
 					"convite", new String[]{"invite"}, REQ_SERVER_ID, "cmd_invite", SUPPORT, true
-			));
-			put(RatingCommand.class, new Argument(
-					"pedirvoto", new String[]{"requestvote", "howwasi"}, REQ_ID, "cmd_rating", SUPPORT, false
 			));
 			put(MarkTicketCommand.class, new Argument(
 					"mark", new String[]{"solved", "resolvido"}, REQ_ID, "cmd_mark-ticket", SUPPORT, false
