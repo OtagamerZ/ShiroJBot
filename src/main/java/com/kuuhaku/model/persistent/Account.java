@@ -520,11 +520,10 @@ public class Account {
 
 	public void setLastQuest() {
 		this.lastQuest = Calendar.getInstance();
-		AccountDAO.saveAccount(this);
 	}
 
 	public boolean hasCompletedQuests() {
 		Calendar c = Calendar.getInstance();
-		return lastQuest == null || lastQuest.equals(c);
+		return lastQuest == null || (lastQuest.getTimeInMillis() == c.getTimeInMillis());
 	}
 }

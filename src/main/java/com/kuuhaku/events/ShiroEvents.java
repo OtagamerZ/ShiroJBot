@@ -452,7 +452,6 @@ public class ShiroEvents extends ListenerAdapter {
 
 				if (tasks.checkTasks(pg)) {
 					acc.setLastQuest();
-					acc = AccountDAO.getAccount(author.getId());
 
 					float mod = tasks.getDifficultyMod();
 					if (mod >= 3.7)
