@@ -519,7 +519,7 @@ public class Account {
 				.map(e -> Pair.of(DailyTask.valueOf(e.getKey()), NumberUtils.toInt(String.valueOf(e.getValue()))))
 				.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
 
-		if (!tasks.isEmpty() && lastQuest.get(Calendar.DAY_OF_YEAR) != c.get(Calendar.DAY_OF_YEAR)) {
+		if (lastQuest.get(Calendar.DAY_OF_YEAR) != c.get(Calendar.DAY_OF_YEAR)) {
 			setDailyProgress(new HashMap<>());
 			return new HashMap<>();
 		} else {
