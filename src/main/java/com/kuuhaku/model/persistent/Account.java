@@ -278,7 +278,7 @@ public class Account {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		try {
 			ZonedDateTime lastVote = lastVoted == null ? null : ZonedDateTime.parse(lastVoted, Helper.dateformat);
-
+			System.out.println("checking vote");
 			if (lastVote != null && today.isBefore(lastVote.plusHours(12)) && voted) {
 				return true;
 			} else if (lastVote == null || today.isBefore(lastVote.plusHours(12))) {
