@@ -277,11 +277,11 @@ public class Account {
 	public boolean hasVoted() {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		try {
-			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
+			ZonedDateTime lastVote = lastVoted == null ? null : ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
-			if (today.isBefore(lastVote.plusHours(12)) && voted) {
+			if (lastVote != null && today.isBefore(lastVote.plusHours(12)) && voted) {
 				return true;
-			} else if (today.isBefore(lastVote.plusHours(12))) {
+			} else if (lastVote == null || today.isBefore(lastVote.plusHours(12))) {
 				AtomicReference<Boolean> lock = new AtomicReference<>(null);
 				Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
 					System.out.println(voted);
