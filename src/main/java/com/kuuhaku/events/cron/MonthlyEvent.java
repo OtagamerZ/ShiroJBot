@@ -182,8 +182,7 @@ public class MonthlyEvent implements Job {
 			Account acc = AccountDAO.getAccount(id);
 			SupportRating sr = RatingDAO.getRating(id);
 			double ticketModif = Math.max(Helper.prcnt(sr.getMonthlyTickets(), 10), 1);
-			double ratingModif = Helper.prcnt((sr.getInteraction() + sr.getKnowledge() + sr.getSolution()) / 3, 5);
-			acc.addCredit(Math.round(20000 * ticketModif * ratingModif), MonthlyEvent.class);
+			acc.addCredit(Math.round(20000 * ticketModif), MonthlyEvent.class);
 			sr.resetTickets();
 			RatingDAO.saveRating(sr);
 			AccountDAO.saveAccount(acc);
