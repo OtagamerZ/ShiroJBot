@@ -298,10 +298,12 @@ public abstract class GlobalGame {
 					if (ranked) yourMMR.increaseRankPoints(hisMMR);
 
 					Account acc = AccountDAO.getAccount(yourMMR.getUserId());
-					Map<DailyTask, Integer> pg = acc.getDailyProgress();
-					pg.compute(DailyTask.WINS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
-					acc.setDailyProgress(pg);
-					AccountDAO.saveAccount(acc);
+					if (!acc.hasCompletedQuests()) {
+						Map<DailyTask, Integer> pg = acc.getDailyProgress();
+						pg.compute(DailyTask.WINS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+						acc.setDailyProgress(pg);
+						AccountDAO.saveAccount(acc);
+					}
 				} else if (history.getWinner() == other) {
 					double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
 					double damageEff = (double) -damageDealt / yourResult.size();
