@@ -509,7 +509,17 @@ public class Account {
 
 	public Map<DailyTask, Integer> getDailyProgress() {
 		Calendar c = Calendar.getInstance();
-		if (dailyProgress == null || (lastQuest != null && !lastQuest.equals(c))) {
+		if (lastQuest == null) {
+			Calendar prev = Calendar.getInstance();
+			prev.add(Calendar.DAY_OF_YEAR, -1);
+			lastQuest = prev;
+		}
+
+		if (lastQuest.equals(c)) {
+			completedQuests = false;
+		}
+
+		if (dailyProgress == null) {
 			return new HashMap<>();
 		} else {
 			completedQuests = false;
