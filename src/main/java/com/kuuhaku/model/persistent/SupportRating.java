@@ -34,15 +34,6 @@ public class SupportRating {
 	@Column(columnDefinition = "VARCHAR(191)")
 	private String id;
 
-	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 0")
-	private float interaction = 0;
-
-	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 0")
-	private float solution = 0;
-
-	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 0")
-	private float knowledge = 0;
-
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int monthlyTickets = 0;
 
@@ -58,30 +49,6 @@ public class SupportRating {
 
 	public String getId() {
 		return id;
-	}
-
-	public float getInteraction() {
-		return interaction;
-	}
-
-	public void setInteraction(float interaction) {
-		this.interaction = interaction;
-	}
-
-	public float getSolution() {
-		return solution;
-	}
-
-	public void setSolution(float solution) {
-		this.solution = solution;
-	}
-
-	public float getKnowledge() {
-		return knowledge;
-	}
-
-	public void setKnowledge(float knowledge) {
-		this.knowledge = knowledge;
 	}
 
 	public String getLastTicket() {
