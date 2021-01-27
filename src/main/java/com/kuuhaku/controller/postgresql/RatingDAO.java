@@ -43,14 +43,4 @@ public class RatingDAO {
 
 		em.close();
 	}
-
-	public static void evaluate(SupportRating sr) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		em.merge(sr);
-		em.getTransaction().commit();
-
-		em.close();
-	}
 }
