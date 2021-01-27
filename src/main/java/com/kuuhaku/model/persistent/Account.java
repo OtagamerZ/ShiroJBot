@@ -517,11 +517,13 @@ public class Account {
 			lastQuest = prev;
 		}
 
-		Map<DailyTask, Integer> tasks = new JSONObject(dailyProgress).toMap().entrySet().stream()
+		JSONObject prog = new JSONObject(dailyProgress);
+		int date = (int) prog.remove("DATE");
+		Map<DailyTask, Integer> tasks = prog.toMap().entrySet().stream()
 				.map(e -> Pair.of(DailyTask.valueOf(e.getKey()), NumberUtils.toInt(String.valueOf(e.getValue()))))
 				.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
 
-		if (lastQuest.get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR)) {
+		if (date != c.get(Calendar.DAY_OF_YEAR) || lastQuest.get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR)) {
 			setDailyProgress(new HashMap<>());
 			return new HashMap<>();
 		} else {
@@ -530,7 +532,10 @@ public class Account {
 	}
 
 	public void setDailyProgress(Map<DailyTask, Integer> progress) {
-		this.dailyProgress = new JSONObject(progress).toString();
+		Calendar c = Calendar.getInstance();
+		JSONObject prog = new JSONObject(progress);
+		prog.put("DATE", c.get(Calendar.DAY_OF_YEAR));
+		this.dailyProgress = prog.toString();
 	}
 
 	public void setLastQuest() {
