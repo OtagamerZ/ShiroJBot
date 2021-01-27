@@ -92,9 +92,6 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean voted = false;
 
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean completedQuests = false;
-
 	@Column(columnDefinition = "TEXT")
 	private String buffs = "{}";
 
@@ -508,21 +505,9 @@ public class Account {
 	}
 
 	public Map<DailyTask, Integer> getDailyProgress() {
-		Calendar c = Calendar.getInstance();
-		if (lastQuest == null) {
-			Calendar prev = Calendar.getInstance();
-			prev.add(Calendar.DAY_OF_YEAR, -1);
-			lastQuest = prev;
-		}
-
-		if (lastQuest.equals(c)) {
-			completedQuests = false;
-		}
-
 		if (dailyProgress == null) {
 			return new HashMap<>();
 		} else {
-			completedQuests = false;
 			return new JSONObject(dailyProgress).toMap().entrySet().stream()
 					.map(e -> Pair.of(DailyTask.valueOf(e.getKey()), NumberUtils.toInt(String.valueOf(e.getValue()))))
 					.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
@@ -530,21 +515,15 @@ public class Account {
 	}
 
 	public void setDailyProgress(Map<DailyTask, Integer> progress) {
-		Calendar c = Calendar.getInstance();
-		if (dailyProgress == null || (lastQuest != null && !lastQuest.equals(c))) return;
 		this.dailyProgress = new JSONObject(progress).toString();
 	}
 
 	public void setLastQuest() {
 		this.lastQuest = Calendar.getInstance();
-		this.completedQuests = true;
 	}
 
 	public boolean hasCompletedQuests() {
-		return completedQuests;
-	}
-
-	public void setCompletedQuests(boolean completed) {
-		this.completedQuests = completed;
+		Calendar c = Calendar.getInstance();
+		return lastQuest == null || lastQuest.equals(c);
 	}
 }

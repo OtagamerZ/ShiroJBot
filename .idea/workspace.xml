@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1005,28 +1003,7 @@
       <workItem from="1611662221150" duration="8761000" />
       <workItem from="1611681045029" duration="1809000" />
       <workItem from="1611688660906" duration="5680000" />
-      <workItem from="1611752114916" duration="2593000" />
-    </task>
-    <task id="LOCAL-03498" summary="Correção no logger">
-      <created>1611319783328</created>
-      <option name="number" value="03498" />
-      <option name="presentableId" value="LOCAL-03498" />
-      <option name="project" value="LOCAL" />
-      <updated>1611319783328</updated>
-    </task>
-    <task id="LOCAL-03499" summary="Correção no logger">
-      <created>1611320277056</created>
-      <option name="number" value="03499" />
-      <option name="presentableId" value="LOCAL-03499" />
-      <option name="project" value="LOCAL" />
-      <updated>1611320277056</updated>
-    </task>
-    <task id="LOCAL-03500" summary="Correção no logger">
-      <created>1611321371827</created>
-      <option name="number" value="03500" />
-      <option name="presentableId" value="LOCAL-03500" />
-      <option name="project" value="LOCAL" />
-      <updated>1611321371827</updated>
+      <workItem from="1611752114916" duration="2894000" />
     </task>
     <task id="LOCAL-03501" summary="Correção no logger">
       <created>1611323466962</created>
@@ -1350,7 +1327,28 @@
       <option name="project" value="LOCAL" />
       <updated>1611755606728</updated>
     </task>
-    <option name="localTasksCounter" value="3547" />
+    <task id="LOCAL-03547" summary="Correções menores no desafios diarios">
+      <created>1611755902723</created>
+      <option name="number" value="03547" />
+      <option name="presentableId" value="LOCAL-03547" />
+      <option name="project" value="LOCAL" />
+      <updated>1611755902723</updated>
+    </task>
+    <task id="LOCAL-03548" summary="Correções menores no desafios diarios">
+      <created>1611755927508</created>
+      <option name="number" value="03548" />
+      <option name="presentableId" value="LOCAL-03548" />
+      <option name="project" value="LOCAL" />
+      <updated>1611755927508</updated>
+    </task>
+    <task id="LOCAL-03549" summary="Correções menores no desafios diarios">
+      <created>1611756106238</created>
+      <option name="number" value="03549" />
+      <option name="presentableId" value="LOCAL-03549" />
+      <option name="project" value="LOCAL" />
+      <updated>1611756106238</updated>
+    </task>
+    <option name="localTasksCounter" value="3550" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1523,10 +1521,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611690233261" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611755605850">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611756105428">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611755605850" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611756105428" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1611348469197">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1575,10 +1573,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611755609733">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611756107794">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611755609733" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611756107794" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611697808035" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1611584154385">
       <screen x="0" y="0" width="1680" height="1010" />
