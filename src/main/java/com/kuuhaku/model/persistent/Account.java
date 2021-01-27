@@ -284,6 +284,7 @@ public class Account {
 			} else if (today.isBefore(lastVote.plusHours(12))) {
 				AtomicReference<Boolean> lock = new AtomicReference<>(null);
 				Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
+					System.out.println(voted);
 					if (voted) {
 						DiscordBotsListHandler.retry(userId);
 						lock.set(true);
