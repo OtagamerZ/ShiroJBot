@@ -22,7 +22,7 @@ public enum DailyTask {
 	CREDIT_TASK("Consiga %s créditos"),
 	CARD_TASK("Colete %s cartas"),
 	DROP_TASK("Abra %s drops"),
-	WINS_TASK("Ganhe %s partidas de %s"),
+	WINS_TASK("Ganhe %s partidas de Shoukan"),
 	XP_TASK("Ganhe %s pontos de XP"),
 	CANVAS_TASK("Coloque %s pixels no [ShiroCanvas](https://shirojbot.site/ShiroCanvas)");
 
