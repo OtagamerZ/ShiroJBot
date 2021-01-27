@@ -39,10 +39,10 @@ public class DailyQuest {
 			this.tasks.put(task,
 					switch (task) {
 						case CREDIT_TASK -> 5000 + Helper.rng(45000, r, false);
-						case CARD_TASK -> 5 + Helper.rng(10, r, false);
+						case CARD_TASK -> 5 + Helper.rng(20, r, false);
 						case DROP_TASK -> 10 + Helper.rng(10, r, false);
 						case WINS_TASK -> 1 + Helper.rng(4, r, false);
-						case XP_TASK -> 1000 + Helper.rng(4000, r, false);
+						case XP_TASK -> 1000 + Helper.rng(9000, r, false);
 						case CANVAS_TASK -> 10 + Helper.rng(40, r, false);
 					}
 			);
@@ -59,10 +59,10 @@ public class DailyQuest {
 			DailyTask dt = task.getKey();
 			mod += 1 * switch (dt) {
 				case CREDIT_TASK -> Helper.prcnt(task.getValue(), 50000);
-				case CARD_TASK -> Helper.prcnt(task.getValue(), 15);
+				case CARD_TASK -> Helper.prcnt(task.getValue(), 25);
 				case DROP_TASK -> Helper.prcnt(task.getValue(), 20);
 				case WINS_TASK -> Helper.prcnt(task.getValue(), 5);
-				case XP_TASK -> Helper.prcnt(task.getValue(), 5000);
+				case XP_TASK -> Helper.prcnt(task.getValue(), 10000);
 				case CANVAS_TASK -> Helper.prcnt(task.getValue(), 50);
 			};
 		}

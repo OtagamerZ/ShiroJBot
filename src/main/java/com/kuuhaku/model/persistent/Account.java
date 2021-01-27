@@ -40,7 +40,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Entity
@@ -277,41 +278,35 @@ public class Account {
 	public boolean hasVoted() {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		try {
-			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
+			try {
+				ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
-			if (today.isBefore(lastVote.plusHours(12)) && voted) {
-				return true;
-			} else if (today.isBefore(lastVote.plusHours(12))) {
-				AtomicReference<Boolean> lock = new AtomicReference<>(null);
+				if (today.isBefore(lastVote.plusHours(12)) && voted) {
+					return true;
+				} else if (today.isBefore(lastVote.plusHours(12))) {
+					CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
+					Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
+						if (voted) {
+							DiscordBotsListHandler.retry(userId);
+							voteCheck.complete(true);
+						} else voteCheck.complete(false);
+					});
+
+					return voteCheck.get();
+				} else return false;
+			} catch (DateTimeParseException e) {
+				CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
 				Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
-					System.out.println(voted);
 					if (voted) {
 						DiscordBotsListHandler.retry(userId);
-						lock.set(true);
-					} else lock.set(false);
+						voteCheck.complete(true);
+					} else voteCheck.complete(false);
 				});
 
-				while (lock.get() == null) {
-					Thread.sleep(250);
-				}
-
-				return lock.get();
-			} else return false;
-		} catch (DateTimeParseException | InterruptedException ignore) {
-			AtomicReference<Boolean> lock = new AtomicReference<>(null);
-			Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
-				System.out.println(voted);
-				if (voted) {
-					DiscordBotsListHandler.retry(userId);
-					lock.set(true);
-				} else lock.set(false);
-			});
-
-			while (lock.get() == null) {
-				Thread.sleep(250);
+				return voteCheck.get();
 			}
-
-			return lock.get();
+		} catch (InterruptedException | ExecutionException e) {
+			return false;
 		}
 	}
 
