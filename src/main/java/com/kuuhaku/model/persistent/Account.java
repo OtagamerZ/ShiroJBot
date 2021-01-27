@@ -505,12 +505,21 @@ public class Account {
 	}
 
 	public Map<DailyTask, Integer> getDailyProgress() {
+		Calendar c = Calendar.getInstance();
+
 		if (dailyProgress == null) {
 			return new HashMap<>();
+		}
+
+		Map<DailyTask, Integer> tasks = new JSONObject(dailyProgress).toMap().entrySet().stream()
+				.map(e -> Pair.of(DailyTask.valueOf(e.getKey()), NumberUtils.toInt(String.valueOf(e.getValue()))))
+				.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
+
+		if (!tasks.isEmpty() && (lastQuest == null || lastQuest.get(Calendar.DAY_OF_YEAR) != c.get(Calendar.DAY_OF_YEAR))) {
+			setDailyProgress(new HashMap<>());
+			return new HashMap<>();
 		} else {
-			return new JSONObject(dailyProgress).toMap().entrySet().stream()
-					.map(e -> Pair.of(DailyTask.valueOf(e.getKey()), NumberUtils.toInt(String.valueOf(e.getValue()))))
-					.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
+			return tasks;
 		}
 	}
 
