@@ -520,6 +520,7 @@ public class Account {
 
 	public void setLastQuest() {
 		this.lastQuest = Calendar.getInstance();
+		AccountDAO.saveAccount(this);
 	}
 
 	public boolean hasCompletedQuests() {

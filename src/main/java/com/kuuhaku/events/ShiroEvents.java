@@ -452,7 +452,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 				if (tasks.checkTasks(pg)) {
 					acc.setLastQuest();
-					channel.sendMessage(author.getAsMention() + " completou todos os desafios diários, parabéns! :confetti_ball:").queue();
+					acc = AccountDAO.getAccount(author.getId());
 
 					float mod = tasks.getDifficultyMod();
 					if (mod >= 3.7)
@@ -461,6 +461,7 @@ public class ShiroEvents extends ListenerAdapter {
 						acc.addCredit(Math.round(2500 * mod), this.getClass());
 
 					AccountDAO.saveAccount(acc);
+					channel.sendMessage(author.getAsMention() + " completou todos os desafios diários, parabéns! :confetti_ball:").queue();
 				}
 			}
 		} catch (InsufficientPermissionException | ErrorResponseException ignore) {
