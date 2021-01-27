@@ -277,11 +277,11 @@ public class Account {
 	public boolean hasVoted() {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		try {
-			ZonedDateTime lastVote = lastVoted == null ? null : ZonedDateTime.parse(lastVoted, Helper.dateformat);
-			System.out.println("checking vote");
-			if (lastVote != null && today.isBefore(lastVote.plusHours(12)) && voted) {
+			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
+
+			if (today.isBefore(lastVote.plusHours(12)) && voted) {
 				return true;
-			} else if (lastVote == null || today.isBefore(lastVote.plusHours(12))) {
+			} else if (today.isBefore(lastVote.plusHours(12))) {
 				AtomicReference<Boolean> lock = new AtomicReference<>(null);
 				Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
 					System.out.println(voted);
@@ -298,7 +298,20 @@ public class Account {
 				return lock.get();
 			} else return false;
 		} catch (DateTimeParseException | InterruptedException ignore) {
-			return false;
+			AtomicReference<Boolean> lock = new AtomicReference<>(null);
+			Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
+				System.out.println(voted);
+				if (voted) {
+					DiscordBotsListHandler.retry(userId);
+					lock.set(true);
+				} else lock.set(false);
+			});
+
+			while (lock.get() == null) {
+				Thread.sleep(250);
+			}
+
+			return lock.get();
 		}
 	}
 
