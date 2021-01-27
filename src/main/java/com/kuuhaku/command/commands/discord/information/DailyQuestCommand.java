@@ -57,7 +57,7 @@ public class DailyQuestCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 		Map<DailyTask, Integer> pg = acc.getDailyProgress();
 
-		if (dq.checkTasks(pg)) {
+		if (acc.hasCompletedQuests()) {
 			channel.sendMessage("Você já completou os desafios diários de hoje, volte amanhã!").queue();
 			return;
 		}
