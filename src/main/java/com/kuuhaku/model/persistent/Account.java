@@ -524,6 +524,6 @@ public class Account {
 
 	public boolean hasCompletedQuests() {
 		Calendar c = Calendar.getInstance();
-		return lastQuest == null || (lastQuest.getTimeInMillis() == c.getTimeInMillis());
+		return lastQuest == null || (lastQuest.get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR));
 	}
 }
