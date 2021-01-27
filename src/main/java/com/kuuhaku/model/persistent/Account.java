@@ -509,7 +509,7 @@ public class Account {
 
 	public Map<DailyTask, Integer> getDailyProgress() {
 		Calendar c = Calendar.getInstance();
-		if (dailyProgress == null || (lastQuest != null && !lastDaily.equals(c))) {
+		if (dailyProgress == null || (lastQuest != null && !lastQuest.equals(c))) {
 			return new HashMap<>();
 		} else {
 			completedQuests = false;
@@ -521,7 +521,7 @@ public class Account {
 
 	public void setDailyProgress(Map<DailyTask, Integer> progress) {
 		Calendar c = Calendar.getInstance();
-		if (dailyProgress == null || (lastQuest != null && !lastDaily.equals(c))) return;
+		if (dailyProgress == null || (lastQuest != null && !lastQuest.equals(c))) return;
 		this.dailyProgress = new JSONObject(progress).toString();
 	}
 
