@@ -81,10 +81,12 @@ public class CanvasSocket extends WebSocketServer {
 					);
 
 					Account acc = AccountDAO.getAccount(t.getUid());
-					Map<DailyTask, Integer> pg = acc.getDailyProgress();
-					pg.compute(DailyTask.CANVAS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
-					acc.setDailyProgress(pg);
-					AccountDAO.saveAccount(acc);
+					if (!acc.hasCompletedQuests()) {
+						Map<DailyTask, Integer> pg = acc.getDailyProgress();
+						pg.compute(DailyTask.CANVAS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+						acc.setDailyProgress(pg);
+						AccountDAO.saveAccount(acc);
+					}
 
 					CanvasDAO.saveOperation(op);
 				} catch (NullPointerException e) {

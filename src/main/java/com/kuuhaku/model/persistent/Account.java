@@ -169,9 +169,11 @@ public class Account {
 			TransactionDAO.register(userId, from, credit);
 			balance += credit;
 
-			Map<DailyTask, Integer> pg = getDailyProgress();
-			pg.compute(DailyTask.CREDIT_TASK, (k, v) -> Helper.getOr(v, 0) + (int) credit);
-			setDailyProgress(pg);
+			if (!hasCompletedQuests()) {
+				Map<DailyTask, Integer> pg = getDailyProgress();
+				pg.compute(DailyTask.CREDIT_TASK, (k, v) -> Helper.getOr(v, 0) + (int) credit);
+				setDailyProgress(pg);
+			}
 		}
 
 		if (loan < 0) {

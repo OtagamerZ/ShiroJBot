@@ -85,9 +85,11 @@ public class CatchKawaiponCommand extends Command {
 		kp.addCard(kc);
 		acc.consumeCredit(cost, this.getClass());
 
-		Map<DailyTask, Integer> pg = acc.getDailyProgress();
-		pg.compute(DailyTask.CARD_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
-		acc.setDailyProgress(pg);
+		if (!acc.hasCompletedQuests()) {
+			Map<DailyTask, Integer> pg = acc.getDailyProgress();
+			pg.compute(DailyTask.CARD_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+			acc.setDailyProgress(pg);
+		}
 
 		KawaiponDAO.saveKawaipon(kp);
 		AccountDAO.saveAccount(acc);
