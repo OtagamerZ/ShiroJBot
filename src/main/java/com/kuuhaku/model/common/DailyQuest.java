@@ -31,7 +31,7 @@ public class DailyQuest {
 	private final HashMap<DailyTask, Integer> tasks = new HashMap<>();
 
 	private DailyQuest(String id) {
-		long seed = LocalDate.now().toEpochDay() / Long.parseLong(id);
+		long seed = LocalDate.now().toEpochDay() + Long.parseLong(id);
 		List<DailyTask> tasks = Helper.getRandomN(List.of(DailyTask.values()), 3, 1, seed);
 
 		Random r = new Random(seed);
