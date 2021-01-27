@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1005,13 +1007,7 @@
       <workItem from="1611688660906" duration="5680000" />
       <workItem from="1611752114916" duration="5895000" />
       <workItem from="1611764317025" duration="3072000" />
-    </task>
-    <task id="LOCAL-03512" summary="Adicionado comando de estatísticas de partida">
-      <created>1611348659173</created>
-      <option name="number" value="03512" />
-      <option name="presentableId" value="LOCAL-03512" />
-      <option name="project" value="LOCAL" />
-      <updated>1611348659173</updated>
+      <workItem from="1611772096802" duration="365000" />
     </task>
     <task id="LOCAL-03513" summary="Adicionado comando de estatísticas de partida">
       <created>1611348842272</created>
@@ -1349,7 +1345,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611769691410</updated>
     </task>
-    <option name="localTasksCounter" value="3561" />
+    <task id="LOCAL-03561" summary="Correções menores no desafios diarios">
+      <created>1611772240166</created>
+      <option name="number" value="03561" />
+      <option name="presentableId" value="LOCAL-03561" />
+      <option name="project" value="LOCAL" />
+      <updated>1611772240167</updated>
+    </task>
+    <option name="localTasksCounter" value="3562" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
