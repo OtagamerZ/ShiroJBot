@@ -459,9 +459,9 @@ public class ShiroEvents extends ListenerAdapter {
 						acc.addGem(1);
 					else
 						acc.addCredit(Math.round(2500 * mod), this.getClass());
-				}
 
-				AccountDAO.saveAccount(acc);
+					AccountDAO.saveAccount(acc);
+				}
 			}
 		} catch (InsufficientPermissionException | ErrorResponseException ignore) {
 		}
