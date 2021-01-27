@@ -73,8 +73,8 @@ public class PixelCanvasCommand extends Command {
 		try {
 			if (opts.length == 1) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-arguments")).queue();
-                return;
-            } else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
+				return;
+			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
 				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-coordinates-out-of-bounds"), CANVAS_SIZE / 2, CANVAS_SIZE / 2)).queue();
 				return;
 			}
@@ -116,10 +116,12 @@ public class PixelCanvasCommand extends Command {
 				);
 
 				Account acc = AccountDAO.getAccount(t.getUid());
-				Map<DailyTask, Integer> pg = acc.getDailyProgress();
-				pg.compute(DailyTask.CANVAS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
-				acc.setDailyProgress(pg);
-				AccountDAO.saveAccount(acc);
+				if (!acc.hasCompletedQuests()) {
+					Map<DailyTask, Integer> pg = acc.getDailyProgress();
+					pg.compute(DailyTask.CANVAS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+					acc.setDailyProgress(pg);
+					AccountDAO.saveAccount(acc);
+				}
 
 				CanvasDAO.saveOperation(op);
 			} catch (NullPointerException e) {

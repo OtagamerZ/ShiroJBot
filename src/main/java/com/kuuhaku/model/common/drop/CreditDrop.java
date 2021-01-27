@@ -56,9 +56,11 @@ public class CreditDrop extends Drop {
 		Account acc = AccountDAO.getAccount(u.getId());
 		acc.addCredit(amount, this.getClass());
 
-		Map<DailyTask, Integer> pg = acc.getDailyProgress();
-		pg.compute(DailyTask.DROP_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
-		acc.setDailyProgress(pg);
+		if (!acc.hasCompletedQuests()) {
+			Map<DailyTask, Integer> pg = acc.getDailyProgress();
+			pg.compute(DailyTask.DROP_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+			acc.setDailyProgress(pg);
+		}
 
 		AccountDAO.saveAccount(acc);
 	}

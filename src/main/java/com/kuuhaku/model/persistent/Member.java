@@ -151,10 +151,12 @@ public class Member {
 		lastEarntXp = System.currentTimeMillis();
 
 		Account acc = AccountDAO.getAccount(mid);
-		Map<DailyTask, Integer> pg = acc.getDailyProgress();
-		pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + (int) Math.round(15 * mult.get() * spamModif));
-		acc.setDailyProgress(pg);
-		AccountDAO.saveAccount(acc);
+		if (!acc.hasCompletedQuests()) {
+			Map<DailyTask, Integer> pg = acc.getDailyProgress();
+			pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + (int) Math.round(15 * mult.get() * spamModif));
+			acc.setDailyProgress(pg);
+			AccountDAO.saveAccount(acc);
+		}
 
 		ExceedMember em = ExceedDAO.getExceedMember(mid);
 		if (em != null) {
@@ -183,10 +185,12 @@ public class Member {
 		}
 
 		Account acc = AccountDAO.getAccount(mid);
-		Map<DailyTask, Integer> pg = acc.getDailyProgress();
-		pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + Math.round(amount * spamModif));
-		acc.setDailyProgress(pg);
-		AccountDAO.saveAccount(acc);
+		if (!acc.hasCompletedQuests()) {
+			Map<DailyTask, Integer> pg = acc.getDailyProgress();
+			pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + Math.round(amount * spamModif));
+			acc.setDailyProgress(pg);
+			AccountDAO.saveAccount(acc);
+		}
 
 		if (xp >= (long) Math.pow(level, 2) * 100) {
 			level++;
