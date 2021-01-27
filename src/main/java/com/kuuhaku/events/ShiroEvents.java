@@ -451,8 +451,8 @@ public class ShiroEvents extends ListenerAdapter {
 				Map<DailyTask, Integer> pg = acc.getDailyProgress();
 
 				if (tasks.checkTasks(pg)) {
-					channel.sendMessage(author.getAsMention() + " completou todos os desafios diários, parabéns! :confetti_ball:").queue();
 					acc.setLastQuest();
+					channel.sendMessage(author.getAsMention() + " completou todos os desafios diários, parabéns! :confetti_ball:").queue();
 
 					float mod = tasks.getDifficultyMod();
 					if (mod >= 3.7)
