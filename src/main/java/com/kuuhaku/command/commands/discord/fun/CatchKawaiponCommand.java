@@ -24,6 +24,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
@@ -88,6 +89,13 @@ public class CatchKawaiponCommand extends Command {
 		if (!acc.hasCompletedQuests()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.compute(DailyTask.CARD_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+			pg.compute(DailyTask.ANIME_TASK, (k, v) -> {
+				DailyQuest dq = DailyQuest.getQuest(author.getId());
+				if (kc.getCard().getAnime() == dq.getChosenAnime())
+					return Helper.getOr(v, 0) + 1;
+				else
+					return v;
+			});
 			acc.setDailyProgress(pg);
 		}
 
