@@ -42,7 +42,7 @@ public class CustomAnswerDAO {
 		return ca.size() > 0 ? ca.get(Helper.rng(ca.size(), true)) : null;
 	}
 
-	public static CustomAnswer getCAByID(Long id) {
+	public static CustomAnswer getCAByID(int id) {
 		EntityManager em = Manager.getEntityManager();
 		CustomAnswer ca;
 
