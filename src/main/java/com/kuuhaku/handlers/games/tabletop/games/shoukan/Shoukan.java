@@ -35,6 +35,8 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.model.common.DailyQuest;
+import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
@@ -594,6 +596,19 @@ public class Shoukan extends GlobalGame {
 					if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
 						c.getEffect(new EffectParameters(EffectTrigger.ON_SUMMON, this, dest, h.getSide(), Duelists.of(c, dest, null, -1), channel));
 						if (postCombat()) return;
+					}
+
+					if (!d.getAcc().hasCompletedQuests()) {
+						Map<DailyTask, Integer> pg = d.getAcc().getDailyProgress();
+						pg.compute(DailyTask.RACE_TASK, (k, v) -> {
+							DailyQuest dq = DailyQuest.getQuest(getCurrent().getId());
+							if (c.getRace() == dq.getChosenRace())
+								return Helper.getOr(v, 0) + 1;
+							else
+								return v;
+						});
+						d.getAcc().setDailyProgress(pg);
+						AccountDAO.saveAccount(d.getAcc());
 					}
 
 					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : c.getName() + " em posição de " + (c.isDefending() ? "defesa" : "ataque")) + ".";
