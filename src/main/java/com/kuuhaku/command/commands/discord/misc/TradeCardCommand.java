@@ -566,7 +566,7 @@ public class TradeCardCommand extends Command {
 									}
 								}
 
-								boolean trusted = Helper.isTrustedMerchant(other.getId());
+								boolean trusted = Helper.isTrustedMerchant(author.getId()) || Helper.isTrustedMerchant(other.getId());
 								double tax = trusted ? 0.05 : 0.1;
 
 								acc.removeCredit(price, this.getClass());
@@ -770,7 +770,7 @@ public class TradeCardCommand extends Command {
 									}
 								}
 
-								boolean trusted = Helper.isTrustedMerchant(author.getId());
+								boolean trusted = Helper.isTrustedMerchant(author.getId()) || Helper.isTrustedMerchant(other.getId());
 								double tax = trusted ? 0.05 : 0.1;
 
 								tacc.removeCredit(price, this.getClass());
