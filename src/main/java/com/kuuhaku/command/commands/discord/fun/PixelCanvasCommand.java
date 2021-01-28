@@ -21,17 +21,13 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
-import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -39,7 +35,6 @@ import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
 import java.text.MessageFormat;
-import java.util.Map;
 
 import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
@@ -114,14 +109,6 @@ public class PixelCanvasCommand extends Command {
 						coords[1],
 						opts[2]
 				);
-
-				Account acc = AccountDAO.getAccount(t.getUid());
-				if (!acc.hasCompletedQuests()) {
-					Map<DailyTask, Integer> pg = acc.getDailyProgress();
-					pg.compute(DailyTask.CANVAS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
-					acc.setDailyProgress(pg);
-					AccountDAO.saveAccount(acc);
-				}
 
 				CanvasDAO.saveOperation(op);
 			} catch (NullPointerException e) {

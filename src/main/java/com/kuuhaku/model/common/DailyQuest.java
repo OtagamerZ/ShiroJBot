@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.utils.Helper;
 
@@ -29,12 +30,14 @@ import java.util.Random;
 
 public class DailyQuest {
 	private final HashMap<DailyTask, Integer> tasks = new HashMap<>();
+	private final AnimeName chosenAnime;
 
 	private DailyQuest(String id) {
 		long seed = LocalDate.now().toEpochDay() + Long.parseLong(id);
 		List<DailyTask> tasks = Helper.getRandomN(List.of(DailyTask.values()), 3, 1, seed);
 
 		Random r = new Random(seed);
+		this.chosenAnime = AnimeName.validValues()[Helper.rng(AnimeName.validValues().length, r, true)];
 		for (DailyTask task : tasks) {
 			this.tasks.put(task,
 					switch (task) {
@@ -43,7 +46,7 @@ public class DailyQuest {
 						case DROP_TASK -> 10 + Helper.rng(10, r, false);
 						case WINS_TASK -> 1 + Helper.rng(4, r, false);
 						case XP_TASK -> 1000 + Helper.rng(9000, r, false);
-						case CANVAS_TASK -> 10 + Helper.rng(40, r, false);
+						case ANIME_TASK -> 1 + Helper.rng(2, r, false);
 					}
 			);
 		}
@@ -63,7 +66,7 @@ public class DailyQuest {
 				case DROP_TASK -> Helper.prcnt(task.getValue(), 20);
 				case WINS_TASK -> Helper.prcnt(task.getValue(), 5);
 				case XP_TASK -> Helper.prcnt(task.getValue(), 10000);
-				case CANVAS_TASK -> Helper.prcnt(task.getValue(), 50);
+				case ANIME_TASK -> Helper.prcnt(task.getValue(), 3);
 			};
 		}
 		return mod;
@@ -80,5 +83,9 @@ public class DailyQuest {
 
 	public static DailyQuest getQuest(String id) {
 		return new DailyQuest(id);
+	}
+
+	public AnimeName getChosenAnime() {
+		return chosenAnime;
 	}
 }
