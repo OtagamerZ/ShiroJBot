@@ -23,7 +23,21 @@ import org.json.JSONObject;
 public class Bonus implements Cloneable {
 	private int atk = 0;
 	private int def = 0;
-	private final JSONObject specialData = new JSONObject();
+	private final JSONObject specialData;
+
+	public Bonus(int atk, int def, JSONObject specialData) {
+		this.atk = atk;
+		this.def = def;
+		this.specialData = new JSONObject(specialData.toString());
+	}
+
+	public Bonus(JSONObject specialData) {
+		this.specialData = new JSONObject(specialData.toString());
+	}
+
+	public Bonus() {
+		this.specialData = new JSONObject();
+	}
 
 	public int getAtk() {
 		return atk;
@@ -63,7 +77,13 @@ public class Bonus implements Cloneable {
 
 	public Bonus copy() {
 		try {
-			return (Bonus) clone();
+			Bonus b = (Bonus) clone();
+
+			return new Bonus(
+					b.getAtk(),
+					b.getDef(),
+					b.getSpecialData()
+			);
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}

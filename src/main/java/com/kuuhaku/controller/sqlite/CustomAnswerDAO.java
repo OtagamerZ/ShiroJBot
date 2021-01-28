@@ -23,6 +23,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -44,21 +45,22 @@ public class CustomAnswerDAO {
 
 	public static CustomAnswer getCAByID(int id) {
 		EntityManager em = Manager.getEntityManager();
-		CustomAnswer ca;
 
 		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE id = :id AND markForDelete = FALSE", CustomAnswer.class);
 		q.setParameter("id", id);
-		ca = (CustomAnswer) q.getSingleResult();
 
-		em.close();
-
-		return ca;
+		try {
+			return (CustomAnswer) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public static List<CustomAnswer> getCAByGuild(String id) {
 		EntityManager em = Manager.getEntityManager();
-		CustomAnswer ca;
 
 		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE guildID = :guild AND markForDelete = FALSE", CustomAnswer.class);
 		q.setParameter("guild", id);
