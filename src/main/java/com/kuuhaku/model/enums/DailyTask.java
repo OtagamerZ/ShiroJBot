@@ -24,7 +24,8 @@ public enum DailyTask {
 	DROP_TASK("Abra %s drops"),
 	WINS_TASK("Ganhe %s partidas de Shoukan"),
 	XP_TASK("Ganhe %s pontos de XP"),
-	ANIME_TASK("Colete %s cartas do anime %s");
+	ANIME_TASK("Colete %s cartas do anime %s"),
+	RACE_TASK("Use %s cartas da raça %s");
 
 	private final String description;
 
@@ -44,6 +45,7 @@ public enum DailyTask {
 			case WINS_TASK -> "Pro-player";
 			case XP_TASK -> "Alto-falante";
 			case ANIME_TASK -> "Otaku";
+			case RACE_TASK -> "Invocador";
 		};
 	}
 }

@@ -72,7 +72,14 @@ public class DailyQuestCommand extends Command {
 			eb.addField(
 					task.getKey().getName(),
 					(pg.getOrDefault(task.getKey(), 0) >= task.getValue() ? "`COMPLETADO`" : "%s | Atual: %s").formatted(
-							task.getKey().getDescription().formatted(Helper.separate(task.getValue()), dq.getChosenAnime()),
+							task.getKey().getDescription().formatted(
+									Helper.separate(task.getValue()),
+									switch (task.getKey()) {
+										case ANIME_TASK -> dq.getChosenAnime();
+										case RACE_TASK -> dq.getChosenRace().getName();
+										default -> "";
+									}
+							),
 							Helper.separate(pg.getOrDefault(task.getKey(), 0))
 					),
 					false
