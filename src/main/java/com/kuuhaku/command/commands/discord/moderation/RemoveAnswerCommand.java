@@ -66,8 +66,8 @@ public class RemoveAnswerCommand extends Command {
 		}
 
         try {
-            CustomAnswerDAO.removeCAFromDB(CustomAnswerDAO.getCAByID(Long.parseLong(args[0])));
-            channel.sendMessage("Não vou mais responder com a resposta `" + args[0] + "`.").queue();
+            CustomAnswerDAO.removeCAFromDB(CustomAnswerDAO.getCAByID(Integer.parseInt(args[0])));
+			channel.sendMessage("Não vou mais responder com a resposta `" + args[0] + "`.").queue();
         } catch (NoResultException e) {
 			channel.sendMessage("❌ | ID de resposta inválido.").queue();
 		}

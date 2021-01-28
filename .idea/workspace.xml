@@ -15,10 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/DailyQuestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/DailyQuestCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DailyQuest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DailyQuest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/DailyTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/DailyTask.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1016,21 +1012,8 @@
       <workItem from="1611778503069" duration="142000" />
       <workItem from="1611836237457" duration="1029000" />
       <workItem from="1611842172904" duration="582000" />
-      <workItem from="1611845911767" duration="2028000" />
-    </task>
-    <task id="LOCAL-03517" summary="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;">
-      <created>1611586364973</created>
-      <option name="number" value="03517" />
-      <option name="presentableId" value="LOCAL-03517" />
-      <option name="project" value="LOCAL" />
-      <updated>1611586364974</updated>
-    </task>
-    <task id="LOCAL-03518" summary="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;">
-      <created>1611586699812</created>
-      <option name="number" value="03518" />
-      <option name="presentableId" value="LOCAL-03518" />
-      <option name="project" value="LOCAL" />
-      <updated>1611586699812</updated>
+      <workItem from="1611845911767" duration="3880000" />
+      <workItem from="1611860820196" duration="428000" />
     </task>
     <task id="LOCAL-03519" summary="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;">
       <created>1611586776638</created>
@@ -1361,7 +1344,21 @@
       <option name="project" value="LOCAL" />
       <updated>1611851758439</updated>
     </task>
-    <option name="localTasksCounter" value="3566" />
+    <task id="LOCAL-03566" summary="Correções menores no desafios diarios">
+      <created>1611852538127</created>
+      <option name="number" value="03566" />
+      <option name="presentableId" value="LOCAL-03566" />
+      <option name="project" value="LOCAL" />
+      <updated>1611852538127</updated>
+    </task>
+    <task id="LOCAL-03567" summary="Correções menores no desafios diarios">
+      <created>1611852703751</created>
+      <option name="number" value="03567" />
+      <option name="presentableId" value="LOCAL-03567" />
+      <option name="project" value="LOCAL" />
+      <updated>1611852703751</updated>
+    </task>
+    <option name="localTasksCounter" value="3568" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1534,10 +1531,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611690233261" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611851757331">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611852702876">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611851757331" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611852702876" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1611348469197">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1586,10 +1583,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611851760478">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611852704957">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611851760478" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611852704957" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611697808035" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1611584154385">
       <screen x="0" y="0" width="1680" height="1010" />
