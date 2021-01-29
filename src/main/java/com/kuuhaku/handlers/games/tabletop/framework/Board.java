@@ -440,4 +440,8 @@ public class Board {
 		g2d.dispose();
 		return bi;
 	}
+
+	public boolean isAwarded() {
+		return awarded;
+	}
 }

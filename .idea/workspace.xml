@@ -14,9 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado Shoukan em duplas">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1016,21 +1016,7 @@
       <workItem from="1611842172904" duration="582000" />
       <workItem from="1611845911767" duration="3880000" />
       <workItem from="1611860820196" duration="3169000" />
-      <workItem from="1611921911483" duration="7895000" />
-    </task>
-    <task id="LOCAL-03530" summary="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;">
-      <created>1611593952798</created>
-      <option name="number" value="03530" />
-      <option name="presentableId" value="LOCAL-03530" />
-      <option name="project" value="LOCAL" />
-      <updated>1611593952798</updated>
-    </task>
-    <task id="LOCAL-03531" summary="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;">
-      <created>1611594061431</created>
-      <option name="number" value="03531" />
-      <option name="presentableId" value="LOCAL-03531" />
-      <option name="project" value="LOCAL" />
-      <updated>1611594061431</updated>
+      <workItem from="1611921911483" duration="8517000" />
     </task>
     <task id="LOCAL-03532" summary="Não pingue o Sora">
       <created>1611595976628</created>
@@ -1361,7 +1347,21 @@
       <option name="project" value="LOCAL" />
       <updated>1611930128462</updated>
     </task>
-    <option name="localTasksCounter" value="3579" />
+    <task id="LOCAL-03579" summary="Adicionado Shoukan em duplas">
+      <created>1611930359547</created>
+      <option name="number" value="03579" />
+      <option name="presentableId" value="LOCAL-03579" />
+      <option name="project" value="LOCAL" />
+      <updated>1611930359547</updated>
+    </task>
+    <task id="LOCAL-03580" summary="Adicionado Shoukan em duplas">
+      <created>1611930640073</created>
+      <option name="number" value="03580" />
+      <option name="presentableId" value="LOCAL-03580" />
+      <option name="project" value="LOCAL" />
+      <updated>1611930640073</updated>
+    </task>
+    <option name="localTasksCounter" value="3581" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1512,10 +1512,10 @@
     </state>
     <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1603723317269" />
     <state x="687" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1604198537643" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1611929607619">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1611930902457">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1611929607619" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1611930902457" />
     <state x="686" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1611027065629" />
     <state x="551" y="216" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1604694130886">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1534,10 +1534,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611690233261" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611930333861">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611930926835">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611930333861" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611930926835" />
     <state x="92" y="92" width="1710" height="851" key="DiffContextDialog" timestamp="1611348469197">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1586,10 +1586,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611930129713">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611930646931">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611930129713" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611930646931" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611697808035" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1611584154385">
       <screen x="0" y="0" width="1680" height="1010" />
