@@ -144,8 +144,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, User... players) {
-		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, custom, ranked, players.length == 4 ? RankedQueue.DUO : RankedQueue.SOLO);
-		System.out.println(Arrays.toString(players));
+		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom, players.length == 4 ? RankedQueue.DUO : RankedQueue.SOLO);
 		this.channel = channel;
 		this.daily = daily;
 		this.team = players.length == 4;
