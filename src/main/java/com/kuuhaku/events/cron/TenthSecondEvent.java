@@ -213,11 +213,13 @@ public class TenthSecondEvent implements Job {
 										Stream.of(teams.getLeft(), teams.getRight())
 												.flatMap(List::stream)
 												.map(MatchMakingRating::getUser)
+												.peek(System.out::println)
 												.toArray(User[]::new)
 										:
 										Stream.of(teams.getRight(), teams.getLeft())
 												.flatMap(List::stream)
 												.map(MatchMakingRating::getUser)
+												.peek(System.out::println)
 												.toArray(User[]::new)
 						);
 						g.start();
