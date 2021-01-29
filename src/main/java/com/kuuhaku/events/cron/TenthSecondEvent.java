@@ -325,7 +325,7 @@ public class TenthSecondEvent implements Job {
 						MatchMakingRatingDAO.saveMMR(mmr1);
 						match.add(Pair.of(p1, false));
 						close();
-						if (match.size() == 2) result.run();
+						if (match.size() == 4) result.run();
 					});
 
 			{
