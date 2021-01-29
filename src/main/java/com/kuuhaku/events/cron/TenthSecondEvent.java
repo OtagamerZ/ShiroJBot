@@ -185,7 +185,6 @@ public class TenthSecondEvent implements Job {
 			int tierDiff = (int) Stream.of(teams.getLeft(), teams.getRight()).flatMap(List::stream).mapToInt(mmr -> mmr.getTier().getTier()).average().orElse(0);
 
 			if (!Helper.isTwice(mmrs)
-				&& Helper.between(teams.getMiddle() * 100, 40, 60)
 				&& tierDiff <= 1) {
 				Main.getInfo().getMatchMaking().getSoloLobby().keySet().removeAll(List.of(mmrs));
 
