@@ -147,8 +147,7 @@ public class ShoukanCommand extends Command {
 			if (message.getMentionedUsers().size() == 0) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 				return;
-			}
-			if (message.getMentionedUsers().size() != 1 && message.getMentionedUsers().size() != 3) {
+			} else if (message.getMentionedUsers().size() != 1 && message.getMentionedUsers().size() != 3) {
 				channel.sendMessage("❌ | Você precisa mencionar 1 usuário para jogar solo, ou 3 para jogar em equipes (1º e 3º equipe 1, você e o 2º equipe 2).").queue();
 				return;
 			} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
@@ -164,7 +163,7 @@ public class ShoukanCommand extends Command {
 				}
 			}
 
-			boolean team = users.size() == 4;
+			boolean team = users.size() == 3;
 			boolean clan = !team && (args.length > 1 && args[1].equalsIgnoreCase("clan")) || (args.length > 2 && args[2].equalsIgnoreCase("clan"));
 			boolean daily = !clan && (args.length > 1 && Helper.equalsAny(args[1], "daily", "diario")) || (args.length > 2 && Helper.equalsAny(args[2], "daily", "diario"));
 

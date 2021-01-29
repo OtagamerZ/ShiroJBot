@@ -33,6 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Arena {
 	private final Map<Side, List<SlotColumn<Champion, Equipment>>> slots;
@@ -105,7 +106,11 @@ public class Arena {
 				if (game.getClans() != null) {
 					name = game.getClans().get(key).getName();
 				} else {
-					name = StringUtils.abbreviate(hands.get(key).getUser().getName(), 32);
+					if (h instanceof TeamHand) {
+						name = ((TeamHand) h).getNames().stream().map(n -> StringUtils.abbreviate(n, 16)).collect(Collectors.joining(" e "));
+					} else {
+						name = StringUtils.abbreviate(h.getUser().getName(), 32);
+					}
 				}
 
 				if (key == Side.TOP)
