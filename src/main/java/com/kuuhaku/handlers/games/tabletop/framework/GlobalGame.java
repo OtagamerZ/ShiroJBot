@@ -88,12 +88,13 @@ public abstract class GlobalGame {
 		this.queue = null;
 	}
 
-	public GlobalGame(ShardManager handler, Board board, GameChannel channel, JSONObject custom, boolean ranked, RankedQueue queue) {
+	public GlobalGame(ShardManager handler, Board board, GameChannel channel, boolean ranked, JSONObject custom, RankedQueue queue) {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
-		this.custom = custom;
+		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
 		this.ranked = ranked;
+		this.custom = custom;
 		this.queue = queue;
 	}
 
