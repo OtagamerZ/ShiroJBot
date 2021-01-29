@@ -70,7 +70,10 @@ public class LobbyCommand extends Command {
 		};
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Saguão do Shoukan ranqueado (%s | %s jogadores)".formatted(rq.name(), Main.getInfo().getMatchMaking().getSoloLobby().size()));
+				.setTitle("Saguão do Shoukan ranqueado (%s | %s jogadores)".formatted(rq.name(), switch (rq) {
+					case SOLO -> Main.getInfo().getMatchMaking().getSoloLobby().size();
+					case DUO -> Main.getInfo().getMatchMaking().getDuoLobby().size();
+				}));
 
 		StringBuilder sb = new StringBuilder();
 		for (List<MatchMakingRating> chunk : lobby) {
