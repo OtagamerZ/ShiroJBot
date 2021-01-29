@@ -185,7 +185,7 @@ public class TenthSecondEvent implements Job {
 			int tierDiff = (int) Stream.of(teams.getLeft(), teams.getRight()).flatMap(List::stream).mapToInt(mmr -> mmr.getTier().getTier()).average().orElse(0);
 
 			if (!Helper.isTwice(mmrs)
-				&& tierDiff <= 1) {
+				&& tierDiff <= 2) {
 				Main.getInfo().getMatchMaking().getDuoLobby().keySet().removeAll(List.of(mmrs));
 
 				List<TextChannel> channels = ps.stream().map(Map.Entry::getValue).map(Pair::getRight).collect(Collectors.toList());
@@ -363,7 +363,7 @@ public class TenthSecondEvent implements Job {
 				timeout.cancel(true);
 				timeout = null;
 				close();
-				if (match.size() == 2) result.run();
+				if (match.size() == 4) result.run();
 			}
 		});
 	}
