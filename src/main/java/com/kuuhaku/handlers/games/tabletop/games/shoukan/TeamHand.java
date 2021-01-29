@@ -155,6 +155,7 @@ public class TeamHand extends Hand {
 			this.deques.add(deque);
 			this.destinyDecks.add(destinyDeck);
 			this.cards.add(new ArrayList<>());
+			redrawHand();
 		}
 	}
 
@@ -330,7 +331,7 @@ public class TeamHand extends Hand {
 
 	public void redrawHand() {
 		LinkedList<Drawable> deque = getDeque();
-		List<Drawable> cards = this.cards.getCurrent();
+		List<Drawable> cards = getCards();
 
 		deque.addAll(cards);
 		cards.clear();
@@ -361,12 +362,11 @@ public class TeamHand extends Hand {
 	}
 
 	public List<Drawable> getCards() {
-		if (cards.getCurrent().size() == 0) redrawHand();
 		return cards.getCurrent();
 	}
 
 	public List<Drawable> getAvailableCards() {
-		return getCards().stream()
+		return cards.getCurrent().stream()
 				.filter(Drawable::isAvailable)
 				.collect(Collectors.toList());
 	}
@@ -381,6 +381,7 @@ public class TeamHand extends Hand {
 
 	public void showHand() {
 		List<Drawable> cards = getCards();
+		if (cards.size() == 0) redrawHand();
 		BufferedImage bi = new BufferedImage(Math.max(5, cards.size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);

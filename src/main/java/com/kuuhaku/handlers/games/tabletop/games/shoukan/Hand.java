@@ -150,6 +150,8 @@ public class Hand {
 		for (Drawable drawable : destinyDeck) {
 			deque.remove(drawable);
 		}
+
+		redrawHand();
 	}
 
 	public Hand(Shoukan game, User user, Clan cl, Side side) {
@@ -243,13 +245,14 @@ public class Hand {
 		for (Drawable drawable : deque) {
 			drawable.setClan(cl);
 		}
+		redrawHand();
 	}
 
 	public boolean manualDraw() {
 		try {
-			if (getCards().stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
+			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
 				manualDrawChampion();
-			else getCards().add(getDeque().removeFirst().copy());
+			else cards.add(getDeque().removeFirst().copy());
 			return true;
 		} catch (NoSuchElementException e) {
 			return false;
@@ -259,7 +262,7 @@ public class Hand {
 	public Drawable destinyDraw() {
 		if (destinyDeck.size() > 0) {
 			Drawable dr = destinyDeck.remove(Helper.rng(destinyDeck.size(), true));
-			getCards().add(dr.copy());
+			cards.add(dr.copy());
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();
 			return dr;
@@ -271,11 +274,11 @@ public class Hand {
 		if (lockTime > 0) return null;
 		try {
 			Drawable dr;
-			if (getCards().stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
+			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
 				dr = drawChampion();
 			else {
 				dr = getDeque().removeFirst();
-				getCards().add(dr.copy());
+				cards.add(dr.copy());
 			}
 			return dr;
 		} catch (NoSuchElementException ignore) {
@@ -288,7 +291,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			getCards().add(dr.copy());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -301,7 +304,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			getCards().add(dr.copy());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -313,7 +316,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			getCards().add(dr.copy());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -324,7 +327,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			getCards().add(dr.copy());
+			cards.add(dr.copy());
 		} catch (NoSuchElementException ignore) {
 		}
 	}
@@ -334,7 +337,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			getCards().add(dr.copy());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -346,7 +349,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() == Charm.SPELL).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			getCards().add(dr.copy());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -358,7 +361,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
 			getDeque().remove(dr);
-			getCards().add(dr.copy());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -370,7 +373,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Field).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			getCards().add(dr.copy());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -382,7 +385,7 @@ public class Hand {
 		try {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Champion && ((Champion) c).getRace() == race).findFirst().orElseThrow();
 			getDeque().remove(dr);
-			getCards().add(dr.copy());
+			cards.add(dr.copy());
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -409,12 +412,11 @@ public class Hand {
 	}
 
 	public List<Drawable> getCards() {
-		if (cards.size() == 0) redrawHand();
 		return cards;
 	}
 
 	public List<Drawable> getAvailableCards() {
-		return getCards().stream().filter(Drawable::isAvailable).collect(Collectors.toList());
+		return cards.stream().filter(Drawable::isAvailable).collect(Collectors.toList());
 	}
 
 	public List<Drawable> getDestinyDeck() {
@@ -426,16 +428,17 @@ public class Hand {
 	}
 
 	public void showHand() {
-		BufferedImage bi = new BufferedImage(Math.max(5, getCards().size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
+		if (cards.size() == 0) redrawHand();
+		BufferedImage bi = new BufferedImage(Math.max(5, cards.size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 90));
 
-		for (int i = 0; i < getCards().size(); i++) {
-			g2d.drawImage(getCards().get(i).drawCard(false), bi.getWidth() / (getCards().size() + 1) * (i + 1) - (225 / 2), 100, null);
-			if (getCards().get(i).isAvailable())
-				Profile.printCenteredString(String.valueOf(i + 1), 225, bi.getWidth() / (getCards().size() + 1) * (i + 1) - (225 / 2), 90, g2d);
+		for (int i = 0; i < cards.size(); i++) {
+			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+			if (cards.get(i).isAvailable())
+				Profile.printCenteredString(String.valueOf(i + 1), 225, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 90, g2d);
 		}
 
 		g2d.dispose();
@@ -504,7 +507,7 @@ public class Hand {
 	}
 
 	public int sumAttack() {
-		return getCards().stream().filter(d -> d instanceof Champion).mapToInt(d -> ((Champion) d).getAtk()).sum();
+		return cards.stream().filter(d -> d instanceof Champion).mapToInt(d -> ((Champion) d).getAtk()).sum();
 	}
 
 	public int getMana() {
