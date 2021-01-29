@@ -348,9 +348,9 @@ public class CommandManager {
 			put(StockMarketCommand.class, new Argument(
 					"bolsa", new String[]{"stockmarket", "stocks"}, "req_card", "cmd_stock-market", INFO, false
 			));
-			put(MatchStatsCommand.class, new Argument(
+			/*put(MatchStatsCommand.class, new Argument(
 					"dadosdapartida", new String[]{"matchstats", "mstats", "estatisticas"}, REQ_ID, "cmd_match-stats", INFO, true
-			));
+			));*/
 			put(MerchantLicenseCommand.class, new Argument(
 					"licença", new String[]{"license", "merchantlicense", "licençadecomercio"}, "cmd_merchant-license", INFO, false
 			));

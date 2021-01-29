@@ -61,7 +61,7 @@ public class LobbyCommand extends Command {
 			return;
 		}
 
-		RankedQueue rq = RankedQueue.valueOf(args[1].toUpperCase());
+		RankedQueue rq = RankedQueue.valueOf(args[0].toUpperCase());
 		List<Page> pages = new ArrayList<>();
 
 		List<List<MatchMakingRating>> lobby = switch (rq) {
