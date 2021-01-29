@@ -181,80 +181,78 @@ public class TenthSecondEvent implements Job {
 			);
 
 			MatchMakingRating[] mmrs = ps.stream().map(Map.Entry::getKey).toArray(MatchMakingRating[]::new);
+			Triple<List<MatchMakingRating>, Double, List<MatchMakingRating>> teams = Helper.balanceSides(mmr -> (int) mmr.getMMR(), mmrs);
+			int tierDiff = (int) Stream.of(teams.getLeft(), teams.getRight()).flatMap(List::stream).mapToInt(mmr -> mmr.getTier().getTier()).average().orElse(0);
 
-			if (Helper.isTwice(mmrs)) {
-				Triple<List<MatchMakingRating>, Double, List<MatchMakingRating>> teams = Helper.balanceSides(mmr -> (int) mmr.getMMR(), mmrs);
-				int tierDiff = (int) Stream.of(teams.getLeft(), teams.getRight()).flatMap(List::stream).mapToInt(mmr -> mmr.getTier().getTier()).average().orElse(0);
+			if (!Helper.isTwice(mmrs)
+				&& tierDiff <= 1) {
+				Main.getInfo().getMatchMaking().getDuoLobby().keySet().removeAll(List.of(mmrs));
 
-				if (tierDiff <= 1) {
+				List<TextChannel> channels = ps.stream().map(Map.Entry::getValue).map(Pair::getRight).collect(Collectors.toList());
+
+				List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
+
+				Runnable result = () -> {
 					Main.getInfo().getMatchMaking().getDuoLobby().keySet().removeAll(List.of(mmrs));
 
-					System.out.println(teams.toString());
-					List<TextChannel> channels = ps.stream().map(Map.Entry::getValue).map(Pair::getRight).collect(Collectors.toList());
+					for (MatchMakingRating mmr : mmrs) {
+						mmr.setEvades(0);
+						MatchMakingRatingDAO.saveMMR(mmr);
+					}
 
-					List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
-
-					Runnable result = () -> {
-						Main.getInfo().getMatchMaking().getDuoLobby().keySet().removeAll(List.of(mmrs));
-
-						for (MatchMakingRating mmr : mmrs) {
-							mmr.setEvades(0);
-							MatchMakingRatingDAO.saveMMR(mmr);
-						}
-
-						boolean p1Starts = Helper.chance(50);
-						if (match.stream().allMatch(Pair::getRight)) {
-							GlobalGame g = new Shoukan(
-									Main.getShiroShards(),
-									new GameChannel(channels.toArray(TextChannel[]::new)),
-									0,
-									null,
-									false,
-									true,
-									p1Starts ?
-											Stream.of(teams.getLeft(), teams.getRight())
-													.flatMap(List::stream)
-													.map(MatchMakingRating::getUser)
-													.toArray(User[]::new)
-											:
-											Stream.of(teams.getRight(), teams.getLeft())
-													.flatMap(List::stream)
-													.map(MatchMakingRating::getUser)
-													.toArray(User[]::new)
-							);
-							g.start();
-							Main.getInfo().getMatchMaking().getGames().add(g);
-						} else {
-							for (Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean> p : match) {
-								MatchMakingRating mmr = p.getLeft().getKey();
-								if (p.getRight()) {
-									p.getLeft().getValue().getRight().sendMessage("Um dos jogadores não confirmou a partida a tempo, você foi retornado ao saguão.").queue(s ->
-											Pages.buttonize(s, Map.of(
-													Helper.CANCEL, (mb, ms) -> {
-														Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
-														ms.delete().queue();
-													}), false, 30, TimeUnit.MINUTES
-													, u -> u.getId().equals(mmr.getUserId())
-													, ms -> {
-														Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
-														ms.delete().queue();
-													}
-											)
-									);
-									Pair<Integer, TextChannel> newPair = Pair.of(
-											p.getLeft().getValue().getLeft() + 1,
-											p.getLeft().getValue().getRight()
-									);
-									Main.getInfo().getMatchMaking().getDuoLobby().put(mmr, newPair);
-								}
+					boolean p1Starts = Helper.chance(50);
+					if (match.stream().allMatch(Pair::getRight)) {
+						GlobalGame g = new Shoukan(
+								Main.getShiroShards(),
+								new GameChannel(channels.toArray(TextChannel[]::new)),
+								0,
+								null,
+								false,
+								true,
+								p1Starts ?
+										Stream.of(teams.getLeft(), teams.getRight())
+												.flatMap(List::stream)
+												.map(MatchMakingRating::getUser)
+												.toArray(User[]::new)
+										:
+										Stream.of(teams.getRight(), teams.getLeft())
+												.flatMap(List::stream)
+												.map(MatchMakingRating::getUser)
+												.toArray(User[]::new)
+						);
+						g.start();
+						Main.getInfo().getMatchMaking().getGames().add(g);
+					} else {
+						for (Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean> p : match) {
+							MatchMakingRating mmr = p.getLeft().getKey();
+							if (p.getRight()) {
+								p.getLeft().getValue().getRight().sendMessage("Um dos jogadores não confirmou a partida a tempo, você foi retornado ao saguão.").queue(s ->
+										Pages.buttonize(s, Map.of(
+												Helper.CANCEL, (mb, ms) -> {
+													Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
+													ms.delete().queue();
+												}), false, 30, TimeUnit.MINUTES
+												, u -> u.getId().equals(mmr.getUserId())
+												, ms -> {
+													Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
+													ms.delete().queue();
+												}
+										)
+								);
+								Pair<Integer, TextChannel> newPair = Pair.of(
+										p.getLeft().getValue().getLeft() + 1,
+										p.getLeft().getValue().getRight()
+								);
+								Main.getInfo().getMatchMaking().getDuoLobby().put(mmr, newPair);
 							}
 						}
-					};
-
-					for (Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p : ps) {
-						sendConfirmation(p, p.getValue().getRight(), channels, match, result);
 					}
+				};
+
+				for (Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p : ps) {
+					sendConfirmation(p, p.getValue().getRight(), channels, match, result);
 				}
+
 				return true;
 			}
 		} catch (IndexOutOfBoundsException e) {

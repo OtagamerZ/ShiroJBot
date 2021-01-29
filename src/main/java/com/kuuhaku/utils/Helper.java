@@ -2024,27 +2024,27 @@ public class Helper {
 	}
 
 	public static <T> Triple<List<T>, Double, List<T>> balanceSides(ToIntFunction<T> extractor, T... objs) {
-		TreeMap<T, Integer> elements = new TreeMap<>(Comparator.comparingInt(extractor));
-		elements.putAll(Arrays.stream(objs).collect(Collectors.toMap(o -> o, extractor::applyAsInt)));
+		LinkedList<T> elements = new LinkedList<>(Arrays.asList(objs));
+		elements.sort(Comparator.comparingInt(extractor));
 
 		Duo<List<T>, Integer> firstGroup = new Duo<>(new ArrayList<>(), 0);
 		Duo<List<T>, Integer> secondGroup = new Duo<>(new ArrayList<>(), 0);
 
 		boolean first = true;
 		while (elements.size() > 0) {
-			Map.Entry<T, Integer> lesser = elements.pollFirstEntry();
-			Map.Entry<T, Integer> higher = elements.pollLastEntry();
+			T lesser = elements.removeFirst();
+			T higher = elements.removeLast();
 
 			if (first) {
-				firstGroup.getLeft().add(lesser.getKey());
-				firstGroup.getLeft().add(higher.getKey());
-				firstGroup.setRight((firstGroup.getRight() + lesser.getValue() + higher.getValue()) / 3);
+				firstGroup.getLeft().add(lesser);
+				firstGroup.getLeft().add(higher);
+				firstGroup.setRight((firstGroup.getRight() + extractor.applyAsInt(lesser) + extractor.applyAsInt(higher)) / 3);
 
 				first = false;
 			} else {
-				secondGroup.getLeft().add(lesser.getKey());
-				secondGroup.getLeft().add(higher.getKey());
-				secondGroup.setRight((secondGroup.getRight() + lesser.getValue() + higher.getValue()) / 3);
+				secondGroup.getLeft().add(lesser);
+				secondGroup.getLeft().add(higher);
+				secondGroup.setRight((secondGroup.getRight() + extractor.applyAsInt(lesser) + extractor.applyAsInt(higher)) / 3);
 
 				first = true;
 			}
