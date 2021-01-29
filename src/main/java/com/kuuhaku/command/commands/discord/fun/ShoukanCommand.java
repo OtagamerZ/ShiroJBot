@@ -43,10 +43,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class ShoukanCommand extends Command {
 
@@ -148,35 +147,47 @@ public class ShoukanCommand extends Command {
 			if (message.getMentionedUsers().size() == 0) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 				return;
+			}
+			if (message.getMentionedUsers().size() != 1 && message.getMentionedUsers().size() != 3) {
+				channel.sendMessage("❌ | Você precisa mencionar 1 usuário para jogar solo, ou 3 para jogar em equipes (1º e 3º equipe 1, você e o 2º equipe 2).").queue();
+				return;
 			} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
 				channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 				return;
-			} else if (Main.getInfo().getConfirmationPending().getIfPresent(message.getMentionedUsers().get(0).getId()) != null) {
-				channel.sendMessage("❌ | Este usuário possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
-				return;
 			}
 
-			Account uacc = AccountDAO.getAccount(author.getId());
-			Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
-			JSONObject custom = Helper.findJson(argsAsText);
-
-			int bet = 0;
-			if (args.length > 1 && StringUtils.isNumeric(args[1]) && custom == null) {
-				bet = Integer.parseInt(args[1]);
-				if (bet < 0) {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
-					return;
-				} else if (uacc.getBalance() < bet) {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
-					return;
-				} else if (tacc.getBalance() < bet) {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
+			List<User> users = message.getMentionedUsers();
+			for (User user : users) {
+				if (Main.getInfo().getConfirmationPending().getIfPresent(user.getId()) != null) {
+					channel.sendMessage("❌ | " + user.getAsMention() + " possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
 					return;
 				}
 			}
 
-			boolean clan = (args.length > 1 && args[1].equalsIgnoreCase("clan")) || (args.length > 2 && args[2].equalsIgnoreCase("clan"));
+			boolean team = users.size() == 4;
+			boolean clan = !team && (args.length > 1 && args[1].equalsIgnoreCase("clan")) || (args.length > 2 && args[2].equalsIgnoreCase("clan"));
 			boolean daily = !clan && (args.length > 1 && Helper.equalsAny(args[1], "daily", "diario")) || (args.length > 2 && Helper.equalsAny(args[2], "daily", "diario"));
+
+			int bet = 0;
+			JSONObject custom = Helper.findJson(argsAsText);
+			if (!team) {
+				Account uacc = AccountDAO.getAccount(author.getId());
+				Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
+
+				if (args.length > 1 && StringUtils.isNumeric(args[1]) && custom == null) {
+					bet = Integer.parseInt(args[1]);
+					if (bet < 0) {
+						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
+						return;
+					} else if (uacc.getBalance() < bet) {
+						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+						return;
+					} else if (tacc.getBalance() < bet) {
+						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
+						return;
+					}
+				}
+			}
 
 			Clan c = ClanDAO.getUserClan(author.getId());
 			Clan other = ClanDAO.getUserClan(message.getMentionedUsers().get(0).getId());
@@ -206,7 +217,7 @@ public class ShoukanCommand extends Command {
 				}
 			}
 
-			String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
+			String id = author.getId() + "." + users.get(0).getId() + "." + guild.getId();
 
 			if (Main.getInfo().gameInProgress(author.getId())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
@@ -214,7 +225,7 @@ public class ShoukanCommand extends Command {
 			} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
 				return;
-			} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
+			} else if (users.stream().anyMatch(u -> u.getId().equals(author.getId()))) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
 				return;
 			}
@@ -222,14 +233,58 @@ public class ShoukanCommand extends Command {
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			if (clan) {
+			if (team) {
+				List<User> players = new ArrayList<>() {{
+					add(author);
+					addAll(users);
+				}};
+				Set<String> accepted = new HashSet<>() {{
+					add(author.getId());
+				}};
+
+				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), bet, custom, daily, false, players.toArray(User[]::new));
+				channel.sendMessage(users.stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : ""))
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									if (players.contains(mb.getUser())) {
+										if (Main.getInfo().gameInProgress(mb.getId())) {
+											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+											return;
+										} else if (Main.getInfo().gameInProgress(author.getId())) {
+											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+											return;
+										}
+
+										if (!accepted.contains(mb.getId())) {
+											channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
+											accepted.add(mb.getId());
+										}
+
+										if (accepted.size() == players.size()) {
+											if (!ShiroInfo.getHashes().remove(hash)) return;
+											Main.getInfo().getConfirmationPending().invalidate(author.getId());
+											//Main.getInfo().getGames().put(id, t);
+											s.delete().queue(null, Helper::doNothing);
+											t.start();
+										}
+									}
+								}), true, 1, TimeUnit.MINUTES,
+								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
+								ms -> {
+									ShiroInfo.getHashes().remove(hash);
+									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								})
+						);
+			} else if (clan) {
 				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel((TextChannel) channel), bet, custom, daily, false, List.of(c, other), author, message.getMentionedUsers().get(0));
 				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " seu clã foi desafiado a uma partida de Shoukan, deseja aceitar?" + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 										if (!ShiroInfo.getHashes().remove(hash)) return;
 										Main.getInfo().getConfirmationPending().invalidate(author.getId());
-										if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
+										if (Main.getInfo().gameInProgress(mb.getId())) {
+											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+											return;
+										} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
 											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
 											return;
 										}
@@ -252,7 +307,10 @@ public class ShoukanCommand extends Command {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 										if (!ShiroInfo.getHashes().remove(hash)) return;
 										Main.getInfo().getConfirmationPending().invalidate(author.getId());
-										if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
+										if (Main.getInfo().gameInProgress(mb.getId())) {
+											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+											return;
+										} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
 											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
 											return;
 										}
