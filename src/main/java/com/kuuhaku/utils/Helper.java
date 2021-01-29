@@ -2025,7 +2025,7 @@ public class Helper {
 
 	public static <T> Triple<List<T>, Double, List<T>> balanceSides(ToIntFunction<T> extractor, T... objs) {
 		TreeMap<T, Integer> elements = new TreeMap<>(Comparator.comparingInt(extractor));
-
+		elements.putAll(Arrays.stream(objs).collect(Collectors.toMap(o -> o, extractor::applyAsInt)));
 
 		Duo<List<T>, Integer> firstGroup = new Duo<>(new ArrayList<>(), 0);
 		Duo<List<T>, Integer> secondGroup = new Duo<>(new ArrayList<>(), 0);
