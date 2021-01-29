@@ -155,6 +155,9 @@ public class TeamHand extends Hand {
 			this.deques.add(deque);
 			this.destinyDecks.add(destinyDeck);
 			this.cards.add(new ArrayList<>());
+		}
+
+		for (int i = 0; i < this.users.size(); i++, this.users.getNext()) {
 			redrawHand();
 		}
 	}
@@ -381,7 +384,6 @@ public class TeamHand extends Hand {
 
 	public void showHand() {
 		List<Drawable> cards = getCards();
-		if (cards.size() == 0) redrawHand();
 		BufferedImage bi = new BufferedImage(Math.max(5, cards.size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
