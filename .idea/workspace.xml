@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1024,14 +1026,7 @@
       <workItem from="1611845911767" duration="3880000" />
       <workItem from="1611860820196" duration="3169000" />
       <workItem from="1611921911483" duration="10106000" />
-      <workItem from="1611937108463" duration="10246000" />
-    </task>
-    <task id="LOCAL-03546" summary="Correções menores no desafios diarios">
-      <created>1611755606728</created>
-      <option name="number" value="03546" />
-      <option name="presentableId" value="LOCAL-03546" />
-      <option name="project" value="LOCAL" />
-      <updated>1611755606728</updated>
+      <workItem from="1611937108463" duration="10611000" />
     </task>
     <task id="LOCAL-03547" summary="Correções menores no desafios diarios">
       <created>1611755902723</created>
@@ -1369,7 +1364,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611947388194</updated>
     </task>
-    <option name="localTasksCounter" value="3595" />
+    <task id="LOCAL-03595" summary="Adição de filas ranqueadas (Solo/Duo)">
+      <created>1611947721221</created>
+      <option name="number" value="03595" />
+      <option name="presentableId" value="LOCAL-03595" />
+      <option name="project" value="LOCAL" />
+      <updated>1611947721223</updated>
+    </task>
+    <option name="localTasksCounter" value="3596" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1542,10 +1544,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611690233261" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611947387243">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611947720364">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611947387243" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611947720364" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1611932571567">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1594,10 +1596,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611947389097">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611947724990">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611947389097" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611947724990" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611697808035" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1611584154385">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1668,10 +1670,10 @@
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1608309711856" />
     <state x="567" y="240" width="768" height="698" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1611093407069" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1611941154607">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1611947682332">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1611941154607" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1611947682332" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1610249812093" />
   </component>
   <component name="XDebuggerManager">
