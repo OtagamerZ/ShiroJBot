@@ -146,19 +146,11 @@ public class Shoukan extends GlobalGame {
 		super(handler, new Board(
 						BoardSize.S_NONE,
 						bet,
-						players.length == 4 ?
-								Arrays.stream(players)
-										.map(User::getId)
-										.sorted(Comparator.reverseOrder())
-										.toArray(String[]::new)
-								:
-								Arrays.stream(players)
-										.map(User::getId)
-										.toArray(String[]::new)
-				),
-				channel,
-				ranked,
-				custom
+						Arrays.stream(players)
+								.map(User::getId)
+								.collect(Collectors.toList()),
+						players.length != 4
+				), channel, ranked, custom
 		);
 		this.channel = channel;
 		this.daily = daily;
