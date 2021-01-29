@@ -86,7 +86,6 @@ public class TeamHand extends Hand {
 			);
 			deque.addAll(kp.getEquipments());
 			deque.addAll(kp.getFields());
-			this.deques.add(deque);
 
 			Account acc = AccountDAO.getAccount(user.getId());
 			for (Drawable d : deque) d.setAcc(acc);
@@ -153,6 +152,9 @@ public class TeamHand extends Hand {
 				deque.remove(drawable);
 			}
 
+			this.deques.add(deque);
+			this.destinyDecks.add(destinyDeck);
+			this.cards.add(new ArrayList<>());
 			redrawHand();
 		}
 	}
@@ -457,7 +459,7 @@ public class TeamHand extends Hand {
 	}
 
 	public int sumAttack() {
-		return cards.stream().filter(d -> d instanceof Champion).mapToInt(d -> ((Champion) d).getAtk()).sum();
+		return getCards().stream().filter(d -> d instanceof Champion).mapToInt(d -> ((Champion) d).getAtk()).sum();
 	}
 
 	public int getMana() {
