@@ -50,14 +50,6 @@ public class Board {
 		Collections.reverse(this.players);
 	}
 
-	public Board(BoardSize size, long bet, List<String> players, boolean reverse) {
-		this.size = size;
-		this.players = players.stream().map(s -> new Player(s, bet, AccountDAO.getAccount(s).getLoan() > 0)).collect(Collectors.toCollection(InfiniteList::new));
-		this.matrix = new Piece[size.getHeight()][size.getWidth()];
-
-		if (reverse) Collections.reverse(this.players);
-	}
-
 	public BoardSize getSize() {
 		return size;
 	}
@@ -447,9 +439,5 @@ public class Board {
 		}
 		g2d.dispose();
 		return bi;
-	}
-
-	public boolean isAwarded() {
-		return awarded;
 	}
 }
