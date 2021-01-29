@@ -134,15 +134,17 @@ public class HitotsuCommand extends Command {
         }};
 
         Game t = new Hitotsu(Main.getShiroShards(), (TextChannel) channel, bet, players.toArray(User[]::new));
-		String msg;
+        String msg;
         if (players.size() > 2)
             msg = message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
         else
-			msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
+            msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
 
-        String hash = Helper.generateHash(guild, author);
-        ShiroInfo.getHashes().add(hash);
-        Main.getInfo().getConfirmationPending().put(author.getId(), true);
+        for (User player : players) {
+            String hash = Helper.generateHash(guild, player);
+            ShiroInfo.getHashes().add(hash);
+            Main.getInfo().getConfirmationPending().put(player.getId(), true);
+        }
         channel.sendMessage(msg).queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                     if (players.contains(mb.getUser())) {
                         if (Main.getInfo().gameInProgress(mb.getId())) {
@@ -153,24 +155,28 @@ public class HitotsuCommand extends Command {
                             return;
                         }
 
-                        if (!accepted.contains(mb.getId())) {
-                            channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
-                            accepted.add(mb.getId());
-                        }
+                        if (ShiroInfo.getHashes().remove(Helper.generateHash(guild, mb.getUser()))) {
+                            if (!accepted.contains(mb.getId())) {
+                                channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
+                                accepted.add(mb.getId());
+                            }
 
-                        if (accepted.size() == players.size()) {
-                            if (!ShiroInfo.getHashes().remove(hash)) return;
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                            //Main.getInfo().getGames().put(id, t);
-                            s.delete().queue(null, Helper::doNothing);
-                            t.start();
+                            if (accepted.size() == players.size()) {
+                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                                //Main.getInfo().getGames().put(id, t);
+                                s.delete().queue(null, Helper::doNothing);
+                                t.start();
+                            }
                         }
                     }
                 }), true, 1, TimeUnit.MINUTES,
                 u -> Helper.equalsAny(u.getId(), players.stream().map(User::getId).toArray(String[]::new)),
                 ms -> {
-                    ShiroInfo.getHashes().remove(hash);
-                    Main.getInfo().getConfirmationPending().invalidate(author.getId());
+                    for (User player : players) {
+                        String hash = Helper.generateHash(guild, player);
+                        ShiroInfo.getHashes().remove(hash);
+                        Main.getInfo().getConfirmationPending().invalidate(player.getId());
+                    }
                 })
         );
     }
