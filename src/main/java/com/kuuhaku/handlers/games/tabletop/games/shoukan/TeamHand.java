@@ -330,7 +330,7 @@ public class TeamHand extends Hand {
 
 	public void redrawHand() {
 		LinkedList<Drawable> deque = getDeque();
-		List<Drawable> cards = getCards();
+		List<Drawable> cards = this.cards.getCurrent();
 
 		deque.addAll(cards);
 		cards.clear();
