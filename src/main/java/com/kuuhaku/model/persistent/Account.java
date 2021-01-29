@@ -284,16 +284,16 @@ public class Account {
 					CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
 					Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
 						if (voted) {
-							System.out.println("Retrying vote");
 							DiscordBotsListHandler.retry(userId);
 						}
+
+						System.out.println("Returning value: " + voted);
 						voteCheck.complete(voted);
 					});
 
 					return voteCheck.get();
 				} else return false;
 			} catch (DateTimeParseException e) {
-				System.out.println("Wrong date");
 				CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
 				Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
 					if (voted) {
