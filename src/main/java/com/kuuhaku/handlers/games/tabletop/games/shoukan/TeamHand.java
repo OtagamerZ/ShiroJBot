@@ -56,7 +56,7 @@ public class TeamHand extends Hand {
 	private int manaReturn = 0;
 
 	public TeamHand(Shoukan game, List<User> users, List<Kawaipon> kps, Side side) {
-		super(game, users.get(0), kps.get(0), side);
+		super(game, null, kps.get(0), null);
 		this.side = side;
 		this.game = game;
 		if (game.getCustom() != null) {
@@ -94,9 +94,9 @@ public class TeamHand extends Hand {
 
 			if (game.getCustom() != null) {
 				if (game.getCustom().optBoolean("semequip"))
-					getDeque().removeIf(d -> d instanceof Equipment);
+					deque.removeIf(d -> d instanceof Equipment);
 				if (game.getCustom().optBoolean("semfield"))
-					getDeque().removeIf(d -> d instanceof Field);
+					deque.removeIf(d -> d instanceof Field);
 
 				switch (game.getCustom().optString("arcade")) {
 					case "roleta" -> {
@@ -330,6 +330,7 @@ public class TeamHand extends Hand {
 	}
 
 	public void redrawHand() {
+		System.out.println(deques.size());
 		LinkedList<Drawable> deque = getDeque();
 		List<Drawable> cards = getCards();
 
@@ -351,6 +352,7 @@ public class TeamHand extends Hand {
 	}
 
 	public LinkedList<Drawable> getDeque() {
+		System.out.println(deques.size());
 		LinkedList<Drawable> deque = deques.getCurrent();
 		List<Drawable> destinyDeck = getDestinyDeck();
 
