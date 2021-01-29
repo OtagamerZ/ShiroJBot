@@ -140,8 +140,9 @@ public class HitotsuCommand extends Command {
         else
             msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
 
+        long millis = System.currentTimeMillis();
         for (User player : players) {
-            String hash = Helper.generateHash(guild, player);
+            String hash = Helper.generateHash(guild, player, millis);
             ShiroInfo.getHashes().add(hash);
             Main.getInfo().getConfirmationPending().put(player.getId(), true);
         }
@@ -155,7 +156,7 @@ public class HitotsuCommand extends Command {
                             return;
                         }
 
-                        if (ShiroInfo.getHashes().remove(Helper.generateHash(guild, mb.getUser()))) {
+                        if (ShiroInfo.getHashes().remove(Helper.generateHash(guild, mb.getUser(), millis))) {
                             if (!accepted.contains(mb.getId())) {
                                 channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
                                 accepted.add(mb.getId());
@@ -173,7 +174,7 @@ public class HitotsuCommand extends Command {
                 u -> Helper.equalsAny(u.getId(), players.stream().map(User::getId).toArray(String[]::new)),
                 ms -> {
                     for (User player : players) {
-                        String hash = Helper.generateHash(guild, player);
+                        String hash = Helper.generateHash(guild, player, millis);
                         ShiroInfo.getHashes().remove(hash);
                         Main.getInfo().getConfirmationPending().invalidate(player.getId());
                     }
