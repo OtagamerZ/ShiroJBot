@@ -56,6 +56,15 @@ public class Hand {
 	private int manaReturn = 0;
 
 	public Hand(Shoukan game, User user, Kawaipon kp, Side side) {
+		if (user == null) {
+			this.game = game;
+			this.user = null;
+			this.deque = null;
+			this.side = null;
+			this.startingCount = 0;
+			this.manaPerTurn = 0;
+			return;
+		}
 		deque = new LinkedList<>() {{
 			addAll(kp.getChampions());
 		}};
