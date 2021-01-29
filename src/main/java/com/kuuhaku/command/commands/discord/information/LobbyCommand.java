@@ -57,10 +57,10 @@ public class LobbyCommand extends Command {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		List<Page> pages = new ArrayList<>();
 
-		List<List<MatchMakingRating>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getLobby().keySet(), 10);
+		List<List<MatchMakingRating>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getSoloLobby().keySet(), 10);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Saguão do Shoukan ranqueado (" + Main.getInfo().getMatchMaking().getLobby().size() + " jogadores)");
+				.setTitle("Saguão do Shoukan ranqueado (" + Main.getInfo().getMatchMaking().getSoloLobby().size() + " jogadores)");
 
 		StringBuilder sb = new StringBuilder();
 		for (List<MatchMakingRating> chunk : lobby) {

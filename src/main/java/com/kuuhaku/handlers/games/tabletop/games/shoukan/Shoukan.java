@@ -1538,7 +1538,7 @@ public class Shoukan extends GlobalGame {
 			if (!finished.get()) {
 				Hand op = getHands().get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
 				if (h.getHp() == 0) {
-					if (getCustom() == null && !team) {
+					if (getCustom() == null) {
 						getHistory().setWinner(op.getSide());
 						getBoard().awardWinner(this, daily, op.getUser().getId());
 					} else close();
@@ -1678,7 +1678,7 @@ public class Shoukan extends GlobalGame {
 
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			if (!h.manualDraw()) {
-				if (getCustom() == null && !team) {
+				if (getCustom() == null) {
 					getHistory().setWinner(next);
 					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 				} else close();
@@ -1857,7 +1857,7 @@ public class Shoukan extends GlobalGame {
 		if (getRound() > 8)
 			buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 				if (!ShiroInfo.getHashes().remove(hash.get())) return;
-				if (getCustom() == null && !team) {
+				if (getCustom() == null) {
 					getHistory().setWinner(next);
 					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 				} else close();
