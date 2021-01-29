@@ -77,6 +77,7 @@ public class Shoukan extends GlobalGame {
 	private final List<Champion> fusions = CardDAO.getFusions();
 	private final boolean[] changed = {false, false, false, false, false};
 	private final boolean daily;
+	private final boolean team;
 	private Phase phase = Phase.PLAN;
 	private boolean draw = false;
 	private Side current = Side.BOTTOM;
@@ -91,6 +92,7 @@ public class Shoukan extends GlobalGame {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
 		this.channel = channel;
 		this.daily = daily;
+		this.team = false;
 
 		this.hands = Map.of(
 				Side.TOP, new Hand(this, players[0], clans.get(0), Side.TOP),
@@ -144,14 +146,29 @@ public class Shoukan extends GlobalGame {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
 		this.channel = channel;
 		this.daily = daily;
+		this.team = players.length == 4;
 
-		Kawaipon p1 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[0].getId());
-		Kawaipon p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[1].getId());
+		if (team) {
+			List<Kawaipon> kps = daily ? Collections.nCopies(4, Helper.getDailyDeck()) : List.of(
+					KawaiponDAO.getKawaipon(players[0].getId()),
+					KawaiponDAO.getKawaipon(players[2].getId()),
+					KawaiponDAO.getKawaipon(players[1].getId()),
+					KawaiponDAO.getKawaipon(players[3].getId())
+			);
 
-		this.hands = Map.of(
-				Side.TOP, new Hand(this, players[0], p1, Side.TOP),
-				Side.BOTTOM, new Hand(this, players[1], p2, Side.BOTTOM)
-		);
+			this.hands = Map.of(
+					Side.TOP, new TeamHand(this, List.of(players[0], players[2]), kps.subList(0, 2), Side.TOP),
+					Side.BOTTOM, new TeamHand(this, List.of(players[1], players[3]), kps.subList(2, 4), Side.BOTTOM)
+			);
+		} else {
+			Kawaipon p1 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[0].getId());
+			Kawaipon p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[1].getId());
+
+			this.hands = Map.of(
+					Side.TOP, new Hand(this, players[0], p1, Side.TOP),
+					Side.BOTTOM, new Hand(this, players[1], p2, Side.BOTTOM)
+			);
+		}
 		this.clans = null;
 
 		if (custom == null)
@@ -1521,19 +1538,29 @@ public class Shoukan extends GlobalGame {
 			if (!finished.get()) {
 				Hand op = getHands().get(s == Side.TOP ? Side.BOTTOM : Side.TOP);
 				if (h.getHp() == 0) {
-					if (getCustom() == null) {
+					if (getCustom() == null && !team) {
 						getHistory().setWinner(op.getSide());
 						getBoard().awardWinner(this, daily, op.getUser().getId());
 					} else close();
 					finished.set(true);
-					channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
-							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-							.queue(msg ->
-									this.message.compute(msg.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return msg;
-									}));
+					if (team)
+						channel.sendMessage(((TeamHand) op).getMentions() + " zeraram os pontos de vida de " + ((TeamHand) h).getMentions() + ", temos os vencedores! (" + getRound() + " turnos)")
+								.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+								.queue(msg ->
+										this.message.compute(msg.getChannel().getId(), (id, m) -> {
+											if (m != null)
+												m.delete().queue(null, Helper::doNothing);
+											return msg;
+										}));
+					else
+						channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
+								.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+								.queue(msg ->
+										this.message.compute(msg.getChannel().getId(), (id, m) -> {
+											if (m != null)
+												m.delete().queue(null, Helper::doNothing);
+											return msg;
+										}));
 				}
 			}
 		}
@@ -1651,18 +1678,28 @@ public class Shoukan extends GlobalGame {
 
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			if (!h.manualDraw()) {
-				if (getCustom() == null) {
+				if (getCustom() == null && !team) {
 					getHistory().setWinner(next);
 					getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 				} else close();
-				channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + getPlayerById(getBoard().getPlayers().get(1).getId()).getAsMention() + " venceu! (" + getRound() + " turnos)")
-						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
-						.queue(msg ->
-								this.message.compute(msg.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return msg;
-								}));
+				if (team)
+					channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + ((TeamHand) getHands().get(next)).getMentions() + " venceram! (" + getRound() + " turnos)")
+							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+							.queue(msg ->
+									this.message.compute(msg.getChannel().getId(), (id, m) -> {
+										if (m != null)
+											m.delete().queue(null, Helper::doNothing);
+										return msg;
+									}));
+				else
+					channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + getHands().get(next).getUser().getAsMention() + " venceu! (" + getRound() + " turnos)")
+							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
+							.queue(msg ->
+									this.message.compute(msg.getChannel().getId(), (id, m) -> {
+										if (m != null)
+											m.delete().queue(null, Helper::doNothing);
+										return msg;
+									}));
 				return;
 			}
 
@@ -1820,7 +1857,7 @@ public class Shoukan extends GlobalGame {
 		if (getRound() > 8)
 			buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 				if (!ShiroInfo.getHashes().remove(hash.get())) return;
-				if (getCustom() == null) {
+				if (getCustom() == null && !team) {
 					getHistory().setWinner(next);
 					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 				} else close();
@@ -2039,6 +2076,7 @@ public class Shoukan extends GlobalGame {
 		decreaseELockTime();
 		super.resetTimer(shkn);
 
+		if (team) ((TeamHand) hands.get(current)).next();
 		current = next;
 		next = current == Side.TOP ? Side.BOTTOM : Side.TOP;
 	}

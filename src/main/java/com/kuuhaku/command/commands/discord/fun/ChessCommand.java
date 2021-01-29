@@ -106,7 +106,10 @@ public class ChessCommand extends Command {
                             if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
                                 if (!ShiroInfo.getHashes().remove(hash)) return;
                                 Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                                if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
+                                if (Main.getInfo().gameInProgress(mb.getId())) {
+                                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+                                    return;
+                                } else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
                                     channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
                                     return;
                                 }
