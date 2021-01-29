@@ -428,7 +428,6 @@ public class Hand {
 	}
 
 	public void showHand() {
-		if (cards.size() == 0) redrawHand();
 		BufferedImage bi = new BufferedImage(Math.max(5, cards.size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
