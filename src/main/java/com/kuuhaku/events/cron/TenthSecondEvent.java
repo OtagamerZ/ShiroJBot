@@ -186,14 +186,14 @@ public class TenthSecondEvent implements Job {
 
 			if (!Helper.isTwice(mmrs)
 				&& tierDiff <= 1) {
-				Main.getInfo().getMatchMaking().getSoloLobby().keySet().removeAll(List.of(mmrs));
+				Main.getInfo().getMatchMaking().getDuoLobby().keySet().removeAll(List.of(mmrs));
 
 				List<TextChannel> channels = ps.stream().map(Map.Entry::getValue).map(Pair::getRight).collect(Collectors.toList());
 
 				List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
 
 				Runnable result = () -> {
-					Main.getInfo().getMatchMaking().getSoloLobby().keySet().removeAll(List.of(mmrs));
+					Main.getInfo().getMatchMaking().getDuoLobby().keySet().removeAll(List.of(mmrs));
 
 					for (MatchMakingRating mmr : mmrs) {
 						mmr.setEvades(0);
@@ -229,12 +229,12 @@ public class TenthSecondEvent implements Job {
 								p.getLeft().getValue().getRight().sendMessage("Um dos jogadores não confirmou a partida a tempo, você foi retornado ao saguão.").queue(s ->
 										Pages.buttonize(s, Map.of(
 												Helper.CANCEL, (mb, ms) -> {
-													Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
+													Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
 													ms.delete().queue();
 												}), false, 30, TimeUnit.MINUTES
 												, u -> u.getId().equals(mmr.getUserId())
 												, ms -> {
-													Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
+													Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
 													ms.delete().queue();
 												}
 										)
@@ -243,7 +243,7 @@ public class TenthSecondEvent implements Job {
 										p.getLeft().getValue().getLeft() + 1,
 										p.getLeft().getValue().getRight()
 								);
-								Main.getInfo().getMatchMaking().getSoloLobby().put(mmr, newPair);
+								Main.getInfo().getMatchMaking().getDuoLobby().put(mmr, newPair);
 							}
 						}
 					}
