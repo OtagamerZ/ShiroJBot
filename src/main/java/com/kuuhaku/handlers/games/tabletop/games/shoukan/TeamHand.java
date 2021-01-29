@@ -330,7 +330,6 @@ public class TeamHand extends Hand {
 	}
 
 	public void redrawHand() {
-		System.out.println(deques.size());
 		LinkedList<Drawable> deque = getDeque();
 		List<Drawable> cards = getCards();
 
@@ -352,7 +351,6 @@ public class TeamHand extends Hand {
 	}
 
 	public LinkedList<Drawable> getDeque() {
-		System.out.println(deques.size());
 		LinkedList<Drawable> deque = deques.getCurrent();
 		List<Drawable> destinyDeck = getDestinyDeck();
 
