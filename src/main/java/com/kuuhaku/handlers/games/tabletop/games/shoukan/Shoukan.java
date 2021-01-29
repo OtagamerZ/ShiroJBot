@@ -29,7 +29,6 @@ import com.kuuhaku.handlers.games.tabletop.ClusterAction;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
-import com.kuuhaku.handlers.games.tabletop.framework.Player;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
@@ -149,34 +148,33 @@ public class Shoukan extends GlobalGame {
 		this.daily = daily;
 		this.team = players.length == 4;
 
-		List<Player> ps = getBoard().getPlayers();
 		if (team) {
 			List<Kawaipon> kps = daily ? Collections.nCopies(4, Helper.getDailyDeck()) : List.of(
-					KawaiponDAO.getKawaipon(ps.get(0).getId()),
-					KawaiponDAO.getKawaipon(ps.get(2).getId()),
-					KawaiponDAO.getKawaipon(ps.get(1).getId()),
-					KawaiponDAO.getKawaipon(ps.get(3).getId())
+					KawaiponDAO.getKawaipon(players[2].getId()),
+					KawaiponDAO.getKawaipon(players[0].getId()),
+					KawaiponDAO.getKawaipon(players[3].getId()),
+					KawaiponDAO.getKawaipon(players[1].getId())
 			);
 
 			this.hands = Map.of(
-					Side.TOP, new TeamHand(this, List.of(ps.get(0).getUser(), ps.get(2).getUser()), kps.subList(0, 2), Side.TOP),
-					Side.BOTTOM, new TeamHand(this, List.of(ps.get(1).getUser(), ps.get(3).getUser()), kps.subList(2, 4), Side.BOTTOM)
+					Side.TOP, new TeamHand(this, List.of(players[2], players[0]), kps.subList(0, 2), Side.TOP),
+					Side.BOTTOM, new TeamHand(this, List.of(players[3], players[1]), kps.subList(2, 4), Side.BOTTOM)
 			);
 		} else {
-			Kawaipon p1 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(ps.get(0).getId());
-			Kawaipon p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(ps.get(1).getId());
+			Kawaipon p1 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[0].getId());
+			Kawaipon p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[1].getId());
 
 			this.hands = Map.of(
-					Side.TOP, new Hand(this, ps.get(0).getUser(), p1, Side.TOP),
-					Side.BOTTOM, new Hand(this, ps.get(1).getUser(), p2, Side.BOTTOM)
+					Side.TOP, new Hand(this, players[0], p1, Side.TOP),
+					Side.BOTTOM, new Hand(this, players[1], p2, Side.BOTTOM)
 			);
 		}
 		this.clans = null;
 
 		if (custom == null)
 			getHistory().setPlayers(Map.of(
-					ps.get(0).getId(), Side.TOP,
-					ps.get(1).getId(), Side.BOTTOM
+					players[0].getId(), Side.TOP,
+					players[1].getId(), Side.BOTTOM
 			));
 
 		setActions(

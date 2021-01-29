@@ -18,9 +18,6 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
-import com.kuuhaku.Main;
-import net.dv8tion.jda.api.entities.User;
-
 public class Player {
 	private final String id;
 	private final long bet;
@@ -35,10 +32,6 @@ public class Player {
 
 	public String getId() {
 		return id;
-	}
-
-	public User getUser() {
-		return Main.getInfo().getUserByID(id);
 	}
 
 	public long getBet() {
