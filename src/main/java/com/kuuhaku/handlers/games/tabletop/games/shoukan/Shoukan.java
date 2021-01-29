@@ -37,6 +37,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.DailyTask;
+import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
@@ -143,7 +144,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, User... players) {
-		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
+		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, custom, ranked, players.length == 4 ? RankedQueue.DUO : RankedQueue.SOLO);
 		this.channel = channel;
 		this.daily = daily;
 		this.team = players.length == 4;
