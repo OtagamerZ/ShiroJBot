@@ -141,7 +141,7 @@ public class ShoukanCommand extends Command {
 			RankedQueue rq = RankedQueue.valueOf(args[1].toUpperCase());
 			mm.joinLobby(mmr, rq, (TextChannel) channel);
 			switch (rq) {
-				case SOLO -> channel.sendMessage("Você entrou no saguão com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getSoloLobby().size() - 1) + " no saguão).").queue(s ->
+				case SOLO -> channel.sendMessage("Você entrou no saguão SOLO com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getSoloLobby().size() - 1) + " no saguão).").queue(s ->
 						Pages.buttonize(s, Collections.emptyMap(), true, 30, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 								, ms -> {
@@ -150,7 +150,7 @@ public class ShoukanCommand extends Command {
 								}
 						)
 				);
-				case DUO -> channel.sendMessage("Você entrou no saguão com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getDuoLobby().size() - 1) + " no saguão).").queue(s ->
+				case DUO -> channel.sendMessage("Você entrou no saguão DUO com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getDuoLobby().size() - 1) + " no saguão).").queue(s ->
 						Pages.buttonize(s, Collections.emptyMap(), true, 30, TimeUnit.MINUTES
 								, u -> u.getId().equals(author.getId())
 								, ms -> {
