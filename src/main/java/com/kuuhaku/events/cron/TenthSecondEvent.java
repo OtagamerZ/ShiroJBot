@@ -188,6 +188,7 @@ public class TenthSecondEvent implements Job {
 				&& tierDiff <= 1) {
 				Main.getInfo().getMatchMaking().getDuoLobby().keySet().removeAll(List.of(mmrs));
 
+				System.out.println(teams.toString());
 				List<TextChannel> channels = ps.stream().map(Map.Entry::getValue).map(Pair::getRight).collect(Collectors.toList());
 
 				List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
@@ -213,13 +214,11 @@ public class TenthSecondEvent implements Job {
 										Stream.of(teams.getLeft(), teams.getRight())
 												.flatMap(List::stream)
 												.map(MatchMakingRating::getUser)
-												.peek(System.out::println)
 												.toArray(User[]::new)
 										:
 										Stream.of(teams.getRight(), teams.getLeft())
 												.flatMap(List::stream)
 												.map(MatchMakingRating::getUser)
-												.peek(System.out::println)
 												.toArray(User[]::new)
 						);
 						g.start();
