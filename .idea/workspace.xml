@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1026,14 +1026,7 @@
       <workItem from="1611845911767" duration="3880000" />
       <workItem from="1611860820196" duration="3169000" />
       <workItem from="1611921911483" duration="10106000" />
-      <workItem from="1611937108463" duration="13944000" />
-    </task>
-    <task id="LOCAL-03555" summary="Correções menores no desafios diarios">
-      <created>1611759181250</created>
-      <option name="number" value="03555" />
-      <option name="presentableId" value="LOCAL-03555" />
-      <option name="project" value="LOCAL" />
-      <updated>1611759181250</updated>
+      <workItem from="1611937108463" duration="14312000" />
     </task>
     <task id="LOCAL-03556" summary="Correções menores no desafios diarios">
       <created>1611759304169</created>
@@ -1371,7 +1364,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611951263207</updated>
     </task>
-    <option name="localTasksCounter" value="3604" />
+    <task id="LOCAL-03604" summary="Adição de filas ranqueadas (Solo/Duo)">
+      <created>1611951643035</created>
+      <option name="number" value="03604" />
+      <option name="presentableId" value="LOCAL-03604" />
+      <option name="project" value="LOCAL" />
+      <updated>1611951643035</updated>
+    </task>
+    <option name="localTasksCounter" value="3605" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1544,10 +1544,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611690233261" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611951262323">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611951642154">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611951262323" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611951642154" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1611932571567">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1596,10 +1596,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611951264203">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611951644950">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611951264203" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611951644950" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611697808035" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1611584154385">
       <screen x="0" y="0" width="1680" height="1010" />
