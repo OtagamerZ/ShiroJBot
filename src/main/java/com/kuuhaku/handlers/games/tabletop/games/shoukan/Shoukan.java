@@ -150,15 +150,15 @@ public class Shoukan extends GlobalGame {
 
 		if (team) {
 			List<Kawaipon> kps = daily ? Collections.nCopies(4, Helper.getDailyDeck()) : List.of(
-					KawaiponDAO.getKawaipon(players[0].getId()),
 					KawaiponDAO.getKawaipon(players[2].getId()),
-					KawaiponDAO.getKawaipon(players[1].getId()),
-					KawaiponDAO.getKawaipon(players[3].getId())
+					KawaiponDAO.getKawaipon(players[0].getId()),
+					KawaiponDAO.getKawaipon(players[3].getId()),
+					KawaiponDAO.getKawaipon(players[1].getId())
 			);
 
 			this.hands = Map.of(
-					Side.TOP, new TeamHand(this, List.of(players[0], players[2]), kps.subList(0, 2), Side.TOP),
-					Side.BOTTOM, new TeamHand(this, List.of(players[1], players[3]), kps.subList(2, 4), Side.BOTTOM)
+					Side.TOP, new TeamHand(this, List.of(players[2], players[0]), kps.subList(0, 2), Side.TOP),
+					Side.BOTTOM, new TeamHand(this, List.of(players[3], players[1]), kps.subList(2, 4), Side.BOTTOM)
 			);
 		} else {
 			Kawaipon p1 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[0].getId());
