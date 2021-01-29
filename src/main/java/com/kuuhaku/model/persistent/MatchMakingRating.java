@@ -173,8 +173,122 @@ public class MatchMakingRating {
 			rankPoints += rpValue;
 	}
 
+	public void increaseRankPoints(List<MatchMakingRating> op) {
+		double avgOpMMR = op.stream().mapToLong(MatchMakingRating::getMMR).average().orElse(0);
+		double mmrModif = Helper.prcnt(mmr, Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) avgOpMMR, mmr);
+		int rpValue = Helper.minMax((int) Math.round(mmrModif * 15), 5, 30);
+		if (tier == RankedTier.UNRANKED) {
+			promWins++;
+
+			if (promWins + promLosses == tier.getMd()) {
+				tier = RankedTier.INITIATE_IV;
+				rankPoints = 0;
+				promWins = promLosses = 0;
+
+				if (StringUtils.isNumeric(master)) {
+					Account acc = AccountDAO.getAccount(master);
+					master = "FULFILLED_" + master;
+					User u = Main.getInfo().getUserByID(userId);
+					u.openPrivateChannel()
+							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratúitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
+							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
+							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Iniciado IV, você recebeu **25.000 créditos**!"))
+							.queue(null, Helper::doNothing);
+
+					acc.addCredit(25000, this.getClass());
+					AccountDAO.saveAccount(acc);
+
+					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + userId);
+					DynamicParameterDAO.setParam("freeSynth_" + userId, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
+				} else {
+					Main.getInfo().getUserByID(userId).openPrivateChannel()
+							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+							.queue(null, Helper::doNothing);
+				}
+				return;
+			}
+			return;
+		} else if (rankPoints == 100) {
+			promWins++;
+
+			if (promWins > tier.getMd() / 2f) {
+				tier = tier.getNext();
+				rankPoints = 0;
+				promWins = promLosses = 0;
+				Main.getInfo().getUserByID(userId).openPrivateChannel()
+						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+						.queue(null, Helper::doNothing);
+				return;
+			}
+			return;
+		}
+
+		if (tier != RankedTier.ARCHMAGE)
+			rankPoints = Math.min(rankPoints + rpValue, 100);
+		else
+			rankPoints += rpValue;
+	}
+
 	public void decreaseRankPoints(MatchMakingRating op) {
 		double mmrModif = Helper.prcnt(Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) op.getMMR());
+		int rpValue = Helper.minMax((int) Math.round(mmrModif * 15), 5, 30);
+
+		if (tier == RankedTier.UNRANKED) {
+			promLosses++;
+
+			if (promWins + promLosses == tier.getMd()) {
+				tier = RankedTier.INITIATE_IV;
+				rankPoints = 0;
+				promWins = promLosses = 0;
+
+				if (StringUtils.isNumeric(master)) {
+					Account acc = AccountDAO.getAccount(master);
+					master = "FULFILLED_" + master;
+					User u = Main.getInfo().getUserByID(userId);
+					u.openPrivateChannel()
+							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratúitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
+							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
+							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Iniciado IV, você recebeu **25.000 créditos**!"))
+							.queue(null, Helper::doNothing);
+
+					acc.addCredit(25000, this.getClass());
+					AccountDAO.saveAccount(acc);
+
+					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + userId);
+					DynamicParameterDAO.setParam("freeSynth_" + userId, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
+				} else {
+					Main.getInfo().getUserByID(userId).openPrivateChannel()
+							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+							.queue(null, Helper::doNothing);
+				}
+			}
+			return;
+		} else if (rankPoints == 100) {
+			promLosses++;
+
+			if (promLosses > tier.getMd() / 2f) {
+				rankPoints -= rpValue * promLosses;
+				promWins = promLosses = 0;
+				return;
+			}
+			return;
+		}
+
+		if (rankPoints == 0 && Helper.chance(20 * mmrModif) && tier != RankedTier.INITIATE_IV) {
+			tier = tier.getPrevious();
+			rankPoints = 75;
+			Main.getInfo().getUserByID(userId).openPrivateChannel()
+					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+					.queue(null, Helper::doNothing);
+			return;
+		}
+
+		rankPoints = Math.max(0, rankPoints - rpValue);
+	}
+
+	public void decreaseRankPoints(List<MatchMakingRating> op) {
+		double avgOpMMR = op.stream().mapToLong(MatchMakingRating::getMMR).average().orElse(0);
+		double mmrModif = Helper.prcnt(Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) avgOpMMR);
 		int rpValue = Helper.minMax((int) Math.round(mmrModif * 15), 5, 30);
 
 		if (tier == RankedTier.UNRANKED) {
@@ -297,7 +411,7 @@ public class MatchMakingRating {
 		this.master = master;
 	}
 
-	public static Map<Side, Pair<String, Map<String, Integer>>> calcMMR(MatchHistory mh) {
+	public static Map<Side, Pair<String, Map<String, Integer>>> calcSoloMMR(MatchHistory mh) {
 		Map<Side, Pair<String, Map<String, Integer>>> finalData = new HashMap<>();
 		for (Side s : Side.values()) {
 			List<MatchRound> rounds = mh.getRounds().entrySet().stream()
@@ -338,6 +452,57 @@ public class MatchMakingRating {
 				ph.set(jo);
 			}
 			finalData.put(s, fd);
+		}
+
+		return finalData;
+	}
+
+	public static Map<Side, List<Pair<String, Map<String, Integer>>>> calcDuoMMR(MatchHistory mh) {
+		Map<Side, List<Pair<String, Map<String, Integer>>>> finalData = new HashMap<>();
+		for (Side s : Side.values()) {
+			List<MatchRound> rounds = mh.getRounds().entrySet().stream()
+					.sorted(Comparator.comparingInt(Map.Entry::getKey))
+					.map(Map.Entry::getValue)
+					.filter(mr -> mr.getSide() == s)
+					.collect(Collectors.toList());
+
+			Set<String> ids = new HashSet<>();
+			for (MatchRound round : rounds) {
+				ids.add(round.getScript()
+						.getJSONObject(s.name().toLowerCase())
+						.getString("id"));
+			}
+
+			for (String id : ids) {
+				Pair<String, Map<String, Integer>> fd = Pair.of(id, new HashMap<>());
+
+				AtomicReference<JSONObject> ph = new AtomicReference<>();
+				for (MatchRound round : rounds) {
+					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase());
+					if (!jo.getString("id").equals(id)) continue;
+					else if (ph.get() == null) {
+						for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
+							String k = entry.getKey();
+							Object v = entry.getValue();
+							if (!k.equals("id")) {
+								int rv = (int) v;
+								fd.getRight().put(k, rv);
+							}
+						}
+					} else {
+						for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
+							String k = entry.getKey();
+							Object v = entry.getValue();
+							if (!k.equals("id")) {
+								int rv = (int) v - ph.get().optInt(k);
+								fd.getRight().computeIfPresent(k, (key, value) -> rv);
+							}
+						}
+					}
+					ph.set(jo);
+				}
+				finalData.compute(s, (k, v) -> v == null ? new ArrayList<>() : v).add(fd);
+			}
 		}
 
 		return finalData;
