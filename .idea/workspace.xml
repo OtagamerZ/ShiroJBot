@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1015,14 +1016,7 @@
       <workItem from="1611845911767" duration="3880000" />
       <workItem from="1611860820196" duration="3169000" />
       <workItem from="1611921911483" duration="10106000" />
-      <workItem from="1611937108463" duration="1060000" />
-    </task>
-    <task id="LOCAL-03538" summary="Correção nos requisitos da licença de comércio">
-      <created>1611603782145</created>
-      <option name="number" value="03538" />
-      <option name="presentableId" value="LOCAL-03538" />
-      <option name="project" value="LOCAL" />
-      <updated>1611603782145</updated>
+      <workItem from="1611937108463" duration="1380000" />
     </task>
     <task id="LOCAL-03539" summary="Correção nos tickets">
       <created>1611604767499</created>
@@ -1360,7 +1354,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611937907925</updated>
     </task>
-    <option name="localTasksCounter" value="3587" />
+    <task id="LOCAL-03587" summary="Adicionado Shoukan em duplas">
+      <created>1611938226182</created>
+      <option name="number" value="03587" />
+      <option name="presentableId" value="LOCAL-03587" />
+      <option name="project" value="LOCAL" />
+      <updated>1611938226182</updated>
+    </task>
+    <option name="localTasksCounter" value="3588" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1533,10 +1534,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611690233261" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611937907057">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1611938225313">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611937907057" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1611938225313" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1611932571567">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1571,10 +1572,10 @@
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1610652298040" />
     <state width="224" height="471" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1603507846095" />
-    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1611937356815">
+    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1611938415702">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611937356815" />
+    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1611938415702" />
     <state x="626" y="235" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1611290490285" />
     <state x="303" y="75" key="SettingsEditor" timestamp="1606877192402">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -1585,10 +1586,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611937909323">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611938227469">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611937909323" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611938227469" />
     <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611697808035" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1611584154385">
       <screen x="0" y="0" width="1680" height="1010" />
