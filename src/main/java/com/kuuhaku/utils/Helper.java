@@ -1999,4 +1999,13 @@ public class Helper {
 		User u = Main.getInfo().getUserByID(id);
 		return msg.isMentioned(u, Message.MentionType.USER);
 	}
+
+	public static <T> List<T> getIndexes(List<T> list, int... indexes) {
+		List<T> out = new ArrayList<>();
+		for (int index : indexes) {
+			if (index < list.size()) out.add(list.get(index));
+		}
+
+		return out;
+	}
 }
