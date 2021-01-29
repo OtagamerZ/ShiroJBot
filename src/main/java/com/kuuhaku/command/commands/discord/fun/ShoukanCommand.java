@@ -238,8 +238,9 @@ public class ShoukanCommand extends Command {
 					add(author.getId());
 				}};
 
+				long millis = System.currentTimeMillis();
 				for (User player : players) {
-					String hash = Helper.generateHash(guild, player);
+					String hash = Helper.generateHash(guild, player, millis);
 					ShiroInfo.getHashes().add(hash);
 					Main.getInfo().getConfirmationPending().put(player.getId(), true);
 				}
@@ -255,7 +256,7 @@ public class ShoukanCommand extends Command {
 											return;
 										}
 
-										if (ShiroInfo.getHashes().remove(Helper.generateHash(guild, mb.getUser()))) {
+										if (ShiroInfo.getHashes().remove(Helper.generateHash(guild, mb.getUser(), millis))) {
 											if (!accepted.contains(mb.getId())) {
 												channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
 												accepted.add(mb.getId());
@@ -273,7 +274,7 @@ public class ShoukanCommand extends Command {
 								u -> Helper.equalsAny(u.getId(), players.stream().map(User::getId).toArray(String[]::new)),
 								ms -> {
 									for (User player : players) {
-										String hash = Helper.generateHash(guild, player);
+										String hash = Helper.generateHash(guild, player, millis);
 										ShiroInfo.getHashes().remove(hash);
 										Main.getInfo().getConfirmationPending().invalidate(player.getId());
 									}

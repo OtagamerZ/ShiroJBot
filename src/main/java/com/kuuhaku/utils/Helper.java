@@ -1718,6 +1718,10 @@ public class Helper {
 		}
 	}
 
+	public static String generateHash(Guild guild, User user, long millis) {
+		return hash((guild.getId() + user.getId() + millis).getBytes(StandardCharsets.UTF_8), "SHA-256");
+	}
+
 	public static String generateHash(Guild guild, User user) {
 		return hash((guild.getId() + user.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-256");
 	}
