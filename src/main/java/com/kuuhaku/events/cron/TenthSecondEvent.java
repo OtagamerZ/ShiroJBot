@@ -84,6 +84,7 @@ public class TenthSecondEvent implements Job {
 						}
 					}
 				}
+				Main.getInfo().getMatchMaking().getDuoLobby().computeIfPresent(duoLobby.get(a).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 			}
 		}
 
@@ -183,7 +184,9 @@ public class TenthSecondEvent implements Job {
 			Triple<List<MatchMakingRating>, Double, List<MatchMakingRating>> teams = Helper.balanceSides(mmr -> (int) mmr.getMMR(), mmrs);
 			int tierDiff = (int) Stream.of(teams.getLeft(), teams.getRight()).flatMap(List::stream).mapToInt(mmr -> mmr.getTier().getTier()).average().orElse(0);
 
-			if (!Helper.isTwice(mmrs) && Helper.between(teams.getMiddle() * 100, 40, 60) && tierDiff <= 1) {
+			if (!Helper.isTwice(mmrs)
+				&& Helper.between(teams.getMiddle() * 100, 40, 60)
+				&& tierDiff <= 1) {
 				Main.getInfo().getMatchMaking().getSoloLobby().keySet().removeAll(List.of(mmrs));
 
 				List<TextChannel> channels = ps.stream().map(Map.Entry::getValue).map(Pair::getRight).collect(Collectors.toList());
