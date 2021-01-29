@@ -275,6 +275,7 @@ public class Account {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		try {
 			try {
+				System.out.println("Checking vote");
 				ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
 				if (today.isBefore(lastVote.plusHours(12)) && voted) {
@@ -283,20 +284,22 @@ public class Account {
 					CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
 					Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
 						if (voted) {
+							System.out.println("Retrying vote");
 							DiscordBotsListHandler.retry(userId);
-							voteCheck.complete(true);
-						} else voteCheck.complete(false);
+						}
+						voteCheck.complete(voted);
 					});
 
 					return voteCheck.get();
 				} else return false;
 			} catch (DateTimeParseException e) {
+				System.out.println("Wrong date");
 				CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
 				Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
 					if (voted) {
 						DiscordBotsListHandler.retry(userId);
-						voteCheck.complete(true);
-					} else voteCheck.complete(false);
+					}
+					voteCheck.complete(voted);
 				});
 
 				return voteCheck.get();
