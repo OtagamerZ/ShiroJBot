@@ -32,6 +32,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Kawaipon;
@@ -46,6 +47,7 @@ import org.json.JSONObject;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ShoukanCommand extends Command {
 
@@ -125,24 +127,39 @@ public class ShoukanCommand extends Command {
 			if (mm.inGame(author.getId())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 				return;
-			} else if (mm.getLobby().keySet().stream().anyMatch(mr -> mr.getUserId().equals(author.getId()))) {
-				channel.sendMessage("❌ | Você já está no saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
+			} else if (Stream.of(mm.getSoloLobby().keySet(), mm.getDuoLobby().keySet()).flatMap(Set::stream).anyMatch(mr -> mr.getUserId().equals(author.getId()))) {
+				channel.sendMessage("❌ | Você já está em um saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
 				return;
 			} else if (mmr.isBlocked()) {
 				channel.sendMessage("❌ | Você está impedido de entrar no saguão ranqueado devido a um abandono recente (Tempo restante: %s seg).".formatted(mmr.getRemainingBlock())).queue();
 				return;
+			} else if (args.length < 2 || !Helper.equalsAny(args[1], "solo", "duo")) {
+				channel.sendMessage("❌ | Você precisa informar o tipo de fila que deseja entrar (`SOLO` ou `DUO`)").queue();
+				return;
 			}
 
-			mm.joinLobby(mmr, (TextChannel) channel);
-			channel.sendMessage("Você entrou no saguão com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getLobby().size() - 1) + " no saguão).").queue(s ->
-					Pages.buttonize(s, Collections.emptyMap(), true, 30, TimeUnit.MINUTES
-							, u -> u.getId().equals(author.getId())
-							, ms -> {
-								mm.getLobby().remove(mmr);
-								ms.delete().queue();
-							}
-					)
-			);
+			RankedQueue rq = RankedQueue.valueOf(args[1].toUpperCase());
+			mm.joinLobby(mmr, rq, (TextChannel) channel);
+			switch (rq) {
+				case SOLO -> channel.sendMessage("Você entrou no saguão com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getSoloLobby().size() - 1) + " no saguão).").queue(s ->
+						Pages.buttonize(s, Collections.emptyMap(), true, 30, TimeUnit.MINUTES
+								, u -> u.getId().equals(author.getId())
+								, ms -> {
+									mm.getSoloLobby().remove(mmr);
+									ms.delete().queue();
+								}
+						)
+				);
+				case DUO -> channel.sendMessage("Você entrou no saguão com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getDuoLobby().size() - 1) + " no saguão).").queue(s ->
+						Pages.buttonize(s, Collections.emptyMap(), true, 30, TimeUnit.MINUTES
+								, u -> u.getId().equals(author.getId())
+								, ms -> {
+									mm.getSoloLobby().remove(mmr);
+									ms.delete().queue();
+								}
+						)
+				);
+			}
 		} else {
 			if (message.getMentionedUsers().size() == 0) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();

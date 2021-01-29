@@ -26,6 +26,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.enums.DailyTask;
+import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchMakingRating;
@@ -39,6 +40,7 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Executors;
@@ -47,6 +49,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public abstract class GlobalGame {
 	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
@@ -56,6 +59,7 @@ public abstract class GlobalGame {
 	private final JSONObject custom;
 	private final MatchHistory history = new MatchHistory();
 	private final boolean ranked;
+	private final RankedQueue queue;
 	private Consumer<Message> onExpiration;
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
@@ -71,6 +75,7 @@ public abstract class GlobalGame {
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
 		this.ranked = ranked;
 		this.custom = null;
+		this.queue = null;
 	}
 
 	public GlobalGame(ShardManager handler, Board board, GameChannel channel, boolean ranked, JSONObject custom) {
@@ -80,6 +85,16 @@ public abstract class GlobalGame {
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
 		this.ranked = ranked;
 		this.custom = custom;
+		this.queue = null;
+	}
+
+	public GlobalGame(ShardManager handler, Board board, GameChannel channel, JSONObject custom, boolean ranked, RankedQueue queue) {
+		this.handler = handler;
+		this.board = board;
+		this.channel = channel;
+		this.custom = custom;
+		this.ranked = ranked;
+		this.queue = queue;
 	}
 
 	public void setActions(Consumer<Message> onExpiration, Consumer<Message> onWO) {
@@ -275,48 +290,99 @@ public abstract class GlobalGame {
 		if (round > 0 && custom == null) {
 			MatchDAO.saveMatch(history);
 
-			Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcMMR(history);
-			for (Side s : Side.values()) {
-				Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
-				Map<String, Integer> yourResult = result.get(s).getRight();
-				Map<String, Integer> hisResult = result.get(other).getRight();
-				MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(result.get(s).getLeft());
-				MatchMakingRating hisMMR = MatchMakingRatingDAO.getMMR(result.get(other).getLeft());
-				int spentMana = yourResult.get("mana");
-				int damageDealt = hisResult.get("hp");
+			switch (queue) {
+				case SOLO -> {
+					Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcSoloMMR(history);
+					for (Side s : Side.values()) {
+						Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
+						Map<String, Integer> yourResult = result.get(s).getRight();
+						Map<String, Integer> hisResult = result.get(other).getRight();
+						MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(result.get(s).getLeft());
+						MatchMakingRating hisMMR = MatchMakingRatingDAO.getMMR(result.get(other).getLeft());
+						int spentMana = yourResult.get("mana");
+						int damageDealt = hisResult.get("hp");
 
-				if (history.getWinner() == s) {
-					double manaEff = 1 + Math.max(-0.75, Math.min(spentMana * 0.5 / 5, 0.25));
-					double damageEff = (double) -damageDealt / yourResult.size();
-					double expEff = 5000d / yourResult.size();
-					double sustainEff = 1 + yourResult.get("hp") / 5000f;
-					long mmr = Math.round(250 * manaEff + (125 * (damageEff / expEff) + 125 * sustainEff));
+						if (history.getWinner() == s) {
+							double manaEff = 1 + Math.max(-0.75, Math.min(spentMana * 0.5 / 5, 0.25));
+							double damageEff = (double) -damageDealt / yourResult.size();
+							double expEff = 5000d / yourResult.size();
+							double sustainEff = 1 + yourResult.get("hp") / 5000f;
+							long mmr = Math.round(250 * manaEff + (125 * (damageEff / expEff) + 125 * sustainEff));
 
 
-					yourMMR.addMMR(mmr / (wo ? 2 : 1), hisMMR.getMMR(), ranked);
-					yourMMR.addWin();
-					if (ranked) yourMMR.increaseRankPoints(hisMMR);
+							yourMMR.addMMR(mmr / (wo ? 2 : 1), hisMMR.getMMR(), ranked);
+							yourMMR.addWin();
+							if (ranked) yourMMR.increaseRankPoints(hisMMR);
 
-					Account acc = AccountDAO.getAccount(yourMMR.getUserId());
-					if (!acc.hasCompletedQuests()) {
-						Map<DailyTask, Integer> pg = acc.getDailyProgress();
-						pg.compute(DailyTask.WINS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
-						acc.setDailyProgress(pg);
-						AccountDAO.saveAccount(acc);
+							Account acc = AccountDAO.getAccount(yourMMR.getUserId());
+							if (!acc.hasCompletedQuests()) {
+								Map<DailyTask, Integer> pg = acc.getDailyProgress();
+								pg.compute(DailyTask.WINS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+								acc.setDailyProgress(pg);
+								AccountDAO.saveAccount(acc);
+							}
+						} else if (history.getWinner() == other) {
+							double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
+							double damageEff = (double) -damageDealt / yourResult.size();
+							double expEff = 5000d / yourResult.size();
+							double sustainEff = 1 + yourResult.get("hp") / 5000d;
+							long mmr = Math.round(250 * manaEff - (125 * (damageEff / expEff) + 125 * sustainEff));
+
+							yourMMR.removeMMR(mmr * (wo ? 2 : 1), hisMMR.getMMR(), ranked);
+							yourMMR.addLoss();
+							if (ranked) yourMMR.decreaseRankPoints(hisMMR);
+						}
+
+						MatchMakingRatingDAO.saveMMR(yourMMR);
 					}
-				} else if (history.getWinner() == other) {
-					double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
-					double damageEff = (double) -damageDealt / yourResult.size();
-					double expEff = 5000d / yourResult.size();
-					double sustainEff = 1 + yourResult.get("hp") / 5000d;
-					long mmr = Math.round(250 * manaEff - (125 * (damageEff / expEff) + 125 * sustainEff));
-
-					yourMMR.removeMMR(mmr * (wo ? 2 : 1), hisMMR.getMMR(), ranked);
-					yourMMR.addLoss();
-					if (ranked) yourMMR.decreaseRankPoints(hisMMR);
 				}
+				case DUO -> {
+					Map<Side, List<Pair<String, Map<String, Integer>>>> result = MatchMakingRating.calcDuoMMR(history);
+					for (Side s : Side.values()) {
+						for (Pair<String, Map<String, Integer>> team : result.get(s)) {
+							Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
+							Map<String, Integer> yourResult = team.getRight();
+							List<Map<String, Integer>> theirResult = result.get(other).stream().map(Pair::getRight).collect(Collectors.toList());
+							MatchMakingRating yourMMR = MatchMakingRatingDAO.getMMR(team.getLeft());
+							List<MatchMakingRating> theirMMR = result.get(other).stream().map(Pair::getLeft).map(MatchMakingRatingDAO::getMMR).collect(Collectors.toList());
+							int spentMana = yourResult.get("mana");
+							int damageDealt = (int) Math.round(Helper.avg(theirResult.get(0).get("hp"), theirResult.get(1).get("hp")));
 
-				MatchMakingRatingDAO.saveMMR(yourMMR);
+							if (history.getWinner() == s) {
+								double manaEff = 1 + Math.max(-0.75, Math.min(spentMana * 0.5 / 5, 0.25));
+								double damageEff = (double) -damageDealt / yourResult.size();
+								double expEff = 5000d / yourResult.size();
+								double sustainEff = 1 + yourResult.get("hp") / 5000f;
+								long mmr = Math.round(250 * manaEff + (125 * (damageEff / expEff) + 125 * sustainEff));
+
+
+								yourMMR.addMMR(mmr / (wo ? 2 : 1), (long) theirMMR.stream().mapToLong(MatchMakingRating::getMMR).average().orElse(0), ranked);
+								yourMMR.addWin();
+								if (ranked) yourMMR.increaseRankPoints(theirMMR);
+
+								Account acc = AccountDAO.getAccount(yourMMR.getUserId());
+								if (!acc.hasCompletedQuests()) {
+									Map<DailyTask, Integer> pg = acc.getDailyProgress();
+									pg.compute(DailyTask.WINS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+									acc.setDailyProgress(pg);
+									AccountDAO.saveAccount(acc);
+								}
+							} else if (history.getWinner() == other) {
+								double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
+								double damageEff = (double) -damageDealt / yourResult.size();
+								double expEff = 5000d / yourResult.size();
+								double sustainEff = 1 + yourResult.get("hp") / 5000d;
+								long mmr = Math.round(250 * manaEff - (125 * (damageEff / expEff) + 125 * sustainEff));
+
+								yourMMR.removeMMR(mmr * (wo ? 2 : 1), (long) theirMMR.stream().mapToLong(MatchMakingRating::getMMR).average().orElse(0), ranked);
+								yourMMR.addLoss();
+								if (ranked) yourMMR.decreaseRankPoints(theirMMR);
+							}
+
+							MatchMakingRatingDAO.saveMMR(yourMMR);
+						}
+					}
+				}
 			}
 		}
 	}
