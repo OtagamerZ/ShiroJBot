@@ -40,7 +40,6 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Executors;
@@ -49,7 +48,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public abstract class GlobalGame {
 	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
@@ -337,7 +335,7 @@ public abstract class GlobalGame {
 						MatchMakingRatingDAO.saveMMR(yourMMR);
 					}
 				}
-				case DUO -> {
+				/*case DUO -> {
 					Map<Side, List<Pair<String, Map<String, Integer>>>> result = MatchMakingRating.calcDuoMMR(history);
 					for (Side s : Side.values()) {
 						for (Pair<String, Map<String, Integer>> team : result.get(s)) {
@@ -383,7 +381,7 @@ public abstract class GlobalGame {
 							MatchMakingRatingDAO.saveMMR(yourMMR);
 						}
 					}
-				}
+				}*/
 			}
 		}
 	}
