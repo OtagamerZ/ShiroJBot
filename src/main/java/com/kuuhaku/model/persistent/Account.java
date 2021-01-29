@@ -275,24 +275,22 @@ public class Account {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		try {
 			try {
-				System.out.println("Checking vote");
 				ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
 				if (today.isBefore(lastVote.plusHours(12)) && voted) {
 					return true;
-				} else if (today.isBefore(lastVote.plusHours(12))) {
+				} else {
 					CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
 					Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
 						if (voted) {
 							DiscordBotsListHandler.retry(userId);
 						}
 
-						System.out.println("Returning value: " + voted);
 						voteCheck.complete(voted);
 					});
 
 					return voteCheck.get();
-				} else return false;
+				}
 			} catch (DateTimeParseException e) {
 				CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
 				Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
