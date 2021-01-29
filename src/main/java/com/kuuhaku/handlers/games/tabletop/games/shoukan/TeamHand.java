@@ -533,4 +533,8 @@ public class TeamHand extends Hand {
 	public String getMentions() {
 		return getUser().getAsMention() + " e " + users.peekNext().getAsMention();
 	}
+
+	public List<String> getNames() {
+		return List.of(getUser().getName(), users.peekNext().getName());
+	}
 }
