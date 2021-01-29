@@ -157,7 +157,7 @@ public class TeamHand extends Hand {
 			this.cards.add(new ArrayList<>());
 		}
 
-		for (int i = 0; i < this.users.size(); i++, this.users.getNext()) {
+		for (int i = 0; i < this.users.size(); i++, next()) {
 			redrawHand();
 		}
 	}

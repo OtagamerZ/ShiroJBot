@@ -120,7 +120,7 @@ public class MatchStatsCommand extends Command {
 		LocalDate date = mh.getTimestamp().toInstant().atZone(ZoneId.of("GMT-3")).toLocalDate();
 		Map<Side, String> players = mh.getPlayers().entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
-		Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcMMR(mh);
+		Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcSoloMMR(mh);
 
 		String p1 = checkUser(players.get(Side.BOTTOM));
 		String p2 = checkUser(players.get(Side.TOP));
@@ -177,7 +177,7 @@ public class MatchStatsCommand extends Command {
 
 	private JSONObject getStats(MatchHistory history) {
 		JSONObject out = new JSONObject();
-		Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcMMR(history);
+		Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcSoloMMR(history);
 		for (Side s : Side.values()) {
 			Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
 			Map<String, Integer> yourResult = result.get(s).getRight();

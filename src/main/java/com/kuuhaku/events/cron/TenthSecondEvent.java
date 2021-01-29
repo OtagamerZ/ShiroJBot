@@ -32,8 +32,10 @@ import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -45,6 +47,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TenthSecondEvent implements Job {
 	public static JobDetail tenthSecond;
@@ -54,16 +58,32 @@ public class TenthSecondEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		if (lock) return;
 		lock = true;
-		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> lobby = new ArrayList<>(Main.getInfo().getMatchMaking().getLobby().entrySet());
-		if (lobby.size() > 1) {
-			for (int a = 0; a < lobby.size(); a++) {
-				for (int b = 0; b < lobby.size(); b++) {
-					if (tryMatching(lobby, a, b)) {
+		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> soloLobby = new ArrayList<>(Main.getInfo().getMatchMaking().getSoloLobby().entrySet());
+		if (soloLobby.size() > 1) {
+			for (int a = 0; a < soloLobby.size(); a++) {
+				for (int b = 0; b < soloLobby.size(); b++) {
+					if (tryMatching(soloLobby, a, b)) {
 						lock = false;
 						return;
 					}
 				}
-				Main.getInfo().getMatchMaking().getLobby().computeIfPresent(lobby.get(a).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
+				Main.getInfo().getMatchMaking().getSoloLobby().computeIfPresent(soloLobby.get(a).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
+			}
+		}
+
+		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> duoLobby = new ArrayList<>(Main.getInfo().getMatchMaking().getDuoLobby().entrySet());
+		if (duoLobby.size() > 1) {
+			for (int a = 0; a < duoLobby.size(); a++) {
+				for (int b = 0; b < duoLobby.size(); b++) {
+					for (int c = 0; c < duoLobby.size(); c++) {
+						for (int d = 0; d < duoLobby.size(); d++) {
+							if (tryMatching(duoLobby, a, b, c, d)) {
+								lock = false;
+								return;
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -79,18 +99,18 @@ public class TenthSecondEvent implements Job {
 			MatchMakingRating mmr2 = p2.getKey();
 
 			if (!mmr1.equals(mmr2)
-					&& Helper.prcnt(mmr1.getMMR(), mmr2.getMMR() == 0 ? 1 : mmr2.getMMR()) * 100 <= p1.getValue().getLeft() * 10
-					&& (Math.abs(mmr1.getTier().getTier() - mmr2.getTier().getTier()) < 2 || mmr2.getTier() == RankedTier.UNRANKED)) {
-				Main.getInfo().getMatchMaking().getLobby().remove(mmr1);
-				Main.getInfo().getMatchMaking().getLobby().remove(mmr2);
+				&& Helper.prcnt(mmr1.getMMR(), mmr2.getMMR() == 0 ? 1 : mmr2.getMMR()) * 100 <= p1.getValue().getLeft() * 10
+				&& (Math.abs(mmr1.getTier().getTier() - mmr2.getTier().getTier()) < 2 || mmr2.getTier() == RankedTier.UNRANKED)) {
+				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr1);
+				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr2);
 
 				TextChannel p1Channel = p1.getValue().getRight();
 				TextChannel p2Channel = p2.getValue().getRight();
 				List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
 
 				Runnable result = () -> {
-					Main.getInfo().getMatchMaking().getLobby().remove(mmr1);
-					Main.getInfo().getMatchMaking().getLobby().remove(mmr2);
+					Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr1);
+					Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr2);
 
 					mmr1.setEvades(0);
 					mmr2.setEvades(0);
@@ -119,12 +139,12 @@ public class TenthSecondEvent implements Job {
 								p.getLeft().getValue().getRight().sendMessage("O oponente não confirmou a partida a tempo, você foi retornado ao saguão.").queue(s ->
 										Pages.buttonize(s, Map.of(
 												Helper.CANCEL, (mb, ms) -> {
-													Main.getInfo().getMatchMaking().getLobby().remove(mmr);
+													Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
 													ms.delete().queue();
 												}), false, 30, TimeUnit.MINUTES
 												, u -> u.getId().equals(mmr.getUserId())
 												, ms -> {
-													Main.getInfo().getMatchMaking().getLobby().remove(mmr);
+													Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
 													ms.delete().queue();
 												}
 										)
@@ -133,14 +153,14 @@ public class TenthSecondEvent implements Job {
 										p.getLeft().getValue().getLeft() + 1,
 										p.getLeft().getValue().getRight()
 								);
-								Main.getInfo().getMatchMaking().getLobby().put(mmr, newPair);
+								Main.getInfo().getMatchMaking().getSoloLobby().put(mmr, newPair);
 							}
 						}
 					}
 				};
 
-				sendConfirmation(p1, p2, p1Channel, p2Channel, match, result);
-				sendConfirmation(p2, p1, p2Channel, p1Channel, match, result);
+				sendConfirmation(p1, p1Channel, p2Channel, match, result);
+				sendConfirmation(p2, p2Channel, p1Channel, match, result);
 
 				return true;
 			}
@@ -150,9 +170,97 @@ public class TenthSecondEvent implements Job {
 		return false;
 	}
 
-	private void sendConfirmation(Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1, Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p2, TextChannel p1Channel, TextChannel p2Channel, List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match, Runnable result) {
+	private boolean tryMatching(List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> lobby, int a, int b, int c, int d) {
+		try {
+			var ps = List.of(
+					lobby.get(a),
+					lobby.get(b),
+					lobby.get(c),
+					lobby.get(d)
+			);
+
+			MatchMakingRating[] mmrs = ps.stream().map(Map.Entry::getKey).toArray(MatchMakingRating[]::new);
+			Triple<List<MatchMakingRating>, Double, List<MatchMakingRating>> teams = Helper.balanceSides(mmr -> (int) mmr.getMMR(), mmrs);
+			int tierDiff = (int) Stream.of(teams.getLeft(), teams.getRight()).flatMap(List::stream).mapToInt(mmr -> mmr.getTier().getTier()).average().orElse(0);
+
+			if (!Helper.isTwice(mmrs) && Helper.between(teams.getMiddle() * 100, 40, 60) && tierDiff <= 1) {
+				Main.getInfo().getMatchMaking().getSoloLobby().keySet().removeAll(List.of(mmrs));
+
+				List<TextChannel> channels = ps.stream().map(Map.Entry::getValue).map(Pair::getRight).collect(Collectors.toList());
+
+				List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match = new ArrayList<>();
+
+				Runnable result = () -> {
+					Main.getInfo().getMatchMaking().getSoloLobby().keySet().removeAll(List.of(mmrs));
+
+					for (MatchMakingRating mmr : mmrs) {
+						mmr.setEvades(0);
+						MatchMakingRatingDAO.saveMMR(mmr);
+					}
+
+					boolean p1Starts = Helper.chance(50);
+					if (match.stream().allMatch(Pair::getRight)) {
+						GlobalGame g = new Shoukan(
+								Main.getShiroShards(),
+								new GameChannel(channels.toArray(TextChannel[]::new)),
+								0,
+								null,
+								false,
+								true,
+								p1Starts ?
+										Stream.of(teams.getLeft(), teams.getRight())
+												.flatMap(List::stream)
+												.map(MatchMakingRating::getUser)
+												.toArray(User[]::new)
+										:
+										Stream.of(teams.getRight(), teams.getLeft())
+												.flatMap(List::stream)
+												.map(MatchMakingRating::getUser)
+												.toArray(User[]::new)
+						);
+						g.start();
+						Main.getInfo().getMatchMaking().getGames().add(g);
+					} else {
+						for (Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean> p : match) {
+							MatchMakingRating mmr = p.getLeft().getKey();
+							if (p.getRight()) {
+								p.getLeft().getValue().getRight().sendMessage("Um dos jogadores não confirmou a partida a tempo, você foi retornado ao saguão.").queue(s ->
+										Pages.buttonize(s, Map.of(
+												Helper.CANCEL, (mb, ms) -> {
+													Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
+													ms.delete().queue();
+												}), false, 30, TimeUnit.MINUTES
+												, u -> u.getId().equals(mmr.getUserId())
+												, ms -> {
+													Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
+													ms.delete().queue();
+												}
+										)
+								);
+								Pair<Integer, TextChannel> newPair = Pair.of(
+										p.getLeft().getValue().getLeft() + 1,
+										p.getLeft().getValue().getRight()
+								);
+								Main.getInfo().getMatchMaking().getSoloLobby().put(mmr, newPair);
+							}
+						}
+					}
+				};
+
+				for (Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p : ps) {
+					sendConfirmation(p, p.getValue().getRight(), channels, match, result);
+				}
+
+				return true;
+			}
+		} catch (IndexOutOfBoundsException e) {
+			return true;
+		}
+		return false;
+	}
+
+	private void sendConfirmation(Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1, TextChannel p1Channel, TextChannel p2Channel, List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match, Runnable result) {
 		MatchMakingRating mmr1 = p1.getKey();
-		MatchMakingRating mmr2 = p2.getKey();
 
 		Main.getInfo().getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
 			private Future<?> timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, você está impedido de entrar no saguão novamente por " + (10 * (mmr1.getEvades() + 1)) + " minutos.")
@@ -168,12 +276,9 @@ public class TenthSecondEvent implements Job {
 			{
 				p1Channel.sendMessage("""
 						%s
-						Oponente encontrado (%s), digite `aschente` para confirmar a partida.
+						Partida encontrada, digite `aschente` para confirmar a partida.
 						Demorar para responder resultará em um bloqueio de saguão de 10 minutos.
-						""".formatted(
-						mmr1.getUser().getAsMention(),
-						mmr2.getUser().getName()
-				)).queue();
+						""".formatted(mmr1.getUser().getAsMention())).queue();
 			}
 
 			@Override
@@ -188,10 +293,69 @@ public class TenthSecondEvent implements Job {
 					return;
 				}
 
-				msg.addReaction(Helper.ACCEPT)
-						.flatMap(s -> p1Channel.sendMessage("Você aceitou a partida."))
-						.flatMap(s -> p2Channel.sendMessage("%s aceitou a partida.".formatted(mmr1.getUser().getName())))
-						.queue();
+				if (p1Channel.getId().equals(p2Channel.getId()))
+					msg.addReaction(Helper.ACCEPT)
+							.flatMap(s -> p1Channel.sendMessage(msg.getAuthor().getName() + " aceitou a partida."))
+							.queue();
+				else
+					msg.addReaction(Helper.ACCEPT)
+							.flatMap(s -> p1Channel.sendMessage("Você aceitou a partida."))
+							.flatMap(s -> p2Channel.sendMessage("O oponente aceitou a partida."))
+							.queue();
+
+				match.add(Pair.of(p1, true));
+				timeout.cancel(true);
+				timeout = null;
+				close();
+				if (match.size() == 2) result.run();
+			}
+		});
+	}
+
+	private void sendConfirmation(Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1, TextChannel p1Channel, List<TextChannel> channels, List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match, Runnable result) {
+		MatchMakingRating mmr1 = p1.getKey();
+
+		Main.getInfo().getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
+			private Future<?> timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, você está impedido de entrar no saguão novamente por " + (10 * (mmr1.getEvades() + 1)) + " minutos.")
+					.queueAfter(1, TimeUnit.MINUTES, msg -> {
+						mmr1.setEvades(mmr1.getEvades() + 1);
+						mmr1.block(10 * mmr1.getEvades(), ChronoUnit.MINUTES);
+						MatchMakingRatingDAO.saveMMR(mmr1);
+						match.add(Pair.of(p1, false));
+						close();
+						if (match.size() == 2) result.run();
+					});
+
+			{
+				p1Channel.sendMessage("""
+						%s
+						Partida encontrada, digite `aschente` para confirmar a partida.
+						Demorar para responder resultará em um bloqueio de saguão de 10 minutos.
+						""".formatted(mmr1.getUser().getAsMention())).queue();
+			}
+
+			@Override
+			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+				Message msg = event.getMessage();
+				if (!msg.getAuthor().getId().equals(mmr1.getUserId()) || !msg.getContentRaw().equalsIgnoreCase("aschente"))
+					return;
+
+				Kawaipon kp = KawaiponDAO.getKawaipon(msg.getAuthor().getId());
+				if (kp.getChampions().size() < 30) {
+					p1Channel.sendMessage("❌ | Você está com um deck que possui menos que 30 cartas. Você precisa corrigir antes de poder aceitar a partida.").queue();
+					return;
+				}
+
+				if (channels.stream().allMatch(c -> c.getId().equals(p1Channel.getId())))
+					msg.addReaction(Helper.ACCEPT)
+							.flatMap(s -> p1Channel.sendMessage(msg.getAuthor().getName() + " aceitou a partida."))
+							.queue();
+				else for (TextChannel channel : channels) {
+					msg.addReaction(Helper.ACCEPT)
+							.flatMap(s -> p1Channel.sendMessage("Você aceitou a partida."))
+							.flatMap(s -> channel.sendMessage("um dos oponentes aceitou a partida (%s/4).".formatted(match.size())))
+							.queue();
+				}
 
 				match.add(Pair.of(p1, true));
 				timeout.cancel(true);

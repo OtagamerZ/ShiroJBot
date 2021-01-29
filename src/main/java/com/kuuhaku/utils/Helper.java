@@ -109,6 +109,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.ToIntFunction;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -2011,5 +2012,44 @@ public class Helper {
 		}
 
 		return out;
+	}
+
+	public static <T> boolean isTwice(T... objs) {
+		List<T> elements = List.of(objs);
+		for (T obj : elements) {
+			if (Collections.frequency(elements, obj) > 1)
+				return true;
+		}
+		return false;
+	}
+
+	public static <T> Triple<List<T>, Double, List<T>> balanceSides(ToIntFunction<T> extractor, T... objs) {
+		TreeMap<T, Integer> elements = new TreeMap<>(Comparator.comparingInt(extractor));
+
+
+		Duo<List<T>, Integer> firstGroup = new Duo<>(new ArrayList<>(), 0);
+		Duo<List<T>, Integer> secondGroup = new Duo<>(new ArrayList<>(), 0);
+
+		boolean first = true;
+		while (elements.size() > 0) {
+			Map.Entry<T, Integer> lesser = elements.pollFirstEntry();
+			Map.Entry<T, Integer> higher = elements.pollLastEntry();
+
+			if (first) {
+				firstGroup.getLeft().add(lesser.getKey());
+				firstGroup.getLeft().add(higher.getKey());
+				firstGroup.setRight((firstGroup.getRight() + lesser.getValue() + higher.getValue()) / 3);
+
+				first = false;
+			} else {
+				secondGroup.getLeft().add(lesser.getKey());
+				secondGroup.getLeft().add(higher.getKey());
+				secondGroup.setRight((secondGroup.getRight() + lesser.getValue() + higher.getValue()) / 3);
+
+				first = true;
+			}
+		}
+
+		return Triple.of(firstGroup.getLeft(), Math.abs(firstGroup.getRight() - secondGroup.getRight()) / (double) (firstGroup.getRight() + secondGroup.getRight()), secondGroup.getLeft());
 	}
 }

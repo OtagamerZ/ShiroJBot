@@ -20,6 +20,7 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
+import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -31,22 +32,33 @@ import java.util.List;
 import java.util.Map;
 
 public class MatchMaking {
-	private final Map<MatchMakingRating, Pair<Integer, TextChannel>> lobby = new LinkedHashMap<>();
+	private final Map<MatchMakingRating, Pair<Integer, TextChannel>> soloLobby = new LinkedHashMap<>();
+	private final Map<MatchMakingRating, Pair<Integer, TextChannel>> duoLobby = new LinkedHashMap<>();
 	private final List<GlobalGame> games = new ArrayList<>();
 	boolean locked = false;
 
-	public Map<MatchMakingRating, Pair<Integer, TextChannel>> getLobby() {
-		return lobby;
+	public Map<MatchMakingRating, Pair<Integer, TextChannel>> getSoloLobby() {
+		return soloLobby;
 	}
 
-	public void joinLobby(User user, TextChannel channel) {
+	public Map<MatchMakingRating, Pair<Integer, TextChannel>> getDuoLobby() {
+		return duoLobby;
+	}
+
+	public void joinLobby(User user, RankedQueue queue, TextChannel channel) {
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(user.getId());
 
-		lobby.put(mmr, Pair.of(0, channel));
+		switch (queue) {
+			case SOLO -> soloLobby.put(mmr, Pair.of(0, channel));
+			case DUO -> duoLobby.put(mmr, Pair.of(0, channel));
+		}
 	}
 
-	public void joinLobby(MatchMakingRating mmr, TextChannel channel) {
-		lobby.put(mmr, Pair.of(0, channel));
+	public void joinLobby(MatchMakingRating mmr, RankedQueue queue, TextChannel channel) {
+		switch (queue) {
+			case SOLO -> soloLobby.put(mmr, Pair.of(0, channel));
+			case DUO -> duoLobby.put(mmr, Pair.of(0, channel));
+		}
 	}
 
 	public boolean inGame(String id) {
