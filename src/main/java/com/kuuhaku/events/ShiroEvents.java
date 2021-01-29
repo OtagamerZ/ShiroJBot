@@ -729,8 +729,8 @@ public class ShiroEvents extends ListenerAdapter {
 						String msgNoArgs = Helper.makeEmoteFromMention(msg.replaceFirst(args[0] + " " + args[1], "")).trim();
 
 						try {
-							User us = Main.getInfo().getUserByID(args[1]);
-							if (us == null) {
+							User u = Main.getInfo().getUserByID(args[1]);
+							if (u == null) {
 								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
 								return;
 							} else if (msgNoArgs.length() == 0) {
@@ -746,12 +746,12 @@ public class ShiroEvents extends ListenerAdapter {
 									.setTimestamp(Instant.now());
 
 							RelayDAO.permaBlock(new PermaBlock(args[1]));
-							us.openPrivateChannel().queue(c ->
+							u.openPrivateChannel().queue(c ->
 									c.sendMessage(eb.build()).queue());
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
 									Main.getInfo().getUserByID(d).openPrivateChannel()
-											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs))
+											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + u.getName() + ". Razão: \n>>> " + msgNoArgs))
 											.queue();
 								}
 							}
@@ -765,8 +765,8 @@ public class ShiroEvents extends ListenerAdapter {
 						String msgNoArgs = Helper.makeEmoteFromMention(msg.replaceFirst(args[0] + " " + args[1], "")).trim();
 
 						try {
-							User us = Main.getInfo().getUserByID(args[1]);
-							if (us == null) {
+							User u = Main.getInfo().getUserByID(args[1]);
+							if (u == null) {
 								event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
 								return;
 							} else if (msgNoArgs.length() == 0) {
@@ -781,12 +781,12 @@ public class ShiroEvents extends ListenerAdapter {
 									.setThumbnail("https://canopytools.com/wp-content/uploads/2019/10/alert-icon-17.png")
 									.setTimestamp(Instant.now());
 
-							us.openPrivateChannel().queue(c ->
+							u.openPrivateChannel().queue(c ->
 									c.sendMessage(eb.build()).queue());
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
 									Main.getInfo().getUserByID(d).openPrivateChannel()
-											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " alertou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs))
+											.flatMap(c -> c.sendMessage(event.getAuthor().getName() + " alertou o usuário " + u.getName() + ". Razão: \n>>> " + msgNoArgs))
 											.queue();
 								}
 							}
