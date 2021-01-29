@@ -25,6 +25,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -55,12 +56,21 @@ public class LobbyCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (args.length < 1 || !Helper.equalsAny(args[0], "solo", "duo")) {
+			channel.sendMessage("❌ | Você precisa informar o tipo de fila que deseja entrar (`SOLO` ou `DUO`)").queue();
+			return;
+		}
+
+		RankedQueue rq = RankedQueue.valueOf(args[1].toUpperCase());
 		List<Page> pages = new ArrayList<>();
 
-		List<List<MatchMakingRating>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getSoloLobby().keySet(), 10);
+		List<List<MatchMakingRating>> lobby = switch (rq) {
+			case SOLO -> Helper.chunkify(Main.getInfo().getMatchMaking().getSoloLobby().keySet(), 10);
+			case DUO -> Helper.chunkify(Main.getInfo().getMatchMaking().getDuoLobby().keySet(), 10);
+		};
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Saguão do Shoukan ranqueado (" + Main.getInfo().getMatchMaking().getSoloLobby().size() + " jogadores)");
+				.setTitle("Saguão do Shoukan ranqueado (%s | %s jogadores)".formatted(rq.name(), Main.getInfo().getMatchMaking().getSoloLobby().size()));
 
 		StringBuilder sb = new StringBuilder();
 		for (List<MatchMakingRating> chunk : lobby) {
