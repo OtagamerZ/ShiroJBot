@@ -57,7 +57,12 @@ public class VoteCommand extends Command {
 					.embed(eb.build())
 					.queue();
 		} else {
-			channel.sendMessage("Vote em mim para receber créditos e acúmulos de voto!\nhttps://top.gg/bot/572413282653306901/vote").queue();
+			channel.sendMessage("""
+					Vote em mim para receber créditos e acúmulos de voto!
+					https://top.gg/bot/572413282653306901/vote
+										
+					Se você votar e não receber a notificação, basta usar este comando novamente para eu verificar seu voto.
+					""").queue();
 		}
 	}
 }
