@@ -15,8 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de filas ranqueadas (Solo/Duo)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1028,28 +1026,7 @@
       <workItem from="1611860820196" duration="3169000" />
       <workItem from="1611921911483" duration="10106000" />
       <workItem from="1611937108463" duration="15634000" />
-      <workItem from="1611975188118" duration="1855000" />
-    </task>
-    <task id="LOCAL-03565" summary="Correções menores no desafios diarios">
-      <created>1611851758439</created>
-      <option name="number" value="03565" />
-      <option name="presentableId" value="LOCAL-03565" />
-      <option name="project" value="LOCAL" />
-      <updated>1611851758439</updated>
-    </task>
-    <task id="LOCAL-03566" summary="Correções menores no desafios diarios">
-      <created>1611852538127</created>
-      <option name="number" value="03566" />
-      <option name="presentableId" value="LOCAL-03566" />
-      <option name="project" value="LOCAL" />
-      <updated>1611852538127</updated>
-    </task>
-    <task id="LOCAL-03567" summary="Correções menores no desafios diarios">
-      <created>1611852703751</created>
-      <option name="number" value="03567" />
-      <option name="presentableId" value="LOCAL-03567" />
-      <option name="project" value="LOCAL" />
-      <updated>1611852703751</updated>
+      <workItem from="1611975188118" duration="2865000" />
     </task>
     <task id="LOCAL-03568" summary="Correções menores no desafios diarios">
       <created>1611861432886</created>
@@ -1373,7 +1350,28 @@
       <option name="project" value="LOCAL" />
       <updated>1611975636908</updated>
     </task>
-    <option name="localTasksCounter" value="3614" />
+    <task id="LOCAL-03614" summary="Adição de filas ranqueadas (Solo/Duo)">
+      <created>1611977149856</created>
+      <option name="number" value="03614" />
+      <option name="presentableId" value="LOCAL-03614" />
+      <option name="project" value="LOCAL" />
+      <updated>1611977149860</updated>
+    </task>
+    <task id="LOCAL-03615" summary="Adição de filas ranqueadas (Solo/Duo)">
+      <created>1611977347696</created>
+      <option name="number" value="03615" />
+      <option name="presentableId" value="LOCAL-03615" />
+      <option name="project" value="LOCAL" />
+      <updated>1611977347696</updated>
+    </task>
+    <task id="LOCAL-03616" summary="Adição de filas ranqueadas (Solo/Duo)">
+      <created>1611977719630</created>
+      <option name="number" value="03616" />
+      <option name="presentableId" value="LOCAL-03616" />
+      <option name="project" value="LOCAL" />
+      <updated>1611977719630</updated>
+    </task>
+    <option name="localTasksCounter" value="3617" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
