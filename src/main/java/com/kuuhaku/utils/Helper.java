@@ -1191,6 +1191,7 @@ public class Helper {
 			if (Collections.frequency(out, inst) < maxInstances)
 				out.add(inst);
 			else {
+				aux.remove(index);
 				Collections.shuffle(aux);
 				i--;
 			}
@@ -1212,6 +1213,7 @@ public class Helper {
 			if (Collections.frequency(out, inst) < maxInstances)
 				out.add(inst);
 			else {
+				aux.remove(index);
 				Collections.shuffle(aux);
 				i--;
 			}
