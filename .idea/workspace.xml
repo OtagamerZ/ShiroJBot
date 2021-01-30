@@ -13,12 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/MatchInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de filas ranqueadas (Solo/Duo)">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/LobbyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/LobbyCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1034,13 +1030,6 @@
       <workItem from="1611921911483" duration="10106000" />
       <workItem from="1611937108463" duration="15634000" />
     </task>
-    <task id="LOCAL-03560" summary="Correções menores no desafios diarios">
-      <created>1611769691410</created>
-      <option name="number" value="03560" />
-      <option name="presentableId" value="LOCAL-03560" />
-      <option name="project" value="LOCAL" />
-      <updated>1611769691410</updated>
-    </task>
     <task id="LOCAL-03561" summary="Correções menores no desafios diarios">
       <created>1611772240166</created>
       <option name="number" value="03561" />
@@ -1377,7 +1366,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611953195824</updated>
     </task>
-    <option name="localTasksCounter" value="3609" />
+    <task id="LOCAL-03609" summary="Adição de filas ranqueadas (Solo/Duo)">
+      <created>1611973856003</created>
+      <option name="number" value="03609" />
+      <option name="presentableId" value="LOCAL-03609" />
+      <option name="project" value="LOCAL" />
+      <updated>1611973856004</updated>
+    </task>
+    <option name="localTasksCounter" value="3610" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1602,11 +1598,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="200" height="441" key="SqlResolveConfigurable/0.0.1920.1040@0.0.1920.1040" timestamp="1603511010647" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611953197045">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="301" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1611973857630">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1611953197045" />
-    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611697808035" />
+    <state x="409" y="301" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1611973857630" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1611584154385">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
