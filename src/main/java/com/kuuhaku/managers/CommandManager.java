@@ -331,7 +331,7 @@ public class CommandManager {
 					"avaliardeck", new String[]{"deckeval"}, "cmd_deck-eval", INFO, false
 			));
 			put(LobbyCommand.class, new Argument(
-					"saguao", new String[]{"lobby"}, "cmd_lobby", INFO, true
+					"saguao", new String[]{"lobby"}, "req_queue-exit", "cmd_lobby", INFO, true
 			));
 			put(TierCommand.class, new Argument(
 					"liga", new String[]{"tier", "league"}, "cmd_tier", INFO, true
