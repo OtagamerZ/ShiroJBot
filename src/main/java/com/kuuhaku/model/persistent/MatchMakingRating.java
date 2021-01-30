@@ -23,6 +23,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -118,8 +119,8 @@ public class MatchMakingRating {
 		return rankPoints;
 	}
 
-	public void increaseRankPoints(MatchMakingRating op) {
-		double mmrModif = Helper.prcnt(mmr, Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) op.getMMR(), mmr);
+	public void increaseRankPoints(long opMMR) {
+		double mmrModif = Helper.prcnt(mmr, Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) opMMR, mmr);
 		int rpValue = Helper.minMax((int) Math.round(mmrModif * 15), 5, 30);
 		if (tier == RankedTier.UNRANKED) {
 			promWins++;
@@ -173,122 +174,8 @@ public class MatchMakingRating {
 			rankPoints += rpValue;
 	}
 
-	public void increaseRankPoints(List<MatchMakingRating> op) {
-		double avgOpMMR = op.stream().mapToLong(MatchMakingRating::getMMR).average().orElse(0);
-		double mmrModif = Helper.prcnt(mmr, Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) avgOpMMR, mmr);
-		int rpValue = Helper.minMax((int) Math.round(mmrModif * 15), 5, 30);
-		if (tier == RankedTier.UNRANKED) {
-			promWins++;
-
-			if (promWins + promLosses == tier.getMd()) {
-				tier = RankedTier.INITIATE_IV;
-				rankPoints = 0;
-				promWins = promLosses = 0;
-
-				if (StringUtils.isNumeric(master)) {
-					Account acc = AccountDAO.getAccount(master);
-					master = "FULFILLED_" + master;
-					User u = Main.getInfo().getUserByID(userId);
-					u.openPrivateChannel()
-							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratúitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
-							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
-							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Iniciado IV, você recebeu **25.000 créditos**!"))
-							.queue(null, Helper::doNothing);
-
-					acc.addCredit(25000, this.getClass());
-					AccountDAO.saveAccount(acc);
-
-					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + userId);
-					DynamicParameterDAO.setParam("freeSynth_" + userId, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
-				} else {
-					Main.getInfo().getUserByID(userId).openPrivateChannel()
-							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
-							.queue(null, Helper::doNothing);
-				}
-				return;
-			}
-			return;
-		} else if (rankPoints == 100) {
-			promWins++;
-
-			if (promWins > tier.getMd() / 2f) {
-				tier = tier.getNext();
-				rankPoints = 0;
-				promWins = promLosses = 0;
-				Main.getInfo().getUserByID(userId).openPrivateChannel()
-						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
-						.queue(null, Helper::doNothing);
-				return;
-			}
-			return;
-		}
-
-		if (tier != RankedTier.ARCHMAGE)
-			rankPoints = Math.min(rankPoints + rpValue, 100);
-		else
-			rankPoints += rpValue;
-	}
-
-	public void decreaseRankPoints(MatchMakingRating op) {
-		double mmrModif = Helper.prcnt(Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) op.getMMR());
-		int rpValue = Helper.minMax((int) Math.round(mmrModif * 15), 5, 30);
-
-		if (tier == RankedTier.UNRANKED) {
-			promLosses++;
-
-			if (promWins + promLosses == tier.getMd()) {
-				tier = RankedTier.INITIATE_IV;
-				rankPoints = 0;
-				promWins = promLosses = 0;
-
-				if (StringUtils.isNumeric(master)) {
-					Account acc = AccountDAO.getAccount(master);
-					master = "FULFILLED_" + master;
-					User u = Main.getInfo().getUserByID(userId);
-					u.openPrivateChannel()
-							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratúitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
-							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
-							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Iniciado IV, você recebeu **25.000 créditos**!"))
-							.queue(null, Helper::doNothing);
-
-					acc.addCredit(25000, this.getClass());
-					AccountDAO.saveAccount(acc);
-
-					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + userId);
-					DynamicParameterDAO.setParam("freeSynth_" + userId, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
-				} else {
-					Main.getInfo().getUserByID(userId).openPrivateChannel()
-							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
-							.queue(null, Helper::doNothing);
-				}
-			}
-			return;
-		} else if (rankPoints == 100) {
-			promLosses++;
-
-			if (promLosses > tier.getMd() / 2f) {
-				rankPoints -= rpValue * promLosses;
-				promWins = promLosses = 0;
-				return;
-			}
-			return;
-		}
-
-		if (rankPoints == 0 && Helper.chance(20 * mmrModif) && tier != RankedTier.INITIATE_IV) {
-			tier = tier.getPrevious();
-			rankPoints = 75;
-			Main.getInfo().getUserByID(userId).openPrivateChannel()
-					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
-					.queue(null, Helper::doNothing);
-			return;
-		}
-
-		rankPoints = Math.max(0, rankPoints - rpValue);
-	}
-
-	public void decreaseRankPoints(List<MatchMakingRating> op) {
-		double avgOpMMR = op.stream().mapToLong(MatchMakingRating::getMMR).average().orElse(0);
-		double mmrModif = Helper.prcnt(Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) avgOpMMR);
+	public void decreaseRankPoints(long opMMR) {
+		double mmrModif = Helper.prcnt(Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) opMMR);
 		int rpValue = Helper.minMax((int) Math.round(mmrModif * 15), 5, 30);
 
 		if (tier == RankedTier.UNRANKED) {
@@ -409,6 +296,44 @@ public class MatchMakingRating {
 
 	public void setMaster(String master) {
 		this.master = master;
+	}
+
+	public static Map<Side, List<MatchInfo>> calcMMR(MatchHistory mh) {
+		Map<Side, List<MatchInfo>> data = new HashMap<>();
+		for (Side s : Side.values()) {
+			List<MatchRound> rounds = mh.getRounds().entrySet().stream()
+					.sorted(Comparator.comparingInt(Map.Entry::getKey))
+					.map(Map.Entry::getValue)
+					.filter(mr -> mr.getSide() == s)
+					.collect(Collectors.toList());
+
+			Set<String> ids = new HashSet<>();
+			for (MatchRound round : rounds) {
+				ids.add(round.getScript()
+						.getJSONObject(s.name().toLowerCase())
+						.getString("id"));
+			}
+
+			for (String id : ids) {
+				MatchInfo info = new MatchInfo(id);
+
+				for (MatchRound round : rounds) {
+					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase());
+
+					for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
+						String key = entry.getKey();
+						if (!key.equals("id")) {
+							int val = (int) entry.getValue();
+							info.getInfo().compute(key, (k, v) -> v == null ? val : val - v);
+						}
+					}
+				}
+
+				data.compute(s, (k, v) -> v == null ? new ArrayList<>() : v).add(info);
+			}
+		}
+
+		return data;
 	}
 
 	public static Map<Side, Pair<String, Map<String, Integer>>> calcSoloMMR(MatchHistory mh) {
