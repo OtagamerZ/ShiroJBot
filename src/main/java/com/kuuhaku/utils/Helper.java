@@ -38,6 +38,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Extensions;
+import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.common.MerchantStats;
 import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.ItemDrop;
@@ -2051,5 +2052,25 @@ public class Helper {
 		}
 
 		return Triple.of(firstGroup.getLeft(), Math.abs(firstGroup.getRight() - secondGroup.getRight()) / (double) (firstGroup.getRight() + secondGroup.getRight()), secondGroup.getLeft());
+	}
+
+	public static MatchInfo mergeInfo(List<MatchInfo> infos) {
+		MatchInfo mi = new MatchInfo("");
+
+		for (MatchInfo info : infos) {
+			for (Map.Entry<String, Integer> entry : info.getInfo().entrySet()) {
+				mi.getInfo().compute(entry.getKey(), (k, v) -> v == null ? entry.getValue() : (v + entry.getValue()) / 2);
+			}
+		}
+
+		return mi;
+	}
+
+	public static long getAverageMMR(String... ids) {
+		return Math.round(Arrays.stream(ids)
+				.map(MatchMakingRatingDAO::getMMR)
+				.mapToLong(MatchMakingRating::getMMR)
+				.average()
+				.orElse(0));
 	}
 }
