@@ -181,7 +181,7 @@ public class ShoukanCommand extends Command {
 			}
 
 			boolean team = users.size() == 3;
-			boolean clan = !team && (args.length > 1 && args[1].equalsIgnoreCase("clan")) || (args.length > 2 && args[2].equalsIgnoreCase("clan"));
+			boolean clan = !team && (args.length > 1 && Helper.equalsAny(args[1], "cla", "clan")) || (args.length > 2 && Helper.equalsAny(args[2], "cla", "clan"));
 			boolean daily = !clan && (args.length > 1 && Helper.equalsAny(args[1], "daily", "diario")) || (args.length > 2 && Helper.equalsAny(args[2], "daily", "diario"));
 
 			int bet = 0;
