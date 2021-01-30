@@ -100,8 +100,8 @@ public class TenthSecondEvent implements Job {
 			MatchMakingRating mmr2 = p2.getKey();
 
 			if (!mmr1.equals(mmr2)
-				&& Helper.prcnt(mmr1.getMMR(), mmr2.getMMR() == 0 ? 1 : mmr2.getMMR()) * 100 <= p1.getValue().getLeft() * 10
-				&& (Math.abs(mmr1.getTier().getTier() - mmr2.getTier().getTier()) < 2 || mmr2.getTier() == RankedTier.UNRANKED)) {
+					&& Helper.prcnt(mmr1.getMMR(), mmr2.getMMR() == 0 ? 1 : mmr2.getMMR()) * 100 <= p1.getValue().getLeft() * 10
+					&& (Math.abs(mmr1.getTier().getTier() - mmr2.getTier().getTier()) < 2 || mmr2.getTier() == RankedTier.UNRANKED)) {
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr1);
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr2);
 
@@ -183,9 +183,11 @@ public class TenthSecondEvent implements Job {
 			MatchMakingRating[] mmrs = ps.stream().map(Map.Entry::getKey).toArray(MatchMakingRating[]::new);
 			Triple<List<MatchMakingRating>, Double, List<MatchMakingRating>> teams = Helper.balanceSides(mmr -> (int) mmr.getMMR(), mmrs);
 			int tierDiff = (int) Stream.of(teams.getLeft(), teams.getRight()).flatMap(List::stream).mapToInt(mmr -> mmr.getTier().getTier()).average().orElse(0);
+			int threshold = ps.stream().map(Map.Entry::getValue).mapToInt(Pair::getLeft).sum();
 
 			if (!Helper.isTwice(mmrs)
-				&& tierDiff <= 2) {
+					&& teams.getMiddle() * 100 <= threshold * 10
+					&& tierDiff <= 2) {
 				Main.getInfo().getMatchMaking().getDuoLobby().keySet().removeAll(List.of(mmrs));
 
 				List<TextChannel> channels = ps.stream().map(Map.Entry::getValue).map(Pair::getRight).collect(Collectors.toList());
