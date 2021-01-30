@@ -1167,9 +1167,10 @@ public class Helper {
 	public static <T> List<T> getRandomN(List<T> array, int elements) {
 		List<T> aux = new ArrayList<>(array);
 		List<T> out = new ArrayList<>();
+		Random seed = new Random(array.hashCode());
 
 		for (int i = 0; i < elements; i++) {
-			int index = rng(aux.size(), true);
+			int index = rng(aux.size(), seed, true);
 
 			out.add(aux.get(index));
 			aux.remove(index);
@@ -1181,9 +1182,10 @@ public class Helper {
 	public static <T> List<T> getRandomN(List<T> array, int elements, int maxInstances) {
 		List<T> aux = new ArrayList<>(array);
 		List<T> out = new ArrayList<>();
+		Random seed = new Random(array.hashCode());
 
 		for (int i = 0; i < elements; i++) {
-			int index = rng(aux.size(), true);
+			int index = rng(aux.size(), seed, true);
 
 			T inst = aux.get(index);
 			if (Collections.frequency(out, inst) < maxInstances)
@@ -2072,5 +2074,13 @@ public class Helper {
 				.mapToLong(MatchMakingRating::getMMR)
 				.average()
 				.orElse(0));
+	}
+
+	public static List<Integer> getNumericList(int min, int max) {
+		List<Integer> values = new ArrayList<>();
+		for (int i = min; i < max; i++) {
+			values.add(i);
+		}
+		return values;
 	}
 }
