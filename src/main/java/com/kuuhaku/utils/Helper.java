@@ -1166,6 +1166,7 @@ public class Helper {
 
 	public static <T> List<T> getRandomN(List<T> array, int elements) {
 		List<T> aux = new ArrayList<>(array);
+		Collections.shuffle(aux);
 		List<T> out = new ArrayList<>();
 		Random seed = new Random(array.hashCode());
 
@@ -1181,6 +1182,7 @@ public class Helper {
 
 	public static <T> List<T> getRandomN(List<T> array, int elements, int maxInstances) {
 		List<T> aux = new ArrayList<>(array);
+		Collections.shuffle(aux);
 		List<T> out = new ArrayList<>();
 		Random seed = new Random(array.hashCode());
 
@@ -1203,6 +1205,7 @@ public class Helper {
 
 	public static <T> List<T> getRandomN(List<T> array, int elements, int maxInstances, long seed) {
 		List<T> aux = new ArrayList<>(array);
+		Collections.shuffle(aux);
 		List<T> out = new ArrayList<>();
 		Random random = new Random(seed);
 
