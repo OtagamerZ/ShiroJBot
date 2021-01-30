@@ -57,7 +57,7 @@ public class LobbyCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length > 0 && args[0].equalsIgnoreCase("sair")) {
+		if (args.length > 0 && Helper.equalsAny(args[0], "sair", "exit")) {
 			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 			Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
 			Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
