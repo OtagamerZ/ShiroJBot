@@ -59,16 +59,18 @@ public class TenthSecondEvent implements Job {
 		if (lock) return;
 		lock = true;
 		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> soloLobby = new ArrayList<>(Main.getInfo().getMatchMaking().getSoloLobby().entrySet());
-		var indexes = Helper.getRandomN(Helper.getNumericList(0, soloLobby.size()), 2, 1);
-		if (tryMatching(soloLobby, indexes.get(0), indexes.get(1))) {
-			lock = false;
-			return;
+		if (soloLobby.size() > 1) {
+			var indexes = Helper.getRandomN(Helper.getNumericList(0, soloLobby.size()), 2, 1);
+			if (tryMatching(soloLobby, indexes.get(0), indexes.get(1))) {
+				lock = false;
+				return;
+			}
+			Main.getInfo().getMatchMaking().getSoloLobby().computeIfPresent(soloLobby.get(indexes.get(0)).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 		}
-		Main.getInfo().getMatchMaking().getSoloLobby().computeIfPresent(soloLobby.get(indexes.get(0)).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 
 		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> duoLobby = new ArrayList<>(Main.getInfo().getMatchMaking().getDuoLobby().entrySet());
 		if (duoLobby.size() > 3) {
-			indexes = Helper.getRandomN(Helper.getNumericList(0, duoLobby.size()), 4, 1);
+			var indexes = Helper.getRandomN(Helper.getNumericList(0, duoLobby.size()), 4, 1);
 			if (tryMatching(duoLobby, indexes.get(0), indexes.get(1), indexes.get(2), indexes.get(3))) {
 				lock = false;
 				return;
