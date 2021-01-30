@@ -1169,7 +1169,7 @@ public class Helper {
 		List<T> out = new ArrayList<>();
 		Random seed = new Random(array.hashCode());
 
-		for (int i = 0; i < elements; i++) {
+		for (int i = 0; i < elements && aux.size() > 0; i++) {
 			int index = rng(aux.size(), seed, true);
 
 			out.add(aux.get(index));
@@ -1184,7 +1184,7 @@ public class Helper {
 		List<T> out = new ArrayList<>();
 		Random seed = new Random(array.hashCode());
 
-		for (int i = 0; i < elements; i++) {
+		for (int i = 0; i < elements && aux.size() > 0; i++) {
 			int index = rng(aux.size(), seed, true);
 
 			T inst = aux.get(index);
@@ -1206,7 +1206,7 @@ public class Helper {
 		List<T> out = new ArrayList<>();
 		Random random = new Random(seed);
 
-		for (int i = 0; i < elements; i++) {
+		for (int i = 0; i < elements && aux.size() > 0; i++) {
 			int index = rng(aux.size(), random, true);
 
 			T inst = aux.get(index);
