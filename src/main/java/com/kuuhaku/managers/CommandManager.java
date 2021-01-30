@@ -584,7 +584,7 @@ public class CommandManager {
 					"reversi", new String[]{"othello"}, REQ_MENTION_BET, "cmd_reversi", FUN, true
 			));
 			put(ShoukanCommand.class, new Argument(
-					"shoukan", new String[]{"duelcards"}, "req_mention-bet-daily-custom", "cmd_shoukan", FUN, true
+					"shoukan", new String[]{"duelcards"}, "req_shoukan-args", "cmd_shoukan", FUN, true
 			));
 			put(CatchKawaiponCommand.class, new Argument(
 					"coletar", new String[]{"collect"}, "cmd_catch-kawaipon", FUN, false

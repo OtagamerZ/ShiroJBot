@@ -24,6 +24,7 @@ import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.MatchMakingRating;
@@ -56,7 +57,13 @@ public class LobbyCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length < 1 || !Helper.equalsAny(args[0], "solo", "duo")) {
+		if (args.length > 0 && args[0].equalsIgnoreCase("sair")) {
+			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
+			Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
+			Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
+			channel.sendMessage("Você saiu do saguão com sucesso.").queue();
+			return;
+		} else if (args.length < 1 || !Helper.equalsAny(args[0], "solo", "duo")) {
 			channel.sendMessage("❌ | Você precisa informar o tipo de fila que deseja entrar (`SOLO` ou `DUO`)").queue();
 			return;
 		}
