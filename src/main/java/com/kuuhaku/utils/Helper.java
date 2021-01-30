@@ -1166,9 +1166,8 @@ public class Helper {
 
 	public static <T> List<T> getRandomN(List<T> array, int elements) {
 		List<T> aux = new ArrayList<>(array);
-		Collections.shuffle(aux);
 		List<T> out = new ArrayList<>();
-		Random seed = new Random(array.hashCode());
+		Random seed = new Random(System.currentTimeMillis());
 
 		for (int i = 0; i < elements && aux.size() > 0; i++) {
 			int index = rng(aux.size(), seed, true);
@@ -1182,9 +1181,8 @@ public class Helper {
 
 	public static <T> List<T> getRandomN(List<T> array, int elements, int maxInstances) {
 		List<T> aux = new ArrayList<>(array);
-		Collections.shuffle(aux);
 		List<T> out = new ArrayList<>();
-		Random seed = new Random(array.hashCode());
+		Random seed = new Random(System.currentTimeMillis());
 
 		for (int i = 0; i < elements && aux.size() > 0; i++) {
 			int index = rng(aux.size(), seed, true);
@@ -1205,7 +1203,6 @@ public class Helper {
 
 	public static <T> List<T> getRandomN(List<T> array, int elements, int maxInstances, long seed) {
 		List<T> aux = new ArrayList<>(array);
-		Collections.shuffle(aux);
 		List<T> out = new ArrayList<>();
 		Random random = new Random(seed);
 
