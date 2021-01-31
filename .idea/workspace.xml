@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de filas ranqueadas (Solo/Duo)">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de filas ranqueadas (Solo/Duo)" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1027,20 +1025,7 @@
       <workItem from="1611921911483" duration="10106000" />
       <workItem from="1611937108463" duration="15634000" />
       <workItem from="1611975188118" duration="2865000" />
-    </task>
-    <task id="LOCAL-03568" summary="Correções menores no desafios diarios">
-      <created>1611861432886</created>
-      <option name="number" value="03568" />
-      <option name="presentableId" value="LOCAL-03568" />
-      <option name="project" value="LOCAL" />
-      <updated>1611861432887</updated>
-    </task>
-    <task id="LOCAL-03569" summary="Correções menores no desafios diarios">
-      <created>1611863688099</created>
-      <option name="number" value="03569" />
-      <option name="presentableId" value="LOCAL-03569" />
-      <option name="project" value="LOCAL" />
-      <updated>1611863688099</updated>
+      <workItem from="1611978467547" duration="145000" />
     </task>
     <task id="LOCAL-03570" summary="Adicionado Shoukan em duplas">
       <created>1611927558390</created>
@@ -1371,7 +1356,21 @@
       <option name="project" value="LOCAL" />
       <updated>1611977719630</updated>
     </task>
-    <option name="localTasksCounter" value="3617" />
+    <task id="LOCAL-03617" summary="Adição de filas ranqueadas (Solo/Duo)">
+      <created>1611978532943</created>
+      <option name="number" value="03617" />
+      <option name="presentableId" value="LOCAL-03617" />
+      <option name="project" value="LOCAL" />
+      <updated>1611978532943</updated>
+    </task>
+    <task id="LOCAL-03618" summary="Adição de filas ranqueadas (Solo/Duo)">
+      <created>1611978598428</created>
+      <option name="number" value="03618" />
+      <option name="presentableId" value="LOCAL-03618" />
+      <option name="project" value="LOCAL" />
+      <updated>1611978598428</updated>
+    </task>
+    <option name="localTasksCounter" value="3619" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
