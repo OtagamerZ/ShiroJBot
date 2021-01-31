@@ -43,6 +43,7 @@ import org.quartz.JobExecutionContext;
 import javax.annotation.Nonnull;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -192,6 +193,8 @@ public class TenthSecondEvent implements Job {
 						MatchMakingRatingDAO.saveMMR(mmr);
 					}
 
+					Collections.shuffle(teams.getLeft());
+					Collections.shuffle(teams.getRight());
 					boolean p1Starts = Helper.chance(50);
 					if (match.stream().allMatch(Pair::getRight)) {
 						GlobalGame g = new Shoukan(
