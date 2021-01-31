@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de filas ranqueadas (Solo/Duo)" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1026,13 +1028,8 @@
       <workItem from="1611937108463" duration="15634000" />
       <workItem from="1611975188118" duration="2865000" />
       <workItem from="1611978467547" duration="145000" />
-    </task>
-    <task id="LOCAL-03570" summary="Adicionado Shoukan em duplas">
-      <created>1611927558390</created>
-      <option name="number" value="03570" />
-      <option name="presentableId" value="LOCAL-03570" />
-      <option name="project" value="LOCAL" />
-      <updated>1611927558390</updated>
+      <workItem from="1612117546538" duration="263000" />
+      <workItem from="1612131537085" duration="41000" />
     </task>
     <task id="LOCAL-03571" summary="Adicionado Shoukan em duplas">
       <created>1611928135561</created>
@@ -1370,7 +1367,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611978598428</updated>
     </task>
-    <option name="localTasksCounter" value="3619" />
+    <task id="LOCAL-03619" summary="Correções menores">
+      <created>1612117806816</created>
+      <option name="number" value="03619" />
+      <option name="presentableId" value="LOCAL-03619" />
+      <option name="project" value="LOCAL" />
+      <updated>1612117806816</updated>
+    </task>
+    <option name="localTasksCounter" value="3620" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1456,7 +1460,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhorias nas funções disponíveis" />
     <MESSAGE value="Correção nas trocas" />
     <MESSAGE value="Melhorias nos metodos disponíveis" />
     <MESSAGE value="Correções no Shoukan" />
@@ -1481,7 +1484,8 @@
     <MESSAGE value="Correções menores no desafios diarios" />
     <MESSAGE value="Adicionado Shoukan em duplas" />
     <MESSAGE value="Adição de filas ranqueadas (Solo/Duo)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de filas ranqueadas (Solo/Duo)" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
