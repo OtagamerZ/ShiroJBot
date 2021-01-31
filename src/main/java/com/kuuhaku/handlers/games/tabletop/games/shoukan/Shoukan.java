@@ -616,7 +616,7 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return;
 					}
 
-					if (!d.getAcc().hasCompletedQuests()) {
+					if (!d.getAcc().hasCompletedQuests() && getCustom() == null) {
 						Map<DailyTask, Integer> pg = d.getAcc().getDailyProgress();
 						pg.compute(DailyTask.RACE_TASK, (k, v) -> {
 							DailyQuest dq = DailyQuest.getQuest(getCurrent().getId());

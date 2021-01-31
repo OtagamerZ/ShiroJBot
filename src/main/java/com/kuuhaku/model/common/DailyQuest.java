@@ -23,11 +23,7 @@ import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.utils.Helper;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class DailyQuest {
 	private final HashMap<DailyTask, Integer> tasks = new HashMap<>();
@@ -35,7 +31,8 @@ public class DailyQuest {
 	private final Race chosenRace;
 
 	private DailyQuest(String id) {
-		long seed = LocalDate.now().toEpochDay() + Long.parseLong(id);
+		Calendar today = Calendar.getInstance(TimeZone.getTimeZone("GMT-3:00"));
+		long seed = (Long.parseLong(id) / today.get(Calendar.DAY_OF_YEAR));
 		List<DailyTask> tasks = Helper.getRandomN(List.of(DailyTask.values()), 3, 1, seed);
 
 		Random r = new Random(seed);
