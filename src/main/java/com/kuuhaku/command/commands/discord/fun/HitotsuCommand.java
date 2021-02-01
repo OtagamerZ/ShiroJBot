@@ -36,9 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -127,7 +125,7 @@ public class HitotsuCommand extends Command {
             }
         }
 
-        Set<User> players = new HashSet<>() {{
+        List<User> players = new ArrayList<>() {{
             add(author);
             addAll(message.getMentionedUsers());
         }};
