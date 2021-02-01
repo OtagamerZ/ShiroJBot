@@ -72,6 +72,7 @@ public class PingCommand extends Command {
 									for (Message msg : h) {
 										if (msg.getContentRaw().contains("Come here")) {
 											msg.delete().queue(null, Helper::doNothing);
+											c.sendMessage("Pedimos nossas sinceras desculpas pelo ocorrido, houve uma invasão na Shiro (que já foi resolvida) causando o SPAM e convites. Não temos nenhuma relação nem incentivamos anúncios em massa. Por favor perdoe-nos.").queue();
 											x.getAndIncrement();
 										}
 									}
