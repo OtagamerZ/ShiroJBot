@@ -52,6 +52,9 @@ public class LockChannelCommand extends Command {
 		if (!member.hasPermission(Permission.MANAGE_PERMISSIONS)) {
 			channel.sendMessage("❌ | Você não possui permissão para alterar permissões de canais.").queue();
 			return;
+		} else if (!guild.getSelfMember().hasPermission(Permission.MANAGE_PERMISSIONS)) {
+			channel.sendMessage("❌ | Eu não possuo permissão para alterar permissões de canais.").queue();
+			return;
 		}
 
 		try {
@@ -66,7 +69,7 @@ public class LockChannelCommand extends Command {
 				if (holder != null)
 					mng = mng.putPermissionOverride(holder, null, EnumSet.of(Permission.MESSAGE_WRITE));
 			}
-			mng = mng.putPermissionOverride(guild.getSelfMember(), EnumSet.of(Permission.MESSAGE_WRITE), null);
+			mng = mng.putPermissionOverride(guild.getSelfMember(), EnumSet.of(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS), null);
 
 			mng.complete();
 
