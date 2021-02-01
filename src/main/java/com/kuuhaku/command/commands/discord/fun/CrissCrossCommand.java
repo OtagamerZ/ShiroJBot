@@ -37,9 +37,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Command(
-        name = "abrir",
-        aliases = {"open"},
-        usage = "req_captcha",
+        name = "jogodavelha",
+        aliases = {"jdv", "crisscross", "cc"},
+        usage = "req_mention-bet",
         category = Category.FUN
 )
 public class CrissCrossCommand implements Executable {
