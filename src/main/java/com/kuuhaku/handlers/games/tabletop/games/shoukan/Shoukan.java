@@ -619,7 +619,7 @@ public class Shoukan extends GlobalGame {
 					if (!d.getAcc().hasCompletedQuests() && getCustom() == null) {
 						Map<DailyTask, Integer> pg = d.getAcc().getDailyProgress();
 						pg.compute(DailyTask.RACE_TASK, (k, v) -> {
-							DailyQuest dq = DailyQuest.getQuest(getCurrent().getId());
+							DailyQuest dq = DailyQuest.getQuest(getCurrent().getIdLong());
 							if (c.getRace() == dq.getChosenRace())
 								return Helper.getOr(v, 0) + 1;
 							else

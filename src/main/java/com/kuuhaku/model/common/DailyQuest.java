@@ -30,9 +30,9 @@ public class DailyQuest {
 	private final AnimeName chosenAnime;
 	private final Race chosenRace;
 
-	private DailyQuest(String id) {
+	private DailyQuest(long id) {
 		Calendar today = Calendar.getInstance(TimeZone.getTimeZone("GMT-3:00"));
-		long seed = (Long.parseLong(id) / (today.get(Calendar.DAY_OF_YEAR) + today.get(Calendar.YEAR)));
+		long seed = (id + (today.get(Calendar.DAY_OF_YEAR) + today.get(Calendar.YEAR)));
 		List<DailyTask> tasks = Helper.getRandomN(List.of(DailyTask.values()), 3, 1, seed);
 
 		Random r = new Random(seed);
@@ -83,7 +83,7 @@ public class DailyQuest {
 		return true;
 	}
 
-	public static DailyQuest getQuest(String id) {
+	public static DailyQuest getQuest(long id) {
 		return new DailyQuest(id);
 	}
 

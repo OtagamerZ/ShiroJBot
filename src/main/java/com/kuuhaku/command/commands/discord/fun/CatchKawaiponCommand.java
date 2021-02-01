@@ -90,7 +90,7 @@ public class CatchKawaiponCommand extends Command {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.compute(DailyTask.CARD_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
 			pg.compute(DailyTask.ANIME_TASK, (k, v) -> {
-				DailyQuest dq = DailyQuest.getQuest(author.getId());
+				DailyQuest dq = DailyQuest.getQuest(author.getIdLong());
 				if (kc.getCard().getAnime() == dq.getChosenAnime())
 					return Helper.getOr(v, 0) + 1;
 				else
