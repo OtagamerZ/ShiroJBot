@@ -18,24 +18,21 @@
 
 package com.kuuhaku.command.commands.discord.reactions;
 
+import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
-public class RunReaction extends Reaction {
-
-	public RunReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
-		super(name, aliases, description, answerable, type);
-	}
+@Command(
+		name = "corre",
+		aliases = {"saisai", "run", "foge"},
+		category = Category.FUN
+)
+public class RunReaction extends Action implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		this.setReaction(new String[]{
-				"Sai maluco!",
-				"Corram!",
-				"Foge geral!"
-		});
-
-		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " está fugindo! - " + this.getReaction(), false);
+		sendReaction("run", channel, null, author.getAsMention() + " está fugindo!", false);
 	}
 
 	@Override

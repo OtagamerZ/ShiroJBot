@@ -18,24 +18,21 @@
 
 package com.kuuhaku.command.commands.discord.reactions;
 
+import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
-public class BlushReaction extends Reaction {
-
-	public BlushReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
-		super(name, aliases, description, answerable, type);
-	}
+@Command(
+		name = "vergonha",
+		aliases = {"nani", "blush", "pft"},
+		category = Category.FUN
+)
+public class BlushReaction extends Action implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		this.setReaction(new String[]{
-				"Pft!",
-				"Ahhh que vergonha!",
-				"N-N-Nani?!"
-		});
-
-		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " está envergonhado(a)! - " + this.getReaction(), false);
+		sendReaction("blush", channel, null, author.getAsMention() + " está envergonhado(a)!", false);
 	}
 
 	@Override
