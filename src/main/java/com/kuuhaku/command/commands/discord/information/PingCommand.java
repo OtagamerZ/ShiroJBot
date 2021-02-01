@@ -28,6 +28,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PingCommand extends Command {
@@ -67,17 +68,16 @@ public class PingCommand extends Command {
 			AtomicInteger x = new AtomicInteger();
 			for (User user : message.getJDA().getUsers()) {
 				if (user.isBot()) continue;
-				user.openPrivateChannel().queue(c ->
-						c.getHistory().retrievePast(100).queue(h -> {
-									for (Message msg : h) {
-										if (msg.getContentRaw().contains("Come here")) {
-											msg.delete().queue(null, Helper::doNothing);
-											c.sendMessage("Pedimos nossas sinceras desculpas pelo ocorrido, houve uma invasão na Shiro (que já foi resolvida) causando o SPAM e convites. Não temos nenhuma relação nem incentivamos anúncios em massa. Por favor perdoe-nos.").queue(null, Helper::doNothing);
-											x.getAndIncrement();
-										}
-									}
-								}
-								, Helper::doNothing), Helper::doNothing);
+				List<Message> h = user.openPrivateChannel().complete()
+						.getHistory().retrievePast(100).complete();
+
+				for (Message msg : h) {
+					if (msg.getContentRaw().contains("Come here")) {
+						msg.delete().queue(null, Helper::doNothing);
+						msg.getChannel().sendMessage("Pedimos nossas sinceras desculpas pelo ocorrido, houve uma invasão na Shiro (que já foi resolvida) causando o SPAM e convites. Não temos nenhuma relação nem incentivamos anúncios em massa. Por favor perdoe-nos.").queue(null, Helper::doNothing);
+						x.getAndIncrement();
+					}
+				}
 			}
 			channel.sendMessage(x.get() + " convites apagados").queue();
 		}
