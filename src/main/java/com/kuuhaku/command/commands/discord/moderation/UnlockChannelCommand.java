@@ -53,7 +53,7 @@ public class UnlockChannelCommand extends Command {
 		try {
 			message.getTextChannel().getManager().sync().complete();
 
-			channel.sendMessage("✅ | Canal destrancado com sucesso!").queue();
+			channel.sendMessage(":unlock: | Canal destrancado com sucesso!").queue();
 		} catch (InsufficientPermissionException e) {
 			channel.sendMessage("❌ | Não possuo a permissão para gerenciar canais.").queue();
 		}

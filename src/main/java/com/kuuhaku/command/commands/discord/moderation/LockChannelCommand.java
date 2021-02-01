@@ -70,7 +70,7 @@ public class LockChannelCommand extends Command {
 
 			mng.complete();
 
-			channel.sendMessage("✅ | Canal trancado com sucesso!").queue();
+			channel.sendMessage(":lock: | Canal trancado com sucesso!").queue();
 		} catch (InsufficientPermissionException e) {
 			channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
 		}
