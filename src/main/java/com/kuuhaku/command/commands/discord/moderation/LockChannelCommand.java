@@ -20,13 +20,13 @@ package com.kuuhaku.command.commands.discord.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.managers.ChannelManager;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -61,15 +61,15 @@ public class LockChannelCommand extends Command {
 
 			ChannelManager mng = message.getTextChannel().getManager();
 
-			List<ChannelManager> act = new ArrayList<>();
-
+			mng = mng.putPermissionOverride(guild.getPublicRole(), null, EnumSet.of(Permission.MESSAGE_WRITE));
 			for (PermissionOverride override : overrides) {
 				IPermissionHolder holder = override.getPermissionHolder();
-				if (holder != null)
-					act.add(mng.putPermissionOverride(holder, null, EnumSet.of(Permission.MESSAGE_WRITE)));
+				if (holder != null && !Helper.equalsAny(holder.getId(), guild.getBotRole().getId(), guild.getSelfMember().getId()))
+					mng = mng.putPermissionOverride(holder, null, EnumSet.of(Permission.MESSAGE_WRITE));
 			}
 
-			mng.zip(mng.putPermissionOverride(guild.getPublicRole(), null, EnumSet.of(Permission.MESSAGE_WRITE)), act.toArray(ChannelManager[]::new)).complete();
+			mng.complete();
+
 			channel.sendMessage("✅ | Canal trancado com sucesso!").queue();
 		} catch (InsufficientPermissionException e) {
 			channel.sendMessage("❌ | Não possuo a permissão para gerenciar canais.").queue();
