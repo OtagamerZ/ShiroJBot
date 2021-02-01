@@ -23,7 +23,10 @@ import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.managers.ChannelManager;
 import org.jetbrains.annotations.NonNls;
+
+import java.util.List;
 
 public class UnlockChannelCommand extends Command {
 
@@ -51,7 +54,22 @@ public class UnlockChannelCommand extends Command {
 		}
 
 		try {
-			message.getTextChannel().getManager().sync().complete();
+			TextChannel tc = message.getTextChannel();
+			List<PermissionOverride> overrides = tc.getPermissionOverrides();
+
+			ChannelManager mng = message.getTextChannel().getManager();
+
+			mng = mng.removePermissionOverride(guild.getPublicRole());
+			if (tc.getParent() == null)
+				for (PermissionOverride override : overrides) {
+					IPermissionHolder holder = override.getPermissionHolder();
+					if (holder != null)
+						mng = mng.removePermissionOverride(override.getPermissionHolder());
+				}
+			else
+				mng = mng.sync();
+
+			mng.complete();
 
 			channel.sendMessage(":unlock: | Canal destrancado com sucesso!").queue();
 		} catch (InsufficientPermissionException e) {
