@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novos comandos de trancar e destrancar o canal">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1025,20 +1023,6 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
     </task>
-    <task id="LOCAL-03583" summary="Adicionado Shoukan em duplas">
-      <created>1611932107816</created>
-      <option name="number" value="03583" />
-      <option name="presentableId" value="LOCAL-03583" />
-      <option name="project" value="LOCAL" />
-      <updated>1611932107816</updated>
-    </task>
-    <task id="LOCAL-03584" summary="Adicionado Shoukan em duplas">
-      <created>1611932384019</created>
-      <option name="number" value="03584" />
-      <option name="presentableId" value="LOCAL-03584" />
-      <option name="project" value="LOCAL" />
-      <updated>1611932384019</updated>
-    </task>
     <task id="LOCAL-03585" summary="Adicionado Shoukan em duplas">
       <created>1611937600380</created>
       <option name="number" value="03585" />
@@ -1368,7 +1352,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612198777306</updated>
     </task>
-    <option name="localTasksCounter" value="3632" />
+    <task id="LOCAL-03632" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612199520570</created>
+      <option name="number" value="03632" />
+      <option name="presentableId" value="LOCAL-03632" />
+      <option name="project" value="LOCAL" />
+      <updated>1612199520571</updated>
+    </task>
+    <task id="LOCAL-03633" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612199652006</created>
+      <option name="number" value="03633" />
+      <option name="presentableId" value="LOCAL-03633" />
+      <option name="project" value="LOCAL" />
+      <updated>1612199652007</updated>
+    </task>
+    <option name="localTasksCounter" value="3634" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1484,14 +1482,14 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612198784651">
+    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612199650807">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612198784651" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612198787856">
+    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612199650807" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612199653461">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612198787856" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612199653461" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
