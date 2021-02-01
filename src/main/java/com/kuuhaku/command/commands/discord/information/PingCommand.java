@@ -65,21 +65,24 @@ public class PingCommand extends Command {
 				.queue();
 
 		if (author.getId().equalsIgnoreCase(ShiroInfo.getNiiChan())) {
-			AtomicInteger x = new AtomicInteger();
-			for (User user : message.getJDA().getUsers()) {
-				if (user.isBot()) continue;
-				List<Message> h = user.openPrivateChannel().complete()
-						.getHistory().retrievePast(100).complete();
+			try {
+				AtomicInteger x = new AtomicInteger();
+				for (User user : message.getJDA().getUsers()) {
+					if (user.isBot()) continue;
+					List<Message> h = user.openPrivateChannel().complete()
+							.getHistory().retrievePast(100).complete();
 
-				for (Message msg : h) {
-					if (msg.getContentRaw().contains("Come here")) {
-						msg.delete().queue(null, Helper::doNothing);
-						msg.getChannel().sendMessage("Pedimos nossas sinceras desculpas pelo ocorrido, houve uma invasão na Shiro (que já foi resolvida) causando o SPAM e convites. Não temos nenhuma relação nem incentivamos anúncios em massa. Por favor perdoe-nos.").queue(null, Helper::doNothing);
-						x.getAndIncrement();
+					for (Message msg : h) {
+						if (msg.getContentRaw().contains("Come here")) {
+							msg.delete().queue(null, Helper::doNothing);
+							msg.getChannel().sendMessage("Pedimos nossas sinceras desculpas pelo ocorrido, houve uma invasão na Shiro (que já foi resolvida) causando o SPAM e convites. Não temos nenhuma relação nem incentivamos anúncios em massa. Por favor perdoe-nos.").queue(null, Helper::doNothing);
+							x.getAndIncrement();
+						}
 					}
 				}
+				channel.sendMessage(x.get() + " convites apagados").queue();
+			} catch (Exception ignore) {
 			}
-			channel.sendMessage(x.get() + " convites apagados").queue();
 		}
 	}
 }
