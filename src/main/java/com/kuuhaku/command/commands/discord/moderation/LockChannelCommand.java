@@ -50,8 +50,8 @@ public class LockChannelCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (!member.hasPermission(Permission.MANAGE_CHANNEL)) {
-			channel.sendMessage("❌ | Você não possui permissão para gerenciar canais.").queue();
+		if (!member.hasPermission(Permission.MANAGE_PERMISSIONS)) {
+			channel.sendMessage("❌ | Você não possui permissão para alterar permissões de canais.").queue();
 			return;
 		}
 
@@ -61,7 +61,7 @@ public class LockChannelCommand extends Command {
 
 			ChannelManager mng = message.getTextChannel().getManager();
 
-			mng = mng.putPermissionOverride(guild.getPublicRole(), null, EnumSet.of(Permission.MESSAGE_WRITE));
+			//mng = mng.putPermissionOverride(guild.getPublicRole(), null, EnumSet.of(Permission.MESSAGE_WRITE));
 			for (PermissionOverride override : overrides) {
 				IPermissionHolder holder = override.getPermissionHolder();
 				if (holder != null && !Helper.equalsAny(holder.getId(), guild.getBotRole().getId(), guild.getSelfMember().getId()))
@@ -72,7 +72,7 @@ public class LockChannelCommand extends Command {
 
 			channel.sendMessage("✅ | Canal trancado com sucesso!").queue();
 		} catch (InsufficientPermissionException e) {
-			channel.sendMessage("❌ | Não possuo a permissão para gerenciar canais.").queue();
+			channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
 		}
 	}
 }

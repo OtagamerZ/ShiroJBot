@@ -14,7 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novos comandos de trancar e destrancar o canal">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LockChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LockChannelCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1031,14 +1032,7 @@
       <workItem from="1612117546538" duration="263000" />
       <workItem from="1612131537085" duration="41000" />
       <workItem from="1612131596239" duration="2744000" />
-      <workItem from="1612144748286" duration="3498000" />
-    </task>
-    <task id="LOCAL-03575" summary="Adicionado Shoukan em duplas">
-      <created>1611928932995</created>
-      <option name="number" value="03575" />
-      <option name="presentableId" value="LOCAL-03575" />
-      <option name="project" value="LOCAL" />
-      <updated>1611928932995</updated>
+      <workItem from="1612144748286" duration="4596000" />
     </task>
     <task id="LOCAL-03576" summary="Adicionado Shoukan em duplas">
       <created>1611929309221</created>
@@ -1376,7 +1370,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612148077008</updated>
     </task>
-    <option name="localTasksCounter" value="3624" />
+    <task id="LOCAL-03624" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612148434261</created>
+      <option name="number" value="03624" />
+      <option name="presentableId" value="LOCAL-03624" />
+      <option name="project" value="LOCAL" />
+      <updated>1612148434261</updated>
+    </task>
+    <option name="localTasksCounter" value="3625" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1386,12 +1387,12 @@
     <option name="UPDATE_COPYRIGHT" value="true" />
   </component>
   <component name="Vcs.Log.History.Properties">
-    <option name="COLUMN_ORDER">
+    <option name="COLUMN_ID_ORDER">
       <list>
-        <option value="0" />
-        <option value="2" />
-        <option value="3" />
-        <option value="1" />
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
       </list>
     </option>
   </component>
