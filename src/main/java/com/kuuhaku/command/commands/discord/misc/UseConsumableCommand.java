@@ -74,7 +74,7 @@ public class UseConsumableCommand implements Executable {
 		}
 
 		Consumable c = ConsumableShop.getAvailable().get(args[0]);
-		c.getEffect().accept(member, (TextChannel) channel, message);
+		c.getEffect().accept(member, channel, message);
 		if (Helper.equalsAny(c.getId(), "spawncard", "spawnanime"))
 			Main.getInfo().getRatelimit().invalidate(author.getId());
 	}

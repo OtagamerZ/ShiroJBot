@@ -224,7 +224,7 @@ public class Backup {
 				}
 				switch (chn.getType()) {
 					case TEXT -> {
-						TextChannel tchannel = (TextChannel) chn;
+						TextChannel tchannel = chn;
 						channels.add(new com.kuuhaku.model.common.backup.GuildChannel(tchannel.getName(), tchannel.getTopic(), chnperms, tchannel.isNSFW()));
 					}
 					case VOICE -> {

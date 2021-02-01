@@ -32,7 +32,7 @@ public class NopeReaction extends Action implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		sendReaction("nope", (TextChannel) channel, null, author.getAsMention() + " esquivou!", false);
+		sendReaction("nope", channel, null, author.getAsMention() + " esquivou!", false);
 	}
 
 	@Override
