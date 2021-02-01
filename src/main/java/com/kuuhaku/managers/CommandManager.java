@@ -250,6 +250,12 @@ public class CommandManager {
 			put(SmallCardsCommand.class, new Argument(
 					"cartaspequenas", new String[]{"smallcards"}, "cmd_small-cards", MODERACAO, false
 			));
+			put(LockChannelCommand.class, new Argument(
+					"travar", new String[]{"lock", "trancar"}, "cmd_lock-channel", MODERACAO, true
+			));
+			put(UnlockChannelCommand.class, new Argument(
+					"destravar", new String[]{"unlock", "destrancar"}, "cmd_unlock-channel", MODERACAO, true
+			));
 
 			//INFORMATION
 			put(HelpCommand.class, new Argument(
