@@ -66,6 +66,7 @@ public class LockChannelCommand extends Command {
 				if (holder != null)
 					mng = mng.putPermissionOverride(holder, null, EnumSet.of(Permission.MESSAGE_WRITE));
 			}
+			mng = mng.putPermissionOverride(guild.getSelfMember(), EnumSet.of(Permission.MESSAGE_WRITE), null);
 
 			mng.complete();
 
