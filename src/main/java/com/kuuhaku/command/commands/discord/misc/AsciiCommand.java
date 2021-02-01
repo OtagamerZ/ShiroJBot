@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -27,30 +28,18 @@ import net.dv8tion.jda.api.entities.*;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+@Command(
+		name = "ascii",
+		usage = "req_text-image",
+		category = Category.MISC
+)
 public class AsciiCommand implements Executable {
-
-	public AsciiCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public AsciiCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public AsciiCommand(@NonNls String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public AsciiCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {

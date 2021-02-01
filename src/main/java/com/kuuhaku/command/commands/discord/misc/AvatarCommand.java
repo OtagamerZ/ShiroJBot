@@ -20,32 +20,21 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
-
+@Command(
+		name = "avatar",
+		aliases = {"icon", "icone", "pfp"},
+		usage = "req_mention-guild",
+		category = Category.MISC
+)
 public class AvatarCommand implements Executable {
-
-	public AvatarCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public AvatarCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public AvatarCommand(@NonNls String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public AvatarCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {

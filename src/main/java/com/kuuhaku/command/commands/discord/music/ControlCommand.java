@@ -54,13 +54,13 @@ public class ControlCommand implements Executable {
 			return;
 		}
 
-		if (Music.getGuildAudioPlayer(guild, (TextChannel) channel).player.getPlayingTrack() == null) {
+		if (Music.getGuildAudioPlayer(guild, channel).player.getPlayingTrack() == null) {
 			channel.sendMessage("❌ | Não há nenhuma música tocando no momento.").queue();
 			return;
 		} else if (member.getVoiceState().getChannel() == null || !member.getVoiceState().getChannel().getMembers().contains(guild.getSelfMember())) {
 			channel.sendMessage("❌ | Este comando só pode ser usado se estiver em um canal de voz com a Shiro.").queue();
 			return;
-		} else if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !((User) Music.getGuildAudioPlayer(guild, (TextChannel) channel).player.getPlayingTrack().getUserData()).getId().equals(author.getId())) {
+		} else if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !((User) Music.getGuildAudioPlayer(guild, channel).player.getPlayingTrack().getUserData()).getId().equals(author.getId())) {
 			channel.sendMessage("❌ | Apenas quem adicionou esta música pode controlá-la (exceto moderadores).").queue();
 			return;
 		}
