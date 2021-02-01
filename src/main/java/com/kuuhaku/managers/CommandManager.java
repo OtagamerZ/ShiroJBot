@@ -22,7 +22,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.command.commands.discord.fun.*;
-import com.kuuhaku.command.commands.discord.misc.*;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
@@ -33,7 +32,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.kuuhaku.command.Category.FUN;
-import static com.kuuhaku.command.Category.MISC;
 
 public class CommandManager {
 
@@ -54,130 +52,15 @@ public class CommandManager {
 	private static final String REQ_ITEM = "req_item";
 	private final HashMap<Class<? extends Executable>, Argument> commands = new HashMap<>() {
 		{
-			/*put(MatchStatsCommand.class, new Argument(
+			/*
+			put(MatchStatsCommand.class, new Argument(
 					"dadosdapartida", new String[]{"matchstats", "mstats", "estatisticas"}, REQ_ID, "cmd_match-stats", INFO, true
-			));*/
+			));
 
-			put(ValidateGIFCommand.class, new Argument(
-					"validate", new String[]{"testgif", "tgif"}, REQ_LINK, "cmd_dimension-test", MISC, false
-			));
-			put(EmbedCommand.class, new Argument(
-					"embed", "req_json", "cmd_embed", MISC, false
-			));
-			put(PollCommand.class, new Argument(
-					"enquete", new String[]{"poll"}, REQ_QUESTION, "cmd_poll", MISC, true
-			));
-			put(TheAnswerCommand.class, new Argument(
-					"arespostaé", new String[]{"theansweris", "responder", "answer"}, "cmd_rules", MISC, true
-			));
-			put(BinaryCommand.class, new Argument(
-					"bin", REQ_TEXT, "cmd_binary", MISC, false
-			));
-			put(LinkTesterCommand.class, new Argument(
-					"link", new String[]{"try"}, REQ_LINK, "cmd_link-test", MISC, false
-			));
-			/*put(TranslateCommand.class, new Argument(
+			put(TranslateCommand.class, new Argument(
 					"traduzir", new String[]{"translate", "traduza", "trad"}, "req_from-to-text", "cmd_translate", MISC, false
-			));*/
-			put(EightBallCommand.class, new Argument(
-					"8ball", REQ_QUESTION, "cmd_8ball", MISC, false
 			));
-			put(ChooseCommand.class, new Argument(
-					"escolha", new String[]{"choose"}, "req_options", "cmd_choose", MISC, false
-			));
-			put(ColorRoleCommand.class, new Argument(
-					"cor", new String[]{"color"}, REQ_NAME, "cmd_color-role", MISC, false
-			));
-			//put(ImageCommand.class, new Argument(
-			//		"image", new String[]{"imagem", "img"}, "req_tags", "cmd_image", MISC, false
-			//));
-			put(TransferCommand.class, new Argument(
-					"transferir", new String[]{"transfer", "tr"}, "req_user-amount", "cmd_transfer", MISC, false
-			));
-			put(TradeCardCommand.class, new Argument(
-					"trocar", new String[]{"trade"}, "req_user-card-amount", "cmd_trade-card", MISC, true
-			));
-			put(BuyCardCommand.class, new Argument(
-					"comprar", new String[]{"buy"}, REQ_ID, "cmd_buy-card", MISC, true
-			));
-			put(SellCardCommand.class, new Argument(
-					"anunciar", new String[]{"sell"}, "req_card-type-price", "cmd_sell-card", MISC, true
-			));
-			put(PseudoNameCommand.class, new Argument(
-					"pseudonimo", new String[]{"pnome", "pname"}, REQ_NAME, "cmd_pseudo-name", MISC, true
-			));
-			put(PseudoAvatarCommand.class, new Argument(
-					"pseudoavatar", new String[]{"pavatar"}, REQ_LINK, "cmd_pseudo-avatar", MISC, true
-			));
-			put(SeeCardCommand.class, new Argument(
-					"carta", new String[]{"card", "see", "olhar"}, "req_card-type", "cmd_see-card", MISC, false
-			));
-			put(LoanCommand.class, new Argument(
-					"emprestimo", new String[]{"emp", "loan"}, REQ_ID, "cmd_loan", MISC, false
-			));
-			put(RedeemCommand.class, new Argument(
-					"trocargema", new String[]{"resgatar", "redeem"}, "cmd_redeem", MISC, true
-			));
-			put(VIPShopCommand.class, new Argument(
-					"vip", new String[]{"lojavip", "gemshop"}, REQ_ID, "cmd_vip", MISC, false
-			));
-			put(PayLoanCommand.class, new Argument(
-					"pagar", new String[]{"pay", "payloan"}, "cmd_pay-loan", MISC, false
-			));
-			put(BindCommand.class, new Argument(
-					"vincular", new String[]{"bind"}, "cmd_bind", MISC, false
-			));
-			put(UnbindCommand.class, new Argument(
-					"desvincular", new String[]{"unbind"}, "cmd_unbind", MISC, false
-			));
-			put(LotteryCommand.class, new Argument(
-					"loteria", new String[]{"lottery"}, "req_dozens", "cmd_lottery", MISC, true
-			));
-			put(BuyConsumableCommand.class, new Argument(
-					"loja", new String[]{"shop"}, REQ_ITEM, "cmd_item-shop", MISC, false
-			));
-			put(UseConsumableCommand.class, new Argument(
-					"usar", new String[]{"use"}, REQ_ITEM, "cmd_use-item", MISC, false
-			));
-			put(FrameColorCommand.class, new Argument(
-					"cordaborda", new String[]{"borda", "framecolor", "frame"}, "req_frame-color", "cmd_frame-color", MISC, true
-			));
-			put(FrameBackgroundCommand.class, new Argument(
-					"fundododeck", new String[]{"deckbg"}, "req_ultimate", "cmd_frame-background", MISC, false
-			));
-			put(ConvertCardCommand.class, new Argument(
-					"converter", new String[]{"convert"}, "req_card", "cmd_convert-card", MISC, true
-			));
-			put(RevertCardCommand.class, new Argument(
-					"reverter", new String[]{"revert"}, "req_card", "cmd_revert-card", MISC, true
-			));
-			put(SynthesizeCardCommand.class, new Argument(
-					"sintetizar", new String[]{"synthesize", "synth"}, "req_cards-type", "cmd_synthesize-card", MISC, true
-			));
-			put(AuctionCommand.class, new Argument(
-					"leilao", new String[]{"auction", "auct"}, "req_card-type-price", "cmd_auction", MISC, true
-			));
-			put(ProfileTrophyCommand.class, new Argument(
-					"trofeu", new String[]{"trophy"}, "req_id-reset", "cmd_trophy", MISC, true
-			));
-			put(DestinyCardsCommand.class, new Argument(
-					"destino", new String[]{"destiny", "dest"}, "req_positions", "cmd_destiny-cards", MISC, false
-			));
-			put(DeckStashCommand.class, new Argument(
-					"reserva", new String[]{"stash", "estoque"}, "req_slot", "cmd_deck-stash", MISC, true
-			));
-			put(GiftCodeCommand.class, new Argument(
-					"giftcode", "req_type-amount-code", "cmd_gift-code", MISC, false
-			));
-			put(InvestCommand.class, new Argument(
-					"investir", new String[]{"invest"}, "req_card-value", "cmd_invest", MISC, true
-			));
-			put(RecoverCommand.class, new Argument(
-					"retirar", new String[]{"recover"}, "req_card-value", "cmd_recover", MISC, true
-			));
-			put(ShoukanMasterCommand.class, new Argument(
-					"tutor", new String[]{"teacher", "mestre", "master"}, REQ_MENTION, "cmd_shoukan-master", MISC, true
-			));
+			*/
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(
