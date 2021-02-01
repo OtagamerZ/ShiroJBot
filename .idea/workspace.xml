@@ -15,7 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novos comandos de trancar e destrancar o canal">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LockChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LockChannelCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1043,21 +1042,7 @@
       <workItem from="1612117546538" duration="263000" />
       <workItem from="1612131537085" duration="41000" />
       <workItem from="1612131596239" duration="2744000" />
-      <workItem from="1612144748286" duration="4596000" />
-    </task>
-    <task id="LOCAL-03576" summary="Adicionado Shoukan em duplas">
-      <created>1611929309221</created>
-      <option name="number" value="03576" />
-      <option name="presentableId" value="LOCAL-03576" />
-      <option name="project" value="LOCAL" />
-      <updated>1611929309221</updated>
-    </task>
-    <task id="LOCAL-03577" summary="Adicionado Shoukan em duplas">
-      <created>1611929782838</created>
-      <option name="number" value="03577" />
-      <option name="presentableId" value="LOCAL-03577" />
-      <option name="project" value="LOCAL" />
-      <updated>1611929782838</updated>
+      <workItem from="1612144748286" duration="5276000" />
     </task>
     <task id="LOCAL-03578" summary="Adicionado Shoukan em duplas">
       <created>1611930128462</created>
@@ -1388,7 +1373,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612148434261</updated>
     </task>
-    <option name="localTasksCounter" value="3625" />
+    <task id="LOCAL-03625" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612149455732</created>
+      <option name="number" value="03625" />
+      <option name="presentableId" value="LOCAL-03625" />
+      <option name="project" value="LOCAL" />
+      <updated>1612149455732</updated>
+    </task>
+    <task id="LOCAL-03626" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612149653430</created>
+      <option name="number" value="03626" />
+      <option name="presentableId" value="LOCAL-03626" />
+      <option name="project" value="LOCAL" />
+      <updated>1612149653430</updated>
+    </task>
+    <option name="localTasksCounter" value="3627" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
