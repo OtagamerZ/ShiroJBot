@@ -21,17 +21,8 @@ package com.kuuhaku.managers;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.commands.PreparedCommand;
-import com.kuuhaku.command.commands.discord.exceed.ExceedLeaveCommand;
-import com.kuuhaku.command.commands.discord.exceed.ExceedPaletteCommand;
-import com.kuuhaku.command.commands.discord.exceed.ExceedRankCommand;
-import com.kuuhaku.command.commands.discord.exceed.ExceedSelectCommand;
 import com.kuuhaku.command.commands.discord.fun.*;
-import com.kuuhaku.command.commands.discord.information.*;
 import com.kuuhaku.command.commands.discord.misc.*;
-import com.kuuhaku.command.commands.discord.music.ControlCommand;
-import com.kuuhaku.command.commands.discord.music.YoutubeCommand;
-import com.kuuhaku.command.commands.discord.reactions.*;
-import com.kuuhaku.command.commands.discord.reactions.answerable.*;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
@@ -62,51 +53,9 @@ public class CommandManager {
 	private static final String REQ_ITEM = "req_item";
 	private final HashMap<Class<? extends Executable>, Argument> commands = new HashMap<>() {
 		{
-			put(CardValueCommand.class, new Argument(
-					"valor", new String[]{"value"}, "req_card", "cmd_card-value", INFO, false
-			));
-			put(ShoukanDeckCommand.class, new Argument(
-					"deck", "req_daily-deck-p", "cmd_shoukan-deck", INFO, false
-			));
-			put(VoteCommand.class, new Argument(
-					"votar", new String[]{"vote", "upvote"}, "cmd_vote", INFO, false
-			));
-			put(DonateCommand.class, new Argument(
-					"doar", new String[]{"donate"}, "cmd_donate", INFO, false
-			));
-			put(MyTicketsCommand.class, new Argument(
-					"bilhetes", new String[]{"tickets"}, "cmd_tickets", INFO, false
-			));
-			put(DeckEvalCommand.class, new Argument(
-					"avaliardeck", new String[]{"deckeval"}, "cmd_deck-eval", INFO, false
-			));
-			put(LobbyCommand.class, new Argument(
-					"saguao", new String[]{"lobby"}, "req_queue-exit", "cmd_lobby", INFO, true
-			));
-			put(TierCommand.class, new Argument(
-					"liga", new String[]{"tier", "league"}, "cmd_tier", INFO, true
-			));
-			put(TierRankCommand.class, new Argument(
-					"ranqueada", new String[]{"ranked", "top10ranked"}, "cmd_tier-rank", INFO, true
-			));
-			put(ServerInfoCommand.class, new Argument(
-					"servidor", new String[]{"server", "sv"}, "cmd_server-info", INFO, false
-			));
-			put(ActionsCommand.class, new Argument(
-					"acoes", new String[]{"actions", "invertment"}, "cmd_actions", INFO, true
-			));
-			put(StockMarketCommand.class, new Argument(
-					"bolsa", new String[]{"stockmarket", "stocks"}, "req_card", "cmd_stock-market", INFO, false
-			));
 			/*put(MatchStatsCommand.class, new Argument(
 					"dadosdapartida", new String[]{"matchstats", "mstats", "estatisticas"}, REQ_ID, "cmd_match-stats", INFO, true
 			));*/
-			put(MerchantLicenseCommand.class, new Argument(
-					"licença", new String[]{"license", "merchantlicense", "licençadecomercio"}, "cmd_merchant-license", INFO, false
-			));
-			put(DailyQuestCommand.class, new Argument(
-					"desafios", new String[]{"challenges", "tasks", "quest", "missao", "tarefas"}, "cmd_daily-quest", INFO, false
-			));
 
 			//MISC
 			put(BackgroundCommand.class, new Argument(
@@ -346,129 +295,12 @@ public class CommandManager {
 					"pesquisar", new String[]{"search", "lts", "aap"}, "req_search", "cmd_learn-to-search", FUN, false
 			));
 			put(GuessTheCardsCommand.class, new Argument(
-					"adivinheascartas", new String[]{"aac", "guessthecards", "gtc"}, "cmd_guess-the-cards", FUN, false
+					"adivinheascartas", "cmd_guess-the-cards", FUN, false
 			));
 
-			//MUSICA
-			put(ControlCommand.class, new Argument(
-					"controle", new String[]{"control", "c"}, "cmd_control", MUSIC, false
-			));
-			put(YoutubeCommand.class, new Argument(
-					"play", new String[]{"yt", "youtube"}, REQ_NAME, "cmd_play", MUSIC, false
-			));
-
-			//EXCEED
-			put(ExceedRankCommand.class, new Argument(
-					"exceedrank", new String[]{"exrank", "topexceed", "topex"}, "req_actual", "cmd_exceed-rank", EXCEED, false
-			));
-			put(ExceedSelectCommand.class, new Argument(
-					"exceedselect", new String[]{"exselect", "souex"}, "cmd_exceed", EXCEED, false
-			));
-			put(ExceedPaletteCommand.class, new Argument(
-					"exceedpalette", new String[]{"expalette", "paletaex"}, "cmd_exceed-palette", EXCEED, false
-			));
-			put(ExceedLeaveCommand.class, new Argument(
-					"exceedsair", new String[]{"exleave", "sairex"}, "cmd_exceed-leave", EXCEED, true
-			));
 			/*
 			put(DisboardCommand.class, new Arguments(
 					"disboard", new String[]{"exmap", "mapa"}, "cmd_disboard", EXCEED, false
-			));
-			*/
-
-			//REACTIONS
-			put(HugReaction.class, new ReactionArgument(
-					"abraçar", new String[]{"abracar", "hug", "vemca"}, "cmd_hug", true, "hug"
-			));
-			put(KissReaction.class, new ReactionArgument(
-					"beijar", new String[]{"beijo", "kiss", "smac"}, "cmd_kiss", true, "kiss"
-			));
-			put(PatReaction.class, new ReactionArgument(
-					"cafuné", new String[]{"cafunhé", "pat", "cafu"}, "cmd_pat", true, "pat"
-			));
-			put(StareReaction.class, new ReactionArgument(
-					"encarar", new String[]{"shiii", "stare", "..."}, "cmd_stare", true, "stare"
-			));
-			put(SlapReaction.class, new ReactionArgument(
-					"estapear", new String[]{"tapa", "slap", "baka"}, "cmd_slap", true, "slap"
-			));
-			put(PunchReaction.class, new ReactionArgument(
-					"socar", new String[]{"chega", "tomaessa", "punch"}, "cmd_punch", true, "smash"
-			));
-			put(BiteReaction.class, new ReactionArgument(
-					"morder", new String[]{"moider", "bite", "moide"}, "cmd_bite", true, "bite"
-			));
-			put(BlushReaction.class, new ReactionArgument(
-					"vergonha", new String[]{"n-nani", "blush", "pft"}, "cmd_blush", false, "blush"
-			));
-			put(CryReaction.class, new ReactionArgument(
-					"chorar", new String[]{"buaa", "cry", "sadboy"}, "cmd_cry", false, "sad"
-			));
-			put(DanceReaction.class, new ReactionArgument(
-					"dançar", new String[]{"dancar", "dance", "tuts"}, "cmd_dance", false, "dance"
-			));
-			put(FacedeskReaction.class, new ReactionArgument(
-					"facedesk", new String[]{"mds", "ahnao", "nss"}, "cmd_facedesk", false, "facedesk"
-			));
-			put(LaughReaction.class, new ReactionArgument(
-					"rir", new String[]{"kkk", "laugh", "aiai"}, "cmd_laugh", false, "laugh"
-			));
-			put(NopeReaction.class, new ReactionArgument(
-					"nope", new String[]{"sqn", "hojenao", "esquiva"}, "cmd_nope", false, "nope"
-			));
-			put(RunReaction.class, new ReactionArgument(
-					"corre", new String[]{"saisai", "run", "foge"}, "cmd_run", false, "run"
-			));
-
-			//CLAN
-			/*
-			put(ClanBannerCommand.class, new Argument(
-					"faixada", new String[]{"banner"}, "cmd_clan-banner", CLAN, false
-			));
-			put(ClanCommand.class, new Argument(
-					"cla", new String[]{"clan", "party", "faction", "guild", "dynasty"}, "cmd_clan", CLAN, true
-			));
-			put(ClanDepositCommand.class, new Argument(
-					"depositar", new String[]{"deposit", "dep"}, "req_qtd", "cmd_clan-deposit", CLAN, true
-			));
-			put(ClanIconCommand.class, new Argument(
-					"emblema", new String[]{"icon", "icone"}, "cmd_clan-icon", CLAN, false
-			));
-			put(ClanMotdCommand.class, new Argument(
-					"motd", new String[]{"mdd", "anuncio"}, "req_msg", "cmd_clan-motd", CLAN, false
-			));
-			put(ClanPermissionCommand.class, new Argument(
-					"cargos", new String[]{"hierarquia", "hierarchy", "roles"}, "req_hierarchy", "cmd_clan-permission", CLAN, true
-			));
-			put(ClanWithdrawCommand.class, new Argument(
-					"sacar", new String[]{"withdraw", "sac", "with"}, "req_qtd", "cmd_clan-withdraw", CLAN, true
-			));
-			put(CreateClanCommand.class, new Argument(
-					"criar", new String[]{"create"}, REQ_NAME, "cmd_create-clan", CLAN, true
-			));
-			put(DemoteClanMemberCommand.class, new Argument(
-					"rebaixar", new String[]{"demote", "dem"}, "req_mention-id", "cmd_demote-clan-member", CLAN, true
-			));
-			put(InviteClanMemberCommand.class, new Argument(
-					"convidar", REQ_MENTION, "cmd_invite-clan-member", CLAN, true
-			));
-			put(KickClanMemberCommand.class, new Argument(
-					"remover", new String[]{"remove"}, "req_mention-id", "cmd_kick-clan-member", CLAN, true
-			));
-			put(LeaveClanCommand.class, new Argument(
-					"sair", new String[]{"exit", "abandonar"}, "cmd_leave-clan", CLAN, true
-			));
-			put(ClanHistoryCommand.class, new Argument(
-					"historico", new String[]{"history", "hist"}, "cmd_clan-history", CLAN, true
-			));
-			put(ClanUpgradeCommand.class, new Argument(
-					"evoluir", new String[]{"evolve"}, "cmd_clan-upgrade", CLAN, true
-			));
-			put(ClanConvertCardCommand.class, new Argument(
-					"cconverter", new String[]{"cconvert"}, "req_card", "cmd_clan-convert-card", CLAN, true
-			));
-			put(ClanRevertCardCommand.class, new Argument(
-					"creverter", new String[]{"crevert"}, "req_card", "cmd_clan-revert-card", CLAN, true
 			));
 			*/
 		}
@@ -481,18 +313,7 @@ public class CommandManager {
 
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			Requires req = cmd.getDeclaredAnnotation(Requires.class);
-			commands.add(new PreparedCommand(
-					params.name(),
-					params.aliases(),
-					params.usage(),
-					"cmd_" + cmd.getSimpleName()
-							.replace("Command", "")
-							.replaceAll("[a-z](?=[A-Z])", "$0-")
-							.toLowerCase(),
-					params.category(),
-					req == null ? null : req.value()
-			));
+			extractCommand(commands, cmd, params);
 		}
 
 		return commands;
@@ -506,18 +327,7 @@ public class CommandManager {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			if (params.category() == category) {
-				Requires req = cmd.getDeclaredAnnotation(Requires.class);
-				commands.add(new PreparedCommand(
-						params.name(),
-						params.aliases(),
-						params.usage(),
-						"cmd_" + cmd.getSimpleName()
-								.replace("Command", "")
-								.replaceAll("[a-z](?=[A-Z])", "$0-")
-								.toLowerCase(),
-						params.category(),
-						req == null ? null : req.value()
-				));
+				extractCommand(commands, cmd, params);
 			}
 		}
 
@@ -537,7 +347,7 @@ public class CommandManager {
 						params.aliases(),
 						params.usage(),
 						"cmd_" + cmd.getSimpleName()
-								.replace("Command", "")
+								.replaceAll("Command|Reaction", "")
 								.replaceAll("[a-z](?=[A-Z])", "$0-")
 								.toLowerCase(),
 						params.category(),
@@ -547,5 +357,20 @@ public class CommandManager {
 		}
 
 		return null;
+	}
+
+	private void extractCommand(Set<PreparedCommand> commands, Class<?> cmd, Command params) {
+		Requires req = cmd.getDeclaredAnnotation(Requires.class);
+		commands.add(new PreparedCommand(
+				params.name(),
+				params.aliases(),
+				params.usage(),
+				"cmd_" + cmd.getSimpleName()
+						.replaceAll("Command|Reaction", "")
+						.replaceAll("[a-z](?=[A-Z])", "$0-")
+						.toLowerCase(),
+				params.category(),
+				req == null ? null : req.value()
+		));
 	}
 }

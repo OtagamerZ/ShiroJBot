@@ -21,31 +21,19 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardMarketDAO;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.MerchantStats;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
-
+@Command(
+		name = "licenca",
+		aliases = {"license", "merchantlicense", "licencadecomercio"},
+		category = Category.INFO
+)
 public class MerchantLicenseCommand implements Executable {
-
-	public MerchantLicenseCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public MerchantLicenseCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public MerchantLicenseCommand(@NonNls String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public MerchantLicenseCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {

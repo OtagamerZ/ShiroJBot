@@ -16,27 +16,13 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.discord.reactions;
+package com.kuuhaku.command.commands;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Executable;
-import com.kuuhaku.model.annotations.Command;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.Permission;
 
-@Command(
-		name = "dancar",
-		aliases = {"dance", "tuts"},
-		category = Category.FUN
-)
-public class DanceReaction extends Action implements Executable {
-
-	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		sendReaction("dance", channel, null, author.getAsMention() + " está dançando!", false);
-	}
-
-	@Override
-	public void answer(TextChannel chn) {
-
+public class PreparedReaction extends PreparedCommand {
+	public PreparedReaction(String name, String[] aliases, String usage, String description, Category category, Permission[] permissions) {
+		super(name, aliases, usage, description, category, permissions);
 	}
 }
