@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NonNls;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class SellCardCommand extends Command {
+public class SellCardCommand implements Executable {
 
     public SellCardCommand(String name, String description, Category category, boolean requiresMM) {
         super(name, description, category, requiresMM);
@@ -55,17 +55,17 @@ public class SellCardCommand extends Command {
     }
 
     @Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+    public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+        Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		} else if (args.length < 3) {
-			channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
-			return;
-		} else if (!StringUtils.isNumeric(args[2])) {
-			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
+        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        } else if (args.length < 3) {
+            channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
+            return;
+        } else if (!StringUtils.isNumeric(args[2])) {
+            channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
             return;
         }
 

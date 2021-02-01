@@ -75,8 +75,8 @@ public class ShiroInfo {
 	private static final String niichan = "350836145921327115"; //KuuHaKu
 	private static final List<String> developers = List.of(
 			niichan, //KuuHaKu
-			"321665807988031495", //Reydux
-			"694652893571055746" //HeyCarlosz
+			"321665807988031495" //Reydux
+			//"694652893571055746" //HeyCarlosz
 	);
 	private static final List<String> editors = List.of(
 

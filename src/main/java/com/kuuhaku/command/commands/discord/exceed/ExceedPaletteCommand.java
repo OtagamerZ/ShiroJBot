@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.exceed;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.TagIcons;
@@ -27,7 +27,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-public class ExceedPaletteCommand extends Command {
+public class ExceedPaletteCommand implements Executable {
 
 	public ExceedPaletteCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -46,7 +46,7 @@ public class ExceedPaletteCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setTitle("Cores de cada Exceed");
 		for (ExceedEnum ex : ExceedEnum.values()) {

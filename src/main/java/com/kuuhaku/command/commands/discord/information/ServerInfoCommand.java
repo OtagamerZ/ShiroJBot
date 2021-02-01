@@ -19,14 +19,14 @@
 package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-public class ServerInfoCommand extends Command {
+public class ServerInfoCommand implements Executable {
 
 	private static final String STR_BOT_INFO_SERVERS = "str_bot-info-servers";
 
@@ -47,7 +47,7 @@ public class ServerInfoCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		int bots = (int) guild.getMembers().stream().filter(m -> m.getUser().isBot()).count();
 

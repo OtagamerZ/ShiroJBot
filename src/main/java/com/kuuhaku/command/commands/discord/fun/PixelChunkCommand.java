@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.fun;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
@@ -37,7 +37,7 @@ import java.awt.*;
 
 import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
-public class PixelChunkCommand extends Command {
+public class PixelChunkCommand implements Executable {
 
 	public PixelChunkCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -56,7 +56,7 @@ public class PixelChunkCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-no-chunk")).queue();
 			return;

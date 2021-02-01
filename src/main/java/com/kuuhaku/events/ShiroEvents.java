@@ -23,7 +23,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.controller.postgresql.RelayDAO;
@@ -246,7 +246,7 @@ public class ShiroEvents extends ListenerAdapter {
 				return;
 			}
 
-			Command command = Main.getCommandManager().getCommand(commandName);
+			Executable command = Main.getCommandManager().getCommand(commandName);
 			if (command != null) {
 				found = command.getCategory().isEnabled(gc, guild, author);
 
@@ -851,7 +851,7 @@ public class ShiroEvents extends ListenerAdapter {
 		}
 	}
 
-	public static boolean isFound(GuildConfig gc, Guild g, String commandName, boolean found, Command command, User u) {
+	public static boolean isFound(GuildConfig gc, Guild g, String commandName, boolean found, Executable command, User u) {
 		if (command.getName().equalsIgnoreCase(commandName)) {
 			found = true;
 		}

@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.reactions;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -37,7 +37,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-public abstract class Reaction extends Command {
+public abstract class Reaction implements Executable {
 	private User user;
 	private String[] reaction;
 	private String[] selfTarget;

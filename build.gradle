@@ -111,6 +111,7 @@ dependencies {
     implementation group: 'org.knowm.xchart', name: 'xchart', version: '3.6.5'
     implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
     implementation group: 'com.graphql-java', name: 'graphql-java', version: '2019-05-08T02-56-27-cca4316'
+    implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
 }
 
 apply plugin: 'org.springframework.boot'

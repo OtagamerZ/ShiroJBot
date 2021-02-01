@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.fun;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.SlotsDAO;
@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class SlotsCommand extends Command {
+public class SlotsCommand implements Executable {
 	private List<String> rolled = new ArrayList<>();
 
 	public SlotsCommand(String name, String description, Category category, boolean requiresMM) {
@@ -64,7 +64,7 @@ public class SlotsCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setDescription(prizeTable());

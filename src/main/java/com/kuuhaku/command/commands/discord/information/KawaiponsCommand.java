@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
@@ -50,17 +50,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class KawaiponsCommand extends Command {
+public class KawaiponsCommand implements Executable {
 
-    public KawaiponsCommand(String name, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
-        super(name, description, category, requiresMM);
-    }
+	public KawaiponsCommand(String name, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
+	}
 
-    public KawaiponsCommand(@NonNls String name, @NonNls String[] aliases, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
-        super(name, aliases, description, category, requiresMM);
-    }
+	public KawaiponsCommand(@NonNls String name, @NonNls String[] aliases, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
+	}
 
-    public KawaiponsCommand(String name, String usage, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
+	public KawaiponsCommand(String name, String usage, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
         super(name, usage, description, category, requiresMM);
     }
 
@@ -68,8 +68,8 @@ public class KawaiponsCommand extends Command {
         super(name, aliases, usage, description, category, requiresMM);
     }
 
-    @Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	@Override
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-collection")).queue(m -> {
 			try {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
@@ -80,16 +80,16 @@ public class KawaiponsCommand extends Command {
 				} else if (args.length == 0) {
 					Set<KawaiponCard> collection = new HashSet<>();
 					for (AnimeName anime : AnimeName.validValues()) {
-                        if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
-                            collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
-                    }
+						if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
+							collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
+					}
 
-                    KawaiponBook kb = new KawaiponBook(collection);
-                    BufferedImage cards = kb.view(CardDAO.getCardsByRarity(KawaiponRarity.ULTIMATE), "Coleção Kawaipon", false);
+					KawaiponBook kb = new KawaiponBook(collection);
+					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(KawaiponRarity.ULTIMATE), "Coleção Kawaipon", false);
 
-                    EmbedBuilder eb = new ColorlessEmbedBuilder();
-                    int count = collection.size();
-                    int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
+					EmbedBuilder eb = new ColorlessEmbedBuilder();
+					int count = collection.size();
+					int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
                     int common = kp.getCards().size() - foil;
 
                     eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName());

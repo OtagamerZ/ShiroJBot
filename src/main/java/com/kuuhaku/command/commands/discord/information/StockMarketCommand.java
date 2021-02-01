@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.CardMarketDAO;
 import com.kuuhaku.controller.postgresql.EquipmentMarketDAO;
@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NonNls;
 import java.util.stream.DoubleStream;
 
 
-public class StockMarketCommand extends Command {
+public class StockMarketCommand implements Executable {
 
 	public StockMarketCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -53,7 +53,7 @@ public class StockMarketCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage("❌ | Você precisa informar uma carta.").queue();
 			return;

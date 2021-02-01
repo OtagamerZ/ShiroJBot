@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.VipItem;
@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
 
-public class VIPShopCommand extends Command {
+public class VIPShopCommand implements Executable {
 
 	public VIPShopCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -51,7 +51,7 @@ public class VIPShopCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (args.length == 0) {

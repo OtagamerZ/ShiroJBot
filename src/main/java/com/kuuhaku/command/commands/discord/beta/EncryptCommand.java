@@ -19,12 +19,12 @@
 package com.kuuhaku.command.commands.discord.beta;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.FileUtils;
 import org.jasypt.util.binary.StrongBinaryEncryptor;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,26 +35,16 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.concurrent.Executors;
 
-public class EncryptCommand extends Command {
-
-	public EncryptCommand(@NonNls String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public EncryptCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public EncryptCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public EncryptCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+@Command(
+		name = "criptografar",
+		aliases = {"crypt", "crpt"},
+		usage = "req_encrypt",
+		category = Category.BETA
+)
+public class EncryptCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getAttachments().size() < 1) {
 			channel.sendMessage("❌ | Você precisa adicionar um arquivo para criptografar.").queue();
 			return;

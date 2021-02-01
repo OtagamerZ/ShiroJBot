@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 
-public class HttpCatCommand extends Command {
+public class HttpCatCommand implements Executable {
 
 	public HttpCatCommand(@NonNls String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -48,7 +48,7 @@ public class HttpCatCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_http-cat-not-enough-args")).queue();
 			return;
