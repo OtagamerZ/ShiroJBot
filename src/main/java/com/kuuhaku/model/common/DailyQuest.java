@@ -32,7 +32,7 @@ public class DailyQuest {
 
 	private DailyQuest(long id) {
 		Calendar today = Calendar.getInstance(TimeZone.getTimeZone("GMT-3:00"));
-		long seed = (id + (today.get(Calendar.DAY_OF_YEAR) + today.get(Calendar.YEAR)));
+		long seed = (id / (today.get(Calendar.DAY_OF_YEAR) + today.get(Calendar.YEAR)));
 		List<DailyTask> tasks = Helper.getRandomN(List.of(DailyTask.values()), 3, 1, seed);
 
 		Random r = new Random(seed);

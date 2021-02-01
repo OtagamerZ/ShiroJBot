@@ -1182,17 +1182,17 @@ public class Helper {
 	public static <T> List<T> getRandomN(List<T> array, int elements, int maxInstances) {
 		List<T> aux = new ArrayList<>(array);
 		List<T> out = new ArrayList<>();
-		Random seed = new Random(System.currentTimeMillis());
+		Random random = new Random(System.currentTimeMillis());
 
 		for (int i = 0; i < elements && aux.size() > 0; i++) {
-			int index = rng(aux.size(), seed, true);
+			int index = rng(aux.size(), random, true);
 
 			T inst = aux.get(index);
 			if (Collections.frequency(out, inst) < maxInstances)
 				out.add(inst);
 			else {
 				aux.remove(index);
-				Collections.shuffle(aux);
+				Collections.shuffle(aux, random);
 				i--;
 			}
 			;
@@ -1214,7 +1214,7 @@ public class Helper {
 				out.add(inst);
 			else {
 				aux.remove(index);
-				Collections.shuffle(aux);
+				Collections.shuffle(aux, random);
 				i--;
 			}
 			;
