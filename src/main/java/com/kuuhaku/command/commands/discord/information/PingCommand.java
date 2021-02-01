@@ -66,6 +66,7 @@ public class PingCommand extends Command {
 		if (author.getId().equalsIgnoreCase(ShiroInfo.getNiiChan())) {
 			AtomicInteger x = new AtomicInteger();
 			for (User user : message.getJDA().getUsers()) {
+				if (user.isBot()) continue;
 				user.openPrivateChannel().queue(c -> {
 					for (Message msg : c.getHistory().getRetrievedHistory()) {
 						if (msg.getContentRaw().contains("Come here")) {
