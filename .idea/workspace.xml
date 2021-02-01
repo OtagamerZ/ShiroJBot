@@ -13,15 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LockChannelCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/UnlockChannelCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novos comandos de trancar e destrancar o canal">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LockChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LockChannelCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/UnlockChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/UnlockChannelCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1038,14 +1032,7 @@
       <workItem from="1612117546538" duration="263000" />
       <workItem from="1612131537085" duration="41000" />
       <workItem from="1612131596239" duration="2744000" />
-      <workItem from="1612144748286" duration="2472000" />
-    </task>
-    <task id="LOCAL-03573" summary="Adicionado Shoukan em duplas">
-      <created>1611928314159</created>
-      <option name="number" value="03573" />
-      <option name="presentableId" value="LOCAL-03573" />
-      <option name="project" value="LOCAL" />
-      <updated>1611928314159</updated>
+      <workItem from="1612144748286" duration="3161000" />
     </task>
     <task id="LOCAL-03574" summary="Adicionado Shoukan em duplas">
       <created>1611928541416</created>
@@ -1383,7 +1370,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612131962632</updated>
     </task>
-    <option name="localTasksCounter" value="3622" />
+    <task id="LOCAL-03622" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612147271163</created>
+      <option name="number" value="03622" />
+      <option name="presentableId" value="LOCAL-03622" />
+      <option name="project" value="LOCAL" />
+      <updated>1612147271163</updated>
+    </task>
+    <option name="localTasksCounter" value="3623" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1469,7 +1463,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nas trocas" />
     <MESSAGE value="Melhorias nos metodos disponíveis" />
     <MESSAGE value="Correções no Shoukan" />
     <MESSAGE value="Comandos de clã" />
@@ -1494,7 +1487,8 @@
     <MESSAGE value="Adicionado Shoukan em duplas" />
     <MESSAGE value="Adição de filas ranqueadas (Solo/Duo)" />
     <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Novos comandos de trancar e destrancar o canal" />
+    <option name="LAST_COMMIT_MESSAGE" value="Novos comandos de trancar e destrancar o canal" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
