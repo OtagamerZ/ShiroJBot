@@ -53,7 +53,7 @@ public class DailyQuestCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		DailyQuest dq = DailyQuest.getQuest(author.getId());
+		DailyQuest dq = DailyQuest.getQuest(author.getIdLong());
 		Account acc = AccountDAO.getAccount(author.getId());
 		Map<DailyTask, Integer> pg = acc.getDailyProgress();
 
