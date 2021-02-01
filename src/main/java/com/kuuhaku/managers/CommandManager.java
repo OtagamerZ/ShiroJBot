@@ -123,9 +123,6 @@ public class CommandManager {
 			put(GuessTheNumberCommand.class, new Argument(
 					"adivinheonumero", new String[]{"aon", "guessthenumber", "gtn"}, "cmd_guess-the-number", FUN, true
 			));
-			put(CrissCrossCommand.class, new Argument(
-					"jogodavelha", new String[]{"jdv", "crisscross", "cc"}, REQ_MENTION_BET, "cmd_criss-cross", FUN, true
-			));
 			/*
 			put(ChessCommand.class, new Argument(
 					"xadrez", new String[]{"chess"}, REQ_MENTION, "cmd_chess", FUN, true
