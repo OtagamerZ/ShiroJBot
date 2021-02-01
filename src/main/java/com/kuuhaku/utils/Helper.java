@@ -1006,14 +1006,14 @@ public class Helper {
 		}
 	}
 
-	public static boolean showMMError(User author, MessageChannel channel, Guild guild, String rawMessage, PreparedCommand command) {
+	public static boolean showMMError(User author, TextChannel channel, Guild guild, String rawMessage, PreparedCommand command) {
 		if (author.getId().equals(Main.getSelfUser().getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_human-command")).queue();
 			return true;
-		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked()) {
+		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-message-manage-permission")).queue();
 			return true;
-		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_EMBED_LINKS, (TextChannel) channel)) {
+		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_EMBED_LINKS, channel)) {
 			channel.sendMessage("❌ | As permissões de enviar links e anexar arquivos são essenciais para que eu funcione, por favor adicione-as ao meu cargo!").queue();
 			return true;
 		}

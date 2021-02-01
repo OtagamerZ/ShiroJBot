@@ -129,7 +129,7 @@ public class ShoukanCommand implements Executable {
 			}
 
 			RankedQueue rq = RankedQueue.valueOf(args[1].toUpperCase());
-			mm.joinLobby(mmr, rq, (TextChannel) channel);
+			mm.joinLobby(mmr, rq, channel);
 			switch (rq) {
 				case SOLO -> channel.sendMessage("Você entrou no saguão **SOLO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getSoloLobby().size() - 1) + " no saguão).").queue(s ->
 						Pages.buttonize(s, Collections.emptyMap(), true, 30, TimeUnit.MINUTES

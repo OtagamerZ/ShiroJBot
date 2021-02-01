@@ -97,7 +97,7 @@ public class YoutubeCommand implements Executable {
 													msg.delete().queue();
 													return;
 												}
-												Music.loadAndPlay(member, (TextChannel) channel, url);
+												Music.loadAndPlay(member, channel, url);
 												msg.delete().queue(null, Helper::doNothing);
 											} catch (ErrorResponseException ignore) {
 											}

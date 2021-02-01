@@ -100,7 +100,7 @@ public class ChessCommand implements Executable {
         String hash = Helper.generateHash(guild, author);
         ShiroInfo.getHashes().add(hash);
         Main.getInfo().getConfirmationPending().put(author.getId(), true);
-        Game t = new Chess(Main.getShiroShards(), (TextChannel) channel, bet, author, message.getMentionedUsers().get(0));
+        Game t = new Chess(Main.getShiroShards(), channel, bet, author, message.getMentionedUsers().get(0));
         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Xadrez, deseja aceitar?")
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                             if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {

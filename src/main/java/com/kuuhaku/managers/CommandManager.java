@@ -32,12 +32,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.kuuhaku.command.Category.*;
+import static com.kuuhaku.command.Category.FUN;
+import static com.kuuhaku.command.Category.MISC;
 
 public class CommandManager {
 
 	private static final String REQ_MENTION = "req_mention";
-	private static final String REQ_MESSAGE = "req_message";
+	private static final String REQ_MESSAGE = "req_text";
 	private static final String REQ_NAME = "req_name";
 	private static final String REQ_SERVER_ID = "req_server-id";
 	private static final String REQ_MENTION_REASON = "req_mention-id-reason";
@@ -57,37 +58,6 @@ public class CommandManager {
 					"dadosdapartida", new String[]{"matchstats", "mstats", "estatisticas"}, REQ_ID, "cmd_match-stats", INFO, true
 			));*/
 
-			//MISC
-			put(BackgroundCommand.class, new Argument(
-					"background", new String[]{"fundo", "bg"}, REQ_LINK, "cmd_background", MISC, false
-			));
-			put(BiographyCommand.class, new Argument(
-					"bio", new String[]{"story", "desc"}, REQ_MESSAGE, "cmd_biography", MISC, false
-			));
-			put(ProfileColorCommand.class, new Argument(
-					"cordoperfil", new String[]{"profilecolor", "pc", "cp"}, REQ_COLOR, "cmd_profile-color", MISC, false
-			));
-			put(AsciiCommand.class, new Argument(
-					"ascii", "req_text-image", "cmd_ascii", MISC, false
-			));
-			put(AvatarCommand.class, new Argument(
-					"avatar", "req_mention-guild", "cmd_avatar", MISC, false
-			));
-			put(FlipCoinCommand.class, new Argument(
-					"flipcoin", new String[]{"caracoroa", "headstails"}, "cmd_heads-tails", MISC, false
-			));
-			put(ReverseCommand.class, new Argument(
-					"reverse", new String[]{"inverter"}, REQ_TEXT, "cmd_reverse", MISC, false
-			));
-			put(SayCommand.class, new Argument(
-					"say", new String[]{"diga", "repetir"}, REQ_MESSAGE, "cmd_repeat", MISC, true
-			));
-			put(CustomAnswerCommand.class, new Argument(
-					"fale", "req_trigger-response", "cmd_custom-answer", MISC, false
-			));
-			put(AnimeCommand.class, new Argument(
-					"anime", new String[]{"desenho", "cartoon"}, REQ_NAME, "cmd_anime", INFO, false
-			));
 			put(ValidateGIFCommand.class, new Argument(
 					"validate", new String[]{"testgif", "tgif"}, REQ_LINK, "cmd_dimension-test", MISC, false
 			));
@@ -273,27 +243,11 @@ public class CommandManager {
 			put(CrissCrossCommand.class, new Argument(
 					"jogodavelha", new String[]{"jdv", "crisscross", "cc"}, REQ_MENTION_BET, "cmd_criss-cross", FUN, true
 			));
-			/*put(ChessCommand.class, new Argument(
+			/*
+			put(ChessCommand.class, new Argument(
 					"xadrez", new String[]{"chess"}, REQ_MENTION, "cmd_chess", FUN, true
-			));*/
-			put(HitotsuCommand.class, new Argument(
-					"hitotsu", new String[]{"uno"}, "req_bet-mentions", "cmd_hitotsu", FUN, true
 			));
-			put(ReversiCommand.class, new Argument(
-					"reversi", new String[]{"othello"}, REQ_MENTION_BET, "cmd_reversi", FUN, true
-			));
-			put(ShoukanCommand.class, new Argument(
-					"shoukan", new String[]{"duelcards"}, "req_shoukan-args", "cmd_shoukan", FUN, true
-			));
-			put(CatchKawaiponCommand.class, new Argument(
-					"coletar", new String[]{"collect"}, "cmd_catch-kawaipon", FUN, false
-			));
-			put(CatchDropCommand.class, new Argument(
-					"abrir", new String[]{"open"}, "req_captcha", "cmd_catch-drop", FUN, false
-			));
-			put(LearnToSearchCommand.class, new Argument(
-					"pesquisar", new String[]{"search", "lts", "aap"}, "req_search", "cmd_learn-to-search", FUN, false
-			));
+			*/
 
 			/*
 			put(DisboardCommand.class, new Arguments(

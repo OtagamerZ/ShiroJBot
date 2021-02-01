@@ -34,7 +34,7 @@ import java.text.MessageFormat;
 @Command(
 		name = "carteira",
 		aliases = {"banco", "bank", "money", "wallet", "atm"},
-		usage = "req_message",
+		usage = "req_text",
 		category = Category.INFO
 )
 public class WalletCommand implements Executable {

@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "ticket",
 		aliases = {"openticket", "tkt"},
-		usage = "req_message",
+		usage = "req_text",
 		category = Category.INFO
 )
 public class OpenTicketCommand implements Executable {
