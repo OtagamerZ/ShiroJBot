@@ -19,8 +19,8 @@
 package com.kuuhaku.command;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.TagDAO;
-import com.kuuhaku.managers.Argument;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.GuildConfig;
@@ -31,18 +31,17 @@ import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public enum Category {
 	DEV(ShiroInfo.getLocale(I18n.PT).getString("cat_dev-name"), "<:dev:674261700333142046>", "674261700333142046", ShiroInfo.getLocale(I18n.PT).getString("cat_dev-description"), PrivilegeLevel.DEV),
 	SUPPORT(ShiroInfo.getLocale(I18n.PT).getString("cat_support-name"), "<:sheriff:674261700538662913>", "674261700538662913", ShiroInfo.getLocale(I18n.PT).getString("cat_support-description"), PrivilegeLevel.SUPPORT),
-	MODERACAO(ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-name"), "<:mod:674261700844716082>", "674261700844716082", ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-description"), PrivilegeLevel.MOD),
+	MODERATION(ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-name"), "<:mod:674261700844716082>", "674261700844716082", ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-description"), PrivilegeLevel.MOD),
 	BETA(ShiroInfo.getLocale(I18n.PT).getString("cat_beta-name"), "<:beta:674261701109219328>", "674261701109219328", ShiroInfo.getLocale(I18n.PT).getString("cat_beta-description"), PrivilegeLevel.USER),
 	FUN(ShiroInfo.getLocale(I18n.PT).getString("cat_fun-name"), "<:rpg:674261700962418688>", "674261700962418688", ShiroInfo.getLocale(I18n.PT).getString("cat_fun-description"), PrivilegeLevel.USER),
 	MISC(ShiroInfo.getLocale(I18n.PT).getString("cat_misc-name"), "<:misc:674261700354113536>", "674261700354113536", ShiroInfo.getLocale(I18n.PT).getString("cat_misc-description"), PrivilegeLevel.USER),
 	INFO(ShiroInfo.getLocale(I18n.PT).getString("cat_info-name"), "<:info:674261700643651645>", "674261700643651645", ShiroInfo.getLocale(I18n.PT).getString("cat_info-description"), PrivilegeLevel.USER),
-	MUSICA(ShiroInfo.getLocale(I18n.PT).getString("cat_music-name"), "<:music:674261701507678220>", "674261701507678220", ShiroInfo.getLocale(I18n.PT).getString("cat_music-description"), PrivilegeLevel.USER),
+	MUSIC(ShiroInfo.getLocale(I18n.PT).getString("cat_music-name"), "<:music:674261701507678220>", "674261701507678220", ShiroInfo.getLocale(I18n.PT).getString("cat_music-description"), PrivilegeLevel.USER),
 	EXCEED(ShiroInfo.getLocale(I18n.PT).getString("cat_exceed-name"), "<:exceed:674261700312170496>", "674261700312170496", ShiroInfo.getLocale(I18n.PT).getString("cat_exceed-description"), PrivilegeLevel.USER),
 	CLAN(ShiroInfo.getLocale(I18n.PT).getString("cat_clan-name"), "<:fun:674261700941185035>", "674261700941185035", ShiroInfo.getLocale(I18n.PT).getString("cat_clan-description"), PrivilegeLevel.USER),
 	NSFW(ShiroInfo.getLocale(I18n.PT).getString("cat_nsfw-name"), "<:nsfw:687649035204558894>", "687649035204558894", ShiroInfo.getLocale(I18n.PT).getString("cat_nsfw-description"), PrivilegeLevel.USER);
@@ -81,8 +80,8 @@ public enum Category {
 		return privilegeLevel;
 	}
 
-	public List<Argument> getCmds() {
-		return Main.getCommandManager().getCommands().values().stream().filter(a -> a.getCategory().equals(this)).collect(Collectors.toList());
+	public Set<PreparedCommand> getCommands() {
+		return Main.getCommandManager().getCommands(this);
 	}
 
 	public boolean isEnabled(GuildConfig gc, Guild g, User u) {

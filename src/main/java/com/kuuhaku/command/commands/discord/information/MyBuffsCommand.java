@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
@@ -39,7 +39,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.stream.Collectors;
 
-public class MyBuffsCommand extends Command {
+public class MyBuffsCommand implements Executable {
 
 	public MyBuffsCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -58,7 +58,7 @@ public class MyBuffsCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Kawaigotchi kg = KGotchiDAO.getKawaigotchi(author.getId());
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
