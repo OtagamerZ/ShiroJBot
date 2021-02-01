@@ -26,6 +26,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.games.hitotsu.Hitotsu;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
@@ -33,30 +34,19 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NonNls;
 
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+@Command(
+        name = "hitotsu",
+        aliases = {"uno"},
+        usage = "req_bet-mentions",
+        category = Category.FUN
+)
 public class HitotsuCommand implements Executable {
-
-    public HitotsuCommand(String name, String description, Category category, boolean requiresMM) {
-        super(name, description, category, requiresMM);
-    }
-
-    public HitotsuCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-        super(name, aliases, description, category, requiresMM);
-    }
-
-    public HitotsuCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-        super(name, usage, description, category, requiresMM);
-    }
-
-    public HitotsuCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-        super(name, aliases, usage, description, category, requiresMM);
-    }
 
     @Override
     public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -134,7 +124,7 @@ public class HitotsuCommand implements Executable {
             add(author.getId());
         }};
 
-        Game t = new Hitotsu(Main.getShiroShards(), (TextChannel) channel, bet, players.toArray(User[]::new));
+        Game t = new Hitotsu(Main.getShiroShards(), channel, bet, players.toArray(User[]::new));
         String msg;
         if (players.size() > 2)
             msg = message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");

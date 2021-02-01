@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.discord.misc;
+package com.kuuhaku.command.commands.discord.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -29,10 +29,10 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Command(
-		name = "netcat",
+		name = "pesquisar",
 		aliases = {"search", "lts", "aap"},
 		usage = "req_http",
-		category = Category.INFO
+		category = Category.FUN
 )
 public class LearnToSearchCommand implements Executable {
 

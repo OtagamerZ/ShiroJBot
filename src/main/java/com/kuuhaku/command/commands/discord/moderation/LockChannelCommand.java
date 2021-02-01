@@ -39,10 +39,10 @@ public class LockChannelCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (!Helper.hasPermission(member, Permission.MANAGE_PERMISSIONS, (TextChannel) channel)) {
+		if (!Helper.hasPermission(member, Permission.MANAGE_PERMISSIONS, channel)) {
 			channel.sendMessage("❌ | Você não possui permissão para alterar permissões de canais.").queue();
 			return;
-		} else if (!Helper.hasPermission(guild.getSelfMember(), Permission.MANAGE_PERMISSIONS, (TextChannel) channel)) {
+		} else if (!Helper.hasPermission(guild.getSelfMember(), Permission.MANAGE_PERMISSIONS, channel)) {
 			channel.sendMessage("❌ | Eu não possuo permissão para alterar permissões de canais.").queue();
 			return;
 		}

@@ -62,7 +62,7 @@ public class HelpCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && args.length == 0) {
+		if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, channel) && args.length == 0) {
 			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_TITLE));
 			eb.setDescription(
 					MessageFormat.format(
