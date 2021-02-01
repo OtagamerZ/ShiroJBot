@@ -19,16 +19,16 @@
 package com.kuuhaku.command.commands;
 
 import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.GuildChannel;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.*;
 
 import java.util.Comparator;
 import java.util.EnumSet;
 
-public class PreparedCommand {
+public class PreparedCommand implements Executable {
 	private final String name;
 	private final String[] aliases;
 	private final String usage;
@@ -84,5 +84,10 @@ public class PreparedCommand {
 		}
 
 		return missing.stream().sorted(Comparator.comparingInt(Permission::getOffset)).toArray(Permission[]::new);
+	}
+
+	@Override
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+
 	}
 }

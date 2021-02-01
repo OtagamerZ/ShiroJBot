@@ -23,7 +23,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.controller.postgresql.RelayDAO;
@@ -131,7 +131,7 @@ public class ShiroEvents extends ListenerAdapter {
 			User author = event.getAuthor();
 			Member member = event.getMember();
 			Message message = event.getMessage();
-			MessageChannel channel = message.getChannel();
+			TextChannel channel = message.getTextChannel();
 			Guild guild = message.getGuild();
 			String rawMessage = StringUtils.normalizeSpace(message.getContentRaw());
 
@@ -246,7 +246,7 @@ public class ShiroEvents extends ListenerAdapter {
 				return;
 			}
 
-			Executable command = Main.getCommandManager().getCommand(commandName);
+			PreparedCommand command = Main.getCommandManager().getCommand(commandName);
 			if (command != null) {
 				found = command.getCategory().isEnabled(gc, guild, author);
 
@@ -849,22 +849,6 @@ public class ShiroEvents extends ListenerAdapter {
 			} catch (Exception ignored) {
 			}
 		}
-	}
-
-	public static boolean isFound(GuildConfig gc, Guild g, String commandName, boolean found, Executable command, User u) {
-		if (command.getName().equalsIgnoreCase(commandName)) {
-			found = true;
-		}
-		for (String alias : command.getAliases()) {
-			if (alias.equalsIgnoreCase(commandName)) {
-				found = true;
-				break;
-			}
-		}
-		if (!command.getCategory().isEnabled(gc, g, u)) {
-			found = false;
-		}
-		return found;
 	}
 
 	@Override

@@ -18,24 +18,21 @@
 
 package com.kuuhaku.command.commands.discord.reactions;
 
+import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
-public class NopeReaction extends Reaction {
-
-	public NopeReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
-		super(name, aliases, description, answerable, type);
-	}
+@Command(
+		name = "nope",
+		aliases = {"sqn", "hojenao", "esquiva"},
+		category = Category.FUN
+)
+public class NopeReaction extends Action implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		this.setReaction(new String[]{
-				"Hoje não!",
-				"Fluido como a água!",
-				"Ha ah, errou!"
-		});
-
-		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " esquivou! - " + this.getReaction(), false);
+		sendReaction("nope", (TextChannel) channel, null, author.getAsMention() + " esquivou!", false);
 	}
 
 	@Override

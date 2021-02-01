@@ -18,19 +18,20 @@
 
 package com.kuuhaku.command.commands.discord.reactions.answerable;
 
-import com.kuuhaku.Main;
-import com.kuuhaku.command.commands.discord.reactions.Reaction;
+import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.commands.discord.reactions.Action;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
-public class SlapReaction extends Reaction {
-
-	public SlapReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
-		super(name, aliases, description, answerable, type);
-	}
+@Command(
+		name = "estapear",
+		aliases = {"tapa", "slap", "baka"},
+		category = Category.FUN
+)
+public class SlapReaction extends Action implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -40,32 +41,11 @@ public class SlapReaction extends Reaction {
 		}
 		setInteraction(new User[]{author, message.getMentionedUsers().get(0)});
 
-		if (message.getMentionedUsers().size() > 0) {
-			this.setReaction(new String[]{
-					"Kono BAKA!",
-					"Eu faria o mesmo!",
-					"Bem que mereceu!"
-			});
-
-			this.setSelfTarget(new String[]{
-					"Fui treinada por meu Nii-chan, POR MEU NII-CHAN!",
-					"Você não pode acertar quem você não vê!",
-					"O que você achou que ia acontecer?!"
-			});
-
-			if (message.getMentionedUsers().get(0) == Main.getSelfUser()) {
-				sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou estapear a " + Main.getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
-				return;
-			}
-
-			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " estapeou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
-		} else {
-			Helper.typeMessage(channel, "❌ | Epa, você precisa mencionar alguém para dar um tapa!");
-		}
+		sendReaction("slap", channel, getInteraction()[1], getInteraction()[0].getAsMention() + " deu um tapa em " + getInteraction()[1].getAsMention(), true);
 	}
 
 	@Override
 	public void answer(TextChannel chn) {
-		sendReaction(getType(), chn, null, getInteraction()[1].getAsMention() + " devolveu o tapa de " + getInteraction()[0].getAsMention() + " - " + this.getReaction(), false);
+		sendReaction("slap", chn, null, getInteraction()[1].getAsMention() + " devolveu o tapa de " + getInteraction()[0].getAsMention(), false);
 	}
 }

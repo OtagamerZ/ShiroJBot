@@ -29,8 +29,7 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.google.gson.Gson;
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Executable;
-import com.kuuhaku.command.commands.discord.reactions.Reaction;
+import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.events.SimpleMessageListener;
@@ -55,9 +54,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
@@ -258,26 +255,6 @@ public class Helper {
 				, Helper::doNothing);
 	}
 
-	public static Consumer<MessageAction> sendReaction(Reaction r, String imageURL, User target, MessageChannel channel, boolean allowReact) throws IllegalAccessException {
-		try {
-			if (r.isAnswerable() && allowReact) {
-				return act -> act.queue(m -> Pages.buttonize(m, Collections.singletonMap("↪", (mb, msg) -> {
-					if (mb.getId().equals(target.getId())) {
-						r.answer((TextChannel) channel);
-						msg.clearReactions().queue();
-					}
-				}), false, 1, TimeUnit.MINUTES, u -> u.getId().equals(target.getId())), Helper::doNothing);
-			} else
-				return RestAction::queue;
-		} catch (Exception e) {
-			for (String d : ShiroInfo.getStaff()) {
-				Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF com erro: " + imageURL).queue());
-			}
-			logger(Helper.class).error("Erro ao carregar a imagem: " + imageURL + " -> " + e + " | " + e.getStackTrace()[0]);
-			throw new IllegalAccessException();
-		}
-	}
-
 	public static int rng(int maxValue, boolean exclusive) {
 		return Math.abs(new Random().nextInt(maxValue + (exclusive ? 0 : 1)));
 	}
@@ -415,7 +392,7 @@ public class Helper {
 		return Helper.getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here")), "...");
 	}
 
-	public static void logToChannel(User u, boolean isCommand, Executable c, String msg, Guild g) {
+	public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g) {
 		GuildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
 
@@ -447,7 +424,7 @@ public class Helper {
 		}
 	}
 
-	public static void logToChannel(User u, boolean isCommand, Executable c, String msg, Guild g, String args) {
+	public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g, String args) {
 		GuildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
 
@@ -1029,11 +1006,11 @@ public class Helper {
 		}
 	}
 
-	public static boolean showMMError(User author, MessageChannel channel, Guild guild, String rawMessage, Executable command) {
+	public static boolean showMMError(User author, MessageChannel channel, Guild guild, String rawMessage, PreparedCommand command) {
 		if (author.getId().equals(Main.getSelfUser().getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_human-command")).queue();
 			return true;
-		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked() && command.requiresMM()) {
+		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-message-manage-permission")).queue();
 			return true;
 		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_EMBED_LINKS, (TextChannel) channel)) {
@@ -1118,6 +1095,20 @@ public class Helper {
 					.headers(headers)
 					.header("Authorization", token)
 					.send(payload);
+
+			return new JSONObject(req.body());
+		} catch (JSONException e) {
+			return new JSONObject();
+		}
+	}
+
+	public static JSONObject get(String endpoint, JSONObject payload, String token) {
+		try {
+			HttpRequest req = HttpRequest.get(endpoint, payload.toMap(), true)
+					.header("Content-Type", "application/json; charset=UTF-8")
+					.header("Accept", "application/json")
+					.header("User-Agent", "Mozilla/5.0")
+					.header("Authorization", token);
 
 			return new JSONObject(req.body());
 		} catch (JSONException e) {
