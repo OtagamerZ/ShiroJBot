@@ -25,6 +25,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.*;
@@ -36,29 +37,18 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@Command(
+		name = "trocar",
+		aliases = {"trade"},
+		usage = "req_user-card-amount",
+		category = Category.MISC
+)
 public class TradeCardCommand implements Executable {
-
-	public TradeCardCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public TradeCardCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public TradeCardCommand(@NonNls String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public TradeCardCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
