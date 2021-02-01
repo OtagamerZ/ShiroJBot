@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -49,10 +50,10 @@ public class LockChannelCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (!member.hasPermission(Permission.MANAGE_PERMISSIONS)) {
+		if (!Helper.hasPermission(member, Permission.MANAGE_PERMISSIONS, (TextChannel) channel)) {
 			channel.sendMessage("❌ | Você não possui permissão para alterar permissões de canais.").queue();
 			return;
-		} else if (!guild.getSelfMember().hasPermission(Permission.MANAGE_PERMISSIONS)) {
+		} else if (!Helper.hasPermission(guild.getSelfMember(), Permission.MANAGE_PERMISSIONS, (TextChannel) channel)) {
 			channel.sendMessage("❌ | Eu não possuo permissão para alterar permissões de canais.").queue();
 			return;
 		}
