@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 
 @Command(
 		name = "play",
-		aliases = {"httpcat"},
+		aliases = {"yt", "youtube"},
 		usage = "req_name",
 		category = Category.MUSIC
 )
