@@ -22,11 +22,13 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.text.MessageFormat;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PingCommand extends Command {
 
@@ -60,5 +62,20 @@ public class PingCommand extends Command {
 						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_listeners"), Main.getShiroShards().getShards().get(0).getEventManager().getRegisteredListeners().size())
 				)))
 				.queue();
+
+		if (author.getId().equalsIgnoreCase(ShiroInfo.getNiiChan())) {
+			AtomicInteger x = new AtomicInteger();
+			for (User user : message.getJDA().getUsers()) {
+				user.openPrivateChannel().queue(c -> {
+					for (Message msg : c.getIterableHistory()) {
+						if (msg.getContentRaw().contains("Come here")) {
+							msg.delete().queue(null, Helper::doNothing);
+							x.getAndIncrement();
+						}
+					}
+				}, Helper::doNothing);
+			}
+			channel.sendMessage(x.get() + " convites apagados").queue();
+		}
 	}
 }
