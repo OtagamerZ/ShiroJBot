@@ -1023,20 +1023,6 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
     </task>
-    <task id="LOCAL-03585" summary="Adicionado Shoukan em duplas">
-      <created>1611937600380</created>
-      <option name="number" value="03585" />
-      <option name="presentableId" value="LOCAL-03585" />
-      <option name="project" value="LOCAL" />
-      <updated>1611937600381</updated>
-    </task>
-    <task id="LOCAL-03586" summary="Adicionado Shoukan em duplas">
-      <created>1611937907925</created>
-      <option name="number" value="03586" />
-      <option name="presentableId" value="LOCAL-03586" />
-      <option name="project" value="LOCAL" />
-      <updated>1611937907925</updated>
-    </task>
     <task id="LOCAL-03587" summary="Adicionado Shoukan em duplas">
       <created>1611938226182</created>
       <option name="number" value="03587" />
@@ -1366,7 +1352,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612199652007</updated>
     </task>
-    <option name="localTasksCounter" value="3634" />
+    <task id="LOCAL-03634" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612199744605</created>
+      <option name="number" value="03634" />
+      <option name="presentableId" value="LOCAL-03634" />
+      <option name="project" value="LOCAL" />
+      <updated>1612199744605</updated>
+    </task>
+    <task id="LOCAL-03635" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612199987264</created>
+      <option name="number" value="03635" />
+      <option name="presentableId" value="LOCAL-03635" />
+      <option name="project" value="LOCAL" />
+      <updated>1612199987264</updated>
+    </task>
+    <option name="localTasksCounter" value="3636" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1482,14 +1482,14 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612199650807">
+    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612199985865">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612199650807" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612199653461">
+    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612199985865" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612199988625">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612199653461" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612199988625" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
