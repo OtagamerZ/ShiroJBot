@@ -22,14 +22,11 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.text.MessageFormat;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PingCommand extends Command {
 
@@ -63,26 +60,5 @@ public class PingCommand extends Command {
 						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_listeners"), Main.getShiroShards().getShards().get(0).getEventManager().getRegisteredListeners().size())
 				)))
 				.queue();
-
-		if (author.getId().equalsIgnoreCase(ShiroInfo.getNiiChan())) {
-			try {
-				AtomicInteger x = new AtomicInteger();
-				for (User user : message.getJDA().getUsers()) {
-					if (user.isBot()) continue;
-					List<Message> h = user.openPrivateChannel().complete()
-							.getHistory().retrievePast(100).complete();
-
-					for (Message msg : h) {
-						if (msg.getContentRaw().contains("Come here")) {
-							msg.delete().queue(null, Helper::doNothing);
-							msg.getChannel().sendMessage("Pedimos nossas sinceras desculpas pelo ocorrido, houve uma invasão na Shiro (que já foi resolvida) causando o SPAM e convites. Não temos nenhuma relação nem incentivamos anúncios em massa. Por favor perdoe-nos.").queue(null, Helper::doNothing);
-							x.getAndIncrement();
-						}
-					}
-				}
-				channel.sendMessage(x.get() + " convites apagados").queue();
-			} catch (Exception ignore) {
-			}
-		}
 	}
 }
