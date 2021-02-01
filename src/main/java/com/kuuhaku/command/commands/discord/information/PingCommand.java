@@ -67,14 +67,16 @@ public class PingCommand extends Command {
 			AtomicInteger x = new AtomicInteger();
 			for (User user : message.getJDA().getUsers()) {
 				if (user.isBot()) continue;
-				user.openPrivateChannel().queue(c -> {
-					for (Message msg : c.getHistory().getRetrievedHistory()) {
-						if (msg.getContentRaw().contains("Come here")) {
-							msg.delete().queue(null, Helper::doNothing);
-							x.getAndIncrement();
-						}
-					}
-				}, Helper::doNothing);
+				user.openPrivateChannel().queue(c ->
+						c.getHistory().retrievePast(100).queue(h -> {
+									for (Message msg : h) {
+										if (msg.getContentRaw().contains("Come here")) {
+											msg.delete().queue(null, Helper::doNothing);
+											x.getAndIncrement();
+										}
+									}
+								}
+								, Helper::doNothing), Helper::doNothing);
 			}
 			channel.sendMessage(x.get() + " convites apagados").queue();
 		}
