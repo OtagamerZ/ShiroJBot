@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanPermissionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanPermissionCommand.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1480,14 +1482,18 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612201714888">
+    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612213094979">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612201714888" />
+    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612213094979" />
     <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612201719334">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612201719334" />
+    <state x="547" y="238" width="585" height="534" key="find.popup" timestamp="1612213069227">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="547" y="238" width="585" height="534" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612213069227" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612201552697">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
