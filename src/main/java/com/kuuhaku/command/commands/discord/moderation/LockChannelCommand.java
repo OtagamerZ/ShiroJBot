@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -61,10 +60,10 @@ public class LockChannelCommand extends Command {
 
 			ChannelManager mng = message.getTextChannel().getManager();
 
-			//mng = mng.putPermissionOverride(guild.getPublicRole(), null, EnumSet.of(Permission.MESSAGE_WRITE));
+			mng = mng.putPermissionOverride(guild.getPublicRole(), null, EnumSet.of(Permission.MESSAGE_WRITE));
 			for (PermissionOverride override : overrides) {
 				IPermissionHolder holder = override.getPermissionHolder();
-				if (holder != null && !Helper.equalsAny(holder.getId(), guild.getBotRole().getId(), guild.getSelfMember().getId()))
+				if (holder != null)
 					mng = mng.putPermissionOverride(holder, null, EnumSet.of(Permission.MESSAGE_WRITE));
 			}
 
