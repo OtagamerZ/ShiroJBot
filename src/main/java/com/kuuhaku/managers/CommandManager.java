@@ -60,6 +60,14 @@ public class CommandManager {
 			put(TranslateCommand.class, new Argument(
 					"traduzir", new String[]{"translate", "traduza", "trad"}, "req_from-to-text", "cmd_translate", MISC, false
 			));
+
+			put(ChessCommand.class, new Argument(
+					"xadrez", new String[]{"chess"}, REQ_MENTION, "cmd_chess", FUN, true
+			));
+
+			put(DisboardCommand.class, new Arguments(
+					"disboard", new String[]{"exmap", "mapa"}, "cmd_disboard", EXCEED, false
+			));
 			*/
 
 			//FUN
@@ -123,17 +131,6 @@ public class CommandManager {
 			put(GuessTheNumberCommand.class, new Argument(
 					"adivinheonumero", new String[]{"aon", "guessthenumber", "gtn"}, "cmd_guess-the-number", FUN, true
 			));
-			/*
-			put(ChessCommand.class, new Argument(
-					"xadrez", new String[]{"chess"}, REQ_MENTION, "cmd_chess", FUN, true
-			));
-			*/
-
-			/*
-			put(DisboardCommand.class, new Arguments(
-					"disboard", new String[]{"exmap", "mapa"}, "cmd_disboard", EXCEED, false
-			));
-			*/
 		}
 	};
 
