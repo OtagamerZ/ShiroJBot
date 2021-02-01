@@ -247,10 +247,16 @@ public class ShoukanCommand extends Command {
 			}
 
 			if (team) {
-				List<User> players = new ArrayList<>() {{
+				Set<User> players = new HashSet<>() {{
 					add(author);
 					addAll(users);
 				}};
+
+				if (players.size() != 4) {
+					channel.sendMessage("❌ | Você precisa mencionar 3 usuários para jogar em equipes (1º e 3º equipe 1, você e o 2º equipe 2).").queue();
+					return;
+				}
+
 				Set<String> accepted = new HashSet<>() {{
 					add(author.getId());
 				}};
