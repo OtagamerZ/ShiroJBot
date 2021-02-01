@@ -14,7 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1023,34 +1024,6 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
     </task>
-    <task id="LOCAL-03587" summary="Adicionado Shoukan em duplas">
-      <created>1611938226182</created>
-      <option name="number" value="03587" />
-      <option name="presentableId" value="LOCAL-03587" />
-      <option name="project" value="LOCAL" />
-      <updated>1611938226182</updated>
-    </task>
-    <task id="LOCAL-03588" summary="Adicionado Shoukan em duplas">
-      <created>1611938522113</created>
-      <option name="number" value="03588" />
-      <option name="presentableId" value="LOCAL-03588" />
-      <option name="project" value="LOCAL" />
-      <updated>1611938522113</updated>
-    </task>
-    <task id="LOCAL-03589" summary="Adicionado Shoukan em duplas">
-      <created>1611939596919</created>
-      <option name="number" value="03589" />
-      <option name="presentableId" value="LOCAL-03589" />
-      <option name="project" value="LOCAL" />
-      <updated>1611939596919</updated>
-    </task>
-    <task id="LOCAL-03590" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611946658490</created>
-      <option name="number" value="03590" />
-      <option name="presentableId" value="LOCAL-03590" />
-      <option name="project" value="LOCAL" />
-      <updated>1611946658490</updated>
-    </task>
     <task id="LOCAL-03591" summary="Adição de filas ranqueadas (Solo/Duo)">
       <created>1611946795671</created>
       <option name="number" value="03591" />
@@ -1366,7 +1339,35 @@
       <option name="project" value="LOCAL" />
       <updated>1612199987264</updated>
     </task>
-    <option name="localTasksCounter" value="3636" />
+    <task id="LOCAL-03636" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612200122880</created>
+      <option name="number" value="03636" />
+      <option name="presentableId" value="LOCAL-03636" />
+      <option name="project" value="LOCAL" />
+      <updated>1612200122880</updated>
+    </task>
+    <task id="LOCAL-03637" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612200192249</created>
+      <option name="number" value="03637" />
+      <option name="presentableId" value="LOCAL-03637" />
+      <option name="project" value="LOCAL" />
+      <updated>1612200192249</updated>
+    </task>
+    <task id="LOCAL-03638" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612200364938</created>
+      <option name="number" value="03638" />
+      <option name="presentableId" value="LOCAL-03638" />
+      <option name="project" value="LOCAL" />
+      <updated>1612200364938</updated>
+    </task>
+    <task id="LOCAL-03639" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612200390100</created>
+      <option name="number" value="03639" />
+      <option name="presentableId" value="LOCAL-03639" />
+      <option name="project" value="LOCAL" />
+      <updated>1612200390100</updated>
+    </task>
+    <option name="localTasksCounter" value="3640" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1482,14 +1483,14 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612199985865">
+    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612200388965">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612199985865" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612199988625">
+    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612200388965" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612200391405">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612199988625" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612200391405" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
