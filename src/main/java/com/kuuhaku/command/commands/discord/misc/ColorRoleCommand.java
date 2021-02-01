@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class ColorRoleCommand extends Command {
+public class ColorRoleCommand implements Executable {
 
 	public ColorRoleCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -60,7 +60,7 @@ public class ColorRoleCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (!guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {

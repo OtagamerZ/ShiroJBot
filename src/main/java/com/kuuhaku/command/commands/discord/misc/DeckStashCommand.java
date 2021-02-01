@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.DeckStashDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DeckStashCommand extends Command {
+public class DeckStashCommand implements Executable {
 
 	public DeckStashCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -61,7 +61,7 @@ public class DeckStashCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		Account acc = AccountDAO.getAccount(author.getId());
 

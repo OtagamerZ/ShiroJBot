@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -38,26 +38,26 @@ import org.jetbrains.annotations.NonNls;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class LoanCommand extends Command {
+public class LoanCommand implements Executable {
 
-    public LoanCommand(String name, String description, Category category, boolean requiresMM) {
-        super(name, description, category, requiresMM);
-    }
+	public LoanCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
+	}
 
-    public LoanCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-        super(name, aliases, description, category, requiresMM);
-    }
+	public LoanCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
+	}
 
-    public LoanCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-        super(name, usage, description, category, requiresMM);
-    }
+	public LoanCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
+	}
 
-    public LoanCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-        super(name, aliases, usage, description, category, requiresMM);
-    }
+	public LoanCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
+	}
 
-    @Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	@Override
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;

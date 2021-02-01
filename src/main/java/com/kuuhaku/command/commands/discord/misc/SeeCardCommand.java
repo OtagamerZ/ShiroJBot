@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class SeeCardCommand extends Command {
+public class SeeCardCommand implements Executable {
 
 	public SeeCardCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -67,7 +67,7 @@ public class SeeCardCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage("❌ | Você precisa informar uma carta.").queue();
 			return;

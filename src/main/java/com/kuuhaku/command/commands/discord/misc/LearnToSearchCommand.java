@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -29,7 +29,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 
-public class LearnToSearchCommand extends Command {
+public class LearnToSearchCommand implements Executable {
 
 	public LearnToSearchCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -48,7 +48,7 @@ public class LearnToSearchCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa informar algo para pesquisar.").queue();
 			return;

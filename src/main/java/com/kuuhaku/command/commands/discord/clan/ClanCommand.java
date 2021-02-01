@@ -23,8 +23,9 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ClanDAO;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.ClanHierarchy;
 import com.kuuhaku.model.enums.ClanTier;
@@ -33,7 +34,6 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -41,26 +41,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class ClanCommand extends Command {
-
-	public ClanCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public ClanCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public ClanCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public ClanCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+@Command(
+		name = "cla",
+		aliases = {"clan", "party", "faction", "guild", "dynasty"},
+		usage = "req_clan",
+		category = Category.CLAN
+)
+public class ClanCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Clan c = ClanDAO.getUserClan(author.getId());
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();

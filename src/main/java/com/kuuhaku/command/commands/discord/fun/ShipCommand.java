@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.fun;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
@@ -38,7 +38,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
-public class ShipCommand extends Command {
+public class ShipCommand implements Executable {
 
 	public ShipCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -57,7 +57,7 @@ public class ShipCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() < 2) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_two-mention-required")).queue();
 			return;

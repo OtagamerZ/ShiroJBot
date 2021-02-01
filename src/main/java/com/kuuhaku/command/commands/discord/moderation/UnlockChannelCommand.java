@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.moderation;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 
-public class UnlockChannelCommand extends Command {
+public class UnlockChannelCommand implements Executable {
 
 	public UnlockChannelCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -47,7 +47,7 @@ public class UnlockChannelCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (!member.hasPermission(Permission.MANAGE_CHANNEL)) {
 			channel.sendMessage("❌ | Você não possui permissão para gerenciar canais.").queue();
 			return;

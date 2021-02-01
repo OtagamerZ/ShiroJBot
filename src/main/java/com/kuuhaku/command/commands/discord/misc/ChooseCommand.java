@@ -19,13 +19,13 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Random;
 
-public class ChooseCommand extends Command {
+public class ChooseCommand implements Executable {
 
 	public ChooseCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -44,7 +44,7 @@ public class ChooseCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você não me deu nenhuma opção.").queue();
 			return;

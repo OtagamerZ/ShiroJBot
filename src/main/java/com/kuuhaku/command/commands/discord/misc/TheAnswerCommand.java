@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NonNls;
 
 import javax.persistence.NoResultException;
 
-public class TheAnswerCommand extends Command {
+public class TheAnswerCommand implements Executable {
 
 	public TheAnswerCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -46,7 +46,7 @@ public class TheAnswerCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (guild.getId().equals("421495229594730496")) {
 			try {
 				if (TagDAO.getTagById(author.getId()).isReader())

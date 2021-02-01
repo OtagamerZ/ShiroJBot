@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.AnimeRequest;
 import com.kuuhaku.model.common.Anime;
 import com.kuuhaku.model.enums.I18n;
@@ -36,7 +36,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-public class AnimeCommand extends Command {
+public class AnimeCommand implements Executable {
 
 	public AnimeCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -55,7 +55,7 @@ public class AnimeCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-name")).queue();
 			return;

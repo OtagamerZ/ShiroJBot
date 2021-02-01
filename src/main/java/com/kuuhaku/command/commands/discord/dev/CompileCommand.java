@@ -21,39 +21,29 @@ package com.kuuhaku.command.commands.discord.dev;
 import bsh.Interpreter;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.utils.BannedVars;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class CompileCommand extends Command {
-
-	public CompileCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public CompileCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public CompileCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public CompileCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+@Command(
+		name = "compilar",
+		aliases = {"compile", "eval", "exec"},
+		usage = "req_code",
+		category = Category.DEV
+)
+public class CompileCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> | Compilando...").queue(m -> {
 			try {
 				Future<?> execute = Main.getInfo().getCompilationPool().submit(() -> {

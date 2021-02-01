@@ -20,32 +20,22 @@ package com.kuuhaku.command.commands.discord.dev;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NonNls;
 
-public class ShardRestartCommand extends Command {
-
-	public ShardRestartCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public ShardRestartCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public ShardRestartCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public ShardRestartCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+@Command(
+		name = "rshard",
+		aliases = {"reiniciar", "reboot"},
+		usage = "req_id",
+		category = Category.DEV
+)
+public class ShardRestartCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage("❌ | É necessário informar o ID do Shard a ser reiniciado.").queue();
 			return;

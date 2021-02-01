@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.exceed;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.common.Profile;
@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class ExceedRankCommand extends Command {
+public class ExceedRankCommand implements Executable {
 
 	public ExceedRankCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -61,7 +61,7 @@ public class ExceedRankCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Gerando placares...").queue(m -> {
 			if (ExceedDAO.getExceed(author.getId()).isBlank()) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-rank-no-exceed")).queue();

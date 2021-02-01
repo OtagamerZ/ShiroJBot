@@ -20,36 +20,26 @@ package com.kuuhaku.command.commands.discord.support;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;
 
-public class BlockCommand extends Command {
-
-	public BlockCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public BlockCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public BlockCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public BlockCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+@Command(
+		name = "bloquear",
+		aliases = {"block"},
+		usage = "req_type-id-reason",
+		category = Category.SUPPORT
+)
+public class BlockCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		try {
 			if (args.length > 2) {
 				if (StringUtils.isNumeric(args[0])) {

@@ -22,7 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.StockMarketDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.StockMarket;
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class ActionsCommand extends Command {
+public class ActionsCommand implements Executable {
 
 	public ActionsCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -55,7 +55,7 @@ public class ActionsCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		List<Page> pages = new ArrayList<>();
 		List<StockMarket> act = StockMarketDAO.getInvestments(author.getId());
 

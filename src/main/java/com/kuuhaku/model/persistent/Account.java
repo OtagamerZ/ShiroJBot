@@ -263,12 +263,12 @@ public class Account {
 			if (today.isBefore(lastVote.plusHours(24)) || streak == 0) streak = Helper.clamp(streak + 1, 0, 7);
 			else streak = 0;
 		} catch (DateTimeParseException ignore) {
-		} finally {
-			lastVoted = today.format(Helper.dateformat);
-			notified = false;
-			voted = true;
-			AccountDAO.saveAccount(this);
 		}
+
+		lastVoted = today.format(Helper.dateformat);
+		notified = false;
+		voted = true;
+		AccountDAO.saveAccount(this);
 	}
 
 	public boolean hasVoted() {

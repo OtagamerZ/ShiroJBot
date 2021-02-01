@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
@@ -30,6 +30,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.RankedQueue;
@@ -41,7 +42,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -49,26 +49,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ShoukanCommand extends Command {
-
-	public ShoukanCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public ShoukanCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public ShoukanCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public ShoukanCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+@Command(
+		name = "shoukan",
+		aliases = {"duelcards"},
+		usage = "req_shoukan-args",
+		category = Category.FUN
+)
+public class ShoukanCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		boolean practice = args.length > 0 && Helper.equalsAny(args[0], "practice", "treino");
 		boolean ranked = args.length > 0 && Helper.equalsAny(args[0], "ranqueada", "ranked");
 

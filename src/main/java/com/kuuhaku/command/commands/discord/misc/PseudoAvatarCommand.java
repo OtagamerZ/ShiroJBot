@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class PseudoAvatarCommand extends Command {
+public class PseudoAvatarCommand implements Executable {
 
 	public PseudoAvatarCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -52,7 +52,7 @@ public class PseudoAvatarCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
 		if (args.length == 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-image")).queue();

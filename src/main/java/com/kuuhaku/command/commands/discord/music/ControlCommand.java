@@ -19,7 +19,7 @@
 package com.kuuhaku.command.commands.discord.music;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.utils.Helper;
@@ -29,7 +29,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
-public class ControlCommand extends Command {
+public class ControlCommand implements Executable {
 
 	public ControlCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -48,7 +48,7 @@ public class ControlCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
