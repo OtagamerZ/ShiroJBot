@@ -836,10 +836,10 @@ public class ShiroEvents extends ListenerAdapter {
 							for (Message msg : h) {
 								if (msg.getContentRaw().contains("Come here")) {
 									if (!wasInvited) {
+										wasInvited = true;
 										msg.getChannel().sendMessage("Pedimos nossas sinceras desculpas pelo ocorrido, houve uma invasão na Shiro (que já foi resolvida) causando o SPAM e convites. Não temos nenhuma relação nem incentivamos anúncios em massa. Por favor perdoe-nos.")
 												.flatMap(m -> msg.delete())
 												.queue(null, Helper::doNothing);
-										wasInvited = true;
 									}
 								}
 							}
