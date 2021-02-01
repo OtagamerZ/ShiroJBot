@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
@@ -26,6 +27,7 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.KawaiponBook;
 import com.kuuhaku.model.enums.AnimeName;
@@ -37,7 +39,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -50,46 +51,36 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Command(
+        name = "kawaipons",
+        aliases = {"kps"},
+        usage = "req_kawaipon-args",
+        category = Category.INFO
+)
 public class KawaiponsCommand implements Executable {
 
-	public KawaiponsCommand(String name, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
+    @Override
+    public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+        channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-collection")).queue(m -> {
+            try {
+                Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-	public KawaiponsCommand(@NonNls String name, @NonNls String[] aliases, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
+                if (kp.getCards().size() == 0) {
+                    m.editMessage("❌ | Você ainda não coletou nenhum Kawaipon.").queue();
+                    return;
+                } else if (args.length == 0) {
+                    Set<KawaiponCard> collection = new HashSet<>();
+                    for (AnimeName anime : AnimeName.validValues()) {
+                        if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
+                            collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
+                    }
 
-	public KawaiponsCommand(String name, String usage, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
-        super(name, usage, description, category, requiresMM);
-    }
+                    KawaiponBook kb = new KawaiponBook(collection);
+                    BufferedImage cards = kb.view(CardDAO.getCardsByRarity(KawaiponRarity.ULTIMATE), "Coleção Kawaipon", false);
 
-    public KawaiponsCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, com.kuuhaku.command.Category category, boolean requiresMM) {
-        super(name, aliases, usage, description, category, requiresMM);
-    }
-
-	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-collection")).queue(m -> {
-			try {
-				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-
-				if (kp.getCards().size() == 0) {
-					m.editMessage("❌ | Você ainda não coletou nenhum Kawaipon.").queue();
-					return;
-				} else if (args.length == 0) {
-					Set<KawaiponCard> collection = new HashSet<>();
-					for (AnimeName anime : AnimeName.validValues()) {
-						if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
-							collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
-					}
-
-					KawaiponBook kb = new KawaiponBook(collection);
-					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(KawaiponRarity.ULTIMATE), "Coleção Kawaipon", false);
-
-					EmbedBuilder eb = new ColorlessEmbedBuilder();
-					int count = collection.size();
-					int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
+                    EmbedBuilder eb = new ColorlessEmbedBuilder();
+                    int count = collection.size();
+                    int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
                     int common = kp.getCards().size() - foil;
 
                     eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName());
