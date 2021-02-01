@@ -19,14 +19,14 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class FlipCoinCommand extends Command {
+public class FlipCoinCommand implements Executable {
 
 	public FlipCoinCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -45,7 +45,7 @@ public class FlipCoinCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("Calculando cara ou coroa....").queue((msg) -> msg.editMessage(((new Random()).nextBoolean() ? "<@" + author.getId() + "> **CARA** :smile:!" : "<@" + author.getId() + "> **COROA** :crown:!")).queueAfter(750, TimeUnit.MILLISECONDS));
 	}
 }

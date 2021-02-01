@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.DoubleStream;
 
 
-public class InvestCommand extends Command {
+public class InvestCommand implements Executable {
 
 	public InvestCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -57,7 +57,7 @@ public class InvestCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar uma carta e um valor para investir.").queue();
 			return;

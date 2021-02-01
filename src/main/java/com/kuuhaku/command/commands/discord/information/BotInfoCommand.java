@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
@@ -35,7 +35,7 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.time.format.DateTimeFormatter;
 
-public class BotInfoCommand extends Command {
+public class BotInfoCommand implements Executable {
 
 	private static final String STR_BOT_INFO_SERVERS = "str_bot-info-servers";
 
@@ -56,7 +56,7 @@ public class BotInfoCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-title"))

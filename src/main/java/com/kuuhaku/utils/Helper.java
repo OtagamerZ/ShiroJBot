@@ -29,7 +29,7 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.google.gson.Gson;
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.commands.discord.reactions.Reaction;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.GuildDAO;
@@ -415,7 +415,7 @@ public class Helper {
 		return Helper.getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here")), "...");
 	}
 
-	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
+	public static void logToChannel(User u, boolean isCommand, Executable c, String msg, Guild g) {
 		GuildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
 
@@ -447,7 +447,7 @@ public class Helper {
 		}
 	}
 
-	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g, String args) {
+	public static void logToChannel(User u, boolean isCommand, Executable c, String msg, Guild g, String args) {
 		GuildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
 
@@ -1029,7 +1029,7 @@ public class Helper {
 		}
 	}
 
-	public static boolean showMMError(User author, MessageChannel channel, Guild guild, String rawMessage, Command command) {
+	public static boolean showMMError(User author, MessageChannel channel, Guild guild, String rawMessage, Executable command) {
 		if (author.getId().equals(Main.getSelfUser().getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_human-command")).queue();
 			return true;

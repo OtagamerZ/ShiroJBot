@@ -28,7 +28,7 @@ public class DanceReaction extends Reaction {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		this.setReaction(new String[]{
 				"Vai vai vai!",
 				"Se liga nos m-o-v-i-m-e-n-t-o-s!",

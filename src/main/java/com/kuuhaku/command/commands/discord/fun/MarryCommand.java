@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.fun;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18n;
@@ -36,7 +36,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-public class MarryCommand extends Command {
+public class MarryCommand implements Executable {
 
 	public MarryCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -55,7 +55,7 @@ public class MarryCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		try {
 			if (message.getMentionedUsers().size() < 1) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();

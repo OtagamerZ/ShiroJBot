@@ -23,7 +23,7 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.Youtube;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -43,26 +43,26 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class YoutubeCommand extends Command {
+public class YoutubeCommand implements Executable {
 
-    public YoutubeCommand(String name, String description, Category category, boolean requiresMM) {
-        super(name, description, category, requiresMM);
-    }
+	public YoutubeCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
+	}
 
-    public YoutubeCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-        super(name, aliases, description, category, requiresMM);
-    }
+	public YoutubeCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
+	}
 
-    public YoutubeCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-        super(name, usage, description, category, requiresMM);
-    }
+	public YoutubeCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
+	}
 
-    public YoutubeCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-        super(name, aliases, usage, description, category, requiresMM);
-    }
+	public YoutubeCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
+	}
 
-    @Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	@Override
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage("❌ | Você precisa digitar um nome para pesquisar.").queue();
 			return;

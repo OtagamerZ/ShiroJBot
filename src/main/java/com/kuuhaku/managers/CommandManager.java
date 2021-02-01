@@ -19,10 +19,9 @@
 package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
-import com.kuuhaku.command.commands.discord.beta.*;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.command.commands.discord.clan.*;
-import com.kuuhaku.command.commands.discord.dev.*;
 import com.kuuhaku.command.commands.discord.exceed.*;
 import com.kuuhaku.command.commands.discord.fun.*;
 import com.kuuhaku.command.commands.discord.information.*;
@@ -32,15 +31,14 @@ import com.kuuhaku.command.commands.discord.music.ControlCommand;
 import com.kuuhaku.command.commands.discord.music.YoutubeCommand;
 import com.kuuhaku.command.commands.discord.reactions.*;
 import com.kuuhaku.command.commands.discord.reactions.answerable.*;
-import com.kuuhaku.command.commands.discord.support.BlockCommand;
-import com.kuuhaku.command.commands.discord.support.InviteCommand;
-import com.kuuhaku.command.commands.discord.support.MarkTicketCommand;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
-import org.apache.commons.lang3.ArrayUtils;
+import org.reflections.Reflections;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.kuuhaku.command.Category.*;
 
@@ -50,7 +48,7 @@ public class CommandManager {
 	private static final String REQ_MESSAGE = "req_message";
 	private static final String REQ_NAME = "req_name";
 	private static final String REQ_SERVER_ID = "req_server-id";
-	private static final String REQ_MENTION_REASON = "req_mention-reason";
+	private static final String REQ_MENTION_REASON = "req_mention-id-reason";
 	private static final String REQ_TEXT = "req_text";
 	private static final String REQ_LINK = "req_link";
 	private static final String REQ_QUESTION = "req_question";
@@ -61,206 +59,34 @@ public class CommandManager {
 	private static final String REQ_MENTION_BET = "req_mention-bet";
 	private static final String REQ_COLOR = "req_color";
 	private static final String REQ_ITEM = "req_item";
-	private final HashMap<Class<? extends Command>, Argument> commands = new HashMap<>() {
+	private final HashMap<Class<? extends Executable>, Argument> commands = new HashMap<>() {
 		{
-			//DEV
-			put(KillCommand.class, new Argument(
-					"desligar", new String[]{"kill"}, "cmd_kill", DEV, false
-			));
-			put(LeaveCommand.class, new Argument(
-					"leave", REQ_SERVER_ID, "cmd_leave", DEV, true
-			));
-			put(ToxicTagCommand.class, new Argument(
-					"toxico", new String[]{"toxic"}, REQ_MENTION, "cmd_toxic-tag", DEV, false
-			));
-			put(BetaTagCommand.class, new Argument(
-					"beta", REQ_MENTION, "cmd_beta-tag", DEV, false
-			));
-			put(VerifiedTagCommand.class, new Argument(
-					"verificado", new String[]{"verified"}, REQ_MENTION, "cmd_verified-tag", DEV, false
-			));
-			put(RelaysCommand.class, new Argument(
-					"relays", "cmd_relay-list", DEV, false
-			));
-			put(LogCommand.class, new Argument(
-					"log", "cmd_log", DEV, false
-			));
-			put(TokenCommand.class, new Argument(
-					"chave", new String[]{"token"}, REQ_NAME, "cmd_token", DEV, false
-			));
-			put(BroadcastCommand.class, new Argument(
-					"transmitir", new String[]{"broadcast"}, "req_type-message", "cmd_broadcast", DEV, false
-			));
-			put(UsageCommand.class, new Argument(
-					"usos", new String[]{"uses", "usage"}, "cmd_usage", DEV, true
-			));
-			put(SimpleWHMCommand.class, new Argument(
-					"wh", REQ_MESSAGE, "cmd_simple-wh", DEV, false
-			));
-			put(MMLockCommand.class, new Argument(
-					"mmlock", "cmd_mm-lock", DEV, false
-			));
-			put(DrawRaffleCommand.class, new Argument(
-					"rifa", new String[]{"raffle"}, "req_period", "cmd_draw-raffle", DEV, false
-			));
-			put(GarbageCollectorCommand.class, new Argument(
-					"coletarlixo", new String[]{"gc"}, "cmd_garbage-collector", DEV, false
-			));
-			put(BlacklistCommand.class, new Argument(
-					"listanegra", new String[]{"bl", "blacklist"}, "cmd_blacklist", DEV, false
-			));
-			put(CompileCommand.class, new Argument(
-					"compilar", new String[]{"compile", "exec"}, "req_code", "cmd_compile", DEV, true
-			));
-			put(SweepCommand.class, new Argument(
-					"sweep", new String[]{"limpar", "cleanse"}, "cmd_sweep", DEV, true
-			));
-			put(BugHuntCommand.class, new Argument(
-					"bughunt", new String[]{"hunter", "debugador"}, REQ_MENTION, "cmd_bug-hunter", DEV, false
-			));
-			put(ShardStatusCommand.class, new Argument(
-					"shards", "cmd_shard-status", DEV, true
-			));
-			put(ShardRestartCommand.class, new Argument(
-					"rshard", REQ_ID, "cmd_shard-restart", DEV, false
-			));
-			put(AuditCommand.class, new Argument(
-					"audit", "req_type-id", "cmd_audit", DEV, true
-			));
-			put(LockRankedCommand.class, new Argument(
-					"rlock", "cmd_ranked-lock", DEV, false
-			));
-			put(CompileChampionsCommand.class, new Argument(
-					"testchamp", "cmd_compile-champions", DEV, false
-			));
-
-			//SUPPORT
-			put(BlockCommand.class, new Argument(
-					"bloquear", new String[]{"block"}, "req_type-id-reason", "cmd_block", SUPPORT, false
-			));
-			put(InviteCommand.class, new Argument(
-					"convite", new String[]{"invite"}, REQ_SERVER_ID, "cmd_invite", SUPPORT, true
-			));
-			put(MarkTicketCommand.class, new Argument(
-					"mark", new String[]{"solved", "resolvido"}, REQ_ID, "cmd_mark-ticket", SUPPORT, false
-			));
-
-			//BETA
-			put(JibrilCommand.class, new Argument(
-					"jibril", "cmd_jibril", BETA, false
-			));
-			put(TetCommand.class, new Argument(
-					"tet", "cmd_tet", BETA, false
-			));
-			put(JibrilEmoteListCommand.class, new Argument(
-					"jemotes", REQ_NAME, "cmd_j-emotes", BETA, true
-			));
-			put(PurchaceKGotchiCommand.class, new Argument(
-					"pkgotchi", new String[]{"buykgotchi", "comprarkgotchi"}, "req_kgotchi", "cmd_kgotchi-shop", BETA, false
-			));
-			put(KGotchiCommand.class, new Argument(
-					"kgotchi", new String[]{"kg", "kawaig"}, "req_action", "cmd_kgotchi", BETA, false
-			));
-			put(RelayCommand.class, new Argument(
-					"relay", new String[]{"relinfo", "relcon"}, "cmd_relay", BETA, false
-			));
-			put(EncryptCommand.class, new Argument(
-					"criptografar", new String[]{"crypt", "crpt"}, REQ_KEY_FILE, "cmd_encrypt", BETA, false
-			));
-			put(DecryptCommand.class, new Argument(
-					"descriptografar", new String[]{"decrypt", "dcrpt"}, REQ_KEY_FILE, "cmd_decrypt", BETA, false
-			));
-
-			//MODERATION
-			put(RemoveAnswerCommand.class, new Argument(
-					"naofale", "req_id-nothing", "cmd_remove-answer", MODERACAO, false
-			));
-			put(SettingsCommand.class, new Argument(
-					"settings", new String[]{"definicoes", "parametros", "configs"}, "req_parameter", "cmd_settings", MODERACAO, false
-			));
-			put(AllowCommunityCommand.class, new Argument(
-					"ouçatodos", "cmd_allow-community", MODERACAO, false
-			));
-			put(KickMemberCommand.class, new Argument(
-					"kick", new String[]{"expulsar"}, REQ_MENTION_REASON, "cmd_kick", MODERACAO, false
-			));
-			put(BanMemberCommand.class, new Argument(
-					"ban", new String[]{"banir"}, REQ_MENTION_REASON, "cmd_ban", MODERACAO, false
-			));
-			put(NoLinkCommand.class, new Argument(
-					"semlink", new String[]{"nolink", "blocklink"}, "cmd_no-link", MODERACAO, true
-			));
-			put(AntispamCommand.class, new Argument(
-					"semspam", new String[]{"nospam", "antispam"}, "req_spam-type-amount", "cmd_no-spam", MODERACAO, true
-			));
-			put(AntiraidCommand.class, new Argument(
-					"semraid", new String[]{"noraid", "antiraid"}, "cmd_no-raid", MODERACAO, false
-			));
-			put(MakeLogCommand.class, new Argument(
-					"logchannel", new String[]{"makelog"}, "cmd_make-log", MODERACAO, false
-			));
-			put(PruneCommand.class, new Argument(
-					"prune", new String[]{"clean", "limpar"}, "req_qtd-all", "cmd_prune", MODERACAO, true
-			));
-			put(LiteModeCommand.class, new Argument(
-					"litemode", new String[]{"lite"}, "cmd_lite-mode", MODERACAO, false
-			));
-			put(AllowImgCommand.class, new Argument(
-					"allowimg", new String[]{"aimg"}, "cmd_allow-images", MODERACAO, false
-			));
-			put(RoleChooserCommand.class, new Argument(
-					"botaocargo", new String[]{"rolebutton", "bc", "rb"}, "req_role-button", "cmd_role-button", MODERACAO, false
-			));
-			put(GatekeeperCommand.class, new Argument(
-					"porteiro", new String[]{"gatekeeper", "gk"}, "req_id-role", "cmd_gatekeeper", MODERACAO, false
-			));
-			put(RegenRulesCommand.class, new Argument(
-					"rrules", new String[]{"makerules"}, "cmd_regen-rules", MODERACAO, true
-			));
-			put(PermissionCommand.class, new Argument(
-					"permissões", new String[]{"perms", "permisions"}, "cmd_permission", MODERACAO, false
-			));
-			put(AddColorRoleCommand.class, new Argument(
-					"cargocor", new String[]{"rolecolor"}, "req_name-color", "cmd_add-color-role", MODERACAO, false
-			));
-			put(MuteMemberCommand.class, new Argument(
-					"mute", new String[]{"mutar", "silenciar", "silence"}, "req_member-time-reason", "cmd_mute", MODERACAO, false
-			));
-			put(AllowKawaiponCommand.class, new Argument(
-					"habilitarkp", new String[]{"enablekp", "hkp", "ekp"}, REQ_CHANNEL, "cmd_allow-kawaipon", MODERACAO, false
-			));
-			put(AllowDropsCommand.class, new Argument(
-					"habilitardp", new String[]{"enabledp", "hdp", "edp"}, REQ_CHANNEL, "cmd_allow-drops", MODERACAO, false
-			));
 			put(PurchaseBuffCommand.class, new Argument(
-					"melhorar", new String[]{"upgrade", "up"}, "req_type-tier", "cmd_purchase-buff", MODERACAO, false
+					"melhorar", new String[]{"upgrade", "up"}, "req_type-tier", "cmd_purchase-buff", MODERATION, false
 			));
 			put(ModifyRulesCommand.class, new Argument(
-					"regra", new String[]{"rule", "r"}, "req_rule-index", "cmd_modify-rule", MODERACAO, false
+					"regra", new String[]{"rule", "r"}, "req_rule-index", "cmd_modify-rule", MODERATION, false
 			));
 			put(UnmuteMemberCommand.class, new Argument(
-					"unmute", new String[]{"desmutar", "dessilenciar", "unsilence"}, REQ_MENTION, "cmd_unmute", MODERACAO, false
+					"unmute", new String[]{"desmutar", "dessilenciar", "unsilence"}, REQ_MENTION, "cmd_unmute", MODERATION, false
 			));
 			put(ToggleExceedRolesCommand.class, new Argument(
-					"cargosexceed", new String[]{"exceedroles", "exroles", "cargosex"}, "cmd_toggle-exceed-roles", MODERACAO, false
+					"cargosexceed", new String[]{"exceedroles", "exroles", "cargosex"}, "cmd_toggle-exceed-roles", MODERATION, false
 			));
 			put(NQNModeCommand.class, new Argument(
-					"modonqn", new String[]{"nqnmode", "nqn", "autoemotes"}, "cmd_nqn-mode", MODERACAO, true
+					"modonqn", new String[]{"nqnmode", "nqn", "autoemotes"}, "cmd_nqn-mode", MODERATION, true
 			));
 			put(SmallCardsCommand.class, new Argument(
-					"cartaspequenas", new String[]{"smallcards"}, "cmd_small-cards", MODERACAO, false
+					"cartaspequenas", new String[]{"smallcards"}, "cmd_small-cards", MODERATION, false
 			));
 			put(LockChannelCommand.class, new Argument(
-					"travar", new String[]{"lock", "trancar"}, "cmd_lock-channel", MODERACAO, true
+					"travar", new String[]{"lock", "trancar"}, "cmd_lock-channel", MODERATION, true
 			));
 			put(UnlockChannelCommand.class, new Argument(
-					"destravar", new String[]{"unlock", "destrancar"}, "cmd_unlock-channel", MODERACAO, true
+					"destravar", new String[]{"unlock", "destrancar"}, "cmd_unlock-channel", MODERATION, true
 			));
 
 			//INFORMATION
-			put(HelpCommand.class, new Argument(
-					"comandos", new String[]{"cmds", "cmd", "comando", "ajuda", "help"}, "req_command", "cmd_help", INFO, false
-			));
 			put(ProfileCommand.class, new Argument(
 					"perfil", new String[]{"xp", "profile", "pf"}, "cmd_profile", INFO, false
 			));
@@ -607,10 +433,10 @@ public class CommandManager {
 
 			//MUSICA
 			put(ControlCommand.class, new Argument(
-					"controle", new String[]{"control", "c"}, "cmd_control", MUSICA, false
+					"controle", new String[]{"control", "c"}, "cmd_control", MUSIC, false
 			));
 			put(YoutubeCommand.class, new Argument(
-					"play", new String[]{"yt", "youtube"}, REQ_NAME, "cmd_play", MUSICA, false
+					"play", new String[]{"yt", "youtube"}, REQ_NAME, "cmd_play", MUSIC, false
 			));
 
 			//EXCEED
@@ -734,29 +560,78 @@ public class CommandManager {
 		}
 	};
 
-	public HashMap<Class<? extends Command>, Argument> getCommands() {
+	public Set<PreparedCommand> getCommands() {
+		Reflections refl = new Reflections(this.getClass().getPackageName());
+		Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
+		Set<PreparedCommand> commands = new HashSet<>();
+
+		for (Class<?> cmd : cmds) {
+			Command params = cmd.getDeclaredAnnotation(Command.class);
+			Requires req = cmd.getDeclaredAnnotation(Requires.class);
+			commands.add(new PreparedCommand(
+					params.name(),
+					params.aliases(),
+					params.usage(),
+					"cmd_" + cmd.getSimpleName()
+							.replace("Command", "")
+							.replaceAll("[a-z](?=[A-Z])", "$0-")
+							.toLowerCase(),
+					params.category(),
+					req == null ? null : req.value()
+			));
+		}
+
 		return commands;
 	}
 
-	public Command getCommand(String name) {
-		Map.Entry<Class<? extends Command>, Argument> cmd = commands.entrySet().stream().filter(e -> e.getValue().getName().equalsIgnoreCase(name) || ArrayUtils.contains(e.getValue().getAliases(), name.toLowerCase())).findFirst().orElse(null);
+	public Set<PreparedCommand> getCommands(Category category) {
+		Reflections refl = new Reflections(this.getClass().getPackageName());
+		Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
+		Set<PreparedCommand> commands = new HashSet<>();
 
-		if (cmd == null) return null;
-
-		try {
-			if (cmd.getValue() instanceof ReactionArgument)
-				//noinspection JavaReflectionInvocation
-				return cmd.getKey()
-						.getConstructor(String.class, String[].class, String.class, boolean.class, String.class)
-						.newInstance(cmd.getValue().getArguments());
-			else
-				//noinspection JavaReflectionInvocation
-				return cmd.getKey()
-						.getConstructor(String.class, String[].class, String.class, String.class, Category.class, boolean.class)
-						.newInstance(cmd.getValue().getArguments());
-		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-			return null;
+		for (Class<?> cmd : cmds) {
+			Command params = cmd.getDeclaredAnnotation(Command.class);
+			if (params.category() == category) {
+				Requires req = cmd.getDeclaredAnnotation(Requires.class);
+				commands.add(new PreparedCommand(
+						params.name(),
+						params.aliases(),
+						params.usage(),
+						"cmd_" + cmd.getSimpleName()
+								.replace("Command", "")
+								.replaceAll("[a-z](?=[A-Z])", "$0-")
+								.toLowerCase(),
+						params.category(),
+						req == null ? null : req.value()
+				));
+			}
 		}
+
+		return commands;
+	}
+
+	public PreparedCommand getCommand(String name) {
+		Reflections refl = new Reflections(this.getClass().getPackageName());
+		Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
+
+		for (Class<?> cmd : cmds) {
+			Command params = cmd.getDeclaredAnnotation(Command.class);
+			if (name.equalsIgnoreCase(params.name()) || Helper.equalsAny(name, params.aliases())) {
+				Requires req = cmd.getDeclaredAnnotation(Requires.class);
+				return new PreparedCommand(
+						params.name(),
+						params.aliases(),
+						params.usage(),
+						"cmd_" + cmd.getSimpleName()
+								.replace("Command", "")
+								.replaceAll("[a-z](?=[A-Z])", "$0-")
+								.toLowerCase(),
+						params.category(),
+						req == null ? null : req.value()
+				);
+			}
+		}
+
+		return null;
 	}
 }
