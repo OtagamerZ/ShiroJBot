@@ -14,7 +14,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LockChannelCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/UnlockChannelCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,17 +128,17 @@
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\tiers" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
+    </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.utils.Helper" />
       <recent name="com.kuuhaku.controller.sqlite.GuildDAO" />
       <recent name="com.kuuhaku.handlers.games.rpg.Utils" />
-    </key>
-    <key name="IntroduceConstantDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.managers.CommandManager" />
-      <recent name="com.kuuhaku.utils.KawaiponCard" />
-      <recent name="com.kuuhaku.command.commands.information.URankCommand" />
-      <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
-      <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners\apprentice" />
@@ -140,19 +147,19 @@
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
     </key>
+    <key name="IntroduceConstantDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.managers.CommandManager" />
+      <recent name="com.kuuhaku.utils.KawaiponCard" />
+      <recent name="com.kuuhaku.command.commands.information.URankCommand" />
+      <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
+      <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.moderation" />
       <recent name="com.kuuhaku.handlers.games.tabletop.games.shoukan" />
       <recent name="com.kuuhaku.command.commands.discord.information" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.controller.postgresql" />
-      <recent name="com.kuuhaku.model.common" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\tiers" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -1030,20 +1037,8 @@
       <workItem from="1611978467547" duration="145000" />
       <workItem from="1612117546538" duration="263000" />
       <workItem from="1612131537085" duration="41000" />
-    </task>
-    <task id="LOCAL-03571" summary="Adicionado Shoukan em duplas">
-      <created>1611928135561</created>
-      <option name="number" value="03571" />
-      <option name="presentableId" value="LOCAL-03571" />
-      <option name="project" value="LOCAL" />
-      <updated>1611928135561</updated>
-    </task>
-    <task id="LOCAL-03572" summary="Adicionado Shoukan em duplas">
-      <created>1611928220545</created>
-      <option name="number" value="03572" />
-      <option name="presentableId" value="LOCAL-03572" />
-      <option name="project" value="LOCAL" />
-      <updated>1611928220545</updated>
+      <workItem from="1612131596239" duration="2744000" />
+      <workItem from="1612144748286" duration="2472000" />
     </task>
     <task id="LOCAL-03573" summary="Adicionado Shoukan em duplas">
       <created>1611928314159</created>
@@ -1374,7 +1369,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612117806816</updated>
     </task>
-    <option name="localTasksCounter" value="3620" />
+    <task id="LOCAL-03620" summary="Correções menores">
+      <created>1612131867896</created>
+      <option name="number" value="03620" />
+      <option name="presentableId" value="LOCAL-03620" />
+      <option name="project" value="LOCAL" />
+      <updated>1612131867896</updated>
+    </task>
+    <task id="LOCAL-03621" summary="Correções menores">
+      <created>1612131962631</created>
+      <option name="number" value="03621" />
+      <option name="presentableId" value="LOCAL-03621" />
+      <option name="project" value="LOCAL" />
+      <updated>1612131962632</updated>
+    </task>
+    <option name="localTasksCounter" value="3622" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
