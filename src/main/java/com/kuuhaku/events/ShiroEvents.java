@@ -447,7 +447,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			Account acc = AccountDAO.getAccount(author.getId());
 			if (!acc.hasCompletedQuests()) {
-				DailyQuest tasks = DailyQuest.getQuest(author.getId());
+				DailyQuest tasks = DailyQuest.getQuest(author.getIdLong());
 				Map<DailyTask, Integer> pg = acc.getDailyProgress();
 
 				if (tasks.checkTasks(pg)) {
