@@ -23,34 +23,24 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@Command(
+		name = "exceedsair",
+		aliases = {"exleave", "sairex"},
+		usage = "cmd_exceed-leave",
+		category = Category.EXCEED
+)
 public class ExceedLeaveCommand implements Executable {
-
-	public ExceedLeaveCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public ExceedLeaveCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public ExceedLeaveCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public ExceedLeaveCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -64,31 +54,31 @@ public class ExceedLeaveCommand implements Executable {
 		if (em == null || em.getExceed().isBlank()) {
 			channel.sendMessage("❌ | Você não faz parte de nenhum Exceed atualmente.").queue();
 			return;
-        }
+		}
 
-        boolean willLock = ZonedDateTime.now(ZoneId.of("GMT-3")).getDayOfMonth() > 5;
-        String hash = Helper.generateHash(guild, author);
-        ShiroInfo.getHashes().add(hash);
-        Main.getInfo().getConfirmationPending().put(author.getId(), true);
-        String name = em.getExceed();
-        channel.sendMessage(":warning: | Sair da " + name + " irá zerar seus pontos de contribuição" + (willLock ? " e fará com que você não possa escolher outro Exceed até o próximo mês" : "") + ". Deseja confirmar sua escolha?").queue(s ->
-                Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-                            if (mb.getId().equals(author.getId())) {
-                                if (!ShiroInfo.getHashes().remove(hash)) return;
-                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                                if (willLock) em.setBlocked(true);
-                                em.setExceed("");
-                                em.resetContribution();
-                                ExceedDAO.saveExceedMember(em);
-                                s.delete().queue(null, Helper::doNothing);
-                                channel.sendMessage("✅ | Você saiu da " + name + " com sucesso!").queue();
-                            }
-                        }), true, 1, TimeUnit.MINUTES,
-                        u -> u.getId().equals(author.getId()),
-                        ms -> {
-                            ShiroInfo.getHashes().remove(hash);
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                        })
-        );
-    }
+		boolean willLock = ZonedDateTime.now(ZoneId.of("GMT-3")).getDayOfMonth() > 5;
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
+		String name = em.getExceed();
+		channel.sendMessage(":warning: | Sair da " + name + " irá zerar seus pontos de contribuição" + (willLock ? " e fará com que você não possa escolher outro Exceed até o próximo mês" : "") + ". Deseja confirmar sua escolha?").queue(s ->
+				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+							if (mb.getId().equals(author.getId())) {
+								if (!ShiroInfo.getHashes().remove(hash)) return;
+								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								if (willLock) em.setBlocked(true);
+								em.setExceed("");
+								em.resetContribution();
+								ExceedDAO.saveExceedMember(em);
+								s.delete().queue(null, Helper::doNothing);
+								channel.sendMessage("✅ | Você saiu da " + name + " com sucesso!").queue();
+							}
+						}), true, 1, TimeUnit.MINUTES,
+						u -> u.getId().equals(author.getId()),
+						ms -> {
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+						})
+		);
+	}
 }

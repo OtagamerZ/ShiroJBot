@@ -21,12 +21,13 @@ package com.kuuhaku.managers;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.commands.PreparedCommand;
-import com.kuuhaku.command.commands.discord.clan.*;
-import com.kuuhaku.command.commands.discord.exceed.*;
+import com.kuuhaku.command.commands.discord.exceed.ExceedLeaveCommand;
+import com.kuuhaku.command.commands.discord.exceed.ExceedPaletteCommand;
+import com.kuuhaku.command.commands.discord.exceed.ExceedRankCommand;
+import com.kuuhaku.command.commands.discord.exceed.ExceedSelectCommand;
 import com.kuuhaku.command.commands.discord.fun.*;
 import com.kuuhaku.command.commands.discord.information.*;
 import com.kuuhaku.command.commands.discord.misc.*;
-import com.kuuhaku.command.commands.discord.moderation.*;
 import com.kuuhaku.command.commands.discord.music.ControlCommand;
 import com.kuuhaku.command.commands.discord.music.YoutubeCommand;
 import com.kuuhaku.command.commands.discord.reactions.*;
@@ -61,89 +62,6 @@ public class CommandManager {
 	private static final String REQ_ITEM = "req_item";
 	private final HashMap<Class<? extends Executable>, Argument> commands = new HashMap<>() {
 		{
-			put(PurchaseBuffCommand.class, new Argument(
-					"melhorar", new String[]{"upgrade", "up"}, "req_type-tier", "cmd_purchase-buff", MODERATION, false
-			));
-			put(ModifyRulesCommand.class, new Argument(
-					"regra", new String[]{"rule", "r"}, "req_rule-index", "cmd_modify-rule", MODERATION, false
-			));
-			put(UnmuteMemberCommand.class, new Argument(
-					"unmute", new String[]{"desmutar", "dessilenciar", "unsilence"}, REQ_MENTION, "cmd_unmute", MODERATION, false
-			));
-			put(ToggleExceedRolesCommand.class, new Argument(
-					"cargosexceed", new String[]{"exceedroles", "exroles", "cargosex"}, "cmd_toggle-exceed-roles", MODERATION, false
-			));
-			put(NQNModeCommand.class, new Argument(
-					"modonqn", new String[]{"nqnmode", "nqn", "autoemotes"}, "cmd_nqn-mode", MODERATION, true
-			));
-			put(SmallCardsCommand.class, new Argument(
-					"cartaspequenas", new String[]{"smallcards"}, "cmd_small-cards", MODERATION, false
-			));
-			put(LockChannelCommand.class, new Argument(
-					"travar", new String[]{"lock", "trancar"}, "cmd_lock-channel", MODERATION, true
-			));
-			put(UnlockChannelCommand.class, new Argument(
-					"destravar", new String[]{"unlock", "destrancar"}, "cmd_unlock-channel", MODERATION, true
-			));
-
-			//INFORMATION
-			put(ProfileCommand.class, new Argument(
-					"perfil", new String[]{"xp", "profile", "pf"}, "cmd_profile", INFO, false
-			));
-			put(OpenTicketCommand.class, new Argument(
-					"ticket", new String[]{"openticket", "tkt"}, REQ_MESSAGE, "cmd_ticket", INFO, true
-			));
-			put(ReportUserCommand.class, new Argument(
-					"report", new String[]{"reportar"}, "req_user-reason", "cmd_report", INFO, true
-			));
-			put(RequestAssistCommand.class, new Argument(
-					"suporte", new String[]{"support", "assist"}, "cmd_request-assist", INFO, true
-			));
-			put(BotInfoCommand.class, new Argument(
-					"info", new String[]{"botinfo", "bot"}, "cmd_info", INFO, false
-			));
-			put(URankCommand.class, new Argument(
-					"rank", new String[]{"ranking", "top10"}, "req_global-credit-card", "cmd_rank", INFO, true
-			));
-			put(ColorTesterCommand.class, new Argument(
-					"quecor", new String[]{"tcolor", "testcolor"}, REQ_COLOR, "cmd_color", INFO, false
-			));
-			put(LocalEmoteListCommand.class, new Argument(
-					"emotes", REQ_NAME, "cmd_emotes", INFO, true
-			));
-			put(ShiroEmoteListCommand.class, new Argument(
-					"semotes", REQ_NAME, "cmd_s-emotes", INFO, true
-			));
-			put(WalletCommand.class, new Argument(
-					"carteira", new String[]{"banco", "bank", "money", "wallet", "atm"}, "cmd_wallet", INFO, false
-			));
-			put(PingCommand.class, new Argument(
-					"ping", "cmd_ping", INFO, false
-			));
-			put(UptimeCommand.class, new Argument(
-					"uptime", "cmd_uptime", INFO, false
-			));
-			put(TagsCommand.class, new Argument(
-					"tags", new String[]{"insignias"}, "cmd_tags", INFO, false
-			));
-			put(MyStatsCommand.class, new Argument(
-					"eu", new String[]{"meustatus", "mystats"}, "cmd_my-stats", INFO, false
-			));
-			put(MyBuffsCommand.class, new Argument(
-					"buffs", new String[]{"meusbuffs", "xpmodifiers", "xpmodifs"}, "cmd_my-buffs", INFO, false
-			));
-			put(HttpCatCommand.class, new Argument(
-					"catnet", new String[]{"httpcat"}, "cmd_http-cat", INFO, false
-			));
-			put(KawaiponsCommand.class, new Argument(
-					"kawaipons", new String[]{"kps"}, "req_anime-rarity-class-race-type", "cmd_kawaipons", INFO, false
-			));
-			put(RemainingCardsCommand.class, new Argument(
-					"cartasrestantes", new String[]{"restante", "remaining"}, "req_anime", "cmd_remaining-cards", INFO, false
-			));
-			put(RemindMeCommand.class, new Argument(
-					"melembre", new String[]{"remindme", "notifyvote", "meavise"}, "cmd_remind-me", INFO, false
-			));
 			put(CardValueCommand.class, new Argument(
 					"valor", new String[]{"value"}, "req_card", "cmd_card-value", INFO, false
 			));
@@ -457,9 +375,6 @@ public class CommandManager {
 					"disboard", new String[]{"exmap", "mapa"}, "cmd_disboard", EXCEED, false
 			));
 			*/
-			put(ExceedMembersCommand.class, new Argument(
-					"exceedmembros", new String[]{"exmembers", "membrosx"}, "cmd_exceed-members", EXCEED, true
-			));
 
 			//REACTIONS
 			put(HugReaction.class, new ReactionArgument(
@@ -506,6 +421,7 @@ public class CommandManager {
 			));
 
 			//CLAN
+			/*
 			put(ClanBannerCommand.class, new Argument(
 					"faixada", new String[]{"banner"}, "cmd_clan-banner", CLAN, false
 			));
@@ -542,9 +458,6 @@ public class CommandManager {
 			put(LeaveClanCommand.class, new Argument(
 					"sair", new String[]{"exit", "abandonar"}, "cmd_leave-clan", CLAN, true
 			));
-			put(PromoteClanMemberCommand.class, new Argument(
-					"promover", new String[]{"promote", "prom"}, "req_mention-id", "cmd_promote-clan-member", CLAN, true
-			));
 			put(ClanHistoryCommand.class, new Argument(
 					"historico", new String[]{"history", "hist"}, "cmd_clan-history", CLAN, true
 			));
@@ -557,6 +470,7 @@ public class CommandManager {
 			put(ClanRevertCardCommand.class, new Argument(
 					"creverter", new String[]{"crevert"}, "req_card", "cmd_clan-revert-card", CLAN, true
 			));
+			*/
 		}
 	};
 
