@@ -25,9 +25,12 @@ import com.kuuhaku.model.annotations.Requires;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.api.managers.ChannelManager;
+import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "destrancar",
@@ -45,22 +48,23 @@ public class UnlockChannelCommand implements Executable {
 		}
 
 		try {
-			TextChannel tc = message.getTextChannel();
-			List<PermissionOverride> overrides = tc.getPermissionOverrides();
+			List<PermissionOverride> overrides = channel.getPermissionOverrides();
 
-			ChannelManager mng = message.getTextChannel().getManager();
+			if (channel.getParent() == null) {
+				List<PermissionOverrideAction> acts = new ArrayList<>();
 
-			mng = mng.removePermissionOverride(guild.getPublicRole());
-			if (tc.getParent() == null)
+				acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).reset());
+				acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).reset());
 				for (PermissionOverride override : overrides) {
 					IPermissionHolder holder = override.getPermissionHolder();
 					if (holder != null)
-						mng = mng.removePermissionOverride(override.getPermissionHolder());
+						acts.add(channel.upsertPermissionOverride(holder).reset());
 				}
-			else
-				mng = mng.sync();
 
-			mng.complete();
+				RestAction.accumulate(acts, Collectors.toList()).complete();
+			} else {
+				channel.getManager().sync().complete();
+			}
 
 			channel.sendMessage(":unlock: | Canal destrancado com sucesso!").queue();
 		} catch (InsufficientPermissionException e) {
