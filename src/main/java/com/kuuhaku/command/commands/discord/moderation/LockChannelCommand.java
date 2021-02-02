@@ -36,7 +36,7 @@ import java.util.List;
 		aliases = {"lock", "travar"},
 		category = Category.MODERATION
 )
-@Requires({Permission.MANAGE_PERMISSIONS})
+@Requires({Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS})
 public class LockChannelCommand implements Executable {
 
 	@Override
@@ -55,12 +55,10 @@ public class LockChannelCommand implements Executable {
 			if (holder != null)
 				acts.add(channel.upsertPermissionOverride(holder).deny(Permission.MESSAGE_WRITE));
 		}
-		if (guild.getBotRole() != null)
-			acts.add(channel.upsertPermissionOverride(guild.getBotRole()).grant(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS));
 
 		RestAction.allOf(acts)
-				.flatMap(s -> channel.sendMessage(":lock: | Canal trancado com sucesso!"))
 				.mapToResult()
+				.flatMap(s -> channel.sendMessage(":lock: | Canal trancado com sucesso!"))
 				.queue();
 	}
 }
