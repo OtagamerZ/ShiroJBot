@@ -60,7 +60,7 @@ public class SayCommand implements Executable {
 		mb.append(Helper.makeEmoteFromMention(args));
 
 		try {
-			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getShiroShards());
+			Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
 			Map<String, Runnable> s = Helper.sendEmotifiedString(guild, mb.getStringBuilder().toString());
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder();

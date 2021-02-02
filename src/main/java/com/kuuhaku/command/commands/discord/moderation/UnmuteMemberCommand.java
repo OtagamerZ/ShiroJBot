@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
 		usage = "req_mention",
 		category = Category.MODERATION
 )
+@Requires({Permission.MANAGE_ROLES})
 public class UnmuteMemberCommand implements Executable {
 
 	@Override

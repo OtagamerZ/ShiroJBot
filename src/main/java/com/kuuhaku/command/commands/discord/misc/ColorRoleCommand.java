@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
@@ -47,6 +48,7 @@ import java.util.stream.Collectors;
 		usage = "req_name",
 		category = Category.MISC
 )
+@Requires({Permission.MANAGE_ROLES, Permission.MESSAGE_ATTACH_FILES})
 public class ColorRoleCommand implements Executable {
 
 	@Override

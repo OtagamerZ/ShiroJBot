@@ -24,12 +24,14 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.StockMarket;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -43,6 +45,7 @@ import java.util.stream.DoubleStream;
 		usage = "req_card-value",
 		category = Category.MISC
 )
+@Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
 public class InvestCommand implements Executable {
 
 	@Override

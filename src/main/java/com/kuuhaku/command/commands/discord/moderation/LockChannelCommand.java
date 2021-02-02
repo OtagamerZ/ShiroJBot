@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -35,6 +36,7 @@ import java.util.List;
 		aliases = {"lock", "travar"},
 		category = Category.MODERATION
 )
+@Requires({Permission.MANAGE_PERMISSIONS})
 public class LockChannelCommand implements Executable {
 
 	@Override
