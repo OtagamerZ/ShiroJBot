@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -33,6 +34,7 @@ import java.util.List;
 		aliases = {"unlock", "destravar"},
 		category = Category.MODERATION
 )
+@Requires({Permission.MANAGE_PERMISSIONS})
 public class UnlockChannelCommand implements Executable {
 
 	@Override

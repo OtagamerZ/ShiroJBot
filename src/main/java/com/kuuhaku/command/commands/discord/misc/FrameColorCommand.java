@@ -26,9 +26,11 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.ArrayList;
@@ -41,6 +43,12 @@ import java.util.concurrent.TimeUnit;
 		usage = "req_frame-color",
 		category = Category.MISC
 )
+@Requires({
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_ADD_REACTION,
+		Permission.MESSAGE_ATTACH_FILES
+})
 public class FrameColorCommand implements Executable {
 
 	@Override

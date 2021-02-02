@@ -24,11 +24,13 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +50,11 @@ import java.util.function.Function;
 		usage = "req_question",
 		category = Category.MISC
 )
+@Requires({
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_ADD_REACTION
+})
 public class PollCommand implements Executable {
 
 	@Override

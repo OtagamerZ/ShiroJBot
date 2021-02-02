@@ -22,7 +22,9 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.GuildConfig;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -30,6 +32,7 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"noraid", "antiraid"},
 		category = Category.MODERATION
 )
+@Requires({Permission.KICK_MEMBERS})
 public class AntiraidCommand implements Executable {
 
 	@Override

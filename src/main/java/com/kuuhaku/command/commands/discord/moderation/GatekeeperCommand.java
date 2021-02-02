@@ -22,10 +22,12 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +38,7 @@ import org.apache.commons.lang3.StringUtils;
 		usage = "req_id-role",
 		category = Category.MODERATION
 )
+@Requires({Permission.MANAGE_ROLES, Permission.KICK_MEMBERS})
 public class GatekeeperCommand implements Executable {
 
 	@Override

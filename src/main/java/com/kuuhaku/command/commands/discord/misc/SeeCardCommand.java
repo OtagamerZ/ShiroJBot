@@ -29,6 +29,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.KawaiponRarity;
@@ -38,6 +39,7 @@ import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.ListUtils;
 
@@ -54,6 +56,7 @@ import java.util.Set;
 		usage = "req_card-type",
 		category = Category.MISC
 )
+@Requires({Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES})
 public class SeeCardCommand implements Executable {
 
 	@Override
