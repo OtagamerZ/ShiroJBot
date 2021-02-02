@@ -61,6 +61,7 @@ public class LockChannelCommand implements Executable {
 		RestAction.allOf(acts)
 				.flatMap(s -> channel.sendMessage(":lock: | Canal trancado com sucesso!"))
 				.queue(null, f -> {
+					f.printStackTrace();
 					if (channel.canTalk())
 						channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
 				});
