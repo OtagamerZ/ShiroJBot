@@ -14,8 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/PreparedCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/PreparedCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanPermissionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanPermissionCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,6 +154,13 @@
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners\apprentice" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners\initiate" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
+    </key>
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
@@ -166,17 +172,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1034,10 +1029,27 @@
       <workItem from="1612131537085" duration="41000" />
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
-      <workItem from="1612185855723" duration="18000" />
-      <workItem from="1612185891093" duration="64000" />
-      <workItem from="1612185972743" duration="753000" />
-      <workItem from="1612186768849" duration="8016000" />
+    </task>
+    <task id="LOCAL-03592" summary="Adição de filas ranqueadas (Solo/Duo)">
+      <created>1611946849886</created>
+      <option name="number" value="03592" />
+      <option name="presentableId" value="LOCAL-03592" />
+      <option name="project" value="LOCAL" />
+      <updated>1611946849886</updated>
+    </task>
+    <task id="LOCAL-03593" summary="Adição de filas ranqueadas (Solo/Duo)">
+      <created>1611947220311</created>
+      <option name="number" value="03593" />
+      <option name="presentableId" value="LOCAL-03593" />
+      <option name="project" value="LOCAL" />
+      <updated>1611947220311</updated>
+    </task>
+    <task id="LOCAL-03594" summary="Adição de filas ranqueadas (Solo/Duo)">
+      <created>1611947388194</created>
+      <option name="number" value="03594" />
+      <option name="presentableId" value="LOCAL-03594" />
+      <option name="project" value="LOCAL" />
+      <updated>1611947388194</updated>
     </task>
     <task id="LOCAL-03595" summary="Adição de filas ranqueadas (Solo/Duo)">
       <created>1611947721221</created>
@@ -1291,98 +1303,77 @@
       <option name="project" value="LOCAL" />
       <updated>1612150957799</updated>
     </task>
-    <task id="LOCAL-03631" summary="Rework no CommandManager">
-      <created>1612204992193</created>
+    <task id="LOCAL-03631" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612198777306</created>
       <option name="number" value="03631" />
       <option name="presentableId" value="LOCAL-03631" />
       <option name="project" value="LOCAL" />
-      <updated>1612204992193</updated>
+      <updated>1612198777306</updated>
     </task>
-    <task id="LOCAL-03632" summary="Rework no CommandManager">
-      <created>1612210960245</created>
+    <task id="LOCAL-03632" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612199520570</created>
       <option name="number" value="03632" />
       <option name="presentableId" value="LOCAL-03632" />
       <option name="project" value="LOCAL" />
-      <updated>1612210960245</updated>
+      <updated>1612199520571</updated>
     </task>
-    <task id="LOCAL-03633" summary="Adição de requisitos de permissão">
-      <created>1612269865989</created>
+    <task id="LOCAL-03633" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612199652006</created>
       <option name="number" value="03633" />
       <option name="presentableId" value="LOCAL-03633" />
       <option name="project" value="LOCAL" />
-      <updated>1612269865989</updated>
+      <updated>1612199652007</updated>
     </task>
-    <task id="LOCAL-03634" summary="Adição de requisitos de permissão">
-      <created>1612270933632</created>
+    <task id="LOCAL-03634" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612199744605</created>
       <option name="number" value="03634" />
       <option name="presentableId" value="LOCAL-03634" />
       <option name="project" value="LOCAL" />
-      <updated>1612270933632</updated>
+      <updated>1612199744605</updated>
     </task>
-    <task id="LOCAL-03635" summary="Adição de requisitos de permissão">
-      <created>1612271543404</created>
+    <task id="LOCAL-03635" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612199987264</created>
       <option name="number" value="03635" />
       <option name="presentableId" value="LOCAL-03635" />
       <option name="project" value="LOCAL" />
-      <updated>1612271543404</updated>
+      <updated>1612199987264</updated>
     </task>
-    <task id="LOCAL-03636" summary="Adição de requisitos de permissão">
-      <created>1612272337201</created>
+    <task id="LOCAL-03636" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612200122880</created>
       <option name="number" value="03636" />
       <option name="presentableId" value="LOCAL-03636" />
       <option name="project" value="LOCAL" />
-      <updated>1612272337201</updated>
+      <updated>1612200122880</updated>
     </task>
-    <task id="LOCAL-03637" summary="Adição de requisitos de permissão">
-      <created>1612272367645</created>
+    <task id="LOCAL-03637" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612200192249</created>
       <option name="number" value="03637" />
       <option name="presentableId" value="LOCAL-03637" />
       <option name="project" value="LOCAL" />
-      <updated>1612272367645</updated>
+      <updated>1612200192249</updated>
     </task>
-    <task id="LOCAL-03638" summary="Adição de requisitos de permissão">
-      <created>1612272545818</created>
+    <task id="LOCAL-03638" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612200364938</created>
       <option name="number" value="03638" />
       <option name="presentableId" value="LOCAL-03638" />
       <option name="project" value="LOCAL" />
-      <updated>1612272545818</updated>
+      <updated>1612200364938</updated>
     </task>
-    <task id="LOCAL-03639" summary="Adição de requisitos de permissão">
-      <created>1612272687374</created>
+    <task id="LOCAL-03639" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612200390100</created>
       <option name="number" value="03639" />
       <option name="presentableId" value="LOCAL-03639" />
       <option name="project" value="LOCAL" />
-      <updated>1612272687374</updated>
+      <updated>1612200390100</updated>
     </task>
-    <task id="LOCAL-03640" summary="Adição de requisitos de permissão">
-      <created>1612272771934</created>
+    <task id="LOCAL-03640" summary="Novos comandos de trancar e destrancar o canal">
+      <created>1612201716170</created>
       <option name="number" value="03640" />
       <option name="presentableId" value="LOCAL-03640" />
       <option name="project" value="LOCAL" />
-      <updated>1612272771934</updated>
+      <updated>1612201716170</updated>
     </task>
-    <task id="LOCAL-03641" summary="Adição de requisitos de permissão">
-      <created>1612272936351</created>
-      <option name="number" value="03641" />
-      <option name="presentableId" value="LOCAL-03641" />
-      <option name="project" value="LOCAL" />
-      <updated>1612272936351</updated>
-    </task>
-    <task id="LOCAL-03642" summary="Adição de requisitos de permissão">
-      <created>1612273045005</created>
-      <option name="number" value="03642" />
-      <option name="presentableId" value="LOCAL-03642" />
-      <option name="project" value="LOCAL" />
-      <updated>1612273045005</updated>
-    </task>
-    <task id="LOCAL-03643" summary="Adição de requisitos de permissão">
-      <created>1612273150783</created>
-      <option name="number" value="03643" />
-      <option name="presentableId" value="LOCAL-03643" />
-      <option name="project" value="LOCAL" />
-      <updated>1612273150783</updated>
-    </task>
-    <option name="localTasksCounter" value="3644" />
+    <option name="localTasksCounter" value="3641" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1498,18 +1489,22 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser" timestamp="1612273292209">
+    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612213094979">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1612273292209" />
-    <state x="397" y="92" key="CommitChangelistDialog2" timestamp="1612273149928">
+    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612213094979" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612201719334">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="397" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612273149928" />
-    <state x="432" y="225" key="Vcs.Push.Dialog.v2" timestamp="1612273152575">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612201719334" />
+    <state x="547" y="238" width="585" height="534" key="find.popup" timestamp="1612213069227">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="225" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612273152575" />
+    <state x="547" y="238" width="585" height="534" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612213069227" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612201552697">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612201552697" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>
