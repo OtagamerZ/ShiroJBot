@@ -24,13 +24,13 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
 import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class CommandManager {
-	private final Reflections refl = new Reflections(this.getClass().getPackageName(), new ResourcesScanner());
+	private final Reflections refl = new Reflections(this.getClass().getPackageName(), new TypeAnnotationsScanner());
 	private final Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
 
 	public Set<PreparedCommand> getCommands() {
