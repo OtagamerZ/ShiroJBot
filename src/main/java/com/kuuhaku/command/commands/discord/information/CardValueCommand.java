@@ -25,11 +25,13 @@ import com.kuuhaku.controller.postgresql.CardMarketDAO;
 import com.kuuhaku.controller.postgresql.EquipmentMarketDAO;
 import com.kuuhaku.controller.postgresql.FieldMarketDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.XYChart;
@@ -50,6 +52,7 @@ import java.util.stream.Stream;
 		usage = "req_card",
 		category = Category.INFO
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EXT_EMOJI})
 public class CardValueCommand implements Executable {
 
 	@Override

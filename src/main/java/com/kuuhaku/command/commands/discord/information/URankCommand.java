@@ -28,12 +28,14 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.text.MessageFormat;
@@ -47,6 +49,12 @@ import java.util.concurrent.TimeUnit;
 		usage = "req_global-credit-card",
 		category = Category.INFO
 )
+@Requires({
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_ADD_REACTION,
+		Permission.MESSAGE_EXT_EMOJI
+})
 public class URankCommand implements Executable {
 
 	private static final String STR_LEVEL = "str_level";

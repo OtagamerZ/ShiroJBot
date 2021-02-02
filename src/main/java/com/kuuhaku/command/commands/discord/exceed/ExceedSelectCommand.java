@@ -24,11 +24,13 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -36,6 +38,11 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"exselect", "souex"},
 		category = Category.EXCEED
 )
+@Requires({
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_ADD_REACTION,
+		Permission.MESSAGE_EXT_EMOJI
+})
 public class ExceedSelectCommand implements Executable {
 
 	@Override

@@ -25,10 +25,12 @@ import com.kuuhaku.controller.postgresql.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Race;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Arrays;
@@ -39,6 +41,7 @@ import java.util.Arrays;
 		usage = "req_kgotchi",
 		category = Category.BETA
 )
+@Requires({Permission.MESSAGE_EMBED_LINKS})
 public class PurchaceKGotchiCommand implements Executable {
 
 	@Override

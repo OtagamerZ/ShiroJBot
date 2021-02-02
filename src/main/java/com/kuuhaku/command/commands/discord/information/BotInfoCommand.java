@@ -23,11 +23,13 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.io.IOException;
@@ -40,6 +42,7 @@ import java.time.format.DateTimeFormatter;
 		aliases = {"botinfo", "bot"},
 		category = Category.INFO
 )
+@Requires({Permission.MESSAGE_EMBED_LINKS})
 public class BotInfoCommand implements Executable {
 	private static final String STR_BOT_INFO_SERVERS = "str_bot-info-servers";
 

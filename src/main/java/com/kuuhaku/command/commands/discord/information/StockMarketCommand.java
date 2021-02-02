@@ -25,10 +25,12 @@ import com.kuuhaku.controller.postgresql.CardMarketDAO;
 import com.kuuhaku.controller.postgresql.EquipmentMarketDAO;
 import com.kuuhaku.controller.postgresql.FieldMarketDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.stream.DoubleStream;
@@ -39,6 +41,7 @@ import java.util.stream.DoubleStream;
 		usage = "req_card",
 		category = Category.INFO
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS})
 public class StockMarketCommand implements Executable {
 
 	@Override

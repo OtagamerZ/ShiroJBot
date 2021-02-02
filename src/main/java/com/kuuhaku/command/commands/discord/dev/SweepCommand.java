@@ -26,9 +26,11 @@ import com.kuuhaku.controller.Sweeper;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.*;
@@ -36,10 +38,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Command(
-        name = "limpar",
-        aliases = {"sweep", "clear"},
-        category = Category.DEV
+		name = "limpar",
+		aliases = {"sweep", "clear"},
+		category = Category.DEV
 )
+@Requires({Permission.MESSAGE_EXT_EMOJI})
 public class SweepCommand implements Executable {
 
     @Override
