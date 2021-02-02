@@ -24,7 +24,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 
@@ -47,28 +46,26 @@ public class UnlockChannelCommand implements Executable {
 			return;
 		}
 
-		try {
-			List<PermissionOverride> overrides = channel.getPermissionOverrides();
+		List<PermissionOverride> overrides = channel.getPermissionOverrides();
 
-			if (channel.getParent() == null) {
-				List<PermissionOverrideAction> acts = new ArrayList<>();
+		if (channel.getParent() == null) {
+			List<PermissionOverrideAction> acts = new ArrayList<>();
 
-				acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).reset());
-				acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).reset());
-				for (PermissionOverride override : overrides) {
-					IPermissionHolder holder = override.getPermissionHolder();
-					if (holder != null)
-						acts.add(channel.upsertPermissionOverride(holder).reset());
-				}
-
-				RestAction.accumulate(acts, Collectors.toList()).complete();
-			} else {
-				channel.getManager().sync().complete();
+			acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).clear(Permission.MESSAGE_WRITE));
+			acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).reset());
+			for (PermissionOverride override : overrides) {
+				IPermissionHolder holder = override.getPermissionHolder();
+				if (holder != null)
+					acts.add(channel.upsertPermissionOverride(holder).clear(Permission.MESSAGE_WRITE));
 			}
 
-			channel.sendMessage(":unlock: | Canal destrancado com sucesso!").queue();
-		} catch (InsufficientPermissionException e) {
-			channel.sendMessage("❌ | Não possuo a permissão para gerenciar canais.").queue();
+			RestAction.accumulate(acts, Collectors.toList())
+					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
+					.queue(null, f -> channel.sendMessage("❌ | Não possuo a permissão para gerenciar canais.").queue());
+		} else {
+			channel.getManager().sync()
+					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
+					.queue(null, f -> channel.sendMessage("❌ | Não possuo a permissão para gerenciar canais.").queue());
 		}
 	}
 }
