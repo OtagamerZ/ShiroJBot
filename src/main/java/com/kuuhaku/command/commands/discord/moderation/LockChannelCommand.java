@@ -49,14 +49,14 @@ public class LockChannelCommand implements Executable {
 		List<PermissionOverride> overrides = channel.getPermissionOverrides();
 		List<PermissionOverrideAction> acts = new ArrayList<>();
 
+		if (guild.getBotRole() != null)
+			acts.add(channel.upsertPermissionOverride(guild.getBotRole()).grant(Permission.MESSAGE_WRITE));
 		acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).deny(Permission.MESSAGE_WRITE));
 		for (PermissionOverride override : overrides) {
 			IPermissionHolder holder = override.getPermissionHolder();
-			if (holder != null)
+			if (holder != null && !(guild.getBotRole() != null && holder.getId().equals(guild.getBotRole().getId())))
 				acts.add(channel.upsertPermissionOverride(holder).deny(Permission.MESSAGE_WRITE));
 		}
-		if (guild.getBotRole() != null)
-			acts.add(channel.upsertPermissionOverride(guild.getBotRole()).grant(Permission.MESSAGE_WRITE));
 
 		RestAction.allOf(acts)
 				.mapToResult()
