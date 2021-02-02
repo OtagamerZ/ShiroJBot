@@ -43,8 +43,8 @@ import java.util.Map;
 public class DailyQuestCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		DailyQuest dq = DailyQuest.getQuest(author.getId());
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		DailyQuest dq = DailyQuest.getQuest(author.getIdLong());
 		Account acc = AccountDAO.getAccount(author.getId());
 		Map<DailyTask, Integer> pg = acc.getDailyProgress();
 
