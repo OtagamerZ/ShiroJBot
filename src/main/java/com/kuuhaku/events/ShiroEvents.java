@@ -24,10 +24,7 @@ import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.commands.PreparedCommand;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.BlacklistDAO;
-import com.kuuhaku.controller.postgresql.RelayDAO;
-import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
@@ -193,7 +190,7 @@ public class ShiroEvents extends ListenerAdapter {
 							.flatMap(s -> channel.sendMessage(":warning: | Opa, sem spam meu amigo!"))
 							.queue(msg -> {
 								msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
-								Helper.logToChannel(member.getUser(), false, null, "Um membro estava spammando no canal " + ((TextChannel) channel).getAsMention(), guild, msg.getContentRaw());
+								Helper.logToChannel(member.getUser(), false, null, "Um membro estava spammando no canal " + channel.getAsMention(), guild, msg.getContentRaw());
 							}, Helper::doNothing);
 				} else if (gc.isHardAntispam()) {
 					channel.getHistory().retrievePast(20).queue(h -> {
@@ -251,9 +248,10 @@ public class ShiroEvents extends ListenerAdapter {
 				found = command.getCategory().isEnabled(gc, guild, author);
 
 				if (found) {
-					if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
-
-					if (command.getCategory() == Category.NSFW && !((TextChannel) channel).isNSFW()) {
+					if (author.getId().equals(Main.getSelfUser().getId())) {
+						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_human-command")).queue();
+						return;
+					} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {
 						try {
 							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_nsfw-in-non-nsfw-channel")).queue();
 						} catch (InsufficientPermissionException ignore) {
@@ -272,6 +270,14 @@ public class ShiroEvents extends ListenerAdapter {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited")).queue();
 						Main.getInfo().getRatelimit().put(author.getId(), true);
 						return;
+					} else if (command.getMissingPerms(channel).length > 0) {
+						Permission[] missing = command.getMissingPerms(channel);
+						channel.sendMessage("❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
+								Arrays.stream(command.getPermissions())
+										.map(p -> (ArrayUtils.contains(missing, p) ? "❌ - " : "✅ - ") + p.getName())
+										.collect(Collectors.joining("\n"))
+						)).queue();
+						return;
 					}
 
 					if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
@@ -279,6 +285,15 @@ public class ShiroEvents extends ListenerAdapter {
 
 					command.execute(author, member, commandName, argsAsText, args, message, channel, guild, prefix);
 					Helper.spawnAd(channel);
+
+					LogDAO.saveLog(
+							new Log()
+									.setGuildId(guild.getId())
+									.setGuild(guild.getName())
+									.setUser(author)
+									.setCommand(rawMessage)
+					);
+					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, rawMessage);
 				}
 			}
 
@@ -381,7 +396,7 @@ public class ShiroEvents extends ListenerAdapter {
 					if (gc.getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage)) {
 						message.delete().reason("Mensagem possui um URL").queue();
 						channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
-						Helper.logToChannel(author, false, null, "Detectei um link no canal " + ((TextChannel) channel).getAsMention(), guild, rawMessage);
+						Helper.logToChannel(author, false, null, "Detectei um link no canal " + channel.getAsMention(), guild, rawMessage);
 					}
 
 					com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(member.getId() + member.getGuild().getId());
@@ -411,7 +426,7 @@ public class ShiroEvents extends ListenerAdapter {
 					try {
 						com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
 
-						Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getShiroShards());
+						Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
 						Map<String, Runnable> s = Helper.sendEmotifiedString(guild, rawMessage);
 
 						WebhookMessageBuilder wmb = new WebhookMessageBuilder();
