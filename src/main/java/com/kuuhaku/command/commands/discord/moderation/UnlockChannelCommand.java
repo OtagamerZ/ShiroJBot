@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -29,7 +30,6 @@ import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "destrancar",
@@ -41,7 +41,7 @@ public class UnlockChannelCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (!member.hasPermission(Permission.MANAGE_CHANNEL)) {
+		if (!Helper.hasPermission(member, Permission.MANAGE_CHANNEL, channel)) {
 			channel.sendMessage("❌ | Você não possui permissão para gerenciar canais.").queue();
 			return;
 		}
@@ -59,13 +59,14 @@ public class UnlockChannelCommand implements Executable {
 			}
 			acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).reset());
 
-			RestAction.accumulate(acts, Collectors.toList())
+
+			RestAction.allOf(acts)
 					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
-					.queue(null, f -> channel.sendMessage("❌ | Não possuo a permissão para gerenciar canais.").queue());
+					.queue(null, f -> channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue());
 		} else {
 			channel.getManager().sync()
 					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
-					.queue(null, f -> channel.sendMessage("❌ | Não possuo a permissão para gerenciar canais.").queue());
+					.queue(null, f -> channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue());
 		}
 	}
 }
