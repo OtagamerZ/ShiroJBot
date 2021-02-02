@@ -131,8 +131,8 @@ public class BuyCardCommand implements Executable {
 				if (params.stream().anyMatch(p -> p.startsWith("-e")))
 					minPrice.set(params.stream()
 							.filter(s -> s.startsWith("-e") && s.length() > 2)
-							.filter(s -> StringUtils.isNumeric(s.substring(3)))
-							.mapToInt(s -> Integer.parseInt(s.substring(3)))
+							.filter(s -> StringUtils.isNumeric(s.substring(2)))
+							.mapToInt(s -> Integer.parseInt(s.substring(2)))
 							.findFirst()
 							.orElse(0));
 

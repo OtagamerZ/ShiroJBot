@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1040,21 +1037,7 @@
       <workItem from="1612131537085" duration="41000" />
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
-      <workItem from="1612285645204" duration="3529000" />
-    </task>
-    <task id="LOCAL-03596" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611948045929</created>
-      <option name="number" value="03596" />
-      <option name="presentableId" value="LOCAL-03596" />
-      <option name="project" value="LOCAL" />
-      <updated>1611948045929</updated>
-    </task>
-    <task id="LOCAL-03597" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611948204736</created>
-      <option name="number" value="03597" />
-      <option name="presentableId" value="LOCAL-03597" />
-      <option name="project" value="LOCAL" />
-      <updated>1611948204736</updated>
+      <workItem from="1612285645204" duration="3836000" />
     </task>
     <task id="LOCAL-03598" summary="Adição de filas ranqueadas (Solo/Duo)">
       <created>1611948273806</created>
@@ -1385,7 +1368,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612292429689</updated>
     </task>
-    <option name="localTasksCounter" value="3645" />
+    <task id="LOCAL-03645" summary="Implementações de sugestões">
+      <created>1612292735277</created>
+      <option name="number" value="03645" />
+      <option name="presentableId" value="LOCAL-03645" />
+      <option name="project" value="LOCAL" />
+      <updated>1612292735277</updated>
+    </task>
+    <task id="LOCAL-03646" summary="Implementações de sugestões">
+      <created>1612292752318</created>
+      <option name="number" value="03646" />
+      <option name="presentableId" value="LOCAL-03646" />
+      <option name="project" value="LOCAL" />
+      <updated>1612292752319</updated>
+    </task>
+    <option name="localTasksCounter" value="3647" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1513,10 +1510,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="509" y="365" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1612274140767" />
-    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612292428807">
+    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612292751135">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612292428807" />
+    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612292751135" />
     <state x="620" y="260" key="FileChooserDialogImpl" timestamp="1612274229542">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1537,10 +1534,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612274522813" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612292432376">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612292753883">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612292432376" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612292753883" />
     <state x="547" y="238" width="585" height="534" key="find.popup" timestamp="1612213069227">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
