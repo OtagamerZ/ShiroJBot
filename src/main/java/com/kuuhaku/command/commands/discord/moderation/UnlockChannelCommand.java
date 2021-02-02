@@ -36,7 +36,7 @@ import java.util.List;
 		aliases = {"unlock", "destravar"},
 		category = Category.MODERATION
 )
-@Requires({Permission.MANAGE_PERMISSIONS})
+@Requires({Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS})
 public class UnlockChannelCommand implements Executable {
 
 	@Override
@@ -57,18 +57,15 @@ public class UnlockChannelCommand implements Executable {
 				if (holder != null)
 					acts.add(channel.upsertPermissionOverride(holder).clear(Permission.MESSAGE_WRITE));
 			}
-			if (guild.getBotRole() != null)
-				acts.add(channel.upsertPermissionOverride(guild.getBotRole()).reset());
-
 
 			RestAction.allOf(acts)
-					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
 					.mapToResult()
+					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
 					.queue();
 		} else {
 			channel.getManager().sync()
-					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
 					.mapToResult()
+					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
 					.queue();
 		}
 	}
