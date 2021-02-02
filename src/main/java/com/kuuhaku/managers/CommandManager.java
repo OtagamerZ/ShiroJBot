@@ -19,6 +19,7 @@
 package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -26,6 +27,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import org.reflections8.Reflections;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,8 +62,6 @@ public class CommandManager {
 	public PreparedCommand getCommand(String name) {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			if (!name.isBlank())
-				System.out.println(name + " | " + params.name());
 			if (name.equalsIgnoreCase(params.name()) || Helper.equalsAny(name, params.aliases())) {
 				Requires req = cmd.getDeclaredAnnotation(Requires.class);
 				return new PreparedCommand(
@@ -73,7 +73,8 @@ public class CommandManager {
 								.replaceAll("[a-z](?=[A-Z])", "$0-")
 								.toLowerCase(),
 						params.category(),
-						req == null ? new Permission[0] : req.value()
+						req == null ? new Permission[0] : req.value(),
+						buildCommand(cmd)
 				);
 			}
 		}
@@ -92,7 +93,17 @@ public class CommandManager {
 						.replaceAll("[a-z](?=[A-Z])", "$0-")
 						.toLowerCase(),
 				params.category(),
-				req == null ? new Permission[0] : req.value()
+				req == null ? new Permission[0] : req.value(),
+				buildCommand(cmd)
 		));
+	}
+
+	private Executable buildCommand(Class<?> klass) {
+		try {
+			return (Executable) klass.getConstructor().newInstance();
+		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			return null;
+		}
 	}
 }
