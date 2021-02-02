@@ -63,17 +63,13 @@ public class UnlockChannelCommand implements Executable {
 
 			RestAction.allOf(acts)
 					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
-					.queue(null, f -> {
-						if (channel.canTalk())
-							channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
-					});
+					.mapToResult()
+					.queue();
 		} else {
 			channel.getManager().sync()
 					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
-					.queue(null, f -> {
-						if (channel.canTalk())
-							channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
-					});
+					.mapToResult()
+					.queue();
 		}
 	}
 }
