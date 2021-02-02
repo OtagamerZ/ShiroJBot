@@ -25,6 +25,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -78,7 +79,7 @@ public class BuyCardCommand implements Executable {
 			AtomicBoolean onlyFoil = new AtomicBoolean();
 			AtomicBoolean onlyMine = new AtomicBoolean();
 			AtomicBoolean onlyKawaipon = new AtomicBoolean();
-			AtomicBoolean onlyEquip = new AtomicBoolean();
+			AtomicReference<Integer> onlyEquip = new AtomicReference<>(-1);
 			AtomicBoolean onlyField = new AtomicBoolean();
 
 			if (args.length > 0) {
@@ -127,7 +128,13 @@ public class BuyCardCommand implements Executable {
 
 				onlyKawaipon.set(params.stream().anyMatch("-k"::equalsIgnoreCase) || byAnime.get() != null || byRarity.get() != null || onlyFoil.get());
 
-				onlyEquip.set(params.stream().anyMatch("-e"::equalsIgnoreCase));
+				if (params.stream().anyMatch(p -> p.startsWith("-e")))
+					minPrice.set(params.stream()
+							.filter(s -> s.startsWith("-e") && s.length() > 2)
+							.filter(s -> StringUtils.isNumeric(s.substring(3)))
+							.mapToInt(s -> Integer.parseInt(s.substring(3)))
+							.findFirst()
+							.orElse(0));
 
 				onlyField.set(params.stream().anyMatch("-f"::equalsIgnoreCase));
 			}
@@ -143,7 +150,7 @@ public class BuyCardCommand implements Executable {
 					`-a` - Busca cartas por anime
 					`-c` - Busca apenas cartas cromadas
 					`-k` - Busca apenas cartas kawaipon
-					`-e` - Busca apenas cartas-equipamento
+					`-e` - Busca apenas cartas-equipamento (podendo informar um tier)
 					`-f` - Busca apenas cartas de campo
 					`-m` - Busca apenas suas cartas anunciadas
 					`-min` - Define um preço mínimo
@@ -199,7 +206,14 @@ public class BuyCardCommand implements Executable {
 					.collect(Collectors.toList())
 			);
 
-			cards.removeIf(p -> (onlyKawaipon.get() && p.getRight() != CardType.KAWAIPON) || (onlyEquip.get() && p.getRight() != CardType.EVOGEAR) || (onlyField.get() && p.getRight() != CardType.FIELD));
+			cards.removeIf(p ->
+					(onlyKawaipon.get() && p.getRight() != CardType.KAWAIPON)
+					|| (
+							(onlyEquip.get() > -1 && p.getRight() != CardType.EVOGEAR)
+							|| (onlyEquip.get() > 0 && (p.getRight() == CardType.EVOGEAR && ((Equipment) p.getLeft()).getTier() != onlyEquip.get()))
+					)
+					|| (onlyField.get() && p.getRight() != CardType.FIELD)
+			);
 
 			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();
