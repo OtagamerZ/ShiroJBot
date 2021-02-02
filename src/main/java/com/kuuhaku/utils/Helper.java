@@ -43,7 +43,10 @@ import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.ItemDrop;
 import com.kuuhaku.model.common.drop.JokerDrop;
 import com.kuuhaku.model.common.drop.Prize;
-import com.kuuhaku.model.enums.*;
+import com.kuuhaku.model.enums.AnimeName;
+import com.kuuhaku.model.enums.CardStatus;
+import com.kuuhaku.model.enums.KawaiponRarity;
+import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.*;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -1006,29 +1009,6 @@ public class Helper {
 		}
 	}
 
-	public static boolean showMMError(User author, TextChannel channel, Guild guild, String rawMessage, PreparedCommand command) {
-		if (author.getId().equals(Main.getSelfUser().getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_human-command")).queue();
-			return true;
-		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-message-manage-permission")).queue();
-			return true;
-		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_EMBED_LINKS, channel)) {
-			channel.sendMessage("❌ | As permissões de enviar links e anexar arquivos são essenciais para que eu funcione, por favor adicione-as ao meu cargo!").queue();
-			return true;
-		}
-
-		LogDAO.saveLog(
-				new Log()
-						.setGuildId(guild.getId())
-						.setGuild(guild.getName())
-						.setUser(author)
-						.setCommand(rawMessage)
-		);
-		logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild, rawMessage);
-		return false;
-	}
-
 	public static float offsetPrcnt(float value, float max, float offset) {
 		return (value - offset) / (max - offset);
 	}
@@ -1186,7 +1166,6 @@ public class Helper {
 				Collections.shuffle(aux);
 				i--;
 			}
-			;
 		}
 
 		return out;
@@ -1208,7 +1187,6 @@ public class Helper {
 				Collections.shuffle(aux);
 				i--;
 			}
-			;
 		}
 
 		return out;
