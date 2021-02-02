@@ -59,8 +59,8 @@ public class LockChannelCommand implements Executable {
 			acts.add(channel.upsertPermissionOverride(guild.getBotRole()).grant(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS));
 
 		RestAction.allOf(acts)
-				.mapToResult()
 				.flatMap(s -> channel.sendMessage(":lock: | Canal trancado com sucesso!"))
+				.mapToResult()
 				.queue();
 	}
 }
