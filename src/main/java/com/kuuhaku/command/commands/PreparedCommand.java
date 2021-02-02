@@ -35,14 +35,16 @@ public class PreparedCommand implements Executable {
 	private final String description;
 	private final Category category;
 	private final Permission[] permissions;
+	private final Executable command;
 
-	public PreparedCommand(String name, String[] aliases, String usage, String description, Category category, Permission[] permissions) {
+	public PreparedCommand(String name, String[] aliases, String usage, String description, Category category, Permission[] permissions, Executable command) {
 		this.name = name;
 		this.aliases = aliases;
 		this.usage = usage;
 		this.description = description;
 		this.category = category;
 		this.permissions = permissions;
+		this.command = command;
 	}
 
 	public String getName() {
@@ -88,6 +90,6 @@ public class PreparedCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-
+		this.command.execute(author, member, command, argsAsText, args, message, channel, guild, prefix);
 	}
 }
