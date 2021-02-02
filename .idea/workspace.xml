@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1038,20 +1038,6 @@
       <workItem from="1612185972743" duration="753000" />
       <workItem from="1612186768849" duration="8016000" />
     </task>
-    <task id="LOCAL-03587" summary="Adicionado Shoukan em duplas">
-      <created>1611938226182</created>
-      <option name="number" value="03587" />
-      <option name="presentableId" value="LOCAL-03587" />
-      <option name="project" value="LOCAL" />
-      <updated>1611938226182</updated>
-    </task>
-    <task id="LOCAL-03588" summary="Adicionado Shoukan em duplas">
-      <created>1611938522113</created>
-      <option name="number" value="03588" />
-      <option name="presentableId" value="LOCAL-03588" />
-      <option name="project" value="LOCAL" />
-      <updated>1611938522113</updated>
-    </task>
     <task id="LOCAL-03589" summary="Adicionado Shoukan em duplas">
       <created>1611939596919</created>
       <option name="number" value="03589" />
@@ -1381,7 +1367,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612271543404</updated>
     </task>
-    <option name="localTasksCounter" value="3636" />
+    <task id="LOCAL-03636" summary="Adição de requisitos de permissão">
+      <created>1612272337201</created>
+      <option name="number" value="03636" />
+      <option name="presentableId" value="LOCAL-03636" />
+      <option name="project" value="LOCAL" />
+      <updated>1612272337201</updated>
+    </task>
+    <task id="LOCAL-03637" summary="Adição de requisitos de permissão">
+      <created>1612272367645</created>
+      <option name="number" value="03637" />
+      <option name="presentableId" value="LOCAL-03637" />
+      <option name="project" value="LOCAL" />
+      <updated>1612272367645</updated>
+    </task>
+    <option name="localTasksCounter" value="3638" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1497,14 +1497,14 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="397" y="92" key="CommitChangelistDialog2" timestamp="1612271542632">
+    <state x="397" y="92" key="CommitChangelistDialog2" timestamp="1612272366844">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="397" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612271542632" />
-    <state x="432" y="225" key="Vcs.Push.Dialog.v2" timestamp="1612271545276">
+    <state x="397" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612272366844" />
+    <state x="432" y="225" key="Vcs.Push.Dialog.v2" timestamp="1612272368878">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="225" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612271545276" />
+    <state x="432" y="225" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612272368878" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>
