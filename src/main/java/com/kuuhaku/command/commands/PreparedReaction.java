@@ -19,10 +19,11 @@
 package com.kuuhaku.command.commands;
 
 import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Executable;
 import net.dv8tion.jda.api.Permission;
 
 public class PreparedReaction extends PreparedCommand {
-	public PreparedReaction(String name, String[] aliases, String usage, String description, Category category, Permission[] permissions) {
-		super(name, aliases, usage, description, category, permissions);
+	public PreparedReaction(String name, String[] aliases, String usage, String description, Category category, Permission[] permissions, Executable command) {
+		super(name, aliases, usage, description, category, permissions, command);
 	}
 }
