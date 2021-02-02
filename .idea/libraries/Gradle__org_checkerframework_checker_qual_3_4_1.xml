@@ -2,11 +2,23 @@
   <library name="Gradle: org.checkerframework:checker-qual:3.4.1">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/b3df2bf4d7d258e5aa192c3ac6f7f84688046262/checker-qual-3.4.1.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/b3df2bf4d7d258e5aa192c3ac6f7f84688046262/checker-qual-3.4.1.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/b3df2bf4d7d258e5aa192c3ac6f7f84688046262/checker-qual-3.4.1.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/b3df2bf4d7d258e5aa192c3ac6f7f84688046262/checker-qual-3.4.1.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/b3df2bf4d7d258e5aa192c3ac6f7f84688046262/checker-qual-3.4.1.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/3996b796edc49c8861995c8fde48bfa38396bad5/checker-qual-3.4.1-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/3996b796edc49c8861995c8fde48bfa38396bad5/checker-qual-3.4.1-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/3996b796edc49c8861995c8fde48bfa38396bad5/checker-qual-3.4.1-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/3996b796edc49c8861995c8fde48bfa38396bad5/checker-qual-3.4.1-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/3996b796edc49c8861995c8fde48bfa38396bad5/checker-qual-3.4.1-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/1ccc444dc0271a148e2475f59a61fbe8587dd65f/checker-qual-3.4.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/1ccc444dc0271a148e2475f59a61fbe8587dd65f/checker-qual-3.4.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/1ccc444dc0271a148e2475f59a61fbe8587dd65f/checker-qual-3.4.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/1ccc444dc0271a148e2475f59a61fbe8587dd65f/checker-qual-3.4.1-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.4.1/1ccc444dc0271a148e2475f59a61fbe8587dd65f/checker-qual-3.4.1-sources.jar!/" />
     </SOURCES>
   </library>

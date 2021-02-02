@@ -2,11 +2,23 @@
   <library name="Gradle: com.apollographql.apollo:apollo-runtime:1.2.2">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/7448b18af680ad1e241e5b3b134c6b32a29bfa7e/apollo-runtime-1.2.2.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/7448b18af680ad1e241e5b3b134c6b32a29bfa7e/apollo-runtime-1.2.2.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/7448b18af680ad1e241e5b3b134c6b32a29bfa7e/apollo-runtime-1.2.2.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/7448b18af680ad1e241e5b3b134c6b32a29bfa7e/apollo-runtime-1.2.2.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/7448b18af680ad1e241e5b3b134c6b32a29bfa7e/apollo-runtime-1.2.2.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/1be32870a87cb4504078139cac58b626d2ba4c4b/apollo-runtime-1.2.2-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/1be32870a87cb4504078139cac58b626d2ba4c4b/apollo-runtime-1.2.2-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/1be32870a87cb4504078139cac58b626d2ba4c4b/apollo-runtime-1.2.2-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/1be32870a87cb4504078139cac58b626d2ba4c4b/apollo-runtime-1.2.2-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/1be32870a87cb4504078139cac58b626d2ba4c4b/apollo-runtime-1.2.2-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/763f5e67deb7ac5b7900fab0a95855e50e7d3e47/apollo-runtime-1.2.2-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/763f5e67deb7ac5b7900fab0a95855e50e7d3e47/apollo-runtime-1.2.2-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/763f5e67deb7ac5b7900fab0a95855e50e7d3e47/apollo-runtime-1.2.2-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/763f5e67deb7ac5b7900fab0a95855e50e7d3e47/apollo-runtime-1.2.2-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-runtime/1.2.2/763f5e67deb7ac5b7900fab0a95855e50e7d3e47/apollo-runtime-1.2.2-sources.jar!/" />
     </SOURCES>
   </library>

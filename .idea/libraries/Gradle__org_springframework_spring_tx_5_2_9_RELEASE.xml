@@ -2,11 +2,23 @@
   <library name="Gradle: org.springframework:spring-tx:5.2.9.RELEASE">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/6e7cc2fe50bebf443f42b91001bd7d4d930ae7a1/spring-tx-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/6e7cc2fe50bebf443f42b91001bd7d4d930ae7a1/spring-tx-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/6e7cc2fe50bebf443f42b91001bd7d4d930ae7a1/spring-tx-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/6e7cc2fe50bebf443f42b91001bd7d4d930ae7a1/spring-tx-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/6e7cc2fe50bebf443f42b91001bd7d4d930ae7a1/spring-tx-5.2.9.RELEASE.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/2495f01519783a20ae419f8209264a2696bb4f2a/spring-tx-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/2495f01519783a20ae419f8209264a2696bb4f2a/spring-tx-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/2495f01519783a20ae419f8209264a2696bb4f2a/spring-tx-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/2495f01519783a20ae419f8209264a2696bb4f2a/spring-tx-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/2495f01519783a20ae419f8209264a2696bb4f2a/spring-tx-5.2.9.RELEASE-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/7e0e4c33250c81497e166d488fd545bd913c8d79/spring-tx-5.2.9.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/7e0e4c33250c81497e166d488fd545bd913c8d79/spring-tx-5.2.9.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/7e0e4c33250c81497e166d488fd545bd913c8d79/spring-tx-5.2.9.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/7e0e4c33250c81497e166d488fd545bd913c8d79/spring-tx-5.2.9.RELEASE-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/5.2.9.RELEASE/7e0e4c33250c81497e166d488fd545bd913c8d79/spring-tx-5.2.9.RELEASE-sources.jar!/" />
     </SOURCES>
   </library>

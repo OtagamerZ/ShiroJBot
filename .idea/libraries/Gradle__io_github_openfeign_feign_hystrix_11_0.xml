@@ -2,11 +2,23 @@
   <library name="Gradle: io.github.openfeign:feign-hystrix:11.0">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/7e4ed278f99d74b97d7321b8209ba7fd1ea36e24/feign-hystrix-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/7e4ed278f99d74b97d7321b8209ba7fd1ea36e24/feign-hystrix-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/7e4ed278f99d74b97d7321b8209ba7fd1ea36e24/feign-hystrix-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/7e4ed278f99d74b97d7321b8209ba7fd1ea36e24/feign-hystrix-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/7e4ed278f99d74b97d7321b8209ba7fd1ea36e24/feign-hystrix-11.0.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/80b1aa9599ffc55c6643962c460af13296024e13/feign-hystrix-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/80b1aa9599ffc55c6643962c460af13296024e13/feign-hystrix-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/80b1aa9599ffc55c6643962c460af13296024e13/feign-hystrix-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/80b1aa9599ffc55c6643962c460af13296024e13/feign-hystrix-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/80b1aa9599ffc55c6643962c460af13296024e13/feign-hystrix-11.0-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/152af770fa0034f7f64d0eefd018e9f767d36f77/feign-hystrix-11.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/152af770fa0034f7f64d0eefd018e9f767d36f77/feign-hystrix-11.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/152af770fa0034f7f64d0eefd018e9f767d36f77/feign-hystrix-11.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/152af770fa0034f7f64d0eefd018e9f767d36f77/feign-hystrix-11.0-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-hystrix/11.0/152af770fa0034f7f64d0eefd018e9f767d36f77/feign-hystrix-11.0-sources.jar!/" />
     </SOURCES>
   </library>

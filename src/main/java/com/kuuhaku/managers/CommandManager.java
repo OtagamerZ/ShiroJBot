@@ -72,64 +72,64 @@ public class CommandManager {
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(
-					"tristemasverdade", new String[]{"tmv", "sadbuttrue", "sbt"}, "req_truth", "cmd_sad-but-true", FUN, false
+					"", new String[]{}, "", "cmd_sad-but-true", FUN, false
 			));
 			put(HardDecisionCommand.class, new Argument(
-					"doisbotoes", new String[]{"tb", "twobuttons", "buttons"}, REQ_TWO_OPTIONS, "cmd_two-buttons", FUN, false
+					"", new String[]{}, REQ_TWO_OPTIONS, "cmd_two-buttons", FUN, false
 			));
 			put(ExpandingBrainCommand.class, new Argument(
-					"menteexpandida", new String[]{"eb", "expandingbrain", "brain"}, "req_four-options", "cmd_expanded-brain", FUN, false
+					"", new String[]{}, "req_four-options", "cmd_expanded-brain", FUN, false
 			));
 			put(JojoCommand.class, new Argument(
-					"jojo", new String[]{"jj", "kickhim", "chutaele"}, "req_two-mentions-message", "cmd_jojo", FUN, false
+					"", new String[]{}, "", "cmd_jojo", FUN, false
 			));
 			put(RPSCommand.class, new Argument(
-					"jankenpon", new String[]{"ppt", "rps", "jokenpo", "janken"}, "req_jakenpon", "cmd_jankenpon", FUN, false
+					"", new String[]{}, "", "cmd_jankenpon", FUN, false
 			));
 			put(ShipCommand.class, new Argument(
-					"ship", new String[]{"shippar"}, "req_two-mentions", "cmd_ship", FUN, false
+					"", new String[]{""}, "", "cmd_ship", FUN, false
 			));
 			put(MarryCommand.class, new Argument(
-					"casar", new String[]{"declarar", "marry"}, REQ_MENTION, "cmd_marry", FUN, false
+					"", new String[]{}, REQ_MENTION, "cmd_marry", FUN, false
 			));
 			put(StonksCommand.class, new Argument(
-					"stonks", new String[]{"stks"}, REQ_TEXT, "cmd_stonks", FUN, false
+					"", new String[]{""}, REQ_TEXT, "cmd_stonks", FUN, false
 			));
 			put(NotStonksCommand.class, new Argument(
-					"notstonks", new String[]{"notstks", "stinks"}, REQ_TEXT, "cmd_stinks", FUN, false
+					"", new String[]{}, REQ_TEXT, "cmd_stinks", FUN, false
 			));
 			put(GuessIllDieCommand.class, new Argument(
-					"guessilldie", new String[]{"gid", "achoquevoumorrer", "meh"}, REQ_TEXT, "cmd_guess-ill-die", FUN, false
+					"", new String[]{""}, REQ_TEXT, "cmd_guess-ill-die", FUN, false
 			));
 			put(PatheticCommand.class, new Argument(
-					"patetico", new String[]{"pathetic"}, REQ_TEXT, "cmd_pathetic", FUN, false
+					"", new String[]{""}, REQ_TEXT, "cmd_pathetic", FUN, false
 			));
 			put(DrakeCommand.class, new Argument(
-					"drake", new String[]{"drk"}, REQ_TWO_OPTIONS, "cmd_drake", FUN, false
+					"", new String[]{""}, REQ_TWO_OPTIONS, "cmd_drake", FUN, false
 			));
 			put(SpiderManCommand.class, new Argument(
-					"homemaranha", new String[]{"spiderman", "spoda", "miranha"}, REQ_TEXT, "cmd_spider-man", FUN, false
+					"", new String[]{}, REQ_TEXT, "cmd_spider-man", FUN, false
 			));
 			put(TomCruiseCommand.class, new Argument(
-					"tomcruise", new String[]{"vainessa", "iludido", "noyoullnot"}, REQ_TEXT, "cmd_tom-cruise", FUN, false
+					"", new String[]{}, REQ_TEXT, "cmd_tom-cruise", FUN, false
 			));
 			put(PixelCanvasCommand.class, new Argument(
-					"canvas", new String[]{"pixel", "pixelcanvas"}, "req_x-y-color", "cmd_canvas", FUN, false
+					"", new String[]{}, , "cmd_canvas", FUN, false
 			));
 			put(PixelChunkCommand.class, new Argument(
-					"chunk", new String[]{"zone", "pixelchunk"}, "req_zone-x-y-color", "cmd_canvas-chunk", FUN, false
+					"", new String[]{}, "", "cmd_canvas-chunk", FUN, false
 			));
 			put(DivorceCommand.class, new Argument(
-					"divorciar", new String[]{"separar", "divorce"}, "cmd_divorce", FUN, false
+					"divorciar", new String[]{}, "cmd_divorce", FUN, false
 			));
 			put(SlotsCommand.class, new Argument(
-					"slots", new String[]{"roleta"}, "req_bet", "cmd_slots", FUN, false
+					"", new String[]{""}, "", "cmd_slots", FUN, false
 			));
 			put(QuizCommand.class, new Argument(
-					"quiz", new String[]{"qna", "per"}, "req_difficulty", "cmd_quiz", FUN, true
+					"", new String[]{}, "", "cmd_quiz", FUN, true
 			));
 			put(GuessTheNumberCommand.class, new Argument(
-					"adivinheonumero", new String[]{"aon", "guessthenumber", "gtn"}, "cmd_guess-the-number", FUN, true
+					"", new String[]{}, "cmd_guess-the-number", FUN, true
 			));
 		}
 	};

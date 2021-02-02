@@ -2,9 +2,17 @@
   <library name="Gradle: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.38">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/9.0.38/5d33c7736d192dff22bb5a7bef3ac2095573f91a/tomcat-embed-websocket-9.0.38.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/9.0.38/5d33c7736d192dff22bb5a7bef3ac2095573f91a/tomcat-embed-websocket-9.0.38.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/9.0.38/5d33c7736d192dff22bb5a7bef3ac2095573f91a/tomcat-embed-websocket-9.0.38.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/9.0.38/5d33c7736d192dff22bb5a7bef3ac2095573f91a/tomcat-embed-websocket-9.0.38.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/9.0.38/5d33c7736d192dff22bb5a7bef3ac2095573f91a/tomcat-embed-websocket-9.0.38.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/9.0.38/223feaea95ad55de67c43c7947b98f1030d30193/tomcat-embed-websocket-9.0.38-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/9.0.38/223feaea95ad55de67c43c7947b98f1030d30193/tomcat-embed-websocket-9.0.38-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/9.0.38/223feaea95ad55de67c43c7947b98f1030d30193/tomcat-embed-websocket-9.0.38-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/9.0.38/223feaea95ad55de67c43c7947b98f1030d30193/tomcat-embed-websocket-9.0.38-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/9.0.38/223feaea95ad55de67c43c7947b98f1030d30193/tomcat-embed-websocket-9.0.38-sources.jar!/" />
     </SOURCES>
   </library>

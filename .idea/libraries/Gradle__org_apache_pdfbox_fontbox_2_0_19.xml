@@ -2,11 +2,23 @@
   <library name="Gradle: org.apache.pdfbox:fontbox:2.0.19">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/b8b3873aacde51f1a3f4a052b236de828867d000/fontbox-2.0.19.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/b8b3873aacde51f1a3f4a052b236de828867d000/fontbox-2.0.19.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/b8b3873aacde51f1a3f4a052b236de828867d000/fontbox-2.0.19.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/b8b3873aacde51f1a3f4a052b236de828867d000/fontbox-2.0.19.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/b8b3873aacde51f1a3f4a052b236de828867d000/fontbox-2.0.19.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/3ea14c4cb2979162c128d1b712414b874c9a1811/fontbox-2.0.19-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/3ea14c4cb2979162c128d1b712414b874c9a1811/fontbox-2.0.19-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/3ea14c4cb2979162c128d1b712414b874c9a1811/fontbox-2.0.19-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/3ea14c4cb2979162c128d1b712414b874c9a1811/fontbox-2.0.19-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/3ea14c4cb2979162c128d1b712414b874c9a1811/fontbox-2.0.19-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/a472e02057a99a9d54def7cc797e8533b84aea81/fontbox-2.0.19-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/a472e02057a99a9d54def7cc797e8533b84aea81/fontbox-2.0.19-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/a472e02057a99a9d54def7cc797e8533b84aea81/fontbox-2.0.19-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/a472e02057a99a9d54def7cc797e8533b84aea81/fontbox-2.0.19-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.19/a472e02057a99a9d54def7cc797e8533b84aea81/fontbox-2.0.19-sources.jar!/" />
     </SOURCES>
   </library>

@@ -2,11 +2,23 @@
   <library name="Gradle: org.apache.pdfbox:pdfbox:2.0.19">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/8dfcfc278b4b66e1a8b0e9e681b84ffe48da2c21/pdfbox-2.0.19.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/8dfcfc278b4b66e1a8b0e9e681b84ffe48da2c21/pdfbox-2.0.19.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/8dfcfc278b4b66e1a8b0e9e681b84ffe48da2c21/pdfbox-2.0.19.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/8dfcfc278b4b66e1a8b0e9e681b84ffe48da2c21/pdfbox-2.0.19.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/8dfcfc278b4b66e1a8b0e9e681b84ffe48da2c21/pdfbox-2.0.19.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/af362ddc89a83b72ebdf8421b116b9997a3dc847/pdfbox-2.0.19-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/af362ddc89a83b72ebdf8421b116b9997a3dc847/pdfbox-2.0.19-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/af362ddc89a83b72ebdf8421b116b9997a3dc847/pdfbox-2.0.19-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/af362ddc89a83b72ebdf8421b116b9997a3dc847/pdfbox-2.0.19-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/af362ddc89a83b72ebdf8421b116b9997a3dc847/pdfbox-2.0.19-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/9cfa7bc186a501edbca673ac67c1438796fd3450/pdfbox-2.0.19-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/9cfa7bc186a501edbca673ac67c1438796fd3450/pdfbox-2.0.19-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/9cfa7bc186a501edbca673ac67c1438796fd3450/pdfbox-2.0.19-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/9cfa7bc186a501edbca673ac67c1438796fd3450/pdfbox-2.0.19-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.19/9cfa7bc186a501edbca673ac67c1438796fd3450/pdfbox-2.0.19-sources.jar!/" />
     </SOURCES>
   </library>

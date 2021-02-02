@@ -2,11 +2,23 @@
   <library name="Gradle: org.springframework:spring-jdbc:5.2.9.RELEASE">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/877e892e80d3b92f24d70e1e4bdd386b2aa9a2/spring-jdbc-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/877e892e80d3b92f24d70e1e4bdd386b2aa9a2/spring-jdbc-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/877e892e80d3b92f24d70e1e4bdd386b2aa9a2/spring-jdbc-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/877e892e80d3b92f24d70e1e4bdd386b2aa9a2/spring-jdbc-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/877e892e80d3b92f24d70e1e4bdd386b2aa9a2/spring-jdbc-5.2.9.RELEASE.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/ac880ee23801825d9ea5d1ae6402bab23585d567/spring-jdbc-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/ac880ee23801825d9ea5d1ae6402bab23585d567/spring-jdbc-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/ac880ee23801825d9ea5d1ae6402bab23585d567/spring-jdbc-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/ac880ee23801825d9ea5d1ae6402bab23585d567/spring-jdbc-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/ac880ee23801825d9ea5d1ae6402bab23585d567/spring-jdbc-5.2.9.RELEASE-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/257bd4d1475493aff32f263056620518d3b14759/spring-jdbc-5.2.9.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/257bd4d1475493aff32f263056620518d3b14759/spring-jdbc-5.2.9.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/257bd4d1475493aff32f263056620518d3b14759/spring-jdbc-5.2.9.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/257bd4d1475493aff32f263056620518d3b14759/spring-jdbc-5.2.9.RELEASE-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/5.2.9.RELEASE/257bd4d1475493aff32f263056620518d3b14759/spring-jdbc-5.2.9.RELEASE-sources.jar!/" />
     </SOURCES>
   </library>

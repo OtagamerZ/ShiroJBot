@@ -2,9 +2,17 @@
   <library name="Gradle: org.apache.tomcat.embed:tomcat-embed-core:9.0.38">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.38/368aac73f9274896fa8cccf20f4799533629471c/tomcat-embed-core-9.0.38.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.38/368aac73f9274896fa8cccf20f4799533629471c/tomcat-embed-core-9.0.38.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.38/368aac73f9274896fa8cccf20f4799533629471c/tomcat-embed-core-9.0.38.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.38/368aac73f9274896fa8cccf20f4799533629471c/tomcat-embed-core-9.0.38.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.38/368aac73f9274896fa8cccf20f4799533629471c/tomcat-embed-core-9.0.38.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.38/c2a226e65fe3a3222ad179e3c1bfc63e4126e40a/tomcat-embed-core-9.0.38-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.38/c2a226e65fe3a3222ad179e3c1bfc63e4126e40a/tomcat-embed-core-9.0.38-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.38/c2a226e65fe3a3222ad179e3c1bfc63e4126e40a/tomcat-embed-core-9.0.38-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.38/c2a226e65fe3a3222ad179e3c1bfc63e4126e40a/tomcat-embed-core-9.0.38-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.38/c2a226e65fe3a3222ad179e3c1bfc63e4126e40a/tomcat-embed-core-9.0.38-sources.jar!/" />
     </SOURCES>
   </library>

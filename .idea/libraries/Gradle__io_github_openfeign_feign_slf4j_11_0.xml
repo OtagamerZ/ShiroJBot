@@ -2,11 +2,23 @@
   <library name="Gradle: io.github.openfeign:feign-slf4j:11.0">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/ecdc96d7315840229d6074a89a88db9feca5ace/feign-slf4j-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/ecdc96d7315840229d6074a89a88db9feca5ace/feign-slf4j-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/ecdc96d7315840229d6074a89a88db9feca5ace/feign-slf4j-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/ecdc96d7315840229d6074a89a88db9feca5ace/feign-slf4j-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/ecdc96d7315840229d6074a89a88db9feca5ace/feign-slf4j-11.0.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/25e5f3d4d7bf60e103f99c8f8b68e99ee6be1dc1/feign-slf4j-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/25e5f3d4d7bf60e103f99c8f8b68e99ee6be1dc1/feign-slf4j-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/25e5f3d4d7bf60e103f99c8f8b68e99ee6be1dc1/feign-slf4j-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/25e5f3d4d7bf60e103f99c8f8b68e99ee6be1dc1/feign-slf4j-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/25e5f3d4d7bf60e103f99c8f8b68e99ee6be1dc1/feign-slf4j-11.0-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/9b3fe4f0d432782cd662b990d1dfe95985dd5762/feign-slf4j-11.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/9b3fe4f0d432782cd662b990d1dfe95985dd5762/feign-slf4j-11.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/9b3fe4f0d432782cd662b990d1dfe95985dd5762/feign-slf4j-11.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/9b3fe4f0d432782cd662b990d1dfe95985dd5762/feign-slf4j-11.0-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-slf4j/11.0/9b3fe4f0d432782cd662b990d1dfe95985dd5762/feign-slf4j-11.0-sources.jar!/" />
     </SOURCES>
   </library>

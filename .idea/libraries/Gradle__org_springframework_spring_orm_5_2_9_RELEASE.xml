@@ -2,11 +2,23 @@
   <library name="Gradle: org.springframework:spring-orm:5.2.9.RELEASE">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/e21a091f545e8a87abd721ac5bb2b76431c9c0f2/spring-orm-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/e21a091f545e8a87abd721ac5bb2b76431c9c0f2/spring-orm-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/e21a091f545e8a87abd721ac5bb2b76431c9c0f2/spring-orm-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/e21a091f545e8a87abd721ac5bb2b76431c9c0f2/spring-orm-5.2.9.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/e21a091f545e8a87abd721ac5bb2b76431c9c0f2/spring-orm-5.2.9.RELEASE.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/38068e4dfa41f77517b81d088cea4324d059e9ea/spring-orm-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/38068e4dfa41f77517b81d088cea4324d059e9ea/spring-orm-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/38068e4dfa41f77517b81d088cea4324d059e9ea/spring-orm-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/38068e4dfa41f77517b81d088cea4324d059e9ea/spring-orm-5.2.9.RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/38068e4dfa41f77517b81d088cea4324d059e9ea/spring-orm-5.2.9.RELEASE-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/1ebdc871a72d4b874fc27abb548c8643b6d7b26a/spring-orm-5.2.9.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/1ebdc871a72d4b874fc27abb548c8643b6d7b26a/spring-orm-5.2.9.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/1ebdc871a72d4b874fc27abb548c8643b6d7b26a/spring-orm-5.2.9.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/1ebdc871a72d4b874fc27abb548c8643b6d7b26a/spring-orm-5.2.9.RELEASE-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.2.9.RELEASE/1ebdc871a72d4b874fc27abb548c8643b6d7b26a/spring-orm-5.2.9.RELEASE-sources.jar!/" />
     </SOURCES>
   </library>

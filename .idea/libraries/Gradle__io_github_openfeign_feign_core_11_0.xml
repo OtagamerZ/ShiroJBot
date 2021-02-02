@@ -2,11 +2,23 @@
   <library name="Gradle: io.github.openfeign:feign-core:11.0">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/29fd8a94cae3f0450894b3875398d57222fce03c/feign-core-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/29fd8a94cae3f0450894b3875398d57222fce03c/feign-core-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/29fd8a94cae3f0450894b3875398d57222fce03c/feign-core-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/29fd8a94cae3f0450894b3875398d57222fce03c/feign-core-11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/29fd8a94cae3f0450894b3875398d57222fce03c/feign-core-11.0.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/5f800082f100611e439c3dac6c2b6f0d7fb527e6/feign-core-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/5f800082f100611e439c3dac6c2b6f0d7fb527e6/feign-core-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/5f800082f100611e439c3dac6c2b6f0d7fb527e6/feign-core-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/5f800082f100611e439c3dac6c2b6f0d7fb527e6/feign-core-11.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/5f800082f100611e439c3dac6c2b6f0d7fb527e6/feign-core-11.0-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/8df4ee67f6a3f315228d215c029f34291ec20d99/feign-core-11.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/8df4ee67f6a3f315228d215c029f34291ec20d99/feign-core-11.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/8df4ee67f6a3f315228d215c029f34291ec20d99/feign-core-11.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/8df4ee67f6a3f315228d215c029f34291ec20d99/feign-core-11.0-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.openfeign/feign-core/11.0/8df4ee67f6a3f315228d215c029f34291ec20d99/feign-core-11.0-sources.jar!/" />
     </SOURCES>
   </library>

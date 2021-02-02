@@ -2,11 +2,23 @@
   <library name="Gradle: com.apollographql.apollo:apollo-api:1.2.2">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/34496f44fa59fc529be25940218ebe1c5a973f9c/apollo-api-1.2.2.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/34496f44fa59fc529be25940218ebe1c5a973f9c/apollo-api-1.2.2.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/34496f44fa59fc529be25940218ebe1c5a973f9c/apollo-api-1.2.2.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/34496f44fa59fc529be25940218ebe1c5a973f9c/apollo-api-1.2.2.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/34496f44fa59fc529be25940218ebe1c5a973f9c/apollo-api-1.2.2.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/63feb5513bb2a75f0e42fe061de2e13057f5bc3/apollo-api-1.2.2-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/63feb5513bb2a75f0e42fe061de2e13057f5bc3/apollo-api-1.2.2-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/63feb5513bb2a75f0e42fe061de2e13057f5bc3/apollo-api-1.2.2-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/63feb5513bb2a75f0e42fe061de2e13057f5bc3/apollo-api-1.2.2-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/63feb5513bb2a75f0e42fe061de2e13057f5bc3/apollo-api-1.2.2-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/dd90cec1225c0ca3a450479b85d90d9ef56fa6c4/apollo-api-1.2.2-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/dd90cec1225c0ca3a450479b85d90d9ef56fa6c4/apollo-api-1.2.2-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/dd90cec1225c0ca3a450479b85d90d9ef56fa6c4/apollo-api-1.2.2-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/dd90cec1225c0ca3a450479b85d90d9ef56fa6c4/apollo-api-1.2.2-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-api/1.2.2/dd90cec1225c0ca3a450479b85d90d9ef56fa6c4/apollo-api-1.2.2-sources.jar!/" />
     </SOURCES>
   </library>

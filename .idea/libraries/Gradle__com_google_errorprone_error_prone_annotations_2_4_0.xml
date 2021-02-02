@@ -2,11 +2,23 @@
   <library name="Gradle: com.google.errorprone:error_prone_annotations:2.4.0">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/32ecccc595e4e4d813a80ee9e3ab5813d65874eb/error_prone_annotations-2.4.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/32ecccc595e4e4d813a80ee9e3ab5813d65874eb/error_prone_annotations-2.4.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/32ecccc595e4e4d813a80ee9e3ab5813d65874eb/error_prone_annotations-2.4.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/32ecccc595e4e4d813a80ee9e3ab5813d65874eb/error_prone_annotations-2.4.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/32ecccc595e4e4d813a80ee9e3ab5813d65874eb/error_prone_annotations-2.4.0.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/c6072b25f7f1702d5388b6f85c50a8c321e71b86/error_prone_annotations-2.4.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/c6072b25f7f1702d5388b6f85c50a8c321e71b86/error_prone_annotations-2.4.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/c6072b25f7f1702d5388b6f85c50a8c321e71b86/error_prone_annotations-2.4.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/c6072b25f7f1702d5388b6f85c50a8c321e71b86/error_prone_annotations-2.4.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/c6072b25f7f1702d5388b6f85c50a8c321e71b86/error_prone_annotations-2.4.0-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/3921a2ff59cbc7ed711b7925109d1f54ec3b8a70/error_prone_annotations-2.4.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/3921a2ff59cbc7ed711b7925109d1f54ec3b8a70/error_prone_annotations-2.4.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/3921a2ff59cbc7ed711b7925109d1f54ec3b8a70/error_prone_annotations-2.4.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/3921a2ff59cbc7ed711b7925109d1f54ec3b8a70/error_prone_annotations-2.4.0-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/3921a2ff59cbc7ed711b7925109d1f54ec3b8a70/error_prone_annotations-2.4.0-sources.jar!/" />
     </SOURCES>
   </library>

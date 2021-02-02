@@ -27,6 +27,7 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
@@ -36,7 +37,6 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -49,24 +49,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+@Command(
+		name = "quiz",
+		aliases = {"qna", "per"},
+		usage = "req_difficulty",
+		category = Category.FUN
+)
 public class QuizCommand implements Executable {
 	private boolean closed = false;
-
-	public QuizCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public QuizCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public QuizCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public QuizCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
