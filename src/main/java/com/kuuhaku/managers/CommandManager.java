@@ -23,6 +23,7 @@ import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.Permission;
 import org.reflections8.Reflections;
 
 import java.util.HashSet;
@@ -70,7 +71,7 @@ public class CommandManager {
 								.replaceAll("[a-z](?=[A-Z])", "$0-")
 								.toLowerCase(),
 						params.category(),
-						req == null ? null : req.value()
+						req == null ? new Permission[0] : req.value()
 				);
 			}
 		}
@@ -89,7 +90,7 @@ public class CommandManager {
 						.replaceAll("[a-z](?=[A-Z])", "$0-")
 						.toLowerCase(),
 				params.category(),
-				req == null ? null : req.value()
+				req == null ? new Permission[0] : req.value()
 		));
 	}
 }
