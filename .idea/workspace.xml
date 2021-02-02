@@ -14,11 +14,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_oneandone_reflections8_reflections8_0_11_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_Pagination_Utils_2_0_0.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +117,7 @@
     <property name="extract.method.default.visibility" value="private" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
@@ -173,28 +174,16 @@
       <command value="gradle -v" />
       <command value="gradlew --version" />
       <command value="gradlew build --warning-mode all" />
+      <command value="gradle compileJava" />
+      <command value="gradle compileJava -Xlint:deprecation" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.ShiroJBot [build]">
-    <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":javadoc" />
-          </list>
-        </option>
-        <option name="vmOptions" value="" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
+  <component name="RunAnythingContextRecentDirectoryCache">
+    <option name="paths">
+      <recentPaths value="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -233,6 +222,45 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="ShiroJBot [compileJava -Xlint:deprecation]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="compileJava" />
+            <option value="-Xlint:deprecation" />
+          </list>
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="ShiroJBot [compileJava]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="compileJava" />
+          </list>
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="ShiroJBot [shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -252,23 +280,6 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="ShiroJBot" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="-v" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list />
-        </option>
-        <option name="vmOptions" value="" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
     <configuration default="true" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -280,11 +291,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.ShiroJBot [compileJava -Xlint:deprecation]" />
+        <item itemvalue="Gradle.ShiroJBot [compileJava]" />
         <item itemvalue="Gradle.ShiroJBot [shadowJar]" />
         <item itemvalue="Gradle.ShiroJBot [clean]" />
         <item itemvalue="Gradle.ShiroJBot [build]" />
-        <item itemvalue="Gradle.ShiroJBot [:javadoc]" />
-        <item itemvalue="Gradle.ShiroJBot" />
       </list>
     </recent_temporary>
   </component>
@@ -1033,13 +1044,7 @@
       <workItem from="1612131537085" duration="41000" />
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
-    </task>
-    <task id="LOCAL-03592" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611946849886</created>
-      <option name="number" value="03592" />
-      <option name="presentableId" value="LOCAL-03592" />
-      <option name="project" value="LOCAL" />
-      <updated>1611946849886</updated>
+      <workItem from="1612285645204" duration="1658000" />
     </task>
     <task id="LOCAL-03593" summary="Adição de filas ranqueadas (Solo/Duo)">
       <created>1611947220311</created>
@@ -1377,7 +1382,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612201716170</updated>
     </task>
-    <option name="localTasksCounter" value="3641" />
+    <task id="LOCAL-03641" summary="Adição de requisitos de permissão">
+      <created>1612274104510</created>
+      <option name="number" value="03641" />
+      <option name="presentableId" value="LOCAL-03641" />
+      <option name="project" value="LOCAL" />
+      <updated>1612274104510</updated>
+    </task>
+    <option name="localTasksCounter" value="3642" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1493,22 +1505,58 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612213094979">
+    <state x="645" y="211" key="#com.intellij.ide.util.MemberChooser" timestamp="1612274062987">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612213094979" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612201719334">
+    <state x="645" y="211" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1612274062987" />
+    <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1612274118010">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612201719334" />
+    <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612274118010" />
+    <state x="509" y="365" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1612274140767">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="509" y="365" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1612274140767" />
+    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612274102985">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612274102985" />
+    <state x="620" y="260" key="FileChooserDialogImpl" timestamp="1612274229542">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="620" y="260" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1612274229542" />
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom" timestamp="1612274522814">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1612274522814" />
+    <state width="1637" height="279" key="GridCell.Tab.0.center" timestamp="1612274522813">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1637" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1612274522813" />
+    <state width="1637" height="279" key="GridCell.Tab.0.left" timestamp="1612274522813">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1637" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1612274522813" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right" timestamp="1612274522813">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612274522813" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612274105769">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612274105769" />
     <state x="547" y="238" width="585" height="534" key="find.popup" timestamp="1612213069227">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="547" y="238" width="585" height="534" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612213069227" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612201552697">
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1612274255711">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612201552697" />
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612274255711" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612274194450">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612274194450" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>
