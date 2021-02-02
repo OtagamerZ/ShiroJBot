@@ -36,7 +36,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
@@ -53,7 +52,6 @@ import java.util.stream.Collectors;
 @Command(
 		name = "adivinheascartas",
 		aliases = {"aac", "guessthecards", "gtc"},
-		usage = "cmd_guess-the-cards",
 		category = Category.FUN
 )
 public class GuessTheCardsCommand implements Executable {
@@ -104,7 +102,8 @@ public class GuessTheCardsCommand implements Executable {
 								if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
 									return;
 
-								if (event.getMessage().getContentRaw().equalsIgnoreCase("desistir") || Helper.equalsAny(prefix + command, ArrayUtils.addAll(getAliases(), getName()))) {
+								String value = event.getMessage().getContentRaw();
+								if (value.equalsIgnoreCase("desistir") || Helper.equalsAny(value.split(" ")[0].replaceFirst(prefix, ""), "adivinheascartas", "aac", "guessthecards", "gtc")) {
 									channel.sendMessage("Você desistiu, as cartas eram `%s`, `%s` e `%s`".formatted(
 											names.get(0),
 											names.get(1),
@@ -116,7 +115,7 @@ public class GuessTheCardsCommand implements Executable {
 									return;
 								}
 
-								String[] answers = event.getMessage().getContentRaw().split(";");
+								String[] answers = value.split(";");
 
 								if (answers.length != 3 && chances > 0) {
 									channel.sendMessage("❌ | Você deve informar exatamente 3 nomes separados por ponto-e-vírgula.").queue();

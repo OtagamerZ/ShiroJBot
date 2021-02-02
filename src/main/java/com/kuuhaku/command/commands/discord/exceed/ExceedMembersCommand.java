@@ -43,7 +43,6 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "exceedmembros",
 		aliases = {"exmembers", "membrosx"},
-		usage = "cmd_exceed-members",
 		category = Category.EXCEED
 )
 public class ExceedMembersCommand implements Executable {
