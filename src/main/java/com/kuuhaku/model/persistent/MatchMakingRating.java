@@ -103,12 +103,10 @@ public class MatchMakingRating {
 
 	public void addMMR(long gained, long opponent, boolean ranked) {
 		this.mmr += gained * (this.mmr == 0 ? 1 : Helper.prcnt(opponent, this.mmr)) * (ranked ? 1 : 0.5);
-		if (this.master.isBlank()) this.master = "none";
 	}
 
 	public void removeMMR(long lost, long opponent, boolean ranked) {
 		this.mmr -= Math.min(this.mmr, lost * (opponent == 0 ? 1 : Helper.prcnt(this.mmr, opponent))) * (ranked ? 1 : 0.5);
-		if (this.master.isBlank()) this.master = "none";
 	}
 
 	public void setMMR(long mmr) {
@@ -126,30 +124,14 @@ public class MatchMakingRating {
 			promWins++;
 
 			if (promWins + promLosses == tier.getMd()) {
-				tier = RankedTier.INITIATE_IV;
+				tier = tier.getNext();
 				rankPoints = 0;
 				promWins = promLosses = 0;
 
-				if (StringUtils.isNumeric(master)) {
-					Account acc = AccountDAO.getAccount(master);
-					master = "FULFILLED_" + master;
-					User u = Main.getInfo().getUserByID(userId);
-					u.openPrivateChannel()
-							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratúitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
-							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
-							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Iniciado IV, você recebeu **25.000 créditos**!"))
-							.queue(null, Helper::doNothing);
-
-					acc.addCredit(25000, this.getClass());
-					AccountDAO.saveAccount(acc);
-
-					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + userId);
-					DynamicParameterDAO.setParam("freeSynth_" + userId, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
-				} else {
-					Main.getInfo().getUserByID(userId).openPrivateChannel()
-							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
-							.queue(null, Helper::doNothing);
-				}
+				if (this.master.isBlank()) this.master = "none";
+				Main.getInfo().getUserByID(userId).openPrivateChannel()
+						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+						.queue(null, Helper::doNothing);
 				return;
 			}
 			return;
@@ -160,9 +142,28 @@ public class MatchMakingRating {
 				tier = tier.getNext();
 				rankPoints = 0;
 				promWins = promLosses = 0;
-				Main.getInfo().getUserByID(userId).openPrivateChannel()
-						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
-						.queue(null, Helper::doNothing);
+
+				if (StringUtils.isNumeric(master) && tier.getTier() > 1) {
+					Account acc = AccountDAO.getAccount(master);
+					master = "FULFILLED_" + master;
+					User u = Main.getInfo().getUserByID(userId);
+					u.openPrivateChannel()
+							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratuitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
+							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
+							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de " + tier.getName() + ", você recebeu **50.000 créditos**!"))
+							.queue(null, Helper::doNothing);
+
+					acc.addCredit(50000, this.getClass());
+					AccountDAO.saveAccount(acc);
+
+					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + userId);
+					DynamicParameterDAO.setParam("freeSynth_" + userId, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
+				} else {
+					Main.getInfo().getUserByID(userId).openPrivateChannel()
+							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+							.queue(null, Helper::doNothing);
+				}
+
 				return;
 			}
 			return;
@@ -182,30 +183,14 @@ public class MatchMakingRating {
 			promLosses++;
 
 			if (promWins + promLosses == tier.getMd()) {
-				tier = RankedTier.INITIATE_IV;
+				tier = tier.getNext();
 				rankPoints = 0;
 				promWins = promLosses = 0;
 
-				if (StringUtils.isNumeric(master)) {
-					Account acc = AccountDAO.getAccount(master);
-					master = "FULFILLED_" + master;
-					User u = Main.getInfo().getUserByID(userId);
-					u.openPrivateChannel()
-							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratúitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
-							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
-							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de Iniciado IV, você recebeu **25.000 créditos**!"))
-							.queue(null, Helper::doNothing);
-
-					acc.addCredit(25000, this.getClass());
-					AccountDAO.saveAccount(acc);
-
-					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + userId);
-					DynamicParameterDAO.setParam("freeSynth_" + userId, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
-				} else {
-					Main.getInfo().getUserByID(userId).openPrivateChannel()
-							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
-							.queue(null, Helper::doNothing);
-				}
+				if (this.master.isBlank()) this.master = "none";
+				Main.getInfo().getUserByID(userId).openPrivateChannel()
+						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+						.queue(null, Helper::doNothing);
 			}
 			return;
 		} else if (rankPoints == 100) {
