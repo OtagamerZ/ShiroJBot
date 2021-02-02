@@ -17,7 +17,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="com.kuuhaku.shiro-j-bot.main" />
-    <orderEntry type="library" name="Gradle: com.github.ygimenez:Pagination-Utils:d6130e0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.ygimenez:Pagination-Utils:5cc03fb" level="project" />
     <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.2.0_227" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:discord-webhooks:0.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.SvenWoltmann:color-thief-java:v1.1.2" level="project" />
