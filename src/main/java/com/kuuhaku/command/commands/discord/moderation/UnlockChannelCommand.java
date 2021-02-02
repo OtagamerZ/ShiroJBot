@@ -57,16 +57,19 @@ public class UnlockChannelCommand implements Executable {
 				if (holder != null)
 					acts.add(channel.upsertPermissionOverride(holder).clear(Permission.MESSAGE_WRITE));
 			}
+			if (guild.getBotRole() != null)
+				acts.add(channel.putPermissionOverride(guild.getBotRole()).reset());
+
 
 			RestAction.allOf(acts)
 					.mapToResult()
 					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
-					.queue();
+					.queue(null, Helper::doNothing);
 		} else {
-			channel.getManager().sync()
-					.mapToResult()
+			channel.getManager()
+					.sync()
 					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
-					.queue();
+					.queue(null, Helper::doNothing);
 		}
 	}
 }
