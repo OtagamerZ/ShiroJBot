@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ShoukanMasterCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ShoukanMasterCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1040,21 +1037,7 @@
       <workItem from="1612131537085" duration="41000" />
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
-      <workItem from="1612285645204" duration="4998000" />
-    </task>
-    <task id="LOCAL-03604" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611951643035</created>
-      <option name="number" value="03604" />
-      <option name="presentableId" value="LOCAL-03604" />
-      <option name="project" value="LOCAL" />
-      <updated>1611951643035</updated>
-    </task>
-    <task id="LOCAL-03605" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611952021046</created>
-      <option name="number" value="03605" />
-      <option name="presentableId" value="LOCAL-03605" />
-      <option name="project" value="LOCAL" />
-      <updated>1611952021046</updated>
+      <workItem from="1612285645204" duration="5358000" />
     </task>
     <task id="LOCAL-03606" summary="Adição de filas ranqueadas (Solo/Duo)">
       <created>1611952203704</created>
@@ -1385,7 +1368,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612293899735</updated>
     </task>
-    <option name="localTasksCounter" value="3653" />
+    <task id="LOCAL-03653" summary="Implementações de sugestões">
+      <created>1612294278995</created>
+      <option name="number" value="03653" />
+      <option name="presentableId" value="LOCAL-03653" />
+      <option name="project" value="LOCAL" />
+      <updated>1612294278995</updated>
+    </task>
+    <task id="LOCAL-03654" summary="Implementações de sugestões">
+      <created>1612294403757</created>
+      <option name="number" value="03654" />
+      <option name="presentableId" value="LOCAL-03654" />
+      <option name="project" value="LOCAL" />
+      <updated>1612294403757</updated>
+    </task>
+    <option name="localTasksCounter" value="3655" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1501,6 +1498,10 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="294" y="160" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1612294211770">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="294" y="160" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612294211770" />
     <state x="645" y="211" key="#com.intellij.ide.util.MemberChooser" timestamp="1612274062987">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1513,10 +1514,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="509" y="365" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1612274140767" />
-    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612293898931">
+    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612294402865">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612293898931" />
+    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612294402865" />
     <state x="620" y="260" key="FileChooserDialogImpl" timestamp="1612274229542">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1537,10 +1538,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612274522813" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612293904444">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612294406817">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612293904444" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612294406817" />
     <state x="547" y="238" width="585" height="534" key="find.popup" timestamp="1612213069227">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
