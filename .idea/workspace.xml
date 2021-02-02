@@ -14,6 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/PreparedCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/PreparedCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1038,13 +1039,6 @@
       <workItem from="1612185972743" duration="753000" />
       <workItem from="1612186768849" duration="8016000" />
     </task>
-    <task id="LOCAL-03594" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611947388194</created>
-      <option name="number" value="03594" />
-      <option name="presentableId" value="LOCAL-03594" />
-      <option name="project" value="LOCAL" />
-      <updated>1611947388194</updated>
-    </task>
     <task id="LOCAL-03595" summary="Adição de filas ranqueadas (Solo/Duo)">
       <created>1611947721221</created>
       <option name="number" value="03595" />
@@ -1381,7 +1375,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612273045005</updated>
     </task>
-    <option name="localTasksCounter" value="3643" />
+    <task id="LOCAL-03643" summary="Adição de requisitos de permissão">
+      <created>1612273150783</created>
+      <option name="number" value="03643" />
+      <option name="presentableId" value="LOCAL-03643" />
+      <option name="project" value="LOCAL" />
+      <updated>1612273150783</updated>
+    </task>
+    <option name="localTasksCounter" value="3644" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1497,14 +1498,18 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="397" y="92" key="CommitChangelistDialog2" timestamp="1612273044175">
+    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser" timestamp="1612273292209">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="397" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612273044175" />
-    <state x="432" y="225" key="Vcs.Push.Dialog.v2" timestamp="1612273048223">
+    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1612273292209" />
+    <state x="397" y="92" key="CommitChangelistDialog2" timestamp="1612273149928">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="225" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612273048223" />
+    <state x="397" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612273149928" />
+    <state x="432" y="225" key="Vcs.Push.Dialog.v2" timestamp="1612273152575">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="432" y="225" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612273152575" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>
