@@ -53,13 +53,13 @@ public class LockChannelCommand implements Executable {
 		List<PermissionOverride> overrides = channel.getPermissionOverrides();
 		List<PermissionOverrideAction> acts = new ArrayList<>();
 
-		acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).grant(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS));
 		acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).deny(Permission.MESSAGE_WRITE));
 		for (PermissionOverride override : overrides) {
 			IPermissionHolder holder = override.getPermissionHolder();
 			if (holder != null)
 				acts.add(channel.upsertPermissionOverride(holder).deny(Permission.MESSAGE_WRITE));
 		}
+		acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).grant(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS));
 
 		RestAction.accumulate(acts, Collectors.toList())
 				.flatMap(s -> channel.sendMessage(":lock: | Canal trancado com sucesso!"))
