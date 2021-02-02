@@ -51,13 +51,13 @@ public class UnlockChannelCommand implements Executable {
 		if (channel.getParent() == null) {
 			List<PermissionOverrideAction> acts = new ArrayList<>();
 
-			acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).clear(Permission.MESSAGE_WRITE));
+			acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).clear(Permission.MESSAGE_WRITE));
 			for (PermissionOverride override : overrides) {
 				IPermissionHolder holder = override.getPermissionHolder();
 				if (holder != null)
 					acts.add(channel.upsertPermissionOverride(holder).clear(Permission.MESSAGE_WRITE));
 			}
-			acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).reset());
+			acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).reset());
 
 
 			RestAction.allOf(acts)
