@@ -18,28 +18,28 @@
 
 package com.kuuhaku.command.commands.discord.reactions;
 
+import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
-public class CryReaction extends Reaction {
+@Command(
+		name = "chorar",
+		aliases = {"buaa", "cry", "sadboy"},
+		category = Category.FUN
+)
+@Requires({Permission.MESSAGE_EMBED_LINKS})
+public class CryReaction extends Action implements Executable {
 
-    public CryReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
-        super(name, aliases, description, answerable, type);
-    }
-
-    @Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		this.setReaction(new String[]{
-				"Faça isso parar!",
-				"Sadboy feels.",
-				"Me deixa sozinho(a)."
-		});
-
-		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " está chorando! - " + this.getReaction(), false);
+	@Override
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		sendReaction("cry", channel, null, author.getAsMention() + " está chorando!", false);
 	}
 
-    @Override
-    public void answer(TextChannel chn) {
+	@Override
+	public void answer(TextChannel chn) {
 
-    }
+	}
 }

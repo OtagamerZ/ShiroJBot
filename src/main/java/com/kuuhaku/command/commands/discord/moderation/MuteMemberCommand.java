@@ -19,9 +19,11 @@
 package com.kuuhaku.command.commands.discord.moderation;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.MutedMember;
@@ -32,46 +34,33 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NonNls;
 import org.json.JSONArray;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MuteMemberCommand extends Command {
-
-	public MuteMemberCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public MuteMemberCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public MuteMemberCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public MuteMemberCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+@Command(
+		name = "silenciar",
+		aliases = {"mute", "silence"},
+		usage = "req_member-time-reason",
+		category = Category.MODERATION
+)
+@Requires({Permission.MANAGE_ROLES, Permission.MESSAGE_MANAGE})
+public class MuteMemberCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (message.getMentionedUsers().size() == 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-member-to-ban")).queue();
 			return;
-		} else if (args.length < 2) {
-			channel.sendMessage("❌ | Você precisa informar um tempo (em minutos).").queue();
+		} else if (args.length < 3) {
+			channel.sendMessage("❌ | Você precisa informar um tempo (em minutos) e um motivo.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
 			channel.sendMessage("❌ | O tempo de punição deve um valor inteiro.").queue();
-			return;
-		} else if (args.length < 3) {
-			channel.sendMessage("❌ | Você precisa informar um motivo.").queue();
 			return;
 		} else if (!member.hasPermission(Permission.MESSAGE_MANAGE)) {
 			channel.sendMessage("❌ | Você não possui permissão para silenciar membros.").queue();

@@ -19,36 +19,28 @@
 package com.kuuhaku.command.commands.discord.music;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NonNls;
 
-public class ControlCommand extends Command {
-
-	public ControlCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public ControlCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public ControlCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public ControlCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+@Command(
+		name = "controle",
+		aliases = {"control", "c"},
+		category = Category.MUSIC
+)
+@Requires({Permission.MESSAGE_EMBED_LINKS})
+public class ControlCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -65,13 +57,13 @@ public class ControlCommand extends Command {
 			return;
 		}
 
-		if (Music.getGuildAudioPlayer(guild, (TextChannel) channel).player.getPlayingTrack() == null) {
+		if (Music.getGuildAudioPlayer(guild, channel).player.getPlayingTrack() == null) {
 			channel.sendMessage("❌ | Não há nenhuma música tocando no momento.").queue();
 			return;
 		} else if (member.getVoiceState().getChannel() == null || !member.getVoiceState().getChannel().getMembers().contains(guild.getSelfMember())) {
 			channel.sendMessage("❌ | Este comando só pode ser usado se estiver em um canal de voz com a Shiro.").queue();
 			return;
-		} else if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !((User) Music.getGuildAudioPlayer(guild, (TextChannel) channel).player.getPlayingTrack().getUserData()).getId().equals(author.getId())) {
+		} else if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !((User) Music.getGuildAudioPlayer(guild, channel).player.getPlayingTrack().getUserData()).getId().equals(author.getId())) {
 			channel.sendMessage("❌ | Apenas quem adicionou esta música pode controlá-la (exceto moderadores).").queue();
 			return;
 		}

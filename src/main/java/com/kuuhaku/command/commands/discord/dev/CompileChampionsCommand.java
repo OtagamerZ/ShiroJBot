@@ -21,36 +21,24 @@ package com.kuuhaku.command.commands.discord.dev;
 import bsh.EvalError;
 import bsh.Interpreter;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.EffectParameters;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 
-public class CompileChampionsCommand extends Command {
-
-	public CompileChampionsCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public CompileChampionsCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public CompileChampionsCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public CompileChampionsCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+@Command(
+		name = "testchamp",
+		category = Category.DEV
+)
+public class CompileChampionsCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		List<Champion> champions = CardDAO.getAllChampions(true);
 
 		for (Champion c : champions) {
