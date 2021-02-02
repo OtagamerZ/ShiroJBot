@@ -21,24 +21,26 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -49,36 +51,27 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class AuctionCommand extends Command {
-
-    public AuctionCommand(String name, String description, Category category, boolean requiresMM) {
-        super(name, description, category, requiresMM);
-    }
-
-    public AuctionCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-        super(name, aliases, description, category, requiresMM);
-    }
-
-    public AuctionCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-        super(name, usage, description, category, requiresMM);
-    }
-
-    public AuctionCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-        super(name, aliases, usage, description, category, requiresMM);
-    }
+@Command(
+        name = "leilao",
+        aliases = {"auction", "auct"},
+        usage = "req_card-type-price",
+        category = Category.MISC
+)
+@Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
+public class AuctionCommand implements Executable {
 
     @Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length < 3) {
-			channel.sendMessage("❌ | Você precisa informar a carta, o tipo dela e o valor inicial para fazer um leilão.").queue();
-			return;
-		} else if (!StringUtils.isNumeric(args[2])) {
-			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
-			return;
-		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		}
+    public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+        if (args.length < 3) {
+            channel.sendMessage("❌ | Você precisa informar a carta, o tipo dela e o valor inicial para fazer um leilão.").queue();
+            return;
+        } else if (!StringUtils.isNumeric(args[2])) {
+            channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
+            return;
+        } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        }
 
         int type = switch (args[1].toUpperCase()) {
             case "N", "C" -> 1;
@@ -212,38 +205,38 @@ public class AuctionCommand extends Command {
                                 event.get().cancel(true);
                                 event.set(exec.scheduleWithFixedDelay(() -> {
                                     if (phase.get() == 4 && highest.get() != null) {
-										channel.sendMessage("**" + (type == 1 ? "Carta vendida" : type == 2 ? "Equipamento vendido" : "Arena vendida") + "** para " + highest.get().getLeft().getAsMention() + " por **" + Helper.separate(highest.get().getRight()) + "** créditos!").queue();
+                                        channel.sendMessage("**" + (type == 1 ? "Carta vendida" : type == 2 ? "Equipamento vendido" : "Arena vendida") + "** para " + highest.get().getLeft().getAsMention() + " por **" + Helper.separate(highest.get().getRight()) + "** créditos!").queue();
 
-					if (!author.getId().equals(highest.get().getLeft().getId())) {
-                                       		Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
-                                       		Kawaipon buyer = KawaiponDAO.getKawaipon(highest.get().getLeft().getId());
+                                        if (!author.getId().equals(highest.get().getLeft().getId())) {
+                                            Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
+                                            Kawaipon buyer = KawaiponDAO.getKawaipon(highest.get().getLeft().getId());
 
-                                      		Account acc = AccountDAO.getAccount(author.getId());
-                                      		Account bacc = AccountDAO.getAccount(highest.get().getLeft().getId());
+                                            Account acc = AccountDAO.getAccount(author.getId());
+                                            Account bacc = AccountDAO.getAccount(highest.get().getLeft().getId());
 
-                                       		acc.addCredit(highest.get().getRight(), AuctionCommand.class);
-                                      		bacc.removeCredit(highest.get().getRight(), AuctionCommand.class);
+                                            acc.addCredit(highest.get().getRight(), AuctionCommand.class);
+                                            bacc.removeCredit(highest.get().getRight(), AuctionCommand.class);
 
-                                       		switch (type) {
-                                           		case 1 -> {
+                                            switch (type) {
+                                                case 1 -> {
                                                     k.removeCard((KawaiponCard) obj);
                                                     buyer.addCard((KawaiponCard) obj);
                                                 }
-                                           		case 2 -> {
-                                               			k.removeEquipment((Equipment) obj);
-                                               			buyer.addEquipment((Equipment) obj);
-                                           		}
-                                           		default -> {
-                                               			k.removeField((Field) obj);
-                                               			buyer.addField((Field) obj);
-                                           		}
-                                       		}
+                                                case 2 -> {
+                                                    k.removeEquipment((Equipment) obj);
+                                                    buyer.addEquipment((Equipment) obj);
+                                                }
+                                                default -> {
+                                                    k.removeField((Field) obj);
+                                                    buyer.addField((Field) obj);
+                                                }
+                                            }
 
-                                       		KawaiponDAO.saveKawaipon(k);
-                                       		KawaiponDAO.saveKawaipon(buyer);
-                                       		AccountDAO.saveAccount(acc);
-                                       		AccountDAO.saveAccount(bacc);
-					}
+                                            KawaiponDAO.saveKawaipon(k);
+                                            KawaiponDAO.saveKawaipon(buyer);
+                                            AccountDAO.saveAccount(acc);
+                                            AccountDAO.saveAccount(bacc);
+                                        }
 
                                         Main.getInfo().getConfirmationPending().invalidate(author.getId());
                                         close();
@@ -252,9 +245,9 @@ public class AuctionCommand extends Command {
                                         switch (phase.get()) {
                                             case 1 -> channel.sendMessage("Dou-lhe 1...").queue();
                                             case 2 -> channel.sendMessage("""
-													Dou-lhe 2...
-													Vamos lá pessoal, será que eu ouvi um %s?
-													""".formatted(Helper.separate(highest.get().getRight() + 250))).queue();
+                                                    Dou-lhe 2...
+                                                    Vamos lá pessoal, será que eu ouvi um %s?
+                                                    """.formatted(Helper.separate(highest.get().getRight() + 250))).queue();
                                             case 3 -> channel.sendMessage("Dou-lhe 3...").queue();
                                         }
 
@@ -263,7 +256,7 @@ public class AuctionCommand extends Command {
                                 }, 5, 5, TimeUnit.SECONDS));
                             }
                         } catch (NumberFormatException e) {
-							channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
+                            channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
                         }
                     }
                 }

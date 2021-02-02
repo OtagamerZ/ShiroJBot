@@ -21,41 +21,37 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.games.chess.Chess;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class ChessCommand extends Command {
+@Command(
+		name = "xadrez",
+		aliases = {"chess"},
+		usage = "req_bet-mentions",
+		category = Category.FUN
+)
+@Requires({
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_ADD_REACTION
+})
+public class ChessCommand implements Executable {
 
-    public ChessCommand(String name, String description, Category category, boolean requiresMM) {
-        super(name, description, category, requiresMM);
-    }
-
-    public ChessCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-        super(name, aliases, description, category, requiresMM);
-    }
-
-    public ChessCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-        super(name, usage, description, category, requiresMM);
-    }
-
-    public ChessCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-        super(name, aliases, usage, description, category, requiresMM);
-    }
-
-    @Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	@Override
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() == 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 			return;
@@ -67,63 +63,63 @@ public class ChessCommand extends Command {
 			return;
 		}
 
-        Account uacc = AccountDAO.getAccount(author.getId());
-        Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
-        int bet = 0;
-        if (args.length > 1 && StringUtils.isNumeric(args[1])) {
-            bet = Integer.parseInt(args[1]);
-            if (bet < 0) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
-                return;
-            } else if (uacc.getBalance() < bet) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
-                return;
-            } else if (tacc.getBalance() < bet) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
-                return;
-            }
-        }
+		Account uacc = AccountDAO.getAccount(author.getId());
+		Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
+		int bet = 0;
+		if (args.length > 1 && StringUtils.isNumeric(args[1])) {
+			bet = Integer.parseInt(args[1]);
+			if (bet < 0) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
+				return;
+			} else if (uacc.getBalance() < bet) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+				return;
+			} else if (tacc.getBalance() < bet) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
+				return;
+			}
+		}
 
-        String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
+		String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
 
-        if (Main.getInfo().gameInProgress(author.getId())) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
-            return;
-        } else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
-            return;
-        } else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
-            return;
-        }
+		if (Main.getInfo().gameInProgress(author.getId())) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+			return;
+		} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+			return;
+		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
+			return;
+		}
 
-        String hash = Helper.generateHash(guild, author);
-        ShiroInfo.getHashes().add(hash);
-        Main.getInfo().getConfirmationPending().put(author.getId(), true);
-        Game t = new Chess(Main.getShiroShards(), (TextChannel) channel, bet, author, message.getMentionedUsers().get(0));
-        channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Xadrez, deseja aceitar?")
-                .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-                            if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
-                                if (!ShiroInfo.getHashes().remove(hash)) return;
-                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                                if (Main.getInfo().gameInProgress(mb.getId())) {
-                                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
-                                    return;
-                                } else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
-                                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
-                                    return;
-                                }
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
+		Game t = new Chess(Main.getShiroShards(), channel, bet, author, message.getMentionedUsers().get(0));
+		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Xadrez, deseja aceitar?")
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+							if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+								if (!ShiroInfo.getHashes().remove(hash)) return;
+								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								if (Main.getInfo().gameInProgress(mb.getId())) {
+									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+									return;
+								} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
+									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+									return;
+								}
 
-                                //Main.getInfo().getGames().put(id, t);
-                                s.delete().queue(null, Helper::doNothing);
-                                t.start();
-                            }
-                        }), true, 1, TimeUnit.MINUTES,
-                        u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
-                        ms -> {
-                            ShiroInfo.getHashes().remove(hash);
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                        })
-                );
-    }
+								//Main.getInfo().getGames().put(id, t);
+								s.delete().queue(null, Helper::doNothing);
+								t.start();
+							}
+						}), true, 1, TimeUnit.MINUTES,
+						u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
+						ms -> {
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+						})
+				);
+	}
 }

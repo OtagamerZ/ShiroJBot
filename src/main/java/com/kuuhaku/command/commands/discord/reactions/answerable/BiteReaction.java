@@ -18,49 +18,41 @@
 
 package com.kuuhaku.command.commands.discord.reactions.answerable;
 
-import com.kuuhaku.Main;
-import com.kuuhaku.command.commands.discord.reactions.Reaction;
+import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.commands.discord.reactions.Action;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
-public class BiteReaction extends Reaction {
-
-	public BiteReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
-		super(name, aliases, description, answerable, type);
-	}
+@Command(
+		name = "morder",
+		aliases = {"moider", "bite", "moide"},
+		category = Category.FUN
+)
+@Requires({
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_ADD_REACTION
+})
+public class BiteReaction extends Action implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() == 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 			return;
 		}
 		setInteraction(new User[]{author, message.getMentionedUsers().get(0)});
 
-		this.setReaction(new String[]{
-				"Snack!",
-				"~~moide!",
-				"Munch!"
-		});
-
-		this.setSelfTarget(new String[]{
-				"Não, não, NÃO!",
-				"Complicado ein!",
-				"Não sou biscoito pra morder!"
-		});
-
-		if (getInteraction()[1] == Main.getSelfUser()) {
-			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou morder a " + Main.getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
-			return;
-		}
-
-		sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " mordeu " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
+		sendReaction("bite", channel, getInteraction()[1], getInteraction()[0].getAsMention() + " mordeu " + getInteraction()[1].getAsMention(), true);
 	}
 
 	@Override
 	public void answer(TextChannel chn) {
-		sendReaction(getType(), chn, null, getInteraction()[1].getAsMention() + " devolveu a mordida de " + getInteraction()[0].getAsMention() + " - " + this.getReaction(), false);
+		sendReaction("bite", chn, null, getInteraction()[1].getAsMention() + " também mordeu " + getInteraction()[0].getAsMention(), false);
 	}
 }

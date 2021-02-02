@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: net.oneandone.reflections8:reflections8:0.11.7">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.oneandone.reflections8/reflections8/0.11.7/e71f98ce021b886a4bb249397c93c968b62e6ed4/reflections8-0.11.7.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.oneandone.reflections8/reflections8/0.11.7/34f4fce0b78193e2ae60a50ee52d500c7d6d8b9d/reflections8-0.11.7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.oneandone.reflections8/reflections8/0.11.7/ba011b5d91fb1ebb38f0e186f55a0134fc75b254/reflections8-0.11.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -18,24 +18,24 @@
 
 package com.kuuhaku.command.commands.discord.reactions;
 
+import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
-public class DanceReaction extends Reaction {
-
-	public DanceReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
-		super(name, aliases, description, answerable, type);
-	}
+@Command(
+		name = "dancar",
+		aliases = {"dance", "tuts"},
+		category = Category.FUN
+)
+@Requires({Permission.MESSAGE_EMBED_LINKS})
+public class DanceReaction extends Action implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		this.setReaction(new String[]{
-				"Vai vai vai!",
-				"Se liga nos m-o-v-i-m-e-n-t-o-s!",
-				"Duas palavras: DANCE BABY!"
-		});
-
-		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " está dançando! - " + this.getReaction(), false);
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		sendReaction("dance", channel, null, author.getAsMention() + " está dançando!", false);
 	}
 
 	@Override

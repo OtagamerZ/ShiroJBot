@@ -19,41 +19,32 @@
 package com.kuuhaku.command.commands.discord.moderation;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.managers.ChannelManager;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.EnumSet;
 import java.util.List;
 
-public class LockChannelCommand extends Command {
-
-	public LockChannelCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public LockChannelCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public LockChannelCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public LockChannelCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+@Command(
+		name = "trancar",
+		aliases = {"lock", "travar"},
+		category = Category.MODERATION
+)
+@Requires({Permission.MANAGE_PERMISSIONS})
+public class LockChannelCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (!Helper.hasPermission(member, Permission.MANAGE_PERMISSIONS, (TextChannel) channel)) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		if (!Helper.hasPermission(member, Permission.MANAGE_PERMISSIONS, channel)) {
 			channel.sendMessage("❌ | Você não possui permissão para alterar permissões de canais.").queue();
 			return;
-		} else if (!Helper.hasPermission(guild.getSelfMember(), Permission.MANAGE_PERMISSIONS, (TextChannel) channel)) {
+		} else if (!Helper.hasPermission(guild.getSelfMember(), Permission.MANAGE_PERMISSIONS, channel)) {
 			channel.sendMessage("❌ | Eu não possuo permissão para alterar permissões de canais.").queue();
 			return;
 		}
