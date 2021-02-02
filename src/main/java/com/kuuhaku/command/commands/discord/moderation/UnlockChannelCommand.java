@@ -57,16 +57,23 @@ public class UnlockChannelCommand implements Executable {
 				if (holder != null)
 					acts.add(channel.upsertPermissionOverride(holder).clear(Permission.MESSAGE_WRITE));
 			}
-			acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).reset());
+			if (guild.getBotRole() != null)
+				acts.add(channel.upsertPermissionOverride(guild.getBotRole()).reset());
 
 
 			RestAction.allOf(acts)
 					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
-					.queue(null, f -> channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue());
+					.queue(null, f -> {
+						if (channel.canTalk())
+							channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
+					});
 		} else {
 			channel.getManager().sync()
 					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
-					.queue(null, f -> channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue());
+					.queue(null, f -> {
+						if (channel.canTalk())
+							channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
+					});
 		}
 	}
 }

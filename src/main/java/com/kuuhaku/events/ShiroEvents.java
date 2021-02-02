@@ -271,10 +271,9 @@ public class ShiroEvents extends ListenerAdapter {
 						Main.getInfo().getRatelimit().put(author.getId(), true);
 						return;
 					} else if (command.getMissingPerms(channel).length > 0) {
-						Permission[] missing = command.getMissingPerms(channel);
 						channel.sendMessage("❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
 								Arrays.stream(command.getPermissions())
-										.map(p -> (ArrayUtils.contains(missing, p) ? "❌ - " : "✅ - ") + p.getName())
+										.map(p -> "- " + p.getName())
 										.collect(Collectors.joining("\n"))
 						)).queue();
 						return;

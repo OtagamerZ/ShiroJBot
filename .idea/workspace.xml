@@ -14,9 +14,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/PreparedCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/PreparedCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LockChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LockChannelCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/UnlockChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/UnlockChannelCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1041,21 +1043,7 @@
       <workItem from="1612131537085" duration="41000" />
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
-      <workItem from="1612285645204" duration="7133000" />
-    </task>
-    <task id="LOCAL-03611" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611974846975</created>
-      <option name="number" value="03611" />
-      <option name="presentableId" value="LOCAL-03611" />
-      <option name="project" value="LOCAL" />
-      <updated>1611974846975</updated>
-    </task>
-    <task id="LOCAL-03612" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611975088885</created>
-      <option name="number" value="03612" />
-      <option name="presentableId" value="LOCAL-03612" />
-      <option name="project" value="LOCAL" />
-      <updated>1611975088885</updated>
+      <workItem from="1612285645204" duration="7940000" />
     </task>
     <task id="LOCAL-03613" summary="Adição de filas ranqueadas (Solo/Duo)">
       <created>1611975636907</created>
@@ -1386,7 +1374,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612296114336</updated>
     </task>
-    <option name="localTasksCounter" value="3660" />
+    <task id="LOCAL-03660" summary="Implementações de sugestões">
+      <created>1612296467318</created>
+      <option name="number" value="03660" />
+      <option name="presentableId" value="LOCAL-03660" />
+      <option name="project" value="LOCAL" />
+      <updated>1612296467318</updated>
+    </task>
+    <task id="LOCAL-03661" summary="Implementações de sugestões">
+      <created>1612296660084</created>
+      <option name="number" value="03661" />
+      <option name="presentableId" value="LOCAL-03661" />
+      <option name="project" value="LOCAL" />
+      <updated>1612296660084</updated>
+    </task>
+    <option name="localTasksCounter" value="3662" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1518,10 +1520,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="509" y="365" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1612274140767" />
-    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612296113586">
+    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612296659249">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612296113586" />
+    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612296659249" />
     <state x="620" y="260" key="FileChooserDialogImpl" timestamp="1612274229542">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1542,10 +1544,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612274522813" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612296115111">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612296664464">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612296115111" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612296664464" />
     <state x="547" y="238" width="585" height="534" key="find.popup" timestamp="1612213069227">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
