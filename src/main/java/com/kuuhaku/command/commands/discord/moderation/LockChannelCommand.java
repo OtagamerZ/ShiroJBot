@@ -26,10 +26,12 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.api.managers.ChannelManager;
+import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 
-import java.util.EnumSet;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "trancar",
@@ -50,20 +52,18 @@ public class LockChannelCommand implements Executable {
 		}
 
 		try {
-			TextChannel tc = message.getTextChannel();
-			List<PermissionOverride> overrides = tc.getPermissionOverrides();
+			List<PermissionOverride> overrides = channel.getPermissionOverrides();
+			List<PermissionOverrideAction> acts = new ArrayList<>();
 
-			ChannelManager mng = message.getTextChannel().getManager();
-
-			mng = mng.putPermissionOverride(guild.getPublicRole(), null, EnumSet.of(Permission.MESSAGE_WRITE));
+			acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).grant(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS));
+			acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).deny(Permission.MESSAGE_WRITE));
 			for (PermissionOverride override : overrides) {
 				IPermissionHolder holder = override.getPermissionHolder();
 				if (holder != null)
-					mng = mng.putPermissionOverride(holder, null, EnumSet.of(Permission.MESSAGE_WRITE));
+					acts.add(channel.upsertPermissionOverride(holder).deny(Permission.MESSAGE_WRITE));
 			}
-			mng = mng.putPermissionOverride(guild.getSelfMember(), EnumSet.of(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS), null);
 
-			mng.complete();
+			RestAction.accumulate(acts, Collectors.toList()).complete();
 
 			channel.sendMessage(":lock: | Canal trancado com sucesso!").queue();
 		} catch (InsufficientPermissionException e) {
