@@ -30,7 +30,6 @@ import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "trancar",
@@ -42,11 +41,8 @@ public class LockChannelCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (!Helper.hasPermission(member, Permission.MANAGE_PERMISSIONS, channel)) {
-			channel.sendMessage("❌ | Você não possui permissão para alterar permissões de canais.").queue();
-			return;
-		} else if (!Helper.hasPermission(guild.getSelfMember(), Permission.MANAGE_PERMISSIONS, channel)) {
-			channel.sendMessage("❌ | Eu não possuo permissão para alterar permissões de canais.").queue();
+		if (!Helper.hasPermission(member, Permission.MANAGE_CHANNEL, channel)) {
+			channel.sendMessage("❌ | Você não possui permissão para gerenciar canais.").queue();
 			return;
 		}
 
@@ -61,7 +57,7 @@ public class LockChannelCommand implements Executable {
 		}
 		acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).grant(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS));
 
-		RestAction.accumulate(acts, Collectors.toList())
+		RestAction.allOf(acts)
 				.flatMap(s -> channel.sendMessage(":lock: | Canal trancado com sucesso!"))
 				.queue(null, f -> {
 					channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
