@@ -24,11 +24,13 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.BiContract;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Map;
@@ -40,6 +42,7 @@ import java.util.concurrent.TimeUnit;
 		usage = "req_mention",
 		category = Category.MISC
 )
+@Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
 public class ShoukanMasterCommand implements Executable {
 
 	@Override

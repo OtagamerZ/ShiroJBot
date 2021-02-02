@@ -22,8 +22,10 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
@@ -32,6 +34,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 		aliases = {"makelog", "logchannel", "canallog"},
 		category = Category.MODERATION
 )
+@Requires({Permission.MANAGE_CHANNEL})
 public class MakeLogCommand implements Executable {
 
 	@Override

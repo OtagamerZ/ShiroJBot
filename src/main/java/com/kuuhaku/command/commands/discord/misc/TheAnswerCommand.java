@@ -22,7 +22,9 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.persistence.NoResultException;
@@ -32,6 +34,7 @@ import javax.persistence.NoResultException;
 		aliases = {"theansweris", "responder", "answer"},
 		category = Category.MISC
 )
+@Requires({Permission.MESSAGE_MANAGE})
 public class TheAnswerCommand implements Executable {
 
 	@Override

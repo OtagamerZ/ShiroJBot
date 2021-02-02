@@ -21,11 +21,13 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -34,6 +36,7 @@ import net.dv8tion.jda.api.entities.*;
 		usage = "req_mention-guild",
 		category = Category.MISC
 )
+@Requires({Permission.MESSAGE_EMBED_LINKS})
 public class AvatarCommand implements Executable {
 
 	@Override

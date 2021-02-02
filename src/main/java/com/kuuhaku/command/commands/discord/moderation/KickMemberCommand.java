@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -34,6 +35,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 		usage = "req_mention-id-reason",
 		category = Category.MODERATION
 )
+@Requires({Permission.KICK_MEMBERS})
 public class KickMemberCommand implements Executable {
 
 	@Override

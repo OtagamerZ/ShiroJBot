@@ -46,7 +46,8 @@ import java.util.concurrent.TimeUnit;
 @Requires({
 		Permission.MESSAGE_MANAGE,
 		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_ADD_REACTION
+		Permission.MESSAGE_ADD_REACTION,
+		Permission.CREATE_INSTANT_INVITE
 })
 public class RequestAssistCommand implements Executable {
 

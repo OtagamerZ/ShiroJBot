@@ -21,9 +21,11 @@ package com.kuuhaku.command.commands.discord.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +38,7 @@ import java.util.List;
 		usage = "req_qtd-all",
 		category = Category.MODERATION
 )
+@Requires({Permission.MESSAGE_MANAGE})
 public class PruneCommand implements Executable {
 
 	@Override
