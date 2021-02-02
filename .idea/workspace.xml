@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1036,20 +1038,6 @@
       <workItem from="1612185972743" duration="753000" />
       <workItem from="1612186768849" duration="8016000" />
     </task>
-    <task id="LOCAL-03592" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611946849886</created>
-      <option name="number" value="03592" />
-      <option name="presentableId" value="LOCAL-03592" />
-      <option name="project" value="LOCAL" />
-      <updated>1611946849886</updated>
-    </task>
-    <task id="LOCAL-03593" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611947220311</created>
-      <option name="number" value="03593" />
-      <option name="presentableId" value="LOCAL-03593" />
-      <option name="project" value="LOCAL" />
-      <updated>1611947220311</updated>
-    </task>
     <task id="LOCAL-03594" summary="Adição de filas ranqueadas (Solo/Duo)">
       <created>1611947388194</created>
       <option name="number" value="03594" />
@@ -1379,7 +1367,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612272771934</updated>
     </task>
-    <option name="localTasksCounter" value="3641" />
+    <task id="LOCAL-03641" summary="Adição de requisitos de permissão">
+      <created>1612272936351</created>
+      <option name="number" value="03641" />
+      <option name="presentableId" value="LOCAL-03641" />
+      <option name="project" value="LOCAL" />
+      <updated>1612272936351</updated>
+    </task>
+    <task id="LOCAL-03642" summary="Adição de requisitos de permissão">
+      <created>1612273045005</created>
+      <option name="number" value="03642" />
+      <option name="presentableId" value="LOCAL-03642" />
+      <option name="project" value="LOCAL" />
+      <updated>1612273045005</updated>
+    </task>
+    <option name="localTasksCounter" value="3643" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1495,14 +1497,14 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="397" y="92" key="CommitChangelistDialog2" timestamp="1612272771126">
+    <state x="397" y="92" key="CommitChangelistDialog2" timestamp="1612273044175">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="397" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612272771126" />
-    <state x="432" y="225" key="Vcs.Push.Dialog.v2" timestamp="1612272772695">
+    <state x="397" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612273044175" />
+    <state x="432" y="225" key="Vcs.Push.Dialog.v2" timestamp="1612273048223">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="225" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612272772695" />
+    <state x="432" y="225" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612273048223" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>
