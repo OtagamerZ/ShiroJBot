@@ -60,6 +60,7 @@ public class CommandManager {
 	public PreparedCommand getCommand(String name) {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
+			System.out.println(name + " | " + params.name());
 			if (name.equalsIgnoreCase(params.name()) || Helper.equalsAny(name, params.aliases())) {
 				Requires req = cmd.getDeclaredAnnotation(Requires.class);
 				return new PreparedCommand(
