@@ -1041,21 +1041,7 @@
       <workItem from="1612131537085" duration="41000" />
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
-      <workItem from="1612285645204" duration="9260000" />
-    </task>
-    <task id="LOCAL-03617" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611978532943</created>
-      <option name="number" value="03617" />
-      <option name="presentableId" value="LOCAL-03617" />
-      <option name="project" value="LOCAL" />
-      <updated>1611978532943</updated>
-    </task>
-    <task id="LOCAL-03618" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611978598428</created>
-      <option name="number" value="03618" />
-      <option name="presentableId" value="LOCAL-03618" />
-      <option name="project" value="LOCAL" />
-      <updated>1611978598428</updated>
+      <workItem from="1612285645204" duration="9990000" />
     </task>
     <task id="LOCAL-03619" summary="Correções menores">
       <created>1612117806816</created>
@@ -1386,7 +1372,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612297792460</updated>
     </task>
-    <option name="localTasksCounter" value="3666" />
+    <task id="LOCAL-03666" summary="Implementações de sugestões">
+      <created>1612298583181</created>
+      <option name="number" value="03666" />
+      <option name="presentableId" value="LOCAL-03666" />
+      <option name="project" value="LOCAL" />
+      <updated>1612298583181</updated>
+    </task>
+    <task id="LOCAL-03667" summary="Implementações de sugestões">
+      <created>1612298820493</created>
+      <option name="number" value="03667" />
+      <option name="presentableId" value="LOCAL-03667" />
+      <option name="project" value="LOCAL" />
+      <updated>1612298820493</updated>
+    </task>
+    <option name="localTasksCounter" value="3668" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1518,10 +1518,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="509" y="365" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1612274140767" />
-    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612297791667">
+    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612298819586">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612297791667" />
+    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612298819586" />
     <state x="620" y="260" key="FileChooserDialogImpl" timestamp="1612274229542">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1542,18 +1542,18 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612274522813" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612297794438">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612298824686">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612297794438" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612298824686" />
     <state x="547" y="238" width="585" height="534" key="find.popup" timestamp="1612213069227">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="547" y="238" width="585" height="534" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612213069227" />
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1612274255711">
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1612298970144">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612274255711" />
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612298970144" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612274194450">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
