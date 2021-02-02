@@ -30,7 +30,6 @@ import net.dv8tion.jda.api.entities.*;
 @Command(
 		name = "disboard",
 		aliases = {"exmap", "mapa"},
-		usage = "cmd_disboard",
 		category = Category.EXCEED
 )
 public class DisboardCommand implements Executable {
