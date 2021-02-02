@@ -24,6 +24,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.model.persistent.Account;
@@ -33,28 +34,17 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@Command(
+		name = "emprestimo",
+		aliases = {"emp", "loan"},
+		usage = "req_id",
+		category = Category.MISC
+)
 public class LoanCommand implements Executable {
-
-	public LoanCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public LoanCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public LoanCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public LoanCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -85,44 +75,44 @@ public class LoanCommand implements Executable {
 			channel.sendMessage(eb.build()).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-            channel.sendMessage("❌ | O plano precisa ser um valor numérico de 1 à 5.").queue();
-            return;
-        }
+			channel.sendMessage("❌ | O plano precisa ser um valor numérico de 1 à 5.").queue();
+			return;
+		}
 
-        int loan = Integer.parseInt(args[0]);
+		int loan = Integer.parseInt(args[0]);
 
-        if (loan < 1 || loan > 5) {
-            channel.sendMessage("❌ | O plano precisa ser um valor numérico de 1 à 5.").queue();
-            return;
-        }
+		if (loan < 1 || loan > 5) {
+			channel.sendMessage("❌ | O plano precisa ser um valor numérico de 1 à 5.").queue();
+			return;
+		}
 
-        Account acc = AccountDAO.getAccount(author.getId());
+		Account acc = AccountDAO.getAccount(author.getId());
 
-        if (acc.getLoan() > 0) {
-            channel.sendMessage("❌ | Você ainda não terminou de pagar seu último empréstimo.").queue();
-            return;
-        }
+		if (acc.getLoan() > 0) {
+			channel.sendMessage("❌ | Você ainda não terminou de pagar seu último empréstimo.").queue();
+			return;
+		}
 
-        CreditLoan cl = CreditLoan.getById(loan);
+		CreditLoan cl = CreditLoan.getById(loan);
 
-        String hash = Helper.generateHash(guild, author);
-        ShiroInfo.getHashes().add(hash);
-        Main.getInfo().getConfirmationPending().put(author.getId(), true);
+		String hash = Helper.generateHash(guild, author);
+		ShiroInfo.getHashes().add(hash);
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Você está prestes a obter __**" + Helper.separate(cl.getLoan()) + " créditos**__ a um juros de __" + Helper.round(cl.getInterest(ex) * 100 - 100, 1) + "%__ (__**" + Helper.separate(Math.round(cl.getLoan() * cl.getInterest(ex))) + " de dívida**__), deseja confirmar?")
-                .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-                            if (!ShiroInfo.getHashes().remove(hash)) return;
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                            Account finalAcc = AccountDAO.getAccount(author.getId());
-                            cl.sign(finalAcc);
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+							if (!ShiroInfo.getHashes().remove(hash)) return;
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Account finalAcc = AccountDAO.getAccount(author.getId());
+							cl.sign(finalAcc);
 
-                            s.delete().flatMap(d -> channel.sendMessage("Obrigada por ser mais um cliente do Shiro Empréstimos LTDA! Você não receberá mais créditos até que termine de pagar sua dívida.")).queue();
-                        }), true, 1, TimeUnit.MINUTES,
-                        u -> u.getId().equals(author.getId()),
-                        ms -> {
-                            ShiroInfo.getHashes().remove(hash);
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                        })
-                );
-    }
+							s.delete().flatMap(d -> channel.sendMessage("Obrigada por ser mais um cliente do Shiro Empréstimos LTDA! Você não receberá mais créditos até que termine de pagar sua dívida.")).queue();
+						}), true, 1, TimeUnit.MINUTES,
+						u -> u.getId().equals(author.getId()),
+						ms -> {
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+						})
+				);
+	}
 
 }
