@@ -20,28 +20,17 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
+@Command(
+		name = "bin",
+		usage = "req_text",
+		category = Category.MISC
+)
 public class BinaryCommand implements Executable {
-
-	public BinaryCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public BinaryCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public BinaryCommand(@NonNls String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public BinaryCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -59,7 +48,7 @@ public class BinaryCommand implements Executable {
 			}
 			channel.sendMessage(":1234: `" + binary.toString() + "`").queue();
 		} catch (IllegalStateException | IllegalArgumentException e) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_message-too-long")).queue();
-        }
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_message-too-long")).queue();
+		}
 	}
 }

@@ -22,47 +22,36 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.PendingBindingDAO;
+import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.PendingBinding;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.codec.binary.Hex;
-import org.jetbrains.annotations.NonNls;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@Command(
+        name = "vincular",
+        aliases = {"bind"},
+        category = Category.MISC
+)
 public class BindCommand implements Executable {
 
-	public BindCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
+    @Override
+    public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+        Account acc = AccountDAO.getAccount(author.getId());
 
-	public BindCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
+        if (!acc.getTwitchId().isBlank()) {
+            channel.sendMessage("❌ | Você já vinculou esta conta a um perfil da Twitch.").queue();
+            return;
+        }
 
-	public BindCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public BindCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
-
-	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
-
-		if (!acc.getTwitchId().isBlank()) {
-			channel.sendMessage("❌ | Você já vinculou esta conta a um perfil da Twitch.").queue();
-			return;
-		}
-
-		try {
-			String code = Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(author.getId().getBytes(StandardCharsets.UTF_8)));
-			PendingBinding pb = PendingBindingDAO.getPendingBinding(code);
+        try {
+            String code = Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(author.getId().getBytes(StandardCharsets.UTF_8)));
+            PendingBinding pb = PendingBindingDAO.getPendingBinding(code);
 
             if (pb != null) {
                 channel.sendMessage("Código e instruções reenviados nas mensagens privadas.").queue();
