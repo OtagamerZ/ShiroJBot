@@ -52,12 +52,12 @@ public class UnlockChannelCommand implements Executable {
 			List<PermissionOverrideAction> acts = new ArrayList<>();
 
 			acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).clear(Permission.MESSAGE_WRITE));
-			acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).reset());
 			for (PermissionOverride override : overrides) {
 				IPermissionHolder holder = override.getPermissionHolder();
 				if (holder != null)
 					acts.add(channel.upsertPermissionOverride(holder).clear(Permission.MESSAGE_WRITE));
 			}
+			acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).reset());
 
 			RestAction.accumulate(acts, Collectors.toList())
 					.flatMap(s -> channel.sendMessage(":unlock: | Canal destrancado com sucesso!"))
