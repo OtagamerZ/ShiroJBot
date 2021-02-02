@@ -36,6 +36,7 @@ import java.util.Arrays;
 		usage = "req_type-id-reason",
 		category = Category.SUPPORT
 )
+
 public class BlockCommand implements Executable {
 
 	@Override

@@ -21,6 +21,8 @@ package com.kuuhaku.command.commands.discord.reactions;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -28,6 +30,7 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"nani", "blush", "pft"},
 		category = Category.FUN
 )
+@Requires({Permission.MESSAGE_EMBED_LINKS})
 public class BlushReaction extends Action implements Executable {
 
 	@Override

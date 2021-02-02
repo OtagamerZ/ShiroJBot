@@ -23,6 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.MutedMember;
@@ -45,6 +46,7 @@ import java.util.stream.Collectors;
 		usage = "req_member-time-reason",
 		category = Category.MODERATION
 )
+@Requires({Permission.MANAGE_ROLES, Permission.MESSAGE_MANAGE})
 public class MuteMemberCommand implements Executable {
 
 	@Override

@@ -23,9 +23,11 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -33,6 +35,12 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"nqnmode", "nqn", "autoemotes"},
 		category = Category.MODERATION
 )
+@Requires({
+		Permission.MANAGE_EMOTES,
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_EXT_EMOJI,
+		Permission.MANAGE_WEBHOOKS
+})
 public class NQNModeCommand implements Executable {
 
 	@Override
