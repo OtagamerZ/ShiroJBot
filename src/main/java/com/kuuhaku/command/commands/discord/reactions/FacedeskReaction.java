@@ -18,28 +18,28 @@
 
 package com.kuuhaku.command.commands.discord.reactions;
 
+import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
-public class FacedeskReaction extends Reaction {
+@Command(
+		name = "facedesk",
+		aliases = {"mds", "ahnao", "nss"},
+		category = Category.FUN
+)
+@Requires({Permission.MESSAGE_EMBED_LINKS})
+public class FacedeskReaction extends Action implements Executable {
 
-    public FacedeskReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
-        super(name, aliases, description, answerable, type);
-    }
-
-    @Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		this.setReaction(new String[]{
-				"Nuss.",
-				"Bah.",
-				"Meeeeee."
-		});
-
-		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " não ta acreditando nisso! - " + this.getReaction(), false);
+	@Override
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		sendReaction("facedesk", channel, null, author.getAsMention() + " não ta acreditando nisso!", false);
 	}
 
-    @Override
-    public void answer(TextChannel chn) {
+	@Override
+	public void answer(TextChannel chn) {
 
-    }
+	}
 }

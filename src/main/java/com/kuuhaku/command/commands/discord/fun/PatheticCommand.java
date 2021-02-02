@@ -19,12 +19,14 @@
 package com.kuuhaku.command.commands.discord.fun;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -32,26 +34,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-public class PatheticCommand extends Command {
+@Command(
+		name = "patetico",
+		aliases = {"pathetic"},
+		usage = "req_text",
+		category = Category.FUN
+)
+@Requires({Permission.MESSAGE_ATTACH_FILES})
+public class PatheticCommand implements Executable {
 
-    public PatheticCommand(String name, String description, Category category, boolean requiresMM) {
-        super(name, description, category, requiresMM);
-    }
-
-    public PatheticCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-        super(name, aliases, description, category, requiresMM);
-    }
-
-    public PatheticCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-        super(name, usage, description, category, requiresMM);
-    }
-
-    public PatheticCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-        super(name, aliases, usage, description, category, requiresMM);
-    }
-
-    @Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	@Override
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_meme-no-message")).queue();
 			return;
@@ -63,10 +56,10 @@ public class PatheticCommand extends Command {
 
 			ByteArrayOutputStream baos = Helper.renderMeme(text, bi);
 
-            channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "pathetic.jpg").queue();
-            baos.close();
-        } catch (IOException e) {
-            Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-        }
-    }
+			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "pathetic.jpg").queue();
+			baos.close();
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		}
+	}
 }

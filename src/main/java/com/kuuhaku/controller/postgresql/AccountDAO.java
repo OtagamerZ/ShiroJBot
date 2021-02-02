@@ -18,9 +18,7 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.Account;
-import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -64,9 +62,8 @@ public class AccountDAO {
 		try {
 			return (Account) q.getSingleResult();
 		} catch (NoResultException e) {
-			User u = Main.getInfo().getUserByID(id);
 			Account acc = new Account();
-			acc.setUserId(u.getId());
+			acc.setUserId(id);
 			saveAccount(acc);
 			return acc;
 		} finally {

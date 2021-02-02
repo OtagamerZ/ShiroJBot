@@ -21,51 +21,44 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class SellCardCommand extends Command {
-
-    public SellCardCommand(String name, String description, Category category, boolean requiresMM) {
-        super(name, description, category, requiresMM);
-    }
-
-    public SellCardCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-        super(name, aliases, description, category, requiresMM);
-    }
-
-    public SellCardCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-        super(name, usage, description, category, requiresMM);
-    }
-
-    public SellCardCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-        super(name, aliases, usage, description, category, requiresMM);
-    }
+@Command(
+        name = "anunciar",
+        aliases = {"sell"},
+        usage = "req_card-type-price",
+        category = Category.MISC
+)
+@Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
+public class SellCardCommand implements Executable {
 
     @Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+    public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+        Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		} else if (args.length < 3) {
-			channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
-			return;
-		} else if (!StringUtils.isNumeric(args[2])) {
-			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
+        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        } else if (args.length < 3) {
+            channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
+            return;
+        } else if (!StringUtils.isNumeric(args[2])) {
+            channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
             return;
         }
 
@@ -93,7 +86,7 @@ public class SellCardCommand extends Command {
                         if (hasLoan)
                             channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
                         else
-							channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
+                            channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
                         return;
                     }
 
@@ -121,7 +114,7 @@ public class SellCardCommand extends Command {
                                     })
                             );
                 } catch (NumberFormatException e) {
-					channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
+                    channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
                 }
             }
             case "E" -> {
@@ -141,9 +134,9 @@ public class SellCardCommand extends Command {
 
                     if (price < min) {
                         if (hasLoan)
-							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
+                            channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
                         else
-							channel.sendMessage("❌ | Você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
+                            channel.sendMessage("❌ | Você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
                         return;
                     }
 
@@ -171,7 +164,7 @@ public class SellCardCommand extends Command {
                                     })
                             );
                 } catch (NumberFormatException e) {
-					channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
+                    channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
                 }
             }
             case "F" -> {
@@ -191,9 +184,9 @@ public class SellCardCommand extends Command {
 
                     if (price < min) {
                         if (hasLoan)
-							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
+                            channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
                         else
-							channel.sendMessage("❌ | Você não pode vender essa arena por menos que " + Helper.separate(min) + " créditos.").queue();
+                            channel.sendMessage("❌ | Você não pode vender essa arena por menos que " + Helper.separate(min) + " créditos.").queue();
                         return;
                     }
 
@@ -221,7 +214,7 @@ public class SellCardCommand extends Command {
                                     })
                             );
                 } catch (NumberFormatException e) {
-					channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
+                    channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
                 }
             }
             default -> channel.sendMessage("❌ | Tipo inválido, o tipo deve ser um dos seguntes valores: `N` = normal, `C` = cromada, `E` = evogear e `F` = campo.").queue();

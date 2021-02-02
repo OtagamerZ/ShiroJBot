@@ -19,32 +19,20 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.model.annotations.Command;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
-import java.util.Arrays;
-
-public class TranslateCommand extends Command {
-
-	public TranslateCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public TranslateCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public TranslateCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public TranslateCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
+@Command(
+		name = "traduzir",
+		aliases = {"translate"},
+		usage = "req_from-to-text",
+		category = Category.MISC
+)
+public class TranslateCommand implements Executable {
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa especificar de qual idioma e para qual idioma devo traduzir o texto (`de>para`).").queue();
 			return;
@@ -53,7 +41,6 @@ public class TranslateCommand extends Command {
 			return;
 		}
 
-		String text = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 		String[] fromTo = args[0].split(">");
 
 		if (fromTo.length < 2) {
