@@ -206,6 +206,7 @@ public class BuyCardCommand implements Executable {
 					.collect(Collectors.toList())
 			);
 
+			System.out.println(onlyEquip.get());
 			cards.removeIf(p ->
 					(onlyKawaipon.get() && p.getRight() != CardType.KAWAIPON)
 					|| (onlyEquip.get() > -1 && p.getRight() != CardType.EVOGEAR)
