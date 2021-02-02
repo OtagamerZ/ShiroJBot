@@ -213,7 +213,7 @@ public class BuyCardCommand implements Executable {
 			);
 
 			if (onlyEquip.get() > -1)
-				cards.removeIf(p -> ((Equipment) p).getTier() != onlyEquip.get());
+				cards.removeIf(p -> ((Equipment) p.getLeft()).getTier() != onlyEquip.get());
 
 			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();
