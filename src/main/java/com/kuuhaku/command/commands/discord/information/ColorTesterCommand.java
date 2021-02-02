@@ -21,10 +21,12 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.imageio.ImageIO;
@@ -40,6 +42,7 @@ import java.text.MessageFormat;
 		usage = "req_color",
 		category = Category.INFO
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS})
 public class ColorTesterCommand implements Executable {
 
 	@Override

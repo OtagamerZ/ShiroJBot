@@ -21,7 +21,9 @@ package com.kuuhaku.command.commands.discord.dev;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -36,6 +38,7 @@ import java.nio.charset.StandardCharsets;
 		name = "log",
 		category = Category.DEV
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES})
 public class LogCommand implements Executable {
 
 	@Override

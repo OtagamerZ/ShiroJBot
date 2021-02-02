@@ -30,12 +30,14 @@ import com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Stance;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.VanityType;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -59,6 +61,7 @@ import static com.kuuhaku.handlers.games.kawaigotchi.enums.Status.*;
 		usage = "req_action",
 		category = Category.BETA
 )
+@Requires({Permission.MESSAGE_EMBED_LINKS})
 public class KGotchiCommand implements Executable {
 
 	@Override

@@ -24,6 +24,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.I18n;
@@ -33,6 +34,7 @@ import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.image.BufferedImage;
@@ -43,6 +45,7 @@ import java.io.IOException;
 		usage = "req_daily-deck-p-c",
 		category = Category.INFO
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS})
 public class ShoukanDeckCommand implements Executable {
 
 	@Override

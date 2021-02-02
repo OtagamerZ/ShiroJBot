@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.ExceedEnum;
@@ -29,6 +30,7 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.ExceedScore;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
@@ -48,6 +50,7 @@ import java.util.stream.Collectors;
 		usage = "req_actual",
 		category = Category.EXCEED
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES})
 public class ExceedRankCommand implements Executable {
 
 	@Override

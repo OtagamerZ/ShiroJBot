@@ -23,10 +23,12 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.utils.BannedVars;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.concurrent.ExecutionException;
@@ -40,6 +42,7 @@ import java.util.concurrent.TimeoutException;
 		usage = "req_code",
 		category = Category.DEV
 )
+@Requires({Permission.MESSAGE_EXT_EMOJI})
 public class CompileCommand implements Executable {
 
 	@Override

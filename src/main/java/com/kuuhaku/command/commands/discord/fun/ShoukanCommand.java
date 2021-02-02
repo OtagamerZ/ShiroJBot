@@ -31,6 +31,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.RankedQueue;
@@ -40,6 +41,7 @@ import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -55,6 +57,10 @@ import java.util.stream.Stream;
 		usage = "req_shoukan-args",
 		category = Category.FUN
 )
+@Requires({
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_ADD_REACTION
+})
 public class ShoukanCommand implements Executable {
 
 	@Override

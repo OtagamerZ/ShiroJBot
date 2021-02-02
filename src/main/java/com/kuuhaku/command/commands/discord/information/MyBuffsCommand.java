@@ -26,12 +26,14 @@ import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.GuildBuff;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ServerBuff;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.time.Instant;
@@ -44,6 +46,7 @@ import java.util.stream.Collectors;
 		aliases = {"meusbuffs", "modifiers", "modifs"},
 		category = Category.INFO
 )
+@Requires({Permission.MESSAGE_EMBED_LINKS})
 public class MyBuffsCommand implements Executable {
 
 	@Override

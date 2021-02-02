@@ -29,15 +29,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CommandManager {
-	/*
-	put(DisboardCommand.class, new Arguments(
-			"disboard", new String[]{"exmap", "mapa"}, "cmd_disboard", EXCEED, false
-	));
-	*/
+	private final Reflections refl = new Reflections(this.getClass().getPackageName());
+	private final Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
 
 	public Set<PreparedCommand> getCommands() {
-		Reflections refl = new Reflections(this.getClass().getPackageName());
-		Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
 		Set<PreparedCommand> commands = new HashSet<>();
 
 		for (Class<?> cmd : cmds) {
@@ -49,8 +44,6 @@ public class CommandManager {
 	}
 
 	public Set<PreparedCommand> getCommands(Category category) {
-		Reflections refl = new Reflections(this.getClass().getPackageName());
-		Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
 		Set<PreparedCommand> commands = new HashSet<>();
 
 		for (Class<?> cmd : cmds) {
@@ -64,9 +57,6 @@ public class CommandManager {
 	}
 
 	public PreparedCommand getCommand(String name) {
-		Reflections refl = new Reflections(this.getClass().getPackageName());
-		Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
-
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			if (name.equalsIgnoreCase(params.name()) || Helper.equalsAny(name, params.aliases())) {
