@@ -21,7 +21,10 @@ package com.kuuhaku;
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
+import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.Paginator;
+import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.Relay;
 import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
@@ -169,7 +172,17 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			ShiroInfo.getEmoteCache().put(":" + emote.getName() + ":", emote.getId());
 		}
 
-		Pages.activate(shiroShards);
+		try {
+			Paginator p = PaginatorBuilder.createPaginator()
+					.setHandler(shiroShards)
+					.shouldRemoveOnReact(true)
+					.build();
+
+			Pages.activate(p);
+		} catch (InvalidHandlerException e) {
+			Helper.logger(Main.class).error(e + " | " + e.getStackTrace()[0]);
+		}
+
 		console.start();
 
 		for (GuildConfig guildConfig : GuildDAO.getAllGuildsWithButtons()) {
