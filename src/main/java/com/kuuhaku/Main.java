@@ -165,8 +165,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		}
 
 		ConsoleListener console = new ConsoleListener();
-		shiroShards.addEventListener(info.getShiroEvents());
-		jbr.addEventListener(new JibrilEvents());
 
 		for (Emote emote : shiroShards.getEmotes()) {
 			ShiroInfo.getEmoteCache().put(":" + emote.getName() + ":", emote.getId());
@@ -192,6 +190,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		System.gc();
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
 		Helper.logger(Main.class).info("Estou pronta!");
+
+		shiroShards.addEventListener(info.getShiroEvents());
+		jbr.addEventListener(new JibrilEvents());
 	}
 
 	public static Activity getRandomActivity() {
