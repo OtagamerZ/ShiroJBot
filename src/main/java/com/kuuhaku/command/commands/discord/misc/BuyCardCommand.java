@@ -208,12 +208,12 @@ public class BuyCardCommand implements Executable {
 
 			cards.removeIf(p ->
 					(onlyKawaipon.get() && p.getRight() != CardType.KAWAIPON)
-					|| (
-							(onlyEquip.get() > -1 && p.getRight() != CardType.EVOGEAR)
-							|| (onlyEquip.get() > 0 && (p.getRight() == CardType.EVOGEAR && ((Equipment) p.getLeft()).getTier() != onlyEquip.get()))
-					)
+					|| (onlyEquip.get() > -1 && p.getRight() != CardType.EVOGEAR)
 					|| (onlyField.get() && p.getRight() != CardType.FIELD)
 			);
+
+			if (onlyEquip.get() > -1)
+				cards.removeIf(p -> ((Equipment) p).getTier() != onlyEquip.get());
 
 			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();

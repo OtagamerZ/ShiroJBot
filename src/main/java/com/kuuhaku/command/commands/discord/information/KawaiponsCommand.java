@@ -135,7 +135,7 @@ public class KawaiponsCommand implements Executable {
                                 List<Drawable> cardList = CardDAO.getFusions().stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                                 KawaiponBook kb = new KawaiponBook();
-                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Fusões Senshi", false);
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Fusões Senshi", true);
 
                                 send(author, channel, m, cards, "Fusões Senshi", null);
                                 return;
