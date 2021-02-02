@@ -55,12 +55,14 @@ public class LockChannelCommand implements Executable {
 			if (holder != null)
 				acts.add(channel.upsertPermissionOverride(holder).deny(Permission.MESSAGE_WRITE));
 		}
-		acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).grant(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS));
+		if (guild.getBotRole() != null)
+			acts.add(channel.upsertPermissionOverride(guild.getBotRole()).grant(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS));
 
 		RestAction.allOf(acts)
 				.flatMap(s -> channel.sendMessage(":lock: | Canal trancado com sucesso!"))
 				.queue(null, f -> {
-					channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
+					if (channel.canTalk())
+						channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
 				});
 	}
 }
