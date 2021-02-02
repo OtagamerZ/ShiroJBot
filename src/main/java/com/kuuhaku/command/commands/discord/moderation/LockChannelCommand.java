@@ -25,7 +25,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 
@@ -51,23 +50,21 @@ public class LockChannelCommand implements Executable {
 			return;
 		}
 
-		try {
-			List<PermissionOverride> overrides = channel.getPermissionOverrides();
-			List<PermissionOverrideAction> acts = new ArrayList<>();
+		List<PermissionOverride> overrides = channel.getPermissionOverrides();
+		List<PermissionOverrideAction> acts = new ArrayList<>();
 
-			acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).grant(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS));
-			acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).deny(Permission.MESSAGE_WRITE));
-			for (PermissionOverride override : overrides) {
-				IPermissionHolder holder = override.getPermissionHolder();
-				if (holder != null)
-					acts.add(channel.upsertPermissionOverride(holder).deny(Permission.MESSAGE_WRITE));
-			}
-
-			RestAction.accumulate(acts, Collectors.toList()).complete();
-
-			channel.sendMessage(":lock: | Canal trancado com sucesso!").queue();
-		} catch (InsufficientPermissionException e) {
-			channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
+		acts.add(channel.upsertPermissionOverride(guild.getSelfMember()).grant(Permission.MESSAGE_WRITE, Permission.MANAGE_PERMISSIONS));
+		acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).deny(Permission.MESSAGE_WRITE));
+		for (PermissionOverride override : overrides) {
+			IPermissionHolder holder = override.getPermissionHolder();
+			if (holder != null)
+				acts.add(channel.upsertPermissionOverride(holder).deny(Permission.MESSAGE_WRITE));
 		}
+
+		RestAction.accumulate(acts, Collectors.toList())
+				.flatMap(s -> channel.sendMessage(":lock: | Canal trancado com sucesso!"))
+				.queue(null, f -> {
+					channel.sendMessage("❌ | Não possuo a permissão para alterar permissões de canais.").queue();
+				});
 	}
 }
