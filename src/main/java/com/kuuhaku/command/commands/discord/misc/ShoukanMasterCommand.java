@@ -50,7 +50,7 @@ public class ShoukanMasterCommand implements Executable {
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 
 		if (mmr.getMaster().equals("none")) {
-			channel.sendMessage("❌ | Você não pode mais escolher um tutor por já ter terminado sua MD10.").queue();
+			channel.sendMessage("❌ | Você não pode mais escolher um tutor por já ter terminado sua MD-10.").queue();
 			return;
 		} else if (!mmr.getMaster().isBlank()) {
 			channel.sendMessage("❌ | Você já possui um tutor.").queue();
@@ -81,7 +81,7 @@ public class ShoukanMasterCommand implements Executable {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes a definir " + target.getName() + " como seu tutor, ao alcançar o ranking de Aprendiz no Shoukan você receberá **5 sínteses gratúitas**. Deseja confirmar?")
+		channel.sendMessage("Você está prestes a definir " + target.getName() + " como seu tutor, ao alcançar o ranking de Aprendiz no Shoukan você receberá **5 sínteses gratuitas**. Deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(author.getId())) {
 								if (!ShiroInfo.getHashes().remove(hash)) return;
@@ -104,7 +104,7 @@ public class ShoukanMasterCommand implements Executable {
 		String hash = Helper.generateHash(guild, target);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(target.getId(), true);
-		channel.sendMessage(target.getAsMention() + ", " + author.getName() + " deseja tornar-se seu discípulo de Shoukan, você receberá **25.000 créditos** caso ele(a) alcance o ranking de Aprendiz. Deseja aceitar?")
+		channel.sendMessage(target.getAsMention() + ", " + author.getName() + " deseja tornar-se seu discípulo de Shoukan, você receberá **50.000 créditos** caso ele(a) alcance o ranking de Aprendiz. Deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(target.getId())) {
 								if (!ShiroInfo.getHashes().remove(hash)) return;
