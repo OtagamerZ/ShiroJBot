@@ -25,7 +25,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -213,7 +212,7 @@ public class BuyCardCommand implements Executable {
 			);
 
 			if (onlyEquip.get() > -1)
-				cards.removeIf(p -> ((Equipment) p.getLeft()).getTier() != onlyEquip.get());
+				cards.removeIf(p -> ((EquipmentMarket) p.getLeft()).getCard().getTier() != onlyEquip.get());
 
 			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();

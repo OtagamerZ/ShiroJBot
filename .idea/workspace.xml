@@ -1037,21 +1037,7 @@
       <workItem from="1612131537085" duration="41000" />
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
-      <workItem from="1612285645204" duration="4165000" />
-    </task>
-    <task id="LOCAL-03599" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611948647445</created>
-      <option name="number" value="03599" />
-      <option name="presentableId" value="LOCAL-03599" />
-      <option name="project" value="LOCAL" />
-      <updated>1611948647446</updated>
-    </task>
-    <task id="LOCAL-03600" summary="Adição de filas ranqueadas (Solo/Duo)">
-      <created>1611948923424</created>
-      <option name="number" value="03600" />
-      <option name="presentableId" value="LOCAL-03600" />
-      <option name="project" value="LOCAL" />
-      <updated>1611948923424</updated>
+      <workItem from="1612285645204" duration="4479000" />
     </task>
     <task id="LOCAL-03601" summary="Adição de filas ranqueadas (Solo/Duo)">
       <created>1611949659837</created>
@@ -1382,7 +1368,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612293112455</updated>
     </task>
-    <option name="localTasksCounter" value="3648" />
+    <task id="LOCAL-03648" summary="Implementações de sugestões">
+      <created>1612293519935</created>
+      <option name="number" value="03648" />
+      <option name="presentableId" value="LOCAL-03648" />
+      <option name="project" value="LOCAL" />
+      <updated>1612293519936</updated>
+    </task>
+    <task id="LOCAL-03649" summary="Implementações de sugestões">
+      <created>1612293608107</created>
+      <option name="number" value="03649" />
+      <option name="presentableId" value="LOCAL-03649" />
+      <option name="project" value="LOCAL" />
+      <updated>1612293608107</updated>
+    </task>
+    <option name="localTasksCounter" value="3650" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1510,10 +1510,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="509" y="365" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1612274140767" />
-    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612293111540">
+    <state x="403" y="92" key="CommitChangelistDialog2" timestamp="1612293607275">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612293111540" />
+    <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612293607275" />
     <state x="620" y="260" key="FileChooserDialogImpl" timestamp="1612274229542">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1534,10 +1534,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612274522813" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612293115408">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612293610304">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612293115408" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612293610304" />
     <state x="547" y="238" width="585" height="534" key="find.popup" timestamp="1612213069227">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
