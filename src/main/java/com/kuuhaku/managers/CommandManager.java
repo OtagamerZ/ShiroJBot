@@ -29,7 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CommandManager {
-	private final Reflections refl = new Reflections(this.getClass().getPackageName());
+	private final Reflections refl = new Reflections("com.kuuhaku.command.commands");
 	private final Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
 
 	public Set<PreparedCommand> getCommands() {
@@ -59,7 +59,6 @@ public class CommandManager {
 	public PreparedCommand getCommand(String name) {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			System.out.println(params.name());
 			if (name.equalsIgnoreCase(params.name()) || Helper.equalsAny(name, params.aliases())) {
 				Requires req = cmd.getDeclaredAnnotation(Requires.class);
 				return new PreparedCommand(
