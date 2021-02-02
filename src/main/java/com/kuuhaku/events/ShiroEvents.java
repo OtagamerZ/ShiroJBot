@@ -462,7 +462,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			Account acc = AccountDAO.getAccount(author.getId());
 			if (!acc.hasCompletedQuests()) {
-				DailyQuest tasks = DailyQuest.getQuest(author.getId());
+				DailyQuest tasks = DailyQuest.getQuest(author.getIdLong());
 				Map<DailyTask, Integer> pg = acc.getDailyProgress();
 
 				if (tasks.checkTasks(pg)) {
@@ -841,8 +841,24 @@ public class ShiroEvents extends ListenerAdapter {
 					event.getChannel().sendMessage("Você não receberá mais notificações de Exceed.").queue();
 					return;
 				}
-				event.getAuthor().openPrivateChannel().queue(c -> {
-					if (RelayDAO.blockedList().contains(event.getAuthor().getId())) {
+				event.getAuthor().openPrivateChannel()
+						.flatMap(c -> {
+							c.sendMessage("O canal de suporte está temporariamente desabilitado, por favor tente mais tarde.").queue(null, Helper::doNothing);
+							return c.getHistory().retrievePast(100);
+						})
+						.queue(h -> {
+							boolean wasInvited = false;
+							for (Message msg : h) {
+								if (msg.getContentRaw().contains("Come here")) {
+									if (!wasInvited) {
+										wasInvited = true;
+										msg.getChannel().sendMessage("Pedimos nossas sinceras desculpas pelo ocorrido, houve uma invasão na Shiro (que já foi resolvida) causando o SPAM e convites. Não temos nenhuma relação nem incentivamos anúncios em massa. Por favor perdoe-nos.")
+												.flatMap(m -> msg.delete())
+												.queue(null, Helper::doNothing);
+									}
+								}
+							}
+					/*if (RelayDAO.blockedList().contains(event.getAuthor().getId())) {
 						c.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-blocked")).queue();
 					} else
 						c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
@@ -859,8 +875,8 @@ public class ShiroEvents extends ListenerAdapter {
 												.queue();
 									}
 									s.delete().queueAfter(1, TimeUnit.MINUTES);
-								});
-				});
+								});*/
+						});
 			} catch (Exception ignored) {
 			}
 		}
