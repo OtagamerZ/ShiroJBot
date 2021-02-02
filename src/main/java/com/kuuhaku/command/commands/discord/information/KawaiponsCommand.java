@@ -119,7 +119,7 @@ public class KawaiponsCommand implements Executable {
                                 List<Drawable> cardList = CardDAO.getAllChampions(false).stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                                 KawaiponBook kb = new KawaiponBook();
-                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis", true);
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis", false);
 
                                 send(author, channel, m, cards, "Cartas elegíveis", null);
                                 return;
@@ -130,6 +130,14 @@ public class KawaiponsCommand implements Executable {
                                 BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Equipamentos EvoGear", false);
 
                                 send(author, channel, m, cards, "Equipamentos EvoGear", null);
+                                return;
+                            } else if (Helper.equalsAny(args[0], "fusao", "fusion", "fusions", "fusoes", "evolucao", "evolution", "evolucoes", "evolutions")) {
+                                List<Drawable> cardList = CardDAO.getFusions().stream().map(d -> (Drawable) d).collect(Collectors.toList());
+
+                                KawaiponBook kb = new KawaiponBook();
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Fusões Senshi", false);
+
+                                send(author, channel, m, cards, "Fusões Senshi", null);
                                 return;
                             } else if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
                                 m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(AnimeName.validValues()).map(AnimeName::name).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
