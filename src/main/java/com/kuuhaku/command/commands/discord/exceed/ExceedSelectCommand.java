@@ -34,7 +34,6 @@ import net.dv8tion.jda.api.entities.*;
 @Command(
 		name = "exceedselect",
 		aliases = {"exselect", "souex"},
-		usage = "cmd_exceed",
 		category = Category.EXCEED
 )
 public class ExceedSelectCommand implements Executable {
