@@ -81,7 +81,7 @@ public class PreparedCommand implements Executable {
 
 		Member self = gc.getGuild().getSelfMember();
 		for (Permission permission : required) {
-			if (!self.hasPermission(gc, permission))
+			if (!self.getPermissions().contains(permission))
 				missing.add(permission);
 		}
 
