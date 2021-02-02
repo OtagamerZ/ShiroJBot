@@ -153,7 +153,7 @@ public class MatchMakingRating {
 							.flatMap(c -> c.sendMessage("Seu discípulo " + u.getAsTag() + " alcançou o ranking de " + tier.getName() + ", você recebeu **50.000 créditos**!"))
 							.queue(null, Helper::doNothing);
 
-					acc.addCredit(50000, this.getClass());
+					acc.addCredit(30000, this.getClass());
 					AccountDAO.saveAccount(acc);
 
 					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + userId);
