@@ -104,7 +104,7 @@ public class ShoukanMasterCommand implements Executable {
 		String hash = Helper.generateHash(guild, target);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(target.getId(), true);
-		channel.sendMessage(target.getAsMention() + ", " + author.getName() + " deseja tornar-se seu discípulo de Shoukan, você receberá **50.000 créditos** caso ele(a) alcance o ranking de Aprendiz. Deseja aceitar?")
+		channel.sendMessage(target.getAsMention() + ", " + author.getName() + " deseja tornar-se seu discípulo de Shoukan, você receberá **30.000 créditos** caso ele(a) alcance o ranking de Aprendiz. Deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(target.getId())) {
 								if (!ShiroInfo.getHashes().remove(hash)) return;
