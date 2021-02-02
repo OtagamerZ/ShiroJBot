@@ -21,50 +21,42 @@ package com.kuuhaku.command.commands.discord.dev;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.Sweeper;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class SweepCommand extends Command {
-
-    public SweepCommand(String name, String description, Category category, boolean requiresMM) {
-        super(name, description, category, requiresMM);
-    }
-
-    public SweepCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
-        super(name, aliases, description, category, requiresMM);
-    }
-
-    public SweepCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-        super(name, usage, description, category, requiresMM);
-    }
-
-    public SweepCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-        super(name, aliases, usage, description, category, requiresMM);
-    }
+@Command(
+		name = "limpar",
+		aliases = {"sweep", "clear"},
+		category = Category.DEV
+)
+@Requires({Permission.MESSAGE_EXT_EMOJI})
+public class SweepCommand implements Executable {
 
     @Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		}
+    public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        }
 
-		channel.sendMessage("<a:loading:697879726630502401> | Comparando índices...").queue(s -> {
-			Set<GuildConfig> gds = new HashSet<>(GuildDAO.getAllGuilds());
-			Set<com.kuuhaku.model.persistent.Member> mbs = new HashSet<>(MemberDAO.getAllMembers());
+        channel.sendMessage("<a:loading:697879726630502401> | Comparando índices...").queue(s -> {
+            Set<GuildConfig> gds = new HashSet<>(GuildDAO.getAllGuilds());
+            Set<com.kuuhaku.model.persistent.Member> mbs = new HashSet<>(MemberDAO.getAllMembers());
 
-			Set<String> guildTrashBin = new HashSet<>();
+            Set<String> guildTrashBin = new HashSet<>();
             Set<String> memberTrashBin = new HashSet<>();
 
             s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + gds.size() + " guilds)").queue();

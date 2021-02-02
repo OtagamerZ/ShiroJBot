@@ -23,9 +23,11 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
+import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.managers.Argument;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
@@ -34,7 +36,6 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
 import java.text.MessageFormat;
@@ -44,38 +45,39 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class HelpCommand extends Command {
-
+@Command(
+		name = "ajuda",
+		aliases = {"help", "commands", "cmds", "cmd", "comando"},
+		usage = "req_command",
+		category = Category.INFO
+)
+@Requires({
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_ADD_REACTION
+})
+public class HelpCommand implements Executable {
 	private static final String STR_COMMAND_LIST_TITLE = "str_command-list-title";
 	private static final String STR_COMMAND_LIST_DESCRIPTION = "str_command-list-description";
 
-	public HelpCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public HelpCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public HelpCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public HelpCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
-
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		Map<String, Page> pages = new LinkedHashMap<>();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && args.length == 0) {
+		if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, channel) && args.length == 0) {
 			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_TITLE));
-			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().values().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
+			eb.setDescription(
+					MessageFormat.format(
+							ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION),
+							prefix,
+							Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(),
+							Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()
+					)
+			);
 			for (Category cat : Category.values()) {
 				if (cat.isEnabled(gc, guild, author))
 					eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
@@ -95,22 +97,21 @@ public class HelpCommand extends Command {
 				ceb.setFooter(Main.getInfo().getFullName(), null);
 				ceb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(cat.getEmoteId())).getImageUrl());
 
-				ceb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_prefix"), prefix, cat.getCmds().size()));
+				ceb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_prefix"), prefix, cat.getCommands().size()));
 
 				if (!cat.isEnabled(gc, guild, author))
 					continue;
-				if (cat.getCmds().size() == 0) {
+				if (cat.getCommands().size() == 0) {
 					ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_empty-category"), cat.getDescription()), false);
 					continue;
 				}
 
-				StringBuilder cmds = new StringBuilder();
+				StringBuilder sb = new StringBuilder();
 
-				for (Argument cmd : cat.getCmds()) {
-					cmds.append("`").append(cmd.getName()).append("`  ");
-				}
+				for (PreparedCommand cmd : cat.getCommands())
+					sb.append("`%s`  ".formatted(cmd.getName()));
 
-				ceb.addField(Helper.VOID, cat.getDescription() + "\n" + cmds.toString().trim(), false);
+				ceb.addField(Helper.VOID, cat.getDescription() + "\n" + sb.toString().trim(), false);
 				ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-single-help-tip"), prefix), false);
 				pages.put(cat.getEmoteId(), new Page(PageType.EMBED, ceb.build()));
 			}
@@ -134,15 +135,22 @@ public class HelpCommand extends Command {
 			return;
 		} else if (args.length == 0) {
 			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_TITLE));
-			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().values().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
+			eb.setDescription(
+					MessageFormat.format(
+							ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION),
+							prefix,
+							Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(),
+							Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()
+					)
+			);
 			eb.appendDescription(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-alert"));
 			StringBuilder sb = new StringBuilder();
 			for (Category cat : Category.values()) {
 				if (cat.isEnabled(gc, guild, author)) {
 					sb.setLength(0);
-					for (Argument c : cat.getCmds()) {
-						sb.append("`").append(c.getName()).append("`  ");
-					}
+					for (PreparedCommand c : cat.getCommands())
+						sb.append("`%s`  ".formatted(c.getName()));
+
 					eb.addField(cat.getEmote() + " | " + cat.getName(), sb.toString(), true);
 				}
 			}
@@ -160,9 +168,9 @@ public class HelpCommand extends Command {
 
 		String cmdName = args[0];
 
-		Argument cmd = null;
+		PreparedCommand cmd = null;
 
-		for (Argument cmmd : Main.getCommandManager().getCommands().values()) {
+		for (PreparedCommand cmmd : Main.getCommandManager().getCommands()) {
 			boolean found = false;
 
 			if (cmmd.getName().equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(gc, guild, author))

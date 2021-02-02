@@ -20,23 +20,24 @@ package com.kuuhaku.command.commands.discord.fun;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
+import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
+import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import org.apache.commons.lang3.ArrayUtils;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
@@ -50,26 +51,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class GuessTheCardsCommand extends Command {
+@Command(
+		name = "adivinheascartas",
+		aliases = {"aac", "guessthecards", "gtc"},
+		category = Category.FUN
+)
+@Requires({Permission.MESSAGE_ATTACH_FILES})
+public class GuessTheCardsCommand implements Executable {
 
-	public GuessTheCardsCommand(String name, String description, Category category, boolean requiresMM) {
-		super(name, description, category, requiresMM);
-	}
-
-	public GuessTheCardsCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
-		super(name, aliases, description, category, requiresMM);
-	}
-
-	public GuessTheCardsCommand(String name, String usage, String description, Category category, boolean requiresMM) {
-		super(name, usage, description, category, requiresMM);
-	}
-
-	public GuessTheCardsCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
-		super(name, aliases, usage, description, category, requiresMM);
-	}
 
 	@Override
-	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().gameInProgress(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 			return;
@@ -113,7 +105,8 @@ public class GuessTheCardsCommand extends Command {
 								if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
 									return;
 
-								if (event.getMessage().getContentRaw().equalsIgnoreCase("desistir") || Helper.equalsAny(prefix + command, ArrayUtils.addAll(getAliases(), getName()))) {
+								String value = event.getMessage().getContentRaw();
+								if (value.equalsIgnoreCase("desistir") || Helper.equalsAny(value.split(" ")[0].replaceFirst(prefix, ""), "adivinheascartas", "aac", "guessthecards", "gtc")) {
 									channel.sendMessage("Você desistiu, as cartas eram `%s`, `%s` e `%s`".formatted(
 											names.get(0),
 											names.get(1),
@@ -125,7 +118,7 @@ public class GuessTheCardsCommand extends Command {
 									return;
 								}
 
-								String[] answers = event.getMessage().getContentRaw().split(";");
+								String[] answers = value.split(";");
 
 								if (answers.length != 3 && chances > 0) {
 									channel.sendMessage("❌ | Você deve informar exatamente 3 nomes separados por ponto-e-vírgula.").queue();

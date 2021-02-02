@@ -99,17 +99,6 @@ public class JibrilEvents extends ListenerAdapter {
 
 			if (BlacklistDAO.isBlacklisted(event.getAuthor())) return;
 
-			if (!rawMsgNoPrefix.isBlank()) {
-				if (commandName.equalsIgnoreCase("reboot") && ShiroInfo.getDevelopers().contains(event.getAuthor().getId())) {
-					event.getChannel().sendMessage("Estou acordando a Shiro, calma ai!").queue(m -> {
-						Main.getShiroShards().restart();
-						System.gc();
-						m.editMessage("Prontinho!").queue(null, Helper::doNothing);
-					}, Helper::doNothing);
-					return;
-				} else return;
-			}
-
 			if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getJibril().getSelfUser().getId())) {
 				event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores deste servidor usando `" + GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue(null, Helper::doNothing);
 				return;
