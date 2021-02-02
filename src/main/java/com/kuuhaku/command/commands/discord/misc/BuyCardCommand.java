@@ -129,7 +129,7 @@ public class BuyCardCommand implements Executable {
 				onlyKawaipon.set(params.stream().anyMatch("-k"::equalsIgnoreCase) || byAnime.get() != null || byRarity.get() != null || onlyFoil.get());
 
 				if (params.stream().anyMatch(p -> p.startsWith("-e")))
-					minPrice.set(params.stream()
+					onlyEquip.set(params.stream()
 							.filter(s -> s.startsWith("-e") && s.length() > 2)
 							.filter(s -> StringUtils.isNumeric(s.substring(2)))
 							.mapToInt(s -> Integer.parseInt(s.substring(2)))
@@ -206,7 +206,6 @@ public class BuyCardCommand implements Executable {
 					.collect(Collectors.toList())
 			);
 
-			System.out.println(onlyEquip.get());
 			cards.removeIf(p ->
 					(onlyKawaipon.get() && p.getRight() != CardType.KAWAIPON)
 					|| (onlyEquip.get() > -1 && p.getRight() != CardType.EVOGEAR)
