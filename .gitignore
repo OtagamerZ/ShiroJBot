@@ -1,10 +1,12 @@
 .gradle
 .log
+.idea
 .bkp
 /build/
 /out/
 /target/
 workspace.xml
+start
 
 # Ignore Gradle GUI config
 gradle-app.setting
