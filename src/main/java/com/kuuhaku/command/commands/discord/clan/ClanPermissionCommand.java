@@ -67,7 +67,7 @@ public class ClanPermissionCommand implements Executable {
 		if (args.length == 0) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(c.getTier().getName() + " " + c.getName())
-					.setThumbnail("attachment://icon.png");
+					.setThumbnail("attachment://icon.jpg");
 
 			for (ClanHierarchy ch : ClanHierarchy.values()) {
 				EnumSet<ClanPermission> perms = c.getPermissions(ch);
@@ -101,7 +101,7 @@ public class ClanPermissionCommand implements Executable {
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(c.getTier().getName() + " " + c.getName())
-					.setThumbnail("attachment://icon.png")
+					.setThumbnail("attachment://icon.jpg")
 					.setFooter("Digite `" + prefix + "permissoes CARGO` para alterar as permissões de um cargo do clã.");
 
 			EnumSet<ClanPermission> perms = c.getPermissions(ch);
