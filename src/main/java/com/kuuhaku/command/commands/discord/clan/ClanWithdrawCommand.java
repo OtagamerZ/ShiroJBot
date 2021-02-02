@@ -25,12 +25,14 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -43,6 +45,7 @@ import java.util.concurrent.TimeUnit;
 		usage = "req_qtd",
 		category = Category.CLAN
 )
+@Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
 public class ClanWithdrawCommand implements Executable {
 
 	@Override
@@ -66,7 +69,7 @@ public class ClanWithdrawCommand implements Executable {
 		int amount = Integer.parseInt(args[0]);
 
 		if (c.getVault() < amount) {
-			channel.sendMessage("❌ | O cofre do clã não tem créditos suficientes.").queue();
+			channel.sendMessage("❌ | O cofre do clã não possui créditos suficientes.").queue();
 			return;
 		}
 

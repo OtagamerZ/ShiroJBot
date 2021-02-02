@@ -23,8 +23,10 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.handlers.games.disboard.model.Disboard;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -32,6 +34,7 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"exmap", "mapa"},
 		category = Category.EXCEED
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES})
 public class DisboardCommand implements Executable {
 
 	@Override
@@ -41,6 +44,6 @@ public class DisboardCommand implements Executable {
 			return;
 		}
 
-		Disboard.view((TextChannel) channel);
+		Disboard.view(channel);
 	}
 }

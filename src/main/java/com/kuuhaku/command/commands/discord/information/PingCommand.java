@@ -37,13 +37,14 @@ public class PingCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		int fp = (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024);
+		long currTime = System.currentTimeMillis();
 		channel.sendMessage(":ping_pong: Pong! ")
 				.flatMap(m -> m.editMessage(m.getContentRaw() + """
 						 %s ms!
 						:floppy_disk: %s MB!
 						:telephone: %s 
 						""".formatted(
-						(int) Main.getShiroShards().getAverageGatewayPing(),
+						System.currentTimeMillis() - currTime,
 						fp,
 						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_listeners"), Main.getShiroShards().getShards().get(0).getEventManager().getRegisteredListeners().size())
 				)))

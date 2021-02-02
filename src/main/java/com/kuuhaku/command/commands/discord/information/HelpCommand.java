@@ -27,6 +27,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
@@ -50,6 +51,11 @@ import java.util.concurrent.TimeUnit;
 		usage = "req_command",
 		category = Category.INFO
 )
+@Requires({
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_ADD_REACTION
+})
 public class HelpCommand implements Executable {
 	private static final String STR_COMMAND_LIST_TITLE = "str_command-list-title";
 	private static final String STR_COMMAND_LIST_DESCRIPTION = "str_command-list-description";

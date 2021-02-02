@@ -28,12 +28,14 @@ import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +56,7 @@ import java.util.stream.Collectors;
 		aliases = {"aac", "guessthecards", "gtc"},
 		category = Category.FUN
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES})
 public class GuessTheCardsCommand implements Executable {
 
 

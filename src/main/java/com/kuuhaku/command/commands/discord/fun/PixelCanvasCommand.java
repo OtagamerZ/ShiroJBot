@@ -25,11 +25,13 @@ import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,6 +46,7 @@ import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 		usage = "req_x-y-color",
 		category = Category.FUN
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES})
 public class PixelCanvasCommand implements Executable {
 
 	@Override

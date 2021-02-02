@@ -27,11 +27,13 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -52,6 +54,11 @@ import java.util.stream.Collectors;
 		usage = "req_id",
 		category = Category.INFO
 )
+@Requires({
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_ADD_REACTION
+})
 public class MatchStatsCommand implements Executable {
 
 	@Override

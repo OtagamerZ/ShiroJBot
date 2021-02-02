@@ -26,12 +26,14 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.ClanHierarchy;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
@@ -47,6 +49,13 @@ import java.util.concurrent.TimeUnit;
 		usage = "req_clan",
 		category = Category.CLAN
 )
+@Requires({
+		Permission.MESSAGE_ATTACH_FILES,
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_EXT_EMOJI,
+		Permission.MESSAGE_ADD_REACTION
+})
 public class ClanCommand implements Executable {
 
 	@Override
