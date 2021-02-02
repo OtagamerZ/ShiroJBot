@@ -27,6 +27,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.RankedTier;
@@ -37,6 +38,7 @@ import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Objects;
@@ -48,6 +50,7 @@ import java.util.stream.Collectors;
 		aliases = {"meustatus", "mystats"},
 		category = Category.INFO
 )
+@Requires({Permission.MESSAGE_EMBED_LINKS})
 public class MyStatsCommand implements Executable {
 
 	@Override

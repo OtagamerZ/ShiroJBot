@@ -21,9 +21,11 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.imageio.ImageIO;
@@ -38,6 +40,7 @@ import java.util.Objects;
 		usage = "req_text",
 		category = Category.FUN
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES})
 public class PatheticCommand implements Executable {
 
 	@Override

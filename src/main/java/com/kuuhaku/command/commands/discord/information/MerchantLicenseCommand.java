@@ -22,10 +22,12 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardMarketDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.MerchantStats;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -33,6 +35,7 @@ import net.dv8tion.jda.api.entities.*;
 		aliases = {"license", "merchantlicense", "licencadecomercio"},
 		category = Category.INFO
 )
+@Requires({Permission.MESSAGE_EMBED_LINKS})
 public class MerchantLicenseCommand implements Executable {
 
 	@Override

@@ -21,7 +21,9 @@ package com.kuuhaku.command.commands.discord.beta;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.FileUtils;
 import org.jasypt.util.binary.StrongBinaryEncryptor;
@@ -41,6 +43,7 @@ import java.util.concurrent.Executors;
 		usage = "req_encrypt",
 		category = Category.BETA
 )
+@Requires({Permission.MESSAGE_ATTACH_FILES})
 public class EncryptCommand implements Executable {
 
 	@Override

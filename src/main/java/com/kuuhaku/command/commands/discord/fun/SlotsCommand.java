@@ -27,6 +27,7 @@ import com.kuuhaku.controller.postgresql.SlotsDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
@@ -35,6 +36,7 @@ import com.kuuhaku.model.persistent.Slots;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -50,6 +52,7 @@ import java.util.concurrent.atomic.AtomicLong;
 		usage = "req_bet",
 		category = Category.FUN
 )
+@Requires({Permission.MESSAGE_EXT_EMOJI})
 public class SlotsCommand implements Executable {
 	private List<String> rolled = new ArrayList<>();
 

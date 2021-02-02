@@ -31,6 +31,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.ClanPermission;
@@ -41,6 +42,7 @@ import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Map;
@@ -52,6 +54,12 @@ import java.util.concurrent.TimeUnit;
 		usage = "req_card",
 		category = Category.CLAN
 )
+@Requires({
+		Permission.MESSAGE_ATTACH_FILES,
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_ADD_REACTION
+})
 public class ClanRevertCardCommand implements Executable {
 
 	@Override

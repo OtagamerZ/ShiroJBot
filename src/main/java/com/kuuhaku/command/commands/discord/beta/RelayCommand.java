@@ -23,6 +23,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.annotations.Requires;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -31,6 +33,7 @@ import net.dv8tion.jda.api.entities.*;
 		usage = "req_relay",
 		category = Category.BETA
 )
+@Requires({Permission.MESSAGE_EMBED_LINKS})
 public class RelayCommand implements Executable {
 
 	@Override
