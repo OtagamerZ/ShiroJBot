@@ -37,7 +37,6 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "exceedsair",
 		aliases = {"exleave", "sairex"},
-		usage = "cmd_exceed-leave",
 		category = Category.EXCEED
 )
 public class ExceedLeaveCommand implements Executable {

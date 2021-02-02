@@ -23,12 +23,13 @@ import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.enums.ExceedEnum;
-import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.model.persistent.Blacklist;
+import com.kuuhaku.model.persistent.CustomAnswer;
+import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
@@ -171,30 +172,5 @@ public class BackupDAO {
 		em.close();
 
 		return dump;
-	}
-
-	public static Backup getGuildBackup(Guild g) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT b FROM Backup b WHERE b.guild = :id", Backup.class);
-		q.setParameter("id", g.getId());
-
-		try {
-			return (Backup) q.getSingleResult();
-		} catch (NoResultException e) {
-			return new Backup();
-		} finally {
-			em.close();
-		}
-	}
-
-	public static void saveBackup(Backup b) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		em.merge(b);
-		em.getTransaction().commit();
-
-		em.close();
 	}
 }

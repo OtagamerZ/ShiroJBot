@@ -30,7 +30,6 @@ import net.dv8tion.jda.api.entities.*;
 @Command(
 		name = "exceedpalette",
 		aliases = {"expalette", "paletaex"},
-		usage = "cmd_exceed-palette",
 		category = Category.EXCEED
 )
 public class ExceedPaletteCommand implements Executable {
