@@ -42,7 +42,7 @@ import java.text.MessageFormat;
 		category = Category.MODERATION
 )
 @Requires({Permission.MANAGE_ROLES, Permission.MESSAGE_EXT_EMOJI})
-public class RoleChooserCommand implements Executable {
+public class RoleButtonCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
