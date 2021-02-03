@@ -13,15 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/QuizDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/BackupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/BackupDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DataDump.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DataDump.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1046,21 +1038,7 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
       <workItem from="1612285645204" duration="10161000" />
-      <workItem from="1612354962274" duration="1959000" />
-    </task>
-    <task id="LOCAL-03621" summary="Correções menores">
-      <created>1612131962631</created>
-      <option name="number" value="03621" />
-      <option name="presentableId" value="LOCAL-03621" />
-      <option name="project" value="LOCAL" />
-      <updated>1612131962632</updated>
-    </task>
-    <task id="LOCAL-03622" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612147271163</created>
-      <option name="number" value="03622" />
-      <option name="presentableId" value="LOCAL-03622" />
-      <option name="project" value="LOCAL" />
-      <updated>1612147271163</updated>
+      <workItem from="1612354962274" duration="2277000" />
     </task>
     <task id="LOCAL-03623" summary="Novos comandos de trancar e destrancar o canal">
       <created>1612148077008</created>
@@ -1391,7 +1369,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612356222173</updated>
     </task>
-    <option name="localTasksCounter" value="3670" />
+    <task id="LOCAL-03670" summary="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
+      <created>1612357074666</created>
+      <option name="number" value="03670" />
+      <option name="presentableId" value="LOCAL-03670" />
+      <option name="project" value="LOCAL" />
+      <updated>1612357074666</updated>
+    </task>
+    <task id="LOCAL-03671" summary="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
+      <created>1612357211320</created>
+      <option name="number" value="03671" />
+      <option name="presentableId" value="LOCAL-03671" />
+      <option name="project" value="LOCAL" />
+      <updated>1612357211320</updated>
+    </task>
+    <option name="localTasksCounter" value="3672" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1555,10 +1547,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612356224670">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612357212502">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612356224670" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612357212502" />
     <state x="547" y="238" width="585" height="534" key="find.popup" timestamp="1612213069227">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1567,10 +1559,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612298970144" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612274194450">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612357170616">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612274194450" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612357170616" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>
