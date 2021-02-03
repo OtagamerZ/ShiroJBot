@@ -242,7 +242,7 @@ public class Shoukan extends GlobalGame {
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
 				.and(e -> {
 					String[] args = e.getMessage().getContentRaw().split(",");
-					return (args.length > 0 && StringUtils.isNumeric(args[0])) || e.getMessage().getContentRaw().equalsIgnoreCase("reload") || e.getMessage().getContentRaw().equalsIgnoreCase("noimg");
+					return (args.length > 0 && StringUtils.isNumeric(args[0])) || e.getMessage().getContentRaw().equalsIgnoreCase("reload");
 				})
 				.and(e -> !isClosed())
 				.and(e -> !moveLock)
@@ -255,20 +255,6 @@ public class Shoukan extends GlobalGame {
 		String cmd = message.getContentRaw();
 		Hand h = getHands().get(current);
 
-		if (cmd.equalsIgnoreCase("noimg")) {
-			moveLock = true;
-			channel.sendMessage(message.getAuthor().getName() + " recriou a mensagem do jogo.")
-					.queue(s -> {
-						this.message.compute(s.getChannel().getId(), (id, m) -> {
-							if (m != null)
-								m.delete().queue(null, Helper::doNothing);
-							return s;
-						});
-						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						moveLock = false;
-					});
-			return;
-		}
 		if (cmd.equalsIgnoreCase("reload")) {
 			moveLock = true;
 			channel.sendMessage(message.getAuthor().getName() + " recriou a mensagem do jogo.")
