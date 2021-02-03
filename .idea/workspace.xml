@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Uso de multithreading na geração da arena Shoukan">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1040,14 +1040,7 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
       <workItem from="1612285645204" duration="10161000" />
-      <workItem from="1612354962274" duration="6196000" />
-    </task>
-    <task id="LOCAL-03630" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612150957799</created>
-      <option name="number" value="03630" />
-      <option name="presentableId" value="LOCAL-03630" />
-      <option name="project" value="LOCAL" />
-      <updated>1612150957799</updated>
+      <workItem from="1612354962274" duration="6574000" />
     </task>
     <task id="LOCAL-03631" summary="Novos comandos de trancar e destrancar o canal">
       <created>1612198777306</created>
@@ -1385,7 +1378,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612360575882</updated>
     </task>
-    <option name="localTasksCounter" value="3679" />
+    <task id="LOCAL-03679" summary="Uso de multithreading na geração da arena Shoukan">
+      <created>1612361682282</created>
+      <option name="number" value="03679" />
+      <option name="presentableId" value="LOCAL-03679" />
+      <option name="project" value="LOCAL" />
+      <updated>1612361682282</updated>
+    </task>
+    <option name="localTasksCounter" value="3680" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1549,10 +1549,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612360584831">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612361686773">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612360584831" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612361686773" />
     <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1612357315174">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
