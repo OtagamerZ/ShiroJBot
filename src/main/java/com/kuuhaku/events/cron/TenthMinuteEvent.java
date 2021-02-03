@@ -139,7 +139,7 @@ public class TenthMinuteEvent implements Job {
 			}
 		}
 
-		for (File file : Main.getInfo().getCollectionsFolder().listFiles()) {
+		for (File file : Main.getInfo().getTemporaryFolder().listFiles()) {
 			try {
 				BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 				if (attr.creationTime().to(TimeUnit.MINUTES) >= 3)

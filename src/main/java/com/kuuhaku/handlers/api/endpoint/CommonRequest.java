@@ -61,20 +61,15 @@ public class CommonRequest {
 
     @RequestMapping(value = "/image", method = RequestMethod.GET)
     public @ResponseBody
-    HttpEntity<byte[]> serveImage(@RequestParam(value = "id") String id) throws IOException, InterruptedException {
-        byte[] bytes = Main.getInfo().getCachedImages().getIfPresent(id);
-        for (int i = 0; i < 3 && bytes == null; i++) {
-            bytes = Main.getInfo().getCachedImages().getIfPresent(id);
-            if (bytes != null) {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.IMAGE_JPEG);
-                headers.setContentLength(bytes.length);
+    HttpEntity<byte[]> serveImage(@RequestParam(value = "id") String id) throws IOException {
+        File f = new File(Main.getInfo().getTemporaryFolder(), id + ".jpg");
+        if (!f.exists()) throw new FileNotFoundException();
+        byte[] bytes = FileUtils.readFileToByteArray(f);
 
-                return new HttpEntity<>(bytes, headers);
-            }
-            Thread.sleep(500);
-        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.setContentLength(bytes.length);
 
-        throw new FileNotFoundException();
+        return new HttpEntity<>(bytes, headers);
     }
 }
