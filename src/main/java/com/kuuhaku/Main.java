@@ -57,7 +57,6 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -88,7 +87,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				See license for more information regarding redistribution conditions
 				""");
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
-		ImageIO.setUseCache(false);
 		info = new ShiroInfo();
 		relay = new Relay();
 		cmdManager = new CommandManager();
