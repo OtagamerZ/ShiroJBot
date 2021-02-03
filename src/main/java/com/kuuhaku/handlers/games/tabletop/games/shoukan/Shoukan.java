@@ -35,7 +35,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.RankedQueue;
@@ -44,10 +43,8 @@ import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -56,7 +53,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -68,7 +64,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Shoukan extends GlobalGame {
-	private final long startTime = System.currentTimeMillis();
 	private final Map<Side, Hand> hands;
 	private final Map<Side, Clan> clans;
 	private final GameChannel channel;
@@ -224,8 +219,7 @@ public class Shoukan extends GlobalGame {
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		AtomicReference<String> previous = new AtomicReference<>("");
 		channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
-				.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-				.embed(showArena())
+				.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 				.queue(s -> {
 					this.message.put(s.getChannel().getId(), s);
 					if (!s.getGuild().getId().equals(previous.get())) {
@@ -264,8 +258,7 @@ public class Shoukan extends GlobalGame {
 		if (cmd.equalsIgnoreCase("reload")) {
 			moveLock = true;
 			channel.sendMessage(message.getAuthor().getName() + " recriou a mensagem do jogo.")
-					.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-					.embed(showArena())
+					.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 					.queue(s -> {
 						this.message.compute(s.getChannel().getId(), (id, m) -> {
 							if (m != null)
@@ -331,8 +324,7 @@ public class Shoukan extends GlobalGame {
 					changed[index] = true;
 					resetTimerKeepTurn();
 					moveLock = true;
-					act.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-							.embed(showArena())
+					act.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(s -> {
 								this.message.compute(s.getChannel().getId(), (id, m) -> {
 									if (m != null)
@@ -744,8 +736,7 @@ public class Shoukan extends GlobalGame {
 						resetTimerKeepTurn();
 						moveLock = true;
 						channel.sendMessage(c.getName() + " atacou diretamente " + getHands().get(next).getUser().getName() + (getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "") + ".")
-								.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-								.embed(showArena())
+								.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
 									this.message.compute(s.getChannel().getId(), (id, m) -> {
 										if (m != null)
@@ -794,8 +785,7 @@ public class Shoukan extends GlobalGame {
 							resetTimerKeepTurn();
 							moveLock = true;
 							channel.sendMessage("Cálculo de combate ignorado por efeito do atacante!")
-									.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-									.embed(showArena())
+									.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 									.queue(s -> {
 										this.message.compute(s.getChannel().getId(), (id, m) -> {
 											if (m != null)
@@ -818,8 +808,7 @@ public class Shoukan extends GlobalGame {
 							resetTimerKeepTurn();
 							moveLock = true;
 							channel.sendMessage("Cálculo de combate ignorado por efeito do defensor!")
-									.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-									.embed(showArena())
+									.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 									.queue(s -> {
 										this.message.compute(s.getChannel().getId(), (id, m) -> {
 											if (m != null)
@@ -921,8 +910,7 @@ public class Shoukan extends GlobalGame {
 					resetTimerKeepTurn();
 					moveLock = true;
 					channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-							.embed(showArena())
+							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(s -> {
 								this.message.compute(s.getChannel().getId(), (id, m) -> {
 									if (m != null)
@@ -937,8 +925,7 @@ public class Shoukan extends GlobalGame {
 				resetTimerKeepTurn();
 				moveLock = true;
 				channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -953,8 +940,7 @@ public class Shoukan extends GlobalGame {
 				resetTimerKeepTurn();
 				moveLock = true;
 				channel.sendMessage("Essa carta era na verdade uma isca!")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -991,8 +977,7 @@ public class Shoukan extends GlobalGame {
 					resetTimerKeepTurn();
 					moveLock = true;
 					channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-							.embed(showArena())
+							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(s -> {
 								this.message.compute(s.getChannel().getId(), (id, m) -> {
 									if (m != null)
@@ -1008,8 +993,7 @@ public class Shoukan extends GlobalGame {
 				resetTimerKeepTurn();
 				moveLock = true;
 				channel.sendMessage(yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -1023,8 +1007,7 @@ public class Shoukan extends GlobalGame {
 				resetTimerKeepTurn();
 				moveLock = true;
 				channel.sendMessage("Essa carta era na verdade uma isca!")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -1055,8 +1038,7 @@ public class Shoukan extends GlobalGame {
 					resetTimerKeepTurn();
 					moveLock = true;
 					channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-							.embed(showArena())
+							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(s -> {
 								this.message.compute(s.getChannel().getId(), (id, m) -> {
 									if (m != null)
@@ -1073,8 +1055,7 @@ public class Shoukan extends GlobalGame {
 				resetTimerKeepTurn();
 				moveLock = true;
 				channel.sendMessage("As duas cartas na verdade eram iscas! (" + yPower + " = " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -1089,8 +1070,7 @@ public class Shoukan extends GlobalGame {
 				resetTimerKeepTurn();
 				moveLock = true;
 				channel.sendMessage("As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -1105,8 +1085,7 @@ public class Shoukan extends GlobalGame {
 				resetTimerKeepTurn();
 				moveLock = true;
 				channel.sendMessage("As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -1605,8 +1584,7 @@ public class Shoukan extends GlobalGame {
 					finished.set(true);
 					if (team)
 						channel.sendMessage(((TeamHand) op).getMentions() + " zeraram os pontos de vida de " + ((TeamHand) h).getMentions() + ", temos os vencedores! (" + getRound() + " turnos)")
-								.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-								.embed(showArena())
+								.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 								.queue(msg ->
 										this.message.compute(msg.getChannel().getId(), (id, m) -> {
 											if (m != null)
@@ -1615,8 +1593,7 @@ public class Shoukan extends GlobalGame {
 										}));
 					else
 						channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
-								.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-								.embed(showArena())
+								.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 								.queue(msg ->
 										this.message.compute(msg.getChannel().getId(), (id, m) -> {
 											if (m != null)
@@ -1688,8 +1665,7 @@ public class Shoukan extends GlobalGame {
 				AtomicBoolean shownHand = new AtomicBoolean(false);
 				moveLock = true;
 				channel.sendMessage(u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -1716,8 +1692,7 @@ public class Shoukan extends GlobalGame {
 				resetTimerKeepTurn();
 				moveLock = true;
 				channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -1752,8 +1727,7 @@ public class Shoukan extends GlobalGame {
 				} else close();
 				if (team)
 					channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + ((TeamHand) getHands().get(next)).getMentions() + " venceram! (" + getRound() + " turnos)")
-							.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-							.embed(showArena())
+							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(msg ->
 									this.message.compute(msg.getChannel().getId(), (id, m) -> {
 										if (m != null)
@@ -1762,8 +1736,7 @@ public class Shoukan extends GlobalGame {
 									}));
 				else
 					channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + getHands().get(next).getUser().getAsMention() + " venceu! (" + getRound() + " turnos)")
-							.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-							.embed(showArena())
+							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(msg ->
 									this.message.compute(msg.getChannel().getId(), (id, m) -> {
 										if (m != null)
@@ -1778,8 +1751,7 @@ public class Shoukan extends GlobalGame {
 			AtomicBoolean shownHand = new AtomicBoolean(false);
 			moveLock = true;
 			channel.sendMessage(getCurrent().getName() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")")
-					.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-					.embed(showArena())
+					.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 					.queue(s -> {
 						this.message.compute(s.getChannel().getId(), (id, m) -> {
 							if (m != null)
@@ -1810,8 +1782,7 @@ public class Shoukan extends GlobalGame {
 				AtomicBoolean shownHand = new AtomicBoolean(false);
 				moveLock = true;
 				channel.sendMessage(getCurrent().getName() + " rolou novamente as cartas na mão!")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -1841,8 +1812,7 @@ public class Shoukan extends GlobalGame {
 				AtomicBoolean shownHand = new AtomicBoolean(false);
 				moveLock = true;
 				channel.sendMessage(getCurrent().getName() + " executou um saque do destino!")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -1862,8 +1832,7 @@ public class Shoukan extends GlobalGame {
 			if (draw) {
 				close();
 				channel.sendMessage("Por acordo mútuo, declaro empate! (" + getRound() + " turnos)")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(msg ->
 								this.message.compute(msg.getChannel().getId(), (id, m) -> {
 									if (m != null)
@@ -1917,8 +1886,7 @@ public class Shoukan extends GlobalGame {
 				draw = true;
 				moveLock = true;
 				channel.sendMessage(u.getName() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D caso queira aceitar ou continue jogando normalmente.")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
 								if (m != null)
@@ -1945,8 +1913,7 @@ public class Shoukan extends GlobalGame {
 					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 				} else close();
 				channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
-						.addFile(Helper.getBytes(arena.render(this, hands), "png", 0.5f), "board.jpg")
-						.embed(showArena())
+						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(msg ->
 								this.message.compute(msg.getChannel().getId(), (id, m) -> {
 									if (m != null)
@@ -2143,18 +2110,6 @@ public class Shoukan extends GlobalGame {
 
 	public Map<Side, Clan> getClans() {
 		return clans;
-	}
-
-	private MessageEmbed showArena() {
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setDescription("[Clique aqui para abrir a imagem](" + arena.getDirectUrl() + ")");
-
-		return eb.build();
-	}
-
-	public String getHash() {
-		String ids = hands.values().stream().map(h -> h.getUser().getId()).collect(Collectors.joining());
-		return Helper.hash((ids + startTime).getBytes(StandardCharsets.UTF_8), "SHA-256");
 	}
 
 	@Override
