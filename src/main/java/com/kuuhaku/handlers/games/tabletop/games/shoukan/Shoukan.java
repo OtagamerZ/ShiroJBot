@@ -255,6 +255,20 @@ public class Shoukan extends GlobalGame {
 		String cmd = message.getContentRaw();
 		Hand h = getHands().get(current);
 
+		if (cmd.equalsIgnoreCase("noimg")) {
+			moveLock = true;
+			channel.sendMessage(message.getAuthor().getName() + " recriou a mensagem do jogo.")
+					.queue(s -> {
+						this.message.compute(s.getChannel().getId(), (id, m) -> {
+							if (m != null)
+								m.delete().queue(null, Helper::doNothing);
+							return s;
+						});
+						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						moveLock = false;
+					});
+			return;
+		}
 		if (cmd.equalsIgnoreCase("reload")) {
 			moveLock = true;
 			channel.sendMessage(message.getAuthor().getName() + " recriou a mensagem do jogo.")
