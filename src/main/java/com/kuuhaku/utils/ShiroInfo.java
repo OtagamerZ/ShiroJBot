@@ -40,6 +40,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
@@ -121,6 +122,7 @@ public class ShiroInfo {
 	private final Cache<String, Boolean> confirmationPending = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, Integer> pendingJoin = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, Boolean> padoruLimit = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
+	private final Cache<String, BufferedImage> cachedImages = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
 	private final Map<String, Game> games = new HashMap<>();
 	private final Map<String, Invite> requests = new HashMap<>();
 	private final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
@@ -406,6 +408,10 @@ public class ShiroInfo {
 
 	public Cache<String, Boolean> getPadoruLimit() {
 		return padoruLimit;
+	}
+
+	public Cache<String, BufferedImage> getCachedImages() {
+		return cachedImages;
 	}
 
 	public Cache<String, Boolean> getConfirmationPending() {
