@@ -13,14 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/NContract.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/NContract.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Uso de multithreading na geração da arena Shoukan" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1045,14 +1038,7 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
       <workItem from="1612285645204" duration="10161000" />
-      <workItem from="1612354962274" duration="4980000" />
-    </task>
-    <task id="LOCAL-03627" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612150109610</created>
-      <option name="number" value="03627" />
-      <option name="presentableId" value="LOCAL-03627" />
-      <option name="project" value="LOCAL" />
-      <updated>1612150109610</updated>
+      <workItem from="1612354962274" duration="5291000" />
     </task>
     <task id="LOCAL-03628" summary="Novos comandos de trancar e destrancar o canal">
       <created>1612150210131</created>
@@ -1390,7 +1376,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612357662472</updated>
     </task>
-    <option name="localTasksCounter" value="3676" />
+    <task id="LOCAL-03676" summary="Uso de multithreading na geração da arena Shoukan">
+      <created>1612360298752</created>
+      <option name="number" value="03676" />
+      <option name="presentableId" value="LOCAL-03676" />
+      <option name="project" value="LOCAL" />
+      <updated>1612360298752</updated>
+    </task>
+    <option name="localTasksCounter" value="3677" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1476,7 +1469,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção na bolsa" />
     <MESSAGE value="Melhorias no Shoukan" />
     <MESSAGE value="Adicionado botão de reroll caso oponente não faça nada no primeiro turno" />
     <MESSAGE value="Correção na bolsa de valores" />
@@ -1501,7 +1493,8 @@
     <MESSAGE value="Atualização da biblioteca de paginação" />
     <MESSAGE value="Implementações de sugestões" />
     <MESSAGE value="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;" />
+    <MESSAGE value="Uso de multithreading na geração da arena Shoukan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Uso de multithreading na geração da arena Shoukan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1554,10 +1547,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612357664519">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612360300620">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612357664519" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612360300620" />
     <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1612357315174">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1566,6 +1559,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="547" y="238" width="585" height="534" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612213069227" />
+    <state x="635" y="252" key="refactoring.ChangeSignatureDialog" timestamp="1612360248263">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="635" y="252" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612360248263" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1612359512946">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

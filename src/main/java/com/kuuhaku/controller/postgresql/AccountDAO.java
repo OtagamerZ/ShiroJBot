@@ -36,8 +36,10 @@ public class AccountDAO {
 		q.setLockMode(LockModeType.PESSIMISTIC_READ);
 
 		try {
+			em.getTransaction().begin();
 			return q.getResultList();
 		} finally {
+			em.getTransaction().commit();
 			em.close();
 		}
 	}
@@ -50,8 +52,10 @@ public class AccountDAO {
 		q.setLockMode(LockModeType.PESSIMISTIC_READ);
 
 		try {
+			em.getTransaction().begin();
 			return q.getResultList();
 		} finally {
+			em.getTransaction().commit();
 			em.close();
 		}
 	}
@@ -83,10 +87,12 @@ public class AccountDAO {
 		q.setParameter("id", id);
 
 		try {
+			em.getTransaction().begin();
 			return (Account) q.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		} finally {
+			em.getTransaction().commit();
 			em.close();
 		}
 	}
@@ -124,10 +130,12 @@ public class AccountDAO {
 		q.setLockMode(LockModeType.PESSIMISTIC_READ);
 
 		try {
+			em.getTransaction().begin();
 			return q.getResultList();
 		} catch (NoResultException e) {
 			return new ArrayList<>();
 		} finally {
+			em.getTransaction().commit();
 			em.close();
 		}
 	}
