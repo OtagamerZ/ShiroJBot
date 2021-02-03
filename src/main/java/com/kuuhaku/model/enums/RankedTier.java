@@ -30,15 +30,15 @@ import java.util.Objects;
 public enum RankedTier {
 	UNRANKED(0, "Sem ranking", 10),
 
-	INITIATE_IV(1, "Iniciado IV", 3),
-	INITIATE_III(1, "Iniciado III", 3),
-	INITIATE_II(1, "Iniciado II", 3),
-	INITIATE_I(1, "Iniciado I", 5),
+	APPRENTICE_IV(1, "Aprendiz IV", 3),
+	APPRENTICE_III(1, "Aprendiz III", 3),
+	APPRENTICE_II(1, "Aprendiz II", 3),
+	APPRENTICE_I(1, "Aprendiz I", 5),
 
-	APPRENTICE_IV(2, "Aprendiz IV", 3),
-	APPRENTICE_III(2, "Aprendiz III", 3),
-	APPRENTICE_II(2, "Aprendiz II", 3),
-	APPRENTICE_I(2, "Aprendiz I", 5),
+	INITIATE_IV(2, "Iniciado IV", 3),
+	INITIATE_III(2, "Iniciado III", 3),
+	INITIATE_II(2, "Iniciado II", 3),
+	INITIATE_I(2, "Iniciado I", 5),
 
 	DISCIPLE_IV(3, "Discípulo IV", 3),
 	DISCIPLE_III(3, "Discípulo III", 3),
@@ -87,53 +87,11 @@ public enum RankedTier {
 	}
 
 	public RankedTier getNext() {
-		return Helper.getNext(this,
-				UNRANKED,
-				INITIATE_IV,
-				INITIATE_III,
-				INITIATE_II,
-				INITIATE_I,
-				APPRENTICE_IV,
-				APPRENTICE_III,
-				APPRENTICE_II,
-				APPRENTICE_I,
-				DISCIPLE_IV,
-				DISCIPLE_III,
-				DISCIPLE_II,
-				DISCIPLE_I,
-				ADEPT_IV,
-				ADEPT_III,
-				ADEPT_II,
-				ADEPT_I,
-				MASTER,
-				ORACLE,
-				ARCHMAGE
-		);
+		return Helper.getNext(this, values());
 	}
 
 	public RankedTier getPrevious() {
-		return Helper.getPrevious(this,
-				null,
-				INITIATE_IV,
-				INITIATE_III,
-				INITIATE_II,
-				INITIATE_I,
-				APPRENTICE_IV,
-				APPRENTICE_III,
-				APPRENTICE_II,
-				APPRENTICE_I,
-				DISCIPLE_IV,
-				DISCIPLE_III,
-				DISCIPLE_II,
-				DISCIPLE_I,
-				ADEPT_IV,
-				ADEPT_III,
-				ADEPT_II,
-				ADEPT_I,
-				MASTER,
-				ORACLE,
-				ARCHMAGE
-		);
+		return Helper.getPrevious(this, values());
 	}
 
 	public static String getTierName(int tier, boolean enumName) {
