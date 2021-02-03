@@ -31,6 +31,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.requests.restaction.InviteAction;
 
 import java.awt.*;
 import java.time.ZoneId;
@@ -45,7 +46,6 @@ import java.util.concurrent.TimeUnit;
 )
 @Requires({
 		Permission.MESSAGE_MANAGE,
-		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ADD_REACTION,
 		Permission.CREATE_INSTANT_INVITE
 })
@@ -53,7 +53,7 @@ public class RequestAssistCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getRequests().contains(guild.getId())) {
+		if (Main.getInfo().getRequests().getOrDefault(guild.getId(), null) != null) {
 			channel.sendMessage("❌ | Este servidor já possui um pedido de auxílio em aberto, aguarde até que um membro da equipe de suporte feche-o.").queue();
 			return;
 		}
@@ -71,10 +71,17 @@ public class RequestAssistCommand implements Executable {
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `SUPORTE PRESENCIAL`?").queue(s ->
+		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `SUPORTE PRESENCIAL` (isso criará um convite de uso único para este servidor)?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
 					Main.getInfo().getConfirmationPending().invalidate(author.getId());
+
+					InviteAction ia = Helper.createInvite(guild);
+
+					if (ia == null) {
+						channel.sendMessage("❌ | Não encontrei nenhum canal que eu possa criar um convite aqui.").queue();
+						return;
+					}
 
 					Map<String, String> ids = new HashMap<>();
 					for (String dev : ShiroInfo.getStaff()) {
@@ -90,7 +97,10 @@ public class RequestAssistCommand implements Executable {
 					author.openPrivateChannel()
 							.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
 							.queue(null, Helper::doNothing);
-					Main.getInfo().getRequests().add(guild.getId());
+
+					ia.setMaxUses(1).queue(i -> {
+						Main.getInfo().getRequests().put(guild.getId(), i);
+					});
 					TicketDAO.setIds(number, ids);
 					s.delete().queue(null, Helper::doNothing);
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();

@@ -33,7 +33,6 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.requests.restaction.InviteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,22 +78,13 @@ public class InviteCommand implements Executable {
 		}
 
 		try {
-			if (!Main.getInfo().getRequests().contains(args[0])) {
+			if (!Main.getInfo().getRequests().containsKey(args[0])) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_assist-not-requested")).queue();
 				return;
 			}
 
-			Guild guildToInvite = Main.getInfo().getGuildByID(args[0]);
-
-			InviteAction ia = Helper.createInvite(guildToInvite);
-
-			if (ia == null) {
-				channel.sendMessage("❌ | Não encontrei nenhum canal que eu pudesse criar um convite lá.").queue();
-				return;
-			}
-
-			String invite = ia.setMaxAge((long) 30, TimeUnit.SECONDS).setMaxUses(1).complete().getUrl();
-			channel.sendMessage("Aqui está!\n" + invite).queue(s -> Main.getInfo().getRequests().remove(args[0]));
+			Invite iv = Main.getInfo().getRequests().remove(args[0]);
+			channel.sendMessage("Aqui está!\n" + iv.getUrl()).queue(s -> Main.getInfo().getRequests().remove(args[0]));
 		} catch (ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage("Escolha o servidor que devo criar um convite!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 		} catch (NullPointerException ex) {
