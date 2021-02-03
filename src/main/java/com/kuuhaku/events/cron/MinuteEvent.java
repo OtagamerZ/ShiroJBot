@@ -20,7 +20,6 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.MemberDAO;
-import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.MutedMember;
@@ -46,8 +45,6 @@ public class MinuteEvent implements Job {
 	@Override
 	public void execute(JobExecutionContext context) {
 		if (LocalDateTime.now().getHour() % 6 == 0) {
-			QuizDAO.resetUserStates();
-
 			if (LocalDateTime.now().getHour() % 12 == 0) {
 				RelayBlockList.clearBlockedThumbs();
 				RelayBlockList.refresh();

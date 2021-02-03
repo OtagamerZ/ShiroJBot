@@ -13,66 +13,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementações de sugestões">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/KGotchiCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/PurchaceKGotchiCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/KGotchiDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/KGotchiDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ScheduledEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ScheduledEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/OddSecondEvent.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Food.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/FoodMenu.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Vanity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/VanityMenu.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Action.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/FoodType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Nature.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Race.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Stance.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Status.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Tier.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Time.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/VanityType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/exceptions/EmptyStockException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/AnsweredQuizzes.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/ExceedMember.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/ExceedMember.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/PixelCanvas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/PixelCanvas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/deco_house.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/deco_tent.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/deco_tree.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/fence_floral.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/fence_metal.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/fence_stone.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/fence_wood.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/misc_bowl.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/bg.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/bg_no_overlay.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/bg_overlay.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/ground.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/sky_day.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/sky_night.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/interface/energy.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/interface/food.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/interface/health.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/interface/mood.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/sheet/snugget_sheet.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/energyUp.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/foodUp.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/healthUp.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/mobius.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/moodUp.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/ressurrected.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/sleeping.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/troubled.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/xpUp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/QuizDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/BackupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/BackupDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DataDump.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DataDump.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1098,14 +1046,7 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
       <workItem from="1612285645204" duration="10161000" />
-      <workItem from="1612354962274" duration="1174000" />
-    </task>
-    <task id="LOCAL-03620" summary="Correções menores">
-      <created>1612131867896</created>
-      <option name="number" value="03620" />
-      <option name="presentableId" value="LOCAL-03620" />
-      <option name="project" value="LOCAL" />
-      <updated>1612131867896</updated>
+      <workItem from="1612354962274" duration="1959000" />
     </task>
     <task id="LOCAL-03621" summary="Correções menores">
       <created>1612131962631</created>
@@ -1443,7 +1384,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612299272923</updated>
     </task>
-    <option name="localTasksCounter" value="3669" />
+    <task id="LOCAL-03669" summary="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
+      <created>1612356222173</created>
+      <option name="number" value="03669" />
+      <option name="presentableId" value="LOCAL-03669" />
+      <option name="project" value="LOCAL" />
+      <updated>1612356222173</updated>
+    </task>
+    <option name="localTasksCounter" value="3670" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1529,7 +1477,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Criação de sistema de bolsa de valores" />
     <MESSAGE value="Correção na bolsa" />
     <MESSAGE value="Melhorias no Shoukan" />
     <MESSAGE value="Adicionado botão de reroll caso oponente não faça nada no primeiro turno" />
@@ -1554,7 +1501,8 @@
     <MESSAGE value="Adição de requisitos de permissão" />
     <MESSAGE value="Atualização da biblioteca de paginação" />
     <MESSAGE value="Implementações de sugestões" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementações de sugestões" />
+    <MESSAGE value="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1571,10 +1519,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612274118010" />
-    <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1612356112263">
+    <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1612356302365">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612356112263" />
+    <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612356302365" />
     <state x="509" y="365" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1612274140767">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1607,10 +1555,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612299274038">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612356224670">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612299274038" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612356224670" />
     <state x="547" y="238" width="585" height="534" key="find.popup" timestamp="1612213069227">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
