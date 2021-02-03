@@ -60,6 +60,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -2055,5 +2056,18 @@ public class Helper {
 			values.add(i);
 		}
 		return values;
+	}
+
+	public static String serveImage(byte[] bytes) {
+		String hash = hash((System.currentTimeMillis() + hash(bytes, "MD5")).getBytes(StandardCharsets.UTF_8), "MD5");
+		File f = new File(Main.getInfo().getTemporaryFolder(), hash + ".jpg");
+
+		try {
+			f.createNewFile();
+			FileUtils.writeByteArrayToFile(f, bytes);
+			return "https://api." + System.getenv("SERVER_URL") + "/image?id=" + hash;
+		} catch (IOException e) {
+			return null;
+		}
 	}
 }
