@@ -220,7 +220,7 @@ public class Arena {
 
 			g2d.dispose();
 
-			return back;
+			return Helper.scaleImage(back, back.getWidth() / 2, back.getHeight() / 2);
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
