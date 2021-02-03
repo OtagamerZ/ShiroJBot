@@ -1238,9 +1238,11 @@ public class Helper {
 				logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			}
 
-			return FileUtils.readFileToByteArray(temp);
+			byte[] bytes = FileUtils.readFileToByteArray(temp);
+			temp.delete();
+			return bytes;
 		} catch (IOException e) {
-			return null;
+			return new byte[0];
 		}
 	}
 
