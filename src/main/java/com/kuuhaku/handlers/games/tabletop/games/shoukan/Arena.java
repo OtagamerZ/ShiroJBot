@@ -33,12 +33,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class Arena {
 	private final Map<Side, List<SlotColumn<Champion, Equipment>>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
 	private final LinkedList<Drawable> banished;
+	private final AtomicReference<String> directUrl = new AtomicReference<>(null);
 	private Field field = null;
 
 	public Arena() {
@@ -220,10 +223,15 @@ public class Arena {
 
 			g2d.dispose();
 
-			return back;
+			Executors.newSingleThreadExecutor().execute(() -> directUrl.set(Helper.serveImage(Helper.getBytes(back))));
+			return Helper.scaleImage(back, back.getWidth() / 2, back.getHeight() / 2);
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
+	}
+
+	public String getDirectUrl() {
+		return directUrl.get();
 	}
 }
