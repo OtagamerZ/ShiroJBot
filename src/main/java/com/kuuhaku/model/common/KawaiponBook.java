@@ -37,9 +37,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class KawaiponBook {
@@ -98,7 +98,6 @@ public class KawaiponBook {
 			return bg;
 		});
 
-		AtomicReference<BufferedImage> result = new AtomicReference<>();
 		ExecutorService th = Executors.newFixedThreadPool(10);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
@@ -139,18 +138,18 @@ public class KawaiponBook {
 
 					g.dispose();
 
-					result.set(act.addSignature(finalC, row));
+					act.addSignature(finalC, row);
 					row.flush();
 				} catch (IOException ignore) {
 				}
 			});
 		}
 
-		while (result.get() == null) {
-			Thread.sleep(250);
+		try {
+			return act.get();
+		} catch (ExecutionException e) {
+			return null;
 		}
-
-		return result.get();
 	}
 
 	public BufferedImage view(List<Drawable> cardList, Account acc, String title, boolean senshi) throws IOException, InterruptedException {
@@ -206,7 +205,6 @@ public class KawaiponBook {
 			return bg;
 		});
 
-		AtomicReference<BufferedImage> result = new AtomicReference<>();
 		ExecutorService th = Executors.newFixedThreadPool(10);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
@@ -227,17 +225,17 @@ public class KawaiponBook {
 
 					g.dispose();
 
-					result.set(act.addSignature(finalC, row));
+					act.addSignature(finalC, row);
 					row.flush();
 				} catch (IOException ignore) {
 				}
 			});
 		}
 
-		while (result.get() == null) {
-			Thread.sleep(250);
+		try {
+			return act.get();
+		} catch (ExecutionException e) {
+			return null;
 		}
-
-		return result.get();
 	}
 }
