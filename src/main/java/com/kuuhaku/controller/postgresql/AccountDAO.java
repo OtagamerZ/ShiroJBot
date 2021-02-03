@@ -60,6 +60,7 @@ public class AccountDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
+			em.getTransaction().begin();
 			Account acc = em.find(Account.class, id, LockModeType.PESSIMISTIC_READ);
 			if (acc == null) {
 				acc = new Account();
@@ -71,6 +72,7 @@ public class AccountDAO {
 			return acc;
 		} finally {
 			em.close();
+			em.getTransaction().commit();
 		}
 	}
 
