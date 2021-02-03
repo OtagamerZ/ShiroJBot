@@ -20,7 +20,6 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
-import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.Blacklist;
@@ -44,7 +43,6 @@ public class BackupDAO {
 		List<CustomAnswer> caDump = data.getCaDump();
 		List<GuildConfig> gcDump = data.getGcDump();
 		List<Member> mDump = data.getmDump();
-		List<Kawaigotchi> kgDump = data.getKgDump();
 		List<PoliticalState> psDump = data.getPsDump();
 
 		AtomicInteger done = new AtomicInteger();
@@ -107,24 +105,6 @@ public class BackupDAO {
 			EntityManager em = Manager.getEntityManager();
 			em.getTransaction().begin();
 
-			for (int i = 0; i < kgDump.size(); i++) {
-				em.merge(kgDump.get(i));
-				saveChunk(em, i, kgDump.size(), "kgotchis");
-			}
-			if (kgDump.size() > 0) Helper.logger(Main.class).info(kgDump.size() + " kawaigotchis salvos com sucesso!");
-
-			em.getTransaction().commit();
-			em.close();
-			done.getAndIncrement();
-			if (done.get() == 5 && exitAfter) {
-				if (Main.shutdown()) System.exit(0);
-			}
-		});
-
-		backupQueue.execute(() -> {
-			EntityManager em = Manager.getEntityManager();
-			em.getTransaction().begin();
-
 			for (int i = 0; i < psDump.size(); i++) {
 				em.merge(psDump.get(i));
 				saveChunk(em, i, psDump.size(), "estados");
@@ -160,7 +140,6 @@ public class BackupDAO {
 		Query ca = em.createQuery("SELECT c FROM CustomAnswer c", CustomAnswer.class);
 		Query m = em.createQuery("SELECT m FROM Member m", Member.class);
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
-		Query kg = em.createQuery("SELECT k FROM Kawaigotchi k", Kawaigotchi.class);
 		Query bl = em.createQuery("SELECT b FROM Blacklist b", Blacklist.class);
 		List<PoliticalState> ps = new ArrayList<>();
 
@@ -168,7 +147,7 @@ public class BackupDAO {
 			ps.add(PStateDAO.getPoliticalState(ex));
 		}
 
-		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), kg.getResultList(), ps, bl.getResultList());
+		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), ps, bl.getResultList());
 		em.close();
 
 		return dump;
