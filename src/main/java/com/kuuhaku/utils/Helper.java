@@ -1200,11 +1200,6 @@ public class Helper {
 	}
 
 	public static byte[] getBytes(BufferedImage image) {
-		DataBuffer db = image.getRaster().getDataBuffer();
-		if (db.getDataType() == DataBuffer.TYPE_BYTE) {
-			return ((DataBufferByte) db).getData();
-		}
-
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(image, "jpg", baos);
 			return baos.toByteArray();
@@ -2066,6 +2061,26 @@ public class Helper {
 	}
 
 	public static String serveImage(byte[] bytes) {
+		String hash = hash((System.currentTimeMillis() + hash(bytes, "MD5")).getBytes(StandardCharsets.UTF_8), "MD5");
+		File f = new File(Main.getInfo().getTemporaryFolder(), hash + ".jpg");
+
+		try {
+			f.createNewFile();
+			FileUtils.writeByteArrayToFile(f, bytes);
+			return "https://api." + System.getenv("SERVER_URL") + "/image?id=" + hash;
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	public static String serveImage(BufferedImage image) {
+		byte[] bytes;
+		DataBuffer db = image.getRaster().getDataBuffer();
+		if (db.getDataType() == DataBuffer.TYPE_BYTE)
+			bytes = ((DataBufferByte) db).getData();
+		else
+			bytes = getBytes(image);
+
 		String hash = hash((System.currentTimeMillis() + hash(bytes, "MD5")).getBytes(StandardCharsets.UTF_8), "MD5");
 		File f = new File(Main.getInfo().getTemporaryFolder(), hash + ".jpg");
 
