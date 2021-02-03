@@ -34,7 +34,7 @@ import net.dv8tion.jda.api.entities.*;
 
 @Command(
 		name = "pedrapapeltesoura",
-		aliases = {"rockpaperscissors", "rps", "ppt"},
+		aliases = {"rockpaperscissors", "jankenpon", "rps", "ppt", "jkp"},
 		usage = "req_jankenpon",
 		category = Category.FUN
 )
