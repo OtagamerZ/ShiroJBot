@@ -25,6 +25,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
+import org.hibernate.annotations.DynamicUpdate;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -39,8 +40,8 @@ import java.util.Base64;
 
 import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
-@SuppressWarnings("rawtypes")
 @Entity
+@DynamicUpdate
 @Table(name = "pixelcanvas")
 public class PixelCanvas {
 	@Id
@@ -96,7 +97,7 @@ public class PixelCanvas {
 		return ja.toString();
 	}
 
-	public RestAction viewCanvas(TextChannel channel) {
+	public RestAction<?> viewCanvas(TextChannel channel) {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(getCanvas(), "png", baos);
 
@@ -107,7 +108,7 @@ public class PixelCanvas {
 		return channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas"));
 	}
 
-	public RestAction viewSection(TextChannel channel, int number) {
+	public RestAction<?> viewSection(TextChannel channel, int number) {
 		int[] section = switch (number) {
 			case 1 -> new int[]{0, 0};
 			case 2 -> new int[]{512, 0};
@@ -131,7 +132,7 @@ public class PixelCanvas {
 		return channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas"));
 	}
 
-	public RestAction viewChunk(TextChannel channel, int[] coords, int zoom, boolean section) {
+	public RestAction<?> viewChunk(TextChannel channel, int[] coords, int zoom, boolean section) {
 		int fac = (int) Math.pow(2, zoom);
 		int chunkSize = CANVAS_SIZE / fac;
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -155,7 +156,7 @@ public class PixelCanvas {
 		return channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-chunk"));
 	}
 
-	public RestAction addPixel(TextChannel channel, int[] coords, Color color) {
+	public RestAction<?> addPixel(TextChannel channel, int[] coords, Color color) {
 		BufferedImage canvas = getCanvas();
 		canvas.setRGB(coords[0] + CANVAS_SIZE / 2, CANVAS_SIZE / 2 - coords[1], color.getRGB());
 		saveCanvas(canvas);

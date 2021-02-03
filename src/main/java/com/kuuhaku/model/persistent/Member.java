@@ -20,16 +20,14 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.Bonus;
-import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
-import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.TrophyType;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
+import org.hibernate.annotations.DynamicUpdate;
 import org.json.JSONObject;
 
 import javax.persistence.*;
@@ -41,6 +39,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Entity
+@DynamicUpdate
 @Table(name = "member")
 public class Member {
 	@Id
@@ -88,16 +87,11 @@ public class Member {
 
 	public static List<Bonus> getBonuses(User u) {
 		List<Bonus> bonuses = new ArrayList<>();
-		Kawaigotchi kg = KGotchiDAO.getKawaigotchi(u.getId());
 
 		if (ExceedDAO.hasExceed(u.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(u.getId())))
 			bonuses.add(new Bonus(0, "Exceed Vitorioso", 2));
 		if (!getWaifu(u.getId()).isEmpty())
 			bonuses.add(new Bonus(1, "Waifu", WaifuDAO.getMultiplier(u).getMult()));
-		if (kg != null && kg.isAlive() && kg.getTier() != Tier.CHILD)
-			bonuses.add(new Bonus(2, "Kawaigotchi", kg.getTier().getUserXpMult()));
-		else if (kg != null)
-			bonuses.add(new Bonus(3, "Kawaigotchi Morto", 0.8f));
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
 		if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 1)
@@ -121,17 +115,11 @@ public class Member {
 	public synchronized boolean addXp(Guild g) {
 		User u = Main.getInfo().getUserByID(mid);
 		AtomicReference<Double> mult = new AtomicReference<>(1d);
-		Kawaigotchi kg = KGotchiDAO.getKawaigotchi(mid);
 
 		if (ExceedDAO.hasExceed(mid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(mid)))
 			mult.updateAndGet(v -> v * 2);
 		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(Member.getWaifu(u.getId())))
 			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(u).getMult());
-		if (kg != null && kg.isAlive() && kg.getTier() != Tier.CHILD)
-			mult.updateAndGet(v -> v * kg.getTier().getUserXpMult());
-		else if (kg != null)
-			mult.updateAndGet(v -> v * 0.8f);
-
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
 		if (kp.getCards().size() / ((float) CardDAO.totalCards()) * 2 >= 1) {
