@@ -1198,7 +1198,7 @@ public class Helper {
 
 	public static byte[] getBytes(BufferedImage image) {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			ImageIO.write(image, "jpg", baos);
+			ImageIO.write(image, "jpg", new BufferedOutputStream(baos));
 			return baos.toByteArray();
 		} catch (IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
@@ -1208,7 +1208,7 @@ public class Helper {
 
 	public static byte[] getBytes(BufferedImage image, String encode) {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			ImageIO.write(image, encode, baos);
+			ImageIO.write(image, encode, new BufferedOutputStream(baos));
 			return baos.toByteArray();
 		} catch (IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
@@ -1220,7 +1220,7 @@ public class Helper {
 		byte[] bytes;
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName(encode).next();
-			ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
+			ImageOutputStream ios = ImageIO.createImageOutputStream(new BufferedOutputStream(baos));
 			writer.setOutput(ios);
 
 			ImageWriteParam param = writer.getDefaultWriteParam();
