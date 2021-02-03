@@ -58,4 +58,18 @@ public class CommonRequest {
 
         return new HttpEntity<>(bytes, headers);
     }
+
+    @RequestMapping(value = "/image", method = RequestMethod.GET)
+    public @ResponseBody
+    HttpEntity<byte[]> serveImage(@RequestParam(value = "id") String id) throws IOException {
+        File f = new File(Main.getInfo().getTemporaryFolder(), id + ".jpg");
+        if (!f.exists()) throw new FileNotFoundException();
+        byte[] bytes = FileUtils.readFileToByteArray(f);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.setContentLength(bytes.length);
+
+        return new HttpEntity<>(bytes, headers);
+    }
 }
