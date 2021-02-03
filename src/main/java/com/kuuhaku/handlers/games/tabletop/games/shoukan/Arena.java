@@ -224,8 +224,8 @@ public class Arena {
 
 			if (directUrl == null)
 				directUrl = "https://api." + System.getenv("SERVER_URL") + "/image?id=" + game.getHash();
-			Executors.newSingleThreadExecutor().execute(() -> Helper.serveImage(Helper.getBytes(back, "jpg", 0.5f)));
-			return Helper.scaleImage(back, back.getWidth() / 2, back.getHeight() / 2);
+			Executors.newSingleThreadExecutor().execute(() -> Helper.serveImage(Helper.getBytes(back, "jpg", 0.5f), game.getHash()));
+			return Helper.scaleImage(back, back.getWidth() / 3, back.getHeight() / 3);
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
