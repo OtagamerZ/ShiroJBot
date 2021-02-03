@@ -65,8 +65,7 @@ public class AccountDAO {
 			if (acc == null) {
 				acc = new Account();
 				acc.setUserId(id);
-				saveAccount(acc);
-				acc = getAccount(id);
+				return acc;
 			}
 
 			return acc;
