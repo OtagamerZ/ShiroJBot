@@ -2065,14 +2065,27 @@ public class Helper {
 	}
 
 	public static String serveImage(byte[] bytes) {
-		String hash = hash(String.valueOf(System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "MD5");
+		String hash = hash((System.currentTimeMillis() + hash(bytes, "MD5")).getBytes(StandardCharsets.UTF_8), "MD5");
+		File f = new File(Main.getInfo().getTemporaryFolder(), hash);
 
-		Main.getInfo().getCachedImages().put(hash, bytes);
-		return "https://api." + System.getenv("SERVER_URL") + "/image?id=" + hash;
+		try {
+			f.createNewFile();
+			FileUtils.writeByteArrayToFile(f, bytes);
+			return "https://api." + System.getenv("SERVER_URL") + "/image?id=" + hash;
+		} catch (IOException e) {
+			return null;
+		}
 	}
 
 	public static String serveImage(byte[] bytes, String hash) {
-		Main.getInfo().getCachedImages().put(hash, bytes);
-		return "https://api." + System.getenv("SERVER_URL") + "/image?id=" + hash;
+		File f = new File(Main.getInfo().getTemporaryFolder(), hash);
+
+		try {
+			f.createNewFile();
+			FileUtils.writeByteArrayToFile(f, bytes);
+			return "https://api." + System.getenv("SERVER_URL") + "/image?id=" + hash;
+		} catch (IOException e) {
+			return null;
+		}
 	}
 }
