@@ -13,7 +13,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do multithreading no Shoukan" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do multithreading no Shoukan">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowImgCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowImagesCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RoleChooserCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RoleButtonCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1038,21 +1045,7 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
       <workItem from="1612285645204" duration="10161000" />
-      <workItem from="1612354962274" duration="6881000" />
-    </task>
-    <task id="LOCAL-03632" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612199520570</created>
-      <option name="number" value="03632" />
-      <option name="presentableId" value="LOCAL-03632" />
-      <option name="project" value="LOCAL" />
-      <updated>1612199520571</updated>
-    </task>
-    <task id="LOCAL-03633" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612199652006</created>
-      <option name="number" value="03633" />
-      <option name="presentableId" value="LOCAL-03633" />
-      <option name="project" value="LOCAL" />
-      <updated>1612199652007</updated>
+      <workItem from="1612354962274" duration="7557000" />
     </task>
     <task id="LOCAL-03634" summary="Novos comandos de trancar e destrancar o canal">
       <created>1612199744605</created>
@@ -1383,7 +1376,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612361935441</updated>
     </task>
-    <option name="localTasksCounter" value="3681" />
+    <task id="LOCAL-03681" summary="Remoção do multithreading no Shoukan">
+      <created>1612362320664</created>
+      <option name="number" value="03681" />
+      <option name="presentableId" value="LOCAL-03681" />
+      <option name="project" value="LOCAL" />
+      <updated>1612362320664</updated>
+    </task>
+    <task id="LOCAL-03682" summary="Remoção do multithreading no Shoukan">
+      <created>1612362437021</created>
+      <option name="number" value="03682" />
+      <option name="presentableId" value="LOCAL-03682" />
+      <option name="project" value="LOCAL" />
+      <updated>1612362437021</updated>
+    </task>
+    <option name="localTasksCounter" value="3683" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1555,10 +1562,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612361943295">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612362438137">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612361943295" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612362438137" />
     <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1612357315174">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
