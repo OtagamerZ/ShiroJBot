@@ -42,12 +42,7 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import javax.persistence.NoResultException;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class TenthMinuteEvent implements Job {
@@ -136,15 +131,6 @@ public class TenthMinuteEvent implements Job {
 					gc.setCanalGeral(null);
 					GuildDAO.updateGuildSettings(gc);
 				}
-			}
-		}
-
-		for (File file : Main.getInfo().getCollectionsFolder().listFiles()) {
-			try {
-				BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-				if (attr.creationTime().to(TimeUnit.MINUTES) >= 3)
-					file.delete();
-			} catch (IOException ignore) {
 			}
 		}
 	}

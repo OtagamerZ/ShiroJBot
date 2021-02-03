@@ -221,7 +221,7 @@ public class Arena {
 
 			g2d.dispose();
 
-			directUrl = Helper.serveImage(Helper.getBytes(back));
+			directUrl = Helper.serveImage(back);
 			return Helper.scaleImage(back, back.getWidth() / 2, back.getHeight() / 2);
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
