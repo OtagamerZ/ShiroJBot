@@ -86,6 +86,8 @@ import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -1198,6 +1200,11 @@ public class Helper {
 	}
 
 	public static byte[] getBytes(BufferedImage image) {
+		DataBuffer db = image.getRaster().getDataBuffer();
+		if (db.getDataType() == DataBuffer.TYPE_BYTE) {
+			return ((DataBufferByte) db).getData();
+		}
+
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(image, "jpg", baos);
 			return baos.toByteArray();
