@@ -49,7 +49,6 @@ public class HourlyEvent implements Job {
 						BackupDAO.getCADump(),
 						BackupDAO.getMemberDump(),
 						BackupDAO.getGuildDump(),
-						BackupDAO.getKawaigotchiDump(),
 						BackupDAO.getPoliticalStateDump(),
 						null
 				), false
