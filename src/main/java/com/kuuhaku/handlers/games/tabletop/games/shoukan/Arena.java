@@ -97,7 +97,6 @@ public class Arena {
 
 			Graphics2D g2d = back.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			g2d.drawImage(arena, 0, 0, null);
 
@@ -153,6 +152,8 @@ public class Arena {
 				th.execute(() -> {
 					BufferedImage side = new BufferedImage(back.getWidth(), back.getHeight() / 2, BufferedImage.TYPE_INT_ARGB);
 					Graphics2D g = side.createGraphics();
+					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
 					Side key = entry.getKey();
 					List<SlotColumn<Champion, Equipment>> value = entry.getValue();
 					Hand h = hands.get(key);
