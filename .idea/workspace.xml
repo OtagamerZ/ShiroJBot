@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Uso de multithreading na geração da arena Shoukan">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do multithreading no Shoukan" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1040,14 +1038,7 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
       <workItem from="1612285645204" duration="10161000" />
-      <workItem from="1612354962274" duration="6574000" />
-    </task>
-    <task id="LOCAL-03631" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612198777306</created>
-      <option name="number" value="03631" />
-      <option name="presentableId" value="LOCAL-03631" />
-      <option name="project" value="LOCAL" />
-      <updated>1612198777306</updated>
+      <workItem from="1612354962274" duration="6881000" />
     </task>
     <task id="LOCAL-03632" summary="Novos comandos de trancar e destrancar o canal">
       <created>1612199520570</created>
@@ -1385,7 +1376,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612361682282</updated>
     </task>
-    <option name="localTasksCounter" value="3680" />
+    <task id="LOCAL-03680" summary="Remoção do multithreading no Shoukan">
+      <created>1612361935441</created>
+      <option name="number" value="03680" />
+      <option name="presentableId" value="LOCAL-03680" />
+      <option name="project" value="LOCAL" />
+      <updated>1612361935441</updated>
+    </task>
+    <option name="localTasksCounter" value="3681" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1471,7 +1469,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhorias no Shoukan" />
     <MESSAGE value="Adicionado botão de reroll caso oponente não faça nada no primeiro turno" />
     <MESSAGE value="Correção na bolsa de valores" />
     <MESSAGE value="Adição de mais taxas" />
@@ -1496,7 +1493,8 @@
     <MESSAGE value="Implementações de sugestões" />
     <MESSAGE value="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;" />
     <MESSAGE value="Uso de multithreading na geração da arena Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Uso de multithreading na geração da arena Shoukan" />
+    <MESSAGE value="Remoção do multithreading no Shoukan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remoção do multithreading no Shoukan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1525,6 +1523,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612354997616" />
+    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1612362168635">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612362168635" />
     <state x="620" y="260" key="FileChooserDialogImpl" timestamp="1612274229542">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1545,14 +1547,18 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612274522813" />
+    <state x="539" y="207" key="RollbackChangesDialog" timestamp="1612361892404">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="539" y="207" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612361892404" />
     <state x="341" y="150" key="SettingsEditor" timestamp="1612355030067">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612361686773">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612361943295">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612361686773" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612361943295" />
     <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1612357315174">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
