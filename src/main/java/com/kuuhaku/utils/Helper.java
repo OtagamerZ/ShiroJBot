@@ -86,8 +86,6 @@ import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -2061,26 +2059,6 @@ public class Helper {
 	}
 
 	public static String serveImage(byte[] bytes) {
-		String hash = hash((System.currentTimeMillis() + hash(bytes, "MD5")).getBytes(StandardCharsets.UTF_8), "MD5");
-		File f = new File(Main.getInfo().getTemporaryFolder(), hash + ".jpg");
-
-		try {
-			f.createNewFile();
-			FileUtils.writeByteArrayToFile(f, bytes);
-			return "https://api." + System.getenv("SERVER_URL") + "/image?id=" + hash;
-		} catch (IOException e) {
-			return null;
-		}
-	}
-
-	public static String serveImage(BufferedImage image) {
-		byte[] bytes;
-		DataBuffer db = image.getRaster().getDataBuffer();
-		if (db.getDataType() == DataBuffer.TYPE_BYTE)
-			bytes = ((DataBufferByte) db).getData();
-		else
-			bytes = getBytes(image);
-
 		String hash = hash((System.currentTimeMillis() + hash(bytes, "MD5")).getBytes(StandardCharsets.UTF_8), "MD5");
 		File f = new File(Main.getInfo().getTemporaryFolder(), hash + ".jpg");
 
