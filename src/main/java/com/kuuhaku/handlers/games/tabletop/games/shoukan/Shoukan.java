@@ -242,7 +242,7 @@ public class Shoukan extends GlobalGame {
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
 				.and(e -> {
 					String[] args = e.getMessage().getContentRaw().split(",");
-					return (args.length > 0 && StringUtils.isNumeric(args[0])) || e.getMessage().getContentRaw().equalsIgnoreCase("reload");
+					return (args.length > 0 && StringUtils.isNumeric(args[0])) || e.getMessage().getContentRaw().equalsIgnoreCase("reload") || e.getMessage().getContentRaw().equalsIgnoreCase("noimg");
 				})
 				.and(e -> !isClosed())
 				.and(e -> !moveLock)
