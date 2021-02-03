@@ -19,14 +19,12 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -63,15 +61,20 @@ public class CommonRequest {
 
     @RequestMapping(value = "/image", method = RequestMethod.GET)
     public @ResponseBody
-    HttpEntity<byte[]> serveImage(@RequestParam(value = "id") String id) throws IOException {
-        BufferedImage img = Main.getInfo().getCachedImages().getIfPresent(id);
-        if (img == null) throw new FileNotFoundException();
+    HttpEntity<byte[]> serveImage(@RequestParam(value = "id") String id) throws IOException, InterruptedException {
+        byte[] bytes = Main.getInfo().getCachedImages().getIfPresent(id);
+        for (int i = 0; i < 3 && bytes == null; i++) {
+            bytes = Main.getInfo().getCachedImages().getIfPresent(id);
+            if (bytes != null) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.IMAGE_JPEG);
+                headers.setContentLength(bytes.length);
 
-        byte[] bytes = Helper.getBytes(img, "jpg", 0.5f);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        headers.setContentLength(bytes.length);
+                return new HttpEntity<>(bytes, headers);
+            }
+            Thread.sleep(500);
+        }
 
-        return new HttpEntity<>(bytes, headers);
+        throw new FileNotFoundException();
     }
 }
