@@ -27,14 +27,15 @@ import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.NContract;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class BackupDAO {
 	private static ExecutorService backupQueue = Executors.newFixedThreadPool(5);
@@ -45,7 +46,8 @@ public class BackupDAO {
 		List<Member> mDump = data.getmDump();
 		List<PoliticalState> psDump = data.getPsDump();
 
-		AtomicInteger done = new AtomicInteger();
+		NContract<Boolean> act = new NContract<>(4);
+		act.setAction(bols -> bols.stream().allMatch(Boolean::booleanValue));
 
 		backupQueue.execute(() -> {
 			EntityManager em = Manager.getEntityManager();
@@ -59,10 +61,7 @@ public class BackupDAO {
 
 			em.getTransaction().commit();
 			em.close();
-			done.getAndIncrement();
-			if (done.get() == 5 && exitAfter) {
-				if (Main.shutdown()) System.exit(0);
-			}
+			act.addSignature(0, true);
 		});
 
 		backupQueue.execute(() -> {
@@ -77,10 +76,7 @@ public class BackupDAO {
 
 			em.getTransaction().commit();
 			em.close();
-			done.getAndIncrement();
-			if (done.get() == 5 && exitAfter) {
-				if (Main.shutdown()) System.exit(0);
-			}
+			act.addSignature(1, true);
 		});
 
 		backupQueue.execute(() -> {
@@ -95,10 +91,7 @@ public class BackupDAO {
 
 			em.getTransaction().commit();
 			em.close();
-			done.getAndIncrement();
-			if (done.get() == 5 && exitAfter) {
-				if (Main.shutdown()) System.exit(0);
-			}
+			act.addSignature(2, true);
 		});
 
 		backupQueue.execute(() -> {
@@ -113,11 +106,16 @@ public class BackupDAO {
 
 			em.getTransaction().commit();
 			em.close();
-			done.getAndIncrement();
-			if (done.get() == 5 && exitAfter) {
+			act.addSignature(3, true);
+		});
+
+		try {
+			if (act.get()) {
 				if (Main.shutdown()) System.exit(0);
 			}
-		});
+		} catch (InterruptedException | ExecutionException e) {
+			Helper.logger(BackupDAO.class).error(e + " | " + e.getStackTrace()[0]);
+		}
 	}
 
 	private static void saveChunk(EntityManager em, int i, int size, String name) {
