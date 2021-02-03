@@ -56,6 +56,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -67,6 +68,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Shoukan extends GlobalGame {
+	private final long startTime = System.currentTimeMillis();
 	private final Map<Side, Hand> hands;
 	private final Map<Side, Clan> clans;
 	private final GameChannel channel;
@@ -2148,6 +2150,11 @@ public class Shoukan extends GlobalGame {
 				.setDescription("[Clique aqui para abrir a imagem](" + arena.getDirectUrl() + ")");
 
 		return eb.build();
+	}
+
+	public String getHash() {
+		String ids = hands.values().stream().map(h -> h.getUser().getId()).collect(Collectors.joining());
+		return Helper.hash((ids + startTime).getBytes(StandardCharsets.UTF_8), "SHA-256");
 	}
 
 	@Override

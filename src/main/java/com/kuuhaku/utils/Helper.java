@@ -2057,10 +2057,15 @@ public class Helper {
 		return values;
 	}
 
-	public static String serveImage(BufferedImage img) {
+	public static String serveImage(byte[] bytes) {
 		String hash = hash(String.valueOf(System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "MD5");
 
-		Main.getInfo().getCachedImages().put(hash, img);
+		Main.getInfo().getCachedImages().put(hash, bytes);
+		return "https://api." + System.getenv("SERVER_URL") + "/image?id=" + hash;
+	}
+
+	public static String serveImage(byte[] bytes, String hash) {
+		Main.getInfo().getCachedImages().put(hash, bytes);
 		return "https://api." + System.getenv("SERVER_URL") + "/image?id=" + hash;
 	}
 }
