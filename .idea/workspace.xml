@@ -13,13 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do multithreading no Shoukan">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de otimização da velocidade de geração de imagens">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowImgCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowImagesCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RoleChooserCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RoleButtonCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1045,175 +1040,9 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
       <workItem from="1612285645204" duration="10161000" />
-      <workItem from="1612354962274" duration="7557000" />
-    </task>
-    <task id="LOCAL-03634" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612199744605</created>
-      <option name="number" value="03634" />
-      <option name="presentableId" value="LOCAL-03634" />
-      <option name="project" value="LOCAL" />
-      <updated>1612199744605</updated>
-    </task>
-    <task id="LOCAL-03635" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612199987264</created>
-      <option name="number" value="03635" />
-      <option name="presentableId" value="LOCAL-03635" />
-      <option name="project" value="LOCAL" />
-      <updated>1612199987264</updated>
-    </task>
-    <task id="LOCAL-03636" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612200122880</created>
-      <option name="number" value="03636" />
-      <option name="presentableId" value="LOCAL-03636" />
-      <option name="project" value="LOCAL" />
-      <updated>1612200122880</updated>
-    </task>
-    <task id="LOCAL-03637" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612200192249</created>
-      <option name="number" value="03637" />
-      <option name="presentableId" value="LOCAL-03637" />
-      <option name="project" value="LOCAL" />
-      <updated>1612200192249</updated>
-    </task>
-    <task id="LOCAL-03638" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612200364938</created>
-      <option name="number" value="03638" />
-      <option name="presentableId" value="LOCAL-03638" />
-      <option name="project" value="LOCAL" />
-      <updated>1612200364938</updated>
-    </task>
-    <task id="LOCAL-03639" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612200390100</created>
-      <option name="number" value="03639" />
-      <option name="presentableId" value="LOCAL-03639" />
-      <option name="project" value="LOCAL" />
-      <updated>1612200390100</updated>
-    </task>
-    <task id="LOCAL-03640" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612201716170</created>
-      <option name="number" value="03640" />
-      <option name="presentableId" value="LOCAL-03640" />
-      <option name="project" value="LOCAL" />
-      <updated>1612201716170</updated>
-    </task>
-    <task id="LOCAL-03641" summary="Adição de requisitos de permissão">
-      <created>1612274104510</created>
-      <option name="number" value="03641" />
-      <option name="presentableId" value="LOCAL-03641" />
-      <option name="project" value="LOCAL" />
-      <updated>1612274104510</updated>
-    </task>
-    <task id="LOCAL-03642" summary="Atualização da biblioteca de paginação">
-      <created>1612290948700</created>
-      <option name="number" value="03642" />
-      <option name="presentableId" value="LOCAL-03642" />
-      <option name="project" value="LOCAL" />
-      <updated>1612290948700</updated>
-    </task>
-    <task id="LOCAL-03643" summary="Atualização da biblioteca de paginação">
-      <created>1612291474583</created>
-      <option name="number" value="03643" />
-      <option name="presentableId" value="LOCAL-03643" />
-      <option name="project" value="LOCAL" />
-      <updated>1612291474583</updated>
-    </task>
-    <task id="LOCAL-03644" summary="Implementações de sugestões">
-      <created>1612292429689</created>
-      <option name="number" value="03644" />
-      <option name="presentableId" value="LOCAL-03644" />
-      <option name="project" value="LOCAL" />
-      <updated>1612292429689</updated>
-    </task>
-    <task id="LOCAL-03645" summary="Implementações de sugestões">
-      <created>1612292735277</created>
-      <option name="number" value="03645" />
-      <option name="presentableId" value="LOCAL-03645" />
-      <option name="project" value="LOCAL" />
-      <updated>1612292735277</updated>
-    </task>
-    <task id="LOCAL-03646" summary="Implementações de sugestões">
-      <created>1612292752318</created>
-      <option name="number" value="03646" />
-      <option name="presentableId" value="LOCAL-03646" />
-      <option name="project" value="LOCAL" />
-      <updated>1612292752319</updated>
-    </task>
-    <task id="LOCAL-03647" summary="Implementações de sugestões">
-      <created>1612293112455</created>
-      <option name="number" value="03647" />
-      <option name="presentableId" value="LOCAL-03647" />
-      <option name="project" value="LOCAL" />
-      <updated>1612293112455</updated>
-    </task>
-    <task id="LOCAL-03648" summary="Implementações de sugestões">
-      <created>1612293519935</created>
-      <option name="number" value="03648" />
-      <option name="presentableId" value="LOCAL-03648" />
-      <option name="project" value="LOCAL" />
-      <updated>1612293519936</updated>
-    </task>
-    <task id="LOCAL-03649" summary="Implementações de sugestões">
-      <created>1612293608107</created>
-      <option name="number" value="03649" />
-      <option name="presentableId" value="LOCAL-03649" />
-      <option name="project" value="LOCAL" />
-      <updated>1612293608107</updated>
-    </task>
-    <task id="LOCAL-03650" summary="Implementações de sugestões">
-      <created>1612293730502</created>
-      <option name="number" value="03650" />
-      <option name="presentableId" value="LOCAL-03650" />
-      <option name="project" value="LOCAL" />
-      <updated>1612293730502</updated>
-    </task>
-    <task id="LOCAL-03651" summary="Implementações de sugestões">
-      <created>1612293808097</created>
-      <option name="number" value="03651" />
-      <option name="presentableId" value="LOCAL-03651" />
-      <option name="project" value="LOCAL" />
-      <updated>1612293808097</updated>
-    </task>
-    <task id="LOCAL-03652" summary="Implementações de sugestões">
-      <created>1612293899735</created>
-      <option name="number" value="03652" />
-      <option name="presentableId" value="LOCAL-03652" />
-      <option name="project" value="LOCAL" />
-      <updated>1612293899735</updated>
-    </task>
-    <task id="LOCAL-03653" summary="Implementações de sugestões">
-      <created>1612294278995</created>
-      <option name="number" value="03653" />
-      <option name="presentableId" value="LOCAL-03653" />
-      <option name="project" value="LOCAL" />
-      <updated>1612294278995</updated>
-    </task>
-    <task id="LOCAL-03654" summary="Implementações de sugestões">
-      <created>1612294403757</created>
-      <option name="number" value="03654" />
-      <option name="presentableId" value="LOCAL-03654" />
-      <option name="project" value="LOCAL" />
-      <updated>1612294403757</updated>
-    </task>
-    <task id="LOCAL-03655" summary="Implementações de sugestões">
-      <created>1612294821576</created>
-      <option name="number" value="03655" />
-      <option name="presentableId" value="LOCAL-03655" />
-      <option name="project" value="LOCAL" />
-      <updated>1612294821576</updated>
-    </task>
-    <task id="LOCAL-03656" summary="Implementações de sugestões">
-      <created>1612294871452</created>
-      <option name="number" value="03656" />
-      <option name="presentableId" value="LOCAL-03656" />
-      <option name="project" value="LOCAL" />
-      <updated>1612294871452</updated>
-    </task>
-    <task id="LOCAL-03657" summary="Implementações de sugestões">
-      <created>1612295671329</created>
-      <option name="number" value="03657" />
-      <option name="presentableId" value="LOCAL-03657" />
-      <option name="project" value="LOCAL" />
-      <updated>1612295671330</updated>
+      <workItem from="1612354962274" duration="21119000" />
+      <workItem from="1612383548985" duration="1402000" />
+      <workItem from="1612385325607" duration="114000" />
     </task>
     <task id="LOCAL-03658" summary="Implementações de sugestões">
       <created>1612296030400</created>
@@ -1390,7 +1219,175 @@
       <option name="project" value="LOCAL" />
       <updated>1612362437021</updated>
     </task>
-    <option name="localTasksCounter" value="3683" />
+    <task id="LOCAL-03683" summary="Remoção do multithreading no Shoukan">
+      <created>1612363113285</created>
+      <option name="number" value="03683" />
+      <option name="presentableId" value="LOCAL-03683" />
+      <option name="project" value="LOCAL" />
+      <updated>1612363113285</updated>
+    </task>
+    <task id="LOCAL-03684" summary="Remoção do multithreading no Shoukan">
+      <created>1612363180490</created>
+      <option name="number" value="03684" />
+      <option name="presentableId" value="LOCAL-03684" />
+      <option name="project" value="LOCAL" />
+      <updated>1612363180490</updated>
+    </task>
+    <task id="LOCAL-03685" summary="Remoção do multithreading no Shoukan">
+      <created>1612363480504</created>
+      <option name="number" value="03685" />
+      <option name="presentableId" value="LOCAL-03685" />
+      <option name="project" value="LOCAL" />
+      <updated>1612363480504</updated>
+    </task>
+    <task id="LOCAL-03686" summary="Remoção do multithreading no Shoukan">
+      <created>1612364434796</created>
+      <option name="number" value="03686" />
+      <option name="presentableId" value="LOCAL-03686" />
+      <option name="project" value="LOCAL" />
+      <updated>1612364434796</updated>
+    </task>
+    <task id="LOCAL-03687" summary="Imagens das arenas agora são armazenadas pela Shiro ao invés de enviadas ao Discord">
+      <created>1612369370440</created>
+      <option name="number" value="03687" />
+      <option name="presentableId" value="LOCAL-03687" />
+      <option name="project" value="LOCAL" />
+      <updated>1612369370440</updated>
+    </task>
+    <task id="LOCAL-03688" summary="Imagens das arenas agora são armazenadas pela Shiro ao invés de enviadas ao Discord">
+      <created>1612370347321</created>
+      <option name="number" value="03688" />
+      <option name="presentableId" value="LOCAL-03688" />
+      <option name="project" value="LOCAL" />
+      <updated>1612370347321</updated>
+    </task>
+    <task id="LOCAL-03689" summary="Imagens das arenas agora são armazenadas pela Shiro ao invés de enviadas ao Discord">
+      <created>1612370384921</created>
+      <option name="number" value="03689" />
+      <option name="presentableId" value="LOCAL-03689" />
+      <option name="project" value="LOCAL" />
+      <updated>1612370384921</updated>
+    </task>
+    <task id="LOCAL-03690" summary="Reversão do último commit">
+      <created>1612370624864</created>
+      <option name="number" value="03690" />
+      <option name="presentableId" value="LOCAL-03690" />
+      <option name="project" value="LOCAL" />
+      <updated>1612370624864</updated>
+    </task>
+    <task id="LOCAL-03691" summary="Reversão do último commit">
+      <created>1612371694842</created>
+      <option name="number" value="03691" />
+      <option name="presentableId" value="LOCAL-03691" />
+      <option name="project" value="LOCAL" />
+      <updated>1612371694842</updated>
+    </task>
+    <task id="LOCAL-03692" summary="Reversão do último commit">
+      <created>1612372005987</created>
+      <option name="number" value="03692" />
+      <option name="presentableId" value="LOCAL-03692" />
+      <option name="project" value="LOCAL" />
+      <updated>1612372005987</updated>
+    </task>
+    <task id="LOCAL-03693" summary="Reversão do último commit">
+      <created>1612372219988</created>
+      <option name="number" value="03693" />
+      <option name="presentableId" value="LOCAL-03693" />
+      <option name="project" value="LOCAL" />
+      <updated>1612372219988</updated>
+    </task>
+    <task id="LOCAL-03694" summary="Reversão do último commit">
+      <created>1612372480919</created>
+      <option name="number" value="03694" />
+      <option name="presentableId" value="LOCAL-03694" />
+      <option name="project" value="LOCAL" />
+      <updated>1612372480920</updated>
+    </task>
+    <task id="LOCAL-03695" summary="Reversão do último commit">
+      <created>1612373034045</created>
+      <option name="number" value="03695" />
+      <option name="presentableId" value="LOCAL-03695" />
+      <option name="project" value="LOCAL" />
+      <updated>1612373034045</updated>
+    </task>
+    <task id="LOCAL-03696" summary="Reversão do último commit">
+      <created>1612373193779</created>
+      <option name="number" value="03696" />
+      <option name="presentableId" value="LOCAL-03696" />
+      <option name="project" value="LOCAL" />
+      <updated>1612373193779</updated>
+    </task>
+    <task id="LOCAL-03697" summary="Reversão do último commit">
+      <created>1612373467765</created>
+      <option name="number" value="03697" />
+      <option name="presentableId" value="LOCAL-03697" />
+      <option name="project" value="LOCAL" />
+      <updated>1612373467765</updated>
+    </task>
+    <task id="LOCAL-03698" summary="Reversão do último commit">
+      <created>1612374082484</created>
+      <option name="number" value="03698" />
+      <option name="presentableId" value="LOCAL-03698" />
+      <option name="project" value="LOCAL" />
+      <updated>1612374082484</updated>
+    </task>
+    <task id="LOCAL-03699" summary="Reversão do último commit">
+      <created>1612374826072</created>
+      <option name="number" value="03699" />
+      <option name="presentableId" value="LOCAL-03699" />
+      <option name="project" value="LOCAL" />
+      <updated>1612374826073</updated>
+    </task>
+    <task id="LOCAL-03700" summary="Reversão do último commit">
+      <created>1612374961068</created>
+      <option name="number" value="03700" />
+      <option name="presentableId" value="LOCAL-03700" />
+      <option name="project" value="LOCAL" />
+      <updated>1612374961068</updated>
+    </task>
+    <task id="LOCAL-03701" summary="Reversão do último commit">
+      <created>1612375222456</created>
+      <option name="number" value="03701" />
+      <option name="presentableId" value="LOCAL-03701" />
+      <option name="project" value="LOCAL" />
+      <updated>1612375222457</updated>
+    </task>
+    <task id="LOCAL-03702" summary="Correções menores">
+      <created>1612375505237</created>
+      <option name="number" value="03702" />
+      <option name="presentableId" value="LOCAL-03702" />
+      <option name="project" value="LOCAL" />
+      <updated>1612375505237</updated>
+    </task>
+    <task id="LOCAL-03703" summary="Correções menores">
+      <created>1612376055312</created>
+      <option name="number" value="03703" />
+      <option name="presentableId" value="LOCAL-03703" />
+      <option name="project" value="LOCAL" />
+      <updated>1612376055312</updated>
+    </task>
+    <task id="LOCAL-03704" summary="Adição de BufferedOutputStreams">
+      <created>1612380068492</created>
+      <option name="number" value="03704" />
+      <option name="presentableId" value="LOCAL-03704" />
+      <option name="project" value="LOCAL" />
+      <updated>1612380068492</updated>
+    </task>
+    <task id="LOCAL-03705" summary="Tentativa de otimização da velocidade de geração de imagens">
+      <created>1612380539679</created>
+      <option name="number" value="03705" />
+      <option name="presentableId" value="LOCAL-03705" />
+      <option name="project" value="LOCAL" />
+      <updated>1612380539679</updated>
+    </task>
+    <task id="LOCAL-03706" summary="Tentativa de otimização da velocidade de geração de imagens">
+      <created>1612381665864</created>
+      <option name="number" value="03706" />
+      <option name="presentableId" value="LOCAL-03706" />
+      <option name="project" value="LOCAL" />
+      <updated>1612381665864</updated>
+    </task>
+    <option name="localTasksCounter" value="3707" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1476,10 +1473,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adicionado botão de reroll caso oponente não faça nada no primeiro turno" />
-    <MESSAGE value="Correção na bolsa de valores" />
-    <MESSAGE value="Adição de mais taxas" />
-    <MESSAGE value="Correção no logger" />
     <MESSAGE value="Correção no icone e banner dos clãs" />
     <MESSAGE value="Colocados os pingos nos Is" />
     <MESSAGE value="Adicionado comando de estatísticas de partida" />
@@ -1492,7 +1485,6 @@
     <MESSAGE value="Correções menores no desafios diarios" />
     <MESSAGE value="Adicionado Shoukan em duplas" />
     <MESSAGE value="Adição de filas ranqueadas (Solo/Duo)" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Novos comandos de trancar e destrancar o canal" />
     <MESSAGE value="Rework no CommandManager" />
     <MESSAGE value="Adição de requisitos de permissão" />
@@ -1501,7 +1493,12 @@
     <MESSAGE value="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;" />
     <MESSAGE value="Uso de multithreading na geração da arena Shoukan" />
     <MESSAGE value="Remoção do multithreading no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remoção do multithreading no Shoukan" />
+    <MESSAGE value="Imagens das arenas agora são armazenadas pela Shiro ao invés de enviadas ao Discord" />
+    <MESSAGE value="Reversão do último commit" />
+    <MESSAGE value="Correções menores" />
+    <MESSAGE value="Adição de BufferedOutputStreams" />
+    <MESSAGE value="Tentativa de otimização da velocidade de geração de imagens" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tentativa de otimização da velocidade de geração de imagens" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1510,10 +1507,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="294" y="160" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612294211770" />
-    <state x="645" y="211" key="#com.intellij.ide.util.MemberChooser" timestamp="1612355230936">
+    <state x="645" y="211" key="#com.intellij.ide.util.MemberChooser" timestamp="1612373707054">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="645" y="211" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1612355230936" />
+    <state x="645" y="211" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1612373707054" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1612274118010">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1530,10 +1527,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="403" y="92" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1612354997616" />
-    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1612362168635">
+    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1612363774318">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612362168635" />
+    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612363774318" />
     <state x="620" y="260" key="FileChooserDialogImpl" timestamp="1612274229542">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1554,18 +1551,18 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612274522813" />
-    <state x="539" y="207" key="RollbackChangesDialog" timestamp="1612361892404">
+    <state x="539" y="207" key="RollbackChangesDialog" timestamp="1612375973893">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="539" y="207" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612361892404" />
+    <state x="539" y="207" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612375973893" />
     <state x="341" y="150" key="SettingsEditor" timestamp="1612355030067">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612362438137">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612381730286">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612362438137" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612381730286" />
     <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1612357315174">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1582,10 +1579,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612359512946" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612357170616">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612380203118">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612357170616" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612380203118" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>
