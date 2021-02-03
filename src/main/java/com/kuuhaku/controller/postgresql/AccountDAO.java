@@ -21,6 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.model.persistent.Account;
 
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class AccountDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT a FROM Account a WHERE remind = TRUE", Account.class);
+		q.setLockMode(LockModeType.PESSIMISTIC_READ);
 
 		try {
 			return q.getResultList();
@@ -45,6 +47,7 @@ public class AccountDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT a FROM Account a WHERE vBalance > 0", Account.class);
+		q.setLockMode(LockModeType.PESSIMISTIC_READ);
 
 		try {
 			return q.getResultList();
@@ -56,15 +59,15 @@ public class AccountDAO {
 	public static Account getAccount(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT a FROM Account a WHERE userId = :id", Account.class);
-		q.setParameter("id", id);
-
 		try {
-			return (Account) q.getSingleResult();
-		} catch (NoResultException e) {
-			Account acc = new Account();
-			acc.setUserId(id);
-			saveAccount(acc);
+			Account acc = em.find(Account.class, id, LockModeType.PESSIMISTIC_READ);
+			if (acc == null) {
+				acc = new Account();
+				acc.setUserId(id);
+				saveAccount(acc);
+				acc = getAccount(id);
+			}
+
 			return acc;
 		} finally {
 			em.close();
@@ -75,6 +78,7 @@ public class AccountDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT a FROM Account a WHERE twitchId = :id", Account.class);
+		q.setLockMode(LockModeType.PESSIMISTIC_READ);
 		q.setParameter("id", id);
 
 		try {
@@ -91,6 +95,7 @@ public class AccountDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
+		em.lock(acc, LockModeType.PESSIMISTIC_WRITE);
 		em.merge(acc);
 		em.getTransaction().commit();
 
@@ -101,6 +106,7 @@ public class AccountDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
+		em.lock(acc, LockModeType.PESSIMISTIC_WRITE);
 		em.remove(acc);
 		em.getTransaction().commit();
 
@@ -112,6 +118,7 @@ public class AccountDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT a FROM Account a ORDER BY a.balance DESC", Account.class);
+		q.setLockMode(LockModeType.PESSIMISTIC_READ);
 
 		try {
 			return q.getResultList();
