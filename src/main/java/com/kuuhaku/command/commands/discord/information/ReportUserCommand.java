@@ -45,11 +45,7 @@ import java.util.concurrent.TimeUnit;
 		usage = "req_user-reason",
 		category = Category.INFO
 )
-@Requires({
-		Permission.MESSAGE_MANAGE,
-		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_ADD_REACTION
-})
+@Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
 public class ReportUserCommand implements Executable {
 
 	@Override
