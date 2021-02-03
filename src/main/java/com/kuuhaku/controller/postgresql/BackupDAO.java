@@ -40,7 +40,7 @@ import java.util.concurrent.Executors;
 public class BackupDAO {
 	private static ExecutorService backupQueue = Executors.newFixedThreadPool(5);
 
-	public static void dumpData(DataDump data, boolean exitAfter) {
+	public static void dumpData(DataDump data, boolean thenExit) {
 		List<CustomAnswer> caDump = data.getCaDump();
 		List<GuildConfig> gcDump = data.getGcDump();
 		List<Member> mDump = data.getmDump();
@@ -110,7 +110,7 @@ public class BackupDAO {
 		});
 
 		try {
-			if (act.get()) {
+			if (act.get() && thenExit) {
 				if (Main.shutdown()) System.exit(0);
 			}
 		} catch (InterruptedException | ExecutionException e) {
