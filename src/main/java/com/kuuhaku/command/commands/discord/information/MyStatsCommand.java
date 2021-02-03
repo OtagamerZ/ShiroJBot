@@ -22,10 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
-import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -57,7 +54,6 @@ public class MyStatsCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
-		Kawaigotchi kg = KGotchiDAO.getKawaigotchi(author.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
@@ -91,18 +87,12 @@ public class MyStatsCommand implements Executable {
 
 		boolean victorious = Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
 		boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
-		boolean kgotchi = kg != null;
 
 		int xp = (int) (15
 						* (victorious ? 2 : 1)
 						* (waifu ? WaifuDAO.getMultiplier(author).getMult() : 1)
 						* (gb.getBuff(1) != null ? gb.getBuff(1).getMult() : 1)
 		);
-
-		if (kgotchi) {
-			if (kg.isAlive() && kg.getTier() != Tier.CHILD) xp *= kg.getTier().getUserXpMult();
-			else if (!kg.isAlive()) xp *= 0.8;
-		}
 
 		float collection = Helper.prcnt(kp.getCards().size(), CardDAO.totalCards() * 2);
 		if (collection >= 1) xp *= 2;

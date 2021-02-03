@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -25,6 +27,7 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
+@DynamicUpdate
 @Table(name = "exceedmember")
 public class ExceedMember {
 	@Id
