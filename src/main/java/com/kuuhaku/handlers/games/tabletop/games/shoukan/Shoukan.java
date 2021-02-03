@@ -53,6 +53,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -67,7 +68,7 @@ public class Shoukan extends GlobalGame {
 	private final Map<Side, Hand> hands;
 	private final Map<Side, Clan> clans;
 	private final GameChannel channel;
-	private final Arena arena = new Arena();
+	private final Arena arena;
 	private final SimpleMessageListener listener = new SimpleMessageListener() {
 		@Override
 		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -88,12 +89,20 @@ public class Shoukan extends GlobalGame {
 	private int effectLock = 0;
 	private final List<Drawable> discardBatch = new ArrayList<>();
 	private boolean reroll = true;
+	private boolean moveLock = false;
 
 	public Shoukan(ShardManager handler, GameChannel channel, int bet, JSONObject custom, boolean daily, boolean ranked, List<Clan> clans, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel, ranked, custom);
 		this.channel = channel;
 		this.daily = daily;
 		this.team = false;
+		Arena arena1;
+		try {
+			arena1 = new Arena();
+		} catch (IOException e) {
+			arena1 = null;
+		}
+		this.arena = arena1;
 
 		this.hands = Map.of(
 				Side.TOP, new Hand(this, players[0], clans.get(0), Side.TOP),
@@ -148,6 +157,13 @@ public class Shoukan extends GlobalGame {
 		this.channel = channel;
 		this.daily = daily;
 		this.team = players.length == 4;
+		Arena arena1;
+		try {
+			arena1 = new Arena();
+		} catch (IOException e) {
+			arena1 = null;
+		}
+		this.arena = arena1;
 
 		if (team) {
 			List<Kawaipon> kps = daily ? Collections.nCopies(4, Helper.getDailyDeck()) : List.of(
@@ -244,6 +260,7 @@ public class Shoukan extends GlobalGame {
 					return (args.length > 0 && StringUtils.isNumeric(args[0])) || e.getMessage().getContentRaw().equalsIgnoreCase("reload");
 				})
 				.and(e -> !isClosed())
+				.and(e -> !moveLock)
 				.test(evt);
 	}
 
@@ -254,6 +271,7 @@ public class Shoukan extends GlobalGame {
 		Hand h = getHands().get(current);
 
 		if (cmd.equalsIgnoreCase("reload")) {
+			moveLock = true;
 			channel.sendMessage(message.getAuthor().getName() + " recriou a mensagem do jogo.")
 					.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 					.queue(s -> {
@@ -263,6 +281,7 @@ public class Shoukan extends GlobalGame {
 							return s;
 						});
 						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						moveLock = false;
 					});
 			return;
 		}
@@ -319,6 +338,7 @@ public class Shoukan extends GlobalGame {
 
 					changed[index] = true;
 					resetTimerKeepTurn();
+					moveLock = true;
 					act.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(s -> {
 								this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -327,6 +347,7 @@ public class Shoukan extends GlobalGame {
 									return s;
 								});
 								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
 							});
 					return;
 				}
@@ -347,6 +368,7 @@ public class Shoukan extends GlobalGame {
 
 					resetTimerKeepTurn();
 					AtomicBoolean shownHand = new AtomicBoolean(false);
+					moveLock = true;
 					channel.sendMessage(h.getUser().getName() + " descartou a carta " + d.getCard().getName() + ".")
 							.addFile(Helper.getBytes(arena.render(this, hands), "jpg"), "board.jpg")
 							.queue(s -> {
@@ -356,6 +378,7 @@ public class Shoukan extends GlobalGame {
 									return s;
 								});
 								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
 								if (!shownHand.get()) {
 									shownHand.set(true);
 									h.showHand();
@@ -477,6 +500,7 @@ public class Shoukan extends GlobalGame {
 						if (!postCombat()) {
 							resetTimerKeepTurn();
 							AtomicBoolean shownHand = new AtomicBoolean(false);
+							moveLock = true;
 							channel.sendMessage(result)
 									.addFile(Helper.getBytes(arena.render(this, hands), "jpg"), "board.jpg")
 									.queue(s -> {
@@ -486,6 +510,7 @@ public class Shoukan extends GlobalGame {
 											return s;
 										});
 										Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+										moveLock = false;
 										if (!shownHand.get()) {
 											shownHand.set(true);
 											h.showHand();
@@ -650,6 +675,7 @@ public class Shoukan extends GlobalGame {
 
 				resetTimerKeepTurn();
 				AtomicBoolean shownHand = new AtomicBoolean(false);
+				moveLock = true;
 				channel.sendMessage(msg)
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg"), "board.jpg")
 						.queue(s -> {
@@ -659,6 +685,7 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 							if (!shownHand.get()) {
 								shownHand.set(true);
 								h.showHand();
@@ -722,6 +749,7 @@ public class Shoukan extends GlobalGame {
 
 					if (!postCombat()) {
 						resetTimerKeepTurn();
+						moveLock = true;
 						channel.sendMessage(c.getName() + " atacou diretamente " + getHands().get(next).getUser().getName() + (getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "") + ".")
 								.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 								.queue(s -> {
@@ -731,6 +759,7 @@ public class Shoukan extends GlobalGame {
 										return s;
 									});
 									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									moveLock = false;
 								});
 					}
 					return;
@@ -769,6 +798,7 @@ public class Shoukan extends GlobalGame {
 
 						if (!postCombat()) {
 							resetTimerKeepTurn();
+							moveLock = true;
 							channel.sendMessage("Cálculo de combate ignorado por efeito do atacante!")
 									.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 									.queue(s -> {
@@ -778,6 +808,7 @@ public class Shoukan extends GlobalGame {
 											return s;
 										});
 										Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+										moveLock = false;
 									});
 						}
 						return;
@@ -790,6 +821,7 @@ public class Shoukan extends GlobalGame {
 					if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
 						if (!postCombat()) {
 							resetTimerKeepTurn();
+							moveLock = true;
 							channel.sendMessage("Cálculo de combate ignorado por efeito do defensor!")
 									.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 									.queue(s -> {
@@ -799,6 +831,7 @@ public class Shoukan extends GlobalGame {
 											return s;
 										});
 										Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+										moveLock = false;
 									});
 						}
 						return;
@@ -890,6 +923,7 @@ public class Shoukan extends GlobalGame {
 				killCard(next, is[1]);
 				if (!postCombat()) {
 					resetTimerKeepTurn();
+					moveLock = true;
 					channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
 							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(s -> {
@@ -899,10 +933,12 @@ public class Shoukan extends GlobalGame {
 									return s;
 								});
 								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
 							});
 				}
 			} else if (yours.getCard().getId().equals("DECOY")) {
 				resetTimerKeepTurn();
+				moveLock = true;
 				channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -912,10 +948,12 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 						});
 			} else {
 				killCard(next, is[1]);
 				resetTimerKeepTurn();
+				moveLock = true;
 				channel.sendMessage("Essa carta era na verdade uma isca!")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -925,6 +963,7 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 						});
 			}
 		} else if (yPower < hPower) {
@@ -951,6 +990,7 @@ public class Shoukan extends GlobalGame {
 				killCard(current, is[0]);
 				if (!postCombat()) {
 					resetTimerKeepTurn();
+					moveLock = true;
 					channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")")
 							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(s -> {
@@ -960,11 +1000,13 @@ public class Shoukan extends GlobalGame {
 									return s;
 								});
 								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
 							});
 				}
 			} else if (his.getCard().getId().equals("DECOY")) {
 				killCard(current, is[0]);
 				resetTimerKeepTurn();
+				moveLock = true;
 				channel.sendMessage(yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -974,9 +1016,11 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 						});
 			} else {
 				resetTimerKeepTurn();
+				moveLock = true;
 				channel.sendMessage("Essa carta era na verdade uma isca!")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -986,6 +1030,7 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 						});
 			}
 		} else {
@@ -1006,6 +1051,7 @@ public class Shoukan extends GlobalGame {
 
 				if (!postCombat()) {
 					resetTimerKeepTurn();
+					moveLock = true;
 					channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
 							.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(s -> {
@@ -1015,12 +1061,14 @@ public class Shoukan extends GlobalGame {
 									return s;
 								});
 								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
 							});
 				}
 			} else if (Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 				killCard(next, is[1]);
 				killCard(current, is[0]);
 				resetTimerKeepTurn();
+				moveLock = true;
 				channel.sendMessage("As duas cartas na verdade eram iscas! (" + yPower + " = " + hPower + ")")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -1030,10 +1078,12 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 						});
 			} else if (his.getCard().getId().equals("DECOY")) {
 				killCard(next, is[1]);
 				resetTimerKeepTurn();
+				moveLock = true;
 				channel.sendMessage("As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -1043,10 +1093,12 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 						});
 			} else {
 				killCard(current, is[0]);
 				resetTimerKeepTurn();
+				moveLock = true;
 				channel.sendMessage("As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -1056,6 +1108,7 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 						});
 			}
 		}
@@ -1625,6 +1678,7 @@ public class Shoukan extends GlobalGame {
 				h.get().decreaseLockTime();
 				h.get().addMana(h.get().getManaPerTurn());
 				AtomicBoolean shownHand = new AtomicBoolean(false);
+				moveLock = true;
 				channel.sendMessage(u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -1634,6 +1688,7 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 							if (!shownHand.get()) {
 								shownHand.set(true);
 								h.get().showHand();
@@ -1650,6 +1705,7 @@ public class Shoukan extends GlobalGame {
 				draw = false;
 				reroll = false;
 				resetTimerKeepTurn();
+				moveLock = true;
 				channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -1659,6 +1715,7 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 						});
 			});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
@@ -1707,6 +1764,7 @@ public class Shoukan extends GlobalGame {
 			remaining = 5 - h.getCards().size();
 			resetTimerKeepTurn();
 			AtomicBoolean shownHand = new AtomicBoolean(false);
+			moveLock = true;
 			channel.sendMessage(getCurrent().getName() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")")
 					.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 					.queue(s -> {
@@ -1716,6 +1774,7 @@ public class Shoukan extends GlobalGame {
 							return s;
 						});
 						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						moveLock = false;
 						if (!shownHand.get()) {
 							shownHand.set(true);
 							h.showHand();
@@ -1736,6 +1795,7 @@ public class Shoukan extends GlobalGame {
 				reroll = false;
 				resetTimerKeepTurn();
 				AtomicBoolean shownHand = new AtomicBoolean(false);
+				moveLock = true;
 				channel.sendMessage(getCurrent().getName() + " rolou novamente as cartas na mão!")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -1745,6 +1805,7 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 							if (!shownHand.get()) {
 								shownHand.set(true);
 								h.showHand();
@@ -1764,6 +1825,7 @@ public class Shoukan extends GlobalGame {
 
 				resetTimerKeepTurn();
 				AtomicBoolean shownHand = new AtomicBoolean(false);
+				moveLock = true;
 				channel.sendMessage(getCurrent().getName() + " executou um saque do destino!")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -1773,6 +1835,7 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 							if (!shownHand.get()) {
 								shownHand.set(true);
 								h.showHand();
@@ -1836,6 +1899,7 @@ public class Shoukan extends GlobalGame {
 				h.get().addMana(h.get().getManaPerTurn());
 				AtomicBoolean shownHand = new AtomicBoolean(false);
 				draw = true;
+				moveLock = true;
 				channel.sendMessage(u.getName() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D caso queira aceitar ou continue jogando normalmente.")
 						.addFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 						.queue(s -> {
@@ -1845,6 +1909,7 @@ public class Shoukan extends GlobalGame {
 								return s;
 							});
 							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
 							if (!shownHand.get()) {
 								shownHand.set(true);
 								h.get().showHand();

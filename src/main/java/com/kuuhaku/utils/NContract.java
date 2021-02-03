@@ -22,9 +22,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-public class NContract<A> {
+public class NContract<A> extends CompletableFuture<A> {
 	private final int signers;
 	private Function<List<A>, A> action = null;
 	private final Map<Integer, A> signatures = new HashMap<>();
@@ -50,9 +51,10 @@ public class NContract<A> {
 		return signatures;
 	}
 
-	public A addSignature(int index, A signature) {
+	public void addSignature(int index, A signature) {
 		this.signatures.put(index, signature);
-		return checkContract();
+		A result = checkContract();
+		if (result != null) complete(result);
 	}
 
 	private A checkContract() {

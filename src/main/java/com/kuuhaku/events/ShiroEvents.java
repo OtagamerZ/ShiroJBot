@@ -243,6 +243,14 @@ public class ShiroEvents extends ListenerAdapter {
 				return;
 			}
 
+			if (toHandle.containsKey(guild.getId())) {
+				List<SimpleMessageListener> evts = getHandler().get(guild.getId());
+				for (SimpleMessageListener evt : evts) {
+					evt.onGuildMessageReceived(event);
+				}
+				evts.removeIf(SimpleMessageListener::isClosed);
+			}
+
 			PreparedCommand command = Main.getCommandManager().getCommand(commandName);
 			if (command != null) {
 				found = command.getCategory().isEnabled(gc, guild, author);
@@ -297,14 +305,6 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			if (!found && !author.isBot() && !blacklisted) {
-				if (toHandle.containsKey(guild.getId())) {
-					List<SimpleMessageListener> evts = getHandler().get(guild.getId());
-					for (SimpleMessageListener evt : evts) {
-						evt.onGuildMessageReceived(event);
-					}
-					evts.removeIf(SimpleMessageListener::isClosed);
-				}
-
 				Account acc = AccountDAO.getAccount(author.getId());
 				if (!acc.getTwitchId().isBlank() && channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
 					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.stripEmotesAndMentions(rawMessage));
