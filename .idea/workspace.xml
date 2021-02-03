@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Uso de multithreading na geração da arena Shoukan" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Uso de multithreading na geração da arena Shoukan">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1038,21 +1040,7 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
       <workItem from="1612285645204" duration="10161000" />
-      <workItem from="1612354962274" duration="5291000" />
-    </task>
-    <task id="LOCAL-03628" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612150210131</created>
-      <option name="number" value="03628" />
-      <option name="presentableId" value="LOCAL-03628" />
-      <option name="project" value="LOCAL" />
-      <updated>1612150210131</updated>
-    </task>
-    <task id="LOCAL-03629" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612150770013</created>
-      <option name="number" value="03629" />
-      <option name="presentableId" value="LOCAL-03629" />
-      <option name="project" value="LOCAL" />
-      <updated>1612150770013</updated>
+      <workItem from="1612354962274" duration="6196000" />
     </task>
     <task id="LOCAL-03630" summary="Novos comandos de trancar e destrancar o canal">
       <created>1612150957799</created>
@@ -1383,7 +1371,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612360298752</updated>
     </task>
-    <option name="localTasksCounter" value="3677" />
+    <task id="LOCAL-03677" summary="Uso de multithreading na geração da arena Shoukan">
+      <created>1612360392549</created>
+      <option name="number" value="03677" />
+      <option name="presentableId" value="LOCAL-03677" />
+      <option name="project" value="LOCAL" />
+      <updated>1612360392549</updated>
+    </task>
+    <task id="LOCAL-03678" summary="Uso de multithreading na geração da arena Shoukan">
+      <created>1612360575882</created>
+      <option name="number" value="03678" />
+      <option name="presentableId" value="LOCAL-03678" />
+      <option name="project" value="LOCAL" />
+      <updated>1612360575882</updated>
+    </task>
+    <option name="localTasksCounter" value="3679" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1547,10 +1549,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612360300620">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612360584831">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612360300620" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612360584831" />
     <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1612357315174">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

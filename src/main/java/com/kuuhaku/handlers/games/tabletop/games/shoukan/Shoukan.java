@@ -53,7 +53,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -68,7 +67,7 @@ public class Shoukan extends GlobalGame {
 	private final Map<Side, Hand> hands;
 	private final Map<Side, Clan> clans;
 	private final GameChannel channel;
-	private final Arena arena;
+	private final Arena arena = new Arena();
 	private final SimpleMessageListener listener = new SimpleMessageListener() {
 		@Override
 		public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -96,13 +95,6 @@ public class Shoukan extends GlobalGame {
 		this.channel = channel;
 		this.daily = daily;
 		this.team = false;
-		Arena arena1;
-		try {
-			arena1 = new Arena();
-		} catch (IOException e) {
-			arena1 = null;
-		}
-		this.arena = arena1;
 
 		this.hands = Map.of(
 				Side.TOP, new Hand(this, players[0], clans.get(0), Side.TOP),
@@ -157,13 +149,6 @@ public class Shoukan extends GlobalGame {
 		this.channel = channel;
 		this.daily = daily;
 		this.team = players.length == 4;
-		Arena arena1;
-		try {
-			arena1 = new Arena();
-		} catch (IOException e) {
-			arena1 = null;
-		}
-		this.arena = arena1;
 
 		if (team) {
 			List<Kawaipon> kps = daily ? Collections.nCopies(4, Helper.getDailyDeck()) : List.of(
