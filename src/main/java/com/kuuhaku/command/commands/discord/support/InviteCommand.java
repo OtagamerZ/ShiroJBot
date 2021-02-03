@@ -84,7 +84,6 @@ public class InviteCommand implements Executable {
 				return;
 			}
 
-			Main.getInfo().getRequests().remove(args[0]);
 			Guild guildToInvite = Main.getInfo().getGuildByID(args[0]);
 
 			InviteAction ia = Helper.createInvite(guildToInvite);
@@ -95,7 +94,7 @@ public class InviteCommand implements Executable {
 			}
 
 			String invite = ia.setMaxAge((long) 30, TimeUnit.SECONDS).setMaxUses(1).complete().getUrl();
-			channel.sendMessage("Aqui está!\n" + invite).queue();
+			channel.sendMessage("Aqui está!\n" + invite).queue(s -> Main.getInfo().getRequests().remove(args[0]));
 		} catch (ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage("Escolha o servidor que devo criar um convite!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 		} catch (NullPointerException ex) {
