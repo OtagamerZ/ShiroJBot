@@ -60,6 +60,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -1197,9 +1198,12 @@ public class Helper {
 	}
 
 	public static byte[] getBytes(BufferedImage image) {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			ImageIO.write(image, "jpg", new BufferedOutputStream(baos));
-			return baos.toByteArray();
+		File temp = Main.getInfo().getTemporaryFolder();
+
+		try {
+			File f = new File(temp, hash(String.valueOf(System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "MD5"));
+			ImageIO.write(image, "jpg", f);
+			return FileUtils.readFileToByteArray(f);
 		} catch (IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			return new byte[0];
@@ -1207,9 +1211,12 @@ public class Helper {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encode) {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			ImageIO.write(image, encode, new BufferedOutputStream(baos));
-			return baos.toByteArray();
+		File temp = Main.getInfo().getTemporaryFolder();
+
+		try {
+			File f = new File(temp, hash(String.valueOf(System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "MD5"));
+			ImageIO.write(image, encode, f);
+			return FileUtils.readFileToByteArray(f);
 		} catch (IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			return new byte[0];
@@ -1217,10 +1224,13 @@ public class Helper {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encode, float compression) {
-		byte[] bytes;
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+		File temp = Main.getInfo().getTemporaryFolder();
+
+		try {
+			File f = new File(temp, hash(String.valueOf(System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "MD5"));
+
 			ImageWriter writer = ImageIO.getImageWritersByFormatName(encode).next();
-			ImageOutputStream ios = ImageIO.createImageOutputStream(new BufferedOutputStream(baos));
+			ImageOutputStream ios = ImageIO.createImageOutputStream(f);
 			writer.setOutput(ios);
 
 			ImageWriteParam param = writer.getDefaultWriteParam();
@@ -1230,13 +1240,11 @@ public class Helper {
 			}
 
 			writer.write(null, new IIOImage(image, null, null), param);
-			bytes = baos.toByteArray();
+			return FileUtils.readFileToByteArray(f);
 		} catch (IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
-			bytes = new byte[0];
+			return new byte[0];
 		}
-
-		return bytes;
 	}
 
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
