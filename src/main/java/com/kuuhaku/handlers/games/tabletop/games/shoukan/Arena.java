@@ -33,6 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class Arena {
@@ -221,7 +222,9 @@ public class Arena {
 
 			g2d.dispose();
 
-			directUrl = Helper.serveImage(back);
+			if (directUrl == null)
+				directUrl = "https://api." + System.getenv("SERVER_URL") + "/image?id=" + game.getHash();
+			Executors.newSingleThreadExecutor().execute(() -> Helper.serveImage(Helper.getBytes(back, "jpg", 0.5f)));
 			return Helper.scaleImage(back, back.getWidth() / 2, back.getHeight() / 2);
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
