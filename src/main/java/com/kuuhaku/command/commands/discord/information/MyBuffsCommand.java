@@ -22,9 +22,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.controller.sqlite.KGotchiDAO;
-import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
-import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -51,24 +48,16 @@ public class MyBuffsCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Kawaigotchi kg = KGotchiDAO.getKawaigotchi(author.getId());
-
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		boolean exceed = Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
 		boolean waifu = guild.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
-		boolean kgotchi = kg != null;
 
 		eb.setTitle(":level_slider: Modificadores ativos");
 
 		if (exceed) eb.addField("Seu Exceed foi vitorioso", "+200% XP ganho", false);
 		if (waifu)
 			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + (int) (WaifuDAO.getMultiplier(author).getMult() * 100 - 100) + "% XP ganho", false);
-		if (kgotchi)
-			if (kg.isAlive() && kg.getTier() != Tier.CHILD)
-				eb.addField("Seu kawaigotchi é um " + kg.getTier().toString().toLowerCase(), "+" + (int) (kg.getTier().getUserXpMult() * 100 - 100) + "% XP ganho", false);
-			else if (!kg.isAlive())
-				eb.addField("Seu kawaigotchi morreu", "-20% XP ganho", false);
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 1)
