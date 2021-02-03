@@ -28,7 +28,6 @@ public class ScheduledEvents implements JobListener {
 
 	public ScheduledEvents() {
 		Thread.currentThread().setName("crontab");
-		schedOddSecond();
 		schedFifthSecond();
 		schedHourly();
 		schedDaily();
@@ -114,26 +113,6 @@ public class ScheduledEvents implements JobListener {
 			}
 		} catch (SchedulerException e) {
 			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada mês: " + e);
-		}
-	}
-
-	private void schedOddSecond() {
-		try {
-			if (OddSecondEvent.oddSecond == null) {
-				OddSecondEvent.oddSecond = JobBuilder.newJob(OddSecondEvent.class).withIdentity("oddsecond", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("oddsecond", "1").withSchedule(CronScheduleBuilder.cronSchedule("0/2 * * ? * * *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
-			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(OddSecondEvent.oddSecond, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada segundo par");
-			}
-		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada segundo par: " + e);
 		}
 	}
 

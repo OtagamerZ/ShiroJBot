@@ -20,8 +20,6 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.controller.sqlite.KGotchiDAO;
-import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
@@ -32,7 +30,6 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -82,16 +79,6 @@ public class MonthlyEvent implements Job {
 			ExceedDAO.unblock();
 
 			Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
-		}
-
-		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
-
-		for (Kawaigotchi k : kgs) {
-			try {
-				if (k.getDiedAt().plusMonths(1).isBefore(LocalDateTime.now()) || k.getOffSince().plusMonths(1).isBefore(LocalDateTime.now()))
-					com.kuuhaku.controller.postgresql.KGotchiDAO.deleteKawaigotchi(k);
-			} catch (NullPointerException ignore) {
-			}
 		}
 
 		List<String> ns = List.of(
@@ -157,7 +144,6 @@ public class MonthlyEvent implements Job {
 				MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(bl.getId());
 				Kawaipon kp = KawaiponDAO.getKawaipon(bl.getId());
 				List<DeckStash> stashes = DeckStashDAO.getStash(bl.getId());
-				Kawaigotchi kg = KGotchiDAO.getKawaigotchi(bl.getId());
 				ExceedMember em = ExceedDAO.getExceedMember(bl.getId());
 				Tags t = TagDAO.getTagById(bl.getId());
 
@@ -169,8 +155,6 @@ public class MonthlyEvent implements Job {
 				for (DeckStash ds : stashes) {
 					DeckStashDAO.removeKawaipon(ds);
 				}
-				if (kg != null)
-					com.kuuhaku.controller.postgresql.KGotchiDAO.deleteKawaigotchi(kg);
 				ExceedDAO.removeMember(em);
 				TagDAO.clearTags(t);
 				WaifuDAO.voidCouple(bl.getId());

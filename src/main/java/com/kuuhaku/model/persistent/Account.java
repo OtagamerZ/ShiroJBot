@@ -30,6 +30,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.hibernate.annotations.DynamicUpdate;
 import org.json.JSONObject;
 
 import javax.persistence.*;
@@ -42,6 +43,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Entity
+@DynamicUpdate
 @Table(name = "account")
 public class Account {
 	@Id
@@ -157,7 +159,7 @@ public class Account {
 		this.loan = Math.round(loan.getLoan() * loan.getInterest(ex));
 	}
 
-	public synchronized void addCredit(long credit, Class<?> from) {
+	public void addCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
 		else if (loan > 0) {
 			TransactionDAO.register(userId, from, -credit);
@@ -180,13 +182,13 @@ public class Account {
 		}
 	}
 
-	public synchronized void addVCredit(long credit, Class<?> from) {
+	public void addVCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
 		vBalance += credit;
 		TransactionDAO.register(userId, from, credit);
 	}
 
-	public synchronized long debitLoan() {
+	public long debitLoan() {
 		long stBalance = balance;
 
 		if (balance >= loan) {
@@ -200,12 +202,12 @@ public class Account {
 		return stBalance - balance;
 	}
 
-	public synchronized void removeCredit(long credit, Class<?> from) {
+	public void removeCredit(long credit, Class<?> from) {
 		this.balance -= credit;
 		if (credit != 0) TransactionDAO.register(userId, from, -credit);
 	}
 
-	public synchronized void consumeCredit(long credit, Class<?> from) {
+	public void consumeCredit(long credit, Class<?> from) {
 		long remaining = vBalance - credit;
 
 		if (remaining < 0) {
@@ -218,11 +220,11 @@ public class Account {
 		if (credit != 0) TransactionDAO.register(userId, from, -credit);
 	}
 
-	public synchronized void expireVCredit() {
+	public void expireVCredit() {
 		this.vBalance *= 0.75;
 	}
 
-	public synchronized void addLoan(long loan) {
+	public void addLoan(long loan) {
 		this.loan += loan;
 		AccountDAO.saveAccount(this);
 	}
