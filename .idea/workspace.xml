@@ -1038,28 +1038,7 @@
       <workItem from="1612131596239" duration="2744000" />
       <workItem from="1612144748286" duration="6286000" />
       <workItem from="1612285645204" duration="10161000" />
-      <workItem from="1612354962274" duration="2277000" />
-    </task>
-    <task id="LOCAL-03623" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612148077008</created>
-      <option name="number" value="03623" />
-      <option name="presentableId" value="LOCAL-03623" />
-      <option name="project" value="LOCAL" />
-      <updated>1612148077008</updated>
-    </task>
-    <task id="LOCAL-03624" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612148434261</created>
-      <option name="number" value="03624" />
-      <option name="presentableId" value="LOCAL-03624" />
-      <option name="project" value="LOCAL" />
-      <updated>1612148434261</updated>
-    </task>
-    <task id="LOCAL-03625" summary="Novos comandos de trancar e destrancar o canal">
-      <created>1612149455732</created>
-      <option name="number" value="03625" />
-      <option name="presentableId" value="LOCAL-03625" />
-      <option name="project" value="LOCAL" />
-      <updated>1612149455732</updated>
+      <workItem from="1612354962274" duration="2585000" />
     </task>
     <task id="LOCAL-03626" summary="Novos comandos de trancar e destrancar o canal">
       <created>1612149653430</created>
@@ -1383,7 +1362,28 @@
       <option name="project" value="LOCAL" />
       <updated>1612357211320</updated>
     </task>
-    <option name="localTasksCounter" value="3672" />
+    <task id="LOCAL-03672" summary="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
+      <created>1612357280472</created>
+      <option name="number" value="03672" />
+      <option name="presentableId" value="LOCAL-03672" />
+      <option name="project" value="LOCAL" />
+      <updated>1612357280472</updated>
+    </task>
+    <task id="LOCAL-03673" summary="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
+      <created>1612357455012</created>
+      <option name="number" value="03673" />
+      <option name="presentableId" value="LOCAL-03673" />
+      <option name="project" value="LOCAL" />
+      <updated>1612357455012</updated>
+    </task>
+    <task id="LOCAL-03674" summary="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
+      <created>1612357513536</created>
+      <option name="number" value="03674" />
+      <option name="presentableId" value="LOCAL-03674" />
+      <option name="project" value="LOCAL" />
+      <updated>1612357513536</updated>
+    </task>
+    <option name="localTasksCounter" value="3675" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1547,10 +1547,14 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612357212502">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612357514927">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612357212502" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612357514927" />
+    <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1612357315174">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1612357315174" />
     <state x="547" y="238" width="585" height="534" key="find.popup" timestamp="1612213069227">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
