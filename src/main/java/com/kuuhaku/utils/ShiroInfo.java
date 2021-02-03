@@ -129,6 +129,7 @@ public class ShiroInfo {
 	private final Set<String> gameLock = new HashSet<>();
 	private final MatchMaking matchMaking = new MatchMaking();
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
+	private final File temporaryFolder = new File(System.getenv("TEMPORARY_PATH"));
 	private boolean isLive = false;
 
 	//CONSTANTS
@@ -286,6 +287,12 @@ public class ShiroInfo {
 		if (!collectionsFolder.exists())
 			collectionsFolder.mkdir();
 		return collectionsFolder;
+	}
+
+	public File getTemporaryFolder() {
+		if (!temporaryFolder.exists())
+			temporaryFolder.mkdir();
+		return temporaryFolder;
 	}
 
 	public MatchMaking getMatchMaking() {
