@@ -60,7 +60,6 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -854,10 +853,8 @@ public class Helper {
 		}
 
 		for (TextChannel tc : guild.getTextChannels()) {
-			try {
+			if (guild.getSelfMember().hasPermission(tc, Permission.CREATE_INSTANT_INVITE))
 				return tc.createInvite();
-			} catch (InsufficientPermissionException | NullPointerException ignore) {
-			}
 		}
 
 		return null;
@@ -1220,30 +1217,26 @@ public class Helper {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encode, float compression) {
-		try {
-			File temp = File.createTempFile("img_" + System.currentTimeMillis(), encode);
-			try (FileOutputStream fos = new FileOutputStream(temp)) {
-				ImageWriter writer = ImageIO.getImageWritersByFormatName(encode).next();
-				ImageOutputStream ios = ImageIO.createImageOutputStream(fos);
-				writer.setOutput(ios);
+		byte[] bytes;
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			ImageWriter writer = ImageIO.getImageWritersByFormatName(encode).next();
+			ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
+			writer.setOutput(ios);
 
-				ImageWriteParam param = writer.getDefaultWriteParam();
-				if (param.canWriteCompressed()) {
-					param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-					param.setCompressionQuality(compression);
-				}
-
-				writer.write(null, new IIOImage(image, null, null), param);
-			} catch (IOException e) {
-				logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+			ImageWriteParam param = writer.getDefaultWriteParam();
+			if (param.canWriteCompressed()) {
+				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+				param.setCompressionQuality(compression);
 			}
 
-			byte[] bytes = FileUtils.readFileToByteArray(temp);
-			temp.delete();
-			return bytes;
+			writer.write(null, new IIOImage(image, null, null), param);
+			bytes = baos.toByteArray();
 		} catch (IOException e) {
-			return new byte[0];
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+			bytes = new byte[0];
 		}
+
+		return bytes;
 	}
 
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {

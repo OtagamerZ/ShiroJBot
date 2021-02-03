@@ -122,7 +122,7 @@ public class ShiroInfo {
 	private final Cache<String, Integer> pendingJoin = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, Boolean> padoruLimit = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
 	private final Map<String, Game> games = new HashMap<>();
-	private final Set<String> requests = new HashSet<>();
+	private final Map<String, Invite> requests = new HashMap<>();
 	private final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
@@ -373,7 +373,7 @@ public class ShiroInfo {
 		);
 	}
 
-	public Set<String> getRequests() {
+	public Map<String, Invite> getRequests() {
 		return requests;
 	}
 

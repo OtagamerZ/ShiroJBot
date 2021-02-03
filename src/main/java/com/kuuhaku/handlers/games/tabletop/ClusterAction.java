@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop;
 
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 import java.util.List;
@@ -30,6 +31,11 @@ public class ClusterAction {
 
 	public ClusterAction(List<MessageAction> actions) {
 		this.actions = actions;
+	}
+
+	public ClusterAction embed(MessageEmbed eb) {
+		actions.replaceAll(msg -> msg.embed(eb));
+		return this;
 	}
 
 	public ClusterAction addFile(byte[] bytes, String filename) {
