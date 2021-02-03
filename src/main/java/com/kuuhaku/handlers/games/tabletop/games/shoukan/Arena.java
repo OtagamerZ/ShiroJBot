@@ -33,14 +33,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class Arena {
 	private final Map<Side, List<SlotColumn<Champion, Equipment>>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
 	private final LinkedList<Drawable> banished;
-	private String directUrl = null;
 	private Field field = null;
 
 	public Arena() {
@@ -222,17 +220,10 @@ public class Arena {
 
 			g2d.dispose();
 
-			if (directUrl == null)
-				directUrl = "https://api." + System.getenv("SERVER_URL") + "/image?id=" + game.getHash();
-			Executors.newSingleThreadExecutor().execute(() -> Helper.serveImage(Helper.getBytes(back, "jpg", 0.5f), game.getHash()));
-			return Helper.scaleImage(back, back.getWidth() / 3, back.getHeight() / 3);
+			return back;
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
-	}
-
-	public String getDirectUrl() {
-		return directUrl;
 	}
 }
