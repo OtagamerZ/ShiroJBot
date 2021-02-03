@@ -43,11 +43,9 @@ public class Arena {
 	private final Map<Side, List<SlotColumn<Champion, Equipment>>> slots;
 	private final Map<Side, LinkedList<Drawable>> graveyard;
 	private final LinkedList<Drawable> banished;
-	private final BufferedImage back = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/backdrop.jpg")));
-	private final BufferedImage frames = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/frames.png")));
 	private Field field = null;
 
-	public Arena() throws IOException {
+	public Arena() {
 		this.slots = Map.of(
 				Side.TOP, List.of(
 						new SlotColumn<>(),
@@ -93,7 +91,9 @@ public class Arena {
 
 	public BufferedImage render(Shoukan game, Map<Side, Hand> hands) {
 		try {
+			BufferedImage back = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/backdrop.jpg")));
 			BufferedImage arena = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/arenas/" + (field == null ? "default" : field.getField().toLowerCase()) + ".png")));
+			BufferedImage frames = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/frames.png")));
 
 			Graphics2D g2d = back.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
