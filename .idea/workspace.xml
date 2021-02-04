@@ -15,7 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de GIFs de transição dos levels 210 e 420">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1053,14 +1052,7 @@
       <workItem from="1612385701698" duration="153000" />
       <workItem from="1612385904263" duration="81000" />
       <workItem from="1612442925827" duration="4772000" />
-      <workItem from="1612457905517" duration="1390000" />
-    </task>
-    <task id="LOCAL-03665" summary="Implementações de sugestões">
-      <created>1612297792460</created>
-      <option name="number" value="03665" />
-      <option name="presentableId" value="LOCAL-03665" />
-      <option name="project" value="LOCAL" />
-      <updated>1612297792460</updated>
+      <workItem from="1612457905517" duration="2198000" />
     </task>
     <task id="LOCAL-03666" summary="Implementações de sugestões">
       <created>1612298583181</created>
@@ -1398,7 +1390,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612458500761</updated>
     </task>
-    <option name="localTasksCounter" value="3714" />
+    <task id="LOCAL-03714" summary="Adição de GIFs de transição dos levels 210 e 420">
+      <created>1612459397951</created>
+      <option name="number" value="03714" />
+      <option name="presentableId" value="LOCAL-03714" />
+      <option name="project" value="LOCAL" />
+      <updated>1612459397951</updated>
+    </task>
+    <option name="localTasksCounter" value="3715" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1570,10 +1569,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612458501785">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612459399249">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612458501785" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612459399249" />
     <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1612357315174">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
