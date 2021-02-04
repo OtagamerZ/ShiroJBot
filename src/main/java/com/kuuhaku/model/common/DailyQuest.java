@@ -47,7 +47,7 @@ public class DailyQuest {
 						case WINS_TASK -> 1 + Helper.rng(4, r, false);
 						case XP_TASK -> 1000 + Helper.rng(9000, r, false);
 						case ANIME_TASK -> 1 + Helper.rng(2, r, false);
-						case RACE_TASK -> 5 + Helper.rng(10, r, false);
+						case RACE_TASK -> 2 + Helper.rng(8, r, false);
 					}
 			);
 		}
@@ -68,7 +68,7 @@ public class DailyQuest {
 				case WINS_TASK -> Helper.prcnt(task.getValue(), 5);
 				case XP_TASK -> Helper.prcnt(task.getValue(), 10000);
 				case ANIME_TASK -> Helper.prcnt(task.getValue(), 3);
-				case RACE_TASK -> Helper.prcnt(task.getValue(), 15);
+				case RACE_TASK -> Helper.prcnt(task.getValue(), 10);
 			};
 		}
 		return mod;
