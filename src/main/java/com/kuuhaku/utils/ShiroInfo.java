@@ -94,6 +94,12 @@ public class ShiroInfo {
 			"732300321673576498", //Shiro Emote Repository 3
 			"763775306095788033"  //Shiro Emote Repository 4
 	);
+	private static final List<String> levelEmoteRepo = List.of(
+			"806891504442277969", //Low level emotes
+			"806891669345271849", //Medium level emotes
+			"806891903990628362", //High level emotes
+			"806892045327007794"  //Top level emotes
+	);
 	private static final Map<String, Map<String, String>> polls = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
@@ -192,6 +198,10 @@ public class ShiroInfo {
 
 	public static List<String> getEmoteRepo() {
 		return emoteRepo;
+	}
+
+	public static List<String> getLevelEmoteRepo() {
+		return levelEmoteRepo;
 	}
 
 	public static List<String> getStaff() {
