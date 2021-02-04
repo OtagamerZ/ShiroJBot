@@ -30,14 +30,12 @@ import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.RankedQueue;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
@@ -79,6 +77,7 @@ public class Shoukan extends GlobalGame {
 	private final boolean[] changed = {false, false, false, false, false};
 	private final boolean daily;
 	private final boolean team;
+	private final Map<Side, Map<Race, Integer>> summoned = new HashMap<>();
 	private Phase phase = Phase.PLAN;
 	private boolean draw = false;
 	private Side current = Side.BOTTOM;
@@ -626,18 +625,8 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return;
 					}
 
-					if (!d.getAcc().hasCompletedQuests() && getCustom() == null) {
-						Map<DailyTask, Integer> pg = d.getAcc().getDailyProgress();
-						pg.compute(DailyTask.RACE_TASK, (k, v) -> {
-							DailyQuest dq = DailyQuest.getQuest(getCurrent().getIdLong());
-							if (c.getRace() == dq.getChosenRace())
-								return Helper.getOr(v, 0) + 1;
-							else
-								return v;
-						});
-						d.getAcc().setDailyProgress(pg);
-						AccountDAO.saveAccount(d.getAcc());
-					}
+					summoned.compute(h.getSide(), (k, v) -> v == null ? new HashMap<>() : v)
+							.compute(c.getRace(), (k, v) -> v == null ? 1 : v + 1);
 
 					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : c.getName() + " em posição de " + (c.isDefending() ? "defesa" : "ataque")) + ".";
 				} else {
@@ -2117,6 +2106,21 @@ public class Shoukan extends GlobalGame {
 		listener.close();
 		recordLast();
 		super.close();
+
+		if (!draw) {
+			for (Side s : Side.values()) {
+				Account acc = AccountDAO.getAccount(getHands().get(s).getUser().getId());
+
+				if (!acc.hasCompletedQuests() && getCustom() == null) {
+					Map<DailyTask, Integer> pg = acc.getDailyProgress();
+					DailyQuest dq = DailyQuest.getQuest(getCurrent().getIdLong());
+					int summons = summoned.get(s).get(dq.getChosenRace());
+					pg.compute(DailyTask.RACE_TASK, (k, v) -> v == null ? summons : v + summons);
+					acc.setDailyProgress(pg);
+					AccountDAO.saveAccount(acc);
+				}
+			}
+		}
 	}
 
 	@Override
