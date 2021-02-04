@@ -74,9 +74,9 @@ public class PruneCommand implements Executable {
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de usuário limpa." : "ns de usuários limpas.")).queue(null, Helper::doNothing);
 		} else if (Helper.equalsAny(args[0], "all", "tudo")) {
-			((TextChannel) channel).createCopy().queue(s -> {
+			channel.createCopy().queue(s -> {
 				try {
-					((GuildChannel) channel).delete().queue();
+					channel.delete().queue();
 					s.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
 				} catch (InsufficientPermissionException e) {
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
