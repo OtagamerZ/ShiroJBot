@@ -13,8 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de otimização da velocidade de geração de imagens">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos nomes dos tiers ranqueados">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/lvl_badge.xcf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/lvl_badge.xcf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1056,14 +1057,7 @@
       <workItem from="1612385325607" duration="114000" />
       <workItem from="1612385701698" duration="153000" />
       <workItem from="1612385904263" duration="81000" />
-      <workItem from="1612442925827" duration="946000" />
-    </task>
-    <task id="LOCAL-03659" summary="Implementações de sugestões">
-      <created>1612296114336</created>
-      <option name="number" value="03659" />
-      <option name="presentableId" value="LOCAL-03659" />
-      <option name="project" value="LOCAL" />
-      <updated>1612296114336</updated>
+      <workItem from="1612442925827" duration="2902000" />
     </task>
     <task id="LOCAL-03660" summary="Implementações de sugestões">
       <created>1612296467318</created>
@@ -1401,7 +1395,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612385824834</updated>
     </task>
-    <option name="localTasksCounter" value="3708" />
+    <task id="LOCAL-03708" summary="Correção nos nomes dos tiers ranqueados">
+      <created>1612444240584</created>
+      <option name="number" value="03708" />
+      <option name="presentableId" value="LOCAL-03708" />
+      <option name="project" value="LOCAL" />
+      <updated>1612444240585</updated>
+    </task>
+    <option name="localTasksCounter" value="3709" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1487,7 +1488,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no icone e banner dos clãs" />
     <MESSAGE value="Colocados os pingos nos Is" />
     <MESSAGE value="Adicionado comando de estatísticas de partida" />
     <MESSAGE value="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;" />
@@ -1512,7 +1512,8 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Adição de BufferedOutputStreams" />
     <MESSAGE value="Tentativa de otimização da velocidade de geração de imagens" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tentativa de otimização da velocidade de geração de imagens" />
+    <MESSAGE value="Correção nos nomes dos tiers ranqueados" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nos nomes dos tiers ranqueados" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1573,10 +1574,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612385845025">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612444284864">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612385845025" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612444284864" />
     <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1612357315174">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
