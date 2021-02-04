@@ -393,10 +393,12 @@ public class Hand {
 	}
 
 	public void redrawHand() {
-		deque.addAll(cards);
-		cards.clear();
+		List<Drawable> notUsed = cards.stream().filter(Drawable::isAvailable).collect(Collectors.toList());
+		deque.addAll(notUsed);
+		cards.removeIf(Drawable::isAvailable);
+
 		Collections.shuffle(deque);
-		for (int i = 0; i < startingCount; i++) manualDraw();
+		for (int i = 0; i < Math.max(0, startingCount - cards.size()); i++) manualDraw();
 	}
 
 	public User getUser() {
