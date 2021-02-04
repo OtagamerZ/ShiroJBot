@@ -13,11 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Aumento no limite máximo dos emotes de level">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/transition_210.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/transition_420.gif" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de GIFs de transição dos levels 210 e 420">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1055,28 +1053,7 @@
       <workItem from="1612385701698" duration="153000" />
       <workItem from="1612385904263" duration="81000" />
       <workItem from="1612442925827" duration="4772000" />
-      <workItem from="1612457905517" duration="364000" />
-    </task>
-    <task id="LOCAL-03662" summary="Implementações de sugestões">
-      <created>1612297199166</created>
-      <option name="number" value="03662" />
-      <option name="presentableId" value="LOCAL-03662" />
-      <option name="project" value="LOCAL" />
-      <updated>1612297199166</updated>
-    </task>
-    <task id="LOCAL-03663" summary="Implementações de sugestões">
-      <created>1612297399808</created>
-      <option name="number" value="03663" />
-      <option name="presentableId" value="LOCAL-03663" />
-      <option name="project" value="LOCAL" />
-      <updated>1612297399808</updated>
-    </task>
-    <task id="LOCAL-03664" summary="Implementações de sugestões">
-      <created>1612297765158</created>
-      <option name="number" value="03664" />
-      <option name="presentableId" value="LOCAL-03664" />
-      <option name="project" value="LOCAL" />
-      <updated>1612297765158</updated>
+      <workItem from="1612457905517" duration="1390000" />
     </task>
     <task id="LOCAL-03665" summary="Implementações de sugestões">
       <created>1612297792460</created>
@@ -1400,7 +1377,28 @@
       <option name="project" value="LOCAL" />
       <updated>1612448968186</updated>
     </task>
-    <option name="localTasksCounter" value="3711" />
+    <task id="LOCAL-03711" summary="Adição de GIFs de transição dos levels 210 e 420">
+      <created>1612458306900</created>
+      <option name="number" value="03711" />
+      <option name="presentableId" value="LOCAL-03711" />
+      <option name="project" value="LOCAL" />
+      <updated>1612458306900</updated>
+    </task>
+    <task id="LOCAL-03712" summary="Adição de GIFs de transição dos levels 210 e 420">
+      <created>1612458410773</created>
+      <option name="number" value="03712" />
+      <option name="presentableId" value="LOCAL-03712" />
+      <option name="project" value="LOCAL" />
+      <updated>1612458410773</updated>
+    </task>
+    <task id="LOCAL-03713" summary="Adição de GIFs de transição dos levels 210 e 420">
+      <created>1612458500761</created>
+      <option name="number" value="03713" />
+      <option name="presentableId" value="LOCAL-03713" />
+      <option name="project" value="LOCAL" />
+      <updated>1612458500761</updated>
+    </task>
+    <option name="localTasksCounter" value="3714" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1486,7 +1484,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adicionado comando de estatísticas de partida" />
     <MESSAGE value="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;" />
     <MESSAGE value="Não pingue o Sora" />
     <MESSAGE value="Correção nos requisitos da licença de comércio" />
@@ -1511,7 +1508,8 @@
     <MESSAGE value="Tentativa de otimização da velocidade de geração de imagens" />
     <MESSAGE value="Correção nos nomes dos tiers ranqueados" />
     <MESSAGE value="Aumento no limite máximo dos emotes de level" />
-    <option name="LAST_COMMIT_MESSAGE" value="Aumento no limite máximo dos emotes de level" />
+    <MESSAGE value="Adição de GIFs de transição dos levels 210 e 420" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de GIFs de transição dos levels 210 e 420" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1572,10 +1570,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612458313549">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612458501785">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612458313549" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612458501785" />
     <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1612357315174">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
