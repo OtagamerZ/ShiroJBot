@@ -408,6 +408,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					boolean lvlUp = m.addXp(guild);
+					MemberDAO.updateMemberConfigs(m);
 					try {
 						if (lvlUp && gc.isLvlNotif()) {
 							if (m.getLevel() % 210 == 0)
@@ -425,8 +426,6 @@ public class ShiroEvents extends ListenerAdapter {
 						else
 							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
 					}
-
-					MemberDAO.updateMemberConfigs(m);
 				} catch (ErrorResponseException | NullPointerException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
