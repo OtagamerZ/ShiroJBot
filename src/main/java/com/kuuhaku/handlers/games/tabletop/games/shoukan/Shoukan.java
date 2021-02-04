@@ -468,14 +468,30 @@ public class Shoukan extends GlobalGame {
 						String result = switch (e.getArgType()) {
 							case NONE -> h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + ".";
 							case ALLY -> {
+								if (allyPos.getLeft().isFlipped()) {
+									allyPos.getLeft().setFlipped(false);
+									allyPos.getLeft().setDefending(true);
+								}
 								assert allyPos != null;
 								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + allyPos.getLeft().getName() + ".";
 							}
 							case ENEMY -> {
+								if (enemyPos.getLeft().isFlipped()) {
+									enemyPos.getLeft().setFlipped(false);
+									enemyPos.getLeft().setDefending(true);
+								}
 								assert enemyPos != null;
 								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + enemyPos.getLeft().getName() + ".";
 							}
 							case BOTH -> {
+								if (allyPos.getLeft().isFlipped()) {
+									allyPos.getLeft().setFlipped(false);
+									allyPos.getLeft().setDefending(true);
+								}
+								if (enemyPos.getLeft().isFlipped()) {
+									enemyPos.getLeft().setFlipped(false);
+									enemyPos.getLeft().setDefending(true);
+								}
 								assert allyPos != null && enemyPos != null;
 								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + allyPos.getLeft().getName() + " e " + enemyPos.getLeft().getName() + ".";
 							}
