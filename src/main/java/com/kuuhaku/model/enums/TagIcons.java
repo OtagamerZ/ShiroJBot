@@ -134,7 +134,7 @@ public enum TagIcons {
 		int l = lvl - (lvl % 5);
 		return Main.getShiroShards().getEmotesByName("lvl_" + Math.min(l, 840), true)
 				.stream()
-				.filter(e -> e.getGuild() != null && ShiroInfo.getEmoteRepo().contains(e.getGuild().getId()))
+				.filter(e -> e.getGuild() != null && ShiroInfo.getLevelEmoteRepo().contains(e.getGuild().getId()))
 				.findFirst()
 				.orElseThrow(() -> new NoSuchElementException("Emblema inexistente para o level " + l));
 	}
