@@ -410,10 +410,20 @@ public class ShiroEvents extends ListenerAdapter {
 					boolean lvlUp = m.addXp(guild);
 					try {
 						if (lvlUp && gc.isLvlNotif()) {
-							Objects.requireNonNullElse(lvlChannel, channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
+							if (m.getLevel() % 210 == 0)
+								Helper.getOr(lvlChannel, channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
+										.addFile(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("assets/transition_" + m.getLevel() + ".gif")), "upgrade.gif")
+										.queue();
+							else
+								Helper.getOr(lvlChannel, channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
 						}
 					} catch (InsufficientPermissionException e) {
-						channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
+						if (m.getLevel() % 210 == 0)
+							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
+									.addFile(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("assets/transition_" + m.getLevel() + ".gif")), "upgrade.gif")
+									.queue();
+						else
+							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
 					}
 
 					MemberDAO.updateMemberConfigs(m);
