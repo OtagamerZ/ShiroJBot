@@ -398,7 +398,8 @@ public class Hand {
 		cards.removeIf(Drawable::isAvailable);
 
 		Collections.shuffle(deque);
-		for (int i = 0; i < Math.max(0, startingCount - cards.size()); i++) manualDraw();
+		int toDraw = Math.max(0, startingCount - cards.size());
+		for (int i = 0; i < toDraw; i++) manualDraw();
 	}
 
 	public User getUser() {
