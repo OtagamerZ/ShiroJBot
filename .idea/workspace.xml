@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de GIFs de transição dos levels 210 e 420">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Feitiços agora viram cartas viradas para baixo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -172,19 +172,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1052,42 +1039,7 @@
       <workItem from="1612385701698" duration="153000" />
       <workItem from="1612385904263" duration="81000" />
       <workItem from="1612442925827" duration="4772000" />
-      <workItem from="1612457905517" duration="2198000" />
-    </task>
-    <task id="LOCAL-03666" summary="Implementações de sugestões">
-      <created>1612298583181</created>
-      <option name="number" value="03666" />
-      <option name="presentableId" value="LOCAL-03666" />
-      <option name="project" value="LOCAL" />
-      <updated>1612298583181</updated>
-    </task>
-    <task id="LOCAL-03667" summary="Implementações de sugestões">
-      <created>1612298820493</created>
-      <option name="number" value="03667" />
-      <option name="presentableId" value="LOCAL-03667" />
-      <option name="project" value="LOCAL" />
-      <updated>1612298820493</updated>
-    </task>
-    <task id="LOCAL-03668" summary="Implementações de sugestões">
-      <created>1612299272923</created>
-      <option name="number" value="03668" />
-      <option name="presentableId" value="LOCAL-03668" />
-      <option name="project" value="LOCAL" />
-      <updated>1612299272923</updated>
-    </task>
-    <task id="LOCAL-03669" summary="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
-      <created>1612356222173</created>
-      <option name="number" value="03669" />
-      <option name="presentableId" value="LOCAL-03669" />
-      <option name="project" value="LOCAL" />
-      <updated>1612356222173</updated>
-    </task>
-    <task id="LOCAL-03670" summary="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
-      <created>1612357074666</created>
-      <option name="number" value="03670" />
-      <option name="presentableId" value="LOCAL-03670" />
-      <option name="project" value="LOCAL" />
-      <updated>1612357074666</updated>
+      <workItem from="1612457905517" duration="4156000" />
     </task>
     <task id="LOCAL-03671" summary="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
       <created>1612357211320</created>
@@ -1397,7 +1349,42 @@
       <option name="project" value="LOCAL" />
       <updated>1612459397951</updated>
     </task>
-    <option name="localTasksCounter" value="3715" />
+    <task id="LOCAL-03715" summary="Adição de GIFs de transição dos levels 210 e 420">
+      <created>1612460191614</created>
+      <option name="number" value="03715" />
+      <option name="presentableId" value="LOCAL-03715" />
+      <option name="project" value="LOCAL" />
+      <updated>1612460191614</updated>
+    </task>
+    <task id="LOCAL-03716" summary="Adição de GIFs de transição dos levels 210 e 420">
+      <created>1612460745105</created>
+      <option name="number" value="03716" />
+      <option name="presentableId" value="LOCAL-03716" />
+      <option name="project" value="LOCAL" />
+      <updated>1612460745105</updated>
+    </task>
+    <task id="LOCAL-03717" summary="Feitiços agora viram cartas viradas para baixo">
+      <created>1612461004576</created>
+      <option name="number" value="03717" />
+      <option name="presentableId" value="LOCAL-03717" />
+      <option name="project" value="LOCAL" />
+      <updated>1612461004577</updated>
+    </task>
+    <task id="LOCAL-03718" summary="Feitiços agora viram cartas viradas para baixo">
+      <created>1612461348429</created>
+      <option name="number" value="03718" />
+      <option name="presentableId" value="LOCAL-03718" />
+      <option name="project" value="LOCAL" />
+      <updated>1612461348429</updated>
+    </task>
+    <task id="LOCAL-03719" summary="Feitiços agora viram cartas viradas para baixo">
+      <created>1612462098599</created>
+      <option name="number" value="03719" />
+      <option name="presentableId" value="LOCAL-03719" />
+      <option name="project" value="LOCAL" />
+      <updated>1612462098599</updated>
+    </task>
+    <option name="localTasksCounter" value="3720" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1483,7 +1470,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria em comandos que utilizam a mensagem digitada ao invés de argumentos;&#10;Adicionada licença de comércio;" />
     <MESSAGE value="Não pingue o Sora" />
     <MESSAGE value="Correção nos requisitos da licença de comércio" />
     <MESSAGE value="Correção nos tickets" />
@@ -1508,7 +1494,8 @@
     <MESSAGE value="Correção nos nomes dos tiers ranqueados" />
     <MESSAGE value="Aumento no limite máximo dos emotes de level" />
     <MESSAGE value="Adição de GIFs de transição dos levels 210 e 420" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de GIFs de transição dos levels 210 e 420" />
+    <MESSAGE value="Feitiços agora viram cartas viradas para baixo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Feitiços agora viram cartas viradas para baixo" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1569,10 +1556,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="150" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1612355030067" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612459399249">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612462099563">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612459399249" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612462099563" />
     <state x="694" y="392" width="316" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1612357315174">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
