@@ -46,6 +46,9 @@ public class AddEmoteCommand implements Executable {
 		if (message.getEmotes().size() == 0) {
 			channel.sendMessage("❌ | Você precisa informar ao menos 1 emote para adicionar.").queue();
 			return;
+		} else if (guild.getEmotes().size() + message.getEmotes().size() > guild.getMaxEmotes()) {
+			channel.sendMessage("❌ | O servidor não tem espaço suficiente para emotes.").queue();
+			return;
 		}
 
 		List<AuditableRestAction<Emote>> acts = new ArrayList<>();
