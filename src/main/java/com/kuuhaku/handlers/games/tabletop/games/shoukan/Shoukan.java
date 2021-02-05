@@ -2123,14 +2123,14 @@ public class Shoukan extends GlobalGame {
 		recordLast();
 		super.close();
 
-		if (!draw) {
+		if (!draw && getCustom() == null) {
 			for (Side s : Side.values()) {
 				Account acc = AccountDAO.getAccount(getHands().get(s).getUser().getId());
 
-				if (!acc.hasCompletedQuests() && getCustom() == null) {
+				if (!acc.hasCompletedQuests()) {
 					Map<DailyTask, Integer> pg = acc.getDailyProgress();
 					DailyQuest dq = DailyQuest.getQuest(getCurrent().getIdLong());
-					int summons = summoned.get(s).getOrDefault(dq.getChosenRace(), 0);
+					int summons = summoned.getOrDefault(s, new HashMap<>()).getOrDefault(dq.getChosenRace(), 0);
 					pg.compute(DailyTask.RACE_TASK, (k, v) -> v == null ? summons : v + summons);
 					acc.setDailyProgress(pg);
 					AccountDAO.saveAccount(acc);
