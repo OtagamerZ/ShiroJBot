@@ -83,7 +83,7 @@ public class CommonRequest {
         String readme = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_HTML);
+        headers.setContentType(new MediaType(MediaType.TEXT_MARKDOWN, StandardCharsets.UTF_8));
         headers.setContentLength(readme.length());
 
         return new HttpEntity<>(readme, headers);
