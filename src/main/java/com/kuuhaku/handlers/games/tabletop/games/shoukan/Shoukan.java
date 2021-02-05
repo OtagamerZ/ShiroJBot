@@ -2229,7 +2229,7 @@ public class Shoukan extends GlobalGame {
 			}
 
 			if (effect.getTrigger() == trigger) {
-				effect.getEffect().accept(you, opp, this);
+				effect.getEffect().accept(you, opp);
 			}
 			if (trigger == EffectTrigger.AFTER_TURN)
 				effect.decreaseTurn();
