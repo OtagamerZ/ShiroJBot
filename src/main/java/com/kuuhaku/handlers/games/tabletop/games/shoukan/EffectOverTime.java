@@ -19,17 +19,17 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
-import org.apache.logging.log4j.util.TriConsumer;
+import org.apache.logging.log4j.util.BiConsumer;
 
 import java.util.Objects;
 
 public class EffectOverTime {
 	private final long stamp = System.currentTimeMillis();
 	private final EffectTrigger trigger;
-	private final TriConsumer<Hand, Hand, Shoukan> effect;
+	private final BiConsumer<Hand, Hand> effect;
 	private int turns;
 
-	public EffectOverTime(EffectTrigger trigger, TriConsumer<Hand, Hand, Shoukan> effect) {
+	public EffectOverTime(EffectTrigger trigger, BiConsumer<Hand, Hand> effect) {
 		this.trigger = trigger;
 		this.effect = effect;
 	}
@@ -38,7 +38,7 @@ public class EffectOverTime {
 		return trigger;
 	}
 
-	public TriConsumer<Hand, Hand, Shoukan> getEffect() {
+	public BiConsumer<Hand, Hand> getEffect() {
 		return effect;
 	}
 
