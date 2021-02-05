@@ -43,6 +43,12 @@ public class ClusterAction {
 		return this;
 	}
 
+	public void queue() {
+		for (MessageAction act : actions) {
+			act.queue();
+		}
+	}
+
 	public void queue(Consumer<? super Message> message) {
 		for (MessageAction act : actions) {
 			act.queue(message);
