@@ -131,7 +131,12 @@ public class TenthMinuteEvent implements Job {
 			if (g != null && !Helper.getOr(gc.getGeneralTopic(), "").isBlank()) {
 				TextChannel tc = g.getTextChannelById(gc.getCanalGeral());
 				if (tc != null)
-					tc.getManager().setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount(), false))).queue();
+					tc.getManager()
+							.setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount(), false)))
+							.queue(null, t -> {
+								gc.setCanalGeral(null);
+								GuildDAO.updateGuildSettings(gc);
+							});
 				else {
 					gc.setCanalGeral(null);
 					GuildDAO.updateGuildSettings(gc);
