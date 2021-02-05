@@ -35,6 +35,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.quartz.Job;
@@ -131,12 +132,17 @@ public class TenthMinuteEvent implements Job {
 			if (g != null && !Helper.getOr(gc.getGeneralTopic(), "").isBlank()) {
 				TextChannel tc = g.getTextChannelById(gc.getCanalGeral());
 				if (tc != null)
-					tc.getManager()
-							.setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount(), false)))
-							.queue(null, t -> {
-								gc.setCanalGeral(null);
-								GuildDAO.updateGuildSettings(gc);
-							});
+					try {
+						tc.getManager()
+								.setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount(), false)))
+								.queue(null, t -> {
+									gc.setCanalGeral(null);
+									GuildDAO.updateGuildSettings(gc);
+								});
+					} catch (InsufficientPermissionException e) {
+						gc.setCanalGeral(null);
+						GuildDAO.updateGuildSettings(gc);
+					}
 				else {
 					gc.setCanalGeral(null);
 					GuildDAO.updateGuildSettings(gc);
