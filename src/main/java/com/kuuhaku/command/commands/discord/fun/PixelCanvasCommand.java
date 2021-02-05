@@ -59,7 +59,7 @@ public class PixelCanvasCommand implements Executable {
 		String[] opts = args[0].split(";");
 
 		try {
-			if (opts.length == 1) {
+			if (opts.length <= 1) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-arguments")).queue();
 				return;
 			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
