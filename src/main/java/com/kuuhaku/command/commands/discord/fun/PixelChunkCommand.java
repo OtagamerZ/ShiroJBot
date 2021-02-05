@@ -78,7 +78,7 @@ public class PixelChunkCommand implements Executable {
 		}
 
 		try {
-			if (opts.length == 2) {
+			if (opts.length <= 2) {
 				channel.sendMessage("❌ | É preciso especificar a coordenada e a cor neste formato: `zona X;Y;#cor`.\nPara dar zoom, digite apenas o número do chunk, as coordenadas X e Y e o nível do zoom.").queue();
 				return;
 			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 4 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 4 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 4 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 4) {
