@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 public class CommonRequest {
@@ -71,5 +72,20 @@ public class CommonRequest {
         headers.setContentLength(bytes.length);
 
         return new HttpEntity<>(bytes, headers);
+    }
+
+    @RequestMapping(value = "/readme", method = RequestMethod.GET)
+    public @ResponseBody
+    HttpEntity<String> serveReadme() throws IOException {
+        File f = new File("README.md");
+        if (!f.exists()) throw new FileNotFoundException();
+
+        String readme = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_HTML);
+        headers.setContentLength(readme.length());
+
+        return new HttpEntity<>(readme, headers);
     }
 }
