@@ -77,7 +77,10 @@ public class Shoukan extends GlobalGame {
 	private final boolean[] changed = {false, false, false, false, false};
 	private final boolean daily;
 	private final boolean team;
-	private final Map<Side, Map<Race, Integer>> summoned = new HashMap<>();
+	private final Map<Side, Map<Race, Integer>> summoned = Map.of(
+			Side.TOP, new HashMap<>(),
+			Side.BOTTOM, new HashMap<>()
+	);
 	private Phase phase = Phase.PLAN;
 	private boolean draw = false;
 	private Side current = Side.BOTTOM;
@@ -641,8 +644,7 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return;
 					}
 
-					summoned.compute(h.getSide(), (k, v) -> v == null ? new HashMap<>() : v)
-							.compute(c.getRace(), (k, v) -> v == null ? 1 : v + 1);
+					summoned.get(h.getSide()).compute(c.getRace(), (k, v) -> v == null ? 1 : v + 1);
 
 					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : c.getName() + " em posição de " + (c.isDefending() ? "defesa" : "ataque")) + ".";
 				} else {
@@ -2130,7 +2132,7 @@ public class Shoukan extends GlobalGame {
 				if (!acc.hasCompletedQuests()) {
 					Map<DailyTask, Integer> pg = acc.getDailyProgress();
 					DailyQuest dq = DailyQuest.getQuest(getCurrent().getIdLong());
-					int summons = summoned.getOrDefault(s, new HashMap<>()).getOrDefault(dq.getChosenRace(), 0);
+					int summons = summoned.get(s).getOrDefault(dq.getChosenRace(), 0);
 					pg.compute(DailyTask.RACE_TASK, (k, v) -> v == null ? summons : v + summons);
 					acc.setDailyProgress(pg);
 					AccountDAO.saveAccount(acc);
