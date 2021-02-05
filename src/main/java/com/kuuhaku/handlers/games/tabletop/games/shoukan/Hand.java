@@ -82,10 +82,10 @@ public class Hand {
 		this.game = game;
 
 		if (game.getCustom() != null) {
-			mana = Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
-			hp = Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
-			startingCount = Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
-			manaPerTurn = Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
+			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
+			hp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
+			startingCount = Helper.clamp(game.getCustom().optInt("cartasini", 5), 1, 10);
+			manaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
 
 			if (game.getCustom().optBoolean("semequip"))
 				getDeque().removeIf(d -> d instanceof Equipment);
@@ -173,10 +173,10 @@ public class Hand {
 		this.game = game;
 
 		if (game.getCustom() != null) {
-			mana = Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
-			hp = Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
-			startingCount = Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
-			manaPerTurn = Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
+			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
+			hp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
+			startingCount = Helper.clamp(game.getCustom().optInt("cartasini", 5), 1, 10);
+			manaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
 
 			if (game.getCustom().optBoolean("semequip"))
 				getDeque().removeIf(d -> d instanceof Equipment);

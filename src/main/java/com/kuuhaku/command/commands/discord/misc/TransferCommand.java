@@ -63,7 +63,7 @@ public class TransferCommand implements Executable {
 
 		boolean victorious = ExceedDAO.hasExceed(author.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
 		int rawAmount = Integer.parseInt(args[1]);
-		double tax = 0.01 + Helper.minMax(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
+		double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
 		int liquidAmount = rawAmount - (victorious ? 0 : (int) Math.floor(rawAmount * tax));
 
 		if (from.getBalance() < rawAmount) {

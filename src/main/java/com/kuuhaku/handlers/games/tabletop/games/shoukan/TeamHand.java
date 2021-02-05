@@ -60,10 +60,10 @@ public class TeamHand extends Hand {
 		this.side = side;
 		this.game = game;
 		if (game.getCustom() != null) {
-			mana = Helper.minMax(game.getCustom().optInt("mana", 0), 0, 20);
-			hp = Helper.minMax(game.getCustom().optInt("hp", 5000), 500, 25000);
-			startingCount = Helper.minMax(game.getCustom().optInt("cartasini", 5), 1, 10);
-			manaPerTurn = Helper.minMax(game.getCustom().optInt("manapt", 5), 1, 20);
+			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
+			hp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
+			startingCount = Helper.clamp(game.getCustom().optInt("cartasini", 5), 1, 10);
+			manaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
 		} else {
 			mana = 0;
 			hp = 5000;
