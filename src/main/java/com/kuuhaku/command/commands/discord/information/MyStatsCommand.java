@@ -110,8 +110,8 @@ public class MyStatsCommand implements Executable {
 				.formatted(
 						xp,
 						Helper.isTrustedMerchant(author.getId()) ? 5 : 10,
-						Helper.round((3 - Helper.minMax(Helper.prcnt(guild.getMemberCount(), 5000), 0, 1)) * (gb.getBuff(2) != null ? gb.getBuff(2).getMult() : 1), 1),
-						Helper.round((2.5 - Helper.minMax(Helper.prcnt(guild.getMemberCount() * 0.75f, 5000), 0, 0.75)) * (gb.getBuff(3) != null ? gb.getBuff(3).getMult() : 1), 1),
+						Helper.round((3 - Helper.clamp(Helper.prcnt(guild.getMemberCount(), 5000), 0, 1)) * (gb.getBuff(2) != null ? gb.getBuff(2).getMult() : 1), 1),
+						Helper.round((2.5 - Helper.clamp(Helper.prcnt(guild.getMemberCount() * 0.75f, 5000), 0, 0.75)) * (gb.getBuff(3) != null ? gb.getBuff(3).getMult() : 1), 1),
 						Helper.round(0.5 * (gb.getBuff(4) != null ? gb.getBuff(4).getMult() : 1), 1)
 				);
 

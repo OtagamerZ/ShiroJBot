@@ -175,6 +175,10 @@ public class Helper {
 		return Arrays.stream(values).average().orElse(0);
 	}
 
+	public static double clamp(double val, double min, double max) {
+		return Math.max(min, Math.min(val, max));
+	}
+
 	public static float clamp(float val, float min, float max) {
 		return Math.max(min, Math.min(val, max));
 	}
@@ -185,22 +189,6 @@ public class Helper {
 
 	public static int clamp(int val, int min, int max) {
 		return Math.max(min, Math.min(val, max));
-	}
-
-	public static int minMax(int val, int min, int max) {
-		return Math.min(Math.max(min, val), max);
-	}
-
-	public static long minMax(long val, long min, long max) {
-		return Math.min(Math.max(min, val), max);
-	}
-
-	public static float minMax(float val, float min, float max) {
-		return Math.min(Math.max(min, val), max);
-	}
-
-	public static double minMax(double val, double min, double max) {
-		return Math.min(Math.max(min, val), max);
 	}
 
 	public static boolean between(int val, int from, int to) {
@@ -1255,7 +1243,7 @@ public class Helper {
 		boolean cbUltimate = cardBuff != null && cardBuff.getTier() == 4;
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
 
-		if (cbUltimate || chance((3 - minMax(prcnt(channel.getGuild().getMemberCount(), 5000), 0, 1)) * (cardBuff != null ? cardBuff.getMult() : 1))) {
+		if (cbUltimate || chance((3 - clamp(prcnt(channel.getGuild().getMemberCount(), 5000), 0, 1)) * (cardBuff != null ? cardBuff.getMult() : 1))) {
 			KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
 					.map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
@@ -1364,7 +1352,7 @@ public class Helper {
 		ServerBuff dropBuff = gb.getBuffs().stream().filter(b -> b.getId() == 3).findFirst().orElse(null);
 		boolean dbUltimate = dropBuff != null && dropBuff.getTier() == 4;
 
-		if (dbUltimate || chance((2.5 - minMax(prcnt(channel.getGuild().getMemberCount() * 0.75f, 5000), 0, 0.75)) * (dropBuff != null ? dropBuff.getMult() : 1))) {
+		if (dbUltimate || chance((2.5 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.75f, 5000), 0, 0.75)) * (dropBuff != null ? dropBuff.getMult() : 1))) {
 			int rolled = Helper.rng(100, false);
 			Prize drop = rolled > 90 ? new ItemDrop() : rolled > 80 ? new JokerDrop() : new CreditDrop();
 
@@ -1401,7 +1389,7 @@ public class Helper {
 	public static void spawnPadoru(GuildConfig gc, TextChannel channel) {
 		if (Main.getInfo().getPadoruLimit().getIfPresent(gc.getGuildID()) != null) return;
 
-		if (chance(0.1 - minMax(prcnt(channel.getGuild().getMemberCount() * 0.09f, 5000), 0, 0.09))) {
+		if (chance(0.1 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.09f, 5000), 0, 0.09))) {
 			int rolled = Helper.rng(100, false);
 			List<Prize> prizes = new ArrayList<>();
 			for (int i = 0; i < 6; i++) {

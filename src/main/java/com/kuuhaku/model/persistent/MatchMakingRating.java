@@ -119,7 +119,7 @@ public class MatchMakingRating {
 
 	public void increaseRankPoints(long opMMR) {
 		double mmrModif = Helper.prcnt(mmr, Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) opMMR, mmr);
-		int rpValue = Helper.minMax((int) Math.round(mmrModif * 15), 5, 30);
+		int rpValue = Helper.clamp((int) Math.round(mmrModif * 15), 5, 30);
 		if (tier == RankedTier.UNRANKED) {
 			promWins++;
 
@@ -177,7 +177,7 @@ public class MatchMakingRating {
 
 	public void decreaseRankPoints(long opMMR) {
 		double mmrModif = Helper.prcnt(Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) opMMR);
-		int rpValue = Helper.minMax((int) Math.round(mmrModif * 15), 5, 30);
+		int rpValue = Helper.clamp((int) Math.round(mmrModif * 15), 5, 30);
 
 		if (tier == RankedTier.UNRANKED) {
 			promLosses++;
