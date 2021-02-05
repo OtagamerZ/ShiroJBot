@@ -50,7 +50,7 @@ public class CoupleMultiplier {
 	}
 
 	public void decrease() {
-		this.mult *= 0.99f;
-		Helper.clamp(this.mult, 1.05f, 1.25f);
+		this.mult = Helper.clamp(this.mult * 0.99f, 1.05f, 1.25f);
+		;
 	}
 }
