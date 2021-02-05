@@ -541,15 +541,15 @@ public class Hand {
 	}
 
 	public void addHp(int value) {
-		hp += value;
+		hp += Math.max(0, value);
 	}
 
 	public void removeHp(int value) {
-		hp = Math.max(0, hp - value);
+		hp = Math.max(0, hp - Math.max(0, value));
 	}
 
 	public void crippleHp(int value) {
-		hp = Math.max(1, hp - value);
+		hp = Math.max(1, hp - Math.max(0, value));
 	}
 
 	public boolean isSuppressed() {
