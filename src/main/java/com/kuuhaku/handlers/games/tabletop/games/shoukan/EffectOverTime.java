@@ -32,9 +32,10 @@ public class EffectOverTime {
 	private final TriConsumer<Hand, Hand, Pair<Side, Integer>> effect;
 	private int turns;
 
-	public EffectOverTime(TriConsumer<Hand, Hand, Pair<Side, Integer>> effect, EffectTrigger... triggers) {
+	public EffectOverTime(TriConsumer<Hand, Hand, Pair<Side, Integer>> effect, int turns, EffectTrigger... triggers) {
 		this.triggers = Set.of(triggers);
 		this.effect = effect;
+		this.turns = turns;
 	}
 
 	public Set<EffectTrigger> getTriggers() {
