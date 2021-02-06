@@ -13,12 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no framework de efeitos por turno">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectOverTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectOverTime.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,6 +180,19 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1067,21 +1076,7 @@
       <workItem from="1612470858536" duration="246000" />
       <workItem from="1612471166498" duration="146000" />
       <workItem from="1612471378441" duration="711000" />
-      <workItem from="1612576623399" duration="1969000" />
-    </task>
-    <task id="LOCAL-03674" summary="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
-      <created>1612357513536</created>
-      <option name="number" value="03674" />
-      <option name="presentableId" value="LOCAL-03674" />
-      <option name="project" value="LOCAL" />
-      <updated>1612357513536</updated>
-    </task>
-    <task id="LOCAL-03675" summary="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;">
-      <created>1612357662472</created>
-      <option name="number" value="03675" />
-      <option name="presentableId" value="LOCAL-03675" />
-      <option name="project" value="LOCAL" />
-      <updated>1612357662472</updated>
+      <workItem from="1612576623399" duration="2733000" />
     </task>
     <task id="LOCAL-03676" summary="Uso de multithreading na geração da arena Shoukan">
       <created>1612360298752</created>
@@ -1412,7 +1407,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612479487291</updated>
     </task>
-    <option name="localTasksCounter" value="3723" />
+    <task id="LOCAL-03723" summary="Melhoria no framework de efeitos por turno">
+      <created>1612578633029</created>
+      <option name="number" value="03723" />
+      <option name="presentableId" value="LOCAL-03723" />
+      <option name="project" value="LOCAL" />
+      <updated>1612578633029</updated>
+    </task>
+    <task id="LOCAL-03724" summary="Melhoria no framework de efeitos por turno">
+      <created>1612578886929</created>
+      <option name="number" value="03724" />
+      <option name="presentableId" value="LOCAL-03724" />
+      <option name="project" value="LOCAL" />
+      <updated>1612578886929</updated>
+    </task>
+    <option name="localTasksCounter" value="3725" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1498,7 +1507,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nos requisitos da licença de comércio" />
     <MESSAGE value="Correção nos tickets" />
     <MESSAGE value="Adição de verificação de voto" />
     <MESSAGE value="Adicionados desafios diários" />
@@ -1523,7 +1531,8 @@
     <MESSAGE value="Adição de GIFs de transição dos levels 210 e 420" />
     <MESSAGE value="Feitiços agora viram cartas viradas para baixo" />
     <MESSAGE value="Correções gerais" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções gerais" />
+    <MESSAGE value="Melhoria no framework de efeitos por turno" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no framework de efeitos por turno" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
