@@ -42,7 +42,7 @@ import java.util.Objects;
 
 @Command(
 		name = "jojo",
-		usage = "req_two-mentions-image",
+		usage = "req_two-mentions-message",
 		category = Category.FUN
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES})
