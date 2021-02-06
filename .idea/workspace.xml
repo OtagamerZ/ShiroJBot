@@ -180,19 +180,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1076,14 +1063,7 @@
       <workItem from="1612470858536" duration="246000" />
       <workItem from="1612471166498" duration="146000" />
       <workItem from="1612471378441" duration="711000" />
-      <workItem from="1612576623399" duration="2733000" />
-    </task>
-    <task id="LOCAL-03676" summary="Uso de multithreading na geração da arena Shoukan">
-      <created>1612360298752</created>
-      <option name="number" value="03676" />
-      <option name="presentableId" value="LOCAL-03676" />
-      <option name="project" value="LOCAL" />
-      <updated>1612360298752</updated>
+      <workItem from="1612576623399" duration="3618000" />
     </task>
     <task id="LOCAL-03677" summary="Uso de multithreading na geração da arena Shoukan">
       <created>1612360392549</created>
@@ -1421,7 +1401,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612578886929</updated>
     </task>
-    <option name="localTasksCounter" value="3725" />
+    <task id="LOCAL-03725" summary="Melhoria no framework de efeitos por turno">
+      <created>1612579457074</created>
+      <option name="number" value="03725" />
+      <option name="presentableId" value="LOCAL-03725" />
+      <option name="project" value="LOCAL" />
+      <updated>1612579457074</updated>
+    </task>
+    <option name="localTasksCounter" value="3726" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
