@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no framework de efeitos por turno">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no framework de efeitos por turno" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1064,13 +1062,7 @@
       <workItem from="1612471166498" duration="146000" />
       <workItem from="1612471378441" duration="711000" />
       <workItem from="1612576623399" duration="3618000" />
-    </task>
-    <task id="LOCAL-03677" summary="Uso de multithreading na geração da arena Shoukan">
-      <created>1612360392549</created>
-      <option name="number" value="03677" />
-      <option name="presentableId" value="LOCAL-03677" />
-      <option name="project" value="LOCAL" />
-      <updated>1612360392549</updated>
+      <workItem from="1612583384333" duration="54000" />
     </task>
     <task id="LOCAL-03678" summary="Uso de multithreading na geração da arena Shoukan">
       <created>1612360575882</created>
@@ -1408,7 +1400,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612579457074</updated>
     </task>
-    <option name="localTasksCounter" value="3726" />
+    <task id="LOCAL-03726" summary="Melhoria no framework de efeitos por turno">
+      <created>1612583422774</created>
+      <option name="number" value="03726" />
+      <option name="presentableId" value="LOCAL-03726" />
+      <option name="project" value="LOCAL" />
+      <updated>1612583422774</updated>
+    </task>
+    <option name="localTasksCounter" value="3727" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
