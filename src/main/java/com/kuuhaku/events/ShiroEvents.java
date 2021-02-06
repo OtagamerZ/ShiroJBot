@@ -82,6 +82,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
@@ -229,7 +230,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			String[] args = rawMsgNoPrefix.split(" ");
-			String argsAsText = message.getContentRaw().replaceFirst(prefix + commandName, "").trim();
+			String argsAsText = message.getContentRaw().replaceFirst(Pattern.quote(prefix + commandName), "").trim();
 			boolean hasArgs = (args.length > 1);
 			if (hasArgs) {
 				args = Arrays.copyOfRange(args, 1, args.length);
