@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no framework de efeitos por turno" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no encerramento das partidas">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1063,20 +1065,7 @@
       <workItem from="1612471378441" duration="711000" />
       <workItem from="1612576623399" duration="3618000" />
       <workItem from="1612583384333" duration="54000" />
-    </task>
-    <task id="LOCAL-03678" summary="Uso de multithreading na geração da arena Shoukan">
-      <created>1612360575882</created>
-      <option name="number" value="03678" />
-      <option name="presentableId" value="LOCAL-03678" />
-      <option name="project" value="LOCAL" />
-      <updated>1612360575882</updated>
-    </task>
-    <task id="LOCAL-03679" summary="Uso de multithreading na geração da arena Shoukan">
-      <created>1612361682282</created>
-      <option name="number" value="03679" />
-      <option name="presentableId" value="LOCAL-03679" />
-      <option name="project" value="LOCAL" />
-      <updated>1612361682282</updated>
+      <workItem from="1612636178642" duration="476000" />
     </task>
     <task id="LOCAL-03680" summary="Remoção do multithreading no Shoukan">
       <created>1612361935441</created>
@@ -1407,7 +1396,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612583422774</updated>
     </task>
-    <option name="localTasksCounter" value="3727" />
+    <task id="LOCAL-03727" summary="Correção no encerramento das partidas">
+      <created>1612636367916</created>
+      <option name="number" value="03727" />
+      <option name="presentableId" value="LOCAL-03727" />
+      <option name="project" value="LOCAL" />
+      <updated>1612636367920</updated>
+    </task>
+    <task id="LOCAL-03728" summary="Correção no encerramento das partidas">
+      <created>1612636450901</created>
+      <option name="number" value="03728" />
+      <option name="presentableId" value="LOCAL-03728" />
+      <option name="project" value="LOCAL" />
+      <updated>1612636450901</updated>
+    </task>
+    <option name="localTasksCounter" value="3729" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1493,7 +1496,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nos tickets" />
     <MESSAGE value="Adição de verificação de voto" />
     <MESSAGE value="Adicionados desafios diários" />
     <MESSAGE value="Correções menores no desafios diarios" />
@@ -1518,7 +1520,8 @@
     <MESSAGE value="Feitiços agora viram cartas viradas para baixo" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Melhoria no framework de efeitos por turno" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no framework de efeitos por turno" />
+    <MESSAGE value="Correção no encerramento das partidas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no encerramento das partidas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
