@@ -57,7 +57,7 @@ public abstract class Action {
 	public void sendReaction(String type, TextChannel channel, User target, String message, boolean allowReact) {
 		Message msg = channel.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("assets/loading.gif")).getPath())).complete();
 		try {
-			JSONObject resposta = Helper.get("https://shiro-api.herokuapp.com/reaction", new JSONObject() {{
+			JSONObject resposta = Helper.get("https://api." + System.getenv("SERVER_URL") + "/reaction", new JSONObject() {{
 				put("type", type);
 			}}, null);
 
