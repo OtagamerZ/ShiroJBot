@@ -20,25 +20,21 @@ package com.kuuhaku.command.commands.discord.fun;
 
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.games.chess.Chess;
-import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@Command(
+/*@Command(
 		name = "xadrez",
 		aliases = {"chess"},
 		usage = "req_bet-mentions",
@@ -47,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 @Requires({
 		Permission.MESSAGE_MANAGE,
 		Permission.MESSAGE_ADD_REACTION
-})
+})*/
 public class ChessCommand implements Executable {
 
 	@Override
