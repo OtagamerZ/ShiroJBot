@@ -3,7 +3,6 @@
   <component name="GithubSharedProjectSettings">
     <option name="branchProtectionPatterns">
       <list>
-        <option value="ShiroAPI" />
         <option value="master" />
       </list>
     </option>
