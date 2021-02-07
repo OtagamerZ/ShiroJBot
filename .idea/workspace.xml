@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no encerramento das partidas">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na listagem das cartas elegíveis" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1066,13 +1064,7 @@
       <workItem from="1612576623399" duration="3618000" />
       <workItem from="1612583384333" duration="54000" />
       <workItem from="1612636178642" duration="476000" />
-    </task>
-    <task id="LOCAL-03680" summary="Remoção do multithreading no Shoukan">
-      <created>1612361935441</created>
-      <option name="number" value="03680" />
-      <option name="presentableId" value="LOCAL-03680" />
-      <option name="project" value="LOCAL" />
-      <updated>1612361935441</updated>
+      <workItem from="1612668202000" duration="300000" />
     </task>
     <task id="LOCAL-03681" summary="Remoção do multithreading no Shoukan">
       <created>1612362320664</created>
@@ -1410,7 +1402,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612636450901</updated>
     </task>
-    <option name="localTasksCounter" value="3729" />
+    <task id="LOCAL-03729" summary="Correção na listagem das cartas elegíveis">
+      <created>1612668490531</created>
+      <option name="number" value="03729" />
+      <option name="presentableId" value="LOCAL-03729" />
+      <option name="project" value="LOCAL" />
+      <updated>1612668490531</updated>
+    </task>
+    <option name="localTasksCounter" value="3730" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1496,7 +1495,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de verificação de voto" />
     <MESSAGE value="Adicionados desafios diários" />
     <MESSAGE value="Correções menores no desafios diarios" />
     <MESSAGE value="Adicionado Shoukan em duplas" />
@@ -1521,7 +1519,8 @@
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Melhoria no framework de efeitos por turno" />
     <MESSAGE value="Correção no encerramento das partidas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no encerramento das partidas" />
+    <MESSAGE value="Correção na listagem das cartas elegíveis" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na listagem das cartas elegíveis" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
