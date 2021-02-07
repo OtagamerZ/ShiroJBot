@@ -119,7 +119,7 @@ public class KawaiponsCommand implements Executable {
                                 List<Drawable> cardList = CardDAO.getAllChampions(false).stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                                 KawaiponBook kb = new KawaiponBook();
-                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis", false);
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Cartas elegíveis", true);
 
                                 send(author, channel, m, cards, "Cartas elegíveis", null);
                                 return;
