@@ -2258,7 +2258,6 @@ public class Shoukan extends GlobalGame {
 			for (Side s : Side.values()) {
 				Account acc = AccountDAO.getAccount(getHands().get(s).getUser().getId());
 
-				System.out.println(summoned.get(s));
 				if (!acc.hasCompletedQuests()) {
 					Map<DailyTask, Integer> pg = acc.getDailyProgress();
 					DailyQuest dq = DailyQuest.getQuest(getCurrent().getIdLong());
