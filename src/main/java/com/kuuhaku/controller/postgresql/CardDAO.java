@@ -31,553 +31,573 @@ import com.kuuhaku.model.persistent.Card;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 public class CardDAO {
-    public static Card getCard(String name) {
-        EntityManager em = Manager.getEntityManager();
+	public static Card getCard(String name) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity = 'EQUIPMENT'", Card.class);
-        q.setParameter("name", name);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity = 'EQUIPMENT'", Card.class);
+		q.setParameter("name", name);
 
-        try {
-            return (Card) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (Card) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Card getCard(String name, boolean withUltimate) {
-        EntityManager em = Manager.getEntityManager();
+	public static Card getCard(String name, boolean withUltimate) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q;
-        if (withUltimate)
-            q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND anime <> 'HIDDEN'", Card.class);
-        else
-            q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity <> 'ULTIMATE' AND anime <> 'HIDDEN'", Card.class);
-        q.setParameter("name", name);
+		Query q;
+		if (withUltimate)
+			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND anime <> 'HIDDEN'", Card.class);
+		else
+			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity <> 'ULTIMATE' AND anime <> 'HIDDEN'", Card.class);
+		q.setParameter("name", name);
 
-        try {
-            return (Card) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (Card) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Card getRawCard(String name) {
-        EntityManager em = Manager.getEntityManager();
+	public static Card getRawCard(String name) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name)", Card.class);
-        q.setParameter("name", name);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name)", Card.class);
+		q.setParameter("name", name);
 
-        try {
-            return (Card) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (Card) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static String getCardAnime(String name) {
-        EntityManager em = Manager.getEntityManager();
+	public static String getCardAnime(String name) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c.anime FROM Card c WHERE id = UPPER(:name)", String.class);
-        q.setParameter("name", name);
+		Query q = em.createQuery("SELECT c.anime FROM Card c WHERE id = UPPER(:name)", String.class);
+		q.setParameter("name", name);
 
-        try {
-            return (String) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (String) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Card getUltimate(AnimeName anime) {
-        EntityManager em = Manager.getEntityManager();
+	public static Card getUltimate(AnimeName anime) {
+		EntityManager em = Manager.getEntityManager();
 
-        try {
-            return em.find(Card.class, anime.name());
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return em.find(Card.class, anime.name());
+		} finally {
+			em.close();
+		}
+	}
 
 	@SuppressWarnings("unchecked")
 	public static List<Card> getCards() {
-        EntityManager em = Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND anime <> 'HIDDEN'", Card.class);
-        q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-	@SuppressWarnings("unchecked")
-	public static List<Card> getCards(List<String> ids) {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT c FROM Card c WHERE c.id IN :ids", Card.class);
-        q.setParameter("ids", ids);
-
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-	@SuppressWarnings("unchecked")
-	public static List<Card> getAllCards() {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", Card.class);
-        q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<String> getAllCardNames() {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", String.class);
-        q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<String> getAllEquipmentNames() {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT e.card.id FROM Equipment e", String.class);
-
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<Equipment> getAllEquipments() {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT e FROM Equipment e", Equipment.class);
-
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<String> getAllChampionNames() {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT c.card.id FROM Champion c", String.class);
-
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<Champion> getAllChampions(boolean withFusion) {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q;
-        if (withFusion)
-            q = em.createQuery("SELECT c FROM Champion c", Champion.class);
-        else
-            q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = FALSE", Champion.class);
-
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<String> getAllFieldNames() {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT f.card.id FROM Field f", String.class);
-
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<Field> getAllFields() {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT f FROM Field f", Field.class);
-
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<Field> getAllAvailableFields() {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT f FROM Field f WHERE f.effectOnly = FALSE", Field.class);
-
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<Card> getCardsByAnime(AnimeName anime) {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime AND anime <> 'HIDDEN'", Card.class);
-        q.setParameter("anime", anime);
-
-        try {
-            return q.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<Card> getAllCardsByAnime(AnimeName anime) {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT c FROM Card c WHERE anime = :anime AND anime <> 'HIDDEN'", Card.class);
-        q.setParameter("anime", anime);
-
-        try {
-            return q.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<Card> getCardsByRarity(KawaiponRarity rarity) {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity AND anime IN :animes AND anime <> 'HIDDEN'", Card.class);
-        q.setParameter("rarity", rarity);
-        q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-
-        try {
-            return q.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    public static long totalCards() {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND anime <> 'HIDDEN'", Long.class);
-        q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-
-        try {
-            return (long) q.getSingleResult();
-        } finally {
-            em.close();
-        }
-    }
-
-    public static long totalCards(AnimeName anime) {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime AND anime <> 'HIDDEN'", Long.class);
-        q.setParameter("anime", anime);
-
-        try {
-            return (long) q.getSingleResult();
-        } finally {
-            em.close();
-        }
-    }
-
-    public static long totalCards(KawaiponRarity rarity) {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity AND anime IN :animes AND anime <> 'HIDDEN'", Long.class);
-        q.setParameter("rarity", rarity);
-        q.setParameter("animes", EnumSet.allOf(AnimeName.class));
-
-        try {
-            return (long) q.getSingleResult();
-        } finally {
-            em.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<Champion> getFusions() {
-        EntityManager em = Manager.getEntityManager();
-
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = TRUE", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND anime <> 'HIDDEN'", Card.class);
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 
 		try {
 			return q.getResultList();
 		} catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Card> getCards(List<String> ids) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE c.id IN :ids", Card.class);
+		q.setParameter("ids", ids);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Card> getAllCards() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", Card.class);
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getAllCardNames() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", String.class);
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getAllEquipmentNames() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT e.card.id FROM Equipment e", String.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Equipment> getAllEquipments() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT e FROM Equipment e", Equipment.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getAllChampionNames() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c.card.id FROM Champion c", String.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Champion> getAllChampions(boolean withFusion) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q;
+		if (withFusion)
+			q = em.createQuery("SELECT c FROM Champion c", Champion.class);
+		else
+			q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = FALSE", Champion.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getAllFieldNames() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT f.card.id FROM Field f", String.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Field> getAllFields() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT f FROM Field f", Field.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Field> getAllAvailableFields() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT f FROM Field f WHERE f.effectOnly = FALSE", Field.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Card> getCardsByAnime(AnimeName anime) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime AND anime <> 'HIDDEN'", Card.class);
+		q.setParameter("anime", anime);
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Card> getAllCardsByAnime(AnimeName anime) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE anime = :anime AND anime <> 'HIDDEN'", Card.class);
+		q.setParameter("anime", anime);
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Card> getCardsByRarity(KawaiponRarity rarity) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity AND anime IN :animes AND anime <> 'HIDDEN'", Card.class);
+		q.setParameter("rarity", rarity);
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static long totalCards() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND anime <> 'HIDDEN'", Long.class);
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+
+		try {
+			return (long) q.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static long totalCards(AnimeName anime) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime AND anime <> 'HIDDEN'", Long.class);
+		q.setParameter("anime", anime);
+
+		try {
+			return (long) q.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static long totalCards(KawaiponRarity rarity) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity AND anime IN :animes AND anime <> 'HIDDEN'", Long.class);
+		q.setParameter("rarity", rarity);
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+
+		try {
+			return (long) q.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Champion> getFusions() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = TRUE", Champion.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
 			em.close();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public static List<Champion> getChampions(List<String> ids) {
-        EntityManager em = Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id IN :ids", Champion.class);
-        q.setParameter("ids", ids);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id IN :ids", Champion.class);
+		q.setParameter("ids", ids);
 
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
 
-    @SuppressWarnings("unchecked")
-    public static List<Champion> getChampions(Class c) {
-        EntityManager em = Manager.getEntityManager();
+	@SuppressWarnings("unchecked")
+	public static List<Champion> getChampions(Class c) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Champion.class);
-        q.setParameter("class", c);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.category = :class", Champion.class);
+		q.setParameter("class", c);
 
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
 
-    @SuppressWarnings("unchecked")
-    public static List<Champion> getChampions(Race r) {
-        EntityManager em = Manager.getEntityManager();
+	@SuppressWarnings("unchecked")
+	public static List<Champion> getChampions(Race r) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.race = :race", Champion.class);
-        q.setParameter("race", r);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.race = :race", Champion.class);
+		q.setParameter("race", r);
 
-        try {
-            return q.getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Champion getChampion(Card c) {
-        EntityManager em = Manager.getEntityManager();
+	public static Champion getChampion(Card c) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE card = :card", Champion.class);
-        q.setParameter("card", c);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE card = :card", Champion.class);
+		q.setParameter("card", c);
 
-        try {
-            return (Champion) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (Champion) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Champion getChampion(String name) {
-        EntityManager em = Manager.getEntityManager();
+	public static Champion getChampion(String name) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id = UPPER(:card)", Champion.class);
-        q.setParameter("card", name);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE card.id = UPPER(:card)", Champion.class);
+		q.setParameter("card", name);
 
-        try {
-            return (Champion) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (Champion) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Champion getRandomChampion() {
-        EntityManager em = Manager.getEntityManager();
+	public static Champion getRandomChampion() {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' ORDER BY RANDOM()", Champion.class);
-        q.setMaxResults(1);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' ORDER BY RANDOM()", Champion.class);
+		q.setMaxResults(1);
 
-        try {
-            return (Champion) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (Champion) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Champion getRandomChampion(int mana) {
-        EntityManager em = Manager.getEntityManager();
+	public static Champion getRandomChampion(int mana) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' AND c.mana = :mana ORDER BY RANDOM()", Champion.class);
-        q.setParameter("mana", mana);
-        q.setMaxResults(1);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' AND c.mana = :mana ORDER BY RANDOM()", Champion.class);
+		q.setParameter("mana", mana);
+		q.setMaxResults(1);
 
-        try {
-            return (Champion) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (Champion) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    @SuppressWarnings("unchecked")
-    public static Champion getFakeChampion() {
-        EntityManager em = Manager.getEntityManager();
+	@SuppressWarnings("unchecked")
+	public static Champion getFakeChampion() {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' ORDER BY RANDOM()", Champion.class);
-        q.setMaxResults(4);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' ORDER BY RANDOM()", Champion.class);
+		q.setMaxResults(4);
 
-        List<Champion> champs = q.getResultList();
-        Champion c = new Champion(
-                champs.get(0).getCard(),
-                champs.get(1).getRace(),
-                champs.get(2).getMana(),
-                champs.get(2).getAtk(),
-                champs.get(2).getDef(),
-                champs.get(3).getDescription(),
-                champs.get(3).getLiteralEffect()
-        );
+		List<Champion> champs = q.getResultList();
+		Champion c = new Champion(
+				champs.get(0).getCard(),
+				champs.get(1).getRace(),
+				champs.get(2).getMana(),
+				champs.get(2).getAtk(),
+				champs.get(2).getDef(),
+				champs.get(3).getDescription(),
+				champs.get(3).getLiteralEffect()
+		);
 
-        try {
-            return c;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return c;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Equipment getEquipment(Card c) {
-        EntityManager em = Manager.getEntityManager();
+	public static Equipment getEquipment(Card c) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT e FROM Equipment e WHERE card = :card", Equipment.class);
-        q.setParameter("card", c);
+		Query q = em.createQuery("SELECT e FROM Equipment e WHERE card = :card", Equipment.class);
+		q.setParameter("card", c);
 
-        try {
-            return (Equipment) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (Equipment) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Equipment getEquipment(String name) {
-        EntityManager em = Manager.getEntityManager();
+	public static Equipment getEquipment(String name) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT e FROM Equipment e WHERE card.id = UPPER(:card)", Equipment.class);
-        q.setParameter("card", name);
+		Query q = em.createQuery("SELECT e FROM Equipment e WHERE card.id = UPPER(:card)", Equipment.class);
+		q.setParameter("card", name);
 
-        try {
-            return (Equipment) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (Equipment) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Field getField(Card c) {
-        EntityManager em = Manager.getEntityManager();
+	public static Field getField(Card c) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT f FROM Field f WHERE card = :card", Field.class);
-        q.setParameter("card", c);
+		Query q = em.createQuery("SELECT f FROM Field f WHERE card = :card", Field.class);
+		q.setParameter("card", c);
 
-        try {
-            return (Field) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (Field) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static Field getField(String name) {
-        EntityManager em = Manager.getEntityManager();
+	public static Field getField(String name) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT f FROM Field f WHERE card.id = UPPER(:card)", Field.class);
-        q.setParameter("card", name);
+		Query q = em.createQuery("SELECT f FROM Field f WHERE card.id = UPPER(:card)", Field.class);
+		q.setParameter("card", name);
 
-        try {
-            return (Field) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			return (Field) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-    public static CardType identifyType(String name) {
-        if (getField(name) != null) return CardType.FIELD;
-        else if (getEquipment(name) != null) return CardType.EVOGEAR;
-        else return CardType.KAWAIPON;
-    }
+	public static int getMeta(Class cat) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT ROUND(COUNT(*) / (36 * 0.75))
+				FROM Kawaipon k
+				JOIN k.champions kc
+				INNER JOIN Champion c on kc.id = c.id
+				WHERE c.category = :cat
+				""");
+		q.setParameter("cat", cat);
+
+		try {
+			return ((BigInteger) q.getSingleResult()).intValue();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static CardType identifyType(String name) {
+		if (getField(name) != null) return CardType.FIELD;
+		else if (getEquipment(name) != null) return CardType.EVOGEAR;
+		else return CardType.KAWAIPON;
+	}
 }
