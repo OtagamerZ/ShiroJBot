@@ -15,6 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/DeckEvalCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/DeckEvalCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1061,14 +1064,7 @@
       <workItem from="1612726198062" duration="438000" />
       <workItem from="1612726819973" duration="144000" />
       <workItem from="1612727052316" duration="531000" />
-      <workItem from="1612800183695" duration="12148000" />
-    </task>
-    <task id="LOCAL-03693" summary="Reversão do último commit">
-      <created>1612372219988</created>
-      <option name="number" value="03693" />
-      <option name="presentableId" value="LOCAL-03693" />
-      <option name="project" value="LOCAL" />
-      <updated>1612372219988</updated>
+      <workItem from="1612800183695" duration="13529000" />
     </task>
     <task id="LOCAL-03694" summary="Reversão do último commit">
       <created>1612372480919</created>
@@ -1406,7 +1402,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612813022187</updated>
     </task>
-    <option name="localTasksCounter" value="3742" />
+    <task id="LOCAL-03742" summary="Correções menores">
+      <created>1612816266529</created>
+      <option name="number" value="03742" />
+      <option name="presentableId" value="LOCAL-03742" />
+      <option name="project" value="LOCAL" />
+      <updated>1612816266529</updated>
+    </task>
+    <option name="localTasksCounter" value="3743" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1534,18 +1537,34 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612795606837" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612813023274">
+    <state width="1387" height="351" key="GridCell.Tab.0.bottom" timestamp="1612817225689">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612813023274" />
+    <state width="1387" height="351" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1612817225689" />
+    <state width="1387" height="351" key="GridCell.Tab.0.center" timestamp="1612817225689">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1387" height="351" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1612817225689" />
+    <state width="1387" height="351" key="GridCell.Tab.0.left" timestamp="1612817225689">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1387" height="351" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1612817225689" />
+    <state width="1387" height="351" key="GridCell.Tab.0.right" timestamp="1612817225689">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612817225689" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612816267793">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612816267793" />
     <state x="683" y="278" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1612809137674">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="683" y="278" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612809137674" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612815975488">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612816940012">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612815975488" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612816940012" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>

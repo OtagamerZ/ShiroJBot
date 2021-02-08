@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
@@ -100,31 +101,31 @@ public class DeckEvalCommand implements Executable {
 		for (Map.Entry<Class, Integer> e : count.entrySet()) {
 			switch (e.getKey()) {
 				case DUELIST -> {
-					if (e.getValue() < 6)
+					if (e.getValue() < CardDAO.getMeta(Class.DUELIST))
 						tips.add("É importante ter várias cartas do tipo duelista, pois elas costumam ser as mais baratas e oferecem versatilidade durante as partidas.");
 				}
 				case SUPPORT -> {
-					if (e.getValue() < 3)
+					if (e.getValue() < CardDAO.getMeta(Class.SUPPORT))
 						tips.add("Decks que possuem cartas de suporte costumam sobressair em partidas extensas, lembre-se que nem sempre dano é o fator vitorioso.");
 				}
 				case TANK -> {
-					if (e.getValue() < 3)
+					if (e.getValue() < CardDAO.getMeta(Class.TANK))
 						tips.add("Um deck sem tanques possui uma defesa muito fraca, lembre-se que após cada turno será a vez do oponente.");
 				}
 				case SPECIALIST -> {
-					if (e.getValue() < 1)
+					if (e.getValue() < CardDAO.getMeta(Class.SPECIALIST))
 						tips.add("Apesar de serem cartas situacionais, as cartas-especialista são essenciais em qualquer deck pois nunca se sabe que rumo a partida irá tomar.");
 				}
 				case NUKE -> {
-					if (e.getValue() < 1)
+					if (e.getValue() < CardDAO.getMeta(Class.NUKE))
 						tips.add("Existem cartas com alto ataque ou defesa, seu deck estará vulnerável sem uma carta para explodi-las.");
 				}
 				case TRAP -> {
-					if (e.getValue() < 5)
+					if (e.getValue() < CardDAO.getMeta(Class.TRAP))
 						tips.add("Sem cartas-armadilha à sua disposição, o oponente não precisará se preocupar em atacar cartas viradas para baixo, o que te torna um alvo fácil.");
 				}
 				case LEVELER -> {
-					if (e.getValue() < 5)
+					if (e.getValue() < CardDAO.getMeta(Class.LEVELER))
 						tips.add("Cartas niveladoras são essenciais para defender-se de um turno ruim, não subestime o poder delas.");
 				}
 			}
