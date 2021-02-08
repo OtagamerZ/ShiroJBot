@@ -27,6 +27,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -74,7 +75,8 @@ public class SayCommand implements Executable {
 			}
 			if (m.getPseudoName() == null || m.getPseudoName().isBlank()) wmb.setUsername(author.getName());
 			else try {
-				wmb.setUsername(m.getPseudoName());
+				Member nii = guild.getMember(Main.getInfo().getUserByID(ShiroInfo.getNiiChan()));
+				wmb.setUsername(nii != null && m.getPseudoName().equals(nii.getEffectiveName()) ? m.getPseudoName() + " (FAKE)" : m.getPseudoName());
 			} catch (RuntimeException e) {
 				m.setPseudoName("");
 				MemberDAO.updateMemberConfigs(m);
