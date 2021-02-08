@@ -177,7 +177,7 @@ public class Arena {
 					g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 75));
 					Profile.drawOutlinedText("HP: " + h.getHp(), key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("HP: " + h.getHp()), key == Side.TOP ? 82 : 1638, g2d);
 					g2d.setColor(Color.cyan);
-					Profile.drawOutlinedText("MP: " + h.getMana(), key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + h.getMana()), key == Side.TOP ? 178 : 1735, g2d);
+					Profile.drawOutlinedText("MP: " + (h.isNullMode() ? "ø" : h.getMana()), key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + (h.isNullMode() ? "ø" : h.getMana())), key == Side.TOP ? 178 : 1735, g2d);
 				}
 			}
 

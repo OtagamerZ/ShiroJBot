@@ -54,6 +54,7 @@ public class Hand {
 	private int suppressTime = 0;
 	private int lockTime = 0;
 	private int manaReturn = 0;
+	private int nullTime = 0;
 
 	public Hand(Shoukan game, User user, Kawaipon kp, Side side) {
 		if (user == null) {
@@ -529,7 +530,7 @@ public class Hand {
 	}
 
 	public void removeMana(int value) {
-		mana = Math.max(0, mana - value);
+		mana = Math.max(0, (isNullMode() ? mana : mana - value));
 	}
 
 	public int getHp() {
@@ -580,5 +581,17 @@ public class Hand {
 
 	public int getLockTime() {
 		return lockTime;
+	}
+
+	public boolean isNullMode() {
+		return nullTime > 0;
+	}
+
+	public void addNullTime(int time) {
+		nullTime += time;
+	}
+
+	public void decreaseNullTime() {
+		nullTime = Math.max(0, nullTime - 1);
 	}
 }
