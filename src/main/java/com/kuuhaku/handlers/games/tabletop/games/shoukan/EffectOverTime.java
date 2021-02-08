@@ -28,14 +28,20 @@ import java.util.Set;
 
 public class EffectOverTime {
 	private final long stamp = System.currentTimeMillis();
+	private final String source;
 	private final Set<EffectTrigger> triggers;
 	private final TriConsumer<Hand, Hand, Pair<Side, Integer>> effect;
 	private int turns;
 
-	public EffectOverTime(TriConsumer<Hand, Hand, Pair<Side, Integer>> effect, int turns, EffectTrigger... triggers) {
+	public EffectOverTime(String source, TriConsumer<Hand, Hand, Pair<Side, Integer>> effect, int turns, EffectTrigger... triggers) {
+		this.source = source;
 		this.triggers = Set.of(triggers);
 		this.effect = effect;
 		this.turns = turns;
+	}
+
+	public String getSource() {
+		return source;
 	}
 
 	public Set<EffectTrigger> getTriggers() {

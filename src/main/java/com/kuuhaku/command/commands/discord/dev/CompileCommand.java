@@ -25,16 +25,12 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.TagIcons;
-import com.kuuhaku.utils.BannedVars;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 @Command(
 		name = "compilar",
@@ -52,24 +48,15 @@ public class CompileCommand implements Executable {
 				Future<?> execute = Main.getInfo().getCompilationPool().submit(() -> {
 					final long start = System.currentTimeMillis();
 					try {
-						String code = String.join(" ", args);
-						if (!code.contains("out")) throw new IllegalArgumentException("Código sem retorno.");
-						else if (Helper.containsAny(code, BannedVars.vars) && !ShiroInfo.getDevelopers().contains(author.getId()))
-							throw new IllegalAccessException("Código com variáveis ou métodos proibidos.");
-
-                        if (code.startsWith("```") && code.endsWith("```")) {
-                            code = code.replace("```java", "").replace("```", "");
-                            Interpreter i = new Interpreter();
-							i.set("msg", message);
-							i.eval(code);
-							Object out = i.get("out");
-							m.getChannel().sendMessage("<a:loading:697879726630502401> | Executando...").queue(d ->
-									d.editMessage("-> " + out.toString()).queue());
-							message.delete().queue();
-							m.editMessage(TagIcons.VERIFIED.getTag(0) + "| Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
-						} else {
-							throw new IllegalArgumentException("Bloco de código com começo incorreto");
-						}
+						String code = argsAsText.replace("```java", "").replace("```", "");
+						Interpreter i = new Interpreter();
+						i.set("msg", message);
+						i.eval(code);
+						Object out = i.get("out");
+						m.getChannel().sendMessage("<a:loading:697879726630502401> | Executando...").queue(d ->
+								d.editMessage("-> " + out.toString()).queue());
+						message.delete().queue();
+						m.editMessage(TagIcons.VERIFIED.getTag(0) + "| Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
 					} catch (Exception e) {
 						m.editMessage("❌ | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 					}
