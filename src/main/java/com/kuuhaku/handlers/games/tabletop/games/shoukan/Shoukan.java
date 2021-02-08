@@ -1331,7 +1331,7 @@ public class Shoukan extends GlobalGame {
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
 						allCards.containsAll(f.getRequiredCards()) &&
-						h.getMana() >= f.getMana()
+						(h.isNullMode() || h.getMana() >= f.getMana())
 				)
 				.findFirst()
 				.orElse(null);
@@ -1763,6 +1763,7 @@ public class Shoukan extends GlobalGame {
 				}
 
 				h.get().decreaseLockTime();
+				h.get().decreaseNullTime();
 				h.get().addMana(h.get().getManaPerTurn());
 				AtomicBoolean shownHand = new AtomicBoolean(false);
 				moveLock = true;
@@ -1997,6 +1998,7 @@ public class Shoukan extends GlobalGame {
 				}
 
 				h.get().decreaseLockTime();
+				h.get().decreaseNullTime();
 				h.get().addMana(h.get().getManaPerTurn());
 				AtomicBoolean shownHand = new AtomicBoolean(false);
 				draw = true;
