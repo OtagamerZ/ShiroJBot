@@ -2231,6 +2231,7 @@ public class Shoukan extends GlobalGame {
 				continue;
 			}
 
+			System.out.println(trigger + " | " + effect.getTriggers());
 			if (effect.getTriggers().contains(trigger)) {
 				effect.getEffect().accept(getHands().get(Side.TOP), getHands().get(Side.BOTTOM), cause);
 			}
