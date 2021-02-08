@@ -15,6 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1061,21 +1064,7 @@
       <workItem from="1612726198062" duration="438000" />
       <workItem from="1612726819973" duration="144000" />
       <workItem from="1612727052316" duration="531000" />
-      <workItem from="1612800183695" duration="4005000" />
-    </task>
-    <task id="LOCAL-03687" summary="Imagens das arenas agora são armazenadas pela Shiro ao invés de enviadas ao Discord">
-      <created>1612369370440</created>
-      <option name="number" value="03687" />
-      <option name="presentableId" value="LOCAL-03687" />
-      <option name="project" value="LOCAL" />
-      <updated>1612369370440</updated>
-    </task>
-    <task id="LOCAL-03688" summary="Imagens das arenas agora são armazenadas pela Shiro ao invés de enviadas ao Discord">
-      <created>1612370347321</created>
-      <option name="number" value="03688" />
-      <option name="presentableId" value="LOCAL-03688" />
-      <option name="project" value="LOCAL" />
-      <updated>1612370347321</updated>
+      <workItem from="1612800183695" duration="5703000" />
     </task>
     <task id="LOCAL-03689" summary="Imagens das arenas agora são armazenadas pela Shiro ao invés de enviadas ao Discord">
       <created>1612370384921</created>
@@ -1406,7 +1395,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612802058451</updated>
     </task>
-    <option name="localTasksCounter" value="3736" />
+    <task id="LOCAL-03736" summary="Correções menores">
+      <created>1612804854085</created>
+      <option name="number" value="03736" />
+      <option name="presentableId" value="LOCAL-03736" />
+      <option name="project" value="LOCAL" />
+      <updated>1612804854086</updated>
+    </task>
+    <task id="LOCAL-03737" summary="Correções menores">
+      <created>1612804966784</created>
+      <option name="number" value="03737" />
+      <option name="presentableId" value="LOCAL-03737" />
+      <option name="project" value="LOCAL" />
+      <updated>1612804966784</updated>
+    </task>
+    <option name="localTasksCounter" value="3738" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1522,18 +1525,22 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser" timestamp="1612801766125">
+    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser" timestamp="1612806321443">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1612801766125" />
+    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1612806321443" />
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1612806675711">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612806675711" />
     <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1612795606837">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612795606837" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612802071503">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612804990534">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612802071503" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612804990534" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612800389443">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
