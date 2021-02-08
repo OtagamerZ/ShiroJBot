@@ -1725,11 +1725,11 @@ public class Shoukan extends GlobalGame {
 							if (postCombat()) return;
 							else if (makeFusion(h.get())) return;
 						}
-						if (eot.size() > 0) {
-							applyEot(EffectTrigger.AFTER_TURN, Pair.of(current, i));
-							if (postCombat()) return;
-						}
 					}
+				}
+				if (eot.size() > 0) {
+					applyEot(EffectTrigger.AFTER_TURN, Pair.of(current, -1));
+					if (postCombat()) return;
 				}
 
 				arena.getGraveyard().get(current).addAll(discardBatch);
@@ -1755,12 +1755,13 @@ public class Shoukan extends GlobalGame {
 							if (postCombat()) return;
 							else if (makeFusion(h.get())) return;
 						}
-						if (eot.size() > 0) {
-							applyEot(EffectTrigger.BEFORE_TURN, Pair.of(current, i));
-							if (postCombat()) return;
-						}
 					}
 				}
+				if (eot.size() > 0) {
+					applyEot(EffectTrigger.BEFORE_TURN, Pair.of(current, -1));
+					if (postCombat()) return;
+				}
+
 				h.get().decreaseLockTime();
 				h.get().addMana(h.get().getManaPerTurn());
 				AtomicBoolean shownHand = new AtomicBoolean(false);
@@ -1946,14 +1947,23 @@ public class Shoukan extends GlobalGame {
 				AtomicReference<Hand> h = new AtomicReference<>(getHands().get(current));
 				h.get().getCards().removeIf(d -> !d.isAvailable());
 				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
-				for (SlotColumn<Champion, Equipment> slot : slots) {
-					Champion c = slot.getTop();
+				for (int i = 0; i < slots.size(); i++) {
+					Champion c = slots.get(i).getTop();
 					if (c != null) {
 						if (c.getStun() == 0)
 							c.setAvailable(true);
 
 						c.resetAttribs();
+						if (c.hasEffect() && effectLock == 0) {
+							c.getEffect(new EffectParameters(EffectTrigger.AFTER_TURN, this, i, current, Duelists.of(c, i, null, -1), channel));
+							if (postCombat()) return;
+							else if (makeFusion(h.get())) return;
+						}
 					}
+				}
+				if (eot.size() > 0) {
+					applyEot(EffectTrigger.AFTER_TURN, Pair.of(current, -1));
+					if (postCombat()) return;
 				}
 
 				arena.getGraveyard().get(current).addAll(discardBatch);
@@ -1979,12 +1989,13 @@ public class Shoukan extends GlobalGame {
 							if (postCombat()) return;
 							else if (makeFusion(h.get())) return;
 						}
-						if (eot.size() > 0) {
-							applyEot(EffectTrigger.BEFORE_TURN, Pair.of(current, i));
-							if (postCombat()) return;
-						}
 					}
 				}
+				if (eot.size() > 0) {
+					applyEot(EffectTrigger.BEFORE_TURN, Pair.of(current, -1));
+					if (postCombat()) return;
+				}
+
 				h.get().decreaseLockTime();
 				h.get().addMana(h.get().getManaPerTurn());
 				AtomicBoolean shownHand = new AtomicBoolean(false);
@@ -2223,8 +2234,6 @@ public class Shoukan extends GlobalGame {
 
 	public void applyEot(EffectTrigger trigger, Pair<Side, Integer> cause) {
 		Iterator<EffectOverTime> i = eot.iterator();
-		System.out.println(eot.toString());
-		System.out.println(trigger);
 		while (i.hasNext()) {
 			EffectOverTime effect = i.next();
 			if (effect.getTurns() <= 0) {
