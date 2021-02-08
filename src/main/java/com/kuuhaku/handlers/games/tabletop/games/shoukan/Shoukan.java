@@ -2252,10 +2252,6 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public void close() {
-		listener.close();
-		recordLast();
-		super.close();
-
 		if (!draw && getCustom() == null) {
 			for (Side s : Side.values()) {
 				Account acc = AccountDAO.getAccount(getHands().get(s).getUser().getId());
@@ -2270,6 +2266,10 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 		}
+
+		listener.close();
+		recordLast();
+		super.close();
 	}
 
 	@Override
