@@ -2223,6 +2223,8 @@ public class Shoukan extends GlobalGame {
 
 	public void applyEot(EffectTrigger trigger, Pair<Side, Integer> cause) {
 		Iterator<EffectOverTime> i = eot.iterator();
+		System.out.println(eot.toString());
+		System.out.println(trigger);
 		while (i.hasNext()) {
 			EffectOverTime effect = i.next();
 			if (effect.getTurns() <= 0) {
@@ -2231,7 +2233,6 @@ public class Shoukan extends GlobalGame {
 				continue;
 			}
 
-			System.out.println(trigger + " | " + effect.getTriggers());
 			if (effect.getTriggers().contains(trigger)) {
 				effect.getEffect().accept(getHands().get(Side.TOP), getHands().get(Side.BOTTOM), cause);
 			}
