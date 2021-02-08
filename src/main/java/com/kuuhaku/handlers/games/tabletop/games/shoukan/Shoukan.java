@@ -2226,7 +2226,7 @@ public class Shoukan extends GlobalGame {
 		while (i.hasNext()) {
 			EffectOverTime effect = i.next();
 			if (effect.getTurns() <= 0) {
-				channel.sendMessage(":timer: | Um efeito expirou!").queue();
+				channel.sendMessage(":timer: | O efeito da carta " + effect.getSource() + " expirou!").queue();
 				i.remove();
 				continue;
 			}
