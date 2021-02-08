@@ -2265,6 +2265,8 @@ public class Shoukan extends GlobalGame {
 					pg.compute(DailyTask.RACE_TASK, (k, v) -> v == null ? summons : v + summons);
 					acc.setDailyProgress(pg);
 					AccountDAO.saveAccount(acc);
+
+					System.out.println(acc.getDailyProgress());
 				}
 			}
 		}
