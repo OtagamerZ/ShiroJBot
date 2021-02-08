@@ -14,6 +14,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectOverTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/EffectOverTime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1061,14 +1065,7 @@
       <workItem from="1612726198062" duration="438000" />
       <workItem from="1612726819973" duration="144000" />
       <workItem from="1612727052316" duration="531000" />
-      <workItem from="1612800183695" duration="999000" />
-    </task>
-    <task id="LOCAL-03685" summary="Remoção do multithreading no Shoukan">
-      <created>1612363480504</created>
-      <option name="number" value="03685" />
-      <option name="presentableId" value="LOCAL-03685" />
-      <option name="project" value="LOCAL" />
-      <updated>1612363480504</updated>
+      <workItem from="1612800183695" duration="1825000" />
     </task>
     <task id="LOCAL-03686" summary="Remoção do multithreading no Shoukan">
       <created>1612364434796</created>
@@ -1406,7 +1403,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612801095575</updated>
     </task>
-    <option name="localTasksCounter" value="3734" />
+    <task id="LOCAL-03734" summary="Correções menores">
+      <created>1612801439200</created>
+      <option name="number" value="03734" />
+      <option name="presentableId" value="LOCAL-03734" />
+      <option name="project" value="LOCAL" />
+      <updated>1612801439200</updated>
+    </task>
+    <option name="localTasksCounter" value="3735" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1522,18 +1526,18 @@
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser" timestamp="1612795909828">
+    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser" timestamp="1612801766125">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1612795909828" />
+    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1612801766125" />
     <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1612795606837">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612795606837" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612801098957">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612801440918">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612801098957" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612801440918" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612800389443">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

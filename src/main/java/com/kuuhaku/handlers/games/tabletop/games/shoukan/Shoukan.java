@@ -316,7 +316,7 @@ public class Shoukan extends GlobalGame {
 							if (postCombat()) return;
 						}
 						if (eot.size() > 0) {
-							applyEot(EffectTrigger.ON_SWITCH, Pair.of(current, index));
+							applyEot(EffectTrigger.ON_SWITCH, current, index);
 							if (postCombat()) return;
 						}
 					} else {
@@ -327,7 +327,7 @@ public class Shoukan extends GlobalGame {
 							if (postCombat()) return;
 						}
 						if (eot.size() > 0) {
-							applyEot(EffectTrigger.ON_SWITCH, Pair.of(current, index));
+							applyEot(EffectTrigger.ON_SWITCH, current, index);
 							if (postCombat()) return;
 						}
 					}
@@ -655,7 +655,7 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return;
 					}
 					if (eot.size() > 0) {
-						applyEot(EffectTrigger.ON_SUMMON, Pair.of(current, dest));
+						applyEot(EffectTrigger.ON_SUMMON, current, dest);
 						if (postCombat()) return;
 					}
 
@@ -803,7 +803,7 @@ public class Shoukan extends GlobalGame {
 							if (postCombat()) return;
 						}
 						if (eot.size() > 0) {
-							applyEot(EffectTrigger.POST_ATTACK, Pair.of(current, is[0]));
+							applyEot(EffectTrigger.POST_ATTACK, current, is[0]);
 							if (postCombat()) return;
 						}
 
@@ -826,7 +826,7 @@ public class Shoukan extends GlobalGame {
 					} else if (postCombat()) return;
 				}
 				if (eot.size() > 0) {
-					applyEot(EffectTrigger.ON_ATTACK, Pair.of(current, is[0]));
+					applyEot(EffectTrigger.ON_ATTACK, current, is[0]);
 					if (postCombat()) return;
 				}
 
@@ -853,7 +853,7 @@ public class Shoukan extends GlobalGame {
 					} else if (postCombat()) return;
 				}
 				if (eot.size() > 0) {
-					applyEot(EffectTrigger.ON_DEFEND, Pair.of(next, is[1]));
+					applyEot(EffectTrigger.ON_DEFEND, next, is[1]);
 					if (postCombat()) return;
 				}
 
@@ -891,7 +891,7 @@ public class Shoukan extends GlobalGame {
 					if (postCombat()) return;
 				}
 				if (eot.size() > 0) {
-					applyEot(EffectTrigger.ON_FLIP, Pair.of(next, is[1]));
+					applyEot(EffectTrigger.ON_FLIP, next, is[1]);
 					if (postCombat()) return;
 				}
 			}
@@ -917,7 +917,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.POST_ATTACK, Pair.of(current, is[0]));
+				applyEot(EffectTrigger.POST_ATTACK, current, is[0]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
@@ -925,7 +925,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_DEATH, Pair.of(next, is[1]));
+				applyEot(EffectTrigger.ON_DEATH, next, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1006,7 +1006,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_SUICIDE, Pair.of(current, is[0]));
+				applyEot(EffectTrigger.ON_SUICIDE, current, is[0]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
@@ -1014,7 +1014,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.POST_DEFENSE, Pair.of(next, is[1]));
+				applyEot(EffectTrigger.POST_DEFENSE, next, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1080,7 +1080,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_SUICIDE, Pair.of(current, is[0]));
+				applyEot(EffectTrigger.ON_SUICIDE, current, is[0]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
@@ -1088,7 +1088,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_DEATH, Pair.of(next, is[1]));
+				applyEot(EffectTrigger.ON_DEATH, next, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1187,7 +1187,7 @@ public class Shoukan extends GlobalGame {
 					if (postCombat()) return;
 				}
 				if (eot.size() > 0) {
-					applyEot(EffectTrigger.ON_FLIP, Pair.of(current, is[1]));
+					applyEot(EffectTrigger.ON_FLIP, current, is[1]);
 					if (postCombat()) return;
 				}
 			}
@@ -1213,7 +1213,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.POST_ATTACK, Pair.of(next, is[0]));
+				applyEot(EffectTrigger.POST_ATTACK, next, is[0]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
@@ -1221,7 +1221,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_DEATH, Pair.of(current, is[1]));
+				applyEot(EffectTrigger.ON_DEATH, current, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1249,7 +1249,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_SUICIDE, Pair.of(next, is[0]));
+				applyEot(EffectTrigger.ON_SUICIDE, next, is[0]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
@@ -1257,7 +1257,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.POST_DEFENSE, Pair.of(current, is[1]));
+				applyEot(EffectTrigger.POST_DEFENSE, current, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1278,7 +1278,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_SUICIDE, Pair.of(next, is[0]));
+				applyEot(EffectTrigger.ON_SUICIDE, next, is[0]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
@@ -1286,7 +1286,7 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_DEATH, Pair.of(current, is[1]));
+				applyEot(EffectTrigger.ON_DEATH, current, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1362,7 +1362,7 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return true;
 					}
 					if (eot.size() > 0) {
-						applyEot(EffectTrigger.ON_SUMMON, Pair.of(current, i));
+						applyEot(EffectTrigger.ON_SUMMON, current, i);
 						if (postCombat()) return true;
 					}
 
@@ -1728,7 +1728,7 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 				if (eot.size() > 0) {
-					applyEot(EffectTrigger.AFTER_TURN, Pair.of(current, -1));
+					applyEot(EffectTrigger.AFTER_TURN, current, -1);
 					if (postCombat()) return;
 				}
 
@@ -1758,7 +1758,7 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 				if (eot.size() > 0) {
-					applyEot(EffectTrigger.BEFORE_TURN, Pair.of(current, -1));
+					applyEot(EffectTrigger.BEFORE_TURN, current, -1);
 					if (postCombat()) return;
 				}
 
@@ -1962,7 +1962,7 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 				if (eot.size() > 0) {
-					applyEot(EffectTrigger.AFTER_TURN, Pair.of(current, -1));
+					applyEot(EffectTrigger.AFTER_TURN, current, -1);
 					if (postCombat()) return;
 				}
 
@@ -1992,7 +1992,7 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 				if (eot.size() > 0) {
-					applyEot(EffectTrigger.BEFORE_TURN, Pair.of(current, -1));
+					applyEot(EffectTrigger.BEFORE_TURN, current, -1);
 					if (postCombat()) return;
 				}
 
@@ -2232,7 +2232,7 @@ public class Shoukan extends GlobalGame {
 		return eot;
 	}
 
-	public void applyEot(EffectTrigger trigger, Pair<Side, Integer> cause) {
+	public void applyEot(EffectTrigger trigger, Side side, int index) {
 		Iterator<EffectOverTime> i = eot.iterator();
 		while (i.hasNext()) {
 			EffectOverTime effect = i.next();
@@ -2243,7 +2243,7 @@ public class Shoukan extends GlobalGame {
 			}
 
 			if (effect.getTriggers().contains(trigger)) {
-				effect.getEffect().accept(getHands().get(Side.TOP), getHands().get(Side.BOTTOM), cause);
+				effect.getEffect().accept(side, index);
 			}
 			if (trigger == EffectTrigger.AFTER_TURN)
 				effect.decreaseTurn();
