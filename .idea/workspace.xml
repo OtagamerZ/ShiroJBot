@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1060,14 +1062,7 @@
       <workItem from="1612726819973" duration="144000" />
       <workItem from="1612727052316" duration="531000" />
       <workItem from="1612800183695" duration="14245000" />
-      <workItem from="1612873094201" duration="2424000" />
-    </task>
-    <task id="LOCAL-03697" summary="Reversão do último commit">
-      <created>1612373467765</created>
-      <option name="number" value="03697" />
-      <option name="presentableId" value="LOCAL-03697" />
-      <option name="project" value="LOCAL" />
-      <updated>1612373467765</updated>
+      <workItem from="1612873094201" duration="3807000" />
     </task>
     <task id="LOCAL-03698" summary="Reversão do último commit">
       <created>1612374082484</created>
@@ -1405,7 +1400,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612876215709</updated>
     </task>
-    <option name="localTasksCounter" value="3746" />
+    <task id="LOCAL-03746" summary="Correções menores">
+      <created>1612876660517</created>
+      <option name="number" value="03746" />
+      <option name="presentableId" value="LOCAL-03746" />
+      <option name="project" value="LOCAL" />
+      <updated>1612876660517</updated>
+    </task>
+    <option name="localTasksCounter" value="3747" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1549,10 +1551,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612876217654">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612876661893">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612876217654" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612876661893" />
     <state x="683" y="278" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1612809137674">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
