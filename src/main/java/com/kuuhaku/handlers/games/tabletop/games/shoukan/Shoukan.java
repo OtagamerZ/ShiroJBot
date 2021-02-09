@@ -1718,6 +1718,8 @@ public class Shoukan extends GlobalGame {
 					if (c != null) {
 						if (c.getStun() == 0)
 							c.setAvailable(true);
+						else
+							c.reduceStun();
 
 						c.resetAttribs();
 						if (c.hasEffect() && effectLock == 0) {
@@ -1745,10 +1747,8 @@ public class Shoukan extends GlobalGame {
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
-						if (c.getStun() > 0) {
-							c.reduceStun();
+						if (c.getStun() > 0)
 							c.setDefending(true);
-						}
 
 						if (c.hasEffect() && effectLock == 0) {
 							c.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, i, current, Duelists.of(c, i, null, -1), channel));
@@ -1953,6 +1953,8 @@ public class Shoukan extends GlobalGame {
 					if (c != null) {
 						if (c.getStun() == 0)
 							c.setAvailable(true);
+						else
+							c.reduceStun();
 
 						c.resetAttribs();
 						if (c.hasEffect() && effectLock == 0) {
@@ -1980,10 +1982,8 @@ public class Shoukan extends GlobalGame {
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
-						if (c.getStun() > 0) {
-							c.reduceStun();
+						if (c.getStun() > 0)
 							c.setDefending(true);
-						}
 
 						if (c.hasEffect() && effectLock == 0) {
 							c.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, i, current, Duelists.of(c, i, null, -1), channel));
