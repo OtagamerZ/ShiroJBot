@@ -16,6 +16,7 @@
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,9 +198,7 @@
         </option>
         <option name="vmOptions" value="" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
     <configuration name="ShiroJBot [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -218,9 +217,7 @@
         </option>
         <option name="vmOptions" value="" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
     <configuration name="ShiroJBot [compileJava -Xlint:deprecation]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -240,9 +237,7 @@
         </option>
         <option name="vmOptions" value="" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
     <configuration name="ShiroJBot [compileJava]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -261,9 +256,7 @@
         </option>
         <option name="vmOptions" value="" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
     <configuration name="ShiroJBot [shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -282,9 +275,7 @@
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
     <configuration default="true" type="Remote">
@@ -1545,22 +1536,22 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612795606837" />
-    <state width="1387" height="351" key="GridCell.Tab.0.bottom" timestamp="1612817374634">
+    <state width="1387" height="351" key="GridCell.Tab.0.bottom" timestamp="1612872171787">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1612817374634" />
-    <state width="1387" height="351" key="GridCell.Tab.0.center" timestamp="1612817374633">
+    <state width="1387" height="351" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
+    <state width="1387" height="351" key="GridCell.Tab.0.center" timestamp="1612872171787">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1612817374633" />
-    <state width="1387" height="351" key="GridCell.Tab.0.left" timestamp="1612817374633">
+    <state width="1387" height="351" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
+    <state width="1387" height="351" key="GridCell.Tab.0.left" timestamp="1612872171787">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1612817374633" />
-    <state width="1387" height="351" key="GridCell.Tab.0.right" timestamp="1612817374634">
+    <state width="1387" height="351" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
+    <state width="1387" height="351" key="GridCell.Tab.0.right" timestamp="1612872171787">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612817374634" />
+    <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
     <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612817386497">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
