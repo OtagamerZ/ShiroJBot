@@ -13,9 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +126,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.CommitDialog" />
+    <property name="settings.editor.selected.configurable" value="proofread" />
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
@@ -1075,27 +1074,8 @@
       <workItem from="1612800183695" duration="14245000" />
       <workItem from="1612873094201" duration="6223000" />
       <workItem from="1612886537565" duration="395000" />
-    </task>
-    <task id="LOCAL-03703" summary="Correções menores">
-      <created>1612376055312</created>
-      <option name="number" value="03703" />
-      <option name="presentableId" value="LOCAL-03703" />
-      <option name="project" value="LOCAL" />
-      <updated>1612376055312</updated>
-    </task>
-    <task id="LOCAL-03704" summary="Adição de BufferedOutputStreams">
-      <created>1612380068492</created>
-      <option name="number" value="03704" />
-      <option name="presentableId" value="LOCAL-03704" />
-      <option name="project" value="LOCAL" />
-      <updated>1612380068492</updated>
-    </task>
-    <task id="LOCAL-03705" summary="Tentativa de otimização da velocidade de geração de imagens">
-      <created>1612380539679</created>
-      <option name="number" value="03705" />
-      <option name="presentableId" value="LOCAL-03705" />
-      <option name="project" value="LOCAL" />
-      <updated>1612380539679</updated>
+      <workItem from="1612896856704" duration="3131000" />
+      <workItem from="1612901352331" duration="898000" />
     </task>
     <task id="LOCAL-03706" summary="Tentativa de otimização da velocidade de geração de imagens">
       <created>1612381665864</created>
@@ -1419,7 +1399,28 @@
       <option name="project" value="LOCAL" />
       <updated>1612880059398</updated>
     </task>
-    <option name="localTasksCounter" value="3752" />
+    <task id="LOCAL-03752" summary="Correções menores">
+      <created>1612897594475</created>
+      <option name="number" value="03752" />
+      <option name="presentableId" value="LOCAL-03752" />
+      <option name="project" value="LOCAL" />
+      <updated>1612897594476</updated>
+    </task>
+    <task id="LOCAL-03753" summary="Correções menores">
+      <created>1612899964622</created>
+      <option name="number" value="03753" />
+      <option name="presentableId" value="LOCAL-03753" />
+      <option name="project" value="LOCAL" />
+      <updated>1612899964622</updated>
+    </task>
+    <task id="LOCAL-03754" summary="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;">
+      <created>1612900377721</created>
+      <option name="number" value="03754" />
+      <option name="presentableId" value="LOCAL-03754" />
+      <option name="project" value="LOCAL" />
+      <updated>1612900377721</updated>
+    </task>
+    <option name="localTasksCounter" value="3755" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1505,8 +1506,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correções menores no desafios diarios" />
-    <MESSAGE value="Adicionado Shoukan em duplas" />
     <MESSAGE value="Adição de filas ranqueadas (Solo/Duo)" />
     <MESSAGE value="Novos comandos de trancar e destrancar o canal" />
     <MESSAGE value="Rework no CommandManager" />
@@ -1530,51 +1529,11 @@
     <MESSAGE value="Correção na listagem das cartas elegíveis" />
     <MESSAGE value="Clones agora possuem custo de mana 0 e não vão mais para o cemitério" />
     <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Adição de configuração de tempo do anti-raid" />
+    <MESSAGE value="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser" timestamp="1612806321443">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="645" y="221" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1612806321443" />
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1612806675711">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612806675711" />
-    <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1612795606837">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="570" y="252" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612795606837" />
-    <state width="1387" height="351" key="GridCell.Tab.0.bottom" timestamp="1612872171787">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
-    <state width="1387" height="351" key="GridCell.Tab.0.center" timestamp="1612872171787">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
-    <state width="1387" height="351" key="GridCell.Tab.0.left" timestamp="1612872171787">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
-    <state width="1387" height="351" key="GridCell.Tab.0.right" timestamp="1612872171787">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612880060719">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612880060719" />
-    <state x="683" y="278" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1612809137674">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="683" y="278" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1612809137674" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1612816940012">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1612816940012" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history>
