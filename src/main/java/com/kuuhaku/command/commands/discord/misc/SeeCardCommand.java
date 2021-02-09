@@ -46,7 +46,6 @@ import org.apache.commons.collections4.ListUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -76,11 +75,10 @@ public class SeeCardCommand implements Executable {
 			Field f = CardDAO.getField(args[0]);
 
 			if (ch == null && eq == null && f == null) {
-				channel.sendMessage("❌ | Esse equipamento ou campeão não existe, você não quis dizer `" + Helper.didYouMean(args[0], ListUtils.union(ListUtils.union(CardDAO.getAllChampionNames(), CardDAO.getAllEquipmentNames()), CardDAO.getAllFieldNames()).toArray(String[]::new)) + "`?").queue();
+				channel.sendMessage("❌ | Esse campeão, equipamento ou campo não existe, você não quis dizer `" + Helper.didYouMean(args[0], ListUtils.union(ListUtils.union(CardDAO.getAllChampionNames(), CardDAO.getAllEquipmentNames()), CardDAO.getAllFieldNames()).toArray(String[]::new)) + "`?").queue();
 				return;
 			}
 
-			List<Drawable> cards = kp.getDrawables();
 			Drawable d = ch == null ? eq == null ? f : eq : ch;
 			d.setAcc(acc);
 

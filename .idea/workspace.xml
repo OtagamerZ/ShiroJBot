@@ -14,9 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,17 +181,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -209,7 +197,9 @@
         </option>
         <option name="vmOptions" value="" />
       </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
     <configuration name="ShiroJBot [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -228,7 +218,9 @@
         </option>
         <option name="vmOptions" value="" />
       </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
     <configuration name="ShiroJBot [compileJava -Xlint:deprecation]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -248,7 +240,9 @@
         </option>
         <option name="vmOptions" value="" />
       </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
     <configuration name="ShiroJBot [compileJava]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -267,7 +261,9 @@
         </option>
         <option name="vmOptions" value="" />
       </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
     <configuration name="ShiroJBot [shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -286,7 +282,9 @@
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
     <configuration default="true" type="Remote">
@@ -1075,14 +1073,8 @@
       <workItem from="1612726819973" duration="144000" />
       <workItem from="1612727052316" duration="531000" />
       <workItem from="1612800183695" duration="14245000" />
-      <workItem from="1612873094201" duration="5553000" />
-    </task>
-    <task id="LOCAL-03702" summary="Correções menores">
-      <created>1612375505237</created>
-      <option name="number" value="03702" />
-      <option name="presentableId" value="LOCAL-03702" />
-      <option name="project" value="LOCAL" />
-      <updated>1612375505237</updated>
+      <workItem from="1612873094201" duration="6223000" />
+      <workItem from="1612886537565" duration="395000" />
     </task>
     <task id="LOCAL-03703" summary="Correções menores">
       <created>1612376055312</created>
@@ -1420,7 +1412,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612879885996</updated>
     </task>
-    <option name="localTasksCounter" value="3751" />
+    <task id="LOCAL-03751" summary="Correções menores">
+      <created>1612880059398</created>
+      <option name="number" value="03751" />
+      <option name="presentableId" value="LOCAL-03751" />
+      <option name="project" value="LOCAL" />
+      <updated>1612880059398</updated>
+    </task>
+    <option name="localTasksCounter" value="3752" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1564,10 +1563,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612879887216">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612880060719">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612879887216" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612880060719" />
     <state x="683" y="278" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1612809137674">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
