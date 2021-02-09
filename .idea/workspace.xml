@@ -14,8 +14,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -182,6 +180,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1064,14 +1073,7 @@
       <workItem from="1612726819973" duration="144000" />
       <workItem from="1612727052316" duration="531000" />
       <workItem from="1612800183695" duration="14245000" />
-      <workItem from="1612873094201" duration="4336000" />
-    </task>
-    <task id="LOCAL-03699" summary="Reversão do último commit">
-      <created>1612374826072</created>
-      <option name="number" value="03699" />
-      <option name="presentableId" value="LOCAL-03699" />
-      <option name="project" value="LOCAL" />
-      <updated>1612374826073</updated>
+      <workItem from="1612873094201" duration="5227000" />
     </task>
     <task id="LOCAL-03700" summary="Reversão do último commit">
       <created>1612374961068</created>
@@ -1409,7 +1411,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612878157393</updated>
     </task>
-    <option name="localTasksCounter" value="3748" />
+    <task id="LOCAL-03748" summary="Correções menores">
+      <created>1612878793369</created>
+      <option name="number" value="03748" />
+      <option name="presentableId" value="LOCAL-03748" />
+      <option name="project" value="LOCAL" />
+      <updated>1612878793369</updated>
+    </task>
+    <option name="localTasksCounter" value="3749" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1553,10 +1562,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612878158922">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612878794444">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612878158922" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612878794444" />
     <state x="683" y="278" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1612809137674">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
