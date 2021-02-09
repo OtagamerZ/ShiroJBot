@@ -173,7 +173,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			Paginator p = PaginatorBuilder.createPaginator()
 					.setHandler(shiroShards)
 					.shouldRemoveOnReact(true)
-					.setEmote(com.github.ygimenez.type.Emote.NEXT, "549632389270470706")
 					.build();
 
 			Pages.activate(p);
