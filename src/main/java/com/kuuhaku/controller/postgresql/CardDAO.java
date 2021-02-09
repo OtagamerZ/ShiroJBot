@@ -578,12 +578,16 @@ public class CardDAO {
 	public static int getMeta(Class cat) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("""
-				SELECT ROUND(COUNT(*) / (36 * 0.75))
-				FROM Kawaipon k
-				JOIN k.champions kc
-				INNER JOIN Champion c on kc.id = c.id
-				WHERE c.category = :cat
+		Query q = em.createNativeQuery("""
+				SELECT SUM(x.total) / COUNT(1) * 0.75
+				FROM (
+						SELECT COUNT(1) AS total
+						     , c.category
+						FROM kawaipon_champion kc
+						         INNER JOIN champion c on c.id = kc.champions_id
+						GROUP BY kc.kawaipon_id, c.category
+					) x
+				WHERE x.category = :cat
 				""");
 		q.setParameter("cat", cat);
 
