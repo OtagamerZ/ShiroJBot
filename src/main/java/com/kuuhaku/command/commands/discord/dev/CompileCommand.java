@@ -54,7 +54,7 @@ public class CompileCommand implements Executable {
 						i.eval(code);
 						Object out = i.get("out");
 						m.getChannel().sendMessage("<a:loading:697879726630502401> | Executando...").queue(d ->
-								d.editMessage("-> " + out.toString()).queue());
+								d.editMessage("-> " + out).queue());
 						message.delete().queue();
 						m.editMessage(TagIcons.VERIFIED.getTag(0) + "| Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
 					} catch (Exception e) {
