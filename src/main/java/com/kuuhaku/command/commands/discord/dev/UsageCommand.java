@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.dev;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.LogDAO;
@@ -60,13 +61,21 @@ public class UsageCommand implements Executable {
 		for (int i = 0; i < uPages.size(); i++) {
 			eb.clear();
 
-			eb.setTitle("Quantidade de comandos usados por servidor:");
+			eb.setTitle("Quantidade de comandos usados por servidor neste mês:");
 			for (Object[] p : uPages.get(i)) {
-				eb.addField("Servidor: " + p[0], """
+				Guild g = Main.getInfo().getGuildByID(String.valueOf(p[0]));
+				if (g == null) continue;
+				eb.addField("Servidor: " + g.getName(), """
 						Dono: %s (%s)
 						Comandos usados: %s
 						Último uso: %s
-						""".formatted(p[1], p[2], p[3], p[4]), false);
+						"""
+						.formatted(
+								g.getOwner() == null ? "`Desconhecido`" : g.getOwner().getUser().getName(),
+								g.getOwner() == null ? "`??`" : g.getOwnerId(),
+								p[1],
+								p[2]
+						), false);
 			}
 			eb.setFooter("Página " + (i + 1) + " de " + uPages.size() + ". Total de " + uPages.stream().mapToInt(List::size).sum() + " resultados.", null);
 
