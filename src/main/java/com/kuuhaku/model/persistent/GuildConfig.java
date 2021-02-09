@@ -132,6 +132,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 5")
 	private int noSpamAmount = 5;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 5")
+	private int antiRaidTime = 10;
+
 	//CHANNELS
 	@Column(columnDefinition = "TEXT")
 	private String noLinkChannels = "";
@@ -445,6 +448,14 @@ public class GuildConfig {
 
 	public void setAntiRaid(boolean antiRaid) {
 		this.antiRaid = antiRaid;
+	}
+
+	public int getAntiRaidTime() {
+		return antiRaidTime;
+	}
+
+	public void setAntiRaidTime(int antiRaidTime) {
+		this.antiRaidTime = antiRaidTime;
 	}
 
 	public String getCanalLog() {
