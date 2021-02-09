@@ -94,7 +94,7 @@ dependencies {
     implementation group: 'org.apache.logging.log4j', name: 'log4j-jcl', version: '2.11.2'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.3.4.RELEASE'
     implementation group: 'org.beanshell', name: 'bsh', version: '2.0b5'
-    implementation group: 'com.github.ygimenez', name: 'Pagination-Utils', version: '5cc03fb'
+    implementation group: 'com.github.ygimenez', name: 'Pagination-Utils', version: '8098017'
     implementation group: 'com.github.kevinsawicki', name: 'http-request', version: '6.0'
     implementation group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
     implementation group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.5.1'
