@@ -589,7 +589,7 @@ public class CardDAO {
 					) x
 				WHERE x.category = :cat
 				""");
-		q.setParameter("cat", cat);
+		q.setParameter("cat", cat.name());
 
 		try {
 			return ((Double) q.getSingleResult()).intValue();

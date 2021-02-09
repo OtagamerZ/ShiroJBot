@@ -15,8 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1064,13 +1062,7 @@
       <workItem from="1612726819973" duration="144000" />
       <workItem from="1612727052316" duration="531000" />
       <workItem from="1612800183695" duration="14245000" />
-    </task>
-    <task id="LOCAL-03695" summary="Reversão do último commit">
-      <created>1612373034045</created>
-      <option name="number" value="03695" />
-      <option name="presentableId" value="LOCAL-03695" />
-      <option name="project" value="LOCAL" />
-      <updated>1612373034045</updated>
+      <workItem from="1612873094201" duration="2017000" />
     </task>
     <task id="LOCAL-03696" summary="Reversão do último commit">
       <created>1612373193779</created>
@@ -1408,7 +1400,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612817385394</updated>
     </task>
-    <option name="localTasksCounter" value="3744" />
+    <task id="LOCAL-03744" summary="Correções menores">
+      <created>1612873144241</created>
+      <option name="number" value="03744" />
+      <option name="presentableId" value="LOCAL-03744" />
+      <option name="project" value="LOCAL" />
+      <updated>1612873144242</updated>
+    </task>
+    <option name="localTasksCounter" value="3745" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1552,10 +1551,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="1387" height="351" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1612872171787" />
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612817386497">
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2" timestamp="1612873145587">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612817386497" />
+    <state x="432" y="238" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1612873145587" />
     <state x="683" y="278" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1612809137674">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
