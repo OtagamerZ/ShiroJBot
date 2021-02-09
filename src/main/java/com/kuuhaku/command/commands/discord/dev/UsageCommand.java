@@ -62,7 +62,11 @@ public class UsageCommand implements Executable {
 
 			eb.setTitle("Quantidade de comandos usados por servidor:");
 			for (Object[] p : uPages.get(i)) {
-				eb.addField("Servidor: " + p[0], "Comandos usados: " + p[1] + "\nÚltimo uso: " + p[2], false);
+				eb.addField("Servidor: " + p[0], """
+						Dono: %s (%s)
+						Comandos usados: %s
+						Último uso: %s
+						""".formatted(p[1], p[2], p[3], p[4]), false);
 			}
 			eb.setFooter("Página " + (i + 1) + " de " + uPages.size() + ". Total de " + uPages.stream().mapToInt(List::size).sum() + " resultados.", null);
 
