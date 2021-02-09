@@ -606,6 +606,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					if (template.has("footer")) eb.setFooter(template.getString("footer"), null);
+					else eb.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(
