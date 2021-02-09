@@ -573,22 +573,24 @@ public class ShiroEvents extends ListenerAdapter {
 				JSONObject template = gc.getEmbedTemplate();
 				EmbedBuilder eb;
 				if (!template.isEmpty()) {
-					if (template.has("color")) eb = new EmbedBuilder();
-					else eb = new ColorlessEmbedBuilder();
-
-					eb.setTitle(
-							switch (Helper.rng(5, true)) {
-								case 0 -> "Opa, parece que temos um novo membro?";
-								case 1 -> "Mais um membro para nosso lindo servidor!";
-								case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
-								case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
-								case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
-								default -> "";
-							}
-					);
+					eb = new EmbedBuilder()
+							.setTitle(
+									switch (Helper.rng(5, true)) {
+										case 0 -> "Opa, parece que temos um novo membro?";
+										case 1 -> "Mais um membro para nosso lindo servidor!";
+										case 2 -> "Um novo jogador entrou na partida, pressione start 2P!";
+										case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
+										case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
+										default -> "";
+									}
+							);
 
 					if (template.has("color")) eb.setColor(Color.decode(template.getString("color")));
+					else eb.setColor(Helper.colorThief(image));
+
 					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
+					else eb.setThumbnail(author.getAvatarUrl());
+
 					if (template.has("image")) eb.setImage(template.getString("image"));
 
 					eb.setDescription(Helper.replaceTags(gc.getMsgBoasVindas(), author, guild));
