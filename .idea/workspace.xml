@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de estatística de uso">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1075,21 +1075,7 @@
       <workItem from="1612873094201" duration="6223000" />
       <workItem from="1612886537565" duration="395000" />
       <workItem from="1612896856704" duration="3131000" />
-      <workItem from="1612901352331" duration="898000" />
-    </task>
-    <task id="LOCAL-03706" summary="Tentativa de otimização da velocidade de geração de imagens">
-      <created>1612381665864</created>
-      <option name="number" value="03706" />
-      <option name="presentableId" value="LOCAL-03706" />
-      <option name="project" value="LOCAL" />
-      <updated>1612381665864</updated>
-    </task>
-    <task id="LOCAL-03707" summary="Tentativa de otimização da velocidade de geração de imagens">
-      <created>1612385824833</created>
-      <option name="number" value="03707" />
-      <option name="presentableId" value="LOCAL-03707" />
-      <option name="project" value="LOCAL" />
-      <updated>1612385824834</updated>
+      <workItem from="1612901352331" duration="2047000" />
     </task>
     <task id="LOCAL-03708" summary="Correção nos nomes dos tiers ranqueados">
       <created>1612444240584</created>
@@ -1420,7 +1406,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612900377721</updated>
     </task>
-    <option name="localTasksCounter" value="3755" />
+    <task id="LOCAL-03755" summary="Melhoria no comando de estatística de uso">
+      <created>1612902564745</created>
+      <option name="number" value="03755" />
+      <option name="presentableId" value="LOCAL-03755" />
+      <option name="project" value="LOCAL" />
+      <updated>1612902564745</updated>
+    </task>
+    <task id="LOCAL-03756" summary="Melhoria no comando de estatística de uso">
+      <created>1612903216215</created>
+      <option name="number" value="03756" />
+      <option name="presentableId" value="LOCAL-03756" />
+      <option name="project" value="LOCAL" />
+      <updated>1612903216215</updated>
+    </task>
+    <option name="localTasksCounter" value="3757" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1506,7 +1506,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de filas ranqueadas (Solo/Duo)" />
     <MESSAGE value="Novos comandos de trancar e destrancar o canal" />
     <MESSAGE value="Rework no CommandManager" />
     <MESSAGE value="Adição de requisitos de permissão" />
@@ -1531,7 +1530,8 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Adição de configuração de tempo do anti-raid" />
     <MESSAGE value="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;" />
+    <MESSAGE value="Melhoria no comando de estatística de uso" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no comando de estatística de uso" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
