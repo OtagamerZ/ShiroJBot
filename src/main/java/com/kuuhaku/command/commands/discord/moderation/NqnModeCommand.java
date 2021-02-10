@@ -41,7 +41,7 @@ import net.dv8tion.jda.api.entities.*;
 		Permission.MESSAGE_EXT_EMOJI,
 		Permission.MANAGE_WEBHOOKS
 })
-public class NQNModeCommand implements Executable {
+public class NqnModeCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
