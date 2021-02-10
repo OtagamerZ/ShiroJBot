@@ -572,9 +572,8 @@ public class ShiroEvents extends ListenerAdapter {
 
 				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
 				JSONObject template = temp.isBlank() ? new JSONObject() : new JSONObject(temp);
-				EmbedBuilder eb;
 				if (!template.isEmpty()) {
-					eb = new EmbedBuilder()
+					EmbedBuilder eb = new EmbedBuilder()
 							.setTitle(
 									switch (Helper.rng(5, true)) {
 										case 0 -> "Opa, parece que temos um novo membro?";
@@ -656,24 +655,25 @@ public class ShiroEvents extends ListenerAdapter {
 
 				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
 				JSONObject template = temp.isBlank() ? new JSONObject() : new JSONObject(temp);
-				EmbedBuilder eb;
 				if (!template.isEmpty()) {
-					if (template.has("color")) eb = new EmbedBuilder();
-					else eb = new ColorlessEmbedBuilder();
-
-					eb.setTitle(
-							switch (Helper.rng(5, true)) {
-								case 0 -> "Nãããoo...um membro deixou este servidor!";
-								case 1 -> "O quê? Temos um membro a menos neste servidor!";
-								case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
-								case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
-								case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
-								default -> "";
-							}
-					);
+					EmbedBuilder eb = new EmbedBuilder()
+							.setTitle(
+									switch (Helper.rng(5, true)) {
+										case 0 -> "Nãããoo...um membro deixou este servidor!";
+										case 1 -> "O quê? Temos um membro a menos neste servidor!";
+										case 2 -> "Alguém saiu do servidor, deve ter acabado a pilha, só pode!";
+										case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
+										case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
+										default -> "";
+									}
+							);
 
 					if (template.has("color")) eb.setColor(Color.decode(template.getString("color")));
+					else eb.setColor(Helper.colorThief(image));
+
 					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
+					else eb.setThumbnail(author.getAvatarUrl());
+
 					if (template.has("image")) eb.setImage(template.getString("image"));
 
 					eb.setDescription(Helper.replaceTags(gc.getMsgAdeus(), author, guild));
@@ -689,6 +689,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					if (template.has("footer")) eb.setFooter(template.getString("footer"), null);
+					else eb.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(
