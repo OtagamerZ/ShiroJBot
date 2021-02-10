@@ -15,6 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de estatística de uso">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1076,13 +1078,8 @@
       <workItem from="1612886537565" duration="395000" />
       <workItem from="1612896856704" duration="3131000" />
       <workItem from="1612901352331" duration="2047000" />
-    </task>
-    <task id="LOCAL-03708" summary="Correção nos nomes dos tiers ranqueados">
-      <created>1612444240584</created>
-      <option name="number" value="03708" />
-      <option name="presentableId" value="LOCAL-03708" />
-      <option name="project" value="LOCAL" />
-      <updated>1612444240585</updated>
+      <workItem from="1612904293331" duration="224000" />
+      <workItem from="1612958183269" duration="336000" />
     </task>
     <task id="LOCAL-03709" summary="Aumento no limite máximo dos emotes de level">
       <created>1612448545210</created>
@@ -1420,7 +1417,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612903216215</updated>
     </task>
-    <option name="localTasksCounter" value="3757" />
+    <task id="LOCAL-03757" summary="Melhoria no comando de estatística de uso">
+      <created>1612904509502</created>
+      <option name="number" value="03757" />
+      <option name="presentableId" value="LOCAL-03757" />
+      <option name="project" value="LOCAL" />
+      <updated>1612904509502</updated>
+    </task>
+    <option name="localTasksCounter" value="3758" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

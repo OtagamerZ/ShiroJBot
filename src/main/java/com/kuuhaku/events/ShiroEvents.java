@@ -564,13 +564,14 @@ public class ShiroEvents extends ListenerAdapter {
 
 			MemberDAO.addMemberToDB(member);
 
-			if (!gc.getMsgBoasVindas().equals("")) {
+			if (!gc.getMsgBoasVindas().isBlank()) {
 				URL url = new URL(Objects.requireNonNull(author.getAvatarUrl()));
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
 
-				JSONObject template = gc.getEmbedTemplate();
+				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
+				JSONObject template = temp.isBlank() ? new JSONObject() : new JSONObject(temp);
 				EmbedBuilder eb;
 				if (!template.isEmpty()) {
 					eb = new EmbedBuilder()
@@ -647,13 +648,14 @@ public class ShiroEvents extends ListenerAdapter {
 			m.setMarkForDelete(true);
 			MemberDAO.updateMemberConfigs(m);*/
 
-			if (!gc.getMsgAdeus().equals("")) {
+			if (!gc.getMsgAdeus().isBlank()) {
 				URL url = new URL(Objects.requireNonNull(author.getAvatarUrl()));
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
 
-				JSONObject template = gc.getEmbedTemplate();
+				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
+				JSONObject template = temp.isBlank() ? new JSONObject() : new JSONObject(temp);
 				EmbedBuilder eb;
 				if (!template.isEmpty()) {
 					if (template.has("color")) eb = new EmbedBuilder();
