@@ -1566,7 +1566,7 @@ public class Helper {
 			w = (int) (h * aspectRatio);
 		}
 
-		BufferedImage newImage = new BufferedImage(w, h, image.getType());
+		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics2D = newImage.createGraphics();
 		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		graphics2D.drawImage(image, 0, 0, w, h, null);
