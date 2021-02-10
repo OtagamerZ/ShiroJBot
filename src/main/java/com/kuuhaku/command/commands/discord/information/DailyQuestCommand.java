@@ -56,7 +56,7 @@ public class DailyQuestCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Desafios diários de " + author.getName())
 				.setThumbnail("https://static.wikia.nocookie.net/dauntless_gamepedia_en/images/6/60/Quest_Main_Available_Icon_001.png")
-				.setDescription("Completar estes desafios lhe dará créditos (2500 multiplicado pela dificuldade) e 1 gema caso a dificuldade esteja acima de 3.7x.")
+				.setDescription("Completar estes desafios lhe dará créditos (2500 multiplicado pela dificuldade) ou 1 gema caso a dificuldade esteja acima de 3.7x.")
 				.addField("Modificador de dificuldade", Helper.roundToString(dq.getDifficultyMod(), 1) + "x", true);
 
 		for (Map.Entry<DailyTask, Integer> task : dq.getTasks().entrySet()) {
