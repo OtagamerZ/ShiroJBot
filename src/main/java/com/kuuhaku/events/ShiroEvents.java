@@ -572,8 +572,9 @@ public class ShiroEvents extends ListenerAdapter {
 
 				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
 				JSONObject template = temp.isBlank() ? new JSONObject() : new JSONObject(temp);
+				EmbedBuilder eb;
 				if (!template.isEmpty()) {
-					EmbedBuilder eb = new EmbedBuilder()
+					eb = new EmbedBuilder()
 							.setTitle(
 									switch (Helper.rng(5, true)) {
 										case 0 -> "Opa, parece que temos um novo membro?";
@@ -655,8 +656,9 @@ public class ShiroEvents extends ListenerAdapter {
 
 				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
 				JSONObject template = temp.isBlank() ? new JSONObject() : new JSONObject(temp);
+				EmbedBuilder eb;
 				if (!template.isEmpty()) {
-					EmbedBuilder eb = new EmbedBuilder()
+					eb = new EmbedBuilder()
 							.setTitle(
 									switch (Helper.rng(5, true)) {
 										case 0 -> "Nãããoo...um membro deixou este servidor!";
