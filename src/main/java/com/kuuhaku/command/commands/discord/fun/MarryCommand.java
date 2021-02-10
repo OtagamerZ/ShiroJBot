@@ -65,8 +65,11 @@ public class MarryCommand implements Executable {
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-the-answer-is-no")).queue();
 				}
 				return;
-			} else if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
+			} else if (WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
+				return;
+			} else if (WaifuDAO.isWaifued(author.getId())) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-married")).queue();
 				return;
 			} else if (author.getId().equals(Main.getSelfUser().getId())) {
 				channel.sendMessage("Ei, o que você acha que está fazendo ao me forçar a me casar? :rage:").queue();
