@@ -15,8 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de estatística de uso">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LoanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LoanCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1079,35 +1078,8 @@
       <workItem from="1612896856704" duration="3131000" />
       <workItem from="1612901352331" duration="2047000" />
       <workItem from="1612904293331" duration="224000" />
-      <workItem from="1612958183269" duration="336000" />
-    </task>
-    <task id="LOCAL-03709" summary="Aumento no limite máximo dos emotes de level">
-      <created>1612448545210</created>
-      <option name="number" value="03709" />
-      <option name="presentableId" value="LOCAL-03709" />
-      <option name="project" value="LOCAL" />
-      <updated>1612448545210</updated>
-    </task>
-    <task id="LOCAL-03710" summary="Aumento no limite máximo dos emotes de level">
-      <created>1612448968186</created>
-      <option name="number" value="03710" />
-      <option name="presentableId" value="LOCAL-03710" />
-      <option name="project" value="LOCAL" />
-      <updated>1612448968186</updated>
-    </task>
-    <task id="LOCAL-03711" summary="Adição de GIFs de transição dos levels 210 e 420">
-      <created>1612458306900</created>
-      <option name="number" value="03711" />
-      <option name="presentableId" value="LOCAL-03711" />
-      <option name="project" value="LOCAL" />
-      <updated>1612458306900</updated>
-    </task>
-    <task id="LOCAL-03712" summary="Adição de GIFs de transição dos levels 210 e 420">
-      <created>1612458410773</created>
-      <option name="number" value="03712" />
-      <option name="presentableId" value="LOCAL-03712" />
-      <option name="project" value="LOCAL" />
-      <updated>1612458410773</updated>
+      <workItem from="1612958183269" duration="5998000" />
+      <workItem from="1612973362866" duration="772000" />
     </task>
     <task id="LOCAL-03713" summary="Adição de GIFs de transição dos levels 210 e 420">
       <created>1612458500761</created>
@@ -1424,7 +1396,35 @@
       <option name="project" value="LOCAL" />
       <updated>1612904509502</updated>
     </task>
-    <option name="localTasksCounter" value="3758" />
+    <task id="LOCAL-03758" summary="Melhoria no comando de estatística de uso">
+      <created>1612958550899</created>
+      <option name="number" value="03758" />
+      <option name="presentableId" value="LOCAL-03758" />
+      <option name="project" value="LOCAL" />
+      <updated>1612958550900</updated>
+    </task>
+    <task id="LOCAL-03759" summary="Melhoria no comando de estatística de uso">
+      <created>1612959216509</created>
+      <option name="number" value="03759" />
+      <option name="presentableId" value="LOCAL-03759" />
+      <option name="project" value="LOCAL" />
+      <updated>1612959216509</updated>
+    </task>
+    <task id="LOCAL-03760" summary="Melhoria no comando de estatística de uso">
+      <created>1612959287625</created>
+      <option name="number" value="03760" />
+      <option name="presentableId" value="LOCAL-03760" />
+      <option name="project" value="LOCAL" />
+      <updated>1612959287625</updated>
+    </task>
+    <task id="LOCAL-03761" summary="Melhoria no comando de estatística de uso">
+      <created>1612964356675</created>
+      <option name="number" value="03761" />
+      <option name="presentableId" value="LOCAL-03761" />
+      <option name="project" value="LOCAL" />
+      <updated>1612964356675</updated>
+    </task>
+    <option name="localTasksCounter" value="3762" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
