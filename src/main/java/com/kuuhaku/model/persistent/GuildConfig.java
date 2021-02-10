@@ -400,6 +400,10 @@ public class GuildConfig {
 		rules = new JSONArray(ph).toString();
 	}
 
+	public String getEmbedTemplateRaw() {
+		return embedTemplate;
+	}
+
 	public JSONObject getEmbedTemplate() {
 		if (embedTemplate.isBlank()) return new JSONObject();
 		else return new JSONObject(embedTemplate);
