@@ -67,7 +67,7 @@ public class LoanCommand implements Executable {
 			eb.setTitle(":bank: | Empréstimo de créditos");
 			eb.setThumbnail("https://image.flaticon.com/icons/png/512/1462/1462438.png");
 			eb.setDescription("""
-					Está precisando de créditos rápidos? Estão aparecendo muitas cartas que você deseja obter? Talvez seu Kawaigotchi esteja morrendo?
+					Está precisando de créditos rápidos? Estão aparecendo muitas cartas que você deseja obter?
 					Não se preocupe, nós podemos resolver!
 					     
 					Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar a dívida mais tarde.
