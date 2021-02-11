@@ -26,6 +26,7 @@ import com.coder4.emoji.EmojiUtils;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.github.ygimenez.type.PageType;
 import com.google.gson.Gson;
 import com.kuuhaku.Main;
@@ -108,7 +109,6 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
@@ -639,7 +639,7 @@ public class Helper {
 			for (String k : source.keySet()) {
 				try {
 					JSONObject jo = btns.getJSONObject(k);
-					Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+					Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 
 					TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 
@@ -686,7 +686,7 @@ public class Helper {
 		}
 	}
 
-	public static void resolveButton(Guild g, JSONObject jo, Map<String, BiConsumer<Member, Message>> buttons) {
+	public static void resolveButton(Guild g, JSONObject jo, Map<String, ThrowingBiConsumer<Member, Message>> buttons) {
 		for (String b : jo.getJSONObject("buttons").keySet()) {
 			JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
 			Role role = g.getRoleById(btns.getString("role"));
@@ -721,7 +721,7 @@ public class Helper {
 
 		for (String k : ja.keySet()) {
 			JSONObject jo = ja.getJSONObject(k);
-			Map<String, BiConsumer<Member, Message>> buttons = new HashMap<>();
+			Map<String, ThrowingBiConsumer<Member, Message>> buttons = new HashMap<>();
 
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			if (channel != null) channel.retrieveMessageById(jo.getString("msgId")).queue(msg -> {

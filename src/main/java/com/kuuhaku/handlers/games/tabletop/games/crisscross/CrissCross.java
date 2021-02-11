@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.crisscross;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
@@ -45,7 +46,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 public class CrissCross extends Game {
@@ -174,11 +174,11 @@ public class CrissCross extends Game {
 	}
 
 	@Override
-	public Map<String, BiConsumer<Member, Message>> getButtons() {
+	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
 		AtomicReference<String> hash = new AtomicReference<>(Helper.generateHash(this));
 		ShiroInfo.getHashes().add(hash.get());
 
-		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 

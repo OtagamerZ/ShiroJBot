@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
+import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchRound;
 import net.dv8tion.jda.api.entities.Member;
@@ -32,7 +33,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public abstract class Game {
@@ -149,7 +149,7 @@ public abstract class Game {
 		return history;
 	}
 
-	public abstract Map<String, BiConsumer<Member, Message>> getButtons();
+	public abstract Map<String, ThrowingBiConsumer<Member, Message>> getButtons();
 
 	public MatchRound getCurrRound() {
 		return history.getRound(round);

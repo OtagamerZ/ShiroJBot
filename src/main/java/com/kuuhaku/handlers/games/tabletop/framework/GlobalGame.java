@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.framework;
 
+import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
@@ -47,7 +48,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public abstract class GlobalGame {
@@ -267,7 +267,7 @@ public abstract class GlobalGame {
 		return history;
 	}
 
-	public abstract Map<String, BiConsumer<Member, Message>> getButtons();
+	public abstract Map<String, ThrowingBiConsumer<Member, Message>> getButtons();
 
 	public GameChannel getChannel() {
 		return channel;
