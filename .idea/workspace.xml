@@ -13,9 +13,21 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de estatística de uso">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no comando de casar">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LoanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LoanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PollCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PollCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/chess/Chess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/chess/Chess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/crisscross/CrissCross.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/crisscross/CrissCross.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/reversi/Reversi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/reversi/Reversi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +139,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="proofread" />
+    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
@@ -181,6 +193,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1079,35 +1102,10 @@
       <workItem from="1612901352331" duration="2047000" />
       <workItem from="1612904293331" duration="224000" />
       <workItem from="1612958183269" duration="5998000" />
-      <workItem from="1612973362866" duration="772000" />
-    </task>
-    <task id="LOCAL-03713" summary="Adição de GIFs de transição dos levels 210 e 420">
-      <created>1612458500761</created>
-      <option name="number" value="03713" />
-      <option name="presentableId" value="LOCAL-03713" />
-      <option name="project" value="LOCAL" />
-      <updated>1612458500761</updated>
-    </task>
-    <task id="LOCAL-03714" summary="Adição de GIFs de transição dos levels 210 e 420">
-      <created>1612459397951</created>
-      <option name="number" value="03714" />
-      <option name="presentableId" value="LOCAL-03714" />
-      <option name="project" value="LOCAL" />
-      <updated>1612459397951</updated>
-    </task>
-    <task id="LOCAL-03715" summary="Adição de GIFs de transição dos levels 210 e 420">
-      <created>1612460191614</created>
-      <option name="number" value="03715" />
-      <option name="presentableId" value="LOCAL-03715" />
-      <option name="project" value="LOCAL" />
-      <updated>1612460191614</updated>
-    </task>
-    <task id="LOCAL-03716" summary="Adição de GIFs de transição dos levels 210 e 420">
-      <created>1612460745105</created>
-      <option name="number" value="03716" />
-      <option name="presentableId" value="LOCAL-03716" />
-      <option name="project" value="LOCAL" />
-      <updated>1612460745105</updated>
+      <workItem from="1612973362866" duration="5128000" />
+      <workItem from="1612989581780" duration="104000" />
+      <workItem from="1613045430076" duration="45000" />
+      <workItem from="1613061170734" duration="3058000" />
     </task>
     <task id="LOCAL-03717" summary="Feitiços agora viram cartas viradas para baixo">
       <created>1612461004576</created>
@@ -1424,7 +1422,35 @@
       <option name="project" value="LOCAL" />
       <updated>1612964356675</updated>
     </task>
-    <option name="localTasksCounter" value="3762" />
+    <task id="LOCAL-03762" summary="Melhoria no comando de estatística de uso">
+      <created>1612974318257</created>
+      <option name="number" value="03762" />
+      <option name="presentableId" value="LOCAL-03762" />
+      <option name="project" value="LOCAL" />
+      <updated>1612974318257</updated>
+    </task>
+    <task id="LOCAL-03763" summary="Melhoria no comando de estatística de uso">
+      <created>1612974777749</created>
+      <option name="number" value="03763" />
+      <option name="presentableId" value="LOCAL-03763" />
+      <option name="project" value="LOCAL" />
+      <updated>1612974777749</updated>
+    </task>
+    <task id="LOCAL-03764" summary="Melhoria no comando de estatística de uso">
+      <created>1612978606666</created>
+      <option name="number" value="03764" />
+      <option name="presentableId" value="LOCAL-03764" />
+      <option name="project" value="LOCAL" />
+      <updated>1612978606666</updated>
+    </task>
+    <task id="LOCAL-03765" summary="Correção no comando de casar">
+      <created>1612986862713</created>
+      <option name="number" value="03765" />
+      <option name="presentableId" value="LOCAL-03765" />
+      <option name="project" value="LOCAL" />
+      <updated>1612986862714</updated>
+    </task>
+    <option name="localTasksCounter" value="3766" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1510,7 +1536,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Novos comandos de trancar e destrancar o canal" />
     <MESSAGE value="Rework no CommandManager" />
     <MESSAGE value="Adição de requisitos de permissão" />
     <MESSAGE value="Atualização da biblioteca de paginação" />
@@ -1535,7 +1560,8 @@
     <MESSAGE value="Adição de configuração de tempo do anti-raid" />
     <MESSAGE value="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;" />
     <MESSAGE value="Melhoria no comando de estatística de uso" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no comando de estatística de uso" />
+    <MESSAGE value="Correção no comando de casar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no comando de casar" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
