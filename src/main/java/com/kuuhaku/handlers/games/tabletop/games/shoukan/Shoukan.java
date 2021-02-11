@@ -385,12 +385,14 @@ public class Shoukan extends GlobalGame {
 
 				if (d instanceof Equipment) {
 					Equipment e = (Equipment) d.copy();
+					if (h.getTechLevel() < e.getTier()) {
+						channel.sendMessage("❌ | Seu nível de invocador não é alto o suficiente.").queue(null, Helper::doNothing);
+						return;
+					}
+
 					if (e.getCharm() != null && e.getCharm().equals(Charm.SPELL)) {
 						if (!args[1].equalsIgnoreCase("s")) {
 							channel.sendMessage("❌ | O segundo argumento precisa ser `S` se deseja jogar uma carta de feitiço.").queue(null, Helper::doNothing);
-							return;
-						} else if (h.getTechLevel() < e.getTier()) {
-							channel.sendMessage("❌ | Seu nível de invocador não é alto o suficiente.").queue(null, Helper::doNothing);
 							return;
 						} else if (spellLock > 0) {
 							channel.sendMessage("❌ | Feitiços estão bloqueados por mais " + (fusionLock == 1 ? "turno" : "turnos") + ".").queue(null, Helper::doNothing);
