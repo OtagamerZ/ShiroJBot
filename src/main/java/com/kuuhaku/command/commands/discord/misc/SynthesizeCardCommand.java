@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -113,7 +114,7 @@ public class SynthesizeCardCommand implements Executable {
 			channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 					.queue(s ->
 							{
-								Map<String, java.util.function.BiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
+								Map<String, ThrowingBiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
 								buttons.put(Helper.ACCEPT, (ms, mb) -> {
 									if (!ShiroInfo.getHashes().remove(hash)) return;
 									Main.getInfo().getConfirmationPending().invalidate(author.getId());
@@ -196,7 +197,7 @@ public class SynthesizeCardCommand implements Executable {
 					.embed(eb.build())
 					.queue(s ->
 							{
-								Map<String, java.util.function.BiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
+								Map<String, ThrowingBiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
 								buttons.put(Helper.ACCEPT, (ms, mb) -> {
 									if (!ShiroInfo.getHashes().remove(hash)) return;
 									Main.getInfo().getConfirmationPending().invalidate(author.getId());
