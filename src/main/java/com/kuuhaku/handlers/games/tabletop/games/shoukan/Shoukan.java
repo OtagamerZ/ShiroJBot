@@ -1935,7 +1935,7 @@ public class Shoukan extends GlobalGame {
 							}
 						});
 			});
-		if (hands.get(current).getTechLevel() < 4 && phase == Phase.PLAN)
+		if (hands.get(current).getTechLevel() < 4 && getRound() >= hands.get(current).getTechLevel() * 3 && phase == Phase.PLAN)
 			buttons.put("\uD83E\uDE84", (mb, ms) -> {
 				if (!ShiroInfo.getHashes().contains(hash.get())) return;
 				if (phase != Phase.PLAN) {
