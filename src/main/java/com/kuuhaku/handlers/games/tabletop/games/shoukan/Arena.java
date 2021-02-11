@@ -189,7 +189,7 @@ public class Arena {
 					g2d.setColor(Color.LIGHT_GRAY);
 					Profile.drawOutlinedText(
 							"NV: " + h.getTechLevel(),
-							key == Side.TOP ? 2240 : 10 - g2d.getFontMetrics().stringWidth("NV: " + h.getTechLevel()),
+							key == Side.TOP ? 2240 - g2d.getFontMetrics().stringWidth("NV: " + h.getTechLevel()) : 10,
 							key == Side.TOP ? 82 : 1638, g2d
 					);
 				}
