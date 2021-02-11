@@ -149,28 +149,28 @@ public class Clan {
 		ClanHierarchy ch = members.get(id);
 		ClanHierarchy next = Helper.getNext(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
 		members.put(id, Helper.getOr(next, ch));
-		transactions.add(u.getAsTag() + " adicionou o membro com ID " + id + ".");
+		transactions.add(u.getAsTag() + " promoveu o membro com ID " + id + ".");
 	}
 
 	public void promote(User tgt, User u) {
 		ClanHierarchy ch = members.get(tgt.getId());
 		ClanHierarchy next = Helper.getNext(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
 		members.put(tgt.getId(), Helper.getOr(next, ch));
-		transactions.add(u.getAsTag() + " adicionou o membro " + tgt.getAsTag() + ".");
+		transactions.add(u.getAsTag() + " promoveu o membro " + tgt.getAsTag() + ".");
 	}
 
 	public void demote(String id, User u) {
 		ClanHierarchy ch = members.get(id);
 		ClanHierarchy previous = Helper.getPrevious(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
 		members.put(id, Helper.getOr(previous, ch));
-		transactions.add(u.getAsTag() + " adicionou o membro com ID " + id + ".");
+		transactions.add(u.getAsTag() + " rebaixou o membro com ID " + id + ".");
 	}
 
 	public void demote(User tgt, User u) {
 		ClanHierarchy ch = members.get(tgt.getId());
 		ClanHierarchy previous = Helper.getPrevious(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
 		members.put(tgt.getId(), Helper.getOr(previous, ch));
-		transactions.add(u.getAsTag() + " adicionou o membro " + tgt.getAsTag() + ".");
+		transactions.add(u.getAsTag() + " rebaixou o membro " + tgt.getAsTag() + ".");
 	}
 
 	public void kick(String id, User u) {
