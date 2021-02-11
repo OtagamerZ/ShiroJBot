@@ -87,8 +87,9 @@ public class Hand {
 		if (game.getCustom() != null) {
 			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
 			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
-			maxCards = Helper.clamp(game.getCustom().optInt("cartasini", 5), 1, 10);
+			maxCards = Helper.clamp(game.getCustom().optInt("cartasmax", 5), 1, 10);
 			manaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
+			techLevel = Helper.clamp(game.getCustom().optInt("nivelini", 1), 1, 4);
 
 			if (game.getCustom().optBoolean("semequip"))
 				getDeque().removeIf(d -> d instanceof Equipment);
@@ -179,8 +180,9 @@ public class Hand {
 		if (game.getCustom() != null) {
 			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
 			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
-			maxCards = Helper.clamp(game.getCustom().optInt("cartasini", 5), 1, 10);
+			maxCards = Helper.clamp(game.getCustom().optInt("cartasmax", 5), 1, 10);
 			manaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
+			techLevel = Helper.clamp(game.getCustom().optInt("nivelini", 1), 1, 4);
 
 			if (game.getCustom().optBoolean("semequip"))
 				getDeque().removeIf(d -> d instanceof Equipment);
