@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -40,7 +41,6 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -95,14 +95,14 @@ public class PollCommand implements Executable {
 		eb.setFooter("Clique nas reações abaixo para votar", null);
 		eb.setColor(Color.decode("#2195f2"));
 
-		Function<Message, Map<String, BiConsumer<Member, Message>>> opts = null;
+		Function<Message, Map<String, ThrowingBiConsumer<Member, Message>>> opts = null;
 		if (options != null && options.length() > 10) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-too-many-options")).queue();
 			return;
 		} else if (options != null) {
 			JSONArray finalOptions = options;
 			opts = m -> {
-				Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+				Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 				for (int i = 0; i < finalOptions.length(); i++) {
 					String emote = Helper.getRegionalIndicator(i);
 					buttons.put(emote, (mb, msg) -> {
@@ -153,7 +153,7 @@ public class PollCommand implements Executable {
 			Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 		};
 
-		Function<Message, Map<String, BiConsumer<Member, Message>>> finalOpts = opts;
+		Function<Message, Map<String, ThrowingBiConsumer<Member, Message>>> finalOpts = opts;
 		Consumer<Message> sendOptions = m -> {
 			assert finalOpts != null;
 			Pages.buttonize(m, finalOpts.apply(m), false, gc.getPollTime(), TimeUnit.SECONDS);

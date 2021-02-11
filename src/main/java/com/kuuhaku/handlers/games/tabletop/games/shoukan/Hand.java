@@ -47,10 +47,12 @@ public class Hand {
 	private final List<Drawable> cards = new ArrayList<>();
 	private final List<Drawable> destinyDeck = new ArrayList<>();
 	private final Side side;
-	private final int startingCount;
-	private final int manaPerTurn;
-	private int mana;
-	private int hp;
+	private final int baseHp;
+	private int maxCards = 0;
+	private int manaPerTurn = 0;
+	private int mana = 0;
+	private int hp = 0;
+	private int techLevel = 1;
 	private int suppressTime = 0;
 	private int lockTime = 0;
 	private int manaReturn = 0;
@@ -62,8 +64,7 @@ public class Hand {
 			this.user = null;
 			this.deque = null;
 			this.side = null;
-			this.startingCount = 0;
-			this.manaPerTurn = 0;
+			this.baseHp = 0;
 			return;
 		}
 		deque = new LinkedList<>() {{
@@ -82,10 +83,11 @@ public class Hand {
 		this.side = side;
 		this.game = game;
 
+		int baseHp;
 		if (game.getCustom() != null) {
 			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
-			hp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
-			startingCount = Helper.clamp(game.getCustom().optInt("cartasini", 5), 1, 10);
+			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
+			maxCards = Helper.clamp(game.getCustom().optInt("cartasini", 5), 1, 10);
 			manaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
 
 			if (game.getCustom().optBoolean("semequip"))
@@ -128,13 +130,13 @@ public class Hand {
 				}
 				case "instakill" -> {
 					deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
-					hp = 1;
+					baseHp = 1;
 				}
 			}
 		} else {
 			mana = 0;
-			hp = 5000;
-			startingCount = 5;
+			baseHp = 5000;
+			maxCards = 5;
 			manaPerTurn = 5;
 		}
 
@@ -152,11 +154,11 @@ public class Hand {
 			deque.remove(drawable);
 		}
 
+		this.baseHp = hp = baseHp;
 		redrawHand();
 	}
 
 	public Hand(Shoukan game, User user, Clan cl, Side side) {
-
 		deque = new LinkedList<>() {{
 			addAll(cl.getDeck().getChampions());
 		}};
@@ -173,10 +175,11 @@ public class Hand {
 		this.side = side;
 		this.game = game;
 
+		int baseHp;
 		if (game.getCustom() != null) {
 			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
-			hp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
-			startingCount = Helper.clamp(game.getCustom().optInt("cartasini", 5), 1, 10);
+			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
+			maxCards = Helper.clamp(game.getCustom().optInt("cartasini", 5), 1, 10);
 			manaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
 
 			if (game.getCustom().optBoolean("semequip"))
@@ -219,13 +222,13 @@ public class Hand {
 				}
 				case "instakill" -> {
 					deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
-					hp = 1;
+					baseHp = 1;
 				}
 			}
 		} else {
 			mana = 0;
-			hp = 5000;
-			startingCount = 5;
+			baseHp = 5000;
+			maxCards = 5;
 			manaPerTurn = 5;
 		}
 
@@ -246,6 +249,8 @@ public class Hand {
 		for (Drawable drawable : deque) {
 			drawable.setClan(cl);
 		}
+
+		this.baseHp = hp = baseHp;
 		redrawHand();
 	}
 
@@ -399,7 +404,7 @@ public class Hand {
 		cards.removeIf(Drawable::isAvailable);
 
 		Collections.shuffle(deque);
-		int toDraw = Math.max(0, startingCount - cards.size());
+		int toDraw = Math.max(0, maxCards - cards.size());
 		for (int i = 0; i < toDraw; i++) manualDraw();
 	}
 
@@ -513,12 +518,24 @@ public class Hand {
 		return cards.stream().filter(d -> d instanceof Champion).mapToInt(d -> ((Champion) d).getAtk()).sum();
 	}
 
+	public int getMaxCards() {
+		return maxCards;
+	}
+
+	public void setMaxCards(int maxCards) {
+		this.maxCards = maxCards;
+	}
+
 	public int getMana() {
 		return mana;
 	}
 
 	public int getManaPerTurn() {
 		return isSuppressed() ? 0 : manaPerTurn;
+	}
+
+	public void setManaPerTurn(int manaPerTurn) {
+		this.manaPerTurn = manaPerTurn;
 	}
 
 	public void setMana(int value) {
@@ -531,6 +548,10 @@ public class Hand {
 
 	public void removeMana(int value) {
 		mana = Math.max(0, (isNullMode() ? mana : mana - value));
+	}
+
+	public int getBaseHp() {
+		return baseHp;
 	}
 
 	public int getHp() {
@@ -593,5 +614,17 @@ public class Hand {
 
 	public void decreaseNullTime() {
 		nullTime = Math.max(0, nullTime - 1);
+	}
+
+	public int getTechLevel() {
+		return techLevel;
+	}
+
+	public void increaseTechLevel() {
+		techLevel += 1;
+	}
+
+	public void decreaseTechLevel() {
+		techLevel = Math.max(1, techLevel - 1);
 	}
 }
