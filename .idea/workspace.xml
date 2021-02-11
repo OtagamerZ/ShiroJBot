@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no comando de casar">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado nível de invocador no Shoukan">
       <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -25,6 +25,7 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/crisscross/CrissCross.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/crisscross/CrissCross.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/reversi/Reversi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/reversi/Reversi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
@@ -1105,14 +1106,7 @@
       <workItem from="1612973362866" duration="5128000" />
       <workItem from="1612989581780" duration="104000" />
       <workItem from="1613045430076" duration="45000" />
-      <workItem from="1613061170734" duration="3058000" />
-    </task>
-    <task id="LOCAL-03717" summary="Feitiços agora viram cartas viradas para baixo">
-      <created>1612461004576</created>
-      <option name="number" value="03717" />
-      <option name="presentableId" value="LOCAL-03717" />
-      <option name="project" value="LOCAL" />
-      <updated>1612461004577</updated>
+      <workItem from="1613061170734" duration="3381000" />
     </task>
     <task id="LOCAL-03718" summary="Feitiços agora viram cartas viradas para baixo">
       <created>1612461348429</created>
@@ -1450,7 +1444,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612986862714</updated>
     </task>
-    <option name="localTasksCounter" value="3766" />
+    <task id="LOCAL-03766" summary="Adicionado nível de invocador no Shoukan">
+      <created>1613064573484</created>
+      <option name="number" value="03766" />
+      <option name="presentableId" value="LOCAL-03766" />
+      <option name="project" value="LOCAL" />
+      <updated>1613064573486</updated>
+    </task>
+    <option name="localTasksCounter" value="3767" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1536,7 +1537,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Rework no CommandManager" />
     <MESSAGE value="Adição de requisitos de permissão" />
     <MESSAGE value="Atualização da biblioteca de paginação" />
     <MESSAGE value="Implementações de sugestões" />
@@ -1561,7 +1561,8 @@
     <MESSAGE value="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;" />
     <MESSAGE value="Melhoria no comando de estatística de uso" />
     <MESSAGE value="Correção no comando de casar" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no comando de casar" />
+    <MESSAGE value="Adicionado nível de invocador no Shoukan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionado nível de invocador no Shoukan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

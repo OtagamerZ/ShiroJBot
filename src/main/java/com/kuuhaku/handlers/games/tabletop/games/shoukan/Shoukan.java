@@ -1939,7 +1939,7 @@ public class Shoukan extends GlobalGame {
 			buttons.put("\uD83E\uDE84", (mb, ms) -> {
 				if (!ShiroInfo.getHashes().contains(hash.get())) return;
 				if (phase != Phase.PLAN) {
-					channel.sendMessage("❌ | Você só pode evoluir seu nível na fase de planejamento.").queue(null, Helper::doNothing);
+					channel.sendMessage("❌ | Você só pode evoluir seu nível de invocador na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
 				}
 
