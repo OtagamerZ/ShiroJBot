@@ -60,7 +60,8 @@ import java.util.stream.Stream;
 )
 @Requires({
 		Permission.MESSAGE_MANAGE,
-		Permission.MESSAGE_ADD_REACTION
+		Permission.MESSAGE_ADD_REACTION,
+		Permission.MESSAGE_ATTACH_FILES
 })
 public class ShoukanCommand implements Executable {
 
@@ -78,7 +79,7 @@ public class ShoukanCommand implements Executable {
 				if (kp.getChampions().size() < 30) {
 					channel.sendMessage("❌ | É necessário ter ao menos 30 cartas no deck para poder jogar Shoukan.").queue();
 					return;
-				} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+				} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() > 24) {
 					channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
 					return;
 				}
@@ -115,7 +116,7 @@ public class ShoukanCommand implements Executable {
 			if (kp.getChampions().size() < 30) {
 				channel.sendMessage("❌ | É necessário ter ao menos 30 cartas no deck para poder jogar Shoukan.").queue();
 				return;
-			} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+			} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() > 24) {
 				channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
 				return;
 			}
@@ -223,10 +224,10 @@ public class ShoukanCommand implements Executable {
 				} else if (other.getDeck().getChampions().size() < 30) {
 					channel.sendMessage("❌ | " + other.getName() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
 					return;
-				} else if (c.getDeck().getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+				} else if (c.getDeck().getEquipments().stream().mapToInt(Equipment::getTier).sum() > 24) {
 					channel.sendMessage("❌ | Os equipamentos de " + c.getName() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
 					return;
-				} else if (other.getDeck().getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+				} else if (other.getDeck().getEquipments().stream().mapToInt(Equipment::getTier).sum() > 24) {
 					channel.sendMessage("❌ | Os equipamentos de " + other.getName() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
 					return;
 				}
@@ -239,10 +240,10 @@ public class ShoukanCommand implements Executable {
 				} else if (target.getChampions().size() < 30) {
 					channel.sendMessage("❌ | " + message.getMentionedUsers().get(0).getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
 					return;
-				} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+				} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() > 24) {
 					channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
 					return;
-				} else if (target.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+				} else if (target.getEquipments().stream().mapToInt(Equipment::getTier).sum() > 24) {
 					channel.sendMessage("❌ | Os equipamentos de " + message.getMentionedUsers().get(0).getAsMention() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
 					return;
 				}
