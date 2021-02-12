@@ -203,14 +203,14 @@ public class SynthesizeCardCommand implements Executable {
 									Main.getInfo().getConfirmationPending().invalidate(author.getId());
 									String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
-									if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) || kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+									if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) || kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() + e.getTier() >= 24) {
 										int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
 
 										Account acc = AccountDAO.getAccount(author.getId());
 										acc.addCredit(change, this.getClass());
 										AccountDAO.saveAccount(acc);
 
-										if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24)
+										if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() + e.getTier() >= 24)
 											channel.sendMessage("❌ | Você não possui mais espaços para equipamentos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " créditos.").queue();
 										else if (kp.getEquipments().stream().filter(e::equals).count() == 3)
 											channel.sendMessage("❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " créditos.").queue();

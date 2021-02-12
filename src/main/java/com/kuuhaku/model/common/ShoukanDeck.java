@@ -135,9 +135,11 @@ public class ShoukanDeck {
 		equips = equips.stream()
 				.peek(e -> e.setAcc(acc))
 				.sorted(Comparator
-						.comparing(Equipment::getTier).reversed()
+						.comparing(Equipment::getTier)
+						.thenComparing(Equipment::getMana).reversed()
 						.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 				)
+				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(e.getTier() - 1, new Equipment())).stream())
 				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))

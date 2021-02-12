@@ -14,7 +14,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado peso aos equipamentos">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,13 +185,15 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -1095,28 +1102,8 @@
       <workItem from="1613061170734" duration="4531000" />
       <workItem from="1613066841045" duration="2730000" />
       <workItem from="1613074442311" duration="2088000" />
-      <workItem from="1613131012926" duration="3666000" />
-    </task>
-    <task id="LOCAL-03726" summary="Melhoria no framework de efeitos por turno">
-      <created>1612583422774</created>
-      <option name="number" value="03726" />
-      <option name="presentableId" value="LOCAL-03726" />
-      <option name="project" value="LOCAL" />
-      <updated>1612583422774</updated>
-    </task>
-    <task id="LOCAL-03727" summary="Correção no encerramento das partidas">
-      <created>1612636367916</created>
-      <option name="number" value="03727" />
-      <option name="presentableId" value="LOCAL-03727" />
-      <option name="project" value="LOCAL" />
-      <updated>1612636367920</updated>
-    </task>
-    <task id="LOCAL-03728" summary="Correção no encerramento das partidas">
-      <created>1612636450901</created>
-      <option name="number" value="03728" />
-      <option name="presentableId" value="LOCAL-03728" />
-      <option name="project" value="LOCAL" />
-      <updated>1612636450901</updated>
+      <workItem from="1613131012926" duration="5686000" />
+      <workItem from="1613145998418" duration="1453000" />
     </task>
     <task id="LOCAL-03729" summary="Correção na listagem das cartas elegíveis">
       <created>1612668490531</created>
@@ -1440,7 +1427,28 @@
       <option name="project" value="LOCAL" />
       <updated>1613136782295</updated>
     </task>
-    <option name="localTasksCounter" value="3775" />
+    <task id="LOCAL-03775" summary="Adicionado peso aos equipamentos">
+      <created>1613136858132</created>
+      <option name="number" value="03775" />
+      <option name="presentableId" value="LOCAL-03775" />
+      <option name="project" value="LOCAL" />
+      <updated>1613136858132</updated>
+    </task>
+    <task id="LOCAL-03776" summary="Adicionado peso aos equipamentos">
+      <created>1613137091342</created>
+      <option name="number" value="03776" />
+      <option name="presentableId" value="LOCAL-03776" />
+      <option name="project" value="LOCAL" />
+      <updated>1613137091342</updated>
+    </task>
+    <task id="LOCAL-03777" summary="Adicionado peso aos equipamentos">
+      <created>1613137178650</created>
+      <option name="number" value="03777" />
+      <option name="presentableId" value="LOCAL-03777" />
+      <option name="project" value="LOCAL" />
+      <updated>1613137178650</updated>
+    </task>
+    <option name="localTasksCounter" value="3778" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
