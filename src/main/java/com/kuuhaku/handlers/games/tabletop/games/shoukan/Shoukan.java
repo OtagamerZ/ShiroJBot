@@ -385,10 +385,6 @@ public class Shoukan extends GlobalGame {
 
 				if (d instanceof Equipment) {
 					Equipment e = (Equipment) d.copy();
-					if (h.getTechLevel() < e.getTier()) {
-						channel.sendMessage("❌ | Seu nível de invocador não é alto o suficiente.").queue(null, Helper::doNothing);
-						return;
-					}
 
 					if (e.getCharm() != null && e.getCharm().equals(Charm.SPELL)) {
 						if (!args[1].equalsIgnoreCase("s")) {
@@ -1922,45 +1918,6 @@ public class Shoukan extends GlobalGame {
 				AtomicBoolean shownHand = new AtomicBoolean(false);
 				moveLock = true;
 				channel.sendMessage(getCurrent().getName() + " executou um saque do destino!")
-						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							moveLock = false;
-							if (!shownHand.get()) {
-								shownHand.set(true);
-								h.showHand();
-							}
-						});
-			});
-		if (hands.get(current).getTechLevel() < 4 && getRound() >= hands.get(current).getTechLevel() * 3 && phase == Phase.PLAN)
-			buttons.put("\uD83E\uDE84", (mb, ms) -> {
-				if (!ShiroInfo.getHashes().contains(hash.get())) return;
-				if (phase != Phase.PLAN) {
-					channel.sendMessage("❌ | Você só pode evoluir seu nível de invocador na fase de planejamento.").queue(null, Helper::doNothing);
-					return;
-				}
-
-				if (!ShiroInfo.getHashes().remove(hash.get())) return;
-				Hand h = hands.get(current);
-
-				int cost = 2 * h.getTechLevel();
-				if (h.getMana() < cost) {
-					channel.sendMessage("❌ | É necessário " + cost + " pontos de mana para evoluir seu nível.").queue(null, Helper::doNothing);
-					return;
-				}
-
-				h.removeMana(cost);
-				h.increaseTechLevel();
-				h.setMaxCards(h.getMaxCards() + 1);
-				resetTimerKeepTurn();
-				AtomicBoolean shownHand = new AtomicBoolean(false);
-				moveLock = true;
-				channel.sendMessage(getCurrent().getName() + " tornou-se um invocador nível " + h.getTechLevel() + "!")
 						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
