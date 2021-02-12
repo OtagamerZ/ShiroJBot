@@ -289,7 +289,7 @@ public class TenthSecondEvent implements Job {
 				if (kp.getChampions().size() < 30) {
 					p1Channel.sendMessage("❌ | Você está com um deck que possui menos que 30 cartas. Você precisa corrigir antes de poder aceitar a partida.").queue();
 					return;
-				} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+				} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() > 24) {
 					p1Channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, você precisa corrigir antes de poder aceitar a partida.").queue();
 					return;
 				}
