@@ -57,7 +57,7 @@ public class ExceedMembersCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (!ExceedDAO.hasExceed(author.getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-map-no-exceed")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-members-no-exceed")).queue();
 			return;
 		}
 
