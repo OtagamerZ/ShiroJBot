@@ -13,18 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado nível de invocador no Shoukan">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/deck.xcf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/slot_lock.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado peso aos equipamentos">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/deck.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/deck.jpg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1105,21 +1095,7 @@
       <workItem from="1613061170734" duration="4531000" />
       <workItem from="1613066841045" duration="2730000" />
       <workItem from="1613074442311" duration="2088000" />
-      <workItem from="1613131012926" duration="3312000" />
-    </task>
-    <task id="LOCAL-03724" summary="Melhoria no framework de efeitos por turno">
-      <created>1612578886929</created>
-      <option name="number" value="03724" />
-      <option name="presentableId" value="LOCAL-03724" />
-      <option name="project" value="LOCAL" />
-      <updated>1612578886929</updated>
-    </task>
-    <task id="LOCAL-03725" summary="Melhoria no framework de efeitos por turno">
-      <created>1612579457074</created>
-      <option name="number" value="03725" />
-      <option name="presentableId" value="LOCAL-03725" />
-      <option name="project" value="LOCAL" />
-      <updated>1612579457074</updated>
+      <workItem from="1613131012926" duration="3666000" />
     </task>
     <task id="LOCAL-03726" summary="Melhoria no framework de efeitos por turno">
       <created>1612583422774</created>
@@ -1450,7 +1426,21 @@
       <option name="project" value="LOCAL" />
       <updated>1613074576045</updated>
     </task>
-    <option name="localTasksCounter" value="3773" />
+    <task id="LOCAL-03773" summary="Adicionado peso aos equipamentos">
+      <created>1613136694208</created>
+      <option name="number" value="03773" />
+      <option name="presentableId" value="LOCAL-03773" />
+      <option name="project" value="LOCAL" />
+      <updated>1613136694209</updated>
+    </task>
+    <task id="LOCAL-03774" summary="Adicionado peso aos equipamentos">
+      <created>1613136782295</created>
+      <option name="number" value="03774" />
+      <option name="presentableId" value="LOCAL-03774" />
+      <option name="project" value="LOCAL" />
+      <updated>1613136782295</updated>
+    </task>
+    <option name="localTasksCounter" value="3775" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1536,7 +1526,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de requisitos de permissão" />
     <MESSAGE value="Atualização da biblioteca de paginação" />
     <MESSAGE value="Implementações de sugestões" />
     <MESSAGE value="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;" />
@@ -1561,7 +1550,8 @@
     <MESSAGE value="Melhoria no comando de estatística de uso" />
     <MESSAGE value="Correção no comando de casar" />
     <MESSAGE value="Adicionado nível de invocador no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionado nível de invocador no Shoukan" />
+    <MESSAGE value="Adicionado peso aos equipamentos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionado peso aos equipamentos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
