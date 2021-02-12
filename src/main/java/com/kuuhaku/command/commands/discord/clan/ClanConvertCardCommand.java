@@ -156,7 +156,7 @@ public class ClanConvertCardCommand implements Executable {
 				} else if (cl.getDeck().getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
 					channel.sendMessage("❌ | Seu clã já possui 1 equipamento tier 4!").queue();
 					return;
-				} else if (cl.getDeck().getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+				} else if (cl.getDeck().getEquipments().stream().mapToInt(Equipment::getTier).sum() + e.getTier() >= 24) {
 					channel.sendMessage("❌ | Seu clã não possui mais espaços para equipamentos no deck.").queue();
 					return;
 				}
