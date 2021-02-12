@@ -161,9 +161,10 @@ public class ShoukanDeck {
 			Equipment e = equips.get(i);
 			if (e.getTier() == 0)
 				g2d.drawImage(slotLock, 2048 + 279 * (i - 3 * y), 349 + 419 * y, null);
-			else
+			else {
 				g2d.drawImage(e.drawCard(false), 2048 + 279 * (i - 3 * y), 349 + 419 * y, null);
-			Profile.printCenteredString(StringUtils.abbreviate(e.getCard().getName(), 15), 225, 2048 + 279 * (i - 3 * y), 739 + 419 * y, g2d);
+				Profile.printCenteredString(StringUtils.abbreviate(e.getCard().getName(), 15), 225, 2048 + 279 * (i - 3 * y), 739 + 419 * y, g2d);
+			}
 		}
 
 		for (int i = 0; i < fields.size(); i++) {
