@@ -17,9 +17,11 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1103,14 +1105,7 @@
       <workItem from="1613066841045" duration="2730000" />
       <workItem from="1613074442311" duration="2088000" />
       <workItem from="1613131012926" duration="5686000" />
-      <workItem from="1613145998418" duration="1453000" />
-    </task>
-    <task id="LOCAL-03729" summary="Correção na listagem das cartas elegíveis">
-      <created>1612668490531</created>
-      <option name="number" value="03729" />
-      <option name="presentableId" value="LOCAL-03729" />
-      <option name="project" value="LOCAL" />
-      <updated>1612668490531</updated>
+      <workItem from="1613145998418" duration="5410000" />
     </task>
     <task id="LOCAL-03730" summary="Clones agora possuem custo de mana 0 e não vão mais para o cemitério">
       <created>1612668757778</created>
@@ -1448,7 +1443,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613137178650</updated>
     </task>
-    <option name="localTasksCounter" value="3778" />
+    <task id="LOCAL-03778" summary="Adicionado peso aos equipamentos">
+      <created>1613148438963</created>
+      <option name="number" value="03778" />
+      <option name="presentableId" value="LOCAL-03778" />
+      <option name="project" value="LOCAL" />
+      <updated>1613148438964</updated>
+    </task>
+    <option name="localTasksCounter" value="3779" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

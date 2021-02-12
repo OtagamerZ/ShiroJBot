@@ -1902,7 +1902,7 @@ public class Shoukan extends GlobalGame {
 							}
 						});
 			});
-		if (hands.get(current).getHp() < 1500 && hands.get(current).getDestinyDeck().size() > 0 && phase == Phase.PLAN)
+		if (hands.get(current).getHp() < hands.get(current).getBaseHp() / 3 && hands.get(current).getDestinyDeck().size() > 0 && phase == Phase.PLAN)
 			buttons.put("\uD83E\uDDE7", (mb, ms) -> {
 				if (!ShiroInfo.getHashes().contains(hash.get())) return;
 				if (phase != Phase.PLAN) {
