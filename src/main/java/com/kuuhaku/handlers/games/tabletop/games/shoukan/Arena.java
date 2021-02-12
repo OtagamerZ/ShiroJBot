@@ -186,12 +186,6 @@ public class Arena {
 							key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + (h.isNullMode() ? "ø" : h.getMana())),
 							key == Side.TOP ? 178 : 1735, g2d
 					);
-					g2d.setColor(Color.LIGHT_GRAY);
-					Profile.drawOutlinedText(
-							"NV: " + h.getTechLevel(),
-							key == Side.TOP ? 2240 - g2d.getFontMetrics().stringWidth("NV: " + h.getTechLevel()) : 10,
-							key == Side.TOP ? 82 : 1638, g2d
-					);
 				}
 			}
 
