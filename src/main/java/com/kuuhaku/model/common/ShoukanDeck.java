@@ -69,7 +69,7 @@ public class ShoukanDeck {
 		equips = equips.stream()
 				.peek(e -> e.setAcc(acc))
 				.sorted(Comparator
-						.comparing(Equipment::getTier).reversed()
+						.comparing(Equipment::getTier)
 						.thenComparing(Equipment::getMana).reversed()
 						.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 				)
