@@ -94,10 +94,10 @@ public class ShoukanDeck {
 
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / SENSHI_COLUMNS) {
 			Champion c = champs.get(i);
-			g2d.drawImage(c.drawCard(false), 76 + 279 * (i - SENSHI_COLUMNS * y), 350 + 420 * y, null);
+			g2d.drawImage(c.drawCard(false), 95 + 279 * (i - SENSHI_COLUMNS * y), 349 + 419 * y, null);
 			if (kp.getDestinyDraw() != null && kp.getDestinyDraw().contains(i))
-				g2d.drawImage(destiny, 66 + 279 * (i - SENSHI_COLUMNS * y), 340 + 420 * y, null);
-			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 225, 76 + 279 * (i - SENSHI_COLUMNS * y), 740 + 420 * y, g2d);
+				g2d.drawImage(destiny, 85 + 279 * (i - SENSHI_COLUMNS * y), 339 + 419 * y, null);
+			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 225, 95 + 279 * (i - SENSHI_COLUMNS * y), 739 + 419 * y, g2d);
 		}
 
 		BufferedImage slotLock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/slot_lock.png")));
@@ -113,8 +113,8 @@ public class ShoukanDeck {
 
 		for (int i = 0; i < fields.size(); i++) {
 			Field f = fields.get(i);
-			g2d.drawImage(f.drawCard(false), 1746, 771 + (420 * i), null);
-			Profile.printCenteredString(StringUtils.abbreviate(f.getCard().getName(), 15), 225, 1746, 1161 + (420 * i), g2d);
+			g2d.drawImage(f.drawCard(false), 1769, 769 + (419 * i), null);
+			Profile.printCenteredString(StringUtils.abbreviate(f.getCard().getName(), 15), 225, 1769, 1159 + (419 * i), g2d);
 		}
 
 		return deck;
