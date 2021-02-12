@@ -159,7 +159,7 @@ public class ShoukanDeck {
 		BufferedImage slotLock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/slot_lock.png")));
 		for (int i = 0, y = 0; i < equips.size(); i++, y = i / 3) {
 			Equipment e = equips.get(i);
-			if (e.getTier() == 0)
+			if (e.getCard() == null)
 				g2d.drawImage(slotLock, 2048 + 279 * (i - 3 * y), 349 + 419 * y, null);
 			else {
 				g2d.drawImage(e.drawCard(false), 2048 + 279 * (i - 3 * y), 349 + 419 * y, null);
