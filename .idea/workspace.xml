@@ -1098,14 +1098,7 @@
       <workItem from="1613066841045" duration="2730000" />
       <workItem from="1613074442311" duration="2088000" />
       <workItem from="1613131012926" duration="5686000" />
-      <workItem from="1613145998418" duration="6468000" />
-    </task>
-    <task id="LOCAL-03731" summary="Correções menores">
-      <created>1612800493032</created>
-      <option name="number" value="03731" />
-      <option name="presentableId" value="LOCAL-03731" />
-      <option name="project" value="LOCAL" />
-      <updated>1612800493033</updated>
+      <workItem from="1613145998418" duration="7753000" />
     </task>
     <task id="LOCAL-03732" summary="Correções menores">
       <created>1612800851034</created>
@@ -1443,7 +1436,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613160771538</updated>
     </task>
-    <option name="localTasksCounter" value="3780" />
+    <task id="LOCAL-03780" summary="Adicionado peso aos equipamentos">
+      <created>1613161737518</created>
+      <option name="number" value="03780" />
+      <option name="presentableId" value="LOCAL-03780" />
+      <option name="project" value="LOCAL" />
+      <updated>1613161737518</updated>
+    </task>
+    <option name="localTasksCounter" value="3781" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
