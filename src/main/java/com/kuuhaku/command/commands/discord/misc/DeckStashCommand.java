@@ -98,13 +98,13 @@ public class DeckStashCommand implements Executable {
 						"`Slot %s | %sreserva %s`".formatted(j, prefix, j),
 						"""
 								:crossed_swords: | Cartas Senshi: %s
-								:shield: | Cartas EvoGear: %s
+								:shield: | Peso EvoGear: %s
 								:thermometer: | Custo médio de mana: %s
 																	
 								%s
 								""".formatted(
 								ds.getChampions().size(),
-								ds.getEquipments().size(),
+								ds.getEquipments().stream().mapToInt(Equipment::getTier).sum(),
 								Helper.round(manaCost, 2),
 								"""
 										:abacus: | Classes
