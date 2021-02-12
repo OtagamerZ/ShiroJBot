@@ -23,6 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -85,7 +86,7 @@ public class ShoukanDeckCommand implements Executable {
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
 								.setTitle(":beginner: | Deck do clã " + cl.getName())
 								.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 36", true)
-								.addField(":shield: | Cartas EvoGear:", kp.getEquipments().size() + " de 18", true)
+								.addField(":shield: | Peso EvoGear:", kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() + " de 24", true)
 								.setImage("attachment://deck.jpg");
 
 						m.delete().queue();
@@ -110,7 +111,7 @@ public class ShoukanDeckCommand implements Executable {
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
 								.setTitle(":beginner: | Deck de " + author.getName())
 								.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 36", true)
-								.addField(":shield: | Cartas EvoGear:", kp.getEquipments().size() + " de 18", true)
+								.addField(":shield: | Peso EvoGear:", kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() + " de 24", true)
 								.setImage("attachment://deck.jpg");
 
 						m.delete().queue();
