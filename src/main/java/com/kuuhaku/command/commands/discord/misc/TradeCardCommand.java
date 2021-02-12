@@ -182,8 +182,8 @@ public class TradeCardCommand implements Executable {
 					if (Collections.frequency(target.getEquipments(), e) == 3) {
 						channel.sendMessage("❌ | Ele/ela já possui 3 cópias desse equipamento!").queue();
 						return;
-					} else if (target.getEquipments().size() == 18) {
-						channel.sendMessage("❌ | Ele/ela já possui 18 equipamentos!").queue();
+					} else if (target.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+						channel.sendMessage("❌ | Ele/ela não possui mais espaços para equipamentos no deck!").queue();
 						return;
 					} else if (target.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
 						channel.sendMessage("❌ | Ele/ela já possui 1 equipamento tier 4!").queue();
@@ -224,8 +224,8 @@ public class TradeCardCommand implements Executable {
 					if (Collections.frequency(kp.getEquipments(), e) == 3) {
 						channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
 						return;
-					} else if (kp.getEquipments().size() == 18) {
-						channel.sendMessage("❌ | Parece que você já possui 18 equipamentos!").queue();
+					} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+						channel.sendMessage("❌ | Parece que você não possui mais espaços para equipamentos no deck!").queue();
 						return;
 					} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
 						channel.sendMessage("❌ | Parece que você já possui 1 equipamento tier 4!").queue();
@@ -447,8 +447,8 @@ public class TradeCardCommand implements Executable {
 					if (Collections.frequency(kp.getEquipments(), e) == 3) {
 						channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
 						return;
-					} else if (kp.getEquipments().size() == 18) {
-						channel.sendMessage("❌ | Parece que você já possui 18 equipamentos!").queue();
+					} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+						channel.sendMessage("❌ | Parece que você não possui mais espaços para equipamentos no deck!").queue();
 						return;
 					} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
 						channel.sendMessage("❌ | Parece que você já possui 1 equipamento tier 4!").queue();
@@ -651,8 +651,8 @@ public class TradeCardCommand implements Executable {
 					if (Collections.frequency(target.getEquipments(), e) == 3) {
 						channel.sendMessage("❌ | Ele/ela já possui 3 cópias desse equipamento!").queue();
 						return;
-					} else if (target.getEquipments().size() == 18) {
-						channel.sendMessage("❌ | Ele/ela já possui 18 equipamentos!").queue();
+					} else if (target.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+						channel.sendMessage("❌ | Ele/ela não possui mais espaços para equipamentos no deck!").queue();
 						return;
 					} else if (target.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
 						channel.sendMessage("❌ | Ele/ela já possui 1 equipamento tier 4!").queue();

@@ -153,8 +153,8 @@ public class ClanRevertCardCommand implements Executable {
 				} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
 					channel.sendMessage("❌ | Você já possui 1 equipamento tier 4!").queue();
 					return;
-				} else if (kp.getEquipments().size() == 18) {
-					channel.sendMessage("❌ | Você só pode ter no máximo 18 cartas evogear no deck.").queue();
+				} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() >= 24) {
+					channel.sendMessage("❌ | Você não possui mais espaços para equipamentos no deck.").queue();
 					return;
 				}
 

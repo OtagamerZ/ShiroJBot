@@ -14,7 +14,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado nível de invocador no Shoukan">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/deck.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/slot_lock.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/deck.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/deck.jpg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,6 +190,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1083,13 +1104,8 @@
       <workItem from="1613045430076" duration="45000" />
       <workItem from="1613061170734" duration="4531000" />
       <workItem from="1613066841045" duration="2730000" />
-    </task>
-    <task id="LOCAL-03723" summary="Melhoria no framework de efeitos por turno">
-      <created>1612578633029</created>
-      <option name="number" value="03723" />
-      <option name="presentableId" value="LOCAL-03723" />
-      <option name="project" value="LOCAL" />
-      <updated>1612578633029</updated>
+      <workItem from="1613074442311" duration="2088000" />
+      <workItem from="1613131012926" duration="3312000" />
     </task>
     <task id="LOCAL-03724" summary="Melhoria no framework de efeitos por turno">
       <created>1612578886929</created>
@@ -1427,7 +1443,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613072324952</updated>
     </task>
-    <option name="localTasksCounter" value="3772" />
+    <task id="LOCAL-03772" summary="Adicionado nível de invocador no Shoukan">
+      <created>1613074576045</created>
+      <option name="number" value="03772" />
+      <option name="presentableId" value="LOCAL-03772" />
+      <option name="project" value="LOCAL" />
+      <updated>1613074576045</updated>
+    </task>
+    <option name="localTasksCounter" value="3773" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
