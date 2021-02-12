@@ -84,7 +84,11 @@ public class DeckEvalCommand implements Executable {
 				.setTitle("Análise do deck de " + author.getName())
 				.addField(
 						":crossed_swords: | Cartas Senshi: " + kp.getChampions().size(),
-						":shield: | Cartas EvoGear: %s\n:thermometer: | Custo médio de mana: %s".formatted(kp.getEquipments().size(), Helper.round(manaCost, 2)),
+						":shield: | Peso EvoGear: %s\n:thermometer: | Custo médio de mana: %s"
+								.formatted(
+										kp.getEquipments().stream().mapToInt(Equipment::getTier).sum(),
+										Helper.round(manaCost, 2)
+								),
 						false
 				)
 				.addField(":abacus: | Classes", """
