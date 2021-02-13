@@ -42,7 +42,7 @@ import java.util.concurrent.Executors;
 @Command(
 		name = "descriptografar",
 		aliases = {"decrypt", "dcrpt"},
-		usage = "req_decrypt",
+		usage = "req_key-file",
 		category = Category.BETA
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES})
