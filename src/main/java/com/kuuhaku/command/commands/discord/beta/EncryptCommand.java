@@ -40,7 +40,7 @@ import java.util.concurrent.Executors;
 @Command(
 		name = "criptografar",
 		aliases = {"crypt", "crpt"},
-		usage = "req_encrypt",
+		usage = "req_key-file",
 		category = Category.BETA
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES})
