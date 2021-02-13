@@ -156,8 +156,8 @@ public class ClanConvertCardCommand implements Executable {
 				} else if (cl.getDeck().getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
 					channel.sendMessage("❌ | Seu clã já possui 1 equipamento tier 4!").queue();
 					return;
-				} else if (cl.getDeck().getEquipments().size() == 18) {
-					channel.sendMessage("❌ | Seu clã só pode ter no máximo 18 cartas evogear no deck.").queue();
+				} else if (cl.getDeck().getEquipments().stream().mapToInt(Equipment::getTier).sum() + e.getTier() > 24) {
+					channel.sendMessage("❌ | Seu clã não possui mais espaços para equipamentos no deck.").queue();
 					return;
 				}
 
@@ -199,7 +199,7 @@ public class ClanConvertCardCommand implements Executable {
 				if (cl.getDeck().getFields().stream().filter(f::equals).count() == 3) {
 					channel.sendMessage("❌ | Seu clã só pode ter no máximo 3 cópias de cada campo no deck.").queue();
 					return;
-				} else if (cl.getDeck().getEquipments().size() == 18) {
+				} else if (cl.getDeck().getFields().size() >= 3) {
 					channel.sendMessage("❌ | Seu clã só pode ter no máximo 3 cartas de campo no deck.").queue();
 					return;
 				}

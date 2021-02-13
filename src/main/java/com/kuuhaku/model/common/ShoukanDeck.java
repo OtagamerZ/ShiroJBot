@@ -25,12 +25,14 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.DeckStash;
 import com.kuuhaku.model.persistent.Kawaipon;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -39,6 +41,8 @@ import java.util.stream.Collectors;
 public class ShoukanDeck {
 	private final Account acc;
 	private final Clan clan;
+	final int SENSHI_COLUMNS = 6;
+	final int EVOGEAR_COLUMNS = 4;
 
 	public ShoukanDeck(Account acc, Clan clan) {
 		this.acc = acc;
@@ -65,9 +69,11 @@ public class ShoukanDeck {
 		equips = equips.stream()
 				.peek(e -> e.setAcc(acc))
 				.sorted(Comparator
-						.comparing(Equipment::getTier).reversed()
+						.comparing(Equipment::getTier)
+						.thenComparing(Equipment::getMana).reversed()
 						.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 				)
+				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(e.getTier() - 1, new Equipment())).stream())
 				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))
@@ -86,21 +92,29 @@ public class ShoukanDeck {
 
 		g2d.drawImage(acc.getFrame().getBack(acc, clan), 1746, 2241, null);
 
-		for (int i = 0, y = 0; i < champs.size(); i++, y = i / 6) {
-			g2d.drawImage(champs.get(i).drawCard(false), 76 + 279 * (i - 6 * y), 350 + 420 * y, null);
+		for (int i = 0, y = 0; i < champs.size(); i++, y = i / SENSHI_COLUMNS) {
+			Champion c = champs.get(i);
+			g2d.drawImage(c.drawCard(false), 95 + 279 * (i - SENSHI_COLUMNS * y), 349 + 419 * y, null);
 			if (kp.getDestinyDraw() != null && kp.getDestinyDraw().contains(i))
-				g2d.drawImage(destiny, 66 + 279 * (i - 6 * y), 340 + 420 * y, null);
-			Profile.printCenteredString(StringUtils.abbreviate(champs.get(i).getCard().getName(), 15), 225, 76 + 279 * (i - 6 * y), 740 + 420 * y, g2d);
+				g2d.drawImage(destiny, 85 + 279 * (i - SENSHI_COLUMNS * y), 339 + 419 * y, null);
+			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 225, 95 + 279 * (i - SENSHI_COLUMNS * y), 739 + 419 * y, g2d);
 		}
 
-		for (int i = 0, y = 0; i < equips.size(); i++, y = i / 3) {
-			g2d.drawImage(equips.get(i).drawCard(false), 2022 + 279 * (i - 3 * y), 350 + 420 * y, null);
-			Profile.printCenteredString(StringUtils.abbreviate(equips.get(i).getCard().getName(), 15), 225, 2022 + 279 * (i - 3 * y), 740 + 420 * y, g2d);
+		BufferedImage slotLock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/slot_lock.png")));
+		for (int i = 0, y = 0; i < equips.size(); i++, y = i / EVOGEAR_COLUMNS) {
+			Equipment e = equips.get(i);
+			if (e.getTier() == 0)
+				g2d.drawImage(slotLock, 2048 + 279 * (i - EVOGEAR_COLUMNS * y), 349 + 419 * y, null);
+			else {
+				g2d.drawImage(e.drawCard(false), 2048 + 279 * (i - EVOGEAR_COLUMNS * y), 349 + 419 * y, null);
+				Profile.printCenteredString(StringUtils.abbreviate(e.getCard().getName(), 15), 225, 2048 + 279 * (i - EVOGEAR_COLUMNS * y), 739 + 419 * y, g2d);
+			}
 		}
 
 		for (int i = 0; i < fields.size(); i++) {
-			g2d.drawImage(fields.get(i).drawCard(false), 1746, 771 + (420 * i), null);
-			Profile.printCenteredString(StringUtils.abbreviate(fields.get(i).getCard().getName(), 15), 225, 1746, 1161 + (420 * i), g2d);
+			Field f = fields.get(i);
+			g2d.drawImage(f.drawCard(false), 1769, 769 + (419 * i), null);
+			Profile.printCenteredString(StringUtils.abbreviate(f.getCard().getName(), 15), 225, 1769, 1159 + (419 * i), g2d);
 		}
 
 		return deck;
@@ -121,9 +135,11 @@ public class ShoukanDeck {
 		equips = equips.stream()
 				.peek(e -> e.setAcc(acc))
 				.sorted(Comparator
-						.comparing(Equipment::getTier).reversed()
+						.comparing(Equipment::getTier)
+						.thenComparing(Equipment::getMana).reversed()
 						.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 				)
+				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(e.getTier() - 1, new Equipment())).stream())
 				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))
@@ -142,21 +158,29 @@ public class ShoukanDeck {
 
 		g2d.drawImage(acc.getFrame().getBack(acc, clan), 1746, 2241, null);
 
-		for (int i = 0, y = 0; i < champs.size(); i++, y = i / 6) {
-			g2d.drawImage(champs.get(i).drawCard(false), 76 + 279 * (i - 6 * y), 350 + 420 * y, null);
+		for (int i = 0, y = 0; i < champs.size(); i++, y = i / SENSHI_COLUMNS) {
+			Champion c = champs.get(i);
+			g2d.drawImage(c.drawCard(false), 95 + 279 * (i - SENSHI_COLUMNS * y), 349 + 419 * y, null);
 			if (ds.getDestinyDraw() != null && ds.getDestinyDraw().contains(i))
-				g2d.drawImage(destiny, 66 + 279 * (i - 6 * y), 340 + 420 * y, null);
-			Profile.printCenteredString(StringUtils.abbreviate(champs.get(i).getCard().getName(), 15), 225, 76 + 279 * (i - 6 * y), 740 + 420 * y, g2d);
+				g2d.drawImage(destiny, 85 + 279 * (i - SENSHI_COLUMNS * y), 339 + 419 * y, null);
+			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 225, 95 + 279 * (i - SENSHI_COLUMNS * y), 739 + 419 * y, g2d);
 		}
 
-		for (int i = 0, y = 0; i < equips.size(); i++, y = i / 3) {
-			g2d.drawImage(equips.get(i).drawCard(false), 2022 + 279 * (i - 3 * y), 350 + 420 * y, null);
-			Profile.printCenteredString(StringUtils.abbreviate(equips.get(i).getCard().getName(), 15), 225, 2022 + 279 * (i - 3 * y), 740 + 420 * y, g2d);
+		BufferedImage slotLock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/slot_lock.png")));
+		for (int i = 0, y = 0; i < equips.size(); i++, y = i / EVOGEAR_COLUMNS) {
+			Equipment e = equips.get(i);
+			if (e.getTier() == 0)
+				g2d.drawImage(slotLock, 2048 + 279 * (i - EVOGEAR_COLUMNS * y), 349 + 419 * y, null);
+			else {
+				g2d.drawImage(e.drawCard(false), 2048 + 279 * (i - EVOGEAR_COLUMNS * y), 349 + 419 * y, null);
+				Profile.printCenteredString(StringUtils.abbreviate(e.getCard().getName(), 15), 225, 2048 + 279 * (i - EVOGEAR_COLUMNS * y), 739 + 419 * y, g2d);
+			}
 		}
 
 		for (int i = 0; i < fields.size(); i++) {
-			g2d.drawImage(fields.get(i).drawCard(false), 1746, 771 + (420 * i), null);
-			Profile.printCenteredString(StringUtils.abbreviate(fields.get(i).getCard().getName(), 15), 225, 1746, 1161 + (420 * i), g2d);
+			Field f = fields.get(i);
+			g2d.drawImage(f.drawCard(false), 1769, 769 + (419 * i), null);
+			Profile.printCenteredString(StringUtils.abbreviate(f.getCard().getName(), 15), 225, 1769, 1159 + (419 * i), g2d);
 		}
 
 		return deck;

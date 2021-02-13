@@ -13,8 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização na biblioteca de paginação">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/EncryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/EncryptCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado peso aos equipamentos">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,6 +180,19 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1083,62 +1096,9 @@
       <workItem from="1613045430076" duration="45000" />
       <workItem from="1613061170734" duration="4531000" />
       <workItem from="1613066841045" duration="2730000" />
-    </task>
-    <task id="LOCAL-03724" summary="Melhoria no framework de efeitos por turno">
-      <created>1612578886929</created>
-      <option name="number" value="03724" />
-      <option name="presentableId" value="LOCAL-03724" />
-      <option name="project" value="LOCAL" />
-      <updated>1612578886929</updated>
-    </task>
-    <task id="LOCAL-03725" summary="Melhoria no framework de efeitos por turno">
-      <created>1612579457074</created>
-      <option name="number" value="03725" />
-      <option name="presentableId" value="LOCAL-03725" />
-      <option name="project" value="LOCAL" />
-      <updated>1612579457074</updated>
-    </task>
-    <task id="LOCAL-03726" summary="Melhoria no framework de efeitos por turno">
-      <created>1612583422774</created>
-      <option name="number" value="03726" />
-      <option name="presentableId" value="LOCAL-03726" />
-      <option name="project" value="LOCAL" />
-      <updated>1612583422774</updated>
-    </task>
-    <task id="LOCAL-03727" summary="Correção no encerramento das partidas">
-      <created>1612636367916</created>
-      <option name="number" value="03727" />
-      <option name="presentableId" value="LOCAL-03727" />
-      <option name="project" value="LOCAL" />
-      <updated>1612636367920</updated>
-    </task>
-    <task id="LOCAL-03728" summary="Correção no encerramento das partidas">
-      <created>1612636450901</created>
-      <option name="number" value="03728" />
-      <option name="presentableId" value="LOCAL-03728" />
-      <option name="project" value="LOCAL" />
-      <updated>1612636450901</updated>
-    </task>
-    <task id="LOCAL-03729" summary="Correção na listagem das cartas elegíveis">
-      <created>1612668490531</created>
-      <option name="number" value="03729" />
-      <option name="presentableId" value="LOCAL-03729" />
-      <option name="project" value="LOCAL" />
-      <updated>1612668490531</updated>
-    </task>
-    <task id="LOCAL-03730" summary="Clones agora possuem custo de mana 0 e não vão mais para o cemitério">
-      <created>1612668757778</created>
-      <option name="number" value="03730" />
-      <option name="presentableId" value="LOCAL-03730" />
-      <option name="project" value="LOCAL" />
-      <updated>1612668757778</updated>
-    </task>
-    <task id="LOCAL-03731" summary="Correções menores">
-      <created>1612800493032</created>
-      <option name="number" value="03731" />
-      <option name="presentableId" value="LOCAL-03731" />
-      <option name="project" value="LOCAL" />
-      <updated>1612800493033</updated>
+      <workItem from="1613074442311" duration="2088000" />
+      <workItem from="1613131012926" duration="5686000" />
+      <workItem from="1613145998418" duration="7753000" />
     </task>
     <task id="LOCAL-03732" summary="Correções menores">
       <created>1612800851034</created>
@@ -1420,14 +1380,70 @@
       <option name="project" value="LOCAL" />
       <updated>1613072324952</updated>
     </task>
-    <task id="LOCAL-03772" summary="Atualização na biblioteca de paginação">
-      <created>1613188583838</created>
+    <task id="LOCAL-03772" summary="Adicionado nível de invocador no Shoukan">
+      <created>1613074576045</created>
       <option name="number" value="03772" />
       <option name="presentableId" value="LOCAL-03772" />
       <option name="project" value="LOCAL" />
-      <updated>1613188583838</updated>
+      <updated>1613074576045</updated>
     </task>
-    <option name="localTasksCounter" value="3773" />
+    <task id="LOCAL-03773" summary="Adicionado peso aos equipamentos">
+      <created>1613136694208</created>
+      <option name="number" value="03773" />
+      <option name="presentableId" value="LOCAL-03773" />
+      <option name="project" value="LOCAL" />
+      <updated>1613136694209</updated>
+    </task>
+    <task id="LOCAL-03774" summary="Adicionado peso aos equipamentos">
+      <created>1613136782295</created>
+      <option name="number" value="03774" />
+      <option name="presentableId" value="LOCAL-03774" />
+      <option name="project" value="LOCAL" />
+      <updated>1613136782295</updated>
+    </task>
+    <task id="LOCAL-03775" summary="Adicionado peso aos equipamentos">
+      <created>1613136858132</created>
+      <option name="number" value="03775" />
+      <option name="presentableId" value="LOCAL-03775" />
+      <option name="project" value="LOCAL" />
+      <updated>1613136858132</updated>
+    </task>
+    <task id="LOCAL-03776" summary="Adicionado peso aos equipamentos">
+      <created>1613137091342</created>
+      <option name="number" value="03776" />
+      <option name="presentableId" value="LOCAL-03776" />
+      <option name="project" value="LOCAL" />
+      <updated>1613137091342</updated>
+    </task>
+    <task id="LOCAL-03777" summary="Adicionado peso aos equipamentos">
+      <created>1613137178650</created>
+      <option name="number" value="03777" />
+      <option name="presentableId" value="LOCAL-03777" />
+      <option name="project" value="LOCAL" />
+      <updated>1613137178650</updated>
+    </task>
+    <task id="LOCAL-03778" summary="Adicionado peso aos equipamentos">
+      <created>1613148438963</created>
+      <option name="number" value="03778" />
+      <option name="presentableId" value="LOCAL-03778" />
+      <option name="project" value="LOCAL" />
+      <updated>1613148438964</updated>
+    </task>
+    <task id="LOCAL-03779" summary="Adicionado peso aos equipamentos">
+      <created>1613160771537</created>
+      <option name="number" value="03779" />
+      <option name="presentableId" value="LOCAL-03779" />
+      <option name="project" value="LOCAL" />
+      <updated>1613160771538</updated>
+    </task>
+    <task id="LOCAL-03780" summary="Adicionado peso aos equipamentos">
+      <created>1613161737518</created>
+      <option name="number" value="03780" />
+      <option name="presentableId" value="LOCAL-03780" />
+      <option name="project" value="LOCAL" />
+      <updated>1613161737518</updated>
+    </task>
+    <option name="localTasksCounter" value="3781" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1537,8 +1553,8 @@
     <MESSAGE value="Melhoria no comando de estatística de uso" />
     <MESSAGE value="Correção no comando de casar" />
     <MESSAGE value="Adicionado nível de invocador no Shoukan" />
-    <MESSAGE value="Atualização na biblioteca de paginação" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualização na biblioteca de paginação" />
+    <MESSAGE value="Adicionado peso aos equipamentos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionado peso aos equipamentos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
