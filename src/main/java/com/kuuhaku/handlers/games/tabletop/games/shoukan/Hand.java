@@ -52,7 +52,6 @@ public class Hand {
 	private int manaPerTurn = 0;
 	private int mana = 0;
 	private int hp = 0;
-	private int techLevel = 1;
 	private int suppressTime = 0;
 	private int lockTime = 0;
 	private int manaReturn = 0;
@@ -89,8 +88,7 @@ public class Hand {
 			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
 			maxCards = Helper.clamp(game.getCustom().optInt("cartasmax", 5), 1, 10);
 			manaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
-			techLevel = Helper.clamp(game.getCustom().optInt("nivelini", 1), 1, 4);
-
+			
 			if (game.getCustom().optBoolean("semequip"))
 				getDeque().removeIf(d -> d instanceof Equipment);
 			if (game.getCustom().optBoolean("semfield"))
@@ -182,8 +180,7 @@ public class Hand {
 			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
 			maxCards = Helper.clamp(game.getCustom().optInt("cartasmax", 5), 1, 10);
 			manaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
-			techLevel = Helper.clamp(game.getCustom().optInt("nivelini", 1), 1, 4);
-
+			
 			if (game.getCustom().optBoolean("semequip"))
 				getDeque().removeIf(d -> d instanceof Equipment);
 			if (game.getCustom().optBoolean("semfield"))
@@ -616,17 +613,5 @@ public class Hand {
 
 	public void decreaseNullTime() {
 		nullTime = Math.max(0, nullTime - 1);
-	}
-
-	public int getTechLevel() {
-		return techLevel;
-	}
-
-	public void increaseTechLevel() {
-		techLevel += 1;
-	}
-
-	public void decreaseTechLevel() {
-		techLevel = Math.max(1, techLevel - 1);
 	}
 }
