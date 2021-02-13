@@ -13,10 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado nível de invocador no Shoukan">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização na biblioteca de paginação">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/EncryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/EncryptCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1086,13 +1084,6 @@
       <workItem from="1613061170734" duration="4531000" />
       <workItem from="1613066841045" duration="2730000" />
     </task>
-    <task id="LOCAL-03723" summary="Melhoria no framework de efeitos por turno">
-      <created>1612578633029</created>
-      <option name="number" value="03723" />
-      <option name="presentableId" value="LOCAL-03723" />
-      <option name="project" value="LOCAL" />
-      <updated>1612578633029</updated>
-    </task>
     <task id="LOCAL-03724" summary="Melhoria no framework de efeitos por turno">
       <created>1612578886929</created>
       <option name="number" value="03724" />
@@ -1429,7 +1420,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613072324952</updated>
     </task>
-    <option name="localTasksCounter" value="3772" />
+    <task id="LOCAL-03772" summary="Atualização na biblioteca de paginação">
+      <created>1613188583838</created>
+      <option name="number" value="03772" />
+      <option name="presentableId" value="LOCAL-03772" />
+      <option name="project" value="LOCAL" />
+      <updated>1613188583838</updated>
+    </task>
+    <option name="localTasksCounter" value="3773" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1515,7 +1513,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de requisitos de permissão" />
     <MESSAGE value="Atualização da biblioteca de paginação" />
     <MESSAGE value="Implementações de sugestões" />
     <MESSAGE value="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;" />
@@ -1540,7 +1537,8 @@
     <MESSAGE value="Melhoria no comando de estatística de uso" />
     <MESSAGE value="Correção no comando de casar" />
     <MESSAGE value="Adicionado nível de invocador no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionado nível de invocador no Shoukan" />
+    <MESSAGE value="Atualização na biblioteca de paginação" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualização na biblioteca de paginação" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
