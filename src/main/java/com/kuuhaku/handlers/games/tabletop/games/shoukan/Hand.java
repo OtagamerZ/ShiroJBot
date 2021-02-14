@@ -120,7 +120,7 @@ public class Hand {
 					assert f != null;
 					f.setAcc(AccountDAO.getAccount(user.getId()));
 					game.getArena().setField(f);
-					this.deque.removeIf(d -> d instanceof Champion || d instanceof Field);
+					deque.removeIf(d -> d instanceof Champion || d instanceof Field);
 					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
 						Champion c = CardDAO.getChampion(name);
 						deque.addAll(Collections.nCopies(6, c));

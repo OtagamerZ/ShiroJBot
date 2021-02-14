@@ -16,6 +16,7 @@
     <content url="file://$MODULE_DIR$/../../src/test" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="com.kuuhaku.shiro-j-bot.main" />
     <orderEntry type="library" name="Gradle: com.github.ygimenez:Pagination-Utils:2.1.4" level="project" />
     <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.2.0_227" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:discord-webhooks:0.3.1" level="project" />
@@ -101,15 +102,14 @@
     <orderEntry type="library" name="Gradle: org.dom4j:dom4j:2.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.glassfish.jaxb:jaxb-runtime:2.3.3" level="project" />
     <orderEntry type="library" name="Gradle: com.mchange:mchange-commons-java:0.2.15" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.twitch4j.twitch4j:twitch4j:1.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.twitch4j.twitch4j:twitch4j-chat:1.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.twitch4j.twitch4j:twitch4j-graphql:1.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.twitch4j.twitch4j:twitch4j-helix:1.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.twitch4j.twitch4j:twitch4j-kraken:1.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.twitch4j.twitch4j:twitch4j-messaginginterface:1.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.twitch4j.twitch4j:twitch4j-pubsub:1.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.twitch4j.twitch4j:twitch4j-common:1.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.twitch4j.twitch4j:twitch4j-auth:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.twitch4j:twitch4j-chat:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.twitch4j:twitch4j-helix:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.twitch4j:twitch4j-kraken:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.twitch4j:twitch4j-messaginginterface:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.twitch4j:twitch4j-pubsub:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.twitch4j:twitch4j-graphql:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.twitch4j:twitch4j-common:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.ben-manes.caffeine:caffeine:2.8.5" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-jul:2.13.3" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:jul-to-slf4j:1.7.30" level="project" />
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
@@ -170,18 +170,19 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.glassfish.jaxb:txw2:2.3.3" level="project" />
     <orderEntry type="library" name="Gradle: com.sun.istack:istack-commons-runtime:3.0.11" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.ben-manes.caffeine:caffeine:2.8.5" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.twitch4j:twitch4j-auth:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.vladimir-bukhtoyarov:bucket4j-core:4.7.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.apollographql.apollo:apollo-runtime:1.2.2" level="project" />
-    <orderEntry type="library" name="Gradle: com.netflix.hystrix:hystrix-core:1.5.18" level="project" />
     <orderEntry type="library" name="Gradle: io.github.openfeign:feign-slf4j:11.0" level="project" />
     <orderEntry type="library" name="Gradle: io.github.openfeign:feign-okhttp:11.0" level="project" />
     <orderEntry type="library" name="Gradle: io.github.openfeign:feign-jackson:11.0" level="project" />
     <orderEntry type="library" name="Gradle: commons-configuration:commons-configuration:1.10" level="project" />
     <orderEntry type="library" name="Gradle: io.github.openfeign:feign-hystrix:11.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.apollographql.apollo:apollo-runtime:1.2.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.netflix.hystrix:hystrix-core:1.5.18" level="project" />
     <orderEntry type="library" name="Gradle: com.github.philippheuer.events4j:events4j-core:0.9.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.philippheuer.events4j:events4j-handler-simple:0.9.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.philippheuer.credentialmanager:credentialmanager:0.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:3.4.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.4.0" level="project" />
     <orderEntry type="library" name="Gradle: net.minidev:json-smart:2.3" level="project" />
     <orderEntry type="library" name="Gradle: net.bytebuddy:byte-buddy-agent:1.10.14" level="project" />
     <orderEntry type="library" name="Gradle: org.objenesis:objenesis:2.6" level="project" />
@@ -199,13 +200,12 @@
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-to-slf4j:2.13.3" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-classic:1.2.3" level="project" />
-    <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:3.4.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.4.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.apollographql.apollo:apollo-api:1.2.2" level="project" />
-    <orderEntry type="library" name="Gradle: com.netflix.archaius:archaius-core:0.7.6" level="project" />
-    <orderEntry type="library" name="Gradle: io.reactivex:rxjava:1.3.8" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.philippheuer.credentialmanager:credentialmanager:0.1.1" level="project" />
     <orderEntry type="library" name="Gradle: io.github.openfeign:feign-core:11.0" level="project" />
     <orderEntry type="library" name="Gradle: commons-lang:commons-lang:2.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.netflix.archaius:archaius-core:0.7.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.apollographql.apollo:apollo-api:1.2.2" level="project" />
+    <orderEntry type="library" name="Gradle: io.reactivex:rxjava:1.3.8" level="project" />
     <orderEntry type="library" name="Gradle: com.github.philippheuer.events4j:events4j-api:0.9.1" level="project" />
     <orderEntry type="library" name="Gradle: net.minidev:accessors-smart:1.2" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.platform:junit-platform-commons:1.6.2" level="project" />
