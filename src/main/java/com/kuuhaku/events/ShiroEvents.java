@@ -311,10 +311,10 @@ public class ShiroEvents extends ListenerAdapter {
 					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.stripEmotesAndMentions(rawMessage));
 				}
 
-				if (!ShiroInfo.getStaff().contains(author.getId()) && Helper.isPinging(message, ShiroInfo.getNiiChan())) {
+				/*if (!ShiroInfo.getStaff().contains(author.getId()) && Helper.isPinging(message, ShiroInfo.getNiiChan())) {
 					channel.sendMessage("✅ | Você comprou um \"Pingue o Sora por **1.000 de dívida**\" com sucesso!").queue();
 					acc.addLoan(1000);
-				}
+				}*/
 
 				if (!TagDAO.getTagById(guild.getOwnerId()).isToxic()) {
 					if (gc.isKawaiponEnabled()) Helper.spawnKawaipon(gc, channel);
