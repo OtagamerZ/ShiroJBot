@@ -865,7 +865,7 @@ public class ShiroEvents extends ListenerAdapter {
 						c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
 								.queue(s -> {
 									EmbedBuilder eb = new ColorlessEmbedBuilder()
-											.setDescription(event.getMessage().getContentRaw())
+											.setDescription((event.getMessage().getContentRaw() + "\n\n" + (event.getMessage().getAttachments().size() > 0 ? "`Contém " + event.getMessage().getAttachments().size() + " anexos`" : "")).trim())
 											.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl())
 											.setFooter(event.getAuthor().getId())
 											.setTimestamp(Instant.now());
