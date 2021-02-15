@@ -50,13 +50,12 @@ public class EmoteCommand implements Executable {
 			Emote emt = message.getEmotes().get(0);
 			Emote cached = Main.getShiroShards().getEmoteById(emt.getId());
 			EmbedBuilder eb = new EmbedBuilder()
-					.addField(emt.getName(), """
-							**Guild:** %s
-							**ID:** %s
-							""".formatted(
-							cached == null ? "desconhecido" : Objects.requireNonNull(cached.getGuild()).getName(),
-							emt.getId()
-					), true)
+					.setTitle(emt.getName(), emt.getImageUrl())
+					.addField(
+							"Guild: " + (cached == null ? "desconhecido" : Objects.requireNonNull(cached.getGuild()).getName()),
+							"**ID:** " + emt.getId(),
+							true
+					)
 					.setThumbnail(emt.getImageUrl())
 					.setColor(Helper.colorThief(emt.getImageUrl()));
 
