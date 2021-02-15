@@ -831,20 +831,29 @@ public class Shoukan extends GlobalGame {
 					if (postCombat()) return;
 				}
 				if (is[0] > 0) {
-					Champion c = arena.getSlots().get(next).get(is[0] - 1).getTop();
+					Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
 					if (c != null && c.hasEffect())
-						c.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+						c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
 				}
 				if (is[0] < 4) {
-					Champion c = arena.getSlots().get(next).get(is[0] + 1).getTop();
+					Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
 					if (c != null && c.hasEffect())
-						c.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+						c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
 				}
 
 				if (his.hasEffect() && effectLock == 0) {
 					his.getEffect(new EffectParameters(EffectTrigger.ON_DEFEND, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 
 					if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
+						if (his.hasEffect()) {
+							his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+							if (postCombat()) return;
+						}
+						if (eot.size() > 0) {
+							applyEot(EffectTrigger.POST_DEFENSE, next, is[1]);
+							if (postCombat()) return;
+						}
+
 						if (!postCombat()) {
 							resetTimerKeepTurn();
 							moveLock = true;
