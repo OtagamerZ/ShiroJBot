@@ -905,14 +905,14 @@ public class Shoukan extends GlobalGame {
 		if (!yours.getCard().getId().equals("DECOY")) {
 			yPower = Math.round(
 					yours.getFinAtk() *
-							(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+					(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
 			);
 		} else {
 			yPower = 0;
 		}
 
 		int hPower;
-		if (his.isDefending() || his.getStun() > 0) {
+		if (his.isDefending()) {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
 				his.setDefending(true);
@@ -980,7 +980,7 @@ public class Shoukan extends GlobalGame {
 						int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
 						Hand enemy = hands.get(next);
 						enemy.removeHp(apDamage);
-					} else if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+					} else if (!his.isDefending() && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
 						Hand enemy = hands.get(next);
 						if (yours.getBonus().getSpecialData().has("totalDamage"))
 							enemy.removeHp(yPower);
@@ -1216,14 +1216,14 @@ public class Shoukan extends GlobalGame {
 		if (!yours.getCard().getId().equals("DECOY")) {
 			yPower = Math.round(
 					yours.getFinAtk() *
-							(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+					(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
 			);
 		} else {
 			yPower = 0;
 		}
 
 		int hPower;
-		if (his.isDefending() || his.getStun() > 0) {
+		if (his.isDefending()) {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
 				his.setDefending(true);
@@ -1291,7 +1291,7 @@ public class Shoukan extends GlobalGame {
 						int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
 						Hand enemy = hands.get(current);
 						enemy.removeHp(apDamage);
-					} else if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+					} else if (!his.isDefending() && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
 						Hand enemy = hands.get(current);
 						if (yours.getBonus().getSpecialData().has("totalDamage"))
 							enemy.removeHp(yPower);
@@ -1964,9 +1964,6 @@ public class Shoukan extends GlobalGame {
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
-						if (c.getStun() > 0)
-							c.setDefending(true);
-
 						if (c.hasEffect() && effectLock == 0) {
 							c.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, i, current, Duelists.of(c, i, null, -1), channel));
 							if (postCombat()) return;
@@ -2208,9 +2205,6 @@ public class Shoukan extends GlobalGame {
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
-							if (c.getStun() > 0)
-								c.setDefending(true);
-
 							if (c.hasEffect() && effectLock == 0) {
 								c.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, i, current, Duelists.of(c, i, null, -1), channel));
 								if (postCombat()) return;
