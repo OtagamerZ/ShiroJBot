@@ -28,6 +28,7 @@ import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
@@ -56,9 +57,18 @@ public class LobbyCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length > 0 && Helper.equalsAny(args[0], "sair", "exit")) {
 			MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
-			Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
-			Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
-			channel.sendMessage("Você saiu do saguão com sucesso.").queue();
+			MatchMaking mm = Main.getInfo().getMatchMaking();
+
+			if (mm.getSoloLobby().containsKey(mmr)) {
+				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
+				channel.sendMessage("Você saiu do saguão SOLO com sucesso.").queue();
+			} else if (mm.getDuoLobby().containsKey(mmr)) {
+				Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
+				channel.sendMessage("Você saiu do saguão DUO com sucesso.").queue();
+			} else {
+				channel.sendMessage("❌ | Você não está em nenhum saguão.").queue();
+				return;
+			}
 			return;
 		} else if (args.length < 1 || !Helper.equalsAny(args[0], "solo", "duo")) {
 			channel.sendMessage("❌ | Você precisa informar o tipo de fila que deseja entrar (`SOLO` ou `DUO`)").queue();
