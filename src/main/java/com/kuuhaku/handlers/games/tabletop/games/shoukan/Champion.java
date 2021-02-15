@@ -299,7 +299,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean isDefending() {
-		return flipped || defending;
+		return flipped || defending || stun > 0;
 	}
 
 	public void setDefending(boolean defending) {
@@ -542,6 +542,7 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setStun(int stun) {
 		this.stun = stun;
+		if (this.stun > 0) defending = true;
 	}
 
 	public void reduceStun() {
