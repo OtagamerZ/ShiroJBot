@@ -13,8 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado peso aos equipamentos">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos efeitos de assistência">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/EmoteCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -130,10 +130,24 @@
     <property name="settings.editor.selected.configurable" value="project.propCompiler" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\assets" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\tiers" />
+      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
+    </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.utils.Helper" />
       <recent name="com.kuuhaku.controller.sqlite.GuildDAO" />
       <recent name="com.kuuhaku.handlers.games.rpg.Utils" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners\apprentice" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners\initiate" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
     </key>
     <key name="IntroduceConstantDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.managers.CommandManager" />
@@ -142,26 +156,12 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\assets" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\tiers" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
-    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.information" />
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
       <recent name="com.kuuhaku.command.commands" />
       <recent name="com.kuuhaku.model.annotations" />
       <recent name="com.kuuhaku.handlers.games.tabletop.games.shoukan" />
-      <recent name="com.kuuhaku.command.commands.discord.information" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners\apprentice" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners\initiate" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\trophy.xcf" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -181,17 +181,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1102,27 +1091,7 @@
       <workItem from="1613339601518" duration="70000" />
       <workItem from="1613342023500" duration="1877000" />
       <workItem from="1613350048233" duration="4725000" />
-    </task>
-    <task id="LOCAL-03739" summary="Correções menores">
-      <created>1612807646102</created>
-      <option name="number" value="03739" />
-      <option name="presentableId" value="LOCAL-03739" />
-      <option name="project" value="LOCAL" />
-      <updated>1612807646102</updated>
-    </task>
-    <task id="LOCAL-03740" summary="Correções menores">
-      <created>1612812657086</created>
-      <option name="number" value="03740" />
-      <option name="presentableId" value="LOCAL-03740" />
-      <option name="project" value="LOCAL" />
-      <updated>1612812657086</updated>
-    </task>
-    <task id="LOCAL-03741" summary="Correções menores">
-      <created>1612813022187</created>
-      <option name="number" value="03741" />
-      <option name="presentableId" value="LOCAL-03741" />
-      <option name="project" value="LOCAL" />
-      <updated>1612813022187</updated>
+      <workItem from="1613404799141" duration="1518000" />
     </task>
     <task id="LOCAL-03742" summary="Correções menores">
       <created>1612816266529</created>
@@ -1446,7 +1415,28 @@
       <option name="project" value="LOCAL" />
       <updated>1613353816604</updated>
     </task>
-    <option name="localTasksCounter" value="3788" />
+    <task id="LOCAL-03788" summary="Correção nos efeitos de assistência">
+      <created>1613395805753</created>
+      <option name="number" value="03788" />
+      <option name="presentableId" value="LOCAL-03788" />
+      <option name="project" value="LOCAL" />
+      <updated>1613395805754</updated>
+    </task>
+    <task id="LOCAL-03789" summary="Correção nos efeitos de assistência">
+      <created>1613396029220</created>
+      <option name="number" value="03789" />
+      <option name="presentableId" value="LOCAL-03789" />
+      <option name="project" value="LOCAL" />
+      <updated>1613396029220</updated>
+    </task>
+    <task id="LOCAL-03790" summary="Correção nos efeitos de assistência">
+      <created>1613396155639</created>
+      <option name="number" value="03790" />
+      <option name="presentableId" value="LOCAL-03790" />
+      <option name="project" value="LOCAL" />
+      <updated>1613396155639</updated>
+    </task>
+    <option name="localTasksCounter" value="3791" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1532,7 +1522,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Uso de multithreading na geração da arena Shoukan" />
     <MESSAGE value="Remoção do multithreading no Shoukan" />
     <MESSAGE value="Imagens das arenas agora são armazenadas pela Shiro ao invés de enviadas ao Discord" />
     <MESSAGE value="Reversão do último commit" />
@@ -1557,7 +1546,8 @@
     <MESSAGE value="Atualização na biblioteca de paginação" />
     <MESSAGE value="Correção nos jogos em equipe" />
     <MESSAGE value="Adição de efeitos por cartas adjacentes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de efeitos por cartas adjacentes" />
+    <MESSAGE value="Correção nos efeitos de assistência" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nos efeitos de assistência" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
