@@ -98,6 +98,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient int efctAtk = 0;
 	private transient int efctDef = 0;
 	private transient int stun = 0;
+	private transient double dodge = 0;
 
 	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
 		this.card = card;
@@ -528,6 +529,7 @@ public class Champion implements Drawable, Cloneable {
 		efctAtk = 0;
 		efctDef = 0;
 		stun = 0;
+		dodge = 0;
 	}
 
 	public Set<String> getRequiredCards() {
@@ -544,6 +546,14 @@ public class Champion implements Drawable, Cloneable {
 
 	public void reduceStun() {
 		this.stun--;
+	}
+
+	public double getDodge() {
+		return dodge;
+	}
+
+	public void setDodge(double dodge) {
+		this.dodge = dodge;
 	}
 
 	@Override
