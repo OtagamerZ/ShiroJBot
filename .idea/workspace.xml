@@ -14,10 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de efeitos por cartas adjacentes">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1092,14 +1091,7 @@
       <workItem from="1613189032524" duration="99000" />
       <workItem from="1613339601518" duration="70000" />
       <workItem from="1613342023500" duration="1877000" />
-      <workItem from="1613350048233" duration="3626000" />
-    </task>
-    <task id="LOCAL-03738" summary="Correções menores">
-      <created>1612806820660</created>
-      <option name="number" value="03738" />
-      <option name="presentableId" value="LOCAL-03738" />
-      <option name="project" value="LOCAL" />
-      <updated>1612806820660</updated>
+      <workItem from="1613350048233" duration="4725000" />
     </task>
     <task id="LOCAL-03739" summary="Correções menores">
       <created>1612807646102</created>
@@ -1437,7 +1429,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613353074378</updated>
     </task>
-    <option name="localTasksCounter" value="3787" />
+    <task id="LOCAL-03787" summary="Adição de efeitos por cartas adjacentes">
+      <created>1613353816604</created>
+      <option name="number" value="03787" />
+      <option name="presentableId" value="LOCAL-03787" />
+      <option name="project" value="LOCAL" />
+      <updated>1613353816604</updated>
+    </task>
+    <option name="localTasksCounter" value="3788" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1447,12 +1446,12 @@
     <option name="UPDATE_COPYRIGHT" value="true" />
   </component>
   <component name="Vcs.Log.History.Properties">
-    <option name="COLUMN_ORDER">
+    <option name="COLUMN_ID_ORDER">
       <list>
-        <option value="0" />
-        <option value="2" />
-        <option value="3" />
-        <option value="1" />
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
       </list>
     </option>
   </component>
