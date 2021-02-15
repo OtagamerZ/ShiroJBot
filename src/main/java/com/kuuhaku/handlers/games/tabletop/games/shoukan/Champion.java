@@ -553,7 +553,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setDodge(double dodge) {
-		this.dodge = dodge;
+		this.dodge = Helper.clamp(dodge, 0, 100);
 	}
 
 	@Override
