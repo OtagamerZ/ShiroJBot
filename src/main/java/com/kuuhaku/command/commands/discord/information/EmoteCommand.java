@@ -51,8 +51,8 @@ public class EmoteCommand implements Executable {
 			Emote cached = Main.getShiroShards().getEmoteById(emt.getId());
 			EmbedBuilder eb = new EmbedBuilder()
 					.addField(emt.getName(), """
-							Guild: %s
-							ID: %s
+							**Guild:** %s
+							**ID:** %s
 							""".formatted(
 							cached == null ? "desconhecido" : Objects.requireNonNull(cached.getGuild()).getName(),
 							emt.getId()
