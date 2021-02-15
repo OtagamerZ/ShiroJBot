@@ -75,6 +75,7 @@ public class Hand {
 		);
 		deque.addAll(kp.getEquipments());
 		deque.addAll(kp.getFields());
+
 		Account acc = AccountDAO.getAccount(user.getId());
 		for (Drawable d : deque) d.setAcc(acc);
 
@@ -407,6 +408,10 @@ public class Hand {
 		for (int i = 0; i < toDraw; i++) manualDraw();
 	}
 
+	public Shoukan getGame() {
+		return game;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -424,7 +429,9 @@ public class Hand {
 	}
 
 	public List<Drawable> getAvailableCards() {
-		return cards.stream().filter(Drawable::isAvailable).collect(Collectors.toList());
+		return cards.stream()
+				.filter(Drawable::isAvailable)
+				.collect(Collectors.toList());
 	}
 
 	public List<Drawable> getDestinyDeck() {
