@@ -63,7 +63,7 @@ public class JibrilEmoteListCommand implements Executable {
 			for (int i = 0; i < emotes.size(); i++) {
 				eb.clear();
 
-				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Jibril:");
+				eb.setTitle("<a:SmugDance:780832902505300058> Emotes disponíveis para a Jibril:");
 				for (Emote e : emotes.get(i)) {
 					eb.addField("Emote: " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false);
 				}
