@@ -13,9 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos jogos em equipe">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de efeitos por cartas adjacentes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1091,14 +1090,7 @@
       <workItem from="1613189032524" duration="99000" />
       <workItem from="1613339601518" duration="70000" />
       <workItem from="1613342023500" duration="1877000" />
-      <workItem from="1613350048233" duration="1558000" />
-    </task>
-    <task id="LOCAL-03734" summary="Correções menores">
-      <created>1612801439200</created>
-      <option name="number" value="03734" />
-      <option name="presentableId" value="LOCAL-03734" />
-      <option name="project" value="LOCAL" />
-      <updated>1612801439200</updated>
+      <workItem from="1613350048233" duration="2451000" />
     </task>
     <task id="LOCAL-03735" summary="Correções menores">
       <created>1612802058451</created>
@@ -1436,7 +1428,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613343768107</updated>
     </task>
-    <option name="localTasksCounter" value="3783" />
+    <task id="LOCAL-03783" summary="Adição de efeitos por cartas adjacentes">
+      <created>1613351915347</created>
+      <option name="number" value="03783" />
+      <option name="presentableId" value="LOCAL-03783" />
+      <option name="project" value="LOCAL" />
+      <updated>1613351915347</updated>
+    </task>
+    <option name="localTasksCounter" value="3784" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1522,7 +1521,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;" />
     <MESSAGE value="Uso de multithreading na geração da arena Shoukan" />
     <MESSAGE value="Remoção do multithreading no Shoukan" />
     <MESSAGE value="Imagens das arenas agora são armazenadas pela Shiro ao invés de enviadas ao Discord" />
@@ -1547,7 +1545,8 @@
     <MESSAGE value="Adicionado peso aos equipamentos" />
     <MESSAGE value="Atualização na biblioteca de paginação" />
     <MESSAGE value="Correção nos jogos em equipe" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nos jogos em equipe" />
+    <MESSAGE value="Adição de efeitos por cartas adjacentes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de efeitos por cartas adjacentes" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

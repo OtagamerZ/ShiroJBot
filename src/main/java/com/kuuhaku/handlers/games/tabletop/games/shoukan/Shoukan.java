@@ -748,8 +748,8 @@ public class Shoukan extends GlobalGame {
 
 					int yPower = Math.round(
 							c.getFinAtk() *
-							(arena.getField() == null || c.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || c.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f)) *
-							(getRound() < 2 ? 0.5f : 1)
+									(arena.getField() == null || c.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || c.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f)) *
+									(getRound() < 2 ? 0.5f : 1)
 					);
 
 					if (!c.getCard().getId().equals("DECOY")) enemy.removeHp(yPower);
@@ -896,7 +896,7 @@ public class Shoukan extends GlobalGame {
 		if (!yours.getCard().getId().equals("DECOY")) {
 			yPower = Math.round(
 					yours.getFinAtk() *
-					(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+							(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
 			);
 		} else {
 			yPower = 0;
@@ -918,12 +918,12 @@ public class Shoukan extends GlobalGame {
 			}
 			hPower = Math.round(
 					his.getFinDef() *
-					(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 			);
 		} else if (!his.getCard().getId().equals("DECOY")) {
 			hPower = Math.round(
 					his.getFinAtk() *
-					(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 			);
 		} else {
 			hPower = 0;
@@ -950,48 +950,10 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 
-			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-				if (his.isDefending() && yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.ARMORPIERCING)) {
-					int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
-					Hand enemy = hands.get(next);
-					enemy.removeHp(apDamage);
-				} else if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
-					Hand enemy = hands.get(next);
-					if (yours.getBonus().getSpecialData().has("totalDamage"))
-						enemy.removeHp(yPower);
-					else {
-						float mob = 1;
-						for (SlotColumn<Champion, Equipment> slot : arena.getSlots().get(next)) {
-							Champion c = slot.getTop();
-							if (c != null && c.getMana() == 1 && !c.isFusion())
-								mob -= 0.05;
-						}
-						enemy.removeHp(Math.round((yPower - hPower) * mob));
-					}
-				}
-			}
-
-			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-				killCard(next, is[1]);
-				if (!postCombat()) {
-					resetTimerKeepTurn();
-					moveLock = true;
-					channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
-							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-							});
-				}
-			} else if (yours.getCard().getId().equals("DECOY")) {
+			if (his.getDodge() > 0 && Helper.chance(his.getDodge())) {
 				resetTimerKeepTurn();
 				moveLock = true;
-				channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
+				channel.sendMessage(his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)")
 						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
@@ -1003,20 +965,75 @@ public class Shoukan extends GlobalGame {
 							moveLock = false;
 						});
 			} else {
-				killCard(next, is[1]);
-				resetTimerKeepTurn();
-				moveLock = true;
-				channel.sendMessage("Essa carta era na verdade uma isca!")
-						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
+
+				if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+					if (his.isDefending() && yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.ARMORPIERCING)) {
+						int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+						Hand enemy = hands.get(next);
+						enemy.removeHp(apDamage);
+					} else if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+						Hand enemy = hands.get(next);
+						if (yours.getBonus().getSpecialData().has("totalDamage"))
+							enemy.removeHp(yPower);
+						else {
+							float mob = 1;
+							for (SlotColumn<Champion, Equipment> slot : arena.getSlots().get(next)) {
+								Champion c = slot.getTop();
+								if (c != null && c.getMana() == 1 && !c.isFusion())
+									mob -= 0.05;
+							}
+							enemy.removeHp(Math.round((yPower - hPower) * mob));
+						}
+					}
+				}
+
+				if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+					killCard(next, is[1]);
+					if (!postCombat()) {
+						resetTimerKeepTurn();
+						moveLock = true;
+						channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
+								.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+								.queue(s -> {
+									this.message.compute(s.getChannel().getId(), (id, m) -> {
+										if (m != null)
+											m.delete().queue(null, Helper::doNothing);
+										return s;
+									});
+									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									moveLock = false;
+								});
+					}
+				} else if (yours.getCard().getId().equals("DECOY")) {
+					resetTimerKeepTurn();
+					moveLock = true;
+					channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
+							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+							.queue(s -> {
+								this.message.compute(s.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return s;
+								});
+								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
 							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							moveLock = false;
-						});
+				} else {
+					killCard(next, is[1]);
+					resetTimerKeepTurn();
+					moveLock = true;
+					channel.sendMessage("Essa carta era na verdade uma isca!")
+							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+							.queue(s -> {
+								this.message.compute(s.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return s;
+								});
+								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
+							});
+				}
 			}
 		} else if (yPower < hPower) {
 			yours.setAvailable(false);
@@ -1186,13 +1203,11 @@ public class Shoukan extends GlobalGame {
 		Champion yours = getArena().getSlots().get(next).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(current).get(is[1]).getTop();
 
-		if (yours.isDefending()) return;
-
 		int yPower;
 		if (!yours.getCard().getId().equals("DECOY")) {
 			yPower = Math.round(
 					yours.getFinAtk() *
-					(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+							(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
 			);
 		} else {
 			yPower = 0;
@@ -1214,12 +1229,12 @@ public class Shoukan extends GlobalGame {
 			}
 			hPower = Math.round(
 					his.getFinDef() *
-					(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 			);
 		} else if (!his.getCard().getId().equals("DECOY")) {
 			hPower = Math.round(
 					his.getFinAtk() *
-					(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 			);
 		} else {
 			hPower = 0;
@@ -1246,21 +1261,91 @@ public class Shoukan extends GlobalGame {
 				if (postCombat()) return;
 			}
 
-			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-				if (his.isDefending() && yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.ARMORPIERCING)) {
-					int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
-					Hand enemy = hands.get(current);
-					enemy.removeHp(apDamage);
-				} else if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
-					Hand enemy = hands.get(current);
-					enemy.removeHp(yPower - hPower);
+			if (his.getDodge() > 0 && Helper.chance(his.getDodge())) {
+				resetTimerKeepTurn();
+				moveLock = true;
+				channel.sendMessage(his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)")
+						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
+						});
+			} else {
+
+				if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+					if (his.isDefending() && yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.ARMORPIERCING)) {
+						int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+						Hand enemy = hands.get(current);
+						enemy.removeHp(apDamage);
+					} else if ((!his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+						Hand enemy = hands.get(current);
+						if (yours.getBonus().getSpecialData().has("totalDamage"))
+							enemy.removeHp(yPower);
+						else {
+							float mob = 1;
+							for (SlotColumn<Champion, Equipment> slot : arena.getSlots().get(current)) {
+								Champion c = slot.getTop();
+								if (c != null && c.getMana() == 1 && !c.isFusion())
+									mob -= 0.05;
+							}
+							enemy.removeHp(Math.round((yPower - hPower) * mob));
+						}
+					}
+				}
+
+				if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+					killCard(current, is[1]);
+					if (!postCombat()) {
+						resetTimerKeepTurn();
+						moveLock = true;
+						channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
+								.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+								.queue(s -> {
+									this.message.compute(s.getChannel().getId(), (id, m) -> {
+										if (m != null)
+											m.delete().queue(null, Helper::doNothing);
+										return s;
+									});
+									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+									moveLock = false;
+								});
+					}
+				} else if (yours.getCard().getId().equals("DECOY")) {
+					resetTimerKeepTurn();
+					moveLock = true;
+					channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
+							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+							.queue(s -> {
+								this.message.compute(s.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return s;
+								});
+								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
+							});
+				} else {
+					killCard(current, is[1]);
+					resetTimerKeepTurn();
+					moveLock = true;
+					channel.sendMessage("Essa carta era na verdade uma isca!")
+							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+							.queue(s -> {
+								this.message.compute(s.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return s;
+								});
+								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
+							});
 				}
 			}
-
-			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId()))
-				killCard(current, is[1]);
-
-			postCombat();
 		} else if (yPower < hPower) {
 			yours.setAvailable(false);
 			his.resetAttribs();
@@ -1289,8 +1374,53 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 
-			killCard(next, is[0]);
-			postCombat();
+			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+				killCard(next, is[0]);
+				if (!postCombat()) {
+					resetTimerKeepTurn();
+					moveLock = true;
+					channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")")
+							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+							.queue(s -> {
+								this.message.compute(s.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return s;
+								});
+								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
+							});
+				}
+			} else if (his.getCard().getId().equals("DECOY")) {
+				killCard(next, is[0]);
+				resetTimerKeepTurn();
+				moveLock = true;
+				channel.sendMessage(yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
+						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
+						});
+			} else {
+				resetTimerKeepTurn();
+				moveLock = true;
+				channel.sendMessage("Essa carta era na verdade uma isca!")
+						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
+						});
+			}
 		} else {
 			yours.setAvailable(false);
 
@@ -1314,12 +1444,69 @@ public class Shoukan extends GlobalGame {
 			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 				killCard(current, is[1]);
 				killCard(next, is[0]);
-			} else if (his.getCard().getId().equals("DECOY"))
-				killCard(current, is[1]);
-			else
-				killCard(next, is[0]);
 
-			postCombat();
+				if (!postCombat()) {
+					resetTimerKeepTurn();
+					moveLock = true;
+					channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
+							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+							.queue(s -> {
+								this.message.compute(s.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return s;
+								});
+								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
+							});
+				}
+			} else if (Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+				killCard(current, is[1]);
+				killCard(next, is[0]);
+				resetTimerKeepTurn();
+				moveLock = true;
+				channel.sendMessage("As duas cartas na verdade eram iscas! (" + yPower + " = " + hPower + ")")
+						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
+						});
+			} else if (his.getCard().getId().equals("DECOY")) {
+				killCard(current, is[1]);
+				resetTimerKeepTurn();
+				moveLock = true;
+				channel.sendMessage("As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")")
+						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
+						});
+			} else {
+				killCard(next, is[0]);
+				resetTimerKeepTurn();
+				moveLock = true;
+				channel.sendMessage("As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")")
+						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+						.queue(s -> {
+							this.message.compute(s.getChannel().getId(), (id, m) -> {
+								if (m != null)
+									m.delete().queue(null, Helper::doNothing);
+								return s;
+							});
+							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+							moveLock = false;
+						});
+			}
 		}
 	}
 
@@ -1351,8 +1538,8 @@ public class Shoukan extends GlobalGame {
 				.stream()
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
-						allCards.containsAll(f.getRequiredCards()) &&
-						(h.isNullMode() || h.getMana() >= f.getMana())
+								allCards.containsAll(f.getRequiredCards()) &&
+								(h.isNullMode() || h.getMana() >= f.getMana())
 				)
 				.findFirst()
 				.orElse(null);
