@@ -13,26 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização na biblioteca de paginação">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ben_manes_caffeine_caffeine_2_8_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ben_manes_caffeine_caffeine_2_8_5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_philippheuer_events4j_events4j_api_0_9_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_philippheuer_events4j_events4j_api_0_9_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_philippheuer_events4j_events4j_core_0_9_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_philippheuer_events4j_events4j_core_0_9_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_philippheuer_events4j_events4j_handler_simple_0_9_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_philippheuer_events4j_events4j_handler_simple_0_9_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_1_1_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_1_1_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_twitch4j_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_twitch4j_auth_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_twitch4j_chat_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_twitch4j_common_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_twitch4j_graphql_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_twitch4j_helix_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_twitch4j_kraken_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_twitch4j_messaginginterface_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_twitch4j_pubsub_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos jogos em equipe">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,17 +182,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1117,14 +1090,8 @@
       <workItem from="1613145998418" duration="7753000" />
       <workItem from="1613189032524" duration="99000" />
       <workItem from="1613339601518" duration="70000" />
-      <workItem from="1613342023500" duration="1127000" />
-    </task>
-    <task id="LOCAL-03733" summary="Correções menores">
-      <created>1612801095575</created>
-      <option name="number" value="03733" />
-      <option name="presentableId" value="LOCAL-03733" />
-      <option name="project" value="LOCAL" />
-      <updated>1612801095575</updated>
+      <workItem from="1613342023500" duration="1877000" />
+      <workItem from="1613350048233" duration="1558000" />
     </task>
     <task id="LOCAL-03734" summary="Correções menores">
       <created>1612801439200</created>
@@ -1462,7 +1429,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613189076603</updated>
     </task>
-    <option name="localTasksCounter" value="3782" />
+    <task id="LOCAL-03782" summary="Correção nos jogos em equipe">
+      <created>1613343768102</created>
+      <option name="number" value="03782" />
+      <option name="presentableId" value="LOCAL-03782" />
+      <option name="project" value="LOCAL" />
+      <updated>1613343768107</updated>
+    </task>
+    <option name="localTasksCounter" value="3783" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1548,7 +1522,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Implementações de sugestões" />
     <MESSAGE value="Tentativa de correção nas Accounts;&#10;Remoção do módulo Kawaigotchi;" />
     <MESSAGE value="Uso de multithreading na geração da arena Shoukan" />
     <MESSAGE value="Remoção do multithreading no Shoukan" />
@@ -1573,7 +1546,8 @@
     <MESSAGE value="Adicionado nível de invocador no Shoukan" />
     <MESSAGE value="Adicionado peso aos equipamentos" />
     <MESSAGE value="Atualização na biblioteca de paginação" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualização na biblioteca de paginação" />
+    <MESSAGE value="Correção nos jogos em equipe" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nos jogos em equipe" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
