@@ -44,7 +44,7 @@ public class SettingsCommand implements Executable {
 		if (args.length == 0) {
 			Settings.embedConfig(message);
 			return;
-		} else if (args.length == 1 && !(args[0].toLowerCase().equals("ajuda") || args[0].toLowerCase().equals("help"))) {
+		} else if (args.length == 1 && !(args[0].equalsIgnoreCase("ajuda") || args[0].equalsIgnoreCase("help"))) {
 			channel.sendMessage("❌ | Nenhum argumento informado para a configuração `" + args[0] + "`.").queue();
 			return;
 		}

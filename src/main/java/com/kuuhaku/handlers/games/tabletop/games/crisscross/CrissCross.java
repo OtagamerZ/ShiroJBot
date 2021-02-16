@@ -107,7 +107,7 @@ public class CrissCross extends Game {
 					char[] chars = e.getMessage().getContentRaw().toCharArray();
 					return Character.isLetter(chars[0]) && Character.isDigit(chars[1]);
 				})
-				.and(e -> !isClosed())
+				.and(e -> isOpen())
 				.test(evt);
 	}
 

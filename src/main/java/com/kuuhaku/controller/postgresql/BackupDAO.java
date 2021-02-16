@@ -38,7 +38,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class BackupDAO {
-	private static ExecutorService backupQueue = Executors.newFixedThreadPool(5);
+	private static final ExecutorService backupQueue = Executors.newFixedThreadPool(5);
 
 	public static void dumpData(DataDump data, boolean thenExit) {
 		List<CustomAnswer> caDump = data.getCaDump();

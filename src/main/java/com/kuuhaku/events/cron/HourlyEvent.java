@@ -41,6 +41,7 @@ public class HourlyEvent implements Job {
 	public static JobDetail hourly;
 
 	@Override
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public void execute(JobExecutionContext context) {
 		if (!Main.getInfo().isLive()) Main.getShiroShards().setActivity(Main.getRandomActivity());
 

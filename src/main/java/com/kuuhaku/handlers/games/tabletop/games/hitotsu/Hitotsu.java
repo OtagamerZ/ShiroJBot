@@ -123,7 +123,7 @@ public class Hitotsu extends Game {
 
 		return condition
 				.and(e -> e.getAuthor().getId().equals(getCurrent().getId()))
-				.and(e -> !isClosed())
+				.and(e -> isOpen())
 				.test(evt);
 	}
 

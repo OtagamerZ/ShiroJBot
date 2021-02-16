@@ -46,20 +46,24 @@ public class Blacklist {
 
     public String getId() {
         return id;
-    }
+	}
 
-    public String getBlockedBy() {
-        return blockedBy;
-    }
+	public String getBlockedBy() {
+		return blockedBy;
+	}
 
-    public Calendar getBlockDate() {
-        return blockDate;
-    }
+	public Calendar getBlockDate() {
+		return blockDate;
+	}
 
-    public boolean canClear() {
-        Calendar today = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
-        Calendar lastDaily = this.blockDate;
+	public void setBlockDate(Calendar blockDate) {
+		this.blockDate = blockDate;
+	}
 
-        return today.get(Calendar.MONTH) > lastDaily.get(Calendar.MONTH);
-    }
+	public boolean canClear() {
+		Calendar today = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+		Calendar lastDaily = this.blockDate;
+
+		return today.get(Calendar.MONTH) > lastDaily.get(Calendar.MONTH);
+	}
 }

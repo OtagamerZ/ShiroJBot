@@ -51,7 +51,7 @@ public class DiscordBotsListHandler {
 		Account acc = AccountDAO.getAccount(body.getString("user"));
 
 		if (!body.getString("type").equals("test")) {
-			acc.addCredit(credit + (100 * (acc.getStreak() + 1)), this.getClass());
+			acc.addCredit(credit + (100L * (acc.getStreak() + 1)), this.getClass());
 			acc.voted();
 		}
 
@@ -94,7 +94,7 @@ public class DiscordBotsListHandler {
 
 					Account acc = AccountDAO.getAccount(uid);
 
-					acc.addCredit(credit + (100 * (acc.getStreak() + 1)), DiscordBotsListHandler.class);
+					acc.addCredit(credit + (100L * (acc.getStreak() + 1)), DiscordBotsListHandler.class);
 					acc.voted();
 
 					User u = Main.getInfo().getUserByID(uid);

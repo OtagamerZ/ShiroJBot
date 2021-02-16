@@ -79,7 +79,7 @@ public class MatchMaking {
 	}
 
 	public void closeGames() {
-		games.removeIf(GlobalGame::isClosed);
+		games.removeIf(g -> !g.isOpen());
 	}
 
 	public List<GlobalGame> getGames() {

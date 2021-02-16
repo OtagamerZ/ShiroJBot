@@ -269,8 +269,16 @@ public class Equipment implements Drawable, Cloneable {
 		return charm;
 	}
 
+	public void setCharm(Charm charm) {
+		this.charm = charm;
+	}
+
 	public Arguments getArgType() {
 		return argType;
+	}
+
+	public void setArgType(Arguments argType) {
+		this.argType = argType;
 	}
 
 	public void activate(Hand you, Hand opponent, Shoukan game, int allyPos, int enemyPos) {
@@ -311,6 +319,10 @@ public class Equipment implements Drawable, Cloneable {
 		} catch (EvalError e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 		}
+	}
+
+	public void setEffect(String effect) {
+		this.effect = effect;
 	}
 
 	@Override

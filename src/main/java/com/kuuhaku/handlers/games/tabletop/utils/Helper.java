@@ -36,7 +36,7 @@ public class Helper {
 		double length = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
 		return switch (roundingMode) {
 			case UP, CEILING, HALF_UP -> new int[]{mirroredCeil(vector[0] / length), mirroredCeil(vector[1] / length)};
-			case DOWN, FLOOR, HALF_DOWN -> new int[]{(int) mirroredFloor(vector[0] / length), (int) mirroredFloor(vector[1] / length)};
+			case DOWN, FLOOR, HALF_DOWN -> new int[]{mirroredFloor(vector[0] / length), mirroredFloor(vector[1] / length)};
 			case HALF_EVEN -> new int[]{(int) Math.round(vector[0] / length), (int) Math.round(vector[1] / length)};
 			default -> throw new IllegalArgumentException();
 		};

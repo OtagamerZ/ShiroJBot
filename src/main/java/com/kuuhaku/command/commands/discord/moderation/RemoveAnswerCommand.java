@@ -27,7 +27,6 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 @Command(
@@ -55,11 +54,13 @@ public class RemoveAnswerCommand implements Executable {
 			return;
 		}
 
-        try {
-            CustomAnswerDAO.removeCAFromDB(CustomAnswerDAO.getCAByID(Integer.parseInt(args[0])));
+		CustomAnswer ca = CustomAnswerDAO.getCAByID(Integer.parseInt(args[0]));
+
+		if (ca != null) {
+			CustomAnswerDAO.removeCAFromDB(ca);
 			channel.sendMessage("Não vou mais responder com a resposta `" + args[0] + "`.").queue();
-        } catch (NoResultException e) {
+		} else {
 			channel.sendMessage("❌ | ID de resposta inválido.").queue();
 		}
-    }
+	}
 }

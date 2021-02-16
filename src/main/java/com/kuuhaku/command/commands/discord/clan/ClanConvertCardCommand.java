@@ -71,7 +71,7 @@ public class ClanConvertCardCommand implements Executable {
 		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
-		} else if (!cl.hasPermission(author.getId(), ClanPermission.DECK)) {
+		} else if (cl.isLocked(author.getId(), ClanPermission.DECK)) {
 			channel.sendMessage("❌ | Você não tem permissão para alterar o deck do clã.").queue();
 			return;
 		}

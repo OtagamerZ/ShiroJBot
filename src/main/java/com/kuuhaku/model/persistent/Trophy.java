@@ -48,4 +48,8 @@ public class Trophy {
 	public Set<TrophyType> getTrophies() {
 		return trophies;
 	}
+
+	public void setTrophies(Set<TrophyType> trophies) {
+		this.trophies = trophies;
+	}
 }
