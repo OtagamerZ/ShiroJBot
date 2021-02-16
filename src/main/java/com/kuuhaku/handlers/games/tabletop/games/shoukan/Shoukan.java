@@ -1933,10 +1933,8 @@ public class Shoukan extends GlobalGame {
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
-						if (c.getStun() == 0)
-							c.setAvailable(true);
-						else
-							c.reduceStun();
+						if (c.getStun() > 0) c.reduceStun();
+						c.setAvailable(c.getStun() == 0);
 
 						c.resetAttribs();
 						if (c.hasEffect() && effectLock == 0) {
@@ -2174,10 +2172,8 @@ public class Shoukan extends GlobalGame {
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
-							if (c.getStun() == 0)
-								c.setAvailable(true);
-							else
-								c.reduceStun();
+							if (c.getStun() > 0) c.reduceStun();
+							c.setAvailable(c.getStun() == 0);
 
 							c.resetAttribs();
 							if (c.hasEffect() && effectLock == 0) {
