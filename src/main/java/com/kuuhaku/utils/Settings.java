@@ -577,7 +577,7 @@ public class Settings {
 		}
 
 		if (args.length < 3) {
-			if (antigoCargoLvl.size() == 0) {
+			if (antigoCargoLvl.isEmpty()) {
 				message.getTextChannel().sendMessage("Nenhum cargo por level foi definido ainda.").queue();
 			} else {
 				message.getTextChannel().sendMessage("Os cargos por level definidos são:```" + cargosLvl.toString() + "```").queue();
@@ -615,7 +615,7 @@ public class Settings {
 		List<String> antigoModulo = gc.getDisabledModules();
 
 		if (Helper.equalsAny(args[1], "list", "lista")) {
-			if (antigoModulo.size() == 0) {
+			if (antigoModulo.isEmpty()) {
 				message.getTextChannel().sendMessage("Nenhum módulo desligado.").queue();
 			} else {
 				message.getTextChannel().sendMessage("Os módulos desligados são:```" + String.join("\n", antigoModulo) + "```").queue();

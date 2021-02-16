@@ -300,7 +300,7 @@ public class ExceedDAO {
         q.setParameter("date", LocalDate.now());
 
         try {
-            return q.getResultList().size() == 0;
+            return q.getResultList().isEmpty();
         } finally {
             em.close();
         }

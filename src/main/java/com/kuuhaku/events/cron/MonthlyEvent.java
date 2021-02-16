@@ -105,7 +105,7 @@ public class MonthlyEvent implements Job {
 		String msg;
 
 		assert chn != null;
-		if (winners.size() == 0)
+		if (winners.isEmpty())
 			msg = """
 					As dezenas sorteadas foram `%s`.
 					Como não houveram vencedores, o prêmio de %s créditos será acumulado para o próximo mês!

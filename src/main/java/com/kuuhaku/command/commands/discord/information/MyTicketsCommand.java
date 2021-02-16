@@ -48,7 +48,7 @@ public class MyTicketsCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		List<Lottery> l = LotteryDAO.getLotteriesByUser(author.getId());
 
-		if (l.size() == 0) {
+		if (l.isEmpty()) {
 			channel.sendMessage("❌ | Você não comprou nenhum bilhete ainda.").queue();
 			return;
 		}

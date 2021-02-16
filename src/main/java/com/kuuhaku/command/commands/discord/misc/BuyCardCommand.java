@@ -262,7 +262,7 @@ public class BuyCardCommand implements Executable {
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 
-			if (pages.size() == 0) {
+			if (pages.isEmpty()) {
 				channel.sendMessage("Ainda não há nenhuma carta anunciada.").queue();
 			} else
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->

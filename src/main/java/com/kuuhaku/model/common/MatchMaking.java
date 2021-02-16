@@ -33,7 +33,7 @@ import java.util.Map;
 
 public class MatchMaking {
 	private final Map<MatchMakingRating, Pair<Integer, TextChannel>> soloLobby = new LinkedHashMap<>();
-	private final Map<MatchMakingRating, Pair<Integer, TextChannel>> duoLobby = new LinkedHashMap<>();
+	private final Map<RankedDuo, Pair<Integer, TextChannel>> duoLobby = new LinkedHashMap<>();
 	private final List<GlobalGame> games = new ArrayList<>();
 	boolean locked = false;
 
@@ -41,23 +41,29 @@ public class MatchMaking {
 		return soloLobby;
 	}
 
-	public Map<MatchMakingRating, Pair<Integer, TextChannel>> getDuoLobby() {
+	public Map<RankedDuo, Pair<Integer, TextChannel>> getDuoLobby() {
 		return duoLobby;
 	}
 
-	public void joinLobby(User user, RankedQueue queue, TextChannel channel) {
+	public void joinLobby(User user, User duo, RankedQueue queue, TextChannel channel) {
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(user.getId());
 
 		switch (queue) {
 			case SOLO -> soloLobby.put(mmr, Pair.of(0, channel));
-			case DUO -> duoLobby.put(mmr, Pair.of(0, channel));
+			case DUO -> duoLobby.put(new RankedDuo(user, duo), Pair.of(0, channel));
 		}
 	}
 
-	public void joinLobby(MatchMakingRating mmr, RankedQueue queue, TextChannel channel) {
+	public void joinLobby(MatchMakingRating mmr, MatchMakingRating duo, RankedQueue queue, TextChannel channel) {
 		switch (queue) {
 			case SOLO -> soloLobby.put(mmr, Pair.of(0, channel));
-			case DUO -> duoLobby.put(mmr, Pair.of(0, channel));
+			case DUO -> duoLobby.put(new RankedDuo(mmr, duo), Pair.of(0, channel));
+		}
+	}
+
+	public void joinLobby(RankedDuo duo, RankedQueue queue, TextChannel channel) {
+		if (queue == RankedQueue.DUO) {
+			duoLobby.put(duo, Pair.of(0, channel));
 		}
 	}
 

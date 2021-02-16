@@ -43,7 +43,7 @@ public class RemoveEmoteCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (message.getEmotes().size() == 0) {
+		if (message.getEmotes().isEmpty()) {
 			channel.sendMessage("❌ | Você precisa informar ao menos 1 emote para remover.").queue();
 			return;
 		}
