@@ -80,7 +80,7 @@ public class CustomAnswerCommand implements Executable {
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 
-			if (pages.size() == 0) {
+			if (pages.isEmpty()) {
 				channel.sendMessage("Não há nenhuma resposta cadastrada neste servidor.").queue();
 				return;
 			}
@@ -90,7 +90,7 @@ public class CustomAnswerCommand implements Executable {
 		} else if (StringUtils.isNumeric(args[0]) && !args[0].contains(";")) {
 			List<CustomAnswer> ca = BackupDAO.getCADump();
 			ca.removeIf(a -> !String.valueOf(a.getId()).equals(args[0]) || !a.getGuildID().equals(guild.getId()));
-			if (ca.size() == 0) {
+			if (ca.isEmpty()) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-not-found")).queue();
 				return;
 			}

@@ -537,8 +537,8 @@ public class Helper {
 		List<Role> usrRoles = user.getRoles();
 		List<Role> tgtRoles = target.getRoles();
 
-		if (usrRoles.size() == 0) return false;
-		else if (tgtRoles.size() == 0) return true;
+		if (usrRoles.isEmpty()) return false;
+		else if (tgtRoles.isEmpty()) return true;
 		else return usrRoles.get(0).getPosition() > tgtRoles.get(0).getPosition();
 	}
 
@@ -904,7 +904,7 @@ public class Helper {
 			}
 			if (sb.length() > 0) wrappedLines.add(sb.toString());
 		}
-		if (wrappedLines.size() == 0) wrappedLines.add(text);
+		if (wrappedLines.isEmpty()) wrappedLines.add(text);
 
 		canvas = new BufferedImage(bi.getWidth(), 45 + (45 * wrappedLines.size()) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 		g2d = canvas.createGraphics();

@@ -51,7 +51,7 @@ public class ClanBannerCommand implements Executable {
 		} else if (c.getTier().ordinal() < ClanTier.DYNASTY.ordinal()) {
 			channel.sendMessage("❌ | Seu clã ainda não desbloqueou o banner.").queue();
 			return;
-		} else if (message.getAttachments().size() == 0) {
+		} else if (message.getAttachments().isEmpty()) {
 			channel.sendMessage("❌ | Você precisa enviar uma imagem com dimensões 384x128.").queue();
 			return;
 		}

@@ -60,7 +60,7 @@ public class ColorRoleCommand implements Executable {
 			return;
 		} else if (args.length < 1) {
 			JSONObject jo = gc.getColorRoles();
-			if (jo.keySet().size() == 0) {
+			if (jo.keySet().isEmpty()) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-found")).queue();
 				return;
 			}

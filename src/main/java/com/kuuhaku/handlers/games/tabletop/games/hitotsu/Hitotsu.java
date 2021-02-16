@@ -210,13 +210,13 @@ public class Hitotsu extends Game {
 		if (c.isFoil())
 			CardEffect.getEffect(c.getCard().getRarity()).accept(this, seats.get(getBoard().getInGamePlayers().peekNext().getId()));
 
-		User winner = seats.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null);
+		User winner = seats.values().stream().filter(h -> h.getCards().isEmpty()).map(Hand::getUser).findFirst().orElse(null);
 		if (winner != null) {
 			getBoard().awardWinner(this, winner.getId());
 			return true;
 		}
 
-		if (deque.size() == 0) {
+		if (deque.isEmpty()) {
 			shuffle();
 			suddenDeath = true;
 		}
@@ -249,13 +249,13 @@ public class Hitotsu extends Game {
 				CardEffect.getEffect(cd.getCard().getRarity()).accept(this, seats.get(getBoard().getInGamePlayers().peekNext().getId()));
 		}
 
-		User winner = seats.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null);
+		User winner = seats.values().stream().filter(h -> h.getCards().isEmpty()).map(Hand::getUser).findFirst().orElse(null);
 		if (winner != null) {
 			getBoard().awardWinner(this, winner.getId());
 			return true;
 		}
 
-		if (deque.size() == 0) {
+		if (deque.isEmpty()) {
 			shuffle();
 			suddenDeath = true;
 		}

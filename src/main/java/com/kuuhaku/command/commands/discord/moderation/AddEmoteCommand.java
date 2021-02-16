@@ -43,7 +43,7 @@ public class AddEmoteCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (message.getEmotes().size() == 0) {
+		if (message.getEmotes().isEmpty()) {
 			channel.sendMessage("❌ | Você precisa informar ao menos 1 emote para adicionar.").queue();
 			return;
 		} else if (guild.getEmotes().size() + message.getEmotes().size() > guild.getMaxEmotes()) {

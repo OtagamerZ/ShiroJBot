@@ -51,10 +51,10 @@ public class GatekeeperCommand implements Executable {
 		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-message-id")).queue();
 			return;
-		} else if (message.getMentionedRoles().size() == 0) {
+		} else if (message.getMentionedRoles().isEmpty()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_gatekeeper-no-role")).queue();
-            return;
-        }
+			return;
+		}
 
 		try {
 			Helper.addButton(args, message, channel, gc, "☑", true);

@@ -68,7 +68,7 @@ public class KawaiponsCommand implements Executable {
             try {
                 Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-                if (kp.getCards().size() == 0) {
+                if (kp.getCards().isEmpty()) {
                     m.editMessage("❌ | Você ainda não coletou nenhum Kawaipon.").queue();
                     return;
                 } else if (args.length == 0) {
