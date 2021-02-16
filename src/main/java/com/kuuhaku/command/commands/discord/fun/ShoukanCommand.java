@@ -187,6 +187,11 @@ public class ShoukanCommand implements Executable {
 											Main.getInfo().getConfirmationPending().invalidate(author.getId());
 											s.delete().queue(null, Helper::doNothing);
 
+											if (mm.getSoloLobby().containsKey(duo) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.getP1().equals(duo) || rd.getP2().equals(duo))) {
+												channel.sendMessage("❌ | " + u.getAsMention() + " já está em um saguão, espere-o cancelar antes de tentar convidar novamente.").queue();
+												return;
+											}
+
 											RankedDuo rd = new RankedDuo(mmr, duo);
 											mm.joinLobby(rd, rq, channel);
 											channel.sendMessage("Você e " + u.getAsMention() + " entraram no saguão **DUO** com sucesso, você será notificado caso uma partida seja encontrada (" + (mm.getDuoLobby().size() - 1) + " no saguão).").queue(su ->
