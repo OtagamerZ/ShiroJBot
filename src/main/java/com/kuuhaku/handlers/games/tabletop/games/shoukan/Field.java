@@ -46,10 +46,10 @@ public class Field implements Drawable, Cloneable {
 	private Card card;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '{}'")
-	private final String modifiers = "{}";
+	private String modifiers = "{}";
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private final boolean effectOnly = false;
+	private boolean effectOnly = false;
 
 	private transient Account acc = null;
 	private transient Clan clan = null;
@@ -161,6 +161,18 @@ public class Field implements Drawable, Cloneable {
 
 	public JSONObject getModifiers() {
 		return new JSONObject(modifiers);
+	}
+
+	public void setModifiers(String modifiers) {
+		this.modifiers = modifiers;
+	}
+
+	public boolean isEffectOnly() {
+		return effectOnly;
+	}
+
+	public void setEffectOnly(boolean effectOnly) {
+		this.effectOnly = effectOnly;
 	}
 
 	@Override
