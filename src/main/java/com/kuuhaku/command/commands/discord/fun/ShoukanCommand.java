@@ -169,7 +169,7 @@ public class ShoukanCommand implements Executable {
 						channel.sendMessage("❌ | " + u.getAsMention() + " está impedido de entrar no saguão ranqueado devido a um abandono recente (Tempo restante: %s seg).".formatted(mmr.getRemainingBlock())).queue();
 						return;
 					} else if (Math.abs(mmr.getTier().getTier() - duo.getTier().getTier()) > 1) {
-						channel.sendMessage("❌ | Diferença entre tiers muito alta.".formatted(mmr.getRemainingBlock())).queue();
+						channel.sendMessage("❌ | Diferença entre tiers muito alta.").queue();
 						return;
 					} else if (mm.getSoloLobby().containsKey(duo) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.getP1().equals(duo) || rd.getP2().equals(duo))) {
 						channel.sendMessage("❌ | " + u.getAsMention() + " já está em um saguão, espere-o cancelar antes de tentar convidar novamente.").queue();

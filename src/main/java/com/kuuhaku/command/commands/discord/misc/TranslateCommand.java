@@ -45,7 +45,6 @@ public class TranslateCommand implements Executable {
 
 		if (fromTo.length < 2) {
 			channel.sendMessage("❌ | Você precisa especificar de qual idioma e para qual idioma devo traduzir o texto (`de>para`).").queue();
-			return;
 		}
 
 		/*try {

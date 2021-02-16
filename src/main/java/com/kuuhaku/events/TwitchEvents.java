@@ -127,7 +127,7 @@ public class TwitchEvents {
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 				wmb.setContent(Helper.stripEmotesAndMentions(rawMessage));
 				wmb.setUsername(u.getName());
-				wmb.setAvatarUrl(u.getAvatarUrl());
+				wmb.setAvatarUrl(u.getEffectiveAvatarUrl());
 
 				assert wh != null;
 				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();

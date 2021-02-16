@@ -55,6 +55,7 @@ public class TenthMinuteEvent implements Job {
 	public static JobDetail tenthMinute;
 
 	@Override
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public void execute(JobExecutionContext context) {
 		for (Guild guild1 : Main.getJibril().getGuilds()) {
 			notif(guild1);

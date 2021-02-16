@@ -31,6 +31,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 @Command(
 		name = "controle",
 		aliases = {"control", "c"},
@@ -60,7 +62,7 @@ public class ControlCommand implements Executable {
 		if (Music.getGuildAudioPlayer(guild, channel).player.getPlayingTrack() == null) {
 			channel.sendMessage("❌ | Não há nenhuma música tocando no momento.").queue();
 			return;
-		} else if (member.getVoiceState().getChannel() == null || !member.getVoiceState().getChannel().getMembers().contains(guild.getSelfMember())) {
+		} else if (Objects.requireNonNull(member.getVoiceState()).getChannel() == null || !member.getVoiceState().getChannel().getMembers().contains(guild.getSelfMember())) {
 			channel.sendMessage("❌ | Este comando só pode ser usado se estiver em um canal de voz com a Shiro.").queue();
 			return;
 		} else if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !((User) Music.getGuildAudioPlayer(guild, channel).player.getPlayingTrack().getUserData()).getId().equals(author.getId())) {
@@ -69,17 +71,17 @@ public class ControlCommand implements Executable {
 		}
 
 		switch (args[0]) {
-			case "resume" -> Music.resumeTrack((TextChannel) channel);
-			case "pause" -> Music.pauseTrack((TextChannel) channel);
-			case "clear" -> Music.clearQueue((TextChannel) channel);
-			case "skip" -> Music.skipTrack((TextChannel) channel);
+			case "resume" -> Music.resumeTrack(channel);
+			case "pause" -> Music.pauseTrack(channel);
+			case "clear" -> Music.clearQueue(channel);
+			case "skip" -> Music.skipTrack(channel);
 			case "volume" -> {
 				if (args.length > 1 && StringUtils.isNumeric(args[1]))
-					Music.setVolume((TextChannel) channel, Integer.parseInt(args[1]));
+					Music.setVolume(channel, Integer.parseInt(args[1]));
 				else channel.sendMessage("❌ | O volume deve ser um valor inteiro entre 0 e 100.").queue();
 			}
-			case "info" -> Music.trackInfo((TextChannel) channel);
-			case "queue" -> Music.queueInfo((TextChannel) channel);
+			case "info" -> Music.trackInfo(channel);
+			case "queue" -> Music.queueInfo(channel);
 			default -> channel.sendMessage("❌ | Comando de música inválido.").queue();
 		}
 	}

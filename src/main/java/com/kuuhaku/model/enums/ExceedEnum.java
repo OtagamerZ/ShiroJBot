@@ -28,19 +28,17 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public enum ExceedEnum {
-	IMANITY("Imanity", Color.MAGENTA),
-	SEIREN("Seiren", Color.CYAN),
-	WEREBEAST("Werebeast", Color.YELLOW),
-	ELF("Elf", Color.PINK),
-	EXMACHINA("Ex-Machina", Color.GREEN),
-	FLUGEL("Flügel", Color.ORANGE);
+	IMANITY("Imanity"),
+	SEIREN("Seiren"),
+	WEREBEAST("Werebeast"),
+	ELF("Elf"),
+	EXMACHINA("Ex-Machina"),
+	FLUGEL("Flügel");
 
 	private final String name;
-	private final Color palette;
 
-	ExceedEnum(String name, Color palette) {
+	ExceedEnum(String name) {
 		this.name = name;
-		this.palette = palette;
 	}
 
 	public String getName() {

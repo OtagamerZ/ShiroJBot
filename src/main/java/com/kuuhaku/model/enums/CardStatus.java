@@ -22,5 +22,5 @@ public enum CardStatus {
 	ALL_CARDS,
 	NORMAL_CARDS,
 	FOIL_CARDS,
-	NO_CARDS;
+	NO_CARDS
 }

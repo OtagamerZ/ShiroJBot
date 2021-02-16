@@ -84,6 +84,10 @@ public class GlobalMessage {
 		return time;
 	}
 
+	public void setTime(long time) {
+		this.time = time;
+	}
+
 	@Override
 	public String toString() {
 		JSONObject out = new JSONObject();

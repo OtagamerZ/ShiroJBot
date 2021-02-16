@@ -59,7 +59,7 @@ public class ClanPermissionCommand implements Executable {
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
-		} else if (!c.hasPermission(author.getId(), ClanPermission.ALTER_HIERARCHY)) {
+		} else if (c.isLocked(author.getId(), ClanPermission.ALTER_HIERARCHY)) {
 			channel.sendMessage("❌ | Você não tem permissão para mudar as permissões dos cargos.").queue();
 			return;
 		}

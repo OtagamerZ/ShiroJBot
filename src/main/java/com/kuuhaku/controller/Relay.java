@@ -69,7 +69,7 @@ public class Relay {
 				(w.contains("<") && w.contains(">") && w.contains(":")) ? ":question:" : w
 		).collect(Collectors.joining(" "));
 		wmb.setContent(filtered);
-		wmb.setAvatarUrl(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
+		wmb.setAvatarUrl(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getEffectiveAvatarUrl());
 		wmb.setUsername("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : "[" + exceed + "] ") + (m.getUser().getName().length() > 15 ? m.getUser().getName().substring(0, 15) + "..." : m.getUser().getName()));
 		return wmb.build();
 	}
@@ -106,7 +106,7 @@ public class Relay {
 		GlobalMessage gm = new GlobalMessage();
 		gm.setUserId(m.getId());
 		gm.setName(m.getUser().getName());
-		gm.setAvatar(m.getUser().getAvatarUrl());
+		gm.setAvatar(m.getUser().getEffectiveAvatarUrl());
 		gm.setContent(msg);
 
 		Main.getInfo().getSockets().getChat().onMessage(null, gm.toString());
@@ -120,7 +120,7 @@ public class Relay {
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n");
 		eb.setImage("attachment://image.png");
 		eb.setAuthor("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : "[" + exceed + "] ") + m.getUser().getName(), s.getIconUrl(), s.getIconUrl());
-		eb.setThumbnail(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
+		eb.setThumbnail(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getEffectiveAvatarUrl());
 		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
 			eb.setColor(Helper.colorThief(s.getIconUrl()));
@@ -134,11 +134,11 @@ public class Relay {
 		if (!exceed.isEmpty()) {
 			badges.append(TagIcons.getExceed(ExceedEnum.getByName(exceed)));
 			for (Tag t : tags) {
-				badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag(mbr.getLevel()));
+				badges.append(t.getEmote(mbr) == null ? "" : Objects.requireNonNull(t.getEmote(mbr)).getTag(mbr.getLevel()));
 			}
 		} else {
 			for (Tag t : tags) {
-				badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag(mbr.getLevel()));
+				badges.append(t.getEmote(mbr) == null ? "" : Objects.requireNonNull(t.getEmote(mbr)).getTag(mbr.getLevel()));
 			}
 		}
 

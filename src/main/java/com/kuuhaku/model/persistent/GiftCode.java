@@ -71,8 +71,16 @@ public class GiftCode {
 		return description;
 	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public String getGift() {
 		return gift;
+	}
+
+	public void setGift(String gift) {
+		this.gift = gift;
 	}
 
 	public void useCode(String id) {
@@ -94,5 +102,13 @@ public class GiftCode {
 		} catch (EvalError e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 		}
+	}
+
+	public Calendar getRedeemed() {
+		return redeemed;
+	}
+
+	public void setRedeemed(Calendar redeemed) {
+		this.redeemed = redeemed;
 	}
 }

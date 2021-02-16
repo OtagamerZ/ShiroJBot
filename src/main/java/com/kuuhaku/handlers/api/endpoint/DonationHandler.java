@@ -114,7 +114,7 @@ public class DonationHandler {
 					acc.removeCredit(amount, this.getClass());
 
 				if (acc.getGems() < db.getGems())
-					acc.addLoan(10000 * db.getGems());
+					acc.addLoan(10000L * db.getGems());
 				else
 					acc.removeGem(db.getGems());
 

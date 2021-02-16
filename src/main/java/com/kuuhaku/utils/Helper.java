@@ -656,7 +656,7 @@ public class Helper {
 						if (k.equals("gatekeeper")) {
 							buttons.put("\uD83D\uDEAA", (m, v) -> m.kick("Não aceitou as regras.").queue(null, Helper::doNothing));
 
-							msg.clearReactions();
+							msg.clearReactions().queue();
 							Pages.buttonize(msg, buttons, false);
 						} else {
 							buttons.put(CANCEL, (m, ms) -> {
@@ -669,7 +669,7 @@ public class Helper {
 								}
 							});
 
-							msg.clearReactions();
+							msg.clearReactions().queue();
 							Pages.buttonize(msg, buttons, true);
 						}
 					} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
@@ -1666,6 +1666,7 @@ public class Helper {
 		else return CardStatus.ALL_CARDS;
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static void keepMaximumNFiles(File folder, int maximum) {
 		if (!folder.isDirectory()) return;
 		List<org.apache.commons.lang3.tuple.Pair<File, FileTime>> files = Arrays.stream(folder.listFiles())
@@ -1870,8 +1871,9 @@ public class Helper {
 
 	public static boolean hasEmote(String text) {
 		for (String word : text.split(" ")) {
-			if (!word.startsWith(":") || !word.endsWith(":")) continue;
-			else if (ShiroInfo.getEmoteCache().containsKey(word)) return true;
+			if (word.startsWith(":") && word.endsWith(":")) {
+				if (ShiroInfo.getEmoteCache().containsKey(word)) return true;
+			}
 		}
 
 		return false;
@@ -2052,6 +2054,7 @@ public class Helper {
 		return values;
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static String serveImage(byte[] bytes) {
 		String hash = hash((System.currentTimeMillis() + hash(bytes, "MD5")).getBytes(StandardCharsets.UTF_8), "MD5");
 		File f = new File(Main.getInfo().getTemporaryFolder(), hash);
@@ -2065,6 +2068,7 @@ public class Helper {
 		}
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static String serveImage(byte[] bytes, String hash) {
 		File f = new File(Main.getInfo().getTemporaryFolder(), hash);
 

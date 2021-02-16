@@ -58,7 +58,7 @@ public class ItemDrop extends Drop {
 		Account acc = AccountDAO.getAccount(u.getId());
 		acc.addBuff(prize.getId());
 
-		if (!acc.hasCompletedQuests()) {
+		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.compute(DailyTask.DROP_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
 			acc.setDailyProgress(pg);

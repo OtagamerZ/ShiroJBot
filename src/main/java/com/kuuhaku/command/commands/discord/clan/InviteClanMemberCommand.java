@@ -49,7 +49,7 @@ public class InviteClanMemberCommand implements Executable {
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
-		} else if (!c.hasPermission(author.getId(), ClanPermission.INVITE)) {
+		} else if (c.isLocked(author.getId(), ClanPermission.INVITE)) {
 			channel.sendMessage("❌ | Você não tem permissão para convidar membros.").queue();
 			return;
 		} else if (message.getMentionedUsers().isEmpty()) {

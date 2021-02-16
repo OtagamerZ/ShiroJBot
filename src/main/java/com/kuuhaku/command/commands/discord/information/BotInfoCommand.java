@@ -51,7 +51,7 @@ public class BotInfoCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-title"))
-				.setThumbnail(Main.getSelfUser().getAvatarUrl())
+				.setThumbnail(Main.getSelfUser().getEffectiveAvatarUrl())
 				.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-1"), Main.getInfo().getUserByID(ShiroInfo.getNiiChan()).getAsTag(), false);
 
 		StringBuilder sb = new StringBuilder();

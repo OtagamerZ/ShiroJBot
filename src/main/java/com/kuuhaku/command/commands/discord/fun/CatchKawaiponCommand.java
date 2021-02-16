@@ -75,7 +75,7 @@ public class CatchKawaiponCommand implements Executable {
 		kp.addCard(kc);
 		acc.consumeCredit(cost, this.getClass());
 
-		if (!acc.hasCompletedQuests()) {
+		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.compute(DailyTask.CARD_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
 			pg.compute(DailyTask.ANIME_TASK, (k, v) -> {

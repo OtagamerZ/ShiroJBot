@@ -66,7 +66,8 @@ public class SayCommand implements Executable {
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 			wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
-			if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank()) wmb.setAvatarUrl(author.getAvatarUrl());
+			if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank())
+				wmb.setAvatarUrl(author.getEffectiveAvatarUrl());
 			else try {
 				wmb.setAvatarUrl(m.getPseudoAvatar());
 			} catch (RuntimeException e) {
