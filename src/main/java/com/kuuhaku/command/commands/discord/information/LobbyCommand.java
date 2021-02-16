@@ -65,7 +65,7 @@ public class LobbyCommand implements Executable {
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
 				channel.sendMessage("Você saiu do saguão SOLO com sucesso.").queue();
 			} else if (mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.getP1().equals(mmr) || rd.getP2().equals(mmr))) {
-				Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
+				Main.getInfo().getMatchMaking().getDuoLobby().entrySet().removeIf(e -> e.getKey().getP1().equals(mmr) || e.getKey().getP2().equals(mmr));
 				channel.sendMessage("Você saiu do saguão DUO com sucesso.").queue();
 			} else {
 				channel.sendMessage("❌ | Você não está em nenhum saguão.").queue();
