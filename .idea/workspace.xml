@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Ranked duo agora exige um time fechado" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Ranked duo agora exige um time fechado">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1101,21 +1103,7 @@
       <workItem from="1613350048233" duration="4725000" />
       <workItem from="1613404799141" duration="11375000" />
       <workItem from="1613422248615" duration="570000" />
-      <workItem from="1613476836829" duration="3533000" />
-    </task>
-    <task id="LOCAL-03750" summary="Correções menores">
-      <created>1612879885996</created>
-      <option name="number" value="03750" />
-      <option name="presentableId" value="LOCAL-03750" />
-      <option name="project" value="LOCAL" />
-      <updated>1612879885996</updated>
-    </task>
-    <task id="LOCAL-03751" summary="Correções menores">
-      <created>1612880059398</created>
-      <option name="number" value="03751" />
-      <option name="presentableId" value="LOCAL-03751" />
-      <option name="project" value="LOCAL" />
-      <updated>1612880059398</updated>
+      <workItem from="1613476836829" duration="4581000" />
     </task>
     <task id="LOCAL-03752" summary="Correções menores">
       <created>1612897594475</created>
@@ -1446,7 +1434,21 @@
       <option name="project" value="LOCAL" />
       <updated>1613480297382</updated>
     </task>
-    <option name="localTasksCounter" value="3799" />
+    <task id="LOCAL-03799" summary="Ranked duo agora exige um time fechado">
+      <created>1613480605972</created>
+      <option name="number" value="03799" />
+      <option name="presentableId" value="LOCAL-03799" />
+      <option name="project" value="LOCAL" />
+      <updated>1613480605972</updated>
+    </task>
+    <task id="LOCAL-03800" summary="Ranked duo agora exige um time fechado">
+      <created>1613481007762</created>
+      <option name="number" value="03800" />
+      <option name="presentableId" value="LOCAL-03800" />
+      <option name="project" value="LOCAL" />
+      <updated>1613481007762</updated>
+    </task>
+    <option name="localTasksCounter" value="3801" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

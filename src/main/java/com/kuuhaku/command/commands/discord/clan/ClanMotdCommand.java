@@ -27,9 +27,9 @@ import com.kuuhaku.model.persistent.Clan;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
-		name = "emblema",
-		aliases = {"icon", "icone"},
-		usage = "req_clanicon",
+		name = "mensagemdodia",
+		aliases = {"messageoftheday", "motd"},
+		usage = "req_text",
 		category = Category.CLAN
 )
 public class ClanMotdCommand implements Executable {
