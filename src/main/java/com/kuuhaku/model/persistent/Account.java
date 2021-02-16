@@ -168,7 +168,7 @@ public class Account {
 			TransactionDAO.register(userId, from, credit);
 			balance += credit;
 
-			if (!hasCompletedQuests()) {
+			if (hasPendingQuest()) {
 				Map<DailyTask, Integer> pg = getDailyProgress();
 				pg.compute(DailyTask.CREDIT_TASK, (k, v) -> Helper.getOr(v, 0) + (int) credit);
 				setDailyProgress(pg);
@@ -543,8 +543,8 @@ public class Account {
 		this.lastQuest = Calendar.getInstance();
 	}
 
-	public boolean hasCompletedQuests() {
+	public boolean hasPendingQuest() {
 		Calendar c = Calendar.getInstance();
-		return lastQuest != null && lastQuest.get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR);
+		return lastQuest == null || lastQuest.get(Calendar.DAY_OF_YEAR) != c.get(Calendar.DAY_OF_YEAR);
 	}
 }

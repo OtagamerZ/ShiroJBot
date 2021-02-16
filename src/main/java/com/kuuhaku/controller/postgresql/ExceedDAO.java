@@ -141,7 +141,7 @@ public class ExceedDAO {
         }
     }
 
-    @SuppressWarnings({"unchecked", "SqlResolve"})
+    @SuppressWarnings("SqlResolve")
     public static Exceed getExceed(ExceedEnum ex) {
         EntityManager em = Manager.getEntityManager();
 

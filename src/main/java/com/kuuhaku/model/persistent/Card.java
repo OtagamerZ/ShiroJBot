@@ -57,12 +57,24 @@ public class Card {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public AnimeName getAnime() {
 		return anime;
 	}
 
+	public void setAnime(AnimeName anime) {
+		this.anime = anime;
+	}
+
 	public KawaiponRarity getRarity() {
 		return rarity;
+	}
+
+	public void setRarity(KawaiponRarity rarity) {
+		this.rarity = rarity;
 	}
 
 	public BufferedImage drawCard(boolean foil) {

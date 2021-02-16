@@ -247,7 +247,7 @@ public class Shoukan extends GlobalGame {
 					String[] args = e.getMessage().getContentRaw().split(",");
 					return (args.length > 0 && StringUtils.isNumeric(args[0])) || e.getMessage().getContentRaw().equalsIgnoreCase("reload");
 				})
-				.and(e -> !isClosed())
+				.and(e -> isOpen())
 				.and(e -> !moveLock)
 				.test(evt);
 	}
@@ -481,22 +481,25 @@ public class Shoukan extends GlobalGame {
 						String result = switch (e.getArgType()) {
 							case NONE -> h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + ".";
 							case ALLY -> {
+								assert allyPos != null;
 								if (allyPos.getLeft().isFlipped()) {
 									allyPos.getLeft().setFlipped(false);
 									allyPos.getLeft().setDefending(true);
 								}
-								assert allyPos != null;
+
 								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + allyPos.getLeft().getName() + ".";
 							}
 							case ENEMY -> {
+								assert enemyPos != null;
 								if (enemyPos.getLeft().isFlipped()) {
 									enemyPos.getLeft().setFlipped(false);
 									enemyPos.getLeft().setDefending(true);
 								}
-								assert enemyPos != null;
+
 								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + enemyPos.getLeft().getName() + ".";
 							}
 							case BOTH -> {
+								assert allyPos != null && enemyPos != null;
 								if (allyPos.getLeft().isFlipped()) {
 									allyPos.getLeft().setFlipped(false);
 									allyPos.getLeft().setDefending(true);
@@ -505,7 +508,7 @@ public class Shoukan extends GlobalGame {
 									enemyPos.getLeft().setFlipped(false);
 									enemyPos.getLeft().setDefending(true);
 								}
-								assert allyPos != null && enemyPos != null;
+
 								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + allyPos.getLeft().getName() + " e " + enemyPos.getLeft().getName() + ".";
 							}
 						};
@@ -2474,7 +2477,7 @@ public class Shoukan extends GlobalGame {
 			for (Side s : Side.values()) {
 				Account acc = AccountDAO.getAccount(hands.get(s).getUser().getId());
 
-				if (!acc.hasCompletedQuests()) {
+				if (acc.hasPendingQuest()) {
 					Map<DailyTask, Integer> pg = acc.getDailyProgress();
 					DailyQuest dq = DailyQuest.getQuest(getCurrent().getIdLong());
 					int summons = summoned.get(s).getOrDefault(dq.getChosenRace(), 0);

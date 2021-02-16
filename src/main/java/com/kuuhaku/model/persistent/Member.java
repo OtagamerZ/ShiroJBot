@@ -139,7 +139,7 @@ public class Member {
 		lastEarntXp = System.currentTimeMillis();
 
 		Account acc = AccountDAO.getAccount(mid);
-		if (!acc.hasCompletedQuests()) {
+		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + (int) Math.round(15 * mult.get() * spamModif));
 			acc.setDailyProgress(pg);
@@ -154,7 +154,7 @@ public class Member {
 
 		if (xp >= (long) Math.pow(level, 2) * 100) {
 			level++;
-			acc.addCredit(75 + (8 * level), this.getClass());
+			acc.addCredit(75 + (8L * level), this.getClass());
 			AccountDAO.saveAccount(acc);
 			return true;
 		}
@@ -173,7 +173,7 @@ public class Member {
 		}
 
 		Account acc = AccountDAO.getAccount(mid);
-		if (!acc.hasCompletedQuests()) {
+		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + Math.round(amount * spamModif));
 			acc.setDailyProgress(pg);
@@ -182,7 +182,7 @@ public class Member {
 
 		if (xp >= (long) Math.pow(level, 2) * 100) {
 			level++;
-			acc.addCredit(75 + (8 * level), this.getClass());
+			acc.addCredit(75 + (8L * level), this.getClass());
 			AccountDAO.saveAccount(acc);
 		}
 		return (long) (amount * spamModif);

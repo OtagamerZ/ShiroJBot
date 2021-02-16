@@ -441,7 +441,7 @@ public class ShiroEvents extends ListenerAdapter {
 						WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 						wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
 						if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank())
-							wmb.setAvatarUrl(author.getAvatarUrl());
+							wmb.setAvatarUrl(author.getEffectiveAvatarUrl());
 						else try {
 							wmb.setAvatarUrl(m.getPseudoAvatar());
 						} catch (RuntimeException e) {
@@ -470,7 +470,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 
 			Account acc = AccountDAO.getAccount(author.getId());
-			if (!acc.hasCompletedQuests()) {
+			if (acc.hasPendingQuest()) {
 				DailyQuest tasks = DailyQuest.getQuest(author.getIdLong());
 				Map<DailyTask, Integer> pg = acc.getDailyProgress();
 
@@ -534,7 +534,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildLeave(GuildLeaveEvent event) {
+	public void onGuildLeave(@NotNull GuildLeaveEvent event) {
 		for (String d : ShiroInfo.getDevelopers()) {
 			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 				GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
@@ -565,7 +565,7 @@ public class ShiroEvents extends ListenerAdapter {
 			MemberDAO.addMemberToDB(member);
 
 			if (!gc.getMsgBoasVindas().isBlank()) {
-				URL url = new URL(Objects.requireNonNull(author.getAvatarUrl()));
+				URL url = new URL(Objects.requireNonNull(author.getEffectiveAvatarUrl()));
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
@@ -590,7 +590,7 @@ public class ShiroEvents extends ListenerAdapter {
 					else eb.setColor(Helper.colorThief(image));
 
 					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
-					else eb.setThumbnail(author.getAvatarUrl());
+					else eb.setThumbnail(author.getEffectiveAvatarUrl());
 
 					if (template.has("image")) eb.setImage(template.getString("image"));
 
@@ -620,10 +620,10 @@ public class ShiroEvents extends ListenerAdapter {
 										default -> "";
 									}
 							)
-							.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl())
+							.setAuthor(author.getAsTag(), author.getEffectiveAvatarUrl(), author.getEffectiveAvatarUrl())
 							.setColor(Helper.colorThief(image))
 							.setDescription(Helper.replaceTags(gc.getMsgBoasVindas(), author, guild))
-							.setThumbnail(author.getAvatarUrl())
+							.setThumbnail(author.getEffectiveAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
 
@@ -649,7 +649,7 @@ public class ShiroEvents extends ListenerAdapter {
 			MemberDAO.updateMemberConfigs(m);*/
 
 			if (!gc.getMsgAdeus().isBlank()) {
-				URL url = new URL(Objects.requireNonNull(author.getAvatarUrl()));
+				URL url = new URL(Objects.requireNonNull(author.getEffectiveAvatarUrl()));
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
@@ -674,7 +674,7 @@ public class ShiroEvents extends ListenerAdapter {
 					else eb.setColor(Helper.colorThief(image));
 
 					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
-					else eb.setThumbnail(author.getAvatarUrl());
+					else eb.setThumbnail(author.getEffectiveAvatarUrl());
 
 					if (template.has("image")) eb.setImage(template.getString("image"));
 
@@ -704,10 +704,10 @@ public class ShiroEvents extends ListenerAdapter {
 										default -> "";
 									}
 							)
-							.setAuthor(author.getAsTag(), author.getAvatarUrl(), author.getAvatarUrl())
+							.setAuthor(author.getAsTag(), author.getEffectiveAvatarUrl(), author.getEffectiveAvatarUrl())
 							.setColor(Helper.colorThief(image))
 							.setDescription(Helper.replaceTags(gc.getMsgAdeus(), author, guild))
-							.setThumbnail(author.getAvatarUrl())
+							.setThumbnail(author.getEffectiveAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
 
@@ -866,7 +866,7 @@ public class ShiroEvents extends ListenerAdapter {
 								.queue(s -> {
 									EmbedBuilder eb = new ColorlessEmbedBuilder()
 											.setDescription((event.getMessage().getContentRaw() + "\n\n" + (event.getMessage().getAttachments().size() > 0 ? "`Contém " + event.getMessage().getAttachments().size() + " anexos`" : "")).trim())
-											.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl())
+											.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getEffectiveAvatarUrl())
 											.setFooter(event.getAuthor().getId())
 											.setTimestamp(Instant.now());
 

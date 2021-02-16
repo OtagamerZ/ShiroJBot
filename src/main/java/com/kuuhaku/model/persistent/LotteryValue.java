@@ -27,8 +27,7 @@ import javax.persistence.Table;
 @Table(name = "lotteryvalue")
 public class LotteryValue {
 	@Id
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private final int id = 0;
+	private int id;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long value = 0;

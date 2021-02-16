@@ -293,12 +293,14 @@ public class ShiroInfo {
 		return gameLock.stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote(".")))) || games.keySet().stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote("."))));
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public File getCollectionsFolder() {
 		if (!collectionsFolder.exists())
 			collectionsFolder.mkdir();
 		return collectionsFolder;
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public File getTemporaryFolder() {
 		if (!temporaryFolder.exists())
 			temporaryFolder.mkdir();

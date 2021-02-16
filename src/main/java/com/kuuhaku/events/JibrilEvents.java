@@ -68,7 +68,7 @@ public class JibrilEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildLeave(GuildLeaveEvent event) {
+	public void onGuildLeave(@NotNull GuildLeaveEvent event) {
 		for (String d : ShiroInfo.getDevelopers()) {
 			Main.getJibril().retrieveUserById(d).queue(u ->
 					u.openPrivateChannel().queue(c -> {
@@ -88,14 +88,7 @@ public class JibrilEvents extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		try {
 			Message message = event.getMessage();
-			String prefix = GuildDAO.getGuildById(event.getGuild().getId()).getPrefix();
 			String rawMessage = message.getContentRaw();
-			String rawMsgNoPrefix = "";
-			String commandName = "";
-			if (rawMessage.toLowerCase().startsWith(prefix)) {
-				rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
-				commandName = rawMsgNoPrefix.split(" ")[0].trim();
-			}
 
 			if (BlacklistDAO.isBlacklisted(event.getAuthor())) return;
 

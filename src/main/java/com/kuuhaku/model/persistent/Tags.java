@@ -29,10 +29,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -79,8 +76,8 @@ public class Tags {
 
 		Set<Tag> tags = Tag.getTags(Main.getInfo().getUserByID(mb.getMid()), Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getMid()));
 		for (Tag t : tags) {
-			badges.add(t.getEmote(mb) == null ? "" : pattern.replace("{id}", t.getEmote(mb).getId(mb.getLevel())));
-		}
+            badges.add(t.getEmote(mb) == null ? "" : pattern.replace("{id}", Objects.requireNonNull(t.getEmote(mb)).getId(mb.getLevel())));
+        }
 
 		return badges;
 	}

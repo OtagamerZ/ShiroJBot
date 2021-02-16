@@ -55,6 +55,7 @@ public class Manager {
 		}
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static synchronized void disconnect() {
 		if (emf != null) {
 			emf.close();

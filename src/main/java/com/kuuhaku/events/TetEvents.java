@@ -46,11 +46,11 @@ public class TetEvents extends ListenerAdapter {
 		if (event.getAuthor().getAvatarUrl() != null) eb = new EmbedBuilder();
 		else eb = new ColorlessEmbedBuilder();
 		eb.setDescription(event.getMessage().getContentRaw());
-		eb.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
-		eb.setThumbnail(event.getAuthor().getAvatarUrl());
+		eb.setAuthor(event.getAuthor().getName(), event.getAuthor().getEffectiveAvatarUrl());
+		eb.setThumbnail(event.getAuthor().getEffectiveAvatarUrl());
 		eb.setFooter(event.getAuthor().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
-			eb.setColor(Helper.colorThief(event.getAuthor().getAvatarUrl()));
+			eb.setColor(Helper.colorThief(event.getAuthor().getEffectiveAvatarUrl()));
 		} catch (IOException ignore) {
 		}
 

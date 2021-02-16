@@ -54,7 +54,7 @@ public class ClanWithdrawCommand implements Executable {
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
-		} else if (!c.hasPermission(author.getId(), ClanPermission.WITHDRAW)) {
+		} else if (c.isLocked(author.getId(), ClanPermission.WITHDRAW)) {
 			channel.sendMessage("❌ | Você não tem permissão para sacar do cofre do clã.").queue();
 			return;
 		} else if (args.length < 1) {

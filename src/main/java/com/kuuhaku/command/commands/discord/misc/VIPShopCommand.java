@@ -75,6 +75,6 @@ public class VIPShopCommand implements Executable {
 			return;
 		}
 
-		vi.getAction().accept((TextChannel) channel, acc, args);
+		vi.getAction().accept(channel, acc, args);
 	}
 }

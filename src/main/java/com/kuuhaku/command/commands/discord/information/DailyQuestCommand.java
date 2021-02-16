@@ -48,7 +48,7 @@ public class DailyQuestCommand implements Executable {
 		Account acc = AccountDAO.getAccount(author.getId());
 		Map<DailyTask, Integer> pg = acc.getDailyProgress();
 
-		if (acc.hasCompletedQuests()) {
+		if (!acc.hasPendingQuest()) {
 			channel.sendMessage("Você já completou os desafios diários de hoje, volte amanhã!").queue();
 			return;
 		}

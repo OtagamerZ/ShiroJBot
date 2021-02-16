@@ -56,7 +56,7 @@ public class DecryptCommand implements Executable {
 		} else if (args.length < 1) {
 			channel.sendMessage("❌ | Você precisa digitar uma chave para descriptografar o arquivo.").queue();
 			return;
-		} else if (!message.getAttachments().get(0).getFileExtension().equals("shr")) {
+		} else if (message.getAttachments().get(0).getFileExtension() == null || !message.getAttachments().get(0).getFileExtension().equals("shr")) {
 			channel.sendMessage("❌ | Este não é um arquivo que foi criptografado por mim!").queue();
 			return;
 		}
