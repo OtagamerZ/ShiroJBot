@@ -336,7 +336,7 @@ public class TeamHand extends Hand {
 		LinkedList<Drawable> deque = deques.getCurrent();
 		List<Drawable> destinyDeck = getDestinyDeck();
 
-		if (deque.size() == 0) {
+		if (deque.isEmpty()) {
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();
 		}

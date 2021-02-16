@@ -141,7 +141,7 @@ public class DeckEvalCommand implements Executable {
 		if (kp.getChampions().size() < 30)
 			eb.setDescription("Seu deck ainda não está pronto para duelos.");
 		else
-			eb.setDescription(tips.size() == 0 ? "Seu deck está bem distribuído, parabéns!" : String.join("\n\n", tips));
+			eb.setDescription(tips.isEmpty() ? "Seu deck está bem distribuído, parabéns!" : String.join("\n\n", tips));
 
 		channel.sendMessage(eb.build()).queue();
 	}

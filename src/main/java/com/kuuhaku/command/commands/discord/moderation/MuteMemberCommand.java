@@ -53,7 +53,7 @@ public class MuteMemberCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		if (message.getMentionedUsers().size() == 0) {
+		if (message.getMentionedUsers().isEmpty()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-member-to-ban")).queue();
 			return;
 		} else if (args.length < 3) {

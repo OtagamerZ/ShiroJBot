@@ -58,7 +58,7 @@ public class KickClanMemberCommand implements Executable {
 			return;
 		}
 
-		User usr = message.getMentionedUsers().size() == 0 ? Main.getInfo().getUserByID(args[0]) : message.getMentionedUsers().get(0);
+		User usr = message.getMentionedUsers().isEmpty() ? Main.getInfo().getUserByID(args[0]) : message.getMentionedUsers().get(0);
 
 		if (usr == null) {
 			if (c.getMembers().get(args[0]) == null) {

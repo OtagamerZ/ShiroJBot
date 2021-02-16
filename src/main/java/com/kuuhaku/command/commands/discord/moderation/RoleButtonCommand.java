@@ -58,7 +58,7 @@ public class RoleButtonCommand implements Executable {
 		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-message-id")).queue();
 			return;
-		} else if (message.getMentionedRoles().size() == 0) {
+		} else if (message.getMentionedRoles().isEmpty()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-role")).queue();
 			return;
 		} else if (message.getMentionedRoles().get(0).getPosition() > guild.getSelfMember().getRoles().get(0).getPosition()) {
@@ -67,7 +67,7 @@ public class RoleButtonCommand implements Executable {
 		} else if (args[1].equals(Helper.CANCEL)) {
 			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-cannot-assign-role"), Helper.CANCEL)).queue();
 			return;
-		} else if (!EmojiUtils.containsEmoji(args[1]) && message.getEmotes().size() == 0) {
+		} else if (!EmojiUtils.containsEmoji(args[1]) && message.getEmotes().isEmpty()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid emote")).queue();
 			return;
 		}

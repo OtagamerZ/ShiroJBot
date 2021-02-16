@@ -58,10 +58,10 @@ public class DrawRaffleCommand implements Executable {
 		List<String> votes = UpvoteDAO.getVotes().stream().filter(u -> u.getVotedAt().isAfter(LocalDateTime.now().minusDays(days)) && Main.getInfo().getUserByID(u.getUid()) != null).map(Upvote::getUid).collect(Collectors.toList());
 		Collections.shuffle(votes);
 
-		if (votes.size() == 0) {
+		if (votes.isEmpty()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_raffle-no-votes")).queue();
-            return;
-        }
+			return;
+		}
 
 		channel.sendMessage("E o vencedor do sorteio é")
 				.delay(2, TimeUnit.SECONDS)

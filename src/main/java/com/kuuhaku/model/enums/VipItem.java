@@ -87,7 +87,7 @@ public enum VipItem {
 						.filter(cd -> !kp.getCards().contains(new KawaiponCard(cd, foil)))
 						.collect(Collectors.toList());
 
-				if (cards.size() == 0) {
+				if (cards.isEmpty()) {
 					ch.sendMessage("❌ | Você já possui todas as cartas " + (foil ? "cromadas" : "normais") + ", parabéns!").queue();
 					return;
 				}

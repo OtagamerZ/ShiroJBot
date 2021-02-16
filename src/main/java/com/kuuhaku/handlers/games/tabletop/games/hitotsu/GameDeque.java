@@ -29,7 +29,7 @@ public class GameDeque<T> extends LinkedList<T> {
 
 	@Override
 	public T removeFirst() {
-		if (game.getDeque().size() == 0) game.shuffle();
+		if (game.getDeque().isEmpty()) game.shuffle();
 		return super.removeFirst();
 	}
 }
