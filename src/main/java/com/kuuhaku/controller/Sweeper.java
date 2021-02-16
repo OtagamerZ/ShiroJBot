@@ -54,7 +54,7 @@ public class Sweeper {
 
 		Query q = em.createQuery(query);
 		for (List<String> ids : chunks) {
-			if (ids.size() == 0) break;
+			if (ids.isEmpty()) break;
 			q.setParameter("ids", ids);
 			q.executeUpdate();
 		}

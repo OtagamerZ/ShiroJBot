@@ -52,7 +52,7 @@ public class InviteClanMemberCommand implements Executable {
 		} else if (!c.hasPermission(author.getId(), ClanPermission.INVITE)) {
 			channel.sendMessage("❌ | Você não tem permissão para convidar membros.").queue();
 			return;
-		} else if (message.getMentionedUsers().size() == 0) {
+		} else if (message.getMentionedUsers().isEmpty()) {
 			channel.sendMessage("❌ | Você precisa mencionar o usuário a ser convidado.").queue();
 			return;
 		} else if (c.getMembers().size() >= c.getTier().getCapacity()) {

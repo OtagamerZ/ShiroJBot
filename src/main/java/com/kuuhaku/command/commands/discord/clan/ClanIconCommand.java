@@ -52,7 +52,7 @@ public class ClanIconCommand implements Executable {
 		} else if (c.getTier().ordinal() < ClanTier.GUILD.ordinal()) {
 			channel.sendMessage("❌ | Seu clã ainda não desbloqueou o emblema.").queue();
 			return;
-		} else if (message.getAttachments().size() == 0) {
+		} else if (message.getAttachments().isEmpty()) {
 			channel.sendMessage("❌ | Você precisa enviar uma imagem com dimensões 225x350.").queue();
 			return;
 		}

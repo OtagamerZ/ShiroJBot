@@ -46,7 +46,7 @@ public class TransferCommand implements Executable {
 		if (args.length < 2) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_transfer-no-amount")).queue();
 			return;
-		} else if (message.getMentionedUsers().size() == 0) {
+		} else if (message.getMentionedUsers().isEmpty()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 			return;
 		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {

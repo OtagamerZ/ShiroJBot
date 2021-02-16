@@ -57,7 +57,7 @@ public class ProfileTrophyCommand implements Executable {
 		Trophy t = TrophyDAO.getTrophies(author.getId());
 
 		if (args.length == 0) {
-			if (t.getTrophies().size() == 0) {
+			if (t.getTrophies().isEmpty()) {
 				channel.sendMessage("❌ | Você não possui troféus ainda.").queue();
 				return;
 			}

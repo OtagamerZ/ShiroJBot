@@ -29,7 +29,9 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.MatchMaking;
+import com.kuuhaku.model.common.RankedDuo;
 import com.kuuhaku.model.enums.RankedQueue;
+import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -62,7 +64,7 @@ public class LobbyCommand implements Executable {
 			if (mm.getSoloLobby().containsKey(mmr)) {
 				Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
 				channel.sendMessage("Você saiu do saguão SOLO com sucesso.").queue();
-			} else if (mm.getDuoLobby().containsKey(mmr)) {
+			} else if (mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.getP1().equals(mmr) || rd.getP2().equals(mmr))) {
 				Main.getInfo().getMatchMaking().getDuoLobby().remove(mmr);
 				channel.sendMessage("Você saiu do saguão DUO com sucesso.").queue();
 			} else {
@@ -78,29 +80,51 @@ public class LobbyCommand implements Executable {
 		RankedQueue rq = RankedQueue.valueOf(args[0].toUpperCase());
 		List<Page> pages = new ArrayList<>();
 
-		List<List<MatchMakingRating>> lobby = switch (rq) {
-			case SOLO -> Helper.chunkify(Main.getInfo().getMatchMaking().getSoloLobby().keySet(), 10);
-			case DUO -> Helper.chunkify(Main.getInfo().getMatchMaking().getDuoLobby().keySet(), 10);
-		};
+		switch (rq) {
+			case SOLO -> {
+				List<List<MatchMakingRating>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getSoloLobby().keySet(), 10);
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Saguão do Shoukan ranqueado (%s | %s jogadores)".formatted(rq.name(), switch (rq) {
-					case SOLO -> Main.getInfo().getMatchMaking().getSoloLobby().size();
-					case DUO -> Main.getInfo().getMatchMaking().getDuoLobby().size();
-				}));
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setTitle("Saguão do Shoukan ranqueado (%s | %s jogadores)".formatted(rq.name(),
+								Main.getInfo().getMatchMaking().getSoloLobby().size()
+						));
 
-		StringBuilder sb = new StringBuilder();
-		for (List<MatchMakingRating> chunk : lobby) {
-			sb.setLength(0);
-			for (MatchMakingRating mmr : chunk)
-				sb.append("%s (%s)\n".formatted(mmr.getUser().getName(), mmr.getTier().getName()));
+				StringBuilder sb = new StringBuilder();
+				for (List<MatchMakingRating> chunk : lobby) {
+					sb.setLength(0);
+					for (MatchMakingRating mmr : chunk)
+						sb.append("%s (%s)\n".formatted(mmr.getUser().getName(), mmr.getTier().getName()));
 
-			eb.setDescription(sb.toString());
-			pages.add(new Page(PageType.EMBED, eb.build()));
+					eb.setDescription(sb.toString());
+					pages.add(new Page(PageType.EMBED, eb.build()));
+				}
+
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
+						Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				);
+			}
+			case DUO -> {
+				List<List<RankedDuo>> lobby = Helper.chunkify(Main.getInfo().getMatchMaking().getDuoLobby().keySet(), 10);
+
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setTitle("Saguão do Shoukan ranqueado (%s | %s equipes)".formatted(rq.name(),
+								Main.getInfo().getMatchMaking().getDuoLobby().size()
+						));
+
+				StringBuilder sb = new StringBuilder();
+				for (List<RankedDuo> chunk : lobby) {
+					sb.setLength(0);
+					for (RankedDuo duo : chunk)
+						sb.append("%s (%s)\n".formatted(duo.getP1().getUser().getName() + " | " + duo.getP2().getUser().getName(), RankedTier.getTierName(duo.getAvgTier(), false)));
+
+					eb.setDescription(sb.toString());
+					pages.add(new Page(PageType.EMBED, eb.build()));
+				}
+
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
+						Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
+				);
+			}
 		}
-
-		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
-				Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
-		);
 	}
 }

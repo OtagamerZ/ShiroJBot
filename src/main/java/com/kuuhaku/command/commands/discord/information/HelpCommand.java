@@ -101,7 +101,7 @@ public class HelpCommand implements Executable {
 
 				if (!cat.isEnabled(gc, guild, author))
 					continue;
-				if (cat.getCommands().size() == 0) {
+				if (cat.getCommands().isEmpty()) {
 					ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_empty-category"), cat.getDescription()), false);
 					continue;
 				}

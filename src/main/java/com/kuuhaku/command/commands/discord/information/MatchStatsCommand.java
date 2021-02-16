@@ -67,7 +67,7 @@ public class MatchStatsCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			List<MatchHistory> hist = MatchDAO.getMatchesByPlayer(author.getId());
 
-			if (hist.size() == 0) {
+			if (hist.isEmpty()) {
 				channel.sendMessage("❌ | Você não possui nenhuma partida armazenada.").queue();
 				return;
 			}

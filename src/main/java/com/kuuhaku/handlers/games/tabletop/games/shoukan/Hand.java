@@ -417,7 +417,7 @@ public class Hand {
 	}
 
 	public LinkedList<Drawable> getDeque() {
-		if (deque.size() == 0) {
+		if (deque.isEmpty()) {
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();
 		}

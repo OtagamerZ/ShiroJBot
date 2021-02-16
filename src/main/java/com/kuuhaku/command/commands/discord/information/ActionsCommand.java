@@ -55,7 +55,7 @@ public class ActionsCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		List<StockMarket> act = StockMarketDAO.getInvestments(author.getId());
 
-		if (act.size() == 0) {
+		if (act.isEmpty()) {
 			channel.sendMessage("❌ | Você não possui nenhuma ação.").queue();
 			return;
 		}
