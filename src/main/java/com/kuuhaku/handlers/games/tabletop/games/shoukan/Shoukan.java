@@ -983,7 +983,7 @@ public class Shoukan extends GlobalGame {
 						int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
 						Hand enemy = hands.get(next);
 						enemy.removeHp(apDamage);
-					} else if (!his.isDefending() && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+					} else if (!(his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
 						Hand enemy = hands.get(next);
 						if (yours.getBonus().getSpecialData().has("totalDamage"))
 							enemy.removeHp(yPower);
@@ -1294,7 +1294,7 @@ public class Shoukan extends GlobalGame {
 						int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
 						Hand enemy = hands.get(current);
 						enemy.removeHp(apDamage);
-					} else if (!his.isDefending() && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+					} else if (!(his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
 						Hand enemy = hands.get(current);
 						if (yours.getBonus().getSpecialData().has("totalDamage"))
 							enemy.removeHp(yPower);
