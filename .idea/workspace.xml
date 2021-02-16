@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Revisão geral no código" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Revisão geral no código">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -178,19 +180,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [compileJava -Xlint:deprecation]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1104,13 +1093,8 @@
       <workItem from="1613404799141" duration="11375000" />
       <workItem from="1613422248615" duration="570000" />
       <workItem from="1613476836829" duration="9203000" />
-    </task>
-    <task id="LOCAL-03755" summary="Melhoria no comando de estatística de uso">
-      <created>1612902564745</created>
-      <option name="number" value="03755" />
-      <option name="presentableId" value="LOCAL-03755" />
-      <option name="project" value="LOCAL" />
-      <updated>1612902564745</updated>
+      <workItem from="1613491209119" duration="2492000" />
+      <workItem from="1613497620102" duration="1371000" />
     </task>
     <task id="LOCAL-03756" summary="Melhoria no comando de estatística de uso">
       <created>1612903216215</created>
@@ -1448,7 +1432,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613485553049</updated>
     </task>
-    <option name="localTasksCounter" value="3804" />
+    <task id="LOCAL-03804" summary="Revisão geral no código">
+      <created>1613491343983</created>
+      <option name="number" value="03804" />
+      <option name="presentableId" value="LOCAL-03804" />
+      <option name="project" value="LOCAL" />
+      <updated>1613491343983</updated>
+    </task>
+    <option name="localTasksCounter" value="3805" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
