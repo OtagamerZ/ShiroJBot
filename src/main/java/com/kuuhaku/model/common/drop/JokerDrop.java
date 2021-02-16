@@ -63,7 +63,7 @@ public class JokerDrop extends Drop {
 		else acc.addCredit(amount, this.getClass());
 		acc.addLoan(penalty);
 
-		if (!acc.hasCompletedQuests()) {
+		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.compute(DailyTask.DROP_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
 			acc.setDailyProgress(pg);

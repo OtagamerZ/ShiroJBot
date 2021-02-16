@@ -48,6 +48,10 @@ public class Version {
 		return minor;
 	}
 
+	public void setMinor(int minor) {
+		this.minor = minor;
+	}
+
 	public int getBuild() {
 		this.build++;
 		return build;

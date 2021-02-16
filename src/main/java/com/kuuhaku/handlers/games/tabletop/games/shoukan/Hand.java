@@ -265,15 +265,13 @@ public class Hand {
 		}
 	}
 
-	public Drawable destinyDraw() {
+	public void destinyDraw() {
 		if (destinyDeck.size() > 0) {
 			Drawable dr = destinyDeck.remove(Helper.rng(destinyDeck.size(), true));
 			cards.add(dr.copy());
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();
-			return dr;
 		}
-		return null;
 	}
 
 	public Drawable draw() {

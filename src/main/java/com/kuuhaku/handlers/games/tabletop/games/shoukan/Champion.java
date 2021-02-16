@@ -501,6 +501,10 @@ public class Champion implements Drawable, Cloneable {
 		return category;
 	}
 
+	public void setCategory(Class category) {
+		this.category = category;
+	}
+
 	public Champion getFakeCard() {
 		return fakeCard;
 	}
@@ -534,6 +538,10 @@ public class Champion implements Drawable, Cloneable {
 
 	public Set<String> getRequiredCards() {
 		return requiredCards;
+	}
+
+	public void setRequiredCards(Set<String> requiredCards) {
+		this.requiredCards = requiredCards;
 	}
 
 	public int getStun() {

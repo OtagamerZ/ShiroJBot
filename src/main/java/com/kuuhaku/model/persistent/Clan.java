@@ -83,6 +83,10 @@ public class Clan {
 	public Clan() {
 	}
 
+	public String getHash() {
+		return hash;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -240,12 +244,24 @@ public class Clan {
 		return deck;
 	}
 
+	public void setDeck(DeckStash deck) {
+		this.deck = deck;
+	}
+
 	public List<String> getTransactions() {
 		return transactions;
 	}
 
+	public void setTransactions(List<String> transactions) {
+		this.transactions = transactions;
+	}
+
 	public Map<String, ClanHierarchy> getMembers() {
 		return members;
+	}
+
+	public void setMembers(Map<String, ClanHierarchy> members) {
+		this.members = members;
 	}
 
 	public Map<ClanHierarchy, Integer> getPermissions() {
@@ -260,7 +276,11 @@ public class Clan {
 		permissions.put(ch, ClanPermission.getFlags(cp));
 	}
 
-	public boolean hasPermission(String id, ClanPermission ch) {
-		return ClanPermission.getPermissions(permissions.get(members.get(id))).contains(ch);
+	public void setPermissions(Map<ClanHierarchy, Integer> permissions) {
+		this.permissions = permissions;
+	}
+
+	public boolean isLocked(String id, ClanPermission ch) {
+		return !ClanPermission.getPermissions(permissions.get(members.get(id))).contains(ch);
 	}
 }

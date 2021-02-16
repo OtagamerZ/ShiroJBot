@@ -43,7 +43,6 @@
         <class>com.kuuhaku.model.persistent.Account</class>
         <class>com.kuuhaku.model.persistent.Slots</class>
         <class>com.kuuhaku.model.persistent.SupportRating</class>
-        <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
         <class>com.kuuhaku.model.persistent.Version</class>
         <class>com.kuuhaku.model.persistent.MutedMember</class>
         <class>com.kuuhaku.model.persistent.RarityColors</class>
@@ -116,7 +115,6 @@
         <class>com.kuuhaku.model.persistent.CustomAnswer</class>
         <class>com.kuuhaku.model.persistent.Tags</class>
         <class>com.kuuhaku.model.persistent.PermaBlock</class>
-        <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
         <class>com.kuuhaku.handlers.games.disboard.model.PoliticalState</class>
         <class>com.kuuhaku.model.persistent.Blacklist</class>
 

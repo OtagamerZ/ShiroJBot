@@ -60,7 +60,7 @@ public class ChatSocket extends WebSocketServer {
 
 		gm.setUserId(u.getId());
 		gm.setName(u.getName());
-		gm.setAvatar(u.getAvatarUrl());
+		gm.setAvatar(u.getEffectiveAvatarUrl());
 		gm.setContent(data.getString("content"));
 
 		GlobalMessageDAO.saveMessage(gm);

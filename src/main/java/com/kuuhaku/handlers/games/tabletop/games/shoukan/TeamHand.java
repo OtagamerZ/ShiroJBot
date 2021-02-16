@@ -108,9 +108,7 @@ public class TeamHand extends Hand {
 						}
 						for (Drawable d : deque) d.setAcc(acc);
 					}
-					case "instakill" -> {
-						deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
-					}
+					case "instakill" -> deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
 				}
 			}
 
@@ -151,7 +149,7 @@ public class TeamHand extends Hand {
 		}
 	}
 
-	public Drawable destinyDraw() {
+	public void destinyDraw() {
 		LinkedList<Drawable> deque = getDeque();
 		List<Drawable> destinyDeck = getDestinyDeck();
 		List<Drawable> cards = getCards();
@@ -161,9 +159,7 @@ public class TeamHand extends Hand {
 			cards.add(dr.copy());
 			deque.addAll(destinyDeck);
 			destinyDeck.clear();
-			return dr;
 		}
-		return null;
 	}
 
 	public Drawable draw() {

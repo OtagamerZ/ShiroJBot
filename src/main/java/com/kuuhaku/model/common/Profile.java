@@ -180,7 +180,7 @@ public class Profile {
 		printCenteredString(String.valueOf(mb.getLevel()), 196, 52, 515, g2d);
 
 		g2d.setFont(FONT.deriveFont(Font.PLAIN, 25));
-		printCenteredString(Helper.getShortenedValue(mb.getXp(), 1000) + "/" + Helper.getShortenedValue((int) Math.pow(mb.getLevel(), 2) * 100, 1000), 196, 52, 538, g2d);
+		printCenteredString(Helper.getShortenedValue(mb.getXp(), 1000) + "/" + Helper.getShortenedValue((int) Math.pow(mb.getLevel(), 2) * 100L, 1000), 196, 52, 538, g2d);
 
 		List<Member> mbs = MemberDAO.getMemberRank(g.getId(), false);
 		int pos = 0;

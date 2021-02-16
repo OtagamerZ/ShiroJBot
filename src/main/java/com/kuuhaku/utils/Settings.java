@@ -122,7 +122,7 @@ public class Settings {
 			eb.addField("\uD83D\uDCDD » Mensagem de Boas-vindas", msgBV, false);
 			eb.addField(Helper.VOID + "\n\uD83D\uDCD6 » Canal de Adeus", canalAdeus, false);
 			eb.addField("\uD83D\uDCDD » Mensagem de Adeus", msgAdeus, false);
-			eb.addField(Helper.VOID + "\n\uD83D\uDCD6 » Canal geral", canalAvisos, true);
+			eb.addField(Helper.VOID + "\n\uD83D\uDCD6 » Canal geral", canalGeral, true);
 			eb.addField("\uD83D\uDCDD » Tópico do canal geral", generalTopic, false);
 
 			eb.addBlankField(false);

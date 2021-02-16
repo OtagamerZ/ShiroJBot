@@ -277,8 +277,8 @@ public abstract class GlobalGame {
 		return history.getRound(round);
 	}
 
-	public boolean isClosed() {
-		return closed;
+	public boolean isOpen() {
+		return !closed;
 	}
 
 	public void close() {
@@ -315,7 +315,7 @@ public abstract class GlobalGame {
 						if (ranked) yourMMR.increaseRankPoints(theirMMR);
 
 						Account acc = AccountDAO.getAccount(yourMMR.getUserId());
-						if (!acc.hasCompletedQuests()) {
+						if (acc.hasPendingQuest()) {
 							Map<DailyTask, Integer> pg = acc.getDailyProgress();
 							pg.compute(DailyTask.WINS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
 							acc.setDailyProgress(pg);

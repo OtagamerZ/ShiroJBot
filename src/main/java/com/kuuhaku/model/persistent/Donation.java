@@ -69,23 +69,47 @@ public class Donation {
 		return transaction;
 	}
 
+	public void setTransaction(String transaction) {
+		this.transaction = transaction;
+	}
+
 	public String getUid() {
 		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public DonationBundle getBundle() {
 		return bundle;
 	}
 
+	public void setBundle(DonationBundle bundle) {
+		this.bundle = bundle;
+	}
+
 	public float getValue() {
 		return value;
+	}
+
+	public void setValue(float value) {
+		this.value = value;
 	}
 
 	public String getDate() {
 		return date;
 	}
 
+	public void setDate(String date) {
+		this.date = date;
+	}
+
 	public String getStatus() {
 		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

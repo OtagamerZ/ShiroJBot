@@ -155,8 +155,8 @@ public abstract class Game {
 		return history.getRound(round);
 	}
 
-	public boolean isClosed() {
-		return closed;
+	public boolean isOpen() {
+		return !closed;
 	}
 
 	public void close() {

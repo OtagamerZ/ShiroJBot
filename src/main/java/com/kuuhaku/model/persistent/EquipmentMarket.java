@@ -22,11 +22,10 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.model.common.Market;
 
 import javax.persistence.*;
-import java.time.ZoneId;
-import java.time.Instant;
 import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Date;
-import java.util.TimeZone;
 
 @Entity
 @Table(name = "equipmentmarket")

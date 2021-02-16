@@ -42,7 +42,7 @@ public class UptimeCommand implements Executable {
 		long uptimeSec = Instant.now().getEpochSecond() - Main.getInfo().getStartTime();
 
 		int dias = (int) TimeUnit.SECONDS.toDays(uptimeSec);
-		long horas = TimeUnit.SECONDS.toHours(uptimeSec) - (dias * 24);
+		long horas = TimeUnit.SECONDS.toHours(uptimeSec) - (dias * 24L);
 		long minutos = TimeUnit.SECONDS.toMinutes(uptimeSec) - (TimeUnit.SECONDS.toHours(uptimeSec) * 60);
 		long segundos = TimeUnit.SECONDS.toSeconds(uptimeSec) - (TimeUnit.SECONDS.toMinutes(uptimeSec) * 60);
 

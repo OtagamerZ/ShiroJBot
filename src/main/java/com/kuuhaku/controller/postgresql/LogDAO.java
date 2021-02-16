@@ -49,7 +49,7 @@ public class LogDAO {
 		return q.getResultList();
 	}
 
-	@SuppressWarnings({"unchecked", "SqlResolve"})
+	@SuppressWarnings("SqlResolve")
 	public static List<Object[]> auditUser(String id, String type) {
 		EntityManager em = Manager.getEntityManager();
 

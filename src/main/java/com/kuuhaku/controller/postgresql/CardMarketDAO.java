@@ -189,7 +189,7 @@ public class CardMarketDAO {
 						 , AVG(ms.month) AS avg_month
 						 , AVG(ms.sold) AS avg_sold
 						 , AVG(ms.unique_buyers) AS avg_unique_buyers 
-					FROM \"GetMerchantStats\" ms 
+					FROM "GetMerchantStats" ms 
 					WHERE ms.month = EXTRACT(MONTH FROM current_date)
 					""");
 
@@ -210,7 +210,7 @@ public class CardMarketDAO {
 						 , ms.month
 						 , ms.sold
 						 , ms.unique_buyers 
-					FROM \"GetMerchantStats\" ms 
+					FROM "GetMerchantStats" ms 
 					WHERE ms.seller = :id
 					AND ms.month = EXTRACT(MONTH FROM current_date)
 					""");
