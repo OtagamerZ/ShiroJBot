@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MemberRequest {
+public class MemberHandler {
 
 	@RequestMapping(value = "/member/get/byid", method = RequestMethod.GET)
 	public Member requestProfileById(@RequestParam(value = "id") String id) {

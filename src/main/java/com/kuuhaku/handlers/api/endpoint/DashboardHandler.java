@@ -23,6 +23,7 @@ import com.google.common.cache.CacheBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
+import com.kuuhaku.handlers.api.endpoint.payload.ReadyData;
 import com.kuuhaku.handlers.api.exception.RatelimitException;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.common.Profile;
@@ -46,7 +47,7 @@ import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-public class DashboardRequest {
+public class DashboardHandler {
 	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.SECONDS).build();
 
 	@RequestMapping(value = "/auth", method = RequestMethod.GET)
