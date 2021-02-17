@@ -1110,14 +1110,7 @@
       <workItem from="1613563359708" duration="189000" />
       <workItem from="1613565710885" duration="2875000" />
       <workItem from="1613573584206" duration="18000" />
-      <workItem from="1613579305523" duration="6398000" />
-    </task>
-    <task id="LOCAL-03763" summary="Melhoria no comando de estatística de uso">
-      <created>1612974777749</created>
-      <option name="number" value="03763" />
-      <option name="presentableId" value="LOCAL-03763" />
-      <option name="project" value="LOCAL" />
-      <updated>1612974777749</updated>
+      <workItem from="1613579305523" duration="6992000" />
     </task>
     <task id="LOCAL-03764" summary="Melhoria no comando de estatística de uso">
       <created>1612978606666</created>
@@ -1455,7 +1448,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613590036540</updated>
     </task>
-    <option name="localTasksCounter" value="3812" />
+    <task id="LOCAL-03812" summary="Implementação do SpringLoaded">
+      <created>1613590591640</created>
+      <option name="number" value="03812" />
+      <option name="presentableId" value="LOCAL-03812" />
+      <option name="project" value="LOCAL" />
+      <updated>1613590591640</updated>
+    </task>
+    <option name="localTasksCounter" value="3813" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
