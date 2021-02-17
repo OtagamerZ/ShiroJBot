@@ -23,6 +23,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.3.4.RELEASE")
         classpath("org.springframework:springloaded:1.2.8.RELEASE")
+        classpath "com.github.jengelman.gradle.plugins:shadow:6.1.0"
     }
 }
 
@@ -31,6 +32,7 @@ plugins {
     id 'idea'
     id 'application'
     id "org.springframework.boot" version "2.3.4.RELEASE"
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 application {
@@ -116,6 +118,7 @@ dependencies {
 
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 idea {
     module {
@@ -124,27 +127,10 @@ idea {
     }
 }
 
-bootJar {
+shadowJar {
     archiveBaseName.set('shirojbot')
     archiveVersion.set('STANDALONE')
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': 'Shiro J. Bot',
-                'Implementation-Version': archiveVersion,
-                'Main-Class': 'com.kuuhaku.Main'
-    }
-    archiveBaseName.set('shirojbot')
-    archiveVersion.set('STANDALONE')
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-    with jar
 }
 
 compileJava.options.encoding = 'UTF-8'
