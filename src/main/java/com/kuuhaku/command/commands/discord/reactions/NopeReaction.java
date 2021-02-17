@@ -27,7 +27,7 @@ import net.dv8tion.jda.api.entities.*;
 
 @Command(
 		name = "nope",
-		aliases = {"sqn", "hojenao", "esquiva"},
+		aliases = {"nao", "iie"},
 		category = Category.FUN
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})
@@ -35,7 +35,7 @@ public class NopeReaction extends Action implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		sendReaction("nope", channel, null, author.getAsMention() + " esquivou!", false);
+		sendReaction("nope", channel, null, author.getAsMention() + " negou!", false);
 	}
 
 	@Override
