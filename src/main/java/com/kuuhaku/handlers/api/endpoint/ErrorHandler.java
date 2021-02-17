@@ -18,8 +18,11 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
-import com.kuuhaku.handlers.api.exception.Exception;
-import com.kuuhaku.handlers.api.exception.*;
+import com.kuuhaku.handlers.api.endpoint.payload.Exception;
+import com.kuuhaku.handlers.api.exception.InvalidTokenException;
+import com.kuuhaku.handlers.api.exception.NotEnoughArgsException;
+import com.kuuhaku.handlers.api.exception.RatelimitException;
+import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.utils.Helper;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.boot.web.servlet.error.ErrorController;

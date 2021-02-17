@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 @RestController
-public class MemeRequest {
+public class MemeHandler {
 	@RequestMapping(value = "/meme/twobuttons", method = RequestMethod.POST)
 	public @ResponseBody
 	byte[] getTwoButtonsMeme(@RequestHeader(value = "token") String token,

@@ -16,30 +16,28 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.api.endpoint;
+package com.kuuhaku.handlers.api.endpoint.payload;
 
-import org.json.JSONObject;
+public class ExceedState {
+	private final int id;
+	private final String name;
+	private final int ranking;
 
-public class ReadyData {
-	private final JSONObject data;
-	private final String sessionId;
-	private final long createdAt;
-
-	public ReadyData(JSONObject data, String sessionId) {
-		this.data = data;
-		this.sessionId = sessionId;
-		this.createdAt = System.currentTimeMillis();
+	public ExceedState(int id, String name, int ranking) {
+		this.id = id;
+		this.name = name;
+		this.ranking = ranking;
 	}
 
-	public JSONObject getData() {
-		return data;
+	public int getId() {
+		return id;
 	}
 
-	public String getSessionId() {
-		return sessionId;
+	public String getName() {
+		return name;
 	}
 
-	public long getCreatedAt() {
-		return createdAt;
+	public int getRanking() {
+		return ranking;
 	}
 }
