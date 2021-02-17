@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
-public class GuildRequest {
+public class GuildHandler {
 
 	@RequestMapping(value = "/guild/get", method = RequestMethod.GET)
 	public GuildConfig requestGuild(@RequestParam(value = "id") String id) {

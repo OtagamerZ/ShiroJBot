@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @RestController
-public class CommonRequest {
+public class CommonHandler {
     @RequestMapping(value = "/collection", method = RequestMethod.GET)
     public @ResponseBody
     HttpEntity<byte[]> serveCollectionImage(@RequestParam(value = "id") String id) throws IOException {

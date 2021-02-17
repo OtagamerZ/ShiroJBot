@@ -23,7 +23,7 @@ import com.google.common.cache.CacheBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.handlers.api.endpoint.ReadyData;
+import com.kuuhaku.handlers.api.endpoint.payload.ReadyData;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.BiContract;

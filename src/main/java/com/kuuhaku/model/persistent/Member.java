@@ -21,7 +21,7 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.handlers.api.endpoint.Bonus;
+import com.kuuhaku.handlers.api.endpoint.payload.Bonus;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.TrophyType;
 import com.kuuhaku.utils.Helper;

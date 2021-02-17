@@ -18,7 +18,7 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.handlers.api.endpoint.ExceedState;
+import com.kuuhaku.handlers.api.endpoint.payload.ExceedState;
 import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.ExceedMember;
