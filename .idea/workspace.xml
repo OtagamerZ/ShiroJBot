@@ -14,8 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção menor">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +128,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
+    <property name="settings.editor.selected.configurable" value="preferences.general" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -1110,14 +1111,7 @@
       <workItem from="1613563359708" duration="189000" />
       <workItem from="1613565710885" duration="2875000" />
       <workItem from="1613573584206" duration="18000" />
-      <workItem from="1613579305523" duration="2295000" />
-    </task>
-    <task id="LOCAL-03759" summary="Melhoria no comando de estatística de uso">
-      <created>1612959216509</created>
-      <option name="number" value="03759" />
-      <option name="presentableId" value="LOCAL-03759" />
-      <option name="project" value="LOCAL" />
-      <updated>1612959216509</updated>
+      <workItem from="1613579305523" duration="5170000" />
     </task>
     <task id="LOCAL-03760" summary="Melhoria no comando de estatística de uso">
       <created>1612959287625</created>
@@ -1455,7 +1449,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613580312652</updated>
     </task>
-    <option name="localTasksCounter" value="3808" />
+    <task id="LOCAL-03808" summary="Correção menor">
+      <created>1613581647064</created>
+      <option name="number" value="03808" />
+      <option name="presentableId" value="LOCAL-03808" />
+      <option name="project" value="LOCAL" />
+      <updated>1613581647064</updated>
+    </task>
+    <option name="localTasksCounter" value="3809" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1577,5 +1578,9 @@
       <element expression="resources/text()" />
     </history>
     <find-history />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
