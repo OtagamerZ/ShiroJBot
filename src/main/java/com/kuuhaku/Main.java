@@ -151,7 +151,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	private static void finishStartUp() {
-		shiroShards.setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 		getInfo().setWinner(ExceedDAO.getWinner());
 		for (Guild g : shiroShards.getGuilds()) {
@@ -192,6 +191,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		shiroShards.addEventListener(info.getShiroEvents());
 		jbr.addEventListener(new JibrilEvents());
+
+		shiroShards.setActivity(getRandomActivity());
 	}
 
 	public static Activity getRandomActivity() {

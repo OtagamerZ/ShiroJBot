@@ -78,8 +78,6 @@ public class URankCommand implements Executable {
 			else
 				getLevelRanking(pages, guild, false);
 
-			System.out.println("Test");
-
 			m.delete().queue();
 			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s ->
 					Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId()))
