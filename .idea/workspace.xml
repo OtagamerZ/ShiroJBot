@@ -13,8 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Revisão geral no código">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no efeito de atordoamento">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/NopeReaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/NopeReaction.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -297,9 +298,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.ShiroJBot [compileJava -Xlint:deprecation]" />
-        <item itemvalue="Gradle.ShiroJBot [compileJava]" />
         <item itemvalue="Gradle.ShiroJBot [shadowJar]" />
+        <item itemvalue="Gradle.ShiroJBot [compileJava]" />
+        <item itemvalue="Gradle.ShiroJBot [compileJava -Xlint:deprecation]" />
         <item itemvalue="Gradle.ShiroJBot [clean]" />
         <item itemvalue="Gradle.ShiroJBot [build]" />
       </list>
@@ -1094,14 +1095,9 @@
       <workItem from="1613422248615" duration="570000" />
       <workItem from="1613476836829" duration="9203000" />
       <workItem from="1613491209119" duration="2492000" />
-      <workItem from="1613497620102" duration="1371000" />
-    </task>
-    <task id="LOCAL-03756" summary="Melhoria no comando de estatística de uso">
-      <created>1612903216215</created>
-      <option name="number" value="03756" />
-      <option name="presentableId" value="LOCAL-03756" />
-      <option name="project" value="LOCAL" />
-      <updated>1612903216215</updated>
+      <workItem from="1613497620102" duration="9292000" />
+      <workItem from="1613563359708" duration="189000" />
+      <workItem from="1613565710885" duration="611000" />
     </task>
     <task id="LOCAL-03757" summary="Melhoria no comando de estatística de uso">
       <created>1612904509502</created>
@@ -1439,7 +1435,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613491343983</updated>
     </task>
-    <option name="localTasksCounter" value="3805" />
+    <task id="LOCAL-03805" summary="Correção no efeito de atordoamento">
+      <created>1613499196589</created>
+      <option name="number" value="03805" />
+      <option name="presentableId" value="LOCAL-03805" />
+      <option name="project" value="LOCAL" />
+      <updated>1613499196590</updated>
+    </task>
+    <option name="localTasksCounter" value="3806" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1525,7 +1528,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de BufferedOutputStreams" />
     <MESSAGE value="Tentativa de otimização da velocidade de geração de imagens" />
     <MESSAGE value="Correção nos nomes dos tiers ranqueados" />
     <MESSAGE value="Aumento no limite máximo dos emotes de level" />
@@ -1550,7 +1552,8 @@
     <MESSAGE value="Adição do comando para ver informações do emote" />
     <MESSAGE value="Ranked duo agora exige um time fechado" />
     <MESSAGE value="Revisão geral no código" />
-    <option name="LAST_COMMIT_MESSAGE" value="Revisão geral no código" />
+    <MESSAGE value="Correção no efeito de atordoamento" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no efeito de atordoamento" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
