@@ -111,7 +111,7 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
     implementation group: 'com.graphql-java', name: 'graphql-java', version: '2019-05-08T02-56-27-cca4316'
     implementation group: 'net.oneandone.reflections8', name: 'reflections8', version: '0.11.7'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-devtools'
+    //implementation group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.3.4.RELEASE'
 }
 
 apply plugin: 'org.springframework.boot'
