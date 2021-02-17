@@ -19,13 +19,13 @@
 package com.kuuhaku.handlers.api;
 
 import com.kuuhaku.utils.Helper;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@SpringBootApplication
 @Configuration
-@ComponentScan
 public class Application implements WebMvcConfigurer {
 	public Application() {
 		Helper.logger(this.getClass()).info("API inicializada.");
