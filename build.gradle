@@ -130,4 +130,21 @@ bootJar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Shiro J. Bot',
+                'Implementation-Version': archiveVersion,
+                'Main-Class': 'com.kuuhaku.Main'
+    }
+    archiveBaseName.set('shirojbot')
+    archiveVersion.set('STANDALONE')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
+}
+
 compileJava.options.encoding = 'UTF-8'
