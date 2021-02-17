@@ -321,7 +321,11 @@ public class ShiroInfo {
 	}
 
 	public User getUserByID(String userID) {
-		return Main.getShiroShards().getUserById(userID);
+		try {
+			return Main.getShiroShards().retrieveUserById(userID).submit().get();
+		} catch (InterruptedException | ExecutionException e) {
+			return null;
+		}
 	}
 
 	public Member getMemberByID(String userID) {
