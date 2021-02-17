@@ -130,6 +130,7 @@ idea {
 shadowJar {
     archiveBaseName.set('shirojbot')
     archiveVersion.set('STANDALONE')
+    archiveClassifier.set('')
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
