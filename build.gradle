@@ -34,7 +34,7 @@ plugins {
 }
 
 application {
-    mainClassName = 'com.kuuhaku/Main'
+    mainClassName = 'com.kuuhaku.Main'
 }
 
 group 'com.kuuhaku'
