@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.api.exception;
+package com.kuuhaku.handlers.api.endpoint.payload;
 
 import org.springframework.http.HttpStatus;
 
