@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação do SpringLoaded" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação do SpringLoaded">
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1107,21 +1109,7 @@
       <workItem from="1613563359708" duration="189000" />
       <workItem from="1613565710885" duration="2875000" />
       <workItem from="1613573584206" duration="18000" />
-      <workItem from="1613579305523" duration="7313000" />
-    </task>
-    <task id="LOCAL-03766" summary="Adicionado nível de invocador no Shoukan">
-      <created>1613064573484</created>
-      <option name="number" value="03766" />
-      <option name="presentableId" value="LOCAL-03766" />
-      <option name="project" value="LOCAL" />
-      <updated>1613064573486</updated>
-    </task>
-    <task id="LOCAL-03767" summary="Adicionado nível de invocador no Shoukan">
-      <created>1613064784742</created>
-      <option name="number" value="03767" />
-      <option name="presentableId" value="LOCAL-03767" />
-      <option name="project" value="LOCAL" />
-      <updated>1613064784742</updated>
+      <workItem from="1613579305523" duration="7628000" />
     </task>
     <task id="LOCAL-03768" summary="Adicionado nível de invocador no Shoukan">
       <created>1613065387980</created>
@@ -1452,7 +1440,21 @@
       <option name="project" value="LOCAL" />
       <updated>1613591205291</updated>
     </task>
-    <option name="localTasksCounter" value="3815" />
+    <task id="LOCAL-03815" summary="Implementação do SpringLoaded">
+      <created>1613591426106</created>
+      <option name="number" value="03815" />
+      <option name="presentableId" value="LOCAL-03815" />
+      <option name="project" value="LOCAL" />
+      <updated>1613591426106</updated>
+    </task>
+    <task id="LOCAL-03816" summary="Implementação do SpringLoaded">
+      <created>1613591583841</created>
+      <option name="number" value="03816" />
+      <option name="presentableId" value="LOCAL-03816" />
+      <option name="project" value="LOCAL" />
+      <updated>1613591583841</updated>
+    </task>
+    <option name="localTasksCounter" value="3817" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
