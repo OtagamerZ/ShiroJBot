@@ -14,9 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação do SpringLoaded">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +117,7 @@
     <property name="last.edited.regexp" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/assets" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
@@ -309,9 +307,13 @@
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
       <option name="SHMEM_ADDRESS" />
-      <option name="HOST" />
+      <option name="HOST" value="209.126.8.17" />
       <option name="PORT" value="5005" />
       <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="5005" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
       <method v="2" />
     </configuration>
     <configuration default="true" type="Remote">
@@ -1165,27 +1167,6 @@
       <workItem from="1613573584206" duration="18000" />
       <workItem from="1613579305523" duration="8769000" />
     </task>
-    <task id="LOCAL-03769" summary="Adicionado nível de invocador no Shoukan">
-      <created>1613068872783</created>
-      <option name="number" value="03769" />
-      <option name="presentableId" value="LOCAL-03769" />
-      <option name="project" value="LOCAL" />
-      <updated>1613068872784</updated>
-    </task>
-    <task id="LOCAL-03770" summary="Adicionado nível de invocador no Shoukan">
-      <created>1613072155779</created>
-      <option name="number" value="03770" />
-      <option name="presentableId" value="LOCAL-03770" />
-      <option name="project" value="LOCAL" />
-      <updated>1613072155779</updated>
-    </task>
-    <task id="LOCAL-03771" summary="Adicionado nível de invocador no Shoukan">
-      <created>1613072324952</created>
-      <option name="number" value="03771" />
-      <option name="presentableId" value="LOCAL-03771" />
-      <option name="project" value="LOCAL" />
-      <updated>1613072324952</updated>
-    </task>
     <task id="LOCAL-03772" summary="Adicionado nível de invocador no Shoukan">
       <created>1613074576045</created>
       <option name="number" value="03772" />
@@ -1508,7 +1489,28 @@
       <option name="project" value="LOCAL" />
       <updated>1613591681962</updated>
     </task>
-    <option name="localTasksCounter" value="3818" />
+    <task id="LOCAL-03818" summary="Implementação do SpringLoaded">
+      <created>1613677313316</created>
+      <option name="number" value="03818" />
+      <option name="presentableId" value="LOCAL-03818" />
+      <option name="project" value="LOCAL" />
+      <updated>1613677313317</updated>
+    </task>
+    <task id="LOCAL-03819" summary="Implementação do SpringLoaded">
+      <created>1613677398328</created>
+      <option name="number" value="03819" />
+      <option name="presentableId" value="LOCAL-03819" />
+      <option name="project" value="LOCAL" />
+      <updated>1613677398328</updated>
+    </task>
+    <task id="LOCAL-03820" summary="Implementação do SpringLoaded">
+      <created>1613677452835</created>
+      <option name="number" value="03820" />
+      <option name="presentableId" value="LOCAL-03820" />
+      <option name="project" value="LOCAL" />
+      <updated>1613677452835</updated>
+    </task>
+    <option name="localTasksCounter" value="3821" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
