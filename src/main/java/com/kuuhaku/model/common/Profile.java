@@ -237,7 +237,7 @@ public class Profile {
 			bi = finalImg;
 		}
 
-		return bi;
+		return Helper.scaleImage(bi, 400, 254);
 	}
 
 	public static BufferedImage clipRoundEdges(BufferedImage image) {

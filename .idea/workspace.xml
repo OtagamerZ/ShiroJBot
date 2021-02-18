@@ -14,8 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação do SpringLoaded">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1171,13 +1172,6 @@
       <workItem from="1613573584206" duration="18000" />
       <workItem from="1613579305523" duration="8769000" />
     </task>
-    <task id="LOCAL-03775" summary="Adicionado peso aos equipamentos">
-      <created>1613136858132</created>
-      <option name="number" value="03775" />
-      <option name="presentableId" value="LOCAL-03775" />
-      <option name="project" value="LOCAL" />
-      <updated>1613136858132</updated>
-    </task>
     <task id="LOCAL-03776" summary="Adicionado peso aos equipamentos">
       <created>1613137091342</created>
       <option name="number" value="03776" />
@@ -1514,7 +1508,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613678567110</updated>
     </task>
-    <option name="localTasksCounter" value="3824" />
+    <task id="LOCAL-03824" summary="Implementação do SpringLoaded">
+      <created>1613679002188</created>
+      <option name="number" value="03824" />
+      <option name="presentableId" value="LOCAL-03824" />
+      <option name="project" value="LOCAL" />
+      <updated>1613679002188</updated>
+    </task>
+    <option name="localTasksCounter" value="3825" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
