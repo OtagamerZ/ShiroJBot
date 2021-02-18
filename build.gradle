@@ -31,7 +31,6 @@ plugins {
     id 'idea'
     id 'application'
     id "org.springframework.boot" version "2.3.4.RELEASE"
-    id "org.springframework.boot"
     id "io.spring.dependency-management"
 }
 
