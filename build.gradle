@@ -31,7 +31,6 @@ plugins {
     id 'idea'
     id 'application'
     id "org.springframework.boot" version "2.3.4.RELEASE"
-    id "io.spring.dependency-management"
 }
 
 application {
@@ -42,7 +41,7 @@ group 'com.kuuhaku'
 version 'STANDALONE'
 sourceCompatibility = JavaVersion.VERSION_15
 targetCompatibility = JavaVersion.VERSION_15
-applicationDefaultJvmArgs = ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]
+applicationDefaultJvmArgs = ["-Djavafx.embed.singleThread=true"]
 
 repositories {
     mavenCentral()
@@ -114,6 +113,9 @@ dependencies {
     implementation group: 'com.graphql-java', name: 'graphql-java', version: '2019-05-08T02-56-27-cca4316'
     implementation group: 'net.oneandone.reflections8', name: 'reflections8', version: '0.11.7'
 }
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 idea {
     module {
