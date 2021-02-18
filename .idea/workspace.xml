@@ -13,7 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação do SpringLoaded" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação do SpringLoaded">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -60,7 +63,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master-new-handler" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -119,7 +122,10 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.general" />
+    <property name="settings.editor.selected.configurable" value="debugger.hotswap" />
+  </component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -1165,13 +1171,6 @@
       <workItem from="1613573584206" duration="18000" />
       <workItem from="1613579305523" duration="8769000" />
     </task>
-    <task id="LOCAL-03774" summary="Adicionado peso aos equipamentos">
-      <created>1613136782295</created>
-      <option name="number" value="03774" />
-      <option name="presentableId" value="LOCAL-03774" />
-      <option name="project" value="LOCAL" />
-      <updated>1613136782295</updated>
-    </task>
     <task id="LOCAL-03775" summary="Adicionado peso aos equipamentos">
       <created>1613136858132</created>
       <option name="number" value="03775" />
@@ -1508,7 +1507,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613678406323</updated>
     </task>
-    <option name="localTasksCounter" value="3823" />
+    <task id="LOCAL-03823" summary="Implementação do SpringLoaded">
+      <created>1613678567110</created>
+      <option name="number" value="03823" />
+      <option name="presentableId" value="LOCAL-03823" />
+      <option name="project" value="LOCAL" />
+      <updated>1613678567110</updated>
+    </task>
+    <option name="localTasksCounter" value="3824" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
