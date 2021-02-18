@@ -13,10 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação do SpringLoaded">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1172,13 +1170,6 @@
       <workItem from="1613573584206" duration="18000" />
       <workItem from="1613579305523" duration="8769000" />
     </task>
-    <task id="LOCAL-03776" summary="Adicionado peso aos equipamentos">
-      <created>1613137091342</created>
-      <option name="number" value="03776" />
-      <option name="presentableId" value="LOCAL-03776" />
-      <option name="project" value="LOCAL" />
-      <updated>1613137091342</updated>
-    </task>
     <task id="LOCAL-03777" summary="Adicionado peso aos equipamentos">
       <created>1613137178650</created>
       <option name="number" value="03777" />
@@ -1515,7 +1506,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613679002188</updated>
     </task>
-    <option name="localTasksCounter" value="3825" />
+    <task id="LOCAL-03825" summary="Correções menores">
+      <created>1613680047890</created>
+      <option name="number" value="03825" />
+      <option name="presentableId" value="LOCAL-03825" />
+      <option name="project" value="LOCAL" />
+      <updated>1613680047890</updated>
+    </task>
+    <option name="localTasksCounter" value="3826" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1609,7 +1607,6 @@
     <MESSAGE value="Correção no encerramento das partidas" />
     <MESSAGE value="Correção na listagem das cartas elegíveis" />
     <MESSAGE value="Clones agora possuem custo de mana 0 e não vão mais para o cemitério" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Adição de configuração de tempo do anti-raid" />
     <MESSAGE value="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;" />
     <MESSAGE value="Melhoria no comando de estatística de uso" />
@@ -1626,7 +1623,8 @@
     <MESSAGE value="Correção no efeito de atordoamento" />
     <MESSAGE value="Correção menor" />
     <MESSAGE value="Implementação do SpringLoaded" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementação do SpringLoaded" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
