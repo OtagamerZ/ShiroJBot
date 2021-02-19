@@ -141,7 +141,7 @@ public class EffectParameters {
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder()
 						.setContent(message)
-						.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().name()))
+						.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime()))
 						.setUsername(c.getName());
 
 				if (gif != null) {

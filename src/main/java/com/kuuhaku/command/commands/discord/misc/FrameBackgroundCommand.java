@@ -24,14 +24,10 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
-
-import java.util.Arrays;
 
 @Command(
 		name = "fundododeck",
@@ -51,19 +47,19 @@ public class FrameBackgroundCommand implements Executable {
 			return;
 		}
 
-		Card tc = CardDAO.getCard(args[0], true);
-		if (tc == null) {
-			channel.sendMessage("❌ | Esse anime não existe, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(AnimeName.validValues()).map(AnimeName::name).toArray(String[]::new)) + "`?").queue();
+		String anime = CardDAO.verifyAnime(args[0].toUpperCase());
+		if (anime == null) {
+			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 			return;
 		}
 
-		boolean canUse = CardDAO.totalCards(tc.getAnime()) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(tc.getAnime()) && !k.isFoil()).count();
+		boolean canUse = CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count();
 		if (!canUse) {
 			channel.sendMessage("❌ | Você só pode usar como fundo animes que você já tenha completado a coleção.").queue();
 			return;
 		}
 
-		acc.setUltimate(tc.getId());
+		acc.setUltimate(anime);
 		AccountDAO.saveAccount(acc);
 		channel.sendMessage("✅ | Ultimate definida com sucesso!").queue();
 	}

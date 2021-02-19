@@ -31,7 +31,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.KawaiponBook;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Kawaipon;
@@ -47,7 +46,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -73,7 +71,8 @@ public class KawaiponsCommand implements Executable {
                     return;
                 } else if (args.length == 0) {
                     Set<KawaiponCard> collection = new HashSet<>();
-                    for (AnimeName anime : AnimeName.validValues()) {
+                    Set<String> animes = CardDAO.getValidAnime();
+                    for (String anime : animes) {
                         if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
                             collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
                     }
@@ -87,7 +86,7 @@ public class KawaiponsCommand implements Executable {
                     int common = kp.getCards().size() - foil;
 
                     eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName());
-                    eb.addField(":books: | Coleções completas:", count + " de " + AnimeName.validValues().length + " (" + Helper.prcntToInt(count, AnimeName.validValues().length) + "%)", true);
+                    eb.addField(":books: | Coleções completas:", count + " de " + CardDAO.getValidAnime().size() + " (" + Helper.prcntToInt(count, CardDAO.getValidAnime().size()) + "%)", true);
                     eb.addField(":red_envelope: | Total de cartas normais:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
                     eb.addField(":star2: | Total de cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(foil, CardDAO.totalCards()) + "%)", true);
                     eb.setImage("attachment://cards.png");
@@ -139,13 +138,16 @@ public class KawaiponsCommand implements Executable {
 
                                 send(author, channel, m, cards, "Fusões Senshi", null);
                                 return;
-                            } else if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
-                                m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(AnimeName.validValues()).map(AnimeName::name).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
-                                return;
                             }
 
                             boolean foil = args.length > 1 && args[1].equalsIgnoreCase("C");
-                            AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
+                            String anime = CardDAO.verifyAnime(args[0].toUpperCase());
+
+                            if (anime == null) {
+                                m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+                                return;
+                            }
+
                             Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
                             Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == foil).collect(Collectors.toSet());
 

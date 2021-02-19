@@ -19,7 +19,6 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
@@ -65,7 +64,7 @@ public enum FrameColor {
 			if (clan != null && clan.getIcon() != null) {
 				g2d.drawImage(clan.getIcon(), 26, 43, 172, 268, null);
 			} else if (withUlt) {
-				AnimeName an = AnimeName.valueOf(acc.getUltimate());
+				String an = CardDAO.verifyAnime(acc.getUltimate());
 				g2d.drawImage(CardDAO.getUltimate(an).drawCardNoBorder(), 26, 43, 172, 268, null);
 			}
 
