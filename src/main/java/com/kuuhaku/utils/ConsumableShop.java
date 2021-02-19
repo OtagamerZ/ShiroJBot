@@ -92,7 +92,7 @@ public class ConsumableShop {
 					}
 
 					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
-					Helper.forceSpawnKawaipon(gc, ms, an.getName());
+					Helper.forceSpawnKawaipon(gc, ms, an);
 
 					Account acc = AccountDAO.getAccount(mb.getId());
 					acc.removeBuff("spawnanime");
