@@ -58,7 +58,7 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return em.find(AddedAnime.class, name).getName();
+			return em.find(AddedAnime.class, name).getId();
 		} finally {
 			em.close();
 		}
