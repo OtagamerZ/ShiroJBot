@@ -1257,7 +1257,7 @@ public class Helper {
 
 			EmbedBuilder eb = new EmbedBuilder()
 					.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!")
-					.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
+					.setTitle(kc.getName() + " (" + c.getAnime() + ")")
 					.setColor(colorThief(img))
 					.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + Helper.separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
 
@@ -1319,7 +1319,7 @@ public class Helper {
 
 		EmbedBuilder eb = new EmbedBuilder()
 				.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase() + " neste servidor!")
-				.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
+				.setTitle(kc.getName() + " (" + c.getAnime() + ")")
 				.setColor(colorThief(img))
 				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + Helper.separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
 
