@@ -38,7 +38,7 @@ public class DailyQuest {
 		List<DailyTask> tasks = Helper.getRandomN(List.of(DailyTask.values()), 3, 1, seed);
 
 		Random r = new Random(seed);
-		List<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getId).collect(Collectors.toList());
+		List<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getName).collect(Collectors.toList());
 		this.chosenAnime = animes.get(Helper.rng(animes.size(), r, true));
 		this.chosenRace = Race.values()[Helper.rng(Race.values().length, r, true)];
 		for (DailyTask task : tasks) {

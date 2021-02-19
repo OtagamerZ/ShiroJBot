@@ -48,19 +48,19 @@ public class FrameBackgroundCommand implements Executable {
 			return;
 		}
 
-		String anime = CardDAO.verifyAnime(args[0].toUpperCase());
+		AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase());
 		if (anime == null) {
-			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getId).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 			return;
 		}
 
-		boolean canUse = CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count();
+		boolean canUse = CardDAO.totalCards(anime.getName()) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count();
 		if (!canUse) {
 			channel.sendMessage("❌ | Você só pode usar como fundo animes que você já tenha completado a coleção.").queue();
 			return;
 		}
 
-		acc.setUltimate(anime);
+		acc.setUltimate(anime.getName());
 		AccountDAO.saveAccount(acc);
 		channel.sendMessage("✅ | Ultimate definida com sucesso!").queue();
 	}
