@@ -393,7 +393,7 @@ public class Shoukan extends GlobalGame {
 						} else if (spellLock > 0) {
 							channel.sendMessage("❌ | Feitiços estão bloqueados por mais " + (fusionLock == 1 ? "turno" : "turnos") + ".").queue(null, Helper::doNothing);
 							return;
-						} else if (h.getMana() < e.getMana()) {
+						} else if (!h.isNullMode() && (h.getMana() < e.getMana())) {
 							channel.sendMessage("❌ | Você não tem mana suficiente para usar essa magia, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
 							return;
 						} else if (args.length - 2 < e.getArgType().getArgs()) {
@@ -614,7 +614,7 @@ public class Shoukan extends GlobalGame {
 					if (args.length < 3) {
 						channel.sendMessage("❌ | O terceiro argumento deve ser `A`, `D` ou `B` para definir se a carta será posicionada em modo de ataque, defesa ou virada para baixo.").queue(null, Helper::doNothing);
 						return;
-					} else if (h.getMana() < ((Champion) d).getMana()) {
+					} else if (!h.isNullMode() && (h.getMana() < c.getMana())) {
 						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
 						return;
 					}
