@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.postgresql.CardDAO;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -29,6 +31,6 @@ public class AddedAnime {
 	private String name;
 
 	public String getName() {
-		return name;
+		return CardDAO.getUltimate(name).getName();
 	}
 }
