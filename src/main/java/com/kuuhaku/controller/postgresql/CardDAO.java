@@ -46,7 +46,7 @@ public class CardDAO {
 		Query q = em.createQuery("SELECT a FROM AddedAnime a", AddedAnime.class);
 
 		try {
-			Set<AddedAnime> animes = (Set<AddedAnime>) q.getResultList();
+			Set<AddedAnime> animes = Set.copyOf(q.getResultList());
 			return animes.stream().map(AddedAnime::getName).collect(Collectors.toSet());
 		} catch (NoResultException e) {
 			return new HashSet<>();
