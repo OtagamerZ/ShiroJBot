@@ -21,9 +21,11 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.DailyTask;
+import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.utils.Helper;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DailyQuest {
 	private final HashMap<DailyTask, Integer> tasks = new HashMap<>();
@@ -36,7 +38,7 @@ public class DailyQuest {
 		List<DailyTask> tasks = Helper.getRandomN(List.of(DailyTask.values()), 3, 1, seed);
 
 		Random r = new Random(seed);
-		List<String> animes = List.copyOf(CardDAO.getValidAnime());
+		List<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getId).collect(Collectors.toList());
 		this.chosenAnime = animes.get(Helper.rng(animes.size(), r, true));
 		this.chosenRace = Race.values()[Helper.rng(Race.values().length, r, true)];
 		for (DailyTask task : tasks) {
