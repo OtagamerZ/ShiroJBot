@@ -44,7 +44,6 @@ import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.ItemDrop;
 import com.kuuhaku.model.common.drop.JokerDrop;
 import com.kuuhaku.model.common.drop.Prize;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.CardStatus;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.enums.PrivilegeLevel;
@@ -1285,7 +1284,7 @@ public class Helper {
 		}
 	}
 
-	public static void forceSpawnKawaipon(GuildConfig gc, Message message, AnimeName anime) {
+	public static void forceSpawnKawaipon(GuildConfig gc, Message message, String anime) {
 		TextChannel channel = message.getTextChannel();
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);

@@ -19,17 +19,16 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.Consumable;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -83,13 +82,16 @@ public class ConsumableShop {
 					if (args.length < 3) {
 						ch.sendMessage("❌ | Você precisa especificar o anime que deseja que apareça uma carta (colocar `_` no lugar de espaços).").queue();
 						return;
-					} else if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(args[2].toUpperCase()))) {
-						ch.sendMessage("❌ | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
+					}
+
+					String an = CardDAO.verifyAnime(args[2].toUpperCase());
+					if (an == null) {
+						ch.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 						return;
 					}
 
 					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
-					Helper.forceSpawnKawaipon(gc, ms, AnimeName.valueOf(args[2].toUpperCase()));
+					Helper.forceSpawnKawaipon(gc, ms, an);
 
 					Account acc = AccountDAO.getAccount(mb.getId());
 					acc.removeBuff("spawnanime");

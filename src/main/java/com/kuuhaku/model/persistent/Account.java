@@ -23,7 +23,6 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.api.endpoint.DiscordBotsListHandler;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.utils.Helper;
@@ -440,7 +439,7 @@ public class Account {
 			try {
 				Kawaipon kp = KawaiponDAO.getKawaipon(userId);
 
-				AnimeName an = AnimeName.valueOf(ultimate);
+				String an = CardDAO.verifyAnime(ultimate);
 				if (CardDAO.totalCards(an) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an) && !k.isFoil()).count())
 					return ultimate;
 			} catch (IllegalArgumentException e) {
