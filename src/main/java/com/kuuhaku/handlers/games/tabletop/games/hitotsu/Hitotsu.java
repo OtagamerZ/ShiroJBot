@@ -360,7 +360,7 @@ public class Hitotsu extends Game {
 			}
 			eb.setDescription(sb.toString());
 			if (played.size() > 0)
-				eb.addField("Carta atual", "(" + played.getLast().getCard().getAnime() + ")" + played.getLast().getCard().getRarity().getEmote() + played.getLast().getName(), false);
+				eb.addField("Carta atual", "(" + played.getLast().getCard().getAnime().toString() + ")" + played.getLast().getCard().getRarity().getEmote() + played.getLast().getName(), false);
 
 			getCurrent().openPrivateChannel()
 					.flatMap(c -> c.sendMessage(eb.build()))
