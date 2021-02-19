@@ -24,6 +24,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.Consumable;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -86,7 +87,7 @@ public class ConsumableShop {
 
 					String an = CardDAO.verifyAnime(args[2].toUpperCase());
 					if (an == null) {
-						ch.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+						ch.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getId).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 						return;
 					}
 

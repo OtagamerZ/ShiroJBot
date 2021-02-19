@@ -33,6 +33,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.KawaiponBook;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.KawaiponRarity;
+import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
@@ -71,7 +72,7 @@ public class KawaiponsCommand implements Executable {
                     return;
                 } else if (args.length == 0) {
                     Set<KawaiponCard> collection = new HashSet<>();
-                    Set<String> animes = CardDAO.getValidAnime();
+                    Set<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getId).collect(Collectors.toSet());
                     for (String anime : animes) {
                         if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
                             collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
@@ -144,7 +145,7 @@ public class KawaiponsCommand implements Executable {
                             String anime = CardDAO.verifyAnime(args[0].toUpperCase());
 
                             if (anime == null) {
-                                m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+                                m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getId).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
                                 return;
                             }
 

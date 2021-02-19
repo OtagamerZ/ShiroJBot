@@ -32,13 +32,11 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.KawaiponRarity;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.ListUtils;
 
@@ -47,6 +45,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "carta",
@@ -102,7 +101,7 @@ public class SeeCardCommand implements Executable {
 			KawaiponCard card = new KawaiponCard(tc, foil);
 
 			Set<KawaiponCard> cards = kp.getCards();
-			Set<String> animes = CardDAO.getValidAnime();
+			Set<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getId).collect(Collectors.toSet());
 			for (String anime : animes) {
 				if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
 					cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));

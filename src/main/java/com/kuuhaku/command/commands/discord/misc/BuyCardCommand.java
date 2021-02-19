@@ -98,7 +98,7 @@ public class BuyCardCommand implements Executable {
 				if (anime != null) {
 					String an = CardDAO.verifyAnime(anime.substring(2).toUpperCase());
 					if (an == null) {
-						channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+						channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getId).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 						return;
 					}
 
