@@ -15,13 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/KillCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/KillCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ConsoleListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ConsoleListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DataDump.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DataDump.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1168,14 +1161,7 @@
       <workItem from="1613565710885" duration="2875000" />
       <workItem from="1613573584206" duration="18000" />
       <workItem from="1613579305523" duration="8769000" />
-      <workItem from="1613736076111" duration="10218000" />
-    </task>
-    <task id="LOCAL-03783" summary="Adição de efeitos por cartas adjacentes">
-      <created>1613351915347</created>
-      <option name="number" value="03783" />
-      <option name="presentableId" value="LOCAL-03783" />
-      <option name="project" value="LOCAL" />
-      <updated>1613351915347</updated>
+      <workItem from="1613736076111" duration="11994000" />
     </task>
     <task id="LOCAL-03784" summary="Adição de efeitos por cartas adjacentes">
       <created>1613352530751</created>
@@ -1513,7 +1499,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613744917021</updated>
     </task>
-    <option name="localTasksCounter" value="3832" />
+    <task id="LOCAL-03832" summary="Correções menores">
+      <created>1613757555607</created>
+      <option name="number" value="03832" />
+      <option name="presentableId" value="LOCAL-03832" />
+      <option name="project" value="LOCAL" />
+      <updated>1613757555607</updated>
+    </task>
+    <option name="localTasksCounter" value="3833" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
