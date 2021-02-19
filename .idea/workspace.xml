@@ -181,17 +181,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="com.kuuhaku.shiro-j-bot.test" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1170,14 +1159,7 @@
       <workItem from="1613565710885" duration="2875000" />
       <workItem from="1613573584206" duration="18000" />
       <workItem from="1613579305523" duration="8769000" />
-      <workItem from="1613736076111" duration="16079000" />
-    </task>
-    <task id="LOCAL-03787" summary="Adição de efeitos por cartas adjacentes">
-      <created>1613353816604</created>
-      <option name="number" value="03787" />
-      <option name="presentableId" value="LOCAL-03787" />
-      <option name="project" value="LOCAL" />
-      <updated>1613353816604</updated>
+      <workItem from="1613736076111" duration="16285000" />
     </task>
     <task id="LOCAL-03788" summary="Correção nos efeitos de assistência">
       <created>1613395805753</created>
@@ -1515,7 +1497,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613766148418</updated>
     </task>
-    <option name="localTasksCounter" value="3836" />
+    <task id="LOCAL-03836" summary="Remoção da dependencia dos enumeradores de AnimeName">
+      <created>1613766544205</created>
+      <option name="number" value="03836" />
+      <option name="presentableId" value="LOCAL-03836" />
+      <option name="project" value="LOCAL" />
+      <updated>1613766544205</updated>
+    </task>
+    <option name="localTasksCounter" value="3837" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
