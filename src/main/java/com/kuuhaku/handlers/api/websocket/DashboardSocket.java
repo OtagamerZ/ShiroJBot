@@ -161,7 +161,7 @@ public class DashboardSocket extends WebSocketServer {
 				case "cards" -> {
 					Kawaipon kp = KawaiponDAO.getKawaipon(t.getUid());
 					Set<KawaiponCard> cards = kp.getCards();
-					Set<String> animes = CardDAO.getValidAnime();
+					Set<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getId).collect(Collectors.toSet());
 					for (String anime : animes) {
 						if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
 							cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));

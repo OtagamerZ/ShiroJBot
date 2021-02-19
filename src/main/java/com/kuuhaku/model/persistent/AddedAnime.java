@@ -30,6 +30,10 @@ public class AddedAnime {
 	@Id
 	private String name;
 
+	public String getId() {
+		return name;
+	}
+
 	public String getName() {
 		return CardDAO.getUltimate(name).getName();
 	}
