@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.FileUtils;
@@ -43,8 +42,8 @@ public class Card {
 	@Column(columnDefinition = "VARCHAR(32) NOT NULL DEFAULT ''")
 	private String name = "";
 
-	@Enumerated(EnumType.STRING)
-	private AnimeName anime;
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	private String anime;
 
 	@Enumerated(EnumType.STRING)
 	private KawaiponRarity rarity = KawaiponRarity.COMMON;
@@ -61,11 +60,11 @@ public class Card {
 		this.name = name;
 	}
 
-	public AnimeName getAnime() {
+	public String getAnime() {
 		return anime;
 	}
 
-	public void setAnime(AnimeName anime) {
+	public void setAnime(String anime) {
 		this.anime = anime;
 	}
 
@@ -79,7 +78,7 @@ public class Card {
 
 	public BufferedImage drawCard(boolean foil) {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.name(), id + ".png")));
+			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime, id + ".png")));
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
@@ -104,7 +103,7 @@ public class Card {
 
 	public BufferedImage drawCardNoBorder() {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.name(), id + ".png")));
+			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime, id + ".png")));
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				return ImageIO.read(bais);
 			}

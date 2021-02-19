@@ -31,7 +31,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
@@ -103,7 +102,8 @@ public class SeeCardCommand implements Executable {
 			KawaiponCard card = new KawaiponCard(tc, foil);
 
 			Set<KawaiponCard> cards = kp.getCards();
-			for (AnimeName anime : AnimeName.validValues()) {
+			Set<String> animes = CardDAO.getValidAnime();
+			for (String anime : animes) {
 				if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
 					cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 			}

@@ -24,7 +24,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.payload.ReadyData;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.BiContract;
 import com.kuuhaku.utils.Helper;
@@ -162,11 +161,13 @@ public class DashboardSocket extends WebSocketServer {
 				case "cards" -> {
 					Kawaipon kp = KawaiponDAO.getKawaipon(t.getUid());
 					Set<KawaiponCard> cards = kp.getCards();
-					for (AnimeName anime : AnimeName.validValues()) {
+					Set<String> animes = CardDAO.getValidAnime();
+					for (String anime : animes) {
 						if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
 							cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 					}
-					for (AnimeName an : AnimeName.validValues()) {
+
+					for (String an : animes) {
 						List<JSONObject> data = new ArrayList<>();
 
 						for (Card k : CardDAO.getAllCardsByAnime(an)) {
@@ -186,13 +187,13 @@ public class DashboardSocket extends WebSocketServer {
 						}
 
 						JSONObject animeCards = new JSONObject() {{
-							put(an.name(), data);
+							put(an, data);
 						}};
 
 						conn.send(new JSONObject() {{
 							put("type", "cards");
 							put("code", HttpURLConnection.HTTP_OK);
-							put("total", AnimeName.validValues().length);
+							put("total", CardDAO.getValidAnime().size());
 							put("data", new JSONObject() {{
 								put("cardData", animeCards);
 							}});

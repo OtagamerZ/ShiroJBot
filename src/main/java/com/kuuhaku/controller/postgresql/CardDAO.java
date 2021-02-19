@@ -23,9 +23,9 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.KawaiponRarity;
+import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Card;
 
 import javax.persistence.EntityManager;
@@ -33,10 +33,36 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CardDAO {
+	@SuppressWarnings("unchecked")
+	public static Set<String> getValidAnime() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT a.name FROM AddedAnime a", String.class);
+
+		try {
+			return Set.copyOf(q.getResultList());
+		} catch (NoResultException e) {
+			return new HashSet<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static String verifyAnime(String name) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return em.find(AddedAnime.class, name).getName();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static Card getCard(String name) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -57,10 +83,11 @@ public class CardDAO {
 
 		Query q;
 		if (withUltimate)
-			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND anime <> 'HIDDEN'", Card.class);
+			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND anime IN :animes", Card.class);
 		else
-			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity <> 'ULTIMATE' AND anime <> 'HIDDEN'", Card.class);
+			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity <> 'ULTIMATE' AND anime IN :animes", Card.class);
 		q.setParameter("name", name);
+		q.setParameter("animes", getValidAnime());
 
 		try {
 			return (Card) q.getSingleResult();
@@ -101,11 +128,11 @@ public class CardDAO {
 		}
 	}
 
-	public static Card getUltimate(AnimeName anime) {
+	public static Card getUltimate(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return em.find(Card.class, anime.name());
+			return em.find(Card.class, anime);
 		} finally {
 			em.close();
 		}
@@ -115,8 +142,8 @@ public class CardDAO {
 	public static List<Card> getCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND anime <> 'HIDDEN'", Card.class);
-		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes", Card.class);
+		q.setParameter("animes", getValidAnime());
 
 		try {
 			return q.getResultList();
@@ -147,8 +174,8 @@ public class CardDAO {
 	public static List<Card> getAllCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", Card.class);
-		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+		Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes", Card.class);
+		q.setParameter("animes", getValidAnime());
 
 		try {
 			return q.getResultList();
@@ -163,8 +190,8 @@ public class CardDAO {
 	public static List<String> getAllCardNames() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes AND anime <> 'HIDDEN'", String.class);
-		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes", String.class);
+		q.setParameter("animes", getValidAnime());
 
 		try {
 			return q.getResultList();
@@ -285,10 +312,10 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Card> getCardsByAnime(AnimeName anime) {
+	public static List<Card> getCardsByAnime(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime AND anime <> 'HIDDEN'", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime", Card.class);
 		q.setParameter("anime", anime);
 
 		try {
@@ -299,10 +326,10 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Card> getAllCardsByAnime(AnimeName anime) {
+	public static List<Card> getAllCardsByAnime(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE anime = :anime AND anime <> 'HIDDEN'", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE anime = :anime", Card.class);
 		q.setParameter("anime", anime);
 
 		try {
@@ -316,9 +343,9 @@ public class CardDAO {
 	public static List<Card> getCardsByRarity(KawaiponRarity rarity) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity AND anime IN :animes AND anime <> 'HIDDEN'", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity AND anime IN :animes", Card.class);
 		q.setParameter("rarity", rarity);
-		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+		q.setParameter("animes", getValidAnime());
 
 		try {
 			return q.getResultList();
@@ -330,8 +357,8 @@ public class CardDAO {
 	public static long totalCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND anime <> 'HIDDEN'", Long.class);
-		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes", Long.class);
+		q.setParameter("animes", getValidAnime());
 
 		try {
 			return (long) q.getSingleResult();
@@ -340,10 +367,10 @@ public class CardDAO {
 		}
 	}
 
-	public static long totalCards(AnimeName anime) {
+	public static long totalCards(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime AND anime <> 'HIDDEN'", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime", Long.class);
 		q.setParameter("anime", anime);
 
 		try {
@@ -356,9 +383,9 @@ public class CardDAO {
 	public static long totalCards(KawaiponRarity rarity) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity AND anime IN :animes AND anime <> 'HIDDEN'", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity AND anime IN :animes", Long.class);
 		q.setParameter("rarity", rarity);
-		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
+		q.setParameter("animes", getValidAnime());
 
 		try {
 			return (long) q.getSingleResult();
@@ -463,7 +490,8 @@ public class CardDAO {
 	public static Champion getRandomChampion() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime IN :animes ORDER BY RANDOM()", Champion.class);
+		q.setParameter("animes", getValidAnime());
 		q.setMaxResults(1);
 
 		try {
@@ -478,7 +506,8 @@ public class CardDAO {
 	public static Champion getRandomChampion(int mana) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' AND c.mana = :mana ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime IN :animes AND c.mana = :mana ORDER BY RANDOM()", Champion.class);
+		q.setParameter("animes", getValidAnime());
 		q.setParameter("mana", mana);
 		q.setMaxResults(1);
 
@@ -495,7 +524,8 @@ public class CardDAO {
 	public static Champion getFakeChampion() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime <> 'HIDDEN' ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime IN :animes ORDER BY RANDOM()", Champion.class);
+		q.setParameter("animes", getValidAnime());
 		q.setMaxResults(4);
 
 		List<Champion> champs = q.getResultList();
