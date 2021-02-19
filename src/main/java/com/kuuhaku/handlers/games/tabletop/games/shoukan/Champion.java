@@ -491,6 +491,7 @@ public class Champion implements Drawable, Cloneable {
 			Interpreter i = new Interpreter();
 			i.setStrictJava(true);
 			i.set("ep", ep);
+			i.set("self", this);
 			i.eval(imports + Helper.getOr(altEffect, effect));
 		} catch (EvalError e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
