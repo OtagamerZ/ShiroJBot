@@ -36,16 +36,18 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CardDAO {
 	@SuppressWarnings("unchecked")
 	public static Set<String> getValidAnime() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT a.name FROM AddedAnime a", String.class);
+		Query q = em.createQuery("SELECT a FROM AddedAnime a", AddedAnime.class);
 
 		try {
-			return Set.copyOf(q.getResultList());
+			Set<AddedAnime> animes = (Set<AddedAnime>) q.getResultList();
+			return animes.stream().map(AddedAnime::getName).collect(Collectors.toSet());
 		} catch (NoResultException e) {
 			return new HashSet<>();
 		} finally {
