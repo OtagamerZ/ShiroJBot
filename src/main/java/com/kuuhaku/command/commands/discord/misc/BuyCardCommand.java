@@ -29,7 +29,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.KawaiponRarity;
@@ -40,7 +39,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -73,7 +71,7 @@ public class BuyCardCommand implements Executable {
 		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
 			AtomicReference<String> byName = new AtomicReference<>(null);
 			AtomicReference<KawaiponRarity> byRarity = new AtomicReference<>(null);
-			AtomicReference<AnimeName[]> byAnime = new AtomicReference<>(null);
+			AtomicReference<String> byAnime = new AtomicReference<>(null);
 			AtomicReference<Integer> minPrice = new AtomicReference<>(-1);
 			AtomicReference<Integer> maxPrice = new AtomicReference<>(-1);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
@@ -91,20 +89,19 @@ public class BuyCardCommand implements Executable {
 				if (rarity != null) {
 					byRarity.set(KawaiponRarity.getByName(rarity.substring(2)));
 					if (byRarity.get() == null) {
-						channel.sendMessage("❌ | Raridade inválida, verifique se digitou-a corretamente.").queue();
+						channel.sendMessage("❌ | Raridade inválida, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(KawaiponRarity.values()).map(KawaiponRarity::name).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 						return;
 					}
 				}
 
 				String anime = params.stream().filter(s -> s.startsWith("-a") && s.length() > 2).findFirst().orElse(null);
 				if (anime != null) {
-					AnimeName[] an = Arrays.stream(AnimeName.validValues())
-							.filter(a -> StringUtils.containsIgnoreCase(a.name(), anime.substring(2).toUpperCase()))
-							.toArray(AnimeName[]::new);
-					if (an.length == 0) {
-						channel.sendMessage("❌ | Anime inválido, verifique se digitou-o corretamente.").queue();
+					String an = CardDAO.verifyAnime(anime.substring(2).toUpperCase());
+					if (an == null) {
+						channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 						return;
 					}
+
 					byAnime.set(an);
 				}
 
@@ -193,14 +190,14 @@ public class BuyCardCommand implements Executable {
 					.filter(fm -> minPrice.get() == -1 || fm.getPrice() >= minPrice.get())
 					.filter(fm -> maxPrice.get() == -1 || fm.getPrice() <= maxPrice.get())
 					.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
-					.filter(cm -> byAnime.get() == null || ArrayUtils.contains(byAnime.get(), cm.getCard().getCard().getAnime()))
+					.filter(cm -> byAnime.get() == null || byAnime.get().equals(cm.getCard().getCard().getAnime()))
 					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
 					.filter(cm -> onlyMine.get() ? cm.getSeller().equals(author.getId()) : cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)))
 					.sorted(Comparator
 							.comparingInt(CardMarket::getPrice)
 							.thenComparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
 							.thenComparing(k -> k.getCard().getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
-							.thenComparing(k -> k.getCard().getCard().getAnime(), Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
+							.thenComparing(k -> k.getCard().getCard().getAnime(), String.CASE_INSENSITIVE_ORDER)
 							.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER))
 					.map(cm -> Pair.of((Object) cm, CardType.KAWAIPON))
 					.collect(Collectors.toList())
