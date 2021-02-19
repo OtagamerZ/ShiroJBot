@@ -353,7 +353,7 @@ public class Hitotsu extends Game {
 			for (int i = 0; i < cards.size(); i++) {
 				sb.append("**%s** - (%s)%s%s\n".formatted(
 						i,
-						cards.get(i).getCard().getAnime().toString(),
+						cards.get(i).getCard().getAnime(),
 						cards.get(i).getCard().getRarity().getEmote(),
 						cards.get(i).getName()
 				));
