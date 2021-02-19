@@ -19,13 +19,10 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
-import com.kuuhaku.model.persistent.Blacklist;
 import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
-import com.kuuhaku.utils.Helper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DataDump {
@@ -33,14 +30,12 @@ public class DataDump {
 	private final List<Member> mDump;
 	private final List<GuildConfig> gcDump;
 	private final List<PoliticalState> psDump;
-	private final List<Blacklist> blDump;
 
-	public DataDump(List<CustomAnswer> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<PoliticalState> psDump, List<Blacklist> blDump) {
+	public DataDump(List<CustomAnswer> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<PoliticalState> psDump) {
 		this.caDump = caDump;
 		this.gcDump = gcDump;
 		this.mDump = mDump;
 		this.psDump = psDump;
-		this.blDump = Helper.getOr(blDump, new ArrayList<>());
 	}
 
 	public List<CustomAnswer> getCaDump() {
@@ -57,9 +52,5 @@ public class DataDump {
 
 	public List<PoliticalState> getPsDump() {
 		return psDump;
-	}
-
-	public List<Blacklist> getBlDump() {
-		return blDump;
 	}
 }

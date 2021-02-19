@@ -127,8 +127,8 @@ public class MemberDAO {
 		if (global)
 			q = em.createQuery("SELECT m FROM Member m WHERE m.mid IS NOT NULL ORDER BY m.level DESC, m.xp DESC", Member.class);
 		else {
-			q = em.createQuery("SELECT m FROM Member m WHERE id LIKE :id AND m.mid IS NOT NULL ORDER BY m.level DESC, m.xp DESC", Member.class);
-			q.setParameter("id", "%" + gid);
+			q = em.createQuery("SELECT m FROM Member m WHERE m.sid = :id AND m.mid IS NOT NULL ORDER BY m.level DESC, m.xp DESC", Member.class);
+			q.setParameter("id", gid);
 		}
 
 		List<Member> mbs = q.getResultList();
