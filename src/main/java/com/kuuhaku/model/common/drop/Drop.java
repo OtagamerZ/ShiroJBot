@@ -22,6 +22,7 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.enums.ExceedEnum;
+import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -30,6 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public abstract class Drop implements Prize {
 	private final String anime;
@@ -40,7 +42,7 @@ public abstract class Drop implements Prize {
 	private final Pair<String, Function<User, Boolean>> chosen;
 
 	protected Drop() {
-		List<String> animes = List.copyOf(CardDAO.getValidAnime());
+		List<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getId).collect(Collectors.toList());
 		anime = animes.get(Helper.rng(animes.size(), true));
 		exceed = ExceedEnum.values()[Helper.rng(ExceedEnum.values().length, true)];
 		tier = ClanTier.values()[Helper.rng(ClanTier.values().length, true)];

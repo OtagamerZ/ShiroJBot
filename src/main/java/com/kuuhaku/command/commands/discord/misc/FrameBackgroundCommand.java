@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
@@ -49,7 +50,7 @@ public class FrameBackgroundCommand implements Executable {
 
 		String anime = CardDAO.verifyAnime(args[0].toUpperCase());
 		if (anime == null) {
-			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getId).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 			return;
 		}
 
