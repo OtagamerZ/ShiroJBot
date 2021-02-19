@@ -22,7 +22,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.enums.ExceedEnum;
-import com.kuuhaku.model.persistent.Blacklist;
 import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
@@ -138,14 +137,13 @@ public class BackupDAO {
 		Query ca = em.createQuery("SELECT c FROM CustomAnswer c", CustomAnswer.class);
 		Query m = em.createQuery("SELECT m FROM Member m", Member.class);
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
-		Query bl = em.createQuery("SELECT b FROM Blacklist b", Blacklist.class);
 		List<PoliticalState> ps = new ArrayList<>();
 
 		for (ExceedEnum ex : ExceedEnum.values()) {
 			ps.add(PStateDAO.getPoliticalState(ex));
 		}
 
-		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), ps, bl.getResultList());
+		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), ps);
 		em.close();
 
 		return dump;
