@@ -75,7 +75,7 @@ public class ConvertCardCommand implements Executable {
 		if (tc == null) {
 			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
 			return;
-		} else if (tc.getId().equals(tc.getAnime())) {
+		} else if (tc.getId().equals(tc.getAnime().getName())) {
 			channel.sendMessage("❌ | Você não pode converter cartas Ultimate.").queue();
 			return;
 		}

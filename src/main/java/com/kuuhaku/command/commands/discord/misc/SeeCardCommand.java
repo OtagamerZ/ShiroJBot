@@ -101,7 +101,7 @@ public class SeeCardCommand implements Executable {
 			KawaiponCard card = new KawaiponCard(tc, foil);
 
 			Set<KawaiponCard> cards = kp.getCards();
-			Set<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getId).collect(Collectors.toSet());
+			Set<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getName).collect(Collectors.toSet());
 			for (String anime : animes) {
 				if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
 					cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
@@ -116,7 +116,7 @@ public class SeeCardCommand implements Executable {
 			eb.addField("Elegível:", c != null && !c.isFusion() ? "Sim" : "Não", true);
 			eb.addField("Raridade:", tc.getRarity().toString(), true);
 			eb.addField("Tipo:", tc.getRarity() == KawaiponRarity.ULTIMATE ? "Única" : (card.isFoil() ? "Cromada" : "Normal"), true);
-			eb.addField("Anime:", tc.getAnime(), true);
+			eb.addField("Anime:", tc.getAnime().toString(), true);
 			eb.setImage("attachment://kawaipon." + (cards.contains(card) ? "png" : "jpg"));
 
 			try {

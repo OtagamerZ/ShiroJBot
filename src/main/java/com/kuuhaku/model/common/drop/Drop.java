@@ -42,7 +42,7 @@ public abstract class Drop implements Prize {
 	private final Pair<String, Function<User, Boolean>> chosen;
 
 	protected Drop() {
-		List<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getId).collect(Collectors.toList());
+		List<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getName).collect(Collectors.toList());
 		anime = animes.get(Helper.rng(animes.size(), true));
 		exceed = ExceedEnum.values()[Helper.rng(ExceedEnum.values().length, true)];
 		tier = ClanTier.values()[Helper.rng(ClanTier.values().length, true)];

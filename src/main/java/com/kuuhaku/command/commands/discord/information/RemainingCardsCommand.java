@@ -65,10 +65,10 @@ public class RemainingCardsCommand implements Executable {
 			return;
 		}
 
-		String anime = CardDAO.verifyAnime(args[0].toUpperCase());
+		AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase());
 
 		if (anime == null) {
-			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getId).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 			return;
 		}
 
@@ -79,7 +79,7 @@ public class RemainingCardsCommand implements Executable {
 				.map(KawaiponCard::getCard)
 				.filter(c -> c.getAnime().equals(anime))
 				.collect(Collectors.toList());
-		List<Card> cards = CardDAO.getCardsByAnime(anime);
+		List<Card> cards = CardDAO.getCardsByAnime(anime.getName());
 		cards.sort(Comparator
 				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)

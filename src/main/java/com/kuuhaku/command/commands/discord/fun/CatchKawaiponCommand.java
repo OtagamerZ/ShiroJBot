@@ -80,7 +80,7 @@ public class CatchKawaiponCommand implements Executable {
 			pg.compute(DailyTask.CARD_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
 			pg.compute(DailyTask.ANIME_TASK, (k, v) -> {
 				DailyQuest dq = DailyQuest.getQuest(author.getIdLong());
-				if (kc.getCard().getAnime() == dq.getChosenAnime())
+				if (kc.getCard().getAnime().getName().equals(dq.getChosenAnime()))
 					return Helper.getOr(v, 0) + 1;
 				else
 					return v;
