@@ -33,6 +33,7 @@ import java.util.List;
 
 @Command(
 		name = "testchamp",
+		aliases = "tchamp",
 		category = Category.DEV
 )
 public class CompileChampionsCommand implements Executable {
@@ -41,6 +42,7 @@ public class CompileChampionsCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		List<Champion> champions = CardDAO.getAllChampions(true);
 
+		int errored = 0;
 		for (Champion c : champions) {
 			if (!c.hasEffect()) continue;
 
@@ -72,7 +74,13 @@ public class CompileChampionsCommand implements Executable {
 				i.eval(imports + c.getRawEffect());
 			} catch (EvalError e) {
 				Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
+				errored += 1;
 			}
 		}
+
+		channel.sendMessage("""
+				✅ Sucesso -> %s
+				❌ Com erro -> %s
+				""".formatted(champions.size() - errored, errored)).queue();
 	}
 }
