@@ -85,14 +85,14 @@ public class ConsumableShop {
 						return;
 					}
 
-					String an = CardDAO.verifyAnime(args[2].toUpperCase());
+					AddedAnime an = CardDAO.verifyAnime(args[2].toUpperCase());
 					if (an == null) {
-						ch.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getId).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+						ch.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 						return;
 					}
 
 					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
-					Helper.forceSpawnKawaipon(gc, ms, an);
+					Helper.forceSpawnKawaipon(gc, ms, an.getName());
 
 					Account acc = AccountDAO.getAccount(mb.getId());
 					acc.removeBuff("spawnanime");

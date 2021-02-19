@@ -72,10 +72,10 @@ public class KawaiponsCommand implements Executable {
                     return;
                 } else if (args.length == 0) {
                     Set<KawaiponCard> collection = new HashSet<>();
-                    Set<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getId).collect(Collectors.toSet());
-                    for (String anime : animes) {
-                        if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
-                            collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
+                    Set<AddedAnime> animes = CardDAO.getValidAnime();
+                    for (AddedAnime anime : animes) {
+                        if (CardDAO.totalCards(anime.getName()) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
+                            collection.add(new KawaiponCard(CardDAO.getUltimate(anime.getName()), false));
                     }
 
                     KawaiponBook kb = new KawaiponBook(collection);
@@ -142,10 +142,10 @@ public class KawaiponsCommand implements Executable {
                             }
 
                             boolean foil = args.length > 1 && args[1].equalsIgnoreCase("C");
-                            String anime = CardDAO.verifyAnime(args[0].toUpperCase());
+                            AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase());
 
                             if (anime == null) {
-                                m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getId).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+                                m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
                                 return;
                             }
 
@@ -153,9 +153,9 @@ public class KawaiponsCommand implements Executable {
                             Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == foil).collect(Collectors.toSet());
 
                             KawaiponBook kb = new KawaiponBook(toRender);
-                            BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), foil);
+                            BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime.getName()), anime.toString(), foil);
 
-                            send(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime));
+                            send(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime.getName()));
                             return;
                         }
 

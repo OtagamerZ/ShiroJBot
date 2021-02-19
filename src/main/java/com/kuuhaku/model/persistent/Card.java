@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.FileUtils;
@@ -60,8 +61,8 @@ public class Card {
 		this.name = name;
 	}
 
-	public String getAnime() {
-		return anime;
+	public AddedAnime getAnime() {
+		return CardDAO.verifyAnime(anime);
 	}
 
 	public void setAnime(String anime) {

@@ -23,6 +23,7 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Table(name = "addedanime")
@@ -30,11 +31,25 @@ public class AddedAnime {
 	@Id
 	private String name;
 
-	public String getId() {
+	public String getName() {
 		return name;
 	}
 
-	public String getName() {
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AddedAnime that = (AddedAnime) o;
+		return Objects.equals(name, that.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
+
+	@Override
+	public String toString() {
 		return CardDAO.getUltimate(name).getName();
 	}
 }

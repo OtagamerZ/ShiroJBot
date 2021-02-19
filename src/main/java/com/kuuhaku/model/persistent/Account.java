@@ -439,8 +439,8 @@ public class Account {
 			try {
 				Kawaipon kp = KawaiponDAO.getKawaipon(userId);
 
-				String an = CardDAO.verifyAnime(ultimate);
-				if (CardDAO.totalCards(an) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an) && !k.isFoil()).count())
+				AddedAnime an = CardDAO.verifyAnime(ultimate);
+				if (CardDAO.totalCards(an.getName()) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an.getName()) && !k.isFoil()).count())
 					return ultimate;
 			} catch (IllegalArgumentException e) {
 				return "";

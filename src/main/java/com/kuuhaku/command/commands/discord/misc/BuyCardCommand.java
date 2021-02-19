@@ -71,7 +71,7 @@ public class BuyCardCommand implements Executable {
 		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
 			AtomicReference<String> byName = new AtomicReference<>(null);
 			AtomicReference<KawaiponRarity> byRarity = new AtomicReference<>(null);
-			AtomicReference<String> byAnime = new AtomicReference<>(null);
+			AtomicReference<AddedAnime> byAnime = new AtomicReference<>(null);
 			AtomicReference<Integer> minPrice = new AtomicReference<>(-1);
 			AtomicReference<Integer> maxPrice = new AtomicReference<>(-1);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
@@ -96,9 +96,9 @@ public class BuyCardCommand implements Executable {
 
 				String anime = params.stream().filter(s -> s.startsWith("-a") && s.length() > 2).findFirst().orElse(null);
 				if (anime != null) {
-					String an = CardDAO.verifyAnime(anime.substring(2).toUpperCase());
+					AddedAnime an = CardDAO.verifyAnime(anime.substring(2).toUpperCase());
 					if (an == null) {
-						channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getId).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+						channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 						return;
 					}
 
@@ -197,7 +197,7 @@ public class BuyCardCommand implements Executable {
 							.comparingInt(CardMarket::getPrice)
 							.thenComparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
 							.thenComparing(k -> k.getCard().getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
-							.thenComparing(k -> k.getCard().getCard().getAnime(), String.CASE_INSENSITIVE_ORDER)
+							.thenComparing(k -> k.getCard().getCard().getAnime(), Comparator.comparing(AddedAnime::toString, String.CASE_INSENSITIVE_ORDER))
 							.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER))
 					.map(cm -> Pair.of((Object) cm, CardType.KAWAIPON))
 					.collect(Collectors.toList())
