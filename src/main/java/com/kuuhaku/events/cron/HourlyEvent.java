@@ -50,8 +50,7 @@ public class HourlyEvent implements Job {
 						BackupDAO.getCADump(),
 						BackupDAO.getMemberDump(),
 						BackupDAO.getGuildDump(),
-						BackupDAO.getPoliticalStateDump(),
-						null
+						BackupDAO.getPoliticalStateDump()
 				), false
 		);
 
