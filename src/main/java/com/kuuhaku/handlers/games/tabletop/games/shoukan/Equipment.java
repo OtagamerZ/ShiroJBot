@@ -315,6 +315,7 @@ public class Equipment implements Drawable, Cloneable {
 			i.set("game", game);
 			i.set("allyPos", allyPos);
 			i.set("enemyPos", enemyPos);
+			i.set("self", this);
 			i.eval(imports + effect);
 		} catch (EvalError e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
