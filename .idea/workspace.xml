@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1161,14 +1162,7 @@
       <workItem from="1613565710885" duration="2875000" />
       <workItem from="1613573584206" duration="18000" />
       <workItem from="1613579305523" duration="8769000" />
-      <workItem from="1613736076111" duration="2889000" />
-    </task>
-    <task id="LOCAL-03778" summary="Adicionado peso aos equipamentos">
-      <created>1613148438963</created>
-      <option name="number" value="03778" />
-      <option name="presentableId" value="LOCAL-03778" />
-      <option name="project" value="LOCAL" />
-      <updated>1613148438964</updated>
+      <workItem from="1613736076111" duration="4501000" />
     </task>
     <task id="LOCAL-03779" summary="Adicionado peso aos equipamentos">
       <created>1613160771537</created>
@@ -1506,7 +1500,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613680838506</updated>
     </task>
-    <option name="localTasksCounter" value="3827" />
+    <task id="LOCAL-03827" summary="Correções menores">
+      <created>1613739391433</created>
+      <option name="number" value="03827" />
+      <option name="presentableId" value="LOCAL-03827" />
+      <option name="project" value="LOCAL" />
+      <updated>1613739391434</updated>
+    </task>
+    <option name="localTasksCounter" value="3828" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
