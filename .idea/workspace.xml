@@ -1161,14 +1161,7 @@
       <workItem from="1613565710885" duration="2875000" />
       <workItem from="1613573584206" duration="18000" />
       <workItem from="1613579305523" duration="8769000" />
-      <workItem from="1613736076111" duration="11994000" />
-    </task>
-    <task id="LOCAL-03784" summary="Adição de efeitos por cartas adjacentes">
-      <created>1613352530751</created>
-      <option name="number" value="03784" />
-      <option name="presentableId" value="LOCAL-03784" />
-      <option name="project" value="LOCAL" />
-      <updated>1613352530751</updated>
+      <workItem from="1613736076111" duration="13108000" />
     </task>
     <task id="LOCAL-03785" summary="Adição de efeitos por cartas adjacentes">
       <created>1613352967492</created>
@@ -1506,7 +1499,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613757555607</updated>
     </task>
-    <option name="localTasksCounter" value="3833" />
+    <task id="LOCAL-03833" summary="Correções menores">
+      <created>1613761715840</created>
+      <option name="number" value="03833" />
+      <option name="presentableId" value="LOCAL-03833" />
+      <option name="project" value="LOCAL" />
+      <updated>1613761715840</updated>
+    </task>
+    <option name="localTasksCounter" value="3834" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

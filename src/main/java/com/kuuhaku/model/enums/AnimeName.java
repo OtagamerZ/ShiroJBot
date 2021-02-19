@@ -71,7 +71,8 @@ public enum AnimeName {
 	FATE_STAY_NIGHT,
 	OVERFLOW,
 	GENSHIN_IMPACT,
-	MAHOU_SHOUJO_LYRICAL_NANOHA;
+	MAHOU_SHOUJO_LYRICAL_NANOHA,
+	KYONYUU_FANTASY;
 
 	public static AnimeName[] validValues() {
 		return Arrays.stream(values()).filter(an -> an != HIDDEN).toArray(AnimeName[]::new);
