@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -87,7 +88,7 @@ public class MarryCommand implements Executable {
 
 			Main.getInfo().getShiroEvents().addHandler(guild, new SimpleMessageListener() {
 				private final Consumer<Void> success = s -> close();
-				private Future<?> timeout = channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
+				private Future<?> timeout = channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null), Helper::doNothing);
 
 				@Override
 				public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
