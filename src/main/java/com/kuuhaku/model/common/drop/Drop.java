@@ -31,10 +31,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public abstract class Drop implements Prize {
-	private final String anime;
+	private final AddedAnime anime;
 	private final ExceedEnum exceed;
 	private final ClanTier tier;
 	private final int[] values;
@@ -42,12 +41,12 @@ public abstract class Drop implements Prize {
 	private final Pair<String, Function<User, Boolean>> chosen;
 
 	protected Drop() {
-		List<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getName).collect(Collectors.toList());
+		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
 		anime = animes.get(Helper.rng(animes.size(), true));
 		exceed = ExceedEnum.values()[Helper.rng(ExceedEnum.values().length, true)];
 		tier = ClanTier.values()[Helper.rng(ClanTier.values().length, true)];
 		values = new int[]{
-				1 + Helper.rng((int) CardDAO.totalCards(anime) - 1, false),
+				1 + Helper.rng((int) CardDAO.totalCards(anime.getName()) - 1, false),
 				1 + Helper.rng(6, false),
 				1 + Helper.rng((int) CardDAO.totalCards() / 2 - 1, false),
 				1 + Helper.rng(MemberDAO.getHighestLevel() / 2 - 1, false)
@@ -86,7 +85,7 @@ public abstract class Drop implements Prize {
 		chosen = condition.get(Helper.rng(condition.size(), true));
 	}
 
-	public String getAnime() {
+	public AddedAnime getAnime() {
 		return anime;
 	}
 

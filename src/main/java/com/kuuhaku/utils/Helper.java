@@ -1257,7 +1257,7 @@ public class Helper {
 
 			EmbedBuilder eb = new EmbedBuilder()
 					.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!")
-					.setTitle(kc.getName() + " (" + c.getAnime() + ")")
+					.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 					.setColor(colorThief(img))
 					.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + Helper.separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
 
@@ -1284,7 +1284,7 @@ public class Helper {
 		}
 	}
 
-	public static void forceSpawnKawaipon(GuildConfig gc, Message message, String anime) {
+	public static void forceSpawnKawaipon(GuildConfig gc, Message message, AddedAnime anime) {
 		TextChannel channel = message.getTextChannel();
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
@@ -1292,7 +1292,7 @@ public class Helper {
 		KawaiponRarity kr;
 		List<Card> cards;
 		if (anime != null) {
-			List<Card> cds = CardDAO.getCardsByAnime(anime);
+			List<Card> cds = CardDAO.getCardsByAnime(anime.getName());
 
 			kr = getRandom(cds.stream()
 					.map(Card::getRarity)
@@ -1319,7 +1319,7 @@ public class Helper {
 
 		EmbedBuilder eb = new EmbedBuilder()
 				.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase() + " neste servidor!")
-				.setTitle(kc.getName() + " (" + c.getAnime() + ")")
+				.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 				.setColor(colorThief(img))
 				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + Helper.separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
 
