@@ -72,8 +72,7 @@ public class ConsoleListener extends BufferedReader {
 								com.kuuhaku.controller.sqlite.BackupDAO.getCADump(),
 								com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump(),
 								com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(),
-								com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump(),
-								null
+								com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump()
 						), true)
 				);
 			}
