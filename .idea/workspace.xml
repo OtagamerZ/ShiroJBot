@@ -1165,27 +1165,7 @@
       <workItem from="1613766641602" duration="92000" />
       <workItem from="1613766979197" duration="1404000" />
       <workItem from="1613780518512" duration="2360000" />
-    </task>
-    <task id="LOCAL-03795" summary="Adição do comando para ver informações do emote">
-      <created>1613407992078</created>
-      <option name="number" value="03795" />
-      <option name="presentableId" value="LOCAL-03795" />
-      <option name="project" value="LOCAL" />
-      <updated>1613407992078</updated>
-    </task>
-    <task id="LOCAL-03796" summary="Adição do comando para ver informações do emote">
-      <created>1613409916288</created>
-      <option name="number" value="03796" />
-      <option name="presentableId" value="LOCAL-03796" />
-      <option name="project" value="LOCAL" />
-      <updated>1613409916288</updated>
-    </task>
-    <task id="LOCAL-03797" summary="Adição do comando para ver informações do emote">
-      <created>1613414354217</created>
-      <option name="number" value="03797" />
-      <option name="presentableId" value="LOCAL-03797" />
-      <option name="project" value="LOCAL" />
-      <updated>1613414354217</updated>
+      <workItem from="1613783227281" duration="1241000" />
     </task>
     <task id="LOCAL-03798" summary="Ranked duo agora exige um time fechado">
       <created>1613480297381</created>
@@ -1509,7 +1489,28 @@
       <option name="project" value="LOCAL" />
       <updated>1613782395714</updated>
     </task>
-    <option name="localTasksCounter" value="3844" />
+    <task id="LOCAL-03844" summary="Remoção da dependencia dos enumeradores de AnimeName">
+      <created>1613783274751</created>
+      <option name="number" value="03844" />
+      <option name="presentableId" value="LOCAL-03844" />
+      <option name="project" value="LOCAL" />
+      <updated>1613783274751</updated>
+    </task>
+    <task id="LOCAL-03845" summary="Remoção da dependencia dos enumeradores de AnimeName">
+      <created>1613783570037</created>
+      <option name="number" value="03845" />
+      <option name="presentableId" value="LOCAL-03845" />
+      <option name="project" value="LOCAL" />
+      <updated>1613783570037</updated>
+    </task>
+    <task id="LOCAL-03846" summary="Remoção da dependencia dos enumeradores de AnimeName">
+      <created>1613783858052</created>
+      <option name="number" value="03846" />
+      <option name="presentableId" value="LOCAL-03846" />
+      <option name="project" value="LOCAL" />
+      <updated>1613783858052</updated>
+    </task>
+    <option name="localTasksCounter" value="3847" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

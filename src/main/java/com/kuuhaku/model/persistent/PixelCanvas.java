@@ -54,8 +54,6 @@ public class PixelCanvas {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean shelved = false;
 
-	private static int length = 0;
-
 	public BufferedImage getCanvas() {
 		if (canvas != null) {
 			byte[] bytes = Base64.getDecoder().decode(canvas);
@@ -88,11 +86,9 @@ public class PixelCanvas {
 	}
 
 	public String getRawCanvas() {
-		byte[] bytes = Base64.getDecoder().decode(canvas);
-		if (bytes.length != length) {
-			BufferedImage bi = getCanvas();
+		BufferedImage bi = getCanvas();
+		if (bi.getWidth() != CANVAS_SIZE || bi.getHeight() != CANVAS_SIZE) {
 			saveCanvas(bi);
-			length = bytes.length;
 		}
 
 		return canvas;
