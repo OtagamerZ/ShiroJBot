@@ -295,53 +295,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="com.kuuhaku.shiro-j-bot.test" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="com.kuuhaku.shiro-j-bot.test" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1164,14 +1117,7 @@
       <workItem from="1613766979197" duration="1404000" />
       <workItem from="1613780518512" duration="2360000" />
       <workItem from="1613783227281" duration="1241000" />
-      <workItem from="1613787216211" duration="305000" />
-    </task>
-    <task id="LOCAL-03799" summary="Ranked duo agora exige um time fechado">
-      <created>1613480605972</created>
-      <option name="number" value="03799" />
-      <option name="presentableId" value="LOCAL-03799" />
-      <option name="project" value="LOCAL" />
-      <updated>1613480605972</updated>
+      <workItem from="1613787216211" duration="549000" />
     </task>
     <task id="LOCAL-03800" summary="Ranked duo agora exige um time fechado">
       <created>1613481007762</created>
@@ -1509,7 +1455,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613787267288</updated>
     </task>
-    <option name="localTasksCounter" value="3848" />
+    <task id="LOCAL-03848" summary="Remoção da dependencia dos enumeradores de AnimeName">
+      <created>1613787628780</created>
+      <option name="number" value="03848" />
+      <option name="presentableId" value="LOCAL-03848" />
+      <option name="project" value="LOCAL" />
+      <updated>1613787628780</updated>
+    </task>
+    <option name="localTasksCounter" value="3849" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
