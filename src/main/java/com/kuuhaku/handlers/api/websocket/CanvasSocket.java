@@ -68,8 +68,9 @@ public class CanvasSocket extends WebSocketServer {
 		switch (jo.getString("type")) {
 			case "canvas" -> {
 				JSONObject pixel = jo.getJSONObject("content").getJSONObject("pixel");
+				int size = jo.optInt("size", 0);
 				Token t = TokenDAO.getToken(jo.getString("token"));
-				if (t == null || pixel.getInt("size") != Helper.CANVAS_SIZE) return;
+				if (t == null || size != Helper.CANVAS_SIZE) return;
 
 				try {
 					PixelOperation op = new PixelOperation(
