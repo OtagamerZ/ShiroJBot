@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.payload.Bonus;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.TrophyType;
@@ -284,32 +283,6 @@ public class Member {
 
 	public void setTrophy(TrophyType trophy) {
 		this.trophy = trophy;
-	}
-
-	public int getLocalRank() {
-		List<Member> mbs = MemberDAO.getMemberRank(sid, false);
-		int pos = 0;
-		for (int i = 0; i < mbs.size(); i++) {
-			if (mbs.get(i).getId().equals(id)) {
-				pos = i + 1;
-				break;
-			}
-		}
-
-		return pos;
-	}
-
-	public int getGlobalRank() {
-		List<Member> mbs = MemberDAO.getMemberRank(sid, true);
-		int posG = 0;
-		for (int i = 0; i < mbs.size(); i++) {
-			if (mbs.get(i).getId().equals(id)) {
-				posG = i + 1;
-				break;
-			}
-		}
-
-		return posG;
 	}
 
 	public JSONObject toJson() {

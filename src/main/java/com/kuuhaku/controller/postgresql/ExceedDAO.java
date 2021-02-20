@@ -154,7 +154,7 @@ public class ExceedDAO {
         int memberCount = ((Long) q.getSingleResult()).intValue();
 
         try {
-            return new Exceed(ex, memberCount, ((BigDecimal) points.getSingleResult()).longValue());
+            return new Exceed(ex, memberCount, ((Number) points.getSingleResult()).longValue());
         } finally {
             em.close();
         }

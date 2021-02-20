@@ -22,6 +22,7 @@ import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.model.persistent.Member;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -105,7 +106,7 @@ public class MemberDAO {
 			em.getTransaction().commit();
 
 			em.close();
-		} 
+		}
 	}
 
 	public static void updateMemberConfigs(Member m) {
@@ -136,6 +137,47 @@ public class MemberDAO {
 		em.close();
 
 		return mbs;
+	}
+
+	public static int getMemberRankPos(String mid, String gid, boolean global) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q;
+
+		if (global)
+			q = em.createNativeQuery("""
+					SELECT x.row + 1
+					FROM (
+						SELECT m.mid
+							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row 
+						FROM Member m 
+						WHERE m.mid IS NOT NULL
+					) x
+					WHERE x.mid = :mid
+					""");
+		else {
+			q = em.createNativeQuery("""
+					SELECT x.row + 1
+					FROM (
+						SELECT m.mid
+							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row 
+						FROM Member m 
+						WHERE m.sid = :id 
+						AND m.mid IS NOT NULL
+					) x
+					WHERE x.mid = :mid
+					""");
+			q.setParameter("id", gid);
+		}
+		q.setMaxResults(1);
+
+		try {
+			return ((Number) q.getSingleResult()).intValue();
+		} catch (NoResultException e) {
+			return 0;
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
