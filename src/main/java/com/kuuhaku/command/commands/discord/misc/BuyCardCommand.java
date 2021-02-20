@@ -70,8 +70,8 @@ public class BuyCardCommand implements Executable {
 		Account buyer = AccountDAO.getAccount(author.getId());
 		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
 			AtomicReference<String> byName = new AtomicReference<>(null);
-			AtomicReference<KawaiponRarity> byRarity = new AtomicReference<>(null);
-			AtomicReference<AddedAnime> byAnime = new AtomicReference<>(null);
+			AtomicReference<String> byRarity = new AtomicReference<>(null);
+			AtomicReference<String> byAnime = new AtomicReference<>(null);
 			AtomicReference<Integer> minPrice = new AtomicReference<>(-1);
 			AtomicReference<Integer> maxPrice = new AtomicReference<>(-1);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
@@ -82,28 +82,21 @@ public class BuyCardCommand implements Executable {
 
 			if (args.length > 0) {
 				List<String> params = List.of(args);
-				byName.set(params.stream().filter(s -> s.startsWith("-n") && s.length() > 2).findFirst().orElse(null));
-				if (byName.get() != null) byName.set(byName.get().substring(2));
 
-				String rarity = params.stream().filter(s -> s.startsWith("-r") && s.length() > 2).findFirst().orElse(null);
-				if (rarity != null) {
-					byRarity.set(KawaiponRarity.getByName(rarity.substring(2)));
-					if (byRarity.get() == null) {
-						channel.sendMessage("❌ | Raridade inválida, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(KawaiponRarity.values()).map(KawaiponRarity::name).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
-						return;
-					}
-				}
+				params.stream()
+						.filter(s -> s.startsWith("-n") && s.length() > 2)
+						.findFirst()
+						.ifPresent(name -> byName.set(name.substring(2)));
 
-				String anime = params.stream().filter(s -> s.startsWith("-a") && s.length() > 2).findFirst().orElse(null);
-				if (anime != null) {
-					AddedAnime an = CardDAO.verifyAnime(anime.substring(2).toUpperCase());
-					if (an == null) {
-						channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
-						return;
-					}
+				params.stream()
+						.filter(s -> s.startsWith("-r") && s.length() > 2)
+						.findFirst()
+						.ifPresent(rarity -> byRarity.set(rarity.substring(2)));
 
-					byAnime.set(an);
-				}
+				params.stream()
+						.filter(s -> s.startsWith("-a") && s.length() > 2)
+						.findFirst()
+						.ifPresent(anime -> byAnime.set(anime.substring(2)));
 
 				minPrice.set(params.stream()
 						.filter(s -> s.startsWith("-min") && s.length() > 4)
@@ -189,8 +182,8 @@ public class BuyCardCommand implements Executable {
 					.filter(cm -> byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get()))
 					.filter(fm -> minPrice.get() == -1 || fm.getPrice() >= minPrice.get())
 					.filter(fm -> maxPrice.get() == -1 || fm.getPrice() <= maxPrice.get())
-					.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
-					.filter(cm -> byAnime.get() == null || byAnime.get().equals(cm.getCard().getCard().getAnime()))
+					.filter(cm -> byRarity.get() == null || Helper.containsAny(byRarity.get(), cm.getCard().getCard().getRarity().name(), cm.getCard().getCard().getRarity().toString()))
+					.filter(cm -> byAnime.get() == null || Helper.containsAny(byAnime.get(), cm.getCard().getCard().getAnime().getName(), cm.getCard().getCard().getAnime().toString()))
 					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
 					.filter(cm -> onlyMine.get() ? cm.getSeller().equals(author.getId()) : cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)))
 					.sorted(Comparator
