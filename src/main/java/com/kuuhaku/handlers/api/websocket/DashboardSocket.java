@@ -129,6 +129,7 @@ public class DashboardSocket extends WebSocketServer {
 						put("credits", AccountDAO.getAccount(u.getId()).getBalance());
 						put("bonuses", Member.getBonuses(u));
 						put("badges", Tags.getUserBadges(u.getId()));
+						put("rank", MemberDAO.getMemberRankPos(u.getId(), null, true));
 					}};
 					List<Guild> g = new ArrayList<>();
 					for (Member profile : profiles) {
