@@ -30,7 +30,6 @@ import net.dv8tion.jda.api.entities.*;
 @Command(
 		name = "relay",
 		aliases = {"relinfo", "global"},
-		usage = "req_relay",
 		category = Category.BETA
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})

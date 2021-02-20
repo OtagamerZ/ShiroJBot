@@ -42,7 +42,6 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "historico",
 		aliases = {"history", "hist"},
-		usage = "req_clanhistory",
 		category = Category.CLAN
 )
 @Requires({

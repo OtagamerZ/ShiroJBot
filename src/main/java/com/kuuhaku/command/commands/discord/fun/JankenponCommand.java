@@ -35,7 +35,7 @@ import net.dv8tion.jda.api.entities.*;
 @Command(
 		name = "pedrapapeltesoura",
 		aliases = {"rockpaperscissors", "jankenpon", "rps", "ppt", "jkp"},
-		usage = "req_jankenpon",
+		usage = "req_rockpaperscissors",
 		category = Category.FUN
 )
 public class JankenponCommand implements Executable {

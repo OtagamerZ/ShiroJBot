@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutionException;
 @Command(
 		name = "emblema",
 		aliases = {"icon", "icone"},
-		usage = "req_clanicon",
+		usage = "req_file",
 		category = Category.CLAN
 )
 public class ClanIconCommand implements Executable {

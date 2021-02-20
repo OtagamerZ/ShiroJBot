@@ -33,7 +33,7 @@ import java.nio.charset.StandardCharsets;
 @Command(
 		name = "pesquisar",
 		aliases = {"search", "lts", "aap"},
-		usage = "req_http",
+		usage = "req_search",
 		category = Category.FUN
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})

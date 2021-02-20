@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 @Command(
 		name = "convidar",
-		usage = "req_inviteclan",
+		usage = "req_mention",
 		category = Category.CLAN
 )
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})

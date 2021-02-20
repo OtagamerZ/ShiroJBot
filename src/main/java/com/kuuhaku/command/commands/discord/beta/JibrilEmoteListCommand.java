@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
 
 @Command(
 		name = "jemotes",
-		usage = "req_jibrilemote",
 		category = Category.BETA
 )
 @Requires({
