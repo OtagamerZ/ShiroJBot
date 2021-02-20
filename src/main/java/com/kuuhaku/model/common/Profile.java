@@ -182,23 +182,8 @@ public class Profile {
 		g2d.setFont(FONT.deriveFont(Font.PLAIN, 25));
 		printCenteredString(Helper.getShortenedValue(mb.getXp(), 1000) + "/" + Helper.getShortenedValue((int) Math.pow(mb.getLevel(), 2) * 100L, 1000), 196, 52, 538, g2d);
 
-		List<Member> mbs = MemberDAO.getMemberRank(g.getId(), false);
-		int pos = 0;
-		for (int i = 0; i < mbs.size(); i++) {
-			if (mbs.get(i).getId().equals(m.getUser().getId() + g.getId())) {
-				pos = i + 1;
-				break;
-			}
-		}
-
-		mbs = MemberDAO.getMemberRank(g.getId(), true);
-		int posG = 0;
-		for (int i = 0; i < mbs.size(); i++) {
-			if (mbs.get(i).getId().equals(m.getUser().getId() + g.getId())) {
-				posG = i + 1;
-				break;
-			}
-		}
+		int pos = MemberDAO.getMemberRankPos(mb.getMid(), mb.getSid(), false);
+		int posG = MemberDAO.getMemberRankPos(mb.getMid(), mb.getSid(), true);
 
 		g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
 		g2d.setColor(Color.WHITE);

@@ -31,7 +31,6 @@ import com.kuuhaku.model.persistent.Card;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -624,7 +623,7 @@ public class CardDAO {
 		q.setParameter("cat", cat.name());
 
 		try {
-			return ((BigDecimal) q.getSingleResult()).doubleValue();
+			return ((Number) q.getSingleResult()).doubleValue();
 		} finally {
 			em.close();
 		}
