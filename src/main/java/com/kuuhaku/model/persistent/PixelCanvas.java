@@ -58,7 +58,20 @@ public class PixelCanvas {
 		if (canvas != null) {
 			byte[] bytes = Base64.getDecoder().decode(canvas);
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-				return ImageIO.read(bais);
+				BufferedImage canvas = ImageIO.read(bais);
+
+				if (canvas.getWidth() != CANVAS_SIZE || canvas.getHeight() != CANVAS_SIZE) {
+					BufferedImage bi = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
+					Graphics2D g2d = bi.createGraphics();
+					g2d.setColor(Color.decode("#333333"));
+					g2d.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+					g2d.drawImage(canvas, 0, 0, null);
+					g2d.dispose();
+
+					return bi;
+				}
+
+				return canvas;
 			} catch (IOException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
