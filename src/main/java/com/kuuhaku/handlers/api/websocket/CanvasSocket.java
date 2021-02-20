@@ -62,13 +62,13 @@ public class CanvasSocket extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, String payload) {
 		JSONObject jo = new JSONObject(payload);
-		if (!jo.has("token") || !jo.has("type") || !jo.has("content") || !TokenDAO.validateToken(jo.getString("token")))
+		if (!jo.has("token") || !jo.has("type") || !jo.has("content") || !jo.has("info") || !TokenDAO.validateToken(jo.getString("token")))
 			return;
 
 		switch (jo.getString("type")) {
 			case "canvas" -> {
 				JSONObject pixel = jo.getJSONObject("content").getJSONObject("pixel");
-				int size = jo.optInt("size", 0);
+				int size = jo.getJSONObject("info").optInt("size", 0);
 				Token t = TokenDAO.getToken(jo.getString("token"));
 				if (t == null || size != Helper.CANVAS_SIZE) return;
 
