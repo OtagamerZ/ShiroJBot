@@ -30,8 +30,6 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -83,7 +81,7 @@ public class ImageCommand implements Executable {
 				eb.setTitle(item.getString("title"), image.getString("contextLink"));
 				eb.addField("Largura:", Integer.toString(image.getInt("width")), true);
 				eb.addField("Altura:", Integer.toString(image.getInt("height")), true);
-				eb.addField("Tamanho: ", BigDecimal.valueOf(image.getInt("byteSize") / 1024f / 1024f).setScale(2, RoundingMode.HALF_EVEN) + " MB", true);
+				eb.addField("Tamanho: ", Helper.round(image.getInt("byteSize") / 1024f / 1024f, 2) + " MB", true);
 				eb.setImage(item.getString("link"));
 
 				m.delete().queue();
