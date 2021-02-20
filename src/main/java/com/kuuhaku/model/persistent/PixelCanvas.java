@@ -86,12 +86,20 @@ public class PixelCanvas {
 	}
 
 	public String getRawCanvas() {
-		BufferedImage bi = getCanvas();
-		if (bi.getWidth() != CANVAS_SIZE || bi.getHeight() != CANVAS_SIZE) {
-			saveCanvas(bi);
-		}
+		byte[] bytes = Base64.getDecoder().decode(canvas);
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
+			BufferedImage img = ImageIO.read(bais);
 
-		return canvas;
+			if (img.getWidth() != CANVAS_SIZE || img.getHeight() != CANVAS_SIZE) {
+				BufferedImage bi = getCanvas();
+				saveCanvas(bi);
+			}
+
+			return canvas;
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			return canvas;
+		}
 	}
 
 	public String getAsCoordinates() {

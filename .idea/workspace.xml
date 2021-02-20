@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção da dependencia dos enumeradores de AnimeName">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção da dependencia dos enumeradores de AnimeName" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1166,13 +1164,7 @@
       <workItem from="1613766979197" duration="1404000" />
       <workItem from="1613780518512" duration="2360000" />
       <workItem from="1613783227281" duration="1241000" />
-    </task>
-    <task id="LOCAL-03798" summary="Ranked duo agora exige um time fechado">
-      <created>1613480297381</created>
-      <option name="number" value="03798" />
-      <option name="presentableId" value="LOCAL-03798" />
-      <option name="project" value="LOCAL" />
-      <updated>1613480297382</updated>
+      <workItem from="1613787216211" duration="305000" />
     </task>
     <task id="LOCAL-03799" summary="Ranked duo agora exige um time fechado">
       <created>1613480605972</created>
@@ -1510,7 +1502,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613783858052</updated>
     </task>
-    <option name="localTasksCounter" value="3847" />
+    <task id="LOCAL-03847" summary="Remoção da dependencia dos enumeradores de AnimeName">
+      <created>1613787267288</created>
+      <option name="number" value="03847" />
+      <option name="presentableId" value="LOCAL-03847" />
+      <option name="project" value="LOCAL" />
+      <updated>1613787267288</updated>
+    </task>
+    <option name="localTasksCounter" value="3848" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
