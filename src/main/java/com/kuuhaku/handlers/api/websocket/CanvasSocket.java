@@ -48,6 +48,9 @@ public class CanvasSocket extends WebSocketServer {
 		conn.send(new JSONObject() {{
 			put("type", "canvas_init");
 			put("content", Main.getInfo().getCanvas().getRawCanvas());
+			put("info", new JSONObject() {{
+				put("size", Helper.CANVAS_SIZE);
+			}});
 		}}.toString());
 	}
 
@@ -115,6 +118,9 @@ public class CanvasSocket extends WebSocketServer {
 				put("color", color);
 				put("x", x);
 				put("y", y);
+				put("info", new JSONObject() {{
+					put("size", Helper.CANVAS_SIZE);
+				}});
 			}}.toString());
 		}
 	}
