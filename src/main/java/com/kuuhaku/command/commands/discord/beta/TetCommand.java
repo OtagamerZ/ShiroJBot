@@ -25,7 +25,6 @@ import net.dv8tion.jda.api.entities.*;
 
 @Command(
 		name = "tet",
-		usage = "req_tet",
 		category = Category.BETA
 )
 public class TetCommand implements Executable {
