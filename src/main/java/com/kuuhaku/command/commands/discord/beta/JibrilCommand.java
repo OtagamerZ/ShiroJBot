@@ -26,7 +26,6 @@ import net.dv8tion.jda.api.entities.*;
 
 @Command(
 		name = "jibril",
-		usage = "req_jibril",
 		category = Category.BETA
 )
 public class JibrilCommand implements Executable {

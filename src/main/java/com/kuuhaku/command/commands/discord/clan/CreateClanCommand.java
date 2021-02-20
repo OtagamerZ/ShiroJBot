@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "criar",
 		aliases = {"create"},
-		usage = "req_createclan",
+		usage = "req_name",
 		category = Category.CLAN
 )
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})

@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutionException;
 @Command(
 		name = "faixada",
 		aliases = {"banner"},
-		usage = "req_clanbanner",
+		usage = "req_file",
 		category = Category.CLAN
 )
 public class ClanBannerCommand implements Executable {

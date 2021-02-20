@@ -39,7 +39,7 @@ import java.util.Objects;
 @Command(
 		name = "menteexpandida",
 		aliases = {"expandedbrain", "brain"},
-		usage = "req_captcha",
+		usage = "req_four-options",
 		category = Category.FUN
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES})
