@@ -169,6 +169,7 @@ public class MemberDAO {
 					""");
 			q.setParameter("id", gid);
 		}
+		q.setParameter("mid", mid);
 		q.setMaxResults(1);
 
 		try {
