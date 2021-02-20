@@ -46,7 +46,6 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "cla",
 		aliases = {"clan", "party", "faction", "guild", "dynasty"},
-		usage = "req_clan",
 		category = Category.CLAN
 )
 @Requires({
