@@ -505,10 +505,10 @@ public class Helper {
 				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissionsExplicit(c);
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
-							  perms.stream()
-									  .map(p -> "✅ -> " + p.getName() + "\n")
-									  .sorted()
-									  .collect(Collectors.joining());
+						perms.stream()
+								.map(p -> "✅ -> " + p.getName() + "\n")
+								.sorted()
+								.collect(Collectors.joining());
 			}
 		} catch (NoResultException ignore) {
 		}
@@ -517,11 +517,11 @@ public class Helper {
 		EnumSet<Permission> perms = shiro.getPermissionsExplicit(c);
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
-			   perms.stream()
-					   .map(p -> "✅ -> " + p.getName() + "\n")
-					   .sorted()
-					   .collect(Collectors.joining()) +
-			   jibrilPerms;
+				perms.stream()
+						.map(p -> "✅ -> " + p.getName() + "\n")
+						.sorted()
+						.collect(Collectors.joining()) +
+				jibrilPerms;
 	}
 
 	public static <T> T getOr(T get, T or) {
@@ -1185,25 +1185,25 @@ public class Helper {
 	}
 
 	public static byte[] getBytes(BufferedImage image) {
-		File temp = Main.getInfo().getTemporaryFolder();
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			try (BufferedOutputStream bos = new BufferedOutputStream(baos)) {
+				ImageIO.write(image, "jpg", bos);
+			}
 
-		try {
-			File f = new File(temp, hash(String.valueOf(System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "MD5"));
-			ImageIO.write(image, "jpg", f);
-			return FileUtils.readFileToByteArray(f);
+			return baos.toByteArray();
 		} catch (IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			return new byte[0];
 		}
 	}
 
-	public static byte[] getBytes(BufferedImage image, String encode) {
-		File temp = Main.getInfo().getTemporaryFolder();
+	public static byte[] getBytes(BufferedImage image, String encoding) {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			try (BufferedOutputStream bos = new BufferedOutputStream(baos)) {
+				ImageIO.write(image, encoding, bos);
+			}
 
-		try {
-			File f = new File(temp, hash(String.valueOf(System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "MD5"));
-			ImageIO.write(image, encode, f);
-			return FileUtils.readFileToByteArray(f);
+			return baos.toByteArray();
 		} catch (IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			return new byte[0];
@@ -1211,23 +1211,23 @@ public class Helper {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encode, float compression) {
-		File temp = Main.getInfo().getTemporaryFolder();
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			try (BufferedOutputStream bos = new BufferedOutputStream(baos)) {
+				ImageWriter writer = ImageIO.getImageWritersByFormatName(encode).next();
+				ImageOutputStream ios = ImageIO.createImageOutputStream(bos);
+				writer.setOutput(ios);
 
-		try {
-			File f = new File(temp, hash(String.valueOf(System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "MD5"));
+				ImageWriteParam param = writer.getDefaultWriteParam();
+				if (param.canWriteCompressed()) {
+					param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+					param.setCompressionQuality(compression);
+				}
 
-			ImageWriter writer = ImageIO.getImageWritersByFormatName(encode).next();
-			ImageOutputStream ios = ImageIO.createImageOutputStream(f);
-			writer.setOutput(ios);
-
-			ImageWriteParam param = writer.getDefaultWriteParam();
-			if (param.canWriteCompressed()) {
-				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-				param.setCompressionQuality(compression);
+				writer.write(null, new IIOImage(image, null, null), param);
 			}
 
-			writer.write(null, new IIOImage(image, null, null), param);
-			return FileUtils.readFileToByteArray(f);
+
+			return baos.toByteArray();
 		} catch (IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			return new byte[0];

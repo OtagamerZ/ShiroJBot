@@ -13,7 +13,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção da dependencia dos enumeradores de AnimeName" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção da dependencia dos enumeradores de AnimeName">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/AddedAnime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/AddedAnime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1121,14 +1126,9 @@
       <workItem from="1613788005814" duration="258000" />
       <workItem from="1613789092245" duration="749000" />
       <workItem from="1613789864374" duration="1287000" />
-      <workItem from="1613847515064" duration="3816000" />
-    </task>
-    <task id="LOCAL-03804" summary="Revisão geral no código">
-      <created>1613491343983</created>
-      <option name="number" value="03804" />
-      <option name="presentableId" value="LOCAL-03804" />
-      <option name="project" value="LOCAL" />
-      <updated>1613491343983</updated>
+      <workItem from="1613847515064" duration="4485000" />
+      <workItem from="1613877843108" duration="60000" />
+      <workItem from="1613928155639" duration="5269000" />
     </task>
     <task id="LOCAL-03805" summary="Correção no efeito de atordoamento">
       <created>1613499196589</created>
@@ -1466,7 +1466,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613852569428</updated>
     </task>
-    <option name="localTasksCounter" value="3853" />
+    <task id="LOCAL-03853" summary="Remoção da dependencia dos enumeradores de AnimeName">
+      <created>1613853671181</created>
+      <option name="number" value="03853" />
+      <option name="presentableId" value="LOCAL-03853" />
+      <option name="project" value="LOCAL" />
+      <updated>1613853671182</updated>
+    </task>
+    <option name="localTasksCounter" value="3854" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
