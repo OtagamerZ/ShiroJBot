@@ -35,6 +35,13 @@ public class AddedAnime {
 		return name;
 	}
 
+	public AddedAnime() {
+	}
+
+	public AddedAnime(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

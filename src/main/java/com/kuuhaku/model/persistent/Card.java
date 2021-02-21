@@ -62,6 +62,7 @@ public class Card {
 	}
 
 	public AddedAnime getAnime() {
+		if (anime.equals("HIDDEN")) return new AddedAnime(anime);
 		return CardDAO.verifyAnime(anime);
 	}
 
