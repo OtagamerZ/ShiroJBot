@@ -48,6 +48,7 @@ public class Hand {
 	private final List<Drawable> destinyDeck = new ArrayList<>();
 	private final Side side;
 	private final int baseHp;
+	private final int baseManaPerTurn;
 	private int maxCards = 0;
 	private int manaPerTurn = 0;
 	private int mana = 0;
@@ -64,6 +65,7 @@ public class Hand {
 			this.deque = null;
 			this.side = null;
 			this.baseHp = 0;
+			this.baseManaPerTurn = 0;
 			return;
 		}
 		deque = new LinkedList<>() {{
@@ -84,12 +86,13 @@ public class Hand {
 		this.game = game;
 
 		int baseHp;
+		int baseManaPerTurn;
 		if (game.getCustom() != null) {
 			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
 			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
 			maxCards = Helper.clamp(game.getCustom().optInt("cartasmax", 5), 1, 10);
-			manaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
-			
+			baseManaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
+
 			if (game.getCustom().optBoolean("semequip"))
 				getDeque().removeIf(d -> d instanceof Equipment);
 			if (game.getCustom().optBoolean("semfield"))
@@ -137,7 +140,7 @@ public class Hand {
 			mana = 0;
 			baseHp = 5000;
 			maxCards = 5;
-			manaPerTurn = 5;
+			baseManaPerTurn = 5;
 		}
 
 		if (kp.getDestinyDraw() != null) {
@@ -155,6 +158,7 @@ public class Hand {
 		}
 
 		this.baseHp = hp = baseHp;
+		this.baseManaPerTurn = manaPerTurn = baseManaPerTurn;
 		redrawHand();
 	}
 
@@ -176,12 +180,13 @@ public class Hand {
 		this.game = game;
 
 		int baseHp;
+		int baseManaPerTurn;
 		if (game.getCustom() != null) {
 			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
 			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
 			maxCards = Helper.clamp(game.getCustom().optInt("cartasmax", 5), 1, 10);
-			manaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
-			
+			baseManaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
+
 			if (game.getCustom().optBoolean("semequip"))
 				getDeque().removeIf(d -> d instanceof Equipment);
 			if (game.getCustom().optBoolean("semfield"))
@@ -229,7 +234,7 @@ public class Hand {
 			mana = 0;
 			baseHp = 5000;
 			maxCards = 5;
-			manaPerTurn = 5;
+			baseManaPerTurn = 5;
 		}
 
 		if (cl.getDeck().getDestinyDraw() != null) {
@@ -251,6 +256,7 @@ public class Hand {
 		}
 
 		this.baseHp = hp = baseHp;
+		this.baseManaPerTurn = manaPerTurn = baseManaPerTurn;
 		redrawHand();
 	}
 
@@ -532,6 +538,10 @@ public class Hand {
 
 	public int getMana() {
 		return mana;
+	}
+
+	public int getBaseManaPerTurn() {
+		return baseManaPerTurn;
 	}
 
 	public int getManaPerTurn() {
