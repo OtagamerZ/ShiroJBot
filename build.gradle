@@ -117,7 +117,7 @@ apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
 apply plugin: "application"
 
-applicationDefaultJvmArgs = ["-XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]
+applicationDefaultJvmArgs = ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-XX:+UseG1GC", "-XX:+UseStringDeduplication"]
 
 idea {
     module {
