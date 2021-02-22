@@ -307,6 +307,7 @@ public class Equipment implements Drawable, Cloneable {
 				          				
 				          """.formatted(card.getName());
 
+
 		try {
 			Interpreter i = new Interpreter();
 			i.setStrictJava(true);
