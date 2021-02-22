@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.FileUtils;
@@ -43,8 +42,8 @@ public class Card {
 	@Column(columnDefinition = "VARCHAR(32) NOT NULL DEFAULT ''")
 	private String name = "";
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
-	private String anime;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private AddedAnime anime;
 
 	@Enumerated(EnumType.STRING)
 	private KawaiponRarity rarity = KawaiponRarity.COMMON;
@@ -62,11 +61,10 @@ public class Card {
 	}
 
 	public AddedAnime getAnime() {
-		if (anime.equals("HIDDEN")) return new AddedAnime(anime);
-		return CardDAO.verifyAnime(anime);
+		return anime;
 	}
 
-	public void setAnime(String anime) {
+	public void setAnime(AddedAnime anime) {
 		this.anime = anime;
 	}
 
