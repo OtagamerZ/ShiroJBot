@@ -66,7 +66,7 @@ public class DailyQuestCommand implements Executable {
 							task.getKey().getDescription().formatted(
 									Helper.separate(task.getValue()),
 									switch (task.getKey()) {
-										case ANIME_TASK -> dq.getChosenAnime();
+										case ANIME_TASK -> dq.getChosenAnime().toString();
 										case RACE_TASK -> dq.getChosenRace().getName();
 										default -> "";
 									}
