@@ -13,11 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de melhoria no tempo de conversão das imagens">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de melhoria no tempo de conversão das imagens" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1128,13 +1124,7 @@
       <workItem from="1613847515064" duration="4485000" />
       <workItem from="1613877843108" duration="60000" />
       <workItem from="1613928155639" duration="6097000" />
-    </task>
-    <task id="LOCAL-03806" summary="Correção menor">
-      <created>1613568127418</created>
-      <option name="number" value="03806" />
-      <option name="presentableId" value="LOCAL-03806" />
-      <option name="project" value="LOCAL" />
-      <updated>1613568127419</updated>
+      <workItem from="1613955967973" duration="317000" />
     </task>
     <task id="LOCAL-03807" summary="Correção menor">
       <created>1613580312651</created>
@@ -1472,7 +1462,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613937909602</updated>
     </task>
-    <option name="localTasksCounter" value="3855" />
+    <task id="LOCAL-03855" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613956237420</created>
+      <option name="number" value="03855" />
+      <option name="presentableId" value="LOCAL-03855" />
+      <option name="project" value="LOCAL" />
+      <updated>1613956237420</updated>
+    </task>
+    <option name="localTasksCounter" value="3856" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
