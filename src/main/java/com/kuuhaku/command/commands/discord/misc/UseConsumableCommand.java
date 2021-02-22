@@ -64,6 +64,12 @@ public class UseConsumableCommand implements Executable {
 		}
 
 		Consumable c = ConsumableShop.getAvailable().get(args[0]);
+
+		if (c == null) {
+			channel.sendMessage("❌ | Esse item não existe.").queue();
+			return;
+		}
+
 		c.getEffect().accept(member, channel, message);
 		if (Helper.equalsAny(c.getId(), "spawncard", "spawnanime"))
 			Main.getInfo().getRatelimit().invalidate(author.getId());
