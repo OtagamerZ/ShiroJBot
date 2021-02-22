@@ -97,9 +97,9 @@ public class CardDAO {
 
 		Query q;
 		if (withUltimate)
-			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND anime IN :animes", Card.class);
+			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND anime.name IN :animes", Card.class);
 		else
-			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity <> 'ULTIMATE' AND anime IN :animes", Card.class);
+			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity <> 'ULTIMATE' AND anime.name IN :animes", Card.class);
 		q.setParameter("name", name);
 		q.setParameter("animes", getValidAnimeNames());
 
@@ -156,7 +156,7 @@ public class CardDAO {
 	public static List<Card> getCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime.name IN :animes", Card.class);
 		q.setParameter("animes", getValidAnimeNames());
 
 		try {
@@ -329,7 +329,7 @@ public class CardDAO {
 	public static List<Card> getCardsByAnime(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime.name = :anime", Card.class);
 		q.setParameter("anime", anime);
 
 		try {
@@ -357,7 +357,7 @@ public class CardDAO {
 	public static List<Card> getCardsByRarity(KawaiponRarity rarity) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity AND anime IN :animes", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity AND anime.name IN :animes", Card.class);
 		q.setParameter("rarity", rarity);
 		q.setParameter("animes", getValidAnimeNames());
 
@@ -371,7 +371,7 @@ public class CardDAO {
 	public static long totalCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime.name IN :animes", Long.class);
 		q.setParameter("animes", getValidAnimeNames());
 
 		try {
@@ -384,7 +384,7 @@ public class CardDAO {
 	public static long totalCards(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime.name = :anime", Long.class);
 		q.setParameter("anime", anime);
 
 		try {
@@ -397,7 +397,7 @@ public class CardDAO {
 	public static long totalCards(KawaiponRarity rarity) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity AND anime IN :animes", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity AND anime.name IN :animes", Long.class);
 		q.setParameter("rarity", rarity);
 		q.setParameter("animes", getValidAnimeNames());
 
