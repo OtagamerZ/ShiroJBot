@@ -57,6 +57,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -79,8 +80,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static ConfigurableApplicationContext spring;
 
 	public static void main(String[] args) throws Exception {
-		//Locale.setDefault(new Locale("pt", "BR"));
 		System.setProperty("sun.java2d.opengl", "true");
+		ImageIO.setUseCache(false);
+
 		Helper.logger(Main.class).info("""
 				Shiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)
 				This program comes with ABSOLUTELY NO WARRANTY 
