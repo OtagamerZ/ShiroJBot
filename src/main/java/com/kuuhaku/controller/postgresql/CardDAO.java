@@ -127,21 +127,6 @@ public class CardDAO {
 		}
 	}
 
-	public static String getCardAnime(String name) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT c.anime FROM Card c WHERE id = UPPER(:name)", String.class);
-		q.setParameter("name", name);
-
-		try {
-			return (String) q.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		} finally {
-			em.close();
-		}
-	}
-
 	public static Card getUltimate(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -504,7 +489,7 @@ public class CardDAO {
 	public static Champion getRandomChampion() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime IN :animes ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime.name IN :animes ORDER BY RANDOM()", Champion.class);
 		q.setParameter("animes", getValidAnimeNames());
 		q.setMaxResults(1);
 
@@ -520,7 +505,7 @@ public class CardDAO {
 	public static Champion getRandomChampion(int mana) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime IN :animes AND c.mana = :mana ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime.name IN :animes AND c.mana = :mana ORDER BY RANDOM()", Champion.class);
 		q.setParameter("animes", getValidAnimeNames());
 		q.setParameter("mana", mana);
 		q.setMaxResults(1);
@@ -538,7 +523,7 @@ public class CardDAO {
 	public static Champion getFakeChampion() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime IN :animes ORDER BY RANDOM()", Champion.class);
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime.name IN :animes ORDER BY RANDOM()", Champion.class);
 		q.setParameter("animes", getValidAnimeNames());
 		q.setMaxResults(4);
 
