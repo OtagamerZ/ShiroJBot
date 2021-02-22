@@ -80,6 +80,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static void main(String[] args) throws Exception {
 		//Locale.setDefault(new Locale("pt", "BR"));
+		System.setProperty("sun.java2d.opengl", "true");
 		Helper.logger(Main.class).info("""
 				Shiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)
 				This program comes with ABSOLUTELY NO WARRANTY 
