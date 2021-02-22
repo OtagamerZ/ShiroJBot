@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -31,15 +32,15 @@ public class AddedAnime {
 	@Id
 	private String name;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean hidden = false;
+
 	public String getName() {
 		return name;
 	}
 
-	public AddedAnime() {
-	}
-
-	public AddedAnime(String name) {
-		this.name = name;
+	public boolean isHidden() {
+		return hidden;
 	}
 
 	@Override
