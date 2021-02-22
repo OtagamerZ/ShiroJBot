@@ -42,7 +42,6 @@ public class Card {
 	@Column(columnDefinition = "VARCHAR(32) NOT NULL DEFAULT ''")
 	private String name = "";
 
-	@Column(name = "anime")
 	@ManyToOne(fetch = FetchType.EAGER)
 	private AddedAnime anime;
 
