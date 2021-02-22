@@ -188,7 +188,7 @@ public class CardDAO {
 	public static List<Card> getAllCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE anime.name IN :animes", Card.class);
 		q.setParameter("animes", getValidAnimeNames());
 
 		try {
@@ -204,7 +204,7 @@ public class CardDAO {
 	public static List<String> getAllCardNames() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes", String.class);
+		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime.name IN :animes", String.class);
 		q.setParameter("animes", getValidAnimeNames());
 
 		try {
@@ -343,7 +343,7 @@ public class CardDAO {
 	public static List<Card> getAllCardsByAnime(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE anime = :anime", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE anime.name = :anime", Card.class);
 		q.setParameter("anime", anime);
 
 		try {
