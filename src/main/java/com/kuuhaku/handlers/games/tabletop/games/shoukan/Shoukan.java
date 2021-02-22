@@ -2481,7 +2481,14 @@ public class Shoukan extends GlobalGame {
 					Map<DailyTask, Integer> pg = acc.getDailyProgress();
 					DailyQuest dq = DailyQuest.getQuest(getCurrent().getIdLong());
 					int summons = summoned.get(s).getOrDefault(dq.getChosenRace(), 0);
+
+					System.out.println(summoned);
+					System.out.println(summons);
+
 					pg.compute(DailyTask.RACE_TASK, (k, v) -> v == null ? summons : v + summons);
+
+					System.out.println(pg);
+
 					acc.setDailyProgress(pg);
 					AccountDAO.saveAccount(acc);
 				}

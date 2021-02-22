@@ -14,8 +14,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de melhoria no tempo de conversão das imagens">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DailyQuest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DailyQuest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1129,20 +1132,7 @@
       <workItem from="1613928155639" duration="6097000" />
       <workItem from="1613955967973" duration="7658000" />
       <workItem from="1613964203914" duration="33000" />
-    </task>
-    <task id="LOCAL-03821" summary="Implementação do SpringLoaded">
-      <created>1613678042528</created>
-      <option name="number" value="03821" />
-      <option name="presentableId" value="LOCAL-03821" />
-      <option name="project" value="LOCAL" />
-      <updated>1613678042528</updated>
-    </task>
-    <task id="LOCAL-03822" summary="Implementação do SpringLoaded">
-      <created>1613678406323</created>
-      <option name="number" value="03822" />
-      <option name="presentableId" value="LOCAL-03822" />
-      <option name="project" value="LOCAL" />
-      <updated>1613678406323</updated>
+      <workItem from="1614012267868" duration="955000" />
     </task>
     <task id="LOCAL-03823" summary="Implementação do SpringLoaded">
       <created>1613678567110</created>
@@ -1473,7 +1463,21 @@
       <option name="project" value="LOCAL" />
       <updated>1613963758341</updated>
     </task>
-    <option name="localTasksCounter" value="3870" />
+    <task id="LOCAL-03870" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1614003225481</created>
+      <option name="number" value="03870" />
+      <option name="presentableId" value="LOCAL-03870" />
+      <option name="project" value="LOCAL" />
+      <updated>1614003225481</updated>
+    </task>
+    <task id="LOCAL-03871" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1614003455173</created>
+      <option name="number" value="03871" />
+      <option name="presentableId" value="LOCAL-03871" />
+      <option name="project" value="LOCAL" />
+      <updated>1614003455173</updated>
+    </task>
+    <option name="localTasksCounter" value="3872" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

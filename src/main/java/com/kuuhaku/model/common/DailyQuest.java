@@ -25,11 +25,10 @@ import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.utils.Helper;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DailyQuest {
 	private final HashMap<DailyTask, Integer> tasks = new HashMap<>();
-	private final String chosenAnime;
+	private final AddedAnime chosenAnime;
 	private final Race chosenRace;
 
 	private DailyQuest(long id) {
@@ -38,7 +37,7 @@ public class DailyQuest {
 		List<DailyTask> tasks = Helper.getRandomN(List.of(DailyTask.values()), 3, 1, seed);
 
 		Random r = new Random(seed);
-		List<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getName).collect(Collectors.toList());
+		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
 		this.chosenAnime = animes.get(Helper.rng(animes.size(), r, true));
 		this.chosenRace = Race.values()[Helper.rng(Race.values().length, r, true)];
 		for (DailyTask task : tasks) {
@@ -90,7 +89,7 @@ public class DailyQuest {
 		return new DailyQuest(id);
 	}
 
-	public String getChosenAnime() {
+	public AddedAnime getChosenAnime() {
 		return chosenAnime;
 	}
 
