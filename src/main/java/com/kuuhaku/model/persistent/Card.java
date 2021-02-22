@@ -78,7 +78,7 @@ public class Card {
 
 	public BufferedImage drawCard(boolean foil) {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime, id + ".png")));
+			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png")));
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
@@ -103,7 +103,7 @@ public class Card {
 
 	public BufferedImage drawCardNoBorder() {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime, id + ".png")));
+			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png")));
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				return ImageIO.read(bais);
 			}
