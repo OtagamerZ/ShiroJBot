@@ -13,7 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de melhoria no tempo de conversão das imagens" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de melhoria no tempo de conversão das imagens">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1124,105 +1127,8 @@
       <workItem from="1613847515064" duration="4485000" />
       <workItem from="1613877843108" duration="60000" />
       <workItem from="1613928155639" duration="6097000" />
-      <workItem from="1613955967973" duration="317000" />
-    </task>
-    <task id="LOCAL-03807" summary="Correção menor">
-      <created>1613580312651</created>
-      <option name="number" value="03807" />
-      <option name="presentableId" value="LOCAL-03807" />
-      <option name="project" value="LOCAL" />
-      <updated>1613580312652</updated>
-    </task>
-    <task id="LOCAL-03808" summary="Correção menor">
-      <created>1613581647064</created>
-      <option name="number" value="03808" />
-      <option name="presentableId" value="LOCAL-03808" />
-      <option name="project" value="LOCAL" />
-      <updated>1613581647064</updated>
-    </task>
-    <task id="LOCAL-03809" summary="Implementação do SpringLoaded">
-      <created>1613589440724</created>
-      <option name="number" value="03809" />
-      <option name="presentableId" value="LOCAL-03809" />
-      <option name="project" value="LOCAL" />
-      <updated>1613589440724</updated>
-    </task>
-    <task id="LOCAL-03810" summary="Implementação do SpringLoaded">
-      <created>1613589625993</created>
-      <option name="number" value="03810" />
-      <option name="presentableId" value="LOCAL-03810" />
-      <option name="project" value="LOCAL" />
-      <updated>1613589625993</updated>
-    </task>
-    <task id="LOCAL-03811" summary="Implementação do SpringLoaded">
-      <created>1613590036540</created>
-      <option name="number" value="03811" />
-      <option name="presentableId" value="LOCAL-03811" />
-      <option name="project" value="LOCAL" />
-      <updated>1613590036540</updated>
-    </task>
-    <task id="LOCAL-03812" summary="Implementação do SpringLoaded">
-      <created>1613590591640</created>
-      <option name="number" value="03812" />
-      <option name="presentableId" value="LOCAL-03812" />
-      <option name="project" value="LOCAL" />
-      <updated>1613590591640</updated>
-    </task>
-    <task id="LOCAL-03813" summary="Implementação do SpringLoaded">
-      <created>1613591025667</created>
-      <option name="number" value="03813" />
-      <option name="presentableId" value="LOCAL-03813" />
-      <option name="project" value="LOCAL" />
-      <updated>1613591025667</updated>
-    </task>
-    <task id="LOCAL-03814" summary="Implementação do SpringLoaded">
-      <created>1613591205290</created>
-      <option name="number" value="03814" />
-      <option name="presentableId" value="LOCAL-03814" />
-      <option name="project" value="LOCAL" />
-      <updated>1613591205291</updated>
-    </task>
-    <task id="LOCAL-03815" summary="Implementação do SpringLoaded">
-      <created>1613591426106</created>
-      <option name="number" value="03815" />
-      <option name="presentableId" value="LOCAL-03815" />
-      <option name="project" value="LOCAL" />
-      <updated>1613591426106</updated>
-    </task>
-    <task id="LOCAL-03816" summary="Implementação do SpringLoaded">
-      <created>1613591583841</created>
-      <option name="number" value="03816" />
-      <option name="presentableId" value="LOCAL-03816" />
-      <option name="project" value="LOCAL" />
-      <updated>1613591583841</updated>
-    </task>
-    <task id="LOCAL-03817" summary="Implementação do SpringLoaded">
-      <created>1613591681962</created>
-      <option name="number" value="03817" />
-      <option name="presentableId" value="LOCAL-03817" />
-      <option name="project" value="LOCAL" />
-      <updated>1613591681962</updated>
-    </task>
-    <task id="LOCAL-03818" summary="Implementação do SpringLoaded">
-      <created>1613677313316</created>
-      <option name="number" value="03818" />
-      <option name="presentableId" value="LOCAL-03818" />
-      <option name="project" value="LOCAL" />
-      <updated>1613677313317</updated>
-    </task>
-    <task id="LOCAL-03819" summary="Implementação do SpringLoaded">
-      <created>1613677398328</created>
-      <option name="number" value="03819" />
-      <option name="presentableId" value="LOCAL-03819" />
-      <option name="project" value="LOCAL" />
-      <updated>1613677398328</updated>
-    </task>
-    <task id="LOCAL-03820" summary="Implementação do SpringLoaded">
-      <created>1613677452835</created>
-      <option name="number" value="03820" />
-      <option name="presentableId" value="LOCAL-03820" />
-      <option name="project" value="LOCAL" />
-      <updated>1613677452835</updated>
+      <workItem from="1613955967973" duration="7658000" />
+      <workItem from="1613964203914" duration="33000" />
     </task>
     <task id="LOCAL-03821" summary="Implementação do SpringLoaded">
       <created>1613678042528</created>
@@ -1469,7 +1375,105 @@
       <option name="project" value="LOCAL" />
       <updated>1613956237420</updated>
     </task>
-    <option name="localTasksCounter" value="3856" />
+    <task id="LOCAL-03856" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613956440094</created>
+      <option name="number" value="03856" />
+      <option name="presentableId" value="LOCAL-03856" />
+      <option name="project" value="LOCAL" />
+      <updated>1613956440094</updated>
+    </task>
+    <task id="LOCAL-03857" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613956600505</created>
+      <option name="number" value="03857" />
+      <option name="presentableId" value="LOCAL-03857" />
+      <option name="project" value="LOCAL" />
+      <updated>1613956600505</updated>
+    </task>
+    <task id="LOCAL-03858" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613956871556</created>
+      <option name="number" value="03858" />
+      <option name="presentableId" value="LOCAL-03858" />
+      <option name="project" value="LOCAL" />
+      <updated>1613956871556</updated>
+    </task>
+    <task id="LOCAL-03859" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613956923637</created>
+      <option name="number" value="03859" />
+      <option name="presentableId" value="LOCAL-03859" />
+      <option name="project" value="LOCAL" />
+      <updated>1613956923637</updated>
+    </task>
+    <task id="LOCAL-03860" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613958531166</created>
+      <option name="number" value="03860" />
+      <option name="presentableId" value="LOCAL-03860" />
+      <option name="project" value="LOCAL" />
+      <updated>1613958531166</updated>
+    </task>
+    <task id="LOCAL-03861" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613958787655</created>
+      <option name="number" value="03861" />
+      <option name="presentableId" value="LOCAL-03861" />
+      <option name="project" value="LOCAL" />
+      <updated>1613958787655</updated>
+    </task>
+    <task id="LOCAL-03862" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613958820190</created>
+      <option name="number" value="03862" />
+      <option name="presentableId" value="LOCAL-03862" />
+      <option name="project" value="LOCAL" />
+      <updated>1613958820190</updated>
+    </task>
+    <task id="LOCAL-03863" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613959260816</created>
+      <option name="number" value="03863" />
+      <option name="presentableId" value="LOCAL-03863" />
+      <option name="project" value="LOCAL" />
+      <updated>1613959260816</updated>
+    </task>
+    <task id="LOCAL-03864" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613959373099</created>
+      <option name="number" value="03864" />
+      <option name="presentableId" value="LOCAL-03864" />
+      <option name="project" value="LOCAL" />
+      <updated>1613959373099</updated>
+    </task>
+    <task id="LOCAL-03865" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613959532037</created>
+      <option name="number" value="03865" />
+      <option name="presentableId" value="LOCAL-03865" />
+      <option name="project" value="LOCAL" />
+      <updated>1613959532037</updated>
+    </task>
+    <task id="LOCAL-03866" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613960326489</created>
+      <option name="number" value="03866" />
+      <option name="presentableId" value="LOCAL-03866" />
+      <option name="project" value="LOCAL" />
+      <updated>1613960326489</updated>
+    </task>
+    <task id="LOCAL-03867" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613961125003</created>
+      <option name="number" value="03867" />
+      <option name="presentableId" value="LOCAL-03867" />
+      <option name="project" value="LOCAL" />
+      <updated>1613961125003</updated>
+    </task>
+    <task id="LOCAL-03868" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613963219721</created>
+      <option name="number" value="03868" />
+      <option name="presentableId" value="LOCAL-03868" />
+      <option name="project" value="LOCAL" />
+      <updated>1613963219721</updated>
+    </task>
+    <task id="LOCAL-03869" summary="Tentativa de melhoria no tempo de conversão das imagens">
+      <created>1613963758341</created>
+      <option name="number" value="03869" />
+      <option name="presentableId" value="LOCAL-03869" />
+      <option name="project" value="LOCAL" />
+      <updated>1613963758341</updated>
+    </task>
+    <option name="localTasksCounter" value="3870" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
