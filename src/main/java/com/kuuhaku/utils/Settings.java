@@ -626,6 +626,11 @@ public class Settings {
 			return;
 		}
 
+		if (args.length < 3) {
+			message.getTextChannel().sendMessage("❌ | Você precisa informar se o módulo será `ligado` ou `desligado`.").queue();
+			return;
+		}
+
 		Category c = Category.getByName(args[1]);
 
 		if (c == null) {
