@@ -49,7 +49,7 @@ public class SupportStoreCommand implements Executable {
 
 		if (args.length == 0) {
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setTitle(":diamonds: | Loja dos Suportes");
+			eb.setTitle(":nazar_amulet: | Loja dos Suportes");
 			eb.setDescription("""
 					Tokens de suporte são obtidos quando um usuário te agradece usando o comando `%sobrigado`. Para utilizar os tokens basta usar `%slojasup ID`!
 					     
