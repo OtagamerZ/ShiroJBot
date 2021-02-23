@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1131,21 +1128,7 @@
       <workItem from="1613964203914" duration="33000" />
       <workItem from="1614012267868" duration="6546000" />
       <workItem from="1614091195907" duration="179000" />
-      <workItem from="1614091681897" duration="3280000" />
-    </task>
-    <task id="LOCAL-03828" summary="Correções menores">
-      <created>1613741464760</created>
-      <option name="number" value="03828" />
-      <option name="presentableId" value="LOCAL-03828" />
-      <option name="project" value="LOCAL" />
-      <updated>1613741464760</updated>
-    </task>
-    <task id="LOCAL-03829" summary="Correções menores">
-      <created>1613741501909</created>
-      <option name="number" value="03829" />
-      <option name="presentableId" value="LOCAL-03829" />
-      <option name="project" value="LOCAL" />
-      <updated>1613741501909</updated>
+      <workItem from="1614091681897" duration="3600000" />
     </task>
     <task id="LOCAL-03830" summary="Correções menores">
       <created>1613744761083</created>
@@ -1476,7 +1459,21 @@
       <option name="project" value="LOCAL" />
       <updated>1614098367696</updated>
     </task>
-    <option name="localTasksCounter" value="3877" />
+    <task id="LOCAL-03877" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
+      <created>1614098668589</created>
+      <option name="number" value="03877" />
+      <option name="presentableId" value="LOCAL-03877" />
+      <option name="project" value="LOCAL" />
+      <updated>1614098668589</updated>
+    </task>
+    <task id="LOCAL-03878" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
+      <created>1614098829191</created>
+      <option name="number" value="03878" />
+      <option name="presentableId" value="LOCAL-03878" />
+      <option name="project" value="LOCAL" />
+      <updated>1614098829191</updated>
+    </task>
+    <option name="localTasksCounter" value="3879" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
