@@ -21,7 +21,6 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
@@ -33,7 +32,6 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -44,37 +42,6 @@ public class MinuteEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		if (LocalDateTime.now().getHour() % 6 == 0) {
-			if (LocalDateTime.now().getHour() % 12 == 0) {
-				RelayBlockList.clearBlockedThumbs();
-				RelayBlockList.refresh();
-
-			/*GuildDAO.getAllGuilds().forEach(gc -> {
-				if (gc.getCargoVip() != null && !gc.getCargoVip().isEmpty()) {
-					Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
-					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
-					Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoVip());
-					assert r != null;
-					g.retrieveInvites().complete().stream()
-							.filter(inv -> inv.getInviter() != null && inv.getInviter() != Objects.requireNonNull(g.getOwner()).getUser() && !inv.getInviter().isFake() && !inv.getInviter().isBot())
-							.map(inv -> {
-								Member m = g.getMember(inv.getInviter());
-								assert m != null;
-								if (inv.getUses() / TimeUnit.DAYS.convert(m.getTimeJoined().toEpochSecond(), TimeUnit.SECONDS) > 1)
-									return g.addRoleToMember(m, r);
-								else return g.removeRoleFromMember(m, r);
-							}).collect(Collectors.toList())
-							.forEach(rst -> {
-								try {
-									rst.complete();
-								} catch (NullPointerException ignore) {
-								}
-							});
-				}
-			});*/
-			}
-		}
-
 		for (MutedMember m : MemberDAO.getMutedMembers()) {
 			Guild g = Main.getInfo().getGuildByID(m.getGuild());
 			if (g == null) {

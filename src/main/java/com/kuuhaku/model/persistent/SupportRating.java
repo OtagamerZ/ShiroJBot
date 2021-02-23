@@ -18,14 +18,10 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.Helper;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 
 @Entity
 @Table(name = "supportrating")
@@ -35,10 +31,7 @@ public class SupportRating {
 	private String id;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int monthlyTickets = 0;
-
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'Nunca'")
-	private String lastTicket = "Nunca";
+	private int thanksTokens = 0;
 
 	public SupportRating(String id) {
 		this.id = id;
@@ -51,20 +44,23 @@ public class SupportRating {
 		return id;
 	}
 
-	public String getLastTicket() {
-		return lastTicket;
+	public int getThanksTokens() {
+		return thanksTokens;
 	}
 
-	public int getMonthlyTickets() {
-		return monthlyTickets;
+	public void addThanksToken() {
+		thanksTokens = Math.min(4, thanksTokens + 1);
 	}
 
-	public void addTicket() {
-		this.monthlyTickets++;
-		this.lastTicket = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
+	public void addThanksToken(int amount) {
+		thanksTokens = Math.min(4, thanksTokens + amount);
 	}
 
-	public void resetTickets() {
-		this.monthlyTickets = 0;
+	public void useThanksToken() {
+		thanksTokens = Math.max(thanksTokens - 1, 0);
+	}
+
+	public void useThanksToken(int amount) {
+		thanksTokens = Math.max(thanksTokens - amount, 0);
 	}
 }
