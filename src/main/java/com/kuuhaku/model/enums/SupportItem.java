@@ -35,7 +35,7 @@ public enum SupportItem {
 			(ch, sr, args) -> {
 				Account acc = AccountDAO.getAccount(sr.getId());
 
-				if (args.length > 0) {
+				if (args.length > 1) {
 					if (!StringUtils.isNumeric(args[1])) {
 						ch.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
 						return;
