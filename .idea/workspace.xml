@@ -1130,14 +1130,7 @@
       <workItem from="1613964203914" duration="33000" />
       <workItem from="1614012267868" duration="6546000" />
       <workItem from="1614091195907" duration="179000" />
-      <workItem from="1614091681897" duration="7390000" />
-    </task>
-    <task id="LOCAL-03834" summary="Correções menores">
-      <created>1613763430190</created>
-      <option name="number" value="03834" />
-      <option name="presentableId" value="LOCAL-03834" />
-      <option name="project" value="LOCAL" />
-      <updated>1613763430190</updated>
+      <workItem from="1614091681897" duration="9091000" />
     </task>
     <task id="LOCAL-03835" summary="Remoção da dependencia dos enumeradores de AnimeName">
       <created>1613766148418</created>
@@ -1475,7 +1468,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614100462467</updated>
     </task>
-    <option name="localTasksCounter" value="3883" />
+    <task id="LOCAL-03883" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
+      <created>1614106135528</created>
+      <option name="number" value="03883" />
+      <option name="presentableId" value="LOCAL-03883" />
+      <option name="project" value="LOCAL" />
+      <updated>1614106135528</updated>
+    </task>
+    <option name="localTasksCounter" value="3884" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
