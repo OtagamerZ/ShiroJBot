@@ -1128,21 +1128,7 @@
       <workItem from="1613964203914" duration="33000" />
       <workItem from="1614012267868" duration="6546000" />
       <workItem from="1614091195907" duration="179000" />
-      <workItem from="1614091681897" duration="3600000" />
-    </task>
-    <task id="LOCAL-03830" summary="Correções menores">
-      <created>1613744761083</created>
-      <option name="number" value="03830" />
-      <option name="presentableId" value="LOCAL-03830" />
-      <option name="project" value="LOCAL" />
-      <updated>1613744761083</updated>
-    </task>
-    <task id="LOCAL-03831" summary="Correções menores">
-      <created>1613744917021</created>
-      <option name="number" value="03831" />
-      <option name="presentableId" value="LOCAL-03831" />
-      <option name="project" value="LOCAL" />
-      <updated>1613744917021</updated>
+      <workItem from="1614091681897" duration="4380000" />
     </task>
     <task id="LOCAL-03832" summary="Correções menores">
       <created>1613757555607</created>
@@ -1473,7 +1459,21 @@
       <option name="project" value="LOCAL" />
       <updated>1614098829191</updated>
     </task>
-    <option name="localTasksCounter" value="3879" />
+    <task id="LOCAL-03879" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
+      <created>1614098936935</created>
+      <option name="number" value="03879" />
+      <option name="presentableId" value="LOCAL-03879" />
+      <option name="project" value="LOCAL" />
+      <updated>1614098936935</updated>
+    </task>
+    <task id="LOCAL-03880" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
+      <created>1614099053160</created>
+      <option name="number" value="03880" />
+      <option name="presentableId" value="LOCAL-03880" />
+      <option name="project" value="LOCAL" />
+      <updated>1614099053160</updated>
+    </task>
+    <option name="localTasksCounter" value="3881" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
