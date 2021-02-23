@@ -31,7 +31,7 @@ import org.apache.logging.log4j.util.TriConsumer;
 import java.util.Arrays;
 
 public enum SupportItem {
-	TOKEN_TO_CREDIT(1, 1, new MessageEmbed.Field("1 - Converter para créditos (1 token)", "Troca 1 token por 1.000 créditos", false),
+	TOKEN_TO_CREDIT(1, 1, new MessageEmbed.Field("1 - Converter para créditos (1 ou mais tokens)", "Troca 1 ou mais tokens por 1.000 créditos cada", false),
 			(ch, sr, args) -> {
 				Account acc = AccountDAO.getAccount(sr.getId());
 
