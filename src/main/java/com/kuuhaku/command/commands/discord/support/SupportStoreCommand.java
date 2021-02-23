@@ -57,7 +57,7 @@ public class SupportStoreCommand implements Executable {
 					""".formatted(prefix, prefix));
 			for (SupportItem s : SupportItem.values()) eb.addField(s.getField());
 			eb.setColor(Color.decode("#0ec86b"));
-			eb.setFooter("Seus tokens: " + sr.getThanksTokens(), "https://assets.materialup.com/uploads/a4a1fe7c-f6d5-41ac-91fe-abf343276225/preview");
+			eb.setFooter("Seus tokens: " + sr.getThanksTokens(), "https://cdn-0.emojis.wiki/emoji-pics/microsoft/nazar-amulet-microsoft.png");
 
 			channel.sendMessage(eb.build()).queue();
 			return;
