@@ -150,9 +150,9 @@ public class AccountDAO {
 		em.createQuery("""
 				UPDATE Account a 
 				SET a.thanksTokens = CASE 
-					WHEN (a.thanksTokens + 1 > 4) THEN 4
-					ELSE a.thanksTokens + 1
-				END
+					WHEN (a.thanksTokens > 3) THEN 3
+					ELSE a.thanksTokens
+				END + 1
 				""").executeUpdate();
 		em.getTransaction().commit();
 		em.close();
