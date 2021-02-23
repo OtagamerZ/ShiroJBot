@@ -1914,12 +1914,12 @@ public class Helper {
 
 	public static <T> T getNext(T current, List<T> sequence) {
 		int index = sequence.indexOf(current);
-		return index == -1 ? null : sequence.get(Math.min(index + 1, sequence.size()));
+		return index == -1 ? null : sequence.get(Math.min(index + 1, sequence.size() - 1));
 	}
 
 	public static <T> T getNext(T current, T... sequence) {
 		int index = ArrayUtils.indexOf(sequence, current);
-		return index == -1 ? null : sequence[Math.min(index + 1, sequence.length)];
+		return index == -1 ? null : sequence[Math.min(index + 1, sequence.length - 1)];
 	}
 
 	public static <T> T getPrevious(T current, List<T> sequence) {

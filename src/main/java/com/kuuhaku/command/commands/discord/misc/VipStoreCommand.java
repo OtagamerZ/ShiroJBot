@@ -41,7 +41,7 @@ import java.awt.*;
 		category = Category.MISC
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})
-public class VipShopCommand implements Executable {
+public class VipStoreCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
