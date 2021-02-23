@@ -52,7 +52,7 @@ public class SettingsCommand implements Executable {
 		final String msg;
 
 		if (args.length == 1) msg = "";
-		else msg = String.join(" ", args).replace(args[0], "").replace(args[1], "").trim();
+		else msg = argsAsText.replace(args[0], "").trim();
 
 		/*case "rvip":
 			case "rolevip":
@@ -64,42 +64,42 @@ public class SettingsCommand implements Executable {
 					channel.sendMessage("❌ | Prefixo muito longo (Max. 5)").queue();
 					return;
 				}
-				Settings.updatePrefix(args, argsAsText, message, gc);
+				Settings.updatePrefix(args, msg, message, gc);
 			}
-			case "cbv", "canalbv" -> Settings.updateCanalBV(args, argsAsText, message, gc);
+			case "cbv", "canalbv" -> Settings.updateCanalBV(args, msg, message, gc);
 			case "mensagembemvindo", "mensagembv", "msgbv" -> {
 				if (msg.length() > 2000) {
 					channel.sendMessage("❌ | Mensagem muito longa (Max. 2000 caractéres)").queue();
 					return;
 				}
-				Settings.updateMsgBV(args, argsAsText, message, gc);
+				Settings.updateMsgBV(args, msg, message, gc);
 			}
-			case "cadeus", "canaladeus" -> Settings.updateCanalAdeus(args, argsAsText, message, gc);
+			case "cadeus", "canaladeus" -> Settings.updateCanalAdeus(args, msg, message, gc);
 			case "mensagemadeus", "mensagema", "msgadeus" -> {
 				if (msg.length() > 2000) {
 					channel.sendMessage("❌ | Mensagem muito longa (Max. 2000 caractéres)").queue();
 					return;
 				}
-				Settings.updateMsgAdeus(args, argsAsText, message, gc);
+				Settings.updateMsgAdeus(args, msg, message, gc);
 			}
-			case "cg", "canalgeral" -> Settings.updateCanalGeral(args, argsAsText, message, gc);
+			case "cg", "canalgeral" -> Settings.updateCanalGeral(args, msg, message, gc);
 			case "topico", "tp", "tpgeral" -> {
 				if (msg.length() > 500) {
 					channel.sendMessage("❌ | Tópico muito longo (Max. 500 caractéres)").queue();
 					return;
 				}
-				Settings.updateGeneralTopic(args, argsAsText, message, gc);
+				Settings.updateGeneralTopic(args, msg, message, gc);
 			}
-			case "tmute", "tempomute", "tmu" -> Settings.updateWarnTime(args, argsAsText, message, gc);
-			case "tpoll", "tempopoll" -> Settings.updatePollTime(args, argsAsText, message, gc);
-			case "csug", "canalsug" -> Settings.updateCanalSUG(args, argsAsText, message, gc);
-			case "cmute", "cargomute", "rmute", "rolemute" -> Settings.updateCargoMute(args, argsAsText, message, gc);
-			case "ln", "levelnotif" -> Settings.updateLevelNotif(args, argsAsText, message, gc);
-			case "canallevelup", "canallvlup", "clvlup" -> Settings.updateCanalLevelUp(args, argsAsText, message, gc);
-			case "canalrelay", "canalrly", "crelay" -> Settings.updateCanalRelay(args, argsAsText, message, gc);
-			case "canalavisos", "canalav", "cavisos" -> Settings.updateCanalAvisos(args, argsAsText, message, gc);
-			case "clvl", "cargolevel", "rlvl", "rolelevel" -> Settings.updateCargoLvl(args, argsAsText, message, gc);
-			case "mod", "module", "categoria", "cat:" -> Settings.updateModules(args, argsAsText, message, gc);
+			case "tmute", "tempomute", "tmu" -> Settings.updateWarnTime(args, msg, message, gc);
+			case "tpoll", "tempopoll" -> Settings.updatePollTime(args, msg, message, gc);
+			case "csug", "canalsug" -> Settings.updateCanalSUG(args, msg, message, gc);
+			case "cmute", "cargomute", "rmute", "rolemute" -> Settings.updateCargoMute(args, msg, message, gc);
+			case "ln", "levelnotif" -> Settings.updateLevelNotif(args, msg, message, gc);
+			case "canallevelup", "canallvlup", "clvlup" -> Settings.updateCanalLevelUp(args, msg, message, gc);
+			case "canalrelay", "canalrly", "crelay" -> Settings.updateCanalRelay(args, msg, message, gc);
+			case "canalavisos", "canalav", "cavisos" -> Settings.updateCanalAvisos(args, msg, message, gc);
+			case "clvl", "cargolevel", "rlvl", "rolelevel" -> Settings.updateCargoLvl(args, msg, message, gc);
+			case "mod", "module", "categoria", "cat:" -> Settings.updateModules(args, msg, message, gc);
 			case "help", "ajuda" -> Settings.settingsHelp(message, gc);
 			default -> Settings.embedConfig(message);
 		}
