@@ -72,6 +72,9 @@ public class Account {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 1")
 	private int stashCapacity = 1;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 4")
+	private int thanksTokens = 4;
+
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean remind = false;
 
@@ -495,6 +498,18 @@ public class Account {
 
 	public void setStashCapacity(int stashCapacity) {
 		this.stashCapacity = stashCapacity;
+	}
+
+	public int getThanksTokens() {
+		return thanksTokens;
+	}
+
+	public void addThanksToken() {
+		thanksTokens = Math.min(4, thanksTokens + 1);
+	}
+
+	public void useThanksToken() {
+		thanksTokens = Math.max(thanksTokens - 1, 0);
 	}
 
 	public boolean isVoted() {

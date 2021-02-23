@@ -161,15 +161,5 @@ public class MonthlyEvent implements Job {
 				TokenDAO.voidToken(bl.getId());
 			}
 		}
-
-		for (String id : ShiroInfo.getSupports()) {
-			Account acc = AccountDAO.getAccount(id);
-			SupportRating sr = RatingDAO.getRating(id);
-			double ticketModif = Math.max(Helper.prcnt(sr.getMonthlyTickets(), 10), 1);
-			acc.addCredit(Math.round(20000 * ticketModif), MonthlyEvent.class);
-			sr.resetTickets();
-			RatingDAO.saveRating(sr);
-			AccountDAO.saveAccount(acc);
-		}
 	}
 }

@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.controller.postgresql.StockMarketDAO;
 import com.kuuhaku.controller.sqlite.BackupDAO;
 import com.kuuhaku.model.common.DataDump;
+import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -35,6 +36,7 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class HourlyEvent implements Job {
@@ -89,5 +91,38 @@ public class HourlyEvent implements Job {
 
 		MatchDAO.cleanHistory();
 		StockMarketDAO.removeZeroInvestments();
+
+		if (LocalDateTime.now().getHour() % 6 == 0) {
+			AccountDAO.addSupportTokens();
+
+			if (LocalDateTime.now().getHour() % 12 == 0) {
+				RelayBlockList.clearBlockedThumbs();
+				RelayBlockList.refresh();
+
+			/*GuildDAO.getAllGuilds().forEach(gc -> {
+				if (gc.getCargoVip() != null && !gc.getCargoVip().isEmpty()) {
+					Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
+					Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoVip());
+					assert r != null;
+					g.retrieveInvites().complete().stream()
+							.filter(inv -> inv.getInviter() != null && inv.getInviter() != Objects.requireNonNull(g.getOwner()).getUser() && !inv.getInviter().isFake() && !inv.getInviter().isBot())
+							.map(inv -> {
+								Member m = g.getMember(inv.getInviter());
+								assert m != null;
+								if (inv.getUses() / TimeUnit.DAYS.convert(m.getTimeJoined().toEpochSecond(), TimeUnit.SECONDS) > 1)
+									return g.addRoleToMember(m, r);
+								else return g.removeRoleFromMember(m, r);
+							}).collect(Collectors.toList())
+							.forEach(rst -> {
+								try {
+									rst.complete();
+								} catch (NullPointerException ignore) {
+								}
+							});
+				}
+			});*/
+			}
+		}
 	}
 }

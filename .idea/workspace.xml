@@ -13,12 +13,20 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Tentativa de melhoria no tempo de conversão das imagens">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção menor">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ThanksCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/SupportStoreCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/SupportItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DailyQuest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DailyQuest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/VipShopCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/VipStoreCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/MarkTicketCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/MarkTicketCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/SupportRating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/SupportRating.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,11 +171,11 @@
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.model.enums" />
+      <recent name="com.kuuhaku.command.commands.discord.support" />
+      <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.model.persistent" />
       <recent name="com.kuuhaku.command.commands.discord.information" />
-      <recent name="com.kuuhaku.command.commands.discord.moderation" />
-      <recent name="com.kuuhaku.command.commands" />
-      <recent name="com.kuuhaku.model.annotations" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -1132,35 +1140,9 @@
       <workItem from="1613928155639" duration="6097000" />
       <workItem from="1613955967973" duration="7658000" />
       <workItem from="1613964203914" duration="33000" />
-      <workItem from="1614012267868" duration="955000" />
-    </task>
-    <task id="LOCAL-03823" summary="Implementação do SpringLoaded">
-      <created>1613678567110</created>
-      <option name="number" value="03823" />
-      <option name="presentableId" value="LOCAL-03823" />
-      <option name="project" value="LOCAL" />
-      <updated>1613678567110</updated>
-    </task>
-    <task id="LOCAL-03824" summary="Implementação do SpringLoaded">
-      <created>1613679002188</created>
-      <option name="number" value="03824" />
-      <option name="presentableId" value="LOCAL-03824" />
-      <option name="project" value="LOCAL" />
-      <updated>1613679002188</updated>
-    </task>
-    <task id="LOCAL-03825" summary="Correções menores">
-      <created>1613680047890</created>
-      <option name="number" value="03825" />
-      <option name="presentableId" value="LOCAL-03825" />
-      <option name="project" value="LOCAL" />
-      <updated>1613680047890</updated>
-    </task>
-    <task id="LOCAL-03826" summary="Correções menores">
-      <created>1613680838506</created>
-      <option name="number" value="03826" />
-      <option name="presentableId" value="LOCAL-03826" />
-      <option name="project" value="LOCAL" />
-      <updated>1613680838506</updated>
+      <workItem from="1614012267868" duration="6546000" />
+      <workItem from="1614091195907" duration="179000" />
+      <workItem from="1614091681897" duration="2964000" />
     </task>
     <task id="LOCAL-03827" summary="Correções menores">
       <created>1613739391433</created>
@@ -1477,7 +1459,35 @@
       <option name="project" value="LOCAL" />
       <updated>1614003455173</updated>
     </task>
-    <option name="localTasksCounter" value="3872" />
+    <task id="LOCAL-03872" summary="Correção menor">
+      <created>1614017215302</created>
+      <option name="number" value="03872" />
+      <option name="presentableId" value="LOCAL-03872" />
+      <option name="project" value="LOCAL" />
+      <updated>1614017215302</updated>
+    </task>
+    <task id="LOCAL-03873" summary="Correção menor">
+      <created>1614017359131</created>
+      <option name="number" value="03873" />
+      <option name="presentableId" value="LOCAL-03873" />
+      <option name="project" value="LOCAL" />
+      <updated>1614017359131</updated>
+    </task>
+    <task id="LOCAL-03874" summary="Correção menor">
+      <created>1614017426860</created>
+      <option name="number" value="03874" />
+      <option name="presentableId" value="LOCAL-03874" />
+      <option name="project" value="LOCAL" />
+      <updated>1614017426860</updated>
+    </task>
+    <task id="LOCAL-03875" summary="Correção menor">
+      <created>1614018651809</created>
+      <option name="number" value="03875" />
+      <option name="presentableId" value="LOCAL-03875" />
+      <option name="project" value="LOCAL" />
+      <updated>1614018651809</updated>
+    </task>
+    <option name="localTasksCounter" value="3876" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1583,12 +1593,12 @@
     <MESSAGE value="Ranked duo agora exige um time fechado" />
     <MESSAGE value="Revisão geral no código" />
     <MESSAGE value="Correção no efeito de atordoamento" />
-    <MESSAGE value="Correção menor" />
     <MESSAGE value="Implementação do SpringLoaded" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Remoção da dependencia dos enumeradores de AnimeName" />
     <MESSAGE value="Tentativa de melhoria no tempo de conversão das imagens" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tentativa de melhoria no tempo de conversão das imagens" />
+    <MESSAGE value="Correção menor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
