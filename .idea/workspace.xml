@@ -13,19 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção menor">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ThanksCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/SupportStoreCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/SupportItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/VipShopCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/VipStoreCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/MarkTicketCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/MarkTicketCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/SupportRating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/SupportRating.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1142,14 +1131,7 @@
       <workItem from="1613964203914" duration="33000" />
       <workItem from="1614012267868" duration="6546000" />
       <workItem from="1614091195907" duration="179000" />
-      <workItem from="1614091681897" duration="2964000" />
-    </task>
-    <task id="LOCAL-03827" summary="Correções menores">
-      <created>1613739391433</created>
-      <option name="number" value="03827" />
-      <option name="presentableId" value="LOCAL-03827" />
-      <option name="project" value="LOCAL" />
-      <updated>1613739391434</updated>
+      <workItem from="1614091681897" duration="3280000" />
     </task>
     <task id="LOCAL-03828" summary="Correções menores">
       <created>1613741464760</created>
@@ -1487,7 +1469,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614018651809</updated>
     </task>
-    <option name="localTasksCounter" value="3876" />
+    <task id="LOCAL-03876" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
+      <created>1614098367695</created>
+      <option name="number" value="03876" />
+      <option name="presentableId" value="LOCAL-03876" />
+      <option name="project" value="LOCAL" />
+      <updated>1614098367696</updated>
+    </task>
+    <option name="localTasksCounter" value="3877" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1573,7 +1562,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Feitiços agora viram cartas viradas para baixo" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Melhoria no framework de efeitos por turno" />
     <MESSAGE value="Correção no encerramento das partidas" />
@@ -1598,7 +1586,8 @@
     <MESSAGE value="Remoção da dependencia dos enumeradores de AnimeName" />
     <MESSAGE value="Tentativa de melhoria no tempo de conversão das imagens" />
     <MESSAGE value="Correção menor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
+    <MESSAGE value="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
