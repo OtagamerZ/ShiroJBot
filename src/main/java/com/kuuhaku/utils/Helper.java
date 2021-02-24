@@ -332,18 +332,21 @@ public class Helper {
 	}
 
 	public static Webhook getOrCreateWebhook(TextChannel chn, String name, ShardManager manager) throws InterruptedException, ExecutionException {
-		final Webhook[] webhook = {null};
+		AtomicReference<Webhook> webhook = new AtomicReference<>();
 		List<Webhook> whs = chn.retrieveWebhooks().submit().get();
 		whs.stream()
-				.filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == manager.getShards().get(0).getSelfUser())
+				.filter(w -> {
+					Member m = w.getOwner();
+					return m != null && m.equals(chn.getGuild().getSelfMember());
+				})
 				.findFirst()
-				.ifPresent(w -> webhook[0] = w);
+				.ifPresent(webhook::set);
 
 		try {
-			if (webhook[0] == null) return chn.createWebhook(name).complete();
+			if (webhook.get() == null)
+				return chn.createWebhook(name).complete();
 			else {
-				webhook[0].getUrl();
-				return webhook[0];
+				return webhook.get();
 			}
 		} catch (NullPointerException e) {
 			return chn.createWebhook(name).complete();
