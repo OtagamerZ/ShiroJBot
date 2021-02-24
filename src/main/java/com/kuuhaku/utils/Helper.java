@@ -635,7 +635,14 @@ public class Helper {
 
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 		if (g != null) {
-			for (String k : source.keySet()) {
+			Set<String> keys = source.keySet();
+			List<String> sortedKeys = new ArrayList<>();
+
+			for (String k : keys) {
+				sortedKeys.add(source.getJSONObject(k).optInt("index", 0), k);
+			}
+
+			for (String k : sortedKeys) {
 				try {
 					JSONObject jo = btns.getJSONObject(k);
 					Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
@@ -689,6 +696,7 @@ public class Helper {
 		for (String b : jo.getJSONObject("buttons").keySet()) {
 			JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
 			Role role = g.getRoleById(btns.getString("role"));
+
 			buttons.put(btns.getString("emote"), (m, ms) -> {
 				if (role != null) {
 					if (m.getRoles().contains(role)) {
@@ -745,9 +753,10 @@ public class Helper {
 
 			JSONObject msg = new JSONObject();
 
-			JSONObject btn = new JSONObject();
-			btn.put("emote", EmojiUtils.containsEmoji(s2) ? s2 : Objects.requireNonNull(Main.getShiroShards().getEmoteById(s2)).getId());
-			btn.put("role", message.getMentionedRoles().get(0).getId());
+			JSONObject btn = new JSONObject() {{
+				put("emote", EmojiUtils.containsEmoji(s2) ? s2 : Objects.requireNonNull(Main.getShiroShards().getEmoteById(s2)).getId());
+				put("role", message.getMentionedRoles().get(0).getId());
+			}};
 
 			if (!root.has(msgId)) {
 				msg.put("msgId", msgId);
@@ -759,6 +768,7 @@ public class Helper {
 			}
 
 			msg.getJSONObject("buttons").put(args[1], btn);
+			msg.put("index", root.length());
 
 			if (gatekeeper) root.put("gatekeeper", msg);
 			else root.put(msgId, msg);
