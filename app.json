@@ -9,10 +9,6 @@
   "repository": "https://github.com/OtagamerZ/ShiroJBot",
   "logo": "https://images-ext-2.discordapp.net/external/VEvNfPPxZPcXdnO-erMqFpB5D7tCXtPiTPOKt3chwqM/https/cdn.discordapp.com/avatars/572413282653306901/081151d97708b2e90b45927136abb432.png",
   "env": {
-    "GRADLE_OPTS": {
-      "description": "Parâmetros do Gradle.",
-      "required": false
-    },
     "SERVER_IP": {
       "description": "IP do servidor.",
       "required": true
