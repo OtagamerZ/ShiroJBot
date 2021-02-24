@@ -28,10 +28,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 @Command(
 		name = "pseudoavatar",
@@ -55,16 +52,12 @@ public class PseudoAvatarCommand implements Executable {
 		}
 
 		try {
-			HttpURLConnection con = (HttpURLConnection) new URL(args[0]).openConnection();
-			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			BufferedImage bi = ImageIO.read(con.getInputStream());
-			con.disconnect();
-			bi.flush();
+			ImageIO.read(Helper.getImage(args[0]));
 
 			mb.setPseudoAvatar(args[0]);
 			MemberDAO.updateMemberConfigs(mb);
 			channel.sendMessage("✅ | Pseudo-avatar definido com sucesso!").queue();
-		} catch (IOException | NullPointerException e) {
+		} catch (ClassCastException | IOException | NullPointerException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-image")).queue();
 		}
 	}
