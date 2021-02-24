@@ -67,12 +67,14 @@ public class UsageCommand implements Executable {
 				if (g == null) continue;
 				eb.addField("Servidor: " + g.getName(), """
 						Dono: %s (%s)
+						Membros: %s
 						Comandos usados: %s
 						Último uso: %s
 						"""
 						.formatted(
 								g.getOwner() == null ? "`Desconhecido`" : g.getOwner().getUser().getName(),
 								g.getOwner() == null ? "`??`" : g.getOwnerId(),
+								g.getMemberCount(),
 								p[1],
 								p[2]
 						), false);
