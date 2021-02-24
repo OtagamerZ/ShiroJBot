@@ -13,13 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/UsageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/UsageCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoAvatarCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoAvatarCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1022,14 +1019,8 @@
       <workItem from="1614012267868" duration="6546000" />
       <workItem from="1614091195907" duration="179000" />
       <workItem from="1614091681897" duration="9286000" />
-      <workItem from="1614168436221" duration="2663000" />
-    </task>
-    <task id="LOCAL-03836" summary="Remoção da dependencia dos enumeradores de AnimeName">
-      <created>1613766544205</created>
-      <option name="number" value="03836" />
-      <option name="presentableId" value="LOCAL-03836" />
-      <option name="project" value="LOCAL" />
-      <updated>1613766544205</updated>
+      <workItem from="1614168436221" duration="3779000" />
+      <workItem from="1614190741819" duration="6232000" />
     </task>
     <task id="LOCAL-03837" summary="Remoção da dependencia dos enumeradores de AnimeName">
       <created>1613766806618</created>
@@ -1367,7 +1358,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614112222810</updated>
     </task>
-    <option name="localTasksCounter" value="3885" />
+    <task id="LOCAL-03885" summary="Correções gerais">
+      <created>1614171279042</created>
+      <option name="number" value="03885" />
+      <option name="presentableId" value="LOCAL-03885" />
+      <option name="project" value="LOCAL" />
+      <updated>1614171279042</updated>
+    </task>
+    <option name="localTasksCounter" value="3886" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1453,7 +1451,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correções gerais" />
     <MESSAGE value="Melhoria no framework de efeitos por turno" />
     <MESSAGE value="Correção no encerramento das partidas" />
     <MESSAGE value="Correção na listagem das cartas elegíveis" />
@@ -1478,7 +1475,8 @@
     <MESSAGE value="Tentativa de melhoria no tempo de conversão das imagens" />
     <MESSAGE value="Correção menor" />
     <MESSAGE value="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;" />
+    <MESSAGE value="Correções gerais" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções gerais" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
