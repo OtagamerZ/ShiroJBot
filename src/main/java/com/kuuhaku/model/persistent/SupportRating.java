@@ -49,11 +49,11 @@ public class SupportRating {
 	}
 
 	public void addThanksToken() {
-		thanksTokens = Math.min(4, thanksTokens + 1);
+		thanksTokens += 1;
 	}
 
 	public void addThanksToken(int amount) {
-		thanksTokens = Math.min(4, thanksTokens + amount);
+		thanksTokens += amount;
 	}
 
 	public void useThanksToken() {
