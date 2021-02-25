@@ -695,7 +695,7 @@ public class Settings {
 
 		eb.addField("%guild%", "Para dizer o nome do server.", false);
 		eb.addField("%user%", "Para dizer o nome do usuário.", false);
-		eb.addField("%count%", "(Apenas tópico) Para dizer a contagem de membros.", false);
+		eb.addField("%count%", "Para dizer a contagem de membros.", false);
 
 		message.getTextChannel().sendMessage(eb.build()).queue();
 	}
