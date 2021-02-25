@@ -18,17 +18,15 @@
 
 package com.kuuhaku.command.commands.discord.misc;
 
-import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.model.annotations.Command;
 import net.dv8tion.jda.api.entities.*;
 
-@Command(
+/*@Command(
 		name = "traduzir",
 		aliases = {"translate"},
 		usage = "req_from-to-text",
 		category = Category.MISC
-)
+)*/
 public class TranslateCommand implements Executable {
 
 	@Override
