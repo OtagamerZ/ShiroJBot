@@ -45,7 +45,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "carta",
@@ -101,10 +100,10 @@ public class SeeCardCommand implements Executable {
 			KawaiponCard card = new KawaiponCard(tc, foil);
 
 			Set<KawaiponCard> cards = kp.getCards();
-			Set<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getName).collect(Collectors.toSet());
-			for (String anime : animes) {
-				if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().getName().equals(anime) && !k.isFoil()).count())
-					cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
+			Set<AddedAnime> animes = CardDAO.getValidAnime();
+			for (AddedAnime anime : animes) {
+				if (CardDAO.hasCompleted(author.getId(), anime.getName(), false) || CardDAO.hasCompleted(author.getId(), anime.getName(), true))
+					cards.add(new KawaiponCard(CardDAO.getUltimate(anime.getName()), false));
 			}
 
 			Champion c = CardDAO.getChampion(card.getCard());

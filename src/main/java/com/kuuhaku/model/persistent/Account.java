@@ -93,6 +93,9 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean voted = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean useFoil = false;
+
 	@Column(columnDefinition = "TEXT")
 	private String buffs = "{}";
 
@@ -333,6 +336,14 @@ public class Account {
 				}
 			}
 		}
+	}
+
+	public boolean isUsingFoil() {
+		return useFoil;
+	}
+
+	public void setUseFoil(boolean useFoil) {
+		this.useFoil = useFoil;
 	}
 
 	public int getStreak() {
