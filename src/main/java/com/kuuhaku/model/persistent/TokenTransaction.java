@@ -32,10 +32,10 @@ public class TokenTransaction {
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String to = "";
+	private String toUser = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String from = "";
+	private String fromUser = "";
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int value = 0;
@@ -44,8 +44,8 @@ public class TokenTransaction {
 	private String date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
 
 	public TokenTransaction(String to, String from, int value) {
-		this.to = to;
-		this.from = from;
+		this.toUser = to;
+		this.fromUser = from;
 		this.value = value;
 	}
 
@@ -56,12 +56,12 @@ public class TokenTransaction {
 		return id;
 	}
 
-	public String getTo() {
-		return to;
+	public String getToUser() {
+		return toUser;
 	}
 
-	public String getFrom() {
-		return from;
+	public String getFromUser() {
+		return fromUser;
 	}
 
 	public int getValue() {
