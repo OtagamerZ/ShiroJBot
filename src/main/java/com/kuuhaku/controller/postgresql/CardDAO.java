@@ -93,7 +93,7 @@ public class CardDAO {
 		q.setParameter("foil", foil);
 
 		try {
-			return ((Number) q.getSingleResult()).intValue() == totalCards(anime.getName());
+			return ((Number) q.getSingleResult()).intValue() == totalCards(anime);
 		} catch (NoResultException e) {
 			return false;
 		} finally {
