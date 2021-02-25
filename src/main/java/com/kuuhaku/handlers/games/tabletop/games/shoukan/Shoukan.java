@@ -979,7 +979,7 @@ public class Shoukan extends GlobalGame {
 			} else {
 
 				if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-					if (his.isDefending() && yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.ARMORPIERCING)) {
+					if (his.isDefending()) {
 						int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
 						Hand enemy = hands.get(next);
 						enemy.removeHp(apDamage);
