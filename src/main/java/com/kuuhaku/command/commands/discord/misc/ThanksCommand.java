@@ -64,7 +64,7 @@ public class ThanksCommand implements Executable {
 		AccountDAO.saveAccount(acc);
 
 		SupportRating sr = RatingDAO.getRating(message.getMentionedUsers().get(0).getId());
-		sr.addThanksToken();
+		sr.addThanksToken(author.getId());
 		RatingDAO.saveRating(sr);
 
 		channel.sendMessage("✅ | Suporte agradecido com sucesso.").queue();
