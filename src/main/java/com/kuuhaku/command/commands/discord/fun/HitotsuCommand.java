@@ -63,9 +63,6 @@ public class HitotsuCommand implements Executable {
         } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
             channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
             return;
-        } else if (Main.getInfo().getConfirmationPending().getIfPresent(message.getMentionedUsers().get(0).getId()) != null) {
-            channel.sendMessage("❌ | Este usuário possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
-            return;
         }
 
         Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
@@ -79,6 +76,15 @@ public class HitotsuCommand implements Executable {
             Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
             if (k.getCards().size() < 25) {
                 channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_not-enough-cards-mention"), u.getAsMention())).queue();
+                return;
+            } else if (Main.getInfo().getConfirmationPending().getIfPresent(u.getId()) != null) {
+                channel.sendMessage("❌ | " + u.getAsMention() + " possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
+                return;
+            } else if (Main.getInfo().gameInProgress(u.getId())) {
+                channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_mention-in-game"), u.getAsMention())).queue();
+                return;
+            } else if (u.getId().equals(author.getId())) {
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
                 return;
             }
         }
@@ -110,16 +116,6 @@ public class HitotsuCommand implements Executable {
         if (Main.getInfo().gameInProgress(author.getId())) {
             channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
             return;
-        }
-
-        for (User u : message.getMentionedUsers()) {
-            if (Main.getInfo().gameInProgress(u.getId())) {
-                channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_mention-in-game"), u.getAsMention())).queue();
-                return;
-            } else if (u.getId().equals(author.getId())) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
-                return;
-            }
         }
 
         List<User> players = new ArrayList<>() {{

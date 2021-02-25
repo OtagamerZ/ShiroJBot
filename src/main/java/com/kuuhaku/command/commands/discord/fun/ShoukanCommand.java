@@ -312,6 +312,19 @@ public class ShoukanCommand implements Executable {
 			}
 
 			if (team) {
+				for (int i = 0; i < 3; i++) {
+					User u = message.getMentionedUsers().get(i);
+					Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
+
+					if (k.getChampions().size() < 30) {
+						channel.sendMessage("❌ | " + u.getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
+						return;
+					} else if (k.getEquipments().stream().mapToInt(Equipment::getTier).sum() > 24) {
+						channel.sendMessage("❌ | Os equipamentos de " + u.getAsMention() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
+						return;
+					}
+				}
+
 				List<User> players = new ArrayList<>() {{
 					add(author);
 					addAll(users);

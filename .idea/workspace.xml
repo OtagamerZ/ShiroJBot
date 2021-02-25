@@ -15,6 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de opção de usar cartas cromadas no Shoukan">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1032,13 +1034,6 @@
       <workItem from="1614190741819" duration="6232000" />
       <workItem from="1614222741289" duration="700000" />
     </task>
-    <task id="LOCAL-03840" summary="Remoção da dependencia dos enumeradores de AnimeName">
-      <created>1613772935113</created>
-      <option name="number" value="03840" />
-      <option name="presentableId" value="LOCAL-03840" />
-      <option name="project" value="LOCAL" />
-      <updated>1613772935113</updated>
-    </task>
     <task id="LOCAL-03841" summary="Remoção da dependencia dos enumeradores de AnimeName">
       <created>1613781778476</created>
       <option name="number" value="03841" />
@@ -1375,7 +1370,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614259340416</updated>
     </task>
-    <option name="localTasksCounter" value="3889" />
+    <task id="LOCAL-03889" summary="Adição de opção de usar cartas cromadas no Shoukan">
+      <created>1614260306475</created>
+      <option name="number" value="03889" />
+      <option name="presentableId" value="LOCAL-03889" />
+      <option name="project" value="LOCAL" />
+      <updated>1614260306475</updated>
+    </task>
+    <option name="localTasksCounter" value="3890" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -47,7 +47,7 @@ public class TeamHand extends Hand {
 	private final InfiniteList<List<Drawable>> destinyDecks = new InfiniteList<>();
 
 	public TeamHand(Shoukan game, List<User> users, List<Kawaipon> kps, Side side) {
-		super(game, null, kps.get(0), null);
+		super(game, null, kps.get(0), side);
 		for (int i = 0; i < users.size(); i++) {
 			Kawaipon kp = kps.get(i);
 			User user = users.get(i);
