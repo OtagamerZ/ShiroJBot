@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import bsh.EvalError;
 import bsh.Interpreter;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -116,6 +117,8 @@ public class Champion implements Drawable, Cloneable {
 
 	@Override
 	public BufferedImage drawCard(boolean flipped) {
+		boolean useFoil = acc.isUsingFoil() && CardDAO.hasCompleted(acc.getUserId(), card.getAnime().getName(), true);
+
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -126,9 +129,9 @@ public class Champion implements Drawable, Cloneable {
 			g2d.drawImage(acc.getFrame().getBack(acc, clan), 0, 0, null);
 		} else {
 			if (fakeCard != null)
-				g2d.drawImage(fakeCard.getCard().drawCardNoBorder(), 0, 0, null);
+				g2d.drawImage(fakeCard.getCard().drawCardNoBorder(useFoil), 0, 0, null);
 			else
-				g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
+				g2d.drawImage(card.drawCardNoBorder(useFoil), 0, 0, null);
 			g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
 			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 

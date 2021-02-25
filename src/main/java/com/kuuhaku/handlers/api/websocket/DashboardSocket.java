@@ -162,23 +162,23 @@ public class DashboardSocket extends WebSocketServer {
 				case "cards" -> {
 					Kawaipon kp = KawaiponDAO.getKawaipon(t.getUid());
 					Set<KawaiponCard> cards = kp.getCards();
-					Set<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getName).collect(Collectors.toSet());
-					for (String anime : animes) {
-						if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
-							cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
+					Set<AddedAnime> animes = CardDAO.getValidAnime();
+					for (AddedAnime anime : animes) {
+						if (CardDAO.hasCompleted(t.getUid(), anime.getName(), false) || CardDAO.hasCompleted(t.getUid(), anime.getName(), true))
+							cards.add(new KawaiponCard(CardDAO.getUltimate(anime.getName()), false));
 					}
 
-					for (String an : animes) {
+					for (AddedAnime an : animes) {
 						List<JSONObject> data = new ArrayList<>();
 
-						for (Card k : CardDAO.getAllCardsByAnime(an)) {
+						for (Card k : CardDAO.getAllCardsByAnime(an.getName())) {
 							boolean normal = cards.contains(new KawaiponCard(k, false));
 							boolean foil = cards.contains(new KawaiponCard(k, true));
 
 							data.add(new JSONObject() {{
 								put("id", k.getId());
 								put("name", k.getName());
-								put("anime", k.getAnime().toString());
+								put("anime", k.getAnime().getName());
 								put("rarity", k.getRarity().getIndex());
 								put("hasNormal", normal);
 								put("hasFoil", foil);
@@ -188,7 +188,7 @@ public class DashboardSocket extends WebSocketServer {
 						}
 
 						JSONObject animeCards = new JSONObject() {{
-							put(an, data);
+							put(an.getName(), data);
 						}};
 
 						conn.send(new JSONObject() {{

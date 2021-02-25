@@ -38,7 +38,7 @@ import java.awt.*;
 		name = "lojasup",
 		aliases = {"lojadossuportes", "supshop"},
 		usage = "req_id",
-		category = Category.MISC
+		category = Category.SUPPORT
 )
 @Requires({Permission.MESSAGE_EMBED_LINKS})
 public class SupportStoreCommand implements Executable {

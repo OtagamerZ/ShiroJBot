@@ -112,6 +112,17 @@ public class Card {
 		}
 	}
 
+	public BufferedImage drawCardNoBorder(boolean foil) {
+		try {
+			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png")));
+			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
+				return foil ? adjust(ImageIO.read(bais)) : ImageIO.read(bais);
+			}
+		} catch (IOException | ExecutionException e) {
+			return null;
+		}
+	}
+
 	private BufferedImage adjust(BufferedImage bi) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
