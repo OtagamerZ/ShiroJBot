@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção menor">
       <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
@@ -1021,13 +1021,7 @@
       <workItem from="1614091681897" duration="9286000" />
       <workItem from="1614168436221" duration="3779000" />
       <workItem from="1614190741819" duration="6232000" />
-    </task>
-    <task id="LOCAL-03837" summary="Remoção da dependencia dos enumeradores de AnimeName">
-      <created>1613766806618</created>
-      <option name="number" value="03837" />
-      <option name="presentableId" value="LOCAL-03837" />
-      <option name="project" value="LOCAL" />
-      <updated>1613766806618</updated>
+      <workItem from="1614222741289" duration="700000" />
     </task>
     <task id="LOCAL-03838" summary="Remoção da dependencia dos enumeradores de AnimeName">
       <created>1613767493621</created>
@@ -1365,7 +1359,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614171279042</updated>
     </task>
-    <option name="localTasksCounter" value="3886" />
+    <task id="LOCAL-03886" summary="Correção menor">
+      <created>1614210354434</created>
+      <option name="number" value="03886" />
+      <option name="presentableId" value="LOCAL-03886" />
+      <option name="project" value="LOCAL" />
+      <updated>1614210354434</updated>
+    </task>
+    <option name="localTasksCounter" value="3887" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1473,10 +1474,10 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Remoção da dependencia dos enumeradores de AnimeName" />
     <MESSAGE value="Tentativa de melhoria no tempo de conversão das imagens" />
-    <MESSAGE value="Correção menor" />
     <MESSAGE value="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;" />
     <MESSAGE value="Correções gerais" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções gerais" />
+    <MESSAGE value="Correção menor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
