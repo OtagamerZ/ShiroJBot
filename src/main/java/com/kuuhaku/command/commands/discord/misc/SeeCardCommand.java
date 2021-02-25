@@ -103,7 +103,7 @@ public class SeeCardCommand implements Executable {
 			Set<KawaiponCard> cards = kp.getCards();
 			Set<String> animes = CardDAO.getValidAnime().stream().map(AddedAnime::getName).collect(Collectors.toSet());
 			for (String anime : animes) {
-				if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
+				if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().getName().equals(anime) && !k.isFoil()).count())
 					cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 			}
 

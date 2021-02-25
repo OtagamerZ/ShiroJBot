@@ -632,28 +632,20 @@ public class Helper {
 
 	public static void refreshButtons(GuildConfig gc) {
 		JSONObject source = gc.getButtonConfigs();
-		JSONObject btns = gc.getButtonConfigs();
 
-		if (btns.isEmpty()) return;
+		if (source.isEmpty()) return;
 
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 		if (g != null) {
-			Set<String> keys = source.keySet();
-			List<String> sortedKeys = new ArrayList<>();
-
-			for (String k : keys) {
-				sortedKeys.add(source.getJSONObject(k).optInt("index", 0), k);
-			}
-
-			for (String k : sortedKeys) {
+			for (String k : source.keySet()) {
 				try {
-					JSONObject jo = btns.getJSONObject(k);
+					JSONObject jo = source.getJSONObject(k);
 					Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 
 					TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 
 					if (channel == null) {
-						JSONObject newJa = new JSONObject(btns.toString());
+						JSONObject newJa = new JSONObject(source.toString());
 						if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
 						else newJa.remove(jo.getString("canalId"));
 						gc.setButtonConfigs(newJa);
@@ -682,7 +674,7 @@ public class Helper {
 							Pages.buttonize(msg, buttons, true);
 						}
 					} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
-						JSONObject newJa = new JSONObject(btns.toString());
+						JSONObject newJa = new JSONObject(source.toString());
 						if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
 						else newJa.remove(jo.getString("msgId"));
 						gc.setButtonConfigs(newJa);
@@ -696,11 +688,19 @@ public class Helper {
 	}
 
 	public static void resolveButton(Guild g, JSONObject jo, Map<String, ThrowingBiConsumer<Member, Message>> buttons) {
-		for (String b : jo.getJSONObject("buttons").keySet()) {
-			JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
-			Role role = g.getRoleById(btns.getString("role"));
+		JSONObject btns = jo.getJSONObject("buttons");
+		Set<String> keys = btns.keySet();
+		List<String> sortedKeys = new ArrayList<>();
 
-			buttons.put(btns.getString("emote"), (m, ms) -> {
+		for (String k : keys) {
+			sortedKeys.add(btns.optInt("index", 0), k);
+		}
+
+		for (String b : sortedKeys) {
+			JSONObject btn = btns.getJSONObject(b);
+			Role role = g.getRoleById(btn.getString("role"));
+
+			buttons.put(btn.getString("emote"), (m, ms) -> {
 				if (role != null) {
 					if (m.getRoles().contains(role)) {
 						g.removeRoleFromMember(m, role).queue(null, Helper::doNothing);
@@ -770,8 +770,8 @@ public class Helper {
 				msg = root.getJSONObject(msgId);
 			}
 
+			btn.put("index", msg.getJSONObject("buttons").length());
 			msg.getJSONObject("buttons").put(args[1], btn);
-			msg.put("index", root.length());
 
 			if (gatekeeper) root.put("gatekeeper", msg);
 			else root.put(msgId, msg);
