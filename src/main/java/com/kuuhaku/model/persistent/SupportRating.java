@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.postgresql.TransactionDAO;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -48,19 +50,23 @@ public class SupportRating {
 		return thanksTokens;
 	}
 
-	public void addThanksToken() {
+	public void addThanksToken(String from) {
+		TransactionDAO.register(id, from, 1);
 		thanksTokens += 1;
 	}
 
-	public void addThanksToken(int amount) {
+	public void addThanksToken(String from, int amount) {
+		TransactionDAO.register(id, from, amount);
 		thanksTokens += amount;
 	}
 
 	public void useThanksToken() {
+		TransactionDAO.register(id, id, -1);
 		thanksTokens = Math.max(thanksTokens - 1, 0);
 	}
 
 	public void useThanksToken(int amount) {
+		TransactionDAO.register(id, id, -amount);
 		thanksTokens = Math.max(thanksTokens - amount, 0);
 	}
 }
