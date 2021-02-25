@@ -77,10 +77,35 @@ public class CardDAO {
 		}
 	}
 
+	public static boolean hasCompleted(String id, String anime, boolean foil) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT COUNT(*)
+				FROM Kawaipon kp
+				JOIN kp.cards kc
+				WHERE kc.card.anime.name = :anime
+				AND kp.uid = :uid
+				AND kc.foil = :foil
+				""");
+		q.setParameter("uid", id);
+		q.setParameter("anime", anime);
+		q.setParameter("foil", foil);
+
+		try {
+			return ((Number) q.getSingleResult()).intValue() == totalCards(anime.getName());
+		} catch (NoResultException e) {
+			return false;
+		} finally {
+			em.close();
+		}
+	}
+
 	public static Card getCard(String name) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity = 'EQUIPMENT'", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity NOT IN :blacklist", Card.class);
+		q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD, KawaiponRarity.ULTIMATE));
 		q.setParameter("name", name);
 
 		try {
@@ -96,10 +121,13 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q;
-		if (withUltimate)
-			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND anime.name IN :animes", Card.class);
-		else
-			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity <> 'ULTIMATE' AND anime.name IN :animes", Card.class);
+		if (withUltimate) {
+			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity NOT IN :blacklist AND anime.name IN :animes", Card.class);
+			q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD));
+		} else {
+			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity NOT IN :blacklist AND anime.name IN :animes", Card.class);
+			q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD, KawaiponRarity.ULTIMATE));
+		}
 		q.setParameter("name", name);
 		q.setParameter("animes", getValidAnimeNames());
 
@@ -141,7 +169,8 @@ public class CardDAO {
 	public static List<Card> getCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime.name IN :animes", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity NOT IN :blacklist AND anime.name IN :animes", Card.class);
+		q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD, KawaiponRarity.ULTIMATE));
 		q.setParameter("animes", getValidAnimeNames());
 
 		try {
@@ -170,10 +199,11 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Card> getAllCards() {
+	public static List<String> getAllCardNames() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE anime.name IN :animes", Card.class);
+		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime.name IN :animes AND rarity NOT IN :blacklist", String.class);
+		q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD, KawaiponRarity.ULTIMATE));
 		q.setParameter("animes", getValidAnimeNames());
 
 		try {
@@ -186,10 +216,11 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<String> getAllCardNames() {
+	public static List<Card> getAllCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime.name IN :animes", String.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE anime.name IN :animes AND rarity NOT IN :blacklist", Card.class);
+		q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD, KawaiponRarity.ULTIMATE));
 		q.setParameter("animes", getValidAnimeNames());
 
 		try {
@@ -314,7 +345,8 @@ public class CardDAO {
 	public static List<Card> getCardsByAnime(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime.name = :anime", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity NOT IN :blacklist AND anime.name = :anime", Card.class);
+		q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD, KawaiponRarity.ULTIMATE));
 		q.setParameter("anime", anime);
 
 		try {
@@ -356,7 +388,8 @@ public class CardDAO {
 	public static long totalCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime.name IN :animes", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity NOT IN :blacklist AND anime.name IN :animes", Long.class);
+		q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD, KawaiponRarity.ULTIMATE));
 		q.setParameter("animes", getValidAnimeNames());
 
 		try {
@@ -369,7 +402,8 @@ public class CardDAO {
 	public static long totalCards(String anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime.name = :anime", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity NOT IN :blacklist AND anime.name = :anime", Long.class);
+		q.setParameter("blacklist", Set.of(KawaiponRarity.EQUIPMENT, KawaiponRarity.FUSION, KawaiponRarity.FIELD, KawaiponRarity.ULTIMATE));
 		q.setParameter("anime", anime);
 
 		try {
