@@ -13,19 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção menor">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/UseFoilCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de opção de usar cartas cromadas no Shoukan">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/SupportStoreCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/SupportStoreCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1043,20 +1032,6 @@
       <workItem from="1614190741819" duration="6232000" />
       <workItem from="1614222741289" duration="700000" />
     </task>
-    <task id="LOCAL-03838" summary="Remoção da dependencia dos enumeradores de AnimeName">
-      <created>1613767493621</created>
-      <option name="number" value="03838" />
-      <option name="presentableId" value="LOCAL-03838" />
-      <option name="project" value="LOCAL" />
-      <updated>1613767493621</updated>
-    </task>
-    <task id="LOCAL-03839" summary="Remoção da dependencia dos enumeradores de AnimeName">
-      <created>1613767738218</created>
-      <option name="number" value="03839" />
-      <option name="presentableId" value="LOCAL-03839" />
-      <option name="project" value="LOCAL" />
-      <updated>1613767738218</updated>
-    </task>
     <task id="LOCAL-03840" summary="Remoção da dependencia dos enumeradores de AnimeName">
       <created>1613772935113</created>
       <option name="number" value="03840" />
@@ -1386,7 +1361,21 @@
       <option name="project" value="LOCAL" />
       <updated>1614210354434</updated>
     </task>
-    <option name="localTasksCounter" value="3887" />
+    <task id="LOCAL-03887" summary="Adição de opção de usar cartas cromadas no Shoukan">
+      <created>1614259216215</created>
+      <option name="number" value="03887" />
+      <option name="presentableId" value="LOCAL-03887" />
+      <option name="project" value="LOCAL" />
+      <updated>1614259216216</updated>
+    </task>
+    <task id="LOCAL-03888" summary="Adição de opção de usar cartas cromadas no Shoukan">
+      <created>1614259340416</created>
+      <option name="number" value="03888" />
+      <option name="presentableId" value="LOCAL-03888" />
+      <option name="project" value="LOCAL" />
+      <updated>1614259340416</updated>
+    </task>
+    <option name="localTasksCounter" value="3889" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1472,7 +1461,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria no framework de efeitos por turno" />
     <MESSAGE value="Correção no encerramento das partidas" />
     <MESSAGE value="Correção na listagem das cartas elegíveis" />
     <MESSAGE value="Clones agora possuem custo de mana 0 e não vão mais para o cemitério" />
@@ -1497,7 +1485,8 @@
     <MESSAGE value="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Correção menor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção menor" />
+    <MESSAGE value="Adição de opção de usar cartas cromadas no Shoukan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de opção de usar cartas cromadas no Shoukan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
