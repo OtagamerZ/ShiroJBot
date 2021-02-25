@@ -182,7 +182,7 @@ public class Arena {
 					);
 					g2d.setColor(h.isNullMode() ? new Color(88, 0, 255) : Color.cyan);
 					Profile.drawOutlinedText(
-							"MP: " + (h.isNullMode() ? "ø" : h.getMana()),
+							"MP: " + (h.isNullMode() ? "--" : h.getMana()),
 							key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + (h.isNullMode() ? "ø" : h.getMana())),
 							key == Side.TOP ? 178 : 1735, g2d
 					);
@@ -223,7 +223,7 @@ public class Arena {
 				}
 				g2d.drawImage(icon, 919 + (i * 166), 835, null);
 				if (locks.get(lockNames[i]) > 0)
-					Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 1009 + (i * 166), 835 + g2d.getFontMetrics().getHeight(), g2d);
+					Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 1009 + (i * 166), 835 + 40 + g2d.getFontMetrics().getHeight() / 2, g2d);
 			}
 
 			g2d.dispose();
