@@ -15,7 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Retorno do salário mensal dos suportes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/UseFoilCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/UseFoilCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1022,14 +1022,8 @@
       <workItem from="1614190741819" duration="6232000" />
       <workItem from="1614222741289" duration="700000" />
       <workItem from="1614270319227" duration="1718000" />
-      <workItem from="1614342324618" duration="3345000" />
-    </task>
-    <task id="LOCAL-03848" summary="Remoção da dependencia dos enumeradores de AnimeName">
-      <created>1613787628780</created>
-      <option name="number" value="03848" />
-      <option name="presentableId" value="LOCAL-03848" />
-      <option name="project" value="LOCAL" />
-      <updated>1613787628780</updated>
+      <workItem from="1614342324618" duration="3995000" />
+      <workItem from="1614355596187" duration="3567000" />
     </task>
     <task id="LOCAL-03849" summary="Remoção da dependencia dos enumeradores de AnimeName">
       <created>1613788050998</created>
@@ -1367,7 +1361,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614343098622</updated>
     </task>
-    <option name="localTasksCounter" value="3897" />
+    <task id="LOCAL-03897" summary="Retorno do salário mensal dos suportes">
+      <created>1614348357638</created>
+      <option name="number" value="03897" />
+      <option name="presentableId" value="LOCAL-03897" />
+      <option name="project" value="LOCAL" />
+      <updated>1614348357638</updated>
+    </task>
+    <option name="localTasksCounter" value="3898" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
