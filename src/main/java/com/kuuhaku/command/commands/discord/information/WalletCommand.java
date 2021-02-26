@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.RatingDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -48,20 +47,10 @@ public class WalletCommand implements Executable {
 		Account acc = AccountDAO.getAccount(author.getId());
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		boolean support = ShiroInfo.getStaff().contains(author.getId());
 		eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-title"), author.getName()));
 		eb.addField(
 				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-field-title"), acc.getBalance()),
-				support ?
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-loan-tokens"),
-								acc.getVBalance(),
-								acc.getLoan(),
-								RatingDAO.getRating(author.getId()).getThanksTokens())
-						:
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-loan-bugs"),
-								acc.getVBalance(),
-								acc.getLoan(),
-								acc.getBugs())
+				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-loan-bugs"), acc.getVBalance(), acc.getLoan(), acc.getBugs())
 				, true
 		);
 		eb.addField(
