@@ -40,8 +40,8 @@ public class UseFoilCommand implements Executable {
 			acc.setUseFoil(false);
 			channel.sendMessage("✅ | Suas cartas terão a aparência normal no Shoukan!").queue();
 		} else {
-			acc.setUseFoil(false);
-			channel.sendMessage("✅ | Suas cartas terão a cromada no Shoukan (apenas animes com cromadas completas)!").queue();
+			acc.setUseFoil(true);
+			channel.sendMessage("✅ | Suas cartas terão a aparência cromada no Shoukan (apenas animes com cromadas completas)!").queue();
 		}
 
 		AccountDAO.saveAccount(acc);
