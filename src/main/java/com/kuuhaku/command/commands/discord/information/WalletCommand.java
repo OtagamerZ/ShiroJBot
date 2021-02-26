@@ -45,20 +45,19 @@ public class WalletCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-title"), author.getName()));
-		eb.addField(
-				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-field-title"), acc.getBalance()),
-				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-loan-bugs"), acc.getVBalance(), acc.getLoan(), acc.getBugs())
-				, true
-		);
-		eb.addField(
-				ShiroInfo.getLocale(I18n.PT).getString("str_balance-last-voted"),
-				acc.getLastVoted(),
-				true
-		);
-		eb.setThumbnail("https://i.imgur.com/nhWckfq.png");
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-title"), author.getName()))
+				.addField(
+						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-field-title"), acc.getBalance()),
+						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-loan-bugs"), acc.getVBalance(), acc.getLoan(), acc.getBugs())
+						, true
+				)
+				.addField(
+						ShiroInfo.getLocale(I18n.PT).getString("str_balance-last-voted"),
+						acc.getLastVoted(),
+						true
+				)
+				.setThumbnail("https://i.imgur.com/nhWckfq.png");
 
 		channel.sendMessage(eb.build()).queue();
 	}
