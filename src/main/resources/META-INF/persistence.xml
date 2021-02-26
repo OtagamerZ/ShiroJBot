@@ -42,7 +42,6 @@
         <class>com.kuuhaku.model.persistent.GlobalMessage</class>
         <class>com.kuuhaku.model.persistent.Account</class>
         <class>com.kuuhaku.model.persistent.Slots</class>
-        <class>com.kuuhaku.model.persistent.SupportRating</class>
         <class>com.kuuhaku.model.persistent.Version</class>
         <class>com.kuuhaku.model.persistent.MutedMember</class>
         <class>com.kuuhaku.model.persistent.RarityColors</class>
@@ -80,7 +79,6 @@
         <class>com.kuuhaku.model.persistent.Clan</class>
         <class>com.kuuhaku.model.persistent.StockMarket</class>
         <class>com.kuuhaku.model.persistent.AddedAnime</class>
-        <class>com.kuuhaku.model.persistent.TokenTransaction</class>
 
         <properties>
             <!-- dados da conexao -->
