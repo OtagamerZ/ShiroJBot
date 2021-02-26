@@ -13,8 +13,18 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de opção de usar cartas cromadas no Shoukan">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Retorno do salário mensal dos suportes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/WalletCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ThanksCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/MarkTicketCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/MarkTicketCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/SupportStoreCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RatingDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/SupportItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/SupportRating.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1020,14 +1030,8 @@
       <workItem from="1614168436221" duration="3779000" />
       <workItem from="1614190741819" duration="6232000" />
       <workItem from="1614222741289" duration="700000" />
-      <workItem from="1614270319227" duration="1235000" />
-    </task>
-    <task id="LOCAL-03846" summary="Remoção da dependencia dos enumeradores de AnimeName">
-      <created>1613783858052</created>
-      <option name="number" value="03846" />
-      <option name="presentableId" value="LOCAL-03846" />
-      <option name="project" value="LOCAL" />
-      <updated>1613783858052</updated>
+      <workItem from="1614270319227" duration="1718000" />
+      <workItem from="1614342324618" duration="744000" />
     </task>
     <task id="LOCAL-03847" summary="Remoção da dependencia dos enumeradores de AnimeName">
       <created>1613787267288</created>
@@ -1365,7 +1369,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614263471557</updated>
     </task>
-    <option name="localTasksCounter" value="3895" />
+    <task id="LOCAL-03895" summary="Adição de opção de usar cartas cromadas no Shoukan">
+      <created>1614286442553</created>
+      <option name="number" value="03895" />
+      <option name="presentableId" value="LOCAL-03895" />
+      <option name="project" value="LOCAL" />
+      <updated>1614286442553</updated>
+    </task>
+    <option name="localTasksCounter" value="3896" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1451,7 +1462,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no encerramento das partidas" />
     <MESSAGE value="Correção na listagem das cartas elegíveis" />
     <MESSAGE value="Clones agora possuem custo de mana 0 e não vão mais para o cemitério" />
     <MESSAGE value="Adição de configuração de tempo do anti-raid" />
@@ -1476,7 +1486,8 @@
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Correção menor" />
     <MESSAGE value="Adição de opção de usar cartas cromadas no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de opção de usar cartas cromadas no Shoukan" />
+    <MESSAGE value="Retorno do salário mensal dos suportes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Retorno do salário mensal dos suportes" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
