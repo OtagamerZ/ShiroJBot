@@ -85,7 +85,6 @@ public class ShiroInfo {
 			"656542716108472340", //Fenyx
 			"666488799835979786", //Lucas
 			"776916405873541130", //Crazy Diamond
-			"406880182624845828", //Angel DK
 			"619214753839185930"  //Botzera
 	);
 	private static final List<String> emoteRepo = List.of(
