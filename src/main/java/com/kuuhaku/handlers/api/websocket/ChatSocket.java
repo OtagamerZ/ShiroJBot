@@ -52,7 +52,7 @@ public class ChatSocket extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, String payload) {
 		JSONObject data = new JSONObject(payload);
-		User u = Main.getInfo().getUserByID(data.getString("userId"));
+		User u = Main.getInfo().getUserByID(data.getString("uid"));
 
 		Helper.logger(this.getClass()).debug("Mensagem enviada por " + u.getName() + ": " + data.getString("content"));
 
