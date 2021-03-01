@@ -82,10 +82,10 @@ public class BroadcastCommand implements Executable {
 					sb.setLength(0);
 
 					for (Tags t : p) {
-						User u = Helper.getOr(Main.getInfo().getUserByID(t.getId()), null);
+						User u = Helper.getOr(Main.getInfo().getUserByID(t.getUid()), null);
 
 						if (u == null) {
-							result.put("Desconhecido (" + t.getId() + ")", false);
+							result.put("Desconhecido (" + t.getUid() + ")", false);
 						} else {
 							try {
 								u.openPrivateChannel().complete().sendMessage(argsAsText.replaceFirst("beta", "").trim()).complete();

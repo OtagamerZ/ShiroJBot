@@ -26,26 +26,26 @@ import java.util.TimeZone;
 @Entity
 @Table(name = "blacklist")
 public class Blacklist {
-    @Id
-    @Column(columnDefinition = "VARCHAR(191)")
-    private String id;
+	@Id
+	@Column(columnDefinition = "VARCHAR(191)")
+	private String uid;
 
-    @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-    private String blockedBy = "";
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String blockedBy = "";
 
-    @Temporal(TemporalType.DATE)
-    private Calendar blockDate = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+	@Temporal(TemporalType.DATE)
+	private Calendar blockDate = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
 
-    public Blacklist(String id, String by) {
-        this.id = id;
-        this.blockedBy = by;
-    }
+	public Blacklist(String uid, String by) {
+		this.uid = uid;
+		this.blockedBy = by;
+	}
 
-    public Blacklist() {
-    }
+	public Blacklist() {
+	}
 
-    public String getId() {
-        return id;
+	public String getUid() {
+		return uid;
 	}
 
 	public String getBlockedBy() {

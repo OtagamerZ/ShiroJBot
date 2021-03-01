@@ -117,7 +117,7 @@ public class TwitchEvents {
 			AccountDAO.saveAccount(acc);
 
 			try {
-				User u = Main.getInfo().getUserByID(acc.getUserId());
+				User u = Main.getInfo().getUserByID(acc.getUid());
 				TextChannel tc = Main.getInfo()
 						.getGuildByID(ShiroInfo.getSupportServerID())
 						.getTextChannelById(ShiroInfo.getTwitchChannelID());
@@ -144,7 +144,7 @@ public class TwitchEvents {
 
 		if (acc == null || acc.isFollower()) return;
 
-		Main.getInfo().getUserByID(acc.getUserId()).openPrivateChannel().queue(c -> {
+		Main.getInfo().getUserByID(acc.getUid()).openPrivateChannel().queue(c -> {
 			try {
 				EmbedBuilder eb = new EmbedBuilder();
 

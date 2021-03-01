@@ -30,14 +30,14 @@ public class PendingBinding {
 	private String hash = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String userId = "";
+	private String uid = "";
 
 	public PendingBinding() {
 	}
 
-	public PendingBinding(String hash, String userId) {
+	public PendingBinding(String hash, String uid) {
 		this.hash = hash;
-		this.userId = userId;
+		this.uid = uid;
 	}
 
 	public int getId() {
@@ -56,11 +56,11 @@ public class PendingBinding {
 		this.hash = hash;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUid() {
+		return uid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 }

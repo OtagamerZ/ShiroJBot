@@ -34,7 +34,7 @@ public class MatchMakingRatingDAO {
 	public static MatchMakingRating getMMR(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT mmr FROM MatchMakingRating mmr WHERE userId = :id", MatchMakingRating.class);
+		Query q = em.createQuery("SELECT mmr FROM MatchMakingRating mmr WHERE uid = :id", MatchMakingRating.class);
 		q.setParameter("id", id);
 
 		try {
@@ -50,7 +50,7 @@ public class MatchMakingRatingDAO {
 	}
 
 	public static void saveMMR(MatchMakingRating mmr) {
-		if (BlacklistDAO.isBlacklisted(mmr.getUserId())) return;
+		if (BlacklistDAO.isBlacklisted(mmr.getUid())) return;
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();

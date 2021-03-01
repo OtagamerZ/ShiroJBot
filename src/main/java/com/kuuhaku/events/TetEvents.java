@@ -40,7 +40,7 @@ public class TetEvents extends ListenerAdapter {
 	public void onPrivateMessageReceived(@NotNull PrivateMessageReceivedEvent event) {
 		if (event.getAuthor().isBot() || !ExceedDAO.hasExceed(event.getAuthor().getId())) return;
 		List<ExceedMember> ems = ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(event.getAuthor().getId())));
-		ems.removeIf(em -> em.getId().equals(event.getAuthor().getId()));
+		ems.removeIf(em -> em.getUid().equals(event.getAuthor().getId()));
 
 		EmbedBuilder eb;
 		if (event.getAuthor().getAvatarUrl() != null) eb = new EmbedBuilder();
@@ -55,7 +55,7 @@ public class TetEvents extends ListenerAdapter {
 		}
 
 		for (ExceedMember em : ems) {
-			Main.getTet().retrieveUserById(em.getId())
+			Main.getTet().retrieveUserById(em.getUid())
 					.flatMap(User::openPrivateChannel)
 					.flatMap(c -> c.sendMessage(eb.build()))
 					.queue(null, Helper::doNothing);

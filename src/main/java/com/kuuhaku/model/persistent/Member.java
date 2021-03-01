@@ -46,7 +46,7 @@ public class Member {
 	private String id;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String mid = "";
+	private String uid = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String sid = "";
@@ -112,10 +112,10 @@ public class Member {
 	}
 
 	public synchronized boolean addXp(Guild g) {
-		User u = Main.getInfo().getUserByID(mid);
+		User u = Main.getInfo().getUserByID(uid);
 		AtomicReference<Double> mult = new AtomicReference<>(1d);
 
-		if (ExceedDAO.hasExceed(mid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(mid)))
+		if (ExceedDAO.hasExceed(uid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(uid)))
 			mult.updateAndGet(v -> v * 2);
 		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(Member.getWaifu(u.getId())))
 			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(u).getMult());
@@ -137,7 +137,7 @@ public class Member {
 		xp += 15 * mult.get() * spamModif;
 		lastEarntXp = System.currentTimeMillis();
 
-		Account acc = AccountDAO.getAccount(mid);
+		Account acc = AccountDAO.getAccount(uid);
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + (int) Math.round(15 * mult.get() * spamModif));
@@ -145,7 +145,7 @@ public class Member {
 			AccountDAO.saveAccount(acc);
 		}
 
-		ExceedMember em = ExceedDAO.getExceedMember(mid);
+		ExceedMember em = ExceedDAO.getExceedMember(uid);
 		if (em != null) {
 			em.addContribution((int) (15 * mult.get() * spamModif));
 			ExceedDAO.saveExceedMember(em);
@@ -165,13 +165,13 @@ public class Member {
 		xp += amount * spamModif;
 		lastEarntXp = System.currentTimeMillis();
 
-		ExceedMember em = ExceedDAO.getExceedMember(mid);
+		ExceedMember em = ExceedDAO.getExceedMember(uid);
 		if (em != null) {
 			em.addContribution((int) (amount * spamModif));
 			ExceedDAO.saveExceedMember(em);
 		}
 
-		Account acc = AccountDAO.getAccount(mid);
+		Account acc = AccountDAO.getAccount(uid);
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + Math.round(amount * spamModif));
@@ -229,12 +229,12 @@ public class Member {
 		this.markForDelete = markForDelete;
 	}
 
-	public String getMid() {
-		return mid;
+	public String getUid() {
+		return uid;
 	}
 
-	public void setMid(String mid) {
-		this.mid = mid;
+	public void setUid(String mid) {
+		this.uid = mid;
 	}
 
 	public boolean isRulesSent() {
@@ -286,11 +286,11 @@ public class Member {
 	}
 
 	public JSONObject toJson() {
-		Account acc = AccountDAO.getAccount(mid);
+		Account acc = AccountDAO.getAccount(uid);
 
 		return new JSONObject() {{
 			put("id", id);
-			put("mid", mid);
+			put("mid", uid);
 			put("sid", sid);
 			put("pseudoName", pseudoName);
 			put("profileColor", acc.getProfileColor());

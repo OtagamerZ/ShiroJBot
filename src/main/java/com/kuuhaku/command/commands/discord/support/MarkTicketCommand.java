@@ -67,8 +67,8 @@ public class MarkTicketCommand implements Executable {
 
 		eb.setTitle("Resolução do ticket Nº " + args[0]);
 		eb.setDescription("Assunto:```" + t.getSubject() + "```");
-		if (Helper.getOr(t.getRequestedBy(), null) != null)
-			eb.addField("Aberto por:", Main.getInfo().getUserByID(t.getRequestedBy()).getAsTag(), true);
+		if (Helper.getOr(t.getUid(), null) != null)
+			eb.addField("Aberto por:", Main.getInfo().getUserByID(t.getUid()).getAsTag(), true);
 		eb.addField("Resolvido por:", author.getAsTag(), true);
 		eb.addField("Fechado em:", Helper.dateformat.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
 		eb.setColor(Color.green);
@@ -83,7 +83,7 @@ public class MarkTicketCommand implements Executable {
 			t.solved();
 		}
 
-		Main.getInfo().getUserByID(t.getRequestedBy()).openPrivateChannel()
+		Main.getInfo().getUserByID(t.getUid()).openPrivateChannel()
 				.flatMap(s -> s.sendMessage("**ATUALIZAÇÃO DE TICKET:** Seu ticket número " + t.getNumber() + " foi fechado por " + author.getName()))
 				.queue(null, Helper::doNothing);
 

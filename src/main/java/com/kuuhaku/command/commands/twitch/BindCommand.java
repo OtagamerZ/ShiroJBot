@@ -63,7 +63,7 @@ public class BindCommand extends TwitchCommand {
 			return;
 		}
 
-		Account acc = AccountDAO.getAccount(pb.getUserId());
+		Account acc = AccountDAO.getAccount(pb.getUid());
 		acc.setTwitchId(author.getId());
 		AccountDAO.saveAccount(acc);
 

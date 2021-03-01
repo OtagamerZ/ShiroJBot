@@ -75,7 +75,7 @@ public class ExceedDAO {
 
         em.getTransaction().begin();
         Query q = em.createQuery("DELETE FROM Member WHERE id = :id");
-        q.setParameter("id", ex.getId());
+        q.setParameter("id", ex.getUid());
         q.executeUpdate();
         em.getTransaction().commit();
 
@@ -96,7 +96,7 @@ public class ExceedDAO {
     }
 
     public static void saveExceedMember(ExceedMember ex) {
-        if (BlacklistDAO.isBlacklisted(ex.getId())) return;
+        if (BlacklistDAO.isBlacklisted(ex.getUid())) return;
         EntityManager em = Manager.getEntityManager();
 
         em.getTransaction().begin();
@@ -212,7 +212,7 @@ public class ExceedDAO {
     public static String getLeader(ExceedEnum ex) {
         EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT m.mid FROM Member m WHERE m.mid IN (SELECT em.id FROM ExceedMember em WHERE em.exceed = :exceed) GROUP BY m.mid ORDER BY SUM(m.xp) DESC", String.class);
+        Query q = em.createQuery("SELECT m.uid FROM Member m WHERE m.uid IN (SELECT em.uid FROM ExceedMember em WHERE em.exceed = :exceed) GROUP BY m.uid ORDER BY SUM(m.xp) DESC", String.class);
         q.setParameter("exceed", ex.getName());
         q.setMaxResults(1);
 

@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 public class Tags {
     @Id
     @Column(columnDefinition = "VARCHAR(191)")
-    private String id;
+    private String uid;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean beta = false;
@@ -54,8 +54,8 @@ public class Tags {
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean sponsor = false;
 
-    public Tags(String id) {
-        this.id = id;
+    public Tags(String uid) {
+        this.uid = uid;
     }
 
     public Tags() {
@@ -66,28 +66,28 @@ public class Tags {
         String exceed = ExceedDAO.getExceed(id);
         Member mb = MemberDAO.getMemberByMid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).stream().findFirst().orElse(null);
 
-		if (mb == null) return new ArrayList<>();
+        if (mb == null) return new ArrayList<>();
 
-		List<String> badges = new ArrayList<>();
+        List<String> badges = new ArrayList<>();
 
-		if (!exceed.isEmpty()) {
-			badges.add(pattern.formatted(TagIcons.getExceedId(ExceedEnum.getByName(exceed))));
-		}
+        if (!exceed.isEmpty()) {
+            badges.add(pattern.formatted(TagIcons.getExceedId(ExceedEnum.getByName(exceed))));
+        }
 
-		Set<Tag> tags = Tag.getTags(Main.getInfo().getUserByID(mb.getMid()), Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getMid()));
-		for (Tag t : tags) {
+        Set<Tag> tags = Tag.getTags(Main.getInfo().getUserByID(mb.getUid()), Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getUid()));
+        for (Tag t : tags) {
             badges.add(t.getEmote(mb) == null ? "" : pattern.replace("{id}", Objects.requireNonNull(t.getEmote(mb)).getId(mb.getLevel())));
         }
 
-		return badges;
-	}
-
-    public String getId() {
-        return id;
+        return badges;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String id) {
+        this.uid = id;
     }
 
     public boolean isBeta() {
