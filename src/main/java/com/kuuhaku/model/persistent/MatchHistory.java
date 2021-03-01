@@ -40,6 +40,7 @@ public class MatchHistory {
 
 	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<String, Side> players = new HashMap<>();
 
 	@Enumerated(value = EnumType.STRING)
