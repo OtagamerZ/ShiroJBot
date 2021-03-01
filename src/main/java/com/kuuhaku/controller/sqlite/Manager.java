@@ -33,7 +33,7 @@ public class Manager {
 	private static File DBfile = null;
 
 	public static void connect() throws IOException {
-		DBfile = File.createTempFile("shiro_", ".db");
+		DBfile = File.createTempFile("shiro_" + System.currentTimeMillis(), ".db");
 		DBfile.deleteOnExit();
 
 		Map<String, String> props = new HashMap<>();
