@@ -14,12 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de cascateamento nas operações de remoção de tabelas com referências">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/SupportTier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BlacklistDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BlacklistDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,19 +188,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1044,13 +1028,7 @@
       <workItem from="1614270319227" duration="1718000" />
       <workItem from="1614342324618" duration="3995000" />
       <workItem from="1614355596187" duration="3567000" />
-    </task>
-    <task id="LOCAL-03859" summary="Tentativa de melhoria no tempo de conversão das imagens">
-      <created>1613956923637</created>
-      <option name="number" value="03859" />
-      <option name="presentableId" value="LOCAL-03859" />
-      <option name="project" value="LOCAL" />
-      <updated>1613956923637</updated>
+      <workItem from="1614624936913" duration="604000" />
     </task>
     <task id="LOCAL-03860" summary="Tentativa de melhoria no tempo de conversão das imagens">
       <created>1613958531166</created>
@@ -1388,7 +1366,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614617741046</updated>
     </task>
-    <option name="localTasksCounter" value="3908" />
+    <task id="LOCAL-03908" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
+      <created>1614617941166</created>
+      <option name="number" value="03908" />
+      <option name="presentableId" value="LOCAL-03908" />
+      <option name="project" value="LOCAL" />
+      <updated>1614617941166</updated>
+    </task>
+    <option name="localTasksCounter" value="3909" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
