@@ -24,6 +24,8 @@ import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.awt.image.BufferedImage;
@@ -57,6 +59,7 @@ public class Clan {
 	private long vault = 0;
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private DeckStash deck = new DeckStash();
 
 	@ElementCollection(fetch = FetchType.EAGER)
