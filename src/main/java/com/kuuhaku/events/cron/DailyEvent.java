@@ -45,11 +45,11 @@ public class DailyEvent implements Job {
 				int fac = (int) Math.pow(1.4, mmr.getTier().getTier());
 				int credits = 10000 * fac;
 
-				Account acc = AccountDAO.getAccount(mmr.getUserId());
+				Account acc = AccountDAO.getAccount(mmr.getUid());
 				acc.addCredit(credits, this.getClass());
 				AccountDAO.saveAccount(acc);
 
-				Main.getInfo().getUserByID(mmr.getUserId()).openPrivateChannel()
+				Main.getInfo().getUserByID(mmr.getUid()).openPrivateChannel()
 						.flatMap(ch -> ch.sendMessage("Parabéns por alcançar o ranking **%s** nesta temporada, como recompensa você recebeu **%s créditos**. GG WP!".formatted(mmr.getTier().getName(), Helper.separate(credits))))
 						.queue(null, Helper::doNothing);
 			}

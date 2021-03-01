@@ -50,7 +50,7 @@ public enum VipItem {
 					return;
 				}
 
-				Kawaipon kp = KawaiponDAO.getKawaipon(acc.getUserId());
+				Kawaipon kp = KawaiponDAO.getKawaipon(acc.getUid());
 				Card c = CardDAO.getCard(args[1], false);
 
 				CardStatus cs = Helper.checkStatus(kp);
@@ -111,7 +111,7 @@ public enum VipItem {
 					return;
 				}
 
-				Kawaipon kp = KawaiponDAO.getKawaipon(acc.getUserId());
+				Kawaipon kp = KawaiponDAO.getKawaipon(acc.getUid());
 				Card c = CardDAO.getCard(args[1], false);
 
 				if (c == null) {

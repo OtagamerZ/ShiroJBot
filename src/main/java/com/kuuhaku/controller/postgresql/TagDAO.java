@@ -95,8 +95,8 @@ public class TagDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		Query q = em.createQuery("DELETE FROM Tags t WHERE t.id = :id");
-		q.setParameter("id", t.getId());
+		Query q = em.createQuery("DELETE FROM Tags t WHERE t.uid = :id");
+		q.setParameter("id", t.getUid());
 		q.executeUpdate();
 		em.getTransaction().commit();
 

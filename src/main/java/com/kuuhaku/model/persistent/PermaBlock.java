@@ -28,10 +28,10 @@ import javax.persistence.Table;
 public class PermaBlock {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
-	private String id;
+	private String uid;
 
-	public PermaBlock(String id) {
-		this.id = id;
+	public PermaBlock(String uid) {
+		this.uid = uid;
 	}
 
 	public PermaBlock() {

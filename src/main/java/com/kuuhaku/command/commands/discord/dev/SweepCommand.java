@@ -73,7 +73,7 @@ public class SweepCommand implements Executable {
             Map<String, List<String>> members = new HashMap<>();
             for (com.kuuhaku.model.persistent.Member mb1 : mbs) {
                 members.putIfAbsent(mb1.getSid(), new ArrayList<>());
-                members.get(mb1.getSid()).add(mb1.getMid());
+                members.get(mb1.getSid()).add(mb1.getUid());
             }
 
             Set<String> foundIds = new HashSet<>();
@@ -105,7 +105,7 @@ public class SweepCommand implements Executable {
             for (com.kuuhaku.model.persistent.Member mb1 : mbs) {
                 if (!foundIds.contains(mb1.getId())) {
                     missingIds.putIfAbsent(mb1.getSid(), new HashSet<>());
-                    missingIds.get(mb1.getSid()).add(mb1.getMid());
+                    missingIds.get(mb1.getSid()).add(mb1.getUid());
                 }
             }
 

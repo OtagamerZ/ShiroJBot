@@ -41,7 +41,7 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 		Member m;
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE mid = :id ORDER BY level DESC", Member.class);
+		Query q = em.createQuery("SELECT m FROM Member m WHERE uid = :id ORDER BY level DESC", Member.class);
 		q.setMaxResults(1);
 		q.setParameter("id", id);
 		m = (Member) q.getSingleResult();
@@ -56,7 +56,7 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 		List<Member> m;
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE mid = :id", Member.class);
+		Query q = em.createQuery("SELECT m FROM Member m WHERE uid = :id", Member.class);
 		q.setParameter("id", id);
 		m = q.getResultList();
 
@@ -98,7 +98,7 @@ public class MemberDAO {
 		if (getMemberById(u.getUser().getId() + u.getGuild().getId()) == null) {
 			Member m = new Member();
 			m.setId(u.getUser().getId() + u.getGuild().getId());
-			m.setMid(u.getUser().getId());
+			m.setUid(u.getUser().getId());
 			m.setSid(u.getGuild().getId());
 
 			em.getTransaction().begin();
@@ -126,9 +126,9 @@ public class MemberDAO {
 		Query q;
 
 		if (global)
-			q = em.createQuery("SELECT m FROM Member m WHERE m.mid IS NOT NULL ORDER BY m.level DESC, m.xp DESC", Member.class);
+			q = em.createQuery("SELECT m FROM Member m WHERE m.uid IS NOT NULL ORDER BY m.level DESC, m.xp DESC", Member.class);
 		else {
-			q = em.createQuery("SELECT m FROM Member m WHERE m.sid = :id AND m.mid IS NOT NULL ORDER BY m.level DESC, m.xp DESC", Member.class);
+			q = em.createQuery("SELECT m FROM Member m WHERE m.sid = :id AND m.uid IS NOT NULL ORDER BY m.level DESC, m.xp DESC", Member.class);
 			q.setParameter("id", gid);
 		}
 
@@ -197,7 +197,7 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		Query q = em.createQuery("DELETE FROM Member m WHERE m.mid = :id");
+		Query q = em.createQuery("DELETE FROM Member m WHERE m.uid = :id");
 		q.setParameter("id", id);
 		q.executeUpdate();
 		em.getTransaction().commit();

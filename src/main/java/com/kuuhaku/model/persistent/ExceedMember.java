@@ -32,7 +32,7 @@ import java.util.Objects;
 public class ExceedMember {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
-	private String id;
+	private String uid;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String exceed = "";
@@ -43,20 +43,20 @@ public class ExceedMember {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean blocked = false;
 
-	public ExceedMember(String id, String ex) {
-		this.id = id;
+	public ExceedMember(String uid, String ex) {
+		this.uid = uid;
 		this.exceed = ex;
 	}
 
 	public ExceedMember() {
 	}
 
-	public String getId() {
-		return id;
+	public String getUid() {
+		return uid;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setUid(String id) {
+		this.uid = id;
 	}
 
 	public String getExceed() {
@@ -92,11 +92,11 @@ public class ExceedMember {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		ExceedMember that = (ExceedMember) o;
-		return Objects.equals(id, that.id);
+		return Objects.equals(uid, that.uid);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(uid);
 	}
 }

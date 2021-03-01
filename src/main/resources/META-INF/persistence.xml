@@ -36,7 +36,6 @@
         <class>com.kuuhaku.model.persistent.PermaBlock</class>
         <class>com.kuuhaku.model.persistent.MonthWinner</class>
         <class>com.kuuhaku.model.persistent.PixelCanvas</class>
-        <class>com.kuuhaku.model.persistent.Votes</class>
         <class>com.kuuhaku.model.persistent.Log</class>
         <class>com.kuuhaku.model.persistent.Token</class>
         <class>com.kuuhaku.model.persistent.GlobalMessage</class>
