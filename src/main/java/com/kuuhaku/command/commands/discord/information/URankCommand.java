@@ -218,7 +218,7 @@ public class URankCommand implements Executable {
 
 	private static String checkUser(com.kuuhaku.model.persistent.Member m) {
 		try {
-			return Main.getInfo().getUserByID(m.getMid()).getName();
+			return Main.getInfo().getUserByID(m.getUid()).getName();
 		} catch (Exception e) {
 			return "";
 		}
@@ -234,7 +234,7 @@ public class URankCommand implements Executable {
 
 	private static String checkUser(Account acc) {
 		try {
-			return Main.getInfo().getUserByID(acc.getUserId()).getName();
+			return Main.getInfo().getUserByID(acc.getUid()).getName();
 		} catch (Exception e) {
 			return "";
 		}
@@ -242,7 +242,7 @@ public class URankCommand implements Executable {
 
 	private static String checkGuild(com.kuuhaku.model.persistent.Member m) {
 		try {
-			return "(" + Main.getInfo().getGuildByID(m.getId().replace(m.getMid(), "")).getName() + ")";
+			return "(" + Main.getInfo().getGuildByID(m.getId().replace(m.getUid(), "")).getName() + ")";
 		} catch (Exception e) {
 			return "";
 		}

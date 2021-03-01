@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 @Table(name = "matchmakingrating")
 public class MatchMakingRating {
 	@Id
-	private String userId;
+	private String uid;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long mmr = 0;
@@ -78,23 +78,23 @@ public class MatchMakingRating {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String master = "";
 
-	public MatchMakingRating(String userId) {
-		this.userId = userId;
+	public MatchMakingRating(String uid) {
+		this.uid = uid;
 	}
 
 	public MatchMakingRating() {
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUid() {
+		return uid;
 	}
 
 	public User getUser() {
-		return Main.getInfo().getUserByID(userId);
+		return Main.getInfo().getUserByID(uid);
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public long getMMR() {
@@ -129,7 +129,7 @@ public class MatchMakingRating {
 				promWins = promLosses = 0;
 
 				if (this.master.isBlank()) this.master = "none";
-				Main.getInfo().getUserByID(userId).openPrivateChannel()
+				Main.getInfo().getUserByID(uid).openPrivateChannel()
 						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
 						.queue(null, Helper::doNothing);
 				return;
@@ -146,7 +146,7 @@ public class MatchMakingRating {
 				if (StringUtils.isNumeric(master) && tier.getTier() > 1) {
 					Account acc = AccountDAO.getAccount(master);
 					master = "FULFILLED_" + master;
-					User u = Main.getInfo().getUserByID(userId);
+					User u = Main.getInfo().getUserByID(uid);
 					u.openPrivateChannel()
 							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s), além de receber **5 sínteses gratuitas** no comando `sintetizar`.".formatted(tier.getTier(), tier.getName())))
 							.flatMap(c -> Main.getInfo().getUserByID(master).openPrivateChannel())
@@ -156,10 +156,10 @@ public class MatchMakingRating {
 					acc.addCredit(30000, this.getClass());
 					AccountDAO.saveAccount(acc);
 
-					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + userId);
-					DynamicParameterDAO.setParam("freeSynth_" + userId, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
+					DynamicParameter freeRolls = DynamicParameterDAO.getParam("freeSynth_" + uid);
+					DynamicParameterDAO.setParam("freeSynth_" + uid, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
 				} else {
-					Main.getInfo().getUserByID(userId).openPrivateChannel()
+					Main.getInfo().getUserByID(uid).openPrivateChannel()
 							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
 							.queue(null, Helper::doNothing);
 				}
@@ -188,7 +188,7 @@ public class MatchMakingRating {
 				promWins = promLosses = 0;
 
 				if (this.master.isBlank()) this.master = "none";
-				Main.getInfo().getUserByID(userId).openPrivateChannel()
+				Main.getInfo().getUserByID(uid).openPrivateChannel()
 						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
 						.queue(null, Helper::doNothing);
 			}
@@ -207,7 +207,7 @@ public class MatchMakingRating {
 		if (rankPoints == 0 && Helper.chance(20 * mmrModif) && tier != RankedTier.INITIATE_IV) {
 			tier = tier.getPrevious();
 			rankPoints = 75;
-			Main.getInfo().getUserByID(userId).openPrivateChannel()
+			Main.getInfo().getUserByID(uid).openPrivateChannel()
 					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
 					.queue(null, Helper::doNothing);
 			return;
@@ -423,11 +423,11 @@ public class MatchMakingRating {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		MatchMakingRating that = (MatchMakingRating) o;
-		return Objects.equals(userId, that.userId);
+		return Objects.equals(uid, that.uid);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(userId);
+		return Objects.hash(uid);
 	}
 }

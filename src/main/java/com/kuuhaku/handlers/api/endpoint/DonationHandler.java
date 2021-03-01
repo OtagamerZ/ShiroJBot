@@ -44,7 +44,7 @@ public class DonationHandler {
 
 		JSONObject data = new JSONObject(payload);
 		Account acc = AccountDAO.getAccount(data.optString("raw_buyer_id"));
-		User u = Main.getInfo().getUserByID(acc.getUserId());
+		User u = Main.getInfo().getUserByID(acc.getUid());
 		DonationBundle db = DonationBundle.getById(data.optString("product_id", "null"));
 
 		EmbedBuilder eb = new EmbedBuilder();
@@ -53,7 +53,7 @@ public class DonationHandler {
 			String reason;
 
 			if (u == null) {
-				reason = "Usuário com ID " + acc.getUserId() + " não foi encontrado.";
+				reason = "Usuário com ID " + acc.getUid() + " não foi encontrado.";
 			} else {
 				reason = "Pacote de doação `" + data.optString("product_id", "null") + "` não foi encontrado.";
 			}

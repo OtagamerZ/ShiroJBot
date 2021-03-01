@@ -34,7 +34,7 @@ public class Ticket {
 	private String subject = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String requestedBy = "";
+	private String uid = "";
 
 	@Column(columnDefinition = "TEXT")
 	private String msgId = "{}";
@@ -42,9 +42,9 @@ public class Ticket {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean solved = false;
 
-	public Ticket(String subject, String requestedBy) {
+	public Ticket(String subject, String uid) {
 		this.subject = subject;
-		this.requestedBy = requestedBy;
+		this.uid = uid;
 	}
 
 	public Ticket() {
@@ -58,8 +58,8 @@ public class Ticket {
 		return subject;
 	}
 
-	public String getRequestedBy() {
-		return requestedBy;
+	public String getUid() {
+		return uid;
 	}
 
 	public void setMsgIds(Map<String, String> msgIds) {

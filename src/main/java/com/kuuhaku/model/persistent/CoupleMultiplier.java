@@ -29,20 +29,20 @@ import javax.persistence.Table;
 @Table(name = "couplemultiplier")
 public class CoupleMultiplier {
 	@Id
-	private String id;
+	private String uid;
 
 	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 1.25")
 	private float mult = 1.25f;
 
-	public CoupleMultiplier(String id) {
-		this.id = id;
+	public CoupleMultiplier(String uid) {
+		this.uid = uid;
 	}
 
 	public CoupleMultiplier() {
 	}
 
-	public String getId() {
-		return id;
+	public String getUid() {
+		return uid;
 	}
 
 	public float getMult() {

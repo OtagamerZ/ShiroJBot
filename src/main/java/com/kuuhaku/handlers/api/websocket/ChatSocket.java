@@ -58,7 +58,7 @@ public class ChatSocket extends WebSocketServer {
 
 		GlobalMessage gm = new GlobalMessage();
 
-		gm.setUserId(u.getId());
+		gm.setUid(u.getId());
 		gm.setName(u.getName());
 		gm.setAvatar(u.getEffectiveAvatarUrl());
 		gm.setContent(data.getString("content"));

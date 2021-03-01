@@ -68,7 +68,7 @@ public class AccountDAO {
 			Account acc = em.find(Account.class, id, LockModeType.PESSIMISTIC_READ);
 			if (acc == null) {
 				acc = new Account();
-				acc.setUserId(id);
+				acc.setUid(id);
 				return acc;
 			}
 
@@ -98,7 +98,7 @@ public class AccountDAO {
 	}
 
 	public static void saveAccount(Account acc) {
-		if (BlacklistDAO.isBlacklisted(acc.getUserId())) return;
+		if (BlacklistDAO.isBlacklisted(acc.getUid())) return;
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();

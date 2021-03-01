@@ -788,7 +788,7 @@ public class Helper {
 	}
 
 	public static String getSponsors() {
-		List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getId).collect(Collectors.toList());
+		List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getUid).collect(Collectors.toList());
 		List<Guild> spGuilds = new ArrayList<>();
 		for (String sp : sponsors) {
 			spGuilds.add(Main.getShiroShards()
