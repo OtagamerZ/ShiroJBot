@@ -38,7 +38,6 @@ import org.apache.commons.lang3.tuple.Triple;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
@@ -276,8 +275,7 @@ public class Profile {
 	public static File applyAnimatedBackground(Account acc, BufferedImage overlay) throws IOException {
 		File out = File.createTempFile("profile_", ".gif");
 		try (ImageOutputStream ios = new FileImageOutputStream(out)) {
-			ImageIcon img = new ImageIcon(acc.getBg());
-			List<Triple<Integer, Integer, BufferedImage>> frames = Helper.readGIF(acc.getBg());
+			List<Triple<Integer, Integer, BufferedImage>> frames = Helper.readGIF(acc.getBg(), WIDTH, HEIGHT);
 			List<Triple<Integer, Integer, BufferedImage>> toDraw = new ArrayList<>();
 			AtomicInteger xOffset = new AtomicInteger();
 			AtomicInteger yOffset = new AtomicInteger();
