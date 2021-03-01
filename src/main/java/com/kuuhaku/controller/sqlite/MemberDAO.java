@@ -148,24 +148,24 @@ public class MemberDAO {
 			q = em.createNativeQuery("""
 					SELECT x.row + 1
 					FROM (
-						SELECT m.mid
+						SELECT m.uid
 							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row 
 						FROM Member m 
-						WHERE m.mid IS NOT NULL
+						WHERE m.uid IS NOT NULL
 					) x
-					WHERE x.mid = :mid
+					WHERE x.uid = :mid
 					""");
 		else {
 			q = em.createNativeQuery("""
 					SELECT x.row + 1
 					FROM (
-						SELECT m.mid
+						SELECT m.uid
 							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row 
 						FROM Member m 
 						WHERE m.sid = :id 
-						AND m.mid IS NOT NULL
+						AND m.uid IS NOT NULL
 					) x
-					WHERE x.mid = :mid
+					WHERE x.uid = :mid
 					""");
 			q.setParameter("id", gid);
 		}

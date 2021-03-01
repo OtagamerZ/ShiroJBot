@@ -13,9 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Retorno do salário mensal dos suportes">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Padronização dos campos de id de usuário">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/UseFoilCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/UseFoilCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/TransactionDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/TransactionDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/TokenTransaction.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +94,9 @@
     </ignored-facets>
   </component>
   <component name="JupyterTrust" id="3cddea61-70ea-4139-828d-65ac523ec76d" />
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="1" />
+  </component>
   <component name="ProjectId" id="1W4mCBhJx2V4Iv1OVHtn8NLtKvt" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="false" id="Update" />
@@ -184,6 +188,19 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1025,13 +1042,6 @@
       <workItem from="1614342324618" duration="3995000" />
       <workItem from="1614355596187" duration="3567000" />
     </task>
-    <task id="LOCAL-03849" summary="Remoção da dependencia dos enumeradores de AnimeName">
-      <created>1613788050998</created>
-      <option name="number" value="03849" />
-      <option name="presentableId" value="LOCAL-03849" />
-      <option name="project" value="LOCAL" />
-      <updated>1613788050998</updated>
-    </task>
     <task id="LOCAL-03850" summary="Remoção da dependencia dos enumeradores de AnimeName">
       <created>1613791028811</created>
       <option name="number" value="03850" />
@@ -1368,7 +1378,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614348357638</updated>
     </task>
-    <option name="localTasksCounter" value="3898" />
+    <task id="LOCAL-03898" summary="Padronização dos campos de id de usuário">
+      <created>1614606287979</created>
+      <option name="number" value="03898" />
+      <option name="presentableId" value="LOCAL-03898" />
+      <option name="project" value="LOCAL" />
+      <updated>1614606287979</updated>
+    </task>
+    <option name="localTasksCounter" value="3899" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1454,7 +1471,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção na listagem das cartas elegíveis" />
     <MESSAGE value="Clones agora possuem custo de mana 0 e não vão mais para o cemitério" />
     <MESSAGE value="Adição de configuração de tempo do anti-raid" />
     <MESSAGE value="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;" />
@@ -1479,7 +1495,8 @@
     <MESSAGE value="Correção menor" />
     <MESSAGE value="Adição de opção de usar cartas cromadas no Shoukan" />
     <MESSAGE value="Retorno do salário mensal dos suportes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Retorno do salário mensal dos suportes" />
+    <MESSAGE value="Padronização dos campos de id de usuário" />
+    <option name="LAST_COMMIT_MESSAGE" value="Padronização dos campos de id de usuário" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
