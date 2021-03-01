@@ -245,14 +245,14 @@ public class ExceedDAO {
         Query q = em.createNativeQuery("""
                 SELECT x.prcnt
                 FROM (
-                         SELECT em.id 
+                         SELECT em.uid 
                               , em.contribution /
                                 NULLIF((SELECT SUM(emi.contribution) FROM ExceedMember emi WHERE emi.exceed = em.exceed), 0) AS prcnt
                          FROM ExceedMember em
                          WHERE em.exceed <> ''
                      ) x
                 WHERE x.prcnt IS NOT NULL
-                AND x.id = :id
+                AND x.uid = :id
                 """);
         q.setParameter("id", id);
 
