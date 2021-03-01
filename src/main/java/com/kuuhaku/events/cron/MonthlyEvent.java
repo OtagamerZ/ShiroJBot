@@ -19,8 +19,12 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.BlacklistDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.enums.ExceedEnum;
+import com.kuuhaku.model.enums.SupportTier;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -33,6 +37,7 @@ import org.quartz.JobExecutionContext;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 public class MonthlyEvent implements Job {
 	public static JobDetail monthly;
@@ -138,33 +143,13 @@ public class MonthlyEvent implements Job {
 
 		List<Blacklist> blacklist = BlacklistDAO.getBlacklist();
 		for (Blacklist bl : blacklist) {
-			if (bl.canClear()) {
-				Account acc = AccountDAO.getAccount(bl.getUid());
-				Trophy tp = TrophyDAO.getTrophies(bl.getUid());
-				MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(bl.getUid());
-				Kawaipon kp = KawaiponDAO.getKawaipon(bl.getUid());
-				List<DeckStash> stashes = DeckStashDAO.getStash(bl.getUid());
-				ExceedMember em = ExceedDAO.getExceedMember(bl.getUid());
-				Tags t = TagDAO.getTagById(bl.getUid());
-
-				AccountDAO.removeAccount(acc);
-				TrophyDAO.removeTrophies(tp);
-				MatchMakingRatingDAO.removeMMR(mmr);
-				MemberDAO.clearMember(bl.getUid());
-				KawaiponDAO.removeKawaipon(kp);
-				for (DeckStash ds : stashes) {
-					DeckStashDAO.removeKawaipon(ds);
-				}
-				ExceedDAO.removeMember(em);
-				TagDAO.clearTags(t);
-				WaifuDAO.voidCouple(bl.getUid());
-				TokenDAO.voidToken(bl.getUid());
-			}
+			if (bl.canClear())
+				BlacklistDAO.purgeData(bl);
 		}
 
-		for (String id : ShiroInfo.getSupports()) {
-			Account acc = AccountDAO.getAccount(id);
-			acc.addCredit(20000, MonthlyEvent.class);
+		for (Map.Entry<String, SupportTier> entry : ShiroInfo.getSupports().entrySet()) {
+			Account acc = AccountDAO.getAccount(entry.getKey());
+			acc.addCredit(entry.getValue().getSalary(), MonthlyEvent.class);
 			AccountDAO.saveAccount(acc);
 		}
 	}
