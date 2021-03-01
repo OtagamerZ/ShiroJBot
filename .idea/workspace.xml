@@ -14,9 +14,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de cascateamento nas operações de remoção de tabelas com referências">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/SupportTier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BlacklistDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BlacklistDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,9 +63,9 @@
         <option value="Interface" />
         <option value="GraphQL File" />
         <option value="JavaScript File" />
-        <option value="Enum" />
         <option value="AnnotationType" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -1042,13 +1045,6 @@
       <workItem from="1614342324618" duration="3995000" />
       <workItem from="1614355596187" duration="3567000" />
     </task>
-    <task id="LOCAL-03858" summary="Tentativa de melhoria no tempo de conversão das imagens">
-      <created>1613956871556</created>
-      <option name="number" value="03858" />
-      <option name="presentableId" value="LOCAL-03858" />
-      <option name="project" value="LOCAL" />
-      <updated>1613956871556</updated>
-    </task>
     <task id="LOCAL-03859" summary="Tentativa de melhoria no tempo de conversão das imagens">
       <created>1613956923637</created>
       <option name="number" value="03859" />
@@ -1385,7 +1381,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614615244943</updated>
     </task>
-    <option name="localTasksCounter" value="3907" />
+    <task id="LOCAL-03907" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
+      <created>1614617741046</created>
+      <option name="number" value="03907" />
+      <option name="presentableId" value="LOCAL-03907" />
+      <option name="project" value="LOCAL" />
+      <updated>1614617741046</updated>
+    </task>
+    <option name="localTasksCounter" value="3908" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
