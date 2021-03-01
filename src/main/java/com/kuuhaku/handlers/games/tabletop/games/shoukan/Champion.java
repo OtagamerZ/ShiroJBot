@@ -31,6 +31,8 @@ import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
@@ -73,6 +75,7 @@ public class Champion implements Drawable, Cloneable {
 	private Class category = null;
 
 	@ElementCollection(fetch = FetchType.EAGER)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String> requiredCards = new HashSet<>();
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
