@@ -25,6 +25,8 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import org.apache.commons.collections4.ListUtils;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.*;
@@ -43,18 +45,22 @@ public class Kawaipon {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "kawaipon_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<KawaiponCard> cards = new HashSet<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Champion> champions = new ArrayList<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Equipment> equipments = new ArrayList<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Field> fields = new ArrayList<>();
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
