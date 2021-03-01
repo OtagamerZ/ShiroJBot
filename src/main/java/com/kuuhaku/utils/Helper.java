@@ -145,7 +145,7 @@ public class Helper {
 			return PrivilegeLevel.NIICHAN;
 		else if (ShiroInfo.getDevelopers().contains(member.getId()))
 			return PrivilegeLevel.DEV;
-		else if (ShiroInfo.getSupports().contains(member.getId()))
+		else if (ShiroInfo.getSupports().containsKey(member.getId()))
 			return PrivilegeLevel.SUPPORT;
 		else if (member.hasPermission(Permission.MESSAGE_MANAGE))
 			return PrivilegeLevel.MOD;
