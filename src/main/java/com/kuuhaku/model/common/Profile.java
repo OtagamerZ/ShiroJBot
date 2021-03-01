@@ -38,6 +38,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
@@ -97,17 +98,22 @@ public class Profile {
 		try {
 			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(acc.getBg())), bi.getWidth(), bi.getHeight());
 
-			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
-			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
+			if (bg.getWidth() > bi.getWidth())
+				xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
+			if (bg.getHeight() > bi.getHeight())
+				yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
 			if (!acc.hasAnimatedBg() || !Helper.getFileType(acc.getBg()).contains("gif"))
 				g2d.drawImage(bg, xOffset, yOffset, null);
-			if (main == null) main = Helper.reverseColor(Helper.colorThief(acc.getBg()));
+			if (main == null)
+				main = Helper.reverseColor(Helper.colorThief(acc.getBg()));
 		} catch (IOException e) {
 			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
-			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
-			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
+			if (bg.getWidth() > bi.getWidth())
+				xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
+			if (bg.getHeight() > bi.getHeight())
+				yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
 			if (!acc.hasAnimatedBg() || !Helper.getFileType(acc.getBg()).contains("gif"))
 				g2d.drawImage(bg, xOffset, yOffset, null);
@@ -222,7 +228,7 @@ public class Profile {
 			bi = finalImg;
 		}
 
-		return Helper.scaleImage(bi, 400, 254);
+		return bi;
 	}
 
 	public static BufferedImage clipRoundEdges(BufferedImage image) {
@@ -270,6 +276,7 @@ public class Profile {
 	public static File applyAnimatedBackground(Account acc, BufferedImage overlay) throws IOException {
 		File out = File.createTempFile("profile_", ".gif");
 		try (ImageOutputStream ios = new FileImageOutputStream(out)) {
+			ImageIcon img = new ImageIcon(acc.getBg());
 			List<Triple<Integer, Integer, BufferedImage>> frames = Helper.readGIF(acc.getBg());
 			List<Triple<Integer, Integer, BufferedImage>> toDraw = new ArrayList<>();
 			AtomicInteger xOffset = new AtomicInteger();
