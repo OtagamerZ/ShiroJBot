@@ -146,7 +146,7 @@ public class MemberDAO {
 
 		if (global)
 			q = em.createNativeQuery("""
-					SELECT x.row + 1
+					SELECT x.row
 					FROM (
 						SELECT m.uid
 							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row 
@@ -157,7 +157,7 @@ public class MemberDAO {
 					""");
 		else {
 			q = em.createNativeQuery("""
-					SELECT x.row + 1
+					SELECT x.row
 					FROM (
 						SELECT m.uid
 							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row 

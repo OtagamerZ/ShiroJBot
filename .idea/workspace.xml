@@ -13,11 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de cascateamento nas operações de remoção de tabelas com referências">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1028,14 +1024,7 @@
       <workItem from="1614270319227" duration="1718000" />
       <workItem from="1614342324618" duration="3995000" />
       <workItem from="1614355596187" duration="3567000" />
-      <workItem from="1614624936913" duration="604000" />
-    </task>
-    <task id="LOCAL-03860" summary="Tentativa de melhoria no tempo de conversão das imagens">
-      <created>1613958531166</created>
-      <option name="number" value="03860" />
-      <option name="presentableId" value="LOCAL-03860" />
-      <option name="project" value="LOCAL" />
-      <updated>1613958531166</updated>
+      <workItem from="1614624936913" duration="916000" />
     </task>
     <task id="LOCAL-03861" summary="Tentativa de melhoria no tempo de conversão das imagens">
       <created>1613958787655</created>
@@ -1373,7 +1362,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614617941166</updated>
     </task>
-    <option name="localTasksCounter" value="3909" />
+    <task id="LOCAL-03909" summary="Correções menores">
+      <created>1614625835189</created>
+      <option name="number" value="03909" />
+      <option name="presentableId" value="LOCAL-03909" />
+      <option name="project" value="LOCAL" />
+      <updated>1614625835190</updated>
+    </task>
+    <option name="localTasksCounter" value="3910" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1474,7 +1470,6 @@
     <MESSAGE value="Revisão geral no código" />
     <MESSAGE value="Correção no efeito de atordoamento" />
     <MESSAGE value="Implementação do SpringLoaded" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Remoção da dependencia dos enumeradores de AnimeName" />
     <MESSAGE value="Tentativa de melhoria no tempo de conversão das imagens" />
     <MESSAGE value="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;" />
@@ -1484,7 +1479,8 @@
     <MESSAGE value="Retorno do salário mensal dos suportes" />
     <MESSAGE value="Padronização dos campos de id de usuário" />
     <MESSAGE value="Adição de cascateamento nas operações de remoção de tabelas com referências" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de cascateamento nas operações de remoção de tabelas com referências" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
