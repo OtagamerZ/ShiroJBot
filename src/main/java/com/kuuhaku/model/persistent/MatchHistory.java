@@ -21,6 +21,8 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.ZoneId;
@@ -45,6 +47,7 @@ public class MatchHistory {
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 
 	@Temporal(TemporalType.DATE)

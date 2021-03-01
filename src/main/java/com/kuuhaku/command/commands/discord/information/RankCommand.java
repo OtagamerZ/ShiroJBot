@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit;
 		Permission.MESSAGE_ADD_REACTION,
 		Permission.MESSAGE_EXT_EMOJI
 })
-public class URankCommand implements Executable {
+public class RankCommand implements Executable {
 
 	private static final String STR_LEVEL = "str_level";
 	private static final String STR_CREDIT = "str_credit";
