@@ -24,8 +24,6 @@ import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.awt.image.BufferedImage;
@@ -62,16 +60,13 @@ public class Clan {
 	private DeckStash deck = new DeckStash();
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<String> transactions = new ArrayList<>();
 
 	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<String, ClanHierarchy> members = new HashMap<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<ClanHierarchy, Integer> permissions = new HashMap<>() {{
 		put(ClanHierarchy.LEADER, 0xf);
 		put(ClanHierarchy.SUBLEADER, 0xf);
