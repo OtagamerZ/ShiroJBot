@@ -19,8 +19,6 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.model.enums.TrophyType;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.EnumSet;
@@ -34,7 +32,6 @@ public class Trophy {
 
 	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<TrophyType> trophies = EnumSet.noneOf(TrophyType.class);
 
 	public Trophy(String uid) {
