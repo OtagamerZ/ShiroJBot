@@ -18,7 +18,6 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.TokenTransaction;
 import com.kuuhaku.model.persistent.Transaction;
 
 import javax.persistence.EntityManager;
@@ -29,16 +28,6 @@ public class TransactionDAO {
 
 		em.getTransaction().begin();
 		em.merge(new Transaction(user, from.getSimpleName(), value));
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	public static void register(String to, String from, int value) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		em.merge(new TokenTransaction(to, from, value));
 		em.getTransaction().commit();
 
 		em.close();
