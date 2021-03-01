@@ -1580,7 +1580,6 @@ public class Helper {
 
 		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics2D = newImage.createGraphics();
-		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		graphics2D.drawImage(image, 0, 0, w, h, null);
 
 		return newImage;
@@ -1604,19 +1603,59 @@ public class Helper {
 
 		int w = 0;
 		int h = 0;
-		int frames = ir.getNumImages(true);
-		for (int i = 0; i < frames; i++) {
-			BufferedImage image = ir.read(i);
-			if (i == 0) {
-				w = image.getWidth();
-				h = image.getHeight();
+		int i = 0;
+		while (true) {
+			try {
+				BufferedImage image = ir.read(i);
+				if (i == 0) {
+					w = image.getWidth();
+					h = image.getHeight();
+				}
+				JSONObject metadata = new JSONObject(new Gson().toJson(ir.getImageMetadata(i)));
+
+				BufferedImage master = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2d = master.createGraphics();
+				g2d.drawImage(image, metadata.getInt("imageLeftPosition"), metadata.getInt("imageTopPosition"), null);
+
+				g2d.dispose();
+				frms.add(Triple.of(metadata.getInt("disposalMethod"), metadata.getInt("delayTime"), master));
+				i++;
+			} catch (IndexOutOfBoundsException e) {
+				break;
 			}
-			JSONObject metadata = new JSONObject(new Gson().toJson(ir.getImageMetadata(i)));
+		}
 
-			BufferedImage master = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-			master.getGraphics().drawImage(image, metadata.getInt("imageLeftPosition"), metadata.getInt("imageTopPosition"), null);
+		return frms;
+	}
 
-			frms.add(Triple.of(metadata.getInt("disposalMethod"), metadata.getInt("delayTime"), master));
+	public static List<Triple<Integer, Integer, BufferedImage>> readGIF(String url, int width, int height) throws IOException {
+		List<Triple<Integer, Integer, BufferedImage>> frms = new ArrayList<>();
+		ImageReader ir = ImageIO.getImageReadersByFormatName("gif").next();
+		ImageInputStream iis = ImageIO.createImageInputStream(getImage(url));
+		ir.setInput(iis);
+
+		int w = 0;
+		int h = 0;
+		int i = 0;
+		while (true) {
+			try {
+				BufferedImage image = ir.read(i);
+				if (i == 0) {
+					w = image.getWidth();
+					h = image.getHeight();
+				}
+				JSONObject metadata = new JSONObject(new Gson().toJson(ir.getImageMetadata(i)));
+
+				BufferedImage master = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2d = master.createGraphics();
+				g2d.drawImage(image, metadata.getInt("imageLeftPosition"), metadata.getInt("imageTopPosition"), null);
+
+				g2d.dispose();
+				frms.add(Triple.of(metadata.getInt("disposalMethod"), metadata.getInt("delayTime"), scaleImage(master, width, height)));
+				i++;
+			} catch (IndexOutOfBoundsException e) {
+				break;
+			}
 		}
 
 		return frms;
