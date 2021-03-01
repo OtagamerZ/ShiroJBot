@@ -23,6 +23,8 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -42,14 +44,17 @@ public class DeckStash {
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Champion> champions = new ArrayList<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Equipment> equipments = new ArrayList<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Field> fields = new ArrayList<>();
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
