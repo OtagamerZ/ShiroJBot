@@ -80,7 +80,7 @@ public class ExceedMembersCommand implements Executable {
 			sb.setLength(0);
 			for (ExceedMember em : ems) {
 				sb.append("**")
-						.append(checkUser(em.getId()))
+						.append(checkUser(em.getUid()))
 						.append("** | ")
 						.append(Helper.getShortenedValue(em.getContribution(), 1000))
 						.append(" PDC")

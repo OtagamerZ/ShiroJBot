@@ -129,7 +129,7 @@ public class TenthSecondEvent implements Job {
 													Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
 													ms.delete().queue();
 												}), false, 30, TimeUnit.MINUTES
-												, u -> u.getId().equals(mmr.getUserId())
+												, u -> u.getId().equals(mmr.getUid())
 												, ms -> {
 													Main.getInfo().getMatchMaking().getSoloLobby().remove(mmr);
 													ms.delete().queue();
@@ -224,7 +224,7 @@ public class TenthSecondEvent implements Job {
 													Main.getInfo().getMatchMaking().getDuoLobby().remove(rd);
 													ms.delete().queue();
 												}), false, 30, TimeUnit.MINUTES
-												, u -> Helper.equalsAny(u.getId(), rd.getP1().getUserId(), rd.getP2().getUserId())
+												, u -> Helper.equalsAny(u.getId(), rd.getP1().getUid(), rd.getP2().getUid())
 												, ms -> {
 													Main.getInfo().getMatchMaking().getDuoLobby().remove(rd);
 													ms.delete().queue();
@@ -277,7 +277,7 @@ public class TenthSecondEvent implements Job {
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 				Message msg = event.getMessage();
-				if (!msg.getAuthor().getId().equals(mmr1.getUserId()) || !msg.getContentRaw().equalsIgnoreCase("aschente"))
+				if (!msg.getAuthor().getId().equals(mmr1.getUid()) || !msg.getContentRaw().equalsIgnoreCase("aschente"))
 					return;
 
 				Kawaipon kp = KawaiponDAO.getKawaipon(msg.getAuthor().getId());
@@ -311,8 +311,8 @@ public class TenthSecondEvent implements Job {
 	private void sendDuoConfirmation(Map.Entry<RankedDuo, Pair<Integer, TextChannel>> p1, TextChannel p1Channel, TextChannel p2Channel, List<Pair<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>, Boolean>> match, Runnable result) {
 		RankedDuo rd = p1.getKey();
 		Set<String> confirmations = new HashSet<>() {{
-			add(rd.getP1().getUserId());
-			add(rd.getP2().getUserId());
+			add(rd.getP1().getUid());
+			add(rd.getP2().getUid());
 		}};
 
 		Main.getInfo().getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
@@ -373,7 +373,7 @@ public class TenthSecondEvent implements Job {
 				if (confirmations.isEmpty())
 					match.add(Pair.of(p1, true));
 
-				if (msg.getAuthor().getId().equals(rd.getP1().getUserId())) {
+				if (msg.getAuthor().getId().equals(rd.getP1().getUid())) {
 					p1Timeout.cancel(true);
 					p1Timeout = null;
 					close();

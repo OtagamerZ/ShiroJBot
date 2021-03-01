@@ -65,7 +65,7 @@ public class BlacklistDAO {
 	public static boolean isBlacklisted(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT b FROM Blacklist b WHERE id = :id", Blacklist.class);
+		Query q = em.createQuery("SELECT b FROM Blacklist b WHERE uid = :id", Blacklist.class);
 		q.setParameter("id", id);
 
 		try {
@@ -81,7 +81,7 @@ public class BlacklistDAO {
 	public static boolean isBlacklisted(User user) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT b FROM Blacklist b WHERE id = :id", Blacklist.class);
+		Query q = em.createQuery("SELECT b FROM Blacklist b WHERE uid = :id", Blacklist.class);
 		q.setParameter("id", user.getId());
 
 		try {
@@ -109,8 +109,8 @@ public class BlacklistDAO {
 
 		boolean blacklisted = false;
 		if (acc != null) {
-			q = em.createQuery("SELECT b FROM Blacklist b WHERE id = :id", Blacklist.class);
-			q.setParameter("id", acc.getUserId());
+			q = em.createQuery("SELECT b FROM Blacklist b WHERE uid = :id", Blacklist.class);
+			q.setParameter("id", acc.getUid());
 
 			try {
 				q.getSingleResult();

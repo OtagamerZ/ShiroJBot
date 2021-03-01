@@ -48,8 +48,8 @@ public class MonthlyEvent implements Job {
 			String ex = ExceedDAO.getWinner();
 			ExceedEnum ee = ExceedEnum.getByName(ex);
 			for (ExceedMember exceedMember : ExceedDAO.getExceedMembers(ee)) {
-				User u = Main.getInfo().getUserByID(exceedMember.getId());
-				Account acc = AccountDAO.getAccount(exceedMember.getId());
+				User u = Main.getInfo().getUserByID(exceedMember.getUid());
+				Account acc = AccountDAO.getAccount(exceedMember.getUid());
 				if (u != null && acc.isReceivingNotifs()) u.openPrivateChannel().queue(c -> {
 					double share = ExceedDAO.getMemberShare(u.getId());
 					long total = Math.round(ExceedDAO.getExceed(ExceedEnum.IMANITY).getExp() / 1000f);
@@ -68,7 +68,7 @@ public class MonthlyEvent implements Job {
 			}
 
 			for (ExceedMember em : ExceedDAO.getExceedMembers()) {
-				if (Main.getInfo().getUserByID(em.getId()) == null || em.getContribution() == 0)
+				if (Main.getInfo().getUserByID(em.getUid()) == null || em.getContribution() == 0)
 					ExceedDAO.removeMember(em);
 				else {
 					em.resetContribution();
@@ -139,26 +139,26 @@ public class MonthlyEvent implements Job {
 		List<Blacklist> blacklist = BlacklistDAO.getBlacklist();
 		for (Blacklist bl : blacklist) {
 			if (bl.canClear()) {
-				Account acc = AccountDAO.getAccount(bl.getId());
-				Trophy tp = TrophyDAO.getTrophies(bl.getId());
-				MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(bl.getId());
-				Kawaipon kp = KawaiponDAO.getKawaipon(bl.getId());
-				List<DeckStash> stashes = DeckStashDAO.getStash(bl.getId());
-				ExceedMember em = ExceedDAO.getExceedMember(bl.getId());
-				Tags t = TagDAO.getTagById(bl.getId());
+				Account acc = AccountDAO.getAccount(bl.getUid());
+				Trophy tp = TrophyDAO.getTrophies(bl.getUid());
+				MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(bl.getUid());
+				Kawaipon kp = KawaiponDAO.getKawaipon(bl.getUid());
+				List<DeckStash> stashes = DeckStashDAO.getStash(bl.getUid());
+				ExceedMember em = ExceedDAO.getExceedMember(bl.getUid());
+				Tags t = TagDAO.getTagById(bl.getUid());
 
 				AccountDAO.removeAccount(acc);
 				TrophyDAO.removeTrophies(tp);
 				MatchMakingRatingDAO.removeMMR(mmr);
-				MemberDAO.clearMember(bl.getId());
+				MemberDAO.clearMember(bl.getUid());
 				KawaiponDAO.removeKawaipon(kp);
 				for (DeckStash ds : stashes) {
 					DeckStashDAO.removeKawaipon(ds);
 				}
 				ExceedDAO.removeMember(em);
 				TagDAO.clearTags(t);
-				WaifuDAO.voidCouple(bl.getId());
-				TokenDAO.voidToken(bl.getId());
+				WaifuDAO.voidCouple(bl.getUid());
+				TokenDAO.voidToken(bl.getUid());
 			}
 		}
 

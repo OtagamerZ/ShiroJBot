@@ -84,7 +84,7 @@ public class TenthMinuteEvent implements Job {
 
 			List<Member> mbs = guild.getMembers()
 					.stream()
-					.filter(m -> m != null && ems.stream().anyMatch(em -> em.getId().equals(m.getId())))
+					.filter(m -> m != null && ems.stream().anyMatch(em -> em.getUid().equals(m.getId())))
 					.collect(Collectors.toList());
 
 			Map<ExceedEnum, List<Role>> roles = new HashMap<>();

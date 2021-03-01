@@ -106,7 +106,7 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		Query q = em.createQuery("DELETE FROM Member m WHERE m.mid = :id");
+		Query q = em.createQuery("DELETE FROM Member m WHERE m.uid = :id");
 		q.setParameter("id", id);
 		q.executeUpdate();
 		em.getTransaction().commit();

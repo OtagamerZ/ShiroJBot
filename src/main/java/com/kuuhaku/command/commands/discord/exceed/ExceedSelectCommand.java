@@ -102,7 +102,7 @@ public class ExceedSelectCommand implements Executable {
 
 				m.editMessage("✅ | Exceed escolhido com sucesso, você agora pertence à **" + e + "**!").queue(null, Helper::doNothing);
 				for (ExceedMember exceedMember : ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())))) {
-					String exm = exceedMember.getId();
+					String exm = exceedMember.getUid();
 					User u = Main.getInfo().getUserByID(exm);
 					if (u != null) {
 						Account acc = AccountDAO.getAccount(u.getId());

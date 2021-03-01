@@ -117,7 +117,7 @@ public class WaifuDAO {
 	public static void removeMultiplier(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("DELETE FROM CoupleMultiplier c WHERE c.id = :id");
+		Query q = em.createQuery("DELETE FROM CoupleMultiplier c WHERE c.uid = :id");
 		q.setParameter("id", id);
 
 		em.getTransaction().begin();

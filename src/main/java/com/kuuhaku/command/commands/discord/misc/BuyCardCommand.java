@@ -274,7 +274,7 @@ public class BuyCardCommand implements Executable {
 		switch (type) {
 			case 1 -> {
 				Account seller = AccountDAO.getAccount(cm.getSeller());
-				if (!seller.getUserId().equals(author.getId())) {
+				if (!seller.getUid().equals(author.getId())) {
 					if (buyer.getBalance() < (blackfriday ? cm.getPrice() * 0.75 : cm.getPrice())) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 						return;
@@ -330,7 +330,7 @@ public class BuyCardCommand implements Executable {
 			}
 			case 2 -> {
 				Account seller = AccountDAO.getAccount(em.getSeller());
-				if (!seller.getUserId().equals(author.getId())) {
+				if (!seller.getUid().equals(author.getId())) {
 					if (buyer.getBalance() < (blackfriday ? em.getPrice() * 0.75 : em.getPrice())) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 						return;
@@ -398,7 +398,7 @@ public class BuyCardCommand implements Executable {
 			}
 			case 3 -> {
 				Account seller = AccountDAO.getAccount(fm.getSeller());
-				if (!seller.getUserId().equals(author.getId())) {
+				if (!seller.getUid().equals(author.getId())) {
 					if (buyer.getBalance() < (blackfriday ? fm.getPrice() * 0.75 : fm.getPrice())) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 						return;

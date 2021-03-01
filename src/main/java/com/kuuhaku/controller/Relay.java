@@ -78,7 +78,7 @@ public class Relay {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
 		wmb.setContent(gm.getContent());
-		wmb.setAvatarUrl(RelayBlockList.checkThumb(gm.getUserId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : gm.getAvatar());
+		wmb.setAvatarUrl(RelayBlockList.checkThumb(gm.getUid()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : gm.getAvatar());
 		wmb.setUsername(gm.getName().length() > 15 ? gm.getName().substring(0, 15) + "..." : gm.getName());
 		return wmb.build();
 	}
@@ -104,7 +104,7 @@ public class Relay {
 		checkSize();
 
 		GlobalMessage gm = new GlobalMessage();
-		gm.setUserId(m.getId());
+		gm.setUid(m.getId());
 		gm.setName(m.getUser().getName());
 		gm.setAvatar(m.getUser().getEffectiveAvatarUrl());
 		gm.setContent(msg);
@@ -201,8 +201,8 @@ public class Relay {
 
 		eb.setDescription(gm.getContent());
 		eb.setAuthor(gm.getName(), "https://www.pngkey.com/png/full/334-3346073_no-game-no-life-icon.png", "https://www.pngkey.com/png/full/334-3346073_no-game-no-life-icon.png");
-		eb.setThumbnail(RelayBlockList.checkThumb(gm.getUserId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : gm.getAvatar());
-		eb.setFooter(gm.getUserId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
+		eb.setThumbnail(RelayBlockList.checkThumb(gm.getUid()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : gm.getAvatar());
+		eb.setFooter(gm.getUid(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
 			eb.setColor(Helper.colorThief(gm.getAvatar()));
 		} catch (IOException ignore) {

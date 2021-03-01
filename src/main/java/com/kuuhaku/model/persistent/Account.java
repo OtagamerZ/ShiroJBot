@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 @Table(name = "account")
 public class Account {
 	@Id
-	private String userId;
+	private String uid;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String twitchId = "";
@@ -126,12 +126,12 @@ public class Account {
 	@Temporal(TemporalType.DATE)
 	private Calendar lastDaily = null;
 
-	public String getUserId() {
-		return userId;
+	public String getUid() {
+		return uid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public String getTwitchId() {
@@ -159,7 +159,7 @@ public class Account {
 	}
 
 	public void signLoan(CreditLoan loan) {
-		ExceedMember ex = ExceedDAO.getExceedMember(userId);
+		ExceedMember ex = ExceedDAO.getExceedMember(uid);
 		this.addCredit(loan.getLoan(), this.getClass());
 		this.loan = Math.round(loan.getLoan() * loan.getInterest(ex));
 	}
@@ -167,10 +167,10 @@ public class Account {
 	public void addCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
 		else if (loan > 0) {
-			TransactionDAO.register(userId, from, -credit);
+			TransactionDAO.register(uid, from, -credit);
 			loan = loan - credit;
 		} else {
-			TransactionDAO.register(userId, from, credit);
+			TransactionDAO.register(uid, from, credit);
 			balance += credit;
 
 			if (hasPendingQuest()) {
@@ -182,7 +182,7 @@ public class Account {
 
 		if (loan < 0) {
 			balance += loan * -1;
-			TransactionDAO.register(userId, from, loan * -1);
+			TransactionDAO.register(uid, from, loan * -1);
 			loan = 0;
 		}
 	}
@@ -190,7 +190,7 @@ public class Account {
 	public void addVCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
 		vBalance += credit;
-		TransactionDAO.register(userId, from, credit);
+		TransactionDAO.register(uid, from, credit);
 	}
 
 	public long debitLoan() {
@@ -209,7 +209,7 @@ public class Account {
 
 	public void removeCredit(long credit, Class<?> from) {
 		this.balance -= credit;
-		if (credit != 0) TransactionDAO.register(userId, from, -credit);
+		if (credit != 0) TransactionDAO.register(uid, from, -credit);
 	}
 
 	public void consumeCredit(long credit, Class<?> from) {
@@ -222,7 +222,7 @@ public class Account {
 			this.vBalance -= credit;
 		}
 
-		if (credit != 0) TransactionDAO.register(userId, from, -credit);
+		if (credit != 0) TransactionDAO.register(uid, from, -credit);
 	}
 
 	public void expireVCredit() {
@@ -288,9 +288,9 @@ public class Account {
 					return true;
 				} else {
 					CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
-					Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
+					Main.getInfo().getDblApi().hasVoted(uid).thenAccept(voted -> {
 						if (voted) {
-							DiscordBotsListHandler.retry(userId);
+							DiscordBotsListHandler.retry(uid);
 						}
 
 						voteCheck.complete(voted);
@@ -300,9 +300,9 @@ public class Account {
 				}
 			} catch (DateTimeParseException e) {
 				CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
-				Main.getInfo().getDblApi().hasVoted(userId).thenAccept(voted -> {
+				Main.getInfo().getDblApi().hasVoted(uid).thenAccept(voted -> {
 					if (voted) {
-						DiscordBotsListHandler.retry(userId);
+						DiscordBotsListHandler.retry(uid);
 					}
 					voteCheck.complete(voted);
 				});
@@ -326,7 +326,7 @@ public class Account {
 					eb.setDescription("Como você pediu, estou aqui para lhe avisar que você já pode [votar novamente](https://top.gg/bot/572413282653306901/vote) para ganhar mais um acúmulo de votos e uma quantia de créditos!");
 					eb.setFooter("Data do último voto: " + lastVoted);
 
-					Main.getInfo().getUserByID(userId).openPrivateChannel()
+					Main.getInfo().getUserByID(uid).openPrivateChannel()
 							.flatMap(s -> s.sendMessage(eb.build()))
 							.queue(null, e -> remind = false);
 				} catch (NullPointerException ignore) {
@@ -451,7 +451,7 @@ public class Account {
 	public String getUltimate() {
 		if (ultimate != null && !ultimate.isBlank()) {
 			try {
-				Kawaipon kp = KawaiponDAO.getKawaipon(userId);
+				Kawaipon kp = KawaiponDAO.getKawaipon(uid);
 
 				AddedAnime an = CardDAO.verifyAnime(ultimate);
 				if (CardDAO.totalCards(an.getName()) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an) && !k.isFoil()).count())

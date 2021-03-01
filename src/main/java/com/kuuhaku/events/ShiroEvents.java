@@ -403,8 +403,8 @@ public class ShiroEvents extends ListenerAdapter {
 					if (m == null) {
 						MemberDAO.addMemberToDB(member);
 						m = MemberDAO.getMemberById(member.getId() + member.getGuild().getId());
-					} else if (m.getMid() == null) {
-						m.setMid(author.getId());
+					} else if (m.getUid() == null) {
+						m.setUid(author.getId());
 						m.setSid(guild.getId());
 					}
 

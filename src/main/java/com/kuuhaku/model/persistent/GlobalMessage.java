@@ -30,7 +30,7 @@ public class GlobalMessage {
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String userId = "";
+	private String uid = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String name = "";
@@ -48,12 +48,12 @@ public class GlobalMessage {
 		return id;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUid() {
+		return uid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public String getName() {
@@ -92,7 +92,7 @@ public class GlobalMessage {
 	public String toString() {
 		JSONObject out = new JSONObject();
 		out.put("id", id);
-		out.put("userId", userId);
+		out.put("uid", uid);
 		out.put("name", name);
 		out.put("avatar", avatar);
 		out.put("content", content);
