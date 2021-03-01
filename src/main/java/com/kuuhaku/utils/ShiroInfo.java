@@ -31,6 +31,7 @@ import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.enums.SupportTier;
 import com.kuuhaku.model.enums.Version;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.PixelCanvas;
@@ -81,11 +82,11 @@ public class ShiroInfo {
 	private static final List<String> editors = List.of(
 
 	);
-	private static final List<String> supports = List.of(
-			"656542716108472340", //Fenyx
-			"666488799835979786", //Lucas
-			"776916405873541130", //Crazy Diamond
-			"619214753839185930"  //Botzera
+	private static final Map<String, SupportTier> supports = Map.of(
+			"656542716108472340", SupportTier.SENIOR, //Fenyx
+			"666488799835979786", SupportTier.NORMAL, //Lucas
+			"776916405873541130", SupportTier.NORMAL, //Crazy Diamond
+			"619214753839185930", SupportTier.NORMAL //Botzera
 	);
 	private static final List<String> emoteRepo = List.of(
 			"666619034103447642", //Shiro Emote Repository 1
@@ -191,7 +192,7 @@ public class ShiroInfo {
 		return editors;
 	}
 
-	public static List<String> getSupports() {
+	public static Map<String, SupportTier> getSupports() {
 		return supports;
 	}
 
@@ -204,7 +205,7 @@ public class ShiroInfo {
 	}
 
 	public static List<String> getStaff() {
-		return Stream.concat(developers.stream(), supports.stream()).distinct().collect(Collectors.toList());
+		return Stream.concat(developers.stream(), supports.keySet().stream()).distinct().collect(Collectors.toList());
 	}
 
 	//NON-STATIC
