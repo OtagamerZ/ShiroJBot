@@ -13,16 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de gatilhos de alvo nos efeitos por turno">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de ranking de tempo em canais de voz">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1044,21 +1036,7 @@
       <workItem from="1614355596187" duration="3567000" />
       <workItem from="1614624936913" duration="1821000" />
       <workItem from="1614626889326" duration="636000" />
-      <workItem from="1614686315599" duration="12590000" />
-    </task>
-    <task id="LOCAL-03872" summary="Correção menor">
-      <created>1614017215302</created>
-      <option name="number" value="03872" />
-      <option name="presentableId" value="LOCAL-03872" />
-      <option name="project" value="LOCAL" />
-      <updated>1614017215302</updated>
-    </task>
-    <task id="LOCAL-03873" summary="Correção menor">
-      <created>1614017359131</created>
-      <option name="number" value="03873" />
-      <option name="presentableId" value="LOCAL-03873" />
-      <option name="project" value="LOCAL" />
-      <updated>1614017359131</updated>
+      <workItem from="1614686315599" duration="12915000" />
     </task>
     <task id="LOCAL-03874" summary="Correção menor">
       <created>1614017426860</created>
@@ -1389,7 +1367,21 @@
       <option name="project" value="LOCAL" />
       <updated>1614697164236</updated>
     </task>
-    <option name="localTasksCounter" value="3921" />
+    <task id="LOCAL-03921" summary="Adição de ranking de tempo em canais de voz">
+      <created>1614702817959</created>
+      <option name="number" value="03921" />
+      <option name="presentableId" value="LOCAL-03921" />
+      <option name="project" value="LOCAL" />
+      <updated>1614702817959</updated>
+    </task>
+    <task id="LOCAL-03922" summary="Adição de ranking de tempo em canais de voz">
+      <created>1614703031754</created>
+      <option name="number" value="03922" />
+      <option name="presentableId" value="LOCAL-03922" />
+      <option name="project" value="LOCAL" />
+      <updated>1614703031755</updated>
+    </task>
+    <option name="localTasksCounter" value="3923" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1475,7 +1467,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria no comando de estatística de uso" />
     <MESSAGE value="Correção no comando de casar" />
     <MESSAGE value="Adicionado nível de invocador no Shoukan" />
     <MESSAGE value="Adicionado peso aos equipamentos" />
@@ -1500,7 +1491,8 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Mudança no comando de status" />
     <MESSAGE value="Adição de gatilhos de alvo nos efeitos por turno" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de gatilhos de alvo nos efeitos por turno" />
+    <MESSAGE value="Adição de ranking de tempo em canais de voz" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de ranking de tempo em canais de voz" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
