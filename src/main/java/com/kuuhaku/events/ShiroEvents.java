@@ -921,7 +921,8 @@ public class ShiroEvents extends ListenerAdapter {
 			m.setSid(mb.getGuild().getId());
 		}
 
-		long time = System.currentTimeMillis() - Helper.getOr(voiceTime.remove(mb.getId()), System.currentTimeMillis());
+		long curr = System.currentTimeMillis();
+		long time = curr - Helper.getOr(voiceTime.remove(mb.getId()), curr);
 		m.setVoiceTime(time);
 		MemberDAO.updateMemberConfigs(m);
 	}
