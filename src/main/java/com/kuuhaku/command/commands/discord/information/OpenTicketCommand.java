@@ -68,14 +68,13 @@ public class OpenTicketCommand implements Executable {
 
 		int number = TicketDAO.openTicket(mensagem, author);
 
-		EmbedBuilder eb = new EmbedBuilder();
-
-		eb.setTitle("Ticket Nº " + number + "");
-		eb.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
-		eb.addField("Enviado em:", Helper.dateformat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
-		eb.addField("Descrição:", "```" + mensagem + "```", false);
-		eb.setFooter(author.getId());
-		eb.setColor(Color.yellow);
+		EmbedBuilder eb = new EmbedBuilder()
+				.setTitle("Ticket Nº " + number + "")
+				.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true)
+				.addField("Enviado em:", Helper.dateformat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
+				.addField("Descrição:", "```" + mensagem + "```", false)
+				.setFooter(author.getId())
+				.setColor(Color.yellow);
 
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);

@@ -912,11 +912,9 @@ public class ShiroEvents extends ListenerAdapter {
 		Member mb = event.getMember();
 
 		Account acc = AccountDAO.getAccount(mb.getId());
-		Long time = voiceTime.remove(mb.getId());
-		if (time != null) {
-			acc.setAvgVoiceTime(time);
-			AccountDAO.saveAccount(acc);
-		}
+		long time = System.currentTimeMillis() - Helper.getOr(voiceTime.remove(mb.getId()), 0L);
+		acc.setAvgVoiceTime(time);
+		AccountDAO.saveAccount(acc);
 	}
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
