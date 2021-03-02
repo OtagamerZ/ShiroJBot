@@ -37,6 +37,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "top10",
 		aliases = {"rank", "ranking", "lb", "leaderboards"},
-		usage = "req_global-credit-card",
+		usage = "req_global-credit-card-voice",
 		category = Category.INFO
 )
 @Requires({
@@ -75,6 +76,8 @@ public class RankCommand implements Executable {
 				getCreditRanking(pages);
 			else if (args.length > 0 && Helper.equalsAny(args[0], "card", "kawaipon", "cartas"))
 				getCardRanking(pages);
+			else if (args.length > 0 && Helper.equalsAny(args[0], "call", "voice", "voz"))
+				getVoiceRanking(pages, guild);
 			else
 				getLevelRanking(pages, guild, false);
 
@@ -205,6 +208,45 @@ public class RankCommand implements Executable {
 			}
 
 			makeEmbed(true, pages, next10, eb, Helper.VOID);
+		}
+	}
+
+	private void getVoiceRanking(List<Page> pages, Guild guild) {
+		List<com.kuuhaku.model.persistent.Member> mbs = MemberDAO.getMemberVoiceRank(guild.getId());
+
+		mbs.removeIf(mb -> checkUser(mb).isBlank());
+
+		String champ = "1 - %s %s".formatted(
+				checkUser(mbs.get(0)),
+				DurationFormatUtils.formatDuration(mbs.get(0).getVoiceTime(), "dd:HH:mm:ss")
+		);
+		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
+		StringBuilder sub9Formatted = new StringBuilder();
+		for (int i = 0; i < sub9.size(); i++) {
+			sub9Formatted.append("%s - %s %s\n".formatted(
+					i + 2,
+					checkUser(sub9.get(i)),
+					DurationFormatUtils.formatDuration(sub9.get(i).getVoiceTime(), "dd:HH:mm:ss")
+			));
+		}
+
+		StringBuilder next10 = new StringBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
+
+		makeEmbed(false, pages, sub9Formatted, eb, champ);
+
+		for (int x = 1; x < Math.ceil(mbs.size() / 10f); x++) {
+			eb.clear();
+			next10.setLength(0);
+			for (int i = 10 * x; i < mbs.size() && i < (10 * x) + 10; i++) {
+				next10.append("%s - %s %s\n".formatted(
+						i + 1,
+						checkUser(mbs.get(i)),
+						DurationFormatUtils.formatDuration(mbs.get(i).getVoiceTime(), "dd:HH:mm:ss")
+				));
+			}
+
+			makeEmbed(false, pages, next10, eb, Helper.VOID);
 		}
 	}
 
