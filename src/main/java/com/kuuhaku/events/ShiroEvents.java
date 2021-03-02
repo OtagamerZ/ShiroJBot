@@ -564,8 +564,11 @@ public class ShiroEvents extends ListenerAdapter {
 
 			MemberDAO.addMemberToDB(member);
 
-			if (!gc.getMsgBoasVindas().isBlank()) {
-				URL url = new URL(Objects.requireNonNull(author.getEffectiveAvatarUrl()));
+			if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < gc.getAntiRaidTime()) {
+				Helper.logToChannel(author, false, null, "Um usuário foi impedido de entrar no servidor", guild);
+				guild.kick(member).queue();
+			} else if (!gc.getMsgBoasVindas().isBlank()) {
+				URL url = new URL(author.getEffectiveAvatarUrl());
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
@@ -627,11 +630,13 @@ public class ShiroEvents extends ListenerAdapter {
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
 
-				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalBV())).sendMessage(author.getAsMention()).embed(eb.build()).queue();
+				TextChannel chn = guild.getTextChannelById(gc.getCanalBV());
+				if (chn != null) {
+					chn.sendMessage(author.getAsMention()).embed(eb.build()).queue();
+					if (author.getId().equals(ShiroInfo.getNiiChan()))
+						chn.sendMessage("<:b_shirolove:752890212371267676> | Seja bem-vindo Nii-chan!").queue();
+				}
 				Helper.logToChannel(author, false, null, "Um usuário entrou no servidor", guild);
-			} else if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
-				Helper.logToChannel(author, false, null, "Um usuário foi bloqueado de entrar no servidor", guild);
-				guild.kick(member).queue();
 			}
 		} catch (Exception ignore) {
 		}
@@ -649,7 +654,7 @@ public class ShiroEvents extends ListenerAdapter {
 			MemberDAO.updateMemberConfigs(m);*/
 
 			if (!gc.getMsgAdeus().isBlank()) {
-				URL url = new URL(Objects.requireNonNull(author.getEffectiveAvatarUrl()));
+				URL url = new URL(author.getEffectiveAvatarUrl());
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
@@ -711,7 +716,9 @@ public class ShiroEvents extends ListenerAdapter {
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
 
-				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalAdeus())).sendMessage(eb.build()).queue();
+				TextChannel chn = guild.getTextChannelById(gc.getCanalAdeus());
+				if (chn != null)
+					chn.sendMessage(eb.build()).queue();
 				Helper.logToChannel(author, false, null, "Um usuário saiu do servidor", guild);
 			}
 		} catch (Exception ignore) {
