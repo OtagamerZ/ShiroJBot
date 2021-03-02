@@ -60,6 +60,9 @@ public class Account {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long loan = 0;
 
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long avgVoiceTime = 0;
+
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int gems = 0;
 
@@ -232,6 +235,14 @@ public class Account {
 	public void addLoan(long loan) {
 		this.loan += loan;
 		AccountDAO.saveAccount(this);
+	}
+
+	public long getAvgVoiceTime() {
+		return avgVoiceTime;
+	}
+
+	public void setAvgVoiceTime(long avgVoiceTime) {
+		this.avgVoiceTime = this.avgVoiceTime == 0 ? avgVoiceTime : (this.avgVoiceTime + avgVoiceTime) / 2;
 	}
 
 	public String getLastVoted() {
