@@ -907,10 +907,10 @@ public class ShiroEvents extends ListenerAdapter {
 	public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
 		Member mb = event.getMember();
 
-		Account acc = AccountDAO.getAccount(mb.getId());
+		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(mb.getId() + mb.getGuild().getId());
 		long time = System.currentTimeMillis() - Helper.getOr(voiceTime.remove(mb.getId()), 0L);
-		acc.setAvgVoiceTime(time);
-		AccountDAO.saveAccount(acc);
+		m.setVoiceTime(time);
+		MemberDAO.updateMemberConfigs(m);
 	}
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
