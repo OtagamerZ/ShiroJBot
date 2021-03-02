@@ -48,7 +48,6 @@ public class TrophyDAO {
 	}
 
 	public static void saveTrophies(Trophy t) {
-		if (BlacklistDAO.isBlacklisted(t.getUid())) return;
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
