@@ -48,6 +48,8 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateOwnerEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
@@ -87,6 +89,7 @@ import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
 	private final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
+	private final Map<String, Long> voiceTime = new HashMap<>();
 
 	@Override
 	public void onGuildUpdateName(GuildUpdateNameEvent event) {
@@ -897,6 +900,23 @@ public class ShiroEvents extends ListenerAdapter {
 		if (msg == null || msg.getAuthor().isBot()) return;
 
 		Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi deletada no canal " + event.getChannel().getAsMention() + ":```diff\n-" + msg.getContentRaw() + "```", msg.getGuild());
+	}
+
+	@Override
+	public void onGuildVoiceJoin(@NotNull GuildVoiceJoinEvent event) {
+		voiceTime.put(event.getMember().getId(), System.currentTimeMillis());
+	}
+
+	@Override
+	public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
+		Member mb = event.getMember();
+
+		Account acc = AccountDAO.getAccount(mb.getId());
+		Long time = voiceTime.remove(mb.getId());
+		if (time != null) {
+			acc.setAvgVoiceTime(time);
+			AccountDAO.saveAccount(acc);
+		}
 	}
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
