@@ -33,7 +33,6 @@ import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
-import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.GuildBuff;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
@@ -67,11 +66,10 @@ public class MyStatsCommand implements Executable {
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		String exceed = ExceedDAO.getExceed(author.getId());
 		Set<Tag> tags = Tag.getTags(author, member);
-		Account acc = AccountDAO.getAccount(author.getId());
 		Map<String, Page> categories = new LinkedHashMap<>();
 
 		{
-			eb.addField(":timer: | Tempo médio em calls:", DurationFormatUtils.formatDuration(acc.getAvgVoiceTime(), "H 'horas', m 'minutos e' s 'segundos'"), false);
+			eb.addField(":timer: | Tempo em canais de voz:", DurationFormatUtils.formatDuration(mb.getVoiceTime(), "d 'dias', H 'horas', m 'minutos e' s 'segundos'"), false);
 
 			StringBuilder badges = new StringBuilder();
 

@@ -15,6 +15,14 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de gatilhos de alvo nos efeitos por turno">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1036,14 +1044,7 @@
       <workItem from="1614355596187" duration="3567000" />
       <workItem from="1614624936913" duration="1821000" />
       <workItem from="1614626889326" duration="636000" />
-      <workItem from="1614686315599" duration="10356000" />
-    </task>
-    <task id="LOCAL-03871" summary="Tentativa de melhoria no tempo de conversão das imagens">
-      <created>1614003455173</created>
-      <option name="number" value="03871" />
-      <option name="presentableId" value="LOCAL-03871" />
-      <option name="project" value="LOCAL" />
-      <updated>1614003455173</updated>
+      <workItem from="1614686315599" duration="12590000" />
     </task>
     <task id="LOCAL-03872" summary="Correção menor">
       <created>1614017215302</created>
@@ -1381,7 +1382,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614695346902</updated>
     </task>
-    <option name="localTasksCounter" value="3920" />
+    <task id="LOCAL-03920" summary="Adição de gatilhos de alvo nos efeitos por turno">
+      <created>1614697164236</created>
+      <option name="number" value="03920" />
+      <option name="presentableId" value="LOCAL-03920" />
+      <option name="project" value="LOCAL" />
+      <updated>1614697164236</updated>
+    </task>
+    <option name="localTasksCounter" value="3921" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

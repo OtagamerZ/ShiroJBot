@@ -115,6 +115,11 @@ public class DashboardSocket extends WebSocketServer {
 								})
 								.complete();
 					}
+
+					Main.getInfo().getUserByID(t.getUid()).openPrivateChannel()
+							.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
+							.queue(null, Helper::doNothing);
+
 					TicketDAO.setIds(number, ids);
 				}
 				case "validate" -> {
