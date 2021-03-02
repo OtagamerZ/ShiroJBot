@@ -29,13 +29,14 @@ import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 @Command(
 		name = "adicionaremote",
 		aliases = {"adicionaremoji", "addemote", "addemoji"},
-		usage = "req_emotes",
+		usage = "req_emotes-name",
 		category = Category.MODERATION
 )
 @Requires({Permission.MANAGE_EMOTES})
@@ -43,29 +44,63 @@ public class AddEmoteCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (message.getEmotes().isEmpty()) {
+		Message.Attachment att = message.getAttachments().stream().filter(Message.Attachment::isImage).findFirst().orElse(null);
+
+		if (message.getEmotes().isEmpty() && (args.length < 1 || att == null)) {
 			channel.sendMessage("❌ | Você precisa informar ao menos 1 emote para adicionar.").queue();
 			return;
-		} else if (guild.getEmotes().size() + message.getEmotes().size() > guild.getMaxEmotes()) {
+		} else if ((guild.getEmotes().size() + message.getEmotes().size() > guild.getMaxEmotes() || guild.getEmotes().size() + 1 > guild.getMaxEmotes())) {
 			channel.sendMessage("❌ | O servidor não tem espaço suficiente para emotes.").queue();
 			return;
 		}
 
-		List<AuditableRestAction<Emote>> acts = new ArrayList<>();
-		int added = 0;
-		for (Emote emote : message.getEmotes()) {
-			try {
-				if (guild.getEmotes().size() + added >= guild.getMaxEmotes()) break;
-				acts.add(guild.createEmote(emote.getName(), Icon.from(Helper.getImage(emote.getImageUrl()))));
-				added++;
-			} catch (IOException ignore) {
+		if (message.getEmotes().isEmpty()) {
+			if (args[0].length() < 2) {
+				channel.sendMessage("❌ | Emotes devem ter no mínimo 2 caracteres no nome.").queue();
+				return;
+			} else if (att == null) {
+				channel.sendMessage("❌ | Você deve enviar uma imagem para o Emote.").queue();
+				return;
 			}
-		}
 
-		int finalAdded = added;
-		RestAction.allOf(acts)
-				.mapToResult()
-				.flatMap(s -> channel.sendMessage("✅ | " + finalAdded + " emotes adicionados com sucesso!"))
-				.queue(null, Helper::doNothing);
+			String ext = att.getFileExtension();
+			if (ext == null) {
+				channel.sendMessage("❌ | Arquivo com extensão inválida.").queue();
+				return;
+			}
+
+			try (InputStream is = Helper.getImage(att.getUrl())) {
+				byte[] bytes = is.readAllBytes();
+				if (bytes.length > 256000) {
+					channel.sendMessage("❌ | O Discord só permite arquivos de até 256kb.").queue();
+					return;
+				}
+
+				Icon.IconType type = Icon.IconType.fromExtension(ext);
+
+				guild.createEmote(args[0], Icon.from(bytes, type))
+						.flatMap(s -> channel.sendMessage("✅ | Emote adicionado com sucesso!"))
+						.queue(null, Helper::doNothing);
+			} catch (IOException e) {
+				channel.sendMessage("❌ | Não foi possível obter a imagem.").queue();
+			}
+		} else {
+			List<AuditableRestAction<Emote>> acts = new ArrayList<>();
+			int added = 0;
+			for (Emote emote : message.getEmotes()) {
+				try {
+					if (guild.getEmotes().size() + added >= guild.getMaxEmotes()) break;
+					acts.add(guild.createEmote(emote.getName(), Icon.from(Helper.getImage(emote.getImageUrl()))));
+					added++;
+				} catch (IOException ignore) {
+				}
+			}
+
+			int finalAdded = added;
+			RestAction.allOf(acts)
+					.mapToResult()
+					.flatMap(s -> channel.sendMessage("✅ | " + finalAdded + " emotes adicionados com sucesso!"))
+					.queue(null, Helper::doNothing);
+		}
 	}
 }
