@@ -2463,11 +2463,13 @@ public class Shoukan extends GlobalGame {
 				continue;
 			}
 
-			if (effect.getTriggers().contains(trigger)) {
-				effect.getEffect().accept(side, index);
+			if (effect.getTarget() == null || effect.getTarget() == side) {
+				if (effect.getTriggers().contains(trigger))
+					effect.getEffect().accept(side, index);
+
+				if (trigger == EffectTrigger.AFTER_TURN)
+					effect.decreaseTurn();
 			}
-			if (trigger == EffectTrigger.AFTER_TURN)
-				effect.decreaseTurn();
 		}
 	}
 
