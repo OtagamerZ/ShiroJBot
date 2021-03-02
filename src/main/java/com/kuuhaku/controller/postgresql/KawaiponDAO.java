@@ -45,7 +45,6 @@ public class KawaiponDAO {
 	}
 
 	public static void saveKawaipon(Kawaipon k) {
-		if (BlacklistDAO.isBlacklisted(k.getUid())) return;
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
