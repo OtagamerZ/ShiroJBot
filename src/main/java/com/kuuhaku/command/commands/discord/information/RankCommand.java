@@ -218,7 +218,7 @@ public class RankCommand implements Executable {
 
 		String champ = "1 - %s %s".formatted(
 				checkUser(mbs.get(0)),
-				DurationFormatUtils.formatDuration(mbs.get(0).getVoiceTime(), "dd:HH:mm:ss")
+				DurationFormatUtils.formatDuration(mbs.get(0).getVoiceTime(), "dd 'dias,' HH:mm:ss")
 		);
 		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
@@ -226,7 +226,7 @@ public class RankCommand implements Executable {
 			sub9Formatted.append("%s - %s %s\n".formatted(
 					i + 2,
 					checkUser(sub9.get(i)),
-					DurationFormatUtils.formatDuration(sub9.get(i).getVoiceTime(), "dd:HH:mm:ss")
+					DurationFormatUtils.formatDuration(sub9.get(i).getVoiceTime(), "dd 'dias,' HH:mm:ss")
 			));
 		}
 
@@ -242,7 +242,7 @@ public class RankCommand implements Executable {
 				next10.append("%s - %s %s\n".formatted(
 						i + 1,
 						checkUser(mbs.get(i)),
-						DurationFormatUtils.formatDuration(mbs.get(i).getVoiceTime(), "dd:HH:mm:ss")
+						DurationFormatUtils.formatDuration(mbs.get(i).getVoiceTime(), "dd 'dias,' HH:mm:ss")
 				));
 			}
 
