@@ -59,7 +59,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -114,7 +113,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		shiroShards.setActivity(Activity.playing("Iniciando..."));
 		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
 
-		info.setStartTime(Instant.now().getEpochSecond());
+		info.setStartTime(System.currentTimeMillis());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + info.getCompilationPool().getCorePoolSize() + " espaços alocados");
 
 		Manager.connect();
