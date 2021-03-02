@@ -97,13 +97,14 @@ public class DashboardSocket extends WebSocketServer {
 			switch (jo.getString("type")) {
 				case "ticket" -> {
 					int number = TicketDAO.openTicket(payload.getString("message"), Main.getInfo().getUserByID(t.getUid()));
-					EmbedBuilder eb = new EmbedBuilder();
-					eb.setTitle("Feedback via site (Ticket Nº " + number + ")");
-					eb.addField("Enviador por:", t.getHolder(), true);
-					eb.addField("Enviado em:", Helper.dateformat.format(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
-					eb.addField("Assunto", payload.getString("subject"), false);
-					eb.addField("Mensagem:", "```" + payload.getString("message") + "```", false);
-					eb.setColor(Color.decode("#fefefe"));
+					EmbedBuilder eb = new EmbedBuilder()
+							.setTitle("Feedback via site (Ticket Nº " + number + ")")
+							.addField("Enviador por:", t.getHolder(), true)
+							.addField("Enviado em:", Helper.dateformat.format(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
+							.addField("Assunto", payload.getString("subject"), false)
+							.addField("Mensagem:", "```" + payload.getString("message") + "```", false)
+							.setFooter(t.getUid())
+							.setColor(Color.decode("#fefefe"));
 					Map<String, String> ids = new HashMap<>();
 					for (String dev : ShiroInfo.getStaff()) {
 						Main.getInfo().getUserByID(dev).openPrivateChannel()
