@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança no comando de status">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de gatilhos de alvo nos efeitos por turno">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1036,14 +1036,7 @@
       <workItem from="1614355596187" duration="3567000" />
       <workItem from="1614624936913" duration="1821000" />
       <workItem from="1614626889326" duration="636000" />
-      <workItem from="1614686315599" duration="8550000" />
-    </task>
-    <task id="LOCAL-03870" summary="Tentativa de melhoria no tempo de conversão das imagens">
-      <created>1614003225481</created>
-      <option name="number" value="03870" />
-      <option name="presentableId" value="LOCAL-03870" />
-      <option name="project" value="LOCAL" />
-      <updated>1614003225481</updated>
+      <workItem from="1614686315599" duration="10356000" />
     </task>
     <task id="LOCAL-03871" summary="Tentativa de melhoria no tempo de conversão das imagens">
       <created>1614003455173</created>
@@ -1381,7 +1374,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614694219865</updated>
     </task>
-    <option name="localTasksCounter" value="3919" />
+    <task id="LOCAL-03919" summary="Adição de gatilhos de alvo nos efeitos por turno">
+      <created>1614695346902</created>
+      <option name="number" value="03919" />
+      <option name="presentableId" value="LOCAL-03919" />
+      <option name="project" value="LOCAL" />
+      <updated>1614695346902</updated>
+    </task>
+    <option name="localTasksCounter" value="3920" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1467,7 +1467,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de configuração de tempo do anti-raid;&#10;Prune não apaga mais mensagens fixadas;" />
     <MESSAGE value="Melhoria no comando de estatística de uso" />
     <MESSAGE value="Correção no comando de casar" />
     <MESSAGE value="Adicionado nível de invocador no Shoukan" />
@@ -1492,7 +1491,8 @@
     <MESSAGE value="Adição de cascateamento nas operações de remoção de tabelas com referências" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Mudança no comando de status" />
-    <option name="LAST_COMMIT_MESSAGE" value="Mudança no comando de status" />
+    <MESSAGE value="Adição de gatilhos de alvo nos efeitos por turno" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de gatilhos de alvo nos efeitos por turno" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

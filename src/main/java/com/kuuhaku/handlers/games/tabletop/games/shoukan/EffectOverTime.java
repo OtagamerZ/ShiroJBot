@@ -31,14 +31,16 @@ public class EffectOverTime {
 	private final Set<EffectTrigger> triggers;
 	private final BiConsumer<Side, Integer> effect;
 	private final Side target;
+	private final boolean debuff;
 	private int turns;
 
-	public EffectOverTime(String source, BiConsumer<Side, Integer> effect, Side target, int turns, EffectTrigger... triggers) {
+	public EffectOverTime(String source, BiConsumer<Side, Integer> effect, Side target, boolean debuff, int turns, EffectTrigger... triggers) {
 		this.source = source;
 		this.triggers = Set.of(triggers);
 		this.effect = effect;
 		this.target = target;
 		this.turns = turns;
+		this.debuff = debuff;
 	}
 
 	public String getSource() {
@@ -55,6 +57,10 @@ public class EffectOverTime {
 
 	public Side getTarget() {
 		return target;
+	}
+
+	public boolean isDebuff() {
+		return debuff;
 	}
 
 	public int getTurns() {
