@@ -61,6 +61,7 @@ public class RankCommand implements Executable {
 	private static final String STR_LEVEL = "str_level";
 	private static final String STR_CREDIT = "str_credit";
 	private static final String STR_CARD = "str_card";
+	private static final String STR_TIME = "str_time";
 	private static final String SRT_USER_RANKING_TITLE = "str_user-ranking-title";
 	private static final String STR_GLOBAL = "str_global";
 	private static final String STR_LOCAL = "str_local";
@@ -139,14 +140,14 @@ public class RankCommand implements Executable {
 		List<Account> accs = AccountDAO.getAccountRank();
 		accs.removeIf(acc -> checkUser(acc).isBlank());
 
-		String champ = "1 - %s %s créditos".formatted(
+		String champ = "1 - %s %s".formatted(
 				checkUser(accs.get(0)),
 				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), Helper.separate(accs.get(0).getBalance()))
 		);
 		List<Account> sub9 = accs.subList(1, Math.min(accs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
-			sub9Formatted.append("%s - %s %s créditos\n".formatted(
+			sub9Formatted.append("%s - %s %s\n".formatted(
 					i + 2,
 					checkUser(sub9.get(i)),
 					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), Helper.separate(sub9.get(i).getBalance()))
@@ -216,17 +217,17 @@ public class RankCommand implements Executable {
 
 		mbs.removeIf(mb -> checkUser(mb).isBlank());
 
-		String champ = "1 - %s %s".formatted(
+		String champ = "1 - %s (%s)".formatted(
 				checkUser(mbs.get(0)),
-				DurationFormatUtils.formatDuration(mbs.get(0).getVoiceTime(), "dd 'dias,' HH:mm:ss")
+				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_TIME), DurationFormatUtils.formatDuration(mbs.get(0).getVoiceTime(), "dd 'dias,' HH:mm:ss"))
 		);
 		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
-			sub9Formatted.append("%s - %s %s\n".formatted(
+			sub9Formatted.append("%s - %s (%s)\n".formatted(
 					i + 2,
 					checkUser(sub9.get(i)),
-					DurationFormatUtils.formatDuration(sub9.get(i).getVoiceTime(), "dd 'dias,' HH:mm:ss")
+					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_TIME), DurationFormatUtils.formatDuration(sub9.get(i).getVoiceTime(), "dd 'dias,' HH:mm:ss"))
 			));
 		}
 
@@ -239,10 +240,10 @@ public class RankCommand implements Executable {
 			eb.clear();
 			next10.setLength(0);
 			for (int i = 10 * x; i < mbs.size() && i < (10 * x) + 10; i++) {
-				next10.append("%s - %s %s\n".formatted(
+				next10.append("%s - %s (%s)\n".formatted(
 						i + 1,
 						checkUser(mbs.get(i)),
-						DurationFormatUtils.formatDuration(mbs.get(i).getVoiceTime(), "dd 'dias,' HH:mm:ss")
+						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_TIME), DurationFormatUtils.formatDuration(mbs.get(i).getVoiceTime(), "dd 'dias,' HH:mm:ss"))
 				));
 			}
 
