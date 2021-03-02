@@ -96,7 +96,6 @@ public class ExceedDAO {
     }
 
     public static void saveExceedMember(ExceedMember ex) {
-        if (BlacklistDAO.isBlacklisted(ex.getUid())) return;
         EntityManager em = Manager.getEntityManager();
 
         em.getTransaction().begin();

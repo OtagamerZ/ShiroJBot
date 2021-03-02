@@ -51,7 +51,6 @@ public class DeckStashDAO {
 	}
 
 	public static void saveStash(DeckStash ds) {
-		if (BlacklistDAO.isBlacklisted(ds.getUid())) return;
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();

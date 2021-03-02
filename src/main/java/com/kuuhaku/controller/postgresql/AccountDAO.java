@@ -98,7 +98,6 @@ public class AccountDAO {
 	}
 
 	public static void saveAccount(Account acc) {
-		if (BlacklistDAO.isBlacklisted(acc.getUid())) return;
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();

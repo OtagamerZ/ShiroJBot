@@ -50,7 +50,6 @@ public class MatchMakingRatingDAO {
 	}
 
 	public static void saveMMR(MatchMakingRating mmr) {
-		if (BlacklistDAO.isBlacklisted(mmr.getUid())) return;
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();

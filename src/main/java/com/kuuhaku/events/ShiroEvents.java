@@ -136,6 +136,11 @@ public class ShiroEvents extends ListenerAdapter {
 			Guild guild = message.getGuild();
 			String rawMessage = StringUtils.normalizeSpace(message.getContentRaw());
 
+			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
+				handleExchange(author, message);
+				return;
+			} else if (member == null) return;
+
 			String prefix = "";
 			if (!Main.getInfo().isDev()) {
 				try {
@@ -165,18 +170,10 @@ public class ShiroEvents extends ListenerAdapter {
 				return;
 			}
 
-			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
-				handleExchange(author, message);
-				return;
-			} else if (member == null) return;
-
 			boolean blacklisted = BlacklistDAO.isBlacklisted(author);
 
-			if (!blacklisted) try {
-				MemberDAO.getMemberById(author.getId() + guild.getId());
-			} catch (NoResultException e) {
+			if (!blacklisted && MemberDAO.getMemberById(author.getId() + guild.getId()) == null)
 				MemberDAO.addMemberToDB(member);
-			}
 
 			/*try {
 				MutedMember mm = com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(author.getId());
@@ -730,7 +727,6 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
-		if (event.getAuthor().isBot()) return;
 		List<String> staffIds = ShiroInfo.getStaff();
 		if (staffIds.contains(event.getAuthor().getId())) {
 			String msg = event.getMessage().getContentRaw();
