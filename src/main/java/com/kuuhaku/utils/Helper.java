@@ -1988,6 +1988,10 @@ public class Helper {
 		return Base64.getEncoder().encodeToString(getBytes(bi, encoding));
 	}
 
+	public static String atob(byte[] bytes) {
+		return Base64.getEncoder().encodeToString(bytes);
+	}
+
 	public static BufferedImage btoa(String b64) {
 		try (ByteArrayInputStream bais = new ByteArrayInputStream(Base64.getDecoder().decode(b64))) {
 			return ImageIO.read(bais);
