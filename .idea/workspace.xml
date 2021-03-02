@@ -16,7 +16,8 @@
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,9 +95,6 @@
     </ignored-facets>
   </component>
   <component name="JupyterTrust" id="3cddea61-70ea-4139-828d-65ac523ec76d" />
-  <component name="ProblemsViewState">
-    <option name="selectedIndex" value="1" />
-  </component>
   <component name="ProjectId" id="1W4mCBhJx2V4Iv1OVHtn8NLtKvt" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="false" id="Update" />
@@ -188,6 +186,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1030,21 +1039,7 @@
       <workItem from="1614355596187" duration="3567000" />
       <workItem from="1614624936913" duration="1821000" />
       <workItem from="1614626889326" duration="636000" />
-      <workItem from="1614686315599" duration="1052000" />
-    </task>
-    <task id="LOCAL-03863" summary="Tentativa de melhoria no tempo de conversão das imagens">
-      <created>1613959260816</created>
-      <option name="number" value="03863" />
-      <option name="presentableId" value="LOCAL-03863" />
-      <option name="project" value="LOCAL" />
-      <updated>1613959260816</updated>
-    </task>
-    <task id="LOCAL-03864" summary="Tentativa de melhoria no tempo de conversão das imagens">
-      <created>1613959373099</created>
-      <option name="number" value="03864" />
-      <option name="presentableId" value="LOCAL-03864" />
-      <option name="project" value="LOCAL" />
-      <updated>1613959373099</updated>
+      <workItem from="1614686315599" duration="2236000" />
     </task>
     <task id="LOCAL-03865" summary="Tentativa de melhoria no tempo de conversão das imagens">
       <created>1613959532037</created>
@@ -1375,7 +1370,21 @@
       <option name="project" value="LOCAL" />
       <updated>1614626420525</updated>
     </task>
-    <option name="localTasksCounter" value="3912" />
+    <task id="LOCAL-03912" summary="Correções menores">
+      <created>1614687454679</created>
+      <option name="number" value="03912" />
+      <option name="presentableId" value="LOCAL-03912" />
+      <option name="project" value="LOCAL" />
+      <updated>1614687454680</updated>
+    </task>
+    <task id="LOCAL-03913" summary="Correções menores">
+      <created>1614687660655</created>
+      <option name="number" value="03913" />
+      <option name="presentableId" value="LOCAL-03913" />
+      <option name="project" value="LOCAL" />
+      <updated>1614687660655</updated>
+    </task>
+    <option name="localTasksCounter" value="3914" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
