@@ -86,6 +86,7 @@ public class JibrilEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		if (event.getAuthor().isBot()) return;
 		try {
 			Message message = event.getMessage();
 			String rawMessage = message.getContentRaw();
@@ -97,11 +98,10 @@ public class JibrilEvents extends ListenerAdapter {
 				return;
 			}
 
-			if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
-				Member mb;
-				try {
-					mb = com.kuuhaku.controller.sqlite.MemberDAO.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
-				} catch (NoResultException e) {
+			if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId())) {
+				Member mb = com.kuuhaku.controller.sqlite.MemberDAO.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+
+				if (mb == null) {
 					assert event.getMember() != null;
 					com.kuuhaku.controller.sqlite.MemberDAO.addMemberToDB(event.getMember());
 					mb = com.kuuhaku.controller.sqlite.MemberDAO.getMemberById(event.getAuthor().getId() + event.getGuild().getId());

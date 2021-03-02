@@ -76,7 +76,6 @@ public class TagDAO {
 	}
 
 	public static void addUserTagsToDB(String id) {
-		if (BlacklistDAO.isBlacklisted(id)) return;
 		EntityManager em = Manager.getEntityManager();
 
 		Tags t = em.find(Tags.class, id);
