@@ -92,8 +92,9 @@ public class CardDAO {
 		q.setParameter("anime", anime);
 		q.setParameter("foil", foil);
 
+		int total = totalCards(anime);
 		try {
-			return ((Number) q.getSingleResult()).intValue() == totalCards(anime);
+			return total != 0 && ((Number) q.getSingleResult()).intValue() == total;
 		} catch (NoResultException e) {
 			return false;
 		} finally {
