@@ -18,6 +18,9 @@
 
 package com.kuuhaku.command.commands.discord.information;
 
+import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.Page;
+import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
@@ -30,6 +33,7 @@ import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.GuildBuff;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
@@ -37,9 +41,13 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Command(
@@ -59,76 +67,98 @@ public class MyStatsCommand implements Executable {
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		String exceed = ExceedDAO.getExceed(author.getId());
 		Set<Tag> tags = Tag.getTags(author, member);
+		Account acc = AccountDAO.getAccount(author.getId());
+		Map<String, Page> categories = new LinkedHashMap<>();
 
-		eb.setTitle(":clipboard: | Status")
-				.addField("Estatísticas de jogo", """
-						%s vitórias
-						%s derrotas
-						Taxa de vitórias: %s
-						""".formatted(mmr.getWins(), mmr.getLosses(), mmr.getWinrate()
-				), false)
-				.addField("Ranking no Shoukan", mmr.getTier().getName(), false);
+		{
+			eb.addField(":timer: | Tempo médio em calls:", DurationFormatUtils.formatDuration(acc.getAvgVoiceTime(), "H 'horas', m 'minutos e' s 'segundos'"), false);
 
-		if (mmr.getRankPoints() == 100 || mmr.getTier() == RankedTier.UNRANKED) {
-			StringBuilder sb = new StringBuilder();
+			StringBuilder badges = new StringBuilder();
 
-			for (int i = 0; i < mmr.getPromWins(); i++)
-				sb.append(TagIcons.RANKED_WIN.getTag(0).trim());
+			if (!exceed.isEmpty()) {
+				badges.append(TagIcons.getExceed(ExceedEnum.getByName(exceed)));
+			}
 
-			for (int i = 0; i < mmr.getPromLosses(); i++)
-				sb.append(TagIcons.RANKED_LOSE.getTag(0).trim());
+			for (Tag t : tags) {
+				badges.append(t.getEmote(mb) == null ? "" : Objects.requireNonNull(t.getEmote(mb)).getTag(mb.getLevel()));
+			}
 
-			for (int i = 0; i < mmr.getTier().getMd() - (mmr.getPromWins() + mmr.getPromLosses()); i++)
-				sb.append(TagIcons.RANKED_PENDING.getTag(0).trim());
+			eb.addField("Emblemas:", badges.toString(), false);
 
-			eb.addField("Progresso para o próximo tier", sb.toString(), false);
-		} else
-			eb.addField("Progresso para o próximo tier", mmr.getRankPoints() + "/100 Pontos de Ranking", false);
+			categories.put("\uD83D\uDD23", new Page(PageType.EMBED, eb.build()));
+		}
 
-		boolean victorious = Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
-		boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
+		eb.clear();
 
-		int xp = (int) (15
-						* (victorious ? 2 : 1)
-						* (waifu ? WaifuDAO.getMultiplier(author).getMult() : 1)
-						* (gb.getBuff(1) != null ? gb.getBuff(1).getMult() : 1)
+		{
+			boolean victorious = Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
+			boolean waifu = guild.getMembers().stream().map(Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author.getId()));
+
+			int xp = (int) (15
+							* (victorious ? 2 : 1)
+							* (waifu ? WaifuDAO.getMultiplier(author).getMult() : 1)
+							* (gb.getBuff(1) != null ? gb.getBuff(1).getMult() : 1)
+			);
+
+			float collection = Helper.prcnt(kp.getCards().size(), CardDAO.totalCards() * 2);
+			if (collection >= 1) xp *= 2;
+			else if (collection >= 0.75) xp *= 1.75;
+			else if (collection >= 0.5) xp *= 1.5;
+			else if (collection >= 0.25) xp *= 1.25;
+
+			String mult = """
+					**XP por mensagem:** %s (Base: 15)
+					**Taxa de venda:** %s%% (Base: 10%%)
+					**Chance de spawn de cartas:** %s%% (Base: 3%%)
+					**Chance de spawn de drops:** %s%% (Base: 2.5%%)
+					**Chance de spawn de cromadas:** %s%% (Base: 0.5%%)
+					"""
+					.formatted(
+							xp,
+							Helper.isTrustedMerchant(author.getId()) ? 5 : 10,
+							Helper.round((3 - Helper.clamp(Helper.prcnt(guild.getMemberCount(), 5000), 0, 1)) * (gb.getBuff(2) != null ? gb.getBuff(2).getMult() : 1), 1),
+							Helper.round((2.5 - Helper.clamp(Helper.prcnt(guild.getMemberCount() * 0.75f, 5000), 0, 0.75)) * (gb.getBuff(3) != null ? gb.getBuff(3).getMult() : 1), 1),
+							Helper.round(0.5 * (gb.getBuff(4) != null ? gb.getBuff(4).getMult() : 1), 1)
+					);
+
+			eb.addField(":chart_with_upwards_trend: | Seus multiplicadores:", mult, false);
+
+			categories.put("\uD83D\uDCC8", new Page(PageType.EMBED, eb.build()));
+		}
+
+		eb.clear();
+
+		{
+			eb.setTitle(":clipboard: | Estatísticas de Shoukan")
+					.addField("Estatísticas de jogo", """
+							%s vitórias
+							%s derrotas
+							Taxa de vitórias: %s
+							""".formatted(mmr.getWins(), mmr.getLosses(), mmr.getWinrate()
+					), false)
+					.addField("Ranking no Shoukan", mmr.getTier().getName(), false);
+
+			if (mmr.getRankPoints() == 100 || mmr.getTier() == RankedTier.UNRANKED) {
+				StringBuilder sb = new StringBuilder();
+
+				for (int i = 0; i < mmr.getPromWins(); i++)
+					sb.append(TagIcons.RANKED_WIN.getTag(0).trim());
+
+				for (int i = 0; i < mmr.getPromLosses(); i++)
+					sb.append(TagIcons.RANKED_LOSE.getTag(0).trim());
+
+				for (int i = 0; i < mmr.getTier().getMd() - (mmr.getPromWins() + mmr.getPromLosses()); i++)
+					sb.append(TagIcons.RANKED_PENDING.getTag(0).trim());
+
+				eb.addField("Progresso para o próximo tier", sb.toString(), false);
+			} else
+				eb.addField("Progresso para o próximo tier", mmr.getRankPoints() + "/100 Pontos de Ranking", false);
+
+			categories.put("\uD83D\uDCCB", new Page(PageType.EMBED, eb.build()));
+		}
+
+		channel.sendMessage((MessageEmbed) categories.get("\uD83D\uDD23").getContent()).queue(s ->
+				Pages.categorize(s, categories, 1, TimeUnit.MINUTES)
 		);
-
-		float collection = Helper.prcnt(kp.getCards().size(), CardDAO.totalCards() * 2);
-		if (collection >= 1) xp *= 2;
-		else if (collection >= 0.75) xp *= 1.75;
-		else if (collection >= 0.5) xp *= 1.5;
-		else if (collection >= 0.25) xp *= 1.25;
-
-		String mult = """
-				**XP por mensagem:** %s (Base: 15)
-				**Taxa de venda:** %s%% (Base: 10%%)
-				**Chance de spawn de cartas:** %s%% (Base: 3%%)
-				**Chance de spawn de drops:** %s%% (Base: 2.5%%)
-				**Chance de spawn de cromadas:** %s%% (Base: 0.5%%)
-				"""
-				.formatted(
-						xp,
-						Helper.isTrustedMerchant(author.getId()) ? 5 : 10,
-						Helper.round((3 - Helper.clamp(Helper.prcnt(guild.getMemberCount(), 5000), 0, 1)) * (gb.getBuff(2) != null ? gb.getBuff(2).getMult() : 1), 1),
-						Helper.round((2.5 - Helper.clamp(Helper.prcnt(guild.getMemberCount() * 0.75f, 5000), 0, 0.75)) * (gb.getBuff(3) != null ? gb.getBuff(3).getMult() : 1), 1),
-						Helper.round(0.5 * (gb.getBuff(4) != null ? gb.getBuff(4).getMult() : 1), 1)
-				);
-
-		eb.addField(":chart_with_upwards_trend: | Seus multiplicadores:", mult, false);
-
-		StringBuilder badges = new StringBuilder();
-
-		if (!exceed.isEmpty()) {
-			badges.append(TagIcons.getExceed(ExceedEnum.getByName(exceed)));
-		}
-
-		for (Tag t : tags) {
-			badges.append(t.getEmote(mb) == null ? "" : Objects.requireNonNull(t.getEmote(mb)).getTag(mb.getLevel()));
-		}
-
-		eb.addField(":label: | Seus emblemas:", badges.toString(), false);
-
-		channel.sendMessage(eb.build()).queue();
 	}
 }
