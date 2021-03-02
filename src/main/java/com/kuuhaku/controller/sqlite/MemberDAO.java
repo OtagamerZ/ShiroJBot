@@ -180,6 +180,47 @@ public class MemberDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<Member> getMemberVoiceRank(String gid) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT m FROM Member m WHERE m.sid = :id AND m.uid IS NOT NULL ORDER BY m.voiceTime DESC", Member.class);
+		q.setParameter("id", gid);
+
+		List<Member> mbs = q.getResultList();
+
+		em.close();
+
+		return mbs;
+	}
+
+	public static int getMemberVoiceRankPos(String mid, String gid) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("""
+				SELECT x.row
+				FROM (
+					SELECT m.uid
+						 , row_number() OVER (ORDER BY m.voiceTime DESC) AS row 
+					FROM Member m 
+					WHERE m.sid = :id 
+					AND m.uid IS NOT NULL
+				) x
+				WHERE x.uid = :mid
+				""");
+		q.setParameter("id", gid);
+		q.setParameter("mid", mid);
+		q.setMaxResults(1);
+
+		try {
+			return ((Number) q.getSingleResult()).intValue();
+		} catch (NoResultException e) {
+			return 0;
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<Member> getAllMembers() {
 		EntityManager em = Manager.getEntityManager();
 
