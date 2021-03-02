@@ -44,13 +44,13 @@ public class ServerInfoCommand implements Executable {
 		eb.setTitle(":dividers: | Dados sobre o servidor")
 				.setThumbnail(guild.getIconUrl())
 				.setImage(guild.getBannerUrl() != null ? guild.getBannerUrl() + "?size=512" : null)
-				.addField(":beginner: | Nome", guild.getName(), false)
-				.addField(":name_badge: | Dono", guild.getOwner() == null ? "Desconhecido" : guild.getOwner().getUser().getAsTag(), false)
-				.addField(":card_box: | Shard", "Nº " + guild.getJDA().getShardInfo().getShardId(), false)
+				.addField(":beginner: | Nome", guild.getName(), true)
+				.addField(":name_badge: | Dono", guild.getOwner() == null ? "Desconhecido" : guild.getOwner().getUser().getAsTag(), true)
+				.addField(":card_box: | Shard", "Nº " + guild.getJDA().getShardInfo().getShardId(), true)
 				.addField(":busts_in_silhouette: | Membros", """
 						Usuários: %s
 						Bots: %s
-						""".formatted(guild.getMemberCount() - bots, bots), false)
+						""".formatted(guild.getMemberCount() - bots, bots), true)
 				.addField(":calendar: | Criado em", guild.getTimeCreated().format(Helper.onlyDate), true)
 				.addField(":calendar: | Estou aqui desde", guild.getSelfMember().hasTimeJoined() ? guild.getSelfMember().getTimeJoined().format(Helper.onlyDate) : "Não lembro", true);
 
