@@ -900,11 +900,17 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildVoiceJoin(@NotNull GuildVoiceJoinEvent event) {
-		voiceTime.put(event.getMember().getId(), System.currentTimeMillis());
+		boolean blacklisted = BlacklistDAO.isBlacklisted(event.getMember().getUser());
+
+		if (!blacklisted) voiceTime.put(event.getMember().getId(), System.currentTimeMillis());
 	}
 
 	@Override
 	public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
+		boolean blacklisted = BlacklistDAO.isBlacklisted(event.getMember().getUser());
+
+		if (blacklisted) return;
+
 		Member mb = event.getMember();
 
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(mb.getId() + mb.getGuild().getId());
