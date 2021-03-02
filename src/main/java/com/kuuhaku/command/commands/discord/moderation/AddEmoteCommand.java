@@ -45,12 +45,11 @@ public class AddEmoteCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Message.Attachment att = message.getAttachments().stream().filter(Message.Attachment::isImage).findFirst().orElse(null);
+		long currAnim = guild.getEmotes().stream().filter(Emote::isAnimated).count();
+		long currNormal = guild.getEmotes().size() - currAnim;
 
 		if (message.getEmotes().isEmpty() && (args.length < 1 || att == null)) {
 			channel.sendMessage("❌ | Você precisa informar ao menos 1 emote para adicionar.").queue();
-			return;
-		} else if ((guild.getEmotes().size() + message.getEmotes().size() > guild.getMaxEmotes() || guild.getEmotes().size() + 1 > guild.getMaxEmotes())) {
-			channel.sendMessage("❌ | O servidor não tem espaço suficiente para emotes.").queue();
 			return;
 		}
 
@@ -78,6 +77,25 @@ public class AddEmoteCommand implements Executable {
 
 				Icon.IconType type = Icon.IconType.fromExtension(ext);
 
+				switch (type) {
+					case JPEG, PNG, WEBP -> {
+						if (currNormal + 1 > guild.getMaxEmotes()) {
+							channel.sendMessage("❌ | O servidor não tem espaço suficiente para emotes.").queue();
+							return;
+						}
+					}
+					case GIF -> {
+						if (currAnim + 1 > guild.getMaxEmotes()) {
+							channel.sendMessage("❌ | O servidor não tem espaço suficiente para emotes.").queue();
+							return;
+						}
+					}
+					case UNKNOWN -> {
+						channel.sendMessage("❌ | Arquivo com extensão desconhecida.").queue();
+						return;
+					}
+				}
+
 				guild.createEmote(args[0], Icon.from(bytes, type))
 						.flatMap(s -> channel.sendMessage("✅ | Emote adicionado com sucesso!"))
 						.queue(null, Helper::doNothing);
@@ -86,6 +104,15 @@ public class AddEmoteCommand implements Executable {
 			}
 		} else {
 			List<AuditableRestAction<Emote>> acts = new ArrayList<>();
+
+			long anim = message.getEmotes().stream().filter(Emote::isAnimated).count();
+			long normal = message.getEmotes().size() - anim;
+
+			if (currAnim + anim > guild.getMaxEmotes() || currNormal + normal > guild.getMaxEmotes()) {
+				channel.sendMessage("❌ | O servidor não tem espaço suficiente para emotes.").queue();
+				return;
+			}
+
 			int added = 0;
 			for (Emote emote : message.getEmotes()) {
 				try {
