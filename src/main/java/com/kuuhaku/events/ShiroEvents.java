@@ -908,6 +908,14 @@ public class ShiroEvents extends ListenerAdapter {
 		Member mb = event.getMember();
 
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(mb.getId() + mb.getGuild().getId());
+		if (m == null) {
+			MemberDAO.addMemberToDB(mb);
+			m = MemberDAO.getMemberById(mb.getId() + mb.getGuild().getId());
+		} else if (m.getUid() == null) {
+			m.setUid(mb.getId());
+			m.setSid(mb.getGuild().getId());
+		}
+
 		long time = System.currentTimeMillis() - Helper.getOr(voiceTime.remove(mb.getId()), 0L);
 		m.setVoiceTime(time);
 		MemberDAO.updateMemberConfigs(m);
