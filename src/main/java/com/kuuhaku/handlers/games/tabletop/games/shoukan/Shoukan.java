@@ -1984,7 +1984,7 @@ public class Shoukan extends GlobalGame {
 				h.get().addMana(h.get().getManaPerTurn());
 				AtomicBoolean shownHand = new AtomicBoolean(false);
 				moveLock = true;
-				channel.sendMessage(u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention())
+				channel.sendMessage(u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention() + " (turno " + getRound() + ")")
 						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
 						.queue(s -> {
 							this.message.compute(s.getChannel().getId(), (id, m) -> {
