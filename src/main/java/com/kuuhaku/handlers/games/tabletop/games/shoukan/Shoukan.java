@@ -18,6 +18,9 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.Main;
@@ -36,24 +39,23 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.RankedQueue;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -2469,6 +2471,34 @@ public class Shoukan extends GlobalGame {
 
 				if (trigger == EffectTrigger.AFTER_TURN)
 					effect.decreaseTurn();
+			}
+		}
+	}
+
+	public void sendWebhookMessage(String message, String gif, Drawable d) {
+		for (TextChannel channel : channel.getChannels()) {
+			try {
+				Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
+				Card c = d.getCard();
+
+				WebhookMessageBuilder wmb = new WebhookMessageBuilder()
+						.setContent(message)
+						.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().getName()))
+						.setUsername(c.getName());
+
+				if (gif != null) {
+					InputStream is = this.getClass().getClassLoader().getResourceAsStream("shoukan/gifs/" + gif + ".gif");
+					if (is != null) wmb.addFile("effect.gif", is);
+				}
+
+				try {
+					if (wh == null) return;
+					WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
+					wc.send(wmb.build()).get();
+				} catch (InterruptedException | ExecutionException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
+			} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
 			}
 		}
 	}
