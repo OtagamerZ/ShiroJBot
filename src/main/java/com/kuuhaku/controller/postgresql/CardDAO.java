@@ -610,6 +610,37 @@ public class CardDAO {
 		}
 	}
 
+	public static Equipment getRandomEquipment() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT e FROM Equipment e ORDER BY RANDOM()", Equipment.class);
+		q.setMaxResults(1);
+
+		try {
+			return (Equipment) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Equipment getRandomEquipment(int tier) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT e FROM Equipment e WHERE e.tier = :tier ORDER BY RANDOM()", Equipment.class);
+		q.setParameter("tier", tier);
+		q.setMaxResults(1);
+
+		try {
+			return (Equipment) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	public static Field getField(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
