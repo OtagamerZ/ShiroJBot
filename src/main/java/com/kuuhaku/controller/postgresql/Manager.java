@@ -33,7 +33,7 @@ public class Manager {
 		Map<String, String> props = new HashMap<>();
 		props.put("javax.persistence.jdbc.user", System.getenv("DB_LOGIN"));
 		props.put("javax.persistence.jdbc.password", System.getenv("DB_PASS"));
-		props.put("javax.persistence.jdbc.url", "jdbc:postgresql://" + System.getenv("SERVER_IP") + "/shiro?serverTimezone=EST5EDT&autoReconnect=true&useUnicode=yes&characterEncoding=UTF-8&interactiveClient=true&reWriteBatchedInserts=true");
+		props.put("javax.persistence.jdbc.url", "jdbc:postgresql://" + System.getenv("SERVER_IP") + "/shiro");
 
 		if (emf == null) {
 			emf = Persistence.createEntityManagerFactory("shiro_remote", props);
