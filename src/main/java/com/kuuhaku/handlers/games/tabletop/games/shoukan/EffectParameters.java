@@ -18,27 +18,16 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import club.minnced.discord.webhook.WebhookClient;
-import club.minnced.discord.webhook.WebhookClientBuilder;
-import club.minnced.discord.webhook.send.WebhookMessageBuilder;
-import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.Webhook;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 public class EffectParameters {
 	private final EffectTrigger trigger;
@@ -131,33 +120,5 @@ public class EffectParameters {
 
 	public GameChannel getChannel() {
 		return channel;
-	}
-
-	public void sendWebhookMessage(String message, String gif, Champion champion) {
-		for (TextChannel channel : channel.getChannels()) {
-			try {
-				Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
-				Card c = champion.getCard();
-
-				WebhookMessageBuilder wmb = new WebhookMessageBuilder()
-						.setContent(message)
-						.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().getName()))
-						.setUsername(c.getName());
-
-				if (gif != null) {
-					InputStream is = this.getClass().getClassLoader().getResourceAsStream("shoukan/gifs/" + gif + ".gif");
-					if (is != null) wmb.addFile("effect.gif", is);
-				}
-
-				try {
-					if (wh == null) return;
-					WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
-					wc.send(wmb.build()).get();
-				} catch (InterruptedException | ExecutionException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-				}
-			} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
-			}
-		}
 	}
 }
