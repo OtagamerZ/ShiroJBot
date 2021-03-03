@@ -13,8 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de ranking de tempo em canais de voz">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Agora é possível adicionar emotes usando nome + arquivo">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,17 +184,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1036,84 +1026,9 @@
       <workItem from="1614355596187" duration="3567000" />
       <workItem from="1614624936913" duration="1821000" />
       <workItem from="1614626889326" duration="636000" />
-      <workItem from="1614686315599" duration="12915000" />
-    </task>
-    <task id="LOCAL-03874" summary="Correção menor">
-      <created>1614017426860</created>
-      <option name="number" value="03874" />
-      <option name="presentableId" value="LOCAL-03874" />
-      <option name="project" value="LOCAL" />
-      <updated>1614017426860</updated>
-    </task>
-    <task id="LOCAL-03875" summary="Correção menor">
-      <created>1614018651809</created>
-      <option name="number" value="03875" />
-      <option name="presentableId" value="LOCAL-03875" />
-      <option name="project" value="LOCAL" />
-      <updated>1614018651809</updated>
-    </task>
-    <task id="LOCAL-03876" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
-      <created>1614098367695</created>
-      <option name="number" value="03876" />
-      <option name="presentableId" value="LOCAL-03876" />
-      <option name="project" value="LOCAL" />
-      <updated>1614098367696</updated>
-    </task>
-    <task id="LOCAL-03877" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
-      <created>1614098668589</created>
-      <option name="number" value="03877" />
-      <option name="presentableId" value="LOCAL-03877" />
-      <option name="project" value="LOCAL" />
-      <updated>1614098668589</updated>
-    </task>
-    <task id="LOCAL-03878" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
-      <created>1614098829191</created>
-      <option name="number" value="03878" />
-      <option name="presentableId" value="LOCAL-03878" />
-      <option name="project" value="LOCAL" />
-      <updated>1614098829191</updated>
-    </task>
-    <task id="LOCAL-03879" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
-      <created>1614098936935</created>
-      <option name="number" value="03879" />
-      <option name="presentableId" value="LOCAL-03879" />
-      <option name="project" value="LOCAL" />
-      <updated>1614098936935</updated>
-    </task>
-    <task id="LOCAL-03880" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
-      <created>1614099053160</created>
-      <option name="number" value="03880" />
-      <option name="presentableId" value="LOCAL-03880" />
-      <option name="project" value="LOCAL" />
-      <updated>1614099053160</updated>
-    </task>
-    <task id="LOCAL-03881" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
-      <created>1614099852713</created>
-      <option name="number" value="03881" />
-      <option name="presentableId" value="LOCAL-03881" />
-      <option name="project" value="LOCAL" />
-      <updated>1614099852713</updated>
-    </task>
-    <task id="LOCAL-03882" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
-      <created>1614100462467</created>
-      <option name="number" value="03882" />
-      <option name="presentableId" value="LOCAL-03882" />
-      <option name="project" value="LOCAL" />
-      <updated>1614100462467</updated>
-    </task>
-    <task id="LOCAL-03883" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
-      <created>1614106135528</created>
-      <option name="number" value="03883" />
-      <option name="presentableId" value="LOCAL-03883" />
-      <option name="project" value="LOCAL" />
-      <updated>1614106135528</updated>
-    </task>
-    <task id="LOCAL-03884" summary="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;">
-      <created>1614112222809</created>
-      <option name="number" value="03884" />
-      <option name="presentableId" value="LOCAL-03884" />
-      <option name="project" value="LOCAL" />
-      <updated>1614112222810</updated>
+      <workItem from="1614686315599" duration="21453000" />
+      <workItem from="1614717396403" duration="107000" />
+      <workItem from="1614772490735" duration="832000" />
     </task>
     <task id="LOCAL-03885" summary="Correções gerais">
       <created>1614171279042</created>
@@ -1381,7 +1296,84 @@
       <option name="project" value="LOCAL" />
       <updated>1614703031755</updated>
     </task>
-    <option name="localTasksCounter" value="3923" />
+    <task id="LOCAL-03923" summary="Adição de ranking de tempo em canais de voz">
+      <created>1614703109749</created>
+      <option name="number" value="03923" />
+      <option name="presentableId" value="LOCAL-03923" />
+      <option name="project" value="LOCAL" />
+      <updated>1614703109749</updated>
+    </task>
+    <task id="LOCAL-03924" summary="Adição de ranking de tempo em canais de voz">
+      <created>1614703134662</created>
+      <option name="number" value="03924" />
+      <option name="presentableId" value="LOCAL-03924" />
+      <option name="project" value="LOCAL" />
+      <updated>1614703134664</updated>
+    </task>
+    <task id="LOCAL-03925" summary="Adição de ranking de tempo em canais de voz">
+      <created>1614703645229</created>
+      <option name="number" value="03925" />
+      <option name="presentableId" value="LOCAL-03925" />
+      <option name="project" value="LOCAL" />
+      <updated>1614703645231</updated>
+    </task>
+    <task id="LOCAL-03926" summary="Adição de ranking de tempo em canais de voz">
+      <created>1614703943799</created>
+      <option name="number" value="03926" />
+      <option name="presentableId" value="LOCAL-03926" />
+      <option name="project" value="LOCAL" />
+      <updated>1614703943799</updated>
+    </task>
+    <task id="LOCAL-03927" summary="Adição de ranking de tempo em canais de voz">
+      <created>1614704038758</created>
+      <option name="number" value="03927" />
+      <option name="presentableId" value="LOCAL-03927" />
+      <option name="project" value="LOCAL" />
+      <updated>1614704038758</updated>
+    </task>
+    <task id="LOCAL-03928" summary="Agora é possível adicionar emotes usando nome + arquivo">
+      <created>1614705438546</created>
+      <option name="number" value="03928" />
+      <option name="presentableId" value="LOCAL-03928" />
+      <option name="project" value="LOCAL" />
+      <updated>1614705438546</updated>
+    </task>
+    <task id="LOCAL-03929" summary="Agora é possível adicionar emotes usando nome + arquivo">
+      <created>1614706434789</created>
+      <option name="number" value="03929" />
+      <option name="presentableId" value="LOCAL-03929" />
+      <option name="project" value="LOCAL" />
+      <updated>1614706434789</updated>
+    </task>
+    <task id="LOCAL-03930" summary="Agora é possível adicionar emotes usando nome + arquivo">
+      <created>1614709415158</created>
+      <option name="number" value="03930" />
+      <option name="presentableId" value="LOCAL-03930" />
+      <option name="project" value="LOCAL" />
+      <updated>1614709415158</updated>
+    </task>
+    <task id="LOCAL-03931" summary="Agora é possível adicionar emotes usando nome + arquivo">
+      <created>1614710206459</created>
+      <option name="number" value="03931" />
+      <option name="presentableId" value="LOCAL-03931" />
+      <option name="project" value="LOCAL" />
+      <updated>1614710206459</updated>
+    </task>
+    <task id="LOCAL-03932" summary="Agora é possível adicionar emotes usando nome + arquivo">
+      <created>1614710814632</created>
+      <option name="number" value="03932" />
+      <option name="presentableId" value="LOCAL-03932" />
+      <option name="project" value="LOCAL" />
+      <updated>1614710814632</updated>
+    </task>
+    <task id="LOCAL-03933" summary="Agora é possível adicionar emotes usando nome + arquivo">
+      <created>1614710949055</created>
+      <option name="number" value="03933" />
+      <option name="presentableId" value="LOCAL-03933" />
+      <option name="project" value="LOCAL" />
+      <updated>1614710949055</updated>
+    </task>
+    <option name="localTasksCounter" value="3934" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1467,7 +1459,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no comando de casar" />
     <MESSAGE value="Adicionado nível de invocador no Shoukan" />
     <MESSAGE value="Adicionado peso aos equipamentos" />
     <MESSAGE value="Atualização na biblioteca de paginação" />
@@ -1492,7 +1483,8 @@
     <MESSAGE value="Mudança no comando de status" />
     <MESSAGE value="Adição de gatilhos de alvo nos efeitos por turno" />
     <MESSAGE value="Adição de ranking de tempo em canais de voz" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de ranking de tempo em canais de voz" />
+    <MESSAGE value="Agora é possível adicionar emotes usando nome + arquivo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Agora é possível adicionar emotes usando nome + arquivo" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
