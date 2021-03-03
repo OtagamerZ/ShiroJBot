@@ -11,7 +11,7 @@
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://209.126.8.17:5432/shiro</jdbc-url>
+      <jdbc-url>jdbc:postgresql://209.126.8.17:5432/shiro?sslmode=require</jdbc-url>
     </data-source>
   </component>
 </project>
