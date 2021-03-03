@@ -74,9 +74,9 @@ import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
@@ -556,18 +556,22 @@ public class ShiroEvents extends ListenerAdapter {
 			if (BlacklistDAO.isBlacklisted(author)) return;
 			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-			if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
-				Helper.logToChannel(author, false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + author.getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", guild);
-				guild.kick(member).queue();
+			long mins = ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), LocalDateTime.now());
+			if (gc.isAntiRaid() && mins < gc.getAntiRaidTime()) {
+				guild.kick(member).queue(s ->
+						Helper.logToChannel(
+								author,
+								false,
+								null,
+								"Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(Conta criada a " + mins + " minutos)`",
+								guild
+						), Helper::doNothing);
 				return;
 			}
 
 			MemberDAO.addMemberToDB(member);
 
-			if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(author.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < gc.getAntiRaidTime()) {
-				Helper.logToChannel(author, false, null, "Um usuário foi impedido de entrar no servidor", guild);
-				guild.kick(member).queue();
-			} else if (!gc.getMsgBoasVindas().isBlank()) {
+			if (!gc.getMsgBoasVindas().isBlank()) {
 				URL url = new URL(author.getEffectiveAvatarUrl());
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
