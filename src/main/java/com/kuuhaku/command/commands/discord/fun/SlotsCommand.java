@@ -62,11 +62,11 @@ public class SlotsCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setDescription(prizeTable());
 			eb.setTitle("Tabela de prêmios");
-			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (Valor mínimo: 100 créditos. Para utilizar as 5 casas da roleta, aposte 500 créditos ou mais)");
+			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (Valor mínimo: 250 créditos. Para utilizar as 5 casas da roleta, aposte 1000 créditos ou mais)");
 
 			channel.sendMessage(eb.build()).queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 100) {
+		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 250) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_slots-invalid-number")).queue();
 			return;
 		} else if (Main.getInfo().gameInProgress(author.getId())) {
@@ -83,7 +83,7 @@ public class SlotsCommand implements Executable {
 		}
 
 		long initialBet = bet.get();
-		boolean highbet = bet.get() >= 500;
+		boolean highbet = bet.get() >= 1000;
 		Slots slt = SlotsDAO.getSlots();
 		acc.consumeCredit(bet.get(), this.getClass());
 		AccountDAO.saveAccount(acc);
