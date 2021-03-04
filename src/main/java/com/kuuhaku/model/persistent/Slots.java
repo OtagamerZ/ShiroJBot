@@ -43,7 +43,7 @@ public class Slots {
 		GamblePool gp = new GamblePool();
 		String[] icon = {LEMON, WATERMELON, CHERRY, HEART, BELL, BAR, HORSESHOE, DIAMOND, JACKPOT};
 		for (String s : icon) {
-			gp.addGamble(new GamblePool.Gamble(s, s.equals(JACKPOT) ? 1 : 3));
+			gp.addGamble(new GamblePool.Gamble(s, s.equals(JACKPOT) ? 1 : 2));
 		}
 		slots = gp.getPool();
 	}
