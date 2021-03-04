@@ -13,12 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Agora é possível adicionar emotes usando nome + arquivo">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Aumentado o custo das apostas na roleta">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/Manager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/Argument.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/ReactionArgument.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/I18n.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/I18n.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1032,14 +1029,7 @@
       <workItem from="1614686315599" duration="21453000" />
       <workItem from="1614717396403" duration="107000" />
       <workItem from="1614772490735" duration="2783000" />
-      <workItem from="1614864315606" duration="4372000" />
-    </task>
-    <task id="LOCAL-03886" summary="Correção menor">
-      <created>1614210354434</created>
-      <option name="number" value="03886" />
-      <option name="presentableId" value="LOCAL-03886" />
-      <option name="project" value="LOCAL" />
-      <updated>1614210354434</updated>
+      <workItem from="1614864315606" duration="5377000" />
     </task>
     <task id="LOCAL-03887" summary="Adição de opção de usar cartas cromadas no Shoukan">
       <created>1614259216215</created>
@@ -1377,7 +1367,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614790108903</updated>
     </task>
-    <option name="localTasksCounter" value="3935" />
+    <task id="LOCAL-03935" summary="Aumentado o custo das apostas na roleta">
+      <created>1614875799706</created>
+      <option name="number" value="03935" />
+      <option name="presentableId" value="LOCAL-03935" />
+      <option name="project" value="LOCAL" />
+      <updated>1614875799707</updated>
+    </task>
+    <option name="localTasksCounter" value="3936" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1463,7 +1460,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adicionado nível de invocador no Shoukan" />
     <MESSAGE value="Adicionado peso aos equipamentos" />
     <MESSAGE value="Atualização na biblioteca de paginação" />
     <MESSAGE value="Correção nos jogos em equipe" />
@@ -1488,7 +1484,8 @@
     <MESSAGE value="Adição de gatilhos de alvo nos efeitos por turno" />
     <MESSAGE value="Adição de ranking de tempo em canais de voz" />
     <MESSAGE value="Agora é possível adicionar emotes usando nome + arquivo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Agora é possível adicionar emotes usando nome + arquivo" />
+    <MESSAGE value="Aumentado o custo das apostas na roleta" />
+    <option name="LAST_COMMIT_MESSAGE" value="Aumentado o custo das apostas na roleta" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

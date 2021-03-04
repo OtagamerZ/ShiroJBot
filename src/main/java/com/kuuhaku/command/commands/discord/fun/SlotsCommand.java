@@ -108,7 +108,7 @@ public class SlotsCommand implements Executable {
 
 			boolean win = false;
 			if (lemon >= 3) {
-				bet.set(Math.round(bet.get() * 0.8f));
+				bet.set(Math.round(bet.get() * 0.8f * (lemon - 2)));
 				msg = "Eita, parece que você está azedo hoje!";
 				win = true;
 
@@ -118,8 +118,8 @@ public class SlotsCommand implements Executable {
 					PStateDAO.savePoliticalState(ps);
 				}
 			} else if (watermelon >= 3) {
-				bet.set(Math.round(bet.get() * 1.5f));
-				msg = "E temos três melancias!";
+				bet.set(Math.round(bet.get() * 1.5f * (watermelon - 2)));
+				msg = "Festa das melancias!";
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
@@ -128,8 +128,8 @@ public class SlotsCommand implements Executable {
 					PStateDAO.savePoliticalState(ps);
 				}
 			} else if (cherry >= 3) {
-				bet.set(bet.get() * 2);
-				msg = "Três cerejas no bolo!";
+				bet.set(bet.get() * 2 * (cherry - 2));
+				msg = "Cerejas para o bolo!";
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
@@ -138,8 +138,8 @@ public class SlotsCommand implements Executable {
 					PStateDAO.savePoliticalState(ps);
 				}
 			} else if (heart >= 3) {
-				bet.set(Math.round(bet.get() * 2.75f));
-				msg = "Três corações apaixonados!";
+				bet.set(Math.round(bet.get() * 2.75f * (heart - 2)));
+				msg = "O amor está no ar!";
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
@@ -148,7 +148,7 @@ public class SlotsCommand implements Executable {
 					PStateDAO.savePoliticalState(ps);
 				}
 			} else if (bell >= 3) {
-				bet.set(bet.get() * 4);
+				bet.set(bet.get() * 4 * (bell - 2));
 				msg = "Toquem os sinos!";
 				win = true;
 
@@ -158,7 +158,7 @@ public class SlotsCommand implements Executable {
 					PStateDAO.savePoliticalState(ps);
 				}
 			} else if (bar >= 3) {
-				bet.set(bet.get() * 7);
+				bet.set(bet.get() * 7 * (bar - 2));
 				msg = "Chamem a polícia, temos um sortudo!";
 				win = true;
 
@@ -168,8 +168,8 @@ public class SlotsCommand implements Executable {
 					PStateDAO.savePoliticalState(ps);
 				}
 			} else if (horseshoe >= 3) {
-				bet.set(bet.get() * 12);
-				msg = "Alguem sequestrou um duende, três ferraduras de ouro!";
+				bet.set(bet.get() * 12 * (horseshoe - 2));
+				msg = "Alguém sequestrou um duende, baú de ferraduras de ouro!";
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
@@ -178,8 +178,8 @@ public class SlotsCommand implements Executable {
 					PStateDAO.savePoliticalState(ps);
 				}
 			} else if (diamond >= 3) {
-				bet.set(bet.get() * 20);
-				msg = "Assalto ao banco da sorte, temos três diamantes!";
+				bet.set(bet.get() * 20 * (diamond - 2));
+				msg = "Assalto ao banco da sorte, saque de diamantes!";
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
@@ -191,7 +191,7 @@ public class SlotsCommand implements Executable {
 
 			boolean pot = false;
 			if (jackpot >= 3) {
-				bet.set(slt.jackpot());
+				bet.set(slt.jackpot() * (jackpot - 2));
 				pot = true;
 				msg = "Impossível, " + author.getAsMention() + " detonou a loteria. **JACKPOT**!!!";
 				win = true;
@@ -276,6 +276,8 @@ public class SlotsCommand implements Executable {
 				%s%s%s -> x12
 				%s%s%s -> x20
 				%s%s%s -> JACKPOT!
+								
+				Tirar 4 ou 5 do mesmo símbolo multiplica o prêmio pelo modificador da combinação.
 				"""
 				.formatted(
 						Slots.LEMON, Slots.LEMON, Slots.LEMON,
