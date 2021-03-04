@@ -15,7 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Aumentado o custo das apostas na roleta">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1029,14 +1028,7 @@
       <workItem from="1614686315599" duration="21453000" />
       <workItem from="1614717396403" duration="107000" />
       <workItem from="1614772490735" duration="2783000" />
-      <workItem from="1614864315606" duration="5377000" />
-    </task>
-    <task id="LOCAL-03887" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614259216215</created>
-      <option name="number" value="03887" />
-      <option name="presentableId" value="LOCAL-03887" />
-      <option name="project" value="LOCAL" />
-      <updated>1614259216216</updated>
+      <workItem from="1614864315606" duration="6708000" />
     </task>
     <task id="LOCAL-03888" summary="Adição de opção de usar cartas cromadas no Shoukan">
       <created>1614259340416</created>
@@ -1374,7 +1366,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614875799707</updated>
     </task>
-    <option name="localTasksCounter" value="3936" />
+    <task id="LOCAL-03936" summary="Aumentado o custo das apostas na roleta">
+      <created>1614876566390</created>
+      <option name="number" value="03936" />
+      <option name="presentableId" value="LOCAL-03936" />
+      <option name="project" value="LOCAL" />
+      <updated>1614876566390</updated>
+    </task>
+    <option name="localTasksCounter" value="3937" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
