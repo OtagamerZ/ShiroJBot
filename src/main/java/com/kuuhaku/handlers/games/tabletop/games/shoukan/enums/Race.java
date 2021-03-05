@@ -42,7 +42,7 @@ public enum Race {
 	),
 	BESTIAL("Bestial",
 			"Inicia com 4 cartas extras",
-			"Inicia com 6 de mana",
+			"Inicia com 1 mana extra",
 			"Metade humano e metade fera, possuem uma incrível força e instintos aguçados. Não se engane, uma garota-gato ainda é mortal o suficiente para te pegar desprevenido."
 	),
 	UNDEAD("Morto-vivo",
