@@ -37,7 +37,6 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "sair",
 		aliases = {"exit", "abandonar"},
-		usage = "req_leaveclan",
 		category = Category.CLAN
 )
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})

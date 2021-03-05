@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -41,6 +42,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TeamHand extends Hand {
+	private final Pair<Race, Race> combo;
 	private final InfiniteList<User> users = new InfiniteList<>();
 	private final InfiniteList<LinkedList<Drawable>> deques = new InfiniteList<>();
 	private final InfiniteList<List<Drawable>> cards = new InfiniteList<>();
@@ -48,6 +50,7 @@ public class TeamHand extends Hand {
 
 	public TeamHand(Shoukan game, List<User> users, List<Kawaipon> kps, Side side) {
 		super(game, null, kps.get(0), side);
+		combo = Race.getCombo(kps.stream().flatMap(kp -> kp.getChampions().stream()).collect(Collectors.toList()));
 		for (int i = 0; i < users.size(); i++) {
 			Kawaipon kp = kps.get(i);
 			User user = users.get(i);
@@ -313,8 +316,15 @@ public class TeamHand extends Hand {
 		cards.removeIf(Drawable::isAvailable);
 
 		Collections.shuffle(deque);
-		int toDraw = Math.max(0, getMaxCards() - cards.size());
+		int toDraw = Math.max(0, getMaxCards() - cards.size())
+					 + (combo.getLeft() == Race.BESTIAL ? 4 : 0);
 		for (int i = 0; i < toDraw; i++) manualDraw();
+
+		switch (combo.getRight()) {
+			case MACHINE -> drawEquipment();
+			case DIVINITY -> drawChampion();
+			case MYSTICAL -> drawSpell();
+		}
 	}
 
 	public void next() {
@@ -326,6 +336,10 @@ public class TeamHand extends Hand {
 
 	public User getUser() {
 		return users.getCurrent();
+	}
+
+	public Pair<Race, Race> getCombo() {
+		return combo;
 	}
 
 	public LinkedList<Drawable> getDeque() {
