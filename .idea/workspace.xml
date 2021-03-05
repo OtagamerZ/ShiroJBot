@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado sistema de efeitos de raças.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado sistema de efeitos de raças." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1031,13 +1029,7 @@
       <workItem from="1614864315606" duration="11820000" />
       <workItem from="1614947702601" duration="14231000" />
       <workItem from="1614968208858" duration="2460000" />
-    </task>
-    <task id="LOCAL-03898" summary="Padronização dos campos de id de usuário">
-      <created>1614606287979</created>
-      <option name="number" value="03898" />
-      <option name="presentableId" value="LOCAL-03898" />
-      <option name="project" value="LOCAL" />
-      <updated>1614606287979</updated>
+      <workItem from="1614972650669" duration="140000" />
     </task>
     <task id="LOCAL-03899" summary="Padronização dos campos de id de usuário">
       <created>1614606944155</created>
@@ -1375,7 +1367,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614970618227</updated>
     </task>
-    <option name="localTasksCounter" value="3947" />
+    <task id="LOCAL-03947" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614972754408</created>
+      <option name="number" value="03947" />
+      <option name="presentableId" value="LOCAL-03947" />
+      <option name="project" value="LOCAL" />
+      <updated>1614972754408</updated>
+    </task>
+    <option name="localTasksCounter" value="3948" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
