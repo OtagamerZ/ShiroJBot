@@ -15,8 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado sistema de efeitos de raças.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1032,35 +1030,7 @@
       <workItem from="1614772490735" duration="2783000" />
       <workItem from="1614864315606" duration="11820000" />
       <workItem from="1614947702601" duration="14231000" />
-      <workItem from="1614968208858" duration="295000" />
-    </task>
-    <task id="LOCAL-03894" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614263471557</created>
-      <option name="number" value="03894" />
-      <option name="presentableId" value="LOCAL-03894" />
-      <option name="project" value="LOCAL" />
-      <updated>1614263471557</updated>
-    </task>
-    <task id="LOCAL-03895" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614286442553</created>
-      <option name="number" value="03895" />
-      <option name="presentableId" value="LOCAL-03895" />
-      <option name="project" value="LOCAL" />
-      <updated>1614286442553</updated>
-    </task>
-    <task id="LOCAL-03896" summary="Retorno do salário mensal dos suportes">
-      <created>1614343098620</created>
-      <option name="number" value="03896" />
-      <option name="presentableId" value="LOCAL-03896" />
-      <option name="project" value="LOCAL" />
-      <updated>1614343098622</updated>
-    </task>
-    <task id="LOCAL-03897" summary="Retorno do salário mensal dos suportes">
-      <created>1614348357638</created>
-      <option name="number" value="03897" />
-      <option name="presentableId" value="LOCAL-03897" />
-      <option name="project" value="LOCAL" />
-      <updated>1614348357638</updated>
+      <workItem from="1614968208858" duration="2460000" />
     </task>
     <task id="LOCAL-03898" summary="Padronização dos campos de id de usuário">
       <created>1614606287979</created>
@@ -1377,7 +1347,35 @@
       <option name="project" value="LOCAL" />
       <updated>1614965856538</updated>
     </task>
-    <option name="localTasksCounter" value="3943" />
+    <task id="LOCAL-03943" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614968609201</created>
+      <option name="number" value="03943" />
+      <option name="presentableId" value="LOCAL-03943" />
+      <option name="project" value="LOCAL" />
+      <updated>1614968609203</updated>
+    </task>
+    <task id="LOCAL-03944" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614968707125</created>
+      <option name="number" value="03944" />
+      <option name="presentableId" value="LOCAL-03944" />
+      <option name="project" value="LOCAL" />
+      <updated>1614968707125</updated>
+    </task>
+    <task id="LOCAL-03945" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614968843275</created>
+      <option name="number" value="03945" />
+      <option name="presentableId" value="LOCAL-03945" />
+      <option name="project" value="LOCAL" />
+      <updated>1614968843275</updated>
+    </task>
+    <task id="LOCAL-03946" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614970618227</created>
+      <option name="number" value="03946" />
+      <option name="presentableId" value="LOCAL-03946" />
+      <option name="project" value="LOCAL" />
+      <updated>1614970618227</updated>
+    </task>
+    <option name="localTasksCounter" value="3947" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
