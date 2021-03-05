@@ -482,16 +482,32 @@ public class Helper {
 		return Arrays.stream(string).map(String::toLowerCase).allMatch(s -> ArrayUtils.contains(compareWith, s));
 	}
 
+	public static <T> boolean containsAll(T[] value, T... compareWith) {
+		return Arrays.stream(value).allMatch(t -> ArrayUtils.contains(compareWith, t));
+	}
+
 	public static boolean containsAny(String[] string, String... compareWith) {
 		return Arrays.stream(string).map(String::toLowerCase).anyMatch(s -> ArrayUtils.contains(compareWith, s));
+	}
+
+	public static <T> boolean containsAny(T[] value, T... compareWith) {
+		return Arrays.stream(value).anyMatch(s -> ArrayUtils.contains(compareWith, s));
 	}
 
 	public static boolean equalsAll(String string, String... compareWith) {
 		return Arrays.stream(compareWith).allMatch(string::equalsIgnoreCase);
 	}
 
+	public static <T> boolean equalsAll(T value, T... compareWith) {
+		return Arrays.stream(compareWith).allMatch(value::equals);
+	}
+
 	public static boolean equalsAny(String string, String... compareWith) {
 		return Arrays.stream(compareWith).anyMatch(string::equalsIgnoreCase);
+	}
+
+	public static <T> boolean equalsAny(T value, T... compareWith) {
+		return Arrays.asList(compareWith).contains(value);
 	}
 
 	public static boolean hasPermission(Member m, Permission p, TextChannel c) {
