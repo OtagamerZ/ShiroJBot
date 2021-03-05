@@ -75,7 +75,7 @@ public class ShoukanDeck {
 						.thenComparing(Equipment::getMana).reversed()
 						.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 				)
-				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(e.getWeight(kp) - 1, new Equipment())).stream())
+				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(Math.max(e.getWeight(kp) - 1, 0), new Equipment())).stream())
 				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))
