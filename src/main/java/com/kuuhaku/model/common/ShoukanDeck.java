@@ -196,7 +196,7 @@ public class ShoukanDeck {
 		if (combo.getLeft() != Race.NONE)
 			g2d.drawImage(combo.getLeft().getIcon(), 1233, 122, 128, 128, null);
 		if (combo.getRight() != Race.NONE)
-			g2d.drawImage(combo.getRight().getIcon(), 1381, 130, 88, 88, null);
+			g2d.drawImage(combo.getRight().getIcon(), 1381, 147, 78, 78, null);
 
 		g2d.dispose();
 		return deck;
