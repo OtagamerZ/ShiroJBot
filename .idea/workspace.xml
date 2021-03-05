@@ -13,7 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado sistema de efeitos de raças." />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado sistema de efeitos de raças.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -181,17 +185,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1038,21 +1031,8 @@
       <workItem from="1614717396403" duration="107000" />
       <workItem from="1614772490735" duration="2783000" />
       <workItem from="1614864315606" duration="11820000" />
-      <workItem from="1614947702601" duration="12783000" />
-    </task>
-    <task id="LOCAL-03892" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614262960924</created>
-      <option name="number" value="03892" />
-      <option name="presentableId" value="LOCAL-03892" />
-      <option name="project" value="LOCAL" />
-      <updated>1614262960925</updated>
-    </task>
-    <task id="LOCAL-03893" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614263172625</created>
-      <option name="number" value="03893" />
-      <option name="presentableId" value="LOCAL-03893" />
-      <option name="project" value="LOCAL" />
-      <updated>1614263172625</updated>
+      <workItem from="1614947702601" duration="14231000" />
+      <workItem from="1614968208858" duration="295000" />
     </task>
     <task id="LOCAL-03894" summary="Adição de opção de usar cartas cromadas no Shoukan">
       <created>1614263471557</created>
@@ -1383,7 +1363,21 @@
       <option name="project" value="LOCAL" />
       <updated>1614965354757</updated>
     </task>
-    <option name="localTasksCounter" value="3941" />
+    <task id="LOCAL-03941" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614965659335</created>
+      <option name="number" value="03941" />
+      <option name="presentableId" value="LOCAL-03941" />
+      <option name="project" value="LOCAL" />
+      <updated>1614965659335</updated>
+    </task>
+    <task id="LOCAL-03942" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614965856538</created>
+      <option name="number" value="03942" />
+      <option name="presentableId" value="LOCAL-03942" />
+      <option name="project" value="LOCAL" />
+      <updated>1614965856538</updated>
+    </task>
+    <option name="localTasksCounter" value="3943" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
