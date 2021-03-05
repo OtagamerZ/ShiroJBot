@@ -38,7 +38,7 @@ public enum Race {
 	ELF("Elfo",
 			"+500 HP, +1 Mana",
 			"+250 HP",
-			"Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade tornam-os altamente mortais no campo de batalha."
+			"Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade torna-os altamente mortais no campo de batalha."
 	),
 	BESTIAL("Bestial",
 			"Inicia com 4 cartas extras",

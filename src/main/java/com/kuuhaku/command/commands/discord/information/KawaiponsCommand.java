@@ -258,6 +258,11 @@ public class KawaiponsCommand implements Executable {
         eb.setTitle("\uD83C\uDFB4 | Cartas Senshi (" + s + ")")
                 .setDescription((r == null ? "" : r.getDescription() + "\n\n") + "[Clique para abrir a imagem no navegador](" + url + ")")
                 .setImage(url);
+
+        if (r != null) {
+            eb.addField("Efeito primário", r.getMajorDesc(), true)
+                    .addField("Efeito secundário", r.getMinorDesc(), true);
+        }
         m.delete().queue();
 
         channel.sendMessage(eb.build()).queue();
