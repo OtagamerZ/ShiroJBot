@@ -1028,14 +1028,7 @@
       <workItem from="1614686315599" duration="21453000" />
       <workItem from="1614717396403" duration="107000" />
       <workItem from="1614772490735" duration="2783000" />
-      <workItem from="1614864315606" duration="8441000" />
-    </task>
-    <task id="LOCAL-03889" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614260306475</created>
-      <option name="number" value="03889" />
-      <option name="presentableId" value="LOCAL-03889" />
-      <option name="project" value="LOCAL" />
-      <updated>1614260306475</updated>
+      <workItem from="1614864315606" duration="11820000" />
     </task>
     <task id="LOCAL-03890" summary="Adição de opção de usar cartas cromadas no Shoukan">
       <created>1614261200633</created>
@@ -1373,7 +1366,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614879379727</updated>
     </task>
-    <option name="localTasksCounter" value="3938" />
+    <task id="LOCAL-03938" summary="Aumentado o custo das apostas na roleta">
+      <created>1614881528372</created>
+      <option name="number" value="03938" />
+      <option name="presentableId" value="LOCAL-03938" />
+      <option name="project" value="LOCAL" />
+      <updated>1614881528372</updated>
+    </task>
+    <option name="localTasksCounter" value="3939" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
