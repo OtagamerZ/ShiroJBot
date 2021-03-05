@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas GIFs do Shoukan">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado sistema de efeitos de raças.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,8 +59,8 @@
         <option value="GraphQL File" />
         <option value="JavaScript File" />
         <option value="AnnotationType" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -190,6 +190,10 @@
       <option name="HOST" value="209.126.8.17" />
       <option name="PORT" value="5005" />
       <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="5005" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
       <method v="2" />
     </configuration>
     <configuration default="true" type="Remote">
@@ -1024,104 +1028,11 @@
       <workItem from="1614686315599" duration="21453000" />
       <workItem from="1614717396403" duration="107000" />
       <workItem from="1614772490735" duration="2783000" />
-    </task>
-    <task id="LOCAL-03887" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614259216215</created>
-      <option name="number" value="03887" />
-      <option name="presentableId" value="LOCAL-03887" />
-      <option name="project" value="LOCAL" />
-      <updated>1614259216216</updated>
-    </task>
-    <task id="LOCAL-03888" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614259340416</created>
-      <option name="number" value="03888" />
-      <option name="presentableId" value="LOCAL-03888" />
-      <option name="project" value="LOCAL" />
-      <updated>1614259340416</updated>
-    </task>
-    <task id="LOCAL-03889" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614260306475</created>
-      <option name="number" value="03889" />
-      <option name="presentableId" value="LOCAL-03889" />
-      <option name="project" value="LOCAL" />
-      <updated>1614260306475</updated>
-    </task>
-    <task id="LOCAL-03890" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614261200633</created>
-      <option name="number" value="03890" />
-      <option name="presentableId" value="LOCAL-03890" />
-      <option name="project" value="LOCAL" />
-      <updated>1614261200633</updated>
-    </task>
-    <task id="LOCAL-03891" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614262043513</created>
-      <option name="number" value="03891" />
-      <option name="presentableId" value="LOCAL-03891" />
-      <option name="project" value="LOCAL" />
-      <updated>1614262043513</updated>
-    </task>
-    <task id="LOCAL-03892" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614262960924</created>
-      <option name="number" value="03892" />
-      <option name="presentableId" value="LOCAL-03892" />
-      <option name="project" value="LOCAL" />
-      <updated>1614262960925</updated>
-    </task>
-    <task id="LOCAL-03893" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614263172625</created>
-      <option name="number" value="03893" />
-      <option name="presentableId" value="LOCAL-03893" />
-      <option name="project" value="LOCAL" />
-      <updated>1614263172625</updated>
-    </task>
-    <task id="LOCAL-03894" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614263471557</created>
-      <option name="number" value="03894" />
-      <option name="presentableId" value="LOCAL-03894" />
-      <option name="project" value="LOCAL" />
-      <updated>1614263471557</updated>
-    </task>
-    <task id="LOCAL-03895" summary="Adição de opção de usar cartas cromadas no Shoukan">
-      <created>1614286442553</created>
-      <option name="number" value="03895" />
-      <option name="presentableId" value="LOCAL-03895" />
-      <option name="project" value="LOCAL" />
-      <updated>1614286442553</updated>
-    </task>
-    <task id="LOCAL-03896" summary="Retorno do salário mensal dos suportes">
-      <created>1614343098620</created>
-      <option name="number" value="03896" />
-      <option name="presentableId" value="LOCAL-03896" />
-      <option name="project" value="LOCAL" />
-      <updated>1614343098622</updated>
-    </task>
-    <task id="LOCAL-03897" summary="Retorno do salário mensal dos suportes">
-      <created>1614348357638</created>
-      <option name="number" value="03897" />
-      <option name="presentableId" value="LOCAL-03897" />
-      <option name="project" value="LOCAL" />
-      <updated>1614348357638</updated>
-    </task>
-    <task id="LOCAL-03898" summary="Padronização dos campos de id de usuário">
-      <created>1614606287979</created>
-      <option name="number" value="03898" />
-      <option name="presentableId" value="LOCAL-03898" />
-      <option name="project" value="LOCAL" />
-      <updated>1614606287979</updated>
-    </task>
-    <task id="LOCAL-03899" summary="Padronização dos campos de id de usuário">
-      <created>1614606944155</created>
-      <option name="number" value="03899" />
-      <option name="presentableId" value="LOCAL-03899" />
-      <option name="project" value="LOCAL" />
-      <updated>1614606944155</updated>
-    </task>
-    <task id="LOCAL-03900" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
-      <created>1614609894720</created>
-      <option name="number" value="03900" />
-      <option name="presentableId" value="LOCAL-03900" />
-      <option name="project" value="LOCAL" />
-      <updated>1614609894720</updated>
+      <workItem from="1614864315606" duration="11820000" />
+      <workItem from="1614947702601" duration="14231000" />
+      <workItem from="1614968208858" duration="2460000" />
+      <workItem from="1614972650669" duration="140000" />
+      <workItem from="1614975245021" duration="1000000" />
     </task>
     <task id="LOCAL-03901" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
       <created>1614610000300</created>
@@ -1361,14 +1272,112 @@
       <option name="project" value="LOCAL" />
       <updated>1614790108903</updated>
     </task>
-    <task id="LOCAL-03935" summary="Correção nas GIFs do Shoukan">
-      <created>1614809741606</created>
+    <task id="LOCAL-03935" summary="Aumentado o custo das apostas na roleta">
+      <created>1614875799706</created>
       <option name="number" value="03935" />
       <option name="presentableId" value="LOCAL-03935" />
       <option name="project" value="LOCAL" />
-      <updated>1614809741607</updated>
+      <updated>1614875799707</updated>
     </task>
-    <option name="localTasksCounter" value="3936" />
+    <task id="LOCAL-03936" summary="Aumentado o custo das apostas na roleta">
+      <created>1614876566390</created>
+      <option name="number" value="03936" />
+      <option name="presentableId" value="LOCAL-03936" />
+      <option name="project" value="LOCAL" />
+      <updated>1614876566390</updated>
+    </task>
+    <task id="LOCAL-03937" summary="Aumentado o custo das apostas na roleta">
+      <created>1614879379726</created>
+      <option name="number" value="03937" />
+      <option name="presentableId" value="LOCAL-03937" />
+      <option name="project" value="LOCAL" />
+      <updated>1614879379727</updated>
+    </task>
+    <task id="LOCAL-03938" summary="Aumentado o custo das apostas na roleta">
+      <created>1614881528372</created>
+      <option name="number" value="03938" />
+      <option name="presentableId" value="LOCAL-03938" />
+      <option name="project" value="LOCAL" />
+      <updated>1614881528372</updated>
+    </task>
+    <task id="LOCAL-03939" summary="Aumentado o custo das apostas na roleta">
+      <created>1614947757626</created>
+      <option name="number" value="03939" />
+      <option name="presentableId" value="LOCAL-03939" />
+      <option name="project" value="LOCAL" />
+      <updated>1614947757626</updated>
+    </task>
+    <task id="LOCAL-03940" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614965354757</created>
+      <option name="number" value="03940" />
+      <option name="presentableId" value="LOCAL-03940" />
+      <option name="project" value="LOCAL" />
+      <updated>1614965354757</updated>
+    </task>
+    <task id="LOCAL-03941" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614965659335</created>
+      <option name="number" value="03941" />
+      <option name="presentableId" value="LOCAL-03941" />
+      <option name="project" value="LOCAL" />
+      <updated>1614965659335</updated>
+    </task>
+    <task id="LOCAL-03942" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614965856538</created>
+      <option name="number" value="03942" />
+      <option name="presentableId" value="LOCAL-03942" />
+      <option name="project" value="LOCAL" />
+      <updated>1614965856538</updated>
+    </task>
+    <task id="LOCAL-03943" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614968609201</created>
+      <option name="number" value="03943" />
+      <option name="presentableId" value="LOCAL-03943" />
+      <option name="project" value="LOCAL" />
+      <updated>1614968609203</updated>
+    </task>
+    <task id="LOCAL-03944" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614968707125</created>
+      <option name="number" value="03944" />
+      <option name="presentableId" value="LOCAL-03944" />
+      <option name="project" value="LOCAL" />
+      <updated>1614968707125</updated>
+    </task>
+    <task id="LOCAL-03945" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614968843275</created>
+      <option name="number" value="03945" />
+      <option name="presentableId" value="LOCAL-03945" />
+      <option name="project" value="LOCAL" />
+      <updated>1614968843275</updated>
+    </task>
+    <task id="LOCAL-03946" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614970618227</created>
+      <option name="number" value="03946" />
+      <option name="presentableId" value="LOCAL-03946" />
+      <option name="project" value="LOCAL" />
+      <updated>1614970618227</updated>
+    </task>
+    <task id="LOCAL-03947" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614972754408</created>
+      <option name="number" value="03947" />
+      <option name="presentableId" value="LOCAL-03947" />
+      <option name="project" value="LOCAL" />
+      <updated>1614972754408</updated>
+    </task>
+    <task id="LOCAL-03948" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614975371725</created>
+      <option name="number" value="03948" />
+      <option name="presentableId" value="LOCAL-03948" />
+      <option name="project" value="LOCAL" />
+      <updated>1614975371726</updated>
+    </task>
+    <task id="LOCAL-03949" summary="Adicionado sistema de efeitos de raças.">
+      <created>1614975419582</created>
+      <option name="number" value="03949" />
+      <option name="presentableId" value="LOCAL-03949" />
+      <option name="project" value="LOCAL" />
+      <updated>1614975419582</updated>
+    </task>
+    <option name="localTasksCounter" value="3950" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1454,7 +1463,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adicionado peso aos equipamentos" />
     <MESSAGE value="Atualização na biblioteca de paginação" />
     <MESSAGE value="Correção nos jogos em equipe" />
     <MESSAGE value="Adição de efeitos por cartas adjacentes" />
@@ -1478,8 +1486,9 @@
     <MESSAGE value="Adição de gatilhos de alvo nos efeitos por turno" />
     <MESSAGE value="Adição de ranking de tempo em canais de voz" />
     <MESSAGE value="Agora é possível adicionar emotes usando nome + arquivo" />
-    <MESSAGE value="Correção nas GIFs do Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nas GIFs do Shoukan" />
+    <MESSAGE value="Aumentado o custo das apostas na roleta" />
+    <MESSAGE value="Adicionado sistema de efeitos de raças." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionado sistema de efeitos de raças." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

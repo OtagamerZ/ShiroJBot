@@ -25,7 +25,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -344,7 +343,7 @@ public class BuyCardCommand implements Executable {
 					} else if (kp.getEquipments().stream().filter(e -> e.getTier() == 4).count() >= 1 && em.getCard().getTier() == 4) {
 						channel.sendMessage("❌ | Você já possui 1 equipamento tier 4!").queue();
 						return;
-					} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() + em.getCard().getTier() > 24) {
+					} else if (kp.getEvoWeight() + em.getCard().getWeight(kp) > 24) {
 						channel.sendMessage("❌ | Você não possui mais espaços para equipamentos, venda um antes de comprar este!").queue();
 						return;
 					}
@@ -382,7 +381,7 @@ public class BuyCardCommand implements Executable {
 					} else if (kp.getEquipments().stream().filter(e -> e.getTier() == 4).count() >= 1 && em.getCard().getTier() == 4) {
 						channel.sendMessage("❌ | Você já possui 1 equipamento tier 4!").queue();
 						return;
-					} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() + em.getCard().getTier() > 24) {
+					} else if (kp.getEvoWeight() + em.getCard().getWeight(kp) > 24) {
 						channel.sendMessage("❌ | Você não possui mais espaços para equipamentos, venda um antes de comprar este!").queue();
 						return;
 					}

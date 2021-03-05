@@ -21,12 +21,14 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.DeckStash;
 import com.kuuhaku.model.persistent.Kawaipon;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -73,7 +75,7 @@ public class ShoukanDeck {
 						.thenComparing(Equipment::getMana).reversed()
 						.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 				)
-				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(e.getTier() - 1, new Equipment())).stream())
+				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(Math.max(e.getWeight(kp) - 1, 0), new Equipment())).stream())
 				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))
@@ -117,6 +119,13 @@ public class ShoukanDeck {
 			Profile.printCenteredString(StringUtils.abbreviate(f.getCard().getName(), 15), 225, 1769, 1159 + (419 * i), g2d);
 		}
 
+		Pair<Race, Race> combo = kp.getCombo();
+		if (combo.getLeft() != Race.NONE)
+			g2d.drawImage(combo.getLeft().getIcon(), 1233, 122, 128, 128, null);
+		if (combo.getRight() != Race.NONE)
+			g2d.drawImage(combo.getRight().getIcon(), 1381, 136, 100, 100, null);
+
+		g2d.dispose();
 		return deck;
 	}
 
@@ -139,7 +148,7 @@ public class ShoukanDeck {
 						.thenComparing(Equipment::getMana).reversed()
 						.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 				)
-				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(e.getTier() - 1, new Equipment())).stream())
+				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(e.getWeight(ds) - 1, new Equipment())).stream())
 				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))
@@ -183,6 +192,13 @@ public class ShoukanDeck {
 			Profile.printCenteredString(StringUtils.abbreviate(f.getCard().getName(), 15), 225, 1769, 1159 + (419 * i), g2d);
 		}
 
+		Pair<Race, Race> combo = ds.getCombo();
+		if (combo.getLeft() != Race.NONE)
+			g2d.drawImage(combo.getLeft().getIcon(), 1233, 122, 128, 128, null);
+		if (combo.getRight() != Race.NONE)
+			g2d.drawImage(combo.getRight().getIcon(), 1381, 147, 78, 78, null);
+
+		g2d.dispose();
 		return deck;
 	}
 }
