@@ -25,7 +25,6 @@ import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.common.RankedDuo;
 import com.kuuhaku.model.enums.RankedTier;
@@ -284,7 +283,7 @@ public class TenthSecondEvent implements Job {
 				if (kp.getChampions().size() < 30) {
 					p1Channel.sendMessage("❌ | Você está com um deck que possui menos que 30 cartas. Você precisa corrigir antes de poder aceitar a partida.").queue();
 					return;
-				} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() > 24) {
+				} else if (kp.getEvoWeight() > 24) {
 					p1Channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, você precisa corrigir antes de poder aceitar a partida.").queue();
 					return;
 				}
@@ -355,7 +354,7 @@ public class TenthSecondEvent implements Job {
 				if (kp.getChampions().size() < 30) {
 					p1Channel.sendMessage("❌ | Você está com um deck que possui menos que 30 cartas. Você precisa corrigir antes de poder aceitar a partida.").queue();
 					return;
-				} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() > 24) {
+				} else if (kp.getEvoWeight() > 24) {
 					p1Channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, você precisa corrigir antes de poder aceitar a partida.").queue();
 					return;
 				}

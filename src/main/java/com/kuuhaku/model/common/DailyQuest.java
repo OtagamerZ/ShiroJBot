@@ -39,7 +39,7 @@ public class DailyQuest {
 		Random r = new Random(seed);
 		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
 		this.chosenAnime = animes.get(Helper.rng(animes.size(), r, true));
-		this.chosenRace = Race.values()[Helper.rng(Race.values().length, r, true)];
+		this.chosenRace = Race.validValues()[Helper.rng(Race.validValues().length, r, true)];
 		for (DailyTask task : tasks) {
 			this.tasks.put(task,
 					switch (task) {

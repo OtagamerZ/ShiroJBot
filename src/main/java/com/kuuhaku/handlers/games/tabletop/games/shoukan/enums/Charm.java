@@ -30,7 +30,7 @@ public enum Charm {
 	DOUBLETAP("Toque duplo"),
 	DOPPELGANGER("Clone"),
 	SOULLINK("Vínculo espiritual"),
-	SPELL("Sortilégio"),
+	SPELL("Magia"),
 	ARMORPIERCING("Penetração de armadura");
 
 	private final String name;
@@ -44,6 +44,7 @@ public enum Charm {
 	}
 
 	public BufferedImage getIcon() {
+		if (this == SPELL) return null;
 		try {
 			return ImageIO.read(Objects.requireNonNull(Charm.class.getClassLoader().getResourceAsStream("shoukan/charm/" + name().toLowerCase() + ".png")));
 		} catch (IOException e) {
