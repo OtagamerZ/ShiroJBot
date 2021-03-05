@@ -184,7 +184,7 @@ public class TradeCardCommand implements Executable {
 					if (Collections.frequency(target.getEquipments(), e) == 3) {
 						channel.sendMessage("❌ | Ele/ela já possui 3 cópias desse equipamento!").queue();
 						return;
-					} else if (target.getEquipments().stream().mapToInt(Equipment::getTier).sum() + e.getTier() > 24) {
+					} else if (target.getEvoWeight() + e.getWeight(target) > 24) {
 						channel.sendMessage("❌ | Ele/ela não possui mais espaços para equipamentos no deck!").queue();
 						return;
 					} else if (target.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
@@ -226,7 +226,7 @@ public class TradeCardCommand implements Executable {
 					if (Collections.frequency(kp.getEquipments(), e) == 3) {
 						channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
 						return;
-					} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() + e.getTier() > 24) {
+					} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
 						channel.sendMessage("❌ | Parece que você não possui mais espaços para equipamentos no deck!").queue();
 						return;
 					} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
@@ -449,7 +449,7 @@ public class TradeCardCommand implements Executable {
 					if (Collections.frequency(kp.getEquipments(), e) == 3) {
 						channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
 						return;
-					} else if (kp.getEquipments().stream().mapToInt(Equipment::getTier).sum() + e.getTier() > 24) {
+					} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
 						channel.sendMessage("❌ | Parece que você não possui mais espaços para equipamentos no deck!").queue();
 						return;
 					} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
@@ -653,7 +653,7 @@ public class TradeCardCommand implements Executable {
 					if (Collections.frequency(target.getEquipments(), e) == 3) {
 						channel.sendMessage("❌ | Ele/ela já possui 3 cópias desse equipamento!").queue();
 						return;
-					} else if (target.getEquipments().stream().mapToInt(Equipment::getTier).sum() + e.getTier() > 24) {
+					} else if (target.getEvoWeight() + e.getWeight(target) > 24) {
 						channel.sendMessage("❌ | Ele/ela não possui mais espaços para equipamentos no deck!").queue();
 						return;
 					} else if (target.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {

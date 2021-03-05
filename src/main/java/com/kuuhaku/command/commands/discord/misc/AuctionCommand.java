@@ -182,6 +182,12 @@ public class AuctionCommand implements Executable {
                                         if (offerer.getEquipments().contains(obj) && !evt.getAuthor().getId().equals(author.getId())) {
                                             channel.sendMessage("❌ | Parece que você já possui esse equipamento!").queue();
                                             return;
+                                        } else if (offerer.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && ((Equipment) obj).getTier() == 4) {
+                                            channel.sendMessage("❌ | Você já possui 1 equipamento tier 4!").queue();
+                                            return;
+                                        } else if (offerer.getEvoWeight() + ((Equipment) obj).getWeight(offerer) > 24) {
+                                            channel.sendMessage("❌ | Você não possui mais espaços para equipamentos no deck.").queue();
+                                            return;
                                         }
                                     }
                                     default -> {
