@@ -21,8 +21,10 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.OnDelete;
@@ -127,6 +129,10 @@ public class Kawaipon {
 		return equipments;
 	}
 
+	public int getEvoWeight() {
+		return equipments.stream().mapToInt(e -> e.getWeight(this)).sum();
+	}
+
 	public void setEquipments(List<Equipment> equipments) {
 		this.equipments = equipments;
 	}
@@ -187,5 +193,9 @@ public class Kawaipon {
 			this.destinyDraw = "";
 		else
 			this.destinyDraw = Arrays.stream(destinyDraw).map(String::valueOf).collect(Collectors.joining(","));
+	}
+
+	public Pair<Race, Race> getCombo() {
+		return Race.getCombo(champions);
 	}
 }

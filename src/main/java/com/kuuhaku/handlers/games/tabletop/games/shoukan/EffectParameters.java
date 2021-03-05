@@ -107,7 +107,7 @@ public class EffectParameters {
 	public Map<Race, Integer> countTypesInGraveyard(Side side) {
 		Map<Race, Integer> types = new HashMap<>();
 
-		for (Race race : Race.values()) {
+		for (Race race : Race.validValues()) {
 			types.put(race, (int) graveyard.get(side).stream()
 					.filter(d -> d instanceof Champion)
 					.map(d -> (Champion) d)

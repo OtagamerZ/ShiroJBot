@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -43,6 +44,7 @@ import java.util.stream.Collectors;
 public class Hand {
 	private final Shoukan game;
 	private final User user;
+	private final Pair<Race, Race> combo;
 	private final LinkedList<Drawable> deque;
 	private final List<Drawable> cards = new ArrayList<>();
 	private final List<Drawable> destinyDeck = new ArrayList<>();
@@ -62,12 +64,15 @@ public class Hand {
 		if (user == null) {
 			this.game = game;
 			this.user = null;
+			this.combo = null;
 			this.deque = null;
 			this.side = null;
 			this.baseHp = 0;
 			this.baseManaPerTurn = 0;
 			return;
 		}
+
+		combo = Race.getCombo(kp.getChampions());
 		deque = new LinkedList<>() {{
 			addAll(kp.getChampions());
 		}};
@@ -76,6 +81,19 @@ public class Hand {
 				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 		);
 		deque.addAll(kp.getEquipments());
+
+		if (combo.getLeft() == Race.DIVINITY) {
+			for (Drawable d : deque) {
+				if (d instanceof Champion) {
+					Champion c = (Champion) d;
+					c.setMana(Math.max(c.getMana() - 1, 1));
+				} else {
+					Equipment e = (Equipment) d;
+					e.setMana(Math.max(e.getMana() - 1, 0));
+				}
+			}
+		}
+
 		deque.addAll(kp.getFields());
 
 		Account acc = AccountDAO.getAccount(user.getId());
@@ -87,6 +105,7 @@ public class Hand {
 
 		int baseHp;
 		int baseManaPerTurn;
+		int maxCards;
 		if (game.getCustom() != null) {
 			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
 			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
@@ -157,12 +176,34 @@ public class Hand {
 			deque.remove(drawable);
 		}
 
-		this.baseHp = hp = baseHp;
-		this.baseManaPerTurn = manaPerTurn = baseManaPerTurn;
+		int hpMod = switch (combo.getLeft()) {
+			case HUMAN -> 1500;
+			case ELF -> 500;
+			case DEMON -> -2000;
+			default -> 0;
+		} + switch (combo.getRight()) {
+			case HUMAN, ELF -> 250;
+			case DEMON -> -500;
+			default -> 0;
+		};
+
+		int manaMod = switch (combo.getLeft()) {
+			case HUMAN -> -1;
+			case ELF -> 1;
+			case DEMON -> 2;
+			default -> 0;
+		};
+
+		this.baseHp = hp = baseHp + hpMod;
+		this.baseManaPerTurn = manaPerTurn = baseManaPerTurn + manaMod;
+		this.maxCards = maxCards
+						+ (combo.getLeft() == Race.CREATURE ? 2 : 0)
+						+ (combo.getRight() == Race.CREATURE ? 1 : 0);
 		redrawHand();
 	}
 
 	public Hand(Shoukan game, User user, Clan cl, Side side) {
+		combo = Race.getCombo(cl.getDeck().getChampions());
 		deque = new LinkedList<>() {{
 			addAll(cl.getDeck().getChampions());
 		}};
@@ -171,6 +212,19 @@ public class Hand {
 				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 		);
 		deque.addAll(cl.getDeck().getEquipments());
+
+		if (combo.getLeft() == Race.DIVINITY) {
+			for (Drawable d : deque) {
+				if (d instanceof Champion) {
+					Champion c = (Champion) d;
+					c.setMana(Math.max(c.getMana() - 1, 1));
+				} else {
+					Equipment e = (Equipment) d;
+					e.setMana(Math.max(e.getMana() - 1, 0));
+				}
+			}
+		}
+
 		deque.addAll(cl.getDeck().getFields());
 		Account acc = AccountDAO.getAccount(user.getId());
 		for (Drawable d : deque) d.setAcc(acc);
@@ -181,6 +235,7 @@ public class Hand {
 
 		int baseHp;
 		int baseManaPerTurn;
+		int maxCards;
 		if (game.getCustom() != null) {
 			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
 			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
@@ -255,8 +310,29 @@ public class Hand {
 			drawable.setClan(cl);
 		}
 
-		this.baseHp = hp = baseHp;
-		this.baseManaPerTurn = manaPerTurn = baseManaPerTurn;
+		int hpMod = switch (combo.getLeft()) {
+			case HUMAN -> 1500;
+			case ELF -> 500;
+			case DEMON -> -2000;
+			default -> 0;
+		} + switch (combo.getRight()) {
+			case HUMAN, ELF -> 250;
+			case DEMON -> -500;
+			default -> 0;
+		};
+
+		int manaMod = switch (combo.getLeft()) {
+			case HUMAN -> -1;
+			case ELF -> 1;
+			case DEMON -> 2;
+			default -> 0;
+		};
+
+		this.baseHp = hp = baseHp + hpMod;
+		this.baseManaPerTurn = manaPerTurn = baseManaPerTurn + manaMod;
+		this.maxCards = maxCards
+						+ (combo.getLeft() == Race.CREATURE ? 2 : 0)
+						+ (combo.getRight() == Race.CREATURE ? 1 : 0);
 		redrawHand();
 	}
 
@@ -408,8 +484,15 @@ public class Hand {
 		cards.removeIf(Drawable::isAvailable);
 
 		Collections.shuffle(deque);
-		int toDraw = Math.max(0, maxCards - cards.size());
+		int toDraw = Math.max(0, maxCards - cards.size())
+					 + (combo.getLeft() == Race.BESTIAL ? 4 : 0);
 		for (int i = 0; i < toDraw; i++) manualDraw();
+
+		switch (combo.getRight()) {
+			case MACHINE -> drawEquipment();
+			case DIVINITY -> drawChampion();
+			case MYSTICAL -> drawSpell();
+		}
 	}
 
 	public Shoukan getGame() {
@@ -418,6 +501,10 @@ public class Hand {
 
 	public User getUser() {
 		return user;
+	}
+
+	public Pair<Race, Race> getCombo() {
+		return combo;
 	}
 
 	public LinkedList<Drawable> getDeque() {

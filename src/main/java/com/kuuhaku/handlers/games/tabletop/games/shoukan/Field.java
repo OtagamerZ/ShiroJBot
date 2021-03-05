@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
@@ -86,54 +85,11 @@ public class Field implements Drawable, Cloneable {
 				BufferedImage icon = r.getIcon();
 				assert icon != null;
 				g2d.setColor(colors[i]);
-				g2d.drawImage(icon, 20, 59 + (26 * i), null);
+				g2d.drawImage(icon, 20, 59 + (26 * i), 23, 23, null);
 				float modif = getModifiers().optFloat(r.name(), 1f) - 1;
 				Profile.drawOutlinedText((modif > 0 ? "+" : "") + Helper.toPercent(modif), 45, 80 + (26 * i), g2d);
 				i++;
 			}
-		}
-
-		if (!available) {
-			g2d.setColor(new Color(0, 0, 0, 150));
-			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-		}
-
-		g2d.dispose();
-
-		return bi;
-	}
-
-	public BufferedImage drawCard() {
-		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = bi.createGraphics();
-		g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
-
-		g2d.drawImage(FrameColor.PINK.getFrontArena(), 0, 0, null);
-		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
-
-		Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
-
-		Color[] colors = {
-				Color.decode("#9013fe"), //HUMAN
-				Color.decode("#7ed321"), //ELF
-				Color.decode("#ffe0af"), //BESTIAL
-				Color.decode("#f5a623"), //MACHINE
-				Color.decode("#f8e71c"), //DIVINITY
-				Color.decode("#4fe4c3"), //MYSTICAL
-				Color.decode("#8b572a"), //CREATURE
-				Color.white,             //SPIRIT
-				Color.decode("#d0021b"), //DEMON
-				Color.decode("#fd88fd")  //UNDEAD
-		};
-		int i = 0;
-		for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
-			BufferedImage icon = r.getIcon();
-			assert icon != null;
-			g2d.setColor(colors[i]);
-			g2d.drawImage(icon, 20, 59 + (26 * i), null);
-			float modif = getModifiers().optFloat(r.name(), 1f) - 1;
-			Profile.drawOutlinedText((modif > 0 ? "+" : "") + Helper.toPercent(modif), 45, 80 + (26 * i), g2d);
-			i++;
 		}
 
 		if (!available) {
