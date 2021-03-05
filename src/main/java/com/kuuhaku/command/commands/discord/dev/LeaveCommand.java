@@ -39,8 +39,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Command(
-		name = "sair",
-		aliases = {"leave"},
+		name = "leave",
 		usage = "req_id",
 		category = Category.DEV
 )

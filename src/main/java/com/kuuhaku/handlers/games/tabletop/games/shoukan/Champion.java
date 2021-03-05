@@ -93,9 +93,9 @@ public class Champion implements Drawable, Cloneable {
 	private transient Race altRace = null;
 	private transient int mAtk = 0;
 	private transient int mDef = 0;
-	private transient int mMana = 0;
 	private transient int redAtk = 0;
 	private transient int redDef = 0;
+	private transient int efctMana = 0;
 	private transient int efctAtk = 0;
 	private transient int efctDef = 0;
 	private transient int stun = 0;
@@ -140,10 +140,10 @@ public class Champion implements Drawable, Cloneable {
 
 			if (fakeCard != null) {
 				Profile.printCenteredString(StringUtils.abbreviate(fakeCard.getCard().getName(), 16), 181, 38, 32, g2d);
-				g2d.drawImage(fakeCard.getRace().getIcon(), 11, 12, null);
+				g2d.drawImage(fakeCard.getRace().getIcon(), 11, 12, 23, 23, null);
 			} else {
 				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 16), 181, 38, 32, g2d);
-				g2d.drawImage(getRace().getIcon(), 11, 12, null);
+				g2d.drawImage(getRace().getIcon(), 11, 12, 23, 23, null);
 			}
 
 			g2d.setColor(Color.cyan);
@@ -318,11 +318,15 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getMana() {
-		return mana + mMana;
+		return mana + efctMana;
 	}
 
-	public void setModMana(int mana) {
-		this.mMana = mana;
+	public void setMana(int mana) {
+		this.mana = mana;
+	}
+
+	public void setEfctMana(int mana) {
+		this.efctMana = mana;
 	}
 
 	public int getBaseAtk() {
@@ -392,7 +396,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setModAtk(int mAtk) {
-		this.mAtk = mAtk;
+		this.mAtk += mAtk;
 	}
 
 	public int getFinDef() {
@@ -404,7 +408,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setModDef(int mDef) {
-		this.mDef = mDef;
+		this.mDef += mDef;
 	}
 
 	public void resetAttribs() {
@@ -530,7 +534,6 @@ public class Champion implements Drawable, Cloneable {
 		fakeCard = null;
 		mAtk = 0;
 		mDef = 0;
-		mMana = 0;
 		altAtk = atk;
 		altDef = def;
 		altDescription = null;
@@ -538,6 +541,7 @@ public class Champion implements Drawable, Cloneable {
 		altRace = null;
 		redAtk = 0;
 		redDef = 0;
+		efctMana = 0;
 		efctAtk = 0;
 		efctDef = 0;
 		stun = 0;
@@ -574,7 +578,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setModDodge(double dodge) {
-		this.dodge = dodge;
+		this.dodge += dodge;
 	}
 
 	@Override
