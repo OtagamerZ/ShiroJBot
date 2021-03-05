@@ -237,19 +237,21 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public int getWeight(Kawaipon kp) {
-		return switch (kp.getCombo().getLeft()) {
-			case MACHINE -> charm != Charm.SPELL ? tier - 1 : tier;
-			case MYSTICAL -> charm == Charm.SPELL ? tier - 1 : tier;
-			default -> tier;
-		};
+		return Math.max(
+				switch (kp.getCombo().getLeft()) {
+					case MACHINE -> charm != Charm.SPELL ? tier - 1 : tier;
+					case MYSTICAL -> charm == Charm.SPELL ? tier - 1 : tier;
+					default -> tier;
+				}, 1);
 	}
 
 	public int getWeight(DeckStash ds) {
-		return switch (ds.getCombo().getLeft()) {
-			case MACHINE -> charm != Charm.SPELL ? tier - 1 : tier;
-			case MYSTICAL -> charm == Charm.SPELL ? tier - 1 : tier;
-			default -> tier;
-		};
+		return Math.max(
+				switch (ds.getCombo().getLeft()) {
+					case MACHINE -> charm != Charm.SPELL ? tier - 1 : tier;
+					case MYSTICAL -> charm == Charm.SPELL ? tier - 1 : tier;
+					default -> tier;
+				}, 1);
 	}
 
 	public Charm getCharm() {
