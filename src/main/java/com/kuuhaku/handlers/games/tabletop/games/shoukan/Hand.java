@@ -194,11 +194,11 @@ public class Hand {
 			default -> 0;
 		};
 
-		this.baseHp = hp = baseHp + hpMod;
-		this.baseManaPerTurn = manaPerTurn = baseManaPerTurn + manaMod;
-		this.maxCards = maxCards
-						+ (combo.getLeft() == Race.CREATURE ? 2 : 0)
-						+ (combo.getRight() == Race.CREATURE ? 1 : 0);
+		this.baseHp = hp = Math.max(baseHp + hpMod, 1);
+		this.baseManaPerTurn = manaPerTurn = Math.max(baseManaPerTurn + manaMod, 0);
+		this.maxCards = Math.max(maxCards
+								 + (combo.getLeft() == Race.CREATURE ? 2 : 0)
+								 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1);
 		redrawHand();
 	}
 
@@ -328,11 +328,11 @@ public class Hand {
 			default -> 0;
 		};
 
-		this.baseHp = hp = baseHp + hpMod;
-		this.baseManaPerTurn = manaPerTurn = baseManaPerTurn + manaMod;
-		this.maxCards = maxCards
-						+ (combo.getLeft() == Race.CREATURE ? 2 : 0)
-						+ (combo.getRight() == Race.CREATURE ? 1 : 0);
+		this.baseHp = hp = Math.max(baseHp + hpMod, 1);
+		this.baseManaPerTurn = manaPerTurn = Math.max(baseManaPerTurn + manaMod, 0);
+		this.maxCards = Math.max(maxCards
+								 + (combo.getLeft() == Race.CREATURE ? 2 : 0)
+								 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1);
 		redrawHand();
 	}
 
