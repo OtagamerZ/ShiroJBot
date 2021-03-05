@@ -1933,6 +1933,9 @@ public class Shoukan extends GlobalGame {
 				User u = getCurrent();
 
 				AtomicReference<Hand> h = new AtomicReference<>(hands.get(current));
+				h.get().decreaseSuppression();
+				h.get().decreaseLockTime();
+				h.get().decreaseNullTime();
 				h.get().getCards().removeIf(d -> !d.isAvailable());
 				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
 				for (int i = 0; i < slots.size(); i++) {
@@ -1962,7 +1965,6 @@ public class Shoukan extends GlobalGame {
 
 				phase = Phase.PLAN;
 				h.set(hands.get(current));
-				h.get().decreaseSuppression();
 				slots = arena.getSlots().get(current);
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
@@ -1979,8 +1981,6 @@ public class Shoukan extends GlobalGame {
 					if (postCombat()) return;
 				}
 
-				h.get().decreaseLockTime();
-				h.get().decreaseNullTime();
 				h.get().addMana(h.get().getManaPerTurn());
 				AtomicBoolean shownHand = new AtomicBoolean(false);
 				moveLock = true;
@@ -2172,6 +2172,9 @@ public class Shoukan extends GlobalGame {
 					User u = getCurrent();
 
 					AtomicReference<Hand> h = new AtomicReference<>(hands.get(current));
+					h.get().decreaseSuppression();
+					h.get().decreaseLockTime();
+					h.get().decreaseNullTime();
 					h.get().getCards().removeIf(d -> !d.isAvailable());
 					List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
 					for (int i = 0; i < slots.size(); i++) {
@@ -2201,7 +2204,6 @@ public class Shoukan extends GlobalGame {
 
 					phase = Phase.PLAN;
 					h.set(hands.get(current));
-					h.get().decreaseSuppression();
 					slots = arena.getSlots().get(current);
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
@@ -2218,8 +2220,6 @@ public class Shoukan extends GlobalGame {
 						if (postCombat()) return;
 					}
 
-					h.get().decreaseLockTime();
-					h.get().decreaseNullTime();
 					h.get().addMana(h.get().getManaPerTurn());
 					AtomicBoolean shownHand = new AtomicBoolean(false);
 					draw = true;
