@@ -27,6 +27,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -38,6 +39,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,17 +96,24 @@ public class DeckStashCommand implements Executable {
 						.average()
 						.orElse(0);
 
+				Pair<Race, Race> combo = ds.getCombo();
 				eb.addField(
 						"`Slot %s | %sreserva %s`".formatted(j, prefix, j),
 						"""
 								:crossed_swords: | Cartas Senshi: %s
+								:large_orange_diamond: | Efeito primário: %s (%s)
+								:small_orange_diamond: | Efeito secundário: %s (%s)
 								:shield: | Peso EvoGear: %s
 								:thermometer: | Custo médio de mana: %s
 																	
 								%s
 								""".formatted(
 								ds.getChampions().size(),
-								ds.getEquipments().stream().mapToInt(Equipment::getTier).sum(),
+								combo.getLeft(),
+								combo.getLeft().getMajorDesc(),
+								combo.getRight(),
+								combo.getRight().getMinorDesc(),
+								ds.getEvoWeight(),
 								Helper.round(manaCost, 2),
 								"""
 										:abacus: | Classes
