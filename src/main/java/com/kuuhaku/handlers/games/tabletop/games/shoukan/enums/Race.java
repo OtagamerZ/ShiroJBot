@@ -142,14 +142,20 @@ public enum Race {
 		}
 
 		Race major = counts.entrySet().stream()
-				.max(Comparator.comparingInt(Map.Entry::getValue))
+				.max(Comparator
+						.<Map.Entry<Race, Integer>>comparingInt(Map.Entry::getValue)
+						.thenComparing(e -> e.getKey().getName(), String.CASE_INSENSITIVE_ORDER)
+				)
 				.map(Map.Entry::getKey)
 				.orElse(NONE);
 
 		counts.remove(major);
 
 		Race minor = counts.entrySet().stream()
-				.max(Comparator.comparingInt(Map.Entry::getValue))
+				.max(Comparator
+						.<Map.Entry<Race, Integer>>comparingInt(Map.Entry::getValue)
+						.thenComparing(e -> e.getKey().getName(), String.CASE_INSENSITIVE_ORDER)
+				)
 				.map(Map.Entry::getKey)
 				.orElse(NONE);
 
