@@ -281,7 +281,7 @@ public class Profile {
 			AtomicInteger yOffset = new AtomicInteger();
 
 			for (Triple<Integer, Integer, BufferedImage> frame : frames) {
-				BufferedImage canvas = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				BufferedImage canvas = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
 
 				if (frame.getRight().getWidth() > canvas.getWidth())

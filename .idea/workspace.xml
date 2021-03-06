@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado sistema de efeitos de raças.">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas GIFs do Shoukan">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1033,6 +1033,7 @@
       <workItem from="1614968208858" duration="2460000" />
       <workItem from="1614972650669" duration="140000" />
       <workItem from="1614975245021" duration="1000000" />
+      <workItem from="1615001247887" duration="218000" />
     </task>
     <task id="LOCAL-03901" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
       <created>1614610000300</created>
