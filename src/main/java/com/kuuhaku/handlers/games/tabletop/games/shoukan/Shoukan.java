@@ -1983,15 +1983,11 @@ public class Shoukan extends GlobalGame {
 				User u = getCurrent();
 
 				AtomicReference<Hand> h = new AtomicReference<>(hands.get(current));
-				h.get().decreaseSuppression();
-				h.get().decreaseLockTime();
-				h.get().decreaseNullTime();
 				h.get().getCards().removeIf(d -> !d.isAvailable());
 				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
-						if (c.getStun() > 0) c.reduceStun();
 						c.setAvailable(c.getStun() == 0);
 
 						c.resetAttribs();
@@ -2015,10 +2011,15 @@ public class Shoukan extends GlobalGame {
 
 				phase = Phase.PLAN;
 				h.set(hands.get(current));
+				h.get().decreaseSuppression();
+				h.get().decreaseLockTime();
+				h.get().decreaseNullTime();
 				slots = arena.getSlots().get(current);
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
+						if (c.getStun() > 0) c.reduceStun();
+
 						if (c.hasEffect() && effectLock == 0) {
 							c.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, i, current, Duelists.of(c, i, null, -1), channel));
 							if (postCombat()) return;
@@ -2224,15 +2225,11 @@ public class Shoukan extends GlobalGame {
 					User u = getCurrent();
 
 					AtomicReference<Hand> h = new AtomicReference<>(hands.get(current));
-					h.get().decreaseSuppression();
-					h.get().decreaseLockTime();
-					h.get().decreaseNullTime();
 					h.get().getCards().removeIf(d -> !d.isAvailable());
 					List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
-							if (c.getStun() > 0) c.reduceStun();
 							c.setAvailable(c.getStun() == 0);
 
 							c.resetAttribs();
@@ -2256,10 +2253,15 @@ public class Shoukan extends GlobalGame {
 
 					phase = Phase.PLAN;
 					h.set(hands.get(current));
+					h.get().decreaseSuppression();
+					h.get().decreaseLockTime();
+					h.get().decreaseNullTime();
 					slots = arena.getSlots().get(current);
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
+							if (c.getStun() > 0) c.reduceStun();
+
 							if (c.hasEffect() && effectLock == 0) {
 								c.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, i, current, Duelists.of(c, i, null, -1), channel));
 								if (postCombat()) return;
