@@ -13,12 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos perfis animados">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__club_minnced_opus_java_pom_1_0_4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__club_minnced_opus_java_pom_1_0_4.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções em efeitos de raça">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1051,14 +1048,7 @@
       <workItem from="1615001247887" duration="218000" />
       <workItem from="1615059853904" duration="2099000" />
       <workItem from="1615066224642" duration="943000" />
-      <workItem from="1615140658661" duration="686000" />
-    </task>
-    <task id="LOCAL-03902" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
-      <created>1614610460882</created>
-      <option name="number" value="03902" />
-      <option name="presentableId" value="LOCAL-03902" />
-      <option name="project" value="LOCAL" />
-      <updated>1614610460882</updated>
+      <workItem from="1615140658661" duration="4471000" />
     </task>
     <task id="LOCAL-03903" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
       <created>1614610664953</created>
@@ -1396,7 +1386,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615060162997</updated>
     </task>
-    <option name="localTasksCounter" value="3951" />
+    <task id="LOCAL-03951" summary="Correções em efeitos de raça">
+      <created>1615141416727</created>
+      <option name="number" value="03951" />
+      <option name="presentableId" value="LOCAL-03951" />
+      <option name="project" value="LOCAL" />
+      <updated>1615141416728</updated>
+    </task>
+    <option name="localTasksCounter" value="3952" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1482,7 +1479,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nos jogos em equipe" />
     <MESSAGE value="Adição de efeitos por cartas adjacentes" />
     <MESSAGE value="Correção nos efeitos de assistência" />
     <MESSAGE value="Adição do comando para ver informações do emote" />
@@ -1507,7 +1503,8 @@
     <MESSAGE value="Aumentado o custo das apostas na roleta" />
     <MESSAGE value="Adicionado sistema de efeitos de raças." />
     <MESSAGE value="Correção nos perfis animados" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nos perfis animados" />
+    <MESSAGE value="Correções em efeitos de raça" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções em efeitos de raça" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

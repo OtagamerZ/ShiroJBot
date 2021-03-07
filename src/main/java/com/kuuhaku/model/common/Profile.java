@@ -281,15 +281,16 @@ public class Profile {
 			AtomicInteger yOffset = new AtomicInteger();
 
 			for (Triple<Integer, Integer, BufferedImage> frame : frames) {
-				BufferedImage canvas = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+				BufferedImage canvas = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				BufferedImage img = frame.getRight();
 				Graphics2D g2d = canvas.createGraphics();
 
-				if (frame.getRight().getWidth() > canvas.getWidth())
-					xOffset.set(-(frame.getRight().getWidth() - canvas.getWidth()) / 2);
-				if (frame.getRight().getHeight() > canvas.getHeight())
-					yOffset.set(-(frame.getRight().getHeight() - canvas.getHeight()) / 2);
+				if (img.getWidth() > WIDTH)
+					xOffset.set(img.getWidth() - WIDTH / -2);
+				if (img.getHeight() > HEIGHT)
+					yOffset.set(img.getHeight() - HEIGHT / -2);
 
-				g2d.drawImage(frame.getRight(), xOffset.get(), yOffset.get(), null);
+				g2d.drawImage(img, xOffset.get(), yOffset.get(), null);
 				g2d.drawImage(overlay, 0, 0, null);
 
 				g2d.dispose();
