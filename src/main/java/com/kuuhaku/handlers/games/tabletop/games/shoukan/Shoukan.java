@@ -953,12 +953,12 @@ public class Shoukan extends GlobalGame {
 			}
 			hPower = Math.round(
 					his.getFinDef() *
-					(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 			);
 
-			if (getCombos().get(next).getLeft() == Race.UNDEAD) {
+			if (getCombos().get(next).getLeft() == Race.SPIRIT) {
 				hPower *= (1 + Helper.prcnt(arena.getGraveyard().get(next).size(), 50));
-			} else if (getCombos().get(next).getRight() == Race.UNDEAD)
+			} else if (getCombos().get(next).getRight() == Race.SPIRIT)
 				hPower *= (1 + Helper.prcnt(arena.getGraveyard().get(next).size(), 100));
 		} else if (!his.getCard().getId().equals("DECOY")) {
 			hPower = Math.round(
@@ -1279,12 +1279,12 @@ public class Shoukan extends GlobalGame {
 			}
 			hPower = Math.round(
 					his.getFinDef() *
-					(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 			);
 
-			if (getCombos().get(current).getLeft() == Race.UNDEAD) {
+			if (getCombos().get(current).getLeft() == Race.SPIRIT) {
 				hPower *= (1 + Helper.prcnt(arena.getGraveyard().get(current).size(), 50));
-			} else if (getCombos().get(current).getRight() == Race.UNDEAD)
+			} else if (getCombos().get(current).getRight() == Race.SPIRIT)
 				hPower *= (1 + Helper.prcnt(arena.getGraveyard().get(current).size(), 100));
 		} else if (!his.getCard().getId().equals("DECOY")) {
 			hPower = Math.round(
