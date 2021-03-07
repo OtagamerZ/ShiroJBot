@@ -286,9 +286,9 @@ public class Profile {
 				Graphics2D g2d = canvas.createGraphics();
 
 				if (img.getWidth() > WIDTH)
-					xOffset.set(img.getWidth() - WIDTH / -2);
+					xOffset.set((img.getWidth() - WIDTH) / -2);
 				if (img.getHeight() > HEIGHT)
-					yOffset.set(img.getHeight() - HEIGHT / -2);
+					yOffset.set((img.getHeight() - HEIGHT) / -2);
 
 				g2d.drawImage(img, xOffset.get(), yOffset.get(), null);
 				g2d.drawImage(overlay, 0, 0, null);
