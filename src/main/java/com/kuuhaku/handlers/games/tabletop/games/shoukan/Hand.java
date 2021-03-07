@@ -83,15 +83,17 @@ public class Hand {
 		deque.addAll(kp.getEquipments());
 
 		if (combo.getLeft() == Race.DIVINITY) {
-			for (Drawable d : deque) {
-				if (d instanceof Champion) {
-					Champion c = (Champion) d;
-					c.setMana(Math.max(c.getMana() - 1, 1));
-				} else {
-					Equipment e = (Equipment) d;
-					e.setMana(Math.max(e.getMana() - 1, 0));
-				}
-			}
+			deque.stream()
+					.distinct()
+					.forEach(d -> {
+						if (d instanceof Champion) {
+							Champion c = (Champion) d;
+							c.setMana(Math.max(c.getMana() - 1, 1));
+						} else {
+							Equipment e = (Equipment) d;
+							e.setMana(Math.max(e.getMana() - 1, 0));
+						}
+					});
 		}
 
 		deque.addAll(kp.getFields());
@@ -214,15 +216,17 @@ public class Hand {
 		deque.addAll(cl.getDeck().getEquipments());
 
 		if (combo.getLeft() == Race.DIVINITY) {
-			for (Drawable d : deque) {
-				if (d instanceof Champion) {
-					Champion c = (Champion) d;
-					c.setMana(Math.max(c.getMana() - 1, 1));
-				} else {
-					Equipment e = (Equipment) d;
-					e.setMana(Math.max(e.getMana() - 1, 0));
-				}
-			}
+			deque.stream()
+					.distinct()
+					.forEach(d -> {
+						if (d instanceof Champion) {
+							Champion c = (Champion) d;
+							c.setMana(Math.max(c.getMana() - 1, 1));
+						} else {
+							Equipment e = (Equipment) d;
+							e.setMana(Math.max(e.getMana() - 1, 0));
+						}
+					});
 		}
 
 		deque.addAll(cl.getDeck().getFields());

@@ -4,6 +4,8 @@
       <root url="file://$USER_HOME$/.gradle/caches/modules-2/files-2.1/club.minnced/opus-java/1.0.4/596995aaf2f5b5091c4d251fdc11fa62680cc59e/opus-java-1.0.4.pom" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/club.minnced/opus-java/1.0.4/da39a3ee5e6b4b0d3255bfef95601890afd80709/opus-java-1.0.4-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

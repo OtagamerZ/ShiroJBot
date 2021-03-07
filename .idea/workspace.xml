@@ -13,8 +13,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas GIFs do Shoukan">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos perfis animados">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__club_minnced_opus_java_pom_1_0_4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__club_minnced_opus_java_pom_1_0_4.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,13 +124,13 @@
     <property name="extract.method.default.visibility" value="private" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/gifs" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../icarusdiscordbot" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="debugger.hotswap" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -183,6 +187,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -215,7 +230,7 @@
     <option name="myConnectionType" value="NONE" />
   </component>
   <component name="SvnConfiguration">
-    <configuration>C:\Users\DEV202\AppData\Roaming\Subversion</configuration>
+    <configuration>C:\Users\yagog\AppData\Roaming\Subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -1034,13 +1049,9 @@
       <workItem from="1614972650669" duration="140000" />
       <workItem from="1614975245021" duration="1000000" />
       <workItem from="1615001247887" duration="218000" />
-    </task>
-    <task id="LOCAL-03901" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
-      <created>1614610000300</created>
-      <option name="number" value="03901" />
-      <option name="presentableId" value="LOCAL-03901" />
-      <option name="project" value="LOCAL" />
-      <updated>1614610000300</updated>
+      <workItem from="1615059853904" duration="2099000" />
+      <workItem from="1615066224642" duration="943000" />
+      <workItem from="1615140658661" duration="686000" />
     </task>
     <task id="LOCAL-03902" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
       <created>1614610460882</created>
@@ -1378,7 +1389,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614975419582</updated>
     </task>
-    <option name="localTasksCounter" value="3950" />
+    <task id="LOCAL-03950" summary="Correção nos perfis animados">
+      <created>1615060162994</created>
+      <option name="number" value="03950" />
+      <option name="presentableId" value="LOCAL-03950" />
+      <option name="project" value="LOCAL" />
+      <updated>1615060162997</updated>
+    </task>
+    <option name="localTasksCounter" value="3951" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1464,7 +1482,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Atualização na biblioteca de paginação" />
     <MESSAGE value="Correção nos jogos em equipe" />
     <MESSAGE value="Adição de efeitos por cartas adjacentes" />
     <MESSAGE value="Correção nos efeitos de assistência" />
@@ -1489,7 +1506,8 @@
     <MESSAGE value="Agora é possível adicionar emotes usando nome + arquivo" />
     <MESSAGE value="Aumentado o custo das apostas na roleta" />
     <MESSAGE value="Adicionado sistema de efeitos de raças." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionado sistema de efeitos de raças." />
+    <MESSAGE value="Correção nos perfis animados" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nos perfis animados" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
