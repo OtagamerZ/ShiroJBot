@@ -138,22 +138,4 @@ public class AccountDAO {
 			em.close();
 		}
 	}
-
-	public static void addSupportTokens() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT a FROM Account a ORDER BY a.balance DESC", Account.class);
-		q.setLockMode(LockModeType.PESSIMISTIC_WRITE);
-
-		em.getTransaction().begin();
-		em.createQuery("""
-				UPDATE Account a 
-				SET a.thanksTokens = CASE 
-					WHEN (a.thanksTokens > 3) THEN 3
-					ELSE a.thanksTokens
-				END + 1
-				""").executeUpdate();
-		em.getTransaction().commit();
-		em.close();
-	}
 }
