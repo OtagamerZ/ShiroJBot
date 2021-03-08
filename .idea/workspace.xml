@@ -13,20 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções em efeitos de raça">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria em alguns efeitos de raça">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AuctionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AuctionCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SynthesizeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/DeckStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/DeckStash.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,17 +186,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1061,28 +1041,9 @@
       <workItem from="1615066224642" duration="943000" />
       <workItem from="1615140658661" duration="4471000" />
       <workItem from="1615206131007" duration="598000" />
-      <workItem from="1615206997848" duration="6560000" />
-    </task>
-    <task id="LOCAL-03903" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
-      <created>1614610664953</created>
-      <option name="number" value="03903" />
-      <option name="presentableId" value="LOCAL-03903" />
-      <option name="project" value="LOCAL" />
-      <updated>1614610664953</updated>
-    </task>
-    <task id="LOCAL-03904" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
-      <created>1614610730228</created>
-      <option name="number" value="03904" />
-      <option name="presentableId" value="LOCAL-03904" />
-      <option name="project" value="LOCAL" />
-      <updated>1614610730228</updated>
-    </task>
-    <task id="LOCAL-03905" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
-      <created>1614610762851</created>
-      <option name="number" value="03905" />
-      <option name="presentableId" value="LOCAL-03905" />
-      <option name="project" value="LOCAL" />
-      <updated>1614610762851</updated>
+      <workItem from="1615206997848" duration="7414000" />
+      <workItem from="1615215373943" duration="327000" />
+      <workItem from="1615219408982" duration="1042000" />
     </task>
     <task id="LOCAL-03906" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
       <created>1614615244943</created>
@@ -1406,7 +1367,28 @@
       <option name="project" value="LOCAL" />
       <updated>1615141416728</updated>
     </task>
-    <option name="localTasksCounter" value="3952" />
+    <task id="LOCAL-03952" summary="Melhoria em alguns efeitos de raça">
+      <created>1615213826838</created>
+      <option name="number" value="03952" />
+      <option name="presentableId" value="LOCAL-03952" />
+      <option name="project" value="LOCAL" />
+      <updated>1615213826840</updated>
+    </task>
+    <task id="LOCAL-03953" summary="Melhoria em alguns efeitos de raça">
+      <created>1615214249988</created>
+      <option name="number" value="03953" />
+      <option name="presentableId" value="LOCAL-03953" />
+      <option name="project" value="LOCAL" />
+      <updated>1615214249988</updated>
+    </task>
+    <task id="LOCAL-03954" summary="Melhoria em alguns efeitos de raça">
+      <created>1615214420789</created>
+      <option name="number" value="03954" />
+      <option name="presentableId" value="LOCAL-03954" />
+      <option name="project" value="LOCAL" />
+      <updated>1615214420789</updated>
+    </task>
+    <option name="localTasksCounter" value="3955" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1492,7 +1474,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de efeitos por cartas adjacentes" />
     <MESSAGE value="Correção nos efeitos de assistência" />
     <MESSAGE value="Adição do comando para ver informações do emote" />
     <MESSAGE value="Ranked duo agora exige um time fechado" />
@@ -1517,7 +1498,8 @@
     <MESSAGE value="Adicionado sistema de efeitos de raças." />
     <MESSAGE value="Correção nos perfis animados" />
     <MESSAGE value="Correções em efeitos de raça" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções em efeitos de raça" />
+    <MESSAGE value="Melhoria em alguns efeitos de raça" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria em alguns efeitos de raça" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
