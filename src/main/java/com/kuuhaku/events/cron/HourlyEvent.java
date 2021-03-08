@@ -93,7 +93,6 @@ public class HourlyEvent implements Job {
 		StockMarketDAO.removeZeroInvestments();
 
 		if (LocalDateTime.now().getHour() % 6 == 0) {
-			AccountDAO.addSupportTokens();
 
 			if (LocalDateTime.now().getHour() % 12 == 0) {
 				RelayBlockList.clearBlockedThumbs();
