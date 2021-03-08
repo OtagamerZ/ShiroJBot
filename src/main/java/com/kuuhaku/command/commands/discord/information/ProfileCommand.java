@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.Profile;
@@ -48,7 +47,7 @@ public class ProfileCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
-		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
+
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-profile")).queue(m -> {
 			try {
 				if (acc.hasAnimatedBg() && Helper.getFileType(acc.getBg()).contains("gif")) {

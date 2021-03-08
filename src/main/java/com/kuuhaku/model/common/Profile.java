@@ -215,15 +215,15 @@ public class Profile {
 
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(m.getId());
 		if (mmr.getTier() != RankedTier.UNRANKED) {
-			BufferedImage finalImg = new BufferedImage(983, 600, BufferedImage.TYPE_INT_ARGB);
-			g2d = finalImg.createGraphics();
+			BufferedImage img = new BufferedImage(983, 600, BufferedImage.TYPE_INT_ARGB);
+			g2d = img.createGraphics();
 
 			g2d.drawImage(bi, 0, 0, null);
 			g2d.drawImage(mmr.getTier().getBanner(), 0, 0, null);
 
 			g2d.dispose();
 
-			bi = finalImg;
+			bi = img;
 		}
 
 		return bi;
@@ -279,16 +279,14 @@ public class Profile {
 
 			for (Triple<Integer, Integer, BufferedImage> frame : frames) {
 				BufferedImage canvas = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-				BufferedImage img = frame.getRight();
 				Graphics2D g2d = canvas.createGraphics();
 
-				g2d.drawImage(img, 0, 0, null);
+				g2d.drawImage(clipRoundEdges(frame.getRight()), 0, 0, null);
 				g2d.drawImage(overlay, 0, 0, null);
 
 				g2d.dispose();
 
-				toDraw.add(Triple.of(frame.getLeft(), frame.getMiddle(), clipRoundEdges(canvas)));
+				toDraw.add(Triple.of(frame.getLeft(), frame.getMiddle(), canvas));
 			}
 
 			GifSequenceWriter writer = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
