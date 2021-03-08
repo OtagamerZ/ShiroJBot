@@ -15,8 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria em alguns efeitos de raça">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1042,14 +1040,7 @@
       <workItem from="1615206131007" duration="598000" />
       <workItem from="1615206997848" duration="7414000" />
       <workItem from="1615215373943" duration="327000" />
-      <workItem from="1615219408982" duration="2078000" />
-    </task>
-    <task id="LOCAL-03907" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
-      <created>1614617741046</created>
-      <option name="number" value="03907" />
-      <option name="presentableId" value="LOCAL-03907" />
-      <option name="project" value="LOCAL" />
-      <updated>1614617741046</updated>
+      <workItem from="1615219408982" duration="2970000" />
     </task>
     <task id="LOCAL-03908" summary="Adição de cascateamento nas operações de remoção de tabelas com referências">
       <created>1614617941166</created>
@@ -1387,7 +1378,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615220487987</updated>
     </task>
-    <option name="localTasksCounter" value="3956" />
+    <task id="LOCAL-03956" summary="Melhoria em alguns efeitos de raça">
+      <created>1615221550192</created>
+      <option name="number" value="03956" />
+      <option name="presentableId" value="LOCAL-03956" />
+      <option name="project" value="LOCAL" />
+      <updated>1615221550192</updated>
+    </task>
+    <option name="localTasksCounter" value="3957" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
