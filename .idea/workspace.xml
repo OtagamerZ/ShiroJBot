@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria em alguns efeitos de raça">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria em alguns efeitos de raça" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1042,13 +1040,7 @@
       <workItem from="1615215373943" duration="327000" />
       <workItem from="1615219408982" duration="2970000" />
       <workItem from="1615222481689" duration="2990000" />
-    </task>
-    <task id="LOCAL-03909" summary="Correções menores">
-      <created>1614625835189</created>
-      <option name="number" value="03909" />
-      <option name="presentableId" value="LOCAL-03909" />
-      <option name="project" value="LOCAL" />
-      <updated>1614625835190</updated>
+      <workItem from="1615227463649" duration="258000" />
     </task>
     <task id="LOCAL-03910" summary="Correções menores">
       <created>1614626071511</created>
@@ -1386,7 +1378,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615222788768</updated>
     </task>
-    <option name="localTasksCounter" value="3958" />
+    <task id="LOCAL-03958" summary="Melhoria em alguns efeitos de raça">
+      <created>1615227570496</created>
+      <option name="number" value="03958" />
+      <option name="presentableId" value="LOCAL-03958" />
+      <option name="project" value="LOCAL" />
+      <updated>1615227570497</updated>
+    </task>
+    <option name="localTasksCounter" value="3959" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

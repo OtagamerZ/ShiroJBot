@@ -72,7 +72,7 @@ public class Profile {
 		Account acc = AccountDAO.getAccount(m.getId());
 
 		try {
-			avatar = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl())), 200, 200);
+			avatar = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl() + "?size=512")), 200, 200);
 		} catch (NullPointerException | IOException e) {
 			avatar = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg")), 200, 200);
 		}
