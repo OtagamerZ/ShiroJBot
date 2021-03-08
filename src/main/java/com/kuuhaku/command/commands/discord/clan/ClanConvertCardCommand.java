@@ -98,22 +98,13 @@ public class ClanConvertCardCommand implements Executable {
 		switch (ct) {
 			case KAWAIPON -> {
 				KawaiponCard kc = new KawaiponCard(tc.getCard(), false);
+				Champion c = (Champion) tc;
 				if (!kp.getCards().contains(kc)) {
 					channel.sendMessage("❌ | Você não possui essa carta.").queue();
 					return;
 				}
 
-				Champion c = (Champion) tc;
-				if (c.isFusion()) {
-					channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
-					return;
-				} else if (cl.getDeck().getChampions().stream().filter(c::equals).count() == 3) {
-					channel.sendMessage("❌ | Seu clã só pode ter no máximo 3 cópias de cada carta no deck.").queue();
-					return;
-				} else if (cl.getDeck().getChampions().size() == 36) {
-					channel.sendMessage("❌ | Seu clã só pode ter no máximo 36 cartas senshi no deck.").queue();
-					return;
-				}
+				if (cl.getDeck().checkChampion(c, channel)) return;
 
 				c.setAcc(acc);
 				EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -144,22 +135,13 @@ public class ClanConvertCardCommand implements Executable {
 				);
 			}
 			case EVOGEAR -> {
+				Equipment e = (Equipment) tc;
 				if (kp.getEquipment(tc.getCard()) == null) {
 					channel.sendMessage("❌ | Você não possui esse equipamento.").queue();
 					return;
 				}
 
-				Equipment e = (Equipment) tc;
-				if (cl.getDeck().getEquipments().stream().filter(e::equals).count() == 3) {
-					channel.sendMessage("❌ | Seu clã só pode ter no máximo 3 cópias de cada equipamento no deck.").queue();
-					return;
-				} else if (cl.getDeck().getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
-					channel.sendMessage("❌ | Seu clã já possui 1 equipamento tier 4!").queue();
-					return;
-				} else if (cl.getDeck().getEvoWeight() + e.getWeight(cl.getDeck()) > 24) {
-					channel.sendMessage("❌ | Seu clã não possui mais espaços para equipamentos no deck.").queue();
-					return;
-				}
+				if (cl.getDeck().checkEquipment(e, channel)) return;
 
 				e.setAcc(acc);
 				EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -190,19 +172,13 @@ public class ClanConvertCardCommand implements Executable {
 				);
 			}
 			case FIELD -> {
+				Field f = (Field) tc;
 				if (kp.getField(tc.getCard()) == null) {
 					channel.sendMessage("❌ | Você não possui esse campo.").queue();
 					return;
 				}
 
-				Field f = (Field) tc;
-				if (cl.getDeck().getFields().stream().filter(f::equals).count() == 3) {
-					channel.sendMessage("❌ | Seu clã só pode ter no máximo 3 cópias de cada campo no deck.").queue();
-					return;
-				} else if (cl.getDeck().getFields().size() >= 3) {
-					channel.sendMessage("❌ | Seu clã só pode ter no máximo 3 cartas de campo no deck.").queue();
-					return;
-				}
+				if (cl.getDeck().checkField(f, channel)) return;
 
 				f.setAcc(acc);
 				EmbedBuilder eb = new ColorlessEmbedBuilder();
