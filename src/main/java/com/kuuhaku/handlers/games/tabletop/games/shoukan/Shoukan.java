@@ -232,6 +232,7 @@ public class Shoukan extends GlobalGame {
 		h.addMana(h.getManaPerTurn());
 		if (combos.get(current).getRight() == Race.BESTIAL)
 			h.addMana(1);
+
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		AtomicReference<String> previous = new AtomicReference<>("");
 		channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
@@ -2015,6 +2016,7 @@ public class Shoukan extends GlobalGame {
 				h.get().decreaseLockTime();
 				h.get().decreaseNullTime();
 				slots = arena.getSlots().get(current);
+
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
@@ -2027,14 +2029,24 @@ public class Shoukan extends GlobalGame {
 						}
 					}
 				}
+
 				if (eot.size() > 0) {
 					applyEot(EffectTrigger.BEFORE_TURN, current, -1);
 					if (postCombat()) return;
 				}
 
 				h.get().addMana(h.get().getManaPerTurn());
-				if (getRound() <= 1 && combos.get(current).getRight() == Race.BESTIAL)
-					h.get().addMana(1);
+				switch (combos.get(current).getRight()) {
+					case BESTIAL -> {
+						if (getRound() <= 1)
+							h.get().addMana(1);
+					}
+					case ELF -> {
+						if (getRound() > 1 && getRound() - (h.get().getSide() == Side.TOP ? 1 : 0) % 3 == 0)
+							h.get().addMana(1);
+					}
+				}
+
 				AtomicBoolean shownHand = new AtomicBoolean(false);
 				moveLock = true;
 				channel.sendMessage(u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention() + " (turno " + getRound() + ")")
@@ -2257,6 +2269,7 @@ public class Shoukan extends GlobalGame {
 					h.get().decreaseLockTime();
 					h.get().decreaseNullTime();
 					slots = arena.getSlots().get(current);
+
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
@@ -2269,14 +2282,24 @@ public class Shoukan extends GlobalGame {
 							}
 						}
 					}
+
 					if (eot.size() > 0) {
 						applyEot(EffectTrigger.BEFORE_TURN, current, -1);
 						if (postCombat()) return;
 					}
 
 					h.get().addMana(h.get().getManaPerTurn());
-					if (getRound() <= 1 && combos.get(current).getRight() == Race.BESTIAL)
-						h.get().addMana(1);
+					switch (combos.get(current).getRight()) {
+						case BESTIAL -> {
+							if (getRound() <= 1)
+								h.get().addMana(1);
+						}
+						case ELF -> {
+							if (getRound() > 1 && getRound() - (h.get().getSide() == Side.TOP ? 1 : 0) % 3 == 0)
+								h.get().addMana(1);
+						}
+					}
+
 					AtomicBoolean shownHand = new AtomicBoolean(false);
 					draw = true;
 					moveLock = true;

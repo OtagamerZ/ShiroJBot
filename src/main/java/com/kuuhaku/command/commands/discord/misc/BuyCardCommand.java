@@ -337,16 +337,7 @@ public class BuyCardCommand implements Executable {
 
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-					if (Collections.frequency(kp.getEquipments(), em.getCard()) == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
-						return;
-					} else if (kp.getEquipments().stream().filter(e -> e.getTier() == 4).count() >= 1 && em.getCard().getTier() == 4) {
-						channel.sendMessage("❌ | Você já possui 1 equipamento tier 4!").queue();
-						return;
-					} else if (kp.getEvoWeight() + em.getCard().getWeight(kp) > 24) {
-						channel.sendMessage("❌ | Você não possui mais espaços para equipamentos, venda um antes de comprar este!").queue();
-						return;
-					}
+					if (kp.checkEquipment(em.getCard(), channel)) return;
 
 					kp.addEquipment(em.getCard());
 					KawaiponDAO.saveKawaipon(kp);
@@ -375,16 +366,7 @@ public class BuyCardCommand implements Executable {
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-					if (Collections.frequency(kp.getEquipments(), em.getCard()) == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
-						return;
-					} else if (kp.getEquipments().stream().filter(e -> e.getTier() == 4).count() >= 1 && em.getCard().getTier() == 4) {
-						channel.sendMessage("❌ | Você já possui 1 equipamento tier 4!").queue();
-						return;
-					} else if (kp.getEvoWeight() + em.getCard().getWeight(kp) > 24) {
-						channel.sendMessage("❌ | Você não possui mais espaços para equipamentos, venda um antes de comprar este!").queue();
-						return;
-					}
+					if (kp.checkEquipment(em.getCard(), channel)) return;
 
 					kp.addEquipment(em.getCard());
 					KawaiponDAO.saveKawaipon(kp);
@@ -405,13 +387,7 @@ public class BuyCardCommand implements Executable {
 
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-					if (Collections.frequency(kp.getFields(), fm.getCard()) == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 cópias dessa arena!").queue();
-						return;
-					} else if (kp.getFields().size() == 3) {
-						channel.sendMessage("❌ | Você já possui 3 arenas, venda uma antes de comprar esta!").queue();
-						return;
-					}
+					if (kp.checkField(fm.getCard(), channel)) return;
 
 					kp.addField(fm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
@@ -440,13 +416,7 @@ public class BuyCardCommand implements Executable {
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-					if (Collections.frequency(kp.getFields(), fm.getCard()) == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 cópias dessa arena!").queue();
-						return;
-					} else if (kp.getFields().size() == 3) {
-						channel.sendMessage("❌ | Você já possui 3 arenas, venda uma antes de comprar esta!").queue();
-						return;
-					}
+					if (kp.checkField(fm.getCard(), channel)) return;
 
 					kp.addField(fm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
