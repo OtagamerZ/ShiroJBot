@@ -1601,6 +1601,19 @@ public class Helper {
 		return newImage;
 	}
 
+	public static BufferedImage scaleAndCenterImage(BufferedImage image, int w, int h) {
+		image = scaleImage(image, w, h);
+
+		int offX = Math.min((image.getWidth() - w) / -2, 0);
+		int offY = Math.min((image.getHeight() - h) / -2, 0);
+
+		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics2D = newImage.createGraphics();
+		graphics2D.drawImage(image, offX, offY, null);
+
+		return newImage;
+	}
+
 	public static BufferedImage removeAlpha(BufferedImage input) {
 		BufferedImage bi = new BufferedImage(input.getWidth(), input.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -1667,7 +1680,7 @@ public class Helper {
 				g2d.drawImage(image, metadata.getInt("imageLeftPosition"), metadata.getInt("imageTopPosition"), null);
 
 				g2d.dispose();
-				frms.add(Triple.of(metadata.getInt("disposalMethod"), metadata.getInt("delayTime"), scaleImage(master, width, height)));
+				frms.add(Triple.of(metadata.getInt("disposalMethod"), metadata.getInt("delayTime"), scaleAndCenterImage(master, width, height)));
 				i++;
 			} catch (IndexOutOfBoundsException e) {
 				break;

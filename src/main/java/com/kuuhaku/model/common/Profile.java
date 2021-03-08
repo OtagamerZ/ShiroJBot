@@ -72,9 +72,9 @@ public class Profile {
 		Account acc = AccountDAO.getAccount(m.getId());
 
 		try {
-			avatar = Helper.scaleImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl())), 200, 200);
+			avatar = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl())), 200, 200);
 		} catch (NullPointerException | IOException e) {
-			avatar = Helper.scaleImage(ImageIO.read(Helper.getImage("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg")), 200, 200);
+			avatar = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg")), 200, 200);
 		}
 
 		BufferedImage bi = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -94,29 +94,18 @@ public class Profile {
 			}
 		}
 		try {
-			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(acc.getBg())), bi.getWidth(), bi.getHeight());
-
-			if (bg.getWidth() > bi.getWidth())
-				xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
-			if (bg.getHeight() > bi.getHeight())
-				yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
+			BufferedImage bg = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage(acc.getBg())), bi.getWidth(), bi.getHeight());
 
 			if (!acc.hasAnimatedBg() || !Helper.getFileType(acc.getBg()).contains("gif"))
-				g2d.drawImage(bg, xOffset, yOffset, null);
+				g2d.drawImage(bg, 0, 0, null);
 			if (main == null)
 				main = Helper.reverseColor(Helper.colorThief(acc.getBg()));
 		} catch (IOException e) {
-			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
+			BufferedImage bg = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
-			if (bg.getWidth() > bi.getWidth())
-				xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
-			if (bg.getHeight() > bi.getHeight())
-				yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
-
-			if (!acc.hasAnimatedBg() || !Helper.getFileType(acc.getBg()).contains("gif"))
-				g2d.drawImage(bg, xOffset, yOffset, null);
+			g2d.drawImage(bg, xOffset, yOffset, null);
 			if (main == null)
-				main = Helper.reverseColor(Helper.colorThief("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg"));
+				main = Helper.reverseColor(Helper.colorThief(bg));
 		}
 
 		Color lvlBar;
