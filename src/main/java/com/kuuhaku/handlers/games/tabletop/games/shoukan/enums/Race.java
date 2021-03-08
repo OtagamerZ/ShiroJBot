@@ -31,17 +31,17 @@ import java.util.stream.Collectors;
 
 public enum Race {
 	HUMAN("Humano",
-			"+1500 HP, -1 Mana",
-			"+250 HP",
+			"+1000 HP",
+			"+500 HP",
 			"Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia."
 	),
 	ELF("Elfo",
-			"+500 HP, +1 Mana",
-			"+250 HP",
+			"+1 Mana",
+			"+1 Mana a cada 3 turnos",
 			"Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade torna-os altamente mortais no campo de batalha."
 	),
 	BESTIAL("Bestial",
-			"Inicia com 4 cartas extras",
+			"+1 Espaço para equipamento tier 4",
 			"Inicia com 1 ponto de mana extra",
 			"Metade humano e metade fera, possuem uma incrível força e instintos aguçados. Não se engane, uma garota-gato ainda é mortal o suficiente para te pegar desprevenido."
 	),
