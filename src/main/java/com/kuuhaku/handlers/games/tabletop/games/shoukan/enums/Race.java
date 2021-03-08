@@ -41,7 +41,7 @@ public enum Race {
 			"Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade torna-os altamente mortais no campo de batalha."
 	),
 	BESTIAL("Bestial",
-			"+1 Espaço para equipamento tier 4",
+			"+1 Espaço para EvoGear tier 4",
 			"Inicia com 1 ponto de mana extra",
 			"Metade humano e metade fera, possuem uma incrível força e instintos aguçados. Não se engane, uma garota-gato ainda é mortal o suficiente para te pegar desprevenido."
 	),
