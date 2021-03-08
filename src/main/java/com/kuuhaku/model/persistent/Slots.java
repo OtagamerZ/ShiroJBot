@@ -73,4 +73,8 @@ public class Slots {
 	public static String getSlot() {
 		return slots[Helper.rng(slots.length, true)];
 	}
+
+	public static String[] getSlots() {
+		return slots;
+	}
 }
