@@ -23,6 +23,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.LazyCollection;
@@ -33,7 +34,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Entity
 @Table(name = "kawaipon")
@@ -145,6 +145,10 @@ public class Kawaipon {
 		this.equipments.remove(equipment);
 	}
 
+	public Field getField(Card card) {
+		return fields.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
+	}
+
 	public List<Field> getFields() {
 		return fields;
 	}
@@ -161,26 +165,8 @@ public class Kawaipon {
 		this.fields.remove(field);
 	}
 
-	public Field getField(Card card) {
-		return fields.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
-	}
-
 	public List<Drawable> getDrawables() {
 		return ListUtils.union(ListUtils.union(champions, equipments), fields);
-	}
-
-	public int getCollectionHash() {
-		List<String> cards = Stream.of(this.cards, champions)
-				.flatMap(Collection::stream)
-				.map(o -> {
-					if (o instanceof KawaiponCard) return ((KawaiponCard) o).getCard();
-					else return ((Champion) o).getCard();
-				})
-				.map(Card::getId)
-				.sorted(String::compareTo)
-				.collect(Collectors.toList());
-
-		return cards.hashCode();
 	}
 
 	public List<Integer> getDestinyDraw() {
@@ -197,5 +183,157 @@ public class Kawaipon {
 
 	public Pair<Race, Race> getCombo() {
 		return Race.getCombo(champions);
+	}
+
+	public int getMaxCopies(Equipment eq) {
+		if (eq.getTier() == 4) {
+			return getCombo().getLeft() == Race.BESTIAL ? 2 : 1;
+		} else {
+			return getCombo().getLeft() == Race.BESTIAL ? 4 : 3;
+		}
+	}
+
+	public boolean checkChampion(Champion c, TextChannel channel) {
+		if (c.isFusion()) {
+			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
+			return true;
+		} else if (getChampions().stream().filter(c::equals).count() == 3) {
+			channel.sendMessage("❌ | Você só pode ter no máximo 3 cópias de cada carta no deck.").queue();
+			return true;
+		} else if (getChampions().size() == 36) {
+			channel.sendMessage("❌ | Você só pode ter no máximo 36 cartas senshi no deck.").queue();
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean checkChampion(Kawaipon kp, Champion c, TextChannel channel) {
+		if (c.isFusion()) {
+			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
+			return true;
+		} else if (kp.getChampions().stream().filter(c::equals).count() == 3) {
+			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 3 cópias de cada carta no deck.").queue();
+			return true;
+		} else if (kp.getChampions().size() == 36) {
+			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 36 cartas senshi no deck.").queue();
+			return true;
+		}
+		return false;
+	}
+
+	public int checkChampionError(Champion c) {
+		if (c.isFusion()) {
+			return 1;
+		} else if (getChampions().stream().filter(c::equals).count() == 3) {
+			return 2;
+		} else if (getChampions().size() == 36) {
+			return 3;
+		}
+		return 0;
+	}
+
+	public static int checkChampionError(Kawaipon kp, Champion c) {
+		if (c.isFusion()) {
+			return 1;
+		} else if (kp.getChampions().stream().filter(c::equals).count() == 3) {
+			return 2;
+		} else if (kp.getChampions().size() == 36) {
+			return 3;
+		}
+		return 0;
+	}
+
+	public boolean checkEquipment(Equipment e, TextChannel channel) {
+		int max = getMaxCopies(e);
+		if (getEquipments().stream().filter(e::equals).count() == max) {
+			channel.sendMessage("❌ | Você só pode ter no máximo " + max + " cópias de cada equipamento no deck.").queue();
+			return true;
+		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
+			channel.sendMessage("❌ | Você não possui mais espaços para equipamentos tier 4!").queue();
+			return true;
+		} else if (getEvoWeight() + e.getWeight(this) > 24) {
+			channel.sendMessage("❌ | Você não possui mais espaços para equipamentos no deck.").queue();
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean checkEquipment(Kawaipon kp, Equipment e, TextChannel channel) {
+		int max = kp.getMaxCopies(e);
+		if (kp.getEquipments().stream().filter(e::equals).count() == max) {
+			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo " + max + " cópias de cada equipamento no deck.").queue();
+			return true;
+		} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
+			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para equipamentos tier 4!").queue();
+			return true;
+		} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
+			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para equipamentos no deck.").queue();
+			return true;
+		}
+		return false;
+	}
+
+	public int checkEquipmentError(Equipment e) {
+		int max = getMaxCopies(e);
+		if (getEquipments().stream().filter(e::equals).count() == max) {
+			return 1;
+		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
+			return 2;
+		} else if (getEvoWeight() + e.getWeight(this) > 24) {
+			return 3;
+		}
+		return 0;
+	}
+
+	public static int checkEquipmentError(Kawaipon kp, Equipment e) {
+		int max = kp.getMaxCopies(e);
+		if (kp.getEquipments().stream().filter(e::equals).count() == max) {
+			return 1;
+		} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
+			return 2;
+		} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
+			return 3;
+		}
+		return 0;
+	}
+
+	public boolean checkField(Field f, TextChannel channel) {
+		if (getFields().stream().filter(f::equals).count() == 3) {
+			channel.sendMessage("❌ | Você só pode ter no máximo 3 cópias de cada campo no deck.").queue();
+			return true;
+		} else if (getFields().size() >= 3) {
+			channel.sendMessage("❌ | Você só pode ter no máximo 3 cartas de campo no deck.").queue();
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean checkField(Kawaipon kp, Field f, TextChannel channel) {
+		if (kp.getFields().stream().filter(f::equals).count() == 3) {
+			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 3 cópias de cada campo no deck.").queue();
+			return true;
+		} else if (kp.getFields().size() >= 3) {
+			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 3 cartas de campo no deck.").queue();
+			return true;
+		}
+		return false;
+	}
+
+	public int checkFieldError(Field f) {
+		if (getFields().stream().filter(f::equals).count() == 3) {
+			return 1;
+		} else if (getFields().size() >= 3) {
+			return 2;
+		}
+		return 0;
+	}
+
+	public static int checkFieldError(Kawaipon kp, Field f) {
+		if (kp.getFields().stream().filter(f::equals).count() == 3) {
+			return 1;
+		} else if (kp.getFields().size() >= 3) {
+			return 2;
+		}
+		return 0;
 	}
 }

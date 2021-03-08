@@ -210,12 +210,14 @@ public class SynthesizeCardCommand implements Executable {
 										acc.addCredit(change, this.getClass());
 										AccountDAO.saveAccount(acc);
 
-										if (kp.getEvoWeight() + e.getWeight(kp) > 24)
-											channel.sendMessage("❌ | Você não possui mais espaços para equipamentos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " créditos.").queue();
-										else if (kp.getEquipments().stream().filter(e::equals).count() == 3)
-											channel.sendMessage("❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " créditos.").queue();
-										else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4)
-											channel.sendMessage("❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " créditos.").queue();
+										channel.sendMessage(
+												switch (kp.checkEquipmentError(e)) {
+													case 1 -> "❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " créditos.";
+													case 2 -> "❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " créditos.";
+													case 3 -> "❌ | Você não possui mais espaços para equipamentos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " créditos.";
+													default -> throw new IllegalStateException("Unexpected value: " + kp.checkEquipmentError(e));
+												}
+										).queue();
 
 										if (dp.getValue().isBlank()) {
 											for (Card t : tributes) {

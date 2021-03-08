@@ -181,32 +181,21 @@ public class TradeCardCommand implements Executable {
 				}
 				case 2 -> {
 					Equipment e = (Equipment) products.get(0).getRight();
-					if (Collections.frequency(target.getEquipments(), e) == 3) {
-						channel.sendMessage("❌ | Ele/ela já possui 3 cópias desse equipamento!").queue();
-						return;
-					} else if (target.getEvoWeight() + e.getWeight(target) > 24) {
-						channel.sendMessage("❌ | Ele/ela não possui mais espaços para equipamentos no deck!").queue();
-						return;
-					} else if (target.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
-						channel.sendMessage("❌ | Ele/ela já possui 1 equipamento tier 4!").queue();
-						return;
-					} else if (!kp.getEquipments().contains(e)) {
+					if (!kp.getEquipments().contains(e)) {
 						channel.sendMessage("❌ | Parece que você não possui esse equipamento!").queue();
 						return;
 					}
+
+					if (target.checkEquipment(e, channel)) return;
 				}
 				default -> {
 					Field f = (Field) products.get(0).getRight();
-					if (Collections.frequency(target.getFields(), f) == 3) {
-						channel.sendMessage("❌ | Ele/ela já possui 3 cópias dessa arena!").queue();
-						return;
-					} else if (target.getFields().size() == 3) {
-						channel.sendMessage("❌ | Ele/ela já possui 3 arenas!").queue();
-						return;
-					} else if (!kp.getFields().contains(f)) {
+					if (!kp.getFields().contains(f)) {
 						channel.sendMessage("❌ | Parece que você não possui essa arena!").queue();
 						return;
 					}
+
+					if (target.checkField(f, channel)) return;
 				}
 			}
 
@@ -223,32 +212,21 @@ public class TradeCardCommand implements Executable {
 				}
 				case 2 -> {
 					Equipment e = (Equipment) products.get(1).getRight();
-					if (Collections.frequency(kp.getEquipments(), e) == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
-						return;
-					} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
-						channel.sendMessage("❌ | Parece que você não possui mais espaços para equipamentos no deck!").queue();
-						return;
-					} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
-						channel.sendMessage("❌ | Parece que você já possui 1 equipamento tier 4!").queue();
-						return;
-					} else if (!target.getEquipments().contains(e)) {
+					if (!target.getEquipments().contains(e)) {
 						channel.sendMessage("❌ | Ele/ela não possui esse equipamento!").queue();
 						return;
 					}
+
+					if (kp.checkEquipment(e, channel)) return;
 				}
 				default -> {
 					Field f = (Field) products.get(1).getRight();
-					if (Collections.frequency(kp.getFields(), f) == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 cópias dessa arena!").queue();
-						return;
-					} else if (kp.getFields().size() == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 arenas!").queue();
-						return;
-					} else if (!target.getFields().contains(f)) {
+					if (!target.getFields().contains(f)) {
 						channel.sendMessage("❌ | Ele/ela não possui essa arena!").queue();
 						return;
 					}
+
+					if (kp.checkField(f, channel)) return;
 				}
 			}
 
@@ -296,12 +274,21 @@ public class TradeCardCommand implements Executable {
 										if (!finalKp.getEquipments().contains(eq)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui esse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(finalTarget.getEquipments(), eq) == 3) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
-											return;
-										} else if (eq.getTier() == 4 && finalTarget.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
-											return;
+										}
+
+										switch (finalTarget.checkEquipmentError(eq)) {
+											case 1 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 2 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 3 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui mais espaço para equipamentos).")).queue(null, Helper::doNothing);
+												return;
+											}
 										}
 
 										finalKp.removeEquipment(eq);
@@ -312,9 +299,17 @@ public class TradeCardCommand implements Executable {
 										if (!finalKp.getFields().contains(f)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui essa arena).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(finalTarget.getFields(), f) == 3) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
-											return;
+										}
+
+										switch (finalTarget.checkFieldError(f)) {
+											case 1 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 2 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui mais espaço para arenas).")).queue(null, Helper::doNothing);
+												return;
+											}
 										}
 
 										finalKp.removeField(f);
@@ -341,12 +336,21 @@ public class TradeCardCommand implements Executable {
 										if (!finalTarget.getEquipments().contains(eq)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui esse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(finalKp.getEquipments(), eq) == 3) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
-											return;
-										} else if (eq.getTier() == 4 && finalKp.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
-											return;
+										}
+
+										switch (finalKp.checkEquipmentError(eq)) {
+											case 1 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 2 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 3 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui mais espaço para equipamentos).")).queue(null, Helper::doNothing);
+												return;
+											}
 										}
 
 										finalTarget.removeEquipment(eq);
@@ -357,9 +361,17 @@ public class TradeCardCommand implements Executable {
 										if (!finalTarget.getFields().contains(f)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui essa arena).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(finalKp.getFields(), f) == 3) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
-											return;
+										}
+
+										switch (finalKp.checkFieldError(f)) {
+											case 1 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 2 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui mais espaço para arenas).")).queue(null, Helper::doNothing);
+												return;
+											}
 										}
 
 										finalTarget.removeField(f);
@@ -446,32 +458,21 @@ public class TradeCardCommand implements Executable {
 				}
 				case 2 -> {
 					Equipment e = (Equipment) product.getRight();
-					if (Collections.frequency(kp.getEquipments(), e) == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 cópias desse equipamento!").queue();
-						return;
-					} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
-						channel.sendMessage("❌ | Parece que você não possui mais espaços para equipamentos no deck!").queue();
-						return;
-					} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
-						channel.sendMessage("❌ | Parece que você já possui 1 equipamento tier 4!").queue();
-						return;
-					} else if (!target.getEquipments().contains(e)) {
+					if (!target.getEquipments().contains(e)) {
 						channel.sendMessage("❌ | Ele/ela não possui esse equipamento!").queue();
 						return;
 					}
+
+					if (kp.checkEquipment(e, channel)) return;
 				}
 				default -> {
 					Field f = (Field) product.getRight();
-					if (Collections.frequency(kp.getFields(), f) == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 cópias dessa arena!").queue();
-						return;
-					} else if (kp.getFields().size() == 3) {
-						channel.sendMessage("❌ | Parece que você já possui 3 arenas!").queue();
-						return;
-					} else if (!target.getFields().contains(f)) {
+					if (!target.getFields().contains(f)) {
 						channel.sendMessage("❌ | Ele/ela não possui essa arena!").queue();
 						return;
 					}
+
+					if (kp.checkField(f, channel)) return;
 				}
 			}
 
@@ -533,12 +534,21 @@ public class TradeCardCommand implements Executable {
 										if (!finalTarget.getEquipments().contains(eq)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui esse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(finalKp.getEquipments(), eq) == 3) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
-											return;
-										} else if (eq.getTier() == 4 && finalKp.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
-											return;
+										}
+
+										switch (finalKp.checkEquipmentError(eq)) {
+											case 1 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 2 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 3 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui mais espaço para equipamentos).")).queue(null, Helper::doNothing);
+												return;
+											}
 										}
 
 										finalTarget.removeEquipment(eq);
@@ -550,9 +560,17 @@ public class TradeCardCommand implements Executable {
 										if (!finalTarget.getFields().contains(f)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui essa arena).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(finalKp.getFields(), f) == 3) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
-											return;
+										}
+
+										switch (finalKp.checkFieldError(f)) {
+											case 1 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 2 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui mais espaço para arenas).")).queue(null, Helper::doNothing);
+												return;
+											}
 										}
 
 										finalTarget.removeField(f);
@@ -650,32 +668,21 @@ public class TradeCardCommand implements Executable {
 				}
 				case 2 -> {
 					Equipment e = (Equipment) product.getRight();
-					if (Collections.frequency(target.getEquipments(), e) == 3) {
-						channel.sendMessage("❌ | Ele/ela já possui 3 cópias desse equipamento!").queue();
-						return;
-					} else if (target.getEvoWeight() + e.getWeight(target) > 24) {
-						channel.sendMessage("❌ | Ele/ela não possui mais espaços para equipamentos no deck!").queue();
-						return;
-					} else if (target.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
-						channel.sendMessage("❌ | Ele/ela já possui 1 equipamento tier 4!").queue();
-						return;
-					} else if (!kp.getEquipments().contains(e)) {
+					if (!kp.getEquipments().contains(e)) {
 						channel.sendMessage("❌ | Parece que você não possui esse equipamento!").queue();
 						return;
 					}
+
+					if (target.checkEquipment(e, channel)) return;
 				}
 				default -> {
 					Field f = (Field) product.getRight();
-					if (Collections.frequency(target.getFields(), f) == 3) {
-						channel.sendMessage("❌ | Ele/ela já possui 3 cópias dessa arena!").queue();
-						return;
-					} else if (target.getFields().size() == 3) {
-						channel.sendMessage("❌ | Ele/ela já possui 3 arenas!").queue();
-						return;
-					} else if (!kp.getFields().contains(f)) {
+					if (!kp.getFields().contains(f)) {
 						channel.sendMessage("❌ | Parece que você não possui essa arena!").queue();
 						return;
 					}
+
+					if (target.checkField(f, channel)) return;
 				}
 			}
 
@@ -737,12 +744,21 @@ public class TradeCardCommand implements Executable {
 										if (!finalKp.getEquipments().contains(eq)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui esse equipamento).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(finalTarget.getEquipments(), eq) == 3) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
-											return;
-										} else if (eq.getTier() == 4 && finalTarget.getEquipments().stream().anyMatch(e -> e.getTier() == 4)) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
-											return;
+										}
+
+										switch (finalTarget.checkEquipmentError(eq)) {
+											case 1 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias desse equipamento).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 2 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 1 equipamento tier 4).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 3 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui mais espaço para equipamentos).")).queue(null, Helper::doNothing);
+												return;
+											}
 										}
 
 										finalKp.removeEquipment(eq);
@@ -754,9 +770,17 @@ public class TradeCardCommand implements Executable {
 										if (!finalKp.getFields().contains(f)) {
 											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + author.getName() + " não possui essa arena).")).queue(null, Helper::doNothing);
 											return;
-										} else if (Collections.frequency(finalTarget.getFields(), f) == 3) {
-											s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
-											return;
+										}
+
+										switch (finalTarget.checkFieldError(f)) {
+											case 1 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " já possui 3 copias dessa arena).")).queue(null, Helper::doNothing);
+												return;
+											}
+											case 2 -> {
+												s.delete().flatMap(n -> channel.sendMessage("❌ | Troca anulada (" + other.getName() + " não possui mais espaço para arenas).")).queue(null, Helper::doNothing);
+												return;
+											}
 										}
 
 										finalKp.removeField(f);

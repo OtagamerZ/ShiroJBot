@@ -104,13 +104,7 @@ public class ClanRevertCardCommand implements Executable {
 					return;
 				}
 
-				if (c.isFusion()) {
-					channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
-					return;
-				} else if (kp.getCards().contains(kc)) {
-					channel.sendMessage("❌ | Você já possui essa carta.").queue();
-					return;
-				}
+				if (kp.checkChampion(c, channel)) return;
 
 				c.setAcc(acc);
 				EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -147,16 +141,7 @@ public class ClanRevertCardCommand implements Executable {
 					return;
 				}
 
-				if (kp.getEquipments().stream().filter(e::equals).count() == 3) {
-					channel.sendMessage("❌ | Você só pode ter no máximo 3 cópias de cada equipamento no deck.").queue();
-					return;
-				} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) {
-					channel.sendMessage("❌ | Você já possui 1 equipamento tier 4!").queue();
-					return;
-				} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
-					channel.sendMessage("❌ | Você não possui mais espaços para equipamentos no deck.").queue();
-					return;
-				}
+				if (kp.checkEquipment(e, channel)) return;
 
 				e.setAcc(acc);
 				EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -187,24 +172,13 @@ public class ClanRevertCardCommand implements Executable {
 				);
 			}
 			case FIELD -> {
-				if (kp.getField(tc.getCard()) == null) {
+				Field f = (Field) tc;
+				if (cl.getDeck().getField(tc.getCard()) == null) {
 					channel.sendMessage("❌ | Você não possui esse campo.").queue();
 					return;
 				}
 
-				Field f = (Field) tc;
-				if (!cl.getDeck().getFields().contains(f)) {
-					channel.sendMessage("❌ | Seu clã não possui essa carta.").queue();
-					return;
-				}
-
-				if (kp.getFields().stream().filter(f::equals).count() == 3) {
-					channel.sendMessage("❌ | Você só pode ter no máximo 3 cópias de cada campo no deck.").queue();
-					return;
-				} else if (kp.getFields().size() == 3) {
-					channel.sendMessage("❌ | Você só pode ter no máximo 3 cartas de campo no deck.").queue();
-					return;
-				}
+				if (kp.checkField(f, channel)) return;
 
 				f.setAcc(acc);
 				EmbedBuilder eb = new ColorlessEmbedBuilder();
