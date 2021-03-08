@@ -260,9 +260,7 @@ public class SlotsCommand implements Executable {
 
 	private void rollSlots() {
 		rolled.clear();
-		for (int i = 0; i < 5; i++) {
-			rolled.add(Slots.getSlot());
-		}
+		rolled.addAll(Helper.getRandomN(List.of(Slots.getSlots()), 5));
 	}
 
 	private String prizeTable() {
