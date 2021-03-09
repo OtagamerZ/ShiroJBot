@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @Command(
 		name = "removeremote",
 		aliases = {"removeremoji", "remote", "remoji"},
-		usage = "req_emotes-name-image",
+		usage = "req_emotes-name",
 		category = Category.MODERATION
 )
 @Requires({Permission.MANAGE_EMOTES})
