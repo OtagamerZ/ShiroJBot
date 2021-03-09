@@ -753,7 +753,7 @@ public class ShiroEvents extends ListenerAdapter {
 							}
 
 							u.openPrivateChannel().queue(c ->
-									c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
+									c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue(null, Helper::doNothing));
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
 									Main.getInfo().getUserByID(d).openPrivateChannel()
@@ -789,7 +789,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 							RelayDAO.permaBlock(new PermaBlock(args[1]));
 							u.openPrivateChannel().queue(c ->
-									c.sendMessage(eb.build()).queue());
+									c.sendMessage(eb.build()).queue(null, Helper::doNothing));
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
 									Main.getInfo().getUserByID(d).openPrivateChannel()
@@ -824,7 +824,7 @@ public class ShiroEvents extends ListenerAdapter {
 									.setTimestamp(Instant.now());
 
 							u.openPrivateChannel().queue(c ->
-									c.sendMessage(eb.build()).queue());
+									c.sendMessage(eb.build()).queue(null, Helper::doNothing));
 							for (String d : staffIds) {
 								if (!d.equals(event.getAuthor().getId())) {
 									Main.getInfo().getUserByID(d).openPrivateChannel()
@@ -865,12 +865,13 @@ public class ShiroEvents extends ListenerAdapter {
 					acc.setReceiveNotifs(false);
 					AccountDAO.saveAccount(acc);
 
-					event.getChannel().sendMessage("Você não receberá mais notificações de Exceed.").queue();
+					event.getChannel().sendMessage("Você não receberá mais notificações de Exceed.").queue(null, Helper::doNothing);
 					return;
 				}
+
 				event.getAuthor().openPrivateChannel().queue(c -> {
 					if (RelayDAO.blockedList().contains(event.getAuthor().getId())) {
-						c.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-blocked")).queue();
+						c.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-blocked")).queue(null, Helper::doNothing);
 					} else
 						c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
 								.queue(s -> {
@@ -886,7 +887,7 @@ public class ShiroEvents extends ListenerAdapter {
 												.queue();
 									}
 									s.delete().queueAfter(1, TimeUnit.MINUTES);
-								});
+								}, Helper::doNothing);
 				});
 			} catch (Exception ignored) {
 			}
