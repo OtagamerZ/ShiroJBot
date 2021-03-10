@@ -13,9 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria em alguns efeitos de raça">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Silenciado erros de falha ao enviar a mensagem ao usuário">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1047,14 +1047,10 @@
       <workItem from="1615229634783" duration="69000" />
       <workItem from="1615236367939" duration="720000" />
       <workItem from="1615291008726" duration="75000" />
-      <workItem from="1615310139522" duration="747000" />
-    </task>
-    <task id="LOCAL-03911" summary="Correções menores">
-      <created>1614626420525</created>
-      <option name="number" value="03911" />
-      <option name="presentableId" value="LOCAL-03911" />
-      <option name="project" value="LOCAL" />
-      <updated>1614626420525</updated>
+      <workItem from="1615310139522" duration="3710000" />
+      <workItem from="1615321398623" duration="976000" />
+      <workItem from="1615401445142" duration="26000" />
+      <workItem from="1615402808274" duration="2673000" />
     </task>
     <task id="LOCAL-03912" summary="Correções menores">
       <created>1614687454679</created>
@@ -1392,7 +1388,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615229696139</updated>
     </task>
-    <option name="localTasksCounter" value="3960" />
+    <task id="LOCAL-03960" summary="Silenciado erros de falha ao enviar a mensagem ao usuário">
+      <created>1615310976380</created>
+      <option name="number" value="03960" />
+      <option name="presentableId" value="LOCAL-03960" />
+      <option name="project" value="LOCAL" />
+      <updated>1615310976381</updated>
+    </task>
+    <option name="localTasksCounter" value="3961" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1478,7 +1481,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nos efeitos de assistência" />
     <MESSAGE value="Adição do comando para ver informações do emote" />
     <MESSAGE value="Ranked duo agora exige um time fechado" />
     <MESSAGE value="Revisão geral no código" />
@@ -1503,7 +1505,8 @@
     <MESSAGE value="Correção nos perfis animados" />
     <MESSAGE value="Correções em efeitos de raça" />
     <MESSAGE value="Melhoria em alguns efeitos de raça" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria em alguns efeitos de raça" />
+    <MESSAGE value="Silenciado erros de falha ao enviar a mensagem ao usuário" />
+    <option name="LAST_COMMIT_MESSAGE" value="Silenciado erros de falha ao enviar a mensagem ao usuário" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
