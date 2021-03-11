@@ -59,7 +59,6 @@ public class EnableCommandCommand implements Executable {
 				.filter(Objects::nonNull)
 				.collect(Collectors.toSet());
 
-		int activated = 0;
 		Set<Executable> commands = new HashSet<>();
 		for (String cmd : args) {
 			PreparedCommand e = Main.getCommandManager().getCommand(cmd);
@@ -75,13 +74,12 @@ public class EnableCommandCommand implements Executable {
 				return;
 			}
 
-			commands.remove(e.getCommand());
-			activated++;
+			commands.add(e.getCommand());
 		}
 
 		disabled.removeAll(commands.stream().map(Executable::getClass).collect(Collectors.toSet()));
 
-		channel.sendMessage("✅ | " + (activated == 1 ? "1 comando ativado" : activated + " comandos ativados") + " com sucesso!").queue();
+		channel.sendMessage("✅ | " + (commands.size() == 1 ? "1 comando ativado" : commands.size() + " comandos ativados") + " com sucesso!").queue();
 		gc.saveDisabledCommands(disabled);
 		GuildDAO.updateGuildSettings(gc);
 	}
