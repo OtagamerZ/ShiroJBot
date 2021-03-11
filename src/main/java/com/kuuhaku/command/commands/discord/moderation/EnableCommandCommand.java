@@ -62,13 +62,14 @@ public class EnableCommandCommand implements Executable {
 		Set<PreparedCommand> commands = new HashSet<>();
 		for (String cmd : args) {
 			PreparedCommand e = Main.getCommandManager().getCommand(cmd);
+
 			if (e == null) {
 				channel.sendMessage("❌ | O comando `" + cmd + "` não foi encontrado.").queue();
 				return;
 			} else if (!e.getCategory().isEnabled(guild, author)) {
 				channel.sendMessage("❌ | A categoria do comando `" + cmd + "` está desativada.").queue();
 				return;
-			} else if (!disabled.contains(e.getClass())) {
+			} else if (disabled.contains(e.getCommand().getClass())) {
 				channel.sendMessage("❌ | O comando `" + cmd + "` já está ativado.").queue();
 				return;
 			}
