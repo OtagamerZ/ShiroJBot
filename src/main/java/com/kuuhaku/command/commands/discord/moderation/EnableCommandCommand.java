@@ -69,7 +69,7 @@ public class EnableCommandCommand implements Executable {
 			} else if (!e.getCategory().isEnabled(guild, author)) {
 				channel.sendMessage("❌ | A categoria do comando `" + cmd + "` está desativada.").queue();
 				return;
-			} else if (disabled.contains(e.getCommand().getClass())) {
+			} else if (!disabled.contains(e.getCommand().getClass())) {
 				channel.sendMessage("❌ | O comando `" + cmd + "` já está ativado.").queue();
 				return;
 			}
