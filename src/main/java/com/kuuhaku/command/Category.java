@@ -23,7 +23,6 @@ import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
-import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
@@ -84,13 +83,14 @@ public enum Category {
 		return Main.getCommandManager().getCommands(this);
 	}
 
-	public boolean isEnabled(GuildConfig gc, Guild g, User u) {
-		if (this == NSFW) return false;
-		else if ((this == DEV || this == SUPPORT) && (!g.getId().equals(ShiroInfo.getSupportServerID()) && !ShiroInfo.getDevelopers().contains(u.getId()))) {
-			return false;
-		} else if (this == BETA && (!TagDAO.getTagById(g.getOwnerId()).isBeta() && !ShiroInfo.getStaff().contains(u.getId()))) {
-			return false;
-		} else return !gc.getDisabledModules().contains(name());
+	public boolean isEnabled(Guild g, User u) {
+		return switch (this) {
+			case NSFW -> false;
+			case DEV -> ShiroInfo.getDevelopers().contains(u.getId());
+			case SUPPORT -> ShiroInfo.getStaff().contains(u.getId());
+			case BETA -> TagDAO.getTagById(g.getOwnerId()).isBeta() || ShiroInfo.getStaff().contains(u.getId());
+			default -> true;
+		};
 	}
 
 	public String getEmote() {

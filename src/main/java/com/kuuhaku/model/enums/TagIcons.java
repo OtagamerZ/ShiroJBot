@@ -32,7 +32,6 @@ public enum TagIcons {
 	READER,
 	MODERATOR,
 	VERIFIED,
-	TOXIC,
 	MARRIED,
     RICH,
 	COLLECTION25,
@@ -59,7 +58,6 @@ public enum TagIcons {
 			case READER -> "<:reader:697879726148288542> ";
 			case MODERATOR -> "<:moderator:697879725628194878> ";
 			case VERIFIED -> "<:verified:697879725887979621> ";
-			case TOXIC -> "<:toxic:697879725816676442> ";
 			case MARRIED -> "<:married:697879725888241684> ";
 			case RICH -> "<:rich:718447753944105012> ";
             case COLLECTION25 -> "<:collection_25:724662152366915636> ";
@@ -88,7 +86,6 @@ public enum TagIcons {
 			case READER -> "697879726148288542";
 			case MODERATOR -> "697879725628194878";
 			case VERIFIED -> "697879725887979621";
-			case TOXIC -> "697879725816676442";
 			case MARRIED -> "697879725888241684";
 			case RICH -> "718447753944105012";
             case COLLECTION25 -> "724662152366915636";
