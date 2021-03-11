@@ -254,7 +254,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			PreparedCommand command = Main.getCommandManager().getCommand(commandName);
 			if (command != null) {
-				found = command.getCategory().isEnabled(guild, author) && !gc.getDisabledCommands().contains(command.getClass().getName());
+				found = command.getCategory().isEnabled(guild, author) && !gc.getDisabledCommands().contains(command.getCommand().getClass().getName());
 
 				if (found) {
 					if (author.getId().equals(Main.getSelfUser().getId())) {
