@@ -53,9 +53,6 @@ public enum Tag {
 	LEITOR(TagIcons.READER, "Você leu as regras, que bom!",
 			(user, member) -> TagDAO.getTagById(user.getId()).isReader()),
 
-	VERIFICADO(TagIcons.VERIFIED, "Usuário com conduta exemplar e identidade verificada.",
-			(user, member) -> TagDAO.getTagById(user.getId()).isVerified()),
-
 	LEVEL(null, "Usuário que atingiu um dos marcos de level.",
 			(user, member) -> true),
 

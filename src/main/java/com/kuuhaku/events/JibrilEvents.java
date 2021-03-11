@@ -21,7 +21,6 @@ package com.kuuhaku.events;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
-import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.Member;
@@ -139,7 +138,7 @@ public class JibrilEvents extends ListenerAdapter {
 				String[] msg = event.getMessage().getContentRaw().split(" ");
 				for (int i = 0; i < msg.length; i++) {
 					try {
-						if (Helper.findURL(msg[i]) && !TagDAO.getTagById(event.getAuthor().getId()).isVerified())
+						if (Helper.findURL(msg[i]))
 							msg[i] = "`LINK BLOQUEADO`";
 						if (Helper.findMentions(msg[i]))
 							msg[i] = "`EVERYONE/HERE BLOQUEADO`";
@@ -154,7 +153,7 @@ public class JibrilEvents extends ListenerAdapter {
 					net.dv8tion.jda.api.entities.Member m = event.getMember();
 					assert m != null;
 					try {
-						if (TagDAO.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
+						if (event.getMessage().getAttachments().size() > 0) {
 							try {
 								ByteArrayOutputStream baos = new ByteArrayOutputStream();
 								ImageIO.write(ImageIO.read(Helper.getImage(event.getMessage().getAttachments().get(0).getUrl())), "png", baos);
