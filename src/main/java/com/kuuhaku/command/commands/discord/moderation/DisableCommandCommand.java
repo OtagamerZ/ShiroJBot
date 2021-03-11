@@ -83,6 +83,7 @@ public class DisableCommandCommand implements Executable {
 		disabled.addAll(commands.stream().map(PreparedCommand::getClass).collect(Collectors.toSet()));
 
 		channel.sendMessage("✅ | " + (commands.size() == 1 ? "1 comando desativado" : commands.size() + " comandos desativados") + " com sucesso!").queue();
+		System.out.println(disabled);
 		gc.saveDisabledCommands(disabled);
 		GuildDAO.updateGuildSettings(gc);
 	}
