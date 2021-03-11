@@ -109,7 +109,7 @@ public class HelpCommand implements Executable {
 				StringBuilder sb = new StringBuilder();
 
 				for (PreparedCommand cmd : cat.getCommands()) {
-					if (gc.getDisabledCommands().contains(cmd.getClass().getName()))
+					if (gc.getDisabledCommands().contains(cmd.getCommand().getClass().getName()))
 						sb.append("||`~%s~`||  ".formatted(cmd.getName()));
 					else
 						sb.append("`%s`  ".formatted(cmd.getName()));
