@@ -99,7 +99,6 @@ public class SettingsCommand implements Executable {
 			case "canalrelay", "canalrly", "crelay" -> Settings.updateCanalRelay(args, msg, message, gc);
 			case "canalavisos", "canalav", "cavisos" -> Settings.updateCanalAvisos(args, msg, message, gc);
 			case "clvl", "cargolevel", "rlvl", "rolelevel" -> Settings.updateCargoLvl(args, msg, message, gc);
-			case "mod", "module", "categoria", "cat:" -> Settings.updateModules(args, msg, message, gc);
 			case "help", "ajuda" -> Settings.settingsHelp(message, gc);
 			default -> Settings.embedConfig(message);
 		}

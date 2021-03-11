@@ -13,9 +13,27 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Silenciado erros de falha ao enviar a mensagem ao usuário">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado comandos para ativar ou desativar comandos">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/DisableCommandCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/EnableCommandCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/ToxicTagCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/HelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/HelpCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowDropsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowDropsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowKawaiponCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowKawaiponCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ModifyRulesCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ModifyRulesCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/NqnModeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/NqnModeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/SettingsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/SettingsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/TagDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/TagDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Tag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/TagIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/TagIcons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Tags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Tags.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +138,7 @@
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
-    <property name="last.edited.regexp" value="" />
+    <property name="last.edited.regexp" value="DisableCommandCommand" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../icarusdiscordbot" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -160,11 +178,11 @@
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.moderation" />
       <recent name="com.kuuhaku.model.persistent" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.model.enums" />
       <recent name="com.kuuhaku.command.commands.discord.support" />
-      <recent name="com.kuuhaku.command.commands.discord.information" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -1050,14 +1068,8 @@
       <workItem from="1615310139522" duration="3710000" />
       <workItem from="1615321398623" duration="976000" />
       <workItem from="1615401445142" duration="26000" />
-      <workItem from="1615402808274" duration="2673000" />
-    </task>
-    <task id="LOCAL-03912" summary="Correções menores">
-      <created>1614687454679</created>
-      <option name="number" value="03912" />
-      <option name="presentableId" value="LOCAL-03912" />
-      <option name="project" value="LOCAL" />
-      <updated>1614687454680</updated>
+      <workItem from="1615402808274" duration="3173000" />
+      <workItem from="1615468000493" duration="2609000" />
     </task>
     <task id="LOCAL-03913" summary="Correções menores">
       <created>1614687660655</created>
@@ -1395,7 +1407,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615310976381</updated>
     </task>
-    <option name="localTasksCounter" value="3961" />
+    <task id="LOCAL-03961" summary="Adicionado antialiasing às cartas de campo">
+      <created>1615409306571</created>
+      <option name="number" value="03961" />
+      <option name="presentableId" value="LOCAL-03961" />
+      <option name="project" value="LOCAL" />
+      <updated>1615409306572</updated>
+    </task>
+    <option name="localTasksCounter" value="3962" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1481,8 +1500,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição do comando para ver informações do emote" />
-    <MESSAGE value="Ranked duo agora exige um time fechado" />
     <MESSAGE value="Revisão geral no código" />
     <MESSAGE value="Correção no efeito de atordoamento" />
     <MESSAGE value="Implementação do SpringLoaded" />
@@ -1506,7 +1523,9 @@
     <MESSAGE value="Correções em efeitos de raça" />
     <MESSAGE value="Melhoria em alguns efeitos de raça" />
     <MESSAGE value="Silenciado erros de falha ao enviar a mensagem ao usuário" />
-    <option name="LAST_COMMIT_MESSAGE" value="Silenciado erros de falha ao enviar a mensagem ao usuário" />
+    <MESSAGE value="Adicionado antialiasing às cartas de campo" />
+    <MESSAGE value="Adicionado comandos para ativar ou desativar comandos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionado comandos para ativar ou desativar comandos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

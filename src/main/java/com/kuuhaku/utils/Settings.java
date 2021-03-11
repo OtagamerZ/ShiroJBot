@@ -19,7 +19,6 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -611,55 +610,6 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O cargo " + newRole.getAsMention() + " foi atribuido ao level " + args[2] + " com sucesso.").queue();
 	}
 
-	public static void updateModules(String[] args, String argsAsText, Message message, GuildConfig gc) {
-		List<String> antigoModulo = gc.getDisabledModules();
-
-		if (Helper.equalsAny(args[1], "list", "lista")) {
-			if (antigoModulo.isEmpty()) {
-				message.getTextChannel().sendMessage("Nenhum módulo desligado.").queue();
-			} else {
-				message.getTextChannel().sendMessage("Os módulos desligados são:```" + String.join("\n", antigoModulo) + "```").queue();
-			}
-			return;
-		} else if (Helper.equalsAny(args[1].toLowerCase(), "moderação", "dev", "parceiros")) {
-			message.getTextChannel().sendMessage("❌ | É impossível desativar o módulo " + args[1].toLowerCase() + ".").queue();
-			return;
-		}
-
-		if (args.length < 3) {
-			message.getTextChannel().sendMessage("❌ | Você precisa informar se o módulo será `ligado` ou `desligado`.").queue();
-			return;
-		}
-
-		Category c = Category.getByName(args[1]);
-
-		if (c == null) {
-			message.getTextChannel().sendMessage("❌ | Esse módulo não existe.").queue();
-			return;
-		} else if (Helper.equalsAny(args[2].toLowerCase(), "ligado", "enabled", "on")) {
-			if (!antigoModulo.contains(c.name())) {
-				message.getTextChannel().sendMessage("❌ | Esse módulo já está ativado.").queue();
-				return;
-			}
-
-			gc.removeDisabledModule(c);
-			message.getTextChannel().sendMessage("✅ | Módulo " + c.getName() + " habilitado com sucesso.").queue();
-		} else if (Helper.equalsAny(args[2].toLowerCase(), "desligado", "disabled", "off")) {
-			if (antigoModulo.contains(c.name())) {
-				message.getTextChannel().sendMessage("❌ | Esse módulo já está desativado.").queue();
-				return;
-			}
-
-			gc.addDisabledModule(c);
-			message.getTextChannel().sendMessage("✅ | Módulo " + c.getName() + " desabilitado com sucesso.").queue();
-		} else {
-			message.getTextChannel().sendMessage("❌ | O terceiro argumento deve ser ligado ou desligado").queue();
-			return;
-		}
-
-		GuildDAO.updateGuildSettings(gc);
-	}
-
 	public static void settingsHelp(Message message, GuildConfig gc) {
 		String prefix = Helper.getOr(gc.getPrefix(), "s!");
 
@@ -671,7 +621,6 @@ public class Settings {
 		eb.setTitle("⚙ | Painel de ajuda");
 		eb.setDescription("Utilize os comandos a baixo para estabelecer suas configurações.");
 		eb.addField(prefix + "settings prefix", "Altera o prefixo da Shiro no seu servidor.", false);
-		eb.addField(prefix + "settings categoria", "Ativa ou desativa uma categoria de comandos.", false);
 
 		eb.addField(prefix + "settings canalbv", "Define o canal onde a Shiro ira mandar as mensagens de boas-vindas. Para remover esta configuração, use `" + prefix + "settings canalbv reset`.", false);
 		eb.addField(prefix + "settings mensagembv", "Defina uma mensagem de boas-vindas em seu servidor.", false);

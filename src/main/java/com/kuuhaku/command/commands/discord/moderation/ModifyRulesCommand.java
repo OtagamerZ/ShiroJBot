@@ -37,13 +37,12 @@ public class ModifyRulesCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-
 		if (args.length < 1) {
 			channel.sendMessage("❌ | É necessário digitar uma regra para adicionar ou um índice para remover.").queue();
 			return;
 		}
 
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		String rule = String.join(" ", args);
 
 		if (!StringUtils.isNumeric(rule) && !rule.contains(";")) {

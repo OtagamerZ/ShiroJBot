@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -32,9 +31,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -99,7 +96,7 @@ public class GuildConfig {
 	private String cargoslvl = "";
 
 	@Column(columnDefinition = "TEXT")
-	private String disabledModules = "";
+	private String disabledCommands = "";
 
 	@Column(columnDefinition = "TEXT")
 	private String buttonConfigs = "";
@@ -562,21 +559,14 @@ public class GuildConfig {
 		smallCards = !smallCards;
 	}
 
-	public List<String> getDisabledModules() {
-		if (disabledModules.isBlank()) return new ArrayList<>();
-		else return new JSONArray(disabledModules).toList().stream().map(String::valueOf).collect(Collectors.toList());
+	public Set<String> getDisabledCommands() {
+		if (disabledCommands.isBlank()) return new HashSet<>();
+		else return new JSONArray(disabledCommands).toList().stream().map(String::valueOf).collect(Collectors.toSet());
 	}
 
-	public void addDisabledModule(Category c) {
-		List<String> ph = new ArrayList<>(getDisabledModules());
-		ph.add(c.name());
-		disabledModules = new JSONArray(ph).toString();
-	}
-
-	public void removeDisabledModule(Category c) {
-		List<String> ph = new ArrayList<>(getDisabledModules());
-		ph.removeIf(s -> s.equals(c.name()));
-		disabledModules = new JSONArray(ph).toString();
+	public void saveDisabledCommands(Set<Class<?>> classes) {
+		Set<String> set = classes.stream().map(Class::getName).collect(Collectors.toSet());
+		disabledCommands = new JSONArray(set).toString();
 	}
 
 	public JSONObject getButtonConfigs() {

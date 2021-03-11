@@ -74,12 +74,12 @@ public class HelpCommand implements Executable {
 					MessageFormat.format(
 							ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION),
 							prefix,
-							Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(),
-							Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()
+							Arrays.stream(Category.values()).filter(c -> c.isEnabled(guild, author)).count(),
+							Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(guild, author)).count()
 					)
 			);
 			for (Category cat : Category.values()) {
-				if (cat.isEnabled(gc, guild, author))
+				if (cat.isEnabled(guild, author))
 					eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
 			}
 
@@ -99,7 +99,7 @@ public class HelpCommand implements Executable {
 
 				ceb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_prefix"), prefix, cat.getCommands().size()));
 
-				if (!cat.isEnabled(gc, guild, author))
+				if (!cat.isEnabled(guild, author))
 					continue;
 				if (cat.getCommands().isEmpty()) {
 					ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_empty-category"), cat.getDescription()), false);
@@ -108,8 +108,12 @@ public class HelpCommand implements Executable {
 
 				StringBuilder sb = new StringBuilder();
 
-				for (PreparedCommand cmd : cat.getCommands())
-					sb.append("`%s`  ".formatted(cmd.getName()));
+				for (PreparedCommand cmd : cat.getCommands()) {
+					if (gc.getDisabledCommands().contains(cmd.getClass().getName()))
+						sb.append("||`~%s~`||  ".formatted(cmd.getName()));
+					else
+						sb.append("`%s`  ".formatted(cmd.getName()));
+				}
 
 				ceb.addField(Helper.VOID, cat.getDescription() + "\n" + sb.toString().trim(), false);
 				ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-single-help-tip"), prefix), false);
@@ -139,14 +143,14 @@ public class HelpCommand implements Executable {
 					MessageFormat.format(
 							ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION),
 							prefix,
-							Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(),
-							Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()
+							Arrays.stream(Category.values()).filter(c -> c.isEnabled(guild, author)).count(),
+							Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(guild, author)).count()
 					)
 			);
 			eb.appendDescription(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-alert"));
 			StringBuilder sb = new StringBuilder();
 			for (Category cat : Category.values()) {
-				if (cat.isEnabled(gc, guild, author)) {
+				if (cat.isEnabled(guild, author)) {
 					sb.setLength(0);
 					for (PreparedCommand c : cat.getCommands())
 						sb.append("`%s`  ".formatted(c.getName()));
@@ -173,18 +177,18 @@ public class HelpCommand implements Executable {
 		for (PreparedCommand cmmd : Main.getCommandManager().getCommands()) {
 			boolean found = false;
 
-			if (cmmd.getName().equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(gc, guild, author))
+			if (cmmd.getName().equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(guild, author))
 				found = true;
-			else if (cmmd.getName().equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(gc, guild, author)) {
+			else if (cmmd.getName().equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(guild, author)) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_module-disabled")).queue();
 				return;
 			}
 
 			for (String alias : cmmd.getAliases()) {
-				if (alias.equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(gc, guild, author)) {
+				if (alias.equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(guild, author)) {
 					found = true;
 					break;
-				} else if (alias.equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(gc, guild, author)) {
+				} else if (alias.equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(guild, author)) {
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_module-disabled")).queue();
 					return;
 				}
