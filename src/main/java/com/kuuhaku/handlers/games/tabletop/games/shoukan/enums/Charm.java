@@ -31,7 +31,8 @@ public enum Charm {
 	DOPPELGANGER("Clone"),
 	SOULLINK("Vínculo espiritual"),
 	SPELL("Magia"),
-	ARMORPIERCING("Penetração de armadura");
+	ARMORPIERCING("Penetração de armadura"),
+	AGILITY("Agilidade");
 
 	private final String name;
 
