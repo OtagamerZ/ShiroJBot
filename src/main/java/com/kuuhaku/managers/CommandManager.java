@@ -69,7 +69,7 @@ public class CommandManager {
 						params.aliases(),
 						params.usage(),
 						"cmd_" + cmd.getSimpleName()
-								.replaceAll("Command|Reaction", "")
+								.replaceFirst("(Command|Reaction)$", "")
 								.replaceAll("[a-z](?=[A-Z])", "$0-")
 								.toLowerCase(),
 						params.category(),
@@ -89,7 +89,7 @@ public class CommandManager {
 				params.aliases(),
 				params.usage(),
 				"cmd_" + cmd.getSimpleName()
-						.replaceAll("Command|Reaction", "")
+						.replaceFirst("(Command|Reaction)$", "")
 						.replaceAll("[a-z](?=[A-Z])", "$0-")
 						.toLowerCase(),
 				params.category(),

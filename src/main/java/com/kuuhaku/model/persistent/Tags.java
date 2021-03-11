@@ -43,9 +43,6 @@ public class Tags {
     private boolean beta = false;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean toxic = false;
-
-    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean verified = false;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
@@ -96,14 +93,6 @@ public class Tags {
 
     public void setBeta(boolean isBeta) {
         beta = isBeta;
-    }
-
-    public boolean isToxic() {
-        return toxic;
-    }
-
-    public void setToxic(boolean isToxic) {
-        toxic = isToxic;
     }
 
     public boolean isVerified() {

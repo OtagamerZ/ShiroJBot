@@ -56,9 +56,6 @@ public enum Tag {
 	VERIFICADO(TagIcons.VERIFIED, "Usuário com conduta exemplar e identidade verificada.",
 			(user, member) -> TagDAO.getTagById(user.getId()).isVerified()),
 
-	TOXICO(TagIcons.TOXIC, "Usuário com atitude tóxica.",
-			(user, member) -> TagDAO.getTagById(user.getId()).isToxic()),
-
 	LEVEL(null, "Usuário que atingiu um dos marcos de level.",
 			(user, member) -> true),
 
