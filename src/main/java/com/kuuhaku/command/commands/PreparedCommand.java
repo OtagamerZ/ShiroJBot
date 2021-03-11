@@ -88,6 +88,10 @@ public class PreparedCommand implements Executable {
 		return missing.stream().sorted(Comparator.comparingInt(Permission::getOffset)).toArray(Permission[]::new);
 	}
 
+	public Executable getCommand() {
+		return command;
+	}
+
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		this.command.execute(author, member, command, argsAsText, args, message, channel, guild, prefix);
