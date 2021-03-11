@@ -102,32 +102,6 @@ public class TagDAO {
 		em.close();
 	}
 
-	public static void giveTagToxic(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Tags t = getTagById(id);
-		t.setToxic(true);
-
-		em.getTransaction().begin();
-		em.merge(t);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	public static void removeTagToxic(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Tags t = getTagById(id);
-		t.setToxic(false);
-
-		em.getTransaction().begin();
-		em.merge(t);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
 	public static void giveTagBeta(String id) {
 		EntityManager em = Manager.getEntityManager();
 
