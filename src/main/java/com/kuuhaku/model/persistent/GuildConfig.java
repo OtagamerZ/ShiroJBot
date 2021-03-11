@@ -560,7 +560,7 @@ public class GuildConfig {
 	}
 
 	public Set<String> getDisabledCommands() {
-		if (disabledCommands.isBlank()) return new HashSet<>();
+		if (disabledCommands == null || disabledCommands.isBlank()) return new HashSet<>();
 		else return new JSONArray(disabledCommands).toList().stream().map(String::valueOf).collect(Collectors.toSet());
 	}
 
