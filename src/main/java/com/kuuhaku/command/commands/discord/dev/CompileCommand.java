@@ -24,7 +24,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -56,7 +55,7 @@ public class CompileCommand implements Executable {
 						m.getChannel().sendMessage("<a:loading:697879726630502401> | Executando...").queue(d ->
 								d.editMessage("-> " + out).queue());
 						message.delete().queue();
-						m.editMessage(TagIcons.VERIFIED.getTag(0) + "| Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
+						m.editMessage("✅ | Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
 					} catch (Exception e) {
 						m.editMessage("❌ | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 					}
