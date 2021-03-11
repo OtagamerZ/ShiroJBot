@@ -60,7 +60,6 @@ public class DisableCommandCommand implements Executable {
 				.filter(Objects::nonNull)
 				.collect(Collectors.toSet());
 
-		int deactivate = 0;
 		Set<Executable> commands = new HashSet<>();
 		for (String cmd : args) {
 			PreparedCommand e = Main.getCommandManager().getCommand(cmd);
@@ -80,12 +79,11 @@ public class DisableCommandCommand implements Executable {
 			}
 
 			commands.add(e.getCommand());
-			deactivate++;
 		}
 
 		disabled.addAll(commands.stream().map(Executable::getClass).collect(Collectors.toSet()));
 
-		channel.sendMessage("✅ | " + (deactivate == 1 ? "1 comando desativado" : deactivate + " comandos desativados") + " com sucesso!").queue();
+		channel.sendMessage("✅ | " + (commands.size() == 1 ? "1 comando desativado" : commands.size() + " comandos desativados") + " com sucesso!").queue();
 		gc.saveDisabledCommands(disabled);
 		GuildDAO.updateGuildSettings(gc);
 	}
