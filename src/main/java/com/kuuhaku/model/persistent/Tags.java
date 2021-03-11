@@ -43,9 +43,6 @@ public class Tags {
     private boolean beta = false;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean verified = false;
-
-    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean reader = false;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
@@ -93,14 +90,6 @@ public class Tags {
 
     public void setBeta(boolean isBeta) {
         beta = isBeta;
-    }
-
-    public boolean isVerified() {
-        return verified;
-    }
-
-    public void setVerified(boolean verified) {
-        this.verified = verified;
     }
 
     public boolean isReader() {
