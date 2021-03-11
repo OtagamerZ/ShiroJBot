@@ -60,9 +60,10 @@ public class DisableCommandCommand implements Executable {
 				.filter(Objects::nonNull)
 				.collect(Collectors.toSet());
 
-		Set<PreparedCommand> commands = new HashSet<>();
+		Set<Executable> commands = new HashSet<>();
 		for (String cmd : args) {
 			PreparedCommand e = Main.getCommandManager().getCommand(cmd);
+
 			if (e == null) {
 				channel.sendMessage("❌ | O comando `" + cmd + "` não foi encontrado.").queue();
 				return;
@@ -72,18 +73,17 @@ public class DisableCommandCommand implements Executable {
 			} else if (Helper.equalsAny(e, EnableCommandCommand.class, this.getClass())) {
 				channel.sendMessage("❌ | O comando `" + cmd + "` não pode ser desativado.").queue();
 				return;
-			} else if (disabled.contains(e.getClass())) {
+			} else if (disabled.contains(e.getCommand().getClass())) {
 				channel.sendMessage("❌ | O comando `" + cmd + "` já está desativado.").queue();
 				return;
 			}
 
-			commands.add(e);
+			commands.add(e.getCommand());
 		}
 
-		disabled.addAll(commands.stream().map(PreparedCommand::getClass).collect(Collectors.toSet()));
+		disabled.addAll(commands.stream().map(Executable::getClass).collect(Collectors.toSet()));
 
 		channel.sendMessage("✅ | " + (commands.size() == 1 ? "1 comando desativado" : commands.size() + " comandos desativados") + " com sucesso!").queue();
-		System.out.println(disabled);
 		gc.saveDisabledCommands(disabled);
 		GuildDAO.updateGuildSettings(gc);
 	}
