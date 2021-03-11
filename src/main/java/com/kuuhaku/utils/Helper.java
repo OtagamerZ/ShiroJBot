@@ -689,7 +689,7 @@ public class Helper {
 							msg.clearReactions().queue();
 							Pages.buttonize(msg, buttons, true);
 						}
-					} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
+					} catch (RuntimeException | InterruptedException | ExecutionException e) {
 						JSONObject newJa = new JSONObject(source.toString());
 						if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
 						else newJa.remove(jo.getString("msgId"));
