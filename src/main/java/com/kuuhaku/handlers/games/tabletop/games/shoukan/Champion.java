@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 import bsh.EvalError;
 import bsh.Interpreter;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -570,15 +571,19 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public double getDodge() {
-		return Helper.clamp(dodge + mDodge, 0, 100);
+		return Helper.clamp(dodge + mDodge + getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count() * 10, 0, 100);
 	}
 
 	public void setDodge(double dodge) {
 		this.dodge = dodge;
 	}
 
+	public double getModDodge() {
+		return mDodge;
+	}
+
 	public void setModDodge(double dodge) {
-		this.dodge += dodge;
+		this.mDodge += dodge;
 	}
 
 	@Override
