@@ -100,8 +100,8 @@ public class YoutubeCommand implements Executable {
 											try {
 												String url = Objects.requireNonNull(ms.getEmbeds().get(0).getFooter()).getIconUrl();
 												assert url != null;
-												if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isVerified()) {
-													channel.sendMessage("❌ | Você precisa ser um usuário verificado para poder adicionar playlists.").queue();
+												if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isBeta()) {
+													channel.sendMessage("❌ | Você precisa ser um usuário com acesso beta para poder adicionar playlists.").queue();
 													msg.delete().queue();
 													return;
 												}

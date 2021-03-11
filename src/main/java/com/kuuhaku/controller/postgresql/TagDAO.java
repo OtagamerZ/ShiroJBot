@@ -128,32 +128,6 @@ public class TagDAO {
 		em.close();
 	}
 
-	public static void giveTagVerified(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Tags t = getTagById(id);
-		t.setVerified(true);
-
-		em.getTransaction().begin();
-		em.merge(t);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	public static void removeTagVerified(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Tags t = getTagById(id);
-		t.setVerified(false);
-
-		em.getTransaction().begin();
-		em.merge(t);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
 	public static void giveTagReader(String id) {
 		EntityManager em = Manager.getEntityManager();
 
