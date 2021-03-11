@@ -59,7 +59,7 @@ public class EnableCommandCommand implements Executable {
 				.filter(Objects::nonNull)
 				.collect(Collectors.toSet());
 
-		Set<PreparedCommand> commands = new HashSet<>();
+		Set<Executable> commands = new HashSet<>();
 		for (String cmd : args) {
 			PreparedCommand e = Main.getCommandManager().getCommand(cmd);
 
@@ -74,10 +74,10 @@ public class EnableCommandCommand implements Executable {
 				return;
 			}
 
-			commands.add(e);
+			commands.remove(e.getCommand());
 		}
 
-		disabled.removeAll(commands.stream().map(PreparedCommand::getClass).collect(Collectors.toSet()));
+		disabled.removeAll(commands.stream().map(Executable::getClass).collect(Collectors.toSet()));
 
 		channel.sendMessage("✅ | " + (commands.size() == 1 ? "1 comando ativado" : commands.size() + " comandos ativados") + " com sucesso!").queue();
 		gc.saveDisabledCommands(disabled);
