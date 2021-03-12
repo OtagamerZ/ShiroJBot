@@ -61,7 +61,7 @@ public class GuildDAO {
 		gc.setGuildId(guild.getId());
 
 		em.getTransaction().begin();
-		em.merge(gc);
+		gc = em.merge(gc);
 		em.getTransaction().commit();
 
 		em.close();
@@ -73,7 +73,7 @@ public class GuildDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(gc);
+		em.remove(em.contains(gc) ? gc : em.merge(gc));
 		em.getTransaction().commit();
 
 		em.close();

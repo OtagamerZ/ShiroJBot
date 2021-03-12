@@ -63,7 +63,7 @@ public class MatchMakingRatingDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(mmr);
+		em.remove(em.contains(mmr) ? mmr : em.merge(mmr));
 		em.getTransaction().commit();
 
 		em.close();

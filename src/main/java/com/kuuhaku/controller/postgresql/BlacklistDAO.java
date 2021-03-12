@@ -43,7 +43,7 @@ public class BlacklistDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(bl);
+		em.remove(em.contains(bl) ? bl : em.merge(bl));
 		em.getTransaction().commit();
 
 		em.close();

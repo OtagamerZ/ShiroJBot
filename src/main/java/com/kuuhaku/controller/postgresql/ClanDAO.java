@@ -82,7 +82,7 @@ public class ClanDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(clan);
+		em.remove(em.contains(clan) ? clan : em.merge(clan));
 		em.getTransaction().commit();
 
 		em.close();
