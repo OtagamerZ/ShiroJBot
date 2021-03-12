@@ -1665,92 +1665,144 @@ public class Shoukan extends GlobalGame {
 			arena.getGraveyard().get(side).add(ch);
 	}
 
-	public void destroyCard(Side side, int index, int source) {
-		Champion ch = getArena().getSlots().get(side).get(index).getTop();
+	public void destroyCard(Side to, int target, Side from, int source) {
+		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
+
+		Champion chi = getArena().getSlots().get(from).get(source).getTop();
+
+		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 100 / (ch.isFusion() ? 5 : ch.getMana()), 100);
+
+		if (Helper.chance(chance)) {
+			for (int i = 0; i < slts.size(); i++) {
+				Equipment eq = slts.get(i).getBottom();
+				if (eq != null && eq.getLinkedTo().getLeft() == target) {
+					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+						unequipCard(to, i, slts);
+						return;
+					} else if ((eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLMIRROR) && chi != null) {
+						destroyCard(from, source, to, target);
+						unequipCard(to, i, slts);
+						return;
+					}
+				}
+			}
+
+			slts.get(target).setTop(null);
+			for (int i = 0; i < slts.size(); i++) {
+				SlotColumn<Champion, Equipment> sd = slts.get(i);
+				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+					killCard(to, i);
+
+				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
+					unequipCard(to, i, slts);
+			}
+
+			ch.reset();
+			if (!ch.isFusion())
+				arena.getGraveyard().get(to).add(ch);
+		}
+	}
+
+	public void destroyCard(Side to, int target) {
+		Champion ch = getArena().getSlots().get(to).get(target).getTop();
+		if (ch == null) return;
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 
 		for (int i = 0; i < slts.size(); i++) {
 			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == index) {
+			if (eq != null && eq.getLinkedTo().getLeft() == target) {
 				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
-					unequipCard(side, i, slts);
-					return;
-				} else if ((eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLMIRROR) && source != -1) {
-					destroyCard(side == Side.TOP ? Side.BOTTOM : Side.TOP, source, index);
-					unequipCard(side, i, slts);
+					unequipCard(to, i, slts);
 					return;
 				}
 			}
 		}
 
-		slts.get(index).setTop(null);
+		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn<Champion, Equipment> sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
-				killCard(side, i);
+			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+				killCard(to, i);
 
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
-				unequipCard(side, i, slts);
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
+				unequipCard(to, i, slts);
 		}
 
 		ch.reset();
 		if (!ch.isFusion())
-			arena.getGraveyard().get(side).add(ch);
+			arena.getGraveyard().get(to).add(ch);
 	}
 
-	public void destroyCard(Side side, int index) {
-		Champion ch = getArena().getSlots().get(side).get(index).getTop();
+	public void captureCard(Side to, int target, Side from, int source, boolean withFusion) {
+		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 
-		slts.get(index).setTop(null);
-		for (int i = 0; i < slts.size(); i++) {
-			SlotColumn<Champion, Equipment> sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
-				killCard(side, i);
+		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
-				unequipCard(side, i, slts);
+		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 100 / (ch.isFusion() ? 5 : ch.getMana()), 100);
+
+		if (Helper.chance(chance)) {
+			for (int i = 0; i < slts.size(); i++) {
+				Equipment eq = slts.get(i).getBottom();
+				if (eq != null && eq.getLinkedTo().getLeft() == target) {
+					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+						unequipCard(to, i, slts);
+						return;
+					} else if ((eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLMIRROR)) {
+						captureCard(from, source, to, target, withFusion);
+						unequipCard(to, i, slts);
+						return;
+					}
+				}
+			}
+
+			slts.get(target).setTop(null);
+			for (int i = 0; i < slts.size(); i++) {
+				SlotColumn<Champion, Equipment> sd = slts.get(i);
+				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+					killCard(to, i);
+
+				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
+					unequipCard(to, i, slts);
+			}
+
+			ch.reset();
+			if (!ch.isFusion() || withFusion)
+				hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch);
 		}
-
-		ch.reset();
-		if (!ch.isFusion())
-			arena.getGraveyard().get(side).add(ch);
 	}
 
-	public void captureCard(Side side, int index, int source, boolean withFusion) {
-		Champion ch = getArena().getSlots().get(side).get(index).getTop();
+	public void captureCard(Side to, int target, boolean withFusion) {
+		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 
 		for (int i = 0; i < slts.size(); i++) {
 			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == index) {
+			if (eq != null && eq.getLinkedTo().getLeft() == target) {
 				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
-					unequipCard(side, i, slts);
-					return;
-				} else if ((eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLMIRROR) && source != -1) {
-					destroyCard(side == Side.TOP ? Side.BOTTOM : Side.TOP, source, index);
-					unequipCard(side, i, slts);
+					unequipCard(to, i, slts);
 					return;
 				}
 			}
 		}
 
-		slts.get(index).setTop(null);
+		slts.get(target).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn<Champion, Equipment> sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
-				killCard(side, i);
+			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+				killCard(to, i);
 
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
-				unequipCard(side, i, slts);
+			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
+				unequipCard(to, i, slts);
 		}
 
 		ch.reset();
 		if (!ch.isFusion() || withFusion)
-			hands.get(side == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch);
+			hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch);
 	}
 
 	public void banishCard(Side side, int index, boolean equipment) {
