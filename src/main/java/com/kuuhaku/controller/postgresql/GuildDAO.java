@@ -39,7 +39,7 @@ public class GuildDAO {
 	}
 
 	public static GuildConfig getGuildById(String id) {
-		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		try {
 			GuildConfig gc = em.find(GuildConfig.class, id);
@@ -54,7 +54,7 @@ public class GuildDAO {
 	}
 
 	public static void addGuildToDB(net.dv8tion.jda.api.entities.Guild guild) {
-		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		GuildConfig gc = new GuildConfig();
 		gc.setName(guild.getName());
@@ -68,7 +68,7 @@ public class GuildDAO {
 	}
 
 	public static void removeGuildFromDB(GuildConfig gc) {
-		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
 		em.remove(gc);
@@ -78,7 +78,7 @@ public class GuildDAO {
 	}
 
 	public static void updateGuildSettings(GuildConfig gc) {
-		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
 		em.merge(gc);
@@ -89,7 +89,7 @@ public class GuildDAO {
 
 	@SuppressWarnings("unchecked")
 	public static List<GuildConfig> getAllGuildsWithExceedRoles() {
-		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE exceedRolesEnabled = TRUE", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();
@@ -101,7 +101,7 @@ public class GuildDAO {
 
 	@SuppressWarnings("unchecked")
 	public static List<GuildConfig> getAllGuildsWithButtons() {
-		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE COALESCE(buttonConfigs, '') NOT IN ('', '{}')", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();
@@ -113,7 +113,7 @@ public class GuildDAO {
 
 	@SuppressWarnings("unchecked")
 	public static List<GuildConfig> getAllGuildsWithGeneralChannel() {
-		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE canalGeral <> ''", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();
@@ -125,7 +125,7 @@ public class GuildDAO {
 
 	@SuppressWarnings("unchecked")
 	public static List<GuildConfig> getAlertChannels() {
-		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE COALESCE(canalAvisos,'') <> ''", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();

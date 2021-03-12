@@ -31,7 +31,7 @@ import java.util.List;
 public class PStateDAO {
 	@SuppressWarnings("unchecked")
 	public static List<PoliticalState> getAllPoliticalState() {
-		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT p FROM PoliticalState p", PoliticalState.class);
 
