@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -50,9 +50,9 @@ public class EmbedCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Construindo embed...").queue(m -> {
 			if (Helper.hasPermission(member, PrivilegeLevel.MOD) && args.length > 0 && Helper.equalsAny(args[0], "reset", "resetar")) {
-				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+				GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
 				gc.setEmbedTemplate(null);
-				GuildDAO.updateGuildSettings(gc);
+				com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 
 				m.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("✅ | Embed de servidor limpo com sucesso!").queue();
@@ -90,7 +90,7 @@ public class EmbedCommand implements Executable {
 							.embed(eb.build())
 							.queue(s ->
 									Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-												GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+												GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
 												gc.setEmbedTemplate(json);
 												GuildDAO.updateGuildSettings(gc);
 

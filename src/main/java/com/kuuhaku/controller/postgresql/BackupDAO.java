@@ -19,66 +19,25 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.common.DataDump;
-import com.kuuhaku.model.enums.ExceedEnum;
-import com.kuuhaku.model.persistent.CustomAnswer;
-import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.NContract;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class BackupDAO {
-	private static final ExecutorService backupQueue = Executors.newFixedThreadPool(5);
+	private static final ExecutorService backupThread = Executors.newSingleThreadExecutor();
 
 	public static void dumpData(DataDump data, boolean thenExit) {
-		List<CustomAnswer> caDump = data.getCaDump();
-		List<GuildConfig> gcDump = data.getGcDump();
 		List<Member> mDump = data.getmDump();
-		List<PoliticalState> psDump = data.getPsDump();
 
-		NContract<Boolean> act = new NContract<>(4);
-		act.setAction(bols -> bols.stream().allMatch(Boolean::booleanValue));
-
-		backupQueue.execute(() -> {
-			EntityManager em = Manager.getEntityManager();
-			em.getTransaction().begin();
-
-			for (int i = 0; i < caDump.size(); i++) {
-				em.merge(caDump.get(i));
-				saveChunk(em, i, caDump.size(), "respostas");
-			}
-			if (caDump.size() > 0) Helper.logger(Main.class).info(caDump.size() + " respostas salvas com sucesso!");
-
-			em.getTransaction().commit();
-			em.close();
-			act.addSignature(0, true);
-		});
-
-		backupQueue.execute(() -> {
-			EntityManager em = Manager.getEntityManager();
-			em.getTransaction().begin();
-
-			for (int i = 0; i < gcDump.size(); i++) {
-				em.merge(gcDump.get(i));
-				saveChunk(em, i, gcDump.size(), "configurações");
-			}
-			if (gcDump.size() > 0) Helper.logger(Main.class).info(gcDump.size() + " configurações salvas com sucesso!");
-
-			em.getTransaction().commit();
-			em.close();
-			act.addSignature(1, true);
-		});
-
-		backupQueue.execute(() -> {
+		Future<Boolean> act = backupThread.submit(() -> {
 			EntityManager em = Manager.getEntityManager();
 			em.getTransaction().begin();
 
@@ -90,22 +49,8 @@ public class BackupDAO {
 
 			em.getTransaction().commit();
 			em.close();
-			act.addSignature(2, true);
-		});
 
-		backupQueue.execute(() -> {
-			EntityManager em = Manager.getEntityManager();
-			em.getTransaction().begin();
-
-			for (int i = 0; i < psDump.size(); i++) {
-				em.merge(psDump.get(i));
-				saveChunk(em, i, psDump.size(), "estados");
-			}
-			if (psDump.size() > 0) Helper.logger(Main.class).info(psDump.size() + " estados salvos com sucesso!");
-
-			em.getTransaction().commit();
-			em.close();
-			act.addSignature(3, true);
+			return true;
 		});
 
 		try {
@@ -134,16 +79,9 @@ public class BackupDAO {
 	public static DataDump getData() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query ca = em.createQuery("SELECT c FROM CustomAnswer c", CustomAnswer.class);
 		Query m = em.createQuery("SELECT m FROM Member m", Member.class);
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
-		List<PoliticalState> ps = new ArrayList<>();
 
-		for (ExceedEnum ex : ExceedEnum.values()) {
-			ps.add(PStateDAO.getPoliticalState(ex));
-		}
-
-		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), ps);
+		DataDump dump = new DataDump(m.getResultList());
 		em.close();
 
 		return dump;

@@ -25,7 +25,7 @@ import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.GlobalMessageDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -150,13 +150,13 @@ public class Relay {
 		for (Map.Entry<String, String> entry : relays.entrySet()) {
 			String k = entry.getKey();
 			String r = entry.getValue();
-			if (k.equals(s.getId()) && GuildDAO.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser())
+			if (k.equals(s.getId()) && com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser())
 				continue;
 			try {
 				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
 				assert t != null;
-				if (GuildDAO.getGuildById(k).isAllowImg()) {
-					if (GuildDAO.getGuildById(k).isLiteMode()) {
+				if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isAllowImg()) {
+					if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
 						if (client != null) {
 							client.send(getMessage(msg, m, s));
@@ -170,7 +170,7 @@ public class Relay {
 						}
 					}
 				} else {
-					if (GuildDAO.getGuildById(k).isLiteMode()) {
+					if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
 						if (client != null) {
 							client.send(getMessage(msg, m, s));
@@ -181,12 +181,12 @@ public class Relay {
 					}
 				}
 			} catch (NullPointerException e) {
-				GuildDAO.getGuildById(k).setCanalRelay(null);
+				com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).setCanalRelay(null);
 			} catch (InsufficientPermissionException ignore) {
 			}
 		}
 		try {
-			if (!GuildDAO.getGuildById(s.getId()).isLiteMode()) {
+			if (!com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(s.getId()).isLiteMode()) {
 				source.delete().queue();
 			}
 		} catch (InsufficientPermissionException ignore) {
@@ -219,8 +219,8 @@ public class Relay {
 			try {
 				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
 				assert t != null;
-				if (GuildDAO.getGuildById(k).isAllowImg()) {
-					if (GuildDAO.getGuildById(k).isLiteMode()) {
+				if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isAllowImg()) {
+					if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
 						if (client != null) {
 							client.send(getMessage(gm));
@@ -230,7 +230,7 @@ public class Relay {
 						t.sendMessage(mb.build()).queue();
 					}
 				} else {
-					if (GuildDAO.getGuildById(k).isLiteMode()) {
+					if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
 						if (client != null) {
 							client.send(getMessage(gm));

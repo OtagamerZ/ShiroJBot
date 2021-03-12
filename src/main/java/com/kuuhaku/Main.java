@@ -28,7 +28,7 @@ import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.Relay;
 import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.ConsoleListener;
 import com.kuuhaku.events.JibrilEvents;
@@ -157,9 +157,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		getInfo().setWinner(ExceedDAO.getWinner());
 		for (Guild g : shiroShards.getGuilds()) {
 			try {
-				GuildDAO.getGuildById(g.getId());
+				com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(g.getId());
 			} catch (NoResultException e) {
-				GuildDAO.addGuildToDB(g);
+				com.kuuhaku.controller.postgresql.GuildDAO.addGuildToDB(g);
 				Helper.logger(Main.class).info("Guild adicionada ao banco: " + g.getName());
 			}
 		}

@@ -69,10 +69,7 @@ public class ConsoleListener extends BufferedReader {
                 System.out.println("Sayonara, Nii-chan <3");
                 Executors.newSingleThreadExecutor().execute(() ->
 						BackupDAO.dumpData(new DataDump(
-								com.kuuhaku.controller.sqlite.BackupDAO.getCADump(),
-								com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump(),
-								com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(),
-								com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump()
+								com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()
 						), true)
 				);
 			}

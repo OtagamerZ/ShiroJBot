@@ -18,39 +18,18 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
-import com.kuuhaku.model.persistent.CustomAnswer;
-import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
 
 import java.util.List;
 
 public class DataDump {
-	private final List<CustomAnswer> caDump;
 	private final List<Member> mDump;
-	private final List<GuildConfig> gcDump;
-	private final List<PoliticalState> psDump;
 
-	public DataDump(List<CustomAnswer> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<PoliticalState> psDump) {
-		this.caDump = caDump;
-		this.gcDump = gcDump;
+	public DataDump(List<Member> mDump) {
 		this.mDump = mDump;
-		this.psDump = psDump;
 	}
 
-	public List<CustomAnswer> getCaDump() {
-		return caDump;
-	}
-
-    public List<Member> getmDump() {
+	public List<Member> getmDump() {
 		return mDump;
-	}
-
-	public List<GuildConfig> getGcDump() {
-		return gcDump;
-	}
-
-	public List<PoliticalState> getPsDump() {
-		return psDump;
 	}
 }

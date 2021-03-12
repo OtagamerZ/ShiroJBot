@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
@@ -42,7 +42,7 @@ public class ModifyRulesCommand implements Executable {
 			return;
 		}
 
-		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
 		String rule = String.join(" ", args);
 
 		if (!StringUtils.isNumeric(rule) && !rule.contains(";")) {
@@ -59,7 +59,7 @@ public class ModifyRulesCommand implements Executable {
 			}
 
 			gc.removeRule(index);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			channel.sendMessage("✅ | Regra removida com sucesso!").queue();
 		} else {
 			if (rule.split(";").length != 2) {

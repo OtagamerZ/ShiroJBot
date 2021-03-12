@@ -19,8 +19,8 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;

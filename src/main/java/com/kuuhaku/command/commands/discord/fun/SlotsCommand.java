@@ -23,8 +23,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.PStateDAO;
 import com.kuuhaku.controller.postgresql.SlotsDAO;
-import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -113,9 +113,9 @@ public class SlotsCommand implements Executable {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(1);
-					PStateDAO.savePoliticalState(ps);
+					com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 				}
 			} else if (watermelon >= 3) {
 				bet.set(Math.round(bet.get() * 1.5f * (watermelon - 2)));
@@ -123,9 +123,9 @@ public class SlotsCommand implements Executable {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(2);
-					PStateDAO.savePoliticalState(ps);
+					com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 				}
 			} else if (cherry >= 3) {
 				bet.set(bet.get() * 2 * (cherry - 2));
@@ -133,9 +133,9 @@ public class SlotsCommand implements Executable {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(4);
-					PStateDAO.savePoliticalState(ps);
+					com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 				}
 			} else if (heart >= 3) {
 				bet.set(Math.round(bet.get() * 2.75f * (heart - 2)));
@@ -143,9 +143,9 @@ public class SlotsCommand implements Executable {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(6);
-					PStateDAO.savePoliticalState(ps);
+					com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 				}
 			} else if (bell >= 3) {
 				bet.set(bet.get() * 4 * (bell - 2));
@@ -153,9 +153,9 @@ public class SlotsCommand implements Executable {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(16);
-					PStateDAO.savePoliticalState(ps);
+					com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 				}
 			} else if (bar >= 3) {
 				bet.set(bet.get() * 7 * (bar - 2));
@@ -163,9 +163,9 @@ public class SlotsCommand implements Executable {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(45);
-					PStateDAO.savePoliticalState(ps);
+					com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 				}
 			} else if (horseshoe >= 3) {
 				bet.set(bet.get() * 12 * (horseshoe - 2));
@@ -173,9 +173,9 @@ public class SlotsCommand implements Executable {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(65);
-					PStateDAO.savePoliticalState(ps);
+					com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 				}
 			} else if (diamond >= 3) {
 				bet.set(bet.get() * 20 * (diamond - 2));
@@ -183,9 +183,9 @@ public class SlotsCommand implements Executable {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(80);
-					PStateDAO.savePoliticalState(ps);
+					com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 				}
 			}
 
@@ -197,9 +197,9 @@ public class SlotsCommand implements Executable {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(150);
-					PStateDAO.savePoliticalState(ps);
+					com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 				}
 			}
 
@@ -214,7 +214,7 @@ public class SlotsCommand implements Executable {
 				msg += "Poxa, parece que você não teve sorte hoje. Volte sempre!";
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(false);
 					PStateDAO.savePoliticalState(ps);
 				}

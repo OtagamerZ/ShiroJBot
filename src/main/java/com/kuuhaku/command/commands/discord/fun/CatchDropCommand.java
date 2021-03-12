@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;

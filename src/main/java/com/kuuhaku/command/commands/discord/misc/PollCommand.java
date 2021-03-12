@@ -23,7 +23,7 @@ import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
@@ -74,7 +74,7 @@ public class PollCommand implements Executable {
 			return;
 		}
 
-		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
 
 		JSONArray options = null;
 		if (Helper.containsAll(text, ";", "[", "]")) {
@@ -163,7 +163,7 @@ public class PollCommand implements Executable {
 
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isBlank()) {
 			gc.setCanalSUG("");
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 
 			if (options != null) channel.sendMessage(eb.build()).queue(sendOptions);
 			else channel.sendMessage(eb.build()).queue(sendSimple);
