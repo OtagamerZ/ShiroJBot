@@ -25,6 +25,7 @@ import com.kuuhaku.utils.Helper;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Map;
 
 public class GuildDAO {
 	@SuppressWarnings("unchecked")
@@ -134,5 +135,20 @@ public class GuildDAO {
 		em.close();
 
 		return gcs;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void updateRelays(Map<String, String> relays) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE canalrelay <> '' AND canalrelay IS NOT NULL", GuildConfig.class);
+
+		List<GuildConfig> gc = q.getResultList();
+		gc.removeIf(g -> Main.getJibril().getGuildById(g.getGuildID()) == null);
+		for (GuildConfig g : gc) {
+			relays.put(g.getGuildID(), g.getCanalRelay());
+		}
+
+		em.close();
 	}
 }
