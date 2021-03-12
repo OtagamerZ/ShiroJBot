@@ -20,7 +20,6 @@ package com.kuuhaku.controller.sqlite;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.Member;
-import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -32,13 +31,14 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			net.dv8tion.jda.api.entities.Member mb = Main.getInfo().getGuildByID(server).getMemberById(id);
+			net.dv8tion.jda.api.entities.Member m = Main.getInfo().getGuildByID(server).getMemberById(id);
+			if (m == null) return null;
 
-			if (mb == null) return null;
-			return Helper.getOr(
-					em.find(Member.class, id),
-					addMemberToDB(mb)
-			);
+			Member mb = em.find(Member.class, id);
+			if (mb == null)
+				return addMemberToDB(m);
+
+			return mb;
 		} finally {
 			em.close();
 		}
