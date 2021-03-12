@@ -170,8 +170,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			boolean blacklisted = BlacklistDAO.isBlacklisted(author);
 
-			if (!blacklisted && MemberDAO.getMember(author.getId(), guild.getId()) == null)
-				MemberDAO.addMemberToDB(author.getId(), guild.getId());
+			if (!blacklisted) MemberDAO.getMember(author.getId(), guild.getId());
 
 			/*try {
 				MutedMember mm = MemberDAO.getMutedMemberById(author.getId());
@@ -331,7 +330,7 @@ public class ShiroEvents extends ListenerAdapter {
 							.stream()
 							.filter(e -> {
 								com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
-								return mb != null && mb.getLevel() >= Integer.parseInt(e.getKey());
+								return mb.getLevel() >= Integer.parseInt(e.getKey());
 							})
 							.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 					Map<Integer, Role> sortedLvls = new TreeMap<>();
@@ -396,10 +395,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
-					if (m == null) {
-						MemberDAO.addMemberToDB(author.getId(), guild.getId());
-						m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
-					} else if (m.getUid() == null) {
+					if (m.getUid() == null) {
 						m.setUid(author.getId());
 						m.setSid(guild.getId());
 					}
@@ -913,10 +909,7 @@ public class ShiroEvents extends ListenerAdapter {
 		if (blacklisted) return;
 
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(mb.getId(), mb.getGuild().getId());
-		if (m == null) {
-			MemberDAO.addMemberToDB(mb.getId(), mb.getGuild().getId());
-			m = MemberDAO.getMember(mb.getId(), mb.getGuild().getId());
-		} else if (m.getUid() == null) {
+		if (m.getUid() == null) {
 			m.setUid(mb.getId());
 			m.setSid(mb.getGuild().getId());
 		}
