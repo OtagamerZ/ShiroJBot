@@ -58,7 +58,7 @@ public class KawaiponDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(k);
+		em.remove(em.contains(k) ? k : em.merge(k));
 		em.getTransaction().commit();
 
 		em.close();
