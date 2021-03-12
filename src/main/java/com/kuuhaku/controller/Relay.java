@@ -26,7 +26,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.GlobalMessageDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
-import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.RelayBlockList;
@@ -42,8 +41,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -100,7 +97,7 @@ public class Relay {
 	}
 
 	public void relayMessage(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
-		updateRelays();
+		GuildDAO.updateRelays(relays);
 		checkSize();
 
 		GlobalMessage gm = new GlobalMessage();
@@ -194,7 +191,7 @@ public class Relay {
 	}
 
 	public void relayMessage(GlobalMessage gm) {
-		updateRelays();
+		GuildDAO.updateRelays(relays);
 		checkSize();
 
 		EmbedBuilder eb = new EmbedBuilder();
@@ -280,7 +277,7 @@ public class Relay {
 	}
 
 	public MessageEmbed getRelayInfo(GuildConfig gc) {
-		updateRelays();
+		GuildDAO.updateRelays(relays);
 		checkSize();
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -293,24 +290,9 @@ public class Relay {
 	}
 
 	public Map<String, String> getRelayMap() {
-		updateRelays();
+		GuildDAO.updateRelays(relays);
 		checkSize();
 
 		return relays;
-	}
-
-	@SuppressWarnings("unchecked")
-	private void updateRelays() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE canalrelay <> '' AND canalrelay IS NOT NULL", GuildConfig.class);
-
-		List<GuildConfig> gc = q.getResultList();
-		gc.removeIf(g -> Main.getJibril().getGuildById(g.getGuildID()) == null);
-		for (GuildConfig g : gc) {
-			relays.put(g.getGuildID(), g.getCanalRelay());
-		}
-
-		em.close();
 	}
 }
