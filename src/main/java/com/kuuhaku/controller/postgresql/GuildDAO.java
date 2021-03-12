@@ -20,6 +20,7 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -56,7 +57,7 @@ public class GuildDAO {
 	public static void addGuildToDB(net.dv8tion.jda.api.entities.Guild guild) {
 		EntityManager em = Manager.getEntityManager();
 
-		GuildConfig gc = new GuildConfig();
+		GuildConfig gc = Helper.getOr(getGuildById(guild.getId()), new GuildConfig());
 		gc.setName(guild.getName());
 		gc.setGuildId(guild.getId());
 
