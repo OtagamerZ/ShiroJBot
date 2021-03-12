@@ -13,10 +13,20 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionada chance para cartas killcard">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Removida passiva secreta das cartas de 1 de mana">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_falling_star.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoAvatarCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoAvatarCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoNameCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoNameCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/MemberHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/MemberHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ConsumableShop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ConsumableShop.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1062,35 +1072,8 @@
       <workItem from="1615494677175" duration="157000" />
       <workItem from="1615495782670" duration="29000" />
       <workItem from="1615550962779" duration="7490000" />
-      <workItem from="1615565953529" duration="305000" />
-    </task>
-    <task id="LOCAL-03930" summary="Agora é possível adicionar emotes usando nome + arquivo">
-      <created>1614709415158</created>
-      <option name="number" value="03930" />
-      <option name="presentableId" value="LOCAL-03930" />
-      <option name="project" value="LOCAL" />
-      <updated>1614709415158</updated>
-    </task>
-    <task id="LOCAL-03931" summary="Agora é possível adicionar emotes usando nome + arquivo">
-      <created>1614710206459</created>
-      <option name="number" value="03931" />
-      <option name="presentableId" value="LOCAL-03931" />
-      <option name="project" value="LOCAL" />
-      <updated>1614710206459</updated>
-    </task>
-    <task id="LOCAL-03932" summary="Agora é possível adicionar emotes usando nome + arquivo">
-      <created>1614710814632</created>
-      <option name="number" value="03932" />
-      <option name="presentableId" value="LOCAL-03932" />
-      <option name="project" value="LOCAL" />
-      <updated>1614710814632</updated>
-    </task>
-    <task id="LOCAL-03933" summary="Agora é possível adicionar emotes usando nome + arquivo">
-      <created>1614710949055</created>
-      <option name="number" value="03933" />
-      <option name="presentableId" value="LOCAL-03933" />
-      <option name="project" value="LOCAL" />
-      <updated>1614710949055</updated>
+      <workItem from="1615565953529" duration="3962000" />
+      <workItem from="1615575891134" duration="619000" />
     </task>
     <task id="LOCAL-03934" summary="Agora é possível adicionar emotes usando nome + arquivo">
       <created>1614790108902</created>
@@ -1407,7 +1390,35 @@
       <option name="project" value="LOCAL" />
       <updated>1615561263156</updated>
     </task>
-    <option name="localTasksCounter" value="3979" />
+    <task id="LOCAL-03979" summary="Adicionada chance para cartas killcard">
+      <created>1615566380187</created>
+      <option name="number" value="03979" />
+      <option name="presentableId" value="LOCAL-03979" />
+      <option name="project" value="LOCAL" />
+      <updated>1615566380188</updated>
+    </task>
+    <task id="LOCAL-03980" summary="Adicionada chance para cartas killcard">
+      <created>1615566652402</created>
+      <option name="number" value="03980" />
+      <option name="presentableId" value="LOCAL-03980" />
+      <option name="project" value="LOCAL" />
+      <updated>1615566652402</updated>
+    </task>
+    <task id="LOCAL-03981" summary="Removida passiva secreta das cartas de 1 de mana">
+      <created>1615567613459</created>
+      <option name="number" value="03981" />
+      <option name="presentableId" value="LOCAL-03981" />
+      <option name="project" value="LOCAL" />
+      <updated>1615567613459</updated>
+    </task>
+    <task id="LOCAL-03982" summary="Removida passiva secreta das cartas de 1 de mana">
+      <created>1615569577046</created>
+      <option name="number" value="03982" />
+      <option name="presentableId" value="LOCAL-03982" />
+      <option name="project" value="LOCAL" />
+      <updated>1615569577046</updated>
+    </task>
+    <option name="localTasksCounter" value="3983" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1493,7 +1504,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Implementação do SpringLoaded" />
     <MESSAGE value="Remoção da dependencia dos enumeradores de AnimeName" />
     <MESSAGE value="Tentativa de melhoria no tempo de conversão das imagens" />
     <MESSAGE value="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;" />
@@ -1518,7 +1528,8 @@
     <MESSAGE value="Adicionado comandos para ativar ou desativar comandos" />
     <MESSAGE value="Removida maior parte das persistências no banco local" />
     <MESSAGE value="Adicionada chance para cartas killcard" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionada chance para cartas killcard" />
+    <MESSAGE value="Removida passiva secreta das cartas de 1 de mana" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removida passiva secreta das cartas de 1 de mana" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

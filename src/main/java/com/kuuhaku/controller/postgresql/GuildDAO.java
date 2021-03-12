@@ -44,21 +44,19 @@ public class GuildDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			GuildConfig gc = em.find(GuildConfig.class, id);
-			if (gc != null) return gc;
-			else {
-				addGuildToDB(Main.getInfo().getGuildByID(id));
-				return getGuildById(id);
-			}
+			return Helper.getOr(
+					em.find(GuildConfig.class, id),
+					addGuildToDB(Main.getInfo().getGuildByID(id))
+			);
 		} finally {
 			em.close();
 		}
 	}
 
-	public static void addGuildToDB(net.dv8tion.jda.api.entities.Guild guild) {
+	public static GuildConfig addGuildToDB(net.dv8tion.jda.api.entities.Guild guild) {
 		EntityManager em = Manager.getEntityManager();
 
-		GuildConfig gc = Helper.getOr(getGuildById(guild.getId()), new GuildConfig());
+		GuildConfig gc = new GuildConfig();
 		gc.setName(guild.getName());
 		gc.setGuildId(guild.getId());
 
@@ -67,6 +65,8 @@ public class GuildDAO {
 		em.getTransaction().commit();
 
 		em.close();
+
+		return gc;
 	}
 
 	public static void removeGuildFromDB(GuildConfig gc) {

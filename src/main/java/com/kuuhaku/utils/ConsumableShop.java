@@ -40,7 +40,7 @@ public class ConsumableShop {
 				"Ganha 3500 de XP instantâneamente (valor reduzido se você ganhou XP em menos de 10 segundos)",
 				5000,
 				(mb, ch, ms) -> {
-					Member m = MemberDAO.getMemberById(mb.getId() + mb.getGuild().getId());
+					Member m = MemberDAO.getMember(mb.getId(), mb.getGuild().getId());
 					int lvl = m.getLevel();
 					ch.sendMessage(mb.getAsMention() + " utilizou um boost de experiência e ganhou " + m.addXp(3500) + " XP.").queue();
 					MemberDAO.updateMemberConfigs(m);

@@ -40,7 +40,7 @@ public class PseudoAvatarCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
+		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
 		if (args.length == 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-image")).queue();
 			return;
