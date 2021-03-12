@@ -64,7 +64,7 @@ public class DeckStashDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(ds);
+		em.remove(em.contains(ds) ? ds : em.merge(ds));
 		em.getTransaction().commit();
 
 		em.close();

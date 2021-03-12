@@ -113,8 +113,8 @@ public class AccountDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		if (em.contains(acc))
-			em.lock(acc, LockModeType.PESSIMISTIC_WRITE);
+		acc = em.contains(acc) ? acc : em.merge(acc);
+		em.lock(acc, LockModeType.PESSIMISTIC_WRITE);
 		em.remove(acc);
 		em.getTransaction().commit();
 

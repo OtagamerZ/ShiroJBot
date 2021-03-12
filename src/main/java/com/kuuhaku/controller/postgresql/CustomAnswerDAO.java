@@ -91,7 +91,7 @@ public class CustomAnswerDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(ca);
+		em.remove(em.contains(ca) ? ca : em.merge(ca));
 		em.getTransaction().commit();
 
 		em.close();

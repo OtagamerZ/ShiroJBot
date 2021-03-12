@@ -103,7 +103,7 @@ public class MemberDAO {
 		m.setSid(server);
 
 		em.getTransaction().begin();
-		em.merge(m);
+		m = em.merge(m);
 		em.getTransaction().commit();
 
 		em.close();
