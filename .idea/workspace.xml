@@ -13,11 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Removida passiva secreta das cartas de 1 de mana">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas transações de membros" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1065,20 +1061,7 @@
       <workItem from="1615565953529" duration="3962000" />
       <workItem from="1615575891134" duration="619000" />
       <workItem from="1615576683551" duration="2046000" />
-    </task>
-    <task id="LOCAL-03935" summary="Aumentado o custo das apostas na roleta">
-      <created>1614875799706</created>
-      <option name="number" value="03935" />
-      <option name="presentableId" value="LOCAL-03935" />
-      <option name="project" value="LOCAL" />
-      <updated>1614875799707</updated>
-    </task>
-    <task id="LOCAL-03936" summary="Aumentado o custo das apostas na roleta">
-      <created>1614876566390</created>
-      <option name="number" value="03936" />
-      <option name="presentableId" value="LOCAL-03936" />
-      <option name="project" value="LOCAL" />
-      <updated>1614876566390</updated>
+      <workItem from="1615578828396" duration="321000" />
     </task>
     <task id="LOCAL-03937" summary="Aumentado o custo das apostas na roleta">
       <created>1614879379726</created>
@@ -1409,7 +1392,21 @@
       <option name="project" value="LOCAL" />
       <updated>1615576690759</updated>
     </task>
-    <option name="localTasksCounter" value="3984" />
+    <task id="LOCAL-03984" summary="Correções nas transações de servidor">
+      <created>1615578844512</created>
+      <option name="number" value="03984" />
+      <option name="presentableId" value="LOCAL-03984" />
+      <option name="project" value="LOCAL" />
+      <updated>1615578844512</updated>
+    </task>
+    <task id="LOCAL-03985" summary="Correção nas transações de membros">
+      <created>1615579143730</created>
+      <option name="number" value="03985" />
+      <option name="presentableId" value="LOCAL-03985" />
+      <option name="project" value="LOCAL" />
+      <updated>1615579143730</updated>
+    </task>
+    <option name="localTasksCounter" value="3986" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1495,8 +1492,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Remoção da dependencia dos enumeradores de AnimeName" />
-    <MESSAGE value="Tentativa de melhoria no tempo de conversão das imagens" />
     <MESSAGE value="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Correção menor" />
@@ -1519,8 +1514,10 @@
     <MESSAGE value="Adicionado comandos para ativar ou desativar comandos" />
     <MESSAGE value="Removida maior parte das persistências no banco local" />
     <MESSAGE value="Adicionada chance para cartas killcard" />
+    <MESSAGE value="Correções nas transações de servidor" />
     <MESSAGE value="Removida passiva secreta das cartas de 1 de mana" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removida passiva secreta das cartas de 1 de mana" />
+    <MESSAGE value="Correção nas transações de membros" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nas transações de membros" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
