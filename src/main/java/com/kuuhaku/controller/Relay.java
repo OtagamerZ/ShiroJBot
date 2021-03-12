@@ -126,7 +126,7 @@ public class Relay {
 
 		StringBuilder badges = new StringBuilder();
 		Set<Tag> tags = Tag.getTags(m.getUser(), m);
-		com.kuuhaku.model.persistent.Member mbr = MemberDAO.getMemberById(m.getId() + s.getId());
+		com.kuuhaku.model.persistent.Member mbr = MemberDAO.getMember(m.getId(), s.getId());
 
 		if (!exceed.isEmpty()) {
 			badges.append(TagIcons.getExceed(ExceedEnum.getByName(exceed)));
