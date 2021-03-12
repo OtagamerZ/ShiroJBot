@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.sqlite.PStateDAO;
+import com.kuuhaku.controller.postgresql.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.ExceedEnum;
@@ -86,9 +86,9 @@ public class JankenponCommand implements Executable {
 				switch (finalWin) {
 					case 0 -> {
 						if (ExceedDAO.hasExceed(author.getId())) {
-							PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+							PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 							ps.modifyInfluence(false);
-							PStateDAO.savePoliticalState(ps);
+							com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 						}
 						yield "\nVocê perdeu!";
 					}
@@ -97,7 +97,7 @@ public class JankenponCommand implements Executable {
 						acc.addCredit(crd, this.getClass());
 						AccountDAO.saveAccount(acc);
 						if (ExceedDAO.hasExceed(author.getId())) {
-							PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+							PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 							ps.modifyInfluence(2);
 							PStateDAO.savePoliticalState(ps);
 						}

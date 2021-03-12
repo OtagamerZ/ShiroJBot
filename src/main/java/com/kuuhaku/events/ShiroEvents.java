@@ -25,8 +25,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.DailyQuest;
@@ -176,7 +174,7 @@ public class ShiroEvents extends ListenerAdapter {
 				MemberDAO.addMemberToDB(member);
 
 			/*try {
-				MutedMember mm = com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(author.getId());
+				MutedMember mm = MemberDAO.getMutedMemberById(author.getId());
 				if (mm != null && mm.isMuted()) {
 					message.delete().complete();
 					return;
@@ -224,7 +222,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			try {
 				CustomAnswer ca = CustomAnswerDAO.getCAByTrigger(rawMessage, guild.getId());
-				if (ca != null && !ca.isMarkForDelete() && !Main.getSelfUser().getId().equals(author.getId()))
+				if (ca != null && !Main.getSelfUser().getId().equals(author.getId()))
 					Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer().replace("%user%", author.getAsMention()).replace("%guild%", guild.getName()).replace("%count%", String.valueOf(guild.getMemberCount())));
 			} catch (NoResultException | NullPointerException ignore) {
 			}
@@ -536,8 +534,7 @@ public class ShiroEvents extends ListenerAdapter {
 		for (String d : ShiroInfo.getDevelopers()) {
 			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 				GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
-				gc.setMarkForDelete(true);
-				GuildDAO.updateGuildSettings(gc);
+				GuildDAO.removeGuildFromDB(gc);
 				String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
 				c.sendMessage(msg).queue();
 			});

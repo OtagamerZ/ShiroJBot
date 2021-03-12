@@ -13,27 +13,77 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado comandos para ativar ou desativar comandos">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/DisableCommandCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/EnableCommandCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Removida maior parte das persistências no banco local">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_3_star.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_4_star.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_5_star.gif" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/ToxicTagCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/RelayCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/RelayCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/KillCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/KillCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/MmLockCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/MmLockCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchDropCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchDropCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchKawaiponCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchKawaiponCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheCardsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheCardsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheNumberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheNumberCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/JankenponCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/JankenponCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/HelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/HelpCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ColorRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ColorRoleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EmbedCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EmbedCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PollCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PollCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddColorRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddColorRoleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowCommunityCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowCommunityCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowDropsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowDropsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowImagesCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowImagesCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowKawaiponCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AllowKawaiponCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntiraidCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntiraidCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntispamCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AntispamCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/DisableCommandCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/DisableCommandCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/EnableCommandCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/EnableCommandCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/GatekeeperCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/GatekeeperCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LiteModeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/LiteModeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MakeLogCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MakeLogCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ModifyRulesCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ModifyRulesCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MuteMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MuteMemberCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/NoLinkCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/NoLinkCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/NqnModeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/NqnModeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RegenRulesCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RegenRulesCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RemoveAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RemoveAnswerCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RoleButtonCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RoleButtonCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/SettingsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/SettingsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/TagDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/TagDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/SmallCardsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/SmallCardsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ToggleExceedRolesCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ToggleExceedRolesCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/PStateDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/PStateDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/BackupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/BackupDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/CustomAnswerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CustomAnswerDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/GuildDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/PStateDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ConsoleListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ConsoleListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Tag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/TagIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/TagIcons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/GuildHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/GuildHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/model/Disboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/model/Disboard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DataDump.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DataDump.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CustomAnswer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/CustomAnswer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Tags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Tags.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ConsumableShop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ConsumableShop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,7 +189,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="DisableCommandCommand" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../icarusdiscordbot" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/gifs" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -153,12 +203,14 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\assets" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\tiers" />
-      <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.controller.postgresql.GuildDAO" />
+      <recent name="com.kuuhaku.controller.postgresql.PStateDAO" />
       <recent name="com.kuuhaku.utils.Helper" />
       <recent name="com.kuuhaku.controller.sqlite.GuildDAO" />
       <recent name="com.kuuhaku.handlers.games.rpg.Utils" />
@@ -176,6 +228,9 @@
       <recent name="com.kuuhaku.command.commands.information.URankCommand" />
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
@@ -202,6 +257,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1069,98 +1135,11 @@
       <workItem from="1615321398623" duration="976000" />
       <workItem from="1615401445142" duration="26000" />
       <workItem from="1615402808274" duration="3173000" />
-      <workItem from="1615468000493" duration="2609000" />
-    </task>
-    <task id="LOCAL-03913" summary="Correções menores">
-      <created>1614687660655</created>
-      <option name="number" value="03913" />
-      <option name="presentableId" value="LOCAL-03913" />
-      <option name="project" value="LOCAL" />
-      <updated>1614687660655</updated>
-    </task>
-    <task id="LOCAL-03914" summary="Correções menores">
-      <created>1614688661733</created>
-      <option name="number" value="03914" />
-      <option name="presentableId" value="LOCAL-03914" />
-      <option name="project" value="LOCAL" />
-      <updated>1614688661733</updated>
-    </task>
-    <task id="LOCAL-03915" summary="Mudança no comando de status">
-      <created>1614691382545</created>
-      <option name="number" value="03915" />
-      <option name="presentableId" value="LOCAL-03915" />
-      <option name="project" value="LOCAL" />
-      <updated>1614691382545</updated>
-    </task>
-    <task id="LOCAL-03916" summary="Mudança no comando de status">
-      <created>1614692980896</created>
-      <option name="number" value="03916" />
-      <option name="presentableId" value="LOCAL-03916" />
-      <option name="project" value="LOCAL" />
-      <updated>1614692980896</updated>
-    </task>
-    <task id="LOCAL-03917" summary="Mudança no comando de status">
-      <created>1614693390641</created>
-      <option name="number" value="03917" />
-      <option name="presentableId" value="LOCAL-03917" />
-      <option name="project" value="LOCAL" />
-      <updated>1614693390642</updated>
-    </task>
-    <task id="LOCAL-03918" summary="Mudança no comando de status">
-      <created>1614694219864</created>
-      <option name="number" value="03918" />
-      <option name="presentableId" value="LOCAL-03918" />
-      <option name="project" value="LOCAL" />
-      <updated>1614694219865</updated>
-    </task>
-    <task id="LOCAL-03919" summary="Adição de gatilhos de alvo nos efeitos por turno">
-      <created>1614695346902</created>
-      <option name="number" value="03919" />
-      <option name="presentableId" value="LOCAL-03919" />
-      <option name="project" value="LOCAL" />
-      <updated>1614695346902</updated>
-    </task>
-    <task id="LOCAL-03920" summary="Adição de gatilhos de alvo nos efeitos por turno">
-      <created>1614697164236</created>
-      <option name="number" value="03920" />
-      <option name="presentableId" value="LOCAL-03920" />
-      <option name="project" value="LOCAL" />
-      <updated>1614697164236</updated>
-    </task>
-    <task id="LOCAL-03921" summary="Adição de ranking de tempo em canais de voz">
-      <created>1614702817959</created>
-      <option name="number" value="03921" />
-      <option name="presentableId" value="LOCAL-03921" />
-      <option name="project" value="LOCAL" />
-      <updated>1614702817959</updated>
-    </task>
-    <task id="LOCAL-03922" summary="Adição de ranking de tempo em canais de voz">
-      <created>1614703031754</created>
-      <option name="number" value="03922" />
-      <option name="presentableId" value="LOCAL-03922" />
-      <option name="project" value="LOCAL" />
-      <updated>1614703031755</updated>
-    </task>
-    <task id="LOCAL-03923" summary="Adição de ranking de tempo em canais de voz">
-      <created>1614703109749</created>
-      <option name="number" value="03923" />
-      <option name="presentableId" value="LOCAL-03923" />
-      <option name="project" value="LOCAL" />
-      <updated>1614703109749</updated>
-    </task>
-    <task id="LOCAL-03924" summary="Adição de ranking de tempo em canais de voz">
-      <created>1614703134662</created>
-      <option name="number" value="03924" />
-      <option name="presentableId" value="LOCAL-03924" />
-      <option name="project" value="LOCAL" />
-      <updated>1614703134664</updated>
-    </task>
-    <task id="LOCAL-03925" summary="Adição de ranking de tempo em canais de voz">
-      <created>1614703645229</created>
-      <option name="number" value="03925" />
-      <option name="presentableId" value="LOCAL-03925" />
-      <option name="project" value="LOCAL" />
-      <updated>1614703645231</updated>
+      <workItem from="1615468000493" duration="6847000" />
+      <workItem from="1615478524708" duration="2617000" />
+      <workItem from="1615494677175" duration="157000" />
+      <workItem from="1615495782670" duration="29000" />
+      <workItem from="1615550962779" duration="3615000" />
     </task>
     <task id="LOCAL-03926" summary="Adição de ranking de tempo em canais de voz">
       <created>1614703943799</created>
@@ -1414,7 +1393,98 @@
       <option name="project" value="LOCAL" />
       <updated>1615409306572</updated>
     </task>
-    <option name="localTasksCounter" value="3962" />
+    <task id="LOCAL-03962" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615470691021</created>
+      <option name="number" value="03962" />
+      <option name="presentableId" value="LOCAL-03962" />
+      <option name="project" value="LOCAL" />
+      <updated>1615470691022</updated>
+    </task>
+    <task id="LOCAL-03963" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615471031739</created>
+      <option name="number" value="03963" />
+      <option name="presentableId" value="LOCAL-03963" />
+      <option name="project" value="LOCAL" />
+      <updated>1615471031739</updated>
+    </task>
+    <task id="LOCAL-03964" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615471105510</created>
+      <option name="number" value="03964" />
+      <option name="presentableId" value="LOCAL-03964" />
+      <option name="project" value="LOCAL" />
+      <updated>1615471105510</updated>
+    </task>
+    <task id="LOCAL-03965" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615471417748</created>
+      <option name="number" value="03965" />
+      <option name="presentableId" value="LOCAL-03965" />
+      <option name="project" value="LOCAL" />
+      <updated>1615471417748</updated>
+    </task>
+    <task id="LOCAL-03966" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615471866994</created>
+      <option name="number" value="03966" />
+      <option name="presentableId" value="LOCAL-03966" />
+      <option name="project" value="LOCAL" />
+      <updated>1615471866994</updated>
+    </task>
+    <task id="LOCAL-03967" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615472196447</created>
+      <option name="number" value="03967" />
+      <option name="presentableId" value="LOCAL-03967" />
+      <option name="project" value="LOCAL" />
+      <updated>1615472196447</updated>
+    </task>
+    <task id="LOCAL-03968" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615472626359</created>
+      <option name="number" value="03968" />
+      <option name="presentableId" value="LOCAL-03968" />
+      <option name="project" value="LOCAL" />
+      <updated>1615472626359</updated>
+    </task>
+    <task id="LOCAL-03969" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615472903298</created>
+      <option name="number" value="03969" />
+      <option name="presentableId" value="LOCAL-03969" />
+      <option name="project" value="LOCAL" />
+      <updated>1615472903298</updated>
+    </task>
+    <task id="LOCAL-03970" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615473049290</created>
+      <option name="number" value="03970" />
+      <option name="presentableId" value="LOCAL-03970" />
+      <option name="project" value="LOCAL" />
+      <updated>1615473049290</updated>
+    </task>
+    <task id="LOCAL-03971" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615473192431</created>
+      <option name="number" value="03971" />
+      <option name="presentableId" value="LOCAL-03971" />
+      <option name="project" value="LOCAL" />
+      <updated>1615473192432</updated>
+    </task>
+    <task id="LOCAL-03972" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615473357163</created>
+      <option name="number" value="03972" />
+      <option name="presentableId" value="LOCAL-03972" />
+      <option name="project" value="LOCAL" />
+      <updated>1615473357163</updated>
+    </task>
+    <task id="LOCAL-03973" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615473521524</created>
+      <option name="number" value="03973" />
+      <option name="presentableId" value="LOCAL-03973" />
+      <option name="project" value="LOCAL" />
+      <updated>1615473521524</updated>
+    </task>
+    <task id="LOCAL-03974" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615474696408</created>
+      <option name="number" value="03974" />
+      <option name="presentableId" value="LOCAL-03974" />
+      <option name="project" value="LOCAL" />
+      <updated>1615474696408</updated>
+    </task>
+    <option name="localTasksCounter" value="3975" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1500,7 +1570,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Revisão geral no código" />
     <MESSAGE value="Correção no efeito de atordoamento" />
     <MESSAGE value="Implementação do SpringLoaded" />
     <MESSAGE value="Remoção da dependencia dos enumeradores de AnimeName" />
@@ -1525,7 +1594,8 @@
     <MESSAGE value="Silenciado erros de falha ao enviar a mensagem ao usuário" />
     <MESSAGE value="Adicionado antialiasing às cartas de campo" />
     <MESSAGE value="Adicionado comandos para ativar ou desativar comandos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionado comandos para ativar ou desativar comandos" />
+    <MESSAGE value="Removida maior parte das persistências no banco local" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removida maior parte das persistências no banco local" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

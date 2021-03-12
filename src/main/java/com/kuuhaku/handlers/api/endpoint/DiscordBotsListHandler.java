@@ -19,11 +19,7 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.TokenDAO;
-import com.kuuhaku.controller.postgresql.UpvoteDAO;
-import com.kuuhaku.controller.sqlite.PStateDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.enums.ExceedEnum;
@@ -71,9 +67,9 @@ public class DiscordBotsListHandler {
 				eb.setColor(Color.cyan);
 
 				if (ExceedDAO.hasExceed(u.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(u.getId())));
+					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(u.getId())));
 					ps.modifyInfluence(5);
-					PStateDAO.savePoliticalState(ps);
+					com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 
 					eb.addField("Bonus ao seu Exceed", "Adicionalmente, seu Exceed recebeu 5 pontos de influência adicionais!", false);
 				}
@@ -113,7 +109,7 @@ public class DiscordBotsListHandler {
 							eb.setColor(Color.cyan);
 
 							if (ExceedDAO.hasExceed(u.getId())) {
-								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(u.getId())));
+								PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(u.getId())));
 								ps.modifyInfluence(5);
 								PStateDAO.savePoliticalState(ps);
 

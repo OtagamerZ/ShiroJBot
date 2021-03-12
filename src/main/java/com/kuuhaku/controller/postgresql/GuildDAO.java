@@ -18,6 +18,7 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.GuildConfig;
 
 import javax.persistence.EntityManager;
@@ -30,6 +31,103 @@ public class GuildDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
+		List<GuildConfig> gcs = gc.getResultList();
+
+		em.close();
+
+		return gcs;
+	}
+
+	public static GuildConfig getGuildById(String id) {
+		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		try {
+			GuildConfig gc = em.find(GuildConfig.class, id);
+			if (gc != null) return gc;
+			else {
+				addGuildToDB(Main.getInfo().getGuildByID(id));
+				return getGuildById(id);
+			}
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void addGuildToDB(net.dv8tion.jda.api.entities.Guild guild) {
+		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		GuildConfig gc = new GuildConfig();
+		gc.setName(guild.getName());
+		gc.setGuildId(guild.getId());
+
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void removeGuildFromDB(GuildConfig gc) {
+		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.remove(gc);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void updateGuildSettings(GuildConfig gc) {
+		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<GuildConfig> getAllGuildsWithExceedRoles() {
+		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE exceedRolesEnabled = TRUE", GuildConfig.class);
+		List<GuildConfig> gcs = gc.getResultList();
+
+		em.close();
+
+		return gcs;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<GuildConfig> getAllGuildsWithButtons() {
+		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE COALESCE(buttonConfigs, '') NOT IN ('', '{}')", GuildConfig.class);
+		List<GuildConfig> gcs = gc.getResultList();
+
+		em.close();
+
+		return gcs;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<GuildConfig> getAllGuildsWithGeneralChannel() {
+		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE canalGeral <> ''", GuildConfig.class);
+		List<GuildConfig> gcs = gc.getResultList();
+
+		em.close();
+
+		return gcs;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<GuildConfig> getAlertChannels() {
+		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE COALESCE(canalAvisos,'') <> ''", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();

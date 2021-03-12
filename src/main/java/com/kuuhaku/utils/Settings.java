@@ -19,8 +19,8 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
@@ -41,7 +41,7 @@ public class Settings {
 
 	public static void embedConfig(Message message) {
 		try {
-			GuildConfig gc = GuildDAO.getGuildById(message.getGuild().getId());
+			GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(message.getGuild().getId());
 			String prefix = Helper.getOr(gc.getPrefix(), "s!");
 
 			//CANAIS
@@ -101,7 +101,7 @@ public class Settings {
 						Map<String, Object> cn = gc.getCargoslvl();
 						cn.remove(String.valueOf(i));
 						gc.setCargosLvl(new JSONObject(cn));
-						GuildDAO.updateGuildSettings(gc);
+						com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 					}
 				}
 			}
@@ -151,7 +151,7 @@ public class Settings {
 					eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoMuteID).getAsMention(), true);
 				} catch (NullPointerException e) {
 					gc.setCargoMute(null);
-					GuildDAO.updateGuildSettings(gc);
+					com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 				}
 			} else {
 				eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoMuteID, true);
@@ -193,7 +193,7 @@ public class Settings {
 		}
 
 		gc.setPrefix(newPrefix);
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O prefixo deste servidor foi trocado para `" + newPrefix + "` com sucesso.").queue();
 	}
 
@@ -209,7 +209,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalBV(null);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal de boas-vindas do servidor foi resetado com sucesso.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
@@ -220,7 +220,7 @@ public class Settings {
 		TextChannel newCanalBV = message.getMentionedChannels().get(0);
 
 		gc.setCanalBV(newCanalBV.getId());
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O canal de boas-vindas do servidor foi trocado para " + newCanalBV.getAsMention() + " com sucesso.").queue();
 	}
 
@@ -232,13 +232,13 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setMsgBoasVindas("Seja bem-vindo(a) ao %guild%, %user%!");
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi resetado com sucesso.").queue();
 			return;
 		}
 
 		gc.setMsgBoasVindas(argsAsText);
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi trocado para ```" + argsAsText + "``` com sucesso.").queue();
 	}
 
@@ -254,7 +254,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalAdeus(null);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal de adeus do servidor foi resetado com sucesso.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
@@ -265,7 +265,7 @@ public class Settings {
 		TextChannel newCanalAdeus = message.getMentionedChannels().get(0);
 
 		gc.setCanalAdeus(newCanalAdeus.getId());
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O canal de adeus do servidor foi trocado para " + newCanalAdeus.getAsMention() + " com sucesso.").queue();
 	}
 
@@ -277,13 +277,13 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setMsgAdeus("Ahhh...%user% saiu do servidor!");
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | A mensagem de adeus do servidor foi resetada com sucesso.").queue();
 			return;
 		}
 
 		gc.setMsgAdeus(argsAsText);
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | A mensagem de adeus do servidor foi trocada para ```" + argsAsText + "``` com sucesso.").queue();
 	}
 
@@ -295,13 +295,13 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setGeneralTopic("Contagem de membros em %count% e subindo!");
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O tópico do canal geral foi resetada com sucesso.").queue();
 			return;
 		}
 
 		gc.setGeneralTopic(argsAsText);
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O tópico do canal geral foi trocado para ```" + argsAsText + "``` com sucesso.").queue();
 	}
 
@@ -317,7 +317,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalSUG("");
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal de sugestões do servidor foi resetado com sucesso.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
@@ -328,7 +328,7 @@ public class Settings {
 		TextChannel newCanalSUG = message.getMentionedChannels().get(0);
 
 		gc.setCanalSUG(newCanalSUG.getId());
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O canal de sugestões do servidor foi trocado para " + newCanalSUG.getAsMention() + " com sucesso.").queue();
 	}
 
@@ -340,7 +340,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setWarnTime(60);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O tempo de punições do servidor foi resetado para 60 minutos com sucesso.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
@@ -351,7 +351,7 @@ public class Settings {
 		int newWarnTime = Integer.parseInt(args[1]);
 
 		gc.setWarnTime(newWarnTime);
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O tempo de punições do servidor foi trocado para " + newWarnTime + " minutos com sucesso.").queue();
 	}
 
@@ -363,7 +363,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setPollTime(60);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O tempo de enquetes do servidor foi resetado para 60 segundos com sucesso.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
@@ -374,7 +374,7 @@ public class Settings {
 		int newPollTime = Integer.parseInt(args[1]);
 
 		gc.setPollTime(newPollTime);
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O tempo de enquetes do servidor foi trocado para " + newPollTime + " segundos com sucesso.").queue();
 	}
 
@@ -391,7 +391,7 @@ public class Settings {
 		}
 		if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCargoMute(null);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O cargo de punição do servidor foi resetado com sucesso.").queue();
 			return;
 		} else if (message.getMentionedRoles().size() < 1) {
@@ -402,7 +402,7 @@ public class Settings {
 		Role newCargoMute = message.getMentionedRoles().get(0);
 
 		gc.setCargoMute(newCargoMute.getId());
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O cargo de punição do servidor foi trocado para " + newCargoMute.getAsMention() + " com sucesso.").queue();
 	}
 
@@ -422,7 +422,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCargoVip(null);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O cargo VIP do servidor foi resetado com sucesso.").queue();
 			return;
 		}
@@ -430,7 +430,7 @@ public class Settings {
 		Role newRoleVip = message.getMentionedRoles().get(0);
 
 		gc.setCargoVip(newRoleVip.getId());
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O cargo VIP do servidor foi trocado para " + newRoleVip.getAsMention() + " com sucesso.").queue();
 	}
 
@@ -448,11 +448,11 @@ public class Settings {
 
 		if (args[1].equals("ativar") || args[1].equals("sim")) {
 			gc.setLvlNotif(true);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | As mensagens quando alguém sobe de nível foram ativadas com sucesso.").queue();
 		} else if (args[1].equals("desativar") || args[1].equals("nao") || args[1].equals("não")) {
 			gc.setLvlNotif(false);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | As mensagens quando alguém sobe de nível foram desativadas com sucesso.").queue();
 		} else {
 			message.getTextChannel().sendMessage("❌ | \"" + args[1] + "\" não é uma opção válida, por favor escolha \"ativar\" ou então \"desativar\".").queue();
@@ -471,7 +471,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalLvl(null);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal de level up do servidor foi resetado com sucesso.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
@@ -482,7 +482,7 @@ public class Settings {
 		TextChannel newCanalLvlUp = message.getMentionedChannels().get(0);
 
 		gc.setCanalLvl(newCanalLvlUp.getId());
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O canal de level up do servidor foi trocado para " + newCanalLvlUp.getAsMention() + " com sucesso.").queue();
 	}
 
@@ -498,7 +498,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalRelay(null);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi resetado com sucesso.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
@@ -509,7 +509,7 @@ public class Settings {
 		TextChannel newCanalRelay = message.getMentionedChannels().get(0);
 
 		gc.setCanalRelay(newCanalRelay.getId());
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi trocado para " + newCanalRelay.getAsMention() + " com sucesso.").queue();
 	}
 
@@ -525,7 +525,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalAvisos(null);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal de avisos do servidor foi resetado com sucesso.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
@@ -536,7 +536,7 @@ public class Settings {
 		TextChannel newCanalAvisos = message.getMentionedChannels().get(0);
 
 		gc.setCanalAvisos(newCanalAvisos.getId());
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O canal de avisos do servidor foi trocado para " + newCanalAvisos.getAsMention() + " com sucesso.").queue();
 	}
 
@@ -552,7 +552,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalGeral(null);
-			GuildDAO.updateGuildSettings(gc);
+			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal geral do servidor foi resetado com sucesso.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
@@ -563,7 +563,7 @@ public class Settings {
 		TextChannel newCanalGeral = message.getMentionedChannels().get(0);
 
 		gc.setCanalGeral(newCanalGeral.getId());
-		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O canal geral do servidor foi trocado para " + newCanalGeral.getAsMention() + " com sucesso.").queue();
 	}
 
@@ -590,7 +590,7 @@ public class Settings {
 				Map<String, Object> cl = gc.getCargoslvl();
 				cl.remove(args[2]);
 				gc.setCargosLvl(new JSONObject(cl));
-				GuildDAO.updateGuildSettings(gc);
+				com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 				message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi resetado com sucesso.").queue();
 				return;
 			} catch (Exception e) {
