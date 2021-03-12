@@ -18,6 +18,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.Member;
 
 import javax.persistence.EntityManager;
@@ -26,11 +27,18 @@ import javax.persistence.Query;
 import java.util.List;
 
 public class MemberDAO {
-	public static Member getMemberById(String id) {
+	public static Member getMember(String id, String server) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return em.find(Member.class, id);
+			net.dv8tion.jda.api.entities.Member m = Main.getInfo().getGuildByID(server).getMemberById(id);
+			if (m == null) return null;
+
+			Member mb = em.find(Member.class, id + server);
+			if (mb == null)
+				return addMemberToDB(m);
+
+			return mb;
 		} finally {
 			em.close();
 		}
@@ -90,21 +98,21 @@ public class MemberDAO {
 		}
 	}
 
-	public static void addMemberToDB(net.dv8tion.jda.api.entities.Member u) {
+	public static Member addMemberToDB(net.dv8tion.jda.api.entities.Member u) {
 		EntityManager em = Manager.getEntityManager();
 
-		if (getMemberById(u.getUser().getId() + u.getGuild().getId()) == null) {
-			Member m = new Member();
-			m.setId(u.getUser().getId() + u.getGuild().getId());
-			m.setUid(u.getUser().getId());
-			m.setSid(u.getGuild().getId());
+		Member m = new Member();
+		m.setId(u.getUser().getId() + u.getGuild().getId());
+		m.setUid(u.getUser().getId());
+		m.setSid(u.getGuild().getId());
 
-			em.getTransaction().begin();
-			em.merge(m);
-			em.getTransaction().commit();
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
 
-			em.close();
-		}
+		em.close();
+
+		return m;
 	}
 
 	public static void updateMemberConfigs(Member m) {
