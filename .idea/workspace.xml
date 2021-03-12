@@ -14,10 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionada chance para cartas killcard">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/PStateDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/PStateDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1075,14 +1072,7 @@
       <workItem from="1615478524708" duration="2617000" />
       <workItem from="1615494677175" duration="157000" />
       <workItem from="1615495782670" duration="29000" />
-      <workItem from="1615550962779" duration="5994000" />
-    </task>
-    <task id="LOCAL-03928" summary="Agora é possível adicionar emotes usando nome + arquivo">
-      <created>1614705438546</created>
-      <option name="number" value="03928" />
-      <option name="presentableId" value="LOCAL-03928" />
-      <option name="project" value="LOCAL" />
-      <updated>1614705438546</updated>
+      <workItem from="1615550962779" duration="6433000" />
     </task>
     <task id="LOCAL-03929" summary="Agora é possível adicionar emotes usando nome + arquivo">
       <created>1614706434789</created>
@@ -1420,7 +1410,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615560302740</updated>
     </task>
-    <option name="localTasksCounter" value="3977" />
+    <task id="LOCAL-03977" summary="Adicionada chance para cartas killcard">
+      <created>1615560675821</created>
+      <option name="number" value="03977" />
+      <option name="presentableId" value="LOCAL-03977" />
+      <option name="project" value="LOCAL" />
+      <updated>1615560675821</updated>
+    </task>
+    <option name="localTasksCounter" value="3978" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

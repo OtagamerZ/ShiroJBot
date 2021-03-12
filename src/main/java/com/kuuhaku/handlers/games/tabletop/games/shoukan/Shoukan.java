@@ -954,7 +954,7 @@ public class Shoukan extends GlobalGame {
 			}
 			hPower = Math.round(
 					his.getFinDef() *
-							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+					(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 			);
 
 			if (getCombos().get(next).getLeft() == Race.SPIRIT) {
@@ -1280,7 +1280,7 @@ public class Shoukan extends GlobalGame {
 			}
 			hPower = Math.round(
 					his.getFinDef() *
-							(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
+					(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
 			);
 
 			if (getCombos().get(current).getLeft() == Race.SPIRIT) {
@@ -1599,8 +1599,8 @@ public class Shoukan extends GlobalGame {
 				.stream()
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
-								allCards.containsAll(f.getRequiredCards()) &&
-								(h.isNullMode() || h.getMana() >= f.getMana())
+						allCards.containsAll(f.getRequiredCards()) &&
+						(h.isNullMode() || h.getMana() >= f.getMana())
 				)
 				.findFirst()
 				.orElse(null);
@@ -1871,92 +1871,133 @@ public class Shoukan extends GlobalGame {
 		return null;
 	}
 
-	public void convertCard(Side side, int index, int source) {
-		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
-		Champion ch = getArena().getSlots().get(his).get(index).getTop();
+	public void convertCard(Side to, int target, Side from, int source) {
+		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
+
+		Champion chi = getArena().getSlots().get(from).get(source).getTop();
+
+		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 100 / (ch.isFusion() ? 5 : ch.getMana()), 100);
+
+		if (Helper.chance(chance)) {
+			for (int i = 0; i < slts.size(); i++) {
+				Equipment eq = slts.get(i).getBottom();
+				if (eq != null && eq.getLinkedTo().getLeft() == target) {
+					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+						unequipCard(to, i, slts);
+						return;
+					} else if ((eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLMIRROR) && source != -1) {
+						convertCard(from, source, to, target);
+						unequipCard(to, i, slts);
+						return;
+					}
+				}
+			}
+
+			SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(to, true);
+			if (sc != null) {
+				ch.clearLinkedTo();
+				ch.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
+				sc.setTop(ch);
+				slts.get(target).setTop(null);
+				for (int i = 0; i < slts.size(); i++) {
+					SlotColumn<Champion, Equipment> sd = slts.get(i);
+					if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+						killCard(to, i);
+
+					if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
+						unequipCard(to, i, slts);
+				}
+			}
+		}
+	}
+
+	public void convertCard(Side to, int target) {
+		Champion ch = getArena().getSlots().get(to).get(target).getTop();
+		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 
 		for (int i = 0; i < slts.size(); i++) {
 			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == index) {
+			if (eq != null && eq.getLinkedTo().getLeft() == target) {
 				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
-					unequipCard(his, i, slts);
-					return;
-				} else if ((eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLMIRROR) && source != -1) {
-					convertCard(his, source, index);
-					unequipCard(his, i, slts);
+					unequipCard(to, i, slts);
 					return;
 				}
 			}
 		}
 
-		SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(side, true);
+		SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(to, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
-			ch.setAcc(AccountDAO.getAccount(hands.get(side).getUser().getId()));
+			ch.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
 			sc.setTop(ch);
-			slts.get(index).setTop(null);
+			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn<Champion, Equipment> sd = slts.get(i);
-				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
-					killCard(side, i);
+				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+					killCard(to, i);
 
-				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
-					unequipCard(his, i, slts);
+				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
+					unequipCard(to, i, slts);
 			}
 		}
 	}
 
-	public void switchCards(Side side, int index, int source) {
-		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
-		Champion ch = getArena().getSlots().get(his).get(index).getTop();
+	public void switchCards(Side to, int target, Side from, int source) {
+		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 
-		for (int i = 0; i < slts.size(); i++) {
-			Equipment eq = slts.get(i).getBottom();
-			if (eq != null && eq.getLinkedTo().getLeft() == index) {
-				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
-					unequipCard(his, i, slts);
-					return;
+		Champion chi = getArena().getSlots().get(from).get(source).getTop();
+
+		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 100 / (ch.isFusion() ? 5 : ch.getMana()), 100);
+
+		if (Helper.chance(chance)) {
+			for (int i = 0; i < slts.size(); i++) {
+				Equipment eq = slts.get(i).getBottom();
+				if (eq != null && eq.getLinkedTo().getLeft() == target) {
+					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+						unequipCard(to, i, slts);
+						return;
+					}
 				}
 			}
+
+			ch.clearLinkedTo();
+			ch.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
+			slts.get(target).setTop(null);
+			for (int i = 0; i < slts.size(); i++) {
+				SlotColumn<Champion, Equipment> sd = slts.get(i);
+				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+					killCard(to, i);
+
+				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == source)
+					unequipCard(to, i, slts);
+			}
+
+			List<SlotColumn<Champion, Equipment>> slots = getArena().getSlots().get(from);
+
+			chi.clearLinkedTo();
+			chi.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
+			slots.get(source).setTop(null);
+			for (int i = 0; i < slots.size(); i++) {
+				SlotColumn<Champion, Equipment> sd = slots.get(i);
+				if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == target)
+					killCard(from, i);
+
+				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
+					unequipCard(from, i, slots);
+			}
+
+			slts.get(target).setTop(chi);
+			slots.get(source).setTop(ch);
 		}
-
-		ch.clearLinkedTo();
-		ch.setAcc(AccountDAO.getAccount(hands.get(side).getUser().getId()));
-		slts.get(index).setTop(null);
-		for (int i = 0; i < slts.size(); i++) {
-			SlotColumn<Champion, Equipment> sd = slts.get(i);
-			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
-				killCard(side, i);
-
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == source)
-				unequipCard(side, i, slts);
-		}
-
-		Champion yours = getArena().getSlots().get(side).get(source).getTop();
-		List<SlotColumn<Champion, Equipment>> slots = getArena().getSlots().get(side);
-
-		yours.clearLinkedTo();
-		yours.setAcc(AccountDAO.getAccount(hands.get(his).getUser().getId()));
-		slots.get(source).setTop(null);
-		for (int i = 0; i < slots.size(); i++) {
-			SlotColumn<Champion, Equipment> sd = slots.get(i);
-			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
-				killCard(his, i);
-
-			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
-				unequipCard(his, i, slots);
-		}
-
-		slts.get(index).setTop(yours);
-		slots.get(source).setTop(ch);
 	}
 
-	public void convertEquipments(Champion target, int pos, Side side, int index) {
-		Side his = side == Side.TOP ? Side.BOTTOM : Side.TOP;
+	public void convertEquipments(Champion target, int pos, Side to, int index) {
+		Side his = to == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
@@ -1974,14 +2015,14 @@ public class Shoukan extends GlobalGame {
 		for (int i = 0; i < 5; i++) {
 			Equipment eq = slts.get(i).getBottom();
 			if (eq != null && eq.getLinkedTo().getLeft() == index) {
-				SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(side, false);
+				SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(to, false);
 				if (sc != null) {
 					ch.removeLinkedTo(eq);
 					slts.get(i).setBottom(null);
 
 					target.addLinkedTo(eq);
 					eq.setLinkedTo(Pair.of(pos, target));
-					eq.setAcc(AccountDAO.getAccount(hands.get(side).getUser().getId()));
+					eq.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
 					sc.setBottom(eq);
 				} else return;
 			}
@@ -2586,7 +2627,7 @@ public class Shoukan extends GlobalGame {
 		return eot;
 	}
 
-	public void applyEot(EffectTrigger trigger, Side side, int index) {
+	public void applyEot(EffectTrigger trigger, Side to, int index) {
 		Iterator<EffectOverTime> i = eot.iterator();
 		while (i.hasNext()) {
 			EffectOverTime effect = i.next();
@@ -2596,9 +2637,9 @@ public class Shoukan extends GlobalGame {
 				continue;
 			}
 
-			if (effect.getTarget() == null || effect.getTarget() == side) {
+			if (effect.getTarget() == null || effect.getTarget() == to) {
 				if (effect.getTriggers().contains(trigger))
-					effect.getEffect().accept(side, index);
+					effect.getEffect().accept(to, index);
 
 				if (trigger == EffectTrigger.AFTER_TURN)
 					effect.decreaseTurn();
