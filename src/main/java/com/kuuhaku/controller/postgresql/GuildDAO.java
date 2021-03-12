@@ -20,7 +20,6 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.GuildConfig;
-import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -44,10 +43,11 @@ public class GuildDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return Helper.getOr(
-					em.find(GuildConfig.class, id),
-					addGuildToDB(Main.getInfo().getGuildByID(id))
-			);
+			GuildConfig gc = em.find(GuildConfig.class, id);
+			if (gc == null)
+				return addGuildToDB(Main.getInfo().getGuildByID(id));
+
+			return gc;
 		} finally {
 			em.close();
 		}
