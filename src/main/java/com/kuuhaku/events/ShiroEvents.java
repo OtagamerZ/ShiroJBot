@@ -170,7 +170,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			boolean blacklisted = BlacklistDAO.isBlacklisted(author);
 
-			if (!blacklisted && MemberDAO.getMemberById(author.getId() + guild.getId()) == null)
+			if (!blacklisted && MemberDAO.getMember(author.getId(), guild.getId()) == null)
 				MemberDAO.addMemberToDB(member);
 
 			/*try {
@@ -330,7 +330,7 @@ public class ShiroEvents extends ListenerAdapter {
 					Map<String, Object> rawLvls = gc.getCargoslvl().entrySet()
 							.stream()
 							.filter(e -> {
-								com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
+								com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
 								return mb != null && mb.getLevel() >= Integer.parseInt(e.getKey());
 							})
 							.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -395,10 +395,10 @@ public class ShiroEvents extends ListenerAdapter {
 						Helper.logToChannel(author, false, null, "Detectei um link no canal " + channel.getAsMention(), guild, rawMessage);
 					}
 
-					com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(member.getId() + member.getGuild().getId());
+					com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
 					if (m == null) {
 						MemberDAO.addMemberToDB(member);
-						m = MemberDAO.getMemberById(member.getId() + member.getGuild().getId());
+						m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
 					} else if (m.getUid() == null) {
 						m.setUid(author.getId());
 						m.setSid(guild.getId());
@@ -429,7 +429,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 				if (gc.isNQNMode() && Helper.hasEmote(rawMessage))
 					try {
-						com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
+						com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 
 						Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
 						Map<String, Runnable> s = Helper.sendEmotifiedString(guild, rawMessage);
@@ -912,10 +912,10 @@ public class ShiroEvents extends ListenerAdapter {
 
 		if (blacklisted) return;
 
-		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(mb.getId() + mb.getGuild().getId());
+		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(mb.getId(), mb.getGuild().getId());
 		if (m == null) {
 			MemberDAO.addMemberToDB(mb);
-			m = MemberDAO.getMemberById(mb.getId() + mb.getGuild().getId());
+			m = MemberDAO.getMember(mb.getId(), mb.getGuild().getId());
 		} else if (m.getUid() == null) {
 			m.setUid(mb.getId());
 			m.setSid(mb.getGuild().getId());

@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberHandler {
 
-	@RequestMapping(value = "/member/get/byid", method = RequestMethod.GET)
-	public Member requestProfileById(@RequestParam(value = "id") String id) {
-		return MemberDAO.getMemberById(id);
+	@RequestMapping(value = "/member/get", method = RequestMethod.GET)
+	public Member requestProfileById(@RequestParam(value = "uid") String uid, @RequestParam(value = "server") String server) {
+		return MemberDAO.getMember(uid, server);
 	}
 
 	@RequestMapping(value = "/member/get/bymid", method = RequestMethod.GET)
