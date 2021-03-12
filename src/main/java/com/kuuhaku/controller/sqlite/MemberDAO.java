@@ -18,7 +18,6 @@
 
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.Member;
 
 import javax.persistence.EntityManager;
@@ -31,12 +30,9 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			net.dv8tion.jda.api.entities.Member m = Main.getInfo().getGuildByID(server).getMemberById(id);
-			if (m == null) return null;
-
 			Member mb = em.find(Member.class, id + server);
 			if (mb == null)
-				return addMemberToDB(m);
+				return addMemberToDB(id, server);
 
 			return mb;
 		} finally {
@@ -98,13 +94,13 @@ public class MemberDAO {
 		}
 	}
 
-	public static Member addMemberToDB(net.dv8tion.jda.api.entities.Member u) {
+	public static Member addMemberToDB(String id, String server) {
 		EntityManager em = Manager.getEntityManager();
 
 		Member m = new Member();
-		m.setId(u.getUser().getId() + u.getGuild().getId());
-		m.setUid(u.getUser().getId());
-		m.setSid(u.getGuild().getId());
+		m.setId(id + server);
+		m.setUid(id);
+		m.setSid(server);
 
 		em.getTransaction().begin();
 		em.merge(m);
