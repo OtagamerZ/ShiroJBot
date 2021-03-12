@@ -100,23 +100,16 @@ public class JibrilEvents extends ListenerAdapter {
 			if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId())) {
 				Member mb = com.kuuhaku.controller.sqlite.MemberDAO.getMember(event.getAuthor().getId(), event.getGuild().getId());
 
-				if (mb == null) {
-					assert event.getMember() != null;
-					com.kuuhaku.controller.sqlite.MemberDAO.addMemberToDB(event.getMember().getId(), event.getGuild().getId());
-					mb = com.kuuhaku.controller.sqlite.MemberDAO.getMember(event.getAuthor().getId(), event.getGuild().getId());
-				}
-
 				if (!mb.isRulesSent())
 					try {
-						Member finalMb = mb;
 						event.getAuthor().openPrivateChannel()
 								.flatMap(c -> c.sendMessage(introMsg()))
 								.flatMap(s -> s.getChannel().sendMessage(rulesMsg()))
 								.flatMap(s -> s.getChannel().sendMessage(finalMsg()))
 								.queue(s -> {
-									finalMb.setRulesSent(true);
-									com.kuuhaku.controller.sqlite.MemberDAO.updateMemberConfigs(finalMb);
-									MemberDAO.saveMemberToBD(finalMb);
+									mb.setRulesSent(true);
+									com.kuuhaku.controller.sqlite.MemberDAO.updateMemberConfigs(mb);
+									MemberDAO.saveMemberToBD(mb);
 								}, Helper::doNothing);
 					} catch (ErrorResponseException ignore) {
 					}
