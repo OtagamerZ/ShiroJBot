@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
@@ -41,7 +41,7 @@ public class AntispamCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
 
 		if (args.length > 0 && (args[0].equalsIgnoreCase("soft") || args[0].equalsIgnoreCase("hard"))) {
 			switch (args[0].toLowerCase()) {
@@ -51,7 +51,7 @@ public class AntispamCommand implements Executable {
 						return;
 					}
 					gc.setHardAntispam(false);
-					GuildDAO.updateGuildSettings(gc);
+					com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage("Modo de anti-spam trocado para **SOFT**").queue();
 				}
 				case "hard" -> {
@@ -60,7 +60,7 @@ public class AntispamCommand implements Executable {
 						return;
 					}
 					gc.setHardAntispam(true);
-					GuildDAO.updateGuildSettings(gc);
+					com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage("Modo de anti-spam trocado para **HARD**").queue();
 				}
 			}

@@ -20,8 +20,8 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.BlacklistDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
@@ -93,7 +93,7 @@ public class JibrilEvents extends ListenerAdapter {
 			if (BlacklistDAO.isBlacklisted(event.getAuthor())) return;
 
 			if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getJibril().getSelfUser().getId())) {
-				event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores deste servidor usando `" + GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue(null, Helper::doNothing);
+				event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores deste servidor usando `" + com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue(null, Helper::doNothing);
 				return;
 			}
 

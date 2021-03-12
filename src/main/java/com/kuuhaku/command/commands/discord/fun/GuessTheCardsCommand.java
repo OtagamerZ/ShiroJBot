@@ -24,7 +24,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.sqlite.PStateDAO;
+import com.kuuhaku.controller.postgresql.PStateDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.annotations.Command;
@@ -140,7 +140,7 @@ public class GuessTheCardsCommand implements Executable {
 							Account acc = AccountDAO.getAccount(author.getId());
 							acc.addCredit(reward, GuessTheCardsCommand.class);
 							if (ExceedDAO.hasExceed(author.getId())) {
-								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+								PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 								ps.modifyInfluence(2 * points);
 								PStateDAO.savePoliticalState(ps);
 							}

@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
+import com.kuuhaku.controller.postgresql.CustomAnswerDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.utils.Helper;

@@ -21,8 +21,8 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.Account;
@@ -74,7 +74,7 @@ public class TenthMinuteEvent implements Job {
 			}
 		}
 
-		List<GuildConfig> guilds = GuildDAO.getAllGuildsWithExceedRoles();
+		List<GuildConfig> guilds = com.kuuhaku.controller.postgresql.GuildDAO.getAllGuildsWithExceedRoles();
 		List<ExceedMember> ems = ExceedDAO.getExceedMembers();
 		String[] exNames = {"imanity", "ex-machina", "exmachina", "flugel", "flügel", "werebeast", "elf", "seiren"};
 
@@ -138,15 +138,15 @@ public class TenthMinuteEvent implements Job {
 								.setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount(), false)))
 								.queue(null, t -> {
 									gc.setCanalGeral(null);
-									GuildDAO.updateGuildSettings(gc);
+									com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 								});
 					} catch (InsufficientPermissionException e) {
 						gc.setCanalGeral(null);
-						GuildDAO.updateGuildSettings(gc);
+						com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 					}
 				else {
 					gc.setCanalGeral(null);
-					GuildDAO.updateGuildSettings(gc);
+					com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
 				}
 			}
 		}

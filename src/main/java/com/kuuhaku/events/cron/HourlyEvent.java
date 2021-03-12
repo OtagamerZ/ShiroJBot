@@ -48,12 +48,7 @@ public class HourlyEvent implements Job {
 		if (!Main.getInfo().isLive()) Main.getShiroShards().setActivity(Main.getRandomActivity());
 
 		com.kuuhaku.controller.postgresql.BackupDAO.dumpData(
-				new DataDump(
-						BackupDAO.getCADump(),
-						BackupDAO.getMemberDump(),
-						BackupDAO.getGuildDump(),
-						BackupDAO.getPoliticalStateDump()
-				), false
+				new DataDump(BackupDAO.getMemberDump()), false
 		);
 
 		Main.getInfo().setWinner(ExceedDAO.getWinner());

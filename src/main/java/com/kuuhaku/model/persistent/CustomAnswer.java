@@ -36,9 +36,6 @@ public class CustomAnswer {
     @Column(columnDefinition = "TEXT")
     private String answer = "";
 
-    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean markForDelete = false;
-
     public CustomAnswer() {
 
     }
@@ -69,13 +66,5 @@ public class CustomAnswer {
 
     public String getGuildID() {
         return guildID;
-    }
-
-    public boolean isMarkForDelete() {
-        return markForDelete;
-    }
-
-    public void setMarkForDelete(boolean markForDelete) {
-        this.markForDelete = markForDelete;
     }
 }
