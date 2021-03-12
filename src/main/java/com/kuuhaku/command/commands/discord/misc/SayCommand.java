@@ -56,7 +56,7 @@ public class SayCommand implements Executable {
 			return;
 		}
 
-		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
+		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 		MessageBuilder mb = new MessageBuilder();
 		mb.append(Helper.makeEmoteFromMention(args));
 

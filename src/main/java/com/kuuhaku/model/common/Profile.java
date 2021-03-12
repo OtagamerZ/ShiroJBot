@@ -68,7 +68,7 @@ public class Profile {
 
 	public static BufferedImage makeProfile(net.dv8tion.jda.api.entities.Member m, Guild g) throws IOException {
 		BufferedImage avatar;
-		Member mb = MemberDAO.getMemberById(m.getUser().getId() + g.getId());
+		Member mb = MemberDAO.getMember(m.getUser().getId(), g.getId());
 		Account acc = AccountDAO.getAccount(m.getId());
 
 		try {

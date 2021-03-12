@@ -60,7 +60,7 @@ public class MyStatsCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
-		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
+		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
