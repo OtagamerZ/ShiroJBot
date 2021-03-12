@@ -1061,14 +1061,7 @@
       <workItem from="1615565953529" duration="3962000" />
       <workItem from="1615575891134" duration="619000" />
       <workItem from="1615576683551" duration="2046000" />
-      <workItem from="1615578828396" duration="321000" />
-    </task>
-    <task id="LOCAL-03937" summary="Aumentado o custo das apostas na roleta">
-      <created>1614879379726</created>
-      <option name="number" value="03937" />
-      <option name="presentableId" value="LOCAL-03937" />
-      <option name="project" value="LOCAL" />
-      <updated>1614879379727</updated>
+      <workItem from="1615578828396" duration="622000" />
     </task>
     <task id="LOCAL-03938" summary="Aumentado o custo das apostas na roleta">
       <created>1614881528372</created>
@@ -1406,7 +1399,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615579143730</updated>
     </task>
-    <option name="localTasksCounter" value="3986" />
+    <task id="LOCAL-03986" summary="Correção nas transações de membros">
+      <created>1615579283421</created>
+      <option name="number" value="03986" />
+      <option name="presentableId" value="LOCAL-03986" />
+      <option name="project" value="LOCAL" />
+      <updated>1615579283422</updated>
+    </task>
+    <option name="localTasksCounter" value="3987" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -171,7 +171,7 @@ public class ShiroEvents extends ListenerAdapter {
 			boolean blacklisted = BlacklistDAO.isBlacklisted(author);
 
 			if (!blacklisted && MemberDAO.getMember(author.getId(), guild.getId()) == null)
-				MemberDAO.addMemberToDB(member);
+				MemberDAO.addMemberToDB(author.getId(), guild.getId());
 
 			/*try {
 				MutedMember mm = MemberDAO.getMutedMemberById(author.getId());
@@ -397,7 +397,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 					com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
 					if (m == null) {
-						MemberDAO.addMemberToDB(member);
+						MemberDAO.addMemberToDB(author.getId(), guild.getId());
 						m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
 					} else if (m.getUid() == null) {
 						m.setUid(author.getId());
@@ -564,7 +564,7 @@ public class ShiroEvents extends ListenerAdapter {
 				return;
 			}
 
-			MemberDAO.addMemberToDB(member);
+			MemberDAO.addMemberToDB(author.getId(), guild.getId());
 
 			if (!gc.getMsgBoasVindas().isBlank()) {
 				URL url = new URL(author.getEffectiveAvatarUrl());
@@ -914,7 +914,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(mb.getId(), mb.getGuild().getId());
 		if (m == null) {
-			MemberDAO.addMemberToDB(mb);
+			MemberDAO.addMemberToDB(mb.getId(), mb.getGuild().getId());
 			m = MemberDAO.getMember(mb.getId(), mb.getGuild().getId());
 		} else if (m.getUid() == null) {
 			m.setUid(mb.getId());
