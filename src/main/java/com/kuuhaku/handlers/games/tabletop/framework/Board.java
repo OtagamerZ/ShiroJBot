@@ -20,7 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.framework;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.sqlite.PStateDAO;
+import com.kuuhaku.controller.postgresql.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
@@ -154,9 +154,9 @@ public class Board {
 
 		if (ExceedDAO.hasExceed(id)) {
 			String wex = ExceedDAO.getExceed(id);
-			PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
+			PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
 			wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * 5));
-			PStateDAO.savePoliticalState(wps);
+			com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
 		}
 
 		for (Player l : losers) {
@@ -166,9 +166,9 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(l.getId())) {
 				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
+				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
-				PStateDAO.savePoliticalState(lps);
+				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
 			}
 		}
 
@@ -184,9 +184,9 @@ public class Board {
 
 		if (ExceedDAO.hasExceed(id)) {
 			String wex = ExceedDAO.getExceed(id);
-			PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
+			PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
 			wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * (daily && wacc.hasDailyAvailable() ? 25 : 5)));
-			PStateDAO.savePoliticalState(wps);
+			com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
 		}
 
 		wacc.playedDaily();
@@ -198,9 +198,9 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(l.getId())) {
 				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
+				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * (daily && lacc.hasDailyAvailable() ? 25 : 5)));
-				PStateDAO.savePoliticalState(lps);
+				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
 			}
 
 			lacc.playedDaily();
@@ -221,9 +221,9 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(id)) {
 				String wex = ExceedDAO.getExceed(id);
-				PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
+				PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
 				wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * 5));
-				PStateDAO.savePoliticalState(wps);
+				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
 			}
 		}
 
@@ -234,9 +234,9 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(l.getId())) {
 				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
+				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
-				PStateDAO.savePoliticalState(lps);
+				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
 			}
 		}
 
@@ -253,9 +253,9 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(id)) {
 				String wex = ExceedDAO.getExceed(id);
-				PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
+				PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
 				wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * (daily && wacc.hasDailyAvailable() ? 25 : 5)));
-				PStateDAO.savePoliticalState(wps);
+				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
 			}
 
 			wacc.playedDaily();
@@ -268,9 +268,9 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(l.getId())) {
 				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
+				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * (daily && lacc.hasDailyAvailable() ? 25 : 5)));
-				PStateDAO.savePoliticalState(lps);
+				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
 			}
 
 			lacc.playedDaily();
@@ -290,9 +290,9 @@ public class Board {
 
 		if (ExceedDAO.hasExceed(id)) {
 			String wex = ExceedDAO.getExceed(id);
-			PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
+			PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
 			wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * 5));
-			PStateDAO.savePoliticalState(wps);
+			com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
 		}
 
 		for (Player l : losers) {
@@ -302,9 +302,9 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(l.getId())) {
 				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
+				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
-				PStateDAO.savePoliticalState(lps);
+				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
 			}
 		}
 
@@ -320,9 +320,9 @@ public class Board {
 
 		if (ExceedDAO.hasExceed(id)) {
 			String wex = ExceedDAO.getExceed(id);
-			PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
+			PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
 			wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * (daily && wacc.hasDailyAvailable() ? 25 : 5)));
-			PStateDAO.savePoliticalState(wps);
+			com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
 		}
 
 		wacc.playedDaily();
@@ -334,9 +334,9 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(l.getId())) {
 				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
+				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * (daily && lacc.hasDailyAvailable() ? 25 : 5)));
-				PStateDAO.savePoliticalState(lps);
+				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
 			}
 
 			lacc.playedDaily();
@@ -357,9 +357,9 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(id)) {
 				String wex = ExceedDAO.getExceed(id);
-				PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
+				PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
 				wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * 5));
-				PStateDAO.savePoliticalState(wps);
+				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
 			}
 		}
 
@@ -370,9 +370,9 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(l.getId())) {
 				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
+				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
-				PStateDAO.savePoliticalState(lps);
+				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(lps);
 			}
 		}
 
@@ -389,9 +389,9 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(id)) {
 				String wex = ExceedDAO.getExceed(id);
-				PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
+				PoliticalState wps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
 				wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * (daily && wacc.hasDailyAvailable() ? 25 : 5)));
-				PStateDAO.savePoliticalState(wps);
+				com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(wps);
 			}
 
 			wacc.playedDaily();
@@ -404,7 +404,7 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(l.getId())) {
 				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
+				PoliticalState lps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * (daily && lacc.hasDailyAvailable() ? 25 : 5)));
 				PStateDAO.savePoliticalState(lps);
 			}

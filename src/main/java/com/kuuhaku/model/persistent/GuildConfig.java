@@ -165,9 +165,6 @@ public class GuildConfig {
 	private boolean mmPermissionLock = true;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean markForDelete = false;
-
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean kawaiponEnabled = false;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
@@ -327,10 +324,6 @@ public class GuildConfig {
 
 	public void setAnyTell(boolean anyTell) {
 		this.anyTell = anyTell;
-	}
-
-	public void setMarkForDelete(boolean markForDelete) {
-		this.markForDelete = markForDelete;
 	}
 
 	public String getCanalRelay() {
@@ -512,10 +505,6 @@ public class GuildConfig {
 
 	public void toggleNQNMode() {
 		nqnMode = !nqnMode;
-	}
-
-	public boolean isMarkForDelete() {
-		return markForDelete;
 	}
 
 	public void toggleKawaipon() {

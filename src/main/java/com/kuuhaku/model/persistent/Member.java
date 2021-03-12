@@ -73,10 +73,6 @@ public class Member {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long voiceTime = 0;
 
-	//SWITCHES
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean markForDelete = false;
-
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean rulesSent = false;
 
@@ -232,14 +228,6 @@ public class Member {
 		this.id = id;
 	}
 
-	public boolean isMarkForDelete() {
-		return markForDelete;
-	}
-
-	public void setMarkForDelete(boolean markForDelete) {
-		this.markForDelete = markForDelete;
-	}
-
 	public String getUid() {
 		return uid;
 	}
@@ -311,7 +299,6 @@ public class Member {
 			put("level", level);
 			put("xp", xp);
 			put("lastVoted", lastVoted);
-			put("markForDelete", markForDelete);
 			put("rulesSent", rulesSent);
 		}};
 	}

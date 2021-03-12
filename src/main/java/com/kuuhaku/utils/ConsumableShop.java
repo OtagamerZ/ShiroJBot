@@ -20,7 +20,7 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.Consumable;
 import com.kuuhaku.model.persistent.Account;
@@ -51,7 +51,7 @@ public class ConsumableShop {
 
 					boolean lvlUp = m.getLevel() > lvl;
 					try {
-						GuildConfig gc = GuildDAO.getGuildById(ch.getGuild().getId());
+						GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(ch.getGuild().getId());
 						TextChannel lvlChannel = null;
 						try {
 							lvlChannel = ch.getGuild().getTextChannelById(gc.getCanalLvl());
@@ -68,7 +68,7 @@ public class ConsumableShop {
 				"Invoca uma carta aleatória (chance de ser cromada afetada pelo buff do servidor)",
 				1000,
 				(mb, ch, ms) -> {
-					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
+					GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(mb.getGuild().getId());
 					Helper.forceSpawnKawaipon(gc, ms, null);
 
 					Account acc = AccountDAO.getAccount(mb.getId());

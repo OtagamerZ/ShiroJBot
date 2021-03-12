@@ -18,10 +18,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.common.DataDump;
-import com.kuuhaku.model.persistent.CustomAnswer;
-import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
 
@@ -35,17 +32,8 @@ public class BackupDAO {
 
 		try {
 			em.getTransaction().begin();
-			for (CustomAnswer customAnswer : data.getCaDump()) {
-				em.merge(customAnswer);
-			}
 			for (Member member : data.getmDump()) {
 				em.merge(member);
-			}
-			for (GuildConfig guildConfig : data.getGcDump()) {
-				em.merge(guildConfig);
-			}
-			for (PoliticalState politicalState : data.getPsDump()) {
-				em.merge(politicalState);
 			}
 			em.getTransaction().commit();
 
@@ -59,49 +47,10 @@ public class BackupDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<CustomAnswer> getCADump() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT c FROM CustomAnswer c", CustomAnswer.class);
-
-		try {
-			return q.getResultList();
-		} finally {
-			em.close();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
 	public static List<Member> getMemberDump() {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT m FROM Member m", Member.class);
-
-		try {
-			return q.getResultList();
-		} finally {
-			em.close();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<GuildConfig> getGuildDump() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
-
-		try {
-			return q.getResultList();
-		} finally {
-			em.close();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<PoliticalState> getPoliticalStateDump() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT p FROM PoliticalState p", PoliticalState.class);
 
 		try {
 			return q.getResultList();

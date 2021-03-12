@@ -19,8 +19,8 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
@@ -36,7 +36,7 @@ public class GuildHandler {
 
 	@RequestMapping(value = "/guild/get", method = RequestMethod.GET)
 	public GuildConfig requestGuild(@RequestParam(value = "id") String id) {
-		return GuildDAO.getGuildById(id);
+		return com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(id);
 	}
 
 	@RequestMapping(value = "/guild/update", method = RequestMethod.POST)

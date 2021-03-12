@@ -23,9 +23,27 @@ import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PStateDAO {
+	@SuppressWarnings("unchecked")
+	public static List<PoliticalState> getAllPoliticalState() {
+		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT p FROM PoliticalState p", PoliticalState.class);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static double getInfluenceShare(ExceedEnum exceed) {
 		EntityManager em = Manager.getEntityManager();
 

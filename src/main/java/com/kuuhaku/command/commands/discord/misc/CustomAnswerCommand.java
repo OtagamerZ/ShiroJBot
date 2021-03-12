@@ -23,9 +23,8 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.sqlite.BackupDAO;
-import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.postgresql.CustomAnswerDAO;
+import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -67,9 +66,8 @@ public class CustomAnswerCommand implements Executable {
 		} else if (args[0].equals("lista")) {
 			List<Page> pages = new ArrayList<>();
 
-			List<CustomAnswer> ca = BackupDAO.getCADump();
+			List<CustomAnswer> ca = CustomAnswerDAO.getCAByGuild(guild.getId());
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
-			ca.removeIf(a -> !a.getGuildID().equals(guild.getId()) || a.isMarkForDelete());
 
 			for (int x = 0; x < Math.ceil(ca.size() / 10f); x++) {
 				eb.clear();
@@ -88,8 +86,8 @@ public class CustomAnswerCommand implements Executable {
 			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 			return;
 		} else if (StringUtils.isNumeric(args[0]) && !args[0].contains(";")) {
-			List<CustomAnswer> ca = BackupDAO.getCADump();
-			ca.removeIf(a -> !String.valueOf(a.getId()).equals(args[0]) || !a.getGuildID().equals(guild.getId()));
+			List<CustomAnswer> ca = CustomAnswerDAO.getCAByGuild(guild.getId());
+			ca.removeIf(a -> !String.valueOf(a.getId()).equals(args[0]));
 			if (ca.isEmpty()) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-not-found")).queue();
 				return;
