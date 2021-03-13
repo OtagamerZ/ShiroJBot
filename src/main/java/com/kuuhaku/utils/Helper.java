@@ -1552,7 +1552,7 @@ public class Helper {
 	}
 
 	public static boolean chance(double percentage) {
-		return Math.random() * 100 < percentage;
+		return Math.round(Math.random() * 100) < percentage;
 	}
 
 	public static void drawRotated(Graphics2D g2d, BufferedImage bi, int x, int y, double deg) {
