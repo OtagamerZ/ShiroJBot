@@ -25,9 +25,9 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import org.json.JSONObject;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -57,7 +57,13 @@ public abstract class Action {
 	public void sendReaction(String type, TextChannel channel, User target, String message, boolean allowReact) {
 		Message msg = channel.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("assets/loading.gif")).getPath())).complete();
 		try {
-			String url = "https://api." + System.getenv("SERVER_URL") + "/reaction?type=" + type + "&r=" + Helper.hash(String.valueOf(System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
+			JSONObject resposta = Helper.get("https://api." + System.getenv("SERVER_URL") + "/reaction", new JSONObject() {{
+				put("type", type);
+			}}, null);
+
+			Helper.logger(this.getClass()).debug(resposta);
+
+			String url = resposta.get("url").toString();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setImage(url);
@@ -66,8 +72,8 @@ public abstract class Action {
 				channel.sendMessage(message)
 						.embed(eb.build())
 						.queue(s -> Pages.buttonize(s, Collections.singletonMap("↪", (mb, ms) -> {
-							if (mb.getId().equals(target.getId())) {
-								answer(channel);
+									if (mb.getId().equals(target.getId())) {
+										answer(channel);
 										s.clearReactions().queue();
 									}
 								}), false, 1, TimeUnit.MINUTES, u -> u.getId().equals(target.getId()))

@@ -1066,13 +1066,7 @@
       <workItem from="1615657731513" duration="1216000" />
       <workItem from="1615682705116" duration="18000" />
       <workItem from="1615746690826" duration="645000" />
-    </task>
-    <task id="LOCAL-03942" summary="Adicionado sistema de efeitos de raças.">
-      <created>1614965856538</created>
-      <option name="number" value="03942" />
-      <option name="presentableId" value="LOCAL-03942" />
-      <option name="project" value="LOCAL" />
-      <updated>1614965856538</updated>
+      <workItem from="1615747709913" duration="169000" />
     </task>
     <task id="LOCAL-03943" summary="Adicionado sistema de efeitos de raças.">
       <created>1614968609201</created>
@@ -1410,7 +1404,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615747125651</updated>
     </task>
-    <option name="localTasksCounter" value="3991" />
+    <task id="LOCAL-03991" summary="Mudança na API de reações">
+      <created>1615747770739</created>
+      <option name="number" value="03991" />
+      <option name="presentableId" value="LOCAL-03991" />
+      <option name="project" value="LOCAL" />
+      <updated>1615747770739</updated>
+    </task>
+    <option name="localTasksCounter" value="3992" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
