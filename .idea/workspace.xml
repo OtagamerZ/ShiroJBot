@@ -13,9 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções em efeitos de raça">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos calculos de chance">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/Action.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1066,14 +1066,9 @@
       <workItem from="1615576683551" duration="2046000" />
       <workItem from="1615578828396" duration="2116000" />
       <workItem from="1615594204979" duration="2158000" />
-      <workItem from="1615657731513" duration="846000" />
-    </task>
-    <task id="LOCAL-03940" summary="Adicionado sistema de efeitos de raças.">
-      <created>1614965354757</created>
-      <option name="number" value="03940" />
-      <option name="presentableId" value="LOCAL-03940" />
-      <option name="project" value="LOCAL" />
-      <updated>1614965354757</updated>
+      <workItem from="1615657731513" duration="1216000" />
+      <workItem from="1615682705116" duration="18000" />
+      <workItem from="1615746690826" duration="414000" />
     </task>
     <task id="LOCAL-03941" summary="Adicionado sistema de efeitos de raças.">
       <created>1614965659335</created>
@@ -1411,7 +1406,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615580012763</updated>
     </task>
-    <option name="localTasksCounter" value="3989" />
+    <task id="LOCAL-03989" summary="Correção nos calculos de chance">
+      <created>1615659962194</created>
+      <option name="number" value="03989" />
+      <option name="presentableId" value="LOCAL-03989" />
+      <option name="project" value="LOCAL" />
+      <updated>1615659962196</updated>
+    </task>
+    <option name="localTasksCounter" value="3990" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1497,7 +1499,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de tokens de suporte;&#10;Remoção do salário mensal e contagem de tickets;" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Correção menor" />
     <MESSAGE value="Adição de opção de usar cartas cromadas no Shoukan" />
@@ -1512,7 +1513,6 @@
     <MESSAGE value="Aumentado o custo das apostas na roleta" />
     <MESSAGE value="Adicionado sistema de efeitos de raças." />
     <MESSAGE value="Correção nos perfis animados" />
-    <MESSAGE value="Correções em efeitos de raça" />
     <MESSAGE value="Melhoria em alguns efeitos de raça" />
     <MESSAGE value="Silenciado erros de falha ao enviar a mensagem ao usuário" />
     <MESSAGE value="Adicionado antialiasing às cartas de campo" />
@@ -1522,7 +1522,9 @@
     <MESSAGE value="Correções nas transações de servidor" />
     <MESSAGE value="Removida passiva secreta das cartas de 1 de mana" />
     <MESSAGE value="Correção nas transações de membros" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nas transações de membros" />
+    <MESSAGE value="Correções em efeitos de raça" />
+    <MESSAGE value="Correção nos calculos de chance" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nos calculos de chance" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
