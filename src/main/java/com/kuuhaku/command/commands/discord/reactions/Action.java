@@ -25,7 +25,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.Collections;
@@ -57,13 +56,7 @@ public abstract class Action {
 	public void sendReaction(String type, TextChannel channel, User target, String message, boolean allowReact) {
 		Message msg = channel.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("assets/loading.gif")).getPath())).complete();
 		try {
-			JSONObject resposta = Helper.get("https://api." + System.getenv("SERVER_URL") + "/reaction", new JSONObject() {{
-				put("type", type);
-			}}, null);
-
-			Helper.logger(this.getClass()).debug(resposta);
-
-			String url = resposta.get("url").toString();
+			String url = "https://api." + System.getenv("SERVER_URL") + "/reaction?type=" + type;
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setImage(url);
