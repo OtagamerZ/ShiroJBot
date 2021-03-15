@@ -44,7 +44,7 @@ public class PrefixCommand implements Executable {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		String p = args[0].trim();
 
-		if (Helper.between(p.length(), 1, 6)) {
+		if (!Helper.between(p.length(), 1, 6)) {
 			channel.sendMessage("❌ | O prefixo deve possuir entre 1 e 5 caracteres.").queue();
 			return;
 		}
