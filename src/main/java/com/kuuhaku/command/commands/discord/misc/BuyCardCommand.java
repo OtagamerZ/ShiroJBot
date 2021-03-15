@@ -30,7 +30,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -43,7 +42,10 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -153,53 +155,23 @@ public class BuyCardCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			List<Pair<Object, CardType>> cards = new ArrayList<>();
 
-			cards.addAll(FieldMarketDAO.getCards().stream()
-					.filter(fm -> byName.get() == null || StringUtils.containsIgnoreCase(fm.getCard().getCard().getName(), byName.get()))
-					.filter(fm -> minPrice.get() == -1 || fm.getPrice() >= minPrice.get())
-					.filter(fm -> maxPrice.get() == -1 || fm.getPrice() <= maxPrice.get())
-					.filter(fm -> onlyMine.get() ? fm.getSeller().equals(author.getId()) : fm.getPrice() <= 250000)
-					.sorted(Comparator
-							.comparingInt(FieldMarket::getPrice)
-							.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER))
-					.map(fm -> Pair.of((Object) fm, CardType.FIELD))
-					.collect(Collectors.toList())
-			);
+			if (onlyEquip.get() == -1 && !onlyField.get())
+				cards.addAll(FieldMarketDAO.getCards().stream()
+						.map(fm -> Pair.of((Object) fm, CardType.FIELD))
+						.collect(Collectors.toList())
+				);
 
-			cards.addAll(EquipmentMarketDAO.getCards().stream()
-					.filter(em -> byName.get() == null || StringUtils.containsIgnoreCase(em.getCard().getCard().getName(), byName.get()))
-					.filter(fm -> minPrice.get() == -1 || fm.getPrice() >= minPrice.get())
-					.filter(fm -> maxPrice.get() == -1 || fm.getPrice() <= maxPrice.get())
-					.filter(em -> onlyMine.get() ? em.getSeller().equals(author.getId()) : em.getPrice() <= (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50))
-					.sorted(Comparator
-							.comparingInt(EquipmentMarket::getPrice)
-							.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER))
-					.map(em -> Pair.of((Object) em, CardType.EVOGEAR))
-					.collect(Collectors.toList())
-			);
+			if (!onlyKawaipon.get() && !onlyField.get())
+				cards.addAll(EquipmentMarketDAO.getCards().stream()
+						.map(em -> Pair.of((Object) em, CardType.EVOGEAR))
+						.collect(Collectors.toList())
+				);
 
-			cards.addAll(CardMarketDAO.getCards().stream()
-					.filter(cm -> byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get()))
-					.filter(fm -> minPrice.get() == -1 || fm.getPrice() >= minPrice.get())
-					.filter(fm -> maxPrice.get() == -1 || fm.getPrice() <= maxPrice.get())
-					.filter(cm -> byRarity.get() == null || Helper.containsAny(byRarity.get(), cm.getCard().getCard().getRarity().name(), cm.getCard().getCard().getRarity().toString()))
-					.filter(cm -> byAnime.get() == null || Helper.containsAny(byAnime.get(), cm.getCard().getCard().getAnime().getName(), cm.getCard().getCard().getAnime().toString()))
-					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
-					.filter(cm -> onlyMine.get() ? cm.getSeller().equals(author.getId()) : cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)))
-					.sorted(Comparator
-							.comparingInt(CardMarket::getPrice)
-							.thenComparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
-							.thenComparing(k -> k.getCard().getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
-							.thenComparing(k -> k.getCard().getCard().getAnime(), Comparator.comparing(AddedAnime::toString, String.CASE_INSENSITIVE_ORDER))
-							.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER))
-					.map(cm -> Pair.of((Object) cm, CardType.KAWAIPON))
-					.collect(Collectors.toList())
-			);
-
-			cards.removeIf(p ->
-					(onlyKawaipon.get() && p.getRight() != CardType.KAWAIPON)
-					|| (onlyEquip.get() > -1 && p.getRight() != CardType.EVOGEAR)
-					|| (onlyField.get() && p.getRight() != CardType.FIELD)
-			);
+			if (!onlyKawaipon.get() && onlyEquip.get() == -1)
+				cards.addAll(CardMarketDAO.getCards().stream()
+						.map(cm -> Pair.of((Object) cm, CardType.KAWAIPON))
+						.collect(Collectors.toList())
+				);
 
 			if (onlyEquip.get() > 0)
 				cards.removeIf(p -> ((EquipmentMarket) p.getLeft()).getCard().getTier() != onlyEquip.get());
