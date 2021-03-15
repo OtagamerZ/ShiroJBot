@@ -60,6 +60,7 @@ public class GuildDAO {
 	}
 
 	public static void removeGuildFromDB(GuildConfig gc) {
+		if (gc.getGuildID() == null) return;
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
