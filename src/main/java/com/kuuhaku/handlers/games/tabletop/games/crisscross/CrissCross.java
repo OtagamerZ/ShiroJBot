@@ -77,6 +77,7 @@ public class CrissCross extends Game {
 				},
 				s -> {
 					getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
+					close();
 					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
@@ -146,6 +147,7 @@ public class CrissCross extends Game {
 
 			if (winner != null) {
 				getBoard().awardWinner(this, winner);
+				close();
 				channel.sendMessage(getCurrent().getAsMention() + " venceu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 						.queue(msg -> {
@@ -183,6 +185,7 @@ public class CrissCross extends Game {
 			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
+			close();
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 					.queue(msg -> {

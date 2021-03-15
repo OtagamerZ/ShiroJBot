@@ -58,7 +58,6 @@ public abstract class GlobalGame {
 	private final JSONObject custom;
 	private final MatchHistory history = new MatchHistory();
 	private final boolean ranked;
-	private final RankedQueue queue;
 	private Consumer<Message> onExpiration;
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
@@ -74,7 +73,6 @@ public abstract class GlobalGame {
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
 		this.ranked = ranked;
 		this.custom = null;
-		this.queue = null;
 	}
 
 	public GlobalGame(ShardManager handler, Board board, GameChannel channel, boolean ranked, JSONObject custom) {
@@ -84,7 +82,6 @@ public abstract class GlobalGame {
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
 		this.ranked = ranked;
 		this.custom = custom;
-		this.queue = null;
 	}
 
 	public GlobalGame(ShardManager handler, Board board, GameChannel channel, boolean ranked, JSONObject custom, RankedQueue queue) {
@@ -94,7 +91,6 @@ public abstract class GlobalGame {
 		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
 		this.ranked = ranked;
 		this.custom = custom;
-		this.queue = queue;
 	}
 
 	public void setActions(Consumer<Message> onExpiration, Consumer<Message> onWO) {
@@ -223,6 +219,7 @@ public abstract class GlobalGame {
 
 	public void resetTimerKeepTurn() {
 		if (timeout != null) timeout.cancel(true);
+		timeout = null;
 		if (round > 0)
 			timeout = executor.schedule(() ->
 					channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
@@ -289,6 +286,7 @@ public abstract class GlobalGame {
 
 		if (round > 0 && custom == null) {
 			history.setRanked(ranked);
+			history.setWo(wo);
 			MatchDAO.saveMatch(history);
 
 			Map<Side, List<MatchInfo>> result = MatchMakingRating.calcMMR(history);
