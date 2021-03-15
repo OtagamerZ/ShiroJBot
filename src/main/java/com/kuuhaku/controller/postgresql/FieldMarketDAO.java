@@ -155,6 +155,7 @@ public class FieldMarketDAO {
 				JOIN fm.card f
 				JOIN f.card c 
 				WHERE fm.buyer = ''
+				%s
 				""";
 
 		String[] params = {

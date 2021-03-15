@@ -234,6 +234,7 @@ public class CardMarketDAO {
 				JOIN cm.card c
 				JOIN c.anime a
 				WHERE cm.buyer = ''
+				%s
 				""";
 
 		String[] params = {
