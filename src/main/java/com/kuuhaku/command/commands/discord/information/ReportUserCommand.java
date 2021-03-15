@@ -83,7 +83,7 @@ public class ReportUserCommand implements Executable {
 		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `DENUNCIAR USUÁRIO`?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
-					Main.getInfo().getConfirmationPending().invalidate(author.getId());
+					Main.getInfo().getConfirmationPending().remove(author.getId());
 
 					Map<String, String> ids = new HashMap<>();
 					for (String dev : ShiroInfo.getStaff()) {

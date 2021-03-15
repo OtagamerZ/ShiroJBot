@@ -69,7 +69,7 @@ public class SynthesizeCardCommand implements Executable {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um equipamento (nomes separados por `;`) e o tipo da síntese (`n` = síntese normal e `c` = síntese cromada).").queue();
 			return;
-		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
 		} else if (!Helper.equalsAny(args[1], "n", "c")) {
@@ -117,7 +117,7 @@ public class SynthesizeCardCommand implements Executable {
 								Map<String, ThrowingBiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
 								buttons.put(Helper.ACCEPT, (ms, mb) -> {
 									if (!ShiroInfo.getHashes().remove(hash)) return;
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 
 									if (kp.getFields().size() == 3) {
 										int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
@@ -159,7 +159,7 @@ public class SynthesizeCardCommand implements Executable {
 								});
 								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
 									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 								});
 							}
 					);
@@ -200,7 +200,7 @@ public class SynthesizeCardCommand implements Executable {
 								Map<String, ThrowingBiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
 								buttons.put(Helper.ACCEPT, (ms, mb) -> {
 									if (!ShiroInfo.getHashes().remove(hash)) return;
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 									String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
 									if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= 1 && e.getTier() == 4) || kp.getEvoWeight() + e.getWeight(kp) > 24) {
@@ -249,7 +249,7 @@ public class SynthesizeCardCommand implements Executable {
 								});
 								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
 									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 								});
 							}
 					);

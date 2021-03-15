@@ -66,12 +66,12 @@ public class AuctionCommand implements Executable {
             channel.sendMessage("❌ | Você precisa informar a carta, o tipo dela e o valor inicial para fazer um leilão.").queue();
             return;
         } else if (!StringUtils.isNumeric(args[2])) {
-            channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
-            return;
-        } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        }
+			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
+			return;
+		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
 
         int type = switch (args[1].toUpperCase()) {
             case "N", "C" -> 1;
@@ -232,8 +232,8 @@ public class AuctionCommand implements Executable {
                                             AccountDAO.saveAccount(bacc);
                                         }
 
-                                        Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                                        close();
+										Main.getInfo().getConfirmationPending().remove(author.getId());
+										close();
                                         event.get().cancel(true);
                                     } else {
                                         switch (phase.get()) {
@@ -263,12 +263,12 @@ public class AuctionCommand implements Executable {
                 Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                             if (mb.getId().equals(author.getId())) {
                                 if (!ShiroInfo.getHashes().remove(hash)) return;
-                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                                event.set(channel.sendMessage("Não houve nenhuma oferta, declaro o leilão **encerrado**!").queueAfter(30, TimeUnit.SECONDS, msg -> {
-                                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                                            listener.close();
-                                        }
-                                ));
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								event.set(channel.sendMessage("Não houve nenhuma oferta, declaro o leilão **encerrado**!").queueAfter(30, TimeUnit.SECONDS, msg -> {
+											Main.getInfo().getConfirmationPending().remove(author.getId());
+											listener.close();
+										}
+								));
 
                                 s.delete().flatMap(d -> channel.sendMessage("✅ | Leilão aberto com sucesso, se não houver ofertas maiores que " + price + " dentro de 30 segundos irei fechá-lo!")).queue();
                                 Main.getInfo().getShiroEvents().addHandler(guild, listener);
@@ -276,8 +276,8 @@ public class AuctionCommand implements Executable {
                         }), true, 1, TimeUnit.MINUTES,
                         u -> u.getId().equals(author.getId()),
                         ms -> {
-                            ShiroInfo.getHashes().remove(hash);
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().remove(author.getId());
                         });
             });
         } catch (NumberFormatException e) {

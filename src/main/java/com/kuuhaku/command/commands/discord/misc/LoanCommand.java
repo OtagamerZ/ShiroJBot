@@ -55,7 +55,7 @@ public class LoanCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
 		}
@@ -108,7 +108,7 @@ public class LoanCommand implements Executable {
 		channel.sendMessage("Você está prestes a obter __**" + Helper.separate(cl.getLoan()) + " créditos**__ a um juros de __" + Helper.round(cl.getInterest(ex) * 100 - 100, 1) + "%__ (__**" + Helper.separate(Math.round(cl.getLoan() * cl.getInterest(ex))) + " de dívida**__), deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 							Account finalAcc = AccountDAO.getAccount(author.getId());
 							cl.sign(finalAcc);
 
@@ -117,7 +117,7 @@ public class LoanCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						ms -> {
 							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 						})
 				);
 	}

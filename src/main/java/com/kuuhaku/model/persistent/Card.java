@@ -31,7 +31,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 @Entity
 @Table(name = "card")
@@ -78,7 +77,13 @@ public class Card {
 
 	public BufferedImage drawCard(boolean foil) {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png")));
+			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+				try {
+					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
+				} catch (IOException e) {
+					return null;
+				}
+			});
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
@@ -95,7 +100,7 @@ public class Card {
 
 				return foil ? adjust(canvas) : canvas;
 			}
-		} catch (IOException | ExecutionException e) {
+		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
@@ -103,22 +108,34 @@ public class Card {
 
 	public BufferedImage drawCardNoBorder() {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png")));
+			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+				try {
+					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
+				} catch (IOException e) {
+					return null;
+				}
+			});
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				return ImageIO.read(bais);
 			}
-		} catch (IOException | ExecutionException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
 
 	public BufferedImage drawCardNoBorder(boolean foil) {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png")));
+			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+				try {
+					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
+				} catch (IOException e) {
+					return null;
+				}
+			});
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				return foil ? adjust(ImageIO.read(bais)) : ImageIO.read(bais);
 			}
-		} catch (IOException | ExecutionException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
