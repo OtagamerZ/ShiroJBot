@@ -19,6 +19,7 @@
 package com.kuuhaku.model.enums;
 
 import com.github.ygimenez.exception.InvalidStateException;
+import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -78,5 +79,14 @@ public enum KawaiponRarity {
 			case "lendaria" -> LEGENDARY;
 			default -> null;
 		};
+	}
+
+	public static KawaiponRarity getByFragment(String fragment) {
+		return valueOf(Helper.didYouMean(fragment,
+				Arrays.stream(validValues())
+						.map(KawaiponRarity::name)
+						.filter(name -> StringUtils.containsIgnoreCase(name, fragment))
+						.toArray(String[]::new)
+		));
 	}
 }
