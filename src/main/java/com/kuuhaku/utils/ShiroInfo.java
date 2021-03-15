@@ -18,8 +18,6 @@
 
 package com.kuuhaku.utils;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.google.gson.GsonBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
@@ -29,6 +27,7 @@ import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.common.MatchMaking;
+import com.kuuhaku.model.common.TempCache;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.SupportTier;
@@ -54,9 +53,6 @@ import java.util.stream.Stream;
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
 
-	//TODO Alternador do modo desenvolvimento (true quando utilizar em IDEs, false quando for dar push para o master)
-	private static final boolean DEV = false;
-
 	//CONSTANTS
 	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
 	private static final ThreadPoolExecutor compilationPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
@@ -70,7 +66,7 @@ public class ShiroInfo {
 	private static final String supportServerID = "421495229594730496";
 	private static final String twitchChannelID = "743479145618472960";
 	private static final String announcementChannelID = "597587565809369089";
-	private static final String default_prefix = DEV ? "dev!" : "s!";
+	private static final String default_prefix = "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String shiro = "572413282653306901";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
@@ -122,20 +118,22 @@ public class ShiroInfo {
 			.token(dblToken)
 			.botId("572413282653306901")
 			.build();
-	private final ConcurrentMap<String, Cache<String, Message>> messageCache = new ConcurrentHashMap<>();
-	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
-	private final Cache<String, Boolean> confirmationPending = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
-	private final Cache<String, Integer> pendingJoin = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
-	private final Cache<String, Boolean> padoruLimit = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
+	private final ConcurrentMap<String, TempCache<String, Message>> messageCache = new ConcurrentHashMap<>();
 	private final Map<String, Game> games = new HashMap<>();
 	private final Map<String, Invite> requests = new HashMap<>();
-	private final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
-	private final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
-	private final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 	private final Set<String> gameLock = new HashSet<>();
 	private final MatchMaking matchMaking = new MatchMaking();
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private final File temporaryFolder = new File(System.getenv("TEMPORARY_PATH"));
+
+	private final TempCache<String, Boolean> ratelimit = new TempCache<>(3, TimeUnit.SECONDS);
+	private final TempCache<String, Boolean> confirmationPending = new TempCache<>(1, TimeUnit.MINUTES);
+	private final TempCache<String, Integer> pendingJoin = new TempCache<>(1, TimeUnit.MINUTES);
+	private final TempCache<String, Boolean> padoruLimit = new TempCache<>(10, TimeUnit.MINUTES);
+	private final TempCache<String, KawaiponCard> currentCard = new TempCache<>(1, TimeUnit.MINUTES);
+	private final TempCache<String, Prize> currentDrop = new TempCache<>(1, TimeUnit.MINUTES);
+	private final TempCache<String, byte[]> cardCache = new TempCache<>(1, TimeUnit.HOURS);
+
 	private boolean isLive = false;
 
 	//CONSTANTS
@@ -219,10 +217,6 @@ public class ShiroInfo {
 
 	public static ThreadPoolExecutor getHandlingPool() {
 		return handlingPool;
-	}
-
-	public boolean isDev() {
-		return DEV;
 	}
 
 	public String getBotToken() {
@@ -365,30 +359,21 @@ public class ShiroInfo {
 	public void cache(Guild guild, Message message) {
 		messageCache.compute(
 				guild.getId(),
-				(s, cache) -> cache == null ? CacheBuilder.newBuilder()
-						.maximumSize(64)
-						.expireAfterWrite(1, TimeUnit.DAYS)
-						.build() : cache
+				(s, cache) -> cache == null ? new TempCache<>(64, 1, TimeUnit.DAYS) : cache
 		).put(message.getId(), message);
 	}
 
 	public Message retrieveCachedMessage(Guild guild, String id) {
 		return messageCache.getOrDefault(
 				guild.getId(),
-				CacheBuilder.newBuilder()
-						.maximumSize(64)
-						.expireAfterWrite(1, TimeUnit.DAYS)
-						.build()
-		).getIfPresent(id);
+				new TempCache<>(64, 1, TimeUnit.DAYS)
+		).get(id);
 	}
 
-	public Cache<String, Message> retrieveCache(Guild guild) {
+	public TempCache<String, Message> retrieveCache(Guild guild) {
 		return messageCache.getOrDefault(
 				guild.getId(),
-				CacheBuilder.newBuilder()
-						.maximumSize(64)
-						.expireAfterWrite(1, TimeUnit.DAYS)
-						.build()
+				new TempCache<>(64, 1, TimeUnit.DAYS)
 		);
 	}
 
@@ -396,31 +381,31 @@ public class ShiroInfo {
 		return requests;
 	}
 
-	public Cache<String, KawaiponCard> getCurrentCard() {
+	public TempCache<String, KawaiponCard> getCurrentCard() {
 		return currentCard;
 	}
 
-	public Cache<String, Prize> getCurrentDrop() {
+	public TempCache<String, Prize> getCurrentDrop() {
 		return currentDrop;
 	}
 
-	public Cache<String, byte[]> getCardCache() {
+	public TempCache<String, byte[]> getCardCache() {
 		return cardCache;
 	}
 
-	public Cache<String, Integer> getPendingJoin() {
+	public TempCache<String, Integer> getPendingJoin() {
 		return pendingJoin;
 	}
 
-	public Cache<String, Boolean> getRatelimit() {
+	public TempCache<String, Boolean> getRatelimit() {
 		return ratelimit;
 	}
 
-	public Cache<String, Boolean> getPadoruLimit() {
+	public TempCache<String, Boolean> getPadoruLimit() {
 		return padoruLimit;
 	}
 
-	public Cache<String, Boolean> getConfirmationPending() {
+	public TempCache<String, Boolean> getConfirmationPending() {
 		return confirmationPending;
 	}
 

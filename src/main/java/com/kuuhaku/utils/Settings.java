@@ -177,26 +177,6 @@ public class Settings {
 		}
 	}
 
-	public static void updatePrefix(String[] args, String argsAsText, Message message, GuildConfig gc) {
-		if (args.length < 2) {
-			message.getTextChannel().sendMessage("O prefixo atual deste servidor é `" + gc.getPrefix() + "`.").queue();
-			return;
-		}
-
-		String newPrefix = args[1].trim();
-		if (newPrefix.length() > 5) {
-			message.getTextChannel().sendMessage("❌ | O prefixo `" + newPrefix + "` contem mais de 5 carateres, não pode.").queue();
-			return;
-		} else if (newPrefix.length() < 2) {
-			message.getTextChannel().sendMessage("❌ | O prefixo `" + newPrefix + "` contem menos de 2 carateres, também não pode.").queue();
-			return;
-		}
-
-		gc.setPrefix(newPrefix);
-		com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
-		message.getTextChannel().sendMessage("✅ | O prefixo deste servidor foi trocado para `" + newPrefix + "` com sucesso.").queue();
-	}
-
 	public static void updateCanalBV(String[] args, String argsAsText, Message message, GuildConfig gc) {
 		String antigoCanalBVID = gc.getCanalBV();
 
@@ -620,8 +600,6 @@ public class Settings {
 		if (message.getGuild().getIconUrl() != null) eb.setThumbnail(message.getGuild().getIconUrl());
 		eb.setTitle("⚙ | Painel de ajuda");
 		eb.setDescription("Utilize os comandos a baixo para estabelecer suas configurações.");
-		eb.addField(prefix + "settings prefix", "Altera o prefixo da Shiro no seu servidor.", false);
-
 		eb.addField(prefix + "settings canalbv", "Define o canal onde a Shiro ira mandar as mensagens de boas-vindas. Para remover esta configuração, use `" + prefix + "settings canalbv reset`.", false);
 		eb.addField(prefix + "settings mensagembv", "Defina uma mensagem de boas-vindas em seu servidor.", false);
 		eb.addField(prefix + "settings canaladeus", "Define o canal onde a Shiro ira mandar as mensagens de saída. Para remover esta configuração, use `" + prefix + "settings canaladeus reset`.", false);

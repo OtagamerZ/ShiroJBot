@@ -1263,7 +1263,7 @@ public class Helper {
 	}
 
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
-		if (Main.getInfo().getRatelimit().getIfPresent("kawaipon_" + gc.getGuildID()) != null) return;
+		if (Main.getInfo().getRatelimit().containsKey("kawaipon_" + gc.getGuildID())) return;
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff cardBuff = gb.getBuffs().stream().filter(b -> b.getId() == 2).findFirst().orElse(null);
 		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
@@ -1374,7 +1374,7 @@ public class Helper {
 	}
 
 	public static void spawnDrop(GuildConfig gc, TextChannel channel) {
-		if (Main.getInfo().getRatelimit().getIfPresent("drop_" + gc.getGuildID()) != null) return;
+		if (Main.getInfo().getRatelimit().containsKey("drop_" + gc.getGuildID())) return;
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff dropBuff = gb.getBuffs().stream().filter(b -> b.getId() == 3).findFirst().orElse(null);
 		boolean dbUltimate = dropBuff != null && dropBuff.getTier() == 4;
@@ -1414,7 +1414,7 @@ public class Helper {
 	}
 
 	public static void spawnPadoru(GuildConfig gc, TextChannel channel) {
-		if (Main.getInfo().getPadoruLimit().getIfPresent(gc.getGuildID()) != null) return;
+		if (Main.getInfo().getPadoruLimit().containsKey(gc.getGuildID())) return;
 
 		if (chance(0.1 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.09f, 5000), 0, 0.09))) {
 			int rolled = Helper.rng(100, false);
