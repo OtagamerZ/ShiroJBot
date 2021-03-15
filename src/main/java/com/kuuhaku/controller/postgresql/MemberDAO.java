@@ -58,7 +58,7 @@ public class MemberDAO {
 		}
 	}
 
-	public static void saveMemberToBD(Member m) {
+	public static void saveMember(Member m) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();

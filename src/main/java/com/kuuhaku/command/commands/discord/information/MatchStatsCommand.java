@@ -87,11 +87,13 @@ public class MatchStatsCommand implements Executable {
 					LocalDate date = mh.getTimestamp().toInstant().atZone(ZoneId.of("GMT-3")).toLocalDate();
 					Map<Side, String> players = mh.getPlayers().entrySet().stream()
 							.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
-					sb.append("(**%s**) `ID: %s` - %s **VS** %s\n".formatted(
+					sb.append("(%s) `%sID: %s` - %s **VS** %s (%s)\n".formatted(
+							mh.isRanked() ? "\uD83D\uDC51 " : "",
 							date.format(Helper.onlyDate),
 							mh.getId(),
 							checkUser(players.get(Side.BOTTOM)),
-							checkUser(players.get(Side.TOP))
+							checkUser(players.get(Side.TOP)),
+							mh.getWinner() == mh.getPlayers().get(author.getId()) ? "V" : "D"
 					));
 				}
 
@@ -132,6 +134,7 @@ public class MatchStatsCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Partida de " + p1 + " VS " + p2)
 				.addField("Jogada em", date.format(Helper.onlyDate), true)
+				.addField("Tipo", mh.isRanked() ? "Ranqueada" : "Normal", true)
 				.addField("Ordem de jogada", """
 						1º: %s %s
 						2º: %s %s
@@ -142,7 +145,7 @@ public class MatchStatsCommand implements Executable {
 						mh.getWinner() == Side.TOP ? "(VENCEDOR)" : p2WO ? "(W.O.)" : ""
 				), true)
 				.addField("Duração", mh.getRounds().size() + " turnos", true)
-				.addField("Eficiencia de " + p1 + " (BAIXO)", """
+				.addField("Eficiencia de " + p1, """
 						Eficiência de mana: %s%%
 						Dano X turno: %s%%
 						Vida X turno: %s%%
@@ -150,8 +153,8 @@ public class MatchStatsCommand implements Executable {
 						Math.round(bottom.getDouble("manaEff") * 100),
 						Math.round(bottom.getDouble("damageEff") * 100),
 						Math.round(bottom.getDouble("sustainEff") * 100)
-				), true)
-				.addField("Eficiencia de " + p2 + " (CIMA)", """
+				), false)
+				.addField("Eficiencia de " + p2, """
 						Eficiência de mana: %s%%
 						Dano X turno: %s%%
 						Vida X turno: %s%%
@@ -159,7 +162,7 @@ public class MatchStatsCommand implements Executable {
 						Math.round(top.getDouble("manaEff") * 100),
 						Math.round(top.getDouble("damageEff") * 100),
 						Math.round(top.getDouble("sustainEff") * 100)
-				), true);
+				), false);
 
 		channel.sendMessage(eb.build()).queue();
 	}

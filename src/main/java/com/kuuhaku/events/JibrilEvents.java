@@ -109,7 +109,7 @@ public class JibrilEvents extends ListenerAdapter {
 								.queue(s -> {
 									mb.setRulesSent(true);
 									com.kuuhaku.controller.sqlite.MemberDAO.updateMemberConfigs(mb);
-									MemberDAO.saveMemberToBD(mb);
+									MemberDAO.saveMember(mb);
 								}, Helper::doNothing);
 					} catch (ErrorResponseException ignore) {
 					}
