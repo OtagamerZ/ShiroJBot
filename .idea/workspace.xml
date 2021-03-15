@@ -13,7 +13,23 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança na API de reações" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança na API de reações">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MatchStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MatchStatsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchHistory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/senketsu_ryuuko.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/senketsu_ryuuko.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_3_star.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_3_star.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_4_star.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_4_star.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_5_star.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_5_star.gif" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -186,6 +202,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1067,13 +1094,9 @@
       <workItem from="1615682705116" duration="18000" />
       <workItem from="1615746690826" duration="645000" />
       <workItem from="1615747709913" duration="169000" />
-    </task>
-    <task id="LOCAL-03943" summary="Adicionado sistema de efeitos de raças.">
-      <created>1614968609201</created>
-      <option name="number" value="03943" />
-      <option name="presentableId" value="LOCAL-03943" />
-      <option name="project" value="LOCAL" />
-      <updated>1614968609203</updated>
+      <workItem from="1615748028014" duration="153000" />
+      <workItem from="1615749187781" duration="679000" />
+      <workItem from="1615773618737" duration="4200000" />
     </task>
     <task id="LOCAL-03944" summary="Adicionado sistema de efeitos de raças.">
       <created>1614968707125</created>
@@ -1411,7 +1434,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615747770739</updated>
     </task>
-    <option name="localTasksCounter" value="3992" />
+    <task id="LOCAL-03992" summary="Mudança na API de reações">
+      <created>1615748042678</created>
+      <option name="number" value="03992" />
+      <option name="presentableId" value="LOCAL-03992" />
+      <option name="project" value="LOCAL" />
+      <updated>1615748042678</updated>
+    </task>
+    <option name="localTasksCounter" value="3993" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

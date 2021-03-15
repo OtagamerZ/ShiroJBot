@@ -1883,10 +1883,10 @@ public class Shoukan extends GlobalGame {
 				}
 			}
 
-			SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(to, true);
+			SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(from, true);
 			if (sc != null) {
 				ch.clearLinkedTo();
-				ch.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
+				ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
 				sc.setTop(ch);
 				slts.get(target).setTop(null);
 				for (int i = 0; i < slts.size(); i++) {
@@ -1902,6 +1902,7 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public void convertCard(Side to, int target) {
+		Side from = to == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
@@ -1916,10 +1917,10 @@ public class Shoukan extends GlobalGame {
 			}
 		}
 
-		SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(to, true);
+		SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(from, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
-			ch.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
+			ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
 			sc.setTop(ch);
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {

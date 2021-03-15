@@ -288,6 +288,7 @@ public abstract class GlobalGame {
 		timeout = null;
 
 		if (round > 0 && custom == null) {
+			history.setRanked(ranked);
 			MatchDAO.saveMatch(history);
 
 			Map<Side, List<MatchInfo>> result = MatchMakingRating.calcMMR(history);

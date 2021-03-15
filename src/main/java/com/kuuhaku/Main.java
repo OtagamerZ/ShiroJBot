@@ -47,7 +47,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Emote;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -58,7 +57,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.imageio.ImageIO;
-import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -155,15 +153,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static void finishStartUp() {
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 		getInfo().setWinner(ExceedDAO.getWinner());
-		for (Guild g : shiroShards.getGuilds()) {
-			try {
-				com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(g.getId());
-			} catch (NoResultException e) {
-				com.kuuhaku.controller.postgresql.GuildDAO.addGuildToDB(g);
-				Helper.logger(Main.class).info("Guild adicionada ao banco: " + g.getName());
-			}
-		}
-
 		ConsoleListener console = new ConsoleListener();
 
 		for (Emote emote : shiroShards.getEmotes()) {
