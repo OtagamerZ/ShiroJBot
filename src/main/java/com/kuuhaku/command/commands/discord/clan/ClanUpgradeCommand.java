@@ -68,7 +68,7 @@ public class ClanUpgradeCommand implements Executable {
 		channel.sendMessage("Tem certeza que deseja evoluir o tier do clã para " + next.getName() + "?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							c.upgrade(author);
 							ClanDAO.saveClan(c);
@@ -78,7 +78,7 @@ public class ClanUpgradeCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						ms -> {
 							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 						})
 				);
 	}

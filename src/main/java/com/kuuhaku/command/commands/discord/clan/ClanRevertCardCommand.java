@@ -68,7 +68,7 @@ public class ClanRevertCardCommand implements Executable {
 		if (cl == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
-		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
 		} else if (cl.isLocked(author.getId(), ClanPermission.DECK)) {
@@ -118,7 +118,7 @@ public class ClanRevertCardCommand implements Executable {
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(kc.getCard().drawCard(false), "png"), "card.png")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 									if (!ShiroInfo.getHashes().remove(hash)) return;
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 									kp.addCard(kc);
 									cl.getDeck().removeChampion(c);
 									KawaiponDAO.saveKawaipon(kp);
@@ -130,7 +130,7 @@ public class ClanRevertCardCommand implements Executable {
 								u -> u.getId().equals(author.getId()),
 								ms -> {
 									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 								})
 						);
 			}
@@ -155,7 +155,7 @@ public class ClanRevertCardCommand implements Executable {
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(e.drawCard(false), "png"), "card.png").queue(s ->
 						Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 									if (!ShiroInfo.getHashes().remove(hash)) return;
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 									kp.addEquipment(e);
 									cl.getDeck().removeEquipment(e);
 									KawaiponDAO.saveKawaipon(kp);
@@ -167,7 +167,7 @@ public class ClanRevertCardCommand implements Executable {
 								u -> u.getId().equals(author.getId()),
 								ms -> {
 									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 								})
 				);
 			}
@@ -192,7 +192,7 @@ public class ClanRevertCardCommand implements Executable {
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(f.drawCard(false), "png"), "card.png")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 									if (!ShiroInfo.getHashes().remove(hash)) return;
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 									kp.addField(f);
 									cl.getDeck().removeField(f);
 									KawaiponDAO.saveKawaipon(kp);
@@ -204,7 +204,7 @@ public class ClanRevertCardCommand implements Executable {
 								u -> u.getId().equals(author.getId()),
 								ms -> {
 									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 								})
 						);
 			}

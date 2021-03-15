@@ -72,7 +72,7 @@ public class InviteClanMemberCommand implements Executable {
 		channel.sendMessage(usr.getAsMention() + ", você foi convidado(a) a juntar-se ao clã " + c.getName() + ", deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							c.invite(usr, author);
 
@@ -83,7 +83,7 @@ public class InviteClanMemberCommand implements Executable {
 						u -> u.getId().equals(usr.getId()),
 						ms -> {
 							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 						})
 				);
 	}

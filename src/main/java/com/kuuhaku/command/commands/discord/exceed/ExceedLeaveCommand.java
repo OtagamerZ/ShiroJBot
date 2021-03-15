@@ -49,7 +49,7 @@ public class ExceedLeaveCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
 		}
@@ -70,7 +70,7 @@ public class ExceedLeaveCommand implements Executable {
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(author.getId())) {
 								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
 								if (willLock) em.setBlocked(true);
 								em.setExceed("");
 								em.resetContribution();
@@ -82,7 +82,7 @@ public class ExceedLeaveCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						ms -> {
 							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 						})
 		);
 	}

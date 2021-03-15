@@ -183,7 +183,7 @@ public class ShoukanCommand implements Executable {
 							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 										if (mb.getId().equals(u.getId())) {
 											if (!ShiroInfo.getHashes().remove(hash)) return;
-											Main.getInfo().getConfirmationPending().invalidate(author.getId());
+											Main.getInfo().getConfirmationPending().remove(author.getId());
 											s.delete().queue(null, Helper::doNothing);
 
 											if (mm.getSoloLobby().containsKey(duo) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.getP1().equals(duo) || rd.getP2().equals(duo))) {
@@ -207,7 +207,7 @@ public class ShoukanCommand implements Executable {
 									usr -> Helper.equalsAny(usr.getId(), author.getId(), u.getId()),
 									ms -> {
 										ShiroInfo.getHashes().remove(hash);
-										Main.getInfo().getConfirmationPending().invalidate(author.getId());
+										Main.getInfo().getConfirmationPending().remove(author.getId());
 									})
 							);
 				}
@@ -219,14 +219,14 @@ public class ShoukanCommand implements Executable {
 			} else if (message.getMentionedUsers().size() != 1 && message.getMentionedUsers().size() != 3) {
 				channel.sendMessage("❌ | Você precisa mencionar 1 usuário para jogar solo, ou 3 para jogar em equipes (1º e 3º equipe 1, você e o 2º equipe 2).").queue();
 				return;
-			} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 				channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 				return;
 			}
 
 			List<User> users = message.getMentionedUsers();
 			for (User user : users) {
-				if (Main.getInfo().getConfirmationPending().getIfPresent(user.getId()) != null) {
+				if (Main.getInfo().getConfirmationPending().get(user.getId()) != null) {
 					channel.sendMessage("❌ | " + user.getAsMention() + " possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
 					return;
 				}
@@ -358,7 +358,7 @@ public class ShoukanCommand implements Executable {
 											}
 
 											if (accepted.size() == players.size()) {
-												Main.getInfo().getConfirmationPending().invalidate(author.getId());
+												Main.getInfo().getConfirmationPending().remove(author.getId());
 												//Main.getInfo().getGames().put(id, t);
 												s.delete().queue(null, Helper::doNothing);
 												t.start();
@@ -371,7 +371,7 @@ public class ShoukanCommand implements Executable {
 									for (User player : players) {
 										String hash = Helper.generateHash(guild, player, millis);
 										ShiroInfo.getHashes().remove(hash);
-										Main.getInfo().getConfirmationPending().invalidate(player.getId());
+										Main.getInfo().getConfirmationPending().remove(player.getId());
 									}
 								})
 						);
@@ -384,7 +384,7 @@ public class ShoukanCommand implements Executable {
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 										if (!ShiroInfo.getHashes().remove(hash)) return;
-										Main.getInfo().getConfirmationPending().invalidate(author.getId());
+										Main.getInfo().getConfirmationPending().remove(author.getId());
 										if (Main.getInfo().gameInProgress(mb.getId())) {
 											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 											return;
@@ -401,7 +401,7 @@ public class ShoukanCommand implements Executable {
 								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
 								ms -> {
 									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 								})
 						);
 			} else {
@@ -413,7 +413,7 @@ public class ShoukanCommand implements Executable {
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 										if (!ShiroInfo.getHashes().remove(hash)) return;
-										Main.getInfo().getConfirmationPending().invalidate(author.getId());
+										Main.getInfo().getConfirmationPending().remove(author.getId());
 										if (Main.getInfo().gameInProgress(mb.getId())) {
 											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 											return;
@@ -430,7 +430,7 @@ public class ShoukanCommand implements Executable {
 								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
 								ms -> {
 									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().invalidate(author.getId());
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 								})
 						);
 			}

@@ -92,7 +92,7 @@ public class RecoverCommand implements Executable {
 		channel.sendMessage("Você está prestes vender " + amount + " ações (" + Helper.separate(readjust) + " créditos) da carta " + c.getName() + ", deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 							acc.addCredit(readjust, this.getClass());
 							AccountDAO.saveAccount(acc);
 
@@ -103,7 +103,7 @@ public class RecoverCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						ms -> {
 							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 						})
 				);
 	}

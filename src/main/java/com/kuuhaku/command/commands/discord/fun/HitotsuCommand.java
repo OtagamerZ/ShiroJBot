@@ -58,12 +58,12 @@ public class HitotsuCommand implements Executable {
     @Override
     public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
         if (message.getMentionedUsers().isEmpty()) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
-            return;
-        } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        }
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			return;
+		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
 
         Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
@@ -74,19 +74,19 @@ public class HitotsuCommand implements Executable {
 
         for (User u : message.getMentionedUsers()) {
             Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
-            if (k.getCards().size() < 25) {
-                channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_not-enough-cards-mention"), u.getAsMention())).queue();
-                return;
-            } else if (Main.getInfo().getConfirmationPending().getIfPresent(u.getId()) != null) {
-                channel.sendMessage("❌ | " + u.getAsMention() + " possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
-                return;
-            } else if (Main.getInfo().gameInProgress(u.getId())) {
-                channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_mention-in-game"), u.getAsMention())).queue();
-                return;
-            } else if (u.getId().equals(author.getId())) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
-                return;
-            }
+			if (k.getCards().size() < 25) {
+				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_not-enough-cards-mention"), u.getAsMention())).queue();
+				return;
+			} else if (Main.getInfo().getConfirmationPending().get(u.getId()) != null) {
+				channel.sendMessage("❌ | " + u.getAsMention() + " possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
+				return;
+			} else if (Main.getInfo().gameInProgress(u.getId())) {
+				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_mention-in-game"), u.getAsMention())).queue();
+				return;
+			} else if (u.getId().equals(author.getId())) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
+				return;
+			}
         }
 
         Account acc = AccountDAO.getAccount(author.getId());
@@ -157,7 +157,7 @@ public class HitotsuCommand implements Executable {
                             }
 
                             if (accepted.size() == players.size()) {
-                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
                                 //Main.getInfo().getGames().put(id, t);
                                 s.delete().queue(null, Helper::doNothing);
                                 t.start();
@@ -169,8 +169,8 @@ public class HitotsuCommand implements Executable {
                 ms -> {
                     for (User player : players) {
                         String hash = Helper.generateHash(guild, player, millis);
-                        ShiroInfo.getHashes().remove(hash);
-                        Main.getInfo().getConfirmationPending().invalidate(player.getId());
+						ShiroInfo.getHashes().remove(hash);
+						Main.getInfo().getConfirmationPending().remove(player.getId());
                     }
                 })
         );

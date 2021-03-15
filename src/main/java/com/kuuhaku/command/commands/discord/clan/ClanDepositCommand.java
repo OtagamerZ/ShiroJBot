@@ -81,7 +81,7 @@ public class ClanDepositCommand implements Executable {
 		channel.sendMessage("Tem certeza que deseja depositar " + Helper.separate(amount) + " créditos no cofre do clã?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							acc.removeCredit(amount, this.getClass());
 							c.deposit(amount, author);
@@ -94,7 +94,7 @@ public class ClanDepositCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						ms -> {
 							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 						})
 				);
 	}

@@ -41,10 +41,10 @@ public class RedeemCommand implements Executable {
 
     @Override
     public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        }
+        if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
 
         Account acc = AccountDAO.getAccount(author.getId());
 
@@ -60,8 +60,8 @@ public class RedeemCommand implements Executable {
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (m, ms) -> {
                             if (m.getId().equals(author.getId())) {
                                 if (!ShiroInfo.getHashes().remove(hash)) return;
-                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                                acc.setStreak(0);
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								acc.setStreak(0);
                                 acc.addGem();
                                 AccountDAO.saveAccount(acc);
 
@@ -71,8 +71,8 @@ public class RedeemCommand implements Executable {
                         }), true, 1, TimeUnit.MINUTES,
                         u -> u.getId().equals(author.getId()),
                         ms -> {
-                            ShiroInfo.getHashes().remove(hash);
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().remove(author.getId());
                         })
                 );
     }
