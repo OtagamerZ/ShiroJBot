@@ -48,6 +48,9 @@ public class MatchHistory {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean ranked = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean wo = false;
+
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "matchhistory_id")
@@ -103,5 +106,13 @@ public class MatchHistory {
 
 	public void setRanked(boolean ranked) {
 		this.ranked = ranked;
+	}
+
+	public boolean isWo() {
+		return wo;
+	}
+
+	public void setWo(boolean wo) {
+		this.wo = wo;
 	}
 }

@@ -127,9 +127,8 @@ public class MatchStatsCommand implements Executable {
 		JSONObject bottom = stats.getJSONObject("BOTTOM");
 		JSONObject top = stats.getJSONObject("TOP");
 
-		boolean wo = result.get(Side.BOTTOM).getRight().get("hp") != 0 && result.get(Side.TOP).getRight().get("hp") != 0;
-		boolean p1WO = wo && mh.getRounds().size() % 2 == 0;
-		boolean p2WO = wo && mh.getRounds().size() % 2 != 0;
+		boolean p1WO = mh.isWo() && mh.getWinner() != Side.BOTTOM;
+		boolean p2WO = mh.isWo() && mh.getWinner() != Side.TOP;
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Partida de " + p1 + " VS " + p2)

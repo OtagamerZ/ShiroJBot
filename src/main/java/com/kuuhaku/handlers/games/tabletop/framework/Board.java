@@ -172,7 +172,6 @@ public class Board {
 			}
 		}
 
-		game.close();
 		awarded = true;
 	}
 
@@ -207,7 +206,6 @@ public class Board {
 			AccountDAO.saveAccount(lacc);
 		}
 
-		game.close();
 		awarded = true;
 	}
 
@@ -240,7 +238,6 @@ public class Board {
 			}
 		}
 
-		game.close();
 		awarded = true;
 	}
 
@@ -277,7 +274,6 @@ public class Board {
 			AccountDAO.saveAccount(lacc);
 		}
 
-		game.close();
 		awarded = true;
 	}
 
@@ -308,7 +304,6 @@ public class Board {
 			}
 		}
 
-		game.close();
 		awarded = true;
 	}
 
@@ -343,7 +338,6 @@ public class Board {
 			AccountDAO.saveAccount(lacc);
 		}
 
-		game.close();
 		awarded = true;
 	}
 
@@ -376,7 +370,6 @@ public class Board {
 			}
 		}
 
-		game.close();
 		awarded = true;
 	}
 
@@ -413,7 +406,6 @@ public class Board {
 			AccountDAO.saveAccount(lacc);
 		}
 
-		game.close();
 		awarded = true;
 	}
 

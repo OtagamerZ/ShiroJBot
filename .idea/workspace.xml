@@ -15,20 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Redução no tamanho dos GIFs e melhoria no comando de dados de partida">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MatchStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MatchStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MemberDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchHistory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/senketsu_ryuuko.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/senketsu_ryuuko.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_3_star.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_3_star.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_4_star.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_4_star.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_5_star.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/wish_5_star.gif" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1096,21 +1085,7 @@
       <workItem from="1615747709913" duration="169000" />
       <workItem from="1615748028014" duration="153000" />
       <workItem from="1615749187781" duration="679000" />
-      <workItem from="1615773618737" duration="4503000" />
-    </task>
-    <task id="LOCAL-03945" summary="Adicionado sistema de efeitos de raças.">
-      <created>1614968843275</created>
-      <option name="number" value="03945" />
-      <option name="presentableId" value="LOCAL-03945" />
-      <option name="project" value="LOCAL" />
-      <updated>1614968843275</updated>
-    </task>
-    <task id="LOCAL-03946" summary="Adicionado sistema de efeitos de raças.">
-      <created>1614970618227</created>
-      <option name="number" value="03946" />
-      <option name="presentableId" value="LOCAL-03946" />
-      <option name="project" value="LOCAL" />
-      <updated>1614970618227</updated>
+      <workItem from="1615773618737" duration="5849000" />
     </task>
     <task id="LOCAL-03947" summary="Adicionado sistema de efeitos de raças.">
       <created>1614972754408</created>
@@ -1441,7 +1416,21 @@
       <option name="project" value="LOCAL" />
       <updated>1615778157040</updated>
     </task>
-    <option name="localTasksCounter" value="3994" />
+    <task id="LOCAL-03994" summary="Redução no tamanho dos GIFs e melhoria no comando de dados de partida">
+      <created>1615778357566</created>
+      <option name="number" value="03994" />
+      <option name="presentableId" value="LOCAL-03994" />
+      <option name="project" value="LOCAL" />
+      <updated>1615778357566</updated>
+    </task>
+    <task id="LOCAL-03995" summary="Redução no tamanho dos GIFs e melhoria no comando de dados de partida">
+      <created>1615778481050</created>
+      <option name="number" value="03995" />
+      <option name="presentableId" value="LOCAL-03995" />
+      <option name="project" value="LOCAL" />
+      <updated>1615778481050</updated>
+    </task>
+    <option name="localTasksCounter" value="3996" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
