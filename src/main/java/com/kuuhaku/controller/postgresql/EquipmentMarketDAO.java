@@ -155,6 +155,7 @@ public class EquipmentMarketDAO {
 				JOIN em.card e
 				JOIN e.card c 
 				WHERE em.buyer = ''
+				%s
 				""";
 
 		String[] params = {
