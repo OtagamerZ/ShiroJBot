@@ -57,8 +57,8 @@ public class TenthMinuteEvent implements Job {
 	@Override
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public void execute(JobExecutionContext context) {
-		for (Guild guild1 : Main.getJibril().getGuilds()) {
-			notif(guild1);
+		for (Guild g : Main.getJibril().getGuilds()) {
+			notif(g);
 		}
 		for (Account account : AccountDAO.getNotifiableAccounts()) {
 			account.notifyVote();
@@ -165,11 +165,11 @@ public class TenthMinuteEvent implements Job {
 		try {
 			if (!TagDAO.getTagById(g.getOwnerId()).isBeta() && !ShiroInfo.getDevelopers().contains(g.getOwnerId())) {
 				g.retrieveOwner().queue(o -> {
-							Helper.logger(TenthMinuteEvent.class).info("Saí do servidor " + g.getName() + " por " + o.getUser().getAsTag() + " não estar na lista de parceiros.");
+							Helper.logger(TenthMinuteEvent.class).info("Saí do servidor " + g.getName() + " por " + o.getUser().getAsTag() + " não estar na lista de acesso beta.");
 							g.leave().queue();
 						}
 						, f -> {
-							Helper.logger(TenthMinuteEvent.class).info("Saí do servidor " + g.getName() + " por DESCONHECIDO não estar na lista de parceiros.");
+							Helper.logger(TenthMinuteEvent.class).info("Saí do servidor " + g.getName() + " por DESCONHECIDO não estar na lista de acesso beta.");
 							g.leave().queue();
 						}
 				);
