@@ -157,19 +157,20 @@ public class FieldMarketDAO {
 				WHERE fm.buyer = ''
 				""";
 
-		String[] params = new String[5];
-		if (name != null) params[0] = "AND c.id LIKE :name";
-		if (min > -1) params[1] = "AND fm.price > :min";
-		if (max > -1) params[2] = "AND fm.price < :max";
-		if (seller != null) params[3] = "AND fm.seller = :seller";
-		params[4] = "ORDER BY fm.price, c.id";
+		String[] params = {
+				name != null ? "AND c.id LIKE :name" : "",
+				min > -1 ? "AND fm.price > :min" : "",
+				max > -1 ? "AND fm.price < :max" : "",
+				seller != null ? "AND fm.seller = :seller" : "",
+				"ORDER BY fm.price, c.id"
+		};
 
 		Query q = em.createQuery(query.formatted(String.join("\n", params)), FieldMarket.class);
 
-		if (params[0] != null) q.setParameter("name", "%" + name + "%");
-		if (params[1] != null) q.setParameter("min", min);
-		if (params[2] != null) q.setParameter("max", max);
-		if (params[3] != null) q.setParameter("seller", seller);
+		if (!params[0].isBlank()) q.setParameter("name", "%" + name + "%");
+		if (!params[1].isBlank()) q.setParameter("min", min);
+		if (!params[2].isBlank()) q.setParameter("max", max);
+		if (!params[3].isBlank()) q.setParameter("seller", seller);
 
 		try {
 			return q.getResultList();
