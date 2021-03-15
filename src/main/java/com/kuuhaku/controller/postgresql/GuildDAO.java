@@ -20,6 +20,7 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.GuildConfig;
+import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -44,29 +45,18 @@ public class GuildDAO {
 
 		try {
 			GuildConfig gc = em.find(GuildConfig.class, id);
-			if (gc == null)
-				return addGuildToDB(Main.getInfo().getGuildByID(id));
+			if (gc == null) {
+				Guild g = Main.getInfo().getGuildByID(id);
+				if (g == null)
+					return new GuildConfig();
+				else
+					return new GuildConfig(g.getId(), g.getName());
+			}
 
 			return gc;
 		} finally {
 			em.close();
 		}
-	}
-
-	public static GuildConfig addGuildToDB(net.dv8tion.jda.api.entities.Guild guild) {
-		EntityManager em = Manager.getEntityManager();
-
-		GuildConfig gc = new GuildConfig();
-		gc.setName(guild.getName());
-		gc.setGuildId(guild.getId());
-
-		em.getTransaction().begin();
-		gc = em.merge(gc);
-		em.getTransaction().commit();
-
-		em.close();
-
-		return gc;
 	}
 
 	public static void removeGuildFromDB(GuildConfig gc) {

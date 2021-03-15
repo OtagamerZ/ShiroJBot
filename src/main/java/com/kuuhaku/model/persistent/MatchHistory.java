@@ -45,6 +45,9 @@ public class MatchHistory {
 	@Enumerated(value = EnumType.STRING)
 	private Side winner = null;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean ranked = false;
+
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "matchhistory_id")
@@ -92,5 +95,13 @@ public class MatchHistory {
 
 	public void setWinner(Side winner) {
 		this.winner = winner;
+	}
+
+	public boolean isRanked() {
+		return ranked;
+	}
+
+	public void setRanked(boolean ranked) {
+		this.ranked = ranked;
 	}
 }

@@ -176,6 +176,11 @@ public class GuildConfig {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean smallCards = false;
 
+	public GuildConfig(String guildID, String name) {
+		this.guildID = guildID;
+		this.name = name;
+	}
+
 	public GuildConfig() {
 	}
 

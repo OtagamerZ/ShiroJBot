@@ -503,8 +503,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildJoin(GuildJoinEvent event) {
-		GuildDAO.addGuildToDB(event.getGuild());
+	public void onGuildJoin(@NotNull GuildJoinEvent event) {
 		try {
 			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Obrigada por me adicionar ao seu servidor, utilize `s!ajuda` em um dos canais do servidor para ver meus comandos!\n\nDúvidas? Pergunte-me diretamente e um de meus suportes responderá assim que possível!");
 		} catch (Exception err) {
