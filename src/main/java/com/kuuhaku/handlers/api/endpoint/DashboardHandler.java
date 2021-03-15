@@ -18,8 +18,6 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
@@ -27,6 +25,7 @@ import com.kuuhaku.handlers.api.endpoint.payload.ReadyData;
 import com.kuuhaku.handlers.api.exception.RatelimitException;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.common.TempCache;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
@@ -48,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 public class DashboardHandler {
-	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.SECONDS).build();
+	private final TempCache<String, Boolean> ratelimit = new TempCache<>(5, TimeUnit.SECONDS);
 
 	@RequestMapping(value = "/auth", method = RequestMethod.GET)
 	public void validateAccount(HttpServletResponse http, @RequestParam(value = "code", defaultValue = "") String code, @RequestParam(value = "error", defaultValue = "") String error) throws InterruptedException {
@@ -119,11 +118,14 @@ public class DashboardHandler {
 	}
 
 	@RequestMapping(value = "/canvas/add", method = RequestMethod.POST)
-	public String addPixel(@RequestHeader(value = "token") String token, @RequestHeader(value = "pos-x") int x, @RequestHeader(value = "pos-y") int y, @RequestHeader(value = "color") String color) throws IllegalArgumentException {
+	public String addPixel(@RequestHeader(value = "token") String token, @RequestHeader(value = "pos-x") int x, @RequestHeader(value = "pos-y") int y, @RequestHeader(value = "color") String color, HttpServletResponse response) throws IllegalArgumentException {
 		if (!Helper.between(x, 0, Helper.CANVAS_SIZE) || !Helper.between(y, 0, Helper.CANVAS_SIZE))
 			throw new IllegalArgumentException();
 		else if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		else if (ratelimit.getIfPresent(token) != null) throw new RatelimitException();
+		else if (ratelimit.containsKey(token)) {
+			response.setHeader("Retry-After", "5");
+			throw new RatelimitException();
+		}
 
 		Token t = TokenDAO.getToken(token);
 		if (t == null) throw new UnauthorizedException();
