@@ -99,7 +99,7 @@ public class TwitchEvents {
 			} else if (BlacklistDAO.isBlacklisted(author)) {
 				client.getChat().sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted"));
 				return;
-			} else if (Main.getInfo().getRatelimit().getIfPresent(author.getId()) != null) {
+			} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
 				client.getChat().sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited"));
 				return;
 			}
