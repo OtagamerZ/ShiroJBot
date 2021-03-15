@@ -84,6 +84,7 @@ public class Hitotsu extends Game {
 					if (getBoard().getInGamePlayers().size() == 1) {
 						User u = getCurrent();
 						getBoard().awardWinner(this, u.getId());
+						close();
 						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
 								.addFile(Helper.getBytes(mount, "png"), "mount.png")
 								.queue(msg -> {
@@ -167,6 +168,7 @@ public class Hitotsu extends Game {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						});
 				getBoard().awardWinners(this, h.getUser().getId());
+				close();
 			} else if (winners.size() != getBoard().getPlayers().size()) {
 				channel.sendMessage(String.join(", ", winners.stream().map(h -> h.getUser().getAsMention()).toArray(String[]::new)) + " são os jogadores que possuem menos cartas, temos " + winners.size() + " vencedores!! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
@@ -174,6 +176,7 @@ public class Hitotsu extends Game {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						});
 				getBoard().awardWinners(this, winners.stream().map(h -> h.getUser().getId()).toArray(String[]::new));
+				close();
 			} else {
 				close();
 				channel.sendMessage("Temos um empate! (" + getRound() + " turnos)")
@@ -187,6 +190,7 @@ public class Hitotsu extends Game {
 
 	private void declareWinner() {
 		getBoard().awardWinner(this, getCurrent().getId());
+		close();
 		channel.sendMessage("Não restam mais cartas para " + getCurrent().getAsMention() + ", temos um vencedor!! (" + getRound() + " turnos)")
 				.addFile(Helper.getBytes(mount, "png"), "mount.png")
 				.queue(msg -> {
@@ -213,6 +217,7 @@ public class Hitotsu extends Game {
 		User winner = seats.values().stream().filter(h -> h.getCards().isEmpty()).map(Hand::getUser).findFirst().orElse(null);
 		if (winner != null) {
 			getBoard().awardWinner(this, winner.getId());
+			close();
 			return true;
 		}
 
@@ -252,6 +257,7 @@ public class Hitotsu extends Game {
 		User winner = seats.values().stream().filter(h -> h.getCards().isEmpty()).map(Hand::getUser).findFirst().orElse(null);
 		if (winner != null) {
 			getBoard().awardWinner(this, winner.getId());
+			close();
 			return true;
 		}
 

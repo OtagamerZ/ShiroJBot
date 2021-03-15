@@ -142,6 +142,7 @@ public class Shoukan extends GlobalGame {
 
 						getHistory().setWinner(next);
 						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
+						close();
 					}
 					channel.sendFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(msg ->
@@ -214,6 +215,7 @@ public class Shoukan extends GlobalGame {
 
 						getHistory().setWinner(next);
 						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
+						close();
 					}
 					channel.sendFile(Helper.getBytes(arena.render(this, hands), "jpg", 0.5f), "board.jpg")
 							.queue(msg ->
@@ -2028,7 +2030,9 @@ public class Shoukan extends GlobalGame {
 					if (getCustom() == null) {
 						getHistory().setWinner(op.getSide());
 						getBoard().awardWinner(this, daily, op.getUser().getId());
-					} else close();
+					}
+
+					close();
 					finished.set(true);
 					if (team)
 						channel.sendMessage(((TeamHand) op).getMentions() + " zeraram os pontos de vida de " + ((TeamHand) h).getMentions() + ", temos os vencedores! (" + getRound() + " turnos)")
@@ -2191,7 +2195,9 @@ public class Shoukan extends GlobalGame {
 					if (getCustom() == null) {
 						getHistory().setWinner(next);
 						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
-					} else close();
+					}
+
+					close();
 					if (team)
 						channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + ((TeamHand) hands.get(next)).getMentions() + " venceram! (" + getRound() + " turnos)")
 								.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
@@ -2411,7 +2417,9 @@ public class Shoukan extends GlobalGame {
 				if (getCustom() == null) {
 					getHistory().setWinner(next);
 					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
-				} else close();
+				}
+
+				close();
 				channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
 						.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
 						.queue(msg ->

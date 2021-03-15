@@ -87,6 +87,7 @@ public class Reversi extends Game {
 				},
 				s -> {
 					getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
+					close();
 					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
@@ -153,10 +154,12 @@ public class Reversi extends Game {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue(null, Helper::doNothing);
 					getBoard().awardWinner(this, winner.getId());
+					close();
 				} else if (whiteCount < blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> !e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue(null, Helper::doNothing);
 					getBoard().awardWinner(this, winner.getId());
+					close();
 				} else {
 					close();
 					channel.sendMessage("Temos um empate!").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue(null, Helper::doNothing);
@@ -196,6 +199,7 @@ public class Reversi extends Game {
 				if (whiteCount > blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
 					getBoard().awardWinner(this, winner.getId());
+					close();
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)")
 							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 							.queue(msg -> {
@@ -205,6 +209,7 @@ public class Reversi extends Game {
 				} else if (whiteCount < blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> !e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
 					getBoard().awardWinner(this, winner.getId());
+					close();
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)")
 							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 							.queue(msg -> {
