@@ -22,12 +22,15 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -45,8 +48,14 @@ public class JibrilEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildJoin(@NotNull GuildJoinEvent event) {
+		boolean beta = TagDAO.getTagById(event.getGuild().getOwnerId()).isBeta() || ShiroInfo.getDevelopers().contains(event.getGuild().getOwnerId());
 		try {
-			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Obrigada por me adicionar ao seu servidor, utilize `s!settings crelay #CANAL` para definir o canal que usarei para transmitir as mensagens globais!\n\nDúvidas? Pergunte-me diretamente e um de meus desenvolvedores responderá assim que possível!");
+			if (beta)
+				Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Obrigada por me adicionar ao seu servidor, utilize `s!settings crelay #CANAL` para definir o canal que usarei para transmitir as mensagens globais!\n\nDúvidas? Pergunte-me diretamente e um de meus desenvolvedores responderá assim que possível!");
+			else {
+				Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Eu só posso ser utilizada em servidores com acesso beta, por favor não insista!");
+				event.getGuild().leave().queue();
+			}
 		} catch (Exception err) {
 			TextChannel dch = event.getGuild().getDefaultChannel();
 			if (dch != null) {
@@ -85,24 +94,27 @@ public class JibrilEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		if (event.getAuthor().isBot()) return;
+		boolean beta = TagDAO.getTagById(event.getGuild().getOwnerId()).isBeta() || ShiroInfo.getDevelopers().contains(event.getGuild().getOwnerId());
 		try {
+			User author = event.getAuthor();
+			Guild guild = event.getGuild();
+			TextChannel channel = event.getChannel();
 			Message message = event.getMessage();
 			String rawMessage = message.getContentRaw();
 
-			if (BlacklistDAO.isBlacklisted(event.getAuthor())) return;
+			if (BlacklistDAO.isBlacklisted(author) || author.isBot() || !beta) return;
 
 			if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getJibril().getSelfUser().getId())) {
-				event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores deste servidor usando `" + com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue(null, Helper::doNothing);
+				channel.sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores deste servidor usando `" + com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId()).getPrefix() + "settings crelay #CANAL`!").queue(null, Helper::doNothing);
 				return;
 			}
 
-			if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId())) {
-				Member mb = com.kuuhaku.controller.sqlite.MemberDAO.getMember(event.getAuthor().getId(), event.getGuild().getId());
+			if (Main.getRelay().getRelayMap().containsValue(channel.getId())) {
+				Member mb = com.kuuhaku.controller.sqlite.MemberDAO.getMember(author.getId(), guild.getId());
 
 				if (!mb.isRulesSent())
 					try {
-						event.getAuthor().openPrivateChannel()
+						author.openPrivateChannel()
 								.flatMap(c -> c.sendMessage(introMsg()))
 								.flatMap(s -> s.getChannel().sendMessage(rulesMsg()))
 								.flatMap(s -> s.getChannel().sendMessage(finalMsg()))
@@ -113,10 +125,10 @@ public class JibrilEvents extends ListenerAdapter {
 								}, Helper::doNothing);
 					} catch (ErrorResponseException ignore) {
 					}
-				if (RelayBlockList.check(event.getAuthor().getId())) {
-					if (!GuildDAO.getGuildById(event.getGuild().getId()).isLiteMode())
-						event.getMessage().delete().queue();
-					event.getAuthor().openPrivateChannel().queue(c -> {
+				if (RelayBlockList.check(author.getId())) {
+					if (!GuildDAO.getGuildById(guild.getId()).isLiteMode())
+						message.delete().queue();
+					author.openPrivateChannel().queue(c -> {
 						try {
 							String s = "❌ | Você não pode mandar mensagens no chat global (bloqueado).";
 							c.getHistory().retrievePast(20).queue(h -> {
@@ -128,7 +140,7 @@ public class JibrilEvents extends ListenerAdapter {
 					});
 					return;
 				}
-				String[] msg = event.getMessage().getContentRaw().split(" ");
+				String[] msg = message.getContentRaw().split(" ");
 				for (int i = 0; i < msg.length; i++) {
 					try {
 						if (Helper.findURL(msg[i]))
@@ -140,25 +152,25 @@ public class JibrilEvents extends ListenerAdapter {
 					}
 				}
 
-				if (event.getChannel().getSlowmode() == 0) {
-					event.getChannel().sendMessage("❌ | Não vou enviar mensagens se este canal estiver com o slowmode desligado.").queue();
+				if (channel.getSlowmode() == 0) {
+					channel.sendMessage("❌ | Não vou enviar mensagens se este canal estiver com o slowmode desligado.").queue();
 				} else if (String.join(" ", msg).length() < 2000) {
 					net.dv8tion.jda.api.entities.Member m = event.getMember();
 					assert m != null;
 					try {
-						if (event.getMessage().getAttachments().size() > 0) {
+						if (message.getAttachments().size() > 0) {
 							try {
 								ByteArrayOutputStream baos = new ByteArrayOutputStream();
-								ImageIO.write(ImageIO.read(Helper.getImage(event.getMessage().getAttachments().get(0).getUrl())), "png", baos);
-								Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), baos);
+								ImageIO.write(ImageIO.read(Helper.getImage(message.getAttachments().get(0).getUrl())), "png", baos);
+								Main.getRelay().relayMessage(message, String.join(" ", msg), m, guild, baos);
 							} catch (Exception e) {
-								Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
+								Main.getRelay().relayMessage(message, String.join(" ", msg), m, guild, null);
 							}
 							return;
 						}
-						Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
+						Main.getRelay().relayMessage(message, String.join(" ", msg), m, guild, null);
 					} catch (NoResultException e) {
-						Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
+						Main.getRelay().relayMessage(message, String.join(" ", msg), m, guild, null);
 					}
 				}
 			}
