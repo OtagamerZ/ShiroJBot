@@ -75,10 +75,10 @@ public class BuyCardCommand implements Executable {
 			AtomicReference<String> byAnime = new AtomicReference<>(null);
 			AtomicReference<Integer> minPrice = new AtomicReference<>(-1);
 			AtomicReference<Integer> maxPrice = new AtomicReference<>(-1);
+			AtomicReference<Integer> onlyEquip = new AtomicReference<>(-1);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
 			AtomicBoolean onlyMine = new AtomicBoolean();
 			AtomicBoolean onlyKawaipon = new AtomicBoolean();
-			AtomicReference<Integer> onlyEquip = new AtomicReference<>(-1);
 			AtomicBoolean onlyField = new AtomicBoolean();
 
 			if (args.length > 0) {
@@ -155,22 +155,43 @@ public class BuyCardCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			List<Pair<Object, CardType>> cards = new ArrayList<>();
 
-			if (onlyEquip.get() == -1 && !onlyField.get())
-				cards.addAll(FieldMarketDAO.getCards().stream()
-						.map(fm -> Pair.of((Object) fm, CardType.FIELD))
-						.collect(Collectors.toList())
+			if (!onlyKawaipon.get() && onlyEquip.get() == -1)
+				cards.addAll(
+						CardMarketDAO.getCardsForMarket(
+								byName.get(),
+								minPrice.get(),
+								maxPrice.get(),
+								byRarity.get(),
+								byAnime.get(),
+								onlyFoil.get(),
+								onlyMine.get() ? author.getId() : null
+						).stream()
+								.map(cm -> Pair.of((Object) cm, CardType.KAWAIPON))
+								.collect(Collectors.toList())
 				);
 
 			if (!onlyKawaipon.get() && !onlyField.get())
-				cards.addAll(EquipmentMarketDAO.getCards().stream()
-						.map(em -> Pair.of((Object) em, CardType.EVOGEAR))
-						.collect(Collectors.toList())
+				cards.addAll(
+						EquipmentMarketDAO.getCardsForMarket(
+								byName.get(),
+								minPrice.get(),
+								maxPrice.get(),
+								onlyMine.get() ? author.getId() : null
+						).stream()
+								.map(em -> Pair.of((Object) em, CardType.EVOGEAR))
+								.collect(Collectors.toList())
 				);
 
-			if (!onlyKawaipon.get() && onlyEquip.get() == -1)
-				cards.addAll(CardMarketDAO.getCards().stream()
-						.map(cm -> Pair.of((Object) cm, CardType.KAWAIPON))
-						.collect(Collectors.toList())
+			if (onlyEquip.get() == -1 && !onlyField.get())
+				cards.addAll(
+						FieldMarketDAO.getCardsForMarket(
+								byName.get(),
+								minPrice.get(),
+								maxPrice.get(),
+								onlyMine.get() ? author.getId() : null
+						).stream()
+								.map(fm -> Pair.of((Object) fm, CardType.FIELD))
+								.collect(Collectors.toList())
 				);
 
 			if (onlyEquip.get() > 0)

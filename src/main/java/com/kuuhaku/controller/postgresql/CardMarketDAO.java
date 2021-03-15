@@ -225,7 +225,7 @@ public class CardMarketDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<CardMarket> getCardsForMarket(String name, int min, int max, KawaiponRarity rarity, String anime, boolean foil, String seller) {
+	public static List<CardMarket> getCardsForMarket(String name, int min, int max, String rarity, String anime, boolean foil, String seller) {
 		EntityManager em = Manager.getEntityManager();
 
 		String query = """
@@ -251,7 +251,7 @@ public class CardMarketDAO {
 		if (params[0] != null) q.setParameter("name", "%" + name + "%");
 		if (params[1] != null) q.setParameter("min", min);
 		if (params[2] != null) q.setParameter("max", max);
-		if (params[3] != null) q.setParameter("rarity", rarity);
+		if (params[3] != null) q.setParameter("rarity", KawaiponRarity.getByFragment(rarity));
 		if (params[4] != null) q.setParameter("anime", "%" + anime + "%");
 		if (params[5] != null) q.setParameter("foil", foil);
 		if (params[6] != null) q.setParameter("seller", seller);
