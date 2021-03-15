@@ -88,8 +88,8 @@ public class MatchStatsCommand implements Executable {
 					Map<Side, String> players = mh.getPlayers().entrySet().stream()
 							.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 					sb.append("(%s) `%sID: %s` - %s **VS** %s (%s)\n".formatted(
-							mh.isRanked() ? "\uD83D\uDC51 " : "",
 							date.format(Helper.onlyDate),
+							mh.isRanked() ? "\uD83D\uDC51 " : "",
 							mh.getId(),
 							checkUser(players.get(Side.BOTTOM)),
 							checkUser(players.get(Side.TOP)),
