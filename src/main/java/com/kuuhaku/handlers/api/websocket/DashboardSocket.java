@@ -18,12 +18,11 @@
 
 package com.kuuhaku.handlers.api.websocket;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.payload.ReadyData;
+import com.kuuhaku.model.common.TempCache;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.BiContract;
 import com.kuuhaku.utils.Helper;
@@ -49,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class DashboardSocket extends WebSocketServer {
-	private final Cache<String, BiContract<WebSocket, ReadyData>> requests = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build();
+	private final TempCache<String, BiContract<WebSocket, ReadyData>> requests = new TempCache<>(5, TimeUnit.MINUTES);
 
 	public DashboardSocket(InetSocketAddress address) {
 		super(address);
@@ -70,8 +69,11 @@ public class DashboardSocket extends WebSocketServer {
 			if (!jo.has("type")) return;
 
 			if (jo.getString("type").equals("login")) {
-				BiContract<WebSocket, ReadyData> request = requests.getIfPresent(jo.getString("data"));
-				if (request == null) request = new BiContract<>((ws, data) -> ws.send(data.getData().toString()));
+				BiContract<WebSocket, ReadyData> request = requests.computeIfAbsent(
+						jo.getString("data"),
+						k -> new BiContract<>((ws, data) -> ws.send(data.getData().toString()))
+				);
+
 				request.setSignatureA(conn);
 				requests.put(jo.getString("data"), request);
 				return;
@@ -223,13 +225,16 @@ public class DashboardSocket extends WebSocketServer {
 	}
 
 	public void addReadyData(ReadyData rdata, String session) {
-		BiContract<WebSocket, ReadyData> request = requests.getIfPresent(session);
-		if (request == null) request = new BiContract<>((ws, data) -> ws.send(data.getData().toString()));
+		BiContract<WebSocket, ReadyData> request = requests.computeIfAbsent(
+				session,
+				k -> new BiContract<>((ws, data) -> ws.send(data.getData().toString()))
+		);
+
 		request.setSignatureB(rdata);
 		requests.put(session, request);
 	}
 
-	public Cache<String, BiContract<WebSocket, ReadyData>> getRequests() {
+	public TempCache<String, BiContract<WebSocket, ReadyData>> getRequests() {
 		return requests;
 	}
 

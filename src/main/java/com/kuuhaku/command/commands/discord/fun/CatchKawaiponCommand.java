@@ -52,7 +52,7 @@ public class CatchKawaiponCommand implements Executable {
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		TextChannel chn = gc.getCanalKawaipon().isBlank() ? null : guild.getTextChannelById(gc.getCanalKawaipon());
-		KawaiponCard kc = Main.getInfo().getCurrentCard().getIfPresent(guild.getId());
+		KawaiponCard kc = Main.getInfo().getCurrentCard().get(guild.getId());
 
 		if (chn != null && !channel.getId().equals(chn.getId())) {
 			channel.sendMessage("❌ | O spawn de Kawaipons está configurado no canal " + chn.getAsMention() + ", você não pode coletá-los aqui.").queue();
@@ -71,7 +71,7 @@ public class CatchKawaiponCommand implements Executable {
 			return;
 		}
 
-		Main.getInfo().getCurrentCard().invalidate(guild.getId());
+		Main.getInfo().getCurrentCard().remove(guild.getId());
 		kp.addCard(kc);
 		acc.consumeCredit(cost, this.getClass());
 

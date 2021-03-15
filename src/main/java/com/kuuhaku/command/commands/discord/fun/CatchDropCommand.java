@@ -54,7 +54,7 @@ public class CatchDropCommand implements Executable {
 			return;
 		}
 
-		Prize p = Main.getInfo().getCurrentDrop().getIfPresent(guild.getId());
+		Prize p = Main.getInfo().getCurrentDrop().get(guild.getId());
 
 		if (p == null) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-drop")).queue();
@@ -67,7 +67,7 @@ public class CatchDropCommand implements Executable {
 			return;
 		}
 
-		Main.getInfo().getCurrentDrop().invalidate(guild.getId());
+		Main.getInfo().getCurrentDrop().remove(guild.getId());
 		p.award(author);
 
 		channel.sendMessage("✅ | " + author.getAsMention() + " coletou o drop com sucesso!").queue();

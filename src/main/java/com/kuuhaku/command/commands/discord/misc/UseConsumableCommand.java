@@ -72,6 +72,6 @@ public class UseConsumableCommand implements Executable {
 
 		c.getEffect().accept(member, channel, message);
 		if (Helper.equalsAny(c.getId(), "spawncard", "spawnanime"))
-			Main.getInfo().getRatelimit().invalidate(author.getId());
+			Main.getInfo().getRatelimit().remove(author.getId());
 	}
 }

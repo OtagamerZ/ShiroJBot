@@ -140,12 +140,10 @@ public class ShiroEvents extends ListenerAdapter {
 			} else if (member == null) return;
 
 			String prefix = "";
-			if (!Main.getInfo().isDev()) {
-				try {
-					prefix = GuildDAO.getGuildById(guild.getId()).getPrefix().toLowerCase();
-				} catch (NoResultException | NullPointerException ignore) {
-				}
-			} else prefix = Main.getInfo().getDefaultPrefix().toLowerCase();
+			try {
+				prefix = GuildDAO.getGuildById(guild.getId()).getPrefix().toLowerCase();
+			} catch (NoResultException | NullPointerException ignore) {
+			}
 
 			if (rawMessage.startsWith(";") && ShiroInfo.getDevelopers().contains(author.getId()) && rawMessage.length() > 1) {
 				try {
@@ -272,7 +270,7 @@ public class ShiroEvents extends ListenerAdapter {
 					} else if (blacklisted) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted")).queue();
 						return;
-					} else if (Main.getInfo().getRatelimit().getIfPresent(author.getId()) != null) {
+					} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited")).queue();
 						Main.getInfo().getRatelimit().put(author.getId(), true);
 						return;

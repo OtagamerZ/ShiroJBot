@@ -53,7 +53,7 @@ public class RequestAssistCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getRequests().getOrDefault(guild.getId(), null) != null) {
+		if (Main.getInfo().getRequests().get(guild.getId()) != null) {
 			channel.sendMessage("❌ | Este servidor já possui um pedido de auxílio em aberto, aguarde até que um membro da equipe de suporte feche-o.").queue();
 			return;
 		}
@@ -74,7 +74,7 @@ public class RequestAssistCommand implements Executable {
 		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `SUPORTE PRESENCIAL` (isso criará um convite de uso único para este servidor)?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
-					Main.getInfo().getConfirmationPending().invalidate(author.getId());
+					Main.getInfo().getConfirmationPending().remove(author.getId());
 
 					InviteAction ia = Helper.createInvite(guild);
 

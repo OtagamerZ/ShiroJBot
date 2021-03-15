@@ -59,13 +59,6 @@ public class SettingsCommand implements Executable {
 				Settings.updateCargoVip(args, message, gc);
 				break;*/
 		switch (args[0].toLowerCase()) {
-			case "prefix", "prefixo" -> {
-				if (msg.length() > 5) {
-					channel.sendMessage("❌ | Prefixo muito longo (Max. 5)").queue();
-					return;
-				}
-				Settings.updatePrefix(args, msg, message, gc);
-			}
 			case "cbv", "canalbv" -> Settings.updateCanalBV(args, msg, message, gc);
 			case "mensagembemvindo", "mensagembv", "msgbv" -> {
 				if (msg.length() > 2000) {
