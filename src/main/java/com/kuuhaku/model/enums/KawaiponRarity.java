@@ -84,8 +84,8 @@ public enum KawaiponRarity {
 	public static KawaiponRarity getByFragment(String fragment) {
 		return valueOf(Helper.didYouMean(fragment,
 				Arrays.stream(validValues())
+						.filter(r -> StringUtils.containsIgnoreCase(r.name(), fragment) || StringUtils.containsIgnoreCase(r.toString(), fragment))
 						.map(KawaiponRarity::name)
-						.filter(name -> StringUtils.containsIgnoreCase(name, fragment))
 						.toArray(String[]::new)
 		));
 	}

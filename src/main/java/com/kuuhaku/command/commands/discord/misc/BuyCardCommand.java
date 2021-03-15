@@ -155,7 +155,7 @@ public class BuyCardCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			List<Pair<Object, CardType>> cards = new ArrayList<>();
 
-			if (!onlyKawaipon.get() && onlyEquip.get() == -1)
+			if (onlyEquip.get() == -1 && !onlyField.get())
 				cards.addAll(
 						CardMarketDAO.getCardsForMarket(
 								byName.get(),
@@ -182,7 +182,7 @@ public class BuyCardCommand implements Executable {
 								.collect(Collectors.toList())
 				);
 
-			if (onlyEquip.get() == -1 && !onlyField.get())
+			if (!onlyKawaipon.get() && onlyEquip.get() == -1)
 				cards.addAll(
 						FieldMarketDAO.getCardsForMarket(
 								byName.get(),

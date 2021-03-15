@@ -13,7 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na busca na loja de cartas" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na busca na loja de cartas">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/KawaiponRarity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/KawaiponRarity.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1070,14 +1074,9 @@
       <workItem from="1615748028014" duration="153000" />
       <workItem from="1615749187781" duration="679000" />
       <workItem from="1615773618737" duration="5849000" />
-      <workItem from="1615813374827" duration="3625000" />
-    </task>
-    <task id="LOCAL-03951" summary="Correções em efeitos de raça">
-      <created>1615141416727</created>
-      <option name="number" value="03951" />
-      <option name="presentableId" value="LOCAL-03951" />
-      <option name="project" value="LOCAL" />
-      <updated>1615141416728</updated>
+      <workItem from="1615813374827" duration="3994000" />
+      <workItem from="1615818903427" duration="504000" />
+      <workItem from="1615823964042" duration="365000" />
     </task>
     <task id="LOCAL-03952" summary="Melhoria em alguns efeitos de raça">
       <created>1615213826838</created>
@@ -1415,7 +1414,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615816833336</updated>
     </task>
-    <option name="localTasksCounter" value="4000" />
+    <task id="LOCAL-04000" summary="Melhoria na busca na loja de cartas">
+      <created>1615817307461</created>
+      <option name="number" value="04000" />
+      <option name="presentableId" value="LOCAL-04000" />
+      <option name="project" value="LOCAL" />
+      <updated>1615817307461</updated>
+    </task>
+    <option name="localTasksCounter" value="4001" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
