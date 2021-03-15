@@ -87,7 +87,7 @@ public class PruneCommand implements Executable {
 					channel.sendMessage("Há " + p.size() + " mensage" + (p.size() == 1 ? "m fixada " : "ns fixadas ") + "neste canal, tem certeza que deseja limpá-lo?")
 							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
 								channel.createCopy().queue(c -> {
 									try {
 										channel.delete().queue();
@@ -101,7 +101,7 @@ public class PruneCommand implements Executable {
 					channel.sendMessage("O canal será recriado, tem certeza que deseja limpá-lo?")
 							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
 								channel.createCopy().queue(c -> {
 									try {
 										channel.delete().queue();

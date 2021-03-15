@@ -57,7 +57,7 @@ public class LeaveClanCommand implements Executable {
 			channel.sendMessage("Tem certeza que deseja abandonar o clã? (ele será desfeito por você ser o último membro)")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								ClanDAO.removeClan(c);
 
@@ -66,14 +66,14 @@ public class LeaveClanCommand implements Executable {
 							u -> u.getId().equals(author.getId()),
 							ms -> {
 								ShiroInfo.getHashes().remove(hash);
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
 							})
 					);
 		} else {
 			channel.sendMessage("Tem certeza que deseja abandonar o clã? (caso seja líder, o membro com posto mais alto assumirá a liderança)")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								c.leave(author.getId());
 
@@ -84,7 +84,7 @@ public class LeaveClanCommand implements Executable {
 							u -> u.getId().equals(author.getId()),
 							ms -> {
 								ShiroInfo.getHashes().remove(hash);
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
 							})
 					);
 		}

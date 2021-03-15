@@ -79,7 +79,7 @@ public class ClanWithdrawCommand implements Executable {
 		channel.sendMessage("Tem certeza que deseja sacar " + Helper.separate(amount) + " créditos do cofre do clã?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							acc.addCredit(amount, this.getClass());
 							c.withdraw(amount, author);
@@ -92,7 +92,7 @@ public class ClanWithdrawCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						ms -> {
 							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 						})
 				);
 	}

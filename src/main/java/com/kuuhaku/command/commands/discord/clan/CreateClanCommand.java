@@ -83,7 +83,7 @@ public class CreateClanCommand implements Executable {
 		channel.sendMessage("Tem certeza que deseja criar o clã " + name + " por 10.000 créditos?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							Clan c = new Clan(name, author.getId());
 							acc.consumeCredit(10000, CreateClanCommand.class);
@@ -96,7 +96,7 @@ public class CreateClanCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						ms -> {
 							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 						})
 				);
 	}

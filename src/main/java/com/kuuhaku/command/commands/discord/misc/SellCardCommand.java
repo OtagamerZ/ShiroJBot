@@ -51,16 +51,16 @@ public class SellCardCommand implements Executable {
     public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
         Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-        if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        } else if (args.length < 3) {
-            channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
-            return;
-        } else if (!StringUtils.isNumeric(args[2])) {
-            channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
-            return;
-        }
+        if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		} else if (args.length < 3) {
+			channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
+			return;
+		} else if (!StringUtils.isNumeric(args[2])) {
+			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
+			return;
+		}
 
         switch (args[1].toUpperCase()) {
             case "N", "C" -> {
@@ -97,8 +97,8 @@ public class SellCardCommand implements Executable {
                             .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                                         if (mb.getId().equals(author.getId())) {
                                             if (!ShiroInfo.getHashes().remove(hash)) return;
-                                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                                            kp.removeCard(card);
+											Main.getInfo().getConfirmationPending().remove(author.getId());
+											kp.removeCard(card);
 
                                             CardMarket cm = new CardMarket(author.getId(), card, price);
                                             CardMarketDAO.saveCard(cm);
@@ -109,8 +109,8 @@ public class SellCardCommand implements Executable {
                                     }), true, 1, TimeUnit.MINUTES,
                                     u -> u.getId().equals(author.getId()),
                                     ms -> {
-                                        ShiroInfo.getHashes().remove(hash);
-                                        Main.getInfo().getConfirmationPending().invalidate(author.getId());
+										ShiroInfo.getHashes().remove(hash);
+										Main.getInfo().getConfirmationPending().remove(author.getId());
                                     })
                             );
                 } catch (NumberFormatException e) {
@@ -147,8 +147,8 @@ public class SellCardCommand implements Executable {
                             .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                                         if (mb.getId().equals(author.getId())) {
                                             if (!ShiroInfo.getHashes().remove(hash)) return;
-                                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                                            kp.removeEquipment(eq);
+											Main.getInfo().getConfirmationPending().remove(author.getId());
+											kp.removeEquipment(eq);
                                             KawaiponDAO.saveKawaipon(kp);
 
                                             EquipmentMarket em = new EquipmentMarket(author.getId(), eq, price);
@@ -159,8 +159,8 @@ public class SellCardCommand implements Executable {
                                     }), true, 1, TimeUnit.MINUTES,
                                     u -> u.getId().equals(author.getId()),
                                     ms -> {
-                                        ShiroInfo.getHashes().remove(hash);
-                                        Main.getInfo().getConfirmationPending().invalidate(author.getId());
+										ShiroInfo.getHashes().remove(hash);
+										Main.getInfo().getConfirmationPending().remove(author.getId());
                                     })
                             );
                 } catch (NumberFormatException e) {
@@ -197,8 +197,8 @@ public class SellCardCommand implements Executable {
                             .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                                         if (mb.getId().equals(author.getId())) {
                                             if (!ShiroInfo.getHashes().remove(hash)) return;
-                                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                                            kp.removeField(f);
+											Main.getInfo().getConfirmationPending().remove(author.getId());
+											kp.removeField(f);
                                             KawaiponDAO.saveKawaipon(kp);
 
                                             FieldMarket fm = new FieldMarket(author.getId(), f, price);
@@ -209,8 +209,8 @@ public class SellCardCommand implements Executable {
                                     }), true, 1, TimeUnit.MINUTES,
                                     u -> u.getId().equals(author.getId()),
                                     ms -> {
-                                        ShiroInfo.getHashes().remove(hash);
-                                        Main.getInfo().getConfirmationPending().invalidate(author.getId());
+										ShiroInfo.getHashes().remove(hash);
+										Main.getInfo().getConfirmationPending().remove(author.getId());
                                     })
                             );
                 } catch (NumberFormatException e) {
