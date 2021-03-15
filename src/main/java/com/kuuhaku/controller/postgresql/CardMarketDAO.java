@@ -223,5 +223,44 @@ public class CardMarketDAO {
 			em.close();
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	public static List<CardMarket> getCardsForMarket(String name, int min, int max, KawaiponRarity rarity, String anime, boolean foil, String seller) {
+		EntityManager em = Manager.getEntityManager();
+
+		String query = """
+				SELECT cm 
+				FROM CardMarket cm
+				JOIN cm.card c
+				JOIN c.anime a
+				WHERE cm.buyer = ''
+				""";
+
+		String[] params = new String[8];
+		if (name != null) params[0] = "AND c.id LIKE :name";
+		if (min > -1) params[1] = "AND cm.price > :min";
+		if (max > -1) params[2] = "AND cm.price < :max";
+		if (rarity != null) params[3] = "AND c.rarity = :rarity";
+		if (anime != null) params[4] = "AND a.id LIKE :anime";
+		if (foil) params[5] = "AND cm.foil = :foil";
+		if (seller != null) params[6] = "AND cm.seller = :seller";
+		params[7] = "ORDER BY cm.price, cm.foil DESC, c.rarity DESC, a.id, c.id";
+
+		Query q = em.createQuery(query.formatted(String.join("\n", params)), CardMarket.class);
+
+		if (params[0] != null) q.setParameter("name", "%" + name + "%");
+		if (params[1] != null) q.setParameter("min", min);
+		if (params[2] != null) q.setParameter("max", max);
+		if (params[3] != null) q.setParameter("rarity", rarity);
+		if (params[4] != null) q.setParameter("anime", "%" + anime + "%");
+		if (params[5] != null) q.setParameter("foil", foil);
+		if (params[6] != null) q.setParameter("seller", seller);
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
 }
 
