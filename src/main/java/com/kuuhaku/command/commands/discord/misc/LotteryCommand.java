@@ -54,12 +54,12 @@ public class LotteryCommand implements Executable {
             channel.sendMessage("O prêmio atual é __**" + Helper.separate(LotteryDAO.getLotteryValue().getValue()) + " créditos**__.").queue();
             return;
         } else if (args[0].split(",").length != 6 || args[0].length() != 17) {
-            channel.sendMessage("❌ | Você precisa informar 6 dezenas separadas por vírgula.").queue();
-            return;
-        } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        }
+			channel.sendMessage("❌ | Você precisa informar 6 dezenas separadas por vírgula.").queue();
+			return;
+		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
 
         Account acc = AccountDAO.getAccount(author.getId());
 
@@ -85,8 +85,8 @@ public class LotteryCommand implements Executable {
         channel.sendMessage("Você está prestes a comprar um bilhete de loteria com as dezenas `" + args[0].replace(",", " ") + "` por " + Helper.separate(cost) + " créditos, deseja confirmar?")
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                             if (!ShiroInfo.getHashes().remove(hash)) return;
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
-                            acc.consumeCredit(cost, this.getClass());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
+							acc.consumeCredit(cost, this.getClass());
                             AccountDAO.saveAccount(acc);
                             LotteryDAO.saveLottery(new Lottery(author.getId(), args[0]));
 
@@ -98,8 +98,8 @@ public class LotteryCommand implements Executable {
                         }), true, 1, TimeUnit.MINUTES,
                         u -> u.getId().equals(author.getId()),
                         ms -> {
-                            ShiroInfo.getHashes().remove(hash);
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().remove(author.getId());
                         })
                 );
     }

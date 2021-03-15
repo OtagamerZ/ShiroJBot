@@ -85,7 +85,7 @@ public class ShoukanMasterCommand implements Executable {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(author.getId())) {
 								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								s.delete().queue();
 								contract.setSignatureA(true);
@@ -95,7 +95,7 @@ public class ShoukanMasterCommand implements Executable {
 						u -> u.getId().equals(author.getId()),
 						msg -> {
 							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 						})
 				);
 	}
@@ -108,7 +108,7 @@ public class ShoukanMasterCommand implements Executable {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(target.getId())) {
 								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(target.getId());
+								Main.getInfo().getConfirmationPending().remove(target.getId());
 
 								s.delete().queue();
 								contract.setSignatureB(true);
@@ -117,7 +117,7 @@ public class ShoukanMasterCommand implements Executable {
 						u -> u.getId().equals(target.getId()),
 						msg -> {
 							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().invalidate(target.getId());
+							Main.getInfo().getConfirmationPending().remove(target.getId());
 						})
 				);
 	}

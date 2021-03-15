@@ -66,10 +66,10 @@ public class TradeCardCommand implements Executable {
 		} else if (args.length < 4) {
 			channel.sendMessage("❌ | Você precisa mencionar uma quantia de créditos ou uma carta, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) para realizar a troca.").queue();
 			return;
-		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
-		} else if (Main.getInfo().getConfirmationPending().getIfPresent(message.getMentionedUsers().get(0).getId()) != null) {
+		} else if (Main.getInfo().getConfirmationPending().get(message.getMentionedUsers().get(0).getId()) != null) {
 			channel.sendMessage("❌ | Este usuário possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
 			return;
 		}
@@ -250,8 +250,8 @@ public class TradeCardCommand implements Executable {
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								Main.getInfo().getConfirmationPending().invalidate(other.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								Main.getInfo().getConfirmationPending().remove(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 
@@ -387,8 +387,8 @@ public class TradeCardCommand implements Executable {
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {
 								ShiroInfo.getHashes().remove(hash);
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								Main.getInfo().getConfirmationPending().invalidate(other.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								Main.getInfo().getConfirmationPending().remove(other.getId());
 							})
 					);
 		} else if (Helper.regex(text, "(\\d+)[ ]+[\\w- ]+[NnCcEeFf]")) { //Purchase
@@ -509,8 +509,8 @@ public class TradeCardCommand implements Executable {
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								Main.getInfo().getConfirmationPending().invalidate(other.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								Main.getInfo().getConfirmationPending().remove(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 
@@ -597,8 +597,8 @@ public class TradeCardCommand implements Executable {
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {
 								ShiroInfo.getHashes().remove(hash);
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								Main.getInfo().getConfirmationPending().invalidate(other.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								Main.getInfo().getConfirmationPending().remove(other.getId());
 							})
 					);
 		} else if (Helper.regex(text, "[\\w- ]+[NnCcEeFf][ ]+(\\d+)")) { //Selling
@@ -719,8 +719,8 @@ public class TradeCardCommand implements Executable {
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
 								if (!mb.getId().equals(other.getId())) return;
 								else if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								Main.getInfo().getConfirmationPending().invalidate(other.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								Main.getInfo().getConfirmationPending().remove(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Kawaipon finalTarget = KawaiponDAO.getKawaipon(other.getId());
 
@@ -807,8 +807,8 @@ public class TradeCardCommand implements Executable {
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {
 								ShiroInfo.getHashes().remove(hash);
-								Main.getInfo().getConfirmationPending().invalidate(author.getId());
-								Main.getInfo().getConfirmationPending().invalidate(other.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								Main.getInfo().getConfirmationPending().remove(other.getId());
 							})
 					);
 		}

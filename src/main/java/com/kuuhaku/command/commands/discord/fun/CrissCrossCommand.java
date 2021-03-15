@@ -54,15 +54,15 @@ public class CrissCrossCommand implements Executable {
     @Override
     public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
         if (message.getMentionedUsers().isEmpty()) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
-            return;
-        } else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
-            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-            return;
-        } else if (Main.getInfo().getConfirmationPending().getIfPresent(message.getMentionedUsers().get(0).getId()) != null) {
-            channel.sendMessage("❌ | Este usuário possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
-            return;
-        }
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			return;
+		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		} else if (Main.getInfo().getConfirmationPending().get(message.getMentionedUsers().get(0).getId()) != null) {
+			channel.sendMessage("❌ | Este usuário possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
+			return;
+		}
 
         Account uacc = AccountDAO.getAccount(author.getId());
         Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
@@ -102,7 +102,7 @@ public class CrissCrossCommand implements Executable {
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                             if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
                                 if (!ShiroInfo.getHashes().remove(hash)) return;
-                                Main.getInfo().getConfirmationPending().invalidate(author.getId());
+								Main.getInfo().getConfirmationPending().remove(author.getId());
                                 if (Main.getInfo().gameInProgress(mb.getId())) {
                                     channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
                                     return;
@@ -118,8 +118,8 @@ public class CrissCrossCommand implements Executable {
                         }), true, 1, TimeUnit.MINUTES,
                         u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
                         ms -> {
-                            ShiroInfo.getHashes().remove(hash);
-                            Main.getInfo().getConfirmationPending().invalidate(author.getId());
+							ShiroInfo.getHashes().remove(hash);
+							Main.getInfo().getConfirmationPending().remove(author.getId());
                         })
                 );
     }

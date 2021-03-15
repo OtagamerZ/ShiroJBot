@@ -64,7 +64,7 @@ public class YoutubeCommand implements Executable {
 		if (args.length < 1) {
 			channel.sendMessage("❌ | Você precisa digitar um nome para pesquisar.").queue();
 			return;
-		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
 		}
@@ -96,7 +96,7 @@ public class YoutubeCommand implements Executable {
 							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
 								Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
 											if (!ShiroInfo.getHashes().remove(hash)) return;
-											Main.getInfo().getConfirmationPending().invalidate(author.getId());
+											Main.getInfo().getConfirmationPending().remove(author.getId());
 											try {
 												String url = Objects.requireNonNull(ms.getEmbeds().get(0).getFooter()).getIconUrl();
 												assert url != null;
@@ -113,7 +113,7 @@ public class YoutubeCommand implements Executable {
 										u -> u.getId().equals(author.getId()),
 										ms -> {
 											ShiroInfo.getHashes().remove(hash);
-											Main.getInfo().getConfirmationPending().invalidate(author.getId());
+											Main.getInfo().getConfirmationPending().remove(author.getId());
 										});
 							}
 						});
