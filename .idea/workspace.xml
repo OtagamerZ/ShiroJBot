@@ -13,9 +13,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas transações de membros">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionadas mais medidas de segurança na Jibril">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/EquipmentMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/EquipmentMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/FieldMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/FieldMarketDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1073,13 +1076,7 @@
       <workItem from="1615748028014" duration="153000" />
       <workItem from="1615749187781" duration="679000" />
       <workItem from="1615773618737" duration="5849000" />
-    </task>
-    <task id="LOCAL-03947" summary="Adicionado sistema de efeitos de raças.">
-      <created>1614972754408</created>
-      <option name="number" value="03947" />
-      <option name="presentableId" value="LOCAL-03947" />
-      <option name="project" value="LOCAL" />
-      <updated>1614972754408</updated>
+      <workItem from="1615813374827" duration="1687000" />
     </task>
     <task id="LOCAL-03948" summary="Adicionado sistema de efeitos de raças.">
       <created>1614975371725</created>
@@ -1417,7 +1414,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615778481050</updated>
     </task>
-    <option name="localTasksCounter" value="3996" />
+    <task id="LOCAL-03996" summary="Adicionadas mais medidas de segurança na Jibril">
+      <created>1615810326534</created>
+      <option name="number" value="03996" />
+      <option name="presentableId" value="LOCAL-03996" />
+      <option name="project" value="LOCAL" />
+      <updated>1615810326535</updated>
+    </task>
+    <option name="localTasksCounter" value="3997" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1503,7 +1507,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de opção de usar cartas cromadas no Shoukan" />
     <MESSAGE value="Retorno do salário mensal dos suportes" />
     <MESSAGE value="Padronização dos campos de id de usuário" />
     <MESSAGE value="Adição de cascateamento nas operações de remoção de tabelas com referências" />
@@ -1528,7 +1531,8 @@
     <MESSAGE value="Correção nos calculos de chance" />
     <MESSAGE value="Mudança na API de reações" />
     <MESSAGE value="Redução no tamanho dos GIFs e melhoria no comando de dados de partida" />
-    <option name="LAST_COMMIT_MESSAGE" value="Redução no tamanho dos GIFs e melhoria no comando de dados de partida" />
+    <MESSAGE value="Adicionadas mais medidas de segurança na Jibril" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionadas mais medidas de segurança na Jibril" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
