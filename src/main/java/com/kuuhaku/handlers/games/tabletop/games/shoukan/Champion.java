@@ -329,6 +329,14 @@ public class Champion implements Drawable, Cloneable {
 		this.efctMana = mana;
 	}
 
+	public void addEfctMana(int mana) {
+		this.efctMana += mana;
+	}
+
+	public void removeEfctMana(int mana) {
+		this.efctMana -= mana;
+	}
+
 	public int getBaseAtk() {
 		return atk;
 	}
@@ -363,12 +371,44 @@ public class Champion implements Drawable, Cloneable {
 		this.altDef = Math.max(-1, altDef);
 	}
 
+	public void setModAtk(int mAtk) {
+		this.mAtk = mAtk;
+	}
+
+	public void addModAtk(int mAtk) {
+		this.mAtk += mAtk;
+	}
+
+	public void removeModAtk(int mAtk) {
+		this.mAtk -= mAtk;
+	}
+
+	public void setModDef(int mDef) {
+		this.mDef = mDef;
+	}
+
+	public void addModDef(int mDef) {
+		this.mDef += mDef;
+	}
+
+	public void removeModDef(int mDef) {
+		this.mDef -= mDef;
+	}
+
 	public int getRedAtk() {
 		return redAtk;
 	}
 
 	public void setRedAtk(int redAtk) {
+		this.redAtk = redAtk;
+	}
+
+	public void addRedAtk(int redAtk) {
 		this.redAtk += redAtk;
+	}
+
+	public void removeRedAtk(int redAtk) {
+		this.redAtk -= redAtk;
 	}
 
 	public int getRedDef() {
@@ -376,39 +416,55 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setRedDef(int redDef) {
+		this.redDef = redDef;
+	}
+
+	public void addRedDef(int redDef) {
 		this.redDef += redDef;
 	}
 
+	public void removeRedDef(int redDef) {
+		this.redDef -= redDef;
+	}
+
 	public void setEfctAtk(int efctAtk) {
+		this.efctAtk = efctAtk;
+	}
+
+	public void addEfctAtk(int efctAtk) {
 		this.efctAtk += efctAtk;
 	}
 
+	public void removeEfctAtk(int efctAtk) {
+		this.efctAtk -= efctAtk;
+	}
+
 	public void setEfctDef(int efctDef) {
+		this.efctDef = efctDef;
+	}
+
+	public void addEfctDef(int efctDef) {
 		this.efctDef += efctDef;
 	}
 
-	public int getFinAtk() {
-		return Math.max(0, getEffAtk() + getLinkedTo().stream().mapToInt(Equipment::getAtk).sum());
+	public void removeEfctDef(int efctDef) {
+		this.efctDef -= efctDef;
 	}
 
 	public int getEffAtk() {
 		return Math.max(0, getAtk() + mAtk + bonus.getAtk());
 	}
 
-	public void setModAtk(int mAtk) {
-		this.mAtk += mAtk;
-	}
-
-	public int getFinDef() {
-		return Math.max(0, getEffDef() + getLinkedTo().stream().mapToInt(Equipment::getDef).sum());
-	}
-
 	public int getEffDef() {
 		return Math.max(0, getDef() + mDef + bonus.getDef());
 	}
 
-	public void setModDef(int mDef) {
-		this.mDef += mDef;
+	public int getFinAtk() {
+		return Math.max(0, getEffAtk() + getLinkedTo().stream().mapToInt(Equipment::getAtk).sum());
+	}
+
+	public int getFinDef() {
+		return Math.max(0, getEffDef() + getLinkedTo().stream().mapToInt(Equipment::getDef).sum());
 	}
 
 	public void resetAttribs() {
