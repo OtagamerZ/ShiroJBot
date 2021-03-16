@@ -610,8 +610,8 @@ public class Shoukan extends GlobalGame {
 
 								if (sc != null) {
 									Champion dp = t.copy();
-									dp.setRedAtk(Math.round(dp.getAltAtk() * 0.25f));
-									dp.setRedDef(Math.round(dp.getAltDef() * 0.25f));
+									dp.addRedAtk(Math.round(dp.getAltAtk() * 0.25f));
+									dp.addRedDef(Math.round(dp.getAltDef() * 0.25f));
 									dp.setBonus(t.getBonus().copy());
 									dp.setEfctMana(-dp.getMana());
 									dp.setFusion(true);
