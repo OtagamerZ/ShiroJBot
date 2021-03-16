@@ -504,7 +504,11 @@ public class Shoukan extends GlobalGame {
 									allyPos.getLeft().setDefending(true);
 								}
 
-								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + allyPos.getLeft().getName() + ".";
+								yield "%s usou o feitiço %s em %s.".formatted(
+										h.getUser().getName(),
+										d.getCard().getName(),
+										allyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : allyPos.getLeft().getName()
+								);
 							}
 							case ENEMY -> {
 								assert enemyPos != null;
@@ -513,7 +517,11 @@ public class Shoukan extends GlobalGame {
 									enemyPos.getLeft().setDefending(true);
 								}
 
-								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + enemyPos.getLeft().getName() + ".";
+								yield "%s usou o feitiço %s em %s.".formatted(
+										h.getUser().getName(),
+										d.getCard().getName(),
+										enemyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : enemyPos.getLeft().getName()
+								);
 							}
 							case BOTH -> {
 								assert allyPos != null && enemyPos != null;
@@ -526,7 +534,12 @@ public class Shoukan extends GlobalGame {
 									enemyPos.getLeft().setDefending(true);
 								}
 
-								yield h.getUser().getName() + " usou o feitiço " + d.getCard().getName() + " em " + allyPos.getLeft().getName() + " e " + enemyPos.getLeft().getName() + ".";
+								yield "%s usou o feitiço %s em %s e %s.".formatted(
+										h.getUser().getName(),
+										d.getCard().getName(),
+										allyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : allyPos.getLeft().getName(),
+										enemyPos.getLeft().isFlipped() ? "uma carta virada para baixo" : enemyPos.getLeft().getName()
+								);
 							}
 						};
 
