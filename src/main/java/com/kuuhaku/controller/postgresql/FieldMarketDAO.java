@@ -159,7 +159,7 @@ public class FieldMarketDAO {
 				""";
 
 		String[] params = {
-				name != null ? "AND c.id LIKE :name" : "",
+				name != null ? "AND c.id LIKE UPPER(:name)" : "",
 				min > -1 ? "AND fm.price > :min" : "",
 				max > -1 ? "AND fm.price < :max" : "",
 				seller != null ? "AND fm.seller = :seller" : "",
