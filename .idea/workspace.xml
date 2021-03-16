@@ -13,16 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas GIFs enviadas durante o Shoukan">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança no tamanho das imagens de clã">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanBannerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanBannerCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanIconCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanIconCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,19 +188,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1099,13 +1078,7 @@
       <workItem from="1615824470460" duration="511000" />
       <workItem from="1615836597821" duration="2228000" />
       <workItem from="1615839020378" duration="2852000" />
-    </task>
-    <task id="LOCAL-03957" summary="Melhoria em alguns efeitos de raça">
-      <created>1615222788768</created>
-      <option name="number" value="03957" />
-      <option name="presentableId" value="LOCAL-03957" />
-      <option name="project" value="LOCAL" />
-      <updated>1615222788768</updated>
+      <workItem from="1615910471861" duration="1616000" />
     </task>
     <task id="LOCAL-03958" summary="Melhoria em alguns efeitos de raça">
       <created>1615227570496</created>
@@ -1443,7 +1416,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615896583839</updated>
     </task>
-    <option name="localTasksCounter" value="4006" />
+    <task id="LOCAL-04006" summary="Mudança no tamanho das imagens de clã">
+      <created>1615903761201</created>
+      <option name="number" value="04006" />
+      <option name="presentableId" value="LOCAL-04006" />
+      <option name="project" value="LOCAL" />
+      <updated>1615903761201</updated>
+    </task>
+    <option name="localTasksCounter" value="4007" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1529,7 +1509,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de gatilhos de alvo nos efeitos por turno" />
     <MESSAGE value="Adição de ranking de tempo em canais de voz" />
     <MESSAGE value="Agora é possível adicionar emotes usando nome + arquivo" />
     <MESSAGE value="Aumentado o custo das apostas na roleta" />
@@ -1554,7 +1533,8 @@
     <MESSAGE value="Melhoria no controle dos atributos dos campeões" />
     <MESSAGE value="Correção nas GIFs enviadas" />
     <MESSAGE value="Correção nas GIFs enviadas durante o Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nas GIFs enviadas durante o Shoukan" />
+    <MESSAGE value="Mudança no tamanho das imagens de clã" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mudança no tamanho das imagens de clã" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
