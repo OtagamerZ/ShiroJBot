@@ -64,7 +64,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
@@ -97,7 +96,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildUpdateOwner(@Nonnull GuildUpdateOwnerEvent event) {
+	public void onGuildUpdateOwner(@NotNull GuildUpdateOwnerEvent event) {
 		assert event.getOldOwner() != null;
 		assert event.getNewOwner() != null;
 
@@ -220,7 +219,7 @@ public class ShiroEvents extends ListenerAdapter {
 			try {
 				CustomAnswer ca = CustomAnswerDAO.getCAByTrigger(rawMessage, guild.getId());
 				if (ca != null && !Main.getSelfUser().getId().equals(author.getId()))
-					Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer().replace("%user%", author.getAsMention()).replace("%guild%", guild.getName()).replace("%count%", String.valueOf(guild.getMemberCount())));
+					Helper.typeMessage(channel, ca.getAnswer().replace("%user%", author.getAsMention()).replace("%guild%", guild.getName()).replace("%count%", String.valueOf(guild.getMemberCount())));
 			} catch (NoResultException | NullPointerException ignore) {
 			}
 
@@ -482,7 +481,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onRoleDelete(@Nonnull RoleDeleteEvent event) {
+	public void onRoleDelete(@NotNull RoleDeleteEvent event) {
 		GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 		Map<String, Object> jo = gc.getCargoslvl();
 
@@ -556,8 +555,6 @@ public class ShiroEvents extends ListenerAdapter {
 						), Helper::doNothing);
 				return;
 			}
-
-			MemberDAO.addMemberToDB(author.getId(), guild.getId());
 
 			if (!gc.getMsgBoasVindas().isBlank()) {
 				URL url = new URL(author.getEffectiveAvatarUrl());
@@ -635,7 +632,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
+	public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
 		Guild guild = event.getGuild();
 		User author = event.getUser();
 		try {
@@ -883,7 +880,7 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
+	public void onGuildMessageDelete(@NotNull GuildMessageDeleteEvent event) {
 		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
 
 		if (msg == null || msg.getAuthor().isBot()) return;
