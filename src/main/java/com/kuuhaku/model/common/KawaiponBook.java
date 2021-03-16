@@ -116,7 +116,7 @@ public class KawaiponBook {
 
 						int width = 4026 / COLUMN_COUNT;
 						int actualWidth = width * chunk.size();
-						int x = 35 + ((actualWidth - 4026) / 2) + ((width - CARD_WIDTH) / 2) + width * i;
+						int x = 35 + ((4026 - actualWidth) / 2) + ((width - CARD_WIDTH) / 2) + width * i;
 
 						int height = row.getHeight();
 						int y = ((height - CARD_HEIGHT) / 2);
@@ -234,7 +234,7 @@ public class KawaiponBook {
 
 						int width = 4026 / COLUMN_COUNT;
 						int actualWidth = width * chunk.size();
-						int x = 35 + ((actualWidth - 4026) / 2) + ((width - CARD_WIDTH) / 2) + width * i;
+						int x = 35 + ((4026 - actualWidth) / 2) + ((width - CARD_WIDTH) / 2) + width * i;
 
 						int height = row.getHeight();
 						int y = ((height - CARD_HEIGHT) / 2);
