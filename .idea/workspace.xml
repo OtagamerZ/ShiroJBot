@@ -13,8 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Mudança no tamanho das imagens de clã">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na perda de perfil ao re-entrar no servidor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Slots.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Slots.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1078,14 +1079,7 @@
       <workItem from="1615824470460" duration="511000" />
       <workItem from="1615836597821" duration="2228000" />
       <workItem from="1615839020378" duration="2852000" />
-      <workItem from="1615910471861" duration="1616000" />
-    </task>
-    <task id="LOCAL-03958" summary="Melhoria em alguns efeitos de raça">
-      <created>1615227570496</created>
-      <option name="number" value="03958" />
-      <option name="presentableId" value="LOCAL-03958" />
-      <option name="project" value="LOCAL" />
-      <updated>1615227570497</updated>
+      <workItem from="1615910471861" duration="2427000" />
     </task>
     <task id="LOCAL-03959" summary="Melhoria em alguns efeitos de raça">
       <created>1615229696138</created>
@@ -1423,7 +1417,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615903761201</updated>
     </task>
-    <option name="localTasksCounter" value="4007" />
+    <task id="LOCAL-04007" summary="Correção na perda de perfil ao re-entrar no servidor">
+      <created>1615917323543</created>
+      <option name="number" value="04007" />
+      <option name="presentableId" value="LOCAL-04007" />
+      <option name="project" value="LOCAL" />
+      <updated>1615917323544</updated>
+    </task>
+    <option name="localTasksCounter" value="4008" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1509,7 +1510,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de ranking de tempo em canais de voz" />
     <MESSAGE value="Agora é possível adicionar emotes usando nome + arquivo" />
     <MESSAGE value="Aumentado o custo das apostas na roleta" />
     <MESSAGE value="Adicionado sistema de efeitos de raças." />
@@ -1534,7 +1534,8 @@
     <MESSAGE value="Correção nas GIFs enviadas" />
     <MESSAGE value="Correção nas GIFs enviadas durante o Shoukan" />
     <MESSAGE value="Mudança no tamanho das imagens de clã" />
-    <option name="LAST_COMMIT_MESSAGE" value="Mudança no tamanho das imagens de clã" />
+    <MESSAGE value="Correção na perda de perfil ao re-entrar no servidor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na perda de perfil ao re-entrar no servidor" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
