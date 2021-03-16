@@ -238,11 +238,11 @@ public class CardMarketDAO {
 				""";
 
 		String[] params = {
-				name != null ? "AND c.id LIKE :name" : "",
+				name != null ? "AND c.id LIKE UPPER(:name)" : "",
 				min > -1 ? "AND cm.price > :min" : "",
 				max > -1 ? "AND cm.price < :max" : "",
 				rarity != null ? "AND c.rarity = :rarity" : "",
-				anime != null ? "AND a.id LIKE :anime" : "",
+				anime != null ? "AND a.id LIKE UPPER(:anime)" : "",
 				foil ? "AND cm.foil = :foil" : "",
 				seller != null ? "AND cm.seller = :seller" : "",
 				"ORDER BY cm.price, cm.foil DESC, c.rarity DESC, a.id, c.id"
