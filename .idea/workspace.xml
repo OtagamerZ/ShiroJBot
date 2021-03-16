@@ -13,7 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na organização das cartas" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na organização das cartas">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1079,21 +1082,7 @@
       <workItem from="1615910471861" duration="2740000" />
       <workItem from="1615919706745" duration="4003000" />
       <workItem from="1615924168878" duration="956000" />
-      <workItem from="1615926863851" duration="458000" />
-    </task>
-    <task id="LOCAL-03966" summary="Adicionado comandos para ativar ou desativar comandos">
-      <created>1615471866994</created>
-      <option name="number" value="03966" />
-      <option name="presentableId" value="LOCAL-03966" />
-      <option name="project" value="LOCAL" />
-      <updated>1615471866994</updated>
-    </task>
-    <task id="LOCAL-03967" summary="Adicionado comandos para ativar ou desativar comandos">
-      <created>1615472196447</created>
-      <option name="number" value="03967" />
-      <option name="presentableId" value="LOCAL-03967" />
-      <option name="project" value="LOCAL" />
-      <updated>1615472196447</updated>
+      <workItem from="1615926863851" duration="846000" />
     </task>
     <task id="LOCAL-03968" summary="Adicionado comandos para ativar ou desativar comandos">
       <created>1615472626359</created>
@@ -1424,7 +1413,21 @@
       <option name="project" value="LOCAL" />
       <updated>1615927124095</updated>
     </task>
-    <option name="localTasksCounter" value="4015" />
+    <task id="LOCAL-04015" summary="Correção na organização das cartas">
+      <created>1615927333878</created>
+      <option name="number" value="04015" />
+      <option name="presentableId" value="LOCAL-04015" />
+      <option name="project" value="LOCAL" />
+      <updated>1615927333878</updated>
+    </task>
+    <task id="LOCAL-04016" summary="Correção na organização das cartas">
+      <created>1615927594799</created>
+      <option name="number" value="04016" />
+      <option name="presentableId" value="LOCAL-04016" />
+      <option name="project" value="LOCAL" />
+      <updated>1615927594799</updated>
+    </task>
+    <option name="localTasksCounter" value="4017" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
