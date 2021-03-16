@@ -45,11 +45,6 @@ public enum Race {
 			"Inicia com 1 ponto de mana extra",
 			"Metade humano e metade fera, possuem uma incrível força e instintos aguçados. Não se engane, uma garota-gato ainda é mortal o suficiente para te pegar desprevenido."
 	),
-	UNDEAD("Morto-vivo",
-			"+1% Dano por carta no cemitério",
-			"+0,5% Dano por carta no cemitério",
-			"Guerreiros mortos a muito tempo e revividos através de magia. São imunes a dor o que os torna implacáveis em combate."
-	),
 	MACHINE("Máquina",
 			"-1 Peso de Equipamentos",
 			"Inicia com 1 equipamento extra",
@@ -79,6 +74,11 @@ public enum Race {
 			"-2000 HP, +2 Mana",
 			"-500 HP",
 			"Seres das trevas que vieram ao mundo material para coletar almas para aumentar seu poder. Sua astúcia e metodologia geralmente reflete seu status no submundo, e são altamente temidas por todos os seres vivos."
+	),
+	UNDEAD("Morto-vivo",
+			"+1% Dano por carta no cemitério",
+			"+0,5% Dano por carta no cemitério",
+			"Guerreiros mortos a muito tempo e revividos através de magia. São imunes a dor o que os torna implacáveis em combate."
 	),
 	NONE("Nenhum",
 			"Nenhum",
