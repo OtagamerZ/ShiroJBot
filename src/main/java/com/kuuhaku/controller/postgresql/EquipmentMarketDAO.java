@@ -159,7 +159,7 @@ public class EquipmentMarketDAO {
 				""";
 
 		String[] params = {
-				name != null ? "AND c.id LIKE :name" : "",
+				name != null ? "AND c.id LIKE UPPER(:name)" : "",
 				min > -1 ? "AND em.price > :min" : "",
 				max > -1 ? "AND em.price < :max" : "",
 				seller != null ? "AND em.seller = :seller" : "",
