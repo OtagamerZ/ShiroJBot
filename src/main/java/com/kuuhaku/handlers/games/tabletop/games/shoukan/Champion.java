@@ -124,7 +124,7 @@ public class Champion implements Drawable, Cloneable {
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		if (flipped) {
-			g2d.drawImage(acc.getFrame().getBack(acc, clan), 0, 0, null);
+			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
 			if (fakeCard != null) {
 				boolean useFoil = acc.isUsingFoil() && CardDAO.hasCompleted(acc.getUid(), fakeCard.getCard().getAnime().getName(), true);

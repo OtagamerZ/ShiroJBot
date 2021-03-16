@@ -92,7 +92,7 @@ public class ShoukanDeck {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 30));
 
-		g2d.drawImage(acc.getFrame().getBack(acc, clan), 1746, 2241, null);
+		g2d.drawImage(acc.getFrame().getBack(acc), 1746, 2241, null);
 
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / SENSHI_COLUMNS) {
 			Champion c = champs.get(i);
@@ -165,7 +165,7 @@ public class ShoukanDeck {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 30));
 
-		g2d.drawImage(acc.getFrame().getBack(acc, clan), 1746, 2241, null);
+		g2d.drawImage(acc.getFrame().getBack(acc), 1746, 2241, null);
 
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / SENSHI_COLUMNS) {
 			Champion c = champs.get(i);
