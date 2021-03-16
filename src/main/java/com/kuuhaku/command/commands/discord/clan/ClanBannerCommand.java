@@ -52,20 +52,20 @@ public class ClanBannerCommand implements Executable {
 			channel.sendMessage("❌ | Seu clã ainda não desbloqueou o banner.").queue();
 			return;
 		} else if (message.getAttachments().isEmpty()) {
-			channel.sendMessage("❌ | Você precisa enviar uma imagem com dimensões 384x128.").queue();
+			channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
 			return;
 		}
 
 		try {
 			Message.Attachment a = message.getAttachments().get(0);
 			if (!a.isImage()) {
-				channel.sendMessage("❌ | Você precisa enviar uma imagem com dimensões 384x128.").queue();
+				channel.sendMessage("❌ | Você precisa enviar uma imagem.").queue();
 				return;
 			}
 
 			BufferedImage bi = ImageIO.read(a.retrieveInputStream().get());
-			if (bi.getWidth() != 384 || bi.getHeight() != 128) {
-				channel.sendMessage("❌ | As dimensões da imagem devem ser exatamente 384x128.").queue();
+			if (bi.getWidth() != bi.getHeight() * 2) {
+				channel.sendMessage("❌ | A proporção da imagem deve ser 2:1 (altura = largura * 2).").queue();
 				return;
 			}
 
