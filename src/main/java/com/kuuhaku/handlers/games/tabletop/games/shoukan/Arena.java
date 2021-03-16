@@ -223,7 +223,7 @@ public class Arena {
 				}
 				g2d.drawImage(icon, 919 + (i * 166), 835, null);
 				if (locks.get(lockNames[i]) > 0)
-					Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 1009 + (i * 166), 835 + 40 + g2d.getFontMetrics().getHeight() / 2, g2d);
+					Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 1009 + (i * 166), 860 + g2d.getFontMetrics().getHeight() / 2, g2d);
 			}
 
 			g2d.dispose();
