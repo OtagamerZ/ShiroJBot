@@ -44,7 +44,9 @@ import java.util.stream.Collectors;
 
 public class KawaiponBook {
 	private final Set<KawaiponCard> cards;
-	private static final int COLUMN_COUNT = 10;
+	private static final int COLUMN_COUNT = 20;
+	private static final int CARD_WIDTH = 160;
+	private static final int CARD_HEIGHT = 250;
 
 	public KawaiponBook(Set<KawaiponCard> cards) {
 		this.cards = cards;
@@ -76,7 +78,7 @@ public class KawaiponBook {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 72));
 		if (foil) g2d.setColor(Color.yellow);
-		Profile.printCenteredString(text, 1904, 36, 168, g2d);
+		Profile.printCenteredString(text, 4026, 35, 168, g2d);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
@@ -108,31 +110,40 @@ public class KawaiponBook {
 					g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-					for (int i = 0; i < chunks.get(finalC).size(); i++) {
-						if (cards.contains(chunks.get(finalC).get(i))) {
+					List<KawaiponCard> chunk = chunks.get(finalC);
+					for (int i = 0; i < chunk.size(); i++) {
+						BufferedImage card = cards.contains(chunk.get(i)) ? chunk.get(i).getCard().drawCard(foil) : slot;
+
+						int width = 4026 / chunk.size();
+						int x = 35 + ((width - CARD_WIDTH) / 2) + width * i;
+
+						int height = row.getHeight();
+						int y = ((height - CARD_HEIGHT) / 2);
+
+						if (cards.contains(chunk.get(i))) {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
-							RarityColors rc = RarityColorsDAO.getColor(chunks.get(finalC).get(i).getCard().getRarity());
+							RarityColors rc = RarityColorsDAO.getColor(chunk.get(i).getCard().getRarity());
 
 							g.setBackground(rc.getSecondary());
 							if (foil) g.setColor(rc.getPrimary().brighter());
 							else g.setColor(rc.getPrimary());
 
-							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 54 + 198 * i, 24, 160, 250, null);
-							Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getName(), 15), 160, 54 + 198 * i, 298, g);
-						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
+							g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
+							Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getName(), 15), CARD_WIDTH, x, y + 274, g);
+						} else if (chunk.get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
-							g.drawImage(slot, 54 + 198 * i, 24, 160, 250, null);
-							Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getName(), 15), 160, 54 + 198 * i, 298, g);
+							g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
+							Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getName(), 15), CARD_WIDTH, x, y + 274, g);
 						} else {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
-							g.drawImage(slot, 54 + 198 * i, 24, 160, 250, null);
-							Profile.printCenteredString("???", 160, 54 + 198 * i, 298, g);
+							g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
+							Profile.printCenteredString("???", CARD_WIDTH, x, y + 274, g);
 						}
 					}
 
@@ -216,11 +227,19 @@ public class KawaiponBook {
 					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 					g.setColor(Color.white);
 
-					for (int i = 0; i < chunks.get(finalC).size(); i++) {
-						g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+					List<Drawable> chunk = chunks.get(finalC);
+					for (int i = 0; i < chunk.size(); i++) {
+						BufferedImage card = chunk.get(i).drawCard(false);
 
-						g.drawImage(chunks.get(finalC).get(i).drawCard(false), 54 + 198 * i, 24, 160, 250, null);
-						Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getCard().getName(), 15), 160, 54 + 198 * i, 298, g);
+						int width = 4026 / chunk.size();
+						int x = 35 + ((width - CARD_WIDTH) / 2) + width * i;
+
+						int height = row.getHeight();
+						int y = ((height - CARD_HEIGHT) / 2);
+
+						g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+						g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
+						Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getCard().getName(), 15), CARD_WIDTH, x, y + 274, g);
 					}
 
 					g.dispose();
