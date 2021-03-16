@@ -180,11 +180,10 @@ public class Hand {
 
 		int hpMod = switch (combo.getLeft()) {
 			case HUMAN -> 1000;
-			case ELF -> 500;
 			case DEMON -> -2000;
 			default -> 0;
 		} + switch (combo.getRight()) {
-			case HUMAN, ELF -> 250;
+			case HUMAN -> 500;
 			case DEMON -> -500;
 			default -> 0;
 		};
@@ -315,11 +314,10 @@ public class Hand {
 
 		int hpMod = switch (combo.getLeft()) {
 			case HUMAN -> 1000;
-			case ELF -> 500;
 			case DEMON -> -2000;
 			default -> 0;
 		} + switch (combo.getRight()) {
-			case HUMAN, ELF -> 250;
+			case HUMAN -> 500;
 			case DEMON -> -500;
 			default -> 0;
 		};

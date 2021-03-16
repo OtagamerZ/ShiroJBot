@@ -84,7 +84,7 @@ public class Field implements Drawable, Cloneable {
 					Color.decode("#fd88fd") //UNDEAD
 			};
 			int i = 0;
-			for (Race r : new Race[]{Race.HUMAN, Race.ELF, Race.BESTIAL, Race.MACHINE, Race.DIVINITY, Race.MYSTICAL, Race.CREATURE, Race.SPIRIT, Race.DEMON, Race.UNDEAD}) {
+			for (Race r : Race.validValues()) {
 				BufferedImage icon = r.getIcon();
 				assert icon != null;
 				g2d.setColor(colors[i]);
