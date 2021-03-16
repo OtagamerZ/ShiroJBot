@@ -13,12 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção menor no Shoukan">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Aumento na quantidade de colunas no livro de Kawaipons">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/footer.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/footer.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/header.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/header.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/row.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/row.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,17 +189,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1094,21 +1080,7 @@
       <workItem from="1615836597821" duration="2228000" />
       <workItem from="1615839020378" duration="2852000" />
       <workItem from="1615910471861" duration="2740000" />
-      <workItem from="1615919706745" duration="2822000" />
-    </task>
-    <task id="LOCAL-03962" summary="Adicionado comandos para ativar ou desativar comandos">
-      <created>1615470691021</created>
-      <option name="number" value="03962" />
-      <option name="presentableId" value="LOCAL-03962" />
-      <option name="project" value="LOCAL" />
-      <updated>1615470691022</updated>
-    </task>
-    <task id="LOCAL-03963" summary="Adicionado comandos para ativar ou desativar comandos">
-      <created>1615471031739</created>
-      <option name="number" value="03963" />
-      <option name="presentableId" value="LOCAL-03963" />
-      <option name="project" value="LOCAL" />
-      <updated>1615471031739</updated>
+      <workItem from="1615919706745" duration="4003000" />
     </task>
     <task id="LOCAL-03964" summary="Adicionado comandos para ativar ou desativar comandos">
       <created>1615471105510</created>
@@ -1439,7 +1411,21 @@
       <option name="project" value="LOCAL" />
       <updated>1615920011059</updated>
     </task>
-    <option name="localTasksCounter" value="4011" />
+    <task id="LOCAL-04011" summary="Aumento na quantidade de colunas no livro de Kawaipons">
+      <created>1615922857644</created>
+      <option name="number" value="04011" />
+      <option name="presentableId" value="LOCAL-04011" />
+      <option name="project" value="LOCAL" />
+      <updated>1615922857644</updated>
+    </task>
+    <task id="LOCAL-04012" summary="Aumento na quantidade de colunas no livro de Kawaipons">
+      <created>1615923633800</created>
+      <option name="number" value="04012" />
+      <option name="presentableId" value="LOCAL-04012" />
+      <option name="project" value="LOCAL" />
+      <updated>1615923633800</updated>
+    </task>
+    <option name="localTasksCounter" value="4013" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1525,7 +1511,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Aumentado o custo das apostas na roleta" />
     <MESSAGE value="Adicionado sistema de efeitos de raças." />
     <MESSAGE value="Correção nos perfis animados" />
     <MESSAGE value="Melhoria em alguns efeitos de raça" />
@@ -1550,7 +1535,8 @@
     <MESSAGE value="Mudança no tamanho das imagens de clã" />
     <MESSAGE value="Correção na perda de perfil ao re-entrar no servidor" />
     <MESSAGE value="Correção menor no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção menor no Shoukan" />
+    <MESSAGE value="Aumento na quantidade de colunas no livro de Kawaipons" />
+    <option name="LAST_COMMIT_MESSAGE" value="Aumento na quantidade de colunas no livro de Kawaipons" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
