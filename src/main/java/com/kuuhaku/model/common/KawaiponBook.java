@@ -114,8 +114,9 @@ public class KawaiponBook {
 					for (int i = 0; i < chunk.size(); i++) {
 						BufferedImage card = cards.contains(chunk.get(i)) ? chunk.get(i).getCard().drawCard(foil) : slot;
 
-						int width = 4026 / chunk.size();
-						int x = 35 + ((width - CARD_WIDTH) / 2) + width * i;
+						int width = 4026 / COLUMN_COUNT;
+						int actualWidth = 4026 / chunk.size();
+						int x = 35 + ((width - actualWidth) / 2) + ((width - CARD_WIDTH) / 2) + width * i;
 
 						int height = row.getHeight();
 						int y = ((height - CARD_HEIGHT) / 2);
@@ -231,8 +232,9 @@ public class KawaiponBook {
 					for (int i = 0; i < chunk.size(); i++) {
 						BufferedImage card = chunk.get(i).drawCard(false);
 
-						int width = 4026 / chunk.size();
-						int x = 35 + ((width - CARD_WIDTH) / 2) + width * i;
+						int width = 4026 / COLUMN_COUNT;
+						int actualWidth = 4026 / chunk.size();
+						int x = 35 + ((width - actualWidth) / 2) + ((width - CARD_WIDTH) / 2) + width * i;
 
 						int height = row.getHeight();
 						int y = ((height - CARD_HEIGHT) / 2);
