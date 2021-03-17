@@ -36,7 +36,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.concurrent.Executors;
 
 @Command(
@@ -68,7 +67,7 @@ public class DecryptCommand implements Executable {
 			try {
 				MessageDigest md = MessageDigest.getInstance("SHA-256");
 				ste.setPassword(Arrays.toString(md.digest(args[0].getBytes(StandardCharsets.UTF_8))));
-				att.downloadToFile(File.createTempFile(Base64.getEncoder().encodeToString(author.getId().getBytes(StandardCharsets.UTF_8)), "shr")).thenAcceptAsync(f -> {
+				att.downloadToFile(File.createTempFile(Helper.atob(author.getId().getBytes(StandardCharsets.UTF_8)), "shr")).thenAcceptAsync(f -> {
 					try {
 						byte[] data = FileUtils.readFileToByteArray(f);
 						byte[] encData = ste.decrypt(data);

@@ -1130,7 +1130,7 @@ public class Helper {
 		byte[] randomSpace = new byte[length];
 		sr.nextBytes(randomSpace);
 
-		return Base64.getEncoder().encodeToString(nameSpace) + "." + Base64.getEncoder().encodeToString(randomSpace);
+		return Helper.atob(nameSpace) + "." + Helper.atob(randomSpace);
 	}
 
 	public static void awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act) {
@@ -2013,7 +2013,7 @@ public class Helper {
 	}
 
 	public static String atob(BufferedImage bi, String encoding) {
-		return Base64.getEncoder().encodeToString(getBytes(bi, encoding));
+		return Helper.atob(getBytes(bi, encoding));
 	}
 
 	public static String atob(byte[] bytes) {
