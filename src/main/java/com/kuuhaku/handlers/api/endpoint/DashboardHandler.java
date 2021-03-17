@@ -24,7 +24,6 @@ import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.endpoint.payload.ReadyData;
 import com.kuuhaku.handlers.api.exception.RatelimitException;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
-import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.common.TempCache;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
@@ -34,14 +33,10 @@ import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
-import java.io.IOException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -95,25 +90,6 @@ public class DashboardHandler {
 		} else {
 			http.setHeader("Location", "https://" + System.getenv("SERVER_URL") + "/Unauthorized");
 			http.setStatus(HttpServletResponse.SC_FOUND);
-		}
-	}
-
-	@RequestMapping(value = "/card", method = RequestMethod.POST)
-	public String requestCard(@RequestHeader(value = "id") String id, @RequestHeader(value = "guild") String guild) throws IOException {
-		if (TokenDAO.verifyToken(id) == null) throw new UnauthorizedException();
-
-		net.dv8tion.jda.api.entities.Member mb = Main.getInfo().getGuildByID(guild).getMemberById(id);
-		assert mb != null;
-		return Base64.getEncoder().encodeToString(Helper.getBytes(Profile.makeProfile(mb, mb.getGuild())));
-	}
-
-	@RequestMapping(value = "/checkImage", method = RequestMethod.POST)
-	public String checkImage(@RequestHeader(value = "imageUrl") String url) {
-		try {
-			ImageIO.read(new URL(url));
-			return new JSONObject().put("valid", true).toString();
-		} catch (IOException e) {
-			return new JSONObject().put("valid", false).toString();
 		}
 	}
 
