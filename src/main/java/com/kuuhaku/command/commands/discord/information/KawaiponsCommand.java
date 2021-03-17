@@ -74,7 +74,7 @@ public class KawaiponsCommand implements Executable {
                     Set<KawaiponCard> collection = new HashSet<>();
                     Set<AddedAnime> animes = CardDAO.getValidAnime();
                     for (AddedAnime anime : animes) {
-                        if (CardDAO.hasCompleted(author.getId(), anime.getName(), false) || CardDAO.hasCompleted(author.getId(), anime.getName(), true))
+                        if (CardDAO.hasCompleted(author.getId(), anime.getName(), false))
                             collection.add(new KawaiponCard(CardDAO.getUltimate(anime.getName()), false));
                     }
 

@@ -31,7 +31,6 @@ import org.json.JSONObject;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Base64;
 import java.util.Objects;
 
 @Entity
@@ -200,7 +199,7 @@ public class Field implements Drawable, Cloneable {
 			put("id", id);
 			put("name", card.getName());
 			put("modifiers", getModifiers());
-			put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(false), "png")));
+			put("image", Helper.atob(drawCard(false), "png"));
 		}}.toString();
 	}
 }

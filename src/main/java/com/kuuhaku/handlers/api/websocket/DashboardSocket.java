@@ -172,14 +172,14 @@ public class DashboardSocket extends WebSocketServer {
 					Set<KawaiponCard> cards = kp.getCards();
 					Set<AddedAnime> animes = CardDAO.getValidAnime();
 					for (AddedAnime anime : animes) {
-						if (CardDAO.hasCompleted(t.getUid(), anime.getName(), false) || CardDAO.hasCompleted(t.getUid(), anime.getName(), true))
+						if (CardDAO.hasCompleted(t.getUid(), anime.getName(), false))
 							cards.add(new KawaiponCard(CardDAO.getUltimate(anime.getName()), false));
 					}
 
 					for (AddedAnime an : animes) {
 						List<JSONObject> data = new ArrayList<>();
 
-						for (Card k : CardDAO.getAllCardsByAnime(an.getName())) {
+						for (Card k : CardDAO.getCardsByAnime(an.getName())) {
 							boolean normal = cards.contains(new KawaiponCard(k, false));
 							boolean foil = cards.contains(new KawaiponCard(k, true));
 
@@ -190,8 +190,23 @@ public class DashboardSocket extends WebSocketServer {
 								put("rarity", k.getRarity().getIndex());
 								put("hasNormal", normal);
 								put("hasFoil", foil);
-								put("cardNormal", normal ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(false), "png")) : "");
-								put("cardFoil", foil ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(true), "png")) : "");
+								put("cardNormal", normal ? Helper.atob(k.drawCard(false), "png") : "");
+								put("cardFoil", foil ? Helper.atob(k.drawCard(true), "png") : "");
+							}});
+						}
+
+						if (CardDAO.hasCompleted(t.getUid(), an.getName(), false)) {
+							Card ult = CardDAO.getUltimate(an.getName());
+
+							data.add(new JSONObject() {{
+								put("id", ult.getId());
+								put("name", ult.getName());
+								put("anime", ult.getAnime().getName());
+								put("rarity", ult.getRarity().getIndex());
+								put("hasNormal", true);
+								put("hasFoil", false);
+								put("cardNormal", Helper.atob(ult.drawCard(false), "png"));
+								put("cardFoil", "");
 							}});
 						}
 
