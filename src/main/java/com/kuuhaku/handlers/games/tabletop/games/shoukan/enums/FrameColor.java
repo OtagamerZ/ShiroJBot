@@ -55,7 +55,7 @@ public enum FrameColor {
 
 	public BufferedImage getBack(Account acc) {
 		try {
-			boolean withUlt = !acc.getUltimate().isBlank() && (CardDAO.hasCompleted(acc.getUid(), acc.getUltimate(), false) || CardDAO.hasCompleted(acc.getUid(), acc.getUltimate(), true));
+			boolean withUlt = !acc.getUltimate().isBlank() && CardDAO.hasCompleted(acc.getUid(), acc.getUltimate(), false);
 			BufferedImage cover = ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/frames/card_back_" + name().toLowerCase() + (withUlt ? "_t" : "") + ".png")));
 			BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = canvas.createGraphics();

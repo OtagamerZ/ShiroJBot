@@ -36,7 +36,6 @@ import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.Objects;
 
 @Entity
@@ -344,7 +343,7 @@ public class Equipment implements Drawable, Cloneable {
 			put("defense", def);
 			put("mana", mana);
 			put("description", description);
-			put("image", Base64.getEncoder().encodeToString(Helper.getBytes(drawCard(false), "png")));
+			put("image", Helper.atob(drawCard(false), "png"));
 		}}.toString();
 	}
 }

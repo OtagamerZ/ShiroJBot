@@ -33,10 +33,8 @@ import javax.imageio.ImageIO;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Base64;
 
 import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
@@ -56,25 +54,21 @@ public class PixelCanvas {
 
 	public BufferedImage getCanvas() {
 		if (canvas != null) {
-			byte[] bytes = Base64.getDecoder().decode(canvas);
-			try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-				BufferedImage canvas = ImageIO.read(bais);
+			BufferedImage canvas = Helper.btoa(this.canvas);
+			assert canvas != null;
 
-				if (canvas.getWidth() != CANVAS_SIZE || canvas.getHeight() != CANVAS_SIZE) {
-					BufferedImage bi = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
-					Graphics2D g2d = bi.createGraphics();
-					g2d.setColor(Color.decode("#333333"));
-					g2d.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-					g2d.drawImage(canvas, 0, 0, null);
-					g2d.dispose();
+			if (canvas.getWidth() != CANVAS_SIZE || canvas.getHeight() != CANVAS_SIZE) {
+				BufferedImage bi = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
+				Graphics2D g2d = bi.createGraphics();
+				g2d.setColor(Color.decode("#333333"));
+				g2d.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+				g2d.drawImage(canvas, 0, 0, null);
+				g2d.dispose();
 
-					return bi;
-				}
-
-				return canvas;
-			} catch (IOException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				return bi;
 			}
+
+			return canvas;
 		}
 		BufferedImage bi = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -86,20 +80,17 @@ public class PixelCanvas {
 	}
 
 	public String getRawCanvas() {
-		byte[] bytes = Base64.getDecoder().decode(canvas);
-		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-			BufferedImage img = ImageIO.read(bais);
-
-			if (img.getWidth() != CANVAS_SIZE || img.getHeight() != CANVAS_SIZE) {
-				BufferedImage bi = getCanvas();
-				saveCanvas(bi);
-			}
-
-			return canvas;
-		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		BufferedImage img = Helper.btoa(canvas);
+		if (img == null) {
 			return canvas;
 		}
+
+		if (img.getWidth() != CANVAS_SIZE || img.getHeight() != CANVAS_SIZE) {
+			BufferedImage bi = getCanvas();
+			saveCanvas(bi);
+		}
+
+		return canvas;
 	}
 
 	public String getAsCoordinates() {
@@ -191,12 +182,7 @@ public class PixelCanvas {
 	}
 
 	private void saveCanvas(BufferedImage canvas) {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			ImageIO.write(canvas, "png", baos);
-			this.canvas = Base64.getEncoder().encodeToString(baos.toByteArray());
-		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-		}
+		this.canvas = Helper.atob(canvas, "png");
 	}
 
 	public static synchronized void addPixel(int[] coords, Color color) {
