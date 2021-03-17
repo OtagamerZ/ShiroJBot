@@ -15,7 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na organização das cartas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1082,14 +1081,8 @@
       <workItem from="1615910471861" duration="2740000" />
       <workItem from="1615919706745" duration="4003000" />
       <workItem from="1615924168878" duration="956000" />
-      <workItem from="1615926863851" duration="846000" />
-    </task>
-    <task id="LOCAL-03968" summary="Adicionado comandos para ativar ou desativar comandos">
-      <created>1615472626359</created>
-      <option name="number" value="03968" />
-      <option name="presentableId" value="LOCAL-03968" />
-      <option name="project" value="LOCAL" />
-      <updated>1615472626359</updated>
+      <workItem from="1615926863851" duration="1068000" />
+      <workItem from="1615999812796" duration="396000" />
     </task>
     <task id="LOCAL-03969" summary="Adicionado comandos para ativar ou desativar comandos">
       <created>1615472903298</created>
@@ -1427,7 +1420,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615927594799</updated>
     </task>
-    <option name="localTasksCounter" value="4017" />
+    <task id="LOCAL-04017" summary="Correção na organização das cartas">
+      <created>1615927855379</created>
+      <option name="number" value="04017" />
+      <option name="presentableId" value="LOCAL-04017" />
+      <option name="project" value="LOCAL" />
+      <updated>1615927855379</updated>
+    </task>
+    <option name="localTasksCounter" value="4018" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
