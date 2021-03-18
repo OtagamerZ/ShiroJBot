@@ -208,6 +208,19 @@ public class DashboardSocket extends WebSocketServer {
 								put("cardNormal", Helper.atob(ult.drawCard(false), "png"));
 								put("cardFoil", "");
 							}});
+						} else {
+							Card ult = CardDAO.getUltimate(an.getName());
+
+							data.add(new JSONObject() {{
+								put("id", ult.getId());
+								put("name", ult.getName());
+								put("anime", ult.getAnime().getName());
+								put("rarity", ult.getRarity().getIndex());
+								put("hasNormal", false);
+								put("hasFoil", false);
+								put("cardNormal", "");
+								put("cardFoil", "");
+							}});
 						}
 
 						JSONObject animeCards = new JSONObject() {{
