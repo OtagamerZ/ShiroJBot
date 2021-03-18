@@ -831,100 +831,6 @@ public class Shoukan extends GlobalGame {
 					return;
 				}
 
-				if (yours.hasEffect() && effectLock == 0) {
-					yours.getEffect(new EffectParameters(EffectTrigger.ON_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-
-					if (yours.getBonus().getSpecialData().remove("skipCombat") != null || yours.getCard().getId().equals("DECOY")) {
-						yours.setAvailable(false);
-						yours.resetAttribs();
-						if (yours.hasEffect()) {
-							yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-							if (postCombat()) return;
-						}
-						if (eot.size() > 0) {
-							applyEot(EffectTrigger.POST_ATTACK, current, is[0]);
-							if (postCombat()) return;
-						}
-
-						if (!postCombat()) {
-							resetTimerKeepTurn();
-							moveLock = true;
-							channel.sendMessage("Cálculo de combate ignorado por efeito do atacante!")
-									.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
-									.queue(s -> {
-										this.message.compute(s.getChannel().getId(), (id, m) -> {
-											if (m != null)
-												m.delete().queue(null, Helper::doNothing);
-											return s;
-										});
-										Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-										moveLock = false;
-									});
-						}
-						return;
-					} else if (postCombat()) return;
-				}
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.ON_ATTACK, current, is[0]);
-					if (postCombat()) return;
-				}
-				if (is[0] > 0) {
-					Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
-					if (c != null && c.hasEffect())
-						c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-				}
-				if (is[0] < 4) {
-					Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
-					if (c != null && c.hasEffect())
-						c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-				}
-
-				if (his.hasEffect() && effectLock == 0) {
-					his.getEffect(new EffectParameters(EffectTrigger.ON_DEFEND, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-
-					if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
-						if (his.hasEffect()) {
-							his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-							if (postCombat()) return;
-						}
-						if (eot.size() > 0) {
-							applyEot(EffectTrigger.POST_DEFENSE, next, is[1]);
-							if (postCombat()) return;
-						}
-
-						if (!postCombat()) {
-							resetTimerKeepTurn();
-							moveLock = true;
-							channel.sendMessage("Cálculo de combate ignorado por efeito do defensor!")
-									.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
-									.queue(s -> {
-										this.message.compute(s.getChannel().getId(), (id, m) -> {
-											if (m != null)
-												m.delete().queue(null, Helper::doNothing);
-											return s;
-										});
-										Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-										moveLock = false;
-									});
-						}
-						return;
-					} else if (postCombat()) return;
-				}
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.ON_DEFEND, next, is[1]);
-					if (postCombat()) return;
-				}
-				if (is[1] > 0) {
-					Champion c = arena.getSlots().get(next).get(is[1] - 1).getTop();
-					if (c != null && c.hasEffect())
-						c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-				}
-				if (is[1] < 4) {
-					Champion c = arena.getSlots().get(next).get(is[1] + 1).getTop();
-					if (c != null && c.hasEffect())
-						c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-				}
-
 				attack(is);
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, escolha uma carta para usar no ataque e uma para ser atacada.").queue(null, Helper::doNothing);
@@ -939,11 +845,105 @@ public class Shoukan extends GlobalGame {
 		Champion yours = getArena().getSlots().get(current).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(next).get(is[1]).getTop();
 
+		if (yours.hasEffect() && effectLock == 0) {
+			yours.getEffect(new EffectParameters(EffectTrigger.ON_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+
+			if (yours.getBonus().getSpecialData().remove("skipCombat") != null || yours.getCard().getId().equals("DECOY")) {
+				yours.setAvailable(false);
+				yours.resetAttribs();
+				if (yours.hasEffect()) {
+					yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+					if (postCombat()) return;
+				}
+				if (eot.size() > 0) {
+					applyEot(EffectTrigger.POST_ATTACK, current, is[0]);
+					if (postCombat()) return;
+				}
+
+				if (!postCombat()) {
+					resetTimerKeepTurn();
+					moveLock = true;
+					channel.sendMessage("Cálculo de combate ignorado por efeito do atacante!")
+							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+							.queue(s -> {
+								this.message.compute(s.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return s;
+								});
+								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
+							});
+				}
+				return;
+			} else if (postCombat()) return;
+		}
+		if (eot.size() > 0) {
+			applyEot(EffectTrigger.ON_ATTACK, current, is[0]);
+			if (postCombat()) return;
+		}
+		if (is[0] > 0) {
+			Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
+		if (is[0] < 4) {
+			Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
+
+		if (his.hasEffect() && effectLock == 0) {
+			his.getEffect(new EffectParameters(EffectTrigger.ON_DEFEND, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+
+			if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
+				if (his.hasEffect()) {
+					his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+					if (postCombat()) return;
+				}
+				if (eot.size() > 0) {
+					applyEot(EffectTrigger.POST_DEFENSE, next, is[1]);
+					if (postCombat()) return;
+				}
+
+				if (!postCombat()) {
+					resetTimerKeepTurn();
+					moveLock = true;
+					channel.sendMessage("Cálculo de combate ignorado por efeito do defensor!")
+							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+							.queue(s -> {
+								this.message.compute(s.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return s;
+								});
+								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
+							});
+				}
+				return;
+			} else if (postCombat()) return;
+		}
+		if (eot.size() > 0) {
+			applyEot(EffectTrigger.ON_DEFEND, next, is[1]);
+			if (postCombat()) return;
+		}
+		if (is[1] > 0) {
+			Champion c = arena.getSlots().get(next).get(is[1] - 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
+		if (is[1] < 4) {
+			Champion c = arena.getSlots().get(next).get(is[1] + 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
+
 		int yPower;
 		if (!yours.getCard().getId().equals("DECOY")) {
 			yPower = Math.round(
 					yours.getFinAtk() *
-					(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+							(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
 			);
 
 			if (getCombos().get(current).getLeft() == Race.UNDEAD) {
@@ -1259,11 +1259,105 @@ public class Shoukan extends GlobalGame {
 		Champion yours = getArena().getSlots().get(next).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(current).get(is[1]).getTop();
 
+		if (yours.hasEffect() && effectLock == 0) {
+			yours.getEffect(new EffectParameters(EffectTrigger.ON_ATTACK, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
+
+			if (yours.getBonus().getSpecialData().remove("skipCombat") != null || yours.getCard().getId().equals("DECOY")) {
+				yours.setAvailable(false);
+				yours.resetAttribs();
+				if (yours.hasEffect()) {
+					yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
+					if (postCombat()) return;
+				}
+				if (eot.size() > 0) {
+					applyEot(EffectTrigger.POST_ATTACK, next, is[0]);
+					if (postCombat()) return;
+				}
+
+				if (!postCombat()) {
+					resetTimerKeepTurn();
+					moveLock = true;
+					channel.sendMessage("Cálculo de combate ignorado por efeito do atacante!")
+							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+							.queue(s -> {
+								this.message.compute(s.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return s;
+								});
+								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
+							});
+				}
+				return;
+			} else if (postCombat()) return;
+		}
+		if (eot.size() > 0) {
+			applyEot(EffectTrigger.ON_ATTACK, next, is[0]);
+			if (postCombat()) return;
+		}
+		if (is[0] > 0) {
+			Champion c = arena.getSlots().get(next).get(is[0] - 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
+		if (is[0] < 4) {
+			Champion c = arena.getSlots().get(next).get(is[0] + 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
+
+		if (his.hasEffect() && effectLock == 0) {
+			his.getEffect(new EffectParameters(EffectTrigger.ON_DEFEND, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
+
+			if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
+				if (his.hasEffect()) {
+					his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
+					if (postCombat()) return;
+				}
+				if (eot.size() > 0) {
+					applyEot(EffectTrigger.POST_DEFENSE, current, is[1]);
+					if (postCombat()) return;
+				}
+
+				if (!postCombat()) {
+					resetTimerKeepTurn();
+					moveLock = true;
+					channel.sendMessage("Cálculo de combate ignorado por efeito do defensor!")
+							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+							.queue(s -> {
+								this.message.compute(s.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return s;
+								});
+								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+								moveLock = false;
+							});
+				}
+				return;
+			} else if (postCombat()) return;
+		}
+		if (eot.size() > 0) {
+			applyEot(EffectTrigger.ON_DEFEND, current, is[1]);
+			if (postCombat()) return;
+		}
+		if (is[1] > 0) {
+			Champion c = arena.getSlots().get(current).get(is[1] - 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
+		if (is[1] < 4) {
+			Champion c = arena.getSlots().get(current).get(is[1] + 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
+
 		int yPower;
 		if (!yours.getCard().getId().equals("DECOY")) {
 			yPower = Math.round(
 					yours.getFinAtk() *
-					(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
+							(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
 			);
 
 			if (getCombos().get(next).getLeft() == Race.UNDEAD) {
