@@ -37,7 +37,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -87,7 +86,6 @@ public class DashboardHandler {
 			http.setStatus(HttpServletResponse.SC_FOUND);
 
 			user.put("token", t);
-			user.put("date", LocalDate.now().format(Helper.onlyDate));
 			Main.getInfo().getSockets().getDashboard().addReadyData(new ReadyData(user, session), session);
 			Helper.logger(this.getClass()).debug("Received partial login request from session " + session + " (Discord oAuth2)");
 		} else {
