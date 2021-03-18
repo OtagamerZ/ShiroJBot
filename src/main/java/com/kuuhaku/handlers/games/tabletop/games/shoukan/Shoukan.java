@@ -1259,6 +1259,8 @@ public class Shoukan extends GlobalGame {
 		Champion yours = getArena().getSlots().get(next).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(current).get(is[1]).getTop();
 
+		if (yours.isDefending()) return;
+
 		if (yours.hasEffect() && effectLock == 0) {
 			yours.getEffect(new EffectParameters(EffectTrigger.ON_ATTACK, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
 
