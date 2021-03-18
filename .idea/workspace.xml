@@ -1096,14 +1096,7 @@
       <workItem from="1615999812796" duration="4208000" />
       <workItem from="1616007997610" duration="83000" />
       <workItem from="1616008117553" duration="1113000" />
-      <workItem from="1616097553095" duration="2563000" />
-    </task>
-    <task id="LOCAL-03973" summary="Adicionado comandos para ativar ou desativar comandos">
-      <created>1615473521524</created>
-      <option name="number" value="03973" />
-      <option name="presentableId" value="LOCAL-03973" />
-      <option name="project" value="LOCAL" />
-      <updated>1615473521524</updated>
+      <workItem from="1616097553095" duration="3233000" />
     </task>
     <task id="LOCAL-03974" summary="Adicionado comandos para ativar ou desativar comandos">
       <created>1615474696408</created>
@@ -1441,7 +1434,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616099777673</updated>
     </task>
-    <option name="localTasksCounter" value="4022" />
+    <task id="LOCAL-04022" summary="Correções menores">
+      <created>1616100412883</created>
+      <option name="number" value="04022" />
+      <option name="presentableId" value="LOCAL-04022" />
+      <option name="project" value="LOCAL" />
+      <updated>1616100412883</updated>
+    </task>
+    <option name="localTasksCounter" value="4023" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
