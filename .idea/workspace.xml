@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1096,21 +1094,7 @@
       <workItem from="1615999812796" duration="4208000" />
       <workItem from="1616007997610" duration="83000" />
       <workItem from="1616008117553" duration="1113000" />
-      <workItem from="1616097553095" duration="1621000" />
-    </task>
-    <task id="LOCAL-03970" summary="Adicionado comandos para ativar ou desativar comandos">
-      <created>1615473049290</created>
-      <option name="number" value="03970" />
-      <option name="presentableId" value="LOCAL-03970" />
-      <option name="project" value="LOCAL" />
-      <updated>1615473049290</updated>
-    </task>
-    <task id="LOCAL-03971" summary="Adicionado comandos para ativar ou desativar comandos">
-      <created>1615473192431</created>
-      <option name="number" value="03971" />
-      <option name="presentableId" value="LOCAL-03971" />
-      <option name="project" value="LOCAL" />
-      <updated>1615473192432</updated>
+      <workItem from="1616097553095" duration="1922000" />
     </task>
     <task id="LOCAL-03972" summary="Adicionado comandos para ativar ou desativar comandos">
       <created>1615473357163</created>
@@ -1441,7 +1425,21 @@
       <option name="project" value="LOCAL" />
       <updated>1616000431980</updated>
     </task>
-    <option name="localTasksCounter" value="4019" />
+    <task id="LOCAL-04019" summary="Correções menores">
+      <created>1616099337315</created>
+      <option name="number" value="04019" />
+      <option name="presentableId" value="LOCAL-04019" />
+      <option name="project" value="LOCAL" />
+      <updated>1616099337323</updated>
+    </task>
+    <task id="LOCAL-04020" summary="Correções menores">
+      <created>1616099423140</created>
+      <option name="number" value="04020" />
+      <option name="presentableId" value="LOCAL-04020" />
+      <option name="project" value="LOCAL" />
+      <updated>1616099423140</updated>
+    </task>
+    <option name="localTasksCounter" value="4021" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

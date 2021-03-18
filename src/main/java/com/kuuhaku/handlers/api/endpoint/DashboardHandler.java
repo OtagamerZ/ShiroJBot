@@ -89,7 +89,7 @@ public class DashboardHandler {
 			user.put("token", t);
 			user.put("date", LocalDate.now().format(Helper.onlyDate));
 			Main.getInfo().getSockets().getDashboard().addReadyData(new ReadyData(user, session), session);
-			System.out.println("Received partial request from session " + session);
+			Helper.logger(this.getClass()).debug("Received partial login request from session " + session + " (Discord oAuth2)");
 		} else {
 			http.setHeader("Location", "https://" + System.getenv("SERVER_URL") + "/Unauthorized");
 			http.setStatus(HttpServletResponse.SC_FOUND);

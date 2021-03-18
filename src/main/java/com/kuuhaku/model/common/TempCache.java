@@ -221,30 +221,21 @@ public class TempCache<K, V> implements Map<K, V> {
 
 	@Override
 	public V computeIfAbsent(K key, @NotNull Function<? super K, ? extends V> mappingFunction) {
-		cache.put(key, mappingFunction.apply(key));
-		return cache.getIfPresent(key);
+		return cache.asMap().computeIfAbsent(key, mappingFunction);
 	}
 
 	@Override
 	public V computeIfPresent(K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-		V value = cache.getIfPresent(key);
-		if (value == null) return null;
-
-		cache.put(key, remappingFunction.apply(key, value));
-		return cache.getIfPresent(key);
+		return cache.asMap().computeIfPresent(key, remappingFunction);
 	}
 
 	@Override
 	public V compute(K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-		V value = cache.getIfPresent(key);
-		cache.put(key, remappingFunction.apply(key, value));
-		return cache.getIfPresent(key);
+		return cache.asMap().computeIfPresent(key, remappingFunction);
 	}
 
 	@Override
 	public V merge(K key, @NotNull V value, @NotNull BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
-		V old = cache.getIfPresent(key);
-		cache.put(key, remappingFunction.apply(old, value));
-		return cache.getIfPresent(key);
+		return cache.asMap().merge(key, value, remappingFunction);
 	}
 }
