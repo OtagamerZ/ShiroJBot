@@ -13,9 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no controle dos atributos dos campeões">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1085,10 +1085,14 @@
       <workItem from="1615926863851" duration="1068000" />
       <workItem from="1615999812796" duration="4208000" />
       <workItem from="1616007997610" duration="83000" />
-      <workItem from="1616008117553" duration="1288000" />
-      <workItem from="1616009446810" duration="655000" />
-      <workItem from="1616010832813" duration="726000" />
-      <workItem from="1616071574311" duration="79000" />
+      <workItem from="1616008117553" duration="1113000" />
+    </task>
+    <task id="LOCAL-03970" summary="Adicionado comandos para ativar ou desativar comandos">
+      <created>1615473049290</created>
+      <option name="number" value="03970" />
+      <option name="presentableId" value="LOCAL-03970" />
+      <option name="project" value="LOCAL" />
+      <updated>1615473049290</updated>
     </task>
     <task id="LOCAL-03971" summary="Adicionado comandos para ativar ou desativar comandos">
       <created>1615473192431</created>
@@ -1426,14 +1430,7 @@
       <option name="project" value="LOCAL" />
       <updated>1616000431980</updated>
     </task>
-    <task id="LOCAL-04019" summary="Correções menores">
-      <created>1616009404284</created>
-      <option name="number" value="04019" />
-      <option name="presentableId" value="LOCAL-04019" />
-      <option name="project" value="LOCAL" />
-      <updated>1616009404285</updated>
-    </task>
-    <option name="localTasksCounter" value="4020" />
+    <option name="localTasksCounter" value="4019" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1519,6 +1516,7 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
+    <MESSAGE value="Correção nos perfis animados" />
     <MESSAGE value="Melhoria em alguns efeitos de raça" />
     <MESSAGE value="Silenciado erros de falha ao enviar a mensagem ao usuário" />
     <MESSAGE value="Adicionado antialiasing às cartas de campo" />
@@ -1543,8 +1541,7 @@
     <MESSAGE value="Correção menor no Shoukan" />
     <MESSAGE value="Aumento na quantidade de colunas no livro de Kawaipons" />
     <MESSAGE value="Correção na organização das cartas" />
-    <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na organização das cartas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
