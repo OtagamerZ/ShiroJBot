@@ -71,7 +71,10 @@ public class DashboardSocket extends WebSocketServer {
 			if (jo.getString("type").equals("login")) {
 				BiContract<WebSocket, ReadyData> request = requests.computeIfAbsent(
 						jo.getString("data"),
-						k -> new BiContract<>((ws, data) -> ws.send(data.getData().toString()))
+						k -> new BiContract<>((ws, data) -> {
+							ws.send(data.getData().toString());
+							System.out.println("Handhshake estabilished with session " + jo.getString("data"));
+						})
 				);
 
 				request.setSignatureA(conn);
@@ -260,6 +263,7 @@ public class DashboardSocket extends WebSocketServer {
 
 		request.setSignatureB(rdata);
 		requests.put(session, request);
+		System.out.println("Received partial request from session " + session);
 	}
 
 	public TempCache<String, BiContract<WebSocket, ReadyData>> getRequests() {
