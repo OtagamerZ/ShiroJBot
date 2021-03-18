@@ -13,9 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no controle dos atributos dos campeões">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -189,6 +188,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1086,6 +1096,7 @@
       <workItem from="1615999812796" duration="4208000" />
       <workItem from="1616007997610" duration="83000" />
       <workItem from="1616008117553" duration="1113000" />
+      <workItem from="1616097553095" duration="1621000" />
     </task>
     <task id="LOCAL-03970" summary="Adicionado comandos para ativar ou desativar comandos">
       <created>1615473049290</created>
@@ -1516,7 +1527,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nos perfis animados" />
     <MESSAGE value="Melhoria em alguns efeitos de raça" />
     <MESSAGE value="Silenciado erros de falha ao enviar a mensagem ao usuário" />
     <MESSAGE value="Adicionado antialiasing às cartas de campo" />
@@ -1541,7 +1551,8 @@
     <MESSAGE value="Correção menor no Shoukan" />
     <MESSAGE value="Aumento na quantidade de colunas no livro de Kawaipons" />
     <MESSAGE value="Correção na organização das cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na organização das cartas" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

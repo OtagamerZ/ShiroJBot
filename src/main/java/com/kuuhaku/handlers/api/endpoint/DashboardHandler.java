@@ -87,6 +87,7 @@ public class DashboardHandler {
 
 			user.put("token", t);
 			Main.getInfo().getSockets().getDashboard().addReadyData(new ReadyData(user, session), session);
+			System.out.println("Received partial request from session " + session);
 		} else {
 			http.setHeader("Location", "https://" + System.getenv("SERVER_URL") + "/Unauthorized");
 			http.setStatus(HttpServletResponse.SC_FOUND);
