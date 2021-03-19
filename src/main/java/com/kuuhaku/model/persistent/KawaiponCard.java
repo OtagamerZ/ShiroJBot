@@ -18,6 +18,9 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.utils.Helper;
+import org.json.JSONObject;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -76,11 +79,22 @@ public class KawaiponCard {
 		if (o == null || getClass() != o.getClass()) return false;
 		KawaiponCard that = (KawaiponCard) o;
 		return foil == that.foil &&
-				Objects.equals(card, that.card);
+			   Objects.equals(card, that.card);
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(card, foil);
+	}
+
+	@Override
+	public String toString() {
+		return new JSONObject(card.toString()) {{
+			put("foil", foil);
+		}}.toString();
+	}
+
+	public String getBase64() {
+		return Helper.atob(card.drawCard(foil), "png");
 	}
 }
