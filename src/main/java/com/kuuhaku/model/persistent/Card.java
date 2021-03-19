@@ -180,8 +180,11 @@ public class Card {
 		return new JSONObject() {{
 			put("id", id);
 			put("name", name);
-			put("anime", anime.getName());
-			put("rarity", rarity);
+			put("anime", new JSONObject() {{
+				put("id", anime.getName());
+				put("name", anime.toString());
+			}});
+			put("rarity", rarity.getIndex());
 		}}.toString();
 	}
 
