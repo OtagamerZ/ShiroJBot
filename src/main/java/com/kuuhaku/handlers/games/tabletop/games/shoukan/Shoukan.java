@@ -328,23 +328,23 @@ public class Shoukan extends GlobalGame {
 					} else if (c.isDefending()) {
 						c.setDefending(false);
 						act = channel.sendMessage("Carta trocada para modo de ataque.");
-						if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
-							c.getEffect(new EffectParameters(EffectTrigger.ON_SWITCH, this, index, current, Duelists.of(c, index, null, -1), channel));
-							if (postCombat()) return;
-						}
 						if (eot.size() > 0) {
 							applyEot(EffectTrigger.ON_SWITCH, current, index);
+							if (postCombat()) return;
+						}
+						if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
+							c.getEffect(new EffectParameters(EffectTrigger.ON_SWITCH, this, index, current, Duelists.of(c, index, null, -1), channel));
 							if (postCombat()) return;
 						}
 					} else {
 						c.setDefending(true);
+						if (eot.size() > 0) {
+							applyEot(EffectTrigger.ON_SWITCH, current, index);
+							if (postCombat()) return;
+						}
 						act = channel.sendMessage("Carta trocada para modo de defesa.");
 						if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
 							c.getEffect(new EffectParameters(EffectTrigger.ON_SWITCH, this, index, current, Duelists.of(c, index, null, -1), channel));
-							if (postCombat()) return;
-						}
-						if (eot.size() > 0) {
-							applyEot(EffectTrigger.ON_SWITCH, current, index);
 							if (postCombat()) return;
 						}
 					}
@@ -684,12 +684,12 @@ public class Shoukan extends GlobalGame {
 					reroll = false;
 					d.setAvailable(false);
 					slot.setTop(c);
-					if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
-						c.getEffect(new EffectParameters(EffectTrigger.ON_SUMMON, this, dest, current, Duelists.of(c, dest, null, -1), channel));
-						if (postCombat()) return;
-					}
 					if (eot.size() > 0) {
 						applyEot(EffectTrigger.ON_SUMMON, current, dest);
+						if (postCombat()) return;
+					}
+					if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
+						c.getEffect(new EffectParameters(EffectTrigger.ON_SUMMON, this, dest, current, Duelists.of(c, dest, null, -1), channel));
 						if (postCombat()) return;
 					}
 
@@ -845,18 +845,32 @@ public class Shoukan extends GlobalGame {
 		Champion yours = getArena().getSlots().get(current).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(next).get(is[1]).getTop();
 
+		if (eot.size() > 0) {
+			applyEot(EffectTrigger.ON_ATTACK, current, is[0]);
+			if (postCombat()) return;
+		}
+		if (is[0] > 0) {
+			Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
+		if (is[0] < 4) {
+			Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
 		if (yours.hasEffect() && effectLock == 0) {
 			yours.getEffect(new EffectParameters(EffectTrigger.ON_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
 
 			if (yours.getBonus().getSpecialData().remove("skipCombat") != null || yours.getCard().getId().equals("DECOY")) {
 				yours.setAvailable(false);
 				yours.resetAttribs();
-				if (yours.hasEffect()) {
-					yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
 				if (eot.size() > 0) {
 					applyEot(EffectTrigger.POST_ATTACK, current, is[0]);
+					if (postCombat()) return;
+				}
+				if (yours.hasEffect()) {
+					yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
 					if (postCombat()) return;
 				}
 
@@ -878,31 +892,31 @@ public class Shoukan extends GlobalGame {
 				return;
 			} else if (postCombat()) return;
 		}
+
 		if (eot.size() > 0) {
-			applyEot(EffectTrigger.ON_ATTACK, current, is[0]);
+			applyEot(EffectTrigger.ON_DEFEND, next, is[1]);
 			if (postCombat()) return;
 		}
-		if (is[0] > 0) {
-			Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
+		if (is[1] > 0) {
+			Champion c = arena.getSlots().get(next).get(is[1] - 1).getTop();
 			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 		}
-		if (is[0] < 4) {
-			Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
+		if (is[1] < 4) {
+			Champion c = arena.getSlots().get(next).get(is[1] + 1).getTop();
 			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 		}
-
 		if (his.hasEffect() && effectLock == 0) {
 			his.getEffect(new EffectParameters(EffectTrigger.ON_DEFEND, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 
 			if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
-				if (his.hasEffect()) {
-					his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
 				if (eot.size() > 0) {
 					applyEot(EffectTrigger.POST_DEFENSE, next, is[1]);
+					if (postCombat()) return;
+				}
+				if (his.hasEffect()) {
+					his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 					if (postCombat()) return;
 				}
 
@@ -923,20 +937,6 @@ public class Shoukan extends GlobalGame {
 				}
 				return;
 			} else if (postCombat()) return;
-		}
-		if (eot.size() > 0) {
-			applyEot(EffectTrigger.ON_DEFEND, next, is[1]);
-			if (postCombat()) return;
-		}
-		if (is[1] > 0) {
-			Champion c = arena.getSlots().get(next).get(is[1] - 1).getTop();
-			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-		}
-		if (is[1] < 4) {
-			Champion c = arena.getSlots().get(next).get(is[1] + 1).getTop();
-			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 		}
 
 		int yPower;
@@ -959,12 +959,12 @@ public class Shoukan extends GlobalGame {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
 				his.setDefending(true);
-				if (his.hasEffect() && effectLock == 0) {
-					his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
 				if (eot.size() > 0) {
 					applyEot(EffectTrigger.ON_FLIP, next, is[1]);
+					if (postCombat()) return;
+				}
+				if (his.hasEffect() && effectLock == 0) {
+					his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
 					if (postCombat()) return;
 				}
 			}
@@ -995,20 +995,20 @@ public class Shoukan extends GlobalGame {
 			yours.setAvailable(false);
 			yours.resetAttribs();
 
+			if (eot.size() > 0) {
+				applyEot(EffectTrigger.POST_ATTACK, current, is[0]);
+				if (postCombat()) return;
+			}
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.POST_ATTACK, current, is[0]);
+				applyEot(EffectTrigger.ON_DEATH, next, is[1]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
 				his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-				if (postCombat()) return;
-			}
-			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_DEATH, next, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1095,20 +1095,20 @@ public class Shoukan extends GlobalGame {
 			yours.setAvailable(false);
 			his.resetAttribs();
 
+			if (eot.size() > 0) {
+				applyEot(EffectTrigger.ON_SUICIDE, current, is[0]);
+				if (postCombat()) return;
+			}
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_SUICIDE, current, is[0]);
+				applyEot(EffectTrigger.POST_DEFENSE, next, is[1]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
 				his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-				if (postCombat()) return;
-			}
-			if (eot.size() > 0) {
-				applyEot(EffectTrigger.POST_DEFENSE, next, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1169,20 +1169,20 @@ public class Shoukan extends GlobalGame {
 		} else {
 			yours.setAvailable(false);
 
+			if (eot.size() > 0) {
+				applyEot(EffectTrigger.ON_SUICIDE, current, is[0]);
+				if (postCombat()) return;
+			}
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_SUICIDE, current, is[0]);
+				applyEot(EffectTrigger.ON_DEATH, next, is[1]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
 				his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-				if (postCombat()) return;
-			}
-			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_DEATH, next, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1261,18 +1261,32 @@ public class Shoukan extends GlobalGame {
 
 		if (yours.isDefending()) return;
 
+		if (eot.size() > 0) {
+			applyEot(EffectTrigger.ON_ATTACK, next, is[0]);
+			if (postCombat()) return;
+		}
+		if (is[0] > 0) {
+			Champion c = arena.getSlots().get(next).get(is[0] - 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
+		if (is[0] < 4) {
+			Champion c = arena.getSlots().get(next).get(is[0] + 1).getTop();
+			if (c != null && c.hasEffect())
+				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
+		}
 		if (yours.hasEffect() && effectLock == 0) {
 			yours.getEffect(new EffectParameters(EffectTrigger.ON_ATTACK, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
 
 			if (yours.getBonus().getSpecialData().remove("skipCombat") != null || yours.getCard().getId().equals("DECOY")) {
 				yours.setAvailable(false);
 				yours.resetAttribs();
-				if (yours.hasEffect()) {
-					yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
 				if (eot.size() > 0) {
 					applyEot(EffectTrigger.POST_ATTACK, next, is[0]);
+					if (postCombat()) return;
+				}
+				if (yours.hasEffect()) {
+					yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
 					if (postCombat()) return;
 				}
 
@@ -1294,31 +1308,31 @@ public class Shoukan extends GlobalGame {
 				return;
 			} else if (postCombat()) return;
 		}
+
 		if (eot.size() > 0) {
-			applyEot(EffectTrigger.ON_ATTACK, next, is[0]);
+			applyEot(EffectTrigger.ON_DEFEND, current, is[1]);
 			if (postCombat()) return;
 		}
-		if (is[0] > 0) {
-			Champion c = arena.getSlots().get(next).get(is[0] - 1).getTop();
+		if (is[1] > 0) {
+			Champion c = arena.getSlots().get(current).get(is[1] - 1).getTop();
 			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
+				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
 		}
-		if (is[0] < 4) {
-			Champion c = arena.getSlots().get(next).get(is[0] + 1).getTop();
+		if (is[1] < 4) {
+			Champion c = arena.getSlots().get(current).get(is[1] + 1).getTop();
 			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
+				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
 		}
-
 		if (his.hasEffect() && effectLock == 0) {
 			his.getEffect(new EffectParameters(EffectTrigger.ON_DEFEND, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
 
 			if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
-				if (his.hasEffect()) {
-					his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
 				if (eot.size() > 0) {
 					applyEot(EffectTrigger.POST_DEFENSE, current, is[1]);
+					if (postCombat()) return;
+				}
+				if (his.hasEffect()) {
+					his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
 					if (postCombat()) return;
 				}
 
@@ -1339,20 +1353,6 @@ public class Shoukan extends GlobalGame {
 				}
 				return;
 			} else if (postCombat()) return;
-		}
-		if (eot.size() > 0) {
-			applyEot(EffectTrigger.ON_DEFEND, current, is[1]);
-			if (postCombat()) return;
-		}
-		if (is[1] > 0) {
-			Champion c = arena.getSlots().get(current).get(is[1] - 1).getTop();
-			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
-		}
-		if (is[1] < 4) {
-			Champion c = arena.getSlots().get(current).get(is[1] + 1).getTop();
-			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
 		}
 
 		int yPower;
@@ -1375,12 +1375,12 @@ public class Shoukan extends GlobalGame {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
 				his.setDefending(true);
-				if (his.hasEffect() && effectLock == 0) {
-					his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
 				if (eot.size() > 0) {
 					applyEot(EffectTrigger.ON_FLIP, current, is[1]);
+					if (postCombat()) return;
+				}
+				if (his.hasEffect() && effectLock == 0) {
+					his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
 					if (postCombat()) return;
 				}
 			}
@@ -1411,20 +1411,20 @@ public class Shoukan extends GlobalGame {
 			yours.setAvailable(false);
 			yours.resetAttribs();
 
+			if (eot.size() > 0) {
+				applyEot(EffectTrigger.POST_ATTACK, next, is[0]);
+				if (postCombat()) return;
+			}
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.POST_ATTACK, next, is[0]);
+				applyEot(EffectTrigger.ON_DEATH, current, is[1]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
 				his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
-				if (postCombat()) return;
-			}
-			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_DEATH, current, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1511,20 +1511,20 @@ public class Shoukan extends GlobalGame {
 			yours.setAvailable(false);
 			his.resetAttribs();
 
+			if (eot.size() > 0) {
+				applyEot(EffectTrigger.ON_SUICIDE, next, is[0]);
+				if (postCombat()) return;
+			}
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_SUICIDE, next, is[0]);
+				applyEot(EffectTrigger.POST_DEFENSE, current, is[1]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
 				his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
-				if (postCombat()) return;
-			}
-			if (eot.size() > 0) {
-				applyEot(EffectTrigger.POST_DEFENSE, current, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1585,20 +1585,20 @@ public class Shoukan extends GlobalGame {
 		} else {
 			yours.setAvailable(false);
 
+			if (eot.size() > 0) {
+				applyEot(EffectTrigger.ON_SUICIDE, next, is[0]);
+				if (postCombat()) return;
+			}
 			if (yours.hasEffect() && effectLock == 0) {
 				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], next, Duelists.of(yours, is[0], his, is[1]), channel));
 				if (postCombat()) return;
 			}
 			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_SUICIDE, next, is[0]);
+				applyEot(EffectTrigger.ON_DEATH, current, is[1]);
 				if (postCombat()) return;
 			}
 			if (his.hasEffect() && effectLock == 0) {
 				his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], current, Duelists.of(yours, is[0], his, is[1]), channel));
-				if (postCombat()) return;
-			}
-			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_DEATH, current, is[1]);
 				if (postCombat()) return;
 			}
 
@@ -1726,12 +1726,12 @@ public class Shoukan extends GlobalGame {
 				if (slt.getTop() == null) {
 					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slt.setTop(aFusion.copy());
-					if (aFusion.hasEffect() && effectLock == 0) {
-						aFusion.getEffect(new EffectParameters(EffectTrigger.ON_SUMMON, this, i, current, Duelists.of(aFusion, i, null, -1), channel));
-						if (postCombat()) return true;
-					}
 					if (eot.size() > 0) {
 						applyEot(EffectTrigger.ON_SUMMON, current, i);
+						if (postCombat()) return true;
+					}
+					if (aFusion.hasEffect() && effectLock == 0) {
+						aFusion.getEffect(new EffectParameters(EffectTrigger.ON_SUMMON, this, i, current, Duelists.of(aFusion, i, null, -1), channel));
 						if (postCombat()) return true;
 					}
 
@@ -2182,6 +2182,11 @@ public class Shoukan extends GlobalGame {
 				AtomicReference<Hand> h = new AtomicReference<>(hands.get(current));
 				h.get().getCards().removeIf(d -> !d.isAvailable());
 				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
+
+				if (eot.size() > 0) {
+					applyEot(EffectTrigger.AFTER_TURN, current, -1);
+					if (postCombat()) return;
+				}
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
@@ -2194,10 +2199,6 @@ public class Shoukan extends GlobalGame {
 							else if (makeFusion(h.get())) return;
 						}
 					}
-				}
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.AFTER_TURN, current, -1);
-					if (postCombat()) return;
 				}
 
 				arena.getGraveyard().get(current).addAll(discardBatch);
@@ -2213,6 +2214,10 @@ public class Shoukan extends GlobalGame {
 				h.get().decreaseNullTime();
 				slots = arena.getSlots().get(current);
 
+				if (eot.size() > 0) {
+					applyEot(EffectTrigger.BEFORE_TURN, current, -1);
+					if (postCombat()) return;
+				}
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
@@ -2224,11 +2229,6 @@ public class Shoukan extends GlobalGame {
 							else if (makeFusion(h.get())) return;
 						}
 					}
-				}
-
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.BEFORE_TURN, current, -1);
-					if (postCombat()) return;
 				}
 
 				h.get().addMana(h.get().getManaPerTurn());
@@ -2437,6 +2437,11 @@ public class Shoukan extends GlobalGame {
 					AtomicReference<Hand> h = new AtomicReference<>(hands.get(current));
 					h.get().getCards().removeIf(d -> !d.isAvailable());
 					List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
+
+					if (eot.size() > 0) {
+						applyEot(EffectTrigger.AFTER_TURN, current, -1);
+						if (postCombat()) return;
+					}
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
@@ -2449,10 +2454,6 @@ public class Shoukan extends GlobalGame {
 								else if (makeFusion(h.get())) return;
 							}
 						}
-					}
-					if (eot.size() > 0) {
-						applyEot(EffectTrigger.AFTER_TURN, current, -1);
-						if (postCombat()) return;
 					}
 
 					arena.getGraveyard().get(current).addAll(discardBatch);
@@ -2468,6 +2469,10 @@ public class Shoukan extends GlobalGame {
 					h.get().decreaseNullTime();
 					slots = arena.getSlots().get(current);
 
+					if (eot.size() > 0) {
+						applyEot(EffectTrigger.BEFORE_TURN, current, -1);
+						if (postCombat()) return;
+					}
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
@@ -2479,11 +2484,6 @@ public class Shoukan extends GlobalGame {
 								else if (makeFusion(h.get())) return;
 							}
 						}
-					}
-
-					if (eot.size() > 0) {
-						applyEot(EffectTrigger.BEFORE_TURN, current, -1);
-						if (postCombat()) return;
 					}
 
 					h.get().addMana(h.get().getManaPerTurn());
