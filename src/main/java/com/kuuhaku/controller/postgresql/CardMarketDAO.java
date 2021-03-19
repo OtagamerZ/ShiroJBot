@@ -268,7 +268,7 @@ public class CardMarketDAO {
 		if (!params[4].isBlank()) q.setParameter("anime", "%" + anime + "%");
 		if (!params[5].isBlank()) q.setParameter("foil", foil);
 		if (!params[6].isBlank()) q.setParameter("seller", seller);
-		if (!params[7].isBlank()) q.setParameter("base", Helper.BASE_CARD_PRICE)
+		if (!params[7].isBlank()) q.setParameter("base", Helper.BASE_CARD_PRICE);
 
 		try {
 			return q.getResultList();
