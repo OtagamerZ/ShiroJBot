@@ -272,6 +272,7 @@ public class CardMarketDAO {
 		if (!params[7].isBlank()) {
 			q.setParameter("base", Helper.BASE_CARD_PRICE);
 			for (KawaiponRarity r : KawaiponRarity.validValues()) {
+				if (r == KawaiponRarity.ULTIMATE) continue;
 				q.setParameter(r.name().toLowerCase(Locale.ROOT), r);
 			}
 		}
