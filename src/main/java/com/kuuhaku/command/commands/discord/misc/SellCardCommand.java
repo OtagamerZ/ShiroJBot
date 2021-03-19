@@ -53,15 +53,15 @@ public class SellCardCommand implements Executable {
         Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
         if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
-			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-			return;
-		} else if (args.length < 3) {
-			channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
-			return;
-		} else if (!StringUtils.isNumeric(args[2])) {
-			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
-			return;
-		}
+            channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+            return;
+        } else if (args.length < 3) {
+            channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
+            return;
+        } else if (!StringUtils.isNumeric(args[2])) {
+            channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
+            return;
+        }
 
         switch (args[1].toUpperCase(Locale.ROOT)) {
             case "N", "C" -> {
@@ -98,20 +98,21 @@ public class SellCardCommand implements Executable {
                             .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                                         if (mb.getId().equals(author.getId())) {
                                             if (!ShiroInfo.getHashes().remove(hash)) return;
-											Main.getInfo().getConfirmationPending().remove(author.getId());
-											kp.removeCard(card);
+                                            Main.getInfo().getConfirmationPending().remove(author.getId());
+                                            Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
+                                            finalKp.removeCard(card);
 
                                             CardMarket cm = new CardMarket(author.getId(), card, price);
                                             CardMarketDAO.saveCard(cm);
-                                            KawaiponDAO.saveKawaipon(kp);
+                                            KawaiponDAO.saveKawaipon(finalKp);
 
                                             s.delete().flatMap(d -> channel.sendMessage("✅ | Carta anunciada com sucesso!")).queue();
                                         }
                                     }), true, 1, TimeUnit.MINUTES,
                                     u -> u.getId().equals(author.getId()),
                                     ms -> {
-										ShiroInfo.getHashes().remove(hash);
-										Main.getInfo().getConfirmationPending().remove(author.getId());
+                                        ShiroInfo.getHashes().remove(hash);
+                                        Main.getInfo().getConfirmationPending().remove(author.getId());
                                     })
                             );
                 } catch (NumberFormatException e) {
@@ -148,20 +149,21 @@ public class SellCardCommand implements Executable {
                             .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                                         if (mb.getId().equals(author.getId())) {
                                             if (!ShiroInfo.getHashes().remove(hash)) return;
-											Main.getInfo().getConfirmationPending().remove(author.getId());
-											kp.removeEquipment(eq);
-                                            KawaiponDAO.saveKawaipon(kp);
+                                            Main.getInfo().getConfirmationPending().remove(author.getId());
+                                            Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
+                                            finalKp.removeEquipment(eq);
 
                                             EquipmentMarket em = new EquipmentMarket(author.getId(), eq, price);
                                             EquipmentMarketDAO.saveCard(em);
+                                            KawaiponDAO.saveKawaipon(finalKp);
 
                                             s.delete().flatMap(d -> channel.sendMessage("✅ | Equipamento anunciado com sucesso!")).queue();
                                         }
                                     }), true, 1, TimeUnit.MINUTES,
                                     u -> u.getId().equals(author.getId()),
                                     ms -> {
-										ShiroInfo.getHashes().remove(hash);
-										Main.getInfo().getConfirmationPending().remove(author.getId());
+                                        ShiroInfo.getHashes().remove(hash);
+                                        Main.getInfo().getConfirmationPending().remove(author.getId());
                                     })
                             );
                 } catch (NumberFormatException e) {
@@ -198,20 +200,21 @@ public class SellCardCommand implements Executable {
                             .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
                                         if (mb.getId().equals(author.getId())) {
                                             if (!ShiroInfo.getHashes().remove(hash)) return;
-											Main.getInfo().getConfirmationPending().remove(author.getId());
-											kp.removeField(f);
-                                            KawaiponDAO.saveKawaipon(kp);
+                                            Main.getInfo().getConfirmationPending().remove(author.getId());
+                                            Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
+                                            finalKp.removeField(f);
 
                                             FieldMarket fm = new FieldMarket(author.getId(), f, price);
                                             FieldMarketDAO.saveCard(fm);
+                                            KawaiponDAO.saveKawaipon(finalKp);
 
                                             s.delete().flatMap(d -> channel.sendMessage("✅ | Arena anunciada com sucesso!")).queue();
                                         }
                                     }), true, 1, TimeUnit.MINUTES,
                                     u -> u.getId().equals(author.getId()),
                                     ms -> {
-										ShiroInfo.getHashes().remove(hash);
-										Main.getInfo().getConfirmationPending().remove(author.getId());
+                                        ShiroInfo.getHashes().remove(hash);
+                                        Main.getInfo().getConfirmationPending().remove(author.getId());
                                     })
                             );
                 } catch (NumberFormatException e) {
