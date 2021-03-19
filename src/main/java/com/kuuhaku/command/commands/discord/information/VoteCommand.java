@@ -41,7 +41,7 @@ public class VoteCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
 
-		if (acc.hasVoted()) {
+		if (acc.hasVoted(true)) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.addField("Acúmulos de voto", acc.getStreak() + " acúmulos", false);
 

@@ -197,10 +197,10 @@ public class DeckStash {
 			channel.sendMessage("❌ | Seu clã só pode ter no máximo " + max + " cópias de cada equipamento no deck.").queue();
 			return true;
 		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
-			channel.sendMessage("❌ | Seu clã não possui mais espaços para equipamentos tier 4!").queue();
+			channel.sendMessage("❌ | Seu clã não possui mais espaços para EvoGears tier 4!").queue();
 			return true;
 		} else if (getEvoWeight() + e.getWeight(this) > 24) {
-			channel.sendMessage("❌ | Seu clã não possui mais espaços para equipamentos no deck.").queue();
+			channel.sendMessage("❌ | Seu clã não possui mais espaços para EvoGears no deck.").queue();
 			return true;
 		}
 		return false;

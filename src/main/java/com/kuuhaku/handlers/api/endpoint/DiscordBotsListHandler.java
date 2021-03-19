@@ -45,7 +45,7 @@ public class DiscordBotsListHandler {
 		int credit = body.getBoolean("isWeekend") ? 500 : 250;
 
 		Account acc = AccountDAO.getAccount(body.getString("user"));
-		if (acc.hasVoted()) return;
+		if (acc.hasVoted(false)) return;
 
 		if (!body.getString("type").equals("test")) {
 			acc.addCredit(credit + (100L * (acc.getStreak() + 1)), this.getClass());

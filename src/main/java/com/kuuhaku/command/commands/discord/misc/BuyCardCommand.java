@@ -280,7 +280,7 @@ public class BuyCardCommand implements Executable {
 					kp.addCard(cm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					boolean trusted = Helper.isTrustedMerchant(author.getId());
+					boolean trusted = Helper.isTrustedMerchant(seller.getUid());
 					double tax = trusted ? 0.05 : 0.1;
 
 					seller.addCredit(Math.round(cm.getPrice() * (1 - tax)), this.getClass());
@@ -333,7 +333,7 @@ public class BuyCardCommand implements Executable {
 					kp.addEquipment(em.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					boolean trusted = Helper.isTrustedMerchant(author.getId());
+					boolean trusted = Helper.isTrustedMerchant(seller.getUid());
 					double tax = trusted ? 0.05 : 0.1;
 
 					seller.addCredit(Math.round(em.getPrice() * (1 - tax)), this.getClass());
@@ -383,7 +383,7 @@ public class BuyCardCommand implements Executable {
 					kp.addField(fm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					boolean trusted = Helper.isTrustedMerchant(author.getId());
+					boolean trusted = Helper.isTrustedMerchant(seller.getUid());
 					double tax = trusted ? 0.05 : 0.1;
 
 					seller.addCredit(Math.round(fm.getPrice() * (1 - tax)), this.getClass());
