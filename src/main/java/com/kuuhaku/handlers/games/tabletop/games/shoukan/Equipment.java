@@ -339,10 +339,11 @@ public class Equipment implements Drawable, Cloneable {
 			put("id", id);
 			put("name", card.getName());
 			put("tier", tier);
-			put("charm", new JSONObject() {{
-				put("id", charm);
-				put("image", Helper.atob(charm.getIcon(), "png"));
-			}});
+			if (charm != null)
+				put("charm", new JSONObject() {{
+					put("id", charm);
+					put("image", charm == Charm.SPELL ? "" : Helper.atob(charm.getIcon(), "png"));
+				}});
 			put("attack", atk);
 			put("defense", def);
 			put("mana", mana);
