@@ -467,6 +467,30 @@ public class Champion implements Drawable, Cloneable {
 		return Math.max(0, getEffDef() + getLinkedTo().stream().mapToInt(Equipment::getDef).sum());
 	}
 
+	public double getDodge() {
+		return Helper.clamp(dodge + mDodge + getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count() * 10, 0, 100);
+	}
+
+	public void setDodge(double dodge) {
+		this.dodge = dodge;
+	}
+
+	public void addDodge(double dodge) {
+		this.dodge += dodge;
+	}
+
+	public void removeDodge(double dodge) {
+		this.dodge -= dodge;
+	}
+
+	public double getModDodge() {
+		return mDodge;
+	}
+
+	public void setModDodge(double dodge) {
+		this.mDodge += dodge;
+	}
+
 	public void resetAttribs() {
 		this.mAtk = 0;
 		this.mDef = 0;
@@ -623,22 +647,6 @@ public class Champion implements Drawable, Cloneable {
 
 	public void reduceStun() {
 		this.stun--;
-	}
-
-	public double getDodge() {
-		return Helper.clamp(dodge + mDodge + getLinkedTo().stream().filter(e -> e.getCharm() == Charm.AGILITY).count() * 10, 0, 100);
-	}
-
-	public void setDodge(double dodge) {
-		this.dodge = dodge;
-	}
-
-	public double getModDodge() {
-		return mDodge;
-	}
-
-	public void setModDodge(double dodge) {
-		this.mDodge += dodge;
 	}
 
 	@Override

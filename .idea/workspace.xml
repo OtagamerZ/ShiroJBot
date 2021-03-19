@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,19 +189,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1099,13 +1087,7 @@
       <workItem from="1616007997610" duration="83000" />
       <workItem from="1616008117553" duration="1113000" />
       <workItem from="1616097553095" duration="3233000" />
-    </task>
-    <task id="LOCAL-03979" summary="Adicionada chance para cartas killcard">
-      <created>1615566380187</created>
-      <option name="number" value="03979" />
-      <option name="presentableId" value="LOCAL-03979" />
-      <option name="project" value="LOCAL" />
-      <updated>1615566380188</updated>
+      <workItem from="1616169589444" duration="413000" />
     </task>
     <task id="LOCAL-03980" summary="Adicionada chance para cartas killcard">
       <created>1615566652402</created>
@@ -1443,7 +1425,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616163942534</updated>
     </task>
-    <option name="localTasksCounter" value="4028" />
+    <task id="LOCAL-04028" summary="Correções menores">
+      <created>1616165669116</created>
+      <option name="number" value="04028" />
+      <option name="presentableId" value="LOCAL-04028" />
+      <option name="project" value="LOCAL" />
+      <updated>1616165669116</updated>
+    </task>
+    <option name="localTasksCounter" value="4029" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
