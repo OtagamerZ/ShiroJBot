@@ -126,6 +126,7 @@ public class Helper {
 	public static final String HOME = "674261700366827539";
 	public static final int BASE_CARD_PRICE = 350;
 	public static final int BASE_EQUIPMENT_PRICE = 500;
+	public static final int BASE_FIELD_PRICE = 250000;
 
 	public static Font HAMMERSMITH;
 

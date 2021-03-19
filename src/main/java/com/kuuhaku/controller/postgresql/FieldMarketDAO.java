@@ -163,6 +163,7 @@ public class FieldMarketDAO {
 				min > -1 ? "AND fm.price > :min" : "",
 				max > -1 ? "AND fm.price < :max" : "",
 				seller != null ? "AND fm.seller = :seller" : "",
+				seller == null ? "AND fm.price <= :base" : "",
 				"ORDER BY fm.price, c.id"
 		};
 
@@ -172,6 +173,7 @@ public class FieldMarketDAO {
 		if (!params[1].isBlank()) q.setParameter("min", min);
 		if (!params[2].isBlank()) q.setParameter("max", max);
 		if (!params[3].isBlank()) q.setParameter("seller", seller);
+		if (!params[4].isBlank()) q.setParameter("base", Helper.BASE_FIELD_PRICE);
 
 		try {
 			return q.getResultList();
