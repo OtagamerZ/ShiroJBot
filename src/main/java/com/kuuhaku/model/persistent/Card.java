@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -172,5 +173,19 @@ public class Card {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+
+	@Override
+	public String toString() {
+		return new JSONObject() {{
+			put("id", id);
+			put("name", name);
+			put("anime", anime.getName());
+			put("rarity", rarity);
+		}}.toString();
+	}
+
+	public String getBase64() {
+		return Helper.atob(drawCard(false), "png");
 	}
 }

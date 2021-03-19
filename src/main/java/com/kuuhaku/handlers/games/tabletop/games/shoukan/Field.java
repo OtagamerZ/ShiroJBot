@@ -199,7 +199,10 @@ public class Field implements Drawable, Cloneable {
 			put("id", id);
 			put("name", card.getName());
 			put("modifiers", getModifiers());
-			put("image", Helper.atob(drawCard(false), "png"));
 		}}.toString();
+	}
+
+	public String getBase64() {
+		return Helper.atob(drawCard(false), "png");
 	}
 }
