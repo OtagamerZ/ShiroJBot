@@ -146,7 +146,7 @@ public class EquipmentMarketDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<EquipmentMarket> getCardsForMarket(String name, int min, int max, String seller) {
+	public static List<EquipmentMarket> getCardsForMarket(String name, int min, int max, int tier, String seller) {
 		EntityManager em = Manager.getEntityManager();
 
 		String query = """
@@ -158,11 +158,23 @@ public class EquipmentMarketDAO {
 				%s
 				""";
 
+		String priceCheck = """
+				AND em.price <= CASE c.rarity
+					WHEN com.kuuhaku.model.enums.KawaiponRarity.COMMON THEN 1
+					WHEN com.kuuhaku.model.enums.KawaiponRarity.UNCOMMON THEN 2
+					WHEN com.kuuhaku.model.enums.KawaiponRarity.RARE THEN 3
+					WHEN com.kuuhaku.model.enums.KawaiponRarity.ULTRA_RARE THEN 4
+					WHEN com.kuuhaku.model.enums.KawaiponRarity.LEGENDARY THEN 5
+				END * :base * CASE em.foil WHEN TRUE THEN 100 ELSE 50 END
+				""";
+
 		String[] params = {
 				name != null ? "AND c.id LIKE UPPER(:name)" : "",
 				min > -1 ? "AND em.price > :min" : "",
 				max > -1 ? "AND em.price < :max" : "",
+				tier > -1 ? "AND e.tier == :tier" : "",
 				seller != null ? "AND em.seller = :seller" : "",
+				seller == null ? "AND em.price <= e.tier * :base * 50" : "",
 				"ORDER BY em.price, c.id"
 		};
 
@@ -171,7 +183,9 @@ public class EquipmentMarketDAO {
 		if (!params[0].isBlank()) q.setParameter("name", "%" + name + "%");
 		if (!params[1].isBlank()) q.setParameter("min", min);
 		if (!params[2].isBlank()) q.setParameter("max", max);
+		if (!params[2].isBlank()) q.setParameter("tier", tier);
 		if (!params[3].isBlank()) q.setParameter("seller", seller);
+		if (!params[4].isBlank()) q.setParameter("base", Helper.BASE_EQUIPMENT_PRICE);
 
 		try {
 			return q.getResultList();
