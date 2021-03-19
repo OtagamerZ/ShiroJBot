@@ -183,9 +183,9 @@ public class EquipmentMarketDAO {
 		if (!params[0].isBlank()) q.setParameter("name", "%" + name + "%");
 		if (!params[1].isBlank()) q.setParameter("min", min);
 		if (!params[2].isBlank()) q.setParameter("max", max);
-		if (!params[2].isBlank()) q.setParameter("tier", tier);
-		if (!params[3].isBlank()) q.setParameter("seller", seller);
-		if (!params[4].isBlank()) q.setParameter("base", Helper.BASE_EQUIPMENT_PRICE);
+		if (!params[3].isBlank()) q.setParameter("tier", tier);
+		if (!params[4].isBlank()) q.setParameter("seller", seller);
+		if (!params[5].isBlank()) q.setParameter("base", Helper.BASE_EQUIPMENT_PRICE);
 
 		try {
 			return q.getResultList();

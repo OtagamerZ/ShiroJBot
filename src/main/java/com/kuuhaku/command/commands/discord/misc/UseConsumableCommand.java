@@ -31,6 +31,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.Locale;
 import java.util.Map;
 
 @Command(
@@ -58,7 +59,7 @@ public class UseConsumableCommand implements Executable {
 			return;
 		}
 
-		if (acc.getBuffs().getOrDefault(args[0].toLowerCase(), 0) <= 0) {
+		if (acc.getBuffs().getOrDefault(args[0].toLowerCase(Locale.ROOT), 0) <= 0) {
 			channel.sendMessage("❌ | Você não possui esse item.").queue();
 			return;
 		}

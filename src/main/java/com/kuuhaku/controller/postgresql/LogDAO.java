@@ -24,6 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class LogDAO {
 	public static void saveLog(Log log) {
@@ -54,7 +55,7 @@ public class LogDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return switch (type.toUpperCase()) {
+			return switch (type.toUpperCase(Locale.ROOT)) {
 				case "T" -> {
 					Query q = em.createNativeQuery("""
 							SELECT t.fromclass

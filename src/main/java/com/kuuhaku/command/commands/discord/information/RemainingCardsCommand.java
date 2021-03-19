@@ -41,6 +41,7 @@ import net.dv8tion.jda.api.entities.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -65,7 +66,7 @@ public class RemainingCardsCommand implements Executable {
 			return;
 		}
 
-		AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase());
+		AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase(Locale.ROOT));
 
 		if (anime == null) {
 			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();

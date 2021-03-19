@@ -141,7 +141,7 @@ public class ShoukanCommand implements Executable {
 				return;
 			}
 
-			RankedQueue rq = RankedQueue.valueOf(args[1].toUpperCase());
+			RankedQueue rq = RankedQueue.valueOf(args[1].toUpperCase(Locale.ROOT));
 			switch (rq) {
 				case SOLO -> {
 					mm.joinLobby(mmr, null, rq, channel);

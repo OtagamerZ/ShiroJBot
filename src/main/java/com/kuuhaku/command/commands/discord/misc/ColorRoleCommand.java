@@ -39,6 +39,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -100,7 +101,7 @@ public class ColorRoleCommand implements Executable {
 			return;
 		}
 
-		String name = StringUtils.capitalize(args[0].toLowerCase());
+		String name = StringUtils.capitalize(args[0].toLowerCase(Locale.ROOT));
 
 		if (!jo.has(name)) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-registered")).queue();

@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.Objects;
 
 @Command(
@@ -65,7 +66,7 @@ public class AnimeCommand implements Executable {
 					Anime anime = new Anime(data);
 
 					EmbedBuilder eb = new EmbedBuilder();
-					boolean hentai = anime.getGenres().toLowerCase().contains("hentai");
+					boolean hentai = anime.getGenres().toLowerCase(Locale.ROOT).contains("hentai");
 					if (hentai && !message.getTextChannel().isNSFW()) {
 						m.editMessage("Humm safadinho, eu não posso postar sobre Hentais neste canal!").queue();
 						return;

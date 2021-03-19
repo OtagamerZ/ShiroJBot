@@ -29,6 +29,7 @@ import org.reflections8.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class CommandManager {
@@ -71,7 +72,7 @@ public class CommandManager {
 						"cmd_" + cmd.getSimpleName()
 								.replaceFirst("(Command|Reaction)$", "")
 								.replaceAll("[a-z](?=[A-Z])", "$0-")
-								.toLowerCase(),
+								.toLowerCase(Locale.ROOT),
 						params.category(),
 						req == null ? new Permission[0] : req.value(),
 						buildCommand(cmd)
@@ -91,7 +92,7 @@ public class CommandManager {
 				"cmd_" + cmd.getSimpleName()
 						.replaceFirst("(Command|Reaction)$", "")
 						.replaceAll("[a-z](?=[A-Z])", "$0-")
-						.toLowerCase(),
+						.toLowerCase(Locale.ROOT),
 				params.category(),
 				req == null ? new Permission[0] : req.value(),
 				buildCommand(cmd)

@@ -30,6 +30,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Locale;
+
 @Command(
 		name = "semspam",
 		aliases = {"nospam", "antispam"},
@@ -44,7 +46,7 @@ public class AntispamCommand implements Executable {
 		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
 
 		if (args.length > 0 && (args[0].equalsIgnoreCase("soft") || args[0].equalsIgnoreCase("hard"))) {
-			switch (args[0].toLowerCase()) {
+			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "soft" -> {
 					if (!gc.isHardAntispam()) {
 						channel.sendMessage("O modo **SOFT** já está ligado").queue();

@@ -21,6 +21,7 @@ package com.kuuhaku.model.enums;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Objects;
 
 public enum TrophyType {
@@ -44,7 +45,7 @@ public enum TrophyType {
 
 	public BufferedImage getBackground() {
 		try {
-			return ImageIO.read(Objects.requireNonNull(TrophyType.class.getClassLoader().getResourceAsStream("shoukan/trophy/" + name().toLowerCase() + "_bg.png")));
+			return ImageIO.read(Objects.requireNonNull(TrophyType.class.getClassLoader().getResourceAsStream("shoukan/trophy/" + name().toLowerCase(Locale.ROOT) + "_bg.png")));
 		} catch (IOException e) {
 			return null;
 		}
@@ -52,7 +53,7 @@ public enum TrophyType {
 
 	public BufferedImage getForeground() {
 		try {
-			return ImageIO.read(Objects.requireNonNull(TrophyType.class.getClassLoader().getResourceAsStream("shoukan/trophy/" + name().toLowerCase() + "_fg.png")));
+			return ImageIO.read(Objects.requireNonNull(TrophyType.class.getClassLoader().getResourceAsStream("shoukan/trophy/" + name().toLowerCase(Locale.ROOT) + "_fg.png")));
 		} catch (IOException e) {
 			return null;
 		}

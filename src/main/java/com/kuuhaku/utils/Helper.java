@@ -224,7 +224,7 @@ public class Helper {
 		text = replaceWith(text, leetSpeak);
 		text = (Extensions.checkExtension(text) ? "http://" : "") + text;
 
-		final Matcher msg = urlPattern.matcher(text.toLowerCase());
+		final Matcher msg = urlPattern.matcher(text.toLowerCase(Locale.ROOT));
 		return msg.matches();
 	}
 
@@ -471,11 +471,11 @@ public class Helper {
 	}
 
 	public static boolean containsAll(String string, String... compareWith) {
-		return Arrays.stream(compareWith).map(String::toLowerCase).allMatch(string.toLowerCase()::contains);
+		return Arrays.stream(compareWith).map(String::toLowerCase).allMatch(string.toLowerCase(Locale.ROOT)::contains);
 	}
 
 	public static boolean containsAny(String string, String... compareWith) {
-		return Arrays.stream(compareWith).map(String::toLowerCase).anyMatch(string.toLowerCase()::contains);
+		return Arrays.stream(compareWith).map(String::toLowerCase).anyMatch(string.toLowerCase(Locale.ROOT)::contains);
 	}
 
 	public static boolean containsAll(String[] string, String... compareWith) {
@@ -886,7 +886,7 @@ public class Helper {
 			if (word.equalsIgnoreCase(w)) {
 				return word;
 			} else {
-				int diff = checker.apply(word.toLowerCase(), w.toLowerCase());
+				int diff = checker.apply(word.toLowerCase(Locale.ROOT), w.toLowerCase(Locale.ROOT));
 				if (diff < threshold) {
 					match = w;
 					threshold = diff;
@@ -1285,7 +1285,7 @@ public class Helper {
 			BufferedImage img = c.drawCard(foil);
 
 			EmbedBuilder eb = new EmbedBuilder()
-					.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!")
+					.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase(Locale.ROOT) + " Kawaipon apareceu neste servidor!")
 					.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 					.setColor(colorThief(img))
 					.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + Helper.separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
@@ -1347,7 +1347,7 @@ public class Helper {
 		BufferedImage img = c.drawCard(foil);
 
 		EmbedBuilder eb = new EmbedBuilder()
-				.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase() + " neste servidor!")
+				.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase(Locale.ROOT) + " neste servidor!")
 				.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 				.setColor(colorThief(img))
 				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + Helper.separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
