@@ -30,6 +30,8 @@ import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.Locale;
+
 @Command(
 		name = "fundododeck",
 		aliases = {"deckbg"},
@@ -48,7 +50,7 @@ public class FrameBackgroundCommand implements Executable {
 			return;
 		}
 
-		AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase());
+		AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase(Locale.ROOT));
 		if (anime == null) {
 			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 			return;

@@ -37,10 +37,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -71,7 +68,7 @@ public class BroadcastCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		switch (args[0].toLowerCase()) {
+		switch (args[0].toLowerCase(Locale.ROOT)) {
 			case "geral" -> Helper.broadcast(argsAsText.replaceFirst("geral", "").trim(), channel, author);
 			case "beta" -> {
 				List<Tags> ps = TagDAO.getAllBetas();

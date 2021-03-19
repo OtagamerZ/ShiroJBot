@@ -662,7 +662,7 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
-					switch (args[2].toLowerCase()) {
+					switch (args[2].toLowerCase(Locale.ROOT)) {
 						case "a" -> {
 							c.setFlipped(false);
 							c.setDefending(false);

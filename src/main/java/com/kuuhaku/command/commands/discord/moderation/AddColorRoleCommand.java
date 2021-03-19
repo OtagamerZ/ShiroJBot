@@ -33,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.util.Locale;
 
 @Command(
 		name = "cargocor",
@@ -56,12 +57,12 @@ public class AddColorRoleCommand implements Executable {
 		}
 
 		try {
-			String name = StringUtils.capitalize(args[0].toLowerCase());
+			String name = StringUtils.capitalize(args[0].toLowerCase(Locale.ROOT));
 
 			if (name.length() > 15) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-name-too-long")).queue();
-                return;
-            }
+				return;
+			}
 
 			JSONObject jo = gc.getColorRoles();
 
@@ -97,7 +98,7 @@ public class AddColorRoleCommand implements Executable {
 		} catch (NumberFormatException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
         } catch (ArrayIndexOutOfBoundsException e) {
-			String name = StringUtils.capitalize(args[0].toLowerCase());
+			String name = StringUtils.capitalize(args[0].toLowerCase(Locale.ROOT));
 			if (!gc.getColorRoles().has(name)) {
 				channel.sendMessage("Essa cor não existe!").queue();
 				return;

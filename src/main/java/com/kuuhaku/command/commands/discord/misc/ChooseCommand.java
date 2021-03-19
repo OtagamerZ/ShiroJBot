@@ -23,6 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.Locale;
 import java.util.Random;
 
 @Command(
@@ -46,7 +47,7 @@ public class ChooseCommand implements Executable {
 		String[] opts = args[0].split(";");
 		long seed = 0;
 
-		for (char c : args[0].toLowerCase().toCharArray()) {
+		for (char c : args[0].toLowerCase(Locale.ROOT).toCharArray()) {
 			seed += (int) c;
 		}
 

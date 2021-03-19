@@ -140,7 +140,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			String prefix = "";
 			try {
-				prefix = GuildDAO.getGuildById(guild.getId()).getPrefix().toLowerCase();
+				prefix = GuildDAO.getGuildById(guild.getId()).getPrefix().toLowerCase(Locale.ROOT);
 			} catch (NoResultException | NullPointerException ignore) {
 			}
 
@@ -211,7 +211,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 			String rawMsgNoPrefix = rawMessage;
 			String commandName = "";
-			if (rawMessage.toLowerCase().startsWith(prefix)) {
+			if (rawMessage.toLowerCase(Locale.ROOT).startsWith(prefix)) {
 				rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
 			}
@@ -722,7 +722,7 @@ public class ShiroEvents extends ListenerAdapter {
 			String[] args = msg.split(" ");
 
 			try {
-				switch (args[0].toLowerCase()) {
+				switch (args[0].toLowerCase(Locale.ROOT)) {
 					case "send", "s" -> {
 						if (args.length < 2) return;
 						String msgNoArgs = Helper.makeEmoteFromMention(msg.replaceFirst(args[0] + " " + args[1], "")).trim();

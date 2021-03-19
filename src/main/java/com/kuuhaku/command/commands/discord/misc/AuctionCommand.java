@@ -43,6 +43,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -73,7 +74,7 @@ public class AuctionCommand implements Executable {
 			return;
 		}
 
-        int type = switch (args[1].toUpperCase()) {
+        int type = switch (args[1].toUpperCase(Locale.ROOT)) {
             case "N", "C" -> 1;
             case "E" -> 2;
             case "F" -> 3;

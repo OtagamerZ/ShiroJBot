@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
 
 public enum RankedTier {
@@ -79,8 +80,8 @@ public enum RankedTier {
 	public BufferedImage getBanner() {
 		if (this == UNRANKED) return null;
 		try {
-			String tier = name().toLowerCase().replaceFirst("_.+", "");
-			return ImageIO.read(Objects.requireNonNull(TrophyType.class.getClassLoader().getResourceAsStream("shoukan/banners/" + tier + "/" + name().toLowerCase() + ".png")));
+			String tier = name().toLowerCase(Locale.ROOT).replaceFirst("_.+", "");
+			return ImageIO.read(Objects.requireNonNull(TrophyType.class.getClassLoader().getResourceAsStream("shoukan/banners/" + tier + "/" + name().toLowerCase(Locale.ROOT) + ".png")));
 		} catch (IOException e) {
 			return null;
 		}

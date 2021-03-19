@@ -32,6 +32,8 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.Locale;
+
 @Command(
 		name = "pedrapapeltesoura",
 		aliases = {"rockpaperscissors", "jankenpon", "rps", "ppt", "jkp"},
@@ -52,7 +54,7 @@ public class JankenponCommand implements Executable {
 		int pcOption = Helper.rng(2, false);
 		int win = 2;
 
-		switch (args[0].toLowerCase()) {
+		switch (args[0].toLowerCase(Locale.ROOT)) {
 			case "pedra", ":punch:" -> win = switch (pcOption) {
 				case 1 -> 0;
 				case 2 -> 1;

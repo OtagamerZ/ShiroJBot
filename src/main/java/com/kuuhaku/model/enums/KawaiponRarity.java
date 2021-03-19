@@ -23,6 +23,7 @@ import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public enum KawaiponRarity {
 	FIELD(-3, ""),
@@ -71,7 +72,7 @@ public enum KawaiponRarity {
 	}
 
 	public static KawaiponRarity getByName(String name) {
-		return switch (StringUtils.stripAccents(name.toLowerCase())) {
+		return switch (StringUtils.stripAccents(name.toLowerCase(Locale.ROOT))) {
 			case "comum" -> COMMON;
 			case "incomum" -> UNCOMMON;
 			case "rara" -> RARE;
