@@ -261,30 +261,33 @@ public class DashboardSocket extends WebSocketServer {
 						switch (card.getRight()) {
 							case KAWAIPON -> {
 								CardMarket cm = (CardMarket) card.getLeft();
+								User seller = Main.getInfo().getUserByID(cm.getSeller());
 								data.put(String.valueOf(cm.getId()), new JSONObject() {{
 									put("id", cm.getId());
 									put("price", cm.getPrice());
-									put("seller", Main.getInfo().getUserByID(cm.getSeller()).getName());
+									put("seller", seller == null ? "Desconhecido" : seller.getName());
 									put("type", card.getRight().name().toLowerCase(Locale.ROOT));
 									put("card", cm.getCard().toString());
 								}});
 							}
 							case EVOGEAR -> {
 								EquipmentMarket em = (EquipmentMarket) card.getLeft();
+								User seller = Main.getInfo().getUserByID(em.getSeller());
 								data.put(String.valueOf(em.getId()), new JSONObject() {{
 									put("id", em.getId());
 									put("price", em.getPrice());
-									put("seller", Main.getInfo().getUserByID(em.getSeller()).getName());
+									put("seller", seller == null ? "Desconhecido" : seller.getName());
 									put("type", card.getRight().name().toLowerCase(Locale.ROOT));
 									put("card", em.getCard().toString());
 								}});
 							}
 							case FIELD -> {
 								FieldMarket fm = (FieldMarket) card.getLeft();
+								User seller = Main.getInfo().getUserByID(fm.getSeller());
 								data.put(String.valueOf(fm.getId()), new JSONObject() {{
 									put("id", fm.getId());
 									put("price", fm.getPrice());
-									put("seller", Main.getInfo().getUserByID(fm.getSeller()).getName());
+									put("seller", seller == null ? "Desconhecido" : seller.getName());
 									put("type", card.getRight().name().toLowerCase(Locale.ROOT));
 									put("card", fm.getCard().toString());
 								}});
