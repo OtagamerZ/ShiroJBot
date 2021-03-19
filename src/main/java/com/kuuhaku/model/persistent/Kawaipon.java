@@ -249,10 +249,10 @@ public class Kawaipon {
 			channel.sendMessage("❌ | Você só pode ter no máximo " + max + " cópias de cada equipamento no deck.").queue();
 			return true;
 		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
-			channel.sendMessage("❌ | Você não possui mais espaços para equipamentos tier 4!").queue();
+			channel.sendMessage("❌ | Você não possui mais espaços para EvoGears tier 4!").queue();
 			return true;
 		} else if (getEvoWeight() + e.getWeight(this) > 24) {
-			channel.sendMessage("❌ | Você não possui mais espaços para equipamentos no deck.").queue();
+			channel.sendMessage("❌ | Você não possui mais espaços para EvoGears no deck.").queue();
 			return true;
 		}
 		return false;
@@ -264,10 +264,10 @@ public class Kawaipon {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo " + max + " cópias de cada equipamento no deck.").queue();
 			return true;
 		} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
-			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para equipamentos tier 4!").queue();
+			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para EvoGears tier 4!").queue();
 			return true;
 		} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
-			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para equipamentos no deck.").queue();
+			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para EvoGears no deck.").queue();
 			return true;
 		}
 		return false;

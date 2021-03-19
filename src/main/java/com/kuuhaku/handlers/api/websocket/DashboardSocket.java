@@ -50,6 +50,8 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class DashboardSocket extends WebSocketServer {
@@ -324,6 +326,181 @@ public class DashboardSocket extends WebSocketServer {
 						put("type", type);
 						put("code", HttpURLConnection.HTTP_OK);
 						put("data", data);
+					}}.toString());
+				}
+				case "card_buy" -> {
+					Kawaipon kp = KawaiponDAO.getKawaipon(t.getUid());
+					Account acc = AccountDAO.getAccount(t.getUid());
+
+					int id = payload.getInt("id");
+					boolean foil = payload.getBoolean("foil");
+					CardType ct = payload.getEnum(CardType.class, "type");
+					Calendar today = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+					boolean blackfriday = today.get(Calendar.MONTH) == Calendar.NOVEMBER && today.get(Calendar.DAY_OF_MONTH) == 27;
+
+					AtomicInteger code = new AtomicInteger(0);
+					AtomicReference<String> msg = new AtomicReference<>("");
+					switch (ct) {
+						case KAWAIPON -> {
+							CardMarket c = CardMarketDAO.getCard(id);
+							if (c != null) {
+								Account seller = AccountDAO.getAccount(c.getSeller());
+								boolean trusted = Helper.isTrustedMerchant(seller.getUid());
+								double tax = trusted ? 0.05 : 0.1;
+
+								int err = kp.getCards().contains(c.getCard()) ? 1 : 0;
+								if (err == 0) {
+									if (seller.getUid().equals(t.getUid())) {
+										code.set(HttpURLConnection.HTTP_OK);
+										msg.set("Carta retirada com sucesso!");
+
+										c.setBuyer(t.getUid());
+										kp.addCard(c.getCard());
+
+										KawaiponDAO.saveKawaipon(kp);
+										CardMarketDAO.saveCard(c);
+									} else {
+										if (acc.getBalance() < c.getPrice()) {
+											code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
+											msg.set("Saldo insuficiente.");
+										} else {
+											c.setBuyer(t.getUid());
+											kp.addCard(c.getCard());
+											acc.removeCredit(blackfriday ? Math.round(c.getPrice() * 0.75) : c.getPrice(), this.getClass());
+											seller.addCredit(Math.round(c.getPrice() * (1 - tax)), this.getClass());
+
+											KawaiponDAO.saveKawaipon(kp);
+											AccountDAO.saveAccount(acc);
+											CardMarketDAO.saveCard(c);
+
+											User sellerU = Main.getInfo().getUserByID(c.getSeller());
+											User buyerU = Main.getInfo().getUserByID(c.getBuyer());
+											if (sellerU != null) sellerU.openPrivateChannel().queue(chn ->
+															chn.sendMessage("✅ | Sua carta `" + c.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(c.getPrice()) + " créditos  (" + (int) (100 * tax) + "% de taxa).").queue(null, Helper::doNothing),
+													Helper::doNothing
+											);
+
+											code.set(HttpURLConnection.HTTP_OK);
+											msg.set("Carta comprada com sucesso!");
+										}
+									}
+								} else {
+									code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
+									msg.set("Você já possui essa carta.");
+								}
+							}
+						}
+						case EVOGEAR -> {
+							EquipmentMarket e = EquipmentMarketDAO.getCard(id);
+							if (e != null) {
+								Account seller = AccountDAO.getAccount(e.getSeller());
+								boolean trusted = Helper.isTrustedMerchant(seller.getUid());
+								double tax = trusted ? 0.05 : 0.1;
+
+								int err = kp.checkEquipmentError(e.getCard());
+								if (err == 0) {
+									if (seller.getUid().equals(t.getUid())) {
+										code.set(HttpURLConnection.HTTP_OK);
+										msg.set("Carta retirada com sucesso!");
+
+										e.setBuyer(t.getUid());
+										kp.addEquipment(e.getCard());
+
+										KawaiponDAO.saveKawaipon(kp);
+										EquipmentMarketDAO.saveCard(e);
+									} else {
+										if (acc.getBalance() < e.getPrice()) {
+											code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
+											msg.set("Saldo insuficiente.");
+										} else {
+											e.setBuyer(t.getUid());
+											kp.addEquipment(e.getCard());
+											acc.removeCredit(blackfriday ? Math.round(e.getPrice() * 0.75) : e.getPrice(), this.getClass());
+											seller.addCredit(Math.round(e.getPrice() * (1 - tax)), this.getClass());
+
+											KawaiponDAO.saveKawaipon(kp);
+											AccountDAO.saveAccount(acc);
+											EquipmentMarketDAO.saveCard(e);
+
+											User sellerU = Main.getInfo().getUserByID(e.getSeller());
+											User buyerU = Main.getInfo().getUserByID(e.getBuyer());
+											if (sellerU != null) sellerU.openPrivateChannel().queue(chn ->
+															chn.sendMessage("✅ | Seu equipamento `" + e.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(e.getPrice()) + " créditos (" + (int) (100 * tax) + "% de taxa).").queue(),
+													Helper::doNothing
+											);
+
+											code.set(HttpURLConnection.HTTP_OK);
+											msg.set("Carta comprada com sucesso!");
+										}
+									}
+								} else {
+									code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
+									switch (err) {
+										case 1 -> msg.set("Você já possui " + kp.getMaxCopies(e.getCard()) + " cópias desse EvoGears.");
+										case 2 -> msg.set("Você não possui mais espaços para EvoGears tier 4.");
+										case 3 -> msg.set("Você não possui mais espaços para EvoGears no deck.");
+									}
+								}
+							}
+						}
+						case FIELD -> {
+							FieldMarket f = FieldMarketDAO.getCard(id);
+							if (f != null) {
+								Account seller = AccountDAO.getAccount(f.getSeller());
+								boolean trusted = Helper.isTrustedMerchant(seller.getUid());
+								double tax = trusted ? 0.05 : 0.1;
+
+								int err = kp.checkFieldError(f.getCard());
+								if (err == 0) {
+									if (seller.getUid().equals(t.getUid())) {
+										code.set(HttpURLConnection.HTTP_OK);
+										msg.set("Carta retirada com sucesso!");
+
+										f.setBuyer(t.getUid());
+										kp.addField(f.getCard());
+
+										KawaiponDAO.saveKawaipon(kp);
+										FieldMarketDAO.saveCard(f);
+									} else {
+										if (acc.getBalance() < f.getPrice()) {
+											code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
+											msg.set("Saldo insuficiente.");
+										} else {
+											f.setBuyer(t.getUid());
+											kp.addField(f.getCard());
+											acc.removeCredit(blackfriday ? Math.round(f.getPrice() * 0.75) : f.getPrice(), this.getClass());
+											seller.addCredit(Math.round(f.getPrice() * (1 - tax)), this.getClass());
+
+											KawaiponDAO.saveKawaipon(kp);
+											AccountDAO.saveAccount(acc);
+											FieldMarketDAO.saveCard(f);
+
+											User sellerU = Main.getInfo().getUserByID(f.getSeller());
+											User buyerU = Main.getInfo().getUserByID(f.getBuyer());
+											if (sellerU != null) sellerU.openPrivateChannel().queue(chn ->
+															chn.sendMessage("✅ | Sua campo `" + f.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(f.getPrice()) + " créditos (" + (int) (100 * tax) + "% de taxa).").queue(),
+													Helper::doNothing
+											);
+
+											code.set(HttpURLConnection.HTTP_OK);
+											msg.set("Carta comprada com sucesso!");
+										}
+									}
+								} else {
+									code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
+									switch (err) {
+										case 1 -> msg.set("Você já possui 3 cópias desse campo.");
+										case 2 -> msg.set("Você não possui mais espaços para campos no deck.");
+									}
+								}
+							}
+						}
+					}
+
+					conn.send(new JSONObject() {{
+						put("type", type);
+						put("code", code.get());
+						put("message", msg.get());
 					}}.toString());
 				}
 			}
