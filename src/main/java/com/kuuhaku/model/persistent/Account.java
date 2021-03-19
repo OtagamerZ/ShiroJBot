@@ -275,7 +275,7 @@ public class Account {
 		AccountDAO.saveAccount(this);
 	}
 
-	public boolean hasVoted() {
+	public boolean hasVoted(boolean thenApply) {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		try {
 			try {
@@ -284,27 +284,35 @@ public class Account {
 				if (today.isBefore(lastVote.plusHours(12)) && voted) {
 					return true;
 				} else {
+					if (thenApply) {
+						CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
+						Main.getInfo().getDblApi().hasVoted(uid).thenAccept(voted -> {
+							if (voted) {
+								DiscordBotsListHandler.retry(uid);
+							}
+
+							voteCheck.complete(voted);
+						});
+
+						return voteCheck.get();
+					}
+
+					return false;
+				}
+			} catch (DateTimeParseException e) {
+				if (thenApply) {
 					CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
 					Main.getInfo().getDblApi().hasVoted(uid).thenAccept(voted -> {
 						if (voted) {
 							DiscordBotsListHandler.retry(uid);
 						}
-
 						voteCheck.complete(voted);
 					});
 
 					return voteCheck.get();
 				}
-			} catch (DateTimeParseException e) {
-				CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
-				Main.getInfo().getDblApi().hasVoted(uid).thenAccept(voted -> {
-					if (voted) {
-						DiscordBotsListHandler.retry(uid);
-					}
-					voteCheck.complete(voted);
-				});
 
-				return voteCheck.get();
+				return false;
 			}
 		} catch (InterruptedException | ExecutionException e) {
 			return false;
