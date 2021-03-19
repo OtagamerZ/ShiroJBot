@@ -15,14 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/VoteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/VoteCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/DeckStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/DeckStash.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1108,27 +1100,6 @@
       <workItem from="1616008117553" duration="1113000" />
       <workItem from="1616097553095" duration="3233000" />
     </task>
-    <task id="LOCAL-03976" summary="Adicionada chance para cartas killcard">
-      <created>1615560302740</created>
-      <option name="number" value="03976" />
-      <option name="presentableId" value="LOCAL-03976" />
-      <option name="project" value="LOCAL" />
-      <updated>1615560302740</updated>
-    </task>
-    <task id="LOCAL-03977" summary="Adicionada chance para cartas killcard">
-      <created>1615560675821</created>
-      <option name="number" value="03977" />
-      <option name="presentableId" value="LOCAL-03977" />
-      <option name="project" value="LOCAL" />
-      <updated>1615560675821</updated>
-    </task>
-    <task id="LOCAL-03978" summary="Adicionada chance para cartas killcard">
-      <created>1615561263156</created>
-      <option name="number" value="03978" />
-      <option name="presentableId" value="LOCAL-03978" />
-      <option name="project" value="LOCAL" />
-      <updated>1615561263156</updated>
-    </task>
     <task id="LOCAL-03979" summary="Adicionada chance para cartas killcard">
       <created>1615566380187</created>
       <option name="number" value="03979" />
@@ -1451,7 +1422,28 @@
       <option name="project" value="LOCAL" />
       <updated>1616160914105</updated>
     </task>
-    <option name="localTasksCounter" value="4025" />
+    <task id="LOCAL-04025" summary="Correções menores">
+      <created>1616163720282</created>
+      <option name="number" value="04025" />
+      <option name="presentableId" value="LOCAL-04025" />
+      <option name="project" value="LOCAL" />
+      <updated>1616163720282</updated>
+    </task>
+    <task id="LOCAL-04026" summary="Correções menores">
+      <created>1616163857416</created>
+      <option name="number" value="04026" />
+      <option name="presentableId" value="LOCAL-04026" />
+      <option name="project" value="LOCAL" />
+      <updated>1616163857416</updated>
+    </task>
+    <task id="LOCAL-04027" summary="Correções menores">
+      <created>1616163942534</created>
+      <option name="number" value="04027" />
+      <option name="presentableId" value="LOCAL-04027" />
+      <option name="project" value="LOCAL" />
+      <updated>1616163942534</updated>
+    </task>
+    <option name="localTasksCounter" value="4028" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
