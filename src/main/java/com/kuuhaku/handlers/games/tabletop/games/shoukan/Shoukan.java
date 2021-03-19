@@ -1772,7 +1772,7 @@ public class Shoukan extends GlobalGame {
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
-		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 100 / (ch.isFusion() ? 5 : ch.getMana()), 100);
+		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
 
 		if (Helper.chance(chance)) {
 			for (int i = 0; i < slts.size(); i++) {
@@ -1842,7 +1842,7 @@ public class Shoukan extends GlobalGame {
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
-		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 100 / (ch.isFusion() ? 5 : ch.getMana()), 100);
+		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
 
 		if (Helper.chance(chance)) {
 			for (int i = 0; i < slts.size(); i++) {
@@ -1978,7 +1978,7 @@ public class Shoukan extends GlobalGame {
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
-		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 100 / (ch.isFusion() ? 5 : ch.getMana()), 100);
+		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
 
 		if (Helper.chance(chance)) {
 			for (int i = 0; i < slts.size(); i++) {
@@ -2053,7 +2053,7 @@ public class Shoukan extends GlobalGame {
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
 
-		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 100 / (ch.isFusion() ? 5 : ch.getMana()), 100);
+		double chance = Math.min((chi.isFusion() ? 5 : chi.getMana()) * 50 / (ch.isFusion() ? 5 : ch.getMana()), 50) + (50 - ch.getDodge() / 2);
 
 		if (Helper.chance(chance)) {
 			for (int i = 0; i < slts.size(); i++) {
