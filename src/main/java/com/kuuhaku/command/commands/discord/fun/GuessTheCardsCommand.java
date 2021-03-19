@@ -45,6 +45,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -133,7 +134,7 @@ public class GuessTheCardsCommand implements Executable {
 
 							int points = 0;
 							for (String s : answers)
-								points += names.remove(s.toUpperCase()) ? 1 : 0;
+								points += names.remove(s.toUpperCase(Locale.ROOT)) ? 1 : 0;
 
 							int reward = 50 * points + Helper.rng(150, false) * points;
 

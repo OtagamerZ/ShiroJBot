@@ -78,7 +78,7 @@ public class Clan {
 	}};
 
 	public Clan(String name, String leader) {
-		this.hash = Helper.hash(name.toLowerCase().getBytes(StandardCharsets.UTF_8), "SHA-256");
+		this.hash = Helper.hash(name.toLowerCase(Locale.ROOT).getBytes(StandardCharsets.UTF_8), "SHA-256");
 		this.name = name;
 		this.members.put(leader, ClanHierarchy.LEADER);
 	}

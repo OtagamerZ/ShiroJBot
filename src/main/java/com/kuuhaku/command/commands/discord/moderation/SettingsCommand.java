@@ -28,6 +28,8 @@ import com.kuuhaku.utils.Settings;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.Locale;
+
 @Command(
 		name = "parametros",
 		aliases = {"settings", "configs", "definicoes"},
@@ -58,7 +60,7 @@ public class SettingsCommand implements Executable {
 			case "rolevip":
 				Settings.updateCargoVip(args, message, gc);
 				break;*/
-		switch (args[0].toLowerCase()) {
+		switch (args[0].toLowerCase(Locale.ROOT)) {
 			case "cbv", "canalbv" -> Settings.updateCanalBV(args, msg, message, gc);
 			case "mensagembemvindo", "mensagembv", "msgbv" -> {
 				if (msg.length() > 2000) {

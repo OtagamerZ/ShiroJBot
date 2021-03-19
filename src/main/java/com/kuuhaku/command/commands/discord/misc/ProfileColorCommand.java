@@ -28,6 +28,8 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.Locale;
+
 @Command(
 		name = "cordoperfil",
 		aliases = {"profilecolor", "cp", "pc"},
@@ -53,7 +55,7 @@ public class ProfileColorCommand implements Executable {
 		}
 
 		try {
-			acc.setProfileColor(args[0].toUpperCase());
+			acc.setProfileColor(args[0].toUpperCase(Locale.ROOT));
 			AccountDAO.saveAccount(acc);
 			channel.sendMessage("✅ | Cor de perfil definida com sucesso!").queue();
 		} catch (NumberFormatException e) {

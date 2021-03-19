@@ -35,6 +35,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -62,7 +63,7 @@ public class SellCardCommand implements Executable {
 			return;
 		}
 
-        switch (args[1].toUpperCase()) {
+        switch (args[1].toUpperCase(Locale.ROOT)) {
             case "N", "C" -> {
                 boolean foil = args[1].equalsIgnoreCase("C");
                 Card c = CardDAO.getCard(args[0], foil);

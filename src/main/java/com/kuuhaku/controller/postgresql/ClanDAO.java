@@ -25,13 +25,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 public class ClanDAO {
 	public static Clan getClan(String name) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return em.find(Clan.class, Helper.hash(name.toLowerCase().getBytes(StandardCharsets.UTF_8), "SHA-256"));
+			return em.find(Clan.class, Helper.hash(name.toLowerCase(Locale.ROOT).getBytes(StandardCharsets.UTF_8), "SHA-256"));
 		} finally {
 			em.close();
 		}

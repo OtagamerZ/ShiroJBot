@@ -295,7 +295,7 @@ public class MatchMakingRating {
 			Set<String> ids = new HashSet<>();
 			for (MatchRound round : rounds) {
 				ids.add(round.getScript()
-						.getJSONObject(s.name().toLowerCase())
+						.getJSONObject(s.name().toLowerCase(Locale.ROOT))
 						.getString("id"));
 			}
 
@@ -303,7 +303,7 @@ public class MatchMakingRating {
 				MatchInfo info = new MatchInfo(id);
 
 				for (MatchRound round : rounds) {
-					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase());
+					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase(Locale.ROOT));
 
 					for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
 						String key = entry.getKey();
@@ -332,14 +332,14 @@ public class MatchMakingRating {
 			Pair<String, Map<String, Integer>> fd = Pair.of(
 					rounds.get(0)
 							.getScript()
-							.getJSONObject(s.name().toLowerCase())
+							.getJSONObject(s.name().toLowerCase(Locale.ROOT))
 							.getString("id"),
 					new HashMap<>()
 			);
 
 			AtomicReference<JSONObject> ph = new AtomicReference<>();
 			for (MatchRound round : rounds) {
-				JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase());
+				JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase(Locale.ROOT));
 				if (ph.get() == null) {
 					for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
 						String k = entry.getKey();
@@ -379,7 +379,7 @@ public class MatchMakingRating {
 			Set<String> ids = new HashSet<>();
 			for (MatchRound round : rounds) {
 				ids.add(round.getScript()
-						.getJSONObject(s.name().toLowerCase())
+						.getJSONObject(s.name().toLowerCase(Locale.ROOT))
 						.getString("id"));
 			}
 
@@ -388,7 +388,7 @@ public class MatchMakingRating {
 
 				AtomicReference<JSONObject> ph = new AtomicReference<>();
 				for (MatchRound round : rounds) {
-					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase());
+					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase(Locale.ROOT));
 					if (!jo.getString("id").equals(id)) continue;
 					else if (ph.get() == null) {
 						for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {

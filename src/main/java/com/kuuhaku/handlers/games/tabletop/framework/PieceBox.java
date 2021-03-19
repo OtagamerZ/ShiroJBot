@@ -21,10 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.framework;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PieceBox {
 	private final Map<Class<? extends Piece>, List<Piece>> pieces = new HashMap<>();
@@ -37,7 +34,7 @@ public class PieceBox {
 					List<Piece> storedPieces = this.pieces.getOrDefault(piece.getKey(), new ArrayList<>());
 					storedPieces.add(piece.getKey()
 							.getConstructor(String.class, boolean.class, String.class)
-							.newInstance(id, white, "pieces/" + piece.getKey().getSimpleName().toLowerCase() + ".png"));
+							.newInstance(id, white, "pieces/" + piece.getKey().getSimpleName().toLowerCase(Locale.ROOT) + ".png"));
 					this.pieces.put(piece.getKey(), storedPieces);
 				}
 			}

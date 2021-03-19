@@ -50,6 +50,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -76,7 +77,7 @@ public class TwitchEvents {
 
 		Account acc = AccountDAO.getAccountByTwitchId(author.getId());
 
-		if (rawMessage.toLowerCase().startsWith(Main.getInfo().getDefaultPrefix())) {
+		if (rawMessage.toLowerCase(Locale.ROOT).startsWith(Main.getInfo().getDefaultPrefix())) {
 			rawMsgNoPrefix = rawMessage.substring(Main.getInfo().getDefaultPrefix().length()).trim();
 			commandName = rawMsgNoPrefix.split(" ")[0].trim();
 		}

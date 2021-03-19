@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -142,7 +143,7 @@ public class KawaiponsCommand implements Executable {
                             }
 
                             boolean foil = args.length > 1 && args[1].equalsIgnoreCase("C");
-                            AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase());
+                            AddedAnime anime = CardDAO.verifyAnime(args[0].toUpperCase(Locale.ROOT));
 
                             if (anime == null) {
                                 m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();

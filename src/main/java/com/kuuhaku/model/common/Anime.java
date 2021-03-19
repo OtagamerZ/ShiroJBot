@@ -26,6 +26,7 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Anime {
 	private final int idMal;
@@ -73,13 +74,13 @@ public class Anime {
 			JSONArray edges = staff.getJSONArray("edges");
 			JSONObject eCreator = null;
 			for (int i = 0; i < edges.length(); i++) {
-				if (edges.getJSONObject(i).getString("role").toLowerCase().contains("original")) {
+				if (edges.getJSONObject(i).getString("role").toLowerCase(Locale.ROOT).contains("original")) {
 					eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
 					break;
-				} else if (edges.getJSONObject(i).getString("role").toLowerCase().contains("creator")) {
+				} else if (edges.getJSONObject(i).getString("role").toLowerCase(Locale.ROOT).contains("creator")) {
 					eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
 					break;
-				} else if (edges.getJSONObject(i).getString("role").toLowerCase().contains("story")) {
+				} else if (edges.getJSONObject(i).getString("role").toLowerCase(Locale.ROOT).contains("story")) {
 					eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
 					break;
 				}

@@ -36,6 +36,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Locale;
+
 @Command(
 		name = "melhorar",
 		aliases = {"upgrade", "up"},
@@ -103,7 +105,7 @@ public class PurchaseBuffCommand implements Executable {
 		}
 
 		ServerBuff sb = null;
-		switch (args[0].toUpperCase()) {
+		switch (args[0].toUpperCase(Locale.ROOT)) {
 			case "XP" -> sb = switch (tier) {
 				case 1 -> new ServerBuff(tier, ServerBuff.XP_TIER_1);
 				case 2 -> new ServerBuff(tier, ServerBuff.XP_TIER_2);
