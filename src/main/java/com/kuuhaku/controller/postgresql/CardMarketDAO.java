@@ -237,6 +237,16 @@ public class CardMarketDAO {
 				%s
 				""";
 
+		String priceCheck = """
+				AND cm.price <= CASE c.rarity
+					WHEN com.kuuhaku.model.enums.KawaiponRarity.COMMON THEN 1
+					WHEN com.kuuhaku.model.enums.KawaiponRarity.UNCOMMON THEN 2
+					WHEN com.kuuhaku.model.enums.KawaiponRarity.RARE THEN 3
+					WHEN com.kuuhaku.model.enums.KawaiponRarity.ULTRA_RARE THEN 4
+					WHEN com.kuuhaku.model.enums.KawaiponRarity.LEGENDARY THEN 5
+				END * :base * CASE cm.foil WHEN TRUE THEN 100 ELSE 50 END
+				""";
+
 		String[] params = {
 				name != null ? "AND c.id LIKE UPPER(:name)" : "",
 				min > -1 ? "AND cm.price > :min" : "",
@@ -245,6 +255,7 @@ public class CardMarketDAO {
 				anime != null ? "AND a.id LIKE UPPER(:anime)" : "",
 				foil ? "AND cm.foil = :foil" : "",
 				seller != null ? "AND cm.seller = :seller" : "",
+				seller == null ? priceCheck : "",
 				"ORDER BY cm.price, cm.foil DESC, c.rarity DESC, a.id, c.id"
 		};
 
@@ -257,6 +268,7 @@ public class CardMarketDAO {
 		if (!params[4].isBlank()) q.setParameter("anime", "%" + anime + "%");
 		if (!params[5].isBlank()) q.setParameter("foil", foil);
 		if (!params[6].isBlank()) q.setParameter("seller", seller);
+		if (!params[7].isBlank()) q.setParameter("base", Helper.BASE_CARD_PRICE);
 
 		try {
 			return q.getResultList();

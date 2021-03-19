@@ -176,6 +176,7 @@ public class BuyCardCommand implements Executable {
 								byName.get(),
 								minPrice.get(),
 								maxPrice.get(),
+								onlyEquip.get() > 0 ? onlyEquip.get() : -1,
 								onlyMine.get() ? author.getId() : null
 						).stream()
 								.map(em -> Pair.of((Object) em, CardType.EVOGEAR))
@@ -194,9 +195,6 @@ public class BuyCardCommand implements Executable {
 								.collect(Collectors.toList())
 				);
 
-			if (onlyEquip.get() > 0)
-				cards.removeIf(p -> ((EquipmentMarket) p.getLeft()).getCard().getTier() != onlyEquip.get());
-
 			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();
 
@@ -214,18 +212,6 @@ public class BuyCardCommand implements Executable {
 									false
 							);
 						}
-						case FIELD -> {
-							FieldMarket fm = (FieldMarket) cards.get(p).getLeft();
-							User seller = Main.getInfo().getUserByID(fm.getSeller());
-							eb.addField(
-									"`ID: " + fm.getId() + "` | " + fm.getCard().getCard().getName() + " (" + fm.getCard().getCard().getRarity().toString() + ")",
-									blackfriday ?
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (fm.getPrice() > 250000 ? "**`valor muito alto`**" : "~~" + Helper.separate(fm.getPrice()) + "~~ **" + Helper.separate(Math.round(fm.getPrice() * 0.75)) + "** créditos")
-											:
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (fm.getPrice() > 250000 ? "**`valor muito alto`**" : "**" + Helper.separate(fm.getPrice()) + "** créditos"),
-									false
-							);
-						}
 						case EVOGEAR -> {
 							EquipmentMarket em = (EquipmentMarket) cards.get(p).getLeft();
 							User seller = Main.getInfo().getUserByID(em.getSeller());
@@ -235,6 +221,18 @@ public class BuyCardCommand implements Executable {
 											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50) ? "**`valor muito alto`**" : "~~" + Helper.separate(em.getPrice()) + "~~ **" + Helper.separate(Math.round(em.getPrice() * 0.75)) + "** créditos")
 											:
 											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50) ? "**`valor muito alto`**" : "**" + Helper.separate(em.getPrice()) + "** créditos"),
+									false
+							);
+						}
+						case FIELD -> {
+							FieldMarket fm = (FieldMarket) cards.get(p).getLeft();
+							User seller = Main.getInfo().getUserByID(fm.getSeller());
+							eb.addField(
+									"`ID: " + fm.getId() + "` | " + fm.getCard().getCard().getName() + " (" + fm.getCard().getCard().getRarity().toString() + ")",
+									blackfriday ?
+											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (fm.getPrice() > Helper.BASE_FIELD_PRICE ? "**`valor muito alto`**" : "~~" + Helper.separate(fm.getPrice()) + "~~ **" + Helper.separate(Math.round(fm.getPrice() * 0.75)) + "** créditos")
+											:
+											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (fm.getPrice() > Helper.BASE_FIELD_PRICE ? "**`valor muito alto`**" : "**" + Helper.separate(fm.getPrice()) + "** créditos"),
 									false
 							);
 						}
