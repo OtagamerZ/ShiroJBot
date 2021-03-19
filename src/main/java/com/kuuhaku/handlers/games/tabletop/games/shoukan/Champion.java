@@ -675,7 +675,10 @@ public class Champion implements Drawable, Cloneable {
 			put("attack", atk);
 			put("defense", def);
 			put("description", description);
-			put("image", Helper.atob(drawCard(false), "png"));
 		}}.toString();
+	}
+
+	public String getBase64() {
+		return Helper.atob(drawCard(false), "png");
 	}
 }

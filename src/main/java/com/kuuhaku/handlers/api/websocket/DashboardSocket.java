@@ -22,7 +22,11 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.payload.ReadyData;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.common.TempCache;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.BiContract;
 import com.kuuhaku.utils.Helper;
@@ -30,6 +34,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.lang3.tuple.Pair;
 import org.java_websocket.WebSocket;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ClientHandshake;
@@ -68,7 +73,8 @@ public class DashboardSocket extends WebSocketServer {
 			JSONObject jo = new JSONObject(message);
 			if (!jo.has("type")) return;
 
-			if (jo.getString("type").equals("login")) {
+			String type = jo.getString("type");
+			if (type.equals("login")) {
 				BiContract<WebSocket, ReadyData> request = requests.computeIfAbsent(
 						jo.getString("data"),
 						k -> new BiContract<>((ws, data) -> {
@@ -85,21 +91,22 @@ public class DashboardSocket extends WebSocketServer {
 			JSONObject payload = jo.getJSONObject("data");
 			if (!payload.has("token") || !validate(payload.getString("token"), conn)) {
 				conn.send(new JSONObject() {{
-					put("type", jo.getString("type"));
-					put("code", HttpURLConnection.HTTP_UNAUTHORIZED);
-				}}.toString());
-				return;
-			}
-			Token t = TokenDAO.getToken(payload.getString("token"));
-			if (t == null) {
-				conn.send(new JSONObject() {{
-					put("type", jo.getString("type"));
+					put("type", type);
 					put("code", HttpURLConnection.HTTP_UNAUTHORIZED);
 				}}.toString());
 				return;
 			}
 
-			switch (jo.getString("type")) {
+			Token t = TokenDAO.getToken(payload.getString("token"));
+			if (t == null) {
+				conn.send(new JSONObject() {{
+					put("type", type);
+					put("code", HttpURLConnection.HTTP_UNAUTHORIZED);
+				}}.toString());
+				return;
+			}
+
+			switch (type) {
 				case "ticket" -> {
 					int number = TicketDAO.openTicket(payload.getString("message"), Main.getInfo().getUserByID(t.getUid()));
 					EmbedBuilder eb = new EmbedBuilder()
@@ -110,6 +117,7 @@ public class DashboardSocket extends WebSocketServer {
 							.addField("Mensagem:", "```" + payload.getString("message") + "```", false)
 							.setFooter(t.getUid())
 							.setColor(Color.decode("#fefefe"));
+
 					Map<String, String> ids = new HashMap<>();
 					for (String dev : ShiroInfo.getStaff()) {
 						Main.getInfo().getUserByID(dev).openPrivateChannel()
@@ -131,6 +139,7 @@ public class DashboardSocket extends WebSocketServer {
 					User u = Main.getInfo().getUserByID(t.getUid());
 					User w = Member.getWaifu(u.getId()).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u.getId()));
 					CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
+
 					List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
 					JSONObject user = new JSONObject() {{
 						put("waifu", w == null ? "" : w.getAsTag());
@@ -142,11 +151,13 @@ public class DashboardSocket extends WebSocketServer {
 						put("badges", Tags.getUserBadges(u.getId()));
 						put("rank", MemberDAO.getMemberRankPos(u.getId(), null, true));
 					}};
+
 					List<Guild> g = new ArrayList<>();
 					for (Member profile : profiles) {
 						Guild gd = Main.getInfo().getGuildByID(profile.getSid());
 						if (gd != null) g.add(gd);
 					}
+
 					JSONArray guilds = new JSONArray();
 					for (Guild gd1 : g) {
 						net.dv8tion.jda.api.entities.Member mb = gd1.getMember(u);
@@ -159,10 +170,11 @@ public class DashboardSocket extends WebSocketServer {
 							guilds.put(guild);
 						}
 					}
+
 					profiles.removeIf(p -> g.stream().map(Guild::getId).noneMatch(p.getSid()::equals));
 					g.removeIf(gd -> profiles.stream().map(Member::getSid).noneMatch(gd.getId()::equals));
 					conn.send(new JSONObject() {{
-						put("type", "validate");
+						put("type", type);
 						put("code", HttpURLConnection.HTTP_OK);
 						put("data", new JSONObject() {{
 							put("userData", user);
@@ -174,10 +186,6 @@ public class DashboardSocket extends WebSocketServer {
 					Kawaipon kp = KawaiponDAO.getKawaipon(t.getUid());
 					Set<KawaiponCard> cards = kp.getCards();
 					Set<AddedAnime> animes = CardDAO.getValidAnime();
-					for (AddedAnime anime : animes) {
-						if (CardDAO.hasCompleted(t.getUid(), anime.getName(), false))
-							cards.add(new KawaiponCard(CardDAO.getUltimate(anime.getName()), false));
-					}
 
 					for (AddedAnime an : animes) {
 						List<JSONObject> data = new ArrayList<>();
@@ -198,40 +206,24 @@ public class DashboardSocket extends WebSocketServer {
 							}});
 						}
 
-						if (CardDAO.hasCompleted(t.getUid(), an.getName(), false)) {
-							Card ult = CardDAO.getUltimate(an.getName());
-
-							data.add(new JSONObject() {{
-								put("id", ult.getId());
-								put("name", ult.getName());
-								put("anime", ult.getAnime().getName());
-								put("rarity", ult.getRarity().getIndex());
-								put("hasNormal", true);
-								put("hasFoil", false);
-								put("cardNormal", Helper.atob(ult.drawCard(false), "png"));
-								put("cardFoil", "");
-							}});
-						} else {
-							Card ult = CardDAO.getUltimate(an.getName());
-
-							data.add(new JSONObject() {{
-								put("id", ult.getId());
-								put("name", ult.getName());
-								put("anime", ult.getAnime().getName());
-								put("rarity", ult.getRarity().getIndex());
-								put("hasNormal", false);
-								put("hasFoil", false);
-								put("cardNormal", "");
-								put("cardFoil", "");
-							}});
-						}
+						Card ult = CardDAO.getUltimate(an.getName());
+						data.add(new JSONObject() {{
+							put("id", ult.getId());
+							put("name", ult.getName());
+							put("anime", ult.getAnime().getName());
+							put("rarity", ult.getRarity().getIndex());
+							put("hasNormal", CardDAO.hasCompleted(t.getUid(), an.getName(), false));
+							put("hasFoil", false);
+							put("cardNormal", Helper.atob(ult.drawCard(false), "png"));
+							put("cardFoil", "");
+						}});
 
 						JSONObject animeCards = new JSONObject() {{
 							put(an.getName(), data);
 						}};
 
 						conn.send(new JSONObject() {{
-							put("type", "cards");
+							put("type", type);
 							put("code", HttpURLConnection.HTTP_OK);
 							put("total", CardDAO.getValidAnime().size());
 							put("data", new JSONObject() {{
@@ -239,6 +231,100 @@ public class DashboardSocket extends WebSocketServer {
 							}});
 						}}.toString());
 					}
+				}
+				case "store" -> {
+					List<Pair<Object, CardType>> cards = new ArrayList<>() {{
+						addAll(
+								CardMarketDAO.getCardsForMarket(null, -1, -1, null, null, false, null)
+										.stream()
+										.map(cm -> Pair.of((Object) cm, CardType.KAWAIPON))
+										.collect(Collectors.toList())
+						);
+						addAll(
+								EquipmentMarketDAO.getCardsForMarket(null, -1, -1, -1, null)
+										.stream()
+										.map(em -> Pair.of((Object) em, CardType.EVOGEAR))
+										.collect(Collectors.toList())
+						);
+						addAll(
+								FieldMarketDAO.getCardsForMarket(null, -1, -1, null)
+										.stream()
+										.map(fm -> Pair.of((Object) fm, CardType.FIELD))
+										.collect(Collectors.toList())
+						);
+					}};
+
+					JSONObject data = new JSONObject();
+					for (Pair<Object, CardType> card : cards) {
+						switch (card.getRight()) {
+							case KAWAIPON -> {
+								CardMarket cm = (CardMarket) card.getLeft();
+								data.put(String.valueOf(cm.getId()), new JSONObject() {{
+									put("id", cm.getId());
+									put("price", cm.getPrice());
+									put("seller", Main.getInfo().getUserByID(cm.getSeller()).getName());
+									put("type", card.getRight().name().toLowerCase(Locale.ROOT));
+									put("card", cm.getCard().toString());
+								}});
+							}
+							case EVOGEAR -> {
+								EquipmentMarket em = (EquipmentMarket) card.getLeft();
+								data.put(String.valueOf(em.getId()), new JSONObject() {{
+									put("id", em.getId());
+									put("price", em.getPrice());
+									put("seller", Main.getInfo().getUserByID(em.getSeller()).getName());
+									put("type", card.getRight().name().toLowerCase(Locale.ROOT));
+									put("card", em.getCard().toString());
+								}});
+							}
+							case FIELD -> {
+								FieldMarket fm = (FieldMarket) card.getLeft();
+								data.put(String.valueOf(fm.getId()), new JSONObject() {{
+									put("id", fm.getId());
+									put("price", fm.getPrice());
+									put("seller", Main.getInfo().getUserByID(fm.getSeller()).getName());
+									put("type", card.getRight().name().toLowerCase(Locale.ROOT));
+									put("card", fm.getCard().toString());
+								}});
+							}
+						}
+					}
+
+					conn.send(new JSONObject() {{
+						put("type", type);
+						put("code", HttpURLConnection.HTTP_OK);
+						put("total", cards.size());
+						put("data", data);
+					}}.toString());
+				}
+				case "card_info" -> {
+					String id = payload.getString("id");
+					boolean foil = payload.getBoolean("foil");
+					CardType ct = payload.getEnum(CardType.class, "type");
+
+					JSONObject data = new JSONObject();
+					switch (ct) {
+						case KAWAIPON -> {
+							KawaiponCard kc = new KawaiponCard(CardDAO.getCard(id), foil);
+							Champion c = CardDAO.getChampion(id);
+							data.put("normal", kc.getBase64());
+							if (c != null) data.put("alt", c.getBase64());
+						}
+						case EVOGEAR -> {
+							Equipment e = CardDAO.getEquipment(id);
+							if (e != null) data.put("normal", e.getBase64());
+						}
+						case FIELD -> {
+							Field f = CardDAO.getField(id);
+							if (f != null) data.put("normal", f.getBase64());
+						}
+					}
+
+					conn.send(new JSONObject() {{
+						put("type", type);
+						put("code", HttpURLConnection.HTTP_OK);
+						put("data", data);
+					}}.toString());
 				}
 			}
 		} catch (WebsocketNotConnectedException ignore) {
