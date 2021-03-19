@@ -20,6 +20,8 @@ package com.kuuhaku.handlers.games.tabletop.framework;
 
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 
+import java.util.Locale;
+
 public class Spot {
 	private final int x;
 	private final int y;
@@ -35,7 +37,7 @@ public class Spot {
 	}
 
 	public static Spot of(String coord) {
-		int x = alphabet.indexOf(String.valueOf(coord.charAt(0)).toUpperCase());
+		int x = alphabet.indexOf(String.valueOf(coord.charAt(0)).toUpperCase(Locale.ROOT));
 		return new Spot(x, Integer.parseInt(String.valueOf(coord.charAt(1))) - 1);
 	}
 

@@ -30,6 +30,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Objects;
 
 @Entity
@@ -87,7 +88,7 @@ public class Card {
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
-				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase() + ".png")));
+				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase(Locale.ROOT) + ".png")));
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
 

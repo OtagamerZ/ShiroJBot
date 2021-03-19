@@ -40,6 +40,7 @@ import net.dv8tion.jda.api.entities.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -77,7 +78,7 @@ public class LobbyCommand implements Executable {
 			return;
 		}
 
-		RankedQueue rq = RankedQueue.valueOf(args[0].toUpperCase());
+		RankedQueue rq = RankedQueue.valueOf(args[0].toUpperCase(Locale.ROOT));
 		List<Page> pages = new ArrayList<>();
 
 		switch (rq) {

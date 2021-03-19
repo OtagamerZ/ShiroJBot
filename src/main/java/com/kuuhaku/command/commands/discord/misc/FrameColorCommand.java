@@ -35,6 +35,7 @@ import net.dv8tion.jda.api.entities.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -61,10 +62,10 @@ public class FrameColorCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			for (FrameColor fc : FrameColor.values()) {
 				eb.clear();
-				eb.setTitle(":flower_playing_cards: | Cor " + fc.toString().toLowerCase());
+				eb.setTitle(":flower_playing_cards: | Cor " + fc.toString().toLowerCase(Locale.ROOT));
 				eb.setDescription(fc.getDescription());
-				eb.setThumbnail("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/card_back_" + fc.name().toLowerCase() + ".png");
-				eb.setImage("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/card_front_" + fc.name().toLowerCase() + ".png");
+				eb.setThumbnail("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/card_back_" + fc.name().toLowerCase(Locale.ROOT) + ".png");
+				eb.setImage("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/card_front_" + fc.name().toLowerCase(Locale.ROOT) + ".png");
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 

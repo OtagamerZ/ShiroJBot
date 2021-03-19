@@ -33,6 +33,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import javax.annotation.Nonnull;
 import javax.persistence.NoResultException;
+import java.util.Locale;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -102,7 +103,7 @@ public class MarryCommand implements Executable {
 
 					try {
 						Message msg = event.getMessage();
-						switch (msg.getContentRaw().toLowerCase()) {
+						switch (msg.getContentRaw().toLowerCase(Locale.ROOT)) {
 							case "sim" -> {
 								channel.sendMessage("Eu os declaro husbando e waifu!").queue();
 								WaifuDAO.saveCouple(author, message.getMentionedUsers().get(0));

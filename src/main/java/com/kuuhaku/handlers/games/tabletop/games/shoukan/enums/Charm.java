@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Objects;
 
 public enum Charm {
@@ -47,7 +48,7 @@ public enum Charm {
 	public BufferedImage getIcon() {
 		if (this == SPELL) return null;
 		try {
-			return ImageIO.read(Objects.requireNonNull(Charm.class.getClassLoader().getResourceAsStream("shoukan/charm/" + name().toLowerCase() + ".png")));
+			return ImageIO.read(Objects.requireNonNull(Charm.class.getClassLoader().getResourceAsStream("shoukan/charm/" + name().toLowerCase(Locale.ROOT) + ".png")));
 		} catch (IOException e) {
 			return null;
 		}

@@ -425,7 +425,7 @@ public class Board {
 				if (p != null && !(p instanceof Decoy)) {
 					g2d.drawImage(p.getIcon(), 64 * x, 64 * y, null);
 				} else {
-					g2d.drawString(String.valueOf(Spot.getAlphabet().toUpperCase().charAt(x)) + (y + 1), 64 * x + 13, 64 * y + 44);
+					g2d.drawString(String.valueOf(Spot.getAlphabet().toUpperCase(Locale.ROOT).charAt(x)) + (y + 1), 64 * x + 13, 64 * y + 44);
 				}
 			}
 		}

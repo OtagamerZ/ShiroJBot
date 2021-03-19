@@ -27,6 +27,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class TwitchCommandManager {
@@ -49,7 +50,7 @@ public class TwitchCommandManager {
 	}
 
 	public TwitchCommand getCommand(String name) {
-		Map.Entry<Class<? extends TwitchCommand>, TwitchArgument> cmd = commands.entrySet().stream().filter(e -> e.getValue().getName().equalsIgnoreCase(name) || ArrayUtils.contains(e.getValue().getAliases(), name.toLowerCase())).findFirst().orElse(null);
+		Map.Entry<Class<? extends TwitchCommand>, TwitchArgument> cmd = commands.entrySet().stream().filter(e -> e.getValue().getName().equalsIgnoreCase(name) || ArrayUtils.contains(e.getValue().getAliases(), name.toLowerCase(Locale.ROOT))).findFirst().orElse(null);
 
 		if (cmd == null) return null;
 

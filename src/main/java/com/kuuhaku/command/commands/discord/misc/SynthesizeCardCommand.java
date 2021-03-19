@@ -46,6 +46,7 @@ import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -90,7 +91,7 @@ public class SynthesizeCardCommand implements Executable {
 		for (String name : names) {
 			Card c = CardDAO.getCard(name, false);
 			if (c == null) {
-				channel.sendMessage("❌ | A carta `" + name.toUpperCase() + "` não existe.").queue();
+				channel.sendMessage("❌ | A carta `" + name.toUpperCase(Locale.ROOT) + "` não existe.").queue();
 				return;
 			} else if (foilSynth ? !kp.getCards().contains(new KawaiponCard(c, true)) : !kp.getCards().contains(new KawaiponCard(c, false))) {
 				channel.sendMessage("❌ | Você só pode usar na síntese cartas que você tenha na coleção kawaipon.").queue();

@@ -37,6 +37,7 @@ import net.dv8tion.jda.api.entities.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -95,7 +96,7 @@ public class ProfileTrophyCommand implements Executable {
 		}
 
 		try {
-			TrophyType tt = TrophyType.valueOf(args[0].toUpperCase());
+			TrophyType tt = TrophyType.valueOf(args[0].toUpperCase(Locale.ROOT));
 
 			if (!t.getTrophies().contains(tt)) {
 				channel.sendMessage("❌ | Você não possui esse troféu.").queue();

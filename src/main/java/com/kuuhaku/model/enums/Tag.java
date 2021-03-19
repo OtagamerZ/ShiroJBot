@@ -28,10 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public enum Tag {
@@ -132,6 +129,6 @@ public enum Tag {
 
 	@Override
 	public String toString() {
-		return StringUtils.capitalize(name().toLowerCase().replace("_", " "));
+		return StringUtils.capitalize(name().toLowerCase(Locale.ROOT).replace("_", " "));
 	}
 }

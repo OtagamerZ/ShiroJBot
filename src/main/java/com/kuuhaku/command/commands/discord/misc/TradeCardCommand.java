@@ -40,10 +40,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -83,13 +80,13 @@ public class TradeCardCommand implements Executable {
 			}
 
 			int[] types = {
-					switch (args[2].toUpperCase()) {
+					switch (args[2].toUpperCase(Locale.ROOT)) {
 						case "N", "C" -> 1;
 						case "E" -> 2;
 						case "F" -> 3;
 						default -> -1;
 					},
-					switch (args[4].toUpperCase()) {
+					switch (args[4].toUpperCase(Locale.ROOT)) {
 						case "N", "C" -> 1;
 						case "E" -> 2;
 						case "F" -> 3;
@@ -392,7 +389,7 @@ public class TradeCardCommand implements Executable {
 							})
 					);
 		} else if (Helper.regex(text, "(\\d+)[ ]+[\\w- ]+[NnCcEeFf]")) { //Purchase
-			int type = switch (args[3].toUpperCase()) {
+			int type = switch (args[3].toUpperCase(Locale.ROOT)) {
 				case "N", "C" -> 1;
 				case "E" -> 2;
 				case "F" -> 3;
@@ -602,7 +599,7 @@ public class TradeCardCommand implements Executable {
 							})
 					);
 		} else if (Helper.regex(text, "[\\w- ]+[NnCcEeFf][ ]+(\\d+)")) { //Selling
-			int type = switch (args[2].toUpperCase()) {
+			int type = switch (args[2].toUpperCase(Locale.ROOT)) {
 				case "N", "C" -> 1;
 				case "E" -> 2;
 				case "F" -> 3;

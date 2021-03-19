@@ -31,6 +31,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -85,7 +86,7 @@ public class ConsumableShop {
 						return;
 					}
 
-					AddedAnime an = CardDAO.verifyAnime(args[2].toUpperCase());
+					AddedAnime an = CardDAO.verifyAnime(args[2].toUpperCase(Locale.ROOT));
 					if (an == null) {
 						ch.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 						return;

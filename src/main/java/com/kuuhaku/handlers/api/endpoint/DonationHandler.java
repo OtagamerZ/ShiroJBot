@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
+import java.util.Locale;
 
 @RestController
 public class DonationHandler {
@@ -95,7 +96,7 @@ public class DonationHandler {
 								(db.getGems() > 0 ? "- " + db.getGems() + " gemas." : ""),
 								true
 						)
-						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(), d.getTransaction(), d.getUid()));
+						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(Locale.ROOT), d.getTransaction(), d.getUid()));
 
 				u.openPrivateChannel()
 						.flatMap(c -> c.sendMessage(eb.build()))
@@ -128,7 +129,7 @@ public class DonationHandler {
 								(db.getGems() > 0 ? "- " + db.getGems() + " gemas." : ""),
 								true
 						)
-						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(), d.getTransaction(), d.getUid()));
+						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(Locale.ROOT), d.getTransaction(), d.getUid()));
 
 				u.openPrivateChannel()
 						.flatMap(c -> c.sendMessage(eb.build()))
@@ -144,7 +145,7 @@ public class DonationHandler {
 				eb.setColor(Helper.getRandomColor())
 						.setTitle("Obrigada pelo seu apoio até agora1")
 						.setDescription("Seu pacote mensal chegou ao fim, agradecemos pelo seu apoio e desejamos que continue utilizando a Shiro!")
-						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(), d.getTransaction(), d.getUid()));
+						.setFooter("Cod. da transação: " + String.join("_", d.getBundle().name().toLowerCase(Locale.ROOT), d.getTransaction(), d.getUid()));
 
 				u.openPrivateChannel()
 						.flatMap(c -> c.sendMessage(eb.build()))

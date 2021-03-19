@@ -26,6 +26,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomAnswerDAO {
 	@SuppressWarnings("unchecked")
@@ -34,7 +35,7 @@ public class CustomAnswerDAO {
 		List<CustomAnswer> ca;
 
 		Query q = em.createQuery("SELECT c FROM CustomAnswer c WHERE LOWER(gatilho) = :trigger AND guildID = :guild", CustomAnswer.class);
-		q.setParameter("trigger", trigger.toLowerCase());
+		q.setParameter("trigger", trigger.toLowerCase(Locale.ROOT));
 		q.setParameter("guild", guild);
 		ca = q.getResultList();
 

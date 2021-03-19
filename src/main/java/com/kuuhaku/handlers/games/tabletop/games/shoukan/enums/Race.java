@@ -116,7 +116,7 @@ public enum Race {
 
 	public BufferedImage getIcon() {
 		try {
-			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/race/" + name().toLowerCase() + ".png")));
+			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/race/" + name().toLowerCase(Locale.ROOT) + ".png")));
 		} catch (IOException e) {
 			return null;
 		}

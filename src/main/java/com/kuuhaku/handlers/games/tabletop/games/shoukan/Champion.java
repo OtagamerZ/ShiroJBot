@@ -195,7 +195,7 @@ public class Champion implements Drawable, Cloneable {
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(Color.black);
-			g2d.drawString("[" + getRace().toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 9, 277);
+			g2d.drawString("[" + getRace().toString().toUpperCase(Locale.ROOT) + (effect == null ? "" : "/EFEITO") + "]", 9, 277);
 
 			g2d.setFont(Helper.HAMMERSMITH.deriveFont(Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : Helper.getOr(altDescription, description), 205, 9, 293);
