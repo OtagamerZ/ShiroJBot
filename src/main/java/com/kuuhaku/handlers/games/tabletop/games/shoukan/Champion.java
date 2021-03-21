@@ -81,9 +81,9 @@ public class Champion implements Drawable, Cloneable {
 
 	private transient boolean flipped = false;
 	private transient boolean available = true;
+	private transient boolean defending = false;
 	private transient Account acc = null;
 	private transient Clan clan = null;
-	private transient boolean defending = false;
 	private transient List<Equipment> linkedTo = new ArrayList<>();
 	private transient Bonus bonus = new Bonus();
 	private transient Champion fakeCard = null;
@@ -100,6 +100,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient int efctAtk = 0;
 	private transient int efctDef = 0;
 	private transient int stun = 0;
+	private transient boolean permastun = false;
 	private transient double dodge = 0;
 	private transient double mDodge = 0;
 
@@ -625,6 +626,7 @@ public class Champion implements Drawable, Cloneable {
 		efctAtk = 0;
 		efctDef = 0;
 		stun = 0;
+		permastun = false;
 		dodge = 0;
 	}
 
@@ -637,12 +639,18 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getStun() {
+		if (permastun) return 1;
 		return stun;
 	}
 
 	public void setStun(int stun) {
 		this.stun = stun;
-		if (this.stun > 0) defending = true;
+		if (getStun() > 0) defending = true;
+	}
+
+	public void setPermaStun(boolean perma) {
+		this.permastun = perma;
+		if (getStun() > 0) defending = true;
 	}
 
 	public void reduceStun() {
