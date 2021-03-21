@@ -40,31 +40,27 @@ public class BetaTagCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() > 0) {
-			if (message.getMentionedUsers().size() == 1) {
-				try {
-					resolveBetaByMention(message, channel);
-				} catch (NoResultException e) {
-					TagDAO.addUserTagsToDB(message.getMentionedUsers().get(0).getId());
-					resolveBetaByMention(message, channel);
-				}
-			} else {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_too-many-users-nv")).queue();
-            }
-        } else {
-            try {
-                if (Main.getInfo().getUserByID(args[0]) != null) {
-                    try {
+			try {
+				resolveBetaByMention(message, channel);
+			} catch (NoResultException e) {
+				TagDAO.addUserTagsToDB(message.getMentionedUsers().get(0).getId());
+				resolveBetaByMention(message, channel);
+			}
+		} else {
+			try {
+				if (Main.getInfo().getUserByID(args[0]) != null) {
+					try {
 						resolveBetaById(args, channel);
-                    } catch (NoResultException e) {
+					} catch (NoResultException e) {
 						TagDAO.addUserTagsToDB(args[0]);
 						resolveBetaById(args, channel);
-                    }
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user-nv")).queue();
-            }
-        }
-    }
+					}
+				}
+			} catch (ArrayIndexOutOfBoundsException e) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			}
+		}
+	}
 
 	private void resolveBetaById(String[] args, MessageChannel channel) {
 		Tags t = TagDAO.getTagById(args[0]);
