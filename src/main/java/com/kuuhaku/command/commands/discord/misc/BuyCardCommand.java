@@ -38,7 +38,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.ZoneId;
@@ -285,8 +284,10 @@ public class BuyCardCommand implements Executable {
 
 					seller.addCredit(Math.round(cm.getPrice() * (1 - tax)), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(cm.getPrice() * 0.75) : cm.getPrice(), this.getClass());
-					long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
-					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(cm.getPrice() * tax)));
+
+					LotteryValue lv = LotteryDAO.getLotteryValue();
+					lv.addValue(Math.round(cm.getPrice() * tax));
+					LotteryDAO.saveLotteryValue(lv);
 
 					AccountDAO.saveAccount(seller);
 					AccountDAO.saveAccount(buyer);
@@ -338,8 +339,10 @@ public class BuyCardCommand implements Executable {
 
 					seller.addCredit(Math.round(em.getPrice() * (1 - tax)), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(em.getPrice() * 0.75) : em.getPrice(), this.getClass());
-					long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
-					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(em.getPrice() * tax)));
+
+					LotteryValue lv = LotteryDAO.getLotteryValue();
+					lv.addValue(Math.round(em.getPrice() * tax));
+					LotteryDAO.saveLotteryValue(lv);
 
 					AccountDAO.saveAccount(seller);
 					AccountDAO.saveAccount(buyer);
@@ -388,8 +391,10 @@ public class BuyCardCommand implements Executable {
 
 					seller.addCredit(Math.round(fm.getPrice() * (1 - tax)), this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(fm.getPrice() * 0.75) : fm.getPrice(), this.getClass());
-					long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
-					DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(fm.getPrice() * tax)));
+
+					LotteryValue lv = LotteryDAO.getLotteryValue();
+					lv.addValue(Math.round(fm.getPrice() * tax));
+					LotteryDAO.saveLotteryValue(lv);
 
 					AccountDAO.saveAccount(seller);
 					AccountDAO.saveAccount(buyer);
