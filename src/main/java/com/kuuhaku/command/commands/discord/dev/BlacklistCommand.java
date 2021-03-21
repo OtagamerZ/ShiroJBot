@@ -31,28 +31,37 @@ import net.dv8tion.jda.api.entities.*;
 @Command(
 		name = "listanegra",
 		aliases = {"blacklist", "bl"},
-		usage = "req_id",
+		usage = "req_mention-id",
 		category = Category.DEV
 )
 public class BlacklistCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (args.length == 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_blacklist-no-id")).queue();
-			return;
+		if (message.getMentionedUsers().size() > 0) {
+			resolveBlacklistByMention(message, channel);
+		} else {
+			try {
+				if (Main.getInfo().getUserByID(args[0]) != null) {
+					resolveBlacklistById(message.getAuthor(), args, channel);
+				}
+			} catch (ArrayIndexOutOfBoundsException e) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			}
 		}
+	}
 
-		User u = Main.getInfo().getUserByID(args[0]);
-
-		if (u == null) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-id")).queue();
-			return;
-		}
-
-		Blacklist bl = new Blacklist(u.getId(), author.getName());
+	private void resolveBlacklistById(User author, String[] args, MessageChannel channel) {
+		Blacklist bl = new Blacklist(args[0], author.getId());
 		BlacklistDAO.blacklist(bl);
 
-		channel.sendMessage("✅ | Usuário adicionado à lista negra com sucesso!").queue();
+		channel.sendMessage("✅ | Usuário adicionado à lista negra com sucesso").queue();
+	}
+
+	private void resolveBlacklistByMention(Message message, MessageChannel channel) {
+		Blacklist bl = new Blacklist(message.getMentionedUsers().get(0).getId(), message.getAuthor().getId());
+		BlacklistDAO.blacklist(bl);
+
+		channel.sendMessage("✅ | Usuário adicionado à lista negra com sucesso").queue();
 	}
 }
