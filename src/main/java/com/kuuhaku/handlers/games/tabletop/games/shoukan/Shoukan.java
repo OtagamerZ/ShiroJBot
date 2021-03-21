@@ -491,7 +491,7 @@ public class Shoukan extends GlobalGame {
 						d.setAvailable(false);
 						h.removeMana(e.getMana());
 						e.activate(h, hands.get(next), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
-						arena.getGraveyard().get(current).add(e);
+						arena.getGraveyard().get(current).add(e.copy());
 
 						if (makeFusion(h)) return;
 
@@ -1762,7 +1762,7 @@ public class Shoukan extends GlobalGame {
 
 		ch.reset();
 		if (!ch.isFusion())
-			arena.getGraveyard().get(side).add(ch);
+			arena.getGraveyard().get(side).add(ch.copy());
 	}
 
 	public void destroyCard(Side to, int target, Side from, int source) {
@@ -1801,7 +1801,7 @@ public class Shoukan extends GlobalGame {
 
 			ch.reset();
 			if (!ch.isFusion())
-				arena.getGraveyard().get(to).add(ch);
+				arena.getGraveyard().get(to).add(ch.copy());
 		}
 	}
 
@@ -1832,7 +1832,7 @@ public class Shoukan extends GlobalGame {
 
 		ch.reset();
 		if (!ch.isFusion())
-			arena.getGraveyard().get(to).add(ch);
+			arena.getGraveyard().get(to).add(ch.copy());
 	}
 
 	public void captureCard(Side to, int target, Side from, int source, boolean withFusion) {
@@ -1947,7 +1947,7 @@ public class Shoukan extends GlobalGame {
 		eq.setLinkedTo(null);
 
 		SlotColumn<Champion, Equipment> sd = side.get(index);
-		arena.getGraveyard().get(s).add(eq);
+		arena.getGraveyard().get(s).add(eq.copy());
 		sd.setBottom(null);
 	}
 
@@ -2201,7 +2201,7 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 
-				arena.getGraveyard().get(current).addAll(discardBatch);
+				arena.getGraveyard().get(current).addAll(discardBatch.stream().map(Drawable::copy).collect(Collectors.toList()));
 				discardBatch.clear();
 
 				if (getRound() > 0) reroll = false;
@@ -2456,7 +2456,7 @@ public class Shoukan extends GlobalGame {
 						}
 					}
 
-					arena.getGraveyard().get(current).addAll(discardBatch);
+					arena.getGraveyard().get(current).addAll(discardBatch.stream().map(Drawable::copy).collect(Collectors.toList()));
 					discardBatch.clear();
 
 					if (getRound() > 0) reroll = false;
