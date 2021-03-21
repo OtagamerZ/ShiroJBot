@@ -42,42 +42,38 @@ public class BugHuntCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() > 0) {
-			if (message.getMentionedUsers().size() == 1) {
-				resolveBugHuntByMention(message, channel);
-			} else {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_too-many-users-nv")).queue();
-			}
+			resolveBugHuntByMention(message, channel);
 		} else {
 			try {
 				if (Main.getInfo().getUserByID(args[0]) != null) {
 					try {
-                        resolveBugHuntById(args, channel);
-                    } catch (NoResultException e) {
-                        TagDAO.addUserTagsToDB(args[0]);
-                        resolveBugHuntById(args, channel);
-                    }
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user-nv")).queue();
-            }
-        }
-    }
+						resolveBugHuntById(args, channel);
+					} catch (NoResultException e) {
+						TagDAO.addUserTagsToDB(args[0]);
+						resolveBugHuntById(args, channel);
+					}
+				}
+			} catch (ArrayIndexOutOfBoundsException e) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			}
+		}
+	}
 
-    private void resolveBugHuntById(String[] args, MessageChannel channel) {
-        Account acc = AccountDAO.getAccount(args[0]);
+	private void resolveBugHuntById(String[] args, MessageChannel channel) {
+		Account acc = AccountDAO.getAccount(args[0]);
 
-        acc.addBug();
-        acc.addCredit(1000, this.getClass());
-        AccountDAO.saveAccount(acc);
+		acc.addBug();
+		acc.addCredit(1000, this.getClass());
+		AccountDAO.saveAccount(acc);
 		channel.sendMessage("<@" + args[0] + "> ajudou a matar um bug! (Ganhou 1.000 créditos)").queue();
-    }
+	}
 
-    private void resolveBugHuntByMention(Message message, MessageChannel channel) {
-        Account acc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
+	private void resolveBugHuntByMention(Message message, MessageChannel channel) {
+		Account acc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
 
-        acc.addBug();
-        acc.addCredit(1000, this.getClass());
+		acc.addBug();
+		acc.addCredit(1000, this.getClass());
 		AccountDAO.saveAccount(acc);
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " ajudou a matar um bug! (Ganhou 1.000 créditos)").queue();
-    }
+	}
 }
