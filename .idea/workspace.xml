@@ -14,8 +14,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BetaTagCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BetaTagCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BlacklistCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BlacklistCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1091,14 +1093,7 @@
       <workItem from="1616271019992" duration="2726000" />
       <workItem from="1616293413133" duration="38000" />
       <workItem from="1616294275278" duration="4570000" />
-      <workItem from="1616351123705" duration="324000" />
-    </task>
-    <task id="LOCAL-03989" summary="Correção nos calculos de chance">
-      <created>1615659962194</created>
-      <option name="number" value="03989" />
-      <option name="presentableId" value="LOCAL-03989" />
-      <option name="project" value="LOCAL" />
-      <updated>1615659962196</updated>
+      <workItem from="1616351123705" duration="1195000" />
     </task>
     <task id="LOCAL-03990" summary="Mudança na API de reações">
       <created>1615747125651</created>
@@ -1436,7 +1431,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616351256670</updated>
     </task>
-    <option name="localTasksCounter" value="4038" />
+    <task id="LOCAL-04038" summary="Correções menores">
+      <created>1616351708442</created>
+      <option name="number" value="04038" />
+      <option name="presentableId" value="LOCAL-04038" />
+      <option name="project" value="LOCAL" />
+      <updated>1616351708442</updated>
+    </task>
+    <option name="localTasksCounter" value="4039" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

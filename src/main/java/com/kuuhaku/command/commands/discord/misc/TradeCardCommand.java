@@ -37,7 +37,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -581,8 +580,10 @@ public class TradeCardCommand implements Executable {
 
 								acc.removeCredit(price, this.getClass());
 								tacc.addCredit(Math.round(price * (1 - tax)), this.getClass());
-								long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
-								DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(price * tax)));
+
+								LotteryValue lv = LotteryDAO.getLotteryValue();
+								lv.addValue(Math.round(price * tax));
+								LotteryDAO.saveLotteryValue(lv);
 
 								KawaiponDAO.saveKawaipon(finalKp);
 								KawaiponDAO.saveKawaipon(finalTarget);
@@ -791,8 +792,10 @@ public class TradeCardCommand implements Executable {
 
 								tacc.removeCredit(price, this.getClass());
 								acc.addCredit(Math.round(price * (1 - tax)), this.getClass());
-								long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
-								DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(price * tax)));
+
+								LotteryValue lv = LotteryDAO.getLotteryValue();
+								lv.addValue(Math.round(price * tax));
+								LotteryDAO.saveLotteryValue(lv);
 
 								KawaiponDAO.saveKawaipon(finalKp);
 								KawaiponDAO.saveKawaipon(finalTarget);
