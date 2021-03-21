@@ -22,16 +22,16 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 @Command(
 		name = "transferir",
@@ -79,8 +79,10 @@ public class TransferCommand implements Executable {
 
 		to.addCredit(liquidAmount, this.getClass());
 		from.removeCredit(rawAmount, this.getClass());
-		long accumulated = NumberUtils.toLong(DynamicParameterDAO.getParam("tributes").getValue());
-		DynamicParameterDAO.setParam("tributes", String.valueOf(accumulated + Math.round(rawAmount * tax)));
+
+		LotteryValue lv = LotteryDAO.getLotteryValue();
+		lv.addValue(Math.round(rawAmount * tax));
+		LotteryDAO.saveLotteryValue(lv);
 
 		AccountDAO.saveAccount(to);
 		AccountDAO.saveAccount(from);
