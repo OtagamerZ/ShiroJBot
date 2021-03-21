@@ -191,7 +191,7 @@ public class SlotsCommand implements Executable {
 
 			boolean pot = false;
 			if (jackpot >= 3) {
-				bet.set(slt.jackpot() * (jackpot - 2));
+				bet.set(slt.jackpot());
 				pot = true;
 				msg = "Impossível, " + author.getAsMention() + " detonou a loteria. **JACKPOT**!!!";
 				win = true;

@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1089,14 +1089,7 @@
       <workItem from="1616169589444" duration="4412000" />
       <workItem from="1616271019992" duration="2726000" />
       <workItem from="1616293413133" duration="38000" />
-      <workItem from="1616294275278" duration="2924000" />
-    </task>
-    <task id="LOCAL-03987" summary="Correção nas transações de membros">
-      <created>1615579782321</created>
-      <option name="number" value="03987" />
-      <option name="presentableId" value="LOCAL-03987" />
-      <option name="project" value="LOCAL" />
-      <updated>1615579782321</updated>
+      <workItem from="1616294275278" duration="4570000" />
     </task>
     <task id="LOCAL-03988" summary="Correção nas transações de membros">
       <created>1615580012762</created>
@@ -1434,7 +1427,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616296266063</updated>
     </task>
-    <option name="localTasksCounter" value="4036" />
+    <task id="LOCAL-04036" summary="Correções menores">
+      <created>1616297265721</created>
+      <option name="number" value="04036" />
+      <option name="presentableId" value="LOCAL-04036" />
+      <option name="project" value="LOCAL" />
+      <updated>1616297265721</updated>
+    </task>
+    <option name="localTasksCounter" value="4037" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
