@@ -170,8 +170,8 @@ public class Arena {
 						}
 					}
 
-					float prcnt = h.getHp() / 5000f;
-					g2d.setColor(prcnt > 0.75d ? Color.green : prcnt > 0.5d ? Color.yellow : Color.red);
+					float prcnt = (float) h.getHp() / h.getBaseHp();
+					g2d.setColor(prcnt > 2 / 3f ? Color.green : prcnt > 1 / 3f ? Color.yellow : Color.red);
 					g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 75));
 					Profile.drawOutlinedText(
 							"HP: " + h.getHp(),
