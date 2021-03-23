@@ -158,21 +158,11 @@ public class EquipmentMarketDAO {
 				%s
 				""";
 
-		String priceCheck = """
-				AND em.price <= CASE c.rarity
-					WHEN com.kuuhaku.model.enums.KawaiponRarity.COMMON THEN 1
-					WHEN com.kuuhaku.model.enums.KawaiponRarity.UNCOMMON THEN 2
-					WHEN com.kuuhaku.model.enums.KawaiponRarity.RARE THEN 3
-					WHEN com.kuuhaku.model.enums.KawaiponRarity.ULTRA_RARE THEN 4
-					WHEN com.kuuhaku.model.enums.KawaiponRarity.LEGENDARY THEN 5
-				END * :base * CASE em.foil WHEN TRUE THEN 100 ELSE 50 END
-				""";
-
 		String[] params = {
 				name != null ? "AND c.id LIKE UPPER(:name)" : "",
 				min > -1 ? "AND em.price > :min" : "",
 				max > -1 ? "AND em.price < :max" : "",
-				tier > -1 ? "AND e.tier == :tier" : "",
+				tier > -1 ? "AND e.tier = :tier" : "",
 				seller != null ? "AND em.seller = :seller" : "",
 				seller == null ? "AND em.price <= e.tier * :base * 50" : "",
 				"ORDER BY em.price, c.id"
