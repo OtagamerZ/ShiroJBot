@@ -21,20 +21,16 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.enums.StorageUnit;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.List;
+import java.io.InputStream;
 
 @Command(
 		name = "background",
@@ -52,19 +48,15 @@ public class BackgroundCommand implements Executable {
 		}
 
 		try {
-			HttpURLConnection con = (HttpURLConnection) new URL(args[0]).openConnection();
-			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			BufferedImage bi = ImageIO.read(con.getInputStream());
-			con.disconnect();
-			bi.flush();
+			InputStream is = Helper.getImage(args[0]);
+			byte[] bytes = is.readAllBytes();
 
-			if (Helper.getFileType(args[0]).contains("gif") && (bi.getWidth() < 400 || bi.getHeight() < 254)) {
-				channel.sendMessage("❌ | Fundos de perfil animados devem ter no mínimo 400px de largura e 254px de altura!").queue();
+			if (bytes.length > StorageUnit.B.convert(4, StorageUnit.MB)) {
+				channel.sendMessage("❌ | Só são permitidas imagens de até 4 MB.").queue();
 				return;
 			}
 
 			Account acc = AccountDAO.getAccount(author.getId());
-			List<com.kuuhaku.model.persistent.Member> ms = MemberDAO.getMemberByMid(author.getId());
 			acc.setBackground(args[0]);
 			AccountDAO.saveAccount(acc);
 			if (args[0].contains("discordapp"))
