@@ -29,7 +29,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.io.IOException;
-import java.util.Objects;
 
 @Command(
 		name = "emote",
@@ -51,13 +50,24 @@ public class EmoteCommand implements Executable {
 			Emote cached = Main.getShiroShards().getEmoteById(emt.getId());
 			EmbedBuilder eb = new EmbedBuilder()
 					.setTitle(emt.getName(), emt.getImageUrl())
-					.addField(
-							"Guild: " + (cached == null ? "desconhecido" : Objects.requireNonNull(cached.getGuild()).getName()),
-							"**ID:** " + emt.getId(),
-							true
-					)
 					.setThumbnail(emt.getImageUrl())
 					.setColor(Helper.colorThief(emt.getImageUrl()));
+
+			if (cached == null) {
+				eb.addField(
+						"Servidor: desconhecido",
+						"**ID:** " + emt.getId(),
+						true
+				);
+			} else {
+				Guild g = cached.getGuild();
+
+				eb.addField(
+						"Servidor: " + (g == null ? "desconhecido" : cached.getGuild().getName()),
+						"**ID:** " + emt.getId(),
+						true
+				);
+			}
 
 			channel.sendMessage(eb.build()).queue();
 		} catch (IOException e) {
