@@ -13,17 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções visuais menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/StorageUnit.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/EmoteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/EmoteCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/OpenTicketCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/OpenTicketCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddEmoteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddEmoteCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/EquipmentMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/EquipmentMarketDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,17 +189,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1114,14 +1095,8 @@
       <workItem from="1616357181216" duration="639000" />
       <workItem from="1616446811173" duration="30000" />
       <workItem from="1616446927708" duration="977000" />
-      <workItem from="1616527878374" duration="3552000" />
-    </task>
-    <task id="LOCAL-03992" summary="Mudança na API de reações">
-      <created>1615748042678</created>
-      <option name="number" value="03992" />
-      <option name="presentableId" value="LOCAL-03992" />
-      <option name="project" value="LOCAL" />
-      <updated>1615748042678</updated>
+      <workItem from="1616527878374" duration="3670000" />
+      <workItem from="1616558349842" duration="692000" />
     </task>
     <task id="LOCAL-03993" summary="Redução no tamanho dos GIFs e melhoria no comando de dados de partida">
       <created>1615778157040</created>
@@ -1459,7 +1434,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616447247373</updated>
     </task>
-    <option name="localTasksCounter" value="4041" />
+    <task id="LOCAL-04041" summary="Correções menores">
+      <created>1616532867820</created>
+      <option name="number" value="04041" />
+      <option name="presentableId" value="LOCAL-04041" />
+      <option name="project" value="LOCAL" />
+      <updated>1616532867821</updated>
+    </task>
+    <option name="localTasksCounter" value="4042" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1567,10 +1549,10 @@
     <MESSAGE value="Correção menor no Shoukan" />
     <MESSAGE value="Aumento na quantidade de colunas no livro de Kawaipons" />
     <MESSAGE value="Correção na organização das cartas" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Loteria agora é acumulada com taxas" />
     <MESSAGE value="Correções visuais menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções visuais menores" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
