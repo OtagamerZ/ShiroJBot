@@ -54,6 +54,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -1723,7 +1724,7 @@ public class Shoukan extends GlobalGame {
 				SlotColumn<Champion, Equipment> slt = slts.get(i);
 				if (slt.getTop() == null) {
 					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
-					slt.setTop(aFusion.copy());
+					slt.setTop(aFusion);
 					if (eot.size() > 0) {
 						applyEot(EffectTrigger.ON_SUMMON, current, i);
 						if (postCombat()) return true;
@@ -2764,8 +2765,11 @@ public class Shoukan extends GlobalGame {
 						.setUsername(c.getName());
 
 				if (gif != null) {
-					File f = new File(this.getClass().getClassLoader().getResource("shoukan/gifs/" + gif + ".gif").toURI());
-					wmb.addFile("effect.gif", f);
+					URL url = this.getClass().getClassLoader().getResource("shoukan/gifs/" + gif + ".gif");
+					if (url != null) {
+						File f = new File(url.toURI());
+						wmb.addFile("effect.gif", f);
+					}
 				}
 
 				try {
