@@ -53,7 +53,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -2767,7 +2766,7 @@ public class Shoukan extends GlobalGame {
 				if (gif != null) {
 					URL url = this.getClass().getClassLoader().getResource("shoukan/gifs/" + gif + ".gif");
 					if (url != null) {
-						File f = new File(url.toURI());
+						File f = new File(url.getFile());
 						wmb.addFile("effect.gif", f);
 					}
 				}
@@ -2779,7 +2778,7 @@ public class Shoukan extends GlobalGame {
 				} catch (InterruptedException | ExecutionException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
-			} catch (InsufficientPermissionException | InterruptedException | ExecutionException | URISyntaxException ignore) {
+			} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
 			}
 		}
 	}
