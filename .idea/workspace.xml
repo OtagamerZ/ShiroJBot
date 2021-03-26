@@ -14,8 +14,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,6 +136,9 @@
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
+  <component name="ReaderModeSettings">
+    <option name="enabled" value="false" />
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
@@ -189,6 +196,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1096,14 +1114,11 @@
       <workItem from="1616446811173" duration="30000" />
       <workItem from="1616446927708" duration="977000" />
       <workItem from="1616527878374" duration="3670000" />
-      <workItem from="1616558349842" duration="692000" />
-    </task>
-    <task id="LOCAL-03993" summary="Redução no tamanho dos GIFs e melhoria no comando de dados de partida">
-      <created>1615778157040</created>
-      <option name="number" value="03993" />
-      <option name="presentableId" value="LOCAL-03993" />
-      <option name="project" value="LOCAL" />
-      <updated>1615778157040</updated>
+      <workItem from="1616558349842" duration="1427000" />
+      <workItem from="1616641654596" duration="2134000" />
+      <workItem from="1616697156761" duration="895000" />
+      <workItem from="1616702159657" duration="926000" />
+      <workItem from="1616731566309" duration="593000" />
     </task>
     <task id="LOCAL-03994" summary="Redução no tamanho dos GIFs e melhoria no comando de dados de partida">
       <created>1615778357566</created>
@@ -1441,7 +1456,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616532867821</updated>
     </task>
-    <option name="localTasksCounter" value="4042" />
+    <task id="LOCAL-04042" summary="Correções menores">
+      <created>1616559065480</created>
+      <option name="number" value="04042" />
+      <option name="presentableId" value="LOCAL-04042" />
+      <option name="project" value="LOCAL" />
+      <updated>1616559065480</updated>
+    </task>
+    <option name="localTasksCounter" value="4043" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
