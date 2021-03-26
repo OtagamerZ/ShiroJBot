@@ -58,46 +58,50 @@ public class KickClanMemberCommand implements Executable {
 			return;
 		}
 
-		User usr = message.getMentionedUsers().isEmpty() ? Main.getInfo().getUserByID(args[0]) : message.getMentionedUsers().get(0);
+		try {
+			User usr = message.getMentionedUsers().isEmpty() ? Main.getInfo().getUserByID(args[0]) : message.getMentionedUsers().get(0);
 
-		if (usr == null) {
-			if (c.getMembers().get(args[0]) == null) {
-				channel.sendMessage("❌ | Membro inexistente.").queue();
-				return;
-			} else if (c.getMembers().get(args[0]).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
-				channel.sendMessage("❌ | Você não pode expulsar membros com hierarquia maior ou igual à sua.").queue();
-				return;
+			if (usr == null) {
+				if (c.getMembers().get(args[0]) == null) {
+					channel.sendMessage("❌ | Membro inexistente.").queue();
+					return;
+				} else if (c.getMembers().get(args[0]).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
+					channel.sendMessage("❌ | Você não pode expulsar membros com hierarquia maior ou igual à sua.").queue();
+					return;
+				}
+			} else {
+				if (c.getMembers().get(usr.getId()) == null) {
+					channel.sendMessage("❌ | Membro inexistente.").queue();
+					return;
+				} else if (c.getMembers().get(usr.getId()).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
+					channel.sendMessage("❌ | Você não pode expulsar membros com hierarquia maior ou igual à sua.").queue();
+					return;
+				}
 			}
-		} else {
-			if (c.getMembers().get(usr.getId()) == null) {
-				channel.sendMessage("❌ | Membro inexistente.").queue();
-				return;
-			} else if (c.getMembers().get(usr.getId()).ordinal() <= c.getMembers().get(author.getId()).ordinal()) {
-				channel.sendMessage("❌ | Você não pode expulsar membros com hierarquia maior ou igual à sua.").queue();
-				return;
-			}
+
+			String hash = Helper.generateHash(guild, author);
+			ShiroInfo.getHashes().add(hash);
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			channel.sendMessage("Tem certeza que deseja expulsar o membro " + (usr == null ? "ID " + args[0] : usr.getName()) + "?")
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+								if (!ShiroInfo.getHashes().remove(hash)) return;
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+
+								if (usr != null) c.kick(usr, author);
+								else c.kick(args[0], author);
+
+								ClanDAO.saveClan(c);
+
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Membro expulso com sucesso.")).queue();
+							}), true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> {
+								ShiroInfo.getHashes().remove(hash);
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+							})
+					);
+		} catch (NumberFormatException e) {
+			channel.sendMessage("❌ | Você precisa digitar o ID ou mencionar o usuário que deseja remover dor clã.").queue();
 		}
-
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
-		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja expulsar o membro " + (usr == null ? "ID " + args[0] : usr.getName()) + "?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-							if (!ShiroInfo.getHashes().remove(hash)) return;
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-
-							if (usr != null) c.kick(usr, author);
-							else c.kick(args[0], author);
-
-							ClanDAO.saveClan(c);
-
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Membro expulso com sucesso.")).queue();
-						}), true, 1, TimeUnit.MINUTES,
-						u -> u.getId().equals(author.getId()),
-						ms -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-						})
-				);
 	}
 }
