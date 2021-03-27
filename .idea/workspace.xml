@@ -1103,13 +1103,9 @@
       <workItem from="1616697156761" duration="895000" />
       <workItem from="1616702159657" duration="926000" />
       <workItem from="1616731566309" duration="1427000" />
-    </task>
-    <task id="LOCAL-03996" summary="Adicionadas mais medidas de segurança na Jibril">
-      <created>1615810326534</created>
-      <option name="number" value="03996" />
-      <option name="presentableId" value="LOCAL-03996" />
-      <option name="project" value="LOCAL" />
-      <updated>1615810326535</updated>
+      <workItem from="1616783201173" duration="867000" />
+      <workItem from="1616816888880" duration="1875000" />
+      <workItem from="1616881040102" duration="335000" />
     </task>
     <task id="LOCAL-03997" summary="Melhoria na busca na loja de cartas">
       <created>1615815230996</created>
@@ -1447,7 +1443,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616732539223</updated>
     </task>
-    <option name="localTasksCounter" value="4045" />
+    <task id="LOCAL-04045" summary="Correções menores">
+      <created>1616783425592</created>
+      <option name="number" value="04045" />
+      <option name="presentableId" value="LOCAL-04045" />
+      <option name="project" value="LOCAL" />
+      <updated>1616783425593</updated>
+    </task>
+    <option name="localTasksCounter" value="4046" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
