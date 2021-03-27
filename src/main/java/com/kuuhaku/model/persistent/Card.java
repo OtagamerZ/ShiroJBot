@@ -83,9 +83,11 @@ public class Card {
 				try {
 					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
 				} catch (IOException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					return null;
 				}
 			});
+
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
