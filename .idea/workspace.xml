@@ -14,10 +14,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Reversão pra versão 2.1.6 de paginação">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1109,14 +1109,8 @@
       <workItem from="1616783201173" duration="867000" />
       <workItem from="1616816888880" duration="1875000" />
       <workItem from="1616881040102" duration="1682000" />
-      <workItem from="1616885260656" duration="1779000" />
-    </task>
-    <task id="LOCAL-03998" summary="Melhoria na busca na loja de cartas">
-      <created>1615816208410</created>
-      <option name="number" value="03998" />
-      <option name="presentableId" value="LOCAL-03998" />
-      <option name="project" value="LOCAL" />
-      <updated>1615816208411</updated>
+      <workItem from="1616885260656" duration="2435000" />
+      <workItem from="1616899256826" duration="303000" />
     </task>
     <task id="LOCAL-03999" summary="Melhoria na busca na loja de cartas">
       <created>1615816833336</created>
@@ -1454,7 +1448,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616881601397</updated>
     </task>
-    <option name="localTasksCounter" value="4047" />
+    <task id="LOCAL-04047" summary="Reversão pra versão 2.1.6 de paginação">
+      <created>1616888872744</created>
+      <option name="number" value="04047" />
+      <option name="presentableId" value="LOCAL-04047" />
+      <option name="project" value="LOCAL" />
+      <updated>1616888872745</updated>
+    </task>
+    <option name="localTasksCounter" value="4048" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
