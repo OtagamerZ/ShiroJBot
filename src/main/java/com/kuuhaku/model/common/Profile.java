@@ -100,7 +100,7 @@ public class Profile {
 				g2d.drawImage(bg, 0, 0, null);
 			if (main == null)
 				main = Helper.reverseColor(Helper.colorThief(acc.getBg()));
-		} catch (IOException e) {
+		} catch (IOException | NullPointerException e) {
 			BufferedImage bg = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
 			g2d.drawImage(bg, xOffset, yOffset, null);

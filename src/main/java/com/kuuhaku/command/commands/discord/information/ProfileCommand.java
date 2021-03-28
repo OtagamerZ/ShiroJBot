@@ -57,7 +57,6 @@ public class ProfileCommand implements Executable {
 					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(Helper.getBytes(Profile.makeProfile(member, guild), "png"), "perfil.png").queue(s -> m.delete().queue());
 			} catch (IOException | NullPointerException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-generation-error")).queue();
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			} catch (InsufficientPermissionException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-attach-files-permission")).queue();
 			}
