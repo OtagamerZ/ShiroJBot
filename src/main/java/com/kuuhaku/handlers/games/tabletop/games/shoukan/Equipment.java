@@ -271,19 +271,7 @@ public class Equipment implements Drawable, Cloneable {
 	public void activate(Hand you, Hand opponent, Shoukan game, int allyPos, int enemyPos) {
 		String imports = """
 				//%s
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArenaField;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.EffectOverTime;
+				import com.kuuhaku.handlers.games.tabletop.games.shoukan.*;
 				import com.kuuhaku.controller.postgresql.AccountDAO;
 				import com.kuuhaku.controller.postgresql.CardDAO;
 				import org.apache.commons.lang3.tuple.Pair;

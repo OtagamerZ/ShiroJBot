@@ -13,9 +13,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Reversão pra versão 2.1.6 da biblioteca de paginação">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionados contadores de cartas no cemitério">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1109,14 +1112,8 @@
       <workItem from="1616881040102" duration="1682000" />
       <workItem from="1616885260656" duration="2435000" />
       <workItem from="1616899256826" duration="3117000" />
-      <workItem from="1616967100904" duration="3997000" />
-    </task>
-    <task id="LOCAL-04001" summary="Melhoria na busca na loja de cartas">
-      <created>1615824349024</created>
-      <option name="number" value="04001" />
-      <option name="presentableId" value="LOCAL-04001" />
-      <option name="project" value="LOCAL" />
-      <updated>1615824349025</updated>
+      <workItem from="1616967100904" duration="4145000" />
+      <workItem from="1616993305806" duration="2339000" />
     </task>
     <task id="LOCAL-04002" summary="Melhoria na busca na loja de cartas">
       <created>1615824857782</created>
@@ -1454,7 +1451,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616902627675</updated>
     </task>
-    <option name="localTasksCounter" value="4050" />
+    <task id="LOCAL-04050" summary="Adicionados contadores de cartas no cemitério">
+      <created>1616976812995</created>
+      <option name="number" value="04050" />
+      <option name="presentableId" value="LOCAL-04050" />
+      <option name="project" value="LOCAL" />
+      <updated>1616976812995</updated>
+    </task>
+    <option name="localTasksCounter" value="4051" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1540,7 +1544,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Removida maior parte das persistências no banco local" />
     <MESSAGE value="Adicionada chance para cartas killcard" />
     <MESSAGE value="Correções nas transações de servidor" />
     <MESSAGE value="Removida passiva secreta das cartas de 1 de mana" />
@@ -1565,7 +1568,8 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Reversão pra versão 2.1.6 de paginação" />
     <MESSAGE value="Reversão pra versão 2.1.6 da biblioteca de paginação" />
-    <option name="LAST_COMMIT_MESSAGE" value="Reversão pra versão 2.1.6 da biblioteca de paginação" />
+    <MESSAGE value="Adicionados contadores de cartas no cemitério" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionados contadores de cartas no cemitério" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
