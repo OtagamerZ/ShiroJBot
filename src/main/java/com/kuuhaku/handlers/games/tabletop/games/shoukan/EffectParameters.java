@@ -47,6 +47,7 @@ public class EffectParameters {
 			import com.kuuhaku.handlers.games.tabletop.games.shoukan.*;
 			import com.kuuhaku.controller.postgresql.AccountDAO;
 			import com.kuuhaku.controller.postgresql.CardDAO;
+			import com.kuuhaku.model.persistent.Account;
 			import org.apache.commons.lang3.tuple.Pair;
 			import java.util.function.BiConsumer;
 			import com.kuuhaku.utils.Helper;
