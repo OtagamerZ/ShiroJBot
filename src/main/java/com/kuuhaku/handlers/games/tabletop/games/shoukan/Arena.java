@@ -138,7 +138,7 @@ public class Arena {
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Champion).count()), 2, "0"),
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Equipment).count()), 2, "0"),
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Field).count()), 2, "0")
-								), 225, 1889, 183, g2d);
+								), 225, 1889, 178, g2d);
 							}
 							if (h.getDeque().size() > 0) {
 								Drawable d = h.getDeque().peek();
@@ -172,7 +172,7 @@ public class Arena {
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Champion).count()), 2, "0"),
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Equipment).count()), 2, "0"),
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Field).count()), 2, "0")
-								), 225, 137, 1641, g2d);
+								), 225, 137, 1638, g2d);
 							}
 							if (h.getDeque().size() > 0) {
 								Drawable d = h.getDeque().peek();
