@@ -99,7 +99,7 @@ public class Arena {
 				Hand h = hands.get(key);
 				LinkedList<Drawable> grv = graveyard.get(key);
 				g2d.setColor(Color.white);
-				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 100));
+				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 75));
 
 				String name;
 				if (game.getClans() != null) {
@@ -113,9 +113,9 @@ public class Arena {
 				}
 
 				if (key == Side.TOP)
-					Profile.printCenteredString(name, 1253, 499, 824, g2d);
+					Profile.printCenteredString(name, 1253, 499, 799, g2d);
 				else
-					Profile.printCenteredString(name, 1253, 499, 989, g2d);
+					Profile.printCenteredString(name, 1253, 499, 1014, g2d);
 
 				for (int i = 0; i < value.size(); i++) {
 					SlotColumn<Champion, Equipment> c = value.get(i);
@@ -129,13 +129,21 @@ public class Arena {
 								Equipment d = c.getBottom();
 								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 0, null);
 							}
-							if (grv.size() > 0)
+
+							if (grv.size() > 0) {
 								g2d.drawImage(grv.peekLast().drawCard(false), 1889, 193, null);
+								Profile.printCenteredString("%s/%s/%s".formatted(
+										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Champion).count()), 2, "0"),
+										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Equipment).count()), 2, "0"),
+										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Field).count()), 2, "0")
+								), 225, 1889, 503, g2d);
+							}
 							if (h.getDeque().size() > 0) {
 								Drawable d = h.getDeque().peek();
 								assert d != null;
 								g2d.drawImage(d.drawCard(true), 137, 193, null);
 							}
+
 							if (h.getLockTime() > 0) {
 								try {
 									BufferedImage lock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/locked.png")));
@@ -153,13 +161,21 @@ public class Arena {
 								Equipment d = c.getBottom();
 								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1400, null);
 							}
-							if (grv.size() > 0)
+
+							if (grv.size() > 0) {
 								g2d.drawImage(grv.peekLast().drawCard(false), 137, 1206, null);
+								Profile.printCenteredString("%s/%s/%s".formatted(
+										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Champion).count()), 2, "0"),
+										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Equipment).count()), 2, "0"),
+										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Field).count()), 2, "0")
+								), 225, 137, 1196, g2d);
+							}
 							if (h.getDeque().size() > 0) {
 								Drawable d = h.getDeque().peek();
 								assert d != null;
 								g2d.drawImage(d.drawCard(true), 1889, 1206, null);
 							}
+
 							if (h.getLockTime() > 0) {
 								try {
 									BufferedImage lock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/locked.png")));
@@ -173,15 +189,19 @@ public class Arena {
 					float prcnt = (float) h.getHp() / h.getBaseHp();
 					g2d.setColor(prcnt > 2 / 3f ? Color.green : prcnt > 1 / 3f ? Color.yellow : Color.red);
 					g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 75));
+
+					String hp = StringUtils.leftPad(String.valueOf(h.getHp()), 4, "0");
+					String mp = h.isNullMode() ? "--" : StringUtils.leftPad(String.valueOf(h.getMana()), 2, "0");
+
 					Profile.drawOutlinedText(
-							"HP: " + h.getHp(),
-							key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("HP: " + h.getHp()),
+							"HP: " + hp,
+							key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + hp),
 							key == Side.TOP ? 82 : 1638, g2d
 					);
 					g2d.setColor(h.isNullMode() ? new Color(88, 0, 255) : Color.cyan);
 					Profile.drawOutlinedText(
-							"MP: " + (h.isNullMode() ? "--" : h.getMana()),
-							key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + (h.isNullMode() ? "ø" : h.getMana())),
+							"MP: " + mp,
+							key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + mp),
 							key == Side.TOP ? 178 : 1735, g2d
 					);
 				}
