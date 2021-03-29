@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionados mais 2 gatilhos de efeito">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1110,14 +1111,7 @@
       <workItem from="1616899256826" duration="3117000" />
       <workItem from="1616967100904" duration="4145000" />
       <workItem from="1616993305806" duration="2455000" />
-      <workItem from="1617042223139" duration="2079000" />
-    </task>
-    <task id="LOCAL-04004" summary="Melhoria no controle dos atributos dos campeões">
-      <created>1615862771766</created>
-      <option name="number" value="04004" />
-      <option name="presentableId" value="LOCAL-04004" />
-      <option name="project" value="LOCAL" />
-      <updated>1615862771766</updated>
+      <workItem from="1617042223139" duration="3831000" />
     </task>
     <task id="LOCAL-04005" summary="Correção nas GIFs enviadas durante o Shoukan">
       <created>1615896583838</created>
@@ -1455,7 +1449,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617050229586</updated>
     </task>
-    <option name="localTasksCounter" value="4053" />
+    <task id="LOCAL-04053" summary="Adicionados mais 2 gatilhos de efeito">
+      <created>1617051879397</created>
+      <option name="number" value="04053" />
+      <option name="presentableId" value="LOCAL-04053" />
+      <option name="project" value="LOCAL" />
+      <updated>1617051879397</updated>
+    </task>
+    <option name="localTasksCounter" value="4054" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

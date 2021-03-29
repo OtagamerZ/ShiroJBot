@@ -113,14 +113,16 @@ public class Arena {
 				}
 
 				if (key == Side.TOP)
-					Profile.printCenteredString(name, 1253, 499, 799, g2d);
+					Profile.printCenteredString(name, 1253, 499, 800, g2d);
 				else
-					Profile.printCenteredString(name, 1253, 499, 1014, g2d);
+					Profile.printCenteredString(name, 1253, 499, 1025, g2d);
 
 				for (int i = 0; i < value.size(); i++) {
 					SlotColumn<Champion, Equipment> c = value.get(i);
 					switch (key) {
 						case TOP -> {
+							g2d.setColor(Color.white);
+
 							if (c.getTop() != null) {
 								Champion d = c.getTop();
 								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 387, null);
@@ -136,7 +138,7 @@ public class Arena {
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Champion).count()), 2, "0"),
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Equipment).count()), 2, "0"),
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Field).count()), 2, "0")
-								), 225, 1889, 503, g2d);
+								), 225, 1889, 183, g2d);
 							}
 							if (h.getDeque().size() > 0) {
 								Drawable d = h.getDeque().peek();
@@ -153,6 +155,8 @@ public class Arena {
 							}
 						}
 						case BOTTOM -> {
+							g2d.setColor(Color.white);
+
 							if (c.getTop() != null) {
 								Champion d = c.getTop();
 								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1013, null);
@@ -168,7 +172,7 @@ public class Arena {
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Champion).count()), 2, "0"),
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Equipment).count()), 2, "0"),
 										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Field).count()), 2, "0")
-								), 225, 137, 1196, g2d);
+								), 225, 137, 1441, g2d);
 							}
 							if (h.getDeque().size() > 0) {
 								Drawable d = h.getDeque().peek();
