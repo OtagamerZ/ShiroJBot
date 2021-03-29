@@ -269,17 +269,7 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public void activate(Hand you, Hand opponent, Shoukan game, int allyPos, int enemyPos) {
-		String imports = """
-				//%s
-				import com.kuuhaku.handlers.games.tabletop.games.shoukan.*;
-				import com.kuuhaku.controller.postgresql.AccountDAO;
-				import com.kuuhaku.controller.postgresql.CardDAO;
-				import org.apache.commons.lang3.tuple.Pair;
-				import java.util.function.BiConsumer;
-				import com.kuuhaku.utils.Helper;
-				import org.json.JSONArray;
-				          				
-				          """.formatted(card.getName());
+		String imports = EffectParameters.IMPORTS.formatted(card.getName());
 
 		try {
 			Interpreter i = new Interpreter();
