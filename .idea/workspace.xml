@@ -15,7 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionados mais 2 gatilhos de efeito">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1111,21 +1112,7 @@
       <workItem from="1616899256826" duration="3117000" />
       <workItem from="1616967100904" duration="4145000" />
       <workItem from="1616993305806" duration="2455000" />
-      <workItem from="1617042223139" duration="5360000" />
-    </task>
-    <task id="LOCAL-04006" summary="Mudança no tamanho das imagens de clã">
-      <created>1615903761201</created>
-      <option name="number" value="04006" />
-      <option name="presentableId" value="LOCAL-04006" />
-      <option name="project" value="LOCAL" />
-      <updated>1615903761201</updated>
-    </task>
-    <task id="LOCAL-04007" summary="Correção na perda de perfil ao re-entrar no servidor">
-      <created>1615917323543</created>
-      <option name="number" value="04007" />
-      <option name="presentableId" value="LOCAL-04007" />
-      <option name="project" value="LOCAL" />
-      <updated>1615917323544</updated>
+      <workItem from="1617042223139" duration="5985000" />
     </task>
     <task id="LOCAL-04008" summary="Correção na perda de perfil ao re-entrar no servidor">
       <created>1615918681620</created>
@@ -1456,7 +1443,21 @@
       <option name="project" value="LOCAL" />
       <updated>1617055579823</updated>
     </task>
-    <option name="localTasksCounter" value="4055" />
+    <task id="LOCAL-04055" summary="Adicionados mais 2 gatilhos de efeito">
+      <created>1617061523642</created>
+      <option name="number" value="04055" />
+      <option name="presentableId" value="LOCAL-04055" />
+      <option name="project" value="LOCAL" />
+      <updated>1617061523642</updated>
+    </task>
+    <task id="LOCAL-04056" summary="Adicionados mais 2 gatilhos de efeito">
+      <created>1617061713044</created>
+      <option name="number" value="04056" />
+      <option name="presentableId" value="LOCAL-04056" />
+      <option name="project" value="LOCAL" />
+      <updated>1617061713044</updated>
+    </task>
+    <option name="localTasksCounter" value="4057" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
