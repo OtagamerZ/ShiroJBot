@@ -1111,14 +1111,7 @@
       <workItem from="1616899256826" duration="3117000" />
       <workItem from="1616967100904" duration="4145000" />
       <workItem from="1616993305806" duration="2455000" />
-      <workItem from="1617042223139" duration="3831000" />
-    </task>
-    <task id="LOCAL-04005" summary="Correção nas GIFs enviadas durante o Shoukan">
-      <created>1615896583838</created>
-      <option name="number" value="04005" />
-      <option name="presentableId" value="LOCAL-04005" />
-      <option name="project" value="LOCAL" />
-      <updated>1615896583839</updated>
+      <workItem from="1617042223139" duration="5360000" />
     </task>
     <task id="LOCAL-04006" summary="Mudança no tamanho das imagens de clã">
       <created>1615903761201</created>
@@ -1456,7 +1449,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617051879397</updated>
     </task>
-    <option name="localTasksCounter" value="4054" />
+    <task id="LOCAL-04054" summary="Adicionados mais 2 gatilhos de efeito">
+      <created>1617055579823</created>
+      <option name="number" value="04054" />
+      <option name="presentableId" value="LOCAL-04054" />
+      <option name="project" value="LOCAL" />
+      <updated>1617055579823</updated>
+    </task>
+    <option name="localTasksCounter" value="4055" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
