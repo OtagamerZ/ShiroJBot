@@ -15,7 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Reversão pra versão 2.1.6 da biblioteca de paginação">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1108,14 +1108,8 @@
       <workItem from="1616816888880" duration="1875000" />
       <workItem from="1616881040102" duration="1682000" />
       <workItem from="1616885260656" duration="2435000" />
-      <workItem from="1616899256826" duration="2978000" />
-    </task>
-    <task id="LOCAL-04000" summary="Melhoria na busca na loja de cartas">
-      <created>1615817307461</created>
-      <option name="number" value="04000" />
-      <option name="presentableId" value="LOCAL-04000" />
-      <option name="project" value="LOCAL" />
-      <updated>1615817307461</updated>
+      <workItem from="1616899256826" duration="3117000" />
+      <workItem from="1616967100904" duration="3997000" />
     </task>
     <task id="LOCAL-04001" summary="Melhoria na busca na loja de cartas">
       <created>1615824349024</created>
@@ -1453,7 +1447,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616899613843</updated>
     </task>
-    <option name="localTasksCounter" value="4049" />
+    <task id="LOCAL-04049" summary="Reversão pra versão 2.1.6 da biblioteca de paginação">
+      <created>1616902627675</created>
+      <option name="number" value="04049" />
+      <option name="presentableId" value="LOCAL-04049" />
+      <option name="project" value="LOCAL" />
+      <updated>1616902627675</updated>
+    </task>
+    <option name="localTasksCounter" value="4050" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
