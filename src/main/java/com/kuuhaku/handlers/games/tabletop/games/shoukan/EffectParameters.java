@@ -40,6 +40,20 @@ public class EffectParameters {
 	private final Duelists duelists;
 	private final GameChannel channel;
 
+	public static final String IMPORTS = """
+			//%s
+			import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.*;
+			import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
+			import com.kuuhaku.handlers.games.tabletop.games.shoukan.*;
+			import com.kuuhaku.controller.postgresql.AccountDAO;
+			import com.kuuhaku.controller.postgresql.CardDAO;
+			import org.apache.commons.lang3.tuple.Pair;
+			import java.util.function.BiConsumer;
+			import com.kuuhaku.utils.Helper;
+			import org.json.JSONArray;
+						
+			""";
+
 	public EffectParameters(EffectTrigger trigger, Shoukan shoukan, int index, Side side, Duelists duelists, GameChannel channel) {
 		this.trigger = trigger;
 		this.shoukan = shoukan;
