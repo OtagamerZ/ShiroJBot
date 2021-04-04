@@ -387,7 +387,7 @@ public class Helper {
 	}
 
 	public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g) {
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(g.getId());
+		GuildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
 
 		TextChannel tc = g.getTextChannelById(gc.getCanalLog());
@@ -408,7 +408,7 @@ public class Helper {
 			tc.sendMessage(eb.build()).queue(null, Helper::doNothing);
 		} catch (Exception e) {
 			gc.setCanalLog("");
-			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+			GuildDAO.updateGuildSettings(gc);
 			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
 			Member owner = g.getOwner();
 			if (owner != null)
@@ -419,7 +419,7 @@ public class Helper {
 	}
 
 	public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g, String args) {
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(g.getId());
+		GuildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
 
 		TextChannel tc = g.getTextChannelById(gc.getCanalLog());
@@ -443,7 +443,7 @@ public class Helper {
 			tc.sendMessage(eb.build()).queue();
 		} catch (Exception e) {
 			gc.setCanalLog("");
-			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+			GuildDAO.updateGuildSettings(gc);
 			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
 			Member owner = g.getOwner();
 			if (owner != null)
@@ -640,7 +640,7 @@ public class Helper {
 
 	public static void finishEmbed(Guild guild, List<Page> pages, List<MessageEmbed.Field> f, EmbedBuilder eb, int i) {
 		eb.setColor(getRandomColor());
-		eb.setAuthor("Para usar estes emotes, utilize o comando \"" + com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId()).getPrefix() + "say MENÇÃO\"");
+		eb.setAuthor("Para usar estes emotes, utilize o comando \"" + GuildDAO.getGuildById(guild.getId()).getPrefix() + "say MENÇÃO\"");
 		eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " resultados.", null);
 
 		pages.add(new Page(PageType.EMBED, eb.build()));
@@ -662,10 +662,15 @@ public class Helper {
 
 					if (channel == null) {
 						JSONObject newJa = new JSONObject(source.toString());
-						if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
-						else newJa.remove(jo.getString("canalId"));
+						if (k.equals("gatekeeper")) {
+							newJa.put("gatekeeper", "");
+							newJa.remove("gatekeeper");
+						} else {
+							newJa.put(jo.getString("canalId"), "");
+							newJa.remove(jo.getString("canalId"));
+						}
 						gc.setButtonConfigs(newJa);
-						com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+						GuildDAO.updateGuildSettings(gc);
 					} else try {
 						Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
 						resolveButton(g, jo, buttons);
@@ -679,9 +684,10 @@ public class Helper {
 							buttons.put(CANCEL, (m, ms) -> {
 								if (m.getUser().getId().equals(jo.getString("author"))) {
 									JSONObject gcjo = gc.getButtonConfigs();
+									gcjo.put(jo.getString("msgId"), "");
 									gcjo.remove(jo.getString("msgId"));
 									gc.setButtonConfigs(gcjo);
-									com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+									GuildDAO.updateGuildSettings(gc);
 									ms.clearReactions().queue();
 								}
 							});
@@ -691,13 +697,20 @@ public class Helper {
 						}
 					} catch (RuntimeException | InterruptedException | ExecutionException e) {
 						JSONObject newJa = new JSONObject(source.toString());
-						if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
-						else newJa.remove(jo.getString("msgId"));
+						if (k.equals("gatekeeper")) {
+							newJa.put("gatekeeper", "");
+							newJa.remove("gatekeeper");
+						} else {
+							newJa.put(jo.getString("canalId"), "");
+							newJa.remove(jo.getString("canalId"));
+						}
 						gc.setButtonConfigs(newJa);
-						com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+						GuildDAO.updateGuildSettings(gc);
 					}
 				} catch (JSONException e) {
 					logger(Helper.class).info("Error in buttons JSON: " + source.toString());
+					gc.setButtonConfigs(new JSONObject());
+					GuildDAO.updateGuildSettings(gc);
 				}
 			}
 		}
@@ -726,12 +739,12 @@ public class Helper {
 				} else {
 					ms.clearReactions().queue(s -> {
 						ms.getChannel().sendMessage(":warning: | Botões removidos devido a cargo inexistente.").queue();
-						GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(g.getId());
+						GuildConfig gc = GuildDAO.getGuildById(g.getId());
 						JSONObject bt = jo.getJSONObject("buttons");
 						bt.remove(b);
 						jo.put("buttons", bt);
 						gc.setButtonConfigs(jo);
-						com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+						GuildDAO.updateGuildSettings(gc);
 					});
 				}
 			});
@@ -793,13 +806,13 @@ public class Helper {
 			else root.put(msgId, msg);
 
 			gc.setButtonConfigs(root);
-			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+			GuildDAO.updateGuildSettings(gc);
 		} catch (ErrorResponseException e) {
 			JSONObject jo = gc.getButtonConfigs();
 			if (gatekeeper) jo.remove("gatekeeper");
 			else jo.remove(message.getId());
 			gc.setButtonConfigs(jo);
-			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+			GuildDAO.updateGuildSettings(gc);
 		}
 	}
 
@@ -1302,7 +1315,7 @@ public class Helper {
 
 				if (tc == null) {
 					gc.setCanalKawaipon(null);
-					com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 				} else {
 					tc.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1364,7 +1377,7 @@ public class Helper {
 
 			if (tc == null) {
 				gc.setCanalKawaipon(null);
-				com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+				GuildDAO.updateGuildSettings(gc);
 				channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			} else {
 				tc.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1403,7 +1416,7 @@ public class Helper {
 
 				if (tc == null) {
 					gc.setCanalDrop(null);
-					com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 				} else {
 					tc.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1532,7 +1545,7 @@ public class Helper {
 
 				if (tc == null) {
 					gc.setCanalDrop(null);
-					com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage(eb.build())
 							.delay(1, TimeUnit.MINUTES)
 							.queue(msg -> {
