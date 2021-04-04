@@ -134,6 +134,10 @@ public class SlotsCommand implements Executable {
 			} else {
 				channel.sendMessage("Poxa, parece que você não teve sorte hoje. Volte sempre!").queue();
 
+				Slots slts = SlotsDAO.getSlots();
+				slts.addToPot(Math.round(bet.get() * 0.75));
+				SlotsDAO.saveSlots(slts);
+
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(false);
