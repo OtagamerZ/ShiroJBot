@@ -708,7 +708,7 @@ public class Helper {
 						GuildDAO.updateGuildSettings(gc);
 					}
 				} catch (JSONException e) {
-					logger(Helper.class).info("Error in buttons JSON: " + source.toString());
+					logger(Helper.class).error("Error in buttons JSON: " + source.toString() + "\nReason: " + e.getMessage());
 					gc.setButtonConfigs(new JSONObject());
 					GuildDAO.updateGuildSettings(gc);
 				}
