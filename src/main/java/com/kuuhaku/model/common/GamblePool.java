@@ -18,20 +18,22 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.model.enums.Slot;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class GamblePool {
 	public static class Gamble {
-		private final String slot;
+		private final Slot slot;
 		private final int weight;
 
-		public Gamble(String s, int w) {
+		public Gamble(Slot s, int w) {
 			this.slot = s;
 			this.weight = w;
 		}
 
-		String getSlot() {
+		Slot getSlot() {
 			return slot;
 		}
 
@@ -48,12 +50,12 @@ public class GamblePool {
 
 	private static final List<Gamble> g = new ArrayList<>();
 
-	public String[] getPool() {
-		List<String> pool = new ArrayList<>();
+	public Slot[] getPool() {
+		List<Slot> pool = new ArrayList<>();
 		for (Gamble gamble : g) {
 			pool.add(gamble.getSlot());
 		}
 
-		return pool.toArray(new String[0]);
+		return pool.toArray(new Slot[0]);
 	}
 }

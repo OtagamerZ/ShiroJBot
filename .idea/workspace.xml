@@ -14,9 +14,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionados mais 2 gatilhos de efeito">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Slot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/GamblePool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/GamblePool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Slots.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Slots.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,8 +71,8 @@
         <option value="GraphQL File" />
         <option value="JavaScript File" />
         <option value="AnnotationType" />
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -193,6 +203,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1112,21 +1133,11 @@
       <workItem from="1616899256826" duration="3117000" />
       <workItem from="1616967100904" duration="4145000" />
       <workItem from="1616993305806" duration="2455000" />
-      <workItem from="1617042223139" duration="5985000" />
-    </task>
-    <task id="LOCAL-04008" summary="Correção na perda de perfil ao re-entrar no servidor">
-      <created>1615918681620</created>
-      <option name="number" value="04008" />
-      <option name="presentableId" value="LOCAL-04008" />
-      <option name="project" value="LOCAL" />
-      <updated>1615918681620</updated>
-    </task>
-    <task id="LOCAL-04009" summary="Correção na perda de perfil ao re-entrar no servidor">
-      <created>1615919789800</created>
-      <option name="number" value="04009" />
-      <option name="presentableId" value="LOCAL-04009" />
-      <option name="project" value="LOCAL" />
-      <updated>1615919789800</updated>
+      <workItem from="1617042223139" duration="6320000" />
+      <workItem from="1617130268902" duration="1796000" />
+      <workItem from="1617161084784" duration="271000" />
+      <workItem from="1617303857653" duration="6289000" />
+      <workItem from="1617560044403" duration="4151000" />
     </task>
     <task id="LOCAL-04010" summary="Correção menor no Shoukan">
       <created>1615920011057</created>
@@ -1457,7 +1468,21 @@
       <option name="project" value="LOCAL" />
       <updated>1617061713044</updated>
     </task>
-    <option name="localTasksCounter" value="4057" />
+    <task id="LOCAL-04057" summary="Adicionados mais 2 gatilhos de efeito">
+      <created>1617062089061</created>
+      <option name="number" value="04057" />
+      <option name="presentableId" value="LOCAL-04057" />
+      <option name="project" value="LOCAL" />
+      <updated>1617062089061</updated>
+    </task>
+    <task id="LOCAL-04058" summary="Adicionados mais 2 gatilhos de efeito">
+      <created>1617062313999</created>
+      <option name="number" value="04058" />
+      <option name="presentableId" value="LOCAL-04058" />
+      <option name="project" value="LOCAL" />
+      <updated>1617062313999</updated>
+    </task>
+    <option name="localTasksCounter" value="4059" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
