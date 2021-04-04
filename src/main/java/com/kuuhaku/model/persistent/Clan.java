@@ -237,10 +237,8 @@ public class Clan {
 	}
 
 	public void upgrade(User u) {
-		ClanTier next = Helper.getNext(tier, ClanTier.PARTY, ClanTier.FACTION, ClanTier.GUILD, ClanTier.DYNASTY);
-		assert next != null;
-		this.vault -= next.getCost();
-		transactions.add(u.getAsTag() + " evoluiu o tier do clã por " + Helper.separate(next.getCost()) + " créditos.");
+		this.vault -= tier.getCost();
+		transactions.add(u.getAsTag() + " evoluiu o tier do clã por " + Helper.separate(tier) + " créditos.");
 	}
 
 	public DeckStash getDeck() {
