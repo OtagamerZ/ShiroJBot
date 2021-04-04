@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.SupportTier;
+import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -61,10 +62,17 @@ public class MonthlyEvent implements Job {
 					long prize = Math.round(total * share);
 					try {
 						c.sendMessage("""
-								:tada: :tada: **O seu Exceed foi campeão neste mês, parabéns!** :tada: :tada:
-								Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas e redução de juros de empréstimos.
+								%s **O seu Exceed foi campeão neste mês, parabéns!** %s
+								Todos da %s ganharão experiência em dobro durante 1 semana além de isenção de taxas.
 								Adicionalmente, por ter sido responsável por **%s%%** da pontuação de seu Exceed, você receberá __**%s créditos**__ como parte do prêmio **(Total: %s pontos)**.
-								""".formatted(ex, Helper.roundToString(share, 2), Helper.separate(prize), total)).queue(null, Helper::doNothing);
+								""".formatted(
+								TagIcons.EXCEED_CHAMPION.getTag(0),
+								TagIcons.EXCEED_CHAMPION.getTag(0),
+								ex,
+								Helper.roundToString(share * 100, 2),
+								Helper.separate(prize),
+								total
+						)).queue(null, Helper::doNothing);
 					} catch (Exception ignore) {
 					}
 					acc.addCredit(prize, MonthlyEvent.class);

@@ -575,14 +575,14 @@ public class TradeCardCommand implements Executable {
 									}
 								}
 
-								boolean trusted = Helper.isTrustedMerchant(author.getId()) || Helper.isTrustedMerchant(other.getId());
-								double tax = trusted ? 0.05 : 0.1;
+								int liquidAmount = Helper.applyTax(tacc.getUid(), price, 0.1);
+								boolean taxed = price == liquidAmount;
 
 								acc.removeCredit(price, this.getClass());
-								tacc.addCredit(Math.round(price * (1 - tax)), this.getClass());
+								tacc.addCredit(liquidAmount, this.getClass());
 
 								LotteryValue lv = LotteryDAO.getLotteryValue();
-								lv.addValue(Math.round(price * tax));
+								lv.addValue(price - liquidAmount);
 								LotteryDAO.saveLotteryValue(lv);
 
 								KawaiponDAO.saveKawaipon(finalKp);
@@ -590,7 +590,11 @@ public class TradeCardCommand implements Executable {
 								AccountDAO.saveAccount(acc);
 								AccountDAO.saveAccount(tacc);
 
-								s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso (taxa de " + (int) (tax * 100) + "%)!")).queue(null, Helper::doNothing);
+								if (taxed) {
+									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (taxa de venda: " + Helper.roundToString(liquidAmount * 100D / price, 1) + "%)")).queue(null, Helper::doNothing);
+								} else {
+									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (Exceed vitorioso isento de taxa)")).queue(null, Helper::doNothing);
+								}
 							}), true, 1, TimeUnit.MINUTES,
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {
@@ -787,14 +791,14 @@ public class TradeCardCommand implements Executable {
 									}
 								}
 
-								boolean trusted = Helper.isTrustedMerchant(author.getId()) || Helper.isTrustedMerchant(other.getId());
-								double tax = trusted ? 0.05 : 0.1;
+								int liquidAmount = Helper.applyTax(acc.getUid(), price, 0.1);
+								boolean taxed = price == liquidAmount;
 
 								tacc.removeCredit(price, this.getClass());
-								acc.addCredit(Math.round(price * (1 - tax)), this.getClass());
+								acc.addCredit(liquidAmount, this.getClass());
 
 								LotteryValue lv = LotteryDAO.getLotteryValue();
-								lv.addValue(Math.round(price * tax));
+								lv.addValue(price - liquidAmount);
 								LotteryDAO.saveLotteryValue(lv);
 
 								KawaiponDAO.saveKawaipon(finalKp);
@@ -802,7 +806,11 @@ public class TradeCardCommand implements Executable {
 								AccountDAO.saveAccount(acc);
 								AccountDAO.saveAccount(tacc);
 
-								s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso (taxa de " + (int) (tax * 100) + "%)!")).queue(null, Helper::doNothing);
+								if (taxed) {
+									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (taxa de venda: " + Helper.roundToString(liquidAmount * 100D / price, 1) + "%)")).queue(null, Helper::doNothing);
+								} else {
+									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (Exceed vitorioso isento de taxa)")).queue(null, Helper::doNothing);
+								}
 							}), true, 1, TimeUnit.MINUTES,
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {
