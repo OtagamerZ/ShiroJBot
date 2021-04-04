@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no sistema de taxas e rebalanceamento do slots">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1126,28 +1127,7 @@
       <workItem from="1617130268902" duration="1796000" />
       <workItem from="1617161084784" duration="271000" />
       <workItem from="1617303857653" duration="6289000" />
-      <workItem from="1617560044403" duration="5926000" />
-    </task>
-    <task id="LOCAL-04012" summary="Aumento na quantidade de colunas no livro de Kawaipons">
-      <created>1615923633800</created>
-      <option name="number" value="04012" />
-      <option name="presentableId" value="LOCAL-04012" />
-      <option name="project" value="LOCAL" />
-      <updated>1615923633800</updated>
-    </task>
-    <task id="LOCAL-04013" summary="Aumento na quantidade de colunas no livro de Kawaipons">
-      <created>1615924524088</created>
-      <option name="number" value="04013" />
-      <option name="presentableId" value="LOCAL-04013" />
-      <option name="project" value="LOCAL" />
-      <updated>1615924524088</updated>
-    </task>
-    <task id="LOCAL-04014" summary="Correção na organização das cartas">
-      <created>1615927124095</created>
-      <option name="number" value="04014" />
-      <option name="presentableId" value="LOCAL-04014" />
-      <option name="project" value="LOCAL" />
-      <updated>1615927124095</updated>
+      <workItem from="1617560044403" duration="9767000" />
     </task>
     <task id="LOCAL-04015" summary="Correção na organização das cartas">
       <created>1615927333878</created>
@@ -1471,7 +1451,28 @@
       <option name="project" value="LOCAL" />
       <updated>1617564546613</updated>
     </task>
-    <option name="localTasksCounter" value="4061" />
+    <task id="LOCAL-04061" summary="Melhoria no sistema de taxas e rebalanceamento do slots">
+      <created>1617566080609</created>
+      <option name="number" value="04061" />
+      <option name="presentableId" value="LOCAL-04061" />
+      <option name="project" value="LOCAL" />
+      <updated>1617566080609</updated>
+    </task>
+    <task id="LOCAL-04062" summary="Melhoria no sistema de taxas e rebalanceamento do slots">
+      <created>1617566187664</created>
+      <option name="number" value="04062" />
+      <option name="presentableId" value="LOCAL-04062" />
+      <option name="project" value="LOCAL" />
+      <updated>1617566187665</updated>
+    </task>
+    <task id="LOCAL-04063" summary="Melhoria no sistema de taxas e rebalanceamento do slots">
+      <created>1617566231973</created>
+      <option name="number" value="04063" />
+      <option name="presentableId" value="LOCAL-04063" />
+      <option name="project" value="LOCAL" />
+      <updated>1617566231973</updated>
+    </task>
+    <option name="localTasksCounter" value="4064" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
