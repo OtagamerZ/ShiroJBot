@@ -87,20 +87,23 @@ public class SlotsCommand implements Executable {
 		Slots slt = SlotsDAO.getSlots();
 		acc.consumeCredit(bet.get(), this.getClass());
 		AccountDAO.saveAccount(acc);
-		slt.addToPot(bet.get());
-
+		slt.addToPot(Math.round(bet.get() * 0.75));
+		SlotsDAO.saveSlots(slt);
 		rollSlots();
 
 		Runnable r = () -> {
 			Slot combo = Slot.getCombo(rolled);
+
 			if (combo != null) {
 				Account facc = AccountDAO.getAccount(author.getId());
 				Slots slts = SlotsDAO.getSlots();
 
 				if (combo == JACKPOT) {
-					long prize = slt.jackpot();
+					long prize = slts.jackpot();
+					SlotsDAO.saveSlots(slts);
 
 					facc.addCredit(prize, this.getClass());
+					AccountDAO.saveAccount(facc);
 
 					channel.sendMessage(
 							"""
@@ -113,18 +116,16 @@ public class SlotsCommand implements Executable {
 					).queue();
 				} else {
 					long prize = Math.round(bet.get() * combo.getMultiplier());
+					SlotsDAO.saveSlots(slts);
 
 					facc.addCredit(prize, this.getClass());
-					slts.addToPot(Math.round(bet.get() * 0.75));
+					AccountDAO.saveAccount(facc);
 
 					channel.sendMessage("""
 							%s
 							Seu prêmio é de __**%s créditos**__!
 							""".formatted(combo.getMessage(), Helper.separate(prize))).queue();
 				}
-
-				SlotsDAO.saveSlots(slts);
-				AccountDAO.saveAccount(facc);
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
@@ -133,10 +134,6 @@ public class SlotsCommand implements Executable {
 				}
 			} else {
 				channel.sendMessage("Poxa, parece que você não teve sorte hoje. Volte sempre!").queue();
-
-				Slots slts = SlotsDAO.getSlots();
-				slts.addToPot(Math.round(bet.get() * 0.75));
-				SlotsDAO.saveSlots(slts);
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = com.kuuhaku.controller.postgresql.PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));

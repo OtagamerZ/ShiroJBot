@@ -167,7 +167,7 @@ public class Helper {
 	public static String roundToString(double value, int places) {
 		if (places < 0) throw new IllegalArgumentException();
 
-		return new DecimalFormat("0" + (places > 0 ? "." : "") + StringUtils.repeat("#", places)).format(value);
+		return new DecimalFormat("#,##0" + (places > 0 ? "." : "") + StringUtils.repeat("#", places)).format(value);
 	}
 
 	public static double avg(double... values) {
