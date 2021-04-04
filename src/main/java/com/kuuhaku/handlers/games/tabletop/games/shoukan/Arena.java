@@ -113,9 +113,9 @@ public class Arena {
 				}
 
 				if (key == Side.TOP)
-					Profile.printCenteredString(name, 1253, 499, 825, g2d);
+					Profile.printCenteredString(name, 1253, 499, 822, g2d);
 				else
-					Profile.printCenteredString(name, 1253, 499, 1000, g2d);
+					Profile.printCenteredString(name, 1253, 499, 1003, g2d);
 
 				for (int i = 0; i < value.size(); i++) {
 					SlotColumn<Champion, Equipment> c = value.get(i);

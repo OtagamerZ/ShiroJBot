@@ -81,7 +81,7 @@ public class TransferCommand implements Executable {
 		from.removeCredit(rawAmount, this.getClass());
 
 		LotteryValue lv = LotteryDAO.getLotteryValue();
-		lv.addValue(Math.round(rawAmount * tax));
+		lv.addValue(rawAmount - liquidAmount);
 		LotteryDAO.saveLotteryValue(lv);
 
 		AccountDAO.saveAccount(to);
