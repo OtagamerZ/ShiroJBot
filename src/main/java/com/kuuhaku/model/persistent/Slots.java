@@ -20,30 +20,24 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.SlotsDAO;
 import com.kuuhaku.model.common.GamblePool;
+import com.kuuhaku.model.enums.Slot;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
+
+import static com.kuuhaku.model.enums.Slot.*;
 
 @Entity
 @Table(name = "slots")
 public class Slots {
 	public static final String SLOT = "<a:slots:680448443692744956>";
-	public static final String JACKPOT = "<:7_s:680405919057969155>";
-	public static final String DIAMOND = "<:diamond_s:680405919317753877>";
-	public static final String HORSESHOE = "<:horseshoe_s:680405919213158525>";
-	public static final String BAR = "<:bar_s:680405918667898910>";
-	public static final String BELL = "<:bell_s:680405919732990017>";
-	public static final String HEART = "<:heart_s:680405919183405086>";
-	public static final String CHERRY = "<:cherry_s:680448442832912419>";
-	public static final String WATERMELON = "<:watermelon_s:680405919548440587>";
-	public static final String LEMON = "<:lemon_s:680405919901024284>";
-	private static final String[] slots;
+	private static final Slot[] slots;
 
 	static {
 		GamblePool gp = new GamblePool();
-		String[] icon = {LEMON, WATERMELON, CHERRY, HEART, BELL, BAR, HORSESHOE, DIAMOND, JACKPOT};
-		for (String s : icon) {
-			gp.addGamble(new GamblePool.Gamble(s, s.equals(JACKPOT) ? 1 : 3));
+		Slot[] icon = {LEMON, WATERMELON, CHERRY, HEART, BELL, BAR, HORSESHOE, DIAMOND, JACKPOT};
+		for (Slot s : icon) {
+			gp.addGamble(new GamblePool.Gamble(s, 1));
 		}
 		slots = gp.getPool();
 	}
@@ -70,11 +64,11 @@ public class Slots {
 		this.pot += value;
 	}
 
-	public static String getSlot() {
+	public static Slot getSlot() {
 		return slots[Helper.rng(slots.length, true)];
 	}
 
-	public static String[] getSlots() {
+	public static Slot[] getSlots() {
 		return slots;
 	}
 }

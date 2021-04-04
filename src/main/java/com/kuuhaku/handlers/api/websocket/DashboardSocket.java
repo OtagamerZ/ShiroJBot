@@ -348,8 +348,9 @@ public class DashboardSocket extends WebSocketServer {
 							CardMarket c = CardMarketDAO.getCard(id);
 							if (c != null) {
 								Account seller = AccountDAO.getAccount(c.getSeller());
-								boolean trusted = Helper.isTrustedMerchant(seller.getUid());
-								double tax = trusted ? 0.05 : 0.1;
+								int rawAmount = c.getPrice();
+								int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
+								boolean taxed = rawAmount == liquidAmount;
 
 								int err = kp.getCards().contains(c.getCard()) ? 1 : 0;
 								if (err == 0) {
@@ -363,14 +364,18 @@ public class DashboardSocket extends WebSocketServer {
 										KawaiponDAO.saveKawaipon(kp);
 										CardMarketDAO.saveCard(c);
 									} else {
-										if (acc.getBalance() < c.getPrice()) {
+										if (acc.getBalance() < rawAmount) {
 											code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
 											msg.set("Saldo insuficiente.");
 										} else {
 											c.setBuyer(t.getUid());
 											kp.addCard(c.getCard());
-											acc.removeCredit(blackfriday ? Math.round(c.getPrice() * 0.75) : c.getPrice(), this.getClass());
-											seller.addCredit(Math.round(c.getPrice() * (1 - tax)), this.getClass());
+											acc.removeCredit(blackfriday ? Math.round(rawAmount * 0.75) : rawAmount, this.getClass());
+											seller.addCredit(liquidAmount, this.getClass());
+
+											LotteryValue lv = LotteryDAO.getLotteryValue();
+											lv.addValue(rawAmount - liquidAmount);
+											LotteryDAO.saveLotteryValue(lv);
 
 											KawaiponDAO.saveKawaipon(kp);
 											AccountDAO.saveAccount(acc);
@@ -378,8 +383,13 @@ public class DashboardSocket extends WebSocketServer {
 
 											User sellerU = Main.getInfo().getUserByID(c.getSeller());
 											User buyerU = Main.getInfo().getUserByID(c.getBuyer());
-											if (sellerU != null) sellerU.openPrivateChannel().queue(chn ->
-															chn.sendMessage("✅ | Sua carta `" + c.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(c.getPrice()) + " créditos  (" + (int) (100 * tax) + "% de taxa).").queue(null, Helper::doNothing),
+											if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
+														if (taxed) {
+															chn.sendMessage("✅ | Sua carta `" + c.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(c.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing);
+														} else {
+															chn.sendMessage("✅ | Sua carta `" + c.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(c.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing);
+														}
+													},
 													Helper::doNothing
 											);
 
@@ -397,8 +407,9 @@ public class DashboardSocket extends WebSocketServer {
 							EquipmentMarket e = EquipmentMarketDAO.getCard(id);
 							if (e != null) {
 								Account seller = AccountDAO.getAccount(e.getSeller());
-								boolean trusted = Helper.isTrustedMerchant(seller.getUid());
-								double tax = trusted ? 0.05 : 0.1;
+								int rawAmount = e.getPrice();
+								int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
+								boolean taxed = rawAmount == liquidAmount;
 
 								int err = kp.checkEquipmentError(e.getCard());
 								if (err == 0) {
@@ -412,14 +423,18 @@ public class DashboardSocket extends WebSocketServer {
 										KawaiponDAO.saveKawaipon(kp);
 										EquipmentMarketDAO.saveCard(e);
 									} else {
-										if (acc.getBalance() < e.getPrice()) {
+										if (acc.getBalance() < rawAmount) {
 											code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
 											msg.set("Saldo insuficiente.");
 										} else {
 											e.setBuyer(t.getUid());
 											kp.addEquipment(e.getCard());
-											acc.removeCredit(blackfriday ? Math.round(e.getPrice() * 0.75) : e.getPrice(), this.getClass());
-											seller.addCredit(Math.round(e.getPrice() * (1 - tax)), this.getClass());
+											acc.removeCredit(blackfriday ? Math.round(rawAmount * 0.75) : rawAmount, this.getClass());
+											seller.addCredit(liquidAmount, this.getClass());
+
+											LotteryValue lv = LotteryDAO.getLotteryValue();
+											lv.addValue(rawAmount - liquidAmount);
+											LotteryDAO.saveLotteryValue(lv);
 
 											KawaiponDAO.saveKawaipon(kp);
 											AccountDAO.saveAccount(acc);
@@ -427,8 +442,13 @@ public class DashboardSocket extends WebSocketServer {
 
 											User sellerU = Main.getInfo().getUserByID(e.getSeller());
 											User buyerU = Main.getInfo().getUserByID(e.getBuyer());
-											if (sellerU != null) sellerU.openPrivateChannel().queue(chn ->
-															chn.sendMessage("✅ | Seu equipamento `" + e.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(e.getPrice()) + " créditos (" + (int) (100 * tax) + "% de taxa).").queue(),
+											if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
+														if (taxed) {
+															chn.sendMessage("✅ | Seu equipamento `" + e.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(e.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing);
+														} else {
+															chn.sendMessage("✅ | Seu equipamento `" + e.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(e.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing);
+														}
+													},
 													Helper::doNothing
 											);
 
@@ -450,8 +470,9 @@ public class DashboardSocket extends WebSocketServer {
 							FieldMarket f = FieldMarketDAO.getCard(id);
 							if (f != null) {
 								Account seller = AccountDAO.getAccount(f.getSeller());
-								boolean trusted = Helper.isTrustedMerchant(seller.getUid());
-								double tax = trusted ? 0.05 : 0.1;
+								int rawAmount = f.getPrice();
+								int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
+								boolean taxed = rawAmount == liquidAmount;
 
 								int err = kp.checkFieldError(f.getCard());
 								if (err == 0) {
@@ -465,14 +486,14 @@ public class DashboardSocket extends WebSocketServer {
 										KawaiponDAO.saveKawaipon(kp);
 										FieldMarketDAO.saveCard(f);
 									} else {
-										if (acc.getBalance() < f.getPrice()) {
+										if (acc.getBalance() < rawAmount) {
 											code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
 											msg.set("Saldo insuficiente.");
 										} else {
 											f.setBuyer(t.getUid());
 											kp.addField(f.getCard());
-											acc.removeCredit(blackfriday ? Math.round(f.getPrice() * 0.75) : f.getPrice(), this.getClass());
-											seller.addCredit(Math.round(f.getPrice() * (1 - tax)), this.getClass());
+											acc.removeCredit(blackfriday ? Math.round(rawAmount * 0.75) : rawAmount, this.getClass());
+											seller.addCredit(liquidAmount, this.getClass());
 
 											KawaiponDAO.saveKawaipon(kp);
 											AccountDAO.saveAccount(acc);
@@ -480,8 +501,13 @@ public class DashboardSocket extends WebSocketServer {
 
 											User sellerU = Main.getInfo().getUserByID(f.getSeller());
 											User buyerU = Main.getInfo().getUserByID(f.getBuyer());
-											if (sellerU != null) sellerU.openPrivateChannel().queue(chn ->
-															chn.sendMessage("✅ | Sua campo `" + f.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(f.getPrice()) + " créditos (" + (int) (100 * tax) + "% de taxa).").queue(),
+											if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
+														if (taxed) {
+															chn.sendMessage("✅ | Seu campo `" + f.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(f.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing);
+														} else {
+															chn.sendMessage("✅ | Seu campo `" + f.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(f.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing);
+														}
+													},
 													Helper::doNothing
 											);
 

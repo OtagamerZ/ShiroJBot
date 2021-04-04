@@ -279,14 +279,15 @@ public class BuyCardCommand implements Executable {
 					kp.addCard(cm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					boolean trusted = Helper.isTrustedMerchant(seller.getUid());
-					double tax = trusted ? 0.05 : 0.1;
+					int rawAmount = cm.getPrice();
+					int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
+					boolean taxed = rawAmount == liquidAmount;
 
-					seller.addCredit(Math.round(cm.getPrice() * (1 - tax)), this.getClass());
+					seller.addCredit(liquidAmount, this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(cm.getPrice() * 0.75) : cm.getPrice(), this.getClass());
 
 					LotteryValue lv = LotteryDAO.getLotteryValue();
-					lv.addValue(Math.round(cm.getPrice() * tax));
+					lv.addValue(rawAmount - liquidAmount);
 					LotteryDAO.saveLotteryValue(lv);
 
 					AccountDAO.saveAccount(seller);
@@ -297,10 +298,17 @@ public class BuyCardCommand implements Executable {
 
 					User sellerU = Main.getInfo().getUserByID(cm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(cm.getBuyer());
-					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos  (" + (int) (100 * tax) + "% de taxa).").queue(null, Helper::doNothing),
-							Helper::doNothing
-					);
+					if (taxed) {
+						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+										c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
+								Helper::doNothing
+						);
+					} else {
+						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+										c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing),
+								Helper::doNothing
+						);
+					}
 					channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
@@ -334,14 +342,15 @@ public class BuyCardCommand implements Executable {
 					kp.addEquipment(em.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					boolean trusted = Helper.isTrustedMerchant(seller.getUid());
-					double tax = trusted ? 0.05 : 0.1;
+					int rawAmount = em.getPrice();
+					int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
+					boolean taxed = rawAmount == liquidAmount;
 
-					seller.addCredit(Math.round(em.getPrice() * (1 - tax)), this.getClass());
+					seller.addCredit(liquidAmount, this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(em.getPrice() * 0.75) : em.getPrice(), this.getClass());
 
 					LotteryValue lv = LotteryDAO.getLotteryValue();
-					lv.addValue(Math.round(em.getPrice() * tax));
+					lv.addValue(rawAmount - liquidAmount);
 					LotteryDAO.saveLotteryValue(lv);
 
 					AccountDAO.saveAccount(seller);
@@ -352,10 +361,17 @@ public class BuyCardCommand implements Executable {
 
 					User sellerU = Main.getInfo().getUserByID(em.getSeller());
 					User buyerU = Main.getInfo().getUserByID(em.getBuyer());
-					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Seu equipamento `" + em.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos (" + (int) (100 * tax) + "% de taxa).").queue(),
-							Helper::doNothing
-					);
+					if (taxed) {
+						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+										c.sendMessage("✅ | Sua carta `" + em.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
+								Helper::doNothing
+						);
+					} else {
+						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+										c.sendMessage("✅ | Sua carta `" + em.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing),
+								Helper::doNothing
+						);
+					}
 					channel.sendMessage("✅ | Equipamento comprado com sucesso!").queue();
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
@@ -386,14 +402,15 @@ public class BuyCardCommand implements Executable {
 					kp.addField(fm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
-					boolean trusted = Helper.isTrustedMerchant(seller.getUid());
-					double tax = trusted ? 0.05 : 0.1;
+					int rawAmount = fm.getPrice();
+					int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
+					boolean taxed = rawAmount == liquidAmount;
 
-					seller.addCredit(Math.round(fm.getPrice() * (1 - tax)), this.getClass());
+					seller.addCredit(liquidAmount, this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(fm.getPrice() * 0.75) : fm.getPrice(), this.getClass());
 
 					LotteryValue lv = LotteryDAO.getLotteryValue();
-					lv.addValue(Math.round(fm.getPrice() * tax));
+					lv.addValue(rawAmount - liquidAmount);
 					LotteryDAO.saveLotteryValue(lv);
 
 					AccountDAO.saveAccount(seller);
@@ -404,10 +421,17 @@ public class BuyCardCommand implements Executable {
 
 					User sellerU = Main.getInfo().getUserByID(fm.getSeller());
 					User buyerU = Main.getInfo().getUserByID(fm.getBuyer());
-					if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-									c.sendMessage("✅ | Sua arena `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos (" + (int) (100 * tax) + "% de taxa).").queue(),
-							Helper::doNothing
-					);
+					if (taxed) {
+						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+										c.sendMessage("✅ | Sua carta `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
+								Helper::doNothing
+						);
+					} else {
+						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+										c.sendMessage("✅ | Sua carta `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing),
+								Helper::doNothing
+						);
+					}
 					channel.sendMessage("✅ | Arena comprada com sucesso!").queue();
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
