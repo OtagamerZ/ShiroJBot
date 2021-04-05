@@ -2290,8 +2290,8 @@ public class Helper {
 				.setDescription(desc)
 				.setColor(color)
 				.setFooter("""
-						:coin: Créditos: %s
-						:diamonds: Gemas: %s
+						💰 Créditos: %s
+						💎 Gemas: %s
 						""".formatted(acc.getBalance(), acc.getGems()));
 
 		for (T item : items) {
