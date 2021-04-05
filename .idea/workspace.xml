@@ -13,36 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no sistema de taxas e rebalanceamento do slots">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/GemStoreCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ColorlessWebhookEmbedBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/CreditItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/GemItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/TriFunction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/avatar/nero/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/avatar/usa-tan/1.png" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/TierRankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/TierRankCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyConsumableCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CreditStoreCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameColorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameColorCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/UseConsumableCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ValidateGIFCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/VipStoreCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Consumable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Consumable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/ItemDrop.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/JokerDrop.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/CardStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/CardStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/VipItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ConsumableShop.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +120,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="DisableCommandCommand" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/avatar/usa-tan" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/ShiroWebsite" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -219,19 +191,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1157,55 +1116,6 @@
       <workItem from="1617303857653" duration="6289000" />
       <workItem from="1617560044403" duration="9767000" />
     </task>
-    <task id="LOCAL-04015" summary="Correção na organização das cartas">
-      <created>1615927333878</created>
-      <option name="number" value="04015" />
-      <option name="presentableId" value="LOCAL-04015" />
-      <option name="project" value="LOCAL" />
-      <updated>1615927333878</updated>
-    </task>
-    <task id="LOCAL-04016" summary="Correção na organização das cartas">
-      <created>1615927594799</created>
-      <option name="number" value="04016" />
-      <option name="presentableId" value="LOCAL-04016" />
-      <option name="project" value="LOCAL" />
-      <updated>1615927594799</updated>
-    </task>
-    <task id="LOCAL-04017" summary="Correção na organização das cartas">
-      <created>1615927855379</created>
-      <option name="number" value="04017" />
-      <option name="presentableId" value="LOCAL-04017" />
-      <option name="project" value="LOCAL" />
-      <updated>1615927855379</updated>
-    </task>
-    <task id="LOCAL-04018" summary="Correção na organização das cartas">
-      <created>1616000431979</created>
-      <option name="number" value="04018" />
-      <option name="presentableId" value="LOCAL-04018" />
-      <option name="project" value="LOCAL" />
-      <updated>1616000431980</updated>
-    </task>
-    <task id="LOCAL-04019" summary="Correções menores">
-      <created>1616099337315</created>
-      <option name="number" value="04019" />
-      <option name="presentableId" value="LOCAL-04019" />
-      <option name="project" value="LOCAL" />
-      <updated>1616099337323</updated>
-    </task>
-    <task id="LOCAL-04020" summary="Correções menores">
-      <created>1616099423140</created>
-      <option name="number" value="04020" />
-      <option name="presentableId" value="LOCAL-04020" />
-      <option name="project" value="LOCAL" />
-      <updated>1616099423140</updated>
-    </task>
-    <task id="LOCAL-04021" summary="Correções menores">
-      <created>1616099777672</created>
-      <option name="number" value="04021" />
-      <option name="presentableId" value="LOCAL-04021" />
-      <option name="project" value="LOCAL" />
-      <updated>1616099777673</updated>
-    </task>
     <task id="LOCAL-04022" summary="Correções menores">
       <created>1616100412883</created>
       <option name="number" value="04022" />
@@ -1500,7 +1410,56 @@
       <option name="project" value="LOCAL" />
       <updated>1617566231973</updated>
     </task>
-    <option name="localTasksCounter" value="4064" />
+    <task id="LOCAL-04064" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
+      <created>1617639343634</created>
+      <option name="number" value="04064" />
+      <option name="presentableId" value="LOCAL-04064" />
+      <option name="project" value="LOCAL" />
+      <updated>1617639343634</updated>
+    </task>
+    <task id="LOCAL-04065" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
+      <created>1617639628351</created>
+      <option name="number" value="04065" />
+      <option name="presentableId" value="LOCAL-04065" />
+      <option name="project" value="LOCAL" />
+      <updated>1617639628351</updated>
+    </task>
+    <task id="LOCAL-04066" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
+      <created>1617640145152</created>
+      <option name="number" value="04066" />
+      <option name="presentableId" value="LOCAL-04066" />
+      <option name="project" value="LOCAL" />
+      <updated>1617640145154</updated>
+    </task>
+    <task id="LOCAL-04067" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
+      <created>1617640478916</created>
+      <option name="number" value="04067" />
+      <option name="presentableId" value="LOCAL-04067" />
+      <option name="project" value="LOCAL" />
+      <updated>1617640478916</updated>
+    </task>
+    <task id="LOCAL-04068" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
+      <created>1617640910929</created>
+      <option name="number" value="04068" />
+      <option name="presentableId" value="LOCAL-04068" />
+      <option name="project" value="LOCAL" />
+      <updated>1617640910930</updated>
+    </task>
+    <task id="LOCAL-04069" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
+      <created>1617641038925</created>
+      <option name="number" value="04069" />
+      <option name="presentableId" value="LOCAL-04069" />
+      <option name="project" value="LOCAL" />
+      <updated>1617641038925</updated>
+    </task>
+    <task id="LOCAL-04070" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
+      <created>1617641141416</created>
+      <option name="number" value="04070" />
+      <option name="presentableId" value="LOCAL-04070" />
+      <option name="project" value="LOCAL" />
+      <updated>1617641141416</updated>
+    </task>
+    <option name="localTasksCounter" value="4071" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1586,8 +1545,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Removida passiva secreta das cartas de 1 de mana" />
-    <MESSAGE value="Correção nas transações de membros" />
     <MESSAGE value="Correções em efeitos de raça" />
     <MESSAGE value="Correção nos calculos de chance" />
     <MESSAGE value="Mudança na API de reações" />
@@ -1611,7 +1568,9 @@
     <MESSAGE value="Adicionados contadores de cartas no cemitério" />
     <MESSAGE value="Adicionados mais 2 gatilhos de efeito" />
     <MESSAGE value="Melhoria no sistema de taxas e rebalanceamento do slots" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no sistema de taxas e rebalanceamento do slots" />
+    <MESSAGE value="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);" />
+    <MESSAGE value="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
