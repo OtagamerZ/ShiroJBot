@@ -281,7 +281,7 @@ public class BuyCardCommand implements Executable {
 
 					int rawAmount = cm.getPrice();
 					int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
-					boolean taxed = rawAmount == liquidAmount;
+					boolean taxed = rawAmount != liquidAmount;
 
 					seller.addCredit(liquidAmount, this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(cm.getPrice() * 0.75) : cm.getPrice(), this.getClass());
@@ -305,7 +305,7 @@ public class BuyCardCommand implements Executable {
 						);
 					} else {
 						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing),
+										c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
 								Helper::doNothing
 						);
 					}
@@ -344,7 +344,7 @@ public class BuyCardCommand implements Executable {
 
 					int rawAmount = em.getPrice();
 					int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
-					boolean taxed = rawAmount == liquidAmount;
+					boolean taxed = rawAmount != liquidAmount;
 
 					seller.addCredit(liquidAmount, this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(em.getPrice() * 0.75) : em.getPrice(), this.getClass());
@@ -368,7 +368,7 @@ public class BuyCardCommand implements Executable {
 						);
 					} else {
 						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + em.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing),
+										c.sendMessage("✅ | Sua carta `" + em.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
 								Helper::doNothing
 						);
 					}
@@ -404,7 +404,7 @@ public class BuyCardCommand implements Executable {
 
 					int rawAmount = fm.getPrice();
 					int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
-					boolean taxed = rawAmount == liquidAmount;
+					boolean taxed = rawAmount != liquidAmount;
 
 					seller.addCredit(liquidAmount, this.getClass());
 					buyer.removeCredit(blackfriday ? Math.round(fm.getPrice() * 0.75) : fm.getPrice(), this.getClass());
@@ -428,7 +428,7 @@ public class BuyCardCommand implements Executable {
 						);
 					} else {
 						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing),
+										c.sendMessage("✅ | Sua carta `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
 								Helper::doNothing
 						);
 					}
