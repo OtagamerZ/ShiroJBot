@@ -1575,73 +1575,49 @@ public class Helper {
 					wc.close();
 				};
 
+				List<Message> hist = channel.getHistory()
+						.retrievePast(100)
+						.complete();
+
+				Message m = hist.get(rng(hist.size(), true));
+				Pages.buttonize(m, Collections.singletonMap(
+						egg.getAsMention(), (mb, ms) -> {
+							Account acc = AccountDAO.getAccount(mb.getId());
+							for (Prize prize : prizes) {
+								acc.addCredit(prize.getPrize(), Helper.class);
+							}
+
+							ColorlessWebhookEmbedBuilder neb = new ColorlessWebhookEmbedBuilder();
+							for (int i = 0; i < prizes.size(); i++) {
+								Prize prize = prizes.get(i);
+								neb.addField("Ovo " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
+							}
+
+							AccountDAO.saveAccount(acc);
+							wc.send(wmb.setContent(mb.getAsMention() + " encontrou os ovos!")
+									.addEmbeds(neb.build())
+									.build());
+							wc.close();
+							found.set(true);
+						}
+				), false, 2, TimeUnit.MINUTES);
+
+				ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
 				if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
-					ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
 
 					channel.retrieveMessageById(rm.getId())
-							.map(m -> {
-								Pages.buttonize(m, Collections.singletonMap(
-										egg.getAsMention(), (mb, ms) -> {
-											Account acc = AccountDAO.getAccount(mb.getId());
-											for (Prize prize : prizes) {
-												acc.addCredit(prize.getPrize(), Helper.class);
-											}
-
-											ColorlessWebhookEmbedBuilder neb = new ColorlessWebhookEmbedBuilder();
-											for (int i = 0; i < prizes.size(); i++) {
-												Prize prize = prizes.get(i);
-												neb.addField("Ovo " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
-											}
-
-											AccountDAO.saveAccount(acc);
-											wc.send(wmb.setContent(mb.getAsMention() + " encontrou os ovos!")
-													.addEmbeds(neb.build())
-													.build());
-											wc.close();
-											found.set(true);
-										}
-								), false, 2, TimeUnit.MINUTES);
-
-								return m;
-							})
 							.delay(2, TimeUnit.MINUTES)
 							.queue(msg -> {
 								msg.delete().queue(null, Helper::doNothing);
 								if (!found.get()) act.run();
 							});
 				} else {
-					ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
 					TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
 
 					if (tc == null) {
 						gc.setCanalDrop(null);
 						GuildDAO.updateGuildSettings(gc);
 						channel.retrieveMessageById(rm.getId())
-								.map(m -> {
-									Pages.buttonize(m, Collections.singletonMap(
-											egg.getAsMention(), (mb, ms) -> {
-												Account acc = AccountDAO.getAccount(mb.getId());
-												for (Prize prize : prizes) {
-													acc.addCredit(prize.getPrize(), Helper.class);
-												}
-
-												ColorlessWebhookEmbedBuilder neb = new ColorlessWebhookEmbedBuilder();
-												for (int i = 0; i < prizes.size(); i++) {
-													Prize prize = prizes.get(i);
-													neb.addField("Ovo " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
-												}
-
-												AccountDAO.saveAccount(acc);
-												wc.send(wmb.setContent(mb.getAsMention() + " encontrou os ovos!")
-														.addEmbeds(neb.build())
-														.build());
-												wc.close();
-												found.set(true);
-											}
-									), false, 2, TimeUnit.MINUTES);
-
-									return m;
-								})
 								.delay(2, TimeUnit.MINUTES)
 								.queue(msg -> {
 									msg.delete().queue(null, Helper::doNothing);
@@ -1649,31 +1625,6 @@ public class Helper {
 								});
 					} else {
 						tc.retrieveMessageById(rm.getId())
-								.map(m -> {
-									Pages.buttonize(m, Collections.singletonMap(
-											egg.getAsMention(), (mb, ms) -> {
-												Account acc = AccountDAO.getAccount(mb.getId());
-												for (Prize prize : prizes) {
-													acc.addCredit(prize.getPrize(), Helper.class);
-												}
-
-												ColorlessWebhookEmbedBuilder neb = new ColorlessWebhookEmbedBuilder();
-												for (int i = 0; i < prizes.size(); i++) {
-													Prize prize = prizes.get(i);
-													neb.addField("Ovo " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
-												}
-
-												AccountDAO.saveAccount(acc);
-												wc.send(wmb.setContent(mb.getAsMention() + " encontrou os ovos!")
-														.addEmbeds(neb.build())
-														.build());
-												wc.close();
-												found.set(true);
-											}
-									), false, 2, TimeUnit.MINUTES);
-
-									return m;
-								})
 								.delay(2, TimeUnit.MINUTES)
 								.queue(msg -> {
 									msg.delete().queue(null, Helper::doNothing);
