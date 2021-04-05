@@ -48,6 +48,7 @@ public class TeamHand extends Hand {
 	private final InfiniteList<List<Drawable>> cards = new InfiniteList<>();
 	private final InfiniteList<List<Drawable>> destinyDecks = new InfiniteList<>();
 
+
 	public TeamHand(Shoukan game, List<User> users, List<Kawaipon> kps, Side side) {
 		super(game, null, kps.get(0), side);
 		combo = Race.getCombo(kps.stream().flatMap(kp -> kp.getChampions().stream()).collect(Collectors.toList()));
@@ -65,6 +66,21 @@ public class TeamHand extends Hand {
 					.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 			);
 			deque.addAll(kp.getEquipments());
+
+			if (combo.getLeft() == Race.DIVINITY) {
+				deque.stream()
+						.distinct()
+						.forEach(d -> {
+							if (d instanceof Champion) {
+								Champion c = (Champion) d;
+								c.setMana(Math.max(c.getMana() - 1, 1));
+							} else {
+								Equipment e = (Equipment) d;
+								e.setMana(Math.max(e.getMana() - 1, 0));
+							}
+						});
+			}
+
 			deque.addAll(kp.getFields());
 
 			Account acc = AccountDAO.getAccount(user.getId());
@@ -133,6 +149,52 @@ public class TeamHand extends Hand {
 			this.destinyDecks.add(destinyDeck);
 			this.cards.add(new ArrayList<>());
 		}
+
+		int baseHp;
+		int baseManaPerTurn;
+		int maxCards;
+		if (game.getCustom() != null) {
+			setMana(Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20));
+			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
+			maxCards = Helper.clamp(game.getCustom().optInt("cartasmax", 5), 1, 10);
+			baseManaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
+
+			if (game.getCustom().optString("arcade").equals("instakill")) {
+				baseHp = 1;
+			}
+		} else {
+			setMana(0);
+			baseHp = 5000;
+			maxCards = 5;
+			baseManaPerTurn = 5;
+		}
+
+		int hpMod = switch (combo.getLeft()) {
+			case HUMAN -> 1000;
+			case DEMON -> -2000;
+			default -> 0;
+		} + switch (combo.getRight()) {
+			case HUMAN -> 500;
+			case DEMON -> -500;
+			default -> 0;
+		};
+
+		int manaMod = switch (combo.getLeft()) {
+			case ELF -> 1;
+			case DEMON -> 2;
+			default -> 0;
+		};
+
+		setBaseHp(Math.max(baseHp + hpMod, 1));
+		setHp(getBaseHp());
+
+		setBaseManaPerTurn(Math.max(baseManaPerTurn + manaMod, 0));
+		setManaPerTurn(getBaseManaPerTurn());
+
+		setMaxCards(Math.max(maxCards
+							 + (combo.getLeft() == Race.CREATURE ? 2 : 0)
+							 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1)
+		);
 
 		for (int i = 0; i < this.users.size(); i++, next()) {
 			redrawHand();

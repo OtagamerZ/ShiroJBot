@@ -49,8 +49,8 @@ public class Hand {
 	private final List<Drawable> cards = new ArrayList<>();
 	private final List<Drawable> destinyDeck = new ArrayList<>();
 	private final Side side;
-	private final int baseHp;
-	private final int baseManaPerTurn;
+	private int baseHp;
+	private int baseManaPerTurn;
 	private int maxCards = 0;
 	private int manaPerTurn = 0;
 	private int mana = 0;
@@ -631,6 +631,10 @@ public class Hand {
 		return baseManaPerTurn;
 	}
 
+	public void setBaseManaPerTurn(int baseManaPerTurn) {
+		this.baseManaPerTurn = baseManaPerTurn;
+	}
+
 	public int getManaPerTurn() {
 		return isSuppressed() ? 0 : manaPerTurn;
 	}
@@ -653,6 +657,10 @@ public class Hand {
 
 	public int getBaseHp() {
 		return baseHp;
+	}
+
+	public void setBaseHp(int baseHp) {
+		this.baseHp = baseHp;
 	}
 
 	public int getHp() {
