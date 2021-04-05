@@ -350,7 +350,7 @@ public class DashboardSocket extends WebSocketServer {
 								Account seller = AccountDAO.getAccount(c.getSeller());
 								int rawAmount = c.getPrice();
 								int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
-								boolean taxed = rawAmount == liquidAmount;
+								boolean taxed = rawAmount != liquidAmount;
 
 								int err = kp.getCards().contains(c.getCard()) ? 1 : 0;
 								if (err == 0) {
@@ -385,7 +385,7 @@ public class DashboardSocket extends WebSocketServer {
 											User buyerU = Main.getInfo().getUserByID(c.getBuyer());
 											if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
 														if (taxed) {
-															chn.sendMessage("✅ | Sua carta `" + c.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(c.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing);
+															chn.sendMessage("✅ | Sua carta `" + c.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(c.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing);
 														} else {
 															chn.sendMessage("✅ | Sua carta `" + c.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(c.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing);
 														}
@@ -409,7 +409,7 @@ public class DashboardSocket extends WebSocketServer {
 								Account seller = AccountDAO.getAccount(e.getSeller());
 								int rawAmount = e.getPrice();
 								int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
-								boolean taxed = rawAmount == liquidAmount;
+								boolean taxed = rawAmount != liquidAmount;
 
 								int err = kp.checkEquipmentError(e.getCard());
 								if (err == 0) {
@@ -444,7 +444,7 @@ public class DashboardSocket extends WebSocketServer {
 											User buyerU = Main.getInfo().getUserByID(e.getBuyer());
 											if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
 														if (taxed) {
-															chn.sendMessage("✅ | Seu equipamento `" + e.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(e.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing);
+															chn.sendMessage("✅ | Seu equipamento `" + e.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(e.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing);
 														} else {
 															chn.sendMessage("✅ | Seu equipamento `" + e.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(e.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing);
 														}
@@ -472,7 +472,7 @@ public class DashboardSocket extends WebSocketServer {
 								Account seller = AccountDAO.getAccount(f.getSeller());
 								int rawAmount = f.getPrice();
 								int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
-								boolean taxed = rawAmount == liquidAmount;
+								boolean taxed = rawAmount != liquidAmount;
 
 								int err = kp.checkFieldError(f.getCard());
 								if (err == 0) {
@@ -503,7 +503,7 @@ public class DashboardSocket extends WebSocketServer {
 											User buyerU = Main.getInfo().getUserByID(f.getBuyer());
 											if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
 														if (taxed) {
-															chn.sendMessage("✅ | Seu campo `" + f.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(f.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString(liquidAmount * 100D / rawAmount, 1) + "%)").queue(null, Helper::doNothing);
+															chn.sendMessage("✅ | Seu campo `" + f.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(f.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing);
 														} else {
 															chn.sendMessage("✅ | Seu campo `" + f.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(f.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing);
 														}
