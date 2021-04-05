@@ -31,6 +31,7 @@ import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -94,7 +95,7 @@ public class TierRankCommand implements Executable {
 
 			eb.addField("Promoção de tier", prom.toString(), false)
 					.addField(Helper.VOID, sb.toString(), false)
-					.setThumbnail("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/tiers/" + RankedTier.getTierName(rt.getTier(), true).toLowerCase(Locale.ROOT) + ".png");
+					.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/tiers/" + RankedTier.getTierName(rt.getTier(), true).toLowerCase(Locale.ROOT) + ".png");
 			categories.put(Helper.getNumericEmoji(rt.getTier()), new Page(PageType.EMBED, eb.build()));
 		}
 

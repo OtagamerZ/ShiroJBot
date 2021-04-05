@@ -316,6 +316,8 @@ public class ShiroEvents extends ListenerAdapter {
 				Calendar cal = Calendar.getInstance();
 				if (cal.get(Calendar.MONTH) == Calendar.DECEMBER && gc.isDropEnabled())
 					Helper.spawnPadoru(gc, channel);
+				else if (cal.get(Calendar.MONTH) == Calendar.APRIL && gc.isDropEnabled())
+					Helper.spawnUsaTan(gc, channel);
 
 				MessageChannel lvlChannel = null;
 				try {
@@ -424,7 +426,7 @@ public class ShiroEvents extends ListenerAdapter {
 					try {
 						com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 
-						Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
+						Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
 						Map<String, Runnable> s = Helper.sendEmotifiedString(guild, rawMessage);
 
 						WebhookMessageBuilder wmb = new WebhookMessageBuilder();

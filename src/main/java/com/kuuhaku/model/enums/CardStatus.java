@@ -19,8 +19,20 @@
 package com.kuuhaku.model.enums;
 
 public enum CardStatus {
+	/**
+	 * User hasn't completed any type
+	 */
 	ALL_CARDS,
+	/**
+	 * User has all normal cards
+	 */
 	NORMAL_CARDS,
+	/**
+	 * User has all foil cards
+	 */
 	FOIL_CARDS,
+	/**
+	 * User has all cards
+	 */
 	NO_CARDS
 }
