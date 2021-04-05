@@ -576,7 +576,7 @@ public class TradeCardCommand implements Executable {
 								}
 
 								int liquidAmount = Helper.applyTax(tacc.getUid(), price, 0.1);
-								boolean taxed = price == liquidAmount;
+								boolean taxed = price != liquidAmount;
 
 								acc.removeCredit(price, this.getClass());
 								tacc.addCredit(liquidAmount, this.getClass());
@@ -591,7 +591,7 @@ public class TradeCardCommand implements Executable {
 								AccountDAO.saveAccount(tacc);
 
 								if (taxed) {
-									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (taxa de venda: " + Helper.roundToString(liquidAmount * 100D / price, 1) + "%)")).queue(null, Helper::doNothing);
+									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (taxa de venda: " + Helper.roundToString((liquidAmount * 100D / price) - 100, 1) + "%)")).queue(null, Helper::doNothing);
 								} else {
 									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (Exceed vitorioso isento de taxa)")).queue(null, Helper::doNothing);
 								}
@@ -792,7 +792,7 @@ public class TradeCardCommand implements Executable {
 								}
 
 								int liquidAmount = Helper.applyTax(acc.getUid(), price, 0.1);
-								boolean taxed = price == liquidAmount;
+								boolean taxed = price != liquidAmount;
 
 								tacc.removeCredit(price, this.getClass());
 								acc.addCredit(liquidAmount, this.getClass());
@@ -807,7 +807,7 @@ public class TradeCardCommand implements Executable {
 								AccountDAO.saveAccount(tacc);
 
 								if (taxed) {
-									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (taxa de venda: " + Helper.roundToString(liquidAmount * 100D / price, 1) + "%)")).queue(null, Helper::doNothing);
+									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (taxa de venda: " + Helper.roundToString((liquidAmount * 100D / price) - 100, 1) + "%)")).queue(null, Helper::doNothing);
 								} else {
 									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (Exceed vitorioso isento de taxa)")).queue(null, Helper::doNothing);
 								}
