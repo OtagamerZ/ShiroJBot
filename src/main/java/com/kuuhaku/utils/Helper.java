@@ -42,6 +42,7 @@ import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.CardStatus;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.enums.PrivilegeLevel;
+import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.*;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -1548,7 +1549,7 @@ public class Helper {
 				wmb.setUsername("Usa-tan (Evento Páscoa)");
 				wmb.setAvatarUrl(ShiroInfo.USATAN_AVATAR.formatted(1));
 
-				Emote egg = channel.getJDA().getEmoteById("828634002197970955");
+				Emote egg = Main.getShiroShards().getEmoteById(TagIcons.EASTER_EGG.getId(0));
 				assert egg != null;
 
 				List<Prize> prizes = new ArrayList<>();
@@ -1581,7 +1582,7 @@ public class Helper {
 
 				Message m = hist.get(rng(hist.size(), true));
 				Pages.buttonize(m, Collections.singletonMap(
-						egg.getAsMention(), (mb, ms) -> {
+						egg.getId(), (mb, ms) -> {
 							Account acc = AccountDAO.getAccount(mb.getId());
 							for (Prize prize : prizes) {
 								acc.addCredit(prize.getPrize(), Helper.class);
