@@ -1573,7 +1573,8 @@ public class Helper {
 				AtomicBoolean finished = new AtomicBoolean(false);
 				Runnable act = () -> {
 					if (finished.get()) return;
-					wc.send(wmb.setContent("Ninguem encontrou o ovo a tempo!")
+					wc.send(wmb.resetEmbeds()
+							.setContent("Ninguem encontrou o ovo a tempo!")
 							.build());
 					wc.close();
 					finished.set(true);
@@ -1599,7 +1600,8 @@ public class Helper {
 							}
 
 							AccountDAO.saveAccount(acc);
-							wc.send(wmb.setContent(mb.getAsMention() + " encontrou os ovos!")
+							wc.send(wmb.resetEmbeds()
+									.setContent(mb.getAsMention() + " encontrou os ovos!")
 									.addEmbeds(neb.build())
 									.build());
 							wc.close();
