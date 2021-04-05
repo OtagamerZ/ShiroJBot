@@ -123,7 +123,7 @@ public class TwitchEvents {
 						.getGuildByID(ShiroInfo.getSupportServerID())
 						.getTextChannelById(ShiroInfo.getTwitchChannelID());
 				assert tc != null;
-				Webhook wh = Helper.getOrCreateWebhook(tc, "Shiro", Main.getShiroShards());
+				Webhook wh = Helper.getOrCreateWebhook(tc, "Shiro");
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 				wmb.setContent(Helper.stripEmotesAndMentions(rawMessage));
