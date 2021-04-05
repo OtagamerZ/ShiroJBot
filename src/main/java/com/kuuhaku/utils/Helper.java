@@ -2292,7 +2292,7 @@ public class Helper {
 				.setFooter("""
 						💰 Créditos: %s
 						💎 Gemas: %s
-						""".formatted(acc.getBalance(), acc.getGems()));
+						""".formatted(separate(acc.getBalance()), separate(acc.getGems())));
 
 		for (T item : items) {
 			eb.addField(fieldExtractor.apply(item));
