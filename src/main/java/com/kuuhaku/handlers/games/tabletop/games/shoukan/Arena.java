@@ -123,8 +123,6 @@ public class Arena {
 					SlotColumn<Champion, Equipment> c = value.get(i);
 					switch (key) {
 						case TOP -> {
-							g2d.setColor(Color.white);
-
 							if (c.getTop() != null) {
 								Champion d = c.getTop();
 								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 387, null);
@@ -133,38 +131,8 @@ public class Arena {
 								Equipment d = c.getBottom();
 								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 0, null);
 							}
-
-							if (grv.size() > 0) {
-								g2d.drawImage(grv.peekLast().drawCard(false), 1889, 193, null);
-								Profile.printCenteredString("%s/%s/%s".formatted(
-										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Champion).count()), 2, "0"),
-										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Equipment).count()), 2, "0"),
-										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Field).count()), 2, "0")
-								), 225, 1889, 178, g2d);
-							}
-							if (h.getDeque().size() > 0) {
-								Drawable d = h.getDeque().peek();
-								assert d != null;
-								g2d.drawImage(d.drawCard(true), 137, 193, null);
-
-								Pair<Race, Race> combo = h.getCombo();
-								if (combo.getLeft() != Race.NONE)
-									g2d.drawImage(combo.getLeft().getIcon(), 234, 193, 128, 128, null);
-								if (combo.getRight() != Race.NONE)
-									g2d.drawImage(combo.getRight().getIcon(), 137, 218, 78, 78, null);
-							}
-
-							if (h.getLockTime() > 0) {
-								try {
-									BufferedImage lock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/locked.png")));
-									g2d.drawImage(lock, 137, 193, null);
-								} catch (IOException ignore) {
-								}
-							}
 						}
 						case BOTTOM -> {
-							g2d.setColor(Color.white);
-
 							if (c.getTop() != null) {
 								Champion d = c.getTop();
 								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1013, null);
@@ -172,34 +140,6 @@ public class Arena {
 							if (c.getBottom() != null) {
 								Equipment d = c.getBottom();
 								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1400, null);
-							}
-
-							if (grv.size() > 0) {
-								g2d.drawImage(grv.peekLast().drawCard(false), 137, 1206, null);
-								Profile.printCenteredString("%s/%s/%s".formatted(
-										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Champion).count()), 2, "0"),
-										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Equipment).count()), 2, "0"),
-										StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Field).count()), 2, "0")
-								), 225, 137, 1638, g2d);
-							}
-							if (h.getDeque().size() > 0) {
-								Drawable d = h.getDeque().peek();
-								assert d != null;
-								g2d.drawImage(d.drawCard(true), 1889, 1206, null);
-
-								Pair<Race, Race> combo = h.getCombo();
-								if (combo.getLeft() != Race.NONE)
-									g2d.drawImage(combo.getLeft().getIcon(), 1889, 1078, 128, 128, null);
-								if (combo.getRight() != Race.NONE)
-									g2d.drawImage(combo.getRight().getIcon(), 2050, 1103, 78, 78, null);
-							}
-
-							if (h.getLockTime() > 0) {
-								try {
-									BufferedImage lock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/locked.png")));
-									g2d.drawImage(lock, 1889, 1206, null);
-								} catch (IOException ignore) {
-								}
 							}
 						}
 					}
@@ -222,6 +162,47 @@ public class Arena {
 							key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth("MP: " + mp),
 							key == Side.TOP ? 178 : 1735, g2d
 					);
+
+					if (h.getLockTime() > 0) {
+						try {
+							BufferedImage lock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/locked.png")));
+							g2d.drawImage(lock,
+									key == Side.TOP ? 137 : 1889,
+									key == Side.TOP ? 193 : 1206, null);
+						} catch (IOException ignore) {
+						}
+					}
+
+					g2d.setColor(Color.white);
+					if (grv.size() > 0) {
+						g2d.drawImage(grv.peekLast().drawCard(false),
+								key == Side.TOP ? 1889 : 137,
+								key == Side.TOP ? 193 : 1206, null);
+						Profile.printCenteredString("%s/%s/%s".formatted(
+								StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Champion).count()), 2, "0"),
+								StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Equipment).count()), 2, "0"),
+								StringUtils.leftPad(String.valueOf(grv.stream().filter(d -> d instanceof Field).count()), 2, "0")
+								), 225,
+								key == Side.TOP ? 1889 : 137,
+								key == Side.TOP ? 178 : 1638, g2d);
+					}
+					if (h.getDeque().size() > 0) {
+						Drawable d = h.getDeque().peek();
+						assert d != null;
+						g2d.drawImage(d.drawCard(true),
+								key == Side.TOP ? 137 : 1889,
+								key == Side.TOP ? 193 : 1206, null);
+
+						Pair<Race, Race> combo = h.getCombo();
+						if (combo.getLeft() != Race.NONE)
+							g2d.drawImage(combo.getLeft().getIcon(),
+									key == Side.TOP ? 234 : 1889,
+									key == Side.TOP ? 193 : 1556, 128, 128, null);
+						if (combo.getRight() != Race.NONE)
+							g2d.drawImage(combo.getRight().getIcon(),
+									key == Side.TOP ? 137 : 2050,
+									key == Side.TOP ? 340 : 1353, 78, 78, null);
+					}
 				}
 			}
 
