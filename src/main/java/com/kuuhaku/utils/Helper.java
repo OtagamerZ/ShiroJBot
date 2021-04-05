@@ -1570,10 +1570,13 @@ public class Helper {
 				web.setFooter("Enconte a reação de ovo de páscoa escondido em uma das mensagens neste canal.", null);
 
 				AtomicBoolean found = new AtomicBoolean(false);
+				AtomicBoolean finished = new AtomicBoolean(false);
 				Runnable act = () -> {
+					if (finished.get()) return;
 					wc.send(wmb.setContent("Ninguem encontrou o ovo a tempo!")
 							.build());
 					wc.close();
+					finished.set(true);
 				};
 
 				List<Message> hist = channel.getHistory()
@@ -1583,6 +1586,7 @@ public class Helper {
 				Message m = hist.get(rng(hist.size(), true));
 				Pages.buttonize(m, Collections.singletonMap(
 						egg.getId(), (mb, ms) -> {
+							if (finished.get()) return;
 							Account acc = AccountDAO.getAccount(mb.getId());
 							for (Prize prize : prizes) {
 								acc.addCredit(prize.getPrize(), Helper.class);
@@ -1600,18 +1604,18 @@ public class Helper {
 									.build());
 							wc.close();
 							found.set(true);
+							finished.set(true);
 						}
 				), false, 2, TimeUnit.MINUTES);
 
 				ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
 				if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
-
 					channel.retrieveMessageById(rm.getId())
 							.delay(2, TimeUnit.MINUTES)
 							.queue(msg -> {
 								msg.delete().queue(null, Helper::doNothing);
 								if (!found.get()) act.run();
-							});
+							}, Helper::doNothing);
 				} else {
 					TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
 
@@ -1623,14 +1627,14 @@ public class Helper {
 								.queue(msg -> {
 									msg.delete().queue(null, Helper::doNothing);
 									if (!found.get()) act.run();
-								});
+								}, Helper::doNothing);
 					} else {
 						tc.retrieveMessageById(rm.getId())
 								.delay(2, TimeUnit.MINUTES)
 								.queue(msg -> {
 									msg.delete().queue(null, Helper::doNothing);
 									if (!found.get()) act.run();
-								});
+								}, Helper::doNothing);
 					}
 				}
 
