@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class CreditDrop extends Drop {
-	private final int amount = 250 + Helper.rng(750, false);
+	private final int amount = 500 + Helper.rng(1000, false);
 
 	@Override
 	public String getCaptcha() {

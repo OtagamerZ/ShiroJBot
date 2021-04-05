@@ -52,8 +52,16 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
+	//PUBLIC CONSTANTS
+	public static final String RESOURCES_URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources";
+	public static final String SHIRO_AVATAR = RESOURCES_URL + "/avatar/shiro/%s.png";
+	public static final String JIBRIL_AVATAR = RESOURCES_URL + "/avatar/jibril/%s.png";
+	public static final String TET_AVATAR = RESOURCES_URL + "/avatar/tet/%s.png";
+	public static final String STEPHANIE_AVATAR = RESOURCES_URL + "/avatar/stephanie/%s.png";
+	public static final String NERO_AVATAR = RESOURCES_URL + "/avatar/nero/%s.png";
+	public static final String USATAN_AVATAR = RESOURCES_URL + "/avatar/usa-tan/%s.png";
 
-	//CONSTANTS
+	//PRIVATE CONSTANTS
 	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
 	private static final ThreadPoolExecutor compilationPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
 	private static final ThreadPoolExecutor handlingPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
@@ -127,10 +135,11 @@ public class ShiroInfo {
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private final File temporaryFolder = new File(System.getenv("TEMPORARY_PATH"));
 
+	//CACHES
 	private final TempCache<String, Boolean> ratelimit = new TempCache<>(3, TimeUnit.SECONDS);
 	private final TempCache<String, Boolean> confirmationPending = new TempCache<>(1, TimeUnit.MINUTES);
 	private final TempCache<String, Integer> pendingJoin = new TempCache<>(1, TimeUnit.MINUTES);
-	private final TempCache<String, Boolean> padoruLimit = new TempCache<>(10, TimeUnit.MINUTES);
+	private final TempCache<String, Boolean> specialEvent = new TempCache<>(10, TimeUnit.MINUTES);
 	private final TempCache<String, KawaiponCard> currentCard = new TempCache<>(1, TimeUnit.MINUTES);
 	private final TempCache<String, Prize> currentDrop = new TempCache<>(1, TimeUnit.MINUTES);
 	private final TempCache<String, byte[]> cardCache = new TempCache<>(1, TimeUnit.HOURS);
@@ -402,8 +411,8 @@ public class ShiroInfo {
 		return ratelimit;
 	}
 
-	public TempCache<String, Boolean> getPadoruLimit() {
-		return padoruLimit;
+	public TempCache<String, Boolean> getSpecialEvent() {
+		return specialEvent;
 	}
 
 	public TempCache<String, Boolean> getConfirmationPending() {
