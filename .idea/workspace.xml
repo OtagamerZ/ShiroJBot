@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no Shoukan em duplas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,13 +192,15 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -1130,13 +1133,8 @@
       <workItem from="1617642067370" duration="120000" />
       <workItem from="1617644965666" duration="756000" />
       <workItem from="1617645758656" duration="21000" />
-    </task>
-    <task id="LOCAL-04024" summary="Correções menores">
-      <created>1616160914105</created>
-      <option name="number" value="04024" />
-      <option name="presentableId" value="LOCAL-04024" />
-      <option name="project" value="LOCAL" />
-      <updated>1616160914105</updated>
+      <workItem from="1617646062840" duration="321000" />
+      <workItem from="1617646747009" duration="314000" />
     </task>
     <task id="LOCAL-04025" summary="Correções menores">
       <created>1616163720282</created>
@@ -1474,7 +1472,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617645713749</updated>
     </task>
-    <option name="localTasksCounter" value="4073" />
+    <task id="LOCAL-04073" summary="Correção no Shoukan em duplas">
+      <created>1617646352307</created>
+      <option name="number" value="04073" />
+      <option name="presentableId" value="LOCAL-04073" />
+      <option name="project" value="LOCAL" />
+      <updated>1617646352307</updated>
+    </task>
+    <option name="localTasksCounter" value="4074" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
