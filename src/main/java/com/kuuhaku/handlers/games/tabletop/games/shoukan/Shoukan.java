@@ -2366,7 +2366,7 @@ public class Shoukan extends GlobalGame {
 	public void sendWebhookMessage(String message, String gif, Drawable d) {
 		for (TextChannel channel : channel.getChannels()) {
 			try {
-				Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro", Main.getShiroShards());
+				Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
 				Card c = d.getCard();
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder()

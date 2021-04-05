@@ -29,6 +29,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -64,8 +65,8 @@ public class FrameColorCommand implements Executable {
 				eb.clear();
 				eb.setTitle(":flower_playing_cards: | Cor " + fc.toString().toLowerCase(Locale.ROOT));
 				eb.setDescription(fc.getDescription());
-				eb.setThumbnail("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/card_back_" + fc.name().toLowerCase(Locale.ROOT) + ".png");
-				eb.setImage("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/card_front_" + fc.name().toLowerCase(Locale.ROOT) + ".png");
+				eb.setThumbnail(ShiroInfo.RESOURCES_URL + "/shoukan/frames/card_back_" + fc.name().toLowerCase(Locale.ROOT) + ".png");
+				eb.setImage(ShiroInfo.RESOURCES_URL + "/shoukan/frames/card_front_" + fc.name().toLowerCase(Locale.ROOT) + ".png");
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 

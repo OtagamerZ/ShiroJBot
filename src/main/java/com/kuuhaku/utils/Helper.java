@@ -21,6 +21,7 @@ package com.kuuhaku.utils;
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.WebhookCluster;
+import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.coder4.emoji.EmojiUtils;
 import com.github.kevinsawicki.http.HttpRequest;
@@ -35,13 +36,8 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.Extensions;
-import com.kuuhaku.model.common.MatchInfo;
-import com.kuuhaku.model.common.MerchantStats;
+import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.common.drop.CreditDrop;
-import com.kuuhaku.model.common.drop.ItemDrop;
-import com.kuuhaku.model.common.drop.JokerDrop;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.CardStatus;
 import com.kuuhaku.model.enums.KawaiponRarity;
@@ -57,7 +53,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
-import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -106,6 +102,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -331,7 +328,7 @@ public class Helper {
 		}
 	}
 
-	public static Webhook getOrCreateWebhook(TextChannel chn, String name, ShardManager manager) throws InterruptedException, ExecutionException {
+	public static Webhook getOrCreateWebhook(TextChannel chn, String name) throws InterruptedException, ExecutionException {
 		AtomicReference<Webhook> webhook = new AtomicReference<>();
 		List<Webhook> whs = chn.retrieveWebhooks().submit().get();
 		whs.stream()
@@ -524,10 +521,10 @@ public class Helper {
 				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissionsExplicit(c);
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
-						perms.stream()
-								.map(p -> "✅ -> " + p.getName() + "\n")
-								.sorted()
-								.collect(Collectors.joining());
+							  perms.stream()
+									  .map(p -> "✅ -> " + p.getName() + "\n")
+									  .sorted()
+									  .collect(Collectors.joining());
 			}
 		} catch (NoResultException ignore) {
 		}
@@ -536,11 +533,11 @@ public class Helper {
 		EnumSet<Permission> perms = shiro.getPermissionsExplicit(c);
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
-				perms.stream()
-						.map(p -> "✅ -> " + p.getName() + "\n")
-						.sorted()
-						.collect(Collectors.joining()) +
-				jibrilPerms;
+			   perms.stream()
+					   .map(p -> "✅ -> " + p.getName() + "\n")
+					   .sorted()
+					   .collect(Collectors.joining()) +
+			   jibrilPerms;
 	}
 
 	public static <T> T getOr(T get, T or) {
@@ -1326,8 +1323,7 @@ public class Helper {
 		}
 	}
 
-	public static void forceSpawnKawaipon(GuildConfig gc, Message message, AddedAnime anime) {
-		TextChannel channel = message.getTextChannel();
+	public static void forceSpawnKawaipon(GuildConfig gc, TextChannel channel, User user, AddedAnime anime, boolean foil) {
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
@@ -1355,12 +1351,12 @@ public class Helper {
 		}
 
 		Card c = cards.get(Helper.rng(cards.size(), true));
-		boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
+		foil = foil || fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
 		KawaiponCard kc = new KawaiponCard(c, foil);
 		BufferedImage img = c.drawCard(foil);
 
 		EmbedBuilder eb = new EmbedBuilder()
-				.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase(Locale.ROOT) + " neste servidor!")
+				.setAuthor(user.getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase(Locale.ROOT) + " neste servidor!")
 				.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 				.setColor(colorThief(img))
 				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + Helper.separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
@@ -1394,19 +1390,13 @@ public class Helper {
 		boolean dbUltimate = dropBuff != null && dropBuff.getTier() == 4;
 
 		if (dbUltimate || chance((2.5 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.75f, 5000), 0, 0.75)) * (dropBuff != null ? dropBuff.getMult() : 1))) {
-			int rolled = Helper.rng(100, false);
-			Prize drop = rolled > 90 ? new ItemDrop() : rolled > 80 ? new JokerDrop() : new CreditDrop();
+			Prize drop = new CreditDrop();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png")
-					.setTitle("Um drop apareceu neste servidor!");
-			if (drop instanceof CreditDrop)
-				eb.addField("Conteúdo:", Helper.separate(drop.getPrize()) + " créditos", true);
-			else if (drop instanceof JokerDrop)
-				eb.addField("Conteúdo:", drop.getPrizeWithPenalty()[0] + "\n__**MAS**__\n" + drop.getPrizeWithPenalty()[1], true);
-			else
-				eb.addField("Conteúdo:", drop.getPrizeAsItem().getName(), true);
-			eb.addField("Código captcha:", drop.getCaptcha(), true)
+					.setTitle("Um drop apareceu neste servidor!")
+					.addField("Conteúdo:", Helper.separate(drop.getPrize()) + " créditos", true)
+					.addField("Código captcha:", drop.getCaptcha(), true)
 					.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisito: " + drop.getRequirement().getKey() + ").", null);
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
@@ -1428,140 +1418,273 @@ public class Helper {
 	}
 
 	public static void spawnPadoru(GuildConfig gc, TextChannel channel) {
-		if (Main.getInfo().getPadoruLimit().containsKey(gc.getGuildID())) return;
+		String padoru = ShiroInfo.RESOURCES_URL + "/assets/padoru_padoru.gif";
+		if (Main.getInfo().getSpecialEvent().containsKey(gc.getGuildID())) return;
 
-		if (chance(0.1 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.09f, 5000), 0, 0.09))) {
-			int rolled = Helper.rng(100, false);
-			List<Prize> prizes = new ArrayList<>();
-			for (int i = 0; i < 6; i++) {
-				prizes.add(rolled > 80 ? new ItemDrop() : new CreditDrop());
-			}
+		if (chance(0.1 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.09, 5000), 0, 0.09))) {
+			try {
+				Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
+				WebhookClient wc = new WebhookClientBuilder(wh.getUrl())
+						.build();
 
-			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setDescription("""
-							**Hashire sori yo**
-							**Kaze no you ni**
-							**Tsukimihara wo...**
-							""")
-					.setThumbnail("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/assets/padoru.gif")
-					.setTitle("Nero Claudius apareceu trazendo presentes neste servidor!");
+				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+				wmb.setUsername("Nero (Evento Padoru)");
+				wmb.setAvatarUrl(ShiroInfo.NERO_AVATAR.formatted(1));
 
-			for (int i = 0; i < prizes.size(); i++) {
-				Prize prize = prizes.get(i);
-				if (prize instanceof CreditDrop)
-					eb.addField("Presente " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
-				else
-					eb.addField("Presente " + (i + 1) + ":", prize.getPrizeAsItem().getName(), true);
-			}
-
-
-			eb.setFooter("Complete a música para participar do sorteio dos prêmios.", null);
-
-			Set<String> users = new HashSet<>();
-
-			SimpleMessageListener sml = new SimpleMessageListener() {
-				@Override
-				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-					String msg = event.getMessage().getContentRaw();
-					User author = event.getAuthor();
-					if (msg.equalsIgnoreCase("PADORU PADORU") && !author.isBot() && users.add(author.getId())) {
-						Emote e = Main.getShiroShards().getEmoteById("787012642501689344");
-						if (e != null) event.getMessage().addReaction(e).queue();
-					}
+				List<Prize> prizes = new ArrayList<>();
+				for (int i = 0; i < 6; i++) {
+					prizes.add(new CreditDrop());
 				}
-			};
 
-			Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), sml);
-			Consumer<Message> act = msg -> {
-				try {
-					InputStream is = getImage("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/assets/padoru_padoru.gif");
+				ColorlessWebhookEmbedBuilder web = new ColorlessWebhookEmbedBuilder()
+						.setDescription("""
+								**Hashire sori yo**
+								**Kaze no you ni**
+								**Tsukimihara wo...**
+								""")
+						.setThumbnailUrl(ShiroInfo.RESOURCES_URL + "/assets/padoru.gif")
+						.setTitle("Nero Claudius apareceu trazendo presentes neste servidor!");
 
+				for (int i = 0; i < prizes.size(); i++) {
+					Prize prize = prizes.get(i);
+					web.addField("Presente " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
+				}
+
+				web.setFooter("Complete a música para participar do sorteio dos prêmios.", null);
+
+				Set<String> users = new HashSet<>();
+				SimpleMessageListener sml = new SimpleMessageListener() {
+					@Override
+					public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+						String msg = event.getMessage().getContentRaw();
+						User author = event.getAuthor();
+						if (msg.equalsIgnoreCase("PADORU PADORU") && !author.isBot() && users.add(author.getId())) {
+							Emote e = Main.getShiroShards().getEmoteById("787012642501689344");
+							if (e != null) event.getMessage().addReaction(e).queue();
+						}
+					}
+				};
+
+				Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), sml);
+				Consumer<Message> act = msg -> {
 					if (users.size() > 0) {
 						List<String> ids = new ArrayList<>(users);
 						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
 
 						Account acc = AccountDAO.getAccount(u.getId());
 						for (Prize prize : prizes) {
-							if (prize instanceof CreditDrop)
-								acc.addCredit(prize.getPrize(), Helper.class);
-							else
-								acc.addBuff(prize.getPrizeAsItem().getId());
+							acc.addCredit(prize.getPrize(), Helper.class);
 						}
 
 						EmbedBuilder neb = new ColorlessEmbedBuilder()
-								.setImage("attachment://padoru_padoru.gif");
+								.setImage(padoru);
+
 						for (int i = 0; i < prizes.size(); i++) {
 							Prize prize = prizes.get(i);
-							if (prize instanceof CreditDrop)
-								neb.addField("Presente " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
-							else
-								neb.addField("Presente " + (i + 1) + ":", prize.getPrizeAsItem().getName(), true);
+							neb.addField("Presente " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
 						}
 
 						AccountDAO.saveAccount(acc);
-						msg.getTextChannel().sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!")
-								.embed(neb.build())
-								.addFile(is, "padoru_padoru.gif")
-								.queue();
+						wc.send(wmb.setContent("Decidi que " + u.getAsMention() + " merece os presentes!")
+								.addEmbeds(web.build())
+								.build());
+						wc.close();
 					} else {
-						msg.getTextChannel().sendMessage("Nero decidiu que ninguém merece os presentes!")
-								.addFile(is, "padoru_padoru.gif")
-								.queue();
+						wc.send(wmb.setContent("Decidi que ninguém merece os presentes!")
+								.build());
+						wc.close();
 					}
 					sml.close();
-				} catch (IOException e) {
-					if (users.size() > 0) {
-						List<String> ids = new ArrayList<>(users);
-						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
+				};
 
-						Account acc = AccountDAO.getAccount(u.getId());
-						for (Prize prize : prizes) {
-							if (prize instanceof CreditDrop)
-								acc.addCredit(prize.getPrize(), Helper.class);
-							else
-								acc.addBuff(prize.getPrizeAsItem().getId());
-						}
+				if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
+					ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
 
-						AccountDAO.saveAccount(acc);
-						msg.getTextChannel().sendMessage("Nero decidiu que " + u.getAsMention() + " merece os presentes!")
-								.queue();
-					} else {
-						msg.getTextChannel().sendMessage("Nero decidiu que ninguém merece os presentes!")
-								.queue();
-					}
-					sml.close();
-				}
-			};
-
-			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
-				channel.sendMessage(eb.build())
-						.delay(1, TimeUnit.MINUTES)
-						.queue(msg -> {
-							msg.delete().queue(null, Helper::doNothing);
-							act.accept(msg);
-						});
-			} else {
-				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
-
-				if (tc == null) {
-					gc.setCanalDrop(null);
-					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessage(eb.build())
+					channel.retrieveMessageById(rm.getId())
 							.delay(1, TimeUnit.MINUTES)
 							.queue(msg -> {
 								msg.delete().queue(null, Helper::doNothing);
 								act.accept(msg);
 							});
 				} else {
-					tc.sendMessage(eb.build())
-							.delay(1, TimeUnit.MINUTES)
+					ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
+					TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
+
+					if (tc == null) {
+						gc.setCanalDrop(null);
+						GuildDAO.updateGuildSettings(gc);
+						channel.retrieveMessageById(rm.getId())
+								.delay(1, TimeUnit.MINUTES)
+								.queue(msg -> {
+									msg.delete().queue(null, Helper::doNothing);
+									act.accept(msg);
+								});
+					} else {
+						tc.retrieveMessageById(rm.getId())
+								.delay(1, TimeUnit.MINUTES)
+								.queue(msg -> {
+									msg.delete().queue(null, Helper::doNothing);
+									act.accept(msg);
+								});
+					}
+				}
+
+				Main.getInfo().getSpecialEvent().put(gc.getGuildID(), true);
+			} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
+			}
+		}
+	}
+
+	public static void spawnUsaTan(GuildConfig gc, TextChannel channel) {
+		if (Main.getInfo().getSpecialEvent().containsKey(gc.getGuildID())) return;
+
+		if (chance(0.15 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.5, 5000), 0, 0.05))) {
+			try {
+				Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
+				WebhookClient wc = new WebhookClientBuilder(wh.getUrl())
+						.build();
+
+				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+				wmb.setUsername("Usa-tan (Evento Páscoa)");
+				wmb.setAvatarUrl(ShiroInfo.USATAN_AVATAR.formatted(1));
+
+				Emote egg = channel.getJDA().getEmoteById("828634002197970955");
+				assert egg != null;
+
+				List<Prize> prizes = new ArrayList<>();
+				for (int i = 0; i < 4; i++) {
+					prizes.add(new CreditDrop());
+				}
+
+				ColorlessWebhookEmbedBuilder web = new ColorlessWebhookEmbedBuilder()
+						.setDescription("Hehe, será que você consegue achar o ovo de páscoa que eu escondi neste canal?")
+						.setThumbnailUrl(egg.getImageUrl())
+						.setTitle("Usa-tan apareceu trazendo presentes neste servidor!");
+
+				for (int i = 0; i < prizes.size(); i++) {
+					Prize prize = prizes.get(i);
+					web.addField("Ovo " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
+				}
+
+				web.setFooter("Enconte a reação de ovo de páscoa escondido em uma das mensagens neste canal.", null);
+
+				AtomicBoolean found = new AtomicBoolean(false);
+				Runnable act = () -> {
+					wc.send(wmb.setContent("Ninguem encontrou o ovo a tempo!")
+							.build());
+					wc.close();
+				};
+
+				if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
+					ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
+
+					channel.retrieveMessageById(rm.getId())
+							.map(m -> {
+								Pages.buttonize(m, Collections.singletonMap(
+										egg.getAsMention(), (mb, ms) -> {
+											Account acc = AccountDAO.getAccount(mb.getId());
+											for (Prize prize : prizes) {
+												acc.addCredit(prize.getPrize(), Helper.class);
+											}
+
+											ColorlessWebhookEmbedBuilder neb = new ColorlessWebhookEmbedBuilder();
+											for (int i = 0; i < prizes.size(); i++) {
+												Prize prize = prizes.get(i);
+												neb.addField("Ovo " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
+											}
+
+											AccountDAO.saveAccount(acc);
+											wc.send(wmb.setContent(mb.getAsMention() + " encontrou os ovos!")
+													.addEmbeds(neb.build())
+													.build());
+											wc.close();
+											found.set(true);
+										}
+								), false, 2, TimeUnit.MINUTES);
+
+								return m;
+							})
+							.delay(2, TimeUnit.MINUTES)
 							.queue(msg -> {
 								msg.delete().queue(null, Helper::doNothing);
-								act.accept(msg);
+								if (!found.get()) act.run();
 							});
+				} else {
+					ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
+					TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
+
+					if (tc == null) {
+						gc.setCanalDrop(null);
+						GuildDAO.updateGuildSettings(gc);
+						channel.retrieveMessageById(rm.getId())
+								.map(m -> {
+									Pages.buttonize(m, Collections.singletonMap(
+											egg.getAsMention(), (mb, ms) -> {
+												Account acc = AccountDAO.getAccount(mb.getId());
+												for (Prize prize : prizes) {
+													acc.addCredit(prize.getPrize(), Helper.class);
+												}
+
+												ColorlessWebhookEmbedBuilder neb = new ColorlessWebhookEmbedBuilder();
+												for (int i = 0; i < prizes.size(); i++) {
+													Prize prize = prizes.get(i);
+													neb.addField("Ovo " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
+												}
+
+												AccountDAO.saveAccount(acc);
+												wc.send(wmb.setContent(mb.getAsMention() + " encontrou os ovos!")
+														.addEmbeds(neb.build())
+														.build());
+												wc.close();
+												found.set(true);
+											}
+									), false, 2, TimeUnit.MINUTES);
+
+									return m;
+								})
+								.delay(2, TimeUnit.MINUTES)
+								.queue(msg -> {
+									msg.delete().queue(null, Helper::doNothing);
+									if (!found.get()) act.run();
+								});
+					} else {
+						tc.retrieveMessageById(rm.getId())
+								.map(m -> {
+									Pages.buttonize(m, Collections.singletonMap(
+											egg.getAsMention(), (mb, ms) -> {
+												Account acc = AccountDAO.getAccount(mb.getId());
+												for (Prize prize : prizes) {
+													acc.addCredit(prize.getPrize(), Helper.class);
+												}
+
+												ColorlessWebhookEmbedBuilder neb = new ColorlessWebhookEmbedBuilder();
+												for (int i = 0; i < prizes.size(); i++) {
+													Prize prize = prizes.get(i);
+													neb.addField("Ovo " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
+												}
+
+												AccountDAO.saveAccount(acc);
+												wc.send(wmb.setContent(mb.getAsMention() + " encontrou os ovos!")
+														.addEmbeds(neb.build())
+														.build());
+												wc.close();
+												found.set(true);
+											}
+									), false, 2, TimeUnit.MINUTES);
+
+									return m;
+								})
+								.delay(2, TimeUnit.MINUTES)
+								.queue(msg -> {
+									msg.delete().queue(null, Helper::doNothing);
+									if (!found.get()) act.run();
+								});
+					}
 				}
+
+				Main.getInfo().getSpecialEvent().put(gc.getGuildID(), true);
+			} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
 			}
-			Main.getInfo().getPadoruLimit().put(gc.getGuildID(), true);
 		}
 	}
 
@@ -1754,8 +1877,8 @@ public class Helper {
 		int total = (int) CardDAO.totalCards();
 
 		if (normalCount + foilCount == total * 2) return CardStatus.NO_CARDS;
-		else if (foilCount == total && normalCount < total) return CardStatus.NORMAL_CARDS;
-		else if (normalCount == total && foilCount < total) return CardStatus.FOIL_CARDS;
+		else if (foilCount == total) return CardStatus.NORMAL_CARDS;
+		else if (normalCount == total) return CardStatus.FOIL_CARDS;
 		else return CardStatus.ALL_CARDS;
 	}
 
@@ -1882,7 +2005,7 @@ public class Helper {
 				try {
 					TextChannel c = g.getTextChannelById(gc.getCanalAvisos());
 					if (c != null && c.canTalk()) {
-						Webhook wh = Helper.getOrCreateWebhook(c, "Notificações Shiro", Main.getShiroShards());
+						Webhook wh = Helper.getOrCreateWebhook(c, "Notificações Shiro");
 						if (wh == null) result.put(g.getName(), false);
 						else {
 							WebhookClientBuilder wcb = new WebhookClientBuilder(wh.getUrl());
@@ -1910,8 +2033,9 @@ public class Helper {
 
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 		wmb.setUsername("Stephanie (Notificações Shiro)");
-		wmb.setAvatarUrl("https://i.imgur.com/OmiNNMF.png"); //Halloween
-		//wmb.setAvatarUrl("https://i.imgur.com/mgA11Rx.png"); //Normal
+
+		int v = 1; //1 = Normal | 2 = Halloween
+		wmb.setAvatarUrl(ShiroInfo.STEPHANIE_AVATAR.formatted(v)); //Normal
 		wmb.setContent(message);
 		WebhookCluster cluster = new WebhookCluster(clients);
 		cluster.broadcast(wmb.build());
@@ -2184,5 +2308,40 @@ public class Helper {
 		tax = trusted ? tax / 2 : tax;
 
 		return raw - (victorious ? 0 : (int) (raw * tax));
+	}
+
+	public static <T> MessageAction generateStore(User u, TextChannel chn, String title, String desc, List<T> items, Function<T, MessageEmbed.Field> fieldExtractor) {
+		Account acc = AccountDAO.getAccount(u.getId());
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setTitle(title)
+				.setDescription(desc)
+				.setFooter("""
+						:coin: Créditos: %s
+						:diamonds: Gemas: %s
+						""".formatted(acc.getBalance(), acc.getGems()));
+
+		for (T item : items) {
+			eb.addField(fieldExtractor.apply(item));
+		}
+
+		return chn.sendMessage(eb.build());
+	}
+
+	public static <T> MessageAction generateStore(User u, TextChannel chn, String title, String desc, Color color, List<T> items, Function<T, MessageEmbed.Field> fieldExtractor) {
+		Account acc = AccountDAO.getAccount(u.getId());
+		EmbedBuilder eb = new EmbedBuilder()
+				.setTitle(title)
+				.setDescription(desc)
+				.setColor(color)
+				.setFooter("""
+						:coin: Créditos: %s
+						:diamonds: Gemas: %s
+						""".formatted(acc.getBalance(), acc.getGems()));
+
+		for (T item : items) {
+			eb.addField(fieldExtractor.apply(item));
+		}
+
+		return chn.sendMessage(eb.build());
 	}
 }
