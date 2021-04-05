@@ -15,6 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1115,13 +1117,9 @@
       <workItem from="1617161084784" duration="271000" />
       <workItem from="1617303857653" duration="6289000" />
       <workItem from="1617560044403" duration="9767000" />
-    </task>
-    <task id="LOCAL-04022" summary="Correções menores">
-      <created>1616100412883</created>
-      <option name="number" value="04022" />
-      <option name="presentableId" value="LOCAL-04022" />
-      <option name="project" value="LOCAL" />
-      <updated>1616100412883</updated>
+      <workItem from="1617641505745" duration="339000" />
+      <workItem from="1617642067370" duration="120000" />
+      <workItem from="1617644965666" duration="675000" />
     </task>
     <task id="LOCAL-04023" summary="Correções menores">
       <created>1616158326662</created>
@@ -1459,7 +1457,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617641141416</updated>
     </task>
-    <option name="localTasksCounter" value="4071" />
+    <task id="LOCAL-04071" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
+      <created>1617641806180</created>
+      <option name="number" value="04071" />
+      <option name="presentableId" value="LOCAL-04071" />
+      <option name="project" value="LOCAL" />
+      <updated>1617641806180</updated>
+    </task>
+    <option name="localTasksCounter" value="4072" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
