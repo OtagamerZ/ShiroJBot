@@ -46,7 +46,8 @@ public enum TagIcons {
 	BUGHUNTER,
 	RANKED_WIN,
 	RANKED_LOSE,
-	RANKED_PENDING;
+	RANKED_PENDING,
+	EASTER_EGG;
 
 	public String getTag(int lvl) {
 		return switch (this) {
@@ -72,6 +73,7 @@ public enum TagIcons {
 			case RANKED_WIN -> "<:ranked_win:789231688122236939> ";
 			case RANKED_LOSE -> "<:ranked_lose:789231689820930048> ";
 			case RANKED_PENDING -> "<:ranked_pending:789231687950663691> ";
+			case EASTER_EGG -> "<:easteregg:828634002197970955>";
 		};
 	}
 
@@ -99,6 +101,7 @@ public enum TagIcons {
 			case RANKED_WIN -> "789231688122236939";
 			case RANKED_LOSE -> "789231689820930048";
 			case RANKED_PENDING -> "789231687950663691";
+			case EASTER_EGG -> "828634002197970955";
 		};
 	}
 
