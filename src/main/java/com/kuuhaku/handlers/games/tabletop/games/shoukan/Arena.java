@@ -19,11 +19,13 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -144,6 +146,12 @@ public class Arena {
 								Drawable d = h.getDeque().peek();
 								assert d != null;
 								g2d.drawImage(d.drawCard(true), 137, 193, null);
+
+								Pair<Race, Race> combo = h.getCombo();
+								if (combo.getLeft() != Race.NONE)
+									g2d.drawImage(combo.getLeft().getIcon(), 234, 193, 128, 128, null);
+								if (combo.getRight() != Race.NONE)
+									g2d.drawImage(combo.getRight().getIcon(), 137, 218, 78, 78, null);
 							}
 
 							if (h.getLockTime() > 0) {
@@ -178,6 +186,12 @@ public class Arena {
 								Drawable d = h.getDeque().peek();
 								assert d != null;
 								g2d.drawImage(d.drawCard(true), 1889, 1206, null);
+
+								Pair<Race, Race> combo = h.getCombo();
+								if (combo.getLeft() != Race.NONE)
+									g2d.drawImage(combo.getLeft().getIcon(), 1889, 1078, 128, 128, null);
+								if (combo.getRight() != Race.NONE)
+									g2d.drawImage(combo.getRight().getIcon(), 2050, 1103, 78, 78, null);
 							}
 
 							if (h.getLockTime() > 0) {
