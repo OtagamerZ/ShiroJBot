@@ -98,7 +98,7 @@ public enum Slot {
 		Slot out = null;
 		Set<Slot> dist = new HashSet<>(rolled);
 		for (Slot slot : dist) {
-			if (Collections.frequency(rolled, slot) == 3) {
+			if (Collections.frequency(rolled, slot) >= 3) {
 				out = slot;
 				break;
 			}
