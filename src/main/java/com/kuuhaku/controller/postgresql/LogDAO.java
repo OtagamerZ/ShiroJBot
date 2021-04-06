@@ -58,7 +58,7 @@ public class LogDAO {
 			return switch (type.toUpperCase(Locale.ROOT)) {
 				case "T" -> {
 					Query q = em.createNativeQuery("""
-							SELECT t.fromclass
+							SELECT CASE t.fromclass WHEN '' THEN 'Anonymous' ELSE t.fromclass END
 								 , SUM(t.value)
 							FROM transaction t
 							WHERE t.uid = :id
