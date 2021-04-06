@@ -43,6 +43,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -87,7 +88,7 @@ public class SlotsCommand implements Executable {
 		Slots slt = SlotsDAO.getSlots();
 		acc.consumeCredit(bet.get(), this.getClass());
 		AccountDAO.saveAccount(acc);
-		slt.addToPot(Math.round(bet.get() * 0.75));
+		slt.addToPot(Math.round(bet.get() * 0.5));
 		SlotsDAO.saveSlots(slt);
 		rollSlots();
 
@@ -143,57 +144,86 @@ public class SlotsCommand implements Executable {
 			}
 		};
 
-		final String top = "<:corner_down_right:747882840451973170><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:corner_down_left:747882840380932286>";
-		final String bottom = "<:corner_up_right:747882840439652522><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:corner_up_left:747882840326406246>";
+		String frame = Helper.buildFrame(
+				"""
+						%
+												
+						**Prêmio acumulado: __%__**						    
+						┌─┬─┬─┬─┬─┐
+						┤%│%│%│%│%├
+						└═┴═┴═┴═┴═┘
+						"""
+		);
 
-		channel.sendMessage(":white_flower: | **Aposta de " + author.getAsMention() + ": __" + Helper.separate(args[0]) + "__**").queue(s -> {
-			s.editMessage("""
-					%s
-					     
-					**Prêmio acumulado: __%s__**
-					%s
-					%s
-					%s
-					""".formatted(s.getContentRaw(), Helper.separate(slt.getPot()), top, showSlots(0), bottom))
-					.queue(null, Helper::doNothing);
-			for (int i = 1; i < 4; i++) {
-				if (i != 3)
-					s.editMessage("""
-							%s
-							     
-							**Prêmio acumulado: __%s__**
-							%s
-							%s
-							%s
-							""".formatted(s.getContentRaw(), Helper.separate(slt.getPot()), top, showSlots(i), bottom))
-							.queueAfter(3 + (3 * i), TimeUnit.SECONDS, null, Helper::doNothing);
-				else
-					s.editMessage("""
-							%s
-							     
-							**Prêmio acumulado: __%s__**
-							%s
-							%s
-							%s
-							""".formatted(s.getContentRaw(), Helper.separate(slt.getPot()), top, showSlots(i), bottom))
-							.queueAfter(3 + (3 * i), TimeUnit.SECONDS, f -> r.run(), Helper::doNothing);
+		channel.sendMessage(frame.formatted(
+				":white_flower: | **Aposta de " + author.getAsMention() + ": __" + Helper.separate(args[0]) + "__**",
+				Helper.separate(slt.getPot()), "%s", "%s", "%s", "%s", "%s"
+		)).queue(s -> {
+			String str = s.getContentRaw();
+
+			for (int i = 1; i < 6; i++) {
+				try {
+					s.editMessage(str.formatted(showSlots(i)))
+							.submitAfter(3 + (3 * i), TimeUnit.SECONDS)
+							.get();
+
+					if (i == 5) r.run();
+				} catch (InterruptedException | ExecutionException ignore) {
+				}
 			}
 		});
 	}
 
-	private String showSlots(int phase) {
+	private Object[] showSlots(int phase) {
 		return switch (phase) {
-			case 0 -> "<:vertical_right:747882840569544714>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
-			case 1 -> "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
-			case 2 -> "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
-			case 3 -> "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + rolled.get(2) + "<:vertical_left:747882840414486571>";
-			default -> "";
+			case 1 -> new Object[]{
+					rolled.get(0),
+					"%s",
+					"%s",
+					"%s",
+					"%s"
+			};
+			case 2 -> new Object[]{
+					rolled.get(0),
+					rolled.get(1),
+					"%s",
+					"%s",
+					"%s"
+			};
+			case 3 -> new Object[]{
+					rolled.get(0),
+					rolled.get(1),
+					rolled.get(2),
+					"%s",
+					"%s"
+			};
+			case 4 -> new Object[]{
+					rolled.get(0),
+					rolled.get(1),
+					rolled.get(2),
+					rolled.get(3),
+					"%s"
+			};
+			case 5 -> new Object[]{
+					rolled.get(0),
+					rolled.get(1),
+					rolled.get(2),
+					rolled.get(3),
+					rolled.get(4)
+			};
+			default -> new Object[]{
+					"%s",
+					"%s",
+					"%s",
+					"%s",
+					"%s"
+			};
 		};
 	}
 
 	private void rollSlots() {
 		rolled.clear();
-		rolled.addAll(Helper.getRandomN(List.of(Slots.getSlots()), 3));
+		rolled.addAll(Helper.getRandomN(List.of(Slots.getSlots()), 5));
 	}
 
 	private String prizeTable() {
