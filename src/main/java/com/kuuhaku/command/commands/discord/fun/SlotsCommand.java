@@ -159,15 +159,13 @@ public class SlotsCommand implements Executable {
 				":white_flower: | **Aposta de " + author.getAsMention() + ": __" + Helper.separate(args[0]) + "__**",
 				Helper.separate(slt.getPot()), "%s", "%s", "%s", "%s", "%s"
 		)).queue(s -> {
-			String str = s.getContentRaw();
-
-			for (int i = 1; i < 6; i++) {
+			for (int i = 0; i < 5; i++) {
 				try {
-					s.editMessage(str.formatted(showSlots(i)))
-							.submitAfter(3 + (3 * i), TimeUnit.SECONDS)
+					s.editMessage(s.getContentRaw().formatted(showSlots(i)))
+							.submitAfter(3, TimeUnit.SECONDS)
 							.get();
 
-					if (i == 5) r.run();
+					if (i == 4) r.run();
 				} catch (InterruptedException | ExecutionException ignore) {
 				}
 			}
@@ -176,35 +174,35 @@ public class SlotsCommand implements Executable {
 
 	private Object[] showSlots(int phase) {
 		return switch (phase) {
+			case 0 -> new Object[]{
+					rolled.get(0),
+					"<:blank:747876900860461118>",
+					"<:blank:747876900860461118>",
+					"<:blank:747876900860461118>",
+					"<:blank:747876900860461118>"
+			};
 			case 1 -> new Object[]{
 					rolled.get(0),
-					"%s",
-					"%s",
-					"%s",
-					"%s"
+					rolled.get(1),
+					"<:blank:747876900860461118>",
+					"<:blank:747876900860461118>",
+					"<:blank:747876900860461118>"
 			};
 			case 2 -> new Object[]{
 					rolled.get(0),
 					rolled.get(1),
-					"%s",
-					"%s",
-					"%s"
+					rolled.get(2),
+					"<:blank:747876900860461118>",
+					"<:blank:747876900860461118>"
 			};
 			case 3 -> new Object[]{
 					rolled.get(0),
 					rolled.get(1),
 					rolled.get(2),
-					"%s",
-					"%s"
+					rolled.get(3),
+					"<:blank:747876900860461118>"
 			};
 			case 4 -> new Object[]{
-					rolled.get(0),
-					rolled.get(1),
-					rolled.get(2),
-					rolled.get(3),
-					"%s"
-			};
-			case 5 -> new Object[]{
 					rolled.get(0),
 					rolled.get(1),
 					rolled.get(2),
@@ -212,11 +210,11 @@ public class SlotsCommand implements Executable {
 					rolled.get(4)
 			};
 			default -> new Object[]{
-					"%s",
-					"%s",
-					"%s",
-					"%s",
-					"%s"
+					"<:blank:747876900860461118>",
+					"<:blank:747876900860461118>",
+					"<:blank:747876900860461118>",
+					"<:blank:747876900860461118>",
+					"<:blank:747876900860461118>"
 			};
 		};
 	}
