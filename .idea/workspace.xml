@@ -1121,13 +1121,8 @@
       <workItem from="1617645758656" duration="21000" />
       <workItem from="1617646062840" duration="321000" />
       <workItem from="1617646747009" duration="314000" />
-    </task>
-    <task id="LOCAL-04037" summary="Correções menores">
-      <created>1616351256669</created>
-      <option name="number" value="04037" />
-      <option name="presentableId" value="LOCAL-04037" />
-      <option name="project" value="LOCAL" />
-      <updated>1616351256670</updated>
+      <workItem from="1617717295455" duration="130000" />
+      <workItem from="1617725857819" duration="980000" />
     </task>
     <task id="LOCAL-04038" summary="Correções menores">
       <created>1616351708442</created>
@@ -1465,7 +1460,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617715872810</updated>
     </task>
-    <option name="localTasksCounter" value="4086" />
+    <task id="LOCAL-04086" summary="Correção no alinhamento dos icones de combo">
+      <created>1617717419011</created>
+      <option name="number" value="04086" />
+      <option name="presentableId" value="LOCAL-04086" />
+      <option name="project" value="LOCAL" />
+      <updated>1617717419011</updated>
+    </task>
+    <option name="localTasksCounter" value="4087" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
