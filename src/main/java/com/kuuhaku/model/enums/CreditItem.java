@@ -79,7 +79,7 @@ public enum CreditItem {
 					return false;
 				}
 
-				AddedAnime an = CardDAO.verifyAnime(args[2].toUpperCase(Locale.ROOT));
+				AddedAnime an = CardDAO.verifyAnime(args[1].toUpperCase(Locale.ROOT));
 				if (an == null) {
 					chn.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 					return false;
@@ -108,7 +108,7 @@ public enum CreditItem {
 					return false;
 				}
 
-				AddedAnime an = CardDAO.verifyAnime(args[2].toUpperCase(Locale.ROOT));
+				AddedAnime an = CardDAO.verifyAnime(args[1].toUpperCase(Locale.ROOT));
 				if (an == null) {
 					chn.sendMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getValidAnime().stream().map(AddedAnime::getName).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 					return false;
