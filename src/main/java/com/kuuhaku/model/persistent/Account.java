@@ -93,9 +93,6 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean useFoil = false;
 
-	@Column(columnDefinition = "TEXT")
-	private String buffs = "{}";
-
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'Nunca'")
 	private String lastVoted = "Nunca";
 
@@ -417,32 +414,6 @@ public class Account {
 
 	public void setReceiveNotifs(boolean receiveNotifs) {
 		this.receiveNotifs = receiveNotifs;
-	}
-
-	public Map<String, Integer> getBuffs() {
-		if (buffs == null) return new HashMap<>();
-		else return new JSONObject(buffs)
-				.toMap()
-				.entrySet()
-				.stream()
-				.map(e -> Pair.of(e.getKey(), (int) e.getValue()))
-				.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
-	}
-
-	public void setBuffs(Map<String, Integer> buffs) {
-		this.buffs = new JSONObject(buffs).toString();
-	}
-
-	public void addBuff(String id) {
-		Map<String, Integer> buffs = getBuffs();
-		buffs.put(id, buffs.getOrDefault(id, 0) + 1);
-		setBuffs(buffs);
-	}
-
-	public void removeBuff(String id) {
-		Map<String, Integer> buffs = getBuffs();
-		buffs.put(id, Math.max(0, buffs.getOrDefault(id, 0) - 1));
-		setBuffs(buffs);
 	}
 
 	public FrameColor getFrame() {
