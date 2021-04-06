@@ -2288,8 +2288,8 @@ public class Helper {
 			put("┬", "<:cross_down:747882840477138994>");
 			put("┴", "<:cross_up:747882840489853000>");
 			put("═", "<:horizontal_bottom:747882840565350430>");
-			put("┤", "<:vertical_left:747882840414486571>");
-			put("├", "<:vertical_right:747882840569544714>");
+			put("┤", "<:vertical_right:747882840569544714>");
+			put("├", "<:vertical_left:747882840414486571>");
 			put("│", "<:vertical:747883406632943669>");
 			put("%", "%s");
 		}};
