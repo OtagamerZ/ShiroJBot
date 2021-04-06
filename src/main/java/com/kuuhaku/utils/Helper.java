@@ -2277,4 +2277,27 @@ public class Helper {
 
 		return chn.sendMessage(eb.build());
 	}
+
+	public static String buildFrame(String sketch) {
+		Map<String, String> replacements = new HashMap<>() {{
+			put("─", "<:horizontal_top:747882840351572020>");
+			put("┌", "<:corner_down_right:747882840451973170>");
+			put("┐", "<:corner_down_left:747882840380932286>");
+			put("└", "<:corner_up_right:747882840439652522>");
+			put("┘", "<:corner_up_left:747882840326406246>");
+			put("┬", "<:cross_down:747882840477138994>");
+			put("┴", "<:cross_up:747882840489853000>");
+			put("═", "<:horizontal_bottom:747882840565350430>");
+			put("┤", "<:vertical_left:747882840414486571>");
+			put("├", "<:vertical_right:747882840569544714>");
+			put("│", "<:vertical:747883406632943669>");
+			put("%", "%s");
+		}};
+
+		StringBuilder sb = new StringBuilder();
+		for (char c : sketch.toCharArray())
+			sb.append(replacements.getOrDefault(String.valueOf(c), String.valueOf(c)));
+
+		return sb.toString();
+	}
 }
