@@ -143,6 +143,8 @@ public class SlotsCommand implements Executable {
 					PStateDAO.savePoliticalState(ps);
 				}
 			}
+
+			Main.getInfo().getConfirmationPending().remove(author.getId());
 		};
 
 		String frame = Helper.buildFrame(
@@ -161,6 +163,7 @@ public class SlotsCommand implements Executable {
 			add(Helper.separate(slt.getPot()));
 		}};
 
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(frame.formatted(ListUtils.union(vals, showSlots(-1)).toArray(Object[]::new))).queue(s -> {
 			for (int i = 0; i < 5; i++) {
 				try {
