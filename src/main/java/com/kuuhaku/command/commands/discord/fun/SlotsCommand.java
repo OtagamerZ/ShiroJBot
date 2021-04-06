@@ -39,6 +39,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -155,13 +156,15 @@ public class SlotsCommand implements Executable {
 						"""
 		);
 
-		channel.sendMessage(frame.formatted(
-				":white_flower: | **Aposta de " + author.getAsMention() + ": __" + Helper.separate(args[0]) + "__**",
-				Helper.separate(slt.getPot()), "%s", "%s", "%s", "%s", "%s"
-		)).queue(s -> {
+		List<String> vals = new ArrayList<>() {{
+			add(":white_flower: | **Aposta de " + author.getAsMention() + ": __" + Helper.separate(args[0]) + "__**");
+			add(Helper.separate(slt.getPot()));
+		}};
+
+		channel.sendMessage(frame.formatted(ListUtils.union(vals, showSlots(-1)).toArray(Object[]::new))).queue(s -> {
 			for (int i = 0; i < 5; i++) {
 				try {
-					s.editMessage(s.getContentRaw().formatted(showSlots(i)))
+					s.editMessage(frame.formatted(ListUtils.union(vals, showSlots(i)).toArray(Object[]::new)))
 							.submitAfter(3, TimeUnit.SECONDS)
 							.get();
 
@@ -172,50 +175,50 @@ public class SlotsCommand implements Executable {
 		});
 	}
 
-	private Object[] showSlots(int phase) {
+	private List<Object> showSlots(int phase) {
 		return switch (phase) {
-			case 0 -> new Object[]{
+			case 0 -> List.of(
 					rolled.get(0),
-					"<:blank:747876900860461118>",
-					"<:blank:747876900860461118>",
-					"<:blank:747876900860461118>",
-					"<:blank:747876900860461118>"
-			};
-			case 1 -> new Object[]{
+					Slots.SLOT,
+					Slots.SLOT,
+					Slots.SLOT,
+					Slots.SLOT
+			);
+			case 1 -> List.of(
 					rolled.get(0),
 					rolled.get(1),
-					"<:blank:747876900860461118>",
-					"<:blank:747876900860461118>",
-					"<:blank:747876900860461118>"
-			};
-			case 2 -> new Object[]{
+					Slots.SLOT,
+					Slots.SLOT,
+					Slots.SLOT
+			);
+			case 2 -> List.of(
 					rolled.get(0),
 					rolled.get(1),
 					rolled.get(2),
-					"<:blank:747876900860461118>",
-					"<:blank:747876900860461118>"
-			};
-			case 3 -> new Object[]{
+					Slots.SLOT,
+					Slots.SLOT
+			);
+			case 3 -> List.of(
 					rolled.get(0),
 					rolled.get(1),
 					rolled.get(2),
 					rolled.get(3),
-					"<:blank:747876900860461118>"
-			};
-			case 4 -> new Object[]{
+					Slots.SLOT
+			);
+			case 4 -> List.of(
 					rolled.get(0),
 					rolled.get(1),
 					rolled.get(2),
 					rolled.get(3),
 					rolled.get(4)
-			};
-			default -> new Object[]{
-					"<:blank:747876900860461118>",
-					"<:blank:747876900860461118>",
-					"<:blank:747876900860461118>",
-					"<:blank:747876900860461118>",
-					"<:blank:747876900860461118>"
-			};
+			);
+			default -> List.of(
+					Slots.SLOT,
+					Slots.SLOT,
+					Slots.SLOT,
+					Slots.SLOT,
+					Slots.SLOT
+			);
 		};
 	}
 
