@@ -196,12 +196,12 @@ public class Arena {
 						Pair<Race, Race> combo = h.getCombo();
 						if (combo.getLeft() != Race.NONE)
 							g2d.drawImage(combo.getLeft().getIcon(),
-									key == Side.TOP ? 234 : 1889,
-									key == Side.TOP ? 193 : 1556, 128, 128, null);
+									key == Side.TOP ? 137 : 1889,
+									key == Side.TOP ? 543 : 1078, 128, 128, null);
 						if (combo.getRight() != Race.NONE)
 							g2d.drawImage(combo.getRight().getIcon(),
-									key == Side.TOP ? 137 : 2050,
-									key == Side.TOP ? 340 : 1353, 78, 78, null);
+									key == Side.TOP ? 284 : 2036,
+									key == Side.TOP ? 568 : 1103, 78, 78, null);
 					}
 				}
 			}
