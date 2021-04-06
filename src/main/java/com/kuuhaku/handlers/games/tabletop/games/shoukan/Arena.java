@@ -163,16 +163,6 @@ public class Arena {
 							key == Side.TOP ? 178 : 1735, g2d
 					);
 
-					if (h.getLockTime() > 0) {
-						try {
-							BufferedImage lock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/locked.png")));
-							g2d.drawImage(lock,
-									key == Side.TOP ? 137 : 1889,
-									key == Side.TOP ? 193 : 1206, null);
-						} catch (IOException ignore) {
-						}
-					}
-
 					g2d.setColor(Color.white);
 					if (grv.size() > 0) {
 						g2d.drawImage(grv.peekLast().drawCard(false),
@@ -186,6 +176,7 @@ public class Arena {
 								key == Side.TOP ? 1889 : 137,
 								key == Side.TOP ? 178 : 1638, g2d);
 					}
+
 					if (h.getDeque().size() > 0) {
 						Drawable d = h.getDeque().peek();
 						assert d != null;
@@ -202,6 +193,16 @@ public class Arena {
 							g2d.drawImage(combo.getRight().getIcon(),
 									key == Side.TOP ? 284 : 2036,
 									key == Side.TOP ? 568 : 1103, 78, 78, null);
+					}
+
+					if (h.getLockTime() > 0) {
+						try {
+							BufferedImage lock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/locked.png")));
+							g2d.drawImage(lock,
+									key == Side.TOP ? 137 : 1889,
+									key == Side.TOP ? 193 : 1206, null);
+						} catch (IOException ignore) {
+						}
 					}
 				}
 			}
