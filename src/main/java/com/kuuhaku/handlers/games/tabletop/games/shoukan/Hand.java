@@ -66,9 +66,7 @@ public class Hand {
 			this.user = null;
 			this.combo = null;
 			this.deque = null;
-			this.side = null;
-			this.baseHp = 0;
-			this.baseManaPerTurn = 0;
+			this.side = side;
 			return;
 		}
 
