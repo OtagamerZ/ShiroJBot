@@ -62,6 +62,11 @@ public class SlotsCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente ou um slots em progresso, por favor resolva-o antes de usar este comando novamente.").queue();
+			return;
+		}
+
 		if (args.length == 0) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setDescription(prizeTable());
