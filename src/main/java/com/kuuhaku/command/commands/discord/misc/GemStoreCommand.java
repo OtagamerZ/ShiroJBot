@@ -85,6 +85,8 @@ public class GemStoreCommand implements Executable {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prestes a comprar o item `" + gi.getName() + "`, deseja confirmar?").queue(s ->
 					Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+
 								if (gi.getEffect().apply(mb, channel, args)) {
 									Account facc = AccountDAO.getAccount(author.getId());
 									facc.removeGem(gi.getPrice());

@@ -81,6 +81,8 @@ public class CreditStoreCommand implements Executable {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prestes a comprar o item `" + ci.getName() + "`, deseja confirmar?").queue(s ->
 					Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+
 								if (ci.getEffect().apply(mb, channel, args)) {
 									Account facc = AccountDAO.getAccount(author.getId());
 									facc.consumeCredit(ci.getPrice(), CreditStoreCommand.class);
