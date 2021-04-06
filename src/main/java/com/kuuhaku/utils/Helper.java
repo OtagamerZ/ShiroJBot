@@ -1424,9 +1424,9 @@ public class Helper {
 
 		if (chance(0.1 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.09, 5000), 0, 0.09))) {
 			try {
-				Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-				WebhookClient wc = new WebhookClientBuilder(wh.getUrl())
-						.build();
+				TextChannel tc = getOr(channel.getGuild().getTextChannelById(getOr(gc.getCanalDrop(), "1")), channel);
+				Webhook wh = Helper.getOrCreateWebhook(tc, "Shiro");
+				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 				wmb.setUsername("Nero (Evento Padoru)");
@@ -1501,7 +1501,7 @@ public class Helper {
 				if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
 					ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
 
-					channel.retrieveMessageById(rm.getId())
+					tc.retrieveMessageById(rm.getId())
 							.delay(1, TimeUnit.MINUTES)
 							.queue(msg -> {
 								msg.delete().queue(null, Helper::doNothing);
@@ -1509,25 +1509,13 @@ public class Helper {
 							});
 				} else {
 					ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
-					TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
 
-					if (tc == null) {
-						gc.setCanalDrop(null);
-						GuildDAO.updateGuildSettings(gc);
-						channel.retrieveMessageById(rm.getId())
-								.delay(1, TimeUnit.MINUTES)
-								.queue(msg -> {
-									msg.delete().queue(null, Helper::doNothing);
-									act.accept(msg);
-								});
-					} else {
-						tc.retrieveMessageById(rm.getId())
-								.delay(1, TimeUnit.MINUTES)
-								.queue(msg -> {
-									msg.delete().queue(null, Helper::doNothing);
-									act.accept(msg);
-								});
-					}
+					tc.retrieveMessageById(rm.getId())
+							.delay(1, TimeUnit.MINUTES)
+							.queue(msg -> {
+								msg.delete().queue(null, Helper::doNothing);
+								act.accept(msg);
+							});
 				}
 
 				Main.getInfo().getSpecialEvent().put(gc.getGuildID(), true);
@@ -1541,9 +1529,9 @@ public class Helper {
 
 		if (chance(0.15 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.5, 5000), 0, 0.05))) {
 			try {
-				Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-				WebhookClient wc = new WebhookClientBuilder(wh.getUrl())
-						.build();
+				TextChannel tc = getOr(channel.getGuild().getTextChannelById(getOr(gc.getCanalDrop(), "1")), channel);
+				Webhook wh = Helper.getOrCreateWebhook(tc, "Shiro");
+				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 				wmb.setUsername("Usa-tan (Evento Páscoa)");
@@ -1612,32 +1600,19 @@ public class Helper {
 
 				ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
 				if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
-					channel.retrieveMessageById(rm.getId())
+					tc.retrieveMessageById(rm.getId())
 							.delay(2, TimeUnit.MINUTES)
 							.queue(msg -> {
 								msg.delete().queue(null, Helper::doNothing);
 								if (!found.get()) act.run();
 							}, Helper::doNothing);
 				} else {
-					TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
-
-					if (tc == null) {
-						gc.setCanalDrop(null);
-						GuildDAO.updateGuildSettings(gc);
-						channel.retrieveMessageById(rm.getId())
-								.delay(2, TimeUnit.MINUTES)
-								.queue(msg -> {
-									msg.delete().queue(null, Helper::doNothing);
-									if (!found.get()) act.run();
-								}, Helper::doNothing);
-					} else {
-						tc.retrieveMessageById(rm.getId())
-								.delay(2, TimeUnit.MINUTES)
-								.queue(msg -> {
-									msg.delete().queue(null, Helper::doNothing);
-									if (!found.get()) act.run();
-								}, Helper::doNothing);
-					}
+					tc.retrieveMessageById(rm.getId())
+							.delay(2, TimeUnit.MINUTES)
+							.queue(msg -> {
+								msg.delete().queue(null, Helper::doNothing);
+								if (!found.get()) act.run();
+							}, Helper::doNothing);
 				}
 
 				Main.getInfo().getSpecialEvent().put(gc.getGuildID(), true);
