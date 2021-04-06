@@ -15,8 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no alinhamento dos icones de combo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1124,69 +1122,6 @@
       <workItem from="1617646062840" duration="321000" />
       <workItem from="1617646747009" duration="314000" />
     </task>
-    <task id="LOCAL-04028" summary="Correções menores">
-      <created>1616165669116</created>
-      <option name="number" value="04028" />
-      <option name="presentableId" value="LOCAL-04028" />
-      <option name="project" value="LOCAL" />
-      <updated>1616165669116</updated>
-    </task>
-    <task id="LOCAL-04029" summary="Correções menores">
-      <created>1616170023713</created>
-      <option name="number" value="04029" />
-      <option name="presentableId" value="LOCAL-04029" />
-      <option name="project" value="LOCAL" />
-      <updated>1616170023714</updated>
-    </task>
-    <task id="LOCAL-04030" summary="Correções menores">
-      <created>1616170839699</created>
-      <option name="number" value="04030" />
-      <option name="presentableId" value="LOCAL-04030" />
-      <option name="project" value="LOCAL" />
-      <updated>1616170839699</updated>
-    </task>
-    <task id="LOCAL-04031" summary="Correções menores">
-      <created>1616170966604</created>
-      <option name="number" value="04031" />
-      <option name="presentableId" value="LOCAL-04031" />
-      <option name="project" value="LOCAL" />
-      <updated>1616170966604</updated>
-    </task>
-    <task id="LOCAL-04032" summary="Correções menores">
-      <created>1616176048987</created>
-      <option name="number" value="04032" />
-      <option name="presentableId" value="LOCAL-04032" />
-      <option name="project" value="LOCAL" />
-      <updated>1616176048988</updated>
-    </task>
-    <task id="LOCAL-04033" summary="Correções menores">
-      <created>1616176457309</created>
-      <option name="number" value="04033" />
-      <option name="presentableId" value="LOCAL-04033" />
-      <option name="project" value="LOCAL" />
-      <updated>1616176457310</updated>
-    </task>
-    <task id="LOCAL-04034" summary="Correções menores">
-      <created>1616275431871</created>
-      <option name="number" value="04034" />
-      <option name="presentableId" value="LOCAL-04034" />
-      <option name="project" value="LOCAL" />
-      <updated>1616275431872</updated>
-    </task>
-    <task id="LOCAL-04035" summary="Correções menores">
-      <created>1616296266063</created>
-      <option name="number" value="04035" />
-      <option name="presentableId" value="LOCAL-04035" />
-      <option name="project" value="LOCAL" />
-      <updated>1616296266063</updated>
-    </task>
-    <task id="LOCAL-04036" summary="Correções menores">
-      <created>1616297265721</created>
-      <option name="number" value="04036" />
-      <option name="presentableId" value="LOCAL-04036" />
-      <option name="project" value="LOCAL" />
-      <updated>1616297265721</updated>
-    </task>
     <task id="LOCAL-04037" summary="Correções menores">
       <created>1616351256669</created>
       <option name="number" value="04037" />
@@ -1467,7 +1402,70 @@
       <option name="project" value="LOCAL" />
       <updated>1617710959432</updated>
     </task>
-    <option name="localTasksCounter" value="4077" />
+    <task id="LOCAL-04077" summary="Correção no alinhamento dos icones de combo">
+      <created>1617713278830</created>
+      <option name="number" value="04077" />
+      <option name="presentableId" value="LOCAL-04077" />
+      <option name="project" value="LOCAL" />
+      <updated>1617713278830</updated>
+    </task>
+    <task id="LOCAL-04078" summary="Correção no alinhamento dos icones de combo">
+      <created>1617713589164</created>
+      <option name="number" value="04078" />
+      <option name="presentableId" value="LOCAL-04078" />
+      <option name="project" value="LOCAL" />
+      <updated>1617713589164</updated>
+    </task>
+    <task id="LOCAL-04079" summary="Correção no alinhamento dos icones de combo">
+      <created>1617713627662</created>
+      <option name="number" value="04079" />
+      <option name="presentableId" value="LOCAL-04079" />
+      <option name="project" value="LOCAL" />
+      <updated>1617713627662</updated>
+    </task>
+    <task id="LOCAL-04080" summary="Correção no alinhamento dos icones de combo">
+      <created>1617714080200</created>
+      <option name="number" value="04080" />
+      <option name="presentableId" value="LOCAL-04080" />
+      <option name="project" value="LOCAL" />
+      <updated>1617714080200</updated>
+    </task>
+    <task id="LOCAL-04081" summary="Correção no alinhamento dos icones de combo">
+      <created>1617715117715</created>
+      <option name="number" value="04081" />
+      <option name="presentableId" value="LOCAL-04081" />
+      <option name="project" value="LOCAL" />
+      <updated>1617715117715</updated>
+    </task>
+    <task id="LOCAL-04082" summary="Correção no alinhamento dos icones de combo">
+      <created>1617715201016</created>
+      <option name="number" value="04082" />
+      <option name="presentableId" value="LOCAL-04082" />
+      <option name="project" value="LOCAL" />
+      <updated>1617715201016</updated>
+    </task>
+    <task id="LOCAL-04083" summary="Correção no alinhamento dos icones de combo">
+      <created>1617715470865</created>
+      <option name="number" value="04083" />
+      <option name="presentableId" value="LOCAL-04083" />
+      <option name="project" value="LOCAL" />
+      <updated>1617715470865</updated>
+    </task>
+    <task id="LOCAL-04084" summary="Correção no alinhamento dos icones de combo">
+      <created>1617715533986</created>
+      <option name="number" value="04084" />
+      <option name="presentableId" value="LOCAL-04084" />
+      <option name="project" value="LOCAL" />
+      <updated>1617715533986</updated>
+    </task>
+    <task id="LOCAL-04085" summary="Correção no alinhamento dos icones de combo">
+      <created>1617715872810</created>
+      <option name="number" value="04085" />
+      <option name="presentableId" value="LOCAL-04085" />
+      <option name="project" value="LOCAL" />
+      <updated>1617715872810</updated>
+    </task>
+    <option name="localTasksCounter" value="4086" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

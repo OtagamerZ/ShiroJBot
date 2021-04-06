@@ -55,6 +55,7 @@ public enum GemItem {
 
 				acc.addCredit(10000L * amount, GemItem.class);
 				acc.removeGem(amount - 1);
+				AccountDAO.saveAccount(acc);
 
 				chn.sendMessage(amount + " gemas convertidas em " + (10000 * amount) + " creditos!").queue();
 				return true;
