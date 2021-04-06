@@ -13,9 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no sistema de taxas e rebalanceamento do slots">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no alinhamento dos icones de combo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1136,13 +1135,6 @@
       <workItem from="1617646062840" duration="321000" />
       <workItem from="1617646747009" duration="314000" />
     </task>
-    <task id="LOCAL-04025" summary="Correções menores">
-      <created>1616163720282</created>
-      <option name="number" value="04025" />
-      <option name="presentableId" value="LOCAL-04025" />
-      <option name="project" value="LOCAL" />
-      <updated>1616163720282</updated>
-    </task>
     <task id="LOCAL-04026" summary="Correções menores">
       <created>1616163857416</created>
       <option name="number" value="04026" />
@@ -1479,7 +1471,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617646352307</updated>
     </task>
-    <option name="localTasksCounter" value="4074" />
+    <task id="LOCAL-04074" summary="Correção no alinhamento dos icones de combo">
+      <created>1617663278652</created>
+      <option name="number" value="04074" />
+      <option name="presentableId" value="LOCAL-04074" />
+      <option name="project" value="LOCAL" />
+      <updated>1617663278652</updated>
+    </task>
+    <option name="localTasksCounter" value="4075" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1565,7 +1564,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nos calculos de chance" />
     <MESSAGE value="Mudança na API de reações" />
     <MESSAGE value="Redução no tamanho dos GIFs e melhoria no comando de dados de partida" />
     <MESSAGE value="Adicionadas mais medidas de segurança na Jibril" />
@@ -1590,7 +1588,8 @@
     <MESSAGE value="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);" />
     <MESSAGE value="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;" />
     <MESSAGE value="Correção no Shoukan em duplas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no Shoukan em duplas" />
+    <MESSAGE value="Correção no alinhamento dos icones de combo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no alinhamento dos icones de combo" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
