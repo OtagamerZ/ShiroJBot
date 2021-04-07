@@ -462,7 +462,7 @@ public class Helper {
 	}
 
 	public static Color getRandomColor() {
-		return new Color(rng(255, false), rng(255, false), rng(255, false));
+		return Color.decode("#%06x".formatted(rng(0xFFFFFF, false)));
 	}
 
 	public static boolean compareWithValues(int value, int... compareWith) {
@@ -1569,7 +1569,7 @@ public class Helper {
 					finished.set(true);
 				};
 
-				List<Message> hist = channel.getHistory()
+				List<Message> hist = tc.getHistory()
 						.retrievePast(100)
 						.complete();
 
