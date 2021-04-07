@@ -49,6 +49,7 @@ public class Field implements Drawable, Cloneable {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean effectOnly = false;
 
+	private transient Shoukan game = null;
 	private transient Account acc = null;
 	private transient Clan clan = null;
 	private transient boolean available = true;
@@ -150,6 +151,16 @@ public class Field implements Drawable, Cloneable {
 	@Override
 	public void setAvailable(boolean available) {
 		this.available = available;
+	}
+
+	@Override
+	public Shoukan getGame() {
+		return game;
+	}
+
+	@Override
+	public void setGame(Shoukan game) {
+		this.game = game;
 	}
 
 	@Override

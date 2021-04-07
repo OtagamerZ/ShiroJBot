@@ -24,6 +24,7 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
@@ -82,6 +83,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient boolean flipped = false;
 	private transient boolean available = true;
 	private transient boolean defending = false;
+	private transient Shoukan game = null;
 	private transient Account acc = null;
 	private transient Clan clan = null;
 	private transient List<Equipment> linkedTo = new ArrayList<>();
@@ -260,6 +262,16 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	@Override
+	public Shoukan getGame() {
+		return game;
+	}
+
+	@Override
+	public void setGame(Shoukan game) {
+		this.game = game;
+	}
+
+	@Override
 	public Account getAcc() {
 		return acc;
 	}
@@ -348,12 +360,48 @@ public class Champion implements Drawable, Cloneable {
 
 	public int getAtk() {
 		if (altAtk == -1) altAtk = atk;
-		return Math.max(0, altAtk - redAtk + efctAtk);
+		float fBonus = 1;
+		float cBonus = 1;
+
+		if (game != null) {
+			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().opt("charm") == Charm.SOULLINK)) {
+				Field f = game.getArena().getField();
+				if (f != null)
+					fBonus = f.getModifiers().optFloat(race.name(), 1f);
+			}
+
+			Side s = game.getSideById(acc.getUid());
+			Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
+			if (combos.getLeft() == Race.UNDEAD) {
+				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
+			} else if (combos.getRight() == Race.UNDEAD)
+				cBonus += game.getArena().getGraveyard().get(s).size() / 200f;
+		}
+
+		return Math.max(0, Math.round((altAtk - redAtk + efctAtk) * fBonus * cBonus));
 	}
 
 	public int getDef() {
 		if (altDef == -1) altDef = def;
-		return Math.max(0, altDef - redDef + efctDef);
+		float fBonus = 1;
+		float cBonus = 1;
+
+		if (game != null) {
+			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().opt("charm") == Charm.SOULLINK)) {
+				Field f = game.getArena().getField();
+				if (f != null)
+					fBonus = f.getModifiers().optFloat(race.name(), 1f);
+			}
+
+			Side s = game.getSideById(acc.getUid());
+			Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
+			if (combos.getLeft() == Race.SPIRIT) {
+				cBonus += game.getArena().getGraveyard().get(s).size() / 50f;
+			} else if (combos.getRight() == Race.SPIRIT)
+				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
+		}
+
+		return Math.max(0, Math.round((altDef - redDef + efctDef) * fBonus * cBonus));
 	}
 
 	public int getAltAtk() {
