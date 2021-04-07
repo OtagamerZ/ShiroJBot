@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Clan;
@@ -36,6 +37,10 @@ public interface Drawable {
 	boolean isAvailable();
 
 	void setAvailable(boolean available);
+
+	Shoukan getGame();
+
+	void setGame(Shoukan game);
 
 	Account getAcc();
 

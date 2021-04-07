@@ -74,6 +74,7 @@ public class Equipment implements Drawable, Cloneable {
 
 	private transient boolean flipped = false;
 	private transient boolean available = true;
+	private transient Shoukan game = null;
 	private transient Account acc = null;
 	private transient Clan clan = null;
 	private transient Pair<Integer, Champion> linkedTo = null;
@@ -184,6 +185,16 @@ public class Equipment implements Drawable, Cloneable {
 	@Override
 	public void setAvailable(boolean available) {
 		this.available = available;
+	}
+
+	@Override
+	public Shoukan getGame() {
+		return game;
+	}
+
+	@Override
+	public void setGame(Shoukan game) {
+		this.game = game;
 	}
 
 	@Override
