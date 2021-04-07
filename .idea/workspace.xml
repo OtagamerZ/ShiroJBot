@@ -13,8 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no alinhamento dos icones de combo">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas lojas de itens">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1123,21 +1126,8 @@
       <workItem from="1617646747009" duration="314000" />
       <workItem from="1617717295455" duration="130000" />
       <workItem from="1617725857819" duration="980000" />
-      <workItem from="1617734186778" duration="2016000" />
-    </task>
-    <task id="LOCAL-04039" summary="Loteria agora é acumulada com taxas">
-      <created>1616352405650</created>
-      <option name="number" value="04039" />
-      <option name="presentableId" value="LOCAL-04039" />
-      <option name="project" value="LOCAL" />
-      <updated>1616352405650</updated>
-    </task>
-    <task id="LOCAL-04040" summary="Correções visuais menores">
-      <created>1616447247373</created>
-      <option name="number" value="04040" />
-      <option name="presentableId" value="LOCAL-04040" />
-      <option name="project" value="LOCAL" />
-      <updated>1616447247373</updated>
+      <workItem from="1617734186778" duration="4058000" />
+      <workItem from="1617796713249" duration="1793000" />
     </task>
     <task id="LOCAL-04041" summary="Correções menores">
       <created>1616532867820</created>
@@ -1468,7 +1458,21 @@
       <option name="project" value="LOCAL" />
       <updated>1617734243968</updated>
     </task>
-    <option name="localTasksCounter" value="4088" />
+    <task id="LOCAL-04088" summary="Correção nas lojas de itens">
+      <created>1617741012992</created>
+      <option name="number" value="04088" />
+      <option name="presentableId" value="LOCAL-04088" />
+      <option name="project" value="LOCAL" />
+      <updated>1617741012992</updated>
+    </task>
+    <task id="LOCAL-04089" summary="Correção nas lojas de itens">
+      <created>1617741096646</created>
+      <option name="number" value="04089" />
+      <option name="presentableId" value="LOCAL-04089" />
+      <option name="project" value="LOCAL" />
+      <updated>1617741096646</updated>
+    </task>
+    <option name="localTasksCounter" value="4090" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1554,7 +1558,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Mudança na API de reações" />
     <MESSAGE value="Redução no tamanho dos GIFs e melhoria no comando de dados de partida" />
     <MESSAGE value="Adicionadas mais medidas de segurança na Jibril" />
     <MESSAGE value="Melhoria na busca na loja de cartas" />
@@ -1579,7 +1582,8 @@
     <MESSAGE value="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;" />
     <MESSAGE value="Correção no Shoukan em duplas" />
     <MESSAGE value="Correção no alinhamento dos icones de combo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no alinhamento dos icones de combo" />
+    <MESSAGE value="Correção nas lojas de itens" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nas lojas de itens" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
