@@ -97,7 +97,10 @@ public class Hand {
 		deque.addAll(kp.getFields());
 
 		Account acc = AccountDAO.getAccount(user.getId());
-		for (Drawable d : deque) d.setAcc(acc);
+		for (Drawable d : deque) {
+			d.setGame(game);
+			d.setAcc(acc);
+		}
 
 		this.user = user;
 		this.side = side;
@@ -227,7 +230,10 @@ public class Hand {
 
 		deque.addAll(cl.getDeck().getFields());
 		Account acc = AccountDAO.getAccount(user.getId());
-		for (Drawable d : deque) d.setAcc(acc);
+		for (Drawable d : deque) {
+			d.setGame(game);
+			d.setAcc(acc);
+		}
 
 		this.user = user;
 		this.side = side;
@@ -271,6 +277,7 @@ public class Hand {
 				case "blackrock" -> {
 					Field f = CardDAO.getField("OTHERWORLD");
 					assert f != null;
+					f.setGame(game);
 					f.setAcc(AccountDAO.getAccount(user.getId()));
 					game.getArena().setField(f);
 					this.deque.removeIf(d -> d instanceof Champion || d instanceof Field);
@@ -278,7 +285,10 @@ public class Hand {
 						Champion c = CardDAO.getChampion(name);
 						deque.addAll(Collections.nCopies(6, c));
 					}
-					for (Drawable d : deque) d.setAcc(acc);
+					for (Drawable d : deque) {
+						d.setGame(game);
+						d.setAcc(acc);
+					}
 				}
 				case "instakill" -> {
 					deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
