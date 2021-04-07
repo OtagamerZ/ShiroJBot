@@ -60,6 +60,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
@@ -239,7 +240,7 @@ public class Helper {
 
 	public static void typeMessage(MessageChannel channel, String message) {
 		channel.sendTyping().queue(tm ->
-						channel.sendMessage(Helper.makeEmoteFromMention(message.split(" ")))
+						channel.sendMessage(makeEmoteFromMention(message.split(" ")))
 								.queueAfter(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS, null, Helper::doNothing)
 				, Helper::doNothing);
 	}
@@ -277,13 +278,13 @@ public class Helper {
 	}
 
 	public static void spawnAd(MessageChannel channel) {
-		if (Helper.rng(1000, false) > 990) {
+		if (rng(1000, false) > 990) {
 			channel.sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\nhttps://top.gg/bot/572413282653306901").queue();
 		}
 	}
 
 	public static String getAd() {
-		if (Helper.rng(1000, false) > 990) {
+		if (rng(1000, false) > 990) {
 			return "Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\nhttps://top.gg/bot/572413282653306901";
 		} else return null;
 	}
@@ -381,7 +382,7 @@ public class Helper {
 	}
 
 	public static String stripEmotesAndMentions(String source) {
-		return Helper.getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here")), "...");
+		return getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", bugText("@everyone")).replace("@here", bugText("@here")), "...");
 	}
 
 	public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g) {
@@ -841,10 +842,10 @@ public class Helper {
 
 			if (i.get() == null) {
 				try {
-					InviteAction ia = Helper.createInvite(g);
+					InviteAction ia = createInvite(g);
 					if (ia != null) sb.append(ia.setMaxAge(0).submit().get().getUrl()).append("\n");
 				} catch (InterruptedException | ExecutionException e) {
-					Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+					logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 				}
 			} else {
 				sb.append(i.get().getUrl()).append("\n");
@@ -997,7 +998,7 @@ public class Helper {
 						}
 						newWords[i] = e.getAsMention();
 					} catch (IOException ex) {
-						Helper.logger(Helper.class).error(ex + " | " + ex.getStackTrace()[0]);
+						logger(Helper.class).error(ex + " | " + ex.getStackTrace()[0]);
 					}
 					emotes++;
 				} else newWords[i] = oldWords[i];
@@ -1142,7 +1143,7 @@ public class Helper {
 		byte[] randomSpace = new byte[length];
 		sr.nextBytes(randomSpace);
 
-		return Helper.atob(nameSpace) + "." + Helper.atob(randomSpace);
+		return atob(nameSpace) + "." + atob(randomSpace);
 	}
 
 	public static void awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act) {
@@ -1290,7 +1291,7 @@ public class Helper {
 			);
 
 			List<Card> cards = CardDAO.getCardsByRarity(kr);
-			Card c = cards.get(Helper.rng(cards.size(), true));
+			Card c = cards.get(rng(cards.size(), true));
 			boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
 			KawaiponCard kc = new KawaiponCard(c, foil);
 			BufferedImage img = c.drawCard(foil);
@@ -1299,7 +1300,7 @@ public class Helper {
 					.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase(Locale.ROOT) + " Kawaipon apareceu neste servidor!")
 					.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 					.setColor(colorThief(img))
-					.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + Helper.separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
+					.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
 
 			if (gc.isSmallCards())
 				eb.setThumbnail("attachment://kawaipon.png");
@@ -1351,7 +1352,7 @@ public class Helper {
 			cards = CardDAO.getCardsByRarity(kr);
 		}
 
-		Card c = cards.get(Helper.rng(cards.size(), true));
+		Card c = cards.get(rng(cards.size(), true));
 		foil = foil || fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
 		KawaiponCard kc = new KawaiponCard(c, foil);
 		BufferedImage img = c.drawCard(foil);
@@ -1360,7 +1361,7 @@ public class Helper {
 				.setAuthor(user.getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase(Locale.ROOT) + " neste servidor!")
 				.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")")
 				.setColor(colorThief(img))
-				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + Helper.separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
+				.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + separate(c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
 
 		if (gc.isSmallCards())
 			eb.setThumbnail("attachment://kawaipon.png");
@@ -1396,7 +1397,7 @@ public class Helper {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png")
 					.setTitle("Um drop apareceu neste servidor!")
-					.addField("Conteúdo:", Helper.separate(drop.getPrize()) + " créditos", true)
+					.addField("Conteúdo:", separate(drop.getPrize()) + " créditos", true)
 					.addField("Código captcha:", drop.getCaptcha(), true)
 					.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisito: " + drop.getRequirement().getKey() + ").", null);
 
@@ -1425,7 +1426,7 @@ public class Helper {
 		if (chance(0.1 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.09, 5000), 0, 0.09))) {
 			try {
 				TextChannel tc = getOr(channel.getGuild().getTextChannelById(getOr(gc.getCanalDrop(), "1")), channel);
-				Webhook wh = Helper.getOrCreateWebhook(tc, "Shiro");
+				Webhook wh = getOrCreateWebhook(tc, "Shiro");
 				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
@@ -1448,7 +1449,7 @@ public class Helper {
 
 				for (int i = 0; i < prizes.size(); i++) {
 					Prize prize = prizes.get(i);
-					web.addField("Presente " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
+					web.addField("Presente " + (i + 1) + ":", separate(prize.getPrize()) + " créditos", true);
 				}
 
 				web.setFooter("Complete a música para participar do sorteio dos prêmios.", null);
@@ -1482,7 +1483,7 @@ public class Helper {
 
 						for (int i = 0; i < prizes.size(); i++) {
 							Prize prize = prizes.get(i);
-							neb.addField("Presente " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
+							neb.addField("Presente " + (i + 1) + ":", separate(prize.getPrize()) + " créditos", true);
 						}
 
 						AccountDAO.saveAccount(acc);
@@ -1530,7 +1531,7 @@ public class Helper {
 		if (chance(0.15 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.5, 5000), 0, 0.05))) {
 			try {
 				TextChannel tc = getOr(channel.getGuild().getTextChannelById(getOr(gc.getCanalDrop(), "1")), channel);
-				Webhook wh = Helper.getOrCreateWebhook(tc, "Shiro");
+				Webhook wh = getOrCreateWebhook(tc, "Shiro");
 				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
@@ -1552,7 +1553,7 @@ public class Helper {
 
 				for (int i = 0; i < prizes.size(); i++) {
 					Prize prize = prizes.get(i);
-					web.addField("Ovo " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
+					web.addField("Ovo " + (i + 1) + ":", separate(prize.getPrize()) + " créditos", true);
 				}
 
 				web.setFooter("Enconte a reação de ovo de páscoa escondido em uma das mensagens neste canal.", null);
@@ -1584,7 +1585,7 @@ public class Helper {
 							ColorlessWebhookEmbedBuilder neb = new ColorlessWebhookEmbedBuilder();
 							for (int i = 0; i < prizes.size(); i++) {
 								Prize prize = prizes.get(i);
-								neb.addField("Ovo " + (i + 1) + ":", Helper.separate(prize.getPrize()) + " créditos", true);
+								neb.addField("Ovo " + (i + 1) + ":", separate(prize.getPrize()) + " créditos", true);
 							}
 
 							AccountDAO.saveAccount(acc);
@@ -1925,7 +1926,7 @@ public class Helper {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		List<WebhookClient> clients = new ArrayList<>();
 		List<GuildConfig> gcs = GuildDAO.getAlertChannels();
-		List<List<GuildConfig>> gcPages = Helper.chunkify(gcs, 10);
+		List<List<GuildConfig>> gcPages = chunkify(gcs, 10);
 
 		for (List<GuildConfig> gs : gcPages) {
 			result.clear();
@@ -1938,7 +1939,7 @@ public class Helper {
 				try {
 					TextChannel c = g.getTextChannelById(gc.getCanalAvisos());
 					if (c != null && c.canTalk()) {
-						Webhook wh = Helper.getOrCreateWebhook(c, "Notificações Shiro");
+						Webhook wh = getOrCreateWebhook(c, "Notificações Shiro");
 						if (wh == null) result.put(g.getName(), false);
 						else {
 							WebhookClientBuilder wcb = new WebhookClientBuilder(wh.getUrl());
@@ -2084,7 +2085,7 @@ public class Helper {
 	}
 
 	public static String atob(BufferedImage bi, String encoding) {
-		return Helper.atob(getBytes(bi, encoding));
+		return atob(getBytes(bi, encoding));
 	}
 
 	public static String atob(byte[] bytes) {
@@ -2100,13 +2101,15 @@ public class Helper {
 	}
 
 	public static String separate(Object value) {
-		String n = StringUtils.reverse(String.valueOf(value));
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < n.length(); i++) {
-			if (i > 0 && i % 3 == 0) sb.append(".");
-			sb.append(n.charAt(i));
+		try {
+			Number n = value instanceof Number ? (Number) value : NumberUtils.createNumber(String.valueOf(value));
+			DecimalFormat df = new DecimalFormat();
+			df.setGroupingSize(3);
+
+			return df.format(n);
+		} catch (NumberFormatException e) {
+			return String.valueOf(value);
 		}
-		return sb.reverse().toString();
 	}
 
 	public static String replaceTags(String text, User author, Guild guild) {
@@ -2237,7 +2240,7 @@ public class Helper {
 
 	public static int applyTax(String id, int raw, double tax) {
 		boolean victorious = ExceedDAO.hasExceed(id) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(id));
-		boolean trusted = Helper.isTrustedMerchant(id);
+		boolean trusted = isTrustedMerchant(id);
 		tax = trusted ? tax / 2 : tax;
 
 		return raw - (victorious ? 0 : (int) (raw * tax));
