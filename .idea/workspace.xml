@@ -15,18 +15,11 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanConvertCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/interfaces/Drawable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/interfaces/Drawable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/utils/Helper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/utils/InfiniteList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/InfiniteList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,6 +196,19 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1137,21 +1143,8 @@
       <workItem from="1617725857819" duration="980000" />
       <workItem from="1617734186778" duration="4058000" />
       <workItem from="1617796713249" duration="3550000" />
-      <workItem from="1617804813792" duration="1966000" />
-    </task>
-    <task id="LOCAL-04042" summary="Correções menores">
-      <created>1616559065480</created>
-      <option name="number" value="04042" />
-      <option name="presentableId" value="LOCAL-04042" />
-      <option name="project" value="LOCAL" />
-      <updated>1616559065480</updated>
-    </task>
-    <task id="LOCAL-04043" summary="Correções menores">
-      <created>1616732208009</created>
-      <option name="number" value="04043" />
-      <option name="presentableId" value="LOCAL-04043" />
-      <option name="project" value="LOCAL" />
-      <updated>1616732208009</updated>
+      <workItem from="1617804813792" duration="2791000" />
+      <workItem from="1617811622756" duration="322000" />
     </task>
     <task id="LOCAL-04044" summary="Correções menores">
       <created>1616732539223</created>
@@ -1482,7 +1475,21 @@
       <option name="project" value="LOCAL" />
       <updated>1617800573602</updated>
     </task>
-    <option name="localTasksCounter" value="4091" />
+    <task id="LOCAL-04091" summary="Correções menores">
+      <created>1617806835474</created>
+      <option name="number" value="04091" />
+      <option name="presentableId" value="LOCAL-04091" />
+      <option name="project" value="LOCAL" />
+      <updated>1617806835474</updated>
+    </task>
+    <task id="LOCAL-04092" summary="Correções menores">
+      <created>1617807176436</created>
+      <option name="number" value="04092" />
+      <option name="presentableId" value="LOCAL-04092" />
+      <option name="project" value="LOCAL" />
+      <updated>1617807176436</updated>
+    </task>
+    <option name="localTasksCounter" value="4093" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1582,7 +1589,6 @@
     <MESSAGE value="Correção na organização das cartas" />
     <MESSAGE value="Loteria agora é acumulada com taxas" />
     <MESSAGE value="Correções visuais menores" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Reversão pra versão 2.1.6 de paginação" />
     <MESSAGE value="Reversão pra versão 2.1.6 da biblioteca de paginação" />
     <MESSAGE value="Adicionados contadores de cartas no cemitério" />
@@ -1593,7 +1599,8 @@
     <MESSAGE value="Correção no Shoukan em duplas" />
     <MESSAGE value="Correção no alinhamento dos icones de combo" />
     <MESSAGE value="Correção nas lojas de itens" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nas lojas de itens" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
