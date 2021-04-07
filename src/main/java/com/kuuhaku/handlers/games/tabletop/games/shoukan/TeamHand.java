@@ -24,12 +24,12 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import com.kuuhaku.handlers.games.tabletop.utils.InfiniteList;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.InfiniteList;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
 

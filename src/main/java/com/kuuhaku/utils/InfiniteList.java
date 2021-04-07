@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.games.tabletop.utils;
+package com.kuuhaku.utils;
 
 import java.util.LinkedList;
 
