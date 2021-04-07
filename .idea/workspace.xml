@@ -15,9 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nas lojas de itens">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1127,14 +1125,7 @@
       <workItem from="1617717295455" duration="130000" />
       <workItem from="1617725857819" duration="980000" />
       <workItem from="1617734186778" duration="4058000" />
-      <workItem from="1617796713249" duration="1793000" />
-    </task>
-    <task id="LOCAL-04041" summary="Correções menores">
-      <created>1616532867820</created>
-      <option name="number" value="04041" />
-      <option name="presentableId" value="LOCAL-04041" />
-      <option name="project" value="LOCAL" />
-      <updated>1616532867821</updated>
+      <workItem from="1617796713249" duration="3550000" />
     </task>
     <task id="LOCAL-04042" summary="Correções menores">
       <created>1616559065480</created>
@@ -1472,7 +1463,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617741096646</updated>
     </task>
-    <option name="localTasksCounter" value="4090" />
+    <task id="LOCAL-04090" summary="Correção nas lojas de itens">
+      <created>1617800573602</created>
+      <option name="number" value="04090" />
+      <option name="presentableId" value="LOCAL-04090" />
+      <option name="project" value="LOCAL" />
+      <updated>1617800573602</updated>
+    </task>
+    <option name="localTasksCounter" value="4091" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
