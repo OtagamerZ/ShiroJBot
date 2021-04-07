@@ -15,11 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/utils/Helper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/utils/InfiniteList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/InfiniteList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,9 +143,9 @@
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.utils.Helper" />
       <recent name="com.kuuhaku.controller.postgresql.GuildDAO" />
       <recent name="com.kuuhaku.controller.postgresql.PStateDAO" />
-      <recent name="com.kuuhaku.utils.Helper" />
       <recent name="com.kuuhaku.controller.sqlite.GuildDAO" />
       <recent name="com.kuuhaku.handlers.games.rpg.Utils" />
     </key>
@@ -1144,14 +1139,7 @@
       <workItem from="1617734186778" duration="4058000" />
       <workItem from="1617796713249" duration="3550000" />
       <workItem from="1617804813792" duration="2791000" />
-      <workItem from="1617811622756" duration="322000" />
-    </task>
-    <task id="LOCAL-04044" summary="Correções menores">
-      <created>1616732539223</created>
-      <option name="number" value="04044" />
-      <option name="presentableId" value="LOCAL-04044" />
-      <option name="project" value="LOCAL" />
-      <updated>1616732539223</updated>
+      <workItem from="1617811622756" duration="1683000" />
     </task>
     <task id="LOCAL-04045" summary="Correções menores">
       <created>1616783425592</created>
@@ -1489,7 +1477,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617807176436</updated>
     </task>
-    <option name="localTasksCounter" value="4093" />
+    <task id="LOCAL-04093" summary="Correções menores">
+      <created>1617811994542</created>
+      <option name="number" value="04093" />
+      <option name="presentableId" value="LOCAL-04093" />
+      <option name="project" value="LOCAL" />
+      <updated>1617811994543</updated>
+    </task>
+    <option name="localTasksCounter" value="4094" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
