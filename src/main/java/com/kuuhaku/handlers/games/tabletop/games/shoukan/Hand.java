@@ -419,7 +419,7 @@ public class Hand {
 	public Drawable drawEquipment() {
 		if (lockTime > 0) return null;
 		try {
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() != Charm.SPELL).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
 			return dr;
