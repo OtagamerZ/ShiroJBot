@@ -1300,6 +1300,7 @@ public class Shoukan extends GlobalGame {
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn<Champion, Equipment> slt = slts.get(i);
 				if (slt.getTop() == null) {
+					aFusion.setGame(this);
 					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slt.setTop(aFusion);
 					if (eot.size() > 0) {
@@ -1581,6 +1582,7 @@ public class Shoukan extends GlobalGame {
 			SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(from, true);
 			if (sc != null) {
 				ch.clearLinkedTo();
+				ch.setGame(this);
 				ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
 				sc.setTop(ch);
 				slts.get(target).setTop(null);
@@ -1615,6 +1617,7 @@ public class Shoukan extends GlobalGame {
 		SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(from, true);
 		if (sc != null) {
 			ch.clearLinkedTo();
+			ch.setGame(this);
 			ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
 			sc.setTop(ch);
 			slts.get(target).setTop(null);
@@ -1650,6 +1653,7 @@ public class Shoukan extends GlobalGame {
 			}
 
 			ch.clearLinkedTo();
+			ch.setGame(this);
 			ch.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
@@ -1664,6 +1668,7 @@ public class Shoukan extends GlobalGame {
 			List<SlotColumn<Champion, Equipment>> slots = getArena().getSlots().get(from);
 
 			chi.clearLinkedTo();
+			chi.setGame(this);
 			chi.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
 			slots.get(source).setTop(null);
 			for (int i = 0; i < slots.size(); i++) {
@@ -1706,6 +1711,7 @@ public class Shoukan extends GlobalGame {
 
 					target.addLinkedTo(eq);
 					eq.setLinkedTo(Pair.of(pos, target));
+					eq.setGame(this);
 					eq.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
 					sc.setBottom(eq);
 				} else return;
