@@ -1564,7 +1564,7 @@ public class Helper {
 				Runnable act = () -> {
 					if (finished.get()) return;
 					wc.send(wmb.resetEmbeds()
-							.setContent("Ninguem encontrou o ovo a tempo!")
+							.setContent("Ninguem encontrou o ovo de páscoa a tempo!")
 							.build());
 					wc.close();
 					finished.set(true);
@@ -1591,7 +1591,7 @@ public class Helper {
 
 							AccountDAO.saveAccount(acc);
 							wc.send(wmb.resetEmbeds()
-									.setContent(mb.getAsMention() + " encontrou os ovos!")
+									.setContent(mb.getAsMention() + " encontrou o ovo de páscoa!")
 									.addEmbeds(neb.build())
 									.build());
 							wc.close();
