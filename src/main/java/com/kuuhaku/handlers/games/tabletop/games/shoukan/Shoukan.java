@@ -779,16 +779,7 @@ public class Shoukan extends GlobalGame {
 
 					Hand enemy = hands.get(next);
 
-					int yPower = Math.round(
-							c.getFinAtk() *
-							(arena.getField() == null || c.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || c.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(c.getRace().name(), 1f)) *
-							(getRound() < 2 ? 0.5f : 1)
-					);
-
-					if (h.getCombo().getLeft() == Race.UNDEAD) {
-						yPower *= (1 + Helper.prcnt(arena.getGraveyard().get(current).size(), 100));
-					} else if (h.getCombo().getRight() == Race.UNDEAD)
-						yPower *= (1 + Helper.prcnt(arena.getGraveyard().get(current).size(), 200));
+					int yPower = Math.round(c.getFinAtk() * (getRound() < 2 ? 0.5f : 1));
 
 					if (!c.getCard().getId().equals("DECOY")) enemy.removeHp(yPower);
 					c.setAvailable(false);
@@ -943,15 +934,7 @@ public class Shoukan extends GlobalGame {
 
 		int yPower;
 		if (!yours.getCard().getId().equals("DECOY")) {
-			yPower = Math.round(
-					yours.getFinAtk() *
-							(arena.getField() == null || yours.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || yours.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(yours.getRace().name(), 1f))
-			);
-
-			if (getCombos().get(current).getLeft() == Race.UNDEAD) {
-				yPower *= (1 + Helper.prcnt(arena.getGraveyard().get(current).size(), 100));
-			} else if (getCombos().get(current).getRight() == Race.UNDEAD)
-				yPower *= (1 + Helper.prcnt(arena.getGraveyard().get(current).size(), 200));
+			yPower = yours.getFinAtk();
 		} else {
 			yPower = 0;
 		}
@@ -970,25 +953,9 @@ public class Shoukan extends GlobalGame {
 					if (postCombat()) return;
 				}
 			}
-			hPower = Math.round(
-					his.getFinDef() *
-					(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
-			);
-
-			if (getCombos().get(next).getLeft() == Race.SPIRIT) {
-				hPower *= (1 + Helper.prcnt(arena.getGraveyard().get(next).size(), 50));
-			} else if (getCombos().get(next).getRight() == Race.SPIRIT)
-				hPower *= (1 + Helper.prcnt(arena.getGraveyard().get(next).size(), 100));
+			hPower = his.getFinDef();
 		} else if (!his.getCard().getId().equals("DECOY")) {
-			hPower = Math.round(
-					his.getFinAtk() *
-					(arena.getField() == null || his.getLinkedTo().stream().anyMatch(e -> e.getCharm() == Charm.SOULLINK || his.getBonus().getSpecialData().opt("charm") == Charm.SOULLINK) ? 1 : arena.getField().getModifiers().optFloat(his.getRace().name(), 1f))
-			);
-
-			if (getCombos().get(next).getLeft() == Race.UNDEAD) {
-				hPower *= (1 + Helper.prcnt(arena.getGraveyard().get(next).size(), 100));
-			} else if (getCombos().get(next).getRight() == Race.UNDEAD)
-				hPower *= (1 + Helper.prcnt(arena.getGraveyard().get(next).size(), 200));
+			hPower = his.getFinAtk();
 		} else {
 			hPower = 0;
 		}
@@ -1562,6 +1529,13 @@ public class Shoukan extends GlobalGame {
 
 	public Arena getArena() {
 		return arena;
+	}
+
+	public Side getSideById(String id) {
+		return hands.values().stream()
+				.filter(h -> h.getUser().getId().equals(id))
+				.map(Hand::getSide)
+				.findFirst().orElse(null);
 	}
 
 	public Map<Side, Hand> getHands() {
