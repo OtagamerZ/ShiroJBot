@@ -44,7 +44,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -169,18 +168,18 @@ public class SlotsCommand implements Executable {
 		}};
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage(frame.formatted(ListUtils.union(vals, showSlots(-1)).toArray(Object[]::new))).queue(s -> {
-			for (int i = 0; i < 5; i++) {
-				try {
-					s.editMessage(frame.formatted(ListUtils.union(vals, showSlots(i)).toArray(Object[]::new)))
-							.submitAfter(3, TimeUnit.SECONDS)
-							.get();
-
-					if (i == 4) r.run();
-				} catch (InterruptedException | ExecutionException ignore) {
-				}
-			}
-		});
+		channel.sendMessage(frame.formatted(ListUtils.union(vals, showSlots(-1)).toArray(Object[]::new)))
+				.delay(3, TimeUnit.SECONDS)
+				.flatMap(s -> s.editMessage(frame.formatted(ListUtils.union(vals, showSlots(0)).toArray(Object[]::new))))
+				.delay(3, TimeUnit.SECONDS)
+				.flatMap(s -> s.editMessage(frame.formatted(ListUtils.union(vals, showSlots(1)).toArray(Object[]::new))))
+				.delay(3, TimeUnit.SECONDS)
+				.flatMap(s -> s.editMessage(frame.formatted(ListUtils.union(vals, showSlots(2)).toArray(Object[]::new))))
+				.delay(3, TimeUnit.SECONDS)
+				.flatMap(s -> s.editMessage(frame.formatted(ListUtils.union(vals, showSlots(3)).toArray(Object[]::new))))
+				.delay(3, TimeUnit.SECONDS)
+				.flatMap(s -> s.editMessage(frame.formatted(ListUtils.union(vals, showSlots(4)).toArray(Object[]::new))))
+				.queue(s -> r.run(), Helper::doNothing);
 	}
 
 	private List<Object> showSlots(int phase) {
