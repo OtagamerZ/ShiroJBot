@@ -96,6 +96,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -2104,6 +2105,7 @@ public class Helper {
 		try {
 			Number n = value instanceof Number ? (Number) value : NumberUtils.createNumber(String.valueOf(value));
 			DecimalFormat df = new DecimalFormat();
+			df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(new Locale("pt", "BR")));
 			df.setGroupingSize(3);
 
 			return df.format(n);
@@ -2302,5 +2304,33 @@ public class Helper {
 			sb.append(replacements.getOrDefault(String.valueOf(c), String.valueOf(c)));
 
 		return sb.toString();
+	}
+
+	public static double[] normalize(double[] vector) {
+		double length = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
+		return new double[]{vector[0] / length, vector[1] / length};
+	}
+
+	public static float[] normalize(float[] vector) {
+		double length = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
+		return new float[]{(float) (vector[0] / length), (float) (vector[1] / length)};
+	}
+
+	public static int[] normalize(int[] vector, RoundingMode roundingMode) {
+		double length = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
+		return switch (roundingMode) {
+			case UP, CEILING, HALF_UP -> new int[]{mirroredCeil(vector[0] / length), mirroredCeil(vector[1] / length)};
+			case DOWN, FLOOR, HALF_DOWN -> new int[]{mirroredFloor(vector[0] / length), mirroredFloor(vector[1] / length)};
+			case HALF_EVEN -> new int[]{(int) Math.round(vector[0] / length), (int) Math.round(vector[1] / length)};
+			default -> throw new IllegalArgumentException();
+		};
+	}
+
+	public static int mirroredCeil(double value) {
+		return (int) (value < 0 ? Math.floor(value) : Math.ceil(value));
+	}
+
+	public static int mirroredFloor(double value) {
+		return (int) (value > 0 ? Math.floor(value) : Math.ceil(value));
 	}
 }
