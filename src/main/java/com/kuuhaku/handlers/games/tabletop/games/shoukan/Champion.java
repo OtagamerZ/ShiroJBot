@@ -710,7 +710,7 @@ public class Champion implements Drawable, Cloneable {
 
 	public String toString() {
 		return new JSONObject() {{
-			put("id", id);
+			put("id", card.getId());
 			put("name", card.getName());
 			put("category", category);
 			put("mana", mana);
