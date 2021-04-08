@@ -42,13 +42,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Hand {
-	private final Shoukan game;
-	private final User user;
-	private final Pair<Race, Race> combo;
-	private final LinkedList<Drawable> deque;
+	private Shoukan game;
+	private User user;
+	private Pair<Race, Race> combo;
+	private final LinkedList<Drawable> deque = new LinkedList<>();
 	private final List<Drawable> cards = new ArrayList<>();
 	private final List<Drawable> destinyDeck = new ArrayList<>();
-	private final Side side;
+	private Side side;
 	private int baseHp;
 	private int baseManaPerTurn;
 	private int maxCards = 0;
@@ -63,22 +63,43 @@ public class Hand {
 	public Hand(Shoukan game, User user, Kawaipon kp, Side side) {
 		if (user == null) {
 			this.game = game;
-			this.user = null;
-			this.combo = null;
-			this.deque = null;
 			this.side = side;
 			return;
 		}
 
-		combo = Race.getCombo(kp.getChampions());
-		deque = new LinkedList<>() {{
-			addAll(kp.getChampions());
-		}};
+		setData(
+				game,
+				user,
+				kp.getChampions(),
+				kp.getEquipments(),
+				kp.getFields(),
+				kp.getDestinyDraw(),
+				side,
+				null
+		);
+	}
+
+	public Hand(Shoukan game, User user, Clan cl, Side side) {
+		setData(
+				game,
+				user,
+				cl.getDeck().getChampions(),
+				cl.getDeck().getEquipments(),
+				cl.getDeck().getFields(),
+				cl.getDeck().getDestinyDraw(),
+				side,
+				cl
+		);
+	}
+
+	private void setData(Shoukan game, User user, List<Champion> champs, List<Equipment> equips, List<Field> fields, List<Integer> destinyDraw, Side side, Clan cl) {
+		combo = Race.getCombo(champs);
+		deque.addAll(champs);
 		deque.sort(Comparator
 				.comparing(d -> ((Champion) d).getMana()).reversed()
 				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 		);
-		deque.addAll(kp.getEquipments());
+		deque.addAll(equips);
 
 		if (combo.getLeft() == Race.DIVINITY) {
 			deque.stream()
@@ -94,13 +115,7 @@ public class Hand {
 					});
 		}
 
-		deque.addAll(kp.getFields());
-
-		Account acc = AccountDAO.getAccount(user.getId());
-		for (Drawable d : deque) {
-			d.setGame(game);
-			d.setAcc(acc);
-		}
+		deque.addAll(fields);
 
 		this.user = user;
 		this.side = side;
@@ -151,7 +166,6 @@ public class Hand {
 						Champion c = CardDAO.getChampion(name);
 						deque.addAll(Collections.nCopies(6, c));
 					}
-					for (Drawable d : deque) d.setAcc(acc);
 				}
 				case "instakill" -> {
 					deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
@@ -165,10 +179,9 @@ public class Hand {
 			baseManaPerTurn = 5;
 		}
 
-		if (kp.getDestinyDraw() != null) {
-			int champs = kp.getChampions().size();
-			for (int i : kp.getDestinyDraw()) {
-				if (i > champs) {
+		if (destinyDraw != null) {
+			for (int i : destinyDraw) {
+				if (i > champs.size()) {
 					destinyDeck.clear();
 					break;
 				} else
@@ -179,145 +192,16 @@ public class Hand {
 			deque.remove(drawable);
 		}
 
-		int hpMod = switch (combo.getLeft()) {
-			case HUMAN -> 1000;
-			case DEMON -> -2000;
-			default -> 0;
-		} + switch (combo.getRight()) {
-			case HUMAN -> 500;
-			case DEMON -> -500;
-			default -> 0;
-		};
-
-		int manaMod = switch (combo.getLeft()) {
-			case ELF -> 1;
-			case DEMON -> 2;
-			default -> 0;
-		};
-
-		this.baseHp = hp = Math.max(baseHp + hpMod, 1);
-		this.baseManaPerTurn = manaPerTurn = Math.max(baseManaPerTurn + manaMod, 0);
-		this.maxCards = Math.max(maxCards
-								 + (combo.getLeft() == Race.CREATURE ? 2 : 0)
-								 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1);
-		redrawHand();
-	}
-
-	public Hand(Shoukan game, User user, Clan cl, Side side) {
-		combo = Race.getCombo(cl.getDeck().getChampions());
-		deque = new LinkedList<>() {{
-			addAll(cl.getDeck().getChampions());
-		}};
-		deque.sort(Comparator
-				.comparing(d -> ((Champion) d).getMana()).reversed()
-				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-		);
-		deque.addAll(cl.getDeck().getEquipments());
-
-		if (combo.getLeft() == Race.DIVINITY) {
-			deque.stream()
-					.distinct()
-					.forEach(d -> {
-						if (d instanceof Champion) {
-							Champion c = (Champion) d;
-							c.setMana(Math.max(c.getMana() - 1, 1));
-						} else {
-							Equipment e = (Equipment) d;
-							e.setMana(Math.max(e.getMana() - 1, 0));
-						}
-					});
-		}
-
-		deque.addAll(cl.getDeck().getFields());
 		Account acc = AccountDAO.getAccount(user.getId());
 		for (Drawable d : deque) {
 			d.setGame(game);
 			d.setAcc(acc);
+			d.setClan(cl);
 		}
-
-		this.user = user;
-		this.side = side;
-		this.game = game;
-
-		int baseHp;
-		int baseManaPerTurn;
-		int maxCards;
-		if (game.getCustom() != null) {
-			mana = Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20);
-			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
-			maxCards = Helper.clamp(game.getCustom().optInt("cartasmax", 5), 1, 10);
-			baseManaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
-
-			if (game.getCustom().optBoolean("semequip"))
-				getDeque().removeIf(d -> d instanceof Equipment);
-			if (game.getCustom().optBoolean("semfield"))
-				getDeque().removeIf(d -> d instanceof Field);
-
-			switch (game.getCustom().optString("arcade")) {
-				case "roleta" -> {
-					for (Drawable d : deque) {
-						if (d instanceof Champion) {
-							Champion c = (Champion) d;
-							c.setRawEffect("""
-									if (ep.getTrigger() == EffectTrigger.ON_ATTACK) {
-										int rng = Math.round(Math.random() * 100);
-										if (rng < 25) {
-											Hand h = ep.getHands().get(ep.getSide());
-											h.setHp(h.getHp() / 2);
-										} else if (rng < 50) {
-											Hand h = ep.getHands().get(ep.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
-											h.setHp(h.getHp() / 2);
-										}
-									}
-									%s
-									""".formatted(Helper.getOr(c.getRawEffect(), "")));
-						}
-					}
-				}
-				case "blackrock" -> {
-					Field f = CardDAO.getField("OTHERWORLD");
-					assert f != null;
-					f.setGame(game);
-					f.setAcc(AccountDAO.getAccount(user.getId()));
-					game.getArena().setField(f);
-					this.deque.removeIf(d -> d instanceof Champion || d instanceof Field);
-					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
-						Champion c = CardDAO.getChampion(name);
-						deque.addAll(Collections.nCopies(6, c));
-					}
-					for (Drawable d : deque) {
-						d.setGame(game);
-						d.setAcc(acc);
-					}
-				}
-				case "instakill" -> {
-					deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
-					baseHp = 1;
-				}
-			}
-		} else {
-			mana = 0;
-			baseHp = 5000;
-			maxCards = 5;
-			baseManaPerTurn = 5;
-		}
-
-		if (cl.getDeck().getDestinyDraw() != null) {
-			int champs = cl.getDeck().getChampions().size();
-			for (int i : cl.getDeck().getDestinyDraw()) {
-				if (i > champs) {
-					destinyDeck.clear();
-					break;
-				} else
-					destinyDeck.add(deque.get(i));
-			}
-		}
-		for (Drawable drawable : destinyDeck) {
-			deque.remove(drawable);
-		}
-
-		for (Drawable drawable : deque) {
-			drawable.setClan(cl);
+		for (Drawable d : destinyDeck) {
+			d.setGame(game);
+			d.setAcc(acc);
+			d.setClan(cl);
 		}
 
 		int hpMod = switch (combo.getLeft()) {

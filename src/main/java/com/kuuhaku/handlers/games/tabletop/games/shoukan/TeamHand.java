@@ -50,7 +50,8 @@ public class TeamHand extends Hand {
 
 
 	public TeamHand(Shoukan game, List<User> users, List<Kawaipon> kps, Side side) {
-		super(game, null, kps.get(0), side);
+		super(game, null, (Kawaipon) null, side);
+
 		combo = Race.getCombo(kps.stream().flatMap(kp -> kp.getChampions().stream()).collect(Collectors.toList()));
 		for (int i = 0; i < users.size(); i++) {
 			Kawaipon kp = kps.get(i);
@@ -82,13 +83,6 @@ public class TeamHand extends Hand {
 			}
 
 			deque.addAll(kp.getFields());
-
-			Account acc = AccountDAO.getAccount(user.getId());
-			for (Drawable d : deque) {
-				d.setGame(game);
-				d.setAcc(acc);
-			}
-
 			this.users.add(user);
 
 			if (game.getCustom() != null) {
@@ -129,10 +123,6 @@ public class TeamHand extends Hand {
 							Champion c = CardDAO.getChampion(name);
 							deque.addAll(Collections.nCopies(6, c));
 						}
-						for (Drawable d : deque) {
-							d.setGame(game);
-							d.setAcc(acc);
-						}
 					}
 					case "instakill" -> deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
 				}
@@ -150,6 +140,16 @@ public class TeamHand extends Hand {
 			}
 			for (Drawable drawable : destinyDeck) {
 				deque.remove(drawable);
+			}
+
+			Account acc = AccountDAO.getAccount(user.getId());
+			for (Drawable d : deque) {
+				d.setGame(game);
+				d.setAcc(acc);
+			}
+			for (Drawable d : destinyDeck) {
+				d.setGame(game);
+				d.setAcc(acc);
 			}
 
 			this.deques.add(deque);
