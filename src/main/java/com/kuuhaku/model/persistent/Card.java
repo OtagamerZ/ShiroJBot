@@ -182,10 +182,11 @@ public class Card {
 		return new JSONObject() {{
 			put("id", id);
 			put("name", name);
-			put("anime", new JSONObject() {{
-				put("id", anime.getName());
-				put("name", anime.toString());
-			}});
+			if (!anime.getName().equals("HIDDEN"))
+				put("anime", new JSONObject() {{
+					put("id", anime.getName());
+					put("name", anime.toString());
+				}});
 			put("rarity", rarity.getIndex());
 		}}.toString();
 	}
