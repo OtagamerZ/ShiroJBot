@@ -325,20 +325,20 @@ public class Equipment implements Drawable, Cloneable {
 
 	public String toString() {
 		return new JSONObject() {{
-			put("id", card.getId());
-			put("name", card.getName());
-			put("anime", card.getAnime());
-			put("tier", tier);
-			if (charm != null)
-				put("charm", new JSONObject() {{
-					put("id", charm);
-					put("image", charm == Charm.SPELL ? "" : Helper.atob(charm.getIcon(), "png"));
-				}});
-			put("attack", atk);
-			put("defense", def);
-			put("mana", mana);
-			put("description", description);
-			put("effectType", argType);
+			put("equipment", new JSONObject(card.toString()) {{
+				put("id", id);
+				put("tier", tier);
+				if (charm != null)
+					put("charm", new JSONObject() {{
+						put("id", charm);
+						put("image", charm == Charm.SPELL ? "" : Helper.atob(charm.getIcon(), "png"));
+					}});
+				put("attack", atk);
+				put("defense", def);
+				put("mana", mana);
+				put("description", description);
+				put("effectType", argType);
+			}});
 		}}.toString();
 	}
 
