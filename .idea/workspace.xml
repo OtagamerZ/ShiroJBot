@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RequestAssistCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RequestAssistCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,19 +192,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1139,14 +1127,7 @@
       <workItem from="1617734186778" duration="4058000" />
       <workItem from="1617796713249" duration="3550000" />
       <workItem from="1617804813792" duration="2791000" />
-      <workItem from="1617811622756" duration="1683000" />
-    </task>
-    <task id="LOCAL-04045" summary="Correções menores">
-      <created>1616783425592</created>
-      <option name="number" value="04045" />
-      <option name="presentableId" value="LOCAL-04045" />
-      <option name="project" value="LOCAL" />
-      <updated>1616783425593</updated>
+      <workItem from="1617811622756" duration="8364000" />
     </task>
     <task id="LOCAL-04046" summary="Reversão pra versão 2.1.6 de paginação">
       <created>1616881601397</created>
@@ -1484,7 +1465,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617811994543</updated>
     </task>
-    <option name="localTasksCounter" value="4094" />
+    <task id="LOCAL-04094" summary="Correções menores">
+      <created>1617813418173</created>
+      <option name="number" value="04094" />
+      <option name="presentableId" value="LOCAL-04094" />
+      <option name="project" value="LOCAL" />
+      <updated>1617813418173</updated>
+    </task>
+    <option name="localTasksCounter" value="4095" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
