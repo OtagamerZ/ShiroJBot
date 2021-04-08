@@ -317,7 +317,7 @@ public class DashboardSocket extends WebSocketServer {
 							if (c != null) {
 								c.setAcc(acc);
 								data.put("alt", c.getBase64());
-								data.put("champion", c.toString());
+								data.put("info", c.toString());
 							}
 						}
 						case EVOGEAR -> {
