@@ -207,9 +207,10 @@ public class Field implements Drawable, Cloneable {
 
 	public String toString() {
 		return new JSONObject() {{
-			put("id", card.getId());
-			put("name", card.getName());
-			put("modifiers", getModifiers());
+			put("field", new JSONObject(card.toString()) {{
+				put("id", id);
+				put("modifiers", getModifiers());
+			}});
 		}}.toString();
 	}
 
