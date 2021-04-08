@@ -26,6 +26,7 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -48,9 +49,12 @@ public class WalletCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-title"), author.getName()))
 				.addField(
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-field-title"), acc.getBalance()),
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-loan-bugs"), acc.getVBalance(), acc.getLoan(), acc.getBugs())
-						, true
+						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-field-title"), Helper.separate(acc.getBalance())),
+						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-loan-bugs"),
+								Helper.separate(acc.getVBalance()),
+								Helper.separate(acc.getLoan()),
+								Helper.separate(acc.getBugs())
+						), true
 				)
 				.addField(
 						ShiroInfo.getLocale(I18n.PT).getString("str_balance-last-voted"),
