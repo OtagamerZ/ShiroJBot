@@ -313,19 +313,25 @@ public class DashboardSocket extends WebSocketServer {
 						case KAWAIPON -> {
 							KawaiponCard kc = new KawaiponCard(CardDAO.getCard(id), foil);
 							Champion c = CardDAO.getChampion(id);
-							c.setAcc(acc);
 							data.put("normal", kc.getBase64());
-							if (c != null) data.put("alt", c.getBase64());
+							if (c != null) {
+								c.setAcc(acc);
+								data.put("alt", c.getBase64());
+							}
 						}
 						case EVOGEAR -> {
 							Equipment e = CardDAO.getEquipment(id);
-							e.setAcc(acc);
-							if (e != null) data.put("normal", e.getBase64());
+							if (e != null) {
+								e.setAcc(acc);
+								data.put("normal", e.getBase64());
+							}
 						}
 						case FIELD -> {
 							Field f = CardDAO.getField(id);
-							f.setAcc(acc);
-							if (f != null) data.put("normal", f.getBase64());
+							if (f != null) {
+								f.setAcc(acc);
+								data.put("normal", f.getBase64());
+							}
 						}
 					}
 
