@@ -88,8 +88,8 @@ public class TransferCommand implements Executable {
 		AccountDAO.saveAccount(from);
 
 		if (victorious)
-			channel.sendMessage("✅ | **" + liquidAmount + "** créditos transferidos com sucesso! (Exceed vitorioso isento de taxa)").queue();
+			channel.sendMessage("✅ | **" + Helper.separate(liquidAmount) + "** créditos transferidos com sucesso! (Exceed vitorioso isento de taxa)").queue();
 		else
-			channel.sendMessage("✅ | **" + liquidAmount + "** créditos transferidos com sucesso! (Taxa de transferência: " + Helper.roundToString(tax * 100, 1) + "%)").queue();
+			channel.sendMessage("✅ | **" + Helper.separate(liquidAmount) + "** créditos transferidos com sucesso! (Taxa de transferência: " + Helper.roundToString(tax * 100, 1) + "%)").queue();
 	}
 }

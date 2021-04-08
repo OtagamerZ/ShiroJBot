@@ -98,9 +98,7 @@ public class RequestAssistCommand implements Executable {
 							.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
 							.queue(null, Helper::doNothing);
 
-					ia.setMaxUses(1).queue(i -> {
-						Main.getInfo().getRequests().put(guild.getId(), i);
-					});
+					ia.setMaxUses(1).queue(i -> Main.getInfo().getRequests().put(guild.getId(), i));
 					TicketDAO.setIds(number, ids);
 					s.delete().queue(null, Helper::doNothing);
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
