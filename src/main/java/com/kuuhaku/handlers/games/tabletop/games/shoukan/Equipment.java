@@ -324,8 +324,8 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public String toString() {
-		return new JSONObject() {{
-			put("equipment", new JSONObject(card.toString()) {{
+		return new JSONObject(card.toString()) {{
+			put("equipment", new JSONObject() {{
 				put("id", id);
 				put("tier", tier);
 				if (charm != null)
