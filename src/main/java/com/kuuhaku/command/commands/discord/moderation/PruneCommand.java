@@ -79,38 +79,40 @@ public class PruneCommand implements Executable {
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de usuário limpa." : "ns de usuários limpas.")).queue(null, Helper::doNothing);
 		} else if (Helper.equalsAny(args[0], "all", "tudo")) {
 			channel.retrievePinnedMessages().queue(p -> {
-				String hash = Helper.generateHash(guild, author);
-				ShiroInfo.getHashes().add(hash);
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 
 				if (p.size() > 0)
 					channel.sendMessage("Há " + p.size() + " mensage" + (p.size() == 1 ? "m fixada " : "ns fixadas ") + "neste canal, tem certeza que deseja limpá-lo?")
 							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().remove(author.getId());
-								channel.createCopy().queue(c -> {
-									try {
-										channel.delete().queue();
-										c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
-									} catch (InsufficientPermissionException e) {
-										channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
-									}
-								});
-							}), true, 1, TimeUnit.MINUTES));
+										Main.getInfo().getConfirmationPending().remove(author.getId());
+										channel.createCopy().queue(c -> {
+											try {
+												channel.delete().queue();
+												c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
+											} catch (InsufficientPermissionException e) {
+												channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
+											}
+										});
+									}), true, 1, TimeUnit.MINUTES,
+									u -> u.getId().equals(author.getId()),
+									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+							));
 				else
 					channel.sendMessage("O canal será recriado, tem certeza que deseja limpá-lo?")
 							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
-								Main.getInfo().getConfirmationPending().remove(author.getId());
-								channel.createCopy().queue(c -> {
-									try {
-										channel.delete().queue();
-										c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
-									} catch (InsufficientPermissionException e) {
-										channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
-									}
-								});
-							}), true, 1, TimeUnit.MINUTES));
+										Main.getInfo().getConfirmationPending().remove(author.getId());
+										channel.createCopy().queue(c -> {
+											try {
+												channel.delete().queue();
+												c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
+											} catch (InsufficientPermissionException e) {
+												channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
+											}
+										});
+									}), true, 1, TimeUnit.MINUTES,
+									u -> u.getId().equals(author.getId()),
+									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+							));
 			});
 		} else {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_amount-not-valid")).queue();

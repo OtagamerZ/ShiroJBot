@@ -77,32 +77,31 @@ public class ReportUserCommand implements Executable {
 				.setFooter(author.getId())
 				.setColor(Color.red);
 
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `DENUNCIAR USUÁRIO`?").queue(s ->
-				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-					if (!ShiroInfo.getHashes().remove(hash)) return;
-					Main.getInfo().getConfirmationPending().remove(author.getId());
+		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `DENUNCIAR USUÁRIO`?")
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 
-					Map<String, String> ids = new HashMap<>();
-					for (String dev : ShiroInfo.getStaff()) {
-						Main.getInfo().getUserByID(dev).openPrivateChannel()
-								.flatMap(m -> m.sendMessage(eb.build()))
-								.flatMap(m -> {
-									ids.put(dev, m.getId());
-									return m.pin();
-								})
-								.complete();
-					}
+							Map<String, String> ids = new HashMap<>();
+							for (String dev : ShiroInfo.getStaff()) {
+								Main.getInfo().getUserByID(dev).openPrivateChannel()
+										.flatMap(m -> m.sendMessage(eb.build()))
+										.flatMap(m -> {
+											ids.put(dev, m.getId());
+											return m.pin();
+										})
+										.complete();
+							}
 
-					author.openPrivateChannel()
-							.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
-							.queue(null, Helper::doNothing);
-					TicketDAO.setIds(number, ids);
-					s.delete().queue(null, Helper::doNothing);
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-reported-user")).queue();
-				}), true, 60, TimeUnit.SECONDS, u -> u.getId().equals(author.getId()))
-		);
+							author.openPrivateChannel()
+									.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
+									.queue(null, Helper::doNothing);
+							TicketDAO.setIds(number, ids);
+							s.delete().queue(null, Helper::doNothing);
+							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-reported-user")).queue();
+						}), true, 60, TimeUnit.SECONDS,
+						u -> u.getId().equals(author.getId()),
+						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+				));
 	}
 }

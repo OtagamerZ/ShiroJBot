@@ -176,13 +176,10 @@ public class ShoukanCommand implements Executable {
 					}
 
 
-					String hash = Helper.generateHash(guild, author);
-					ShiroInfo.getHashes().add(hash);
 					Main.getInfo().getConfirmationPending().put(author.getId(), true);
 					channel.sendMessage(u.getAsMention() + " você foi convidado a entrar no saguão DUO com " + author.getAsMention() + ", deseja aceitar?")
 							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 										if (mb.getId().equals(u.getId())) {
-											if (!ShiroInfo.getHashes().remove(hash)) return;
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											s.delete().queue(null, Helper::doNothing);
 
@@ -205,11 +202,8 @@ public class ShoukanCommand implements Executable {
 										}
 									}), true, 1, TimeUnit.MINUTES,
 									usr -> Helper.equalsAny(usr.getId(), author.getId(), u.getId()),
-									ms -> {
-										ShiroInfo.getHashes().remove(hash);
-										Main.getInfo().getConfirmationPending().remove(author.getId());
-									})
-							);
+									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+							));
 				}
 			}
 		} else {
@@ -336,8 +330,6 @@ public class ShoukanCommand implements Executable {
 
 				long millis = System.currentTimeMillis();
 				for (User player : players) {
-					String hash = Helper.generateHash(guild, player, millis);
-					ShiroInfo.getHashes().add(hash);
 					Main.getInfo().getConfirmationPending().put(player.getId(), true);
 				}
 				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, players.toArray(User[]::new));
@@ -352,39 +344,32 @@ public class ShoukanCommand implements Executable {
 											return;
 										}
 
-										if (ShiroInfo.getHashes().remove(Helper.generateHash(guild, mb.getUser(), millis))) {
-											if (!accepted.contains(mb.getId())) {
-												channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
-												accepted.add(mb.getId());
-											}
+										if (!accepted.contains(mb.getId())) {
+											channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
+											accepted.add(mb.getId());
+										}
 
-											if (accepted.size() == players.size()) {
-												Main.getInfo().getConfirmationPending().remove(author.getId());
-												//Main.getInfo().getGames().put(id, t);
-												s.delete().queue(null, Helper::doNothing);
-												t.start();
-											}
+										if (accepted.size() == players.size()) {
+											Main.getInfo().getConfirmationPending().remove(author.getId());
+											//Main.getInfo().getGames().put(id, t);
+											s.delete().queue(null, Helper::doNothing);
+											t.start();
 										}
 									}
 								}), true, 1, TimeUnit.MINUTES,
 								u -> Helper.equalsAny(u.getId(), players.stream().map(User::getId).toArray(String[]::new)),
 								ms -> {
 									for (User player : players) {
-										String hash = Helper.generateHash(guild, player, millis);
-										ShiroInfo.getHashes().remove(hash);
 										Main.getInfo().getConfirmationPending().remove(player.getId());
 									}
-								})
-						);
+								}
+						));
 			} else if (clan) {
-				String hash = Helper.generateHash(guild, author);
-				ShiroInfo.getHashes().add(hash);
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, List.of(c, other), author, message.getMentionedUsers().get(0));
 				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " seu clã foi desafiado a uma partida de Shoukan, deseja aceitar?" + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
-										if (!ShiroInfo.getHashes().remove(hash)) return;
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										if (Main.getInfo().gameInProgress(mb.getId())) {
 											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
@@ -400,20 +385,14 @@ public class ShoukanCommand implements Executable {
 									}
 								}), true, 1, TimeUnit.MINUTES,
 								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
-								ms -> {
-									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-								})
-						);
+								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						));
 			} else {
-				String hash = Helper.generateHash(guild, author);
-				ShiroInfo.getHashes().add(hash);
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, author, message.getMentionedUsers().get(0));
 				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
-										if (!ShiroInfo.getHashes().remove(hash)) return;
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										if (Main.getInfo().gameInProgress(mb.getId())) {
 											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
@@ -429,11 +408,8 @@ public class ShoukanCommand implements Executable {
 									}
 								}), true, 1, TimeUnit.MINUTES,
 								u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
-								ms -> {
-									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-								})
-						);
+								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						));
 			}
 		}
 	}

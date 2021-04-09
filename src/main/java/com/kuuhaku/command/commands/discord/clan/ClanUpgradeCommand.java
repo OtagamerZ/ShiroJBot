@@ -28,7 +28,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -62,12 +61,9 @@ public class ClanUpgradeCommand implements Executable {
 
 		ClanTier next = Helper.getNext(c.getTier(), ClanTier.PARTY, ClanTier.FACTION, ClanTier.GUILD, ClanTier.DYNASTY);
 		assert next != null;
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Tem certeza que deseja evoluir o tier do clã para " + next.getName() + "?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
 							c.upgrade(author);
@@ -76,10 +72,7 @@ public class ClanUpgradeCommand implements Executable {
 							s.delete().flatMap(d -> channel.sendMessage("✅ | Tier evoluído com sucesso.")).queue();
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
-						ms -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-						})
-				);
+						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+				));
 	}
 }

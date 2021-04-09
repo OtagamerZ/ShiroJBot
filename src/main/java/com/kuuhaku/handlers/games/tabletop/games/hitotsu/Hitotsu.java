@@ -30,7 +30,6 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -46,7 +45,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -346,9 +344,6 @@ public class Hitotsu extends Game {
 
 	@Override
 	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
-		AtomicReference<String> hash = new AtomicReference<>(Helper.generateHash(this));
-		ShiroInfo.getHashes().add(hash.get());
-
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83D\uDCCB", (mb, ms) -> {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -373,7 +368,6 @@ public class Hitotsu extends Game {
 					.queue(null, Helper::doNothing);
 		});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
-			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			seats.get(getCurrent().getId()).draw(getDeque());
 
 			User u = getCurrent();
@@ -388,7 +382,6 @@ public class Hitotsu extends Game {
 					});
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu!").queue(null, Helper::doNothing);
 			getBoard().leaveGame();
 			resetTimer();

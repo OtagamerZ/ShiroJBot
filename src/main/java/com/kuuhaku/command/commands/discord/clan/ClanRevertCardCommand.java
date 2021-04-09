@@ -40,7 +40,6 @@ import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -112,12 +111,9 @@ public class ClanRevertCardCommand implements Executable {
 				eb.setDescription("A carta senshi " + kc.getName() + " do seu clã será convertida para carta kawaipon e será adicionada à sua coleção, por favor clique no botão abaixo para confirmar a conversão.");
 				eb.setImage("attachment://card.png");
 
-				String hash = Helper.generateHash(guild, author);
-				ShiroInfo.getHashes().add(hash);
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(kc.getCard().drawCard(false), "png"), "card.png")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-									if (!ShiroInfo.getHashes().remove(hash)) return;
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									kp.addCard(kc);
 									cl.getDeck().removeChampion(c);
@@ -128,11 +124,8 @@ public class ClanRevertCardCommand implements Executable {
 									channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();
 								}), true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(author.getId()),
-								ms -> {
-									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-								})
-						);
+								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						));
 			}
 			case EVOGEAR -> {
 				Equipment e = (Equipment) tc;
@@ -149,12 +142,9 @@ public class ClanRevertCardCommand implements Executable {
 				eb.setDescription("A carta evogear " + tc.getCard().getName() + " do seu clã será transferida ao seu deck, por favor clique no botão abaixo para confirmar.");
 				eb.setImage("attachment://card.png");
 
-				String hash = Helper.generateHash(guild, author);
-				ShiroInfo.getHashes().add(hash);
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(e.drawCard(false), "png"), "card.png").queue(s ->
 						Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-									if (!ShiroInfo.getHashes().remove(hash)) return;
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									kp.addEquipment(e);
 									cl.getDeck().removeEquipment(e);
@@ -165,11 +155,8 @@ public class ClanRevertCardCommand implements Executable {
 									channel.sendMessage("✅ | Transferência realizada com sucesso!").queue();
 								}), true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(author.getId()),
-								ms -> {
-									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-								})
-				);
+								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						));
 			}
 			case FIELD -> {
 				Field f = (Field) tc;
@@ -186,12 +173,9 @@ public class ClanRevertCardCommand implements Executable {
 				eb.setDescription("A carta de campo " + tc.getCard().getName() + " do seu clã será transferida ao seu deck, por favor clique no botão abaixo para confirmar.");
 				eb.setImage("attachment://card.png");
 
-				String hash = Helper.generateHash(guild, author);
-				ShiroInfo.getHashes().add(hash);
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(f.drawCard(false), "png"), "card.png")
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-									if (!ShiroInfo.getHashes().remove(hash)) return;
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									kp.addField(f);
 									cl.getDeck().removeField(f);
@@ -202,11 +186,8 @@ public class ClanRevertCardCommand implements Executable {
 									channel.sendMessage("✅ | Transferência realizada com sucesso!").queue();
 								}), true, 1, TimeUnit.MINUTES,
 								u -> u.getId().equals(author.getId()),
-								ms -> {
-									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-								})
-						);
+								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						));
 			}
 		}
 	}

@@ -41,7 +41,6 @@ import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -1536,7 +1535,7 @@ public class Shoukan extends GlobalGame {
 
 	public Side getSideById(String id) {
 		return hands.values().stream()
-				.filter(h -> h.getUser().getId().equals(id))
+				.filter(h -> h.getUser().getId().equals(id) || (h instanceof TeamHand && ((TeamHand) h).getUsers().stream().anyMatch(u -> u.getId().equals(id))))
 				.map(Hand::getSide)
 				.findFirst().orElse(null);
 	}
@@ -1761,13 +1760,9 @@ public class Shoukan extends GlobalGame {
 
 	@Override
 	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
-		AtomicReference<String> hash = new AtomicReference<>(Helper.generateHash(this));
-		ShiroInfo.getHashes().add(hash.get());
-
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		if (getRound() < 1 || phase == Phase.ATTACK)
 			buttons.put("▶️", (mb, ms) -> {
-				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				User u = getCurrent();
 
 				AtomicReference<Hand> h = new AtomicReference<>(hands.get(current));
@@ -1857,7 +1852,6 @@ public class Shoukan extends GlobalGame {
 			});
 		else
 			buttons.put("▶️", (mb, ms) -> {
-				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				phase = Phase.ATTACK;
 				draw = false;
 				reroll = false;
@@ -1877,7 +1871,6 @@ public class Shoukan extends GlobalGame {
 			});
 		if (phase == Phase.PLAN)
 			buttons.put("\uD83D\uDCE4", (mb, ms) -> {
-				if (!ShiroInfo.getHashes().contains(hash.get())) return;
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
@@ -1891,7 +1884,6 @@ public class Shoukan extends GlobalGame {
 					return;
 				}
 
-				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				if (!h.manualDraw()) {
 					if (getCustom() == null) {
 						getHistory().setWinner(next);
@@ -1942,13 +1934,11 @@ public class Shoukan extends GlobalGame {
 			});
 		if (reroll && getRound() == 1 && phase == Phase.PLAN)
 			buttons.put("\uD83D\uDD04", (mb, ms) -> {
-				if (!ShiroInfo.getHashes().contains(hash.get())) return;
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
 				}
 
-				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				Hand h = hands.get(current);
 				h.redrawHand();
 
@@ -1974,13 +1964,11 @@ public class Shoukan extends GlobalGame {
 			});
 		if (hands.get(current).getHp() < hands.get(current).getBaseHp() / 3 && hands.get(current).getDestinyDeck().size() > 0 && phase == Phase.PLAN)
 			buttons.put("\uD83E\uDDE7", (mb, ms) -> {
-				if (!ShiroInfo.getHashes().contains(hash.get())) return;
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode puxar cartas na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
 				}
 
-				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				Hand h = hands.get(current);
 				h.destinyDraw();
 
@@ -2005,13 +1993,11 @@ public class Shoukan extends GlobalGame {
 			});
 		if (phase == Phase.PLAN)
 			buttons.put("\uD83E\uDD1D", (mb, ms) -> {
-				if (!ShiroInfo.getHashes().contains(hash.get())) return;
 				if (phase != Phase.PLAN) {
 					channel.sendMessage("❌ | Você só pode pedir empate na fase de planejamento.").queue(null, Helper::doNothing);
 					return;
 				}
 
-				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				if (draw) {
 					close();
 					channel.sendMessage("Por acordo mútuo, declaro empate! (" + getRound() + " turnos)")
@@ -2114,7 +2100,6 @@ public class Shoukan extends GlobalGame {
 			});
 		if (getRound() > 8)
 			buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-				if (!ShiroInfo.getHashes().remove(hash.get())) return;
 				if (getCustom() == null) {
 					getHistory().setWinner(next);
 					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());

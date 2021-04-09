@@ -68,41 +68,40 @@ public class RequestAssistCommand implements Executable {
 		eb.setFooter(author.getId());
 		eb.setColor(Color.cyan);
 
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `SUPORTE PRESENCIAL` (isso criará um convite de uso único para este servidor)?").queue(s ->
-				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-					if (!ShiroInfo.getHashes().remove(hash)) return;
-					Main.getInfo().getConfirmationPending().remove(author.getId());
+		channel.sendMessage("Deseja realmente abrir um ticket com o assunto `SUPORTE PRESENCIAL` (isso criará um convite de uso único para este servidor)?")
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+							Main.getInfo().getConfirmationPending().remove(author.getId());
 
-					InviteAction ia = Helper.createInvite(guild);
+							InviteAction ia = Helper.createInvite(guild);
 
-					if (ia == null) {
-						channel.sendMessage("❌ | Não encontrei nenhum canal que eu possa criar um convite aqui.").queue();
-						return;
-					}
+							if (ia == null) {
+								channel.sendMessage("❌ | Não encontrei nenhum canal que eu possa criar um convite aqui.").queue();
+								return;
+							}
 
-					Map<String, String> ids = new HashMap<>();
-					for (String dev : ShiroInfo.getStaff()) {
-						Main.getInfo().getUserByID(dev).openPrivateChannel()
-								.flatMap(m -> m.sendMessage(eb.build()))
-								.flatMap(m -> {
-									ids.put(dev, m.getId());
-									return m.pin();
-								})
-								.complete();
-					}
+							Map<String, String> ids = new HashMap<>();
+							for (String dev : ShiroInfo.getStaff()) {
+								Main.getInfo().getUserByID(dev).openPrivateChannel()
+										.flatMap(m -> m.sendMessage(eb.build()))
+										.flatMap(m -> {
+											ids.put(dev, m.getId());
+											return m.pin();
+										})
+										.complete();
+							}
 
-					author.openPrivateChannel()
-							.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
-							.queue(null, Helper::doNothing);
+							author.openPrivateChannel()
+									.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
+									.queue(null, Helper::doNothing);
 
-					ia.setMaxUses(1).queue(i -> Main.getInfo().getRequests().put(guild.getId(), i));
-					TicketDAO.setIds(number, ids);
-					s.delete().queue(null, Helper::doNothing);
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
-				}), true, 60, TimeUnit.SECONDS, u -> u.getId().equals(author.getId()))
-		);
+							ia.setMaxUses(1).queue(i -> Main.getInfo().getRequests().put(guild.getId(), i));
+							TicketDAO.setIds(number, ids);
+							s.delete().queue(null, Helper::doNothing);
+							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
+						}), true, 60, TimeUnit.SECONDS,
+						u -> u.getId().equals(author.getId()),
+						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+				));
 	}
 }

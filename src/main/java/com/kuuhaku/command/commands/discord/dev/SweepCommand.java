@@ -29,7 +29,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -118,27 +117,21 @@ public class SweepCommand implements Executable {
             }
 
             if (guildTrashBin.size() + memberTrashBin.size() > 0) {
-                String hash = Helper.generateHash(guild, author);
-                ShiroInfo.getHashes().add(hash);
                 Main.getInfo().getConfirmationPending().put(author.getId(), true);
                 String gText = guildTrashBin.size() > 0 ? guildTrashBin.size() == 1 ? guildTrashBin.size() + " índice de servidor" : guildTrashBin.size() + " índices de servidores" : "";
                 String mText = memberTrashBin.size() > 0 ? memberTrashBin.size() == 1 ? memberTrashBin.size() + " membro" : memberTrashBin.size() + " membros" : "";
 
                 s.editMessage(":warning: | " + (guildTrashBin.size() + memberTrashBin.size() > 1 ? "Foram encontrados " : "Foi encontrado ") + gText + (!gText.isBlank() && !mText.isBlank() ? " e " : "") + mText + (guildTrashBin.size() + memberTrashBin.size() > 1 ? " inexistentes" : " inexistente") + ", deseja executar a limpeza?")
                         .queue(m -> Pages.buttonize(m, Map.of(Helper.ACCEPT, (mb, ms) -> {
-                                    if (!ShiroInfo.getHashes().remove(hash)) return;
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-									Sweeper.sweep(guildTrashBin, memberTrashBin);
+                                    Main.getInfo().getConfirmationPending().remove(author.getId());
+                                    Sweeper.sweep(guildTrashBin, memberTrashBin);
 
                                     m.delete().queue(null, Helper::doNothing);
                                     channel.sendMessage("✅ | Entradas limpas com sucesso!").queue();
                                 }), true, 1, TimeUnit.MINUTES,
                                 u -> u.getId().equals(author.getId()),
-                                ms -> {
-									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-                                })
-                        );
+                                ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+                        ));
             } else s.editMessage("✅ | Não há entradas para serem limpas.").queue();
         });
     }
