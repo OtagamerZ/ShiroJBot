@@ -780,6 +780,13 @@ public class Shoukan extends GlobalGame {
 
 					Hand enemy = hands.get(next);
 
+					float demonFac = 1;
+
+					if (h.getCombo().getRight() == Race.DEMON)
+						demonFac *= 1.25f;
+					if (enemy.getCombo().getRight() == Race.DEMON)
+						demonFac *= 1.33f;
+
 					int yPower = Math.round(c.getFinAtk() * (getRound() < 2 ? 0.5f : 1));
 
 					if (!c.getCard().getId().equals("DECOY")) enemy.removeHp(yPower);
@@ -788,8 +795,14 @@ public class Shoukan extends GlobalGame {
 					if (!postCombat()) {
 						resetTimerKeepTurn();
 						moveLock = true;
-						channel.sendMessage(c.getName() + " atacou " + hands.get(next).getUser().getName() + " causando " + yPower + " de dano direto!" + (getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : ""))
-								.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+						channel.sendMessage("%s atacou %s causando %s de dano direto!%s".formatted(
+								c.getName(),
+								hands.get(next).getUser().getName(),
+								yPower,
+								(getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "")
+								+ (demonFac > 1 ? " (efeito de raça: +" + Helper.roundToString(demonFac, 0) + "%)" : "")
+								)
+						).addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
 								.queue(s -> {
 									this.message.compute(s.getChannel().getId(), (id, m) -> {
 										if (m != null)

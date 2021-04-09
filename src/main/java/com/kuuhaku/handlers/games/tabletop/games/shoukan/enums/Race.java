@@ -72,7 +72,7 @@ public enum Race {
 	),
 	DEMON("Demônio",
 			"-2000 HP, +2 Mana",
-			"-500 HP",
+			"+25% dano direto causado, +33% dano direto sofrido",
 			"Seres das trevas que vieram ao mundo material para coletar almas para aumentar seu poder. Sua astúcia e metodologia geralmente reflete seu status no submundo, e são altamente temidas por todos os seres vivos."
 	),
 	UNDEAD("Morto-vivo",
