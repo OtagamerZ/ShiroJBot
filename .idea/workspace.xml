@@ -14,10 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1132,14 +1130,7 @@
       <workItem from="1617811622756" duration="8364000" />
       <workItem from="1617883142747" duration="11612000" />
       <workItem from="1617984427814" duration="844000" />
-      <workItem from="1617987556896" duration="764000" />
-    </task>
-    <task id="LOCAL-04057" summary="Adicionados mais 2 gatilhos de efeito">
-      <created>1617062089061</created>
-      <option name="number" value="04057" />
-      <option name="presentableId" value="LOCAL-04057" />
-      <option name="project" value="LOCAL" />
-      <updated>1617062089061</updated>
+      <workItem from="1617987556896" duration="1719000" />
     </task>
     <task id="LOCAL-04058" summary="Adicionados mais 2 gatilhos de efeito">
       <created>1617062313999</created>
@@ -1477,7 +1468,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617902428345</updated>
     </task>
-    <option name="localTasksCounter" value="4106" />
+    <task id="LOCAL-04106" summary="Correções menores">
+      <created>1617988526631</created>
+      <option name="number" value="04106" />
+      <option name="presentableId" value="LOCAL-04106" />
+      <option name="project" value="LOCAL" />
+      <updated>1617988526632</updated>
+    </task>
+    <option name="localTasksCounter" value="4107" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

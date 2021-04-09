@@ -214,7 +214,19 @@ public class TeamHand extends Hand {
 
 			if (cards.stream().filter(d -> d instanceof Equipment || d instanceof Field).count() == 4 && getDeque().stream().anyMatch(d -> d instanceof Champion))
 				manualDrawChampion();
-			else cards.add(getDeque().removeFirst().copy());
+			else {
+				Drawable dr = getDeque().removeFirst().copy();
+				cards.add(dr);
+
+				if (dr instanceof Equipment) {
+					Equipment e = (Equipment) dr;
+					if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
+						addMana(1);
+					else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
+						addHp(250);
+				}
+			}
+
 			return true;
 		} catch (NoSuchElementException e) {
 			return false;
@@ -245,6 +257,14 @@ public class TeamHand extends Hand {
 			else {
 				dr = getDeque().removeFirst();
 				cards.add(dr.copy());
+
+				if (dr instanceof Equipment) {
+					Equipment e = (Equipment) dr;
+					if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
+						addMana(1);
+					else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
+						addHp(250);
+				}
 			}
 			return dr;
 		} catch (NoSuchElementException ignore) {
@@ -260,6 +280,15 @@ public class TeamHand extends Hand {
 			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+
+			if (dr instanceof Equipment) {
+				Equipment e = (Equipment) dr;
+				if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
+					addMana(1);
+				else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
+					addHp(250);
+			}
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -275,6 +304,15 @@ public class TeamHand extends Hand {
 			Drawable dr = getDeque().stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+
+			if (dr instanceof Equipment) {
+				Equipment e = (Equipment) dr;
+				if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
+					addMana(1);
+				else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
+					addHp(250);
+			}
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -311,9 +349,13 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() != Charm.SPELL).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+
+			if (combo.getLeft() == Race.MACHINE)
+				addHp(250);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -328,6 +370,10 @@ public class TeamHand extends Hand {
 			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() == Charm.SPELL).findFirst().orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+
+			if (combo.getLeft() == Race.MYSTICAL)
+				addMana(1);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
@@ -339,9 +385,13 @@ public class TeamHand extends Hand {
 		try {
 			List<Drawable> cards = getCards();
 
-			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
+			Drawable dr = getDeque().stream().filter(c -> c instanceof Equipment && ((Equipment) c).getCharm() != Charm.SPELL).max(Comparator.comparingInt(c -> attack ? ((Equipment) c).getAtk() : ((Equipment) c).getDef())).orElseThrow();
 			getDeque().remove(dr);
 			cards.add(dr.copy());
+
+			if (combo.getLeft() == Race.MACHINE)
+				addHp(250);
+
 			return dr;
 		} catch (NoSuchElementException ignore) {
 			return null;
