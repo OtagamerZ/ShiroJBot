@@ -233,8 +233,8 @@ public class ShoukanCommand implements Executable {
 			}
 
 			boolean team = users.size() == 3;
-			boolean clan = !team && (args.length > 1 && Helper.equalsAny(args[1], "cla", "clan")) || (args.length > 2 && Helper.equalsAny(args[2], "cla", "clan"));
-			boolean daily = !clan && (args.length > 1 && Helper.equalsAny(args[1], "daily", "diario")) || (args.length > 2 && Helper.equalsAny(args[2], "daily", "diario"));
+			boolean clan = !team && Helper.findParam(args, "cla", "clan");
+			boolean daily = !clan && Helper.findParam(args, "daily", "diario");
 
 			int bet = 0;
 			JSONObject custom = Helper.findJson(argsAsText);
@@ -311,18 +311,19 @@ public class ShoukanCommand implements Executable {
 			}
 
 			if (team) {
-				for (int i = 0; i < 3; i++) {
-					User u = message.getMentionedUsers().get(i);
-					Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
+				if (!daily)
+					for (int i = 0; i < 3; i++) {
+						User u = message.getMentionedUsers().get(i);
+						Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
 
-					if (k.getChampions().size() < 30) {
-						channel.sendMessage("❌ | " + u.getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
-						return;
-					} else if (k.getEvoWeight() > 24) {
-						channel.sendMessage("❌ | Os equipamentos de " + u.getAsMention() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
-						return;
+						if (k.getChampions().size() < 30) {
+							channel.sendMessage("❌ | " + u.getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
+							return;
+						} else if (k.getEvoWeight() > 24) {
+							channel.sendMessage("❌ | Os equipamentos de " + u.getAsMention() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
+							return;
+						}
 					}
-				}
 
 				List<User> players = new ArrayList<>() {{
 					add(author);
