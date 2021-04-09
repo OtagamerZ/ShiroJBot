@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.enums;
 
+import com.kuuhaku.utils.Helper;
+
 public enum ClanTier {
 	PARTY("Grupo", 10, 100000, 50000),
 	FACTION("Facção", 50, 500000, 125000),
@@ -50,5 +52,9 @@ public enum ClanTier {
 
 	public long getCost() {
 		return cost;
+	}
+
+	public ClanTier getNext() {
+		return Helper.getNext(this, values());
 	}
 }

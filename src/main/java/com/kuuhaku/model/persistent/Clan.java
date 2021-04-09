@@ -238,6 +238,7 @@ public class Clan {
 
 	public void upgrade(User u) {
 		this.vault -= tier.getCost();
+		this.tier = this.tier.getNext();
 		transactions.add(u.getAsTag() + " evoluiu o tier do clã por " + Helper.separate(tier) + " créditos.");
 	}
 
