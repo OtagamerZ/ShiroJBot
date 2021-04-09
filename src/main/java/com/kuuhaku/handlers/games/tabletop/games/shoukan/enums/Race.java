@@ -46,7 +46,7 @@ public enum Race {
 			"Metade humano e metade fera, possuem uma incrível força e instintos aguçados. Não se engane, uma garota-gato ainda é mortal o suficiente para te pegar desprevenido."
 	),
 	MACHINE("Máquina",
-			"(SOLO) -1 Peso de Equipamentos\n(DUO) Ao puxar um equipamento ganhe 250 de HP",
+			"**(SOLO)** -1 Peso de Equipamentos\n**(DUO)** Ao puxar um equipamento ganhe 250 de HP",
 			"Inicia com 1 equipamento extra",
 			"Máquinas infundidas com magia, permitindo que ajam por vontade própria e até mesmo tenham emoções. São imbatíveis quando o assunto é poder de fogo."
 	),
@@ -56,7 +56,7 @@ public enum Race {
 			"Divindades que criaram formas físicas para interagir com o mundo dos mortais. Seu poder vem da crença de seus seguidores, o que permite que criem e destruam matéria com um mero estalar de dedos."
 	),
 	MYSTICAL("Místico",
-			"(SOLO) -1 Peso de Magias\n(DUO) Ao puxar uma magia ganhe 1 de mana",
+			"**(SOLO)** -1 Peso de Magias\n**(DUO)** Ao puxar uma magia ganhe 1 de mana",
 			"Inicia com 1 magia extra",
 			"Seres místicos resultantes da materialização de energia mágica. Vivem em eterno vínculo com o ambiente e são capazes de sentir até mesmo o menor movimento apenas canalizando seus sentidos."
 	),
