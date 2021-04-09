@@ -82,12 +82,9 @@ public class InvestCommand implements Executable {
 		StockMarket sm = StockMarketDAO.getCardInvestment(author.getId(), c);
 		sm.setInvestment(sm.getInvestment() + readjust);
 
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Você está prestes comprar " + readjust + " ações (" + Helper.separate(amount) + " créditos) da carta " + c.getName() + ", deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							acc.removeCredit(amount, this.getClass());
 							AccountDAO.saveAccount(acc);
@@ -97,10 +94,7 @@ public class InvestCommand implements Executable {
 							s.delete().flatMap(d -> channel.sendMessage("✅ | Ações compradas com sucesso!")).queue();
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
-						ms -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-						})
-				);
+						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+				));
 	}
 }

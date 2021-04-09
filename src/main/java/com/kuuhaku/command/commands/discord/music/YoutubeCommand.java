@@ -32,7 +32,6 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -88,15 +87,13 @@ public class YoutubeCommand implements Executable {
 							pages.add(new Page(PageType.EMBED, eb.build()));
 						}
 
-						String hash = Helper.generateHash(guild, author);
-						ShiroInfo.getHashes().add(hash);
 						Main.getInfo().getConfirmationPending().put(author.getId(), true);
 						channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
 							Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
 							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
 								Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
-											if (!ShiroInfo.getHashes().remove(hash)) return;
 											Main.getInfo().getConfirmationPending().remove(author.getId());
+
 											try {
 												String url = Objects.requireNonNull(ms.getEmbeds().get(0).getFooter()).getIconUrl();
 												assert url != null;
@@ -111,10 +108,8 @@ public class YoutubeCommand implements Executable {
 											}
 										}), true, 1, TimeUnit.MINUTES,
 										u -> u.getId().equals(author.getId()),
-										ms -> {
-											ShiroInfo.getHashes().remove(hash);
-											Main.getInfo().getConfirmationPending().remove(author.getId());
-										});
+										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+								);
 							}
 						});
 					} else m.editMessage("❌ | Nenhum vídeo encontrado").queue();

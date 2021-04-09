@@ -238,14 +238,13 @@ public class TradeCardCommand implements Executable {
 						default -> ((Field) products.get(1).getRight()).getCard().getName();
 					}
 			};
-			String hash = Helper.generateHash(guild, author);
-			ShiroInfo.getHashes().add(hash);
+
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			Main.getInfo().getConfirmationPending().put(other.getId(), true);
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja trocar a carta `" + names[0] + "` pela sua carta `" + names[1] + "`, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								if (!mb.getId().equals(other.getId())) return;
-								else if (!ShiroInfo.getHashes().remove(hash)) return;
+
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								Main.getInfo().getConfirmationPending().remove(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
@@ -382,11 +381,10 @@ public class TradeCardCommand implements Executable {
 							}), true, 1, TimeUnit.MINUTES,
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {
-								ShiroInfo.getHashes().remove(hash);
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								Main.getInfo().getConfirmationPending().remove(other.getId());
-							})
-					);
+							}
+					));
 		} else if (Helper.regex(text, "(\\d+)[ ]+[\\w- ]+[NnCcEeFf]")) { //Purchase
 			int type = switch (args[3].toUpperCase(Locale.ROOT)) {
 				case "N", "C" -> 1;
@@ -475,11 +473,11 @@ public class TradeCardCommand implements Executable {
 			boolean hasLoan = tacc.getLoan() > 0;
 			int min = switch (type) {
 				case 1 -> ((KawaiponCard) product.getRight())
-						.getCard()
-						.getRarity()
-						.getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+								  .getCard()
+								  .getRarity()
+								  .getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
 				case 2 -> ((Equipment) product.getRight())
-						.getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
+								  .getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
 				default -> hasLoan ? 20000 : 5000;
 			};
 
@@ -496,15 +494,14 @@ public class TradeCardCommand implements Executable {
 				case 2 -> ((Equipment) product.getRight()).getCard().getName();
 				default -> ((Field) product.getRight()).getCard().getName();
 			};
-			String hash = Helper.generateHash(guild, author);
-			ShiroInfo.getHashes().add(hash);
+
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			Main.getInfo().getConfirmationPending().put(other.getId(), true);
 			Pair<CardType, Object> finalProduct = product;
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar " + (type == 1 ? "sua carta" : type == 2 ? "seu equipamento" : "sua arena") + " `" + name + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
 								if (!mb.getId().equals(other.getId())) return;
-								else if (!ShiroInfo.getHashes().remove(hash)) return;
+
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								Main.getInfo().getConfirmationPending().remove(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
@@ -598,11 +595,10 @@ public class TradeCardCommand implements Executable {
 							}), true, 1, TimeUnit.MINUTES,
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {
-								ShiroInfo.getHashes().remove(hash);
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								Main.getInfo().getConfirmationPending().remove(other.getId());
-							})
-					);
+							}
+					));
 		} else if (Helper.regex(text, "[\\w- ]+[NnCcEeFf][ ]+(\\d+)")) { //Selling
 			int type = switch (args[2].toUpperCase(Locale.ROOT)) {
 				case "N", "C" -> 1;
@@ -691,11 +687,11 @@ public class TradeCardCommand implements Executable {
 			boolean hasLoan = acc.getLoan() > 0;
 			int min = switch (type) {
 				case 1 -> ((KawaiponCard) product.getRight())
-						.getCard()
-						.getRarity()
-						.getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+								  .getCard()
+								  .getRarity()
+								  .getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
 				case 2 -> ((Equipment) product.getRight())
-						.getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
+								  .getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
 				default -> hasLoan ? 20000 : 5000;
 			};
 
@@ -712,15 +708,14 @@ public class TradeCardCommand implements Executable {
 				case 2 -> ((Equipment) product.getRight()).getCard().getName();
 				default -> ((Field) product.getRight()).getCard().getName();
 			};
-			String hash = Helper.generateHash(guild, author);
-			ShiroInfo.getHashes().add(hash);
+
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			Main.getInfo().getConfirmationPending().put(other.getId(), true);
 			Pair<CardType, Object> finalProduct = product;
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja vender " + (type == 1 ? "a carta" : type == 2 ? "o equipamento" : "a arena") + " `" + name + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
 								if (!mb.getId().equals(other.getId())) return;
-								else if (!ShiroInfo.getHashes().remove(hash)) return;
+
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								Main.getInfo().getConfirmationPending().remove(other.getId());
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
@@ -814,11 +809,10 @@ public class TradeCardCommand implements Executable {
 							}), true, 1, TimeUnit.MINUTES,
 							u -> Helper.equalsAny(u.getId(), author.getId(), other.getId()),
 							ms -> {
-								ShiroInfo.getHashes().remove(hash);
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								Main.getInfo().getConfirmationPending().remove(other.getId());
-							})
-					);
+							}
+					));
 		}
 	}
 }

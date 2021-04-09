@@ -29,7 +29,6 @@ import com.kuuhaku.handlers.games.tabletop.framework.Spot;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.reversi.pieces.Disk;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -42,7 +41,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -182,12 +180,8 @@ public class Reversi extends Game {
 
 	@Override
 	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
-		AtomicReference<String> hash = new AtomicReference<>(Helper.generateHash(this));
-		ShiroInfo.getHashes().add(hash.get());
-
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("▶️", (mb, ms) -> {
-			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			if (draw) {
 				int whiteCount = 0;
 				int blackCount = 0;
@@ -239,7 +233,6 @@ public class Reversi extends Game {
 					});
 		});
 		buttons.put("\uD83C\uDFF3️", (mb, ms) -> {
-			if (!ShiroInfo.getHashes().remove(hash.get())) return;
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 			close();
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")

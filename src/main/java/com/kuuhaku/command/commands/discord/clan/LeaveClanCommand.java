@@ -27,7 +27,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -50,13 +49,10 @@ public class LeaveClanCommand implements Executable {
 			return;
 		}
 
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		if (c.getMembers().size() < 2) {
 			channel.sendMessage("Tem certeza que deseja abandonar o clã? (ele será desfeito por você ser o último membro)")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								ClanDAO.removeClan(c);
@@ -64,15 +60,11 @@ public class LeaveClanCommand implements Executable {
 								s.delete().flatMap(d -> channel.sendMessage("✅ | O clã " + c.getName() + " foi desfeito com sucesso.")).queue();
 							}), true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
-							ms -> {
-								ShiroInfo.getHashes().remove(hash);
-								Main.getInfo().getConfirmationPending().remove(author.getId());
-							})
-					);
+							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+					));
 		} else {
 			channel.sendMessage("Tem certeza que deseja abandonar o clã? (caso seja líder, o membro com posto mais alto assumirá a liderança)")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								c.leave(author.getId());
@@ -82,11 +74,8 @@ public class LeaveClanCommand implements Executable {
 								s.delete().flatMap(d -> channel.sendMessage("✅ | Você saiu do clã " + c.getName() + " com sucesso.")).queue();
 							}), true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
-							ms -> {
-								ShiroInfo.getHashes().remove(hash);
-								Main.getInfo().getConfirmationPending().remove(author.getId());
-							})
-					);
+							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+					));
 		}
 	}
 }

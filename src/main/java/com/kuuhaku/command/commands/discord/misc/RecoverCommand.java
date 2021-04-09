@@ -86,12 +86,9 @@ public class RecoverCommand implements Executable {
 
 		sm.setInvestment(sm.getInvestment() - amount);
 
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Você está prestes vender " + amount + " ações (" + Helper.separate(readjust) + " créditos) da carta " + c.getName() + ", deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-							if (!ShiroInfo.getHashes().remove(hash)) return;
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							acc.addCredit(readjust, this.getClass());
 							AccountDAO.saveAccount(acc);
@@ -101,10 +98,7 @@ public class RecoverCommand implements Executable {
 							s.delete().flatMap(d -> channel.sendMessage("✅ | Ações vendidas com sucesso!")).queue();
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
-						ms -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-						})
-				);
+						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+				));
 	}
 }
