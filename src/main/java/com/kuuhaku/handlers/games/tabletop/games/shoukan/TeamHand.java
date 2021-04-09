@@ -180,11 +180,7 @@ public class TeamHand extends Hand {
 			case HUMAN -> 1000;
 			case DEMON -> -2000;
 			default -> 0;
-		} + switch (combo.getRight()) {
-			case HUMAN -> 500;
-			case DEMON -> -500;
-			default -> 0;
-		};
+		} + (combo.getRight() == Race.HUMAN ? 500 : 0);
 
 		int manaMod = switch (combo.getLeft()) {
 			case ELF -> 1;
