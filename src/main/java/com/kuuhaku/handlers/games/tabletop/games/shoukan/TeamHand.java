@@ -457,6 +457,10 @@ public class TeamHand extends Hand {
 		return users.getCurrent();
 	}
 
+	public InfiniteList<User> getUsers() {
+		return users;
+	}
+
 	public Pair<Race, Race> getCombo() {
 		return combo;
 	}

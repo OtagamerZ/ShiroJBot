@@ -35,7 +35,6 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -109,15 +108,11 @@ public class SynthesizeCardCommand implements Executable {
 			DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
 			int freeRolls = NumberUtils.toInt(dp.getValue());
 
-			String hash = Helper.generateHash(guild, author);
-			ShiroInfo.getHashes().add(hash);
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prester a sintetizar uma arena usando essas cartas **CROMADAS** (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
-					.queue(s ->
-							{
+					.queue(s -> {
 								Map<String, ThrowingBiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
 								buttons.put(Helper.ACCEPT, (ms, mb) -> {
-									if (!ShiroInfo.getHashes().remove(hash)) return;
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 
 									if (kp.getFields().size() == 3) {
@@ -158,10 +153,11 @@ public class SynthesizeCardCommand implements Executable {
 									s.delete().queue(null, Helper::doNothing);
 									channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve a arena **" + f.getCard().getName() + "**!").queue();
 								});
-								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-								});
+
+								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES,
+										u -> u.getId().equals(author.getId()),
+										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+								);
 							}
 					);
 		} else {
@@ -191,16 +187,12 @@ public class SynthesizeCardCommand implements Executable {
 			DynamicParameter dp = DynamicParameterDAO.getParam("freeSynth_" + author.getId());
 			int freeRolls = NumberUtils.toInt(dp.getValue());
 
-			String hash = Helper.generateHash(guild, author);
-			ShiroInfo.getHashes().add(hash);
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Você está prester a sintetizar um equipamento usando essas cartas (" + (freeRolls > 0 ? "possui " + freeRolls + " sínteses gratúitas" : "elas serão destruídas no processo") + "). Deseja continuar?")
 					.embed(eb.build())
-					.queue(s ->
-							{
+					.queue(s -> {
 								Map<String, ThrowingBiConsumer<Member, Message>> buttons = new java.util.HashMap<>();
 								buttons.put(Helper.ACCEPT, (ms, mb) -> {
-									if (!ShiroInfo.getHashes().remove(hash)) return;
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
@@ -248,10 +240,10 @@ public class SynthesizeCardCommand implements Executable {
 									s.delete().queue(null, Helper::doNothing);
 									channel.sendMessage("✅ | Síntese realizada com sucesso, você obteve o equipamento **" + e.getCard().getName() + "**! (" + tier + ")").queue();
 								});
-								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()), ms -> {
-									ShiroInfo.getHashes().remove(hash);
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-								});
+								Pages.buttonize(s, buttons, true, 1, TimeUnit.MINUTES,
+										u -> u.getId().equals(author.getId()),
+										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+								);
 							}
 					);
 		}
