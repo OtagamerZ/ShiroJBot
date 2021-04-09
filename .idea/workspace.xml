@@ -14,7 +14,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +129,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -1127,63 +1130,9 @@
       <workItem from="1617796713249" duration="3550000" />
       <workItem from="1617804813792" duration="2791000" />
       <workItem from="1617811622756" duration="8364000" />
-      <workItem from="1617883142747" duration="4363000" />
-    </task>
-    <task id="LOCAL-04049" summary="Reversão pra versão 2.1.6 da biblioteca de paginação">
-      <created>1616902627675</created>
-      <option name="number" value="04049" />
-      <option name="presentableId" value="LOCAL-04049" />
-      <option name="project" value="LOCAL" />
-      <updated>1616902627675</updated>
-    </task>
-    <task id="LOCAL-04050" summary="Adicionados contadores de cartas no cemitério">
-      <created>1616976812995</created>
-      <option name="number" value="04050" />
-      <option name="presentableId" value="LOCAL-04050" />
-      <option name="project" value="LOCAL" />
-      <updated>1616976812995</updated>
-    </task>
-    <task id="LOCAL-04051" summary="Adicionados mais 2 gatilhos de efeito">
-      <created>1616996027150</created>
-      <option name="number" value="04051" />
-      <option name="presentableId" value="LOCAL-04051" />
-      <option name="project" value="LOCAL" />
-      <updated>1616996027150</updated>
-    </task>
-    <task id="LOCAL-04052" summary="Adicionados mais 2 gatilhos de efeito">
-      <created>1617050229585</created>
-      <option name="number" value="04052" />
-      <option name="presentableId" value="LOCAL-04052" />
-      <option name="project" value="LOCAL" />
-      <updated>1617050229586</updated>
-    </task>
-    <task id="LOCAL-04053" summary="Adicionados mais 2 gatilhos de efeito">
-      <created>1617051879397</created>
-      <option name="number" value="04053" />
-      <option name="presentableId" value="LOCAL-04053" />
-      <option name="project" value="LOCAL" />
-      <updated>1617051879397</updated>
-    </task>
-    <task id="LOCAL-04054" summary="Adicionados mais 2 gatilhos de efeito">
-      <created>1617055579823</created>
-      <option name="number" value="04054" />
-      <option name="presentableId" value="LOCAL-04054" />
-      <option name="project" value="LOCAL" />
-      <updated>1617055579823</updated>
-    </task>
-    <task id="LOCAL-04055" summary="Adicionados mais 2 gatilhos de efeito">
-      <created>1617061523642</created>
-      <option name="number" value="04055" />
-      <option name="presentableId" value="LOCAL-04055" />
-      <option name="project" value="LOCAL" />
-      <updated>1617061523642</updated>
-    </task>
-    <task id="LOCAL-04056" summary="Adicionados mais 2 gatilhos de efeito">
-      <created>1617061713044</created>
-      <option name="number" value="04056" />
-      <option name="presentableId" value="LOCAL-04056" />
-      <option name="project" value="LOCAL" />
-      <updated>1617061713044</updated>
+      <workItem from="1617883142747" duration="11612000" />
+      <workItem from="1617984427814" duration="844000" />
+      <workItem from="1617987556896" duration="764000" />
     </task>
     <task id="LOCAL-04057" summary="Adicionados mais 2 gatilhos de efeito">
       <created>1617062089061</created>
@@ -1472,7 +1421,63 @@
       <option name="project" value="LOCAL" />
       <updated>1617885266959</updated>
     </task>
-    <option name="localTasksCounter" value="4098" />
+    <task id="LOCAL-04098" summary="Correções menores">
+      <created>1617890328448</created>
+      <option name="number" value="04098" />
+      <option name="presentableId" value="LOCAL-04098" />
+      <option name="project" value="LOCAL" />
+      <updated>1617890328448</updated>
+    </task>
+    <task id="LOCAL-04099" summary="Correções menores">
+      <created>1617890638846</created>
+      <option name="number" value="04099" />
+      <option name="presentableId" value="LOCAL-04099" />
+      <option name="project" value="LOCAL" />
+      <updated>1617890638846</updated>
+    </task>
+    <task id="LOCAL-04100" summary="Correções menores">
+      <created>1617898012408</created>
+      <option name="number" value="04100" />
+      <option name="presentableId" value="LOCAL-04100" />
+      <option name="project" value="LOCAL" />
+      <updated>1617898012408</updated>
+    </task>
+    <task id="LOCAL-04101" summary="Correções menores">
+      <created>1617898674827</created>
+      <option name="number" value="04101" />
+      <option name="presentableId" value="LOCAL-04101" />
+      <option name="project" value="LOCAL" />
+      <updated>1617898674827</updated>
+    </task>
+    <task id="LOCAL-04102" summary="Correções menores">
+      <created>1617899559004</created>
+      <option name="number" value="04102" />
+      <option name="presentableId" value="LOCAL-04102" />
+      <option name="project" value="LOCAL" />
+      <updated>1617899559004</updated>
+    </task>
+    <task id="LOCAL-04103" summary="Correções menores">
+      <created>1617901233205</created>
+      <option name="number" value="04103" />
+      <option name="presentableId" value="LOCAL-04103" />
+      <option name="project" value="LOCAL" />
+      <updated>1617901233206</updated>
+    </task>
+    <task id="LOCAL-04104" summary="Correções menores">
+      <created>1617901963349</created>
+      <option name="number" value="04104" />
+      <option name="presentableId" value="LOCAL-04104" />
+      <option name="project" value="LOCAL" />
+      <updated>1617901963349</updated>
+    </task>
+    <task id="LOCAL-04105" summary="Correções menores">
+      <created>1617902428344</created>
+      <option name="number" value="04105" />
+      <option name="presentableId" value="LOCAL-04105" />
+      <option name="project" value="LOCAL" />
+      <updated>1617902428345</updated>
+    </task>
+    <option name="localTasksCounter" value="4106" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

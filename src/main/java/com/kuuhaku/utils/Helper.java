@@ -2333,4 +2333,8 @@ public class Helper {
 	public static int mirroredFloor(double value) {
 		return (int) (value > 0 ? Math.floor(value) : Math.ceil(value));
 	}
+
+	public static boolean findParam(String[] args, String... param) {
+		return Arrays.stream(args).anyMatch(s -> equalsAny(s, param));
+	}
 }
