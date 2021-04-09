@@ -27,7 +27,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -62,14 +61,11 @@ public class ExceedLeaveCommand implements Executable {
 		}
 
 		boolean willLock = ZonedDateTime.now(ZoneId.of("GMT-3")).getDayOfMonth() > 5;
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		String name = em.getExceed();
 		channel.sendMessage(":warning: | Sair da " + name + " irá zerar seus pontos de contribuição" + (willLock ? " e fará com que você não possa escolher outro Exceed até o próximo mês" : "") + ". Deseja confirmar sua escolha?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(author.getId())) {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								if (willLock) em.setBlocked(true);
 								em.setExceed("");
@@ -80,10 +76,7 @@ public class ExceedLeaveCommand implements Executable {
 							}
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
-						ms -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-						})
-		);
+						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+				));
 	}
 }

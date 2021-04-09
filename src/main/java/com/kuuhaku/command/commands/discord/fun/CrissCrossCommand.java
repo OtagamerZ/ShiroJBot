@@ -94,33 +94,27 @@ public class CrissCrossCommand implements Executable {
             return;
         }
 
-        String hash = Helper.generateHash(guild, author);
-        ShiroInfo.getHashes().add(hash);
         Main.getInfo().getConfirmationPending().put(author.getId(), true);
         Game t = new CrissCross(Main.getShiroShards(), channel, bet, author, message.getMentionedUsers().get(0));
         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Jogo da Velha, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : ""))
                 .queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-                            if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
-                                if (!ShiroInfo.getHashes().remove(hash)) return;
+							if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
-                                if (Main.getInfo().gameInProgress(mb.getId())) {
-                                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
-                                    return;
-                                } else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
-                                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
-                                    return;
-                                }
+								if (Main.getInfo().gameInProgress(mb.getId())) {
+									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+									return;
+								} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
+									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+									return;
+								}
 
-                                //Main.getInfo().getGames().put(id, t);
-                                s.delete().queue(null, Helper::doNothing);
-                                t.start();
-                            }
-                        }), true, 1, TimeUnit.MINUTES,
-                        u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
-                        ms -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-                        })
-                );
+								//Main.getInfo().getGames().put(id, t);
+								s.delete().queue(null, Helper::doNothing);
+								t.start();
+							}
+						}), true, 1, TimeUnit.MINUTES,
+						u -> Helper.equalsAny(u.getId(), author.getId(), message.getMentionedUsers().get(0).getId()),
+						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+				));
     }
 }

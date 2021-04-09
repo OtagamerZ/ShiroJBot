@@ -29,7 +29,6 @@ import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.BiContract;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -78,13 +77,10 @@ public class ShoukanMasterCommand implements Executable {
 	}
 
 	private void firstStep(BiContract<Boolean, Boolean> contract, Guild guild, User author, User target, MessageChannel channel) {
-		String hash = Helper.generateHash(guild, author);
-		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Você está prestes a definir " + target.getName() + " como seu tutor, ao alcançar o ranking de Iniciado no Shoukan você receberá **5 sínteses gratuitas**. Deseja confirmar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(author.getId())) {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
 								s.delete().queue();
@@ -93,21 +89,15 @@ public class ShoukanMasterCommand implements Executable {
 							}
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
-						msg -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-						})
-				);
+						msg -> Main.getInfo().getConfirmationPending().remove(author.getId())
+				));
 	}
 
 	private void secondStep(BiContract<Boolean, Boolean> contract, Guild guild, User author, User target, MessageChannel channel) {
-		String hash = Helper.generateHash(guild, target);
-		ShiroInfo.getHashes().add(hash);
 		Main.getInfo().getConfirmationPending().put(target.getId(), true);
 		channel.sendMessage(target.getAsMention() + ", " + author.getName() + " deseja tornar-se seu discípulo de Shoukan, você receberá **30.000 créditos** caso ele(a) alcance o ranking de Iniciado. Deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							if (mb.getId().equals(target.getId())) {
-								if (!ShiroInfo.getHashes().remove(hash)) return;
 								Main.getInfo().getConfirmationPending().remove(target.getId());
 
 								s.delete().queue();
@@ -115,10 +105,7 @@ public class ShoukanMasterCommand implements Executable {
 							}
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(target.getId()),
-						msg -> {
-							ShiroInfo.getHashes().remove(hash);
-							Main.getInfo().getConfirmationPending().remove(target.getId());
-						})
-				);
+						msg -> Main.getInfo().getConfirmationPending().remove(target.getId())
+				));
 	}
 }
