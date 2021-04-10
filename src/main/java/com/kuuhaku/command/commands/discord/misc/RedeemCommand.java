@@ -62,7 +62,7 @@ public class RedeemCommand implements Executable {
 								AccountDAO.saveAccount(acc);
 
 								s.delete().queue();
-								channel.sendMessage("✅ | Gema adquirida com sucesso! Use `" + prefix + "vip` para ver a loja de gemas.").queue();
+								channel.sendMessage("✅ | Gema adquirida com sucesso! Use `" + prefix + "shopg` para ver a loja de gemas.").queue();
 							}
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
