@@ -13,13 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na evolução de clãs">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no fluxo de efeitos no Shoukan">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Duelists.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Duelists.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/SlotColumn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/SlotColumn.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1135,14 +1131,7 @@
       <workItem from="1617883142747" duration="11612000" />
       <workItem from="1617984427814" duration="844000" />
       <workItem from="1617987556896" duration="7975000" />
-      <workItem from="1618230391795" duration="5199000" />
-    </task>
-    <task id="LOCAL-04062" summary="Melhoria no sistema de taxas e rebalanceamento do slots">
-      <created>1617566187664</created>
-      <option name="number" value="04062" />
-      <option name="presentableId" value="LOCAL-04062" />
-      <option name="project" value="LOCAL" />
-      <updated>1617566187665</updated>
+      <workItem from="1618230391795" duration="7311000" />
     </task>
     <task id="LOCAL-04063" summary="Melhoria no sistema de taxas e rebalanceamento do slots">
       <created>1617566231973</created>
@@ -1480,7 +1469,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618007333404</updated>
     </task>
-    <option name="localTasksCounter" value="4111" />
+    <task id="LOCAL-04111" summary="Melhoria no fluxo de efeitos no Shoukan">
+      <created>1618235845631</created>
+      <option name="number" value="04111" />
+      <option name="presentableId" value="LOCAL-04111" />
+      <option name="project" value="LOCAL" />
+      <updated>1618235845632</updated>
+    </task>
+    <option name="localTasksCounter" value="4112" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1566,7 +1562,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhorias no sistema de cache" />
     <MESSAGE value="Melhoria no controle dos atributos dos campeões" />
     <MESSAGE value="Correção nas GIFs enviadas" />
     <MESSAGE value="Correção nas GIFs enviadas durante o Shoukan" />
@@ -1591,7 +1586,8 @@
     <MESSAGE value="Removidas travas de hash (biblioteca de paginação faz automaticamente);&#10;Corrigido modo 2v2 do Shoukan;" />
     <MESSAGE value="Correção na evolução de clans" />
     <MESSAGE value="Correção na evolução de clãs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na evolução de clãs" />
+    <MESSAGE value="Melhoria no fluxo de efeitos no Shoukan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no fluxo de efeitos no Shoukan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
