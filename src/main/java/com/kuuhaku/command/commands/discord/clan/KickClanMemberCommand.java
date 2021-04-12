@@ -49,7 +49,7 @@ public class KickClanMemberCommand implements Executable {
 		if (c == null) {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
-		} else if (c.isLocked(author.getId(), ClanPermission.ALTER_HIERARCHY)) {
+		} else if (c.isLocked(author.getId(), ClanPermission.KICK)) {
 			channel.sendMessage("❌ | Você não tem permissão para expulsar membros.").queue();
 			return;
 		} else if (args.length < 1) {
