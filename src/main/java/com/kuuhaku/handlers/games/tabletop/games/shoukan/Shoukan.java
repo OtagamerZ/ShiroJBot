@@ -1293,6 +1293,7 @@ public class Shoukan extends GlobalGame {
 						(h.isNullMode() || h.getMana() >= f.getMana())
 				)
 				.findFirst()
+				.map(Champion::copy)
 				.orElse(null);
 
 		if (aFusion != null) {
