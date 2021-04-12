@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.imageio.ImageIO;
@@ -94,12 +95,7 @@ public class Hand {
 
 	private void setData(Shoukan game, User user, List<Champion> champs, List<Equipment> equips, List<Field> fields, List<Integer> destinyDraw, Side side, Clan cl) {
 		combo = Race.getCombo(champs);
-		deque.addAll(champs);
-		deque.sort(Comparator
-				.comparing(d -> ((Champion) d).getMana()).reversed()
-				.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-		);
-		deque.addAll(equips);
+		deque.addAll(ListUtils.union(champs, equips));
 
 		if (combo.getLeft() == Race.DIVINITY) {
 			deque.stream()

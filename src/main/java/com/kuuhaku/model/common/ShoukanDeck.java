@@ -35,7 +35,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -63,25 +62,13 @@ public class ShoukanDeck {
 
 		champs = champs.stream()
 				.peek(c -> c.setAcc(acc))
-				.sorted(Comparator
-						.comparing(Champion::getMana).reversed()
-						.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-				)
 				.collect(Collectors.toList());
 		equips = equips.stream()
 				.peek(e -> e.setAcc(acc))
-				.sorted(Comparator
-						.comparing(Equipment::getTier)
-						.thenComparing(Equipment::getMana).reversed()
-						.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-				)
 				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(Math.max(e.getWeight(kp) - 1, 0), new Equipment())).stream())
 				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))
-				.sorted(Comparator
-						.comparing(f -> f.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-				)
 				.collect(Collectors.toList());
 
 		BufferedImage deck = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/deck.jpg")));
@@ -136,25 +123,13 @@ public class ShoukanDeck {
 
 		champs = champs.stream()
 				.peek(c -> c.setAcc(acc))
-				.sorted(Comparator
-						.comparing(Champion::getMana).reversed()
-						.thenComparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-				)
 				.collect(Collectors.toList());
 		equips = equips.stream()
 				.peek(e -> e.setAcc(acc))
-				.sorted(Comparator
-						.comparing(Equipment::getTier)
-						.thenComparing(Equipment::getMana).reversed()
-						.thenComparing(e -> e.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-				)
 				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(e.getWeight(ds) - 1, new Equipment())).stream())
 				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))
-				.sorted(Comparator
-						.comparing(f -> f.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-				)
 				.collect(Collectors.toList());
 
 		BufferedImage deck = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/deck.jpg")));

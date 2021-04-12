@@ -645,6 +645,22 @@ public class CardDAO {
 		}
 	}
 
+	public static Equipment getRandomEquipment(boolean spell) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT e FROM Equipment e WHERE (e.charm = 'SPELL') = :spell ORDER BY RANDOM()", Equipment.class);
+		q.setParameter("spell", spell);
+		q.setMaxResults(1);
+
+		try {
+			return (Equipment) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	public static Field getField(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
