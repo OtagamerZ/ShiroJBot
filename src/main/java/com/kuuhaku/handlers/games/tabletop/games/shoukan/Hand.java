@@ -31,7 +31,6 @@ import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.imageio.ImageIO;
@@ -41,6 +40,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Hand {
 	private Shoukan game;
@@ -94,24 +94,11 @@ public class Hand {
 	}
 
 	private void setData(Shoukan game, User user, List<Champion> champs, List<Equipment> equips, List<Field> fields, List<Integer> destinyDraw, Side side, Clan cl) {
-		combo = Race.getCombo(champs);
-		deque.addAll(ListUtils.union(champs, equips));
-
-		if (combo.getLeft() == Race.DIVINITY) {
-			deque.stream()
-					.distinct()
-					.forEach(d -> {
-						if (d instanceof Champion) {
-							Champion c = (Champion) d;
-							c.setMana(Math.max(c.getMana() - 1, 1));
-						} else {
-							Equipment e = (Equipment) d;
-							e.setMana(Math.max(e.getMana() - 1, 0));
-						}
-					});
-		}
-
-		deque.addAll(fields);
+		deque.addAll(
+				Stream.of(champs, equips, fields)
+						.flatMap(List::stream)
+						.collect(Collectors.toList())
+		);
 
 		this.user = user;
 		this.side = side;
@@ -179,6 +166,21 @@ public class Hand {
 			baseHp = 5000;
 			maxCards = 5;
 			baseManaPerTurn = 5;
+		}
+
+		combo = Race.getCombo(champs);
+		if (combo.getLeft() == Race.DIVINITY) {
+			deque.stream()
+					.distinct()
+					.forEach(d -> {
+						if (d instanceof Champion) {
+							Champion c = (Champion) d;
+							c.setMana(Math.max(c.getMana() - 1, 1));
+						} else if (d instanceof Equipment) {
+							Equipment e = (Equipment) d;
+							e.setMana(Math.max(e.getMana() - 1, 0));
+						}
+					});
 		}
 
 		if (destinyDraw != null) {
