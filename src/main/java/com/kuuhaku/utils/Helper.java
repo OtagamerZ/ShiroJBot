@@ -1541,7 +1541,7 @@ public class Helper {
 				assert egg != null;
 
 				List<Prize> prizes = new ArrayList<>();
-				for (int i = 0; i < 4; i++) {
+				for (int i = 0; i < 6; i++) {
 					prizes.add(new CreditDrop());
 				}
 
@@ -1571,6 +1571,8 @@ public class Helper {
 				List<Message> hist = tc.getHistory()
 						.retrievePast(100)
 						.complete();
+
+				if (hist.size() == 0) return;
 
 				Message m = hist.get(rng(hist.size(), true));
 				Pages.buttonize(m, Collections.singletonMap(
