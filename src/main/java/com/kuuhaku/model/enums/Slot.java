@@ -30,19 +30,19 @@ public enum Slot {
 	),
 	DIAMOND(
 			"<:diamond_s:680405919317753877>", "Assalto ao banco da sorte, saque de diamantes!",
-			50, 80
+			25, 80
 	),
 	HORSESHOE(
 			"<:horseshoe_s:680405919213158525>", "Alguém sequestrou um duende, baú de ferraduras de ouro!",
-			24, 65
+			18, 65
 	),
 	BAR(
 			"<:bar_s:680405918667898910>", "Chamem a polícia, temos um sortudo!",
-			15, 45
+			10, 45
 	),
 	BELL(
 			"<:bell_s:680405919732990017>", "Toquem os sinos!",
-			10, 16
+			7, 16
 	),
 	HEART(
 			"<:heart_s:680405919183405086>", "O amor está no ar!",
