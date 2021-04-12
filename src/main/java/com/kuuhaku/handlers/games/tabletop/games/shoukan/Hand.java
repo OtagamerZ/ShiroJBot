@@ -285,6 +285,18 @@ public class Hand {
 		}
 	}
 
+	public Drawable draw(String name) {
+		if (lockTime > 0) return null;
+		try {
+			Drawable dr = getDeque().stream().filter(c -> c.getCard().getId().equals(name)).findFirst().orElseThrow();
+			getDeque().remove(dr);
+			cards.add(dr.copy());
+			return dr;
+		} catch (NoSuchElementException ignore) {
+			return null;
+		}
+	}
+
 	public Drawable drawChampion() {
 		if (lockTime > 0) return null;
 		try {
