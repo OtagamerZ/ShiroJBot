@@ -1224,7 +1224,7 @@ public class Shoukan extends GlobalGame {
 					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slt.setTop(aFusion);
 					if (applyEot(ON_SUMMON, current, i)) return true;
-					if (applyEffect(ON_SUICIDE, aFusion, i, current, Pair.of(aFusion, i), null)) return true;
+					if (applyEffect(ON_SUMMON, aFusion, i, current, Pair.of(aFusion, i), null)) return true;
 
 					h.removeMana(aFusion.getMana());
 					break;
