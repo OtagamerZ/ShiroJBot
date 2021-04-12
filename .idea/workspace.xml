@@ -13,8 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Decks não são mais ordenados">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado modo arcade &quot;cardmaster&quot;">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Slot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Slot.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1141,14 +1142,7 @@
       <workItem from="1617883142747" duration="11612000" />
       <workItem from="1617984427814" duration="844000" />
       <workItem from="1617987556896" duration="7975000" />
-      <workItem from="1618230391795" duration="16597000" />
-    </task>
-    <task id="LOCAL-04069" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
-      <created>1617641038925</created>
-      <option name="number" value="04069" />
-      <option name="presentableId" value="LOCAL-04069" />
-      <option name="project" value="LOCAL" />
-      <updated>1617641038925</updated>
+      <workItem from="1618230391795" duration="17716000" />
     </task>
     <task id="LOCAL-04070" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
       <created>1617641141416</created>
@@ -1486,7 +1480,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618254797303</updated>
     </task>
-    <option name="localTasksCounter" value="4118" />
+    <task id="LOCAL-04118" summary="Adicionado modo arcade &quot;cardmaster&quot;">
+      <created>1618255321515</created>
+      <option name="number" value="04118" />
+      <option name="presentableId" value="LOCAL-04118" />
+      <option name="project" value="LOCAL" />
+      <updated>1618255321515</updated>
+    </task>
+    <option name="localTasksCounter" value="4119" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1572,7 +1573,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nas GIFs enviadas" />
     <MESSAGE value="Correção nas GIFs enviadas durante o Shoukan" />
     <MESSAGE value="Mudança no tamanho das imagens de clã" />
     <MESSAGE value="Correção na perda de perfil ao re-entrar no servidor" />
@@ -1597,7 +1597,8 @@
     <MESSAGE value="Correção na evolução de clãs" />
     <MESSAGE value="Melhoria no fluxo de efeitos no Shoukan" />
     <MESSAGE value="Decks não são mais ordenados" />
-    <option name="LAST_COMMIT_MESSAGE" value="Decks não são mais ordenados" />
+    <MESSAGE value="Adicionado modo arcade &quot;cardmaster&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionado modo arcade &quot;cardmaster&quot;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
