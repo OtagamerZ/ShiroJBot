@@ -67,7 +67,7 @@ public class ClanPermissionCommand implements Executable {
 		if (args.length == 0) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(c.getTier().getName() + " " + c.getName())
-					.setThumbnail("attachment://icon.jpg");
+					.setThumbnail("attachment://icon.png");
 
 			for (ClanHierarchy ch : ClanHierarchy.values()) {
 				EnumSet<ClanPermission> perms = c.getPermissions(ch);
@@ -87,7 +87,7 @@ public class ClanPermissionCommand implements Executable {
 			}
 
 			MessageAction ma = channel.sendMessage(eb.build());
-			if (c.getIcon() != null) ma = ma.addFile(Helper.getBytes(c.getIcon()), "icon.jpg");
+			if (c.getIcon() != null) ma = ma.addFile(Helper.getBytes(c.getIcon(), "png"), "icon.png");
 			ma.queue();
 		} else {
 			ClanHierarchy ch = ClanHierarchy.getByName(args[0]);
@@ -101,7 +101,7 @@ public class ClanPermissionCommand implements Executable {
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(c.getTier().getName() + " " + c.getName())
-					.setThumbnail("attachment://icon.jpg")
+					.setThumbnail("attachment://icon.png")
 					.setFooter("Digite `" + prefix + "permissoes CARGO` para alterar as permissões de um cargo do clã.");
 
 			EnumSet<ClanPermission> perms = c.getPermissions(ch);
@@ -109,7 +109,7 @@ public class ClanPermissionCommand implements Executable {
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			MessageAction ma = channel.sendMessage(eb.build());
-			if (c.getIcon() != null) ma = ma.addFile(Helper.getBytes(c.getIcon()), "icon.jpg");
+			if (c.getIcon() != null) ma = ma.addFile(Helper.getBytes(c.getIcon(), "png"), "icon.png");
 			ma.queue(s -> Pages.buttonize(s,
 					new LinkedHashMap<>() {{
 						put(Helper.getNumericEmoji(1), (mb, ms) -> {
