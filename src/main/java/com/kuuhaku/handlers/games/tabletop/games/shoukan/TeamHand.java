@@ -125,6 +125,12 @@ public class TeamHand extends Hand {
 						}
 					}
 					case "instakill" -> deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
+					case "cardmaster" -> {
+						deque.clear();
+						deque.addAll(CardDAO.getAllChampions(false));
+						deque.addAll(CardDAO.getAllEquipments());
+						deque.addAll(CardDAO.getAllFields());
+					}
 				}
 			}
 
