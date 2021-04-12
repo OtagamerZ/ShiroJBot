@@ -21,13 +21,16 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 public class SlotColumn<A, B> {
 	private A top = null;
 	private B bottom = null;
+	private final int index;
 
-	public SlotColumn() {
+	public SlotColumn(int index) {
+		this.index = index;
 	}
 
-	public SlotColumn(A top, B bottom) {
+	public SlotColumn(A top, B bottom, int index) {
 		this.top = top;
 		this.bottom = bottom;
+		this.index = index;
 	}
 
 	public A getTop() {
@@ -44,5 +47,9 @@ public class SlotColumn<A, B> {
 
 	public void setBottom(B bottom) {
 		this.bottom = bottom;
+	}
+
+	public int getIndex() {
+		return index;
 	}
 }
