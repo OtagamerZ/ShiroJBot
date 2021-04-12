@@ -167,6 +167,12 @@ public class Hand {
 					deque.removeIf(d -> d instanceof Equipment && ((Equipment) d).getCharm() != null && ((Equipment) d).getCharm() == Charm.SPELL);
 					baseHp = 1;
 				}
+				case "cardmaster" -> {
+					deque.clear();
+					deque.addAll(CardDAO.getAllChampions(false));
+					deque.addAll(CardDAO.getAllEquipments());
+					deque.addAll(CardDAO.getAllFields());
+				}
 			}
 		} else {
 			mana = 0;
