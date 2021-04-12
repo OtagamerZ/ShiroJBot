@@ -44,18 +44,18 @@ public class Arena {
 	public Arena() {
 		this.slots = Map.of(
 				Side.TOP, List.of(
-						new SlotColumn<>(),
-						new SlotColumn<>(),
-						new SlotColumn<>(),
-						new SlotColumn<>(),
-						new SlotColumn<>()
+						new SlotColumn<>(0),
+						new SlotColumn<>(1),
+						new SlotColumn<>(2),
+						new SlotColumn<>(3),
+						new SlotColumn<>(4)
 				),
 				Side.BOTTOM, List.of(
-						new SlotColumn<>(),
-						new SlotColumn<>(),
-						new SlotColumn<>(),
-						new SlotColumn<>(),
-						new SlotColumn<>()
+						new SlotColumn<>(0),
+						new SlotColumn<>(1),
+						new SlotColumn<>(2),
+						new SlotColumn<>(3),
+						new SlotColumn<>(4)
 				)
 		);
 		this.graveyard = Map.of(

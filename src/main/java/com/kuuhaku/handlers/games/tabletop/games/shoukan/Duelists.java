@@ -33,6 +33,15 @@ public class Duelists {
 		return new Duelists(attacker, yourPos, defender, hisPos);
 	}
 
+	public static Duelists of(Pair<Champion, Integer> attacker, Pair<Champion, Integer> defender) {
+		return new Duelists(
+				attacker == null ? null : attacker.getLeft(),
+				attacker == null ? -1 : attacker.getRight(),
+				defender == null ? null : defender.getLeft(),
+				defender == null ? -1 : defender.getRight()
+		);
+	}
+
 	public Champion getAttacker() {
 		return duelists.getLeft();
 	}

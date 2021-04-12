@@ -63,6 +63,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
+
 public class Shoukan extends GlobalGame {
 	private final Map<Side, Hand> hands;
 	private final Map<Side, Pair<Race, Race>> combos;
@@ -321,6 +323,10 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
+					if (applyEot(ON_SWITCH, current, index)
+						|| applyEffect(ON_SWITCH, c, index, current, Pair.of(c, index), null)
+					) return;
+
 					ClusterAction act;
 					if (c.isFlipped()) {
 						c.setFlipped(false);
@@ -329,25 +335,9 @@ public class Shoukan extends GlobalGame {
 					} else if (c.isDefending()) {
 						c.setDefending(false);
 						act = channel.sendMessage("Carta trocada para modo de ataque.");
-						if (eot.size() > 0) {
-							applyEot(EffectTrigger.ON_SWITCH, current, index);
-							if (postCombat()) return;
-						}
-						if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
-							c.getEffect(new EffectParameters(EffectTrigger.ON_SWITCH, this, index, current, Duelists.of(c, index, null, -1), channel));
-							if (postCombat()) return;
-						}
 					} else {
 						c.setDefending(true);
-						if (eot.size() > 0) {
-							applyEot(EffectTrigger.ON_SWITCH, current, index);
-							if (postCombat()) return;
-						}
 						act = channel.sendMessage("Carta trocada para modo de defesa.");
-						if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
-							c.getEffect(new EffectParameters(EffectTrigger.ON_SWITCH, this, index, current, Duelists.of(c, index, null, -1), channel));
-							if (postCombat()) return;
-						}
 					}
 
 					changed[index] = true;
@@ -608,18 +598,17 @@ public class Shoukan extends GlobalGame {
 					}
 					t.addLinkedTo(e);
 					e.setLinkedTo(Pair.of(toEquip, t));
-					if (t.hasEffect() && effectLock == 0) {
-						t.getEffect(new EffectParameters(EffectTrigger.ON_EQUIP, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
-						if (postCombat()) return;
-					}
+					if (applyEot(ON_EQUIP, current, toEquip)
+						|| applyEffect(ON_EQUIP, t, toEquip, current, Pair.of(t, toEquip), null)
+					) return;
 
 					if (e.getCharm() != null) {
 						switch (e.getCharm()) {
 							case TIMEWARP -> {
-								t.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
-								t.getEffect(new EffectParameters(EffectTrigger.AFTER_TURN, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
+								t.getEffect(new EffectParameters(BEFORE_TURN, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
+								t.getEffect(new EffectParameters(AFTER_TURN, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
 							}
-							case DOUBLETAP -> t.getEffect(new EffectParameters(EffectTrigger.ON_SUMMON, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
+							case DOUBLETAP -> t.getEffect(new EffectParameters(ON_SUMMON, this, toEquip, current, Duelists.of(t, toEquip, null, -1), channel));
 							case DOPPELGANGER -> {
 								SlotColumn<Champion, Equipment> sc = getFirstAvailableSlot(current, true);
 
@@ -685,14 +674,9 @@ public class Shoukan extends GlobalGame {
 					reroll = false;
 					d.setAvailable(false);
 					slot.setTop(c);
-					if (eot.size() > 0) {
-						applyEot(EffectTrigger.ON_SUMMON, current, dest);
-						if (postCombat()) return;
-					}
-					if (c.hasEffect() && !c.isFlipped() && effectLock == 0) {
-						c.getEffect(new EffectParameters(EffectTrigger.ON_SUMMON, this, dest, current, Duelists.of(c, dest, null, -1), channel));
-						if (postCombat()) return;
-					}
+					if (applyEot(ON_SUMMON, current, dest)
+						|| applyEffect(ON_SUMMON, c, dest, current, Pair.of(c, dest), null)
+					) return;
 
 					summoned.get(current).compute(c.getRace(), (k, v) -> v == null ? 1 : v + 1);
 
@@ -852,98 +836,74 @@ public class Shoukan extends GlobalGame {
 
 		if (yours.isDefending()) return;
 
-		if (eot.size() > 0) {
-			applyEot(EffectTrigger.ON_ATTACK, current, is[0]);
-			if (postCombat()) return;
-		}
+		if (applyEot(ON_ATTACK, current, is[0])) return;
 		if (is[0] > 0) {
 			Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
-			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
+			if (c != null && applyEffect(ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
+				return;
 		}
 		if (is[0] < 4) {
 			Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
-			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.ATTACK_ASSIST, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-		}
-		if (yours.hasEffect() && effectLock == 0) {
-			yours.getEffect(new EffectParameters(EffectTrigger.ON_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-
-			if (yours.getBonus().getSpecialData().remove("skipCombat") != null || yours.getCard().getId().equals("DECOY")) {
-				yours.setAvailable(false);
-				yours.resetAttribs();
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.POST_ATTACK, current, is[0]);
-					if (postCombat()) return;
-				}
-				if (yours.hasEffect()) {
-					yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
-
-				if (!postCombat()) {
-					resetTimerKeepTurn();
-					moveLock = true;
-					channel.sendMessage("Cálculo de combate ignorado por efeito do atacante!")
-							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-							});
-				}
+			if (c != null && applyEffect(ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
 				return;
-			} else if (postCombat()) return;
+		}
+		if (applyEffect(ON_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
+
+		if (yours.getBonus().getSpecialData().remove("skipCombat") != null || yours.getCard().getId().equals("DECOY")) {
+			yours.setAvailable(false);
+			yours.resetAttribs();
+			if (applyEot(POST_ATTACK, current, is[0])
+				|| applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))
+			) return;
+
+			resetTimerKeepTurn();
+			moveLock = true;
+			channel.sendMessage("Cálculo de combate ignorado por efeito do atacante!")
+					.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+					.queue(s -> {
+						this.message.compute(s.getChannel().getId(), (id, m) -> {
+							if (m != null)
+								m.delete().queue(null, Helper::doNothing);
+							return s;
+						});
+						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						moveLock = false;
+					});
+			return;
 		}
 
-		if (eot.size() > 0) {
-			applyEot(EffectTrigger.ON_DEFEND, next, is[1]);
-			if (postCombat()) return;
-		}
+		if (applyEot(ON_DEFEND, next, is[1])) return;
 		if (is[1] > 0) {
 			Champion c = arena.getSlots().get(next).get(is[1] - 1).getTop();
-			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
+			if (c != null && applyEffect(DEFENSE_ASSIST, c, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1])))
+				return;
 		}
 		if (is[1] < 4) {
 			Champion c = arena.getSlots().get(next).get(is[1] + 1).getTop();
-			if (c != null && c.hasEffect())
-				c.getEffect(new EffectParameters(EffectTrigger.DEFENSE_ASSIST, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-		}
-		if (his.hasEffect() && effectLock == 0) {
-			his.getEffect(new EffectParameters(EffectTrigger.ON_DEFEND, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-
-			if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.POST_DEFENSE, next, is[1]);
-					if (postCombat()) return;
-				}
-				if (his.hasEffect()) {
-					his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
-
-				if (!postCombat()) {
-					resetTimerKeepTurn();
-					moveLock = true;
-					channel.sendMessage("Cálculo de combate ignorado por efeito do defensor!")
-							.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-							});
-				}
+			if (c != null && applyEffect(DEFENSE_ASSIST, c, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1])))
 				return;
-			} else if (postCombat()) return;
+		}
+		if (applyEffect(ON_DEFEND, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
+
+		if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
+			if (applyEot(POST_DEFENSE, next, is[1])
+				|| applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
+			) return;
+
+			resetTimerKeepTurn();
+			moveLock = true;
+			channel.sendMessage("Cálculo de combate ignorado por efeito do defensor!")
+					.addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
+					.queue(s -> {
+						this.message.compute(s.getChannel().getId(), (id, m) -> {
+							if (m != null)
+								m.delete().queue(null, Helper::doNothing);
+							return s;
+						});
+						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+						moveLock = false;
+					});
+			return;
 		}
 
 		int yPower;
@@ -958,14 +918,9 @@ public class Shoukan extends GlobalGame {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
 				his.setDefending(true);
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.ON_FLIP, next, is[1]);
-					if (postCombat()) return;
-				}
-				if (his.hasEffect() && effectLock == 0) {
-					his.getEffect(new EffectParameters(EffectTrigger.ON_FLIP, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
+				if (applyEot(ON_FLIP, next, is[1])
+					|| applyEffect(ON_FLIP, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
+				) return;
 			}
 			hPower = his.getFinDef();
 		} else if (!his.getCard().getId().equals("DECOY")) {
@@ -982,22 +937,13 @@ public class Shoukan extends GlobalGame {
 			yours.resetAttribs();
 
 			if (hisDodge) {
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.ON_MISS, current, is[0]);
-					if (postCombat()) return;
-				}
-				if (yours.hasEffect() && effectLock == 0) {
-					yours.getEffect(new EffectParameters(EffectTrigger.ON_MISS, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.ON_DODGE, next, is[1]);
-					if (postCombat()) return;
-				}
-				if (his.hasEffect() && effectLock == 0) {
-					his.getEffect(new EffectParameters(EffectTrigger.ON_DODGE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
+				if (applyEot(ON_MISS, current, is[0])
+					|| applyEffect(ON_MISS, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))
+				) return;
+
+				if (applyEot(ON_DODGE, next, is[1])
+					|| applyEffect(ON_DODGE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
+				) return;
 
 				resetTimerKeepTurn();
 				moveLock = true;
@@ -1013,22 +959,13 @@ public class Shoukan extends GlobalGame {
 							moveLock = false;
 						});
 			} else {
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.POST_ATTACK, current, is[0]);
-					if (postCombat()) return;
-				}
-				if (yours.hasEffect() && effectLock == 0) {
-					yours.getEffect(new EffectParameters(EffectTrigger.POST_ATTACK, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.ON_DEATH, next, is[1]);
-					if (postCombat()) return;
-				}
-				if (his.hasEffect() && effectLock == 0) {
-					his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-					if (postCombat()) return;
-				}
+				if (applyEot(POST_ATTACK, current, is[0])
+					|| applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))
+				) return;
+
+				if (applyEot(ON_DEATH, next, is[1])
+					|| applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
+				) return;
 
 				if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 					if (his.isDefending()) {
@@ -1097,22 +1034,13 @@ public class Shoukan extends GlobalGame {
 			yours.setAvailable(false);
 			his.resetAttribs();
 
-			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_SUICIDE, current, is[0]);
-				if (postCombat()) return;
-			}
-			if (yours.hasEffect() && effectLock == 0) {
-				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-				if (postCombat()) return;
-			}
-			if (eot.size() > 0) {
-				applyEot(EffectTrigger.POST_DEFENSE, next, is[1]);
-				if (postCombat()) return;
-			}
-			if (his.hasEffect() && effectLock == 0) {
-				his.getEffect(new EffectParameters(EffectTrigger.POST_DEFENSE, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-				if (postCombat()) return;
-			}
+			if (applyEot(ON_SUICIDE, current, is[0])
+				|| applyEffect(ON_SUICIDE, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))
+			) return;
+
+			if (applyEot(POST_DEFENSE, next, is[1])
+				|| applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
+			) return;
 
 			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 				if (yours.getBonus().getSpecialData().remove("noDamage") == null && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
@@ -1171,22 +1099,13 @@ public class Shoukan extends GlobalGame {
 		} else {
 			yours.setAvailable(false);
 
-			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_SUICIDE, current, is[0]);
-				if (postCombat()) return;
-			}
-			if (yours.hasEffect() && effectLock == 0) {
-				yours.getEffect(new EffectParameters(EffectTrigger.ON_SUICIDE, this, is[0], current, Duelists.of(yours, is[0], his, is[1]), channel));
-				if (postCombat()) return;
-			}
-			if (eot.size() > 0) {
-				applyEot(EffectTrigger.ON_DEATH, next, is[1]);
-				if (postCombat()) return;
-			}
-			if (his.hasEffect() && effectLock == 0) {
-				his.getEffect(new EffectParameters(EffectTrigger.ON_DEATH, this, is[1], next, Duelists.of(yours, is[0], his, is[1]), channel));
-				if (postCombat()) return;
-			}
+			if (applyEot(ON_SUICIDE, current, is[0])
+				|| applyEffect(ON_SUICIDE, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))
+			) return;
+
+			if (applyEot(ON_DEATH, next, is[1])
+				|| applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
+			) return;
 
 			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 				killCard(next, is[1]);
@@ -1318,14 +1237,9 @@ public class Shoukan extends GlobalGame {
 					aFusion.setGame(this);
 					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slt.setTop(aFusion);
-					if (eot.size() > 0) {
-						applyEot(EffectTrigger.ON_SUMMON, current, i);
-						if (postCombat()) return true;
-					}
-					if (aFusion.hasEffect() && effectLock == 0) {
-						aFusion.getEffect(new EffectParameters(EffectTrigger.ON_SUMMON, this, i, current, Duelists.of(aFusion, i, null, -1), channel));
-						if (postCombat()) return true;
-					}
+					if (applyEot(ON_SUMMON, current, i)
+						|| applyEffect(ON_SUICIDE, aFusion, i, current, Pair.of(aFusion, i), null)
+					) return true;
 
 					h.removeMana(aFusion.getMana());
 					break;
@@ -1337,24 +1251,24 @@ public class Shoukan extends GlobalGame {
 		return false;
 	}
 
-	public void killCard(Side side, int index) {
-		Champion ch = getArena().getSlots().get(side).get(index).getTop();
+	public void killCard(Side to, int index) {
+		Champion ch = getArena().getSlots().get(to).get(index).getTop();
 		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath")) return;
-		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(side);
+		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 
 		slts.get(index).setTop(null);
 		for (int i = 0; i < slts.size(); i++) {
 			SlotColumn<Champion, Equipment> sd = slts.get(i);
 			if (sd.getTop() != null && sd.getTop().getCard().getId().equals("DECOY") && sd.getTop().getBonus().getSpecialData().getInt("original") == index)
-				killCard(side, i);
+				killCard(to, i);
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
-				unequipCard(side, i, slts);
+				unequipCard(to, i, slts);
 		}
 
 		ch.reset();
 		if (!ch.isFusion())
-			arena.getGraveyard().get(side).add(ch.copy());
+			arena.getGraveyard().get(to).add(ch.copy());
 	}
 
 	public void destroyCard(Side to, int target, Side from, int source) {
@@ -1783,21 +1697,16 @@ public class Shoukan extends GlobalGame {
 				h.get().getCards().removeIf(d -> !d.isAvailable());
 				List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
 
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.AFTER_TURN, current, -1);
-					if (postCombat()) return;
-				}
+				if (applyEot(AFTER_TURN, current, -1)) return;
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
 						c.setAvailable(c.getStun() == 0);
 
 						c.resetAttribs();
-						if (c.hasEffect() && effectLock == 0) {
-							c.getEffect(new EffectParameters(EffectTrigger.AFTER_TURN, this, i, current, Duelists.of(c, i, null, -1), channel));
-							if (postCombat()) return;
-							else if (makeFusion(h.get())) return;
-						}
+						if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
+							|| makeFusion(h.get())
+						) return;
 					}
 				}
 
@@ -1814,20 +1723,15 @@ public class Shoukan extends GlobalGame {
 				h.get().decreaseNullTime();
 				slots = arena.getSlots().get(current);
 
-				if (eot.size() > 0) {
-					applyEot(EffectTrigger.BEFORE_TURN, current, -1);
-					if (postCombat()) return;
-				}
+				if (applyEot(BEFORE_TURN, current, -1)) return;
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
 						if (c.getStun() > 0) c.reduceStun();
 
-						if (c.hasEffect() && effectLock == 0) {
-							c.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, i, current, Duelists.of(c, i, null, -1), channel));
-							if (postCombat()) return;
-							else if (makeFusion(h.get())) return;
-						}
+						if (applyEffect(BEFORE_TURN, c, i, current, Pair.of(c, i), null)
+							|| makeFusion(h.get())
+						) return;
 					}
 				}
 
@@ -2029,21 +1933,16 @@ public class Shoukan extends GlobalGame {
 					h.get().getCards().removeIf(d -> !d.isAvailable());
 					List<SlotColumn<Champion, Equipment>> slots = arena.getSlots().get(current);
 
-					if (eot.size() > 0) {
-						applyEot(EffectTrigger.AFTER_TURN, current, -1);
-						if (postCombat()) return;
-					}
+					if (applyEot(AFTER_TURN, current, -1)) return;
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
 							c.setAvailable(c.getStun() == 0);
 
 							c.resetAttribs();
-							if (c.hasEffect() && effectLock == 0) {
-								c.getEffect(new EffectParameters(EffectTrigger.AFTER_TURN, this, i, current, Duelists.of(c, i, null, -1), channel));
-								if (postCombat()) return;
-								else if (makeFusion(h.get())) return;
-							}
+							if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
+								|| makeFusion(h.get())
+							) return;
 						}
 					}
 
@@ -2060,20 +1959,15 @@ public class Shoukan extends GlobalGame {
 					h.get().decreaseNullTime();
 					slots = arena.getSlots().get(current);
 
-					if (eot.size() > 0) {
-						applyEot(EffectTrigger.BEFORE_TURN, current, -1);
-						if (postCombat()) return;
-					}
+					if (applyEot(BEFORE_TURN, current, -1)) return;
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
 							if (c.getStun() > 0) c.reduceStun();
 
-							if (c.hasEffect() && effectLock == 0) {
-								c.getEffect(new EffectParameters(EffectTrigger.BEFORE_TURN, this, i, current, Duelists.of(c, i, null, -1), channel));
-								if (postCombat()) return;
-								else if (makeFusion(h.get())) return;
-							}
+							if (applyEffect(BEFORE_TURN, c, i, current, Pair.of(c, i), null)
+								|| makeFusion(h.get())
+							) return;
 						}
 					}
 
@@ -2324,24 +2218,39 @@ public class Shoukan extends GlobalGame {
 		return eot;
 	}
 
-	public void applyEot(EffectTrigger trigger, Side to, int index) {
-		Iterator<EffectOverTime> i = eot.iterator();
-		while (i.hasNext()) {
-			EffectOverTime effect = i.next();
-			if (effect.getTurns() <= 0) {
-				channel.sendMessage(":timer: | O efeito da carta " + effect.getSource() + " expirou!").queue();
-				i.remove();
-				continue;
+	public boolean applyEot(EffectTrigger trigger, Side to, int index) {
+		if (eot.size() > 0) {
+			Iterator<EffectOverTime> i = eot.iterator();
+			while (i.hasNext()) {
+				EffectOverTime effect = i.next();
+				if (effect.getTurns() <= 0) {
+					channel.sendMessage(":timer: | O efeito da carta " + effect.getSource() + " expirou!").queue();
+					i.remove();
+					continue;
+				}
+
+				if (effect.getTarget() == null || effect.getTarget() == to) {
+					if (effect.getTriggers().contains(trigger))
+						effect.getEffect().accept(to, index);
+
+					if (trigger == AFTER_TURN)
+						effect.decreaseTurn();
+				}
 			}
 
-			if (effect.getTarget() == null || effect.getTarget() == to) {
-				if (effect.getTriggers().contains(trigger))
-					effect.getEffect().accept(to, index);
-
-				if (trigger == EffectTrigger.AFTER_TURN)
-					effect.decreaseTurn();
-			}
+			return postCombat();
 		}
+
+		return false;
+	}
+
+	public boolean applyEffect(EffectTrigger trigger, Champion activator, int index, Side side, Pair<Champion, Integer> attacker, Pair<Champion, Integer> defender) {
+		if (activator.hasEffect() && effectLock == 0) {
+			activator.getEffect(new EffectParameters(trigger, this, index, side, Duelists.of(attacker, defender), channel));
+			return postCombat();
+		}
+
+		return false;
 	}
 
 	public void sendWebhookMessage(String message, String gif, Drawable d) {
