@@ -323,9 +323,8 @@ public class Shoukan extends GlobalGame {
 						return;
 					}
 
-					if (applyEot(ON_SWITCH, current, index)
-						|| applyEffect(ON_SWITCH, c, index, current, Pair.of(c, index), null)
-					) return;
+					if (applyEot(ON_SWITCH, current, index)) return;
+					if (applyEffect(ON_SWITCH, c, index, current, Pair.of(c, index), null)) return;
 
 					ClusterAction act;
 					if (c.isFlipped()) {
@@ -598,9 +597,8 @@ public class Shoukan extends GlobalGame {
 					}
 					t.addLinkedTo(e);
 					e.setLinkedTo(Pair.of(toEquip, t));
-					if (applyEot(ON_EQUIP, current, toEquip)
-						|| applyEffect(ON_EQUIP, t, toEquip, current, Pair.of(t, toEquip), null)
-					) return;
+					if (applyEot(ON_EQUIP, current, toEquip)) return;
+					if (applyEffect(ON_EQUIP, t, toEquip, current, Pair.of(t, toEquip), null)) return;
 
 					if (e.getCharm() != null) {
 						switch (e.getCharm()) {
@@ -674,9 +672,8 @@ public class Shoukan extends GlobalGame {
 					reroll = false;
 					d.setAvailable(false);
 					slot.setTop(c);
-					if (applyEot(ON_SUMMON, current, dest)
-						|| applyEffect(ON_SUMMON, c, dest, current, Pair.of(c, dest), null)
-					) return;
+					if (applyEot(ON_SUMMON, current, dest)) return;
+					if (applyEffect(ON_SUMMON, c, dest, current, Pair.of(c, dest), null)) return;
 
 					summoned.get(current).compute(c.getRace(), (k, v) -> v == null ? 1 : v + 1);
 
@@ -852,9 +849,8 @@ public class Shoukan extends GlobalGame {
 		if (yours.getBonus().getSpecialData().remove("skipCombat") != null || yours.getCard().getId().equals("DECOY")) {
 			yours.setAvailable(false);
 			yours.resetAttribs();
-			if (applyEot(POST_ATTACK, current, is[0])
-				|| applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))
-			) return;
+			if (applyEot(POST_ATTACK, current, is[0])) return;
+			if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
 			resetTimerKeepTurn();
 			moveLock = true;
@@ -886,9 +882,8 @@ public class Shoukan extends GlobalGame {
 		if (applyEffect(ON_DEFEND, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
 		if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
-			if (applyEot(POST_DEFENSE, next, is[1])
-				|| applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
-			) return;
+			if (applyEot(POST_DEFENSE, next, is[1])) return;
+			if (applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
 			resetTimerKeepTurn();
 			moveLock = true;
@@ -918,9 +913,8 @@ public class Shoukan extends GlobalGame {
 			if (his.isFlipped()) {
 				his.setFlipped(false);
 				his.setDefending(true);
-				if (applyEot(ON_FLIP, next, is[1])
-					|| applyEffect(ON_FLIP, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
-				) return;
+				if (applyEot(ON_FLIP, next, is[1])) return;
+				if (applyEffect(ON_FLIP, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 			}
 			hPower = his.getFinDef();
 		} else if (!his.getCard().getId().equals("DECOY")) {
@@ -937,13 +931,11 @@ public class Shoukan extends GlobalGame {
 			yours.resetAttribs();
 
 			if (hisDodge) {
-				if (applyEot(ON_MISS, current, is[0])
-					|| applyEffect(ON_MISS, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))
-				) return;
+				if (applyEot(ON_MISS, current, is[0])) return;
+				if (applyEffect(ON_MISS, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-				if (applyEot(ON_DODGE, next, is[1])
-					|| applyEffect(ON_DODGE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
-				) return;
+				if (applyEot(ON_DODGE, next, is[1])) return;
+				if (applyEffect(ON_DODGE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
 				resetTimerKeepTurn();
 				moveLock = true;
@@ -959,13 +951,11 @@ public class Shoukan extends GlobalGame {
 							moveLock = false;
 						});
 			} else {
-				if (applyEot(POST_ATTACK, current, is[0])
-					|| applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))
-				) return;
+				if (applyEot(POST_ATTACK, current, is[0])) return;
+				if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-				if (applyEot(ON_DEATH, next, is[1])
-					|| applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
-				) return;
+				if (applyEot(ON_DEATH, next, is[1])) return;
+				if (applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
 				if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 					if (his.isDefending()) {
@@ -1034,13 +1024,11 @@ public class Shoukan extends GlobalGame {
 			yours.setAvailable(false);
 			his.resetAttribs();
 
-			if (applyEot(ON_SUICIDE, current, is[0])
-				|| applyEffect(ON_SUICIDE, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))
-			) return;
+			if (applyEot(ON_SUICIDE, current, is[0])) return;
+			if (applyEffect(ON_SUICIDE, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-			if (applyEot(POST_DEFENSE, next, is[1])
-				|| applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
-			) return;
+			if (applyEot(POST_DEFENSE, next, is[1])) return;
+			if (applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
 			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 				if (yours.getBonus().getSpecialData().remove("noDamage") == null && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
@@ -1099,13 +1087,11 @@ public class Shoukan extends GlobalGame {
 		} else {
 			yours.setAvailable(false);
 
-			if (applyEot(ON_SUICIDE, current, is[0])
-				|| applyEffect(ON_SUICIDE, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))
-			) return;
+			if (applyEot(ON_SUICIDE, current, is[0])) return;
+			if (applyEffect(ON_SUICIDE, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-			if (applyEot(ON_DEATH, next, is[1])
-				|| applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))
-			) return;
+			if (applyEot(ON_DEATH, next, is[1])) return;
+			if (applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
 			if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 				killCard(next, is[1]);
@@ -1237,9 +1223,8 @@ public class Shoukan extends GlobalGame {
 					aFusion.setGame(this);
 					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
 					slt.setTop(aFusion);
-					if (applyEot(ON_SUMMON, current, i)
-						|| applyEffect(ON_SUICIDE, aFusion, i, current, Pair.of(aFusion, i), null)
-					) return true;
+					if (applyEot(ON_SUMMON, current, i)) return true;
+					if (applyEffect(ON_SUICIDE, aFusion, i, current, Pair.of(aFusion, i), null)) return true;
 
 					h.removeMana(aFusion.getMana());
 					break;
