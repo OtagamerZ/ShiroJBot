@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TeamHand extends Hand {
 	private final Pair<Race, Race> combo;
@@ -52,37 +53,16 @@ public class TeamHand extends Hand {
 	public TeamHand(Shoukan game, List<User> users, List<Kawaipon> kps, Side side) {
 		super(game, null, (Kawaipon) null, side);
 
-		combo = Race.getCombo(kps.stream().flatMap(kp -> kp.getChampions().stream()).collect(Collectors.toList()));
 		for (int i = 0; i < users.size(); i++) {
 			Kawaipon kp = kps.get(i);
 			User user = users.get(i);
 
-			LinkedList<Drawable> deque = new LinkedList<>() {{
-				addAll(kp.getChampions());
-			}};
+			LinkedList<Drawable> deque = Stream.of(kp.getChampions(), kp.getEquipments(), kp.getFields())
+					.flatMap(List::stream)
+					.collect(Collectors.toCollection(LinkedList::new));
+
 			List<Drawable> destinyDeck = new ArrayList<>();
 
-			deque.sort(Comparator
-					.comparing(d -> ((Champion) d).getMana()).reversed()
-					.thenComparing(c -> ((Champion) c).getCard().getName(), String.CASE_INSENSITIVE_ORDER)
-			);
-			deque.addAll(kp.getEquipments());
-
-			if (combo.getLeft() == Race.DIVINITY) {
-				deque.stream()
-						.distinct()
-						.forEach(d -> {
-							if (d instanceof Champion) {
-								Champion c = (Champion) d;
-								c.setMana(Math.max(c.getMana() - 1, 1));
-							} else {
-								Equipment e = (Equipment) d;
-								e.setMana(Math.max(e.getMana() - 1, 0));
-							}
-						});
-			}
-
-			deque.addAll(kp.getFields());
 			this.users.add(user);
 
 			if (game.getCustom() != null) {
@@ -161,6 +141,23 @@ public class TeamHand extends Hand {
 			this.deques.add(deque);
 			this.destinyDecks.add(destinyDeck);
 			this.cards.add(new ArrayList<>());
+		}
+
+		combo = Race.getCombo(kps.stream().flatMap(kp -> kp.getChampions().stream()).collect(Collectors.toList()));
+		if (combo.getLeft() == Race.DIVINITY) {
+			for (LinkedList<Drawable> deque : deques) {
+				deque.stream()
+						.distinct()
+						.forEach(d -> {
+							if (d instanceof Champion) {
+								Champion c = (Champion) d;
+								c.setMana(Math.max(c.getMana() - 1, 1));
+							} else if (d instanceof Equipment) {
+								Equipment e = (Equipment) d;
+								e.setMana(Math.max(e.getMana() - 1, 0));
+							}
+						});
+			}
 		}
 
 		int baseHp;
