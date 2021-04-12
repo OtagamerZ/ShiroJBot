@@ -13,12 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no fluxo de efeitos no Shoukan">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Decks não são mais ordenados">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1145,14 +1141,7 @@
       <workItem from="1617883142747" duration="11612000" />
       <workItem from="1617984427814" duration="844000" />
       <workItem from="1617987556896" duration="7975000" />
-      <workItem from="1618230391795" duration="8683000" />
-    </task>
-    <task id="LOCAL-04064" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
-      <created>1617639343634</created>
-      <option name="number" value="04064" />
-      <option name="presentableId" value="LOCAL-04064" />
-      <option name="project" value="LOCAL" />
-      <updated>1617639343634</updated>
+      <workItem from="1618230391795" duration="9926000" />
     </task>
     <task id="LOCAL-04065" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
       <created>1617639628351</created>
@@ -1490,7 +1479,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618237815954</updated>
     </task>
-    <option name="localTasksCounter" value="4113" />
+    <task id="LOCAL-04113" summary="Decks não são mais ordenados">
+      <created>1618239230103</created>
+      <option name="number" value="04113" />
+      <option name="presentableId" value="LOCAL-04113" />
+      <option name="project" value="LOCAL" />
+      <updated>1618239230103</updated>
+    </task>
+    <option name="localTasksCounter" value="4114" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1576,7 +1572,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria no controle dos atributos dos campeões" />
     <MESSAGE value="Correção nas GIFs enviadas" />
     <MESSAGE value="Correção nas GIFs enviadas durante o Shoukan" />
     <MESSAGE value="Mudança no tamanho das imagens de clã" />
@@ -1601,7 +1596,8 @@
     <MESSAGE value="Correção na evolução de clans" />
     <MESSAGE value="Correção na evolução de clãs" />
     <MESSAGE value="Melhoria no fluxo de efeitos no Shoukan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no fluxo de efeitos no Shoukan" />
+    <MESSAGE value="Decks não são mais ordenados" />
+    <option name="LAST_COMMIT_MESSAGE" value="Decks não são mais ordenados" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
