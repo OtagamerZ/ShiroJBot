@@ -26,6 +26,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
@@ -70,7 +71,7 @@ public class ClanDepositCommand implements Executable {
 		} else if (acc.getLoan() > 0) {
 			channel.sendMessage("❌ | Você não pode depositar se possuir dívida ativa.").queue();
 			return;
-		} else if (c.getVault() + amount >= c.getTier().getVaultSize()) {
+		} else if (c.getTier() != ClanTier.DYNASTY && c.getVault() + amount >= c.getTier().getVaultSize()) {
 			channel.sendMessage("❌ | Depositar essa quantidade ultrapassa a capacidade do cofre do clã.").queue();
 			return;
 		}
