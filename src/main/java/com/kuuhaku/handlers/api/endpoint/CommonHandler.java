@@ -70,6 +70,7 @@ public class CommonHandler {
 
 				String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isDirectory), new File[0]))
 						.map(File::getName)
+						.sorted()
 						.toArray(String[]::new);
 
 				for (String s : available) {
@@ -90,6 +91,7 @@ public class CommonHandler {
 
 				String[] available = Arrays.stream(Helper.getOr(f.listFiles(fl -> fl.isFile() && !fl.getName().startsWith(".")), new File[0]))
 						.map(fl -> fl.getName().replace(".png", ""))
+						.sorted()
 						.toArray(String[]::new);
 
 				for (String s : available) {
