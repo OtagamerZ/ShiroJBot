@@ -1904,6 +1904,10 @@ public class Helper {
 		return Pattern.compile(regex).matcher(text).matches();
 	}
 
+	public static String extract(String text, @Language("RegExp") String regex) {
+		return Pattern.compile(regex).matcher(text).group();
+	}
+
 	public static void broadcast(String message, TextChannel channel, User author) {
 		Map<String, Boolean> result = new HashMap<>();
 		StringBuilder sb = new StringBuilder();
