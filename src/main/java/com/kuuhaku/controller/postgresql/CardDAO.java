@@ -653,7 +653,6 @@ public class CardDAO {
 			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') = 'SPELL' ORDER BY RANDOM()", Equipment.class);
 		else
 			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') <> 'SPELL' ORDER BY RANDOM()", Equipment.class);
-		q.setParameter("spell", spell);
 		q.setMaxResults(1);
 
 		try {
