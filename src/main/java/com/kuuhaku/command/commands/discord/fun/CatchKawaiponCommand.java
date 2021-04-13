@@ -77,14 +77,12 @@ public class CatchKawaiponCommand implements Executable {
 
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
-			pg.compute(DailyTask.CARD_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
-			pg.compute(DailyTask.ANIME_TASK, (k, v) -> {
-				DailyQuest dq = DailyQuest.getQuest(author.getIdLong());
-				if (kc.getCard().getAnime().equals(dq.getChosenAnime()))
-					return Helper.getOr(v, 0) + 1;
-				else
-					return v;
-			});
+			DailyQuest dq = DailyQuest.getQuest(author.getIdLong());
+
+			pg.merge(DailyTask.CARD_TASK, 1, Integer::sum);
+			if (kc.getCard().getAnime().equals(dq.getChosenAnime()))
+				pg.merge(DailyTask.ANIME_TASK, 1, Integer::sum);
+
 			acc.setDailyProgress(pg);
 		}
 

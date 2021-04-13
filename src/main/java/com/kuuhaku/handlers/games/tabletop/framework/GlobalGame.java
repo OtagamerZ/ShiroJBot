@@ -316,7 +316,7 @@ public abstract class GlobalGame {
 						Account acc = AccountDAO.getAccount(yourMMR.getUid());
 						if (acc.hasPendingQuest()) {
 							Map<DailyTask, Integer> pg = acc.getDailyProgress();
-							pg.compute(DailyTask.WINS_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+							pg.merge(DailyTask.WINS_TASK, 1, Integer::sum);
 							acc.setDailyProgress(pg);
 							AccountDAO.saveAccount(acc);
 						}

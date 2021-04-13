@@ -23,7 +23,6 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.api.endpoint.payload.Bonus;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.TrophyType;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.DynamicUpdate;
@@ -139,7 +138,7 @@ public class Member {
 		Account acc = AccountDAO.getAccount(uid);
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
-			pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + (int) Math.round(15 * mult.get() * spamModif));
+			pg.merge(DailyTask.XP_TASK, (int) Math.round(15 * mult.get() * spamModif), Integer::sum);
 			acc.setDailyProgress(pg);
 			AccountDAO.saveAccount(acc);
 		}
@@ -173,7 +172,7 @@ public class Member {
 		Account acc = AccountDAO.getAccount(uid);
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
-			pg.compute(DailyTask.XP_TASK, (k, v) -> Helper.getOr(v, 0) + Math.round(amount * spamModif));
+			pg.merge(DailyTask.XP_TASK, Math.round(amount * spamModif), Integer::sum);
 			acc.setDailyProgress(pg);
 			AccountDAO.saveAccount(acc);
 		}

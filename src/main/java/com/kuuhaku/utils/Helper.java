@@ -2174,7 +2174,7 @@ public class Helper {
 
 		for (MatchInfo info : infos) {
 			for (Map.Entry<String, Integer> entry : info.getInfo().entrySet()) {
-				mi.getInfo().compute(entry.getKey(), (k, v) -> v == null ? entry.getValue() : (v + entry.getValue()) / 2);
+				mi.getInfo().merge(entry.getKey(), entry.getValue(), Helper::average);
 			}
 		}
 
@@ -2320,5 +2320,13 @@ public class Helper {
 
 	public static boolean findParam(String[] args, String... param) {
 		return Arrays.stream(args).anyMatch(s -> equalsAny(s, param));
+	}
+
+	public static int subtract(int a, int b) {
+		return a - b;
+	}
+
+	public static int average(int a, int b) {
+		return Math.round((a + b) / 2f);
 	}
 }

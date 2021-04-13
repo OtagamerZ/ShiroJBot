@@ -101,8 +101,7 @@ public class TenthMinuteEvent implements Job {
 
 			for (Pair<String, Role> addRole : addRoles) {
 				ExceedEnum ee = ExceedEnum.getByName(addRole.getLeft());
-				roles.compute(ee, (ex, r) -> r == null ? new ArrayList<>() : r)
-						.add(addRole.getRight());
+				roles.computeIfAbsent(ee, k -> new ArrayList<>()).add(addRole.getRight());
 			}
 
 			for (Member mb : mbs) {
