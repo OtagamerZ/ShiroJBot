@@ -48,7 +48,7 @@ public class GuildDAO {
 			if (gc == null) {
 				Guild g = Main.getInfo().getGuildByID(id);
 				if (g == null)
-					return new GuildConfig();
+					return new GuildConfig(id);
 				else
 					return new GuildConfig(g.getId(), g.getName());
 			}

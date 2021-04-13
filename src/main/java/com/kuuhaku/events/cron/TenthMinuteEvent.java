@@ -137,15 +137,15 @@ public class TenthMinuteEvent implements Job {
 								.setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount(), false)))
 								.queue(null, t -> {
 									gc.setCanalGeral(null);
-									com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+									GuildDAO.updateGuildSettings(gc);
 								});
 					} catch (InsufficientPermissionException e) {
 						gc.setCanalGeral(null);
-						com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+						GuildDAO.updateGuildSettings(gc);
 					}
 				else {
 					gc.setCanalGeral(null);
-					com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+					GuildDAO.updateGuildSettings(gc);
 				}
 			}
 		}
