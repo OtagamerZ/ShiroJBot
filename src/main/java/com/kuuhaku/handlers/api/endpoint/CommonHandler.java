@@ -34,7 +34,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 
 @RestController
@@ -70,7 +69,7 @@ public class CommonHandler {
 				StringBuilder sb = new StringBuilder();
 
 				String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isDirectory), new File[0]))
-						.map(fl -> Paths.get(fl.toURI()).getFileName().toString())
+						.map(File::getName)
 						.toArray(String[]::new);
 
 				for (String s : available) {
@@ -89,8 +88,8 @@ public class CommonHandler {
 
 				StringBuilder sb = new StringBuilder();
 
-				String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isFile), new File[0]))
-						.map(fl -> Paths.get(fl.toURI()).getFileName().toString().replace(".png", ""))
+				String[] available = Arrays.stream(Helper.getOr(f.listFiles(fl -> fl.isFile() && !fl.getName().startsWith(".")), new File[0]))
+						.map(fl -> fl.getName().replace(".png", ""))
 						.toArray(String[]::new);
 
 				for (String s : available) {
