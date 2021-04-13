@@ -21,6 +21,7 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
+import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
@@ -42,11 +43,14 @@ public class DailyEvent implements Job {
 		} else if (c.get(Calendar.MONTH) == Calendar.DECEMBER && c.get(Calendar.DAY_OF_MONTH) == 21) {
 			List<MatchMakingRating> mmrs = MatchMakingRatingDAO.getMMRRank();
 			for (MatchMakingRating mmr : mmrs) {
-				int fac = (int) Math.pow(1.4, mmr.getTier().getTier());
+				if (mmr.getTier() == RankedTier.UNRANKED) continue;
+				int fac = (int) Math.pow(1.8, mmr.getTier().getTier() - 1);
 				int credits = 10000 * fac;
 
 				Account acc = AccountDAO.getAccount(mmr.getUid());
 				acc.addCredit(credits, this.getClass());
+				if (mmr.getTier().getTier() >= 5)
+					acc.addGem(3 * (mmr.getTier().getTier() - 4));
 				AccountDAO.saveAccount(acc);
 
 				Main.getInfo().getUserByID(mmr.getUid()).openPrivateChannel()
