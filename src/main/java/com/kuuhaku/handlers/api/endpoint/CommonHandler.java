@@ -89,7 +89,7 @@ public class CommonHandler {
 
 				StringBuilder sb = new StringBuilder();
 
-				String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isDirectory), new File[0]))
+				String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isFile), new File[0]))
 						.map(fl -> Paths.get(fl.toURI()).getFileName().toString().replace(".png", ""))
 						.toArray(String[]::new);
 
