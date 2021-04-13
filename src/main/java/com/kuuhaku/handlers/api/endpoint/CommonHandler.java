@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +34,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 @RestController
 public class CommonHandler {
@@ -66,8 +69,10 @@ public class CommonHandler {
 
 				StringBuilder sb = new StringBuilder();
 
-				String[] available = f.list();
-				if (available == null) available = new String[0];
+				String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isDirectory), new File[0]))
+						.map(fl -> Paths.get(fl.toURI()).getFileName().toString())
+						.toArray(String[]::new);
+
 				for (String s : available) {
 					sb.append(item.formatted("?anime=" + s, s));
 				}
@@ -84,10 +89,12 @@ public class CommonHandler {
 
 				StringBuilder sb = new StringBuilder();
 
-				String[] available = f.list();
-				if (available == null) available = new String[0];
+				String[] available = Arrays.stream(Helper.getOr(f.listFiles(File::isDirectory), new File[0]))
+						.map(fl -> Paths.get(fl.toURI()).getFileName().toString().replace(".png", ""))
+						.toArray(String[]::new);
+
 				for (String s : available) {
-					sb.append(item.formatted("&name=" + s, s));
+					sb.append(item.formatted("?anime=" + anime + "&name=" + s, s));
 				}
 
 				byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);
