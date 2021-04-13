@@ -169,7 +169,7 @@ public class Account {
 
 			if (hasPendingQuest()) {
 				Map<DailyTask, Integer> pg = getDailyProgress();
-				pg.compute(DailyTask.CREDIT_TASK, (k, v) -> Helper.getOr(v, 0) + (int) credit);
+				pg.merge(DailyTask.CREDIT_TASK, (int) credit, Integer::sum);
 				setDailyProgress(pg);
 			}
 		}

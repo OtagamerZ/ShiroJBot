@@ -361,10 +361,8 @@ public class ShiroInfo {
 	}
 
 	public void cache(Guild guild, Message message) {
-		messageCache.compute(
-				guild.getId(),
-				(s, cache) -> cache == null ? new TempCache<>(64, 1, TimeUnit.DAYS) : cache
-		).put(message.getId(), message);
+		messageCache.computeIfAbsent(guild.getId(), k -> new TempCache<>(64, 1, TimeUnit.DAYS))
+				.put(message.getId(), message);
 	}
 
 	public Message retrieveCachedMessage(Guild guild, String id) {

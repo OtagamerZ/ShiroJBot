@@ -39,7 +39,6 @@ import java.time.ZoneId;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Entity
@@ -309,12 +308,12 @@ public class MatchMakingRating {
 						String key = entry.getKey();
 						if (!key.equals("id")) {
 							int val = (int) entry.getValue();
-							info.getInfo().compute(key, (k, v) -> v == null ? val : val - v);
+							info.getInfo().merge(key, val, Helper::subtract);
 						}
 					}
 				}
 
-				data.compute(s, (k, v) -> v == null ? new ArrayList<>() : v).add(info);
+				data.computeIfAbsent(s, k -> new ArrayList<>()).add(info);
 			}
 		}
 
@@ -337,30 +336,25 @@ public class MatchMakingRating {
 					new HashMap<>()
 			);
 
-			AtomicReference<JSONObject> ph = new AtomicReference<>();
+			JSONObject ph = null;
 			for (MatchRound round : rounds) {
 				JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase(Locale.ROOT));
-				if (ph.get() == null) {
-					for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
-						String k = entry.getKey();
-						Object v = entry.getValue();
-						if (!k.equals("id")) {
-							int rv = (int) v;
-							fd.getRight().put(k, rv);
-						}
-					}
-				} else {
-					for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
-						String k = entry.getKey();
-						Object v = entry.getValue();
-						if (!k.equals("id")) {
-							int rv = (int) v - ph.get().optInt(k);
-							fd.getRight().computeIfPresent(k, (key, value) -> rv);
+				for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
+					String key = entry.getKey();
+					Object value = entry.getValue();
+					if (!key.equals("id")) {
+						if (ph == null) {
+							fd.getRight().put(key, (int) value);
+						} else {
+							int rv = (int) value - ph.optInt(key);
+							fd.getRight().computeIfPresent(key, (k, v) -> rv);
 						}
 					}
 				}
-				ph.set(jo);
+
+				ph = jo;
 			}
+
 			finalData.put(s, fd);
 		}
 
@@ -386,32 +380,28 @@ public class MatchMakingRating {
 			for (String id : ids) {
 				Pair<String, Map<String, Integer>> fd = Pair.of(id, new HashMap<>());
 
-				AtomicReference<JSONObject> ph = new AtomicReference<>();
+				JSONObject ph = null;
 				for (MatchRound round : rounds) {
 					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase(Locale.ROOT));
 					if (!jo.getString("id").equals(id)) continue;
-					else if (ph.get() == null) {
+					else {
 						for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
-							String k = entry.getKey();
-							Object v = entry.getValue();
-							if (!k.equals("id")) {
-								int rv = (int) v;
-								fd.getRight().put(k, rv);
-							}
-						}
-					} else {
-						for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
-							String k = entry.getKey();
-							Object v = entry.getValue();
-							if (!k.equals("id")) {
-								int rv = (int) v - ph.get().optInt(k);
-								fd.getRight().computeIfPresent(k, (key, value) -> rv);
+							String key = entry.getKey();
+							Object value = entry.getValue();
+							if (!key.equals("id")) {
+								if (ph == null) {
+									fd.getRight().put(key, (int) value);
+								} else {
+									int rv = (int) value - ph.optInt(key);
+									fd.getRight().computeIfPresent(key, (k, v) -> rv);
+								}
 							}
 						}
 					}
-					ph.set(jo);
+
+					ph = jo;
 				}
-				finalData.compute(s, (k, v) -> v == null ? new ArrayList<>() : v).add(fd);
+				finalData.computeIfAbsent(s, k -> new ArrayList<>()).add(fd);
 			}
 		}
 

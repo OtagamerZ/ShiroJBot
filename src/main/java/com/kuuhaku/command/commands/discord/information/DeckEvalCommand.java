@@ -64,7 +64,7 @@ public class DeckEvalCommand implements Executable {
 			put(Class.LEVELER, 0);
 		}};
 		for (Champion c : kp.getChampions())
-			count.compute(c.getCategory(), (cl, ct) -> ct == null ? 1 : ct + 1);
+			count.merge(c.getCategory(), 1, Integer::sum);
 
 		count.remove(null);
 

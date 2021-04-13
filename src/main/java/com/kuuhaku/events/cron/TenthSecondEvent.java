@@ -60,6 +60,7 @@ public class TenthSecondEvent implements Job {
 				lock = false;
 				return;
 			}
+
 			Main.getInfo().getMatchMaking().getSoloLobby().computeIfPresent(soloLobby.get(indexes.get(0)).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 		}
 
@@ -70,6 +71,7 @@ public class TenthSecondEvent implements Job {
 				lock = false;
 				return;
 			}
+
 			Main.getInfo().getMatchMaking().getDuoLobby().computeIfPresent(duoLobby.get(indexes.get(0)).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 		}
 

@@ -58,7 +58,7 @@ public class CreditDrop extends Drop {
 
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
-			pg.compute(DailyTask.DROP_TASK, (k, v) -> Helper.getOr(v, 0) + 1);
+			pg.merge(DailyTask.DROP_TASK, 1, Integer::sum);
 			acc.setDailyProgress(pg);
 		}
 

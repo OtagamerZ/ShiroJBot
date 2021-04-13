@@ -119,20 +119,12 @@ public class CardValueCommand implements Executable {
 					.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
 
 			Map<Date, Integer> normalValues = new HashMap<>();
-			for (Market nc : normalCards) {
-				if (normalValues.containsKey(nc.getPublishDate()))
-					normalValues.computeIfPresent(nc.getPublishDate(), (k, v) -> Math.round(v + nc.getPrice() / 2f));
-				else
-					normalValues.put(nc.getPublishDate(), nc.getPrice());
-			}
+			for (Market nc : normalCards)
+				normalValues.merge(nc.getPublishDate(), nc.getPrice(), Helper::average);
 
 			Map<Date, Integer> foilValues = new HashMap<>();
-			for (Market fc : foilCards) {
-				if (foilValues.containsKey(fc.getPublishDate()))
-					foilValues.computeIfPresent(fc.getPublishDate(), (k, v) -> Math.round(v + fc.getPrice() / 2f));
-				else
-					foilValues.put(fc.getPublishDate(), fc.getPrice());
-			}
+			for (Market fc : foilCards)
+				foilValues.merge(fc.getPublishDate(), fc.getPrice(), Helper::average);
 
 			List<Map.Entry<Date, Integer>> normalData = normalValues.entrySet()
 					.stream()
