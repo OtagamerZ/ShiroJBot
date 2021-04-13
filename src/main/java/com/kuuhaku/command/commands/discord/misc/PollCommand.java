@@ -163,7 +163,7 @@ public class PollCommand implements Executable {
 
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isBlank()) {
 			gc.setCanalSUG("");
-			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+			GuildDAO.updateGuildSettings(gc);
 
 			if (options != null) channel.sendMessage(eb.build()).queue(sendOptions);
 			else channel.sendMessage(eb.build()).queue(sendSimple);

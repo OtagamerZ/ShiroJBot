@@ -181,6 +181,10 @@ public class GuildConfig {
 		this.name = name;
 	}
 
+	public GuildConfig(String guildID) {
+		this.guildID = guildID;
+	}
+
 	public GuildConfig() {
 	}
 
