@@ -14,8 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na API de cartas">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/FileInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,8 +61,8 @@
         <option value="GraphQL File" />
         <option value="JavaScript File" />
         <option value="AnnotationType" />
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -1145,21 +1146,7 @@
       <workItem from="1617984427814" duration="844000" />
       <workItem from="1617987556896" duration="7975000" />
       <workItem from="1618230391795" duration="22163000" />
-      <workItem from="1618314764159" duration="8697000" />
-    </task>
-    <task id="LOCAL-04076" summary="Correção no alinhamento dos icones de combo">
-      <created>1617710959432</created>
-      <option name="number" value="04076" />
-      <option name="presentableId" value="LOCAL-04076" />
-      <option name="project" value="LOCAL" />
-      <updated>1617710959432</updated>
-    </task>
-    <task id="LOCAL-04077" summary="Correção no alinhamento dos icones de combo">
-      <created>1617713278830</created>
-      <option name="number" value="04077" />
-      <option name="presentableId" value="LOCAL-04077" />
-      <option name="project" value="LOCAL" />
-      <updated>1617713278830</updated>
+      <workItem from="1618314764159" duration="9061000" />
     </task>
     <task id="LOCAL-04078" summary="Correção no alinhamento dos icones de combo">
       <created>1617713589164</created>
@@ -1490,7 +1477,21 @@
       <option name="project" value="LOCAL" />
       <updated>1618331111268</updated>
     </task>
-    <option name="localTasksCounter" value="4125" />
+    <task id="LOCAL-04125" summary="Melhoria na API de cartas">
+      <created>1618331686765</created>
+      <option name="number" value="04125" />
+      <option name="presentableId" value="LOCAL-04125" />
+      <option name="project" value="LOCAL" />
+      <updated>1618331686765</updated>
+    </task>
+    <task id="LOCAL-04126" summary="Melhoria na API de cartas">
+      <created>1618331810045</created>
+      <option name="number" value="04126" />
+      <option name="presentableId" value="LOCAL-04126" />
+      <option name="project" value="LOCAL" />
+      <updated>1618331810045</updated>
+    </task>
+    <option name="localTasksCounter" value="4127" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
