@@ -675,7 +675,7 @@ public class Shoukan extends GlobalGame {
 					if (applyEot(ON_SUMMON, current, dest)) return;
 					if (applyEffect(ON_SUMMON, c, dest, current, Pair.of(c, dest), null)) return;
 
-					summoned.get(current).compute(c.getRace(), (k, v) -> v == null ? 1 : v + 1);
+					summoned.get(current).merge(c.getRace(), 1, Integer::sum);
 
 					msg = h.getUser().getName() + " invocou " + (c.isFlipped() ? "uma carta virada para baixo" : c.getName() + " em posição de " + (c.isDefending() ? "defesa" : "ataque")) + ".";
 				} else {
@@ -2279,7 +2279,7 @@ public class Shoukan extends GlobalGame {
 					Map<DailyTask, Integer> pg = acc.getDailyProgress();
 					DailyQuest dq = DailyQuest.getQuest(getCurrent().getIdLong());
 					int summons = summoned.get(s).getOrDefault(dq.getChosenRace(), 0);
-					pg.compute(DailyTask.RACE_TASK, (k, v) -> v == null ? summons : v + summons);
+					pg.merge(DailyTask.RACE_TASK, summons, Integer::sum);
 					acc.setDailyProgress(pg);
 					AccountDAO.saveAccount(acc);
 				}
