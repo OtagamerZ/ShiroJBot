@@ -59,7 +59,7 @@ public class ModifyRulesCommand implements Executable {
 			}
 
 			gc.removeRule(index);
-			com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+			GuildDAO.updateGuildSettings(gc);
 			channel.sendMessage("✅ | Regra removida com sucesso!").queue();
 		} else {
 			if (rule.split(";").length != 2) {
