@@ -52,7 +52,7 @@ public class EmbedCommand implements Executable {
 			if (Helper.hasPermission(member, PrivilegeLevel.MOD) && args.length > 0 && Helper.equalsAny(args[0], "reset", "resetar")) {
 				GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
 				gc.setEmbedTemplate(null);
-				com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+				GuildDAO.updateGuildSettings(gc);
 
 				m.delete().queue(null, Helper::doNothing);
 				channel.sendMessage("✅ | Embed de servidor limpo com sucesso!").queue();

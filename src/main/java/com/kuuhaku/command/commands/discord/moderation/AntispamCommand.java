@@ -53,7 +53,7 @@ public class AntispamCommand implements Executable {
 						return;
 					}
 					gc.setHardAntispam(false);
-					com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage("Modo de anti-spam trocado para **SOFT**").queue();
 				}
 				case "hard" -> {
@@ -62,7 +62,7 @@ public class AntispamCommand implements Executable {
 						return;
 					}
 					gc.setHardAntispam(true);
-					com.kuuhaku.controller.postgresql.GuildDAO.updateGuildSettings(gc);
+					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage("Modo de anti-spam trocado para **HARD**").queue();
 				}
 			}
