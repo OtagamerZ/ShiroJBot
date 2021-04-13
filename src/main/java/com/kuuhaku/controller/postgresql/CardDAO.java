@@ -648,7 +648,11 @@ public class CardDAO {
 	public static Equipment getRandomEquipment(boolean spell) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT e FROM Equipment e WHERE (e.charm = 'SPELL') = :spell ORDER BY RANDOM()", Equipment.class);
+		Query q;
+		if (spell)
+			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') = 'SPELL' ORDER BY RANDOM()", Equipment.class);
+		else
+			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') <> 'SPELL' ORDER BY RANDOM()", Equipment.class);
 		q.setParameter("spell", spell);
 		q.setMaxResults(1);
 
