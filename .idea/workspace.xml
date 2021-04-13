@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/AnimeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/AnimeRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1146,13 +1146,6 @@
       <workItem from="1618230391795" duration="22163000" />
       <workItem from="1618314764159" duration="13761000" />
     </task>
-    <task id="LOCAL-04081" summary="Correção no alinhamento dos icones de combo">
-      <created>1617715117715</created>
-      <option name="number" value="04081" />
-      <option name="presentableId" value="LOCAL-04081" />
-      <option name="project" value="LOCAL" />
-      <updated>1617715117715</updated>
-    </task>
     <task id="LOCAL-04082" summary="Correção no alinhamento dos icones de combo">
       <created>1617715201016</created>
       <option name="number" value="04082" />
@@ -1489,7 +1482,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618340284412</updated>
     </task>
-    <option name="localTasksCounter" value="4130" />
+    <task id="LOCAL-04130" summary="Correções menores">
+      <created>1618350729224</created>
+      <option name="number" value="04130" />
+      <option name="presentableId" value="LOCAL-04130" />
+      <option name="project" value="LOCAL" />
+      <updated>1618350729225</updated>
+    </task>
+    <option name="localTasksCounter" value="4131" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1598,9 +1598,9 @@
     <MESSAGE value="Adicionado modo arcade &quot;cardmaster&quot;" />
     <MESSAGE value="Redução nos multiplicadores do slots" />
     <MESSAGE value="Correção no calculo de raça dos modos arcade" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Melhoria na API de cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria na API de cartas" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
