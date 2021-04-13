@@ -77,7 +77,7 @@ public class MatchHistory {
 	}
 
 	public MatchRound getRound(int round) {
-		return rounds.compute(round, (i, mr) -> mr == null ? new MatchRound() : mr);
+		return rounds.computeIfAbsent(round, k -> new MatchRound());
 	}
 
 	public void setRounds(Map<Integer, MatchRound> rounds) {

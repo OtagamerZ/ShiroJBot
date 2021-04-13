@@ -978,6 +978,6 @@ public class ShiroEvents extends ListenerAdapter {
 	}
 
 	public void addHandler(Guild guild, SimpleMessageListener sml) {
-		getHandler().compute(guild.getId(), (s, evts) -> evts == null ? new CopyOnWriteArrayList<>() : evts).add(sml);
+		getHandler().computeIfAbsent(guild.getId(), k -> new CopyOnWriteArrayList<>()).add(sml);
 	}
 }
