@@ -13,10 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Redução nos multiplicadores do slots">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no calculo de raça dos modos arcade">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,17 +192,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1143,14 +1131,8 @@
       <workItem from="1617883142747" duration="11612000" />
       <workItem from="1617984427814" duration="844000" />
       <workItem from="1617987556896" duration="7975000" />
-      <workItem from="1618230391795" duration="19424000" />
-    </task>
-    <task id="LOCAL-04071" summary="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;">
-      <created>1617641806180</created>
-      <option name="number" value="04071" />
-      <option name="presentableId" value="LOCAL-04071" />
-      <option name="project" value="LOCAL" />
-      <updated>1617641806180</updated>
+      <workItem from="1618230391795" duration="22163000" />
+      <workItem from="1618314764159" duration="1826000" />
     </task>
     <task id="LOCAL-04072" summary="Correção no Shoukan em duplas">
       <created>1617645713748</created>
@@ -1488,7 +1470,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618256242509</updated>
     </task>
-    <option name="localTasksCounter" value="4120" />
+    <task id="LOCAL-04120" summary="Correção no calculo de raça dos modos arcade">
+      <created>1618257985436</created>
+      <option name="number" value="04120" />
+      <option name="presentableId" value="LOCAL-04120" />
+      <option name="project" value="LOCAL" />
+      <updated>1618257985436</updated>
+    </task>
+    <option name="localTasksCounter" value="4121" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1574,7 +1563,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Mudança no tamanho das imagens de clã" />
     <MESSAGE value="Correção na perda de perfil ao re-entrar no servidor" />
     <MESSAGE value="Correção menor no Shoukan" />
     <MESSAGE value="Aumento na quantidade de colunas no livro de Kawaipons" />
@@ -1599,7 +1587,8 @@
     <MESSAGE value="Decks não são mais ordenados" />
     <MESSAGE value="Adicionado modo arcade &quot;cardmaster&quot;" />
     <MESSAGE value="Redução nos multiplicadores do slots" />
-    <option name="LAST_COMMIT_MESSAGE" value="Redução nos multiplicadores do slots" />
+    <MESSAGE value="Correção no calculo de raça dos modos arcade" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no calculo de raça dos modos arcade" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
