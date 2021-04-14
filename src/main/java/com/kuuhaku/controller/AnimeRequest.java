@@ -21,6 +21,8 @@ package com.kuuhaku.controller;
 import com.kuuhaku.utils.Helper;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
 
@@ -46,7 +48,7 @@ public class AnimeRequest {
 		if (System.getenv().containsKey("NOWANIMES_URL") && System.getenv().containsKey("NOWANIMES_TOKEN")) {
 			resposta = Helper.get(System.getenv("NOWANIMES_URL"),
 					new JSONObject() {{
-						put("anime", name);
+						put("anime", URLEncoder.encode(name, StandardCharsets.UTF_8));
 					}},
 					Collections.emptyMap(),
 					System.getenv("NOWANIMES_TOKEN")
@@ -64,7 +66,7 @@ public class AnimeRequest {
 		if (System.getenv().containsKey("MEGAHENTAIS_URL") && System.getenv().containsKey("MEGAHENTAIS_TOKEN")) {
 			resposta = Helper.get(System.getenv("MEGAHENTAIS_URL"),
 					new JSONObject() {{
-						put("anime", name);
+						put("anime", URLEncoder.encode(name, StandardCharsets.UTF_8));
 					}},
 					Collections.emptyMap(),
 					System.getenv("MEGAHENTAIS_TOKEN")

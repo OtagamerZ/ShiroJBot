@@ -673,7 +673,7 @@ public class Shoukan extends GlobalGame {
 					d.setAvailable(false);
 					slot.setTop(c);
 					if (applyEot(ON_SUMMON, current, dest)) return;
-					if (applyEffect(ON_SUMMON, c, dest, current, Pair.of(c, dest), null)) return;
+					if (!c.isFlipped() && applyEffect(ON_SUMMON, c, dest, current, Pair.of(c, dest), null)) return;
 
 					summoned.get(current).merge(c.getRace(), 1, Integer::sum);
 
