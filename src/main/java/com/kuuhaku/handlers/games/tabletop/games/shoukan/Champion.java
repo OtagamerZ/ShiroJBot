@@ -203,7 +203,7 @@ public class Champion implements Drawable, Cloneable {
 			g2d.setFont(Helper.HAMMERSMITH.deriveFont(Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : Helper.getOr(altDescription, description), 205, 9, 293);
 
-			if (getStun() > 0) {
+			if (getStun() > 0 || getStun() == -1) {
 				available = false;
 			}
 
@@ -212,7 +212,7 @@ public class Champion implements Drawable, Cloneable {
 				g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 			}
 
-			if (getStun() > 0) {
+			if (getStun() > 0 || getStun() == -1) {
 				try {
 					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/stunned.png")));
 					g2d.drawImage(dm, 0, 0, null);
@@ -319,7 +319,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean isDefending() {
-		return flipped || defending || stun > 0;
+		return flipped || defending || getStun() > 0 || getStun() == -1;
 	}
 
 	public void setDefending(boolean defending) {
@@ -665,18 +665,18 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getStun() {
-		if (permastun) return 1;
+		if (permastun) return -1;
 		return stun;
 	}
 
 	public void setStun(int stun) {
 		this.stun = stun;
-		if (getStun() > 0) defending = true;
+		if (getStun() > 0 || getStun() == -1) defending = true;
 	}
 
 	public void setPermaStun(boolean perma) {
 		this.permastun = perma;
-		if (getStun() > 0) defending = true;
+		if (getStun() > 0 || getStun() == -1) defending = true;
 	}
 
 	public void reduceStun() {
