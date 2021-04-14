@@ -129,12 +129,9 @@ public class TenthMinuteEvent implements Job {
 		}
 
 		Guild supportServer = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
-		Role devRole = supportServer.getRolesByName("Shiro DEVs", true).stream()
-				.findFirst().orElse(null);
-		Role seniorRole = supportServer.getRolesByName("Suporte Senior", true).stream()
-				.findFirst().orElse(null);
-		Role supRole = supportServer.getRolesByName("Suporte", true).stream()
-				.findFirst().orElse(null);
+		Role devRole = supportServer.getRoleById("585170918700220418");
+		Role seniorRole = supportServer.getRoleById("815429753058230292");
+		Role supRole = supportServer.getRoleById("738837622805364876");
 
 		for (Map.Entry<String, SupportTier> sup : ShiroInfo.getSupports().entrySet()) {
 			if (seniorRole != null && sup.getValue() == SupportTier.SENIOR)
