@@ -90,7 +90,8 @@ public class ShiroInfo {
 			"656542716108472340", SupportTier.SENIOR, //Fenyx
 			"666488799835979786", SupportTier.SENIOR, //Lucas
 			"619214753839185930", SupportTier.NORMAL, //Botzera
-			"553244700258336825", SupportTier.NORMAL  //Caos
+			"553244700258336825", SupportTier.NORMAL, //Caos
+			"755582535228063822", SupportTier.NORMAL  //Kog
 	);
 	private static final List<String> emoteRepo = List.of(
 			"666619034103447642", //Shiro Emote Repository 1
