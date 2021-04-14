@@ -77,7 +77,7 @@ public class CreateClanCommand implements Executable {
 
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja criar o clã " + name + " por 10.000 créditos?")
+		channel.sendMessage("Tem certeza que deseja criar o clã " + name + " por 10.000 créditos (o nome **NÃO** poderá ser alterado depois)?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
