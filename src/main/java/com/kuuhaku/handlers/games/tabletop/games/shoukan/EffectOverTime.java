@@ -20,21 +20,21 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.EffectConsumer;
 
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiConsumer;
 
 public class EffectOverTime {
 	private final long stamp = System.currentTimeMillis();
 	private final String source;
 	private final Set<EffectTrigger> triggers;
-	private final BiConsumer<Side, Integer> effect;
+	private final EffectConsumer effect;
 	private final Side target;
 	private final boolean debuff;
 	private int turns;
 
-	public EffectOverTime(String source, BiConsumer<Side, Integer> effect, Side target, boolean debuff, int turns, EffectTrigger... triggers) {
+	public EffectOverTime(String source, EffectConsumer effect, Side target, boolean debuff, int turns, EffectTrigger... triggers) {
 		this.source = source;
 		this.triggers = Set.of(triggers);
 		this.effect = effect;
@@ -51,7 +51,7 @@ public class EffectOverTime {
 		return triggers;
 	}
 
-	public BiConsumer<Side, Integer> getEffect() {
+	public EffectConsumer getEffect() {
 		return effect;
 	}
 
