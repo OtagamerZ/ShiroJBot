@@ -680,7 +680,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void reduceStun() {
-		this.stun--;
+		this.stun = Math.max(stun - 1, 0);
 	}
 
 	@Override
