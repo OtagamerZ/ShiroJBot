@@ -2209,11 +2209,6 @@ public class Shoukan extends GlobalGame {
 			Iterator<EffectOverTime> i = eot.iterator();
 			while (i.hasNext()) {
 				EffectOverTime effect = i.next();
-				if (effect.getTurns() <= 0) {
-					channel.sendMessage(":timer: | O efeito da carta " + effect.getSource() + " expirou!").queue();
-					i.remove();
-					continue;
-				}
 
 				if (effect.getTarget() == null || effect.getTarget() == to) {
 					if (CollectionUtils.containsAny(effect.getTriggers(), Set.of(BEFORE_TURN, AFTER_TURN))) {
@@ -2228,6 +2223,11 @@ public class Shoukan extends GlobalGame {
 						if (trigger == AFTER_TURN)
 							effect.decreaseTurn();
 					}
+				}
+
+				if (effect.getTurns() <= 0) {
+					channel.sendMessage(":timer: | O efeito da carta " + effect.getSource() + " expirou!").queue();
+					i.remove();
 				}
 			}
 
