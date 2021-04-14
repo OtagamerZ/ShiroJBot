@@ -14,6 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos efeitos por tempo do Shoukan">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1133,13 +1134,6 @@
       <workItem from="1618230391795" duration="22163000" />
       <workItem from="1618314764159" duration="13761000" />
     </task>
-    <task id="LOCAL-04088" summary="Correção nas lojas de itens">
-      <created>1617741012992</created>
-      <option name="number" value="04088" />
-      <option name="presentableId" value="LOCAL-04088" />
-      <option name="project" value="LOCAL" />
-      <updated>1617741012992</updated>
-    </task>
     <task id="LOCAL-04089" summary="Correção nas lojas de itens">
       <created>1617741096646</created>
       <option name="number" value="04089" />
@@ -1476,7 +1470,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618411029048</updated>
     </task>
-    <option name="localTasksCounter" value="4137" />
+    <task id="LOCAL-04137" summary="Correção nos efeitos por tempo do Shoukan">
+      <created>1618411409300</created>
+      <option name="number" value="04137" />
+      <option name="presentableId" value="LOCAL-04137" />
+      <option name="project" value="LOCAL" />
+      <updated>1618411409300</updated>
+    </task>
+    <option name="localTasksCounter" value="4138" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

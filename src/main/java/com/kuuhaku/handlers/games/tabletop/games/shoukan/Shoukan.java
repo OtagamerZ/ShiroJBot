@@ -319,7 +319,7 @@ public class Shoukan extends GlobalGame {
 					} else if (changed[index]) {
 						channel.sendMessage("❌ | Você já mudou a postura dessa carta neste turno.").queue(null, Helper::doNothing);
 						return;
-					} else if (c.getStun() > 0) {
+					} else if (c.getStun() > 0 || c.getStun() == -1) {
 						channel.sendMessage("❌ | Essa carta está atordoada.").queue(null, Helper::doNothing);
 						return;
 					}
@@ -752,7 +752,7 @@ public class Shoukan extends GlobalGame {
 					} else if (c.isFlipped()) {
 						channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue(null, Helper::doNothing);
 						return;
-					} else if (c.getStun() > 0) {
+					} else if (c.getStun() > 0 || c.getStun() == -1) {
 						channel.sendMessage("❌ | Essa carta está atordoada.").queue(null, Helper::doNothing);
 						return;
 					} else if (c.isDefending()) {
@@ -810,7 +810,7 @@ public class Shoukan extends GlobalGame {
 				} else if (yours.isFlipped()) {
 					channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue(null, Helper::doNothing);
 					return;
-				} else if (yours.getStun() > 0) {
+				} else if (yours.getStun() > 0 || his.getStun() == -1) {
 					channel.sendMessage("❌ | Essa carta está atordoada.").queue(null, Helper::doNothing);
 					return;
 				} else if (yours.isDefending()) {
@@ -963,7 +963,7 @@ public class Shoukan extends GlobalGame {
 						int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
 						Hand enemy = hands.get(next);
 						enemy.removeHp(apDamage);
-					} else if (!(his.isDefending() || his.getStun() > 0) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+					} else if (!(his.isDefending() || his.getStun() > 0 || his.getStun() == -1) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
 						Hand enemy = hands.get(next);
 						if (yours.getBonus().getSpecialData().has("totalDamage"))
 							enemy.removeHp(yPower);
@@ -1713,7 +1713,7 @@ public class Shoukan extends GlobalGame {
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
-						if (c.getStun() > 0) c.reduceStun();
+						if (c.getStun() > 0 && c.getStun() != -1) c.reduceStun();
 
 						if (applyEffect(BEFORE_TURN, c, i, current, Pair.of(c, i), null)
 							|| makeFusion(h.get())
@@ -1949,7 +1949,7 @@ public class Shoukan extends GlobalGame {
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
-							if (c.getStun() > 0) c.reduceStun();
+							if (c.getStun() > 0 && c.getStun() != -1) c.reduceStun();
 
 							if (applyEffect(BEFORE_TURN, c, i, current, Pair.of(c, i), null)
 								|| makeFusion(h.get())
