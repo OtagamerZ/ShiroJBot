@@ -50,6 +50,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
+import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -2215,11 +2216,18 @@ public class Shoukan extends GlobalGame {
 				}
 
 				if (effect.getTarget() == null || effect.getTarget() == to) {
-					if (trigger == AFTER_TURN)
-						effect.decreaseTurn();
+					if (CollectionUtils.containsAny(effect.getTriggers(), Set.of(BEFORE_TURN, AFTER_TURN))) {
+						if (effect.getTriggers().contains(trigger)) {
+							effect.getEffect().accept(to, index, effect.getTurns() == 1);
+							effect.decreaseTurn();
+						}
+					} else {
+						if (effect.getTriggers().contains(trigger))
+							effect.getEffect().accept(to, index, effect.getTurns() == 1);
 
-					if (effect.getTriggers().contains(trigger))
-						effect.getEffect().accept(to, index, effect.getTurns() <= 0);
+						if (trigger == AFTER_TURN)
+							effect.decreaseTurn();
+					}
 				}
 			}
 
