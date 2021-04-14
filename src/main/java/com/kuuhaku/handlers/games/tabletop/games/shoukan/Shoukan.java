@@ -2215,11 +2215,11 @@ public class Shoukan extends GlobalGame {
 				}
 
 				if (effect.getTarget() == null || effect.getTarget() == to) {
-					if (effect.getTriggers().contains(trigger))
-						effect.getEffect().accept(to, index);
-
 					if (trigger == AFTER_TURN)
 						effect.decreaseTurn();
+
+					if (effect.getTriggers().contains(trigger))
+						effect.getEffect().accept(to, index, effect.getTurns() <= 0);
 				}
 			}
 

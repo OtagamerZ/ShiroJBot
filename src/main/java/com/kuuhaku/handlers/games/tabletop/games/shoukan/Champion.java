@@ -203,7 +203,7 @@ public class Champion implements Drawable, Cloneable {
 			g2d.setFont(Helper.HAMMERSMITH.deriveFont(Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : Helper.getOr(altDescription, description), 205, 9, 293);
 
-			if (stun > 0) {
+			if (getStun() > 0) {
 				available = false;
 			}
 
@@ -212,13 +212,13 @@ public class Champion implements Drawable, Cloneable {
 				g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 			}
 
-			if (stun > 0) {
+			if (getStun() > 0) {
 				try {
 					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/stunned.png")));
 					g2d.drawImage(dm, 0, 0, null);
 				} catch (IOException ignore) {
 				}
-			} else if (defending) {
+			} else if (isDefending()) {
 				try {
 					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/defense_mode.png")));
 					g2d.drawImage(dm, 0, 0, null);
