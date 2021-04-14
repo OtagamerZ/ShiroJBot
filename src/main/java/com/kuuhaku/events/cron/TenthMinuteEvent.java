@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.enums.ExceedEnum;
+import com.kuuhaku.model.enums.SupportTier;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.model.persistent.GuildConfig;
@@ -127,6 +128,26 @@ public class TenthMinuteEvent implements Job {
 			}
 		}
 
+		Guild supportServer = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
+		Role devRole = supportServer.getRolesByName("Shiro DEVs", true).stream()
+				.findFirst().orElse(null);
+		Role seniorRole = supportServer.getRolesByName("Suporte Senior", true).stream()
+				.findFirst().orElse(null);
+		Role supRole = supportServer.getRolesByName("Suporte", true).stream()
+				.findFirst().orElse(null);
+
+		for (Map.Entry<String, SupportTier> sup : ShiroInfo.getSupports().entrySet()) {
+			if (seniorRole != null && sup.getValue() == SupportTier.SENIOR)
+				supportServer.addRoleToMember(sup.getKey(), seniorRole);
+			if (supRole != null)
+				supportServer.addRoleToMember(sup.getKey(), supRole);
+		}
+		for (String dev : ShiroInfo.getDevelopers()) {
+			if (devRole != null)
+				supportServer.addRoleToMember(dev, devRole);
+		}
+
+
 		for (GuildConfig gc : GuildDAO.getAllGuildsWithGeneralChannel()) {
 			Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 			if (g != null && !Helper.getOr(gc.getGeneralTopic(), "").isBlank()) {
@@ -150,7 +171,9 @@ public class TenthMinuteEvent implements Job {
 			}
 		}
 
-		for (File file : Main.getInfo().getTemporaryFolder().listFiles()) {
+		File[] temp = Main.getInfo().getTemporaryFolder().listFiles();
+		assert temp != null;
+		for (File file : temp) {
 			try {
 				BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 				if (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - attr.creationTime().toMillis()) >= 3)
