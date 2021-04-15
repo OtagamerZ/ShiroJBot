@@ -543,6 +543,7 @@ public class DashboardSocket extends WebSocketServer {
 						put("message", msg.get());
 					}}.toString());
 				}
+				case "botstats" -> conn.send(new JSONArray(BotStatsDAO.getStats()).toString());
 			}
 		} catch (WebsocketNotConnectedException ignore) {
 		}

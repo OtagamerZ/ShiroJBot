@@ -25,11 +25,12 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.ZoneId;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
 @Entity
 @Table(name = "matchhistory")
@@ -57,8 +58,8 @@ public class MatchHistory {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 
-	@Temporal(TemporalType.DATE)
-	private Calendar timestamp = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date timestamp = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
 
 	public int getId() {
 		return id;
@@ -84,11 +85,11 @@ public class MatchHistory {
 		this.rounds = rounds;
 	}
 
-	public Calendar getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Calendar timestamp) {
+	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 
