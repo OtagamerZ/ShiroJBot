@@ -57,6 +57,10 @@ public class BotStats {
 	private int servers;
 
 	public BotStats() {
+
+	}
+
+	public BotStats get() {
 		memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 		memoryPrcnt = Helper.prcnt(memoryUsage, Runtime.getRuntime().totalMemory());
 		cpuUsage = ShiroInfo.getProcessCpuLoad();
@@ -73,6 +77,8 @@ public class BotStats {
 		} catch (InterruptedException | ExecutionException e) {
 			ping = 0;
 		}
+
+		return this;
 	}
 
 	public int getId() {
