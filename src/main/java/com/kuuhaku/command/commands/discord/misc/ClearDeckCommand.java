@@ -87,8 +87,8 @@ public class ClearDeckCommand implements Executable {
 												9999999
 										);
 										CardMarketDAO.saveCard(cm);
-										fkp.removeChampion(c);
 									}
+									fkp.getChampions().clear();
 
 									for (Equipment e : fkp.getEquipments()) {
 										EquipmentMarket em = new EquipmentMarket(
@@ -97,8 +97,8 @@ public class ClearDeckCommand implements Executable {
 												9999999
 										);
 										EquipmentMarketDAO.saveCard(em);
-										fkp.removeEquipment(e);
 									}
+									fkp.getEquipments().clear();
 
 									for (Field f : fkp.getFields()) {
 										FieldMarket fm = new FieldMarket(
@@ -107,8 +107,8 @@ public class ClearDeckCommand implements Executable {
 												9999999
 										);
 										FieldMarketDAO.saveCard(fm);
-										fkp.removeField(f);
 									}
+									fkp.getFields().clear();
 
 									KawaiponDAO.saveKawaipon(fkp);
 									s.delete().queue();
