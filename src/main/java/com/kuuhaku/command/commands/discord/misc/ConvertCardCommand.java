@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "converter",
 		aliases = {"convert"},
-		usage = "req_card",
+		usage = "req_card-override",
 		category = Category.MISC
 )
 @Requires({
@@ -91,23 +91,31 @@ public class ConvertCardCommand implements Executable {
 
 		assert c != null;
 		c.setAcc(acc);
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-		eb.setTitle("Por favor confirme!");
-		eb.setDescription("Sua carta kawaipon " + kc.getName() + " será convertida para carta senshi e será adicionada ao seu deck, por favor clique no botão abaixo para confirmar a conversão.");
-		eb.setImage("attachment://card.png");
 
-		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage(eb.build()).addFile(Helper.getBytes(c.drawCard(false), "png"), "card.png")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-							kp.removeCard(kc);
-							kp.addChampion(c);
-							KawaiponDAO.saveKawaipon(kp);
-							s.delete().queue();
-							channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();
-						}), true, 1, TimeUnit.MINUTES,
-						u -> u.getId().equals(author.getId()),
-						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-				));
+		if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
+			kp.removeCard(kc);
+			kp.addChampion(c);
+			KawaiponDAO.saveKawaipon(kp);
+			channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();
+		} else {
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
+			eb.setTitle("Por favor confirme!");
+			eb.setDescription("Sua carta kawaipon " + kc.getName() + " será convertida para carta senshi e será adicionada ao seu deck, por favor clique no botão abaixo para confirmar a conversão.");
+			eb.setImage("attachment://card.png");
+
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			channel.sendMessage(eb.build()).addFile(Helper.getBytes(c.drawCard(false), "png"), "card.png")
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								kp.removeCard(kc);
+								kp.addChampion(c);
+								KawaiponDAO.saveKawaipon(kp);
+								s.delete().queue();
+								channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();
+							}), true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+					));
+		}
 	}
 }
