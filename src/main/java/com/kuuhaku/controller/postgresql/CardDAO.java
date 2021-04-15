@@ -510,8 +510,23 @@ public class CardDAO {
 	public static Champion getRandomChampion() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime.name IN :animes ORDER BY RANDOM()", Champion.class);
-		q.setParameter("animes", getValidAnimeNames());
+		Query q = em.createQuery("SELECT c FROM Champion c ORDER BY RANDOM()", Champion.class);
+		q.setMaxResults(1);
+
+		try {
+			return (Champion) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Champion getRandomChampion(boolean fusion) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.fusion = :fusion ORDER BY RANDOM()", Champion.class);
+		q.setParameter("fusion", fusion);
 		q.setMaxResults(1);
 
 		try {
@@ -526,9 +541,25 @@ public class CardDAO {
 	public static Champion getRandomChampion(int mana) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime.name IN :animes AND c.mana = :mana ORDER BY RANDOM()", Champion.class);
-		q.setParameter("animes", getValidAnimeNames());
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana ORDER BY RANDOM()", Champion.class);
 		q.setParameter("mana", mana);
+		q.setMaxResults(1);
+
+		try {
+			return (Champion) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Champion getRandomChampion(int mana, boolean fusion) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana AND c.fusion = :fusion ORDER BY RANDOM()", Champion.class);
+		q.setParameter("mana", mana);
+		q.setParameter("fusion", fusion);
 		q.setMaxResults(1);
 
 		try {
@@ -543,10 +574,27 @@ public class CardDAO {
 	public static Champion getRandomChampion(int mana, Race race) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.card.anime.name IN :animes AND c.mana = :mana AND c.race = :race ORDER BY RANDOM()", Champion.class);
-		q.setParameter("animes", getValidAnimeNames());
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana AND c.race = :race ORDER BY RANDOM()", Champion.class);
 		q.setParameter("mana", mana);
 		q.setParameter("race", race);
+		q.setMaxResults(1);
+
+		try {
+			return (Champion) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Champion getRandomChampion(int mana, Race race, boolean fusion) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Champion c WHERE c.mana = :mana AND c.race = :race AND c.fusion = :fusion ORDER BY RANDOM()", Champion.class);
+		q.setParameter("mana", mana);
+		q.setParameter("race", race);
+		q.setParameter("fusion", fusion);
 		q.setMaxResults(1);
 
 		try {

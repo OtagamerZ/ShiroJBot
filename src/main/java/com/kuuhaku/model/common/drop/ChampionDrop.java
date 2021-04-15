@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class ChampionDrop extends Drop<Champion> {
 	public ChampionDrop() {
-		super(CardDAO.getRandomChampion());
+		super(CardDAO.getRandomChampion(false));
 	}
 
 	@Override
