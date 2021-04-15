@@ -87,8 +87,8 @@ public class MatchStatsCommand implements Executable {
 					LocalDate date = mh.getTimestamp().toInstant().atZone(ZoneId.of("GMT-3")).toLocalDate();
 					Map<Side, String> players = mh.getPlayers().entrySet().stream()
 							.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
-					sb.append("(%s) `%sID: %s` - %s **VS** %s **(%s)**\n".formatted(
-							date.format(Helper.onlyDate),
+					sb.append("(%s)\n`%sID: %s` - %s **VS** %s **(%s)**\n\n".formatted(
+							date.format(Helper.dateformat),
 							mh.isRanked() ? "\uD83D\uDC51 " : "",
 							mh.getId(),
 							checkUser(players.get(Side.BOTTOM)),
