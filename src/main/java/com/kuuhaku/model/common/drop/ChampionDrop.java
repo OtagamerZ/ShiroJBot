@@ -66,7 +66,7 @@ public class ChampionDrop extends Drop<Champion> {
 		if (kp.getChampions().size() < 36)
 			return "Campeão " + getPrize().getCard().getName();
 		else
-			return "~~Campeão %s~~ (convertido em %s créditos)".formatted(
+			return "~~Campeão %s~~\n(convertido em %s créditos)".formatted(
 					getPrize().getCard().getName(),
 					getPrize().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE
 			);
