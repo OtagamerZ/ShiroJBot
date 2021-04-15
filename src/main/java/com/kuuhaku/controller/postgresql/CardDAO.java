@@ -694,6 +694,21 @@ public class CardDAO {
 		}
 	}
 
+	public static Field getRandomField() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT f FROM Field f ORDER BY RANDOM()", Field.class);
+		q.setMaxResults(1);
+
+		try {
+			return (Field) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	public static double getMeta(Class cat) {
 		EntityManager em = Manager.getEntityManager();
 
