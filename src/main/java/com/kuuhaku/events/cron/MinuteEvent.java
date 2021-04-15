@@ -19,6 +19,7 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.BotStatsDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.persistent.MutedMember;
@@ -38,10 +39,11 @@ import java.util.stream.Collectors;
 
 public class MinuteEvent implements Job {
 	public static JobDetail minute;
-	public static boolean restarting = false;
 
 	@Override
 	public void execute(JobExecutionContext context) {
+		BotStatsDAO.register();
+
 		for (MutedMember m : MemberDAO.getMutedMembers()) {
 			Guild g = Main.getInfo().getGuildByID(m.getGuild());
 			if (g == null) {
