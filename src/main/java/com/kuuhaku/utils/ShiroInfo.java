@@ -40,6 +40,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
 
+import javax.management.*;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
@@ -209,6 +210,25 @@ public class ShiroInfo {
 
 	public static List<String> getStaff() {
 		return Stream.concat(developers.stream(), supports.keySet().stream()).distinct().collect(Collectors.toList());
+	}
+
+	public static double getProcessCpuLoad() {
+		try {
+			MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+			ObjectName name = ObjectName.getInstance("java.lang:type=OperatingSystem");
+			AttributeList list = mbs.getAttributes(name, new String[]{"ProcessCpuLoad"});
+
+			if (list.isEmpty()) return Double.NaN;
+
+			return list.stream()
+					.map(a -> (double) ((Attribute) a).getValue())
+					.filter(d -> d >= 0)
+					.map(d -> Helper.round(d, 1))
+					.findFirst()
+					.orElse(0D);
+		} catch (ReflectionException | MalformedObjectNameException | InstanceNotFoundException e) {
+			return 0;
+		}
 	}
 
 	//NON-STATIC
