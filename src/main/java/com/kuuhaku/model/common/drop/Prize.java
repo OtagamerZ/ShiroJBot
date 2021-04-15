@@ -18,29 +18,23 @@
 
 package com.kuuhaku.model.common.drop;
 
-import com.github.twitch4j.common.events.domain.EventUser;
-import com.kuuhaku.model.common.Consumable;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.Map;
 import java.util.function.Function;
 
-public interface Prize {
+public interface Prize<P> {
 	String getCaptcha();
 
 	String getRealCaptcha();
 
 	void award(User u);
 
-	void award(EventUser u);
+	void awardInstead(User u, int prize);
 
-	int getPrize();
-
-	Consumable getPrizeAsItem();
-
-	String[] getPrizeWithPenalty();
+	P getPrize();
 
 	Map.Entry<String, Function<User, Boolean>> getRequirement();
 
-	Map.Entry<String, Function<EventUser, Boolean>> getRequirementForTwitch();
+	String toString(User u);
 }

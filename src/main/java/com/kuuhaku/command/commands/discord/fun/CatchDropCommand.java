@@ -23,11 +23,13 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -54,7 +56,7 @@ public class CatchDropCommand implements Executable {
 			return;
 		}
 
-		Prize p = Main.getInfo().getCurrentDrop().get(guild.getId());
+		Prize<?> p = Main.getInfo().getCurrentDrop().get(guild.getId());
 
 		if (p == null) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-drop")).queue();
@@ -70,6 +72,11 @@ public class CatchDropCommand implements Executable {
 		Main.getInfo().getCurrentDrop().remove(guild.getId());
 		p.award(author);
 
-		channel.sendMessage("✅ | " + author.getAsMention() + " coletou o drop com sucesso!").queue();
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.addField("Conteúdo:", p.toString(author), true);
+
+		channel.sendMessage("✅ | " + author.getAsMention() + " coletou o drop com sucesso!")
+				.embed(eb.build())
+				.queue();
 	}
 }
