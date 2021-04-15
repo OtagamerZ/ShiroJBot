@@ -47,10 +47,10 @@ public class BotStats {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long memoryUsage;
 
-	@Column(columnDefinition = "DOUBLE NOT NULL DEFAULT 0")
+	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 0")
 	private double memoryPrcnt;
 
-	@Column(columnDefinition = "DOUBLE NOT NULL DEFAULT 0")
+	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 0")
 	private double cpuUsage;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
