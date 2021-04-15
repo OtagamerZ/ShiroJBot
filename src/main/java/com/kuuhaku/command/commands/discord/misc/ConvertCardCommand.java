@@ -87,18 +87,9 @@ public class ConvertCardCommand implements Executable {
 		}
 
 		Champion c = CardDAO.getChampion(tc);
+		if (kp.checkChampion(c, channel)) return;
 
-		if (c == null || c.isFusion()) {
-			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
-			return;
-		} else if (kp.getChampions().stream().filter(c::equals).count() == 3) {
-			channel.sendMessage("❌ | Você só pode ter no máximo 3 cópias de cada carta no seu deck.").queue();
-			return;
-		} else if (kp.getChampions().size() == 36) {
-			channel.sendMessage("❌ | Você só pode ter no máximo 36 cartas senshi no seu deck.").queue();
-			return;
-		}
-
+		assert c != null;
 		c.setAcc(acc);
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setTitle("Por favor confirme!");
