@@ -262,6 +262,11 @@ public class BuyCardCommand implements Executable {
 		int type = cm == null ? em == null ? fm == null ? -1 : 3 : 2 : 1;
 		switch (type) {
 			case 1 -> {
+				if (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1))) {
+					channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
+					return;
+				}
+
 				Account seller = AccountDAO.getAccount(cm.getSeller());
 				if (!seller.getUid().equals(author.getId())) {
 					if (buyer.getBalance() < (blackfriday ? cm.getPrice() * 0.75 : cm.getPrice())) {
@@ -330,7 +335,10 @@ public class BuyCardCommand implements Executable {
 			case 2 -> {
 				Account seller = AccountDAO.getAccount(em.getSeller());
 				if (!seller.getUid().equals(author.getId())) {
-					if (buyer.getBalance() < (blackfriday ? em.getPrice() * 0.75 : em.getPrice())) {
+					if (em.getPrice() > (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50)) {
+						channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
+						return;
+					} else if (buyer.getBalance() < (blackfriday ? em.getPrice() * 0.75 : em.getPrice())) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 						return;
 					}
@@ -390,7 +398,10 @@ public class BuyCardCommand implements Executable {
 			case 3 -> {
 				Account seller = AccountDAO.getAccount(fm.getSeller());
 				if (!seller.getUid().equals(author.getId())) {
-					if (buyer.getBalance() < (blackfriday ? fm.getPrice() * 0.75 : fm.getPrice())) {
+					if (fm.getPrice() > Helper.BASE_FIELD_PRICE) {
+						channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
+						return;
+					} else if (buyer.getBalance() < (blackfriday ? fm.getPrice() * 0.75 : fm.getPrice())) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 						return;
 					}
