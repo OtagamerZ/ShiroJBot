@@ -78,6 +78,7 @@
         <class>com.kuuhaku.model.persistent.Clan</class>
         <class>com.kuuhaku.model.persistent.StockMarket</class>
         <class>com.kuuhaku.model.persistent.AddedAnime</class>
+        <class>com.kuuhaku.model.persistent.BotStats</class>
 
         <properties>
             <!-- dados da conexao -->
