@@ -39,10 +39,12 @@ import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.Styler;
 
 import java.awt.*;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -76,26 +78,27 @@ public class CardValueCommand implements Executable {
 			List<Market> normalCards;
 			List<Market> foilCards;
 
+			ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 			if (c != null) {
 				normalCards = Stream.of(
 						CardMarketDAO.getCardsByCard(c.getId(), false),
 						EquipmentMarketDAO.getCardsByCard(c.getId()),
 						FieldMarketDAO.getCardsByCard(c.getId())
 				).flatMap(List::stream)
-						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
+						.filter(cm -> cm.getPublishDate().isAfter(today.minusDays(30)))
 						.collect(Collectors.toList());
 				foilCards = CardMarketDAO.getCardsByCard(c.getId(), true)
 						.stream()
-						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
+						.filter(cm -> cm.getPublishDate().isAfter(today.minusDays(30)))
 						.collect(Collectors.toList());
 			} else {
 				normalCards = CardMarketDAO.getCardsByRarity(r, false)
 						.stream()
-						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
+						.filter(cm -> cm.getPublishDate().isAfter(today.minusDays(30)))
 						.collect(Collectors.toList());
 				foilCards = CardMarketDAO.getCardsByRarity(r, true)
 						.stream()
-						.filter(cm -> cm.getPublishDate().after(Date.from(Instant.now().minus(30, ChronoUnit.DAYS))))
+						.filter(cm -> cm.getPublishDate().isAfter(today.minusDays(30)))
 						.collect(Collectors.toList());
 			}
 
@@ -118,18 +121,18 @@ public class CardValueCommand implements Executable {
 					.setLegendBackgroundColor(new Color(16, 17, 20, 100))
 					.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
 
-			Map<Date, Integer> normalValues = new HashMap<>();
+			Map<ZonedDateTime, Integer> normalValues = new HashMap<>();
 			for (Market nc : normalCards)
 				normalValues.merge(nc.getPublishDate(), nc.getPrice(), Helper::average);
 
-			Map<Date, Integer> foilValues = new HashMap<>();
+			Map<ZonedDateTime, Integer> foilValues = new HashMap<>();
 			for (Market fc : foilCards)
 				foilValues.merge(fc.getPublishDate(), fc.getPrice(), Helper::average);
 
-			List<Map.Entry<Date, Integer>> normalData = normalValues.entrySet()
+			List<Map.Entry<ZonedDateTime, Integer>> normalData = normalValues.entrySet()
 					.stream()
 					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
-			List<Map.Entry<Date, Integer>> foilData = foilValues.entrySet()
+			List<Map.Entry<ZonedDateTime, Integer>> foilData = foilValues.entrySet()
 					.stream()
 					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
 

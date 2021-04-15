@@ -36,7 +36,10 @@ import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -111,14 +114,14 @@ public class Account {
 	@Column(columnDefinition = "TEXT")
 	private String dailyProgress = "{}";
 
-	@Temporal(TemporalType.DATE)
-	private Calendar lastQuest = null;
+	@Temporal(TemporalType.TIMESTAMP)
+	private ZonedDateTime lastQuest = null;
 
 	@Enumerated(value = EnumType.STRING)
 	private FrameColor frame = FrameColor.PINK;
 
-	@Temporal(TemporalType.DATE)
-	private Calendar lastDaily = null;
+	@Temporal(TemporalType.TIMESTAMP)
+	private ZonedDateTime lastDaily = null;
 
 	public String getUid() {
 		return uid;
@@ -232,20 +235,19 @@ public class Account {
 		return lastVoted;
 	}
 
-	public Calendar getLastDaily() {
+	public ZonedDateTime getLastDaily() {
 		return lastDaily;
 	}
 
 	public boolean hasDailyAvailable() {
 		if (this.lastDaily == null) return true;
-		Calendar today = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
-		Calendar lastDaily = this.lastDaily;
+		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
-		return today.get(Calendar.DAY_OF_YEAR) > lastDaily.get(Calendar.DAY_OF_YEAR);
+		return today.getDayOfYear() > lastDaily.getDayOfYear();
 	}
 
 	public void playedDaily() {
-		this.lastDaily = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+		this.lastDaily = ZonedDateTime.now(ZoneId.of("GMT-3"));
 	}
 
 	public void voted() {
@@ -496,13 +498,13 @@ public class Account {
 	}
 
 	public Map<DailyTask, Integer> getDailyProgress() {
-		Calendar c = Calendar.getInstance();
+		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 		if (dailyProgress == null) {
 			return new HashMap<>();
 		} else if (lastQuest == null) {
-			Calendar prev = Calendar.getInstance();
-			prev.add(Calendar.DAY_OF_YEAR, -1);
+			ZonedDateTime prev = ZonedDateTime.now(ZoneId.of("GMT-3"));
+			prev.minusDays(1);
 			lastQuest = prev;
 		}
 
@@ -513,7 +515,7 @@ public class Account {
 				.map(e -> Pair.of(DailyTask.valueOf(e.getKey()), NumberUtils.toInt(String.valueOf(e.getValue()))))
 				.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
 
-		if (date > -1 && (date != c.get(Calendar.DAY_OF_YEAR) || lastQuest.get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR))) {
+		if (date > -1 && (date != today.getDayOfYear() || lastQuest.getDayOfYear() == today.getDayOfYear())) {
 			setDailyProgress(new HashMap<>());
 			return new HashMap<>();
 		} else {
@@ -529,11 +531,11 @@ public class Account {
 	}
 
 	public void setLastQuest() {
-		this.lastQuest = Calendar.getInstance();
+		this.lastQuest = ZonedDateTime.now(ZoneId.of("GMT-3"));
 	}
 
 	public boolean hasPendingQuest() {
-		Calendar c = Calendar.getInstance();
-		return lastQuest == null || lastQuest.get(Calendar.DAY_OF_YEAR) != c.get(Calendar.DAY_OF_YEAR);
+		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
+		return lastQuest == null || lastQuest.getDayOfYear() != today.getDayOfYear();
 	}
 }

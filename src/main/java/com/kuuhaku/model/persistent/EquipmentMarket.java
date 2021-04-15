@@ -22,10 +22,8 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.model.common.Market;
 
 import javax.persistence.*;
-import java.time.Clock;
-import java.time.Instant;
 import java.time.ZoneId;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "equipmentmarket")
@@ -47,7 +45,7 @@ public class EquipmentMarket implements Market {
 	private int price;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date publishDate = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
+	private ZonedDateTime publishDate = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	public EquipmentMarket(String seller, String buyer, Equipment card, int price) {
 		this.seller = seller;
@@ -110,11 +108,11 @@ public class EquipmentMarket implements Market {
 		this.price = price;
 	}
 
-	public Date getPublishDate() {
+	public ZonedDateTime getPublishDate() {
 		return publishDate;
 	}
 
-	public void setPublishDate(Date publishDate) {
+	public void setPublishDate(ZonedDateTime publishDate) {
 		this.publishDate = publishDate;
 	}
 }
