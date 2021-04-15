@@ -223,7 +223,7 @@ public class ShiroInfo {
 			return list.stream()
 					.map(a -> (double) ((Attribute) a).getValue())
 					.filter(d -> d >= 0)
-					.map(d -> Helper.round(d * 100, 1))
+					.map(d -> Helper.round(d, 4))
 					.findFirst()
 					.orElse(0D);
 		} catch (ReflectionException | MalformedObjectNameException | InstanceNotFoundException e) {
