@@ -470,9 +470,9 @@ public class DashboardSocket extends WebSocketServer {
 								} else {
 									code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
 									switch (err) {
-										case 1 -> msg.set("Você já possui " + kp.getMaxCopies(e.getCard()) + " cópias desse EvoGears.");
-										case 2 -> msg.set("Você não possui mais espaços para EvoGears tier 4.");
-										case 3 -> msg.set("Você não possui mais espaços para EvoGears no deck.");
+										case 1 -> msg.set("Você já possui " + kp.getEquipmentMaxCopies(e.getCard()) + " cópias desse evogears.");
+										case 2 -> msg.set("Você não possui mais espaços para evogears tier 4.");
+										case 3 -> msg.set("Você não possui mais espaços para evogears no deck.");
 									}
 								}
 							}
