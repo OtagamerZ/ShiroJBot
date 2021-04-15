@@ -14,7 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado comando para limpar o deck">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ClearDeckCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ClearDeckCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1133,21 +1134,7 @@
       <workItem from="1618230391795" duration="22163000" />
       <workItem from="1618314764159" duration="13761000" />
       <workItem from="1618488051307" duration="8216000" />
-      <workItem from="1618502454870" duration="3426000" />
-    </task>
-    <task id="LOCAL-04102" summary="Correções menores">
-      <created>1617899559004</created>
-      <option name="number" value="04102" />
-      <option name="presentableId" value="LOCAL-04102" />
-      <option name="project" value="LOCAL" />
-      <updated>1617899559004</updated>
-    </task>
-    <task id="LOCAL-04103" summary="Correções menores">
-      <created>1617901233205</created>
-      <option name="number" value="04103" />
-      <option name="presentableId" value="LOCAL-04103" />
-      <option name="project" value="LOCAL" />
-      <updated>1617901233206</updated>
+      <workItem from="1618502454870" duration="4075000" />
     </task>
     <task id="LOCAL-04104" summary="Correções menores">
       <created>1617901963349</created>
@@ -1478,7 +1465,21 @@
       <option name="project" value="LOCAL" />
       <updated>1618509809363</updated>
     </task>
-    <option name="localTasksCounter" value="4151" />
+    <task id="LOCAL-04151" summary="Adicionado comando para limpar o deck">
+      <created>1618510112799</created>
+      <option name="number" value="04151" />
+      <option name="presentableId" value="LOCAL-04151" />
+      <option name="project" value="LOCAL" />
+      <updated>1618510112800</updated>
+    </task>
+    <task id="LOCAL-04152" summary="Adicionado comando para limpar o deck">
+      <created>1618510322628</created>
+      <option name="number" value="04152" />
+      <option name="presentableId" value="LOCAL-04152" />
+      <option name="project" value="LOCAL" />
+      <updated>1618510322628</updated>
+    </task>
+    <option name="localTasksCounter" value="4153" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
