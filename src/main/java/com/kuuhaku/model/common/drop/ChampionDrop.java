@@ -19,39 +19,56 @@
 package com.kuuhaku.model.common.drop;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.Map;
 
-public class CreditDrop extends Drop<Integer> {
-	public CreditDrop() {
-		super(500 + Helper.rng(1000, false));
+public class ChampionDrop extends Drop<Champion> {
+	public ChampionDrop() {
+		super(CardDAO.getRandomChampion());
 	}
 
 	@Override
 	public void award(User u) {
-		Account acc = AccountDAO.getAccount(u.getId());
-		acc.addCredit(getPrize(), this.getClass());
+		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+		if (kp.getChampions().size() < 36) {
+			kp.addChampion(getPrize());
+		} else {
+			awardInstead(u, getPrize().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE);
+			return;
+		}
+		KawaiponDAO.saveKawaipon(kp);
 
+		Account acc = AccountDAO.getAccount(u.getId());
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.merge(DailyTask.DROP_TASK, 1, Integer::sum);
 			acc.setDailyProgress(pg);
+			AccountDAO.saveAccount(acc);
 		}
-
-		AccountDAO.saveAccount(acc);
 	}
 
 	@Override
 	public String toString() {
-		return Helper.separate(getPrize()) + " créditos";
+		return "Campeão " + getPrize().getCard().getName();
 	}
 
 	@Override
 	public String toString(User u) {
-		return toString();
+		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+		if (kp.getChampions().size() < 36)
+			return "Campeão " + getPrize().getCard().getName();
+		else
+			return "~~Campeão %s~~ (convertido em %s créditos)".formatted(
+					getPrize().getCard().getName(),
+					getPrize().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE
+			);
 	}
 }

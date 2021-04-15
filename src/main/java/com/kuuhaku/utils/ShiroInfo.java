@@ -140,7 +140,7 @@ public class ShiroInfo {
 	private final TempCache<String, Integer> pendingJoin = new TempCache<>(1, TimeUnit.MINUTES);
 	private final TempCache<String, Boolean> specialEvent = new TempCache<>(30, TimeUnit.MINUTES);
 	private final TempCache<String, KawaiponCard> currentCard = new TempCache<>(1, TimeUnit.MINUTES);
-	private final TempCache<String, Prize> currentDrop = new TempCache<>(1, TimeUnit.MINUTES);
+	private final TempCache<String, Prize<?>> currentDrop = new TempCache<>(1, TimeUnit.MINUTES);
 	private final TempCache<String, byte[]> cardCache = new TempCache<>(1, TimeUnit.HOURS);
 
 	private boolean isLive = false;
@@ -388,7 +388,7 @@ public class ShiroInfo {
 		return currentCard;
 	}
 
-	public TempCache<String, Prize> getCurrentDrop() {
+	public TempCache<String, Prize<?>> getCurrentDrop() {
 		return currentDrop;
 	}
 

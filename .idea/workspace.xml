@@ -14,8 +14,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos efeitos por tempo do Shoukan">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/ChampionDrop.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/EvogearDrop.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/FieldDrop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchDropCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchDropCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Consumable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Drop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Drop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Prize.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Prize.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,11 +178,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.model.common.drop" />
       <recent name="com.kuuhaku.model.common" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.model.enums" />
       <recent name="com.kuuhaku.handlers.games.tabletop.games.shoukan" />
-      <recent name="com.kuuhaku.command.commands.discord.moderation" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -1133,20 +1143,7 @@
       <workItem from="1617987556896" duration="7975000" />
       <workItem from="1618230391795" duration="22163000" />
       <workItem from="1618314764159" duration="13761000" />
-    </task>
-    <task id="LOCAL-04089" summary="Correção nas lojas de itens">
-      <created>1617741096646</created>
-      <option name="number" value="04089" />
-      <option name="presentableId" value="LOCAL-04089" />
-      <option name="project" value="LOCAL" />
-      <updated>1617741096646</updated>
-    </task>
-    <task id="LOCAL-04090" summary="Correção nas lojas de itens">
-      <created>1617800573602</created>
-      <option name="number" value="04090" />
-      <option name="presentableId" value="LOCAL-04090" />
-      <option name="project" value="LOCAL" />
-      <updated>1617800573602</updated>
+      <workItem from="1618488051307" duration="5106000" />
     </task>
     <task id="LOCAL-04091" summary="Correções menores">
       <created>1617806835474</created>
@@ -1477,7 +1474,21 @@
       <option name="project" value="LOCAL" />
       <updated>1618411409300</updated>
     </task>
-    <option name="localTasksCounter" value="4138" />
+    <task id="LOCAL-04138" summary="Correção nos efeitos por tempo do Shoukan">
+      <created>1618411864558</created>
+      <option name="number" value="04138" />
+      <option name="presentableId" value="LOCAL-04138" />
+      <option name="project" value="LOCAL" />
+      <updated>1618411864558</updated>
+    </task>
+    <task id="LOCAL-04139" summary="Correção nos efeitos por tempo do Shoukan">
+      <created>1618412001448</created>
+      <option name="number" value="04139" />
+      <option name="presentableId" value="LOCAL-04139" />
+      <option name="project" value="LOCAL" />
+      <updated>1618412001448</updated>
+    </task>
+    <option name="localTasksCounter" value="4140" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
