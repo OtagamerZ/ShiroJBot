@@ -121,6 +121,10 @@ public class Kawaipon {
 		this.champions.remove(champion);
 	}
 
+	public int getChampionCopies(Card card) {
+		return (int) champions.stream().filter(k -> k.getCard().equals(card)).count();
+	}
+
 	public Equipment getEquipment(Card card) {
 		return equipments.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
 	}
@@ -145,6 +149,10 @@ public class Kawaipon {
 		this.equipments.remove(equipment);
 	}
 
+	public int getEquipmentCopies(Card card) {
+		return (int) equipments.stream().filter(k -> k.getCard().equals(card)).count();
+	}
+
 	public Field getField(Card card) {
 		return fields.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
 	}
@@ -163,6 +171,10 @@ public class Kawaipon {
 
 	public void removeField(Field field) {
 		this.fields.remove(field);
+	}
+
+	public int getFieldCopies(Card card) {
+		return (int) fields.stream().filter(k -> k.getCard().equals(card)).count();
 	}
 
 	public List<Drawable> getDrawables() {
@@ -185,7 +197,11 @@ public class Kawaipon {
 		return Race.getCombo(champions);
 	}
 
-	public int getMaxCopies(Equipment eq) {
+	public int getChampionMaxCopies() {
+		return getCombo().getLeft() == Race.HUMAN ? 4 : 3;
+	}
+
+	public int getEquipmentMaxCopies(Equipment eq) {
 		if (eq.getTier() == 4) {
 			return getCombo().getLeft() == Race.BESTIAL ? 2 : 1;
 		} else {
@@ -244,37 +260,37 @@ public class Kawaipon {
 	}
 
 	public boolean checkEquipment(Equipment e, TextChannel channel) {
-		int max = getMaxCopies(e);
+		int max = getEquipmentMaxCopies(e);
 		if (getEquipments().stream().filter(e::equals).count() == max) {
 			channel.sendMessage("❌ | Você só pode ter no máximo " + max + " cópias de cada equipamento no deck.").queue();
 			return true;
 		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
-			channel.sendMessage("❌ | Você não possui mais espaços para EvoGears tier 4!").queue();
+			channel.sendMessage("❌ | Você não possui mais espaços para evogears tier 4!").queue();
 			return true;
 		} else if (getEvoWeight() + e.getWeight(this) > 24) {
-			channel.sendMessage("❌ | Você não possui mais espaços para EvoGears no deck.").queue();
+			channel.sendMessage("❌ | Você não possui mais espaços para evogears no deck.").queue();
 			return true;
 		}
 		return false;
 	}
 
 	public static boolean checkEquipment(Kawaipon kp, Equipment e, TextChannel channel) {
-		int max = kp.getMaxCopies(e);
+		int max = kp.getEquipmentMaxCopies(e);
 		if (kp.getEquipments().stream().filter(e::equals).count() == max) {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo " + max + " cópias de cada equipamento no deck.").queue();
 			return true;
 		} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
-			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para EvoGears tier 4!").queue();
+			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para evogears tier 4!").queue();
 			return true;
 		} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
-			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para EvoGears no deck.").queue();
+			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para evogears no deck.").queue();
 			return true;
 		}
 		return false;
 	}
 
 	public int checkEquipmentError(Equipment e) {
-		int max = getMaxCopies(e);
+		int max = getEquipmentMaxCopies(e);
 		if (getEquipments().stream().filter(e::equals).count() == max) {
 			return 1;
 		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
@@ -286,7 +302,7 @@ public class Kawaipon {
 	}
 
 	public static int checkEquipmentError(Kawaipon kp, Equipment e) {
-		int max = kp.getMaxCopies(e);
+		int max = kp.getEquipmentMaxCopies(e);
 		if (kp.getEquipments().stream().filter(e::equals).count() == max) {
 			return 1;
 		} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {

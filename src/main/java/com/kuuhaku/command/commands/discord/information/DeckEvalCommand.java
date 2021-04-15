@@ -90,7 +90,7 @@ public class DeckEvalCommand implements Executable {
 						"""
 								:large_orange_diamond: | Efeito primário: %s (%s)
 								:small_orange_diamond: | Efeito secundário: %s (%s)
-								:shield: | Peso EvoGear: %s
+								:shield: | Peso evogear: %s
 								:thermometer: | Custo médio de mana: %s
 								"""
 								.formatted(
