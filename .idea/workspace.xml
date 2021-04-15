@@ -14,7 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Drops agora possuem chance de conter cartas do Shoukan">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShoukanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthSecondEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/DeckStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/DeckStash.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
     </list>
@@ -1145,14 +1147,7 @@
       <workItem from="1617987556896" duration="7975000" />
       <workItem from="1618230391795" duration="22163000" />
       <workItem from="1618314764159" duration="13761000" />
-      <workItem from="1618488051307" duration="6705000" />
-    </task>
-    <task id="LOCAL-04096" summary="Correções menores">
-      <created>1617884671222</created>
-      <option name="number" value="04096" />
-      <option name="presentableId" value="LOCAL-04096" />
-      <option name="project" value="LOCAL" />
-      <updated>1617884671222</updated>
+      <workItem from="1618488051307" duration="7625000" />
     </task>
     <task id="LOCAL-04097" summary="Correções menores">
       <created>1617885266959</created>
@@ -1490,7 +1485,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618497007781</updated>
     </task>
-    <option name="localTasksCounter" value="4145" />
+    <task id="LOCAL-04145" summary="Drops agora possuem chance de conter cartas do Shoukan">
+      <created>1618497606009</created>
+      <option name="number" value="04145" />
+      <option name="presentableId" value="LOCAL-04145" />
+      <option name="project" value="LOCAL" />
+      <updated>1618497606009</updated>
+    </task>
+    <option name="localTasksCounter" value="4146" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

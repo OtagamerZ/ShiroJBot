@@ -32,6 +32,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -98,6 +99,14 @@ public class DeckStash {
 		this.champions.remove(champion);
 	}
 
+	public int getChampionCopies(Card card) {
+		return (int) champions.stream().filter(k -> k.getCard().equals(card)).count();
+	}
+
+	public boolean hasInvalidChampionCopyCount() {
+		return champions.stream().distinct().anyMatch(c -> Collections.frequency(champions, c) > getChampionMaxCopies());
+	}
+
 	public List<Equipment> getEquipments() {
 		return equipments;
 	}
@@ -120,6 +129,14 @@ public class DeckStash {
 
 	public void removeEquipment(Equipment equipment) {
 		this.equipments.remove(equipment);
+	}
+
+	public int getEquipmentCopies(Card card) {
+		return (int) equipments.stream().filter(k -> k.getCard().equals(card)).count();
+	}
+
+	public boolean hasInvalidEquipmentCopyCount() {
+		return equipments.stream().distinct().anyMatch(c -> Collections.frequency(equipments, c) > getEquipmentMaxCopies(c));
 	}
 
 	public Field getField(Card card) {

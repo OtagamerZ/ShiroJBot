@@ -125,6 +125,10 @@ public class Kawaipon {
 		return (int) champions.stream().filter(k -> k.getCard().equals(card)).count();
 	}
 
+	public boolean hasInvalidChampionCopyCount() {
+		return champions.stream().distinct().noneMatch(c -> Collections.frequency(champions, c) > getChampionMaxCopies());
+	}
+
 	public Equipment getEquipment(Card card) {
 		return equipments.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
 	}
@@ -151,6 +155,10 @@ public class Kawaipon {
 
 	public int getEquipmentCopies(Card card) {
 		return (int) equipments.stream().filter(k -> k.getCard().equals(card)).count();
+	}
+
+	public boolean hasInvalidEquipmentCopyCount() {
+		return equipments.stream().distinct().noneMatch(c -> Collections.frequency(equipments, c) > getEquipmentMaxCopies(c));
 	}
 
 	public Field getField(Card card) {
