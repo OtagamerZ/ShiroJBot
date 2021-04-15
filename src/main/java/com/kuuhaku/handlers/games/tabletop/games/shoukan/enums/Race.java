@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public enum Race {
 	HUMAN("Humano",
 			"+1 Limite de cópias para campeões",
-			"+1000 HP",
+			"+750 HP",
 			"Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia."
 	),
 	ELF("Elfo",
