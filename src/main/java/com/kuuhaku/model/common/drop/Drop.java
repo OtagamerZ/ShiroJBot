@@ -123,9 +123,9 @@ public abstract class Drop<P> implements Prize<P> {
 	@Override
 	public String getRealCaptcha() {
 		try {
-			return Hex.encodeHexString(MessageDigest.getInstance("MD5").digest(ByteBuffer.allocate(4).putInt(hashCode()).array())).substring(0, 5);
+			return Hex.encodeHexString(MessageDigest.getInstance("MD5").digest(ByteBuffer.allocate(4).putInt(hashCode()).array())).substring(0, 6);
 		} catch (NoSuchAlgorithmException e) {
-			return String.valueOf(System.currentTimeMillis()).substring(0, 5);
+			return String.valueOf(System.currentTimeMillis()).substring(0, 6);
 		}
 	}
 
