@@ -25,8 +25,7 @@ import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.TimeZone;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "giftcode")
@@ -44,8 +43,8 @@ public class GiftCode {
 	@Column(columnDefinition = "TEXT NOT NULL DEFAULT ''")
 	private String gift = "";
 
-	@Temporal(TemporalType.DATE)
-	private Calendar redeemed = null;
+	@Temporal(TemporalType.TIMESTAMP)
+	private ZonedDateTime redeemed = null;
 
 	public GiftCode(String code) {
 		this.code = code;
@@ -64,7 +63,8 @@ public class GiftCode {
 
 	public void setRedeemedBy(String redeemedBy) {
 		this.redeemedBy = redeemedBy;
-		this.redeemed = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+		this.redeemed = ZonedDateTime.now(ZoneId.of("GMT-3"));
+		;
 	}
 
 	public String getDescription() {
@@ -104,11 +104,11 @@ public class GiftCode {
 		}
 	}
 
-	public Calendar getRedeemed() {
+	public ZonedDateTime getRedeemed() {
 		return redeemed;
 	}
 
-	public void setRedeemed(Calendar redeemed) {
+	public void setRedeemed(ZonedDateTime redeemed) {
 		this.redeemed = redeemed;
 	}
 }
