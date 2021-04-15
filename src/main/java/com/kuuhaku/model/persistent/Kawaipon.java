@@ -202,7 +202,8 @@ public class Kawaipon {
 	}
 
 	public int getEquipmentMaxCopies(Equipment eq) {
-		if (eq.getTier() == 4) {
+		if (eq == null) return 0;
+		else if (eq.getTier() == 4) {
 			return getCombo().getLeft() == Race.BESTIAL ? 2 : 1;
 		} else {
 			return getCombo().getLeft() == Race.BESTIAL ? 4 : 3;
@@ -210,59 +211,65 @@ public class Kawaipon {
 	}
 
 	public boolean checkChampion(Champion c, TextChannel channel) {
-		if (c.isFusion()) {
+		int max = getChampionMaxCopies();
+		if (c == null || c.isFusion()) {
 			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
 			return true;
-		} else if (getChampions().stream().filter(c::equals).count() == 3) {
-			channel.sendMessage("❌ | Você só pode ter no máximo 3 cópias de cada carta no deck.").queue();
+		} else if (getChampions().stream().filter(c::equals).count() >= max) {
+			channel.sendMessage("❌ | Você só pode ter no máximo " + max + " cópias de cada campeão no deck.").queue();
 			return true;
 		} else if (getChampions().size() == 36) {
-			channel.sendMessage("❌ | Você só pode ter no máximo 36 cartas senshi no deck.").queue();
+			channel.sendMessage("❌ | Você só pode ter no máximo 36 campeões no deck.").queue();
 			return true;
 		}
+
 		return false;
 	}
 
 	public static boolean checkChampion(Kawaipon kp, Champion c, TextChannel channel) {
-		if (c.isFusion()) {
+		int max = kp.getChampionMaxCopies();
+		if (c == null || c.isFusion()) {
 			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
 			return true;
-		} else if (kp.getChampions().stream().filter(c::equals).count() == 3) {
-			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 3 cópias de cada carta no deck.").queue();
+		} else if (kp.getChampions().stream().filter(c::equals).count() == max) {
+			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo " + max + " cópias de cada campeão no deck.").queue();
 			return true;
 		} else if (kp.getChampions().size() == 36) {
-			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 36 cartas senshi no deck.").queue();
+			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 36 campeões no deck.").queue();
 			return true;
 		}
+
 		return false;
 	}
 
 	public int checkChampionError(Champion c) {
-		if (c.isFusion()) {
+		if (c == null || c.isFusion()) {
 			return 1;
 		} else if (getChampions().stream().filter(c::equals).count() == 3) {
 			return 2;
 		} else if (getChampions().size() == 36) {
 			return 3;
 		}
+
 		return 0;
 	}
 
 	public static int checkChampionError(Kawaipon kp, Champion c) {
-		if (c.isFusion()) {
+		if (c == null || c.isFusion()) {
 			return 1;
 		} else if (kp.getChampions().stream().filter(c::equals).count() == 3) {
 			return 2;
 		} else if (kp.getChampions().size() == 36) {
 			return 3;
 		}
+
 		return 0;
 	}
 
 	public boolean checkEquipment(Equipment e, TextChannel channel) {
 		int max = getEquipmentMaxCopies(e);
 		if (getEquipments().stream().filter(e::equals).count() == max) {
-			channel.sendMessage("❌ | Você só pode ter no máximo " + max + " cópias de cada equipamento no deck.").queue();
+			channel.sendMessage("❌ | Você só pode ter no máximo " + max + " cópias desse equipamento no deck.").queue();
 			return true;
 		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
 			channel.sendMessage("❌ | Você não possui mais espaços para evogears tier 4!").queue();
@@ -271,13 +278,14 @@ public class Kawaipon {
 			channel.sendMessage("❌ | Você não possui mais espaços para evogears no deck.").queue();
 			return true;
 		}
+
 		return false;
 	}
 
 	public static boolean checkEquipment(Kawaipon kp, Equipment e, TextChannel channel) {
 		int max = kp.getEquipmentMaxCopies(e);
 		if (kp.getEquipments().stream().filter(e::equals).count() == max) {
-			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo " + max + " cópias de cada equipamento no deck.").queue();
+			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo " + max + " cópias desse equipamento no deck.").queue();
 			return true;
 		} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
 			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para evogears tier 4!").queue();
@@ -286,6 +294,7 @@ public class Kawaipon {
 			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para evogears no deck.").queue();
 			return true;
 		}
+
 		return false;
 	}
 
@@ -298,6 +307,7 @@ public class Kawaipon {
 		} else if (getEvoWeight() + e.getWeight(this) > 24) {
 			return 3;
 		}
+
 		return 0;
 	}
 
@@ -310,6 +320,7 @@ public class Kawaipon {
 		} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
 			return 3;
 		}
+
 		return 0;
 	}
 
@@ -321,6 +332,7 @@ public class Kawaipon {
 			channel.sendMessage("❌ | Você só pode ter no máximo 3 cartas de campo no deck.").queue();
 			return true;
 		}
+
 		return false;
 	}
 
@@ -332,6 +344,7 @@ public class Kawaipon {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 3 cartas de campo no deck.").queue();
 			return true;
 		}
+
 		return false;
 	}
 
@@ -341,6 +354,7 @@ public class Kawaipon {
 		} else if (getFields().size() >= 3) {
 			return 2;
 		}
+
 		return 0;
 	}
 
@@ -350,6 +364,7 @@ public class Kawaipon {
 		} else if (kp.getFields().size() >= 3) {
 			return 2;
 		}
+
 		return 0;
 	}
 }
