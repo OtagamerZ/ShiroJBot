@@ -1391,13 +1391,13 @@ public class Helper {
 
 		if (dbUltimate || chance((2.5 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.75f, 5000), 0, 0.75)) * (dropBuff != null ? dropBuff.getMult() : 1))) {
 			Prize<?> drop;
-			int type = rng(100, false);
+			int type = rng(1000, false);
 
-			if (type >= 99)
+			if (type >= 995)
 				drop = new FieldDrop();
-			else if (type >= 95)
+			else if (type >= 950)
 				drop = new EvogearDrop();
-			else if (type >= 80)
+			else if (type >= 850)
 				drop = new ChampionDrop();
 			else
 				drop = new CreditDrop();
@@ -1443,13 +1443,13 @@ public class Helper {
 
 				List<Prize<?>> prizes = new ArrayList<>();
 				for (int i = 0; i < 6; i++) {
-					int type = rng(100, false);
+					int type = rng(1000, false);
 
-					if (type >= 99)
+					if (type >= 995)
 						prizes.add(new FieldDrop());
-					else if (type >= 95)
+					else if (type >= 950)
 						prizes.add(new EvogearDrop());
-					else if (type >= 80)
+					else if (type >= 850)
 						prizes.add(new ChampionDrop());
 					else
 						prizes.add(new CreditDrop());
@@ -1554,13 +1554,13 @@ public class Helper {
 
 				List<Prize<?>> prizes = new ArrayList<>();
 				for (int i = 0; i < 6; i++) {
-					int type = rng(100, false);
+					int type = rng(1000, false);
 
-					if (type >= 99)
+					if (type >= 995)
 						prizes.add(new FieldDrop());
-					else if (type >= 95)
+					else if (type >= 950)
 						prizes.add(new EvogearDrop());
-					else if (type >= 80)
+					else if (type >= 850)
 						prizes.add(new ChampionDrop());
 					else
 						prizes.add(new CreditDrop());

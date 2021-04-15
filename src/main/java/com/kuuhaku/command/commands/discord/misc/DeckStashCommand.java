@@ -103,7 +103,7 @@ public class DeckStashCommand implements Executable {
 								:crossed_swords: | Cartas Senshi: %s
 								:large_orange_diamond: | Efeito primário: %s (%s)
 								:small_orange_diamond: | Efeito secundário: %s (%s)
-								:shield: | Peso EvoGear: %s
+								:shield: | Peso evogear: %s
 								:thermometer: | Custo médio de mana: %s
 																	
 								%s

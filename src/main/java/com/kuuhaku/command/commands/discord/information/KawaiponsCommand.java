@@ -128,9 +128,9 @@ public class KawaiponsCommand implements Executable {
                                 List<Drawable> cardList = CardDAO.getAllEquipments().stream().map(d -> (Drawable) d).collect(Collectors.toList());
 
                                 KawaiponBook kb = new KawaiponBook();
-                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Equipamentos EvoGear", false);
+                                BufferedImage cards = kb.view(cardList, AccountDAO.getAccount(author.getId()), "Equipamentos evogear", false);
 
-                                send(author, channel, m, cards, "Equipamentos EvoGear", null);
+                                send(author, channel, m, cards, "Equipamentos evogear", null);
                                 return;
                             } else if (Helper.equalsAny(args[0], "fusao", "fusion", "fusions", "fusoes", "evolucao", "evolution", "evolucoes", "evolutions")) {
                                 List<Drawable> cardList = CardDAO.getFusions().stream().map(d -> (Drawable) d).collect(Collectors.toList());

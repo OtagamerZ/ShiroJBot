@@ -85,7 +85,7 @@ public class ShoukanDeckCommand implements Executable {
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
 								.setTitle(":beginner: | Deck do clã " + cl.getName())
 								.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 36", true)
-								.addField(":shield: | Peso EvoGear:", kp.getEvoWeight() + " de 24", true)
+								.addField(":shield: | Peso evogear:", kp.getEvoWeight() + " de 24", true)
 								.setImage("attachment://deck.jpg");
 
 						m.delete().queue();
@@ -110,7 +110,7 @@ public class ShoukanDeckCommand implements Executable {
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
 								.setTitle(":beginner: | Deck de " + author.getName())
 								.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 36", true)
-								.addField(":shield: | Peso EvoGear:", kp.getEvoWeight() + " de 24", true)
+								.addField(":shield: | Peso evogear:", kp.getEvoWeight() + " de 24", true)
 								.setImage("attachment://deck.jpg");
 
 						m.delete().queue();

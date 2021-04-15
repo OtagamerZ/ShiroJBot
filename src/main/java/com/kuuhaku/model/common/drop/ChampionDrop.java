@@ -38,7 +38,7 @@ public class ChampionDrop extends Drop<Champion> {
 	@Override
 	public void award(User u) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		if (kp.getChampions().size() < 36) {
+		if (kp.getChampions().size() < 36 && kp.getChampionCopies(getPrize().getCard()) < kp.getChampionMaxCopies()) {
 			kp.addChampion(getPrize());
 		} else {
 			awardInstead(u, getPrize().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE);
