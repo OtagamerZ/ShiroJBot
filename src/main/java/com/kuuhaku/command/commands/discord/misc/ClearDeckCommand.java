@@ -30,8 +30,10 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.ShoukanDeck;
+import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -67,56 +69,59 @@ public class ClearDeckCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setTitle("Por favor confirme!");
 		eb.setDescription("Seu deck será limpo e todas as cartas nele serão colocadas na loja (oculto para os outros), por favor clique no botão abaixo para confirmar.");
-		eb.setImage("attachment://deque.png");
+		eb.setImage("attachment://deque.jpg");
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		try {
-			channel.sendMessage(eb.build()).addFile(Helper.getBytes(sd.view(kp), "png"), "deque.png")
-					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-								Main.getInfo().getConfirmationPending().remove(author.getId());
+		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-deck")).queue(m -> {
+			try {
+				channel.sendMessage(eb.build()).addFile(Helper.getBytes(sd.view(kp), "jpg", 0.5f), "deque.jpg")
+						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
 
-								Kawaipon fkp = KawaiponDAO.getKawaipon(author.getId());
+									Kawaipon fkp = KawaiponDAO.getKawaipon(author.getId());
 
-								for (Champion c : fkp.getChampions()) {
-									CardMarket cm = new CardMarket(
-											author.getId(),
-											new KawaiponCard(c.getCard(), false),
-											9999999
-									);
-									CardMarketDAO.saveCard(cm);
-									fkp.removeChampion(c);
-								}
+									for (Champion c : fkp.getChampions()) {
+										CardMarket cm = new CardMarket(
+												author.getId(),
+												new KawaiponCard(c.getCard(), false),
+												9999999
+										);
+										CardMarketDAO.saveCard(cm);
+										fkp.removeChampion(c);
+									}
 
-								for (Equipment e : fkp.getEquipments()) {
-									EquipmentMarket em = new EquipmentMarket(
-											author.getId(),
-											e,
-											9999999
-									);
-									EquipmentMarketDAO.saveCard(em);
-									fkp.removeEquipment(e);
-								}
+									for (Equipment e : fkp.getEquipments()) {
+										EquipmentMarket em = new EquipmentMarket(
+												author.getId(),
+												e,
+												9999999
+										);
+										EquipmentMarketDAO.saveCard(em);
+										fkp.removeEquipment(e);
+									}
 
-								for (Field f : fkp.getFields()) {
-									FieldMarket fm = new FieldMarket(
-											author.getId(),
-											f,
-											9999999
-									);
-									FieldMarketDAO.saveCard(fm);
-									fkp.removeField(f);
-								}
+									for (Field f : fkp.getFields()) {
+										FieldMarket fm = new FieldMarket(
+												author.getId(),
+												f,
+												9999999
+										);
+										FieldMarketDAO.saveCard(fm);
+										fkp.removeField(f);
+									}
 
-								KawaiponDAO.saveKawaipon(fkp);
-								s.delete().queue();
-								channel.sendMessage("✅ | Deck limpo com sucesso!").queue();
-							}), true, 1, TimeUnit.MINUTES,
-							u -> u.getId().equals(author.getId()),
-							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-					));
-		} catch (IOException e) {
-			channel.sendMessage("❌ | Erro ao gerar o deck.").queue();
-			Main.getInfo().getConfirmationPending().remove(author.getId());
-		}
+									KawaiponDAO.saveKawaipon(fkp);
+									s.delete().queue();
+									channel.sendMessage("✅ | Deck limpo com sucesso!").queue();
+								}), true, 1, TimeUnit.MINUTES,
+								u -> u.getId().equals(author.getId()),
+								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						));
+				m.delete().queue();
+			} catch (IOException e) {
+				m.editMessage("❌ | Erro ao gerar o deck.").queue();
+				Main.getInfo().getConfirmationPending().remove(author.getId());
+			}
+		});
 	}
 }
