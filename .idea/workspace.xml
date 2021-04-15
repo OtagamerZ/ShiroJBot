@@ -14,9 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado registrador de dados sobre a Shiro">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MatchStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MatchStatsCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1148,14 +1146,7 @@
       <workItem from="1618488051307" duration="8216000" />
       <workItem from="1618502454870" duration="4688000" />
       <workItem from="1618514248824" duration="109000" />
-      <workItem from="1618515062982" duration="3657000" />
-    </task>
-    <task id="LOCAL-04107" summary="Correções menores">
-      <created>1617989302728</created>
-      <option name="number" value="04107" />
-      <option name="presentableId" value="LOCAL-04107" />
-      <option name="project" value="LOCAL" />
-      <updated>1617989302728</updated>
+      <workItem from="1618515062982" duration="3973000" />
     </task>
     <task id="LOCAL-04108" summary="Correções menores">
       <created>1617989627528</created>
@@ -1493,7 +1484,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618518696293</updated>
     </task>
-    <option name="localTasksCounter" value="4156" />
+    <task id="LOCAL-04156" summary="Adicionado registrador de dados sobre a Shiro">
+      <created>1618519228074</created>
+      <option name="number" value="04156" />
+      <option name="presentableId" value="LOCAL-04156" />
+      <option name="project" value="LOCAL" />
+      <updated>1618519228074</updated>
+    </task>
+    <option name="localTasksCounter" value="4157" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
