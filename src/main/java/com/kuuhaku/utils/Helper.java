@@ -1395,9 +1395,9 @@ public class Helper {
 
 			if (type >= 995)
 				drop = new FieldDrop();
-			else if (type >= 950)
+			else if (type >= 975)
 				drop = new EvogearDrop();
-			else if (type >= 850)
+			else if (type >= 900)
 				drop = new ChampionDrop();
 			else
 				drop = new CreditDrop();
@@ -1447,9 +1447,9 @@ public class Helper {
 
 					if (type >= 995)
 						prizes.add(new FieldDrop());
-					else if (type >= 950)
+					else if (type >= 975)
 						prizes.add(new EvogearDrop());
-					else if (type >= 850)
+					else if (type >= 900)
 						prizes.add(new ChampionDrop());
 					else
 						prizes.add(new CreditDrop());
@@ -1558,9 +1558,9 @@ public class Helper {
 
 					if (type >= 995)
 						prizes.add(new FieldDrop());
-					else if (type >= 950)
+					else if (type >= 975)
 						prizes.add(new EvogearDrop());
-					else if (type >= 850)
+					else if (type >= 900)
 						prizes.add(new ChampionDrop());
 					else
 						prizes.add(new CreditDrop());
