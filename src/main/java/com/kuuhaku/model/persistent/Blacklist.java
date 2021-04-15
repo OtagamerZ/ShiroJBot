@@ -20,8 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.TimeZone;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "blacklist")
@@ -33,8 +32,8 @@ public class Blacklist {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String blockedBy = "";
 
-	@Temporal(TemporalType.DATE)
-	private Calendar blockDate = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
+	@Temporal(TemporalType.TIMESTAMP)
+	private ZonedDateTime blockDate = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	public Blacklist(String uid, String by) {
 		this.uid = uid;
@@ -52,18 +51,17 @@ public class Blacklist {
 		return blockedBy;
 	}
 
-	public Calendar getBlockDate() {
+	public ZonedDateTime getBlockDate() {
 		return blockDate;
 	}
 
-	public void setBlockDate(Calendar blockDate) {
+	public void setBlockDate(ZonedDateTime blockDate) {
 		this.blockDate = blockDate;
 	}
 
 	public boolean canClear() {
-		Calendar today = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("GMT-3")));
-		Calendar lastDaily = this.blockDate;
+		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
-		return today.get(Calendar.MONTH) > lastDaily.get(Calendar.MONTH);
+		return today.isAfter(this.blockDate.plusMonths(1));
 	}
 }

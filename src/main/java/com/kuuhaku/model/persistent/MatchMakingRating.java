@@ -33,9 +33,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
 import javax.persistence.*;
-import java.time.Clock;
-import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -69,7 +68,7 @@ public class MatchMakingRating {
 	private int losses = 0;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date blockedUntil = null;
+	private ZonedDateTime blockedUntil = null;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int evades = 0;
@@ -250,7 +249,7 @@ public class MatchMakingRating {
 
 	public boolean isBlocked() {
 		if (blockedUntil == null) return false;
-		else if (Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3")))).after(blockedUntil)) {
+		else if (ZonedDateTime.now(ZoneId.of("GMT-3")).isAfter(blockedUntil)) {
 			blockedUntil = null;
 			MatchMakingRatingDAO.saveMMR(this);
 			return false;
@@ -259,11 +258,14 @@ public class MatchMakingRating {
 
 	public int getRemainingBlock() {
 		if (blockedUntil == null) return 0;
-		return (int) TimeUnit.SECONDS.convert(Math.max(0, blockedUntil.getTime() - Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3")))).getTime()), TimeUnit.MILLISECONDS);
+
+		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
+
+		return (int) TimeUnit.SECONDS.convert(Math.max(0, blockedUntil.toInstant().toEpochMilli() - today.toInstant().toEpochMilli()), TimeUnit.MILLISECONDS);
 	}
 
 	public void block(int time, TemporalUnit unit) {
-		blockedUntil = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))).plus(time, unit));
+		blockedUntil = ZonedDateTime.now(ZoneId.of("GMT-3")).plus(time, unit);
 	}
 
 	public int getEvades() {

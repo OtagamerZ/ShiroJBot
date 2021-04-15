@@ -24,10 +24,8 @@ import com.kuuhaku.utils.ShiroInfo;
 import org.json.JSONObject;
 
 import javax.persistence.*;
-import java.time.Clock;
-import java.time.Instant;
 import java.time.ZoneId;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.concurrent.ExecutionException;
 
 @Entity
@@ -38,7 +36,7 @@ public class BotStats {
 	private int id;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date timestamp = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
+	private ZonedDateTime timestamp = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	//INFO
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
@@ -89,11 +87,11 @@ public class BotStats {
 		this.id = id;
 	}
 
-	public Date getTimestamp() {
+	public ZonedDateTime getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Date timestamp) {
+	public void setTimestamp(ZonedDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -141,7 +139,7 @@ public class BotStats {
 	public String toString() {
 		return new JSONObject() {{
 			put("id", id);
-			put("timestamp", timestamp.getTime());
+			put("timestamp", timestamp.toInstant().toEpochMilli());
 			put("ping", ping);
 			put("memoryUsage", memoryUsage);
 			put("memoryPrcnt", memoryPrcnt);
