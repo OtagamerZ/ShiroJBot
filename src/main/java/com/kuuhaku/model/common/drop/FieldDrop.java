@@ -19,39 +19,55 @@
 package com.kuuhaku.model.common.drop;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.Map;
 
-public class CreditDrop extends Drop<Integer> {
-	public CreditDrop() {
-		super(500 + Helper.rng(1000, false));
+public class FieldDrop extends Drop<Field> {
+	public FieldDrop() {
+		super(CardDAO.getRandomField());
 	}
 
 	@Override
 	public void award(User u) {
-		Account acc = AccountDAO.getAccount(u.getId());
-		acc.addCredit(getPrize(), this.getClass());
+		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+		if (kp.getFields().size() < 3) {
+			kp.addField(getPrize());
+		} else {
+			awardInstead(u, Helper.BASE_FIELD_PRICE);
+		}
+		KawaiponDAO.saveKawaipon(kp);
 
+		Account acc = AccountDAO.getAccount(u.getId());
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.merge(DailyTask.DROP_TASK, 1, Integer::sum);
 			acc.setDailyProgress(pg);
+			AccountDAO.saveAccount(acc);
 		}
-
-		AccountDAO.saveAccount(acc);
 	}
 
 	@Override
 	public String toString() {
-		return Helper.separate(getPrize()) + " créditos";
+		return "Campo " + getPrize().getCard().getName();
 	}
 
 	@Override
 	public String toString(User u) {
-		return toString();
+		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+		if (kp.getFields().size() < 3)
+			return "Campo " + getPrize().getCard().getName();
+		else
+			return "~~Campo %s~~ (convertido em %s créditos)".formatted(
+					getPrize().getCard().getName(),
+					Helper.BASE_FIELD_PRICE
+			);
 	}
 }

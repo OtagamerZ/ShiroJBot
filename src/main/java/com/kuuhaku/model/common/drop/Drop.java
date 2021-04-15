@@ -21,27 +21,35 @@ package com.kuuhaku.model.common.drop;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.enums.ClanTier;
+import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.ExceedEnum;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.function.Function;
 
-public abstract class Drop implements Prize {
+public abstract class Drop<P> implements Prize<P> {
 	private final AddedAnime anime;
 	private final ExceedEnum exceed;
 	private final ClanTier tier;
 	private final int[] values;
 	private final List<Pair<String, Function<User, Boolean>>> condition;
 	private final Pair<String, Function<User, Boolean>> chosen;
+	private final P prize;
 
-	protected Drop() {
+	protected Drop(P prize) {
 		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
 		anime = animes.get(Helper.rng(animes.size(), true));
 		exceed = ExceedEnum.values()[Helper.rng(ExceedEnum.values().length, true)];
@@ -84,6 +92,7 @@ public abstract class Drop implements Prize {
 			}));
 		}};
 		chosen = condition.get(Helper.rng(condition.size(), true));
+		this.prize = prize;
 	}
 
 	public AddedAnime getAnime() {
@@ -104,5 +113,43 @@ public abstract class Drop implements Prize {
 
 	public Pair<String, Function<User, Boolean>> getChosen() {
 		return chosen;
+	}
+
+	@Override
+	public String getCaptcha() {
+		return Helper.noCopyPaste(getRealCaptcha());
+	}
+
+	@Override
+	public String getRealCaptcha() {
+		try {
+			return Hex.encodeHexString(MessageDigest.getInstance("MD5").digest(ByteBuffer.allocate(4).putInt(hashCode()).array())).substring(0, 5);
+		} catch (NoSuchAlgorithmException e) {
+			return String.valueOf(System.currentTimeMillis()).substring(0, 5);
+		}
+	}
+
+	@Override
+	public P getPrize() {
+		return prize;
+	}
+
+	@Override
+	public Map.Entry<String, Function<User, Boolean>> getRequirement() {
+		return chosen;
+	}
+
+	@Override
+	public void awardInstead(User u, int prize) {
+		Account acc = AccountDAO.getAccount(u.getId());
+		acc.addCredit(prize, this.getClass());
+
+		if (acc.hasPendingQuest()) {
+			Map<DailyTask, Integer> pg = acc.getDailyProgress();
+			pg.merge(DailyTask.DROP_TASK, 1, Integer::sum);
+			acc.setDailyProgress(pg);
+		}
+
+		AccountDAO.saveAccount(acc);
 	}
 }

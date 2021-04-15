@@ -35,8 +35,7 @@ import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.common.*;
-import com.kuuhaku.model.common.drop.CreditDrop;
-import com.kuuhaku.model.common.drop.Prize;
+import com.kuuhaku.model.common.drop.*;
 import com.kuuhaku.model.enums.CardStatus;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.enums.PrivilegeLevel;
@@ -124,7 +123,7 @@ public class Helper {
 	public static final String HOME = "674261700366827539";
 	public static final int BASE_CARD_PRICE = 400;
 	public static final int BASE_EQUIPMENT_PRICE = 500;
-	public static final int BASE_FIELD_PRICE = 250000;
+	public static final int BASE_FIELD_PRICE = 50000;
 
 	public static Font HAMMERSMITH;
 
@@ -1391,12 +1390,22 @@ public class Helper {
 		boolean dbUltimate = dropBuff != null && dropBuff.getTier() == 4;
 
 		if (dbUltimate || chance((2.5 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.75f, 5000), 0, 0.75)) * (dropBuff != null ? dropBuff.getMult() : 1))) {
-			Prize drop = new CreditDrop();
+			Prize<?> drop;
+			int type = rng(100, false);
+
+			if (type >= 99)
+				drop = new FieldDrop();
+			else if (type >= 95)
+				drop = new EvogearDrop();
+			else if (type >= 80)
+				drop = new ChampionDrop();
+			else
+				drop = new CreditDrop();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png")
 					.setTitle("Um drop apareceu neste servidor!")
-					.addField("Conteúdo:", separate(drop.getPrize()) + " créditos", true)
+					.addField("Conteúdo:", drop.toString(), true)
 					.addField("Código captcha:", drop.getCaptcha(), true)
 					.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisito: " + drop.getRequirement().getKey() + ").", null);
 
@@ -1432,9 +1441,18 @@ public class Helper {
 				wmb.setUsername("Nero (Evento Padoru)");
 				wmb.setAvatarUrl(ShiroInfo.NERO_AVATAR.formatted(1));
 
-				List<Prize> prizes = new ArrayList<>();
+				List<Prize<?>> prizes = new ArrayList<>();
 				for (int i = 0; i < 6; i++) {
-					prizes.add(new CreditDrop());
+					int type = rng(100, false);
+
+					if (type >= 99)
+						prizes.add(new FieldDrop());
+					else if (type >= 95)
+						prizes.add(new EvogearDrop());
+					else if (type >= 80)
+						prizes.add(new ChampionDrop());
+					else
+						prizes.add(new CreditDrop());
 				}
 
 				ColorlessWebhookEmbedBuilder web = new ColorlessWebhookEmbedBuilder()
@@ -1447,8 +1465,8 @@ public class Helper {
 						.setTitle("Nero Claudius apareceu trazendo presentes neste servidor!");
 
 				for (int i = 0; i < prizes.size(); i++) {
-					Prize prize = prizes.get(i);
-					web.addField("Presente " + (i + 1) + ":", separate(prize.getPrize()) + " créditos", true);
+					Prize<?> prize = prizes.get(i);
+					web.addField("Presente " + (i + 1) + ":", prize.toString(), true);
 				}
 
 				web.setFooter("Complete a música para participar do sorteio dos prêmios.", null);
@@ -1473,34 +1491,30 @@ public class Helper {
 						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
 
 						Account acc = AccountDAO.getAccount(u.getId());
-						for (Prize prize : prizes) {
-							acc.addCredit(prize.getPrize(), Helper.class);
-						}
 
-						EmbedBuilder neb = new ColorlessEmbedBuilder()
-								.setImage(padoru);
+						ColorlessWebhookEmbedBuilder neb = new ColorlessWebhookEmbedBuilder()
+								.setImageUrl(padoru);
 
 						for (int i = 0; i < prizes.size(); i++) {
-							Prize prize = prizes.get(i);
-							neb.addField("Presente " + (i + 1) + ":", separate(prize.getPrize()) + " créditos", true);
+							Prize<?> prize = prizes.get(i);
+							neb.addField("Presente " + (i + 1) + ":", prize.toString(u), true);
+							prize.award(u);
 						}
 
 						AccountDAO.saveAccount(acc);
 						wc.send(wmb.setContent("Decidi que " + u.getAsMention() + " merece os presentes!")
-								.addEmbeds(web.build())
+								.addEmbeds(neb.build())
 								.build());
-						wc.close();
 					} else {
-						wc.send(wmb.setContent("Decidi que ninguém merece os presentes!")
-								.build());
-						wc.close();
+						wc.send(wmb.setContent("Decidi que ninguém merece os presentes!").build());
 					}
+
+					wc.close();
 					sml.close();
 				};
 
+				ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
 				if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
-					ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
-
 					tc.retrieveMessageById(rm.getId())
 							.delay(1, TimeUnit.MINUTES)
 							.queue(msg -> {
@@ -1508,8 +1522,6 @@ public class Helper {
 								act.accept(msg);
 							});
 				} else {
-					ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
-
 					tc.retrieveMessageById(rm.getId())
 							.delay(1, TimeUnit.MINUTES)
 							.queue(msg -> {
@@ -1540,9 +1552,18 @@ public class Helper {
 				Emote egg = Main.getShiroShards().getEmoteById(TagIcons.EASTER_EGG.getId(0));
 				assert egg != null;
 
-				List<Prize> prizes = new ArrayList<>();
+				List<Prize<?>> prizes = new ArrayList<>();
 				for (int i = 0; i < 6; i++) {
-					prizes.add(new CreditDrop());
+					int type = rng(100, false);
+
+					if (type >= 99)
+						prizes.add(new FieldDrop());
+					else if (type >= 95)
+						prizes.add(new EvogearDrop());
+					else if (type >= 80)
+						prizes.add(new ChampionDrop());
+					else
+						prizes.add(new CreditDrop());
 				}
 
 				ColorlessWebhookEmbedBuilder web = new ColorlessWebhookEmbedBuilder()
@@ -1551,8 +1572,8 @@ public class Helper {
 						.setTitle("Usa-tan apareceu trazendo presentes neste servidor!");
 
 				for (int i = 0; i < prizes.size(); i++) {
-					Prize prize = prizes.get(i);
-					web.addField("Ovo " + (i + 1) + ":", separate(prize.getPrize()) + " créditos", true);
+					Prize<?> prize = prizes.get(i);
+					web.addField("Ovo " + (i + 1) + ":", prize.toString(), true);
 				}
 
 				web.setFooter("Enconte a reação de ovo de páscoa escondido em uma das mensagens neste canal.", null);
@@ -1578,18 +1599,14 @@ public class Helper {
 				Pages.buttonize(m, Collections.singletonMap(
 						egg.getId(), (mb, ms) -> {
 							if (finished.get()) return;
-							Account acc = AccountDAO.getAccount(mb.getId());
-							for (Prize prize : prizes) {
-								acc.addCredit(prize.getPrize(), Helper.class);
-							}
 
 							ColorlessWebhookEmbedBuilder neb = new ColorlessWebhookEmbedBuilder();
 							for (int i = 0; i < prizes.size(); i++) {
-								Prize prize = prizes.get(i);
-								neb.addField("Ovo " + (i + 1) + ":", separate(prize.getPrize()) + " créditos", true);
+								Prize<?> prize = prizes.get(i);
+								neb.addField("Ovo " + (i + 1) + ":", prize.toString(mb.getUser()), true);
+								prize.award(mb.getUser());
 							}
 
-							AccountDAO.saveAccount(acc);
 							wc.send(wmb.resetEmbeds()
 									.setContent(mb.getAsMention() + " encontrou o ovo de páscoa!")
 									.addEmbeds(neb.build())
