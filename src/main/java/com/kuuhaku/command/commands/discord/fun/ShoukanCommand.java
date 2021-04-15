@@ -81,6 +81,12 @@ public class ShoukanCommand implements Executable {
 				} else if (kp.getEvoWeight() > 24) {
 					channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
 					return;
+				} else if (kp.hasInvalidChampionCopyCount()) {
+					channel.sendMessage("❌ | Seus campeões ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+					return;
+				} else if (kp.hasInvalidEquipmentCopyCount()) {
+					channel.sendMessage("❌ | Seus equipamentos ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+					return;
 				}
 			}
 
@@ -117,6 +123,12 @@ public class ShoukanCommand implements Executable {
 				return;
 			} else if (kp.getEvoWeight() > 24) {
 				channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
+				return;
+			} else if (kp.hasInvalidChampionCopyCount()) {
+				channel.sendMessage("❌ | Seus campeões ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+				return;
+			} else if (kp.hasInvalidEquipmentCopyCount()) {
+				channel.sendMessage("❌ | Seus equipamentos ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
 				return;
 			}
 
@@ -269,8 +281,20 @@ public class ShoukanCommand implements Executable {
 				} else if (c.getDeck().getEvoWeight() > 24) {
 					channel.sendMessage("❌ | Os equipamentos de " + c.getName() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
 					return;
+				} else if (c.getDeck().hasInvalidChampionCopyCount()) {
+					channel.sendMessage("❌ | Os campeões de " + c.getName() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+					return;
+				} else if (c.getDeck().hasInvalidEquipmentCopyCount()) {
+					channel.sendMessage("❌ | Os equipamentos de " + c.getName() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+					return;
 				} else if (other.getDeck().getEvoWeight() > 24) {
 					channel.sendMessage("❌ | Os equipamentos de " + other.getName() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
+					return;
+				} else if (other.getDeck().hasInvalidChampionCopyCount()) {
+					channel.sendMessage("❌ | Os campeões de " + other.getName() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+					return;
+				} else if (other.getDeck().hasInvalidEquipmentCopyCount()) {
+					channel.sendMessage("❌ | Os equipamentos de " + other.getName() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
 					return;
 				}
 			} else if (!daily) {
@@ -285,8 +309,20 @@ public class ShoukanCommand implements Executable {
 				} else if (kp.getEvoWeight() > 24) {
 					channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
 					return;
+				} else if (kp.hasInvalidChampionCopyCount()) {
+					channel.sendMessage("❌ | Seus campeões ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+					return;
+				} else if (kp.hasInvalidEquipmentCopyCount()) {
+					channel.sendMessage("❌ | Seus equipamentos ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+					return;
 				} else if (target.getEvoWeight() > 24) {
 					channel.sendMessage("❌ | Os equipamentos de " + message.getMentionedUsers().get(0).getAsMention() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
+					return;
+				} else if (target.hasInvalidChampionCopyCount()) {
+					channel.sendMessage("❌ | Os campeões de " + message.getMentionedUsers().get(0).getAsMention() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+					return;
+				} else if (target.hasInvalidEquipmentCopyCount()) {
+					channel.sendMessage("❌ | Os equipamentos de " + message.getMentionedUsers().get(0).getAsMention() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
 					return;
 				}
 			}
@@ -315,6 +351,12 @@ public class ShoukanCommand implements Executable {
 							return;
 						} else if (k.getEvoWeight() > 24) {
 							channel.sendMessage("❌ | Os equipamentos de " + u.getAsMention() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
+							return;
+						} else if (k.hasInvalidChampionCopyCount()) {
+							channel.sendMessage("❌ | Os campeões de " + u.getAsMention() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+							return;
+						} else if (k.hasInvalidEquipmentCopyCount()) {
+							channel.sendMessage("❌ | Os equipamentos de " + u.getAsMention() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
 							return;
 						}
 					}

@@ -288,6 +288,12 @@ public class TenthSecondEvent implements Job {
 				} else if (kp.getEvoWeight() > 24) {
 					p1Channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, você precisa corrigir antes de poder aceitar a partida.").queue();
 					return;
+				} else if (kp.hasInvalidChampionCopyCount()) {
+					p1Channel.sendMessage("❌ | Seus campeões ultrapassam o limite máximo de cópias permitidas, você precisa corrigir antes de poder aceitar a partida.").queue();
+					return;
+				} else if (kp.hasInvalidEquipmentCopyCount()) {
+					p1Channel.sendMessage("❌ | Seus equipamentos ultrapassam o limite máximo de cópias permitidas, você precisa corrigir antes de poder aceitar a partida.").queue();
+					return;
 				}
 
 				if (p1Channel.getId().equals(p2Channel.getId()))
@@ -358,6 +364,12 @@ public class TenthSecondEvent implements Job {
 					return;
 				} else if (kp.getEvoWeight() > 24) {
 					p1Channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, você precisa corrigir antes de poder aceitar a partida.").queue();
+					return;
+				} else if (kp.hasInvalidChampionCopyCount()) {
+					p1Channel.sendMessage("❌ | Seus campeões ultrapassam o limite máximo de cópias permitidas, você precisa corrigir antes de poder aceitar a partida.").queue();
+					return;
+				} else if (kp.hasInvalidEquipmentCopyCount()) {
+					p1Channel.sendMessage("❌ | Seus equipamentos ultrapassam o limite máximo de cópias permitidas, você precisa corrigir antes de poder aceitar a partida.").queue();
 					return;
 				}
 
