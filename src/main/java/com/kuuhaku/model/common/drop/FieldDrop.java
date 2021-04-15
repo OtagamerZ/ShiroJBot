@@ -65,7 +65,7 @@ public class FieldDrop extends Drop<Field> {
 		if (kp.getFields().size() < 3)
 			return "Campo " + getPrize().getCard().getName();
 		else
-			return "~~Campo %s~~ (convertido em %s créditos)".formatted(
+			return "~~Campo %s~~\n(convertido em %s créditos)".formatted(
 					getPrize().getCard().getName(),
 					Helper.BASE_FIELD_PRICE
 			);

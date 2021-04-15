@@ -66,7 +66,7 @@ public class EvogearDrop extends Drop<Equipment> {
 		if (kp.getEvoWeight() + getPrize().getWeight(kp) <= 24)
 			return "evogear " + getPrize().getCard().getName();
 		else
-			return "~~evogear %s~~ (convertido em %s créditos)".formatted(
+			return "~~evogear %s~~\n(convertido em %s créditos)".formatted(
 					getPrize().getCard().getName(),
 					getPrize().getTier() * Helper.BASE_EQUIPMENT_PRICE
 			);
