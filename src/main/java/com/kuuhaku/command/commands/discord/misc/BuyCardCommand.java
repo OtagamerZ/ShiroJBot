@@ -262,14 +262,12 @@ public class BuyCardCommand implements Executable {
 		int type = cm == null ? em == null ? fm == null ? -1 : 3 : 2 : 1;
 		switch (type) {
 			case 1 -> {
-				if (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1))) {
-					channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
-					return;
-				}
-
 				Account seller = AccountDAO.getAccount(cm.getSeller());
 				if (!seller.getUid().equals(author.getId())) {
-					if (buyer.getBalance() < (blackfriday ? cm.getPrice() * 0.75 : cm.getPrice())) {
+					if (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1))) {
+						channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
+						return;
+					} else if (buyer.getBalance() < (blackfriday ? cm.getPrice() * 0.75 : cm.getPrice())) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 						return;
 					}
