@@ -622,7 +622,7 @@ public class CardDAO {
 				champs.get(2).getAtk(),
 				champs.get(2).getDef(),
 				champs.get(3).getDescription(),
-				champs.get(3).getLiteralEffect()
+				champs.get(3).getRawEffect()
 		);
 
 		try {

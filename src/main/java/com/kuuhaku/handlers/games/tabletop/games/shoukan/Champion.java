@@ -574,10 +574,6 @@ public class Champion implements Drawable, Cloneable {
 		return effect != null;
 	}
 
-	public String getLiteralEffect() {
-		return effect;
-	}
-
 	public boolean isFusion() {
 		return fusion;
 	}

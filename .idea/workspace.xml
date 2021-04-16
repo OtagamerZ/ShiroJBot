@@ -14,8 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no gráfico de estatísticas sobre a Shiro">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,15 +198,13 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -1157,13 +1156,7 @@
       <workItem from="1618515062982" duration="4386000" />
       <workItem from="1618533715550" duration="113000" />
       <workItem from="1618537815178" duration="7460000" />
-    </task>
-    <task id="LOCAL-04124" summary="Melhoria na API de cartas">
-      <created>1618331111268</created>
-      <option name="number" value="04124" />
-      <option name="presentableId" value="LOCAL-04124" />
-      <option name="project" value="LOCAL" />
-      <updated>1618331111268</updated>
+      <workItem from="1618593814709" duration="3047000" />
     </task>
     <task id="LOCAL-04125" summary="Melhoria na API de cartas">
       <created>1618331686765</created>
@@ -1501,7 +1494,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618582993453</updated>
     </task>
-    <option name="localTasksCounter" value="4173" />
+    <task id="LOCAL-04173" summary="Correção no gráfico de estatísticas sobre a Shiro">
+      <created>1618583407171</created>
+      <option name="number" value="04173" />
+      <option name="presentableId" value="LOCAL-04173" />
+      <option name="project" value="LOCAL" />
+      <updated>1618583407171</updated>
+    </task>
+    <option name="localTasksCounter" value="4174" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
