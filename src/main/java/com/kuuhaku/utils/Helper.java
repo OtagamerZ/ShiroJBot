@@ -2364,6 +2364,18 @@ public class Helper {
 		return Math.round((a + b) / 2f);
 	}
 
+	public static long average(long a, long b) {
+		return Math.round((a + b) / 2d);
+	}
+
+	public static float average(float a, float b) {
+		return Math.round((a + b) / 2);
+	}
+
+	public static double average(double a, double b) {
+		return Math.round((a + b) / 2);
+	}
+
 	public static XYChart buildXYChart(String title, Pair<String, String> axis, List<Color> colors) {
 		XYChart chart = new XYChartBuilder()
 				.width(1920)

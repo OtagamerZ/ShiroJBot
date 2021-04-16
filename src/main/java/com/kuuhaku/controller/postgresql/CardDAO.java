@@ -745,7 +745,7 @@ public class CardDAO {
 	public static Field getRandomField() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT f FROM Field f ORDER BY RANDOM()", Field.class);
+		Query q = em.createQuery("SELECT f FROM Field f WHERE f.effectOnly = false ORDER BY RANDOM()", Field.class);
 		q.setMaxResults(1);
 
 		try {
