@@ -892,14 +892,17 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildVoiceJoin(@NotNull GuildVoiceJoinEvent event) {
+		Member mb = event.getMember();
+		if (mb.getUser().isBot()) return;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(event.getMember().getUser());
 
-		if (!blacklisted) voiceTime.put(event.getMember().getId(), System.currentTimeMillis());
+		if (!blacklisted) voiceTime.put(mb.getId(), System.currentTimeMillis());
 	}
 
 	@Override
 	public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
 		Member mb = event.getMember();
+		if (mb.getUser().isBot()) return;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(mb.getUser());
 
 		if (blacklisted) return;
