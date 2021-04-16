@@ -39,8 +39,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -84,11 +82,10 @@ public class MatchStatsCommand implements Executable {
 				sb.setLength(0);
 
 				for (MatchHistory mh : chunk) {
-					LocalDate date = mh.getTimestamp().toInstant().atZone(ZoneId.of("GMT-3")).toLocalDate();
 					Map<Side, String> players = mh.getPlayers().entrySet().stream()
 							.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 					sb.append("(%s)\n`%sID: %s` - %s **VS** %s **(%s)**\n\n".formatted(
-							date.format(Helper.dateformat),
+							mh.getTimestamp().format(Helper.dateformat),
 							mh.isRanked() ? "\uD83D\uDC51 " : "",
 							mh.getId(),
 							checkUser(players.get(Side.BOTTOM)),
@@ -116,7 +113,6 @@ public class MatchStatsCommand implements Executable {
 			return;
 		}
 
-		LocalDate date = mh.getTimestamp().toInstant().atZone(ZoneId.of("GMT-3")).toLocalDate();
 		Map<Side, String> players = mh.getPlayers().entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 		Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcSoloMMR(mh);
@@ -132,7 +128,7 @@ public class MatchStatsCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Partida de " + p1 + " VS " + p2)
-				.addField("Jogada em", date.format(Helper.onlyDate), true)
+				.addField("Jogada em", mh.getTimestamp().format(Helper.onlyDate), true)
 				.addField("Tipo", mh.isRanked() ? "Ranqueada" : "Normal", true)
 				.addField("Ordem de jogada", """
 						1º: %s %s
