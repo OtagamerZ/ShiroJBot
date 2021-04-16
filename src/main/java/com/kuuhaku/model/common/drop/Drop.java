@@ -28,12 +28,8 @@ import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -122,11 +118,7 @@ public abstract class Drop<P> implements Prize<P> {
 
 	@Override
 	public String getRealCaptcha() {
-		try {
-			return Hex.encodeHexString(MessageDigest.getInstance("MD5").digest(ByteBuffer.allocate(4).putInt(hashCode()).array())).substring(0, 6);
-		} catch (NoSuchAlgorithmException e) {
-			return String.valueOf(System.currentTimeMillis()).substring(0, 6);
-		}
+		return Helper.getOr(Helper.generateRandomHash(6), String.valueOf(System.currentTimeMillis()).substring(0, 6));
 	}
 
 	@Override
