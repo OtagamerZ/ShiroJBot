@@ -36,6 +36,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.XYChart;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.awt.*;
 import java.time.LocalDate;
@@ -118,7 +119,7 @@ public class ExceedRankCommand implements Executable {
 								ex.stream()
 										.map(e -> Math.round(e.getPoints() / 1000d))
 										.collect(Collectors.toList())
-						);
+						).setMarker(SeriesMarkers.NONE);
 					}
 
 					channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES, null, Helper::doNothing));

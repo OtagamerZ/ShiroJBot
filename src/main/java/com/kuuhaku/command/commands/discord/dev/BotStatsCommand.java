@@ -34,10 +34,13 @@ import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.style.AxesChartStyler;
 import org.knowm.xchart.style.Styler;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.awt.*;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Command(
@@ -51,6 +54,20 @@ public class BotStatsCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		List<BotStats> stats = BotStatsDAO.getStats();
+
+		Map<Date, BotStats> reducedStats = new HashMap<>();
+		for (BotStats stat : stats) {
+			reducedStats.merge(Date.from(stat.getTimestamp().toInstant()), stat, (p, n) ->
+					new BotStats(
+							stat.getTimestamp(),
+							Helper.average(p.getPing(), n.getPing()),
+							Helper.average(p.getMemoryUsage(), n.getMemoryUsage()),
+							Helper.average(p.getMemoryPrcnt(), n.getMemoryPrcnt()),
+							Helper.average(p.getCpuUsage(), n.getCpuUsage()),
+							Helper.average(p.getServers(), n.getServers())
+					)
+			);
+		}
 
 		channel.sendMessage("<a:loading:697879726630502401> Gerando gráfico...").queue(m -> {
 			XYChart chart = Helper.buildXYChart(
@@ -77,39 +94,40 @@ public class BotStatsCommand implements Executable {
 			chart.setYAxisGroupTitle(0, "Absoluto");
 			chart.setYAxisGroupTitle(1, "%");
 
-			List<Date> dates = stats.stream()
-					.map(s -> Date.from(s.getTimestamp().toInstant()))
-					.collect(Collectors.toList());
-
 			chart.addSeries(
 					"Uso de memória (%)",
-					dates,
-					stats.stream().map(s -> Helper.round(s.getMemoryPrcnt() * 100, 1)).collect(Collectors.toList())
-			).setYAxisGroup(1);
+					List.copyOf(reducedStats.keySet()),
+					reducedStats.values().stream().map(s -> Helper.round(s.getMemoryPrcnt() * 100, 1)).collect(Collectors.toList())
+			).setMarker(SeriesMarkers.NONE)
+					.setYAxisGroup(1);
 
 			chart.addSeries(
 					"Uso de memória (MB)",
-					dates,
-					stats.stream().map(s -> StorageUnit.MB.convert(s.getMemoryUsage(), StorageUnit.B)).collect(Collectors.toList())
-			).setYAxisGroup(0);
+					List.copyOf(reducedStats.keySet()),
+					reducedStats.values().stream().map(s -> StorageUnit.MB.convert(s.getMemoryUsage(), StorageUnit.B)).collect(Collectors.toList())
+			).setMarker(SeriesMarkers.NONE)
+					.setYAxisGroup(0);
 
 			chart.addSeries(
 					"Uso de CPU (%)",
-					dates,
-					stats.stream().map(s -> Helper.round(s.getCpuUsage() * 100, 1)).collect(Collectors.toList())
-			).setYAxisGroup(1);
+					List.copyOf(reducedStats.keySet()),
+					reducedStats.values().stream().map(s -> Helper.round(s.getCpuUsage() * 100, 1)).collect(Collectors.toList())
+			).setMarker(SeriesMarkers.NONE)
+					.setYAxisGroup(1);
 
 			chart.addSeries(
 					"Ping (ms)",
-					dates,
-					stats.stream().map(BotStats::getPing).collect(Collectors.toList())
-			).setYAxisGroup(0);
+					List.copyOf(reducedStats.keySet()),
+					reducedStats.values().stream().map(BotStats::getPing).collect(Collectors.toList())
+			).setMarker(SeriesMarkers.NONE)
+					.setYAxisGroup(0);
 
 			chart.addSeries(
 					"Servidores",
-					dates,
-					stats.stream().map(BotStats::getServers).collect(Collectors.toList())
-			).setYAxisGroup(0);
+					List.copyOf(reducedStats.keySet()),
+					reducedStats.values().stream().map(BotStats::getServers).collect(Collectors.toList())
+			).setMarker(SeriesMarkers.NONE)
+					.setYAxisGroup(0);
 
 			channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "chart.png").queue();
 			m.delete().queue();
