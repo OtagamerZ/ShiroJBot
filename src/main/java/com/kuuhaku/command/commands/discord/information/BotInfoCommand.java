@@ -32,8 +32,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.MessageFormat;
 import java.time.format.DateTimeFormatter;
 
@@ -62,7 +60,7 @@ public class BotInfoCommand implements Executable {
 				.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-3"), Main.getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern(ShiroInfo.getLocale(I18n.PT).getString("date-format"))), false)
 				.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-4"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_BOT_INFO_SERVERS), Main.getShiroShards().getGuilds().size()), false)
 				.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-5"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-registered-users"), MemberDAO.getAllMembers().size()), false)
-				.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-6"), Main.getInfo().getVersion(), false)
+				.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-6"), ShiroInfo.getVersion(), false)
 				.addField("Links:", """
 								[%s](https://discordapp.com/invite/9sgkzna)
 								[Top.GG](https://top.gg/bot/572413282653306901)
@@ -81,16 +79,9 @@ public class BotInfoCommand implements Executable {
 										ShiroInfo.getLocale(I18n.PT).getString("str_donate")
 								)
 						, false
-				);
+				)
+				.setImage("https://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff&v=" + Helper.generateRandomHash(5));
 
-		try {
-			InputStream info = Helper.getImage("https://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff");
-
-			eb.setImage("attachment://info.png");
-			channel.sendMessage(eb.build()).addFile(info, "info.png").queue();
-		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-			channel.sendMessage(eb.build()).queue();
-		}
+		channel.sendMessage(eb.build()).queue();
 	}
 }
