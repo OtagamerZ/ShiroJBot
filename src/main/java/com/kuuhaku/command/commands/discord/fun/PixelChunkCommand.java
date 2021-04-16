@@ -110,7 +110,7 @@ public class PixelChunkCommand implements Executable {
 			} else if (t.isDisabled()) {
 				channel.sendMessage("❌ | Seu token foi proibido de interagir com o canvas.").queue();
 				return;
-			}
+			} else if (opts[2].length() != 7) throw new NullPointerException();
 
 			try {
 				PixelOperation op = new PixelOperation(
