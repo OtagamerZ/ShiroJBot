@@ -58,9 +58,9 @@ public class BotStats {
 	}
 
 	public BotStats get() {
-		memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-		memoryPrcnt = Helper.prcnt(memoryUsage, Runtime.getRuntime().totalMemory());
-		cpuUsage = ShiroInfo.getProcessCpuLoad();
+		memoryUsage = ShiroInfo.getSystemInfo().getTotalMemorySize() - ShiroInfo.getSystemInfo().getFreeMemorySize();
+		memoryPrcnt = Helper.prcnt(memoryUsage, ShiroInfo.getSystemInfo().getTotalMemorySize());
+		cpuUsage = ShiroInfo.getSystemInfo().getProcessCpuLoad();
 		servers = Main.getShiroShards().getGuilds().size();
 		ping = Math.round(Main.getShiroShards().getAverageGatewayPing());
 

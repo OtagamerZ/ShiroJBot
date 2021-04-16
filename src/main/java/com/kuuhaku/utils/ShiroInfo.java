@@ -36,14 +36,13 @@ import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
 
-import javax.management.*;
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.*;
@@ -63,7 +62,7 @@ public class ShiroInfo {
 	public static final String USATAN_AVATAR = RESOURCES_URL + "/avatar/usa-tan/%s.png";
 
 	//PRIVATE CONSTANTS
-	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
+	private static final OperatingSystemMXBean systemInfo = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean());
 	private static final ThreadPoolExecutor compilationPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
 	private static final ThreadPoolExecutor handlingPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 	private static final String botToken = System.getenv("BOT_TOKEN");
@@ -148,6 +147,70 @@ public class ShiroInfo {
 
 	//CONSTANTS
 	//STATIC
+	public static OperatingSystemMXBean getSystemInfo() {
+		return systemInfo;
+	}
+
+	public static ThreadPoolExecutor getCompilationPool() {
+		return compilationPool;
+	}
+
+	public static ThreadPoolExecutor getHandlingPool() {
+		return handlingPool;
+	}
+
+	public static String getBotToken() {
+		return botToken;
+	}
+
+	public static String getYoutubeToken() {
+		return youtubeToken;
+	}
+
+	public static String getDblToken() {
+		return dblToken;
+	}
+
+	public static String getName() {
+		return name;
+	}
+
+	public static String getFullName() {
+		return MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_version"), name, version);
+	}
+
+	public static String getVersion() {
+		return version;
+	}
+
+	public static String getDefaultPrefix() {
+		return default_prefix;
+	}
+
+	public static String getDBFileName() {
+		return nomeDB;
+	}
+
+	public static Map<String, Map<String, String>> getPolls() {
+		return polls;
+	}
+
+	public static AudioPlayerManager getApm() {
+		return apm;
+	}
+
+	public static Map<Long, GuildMusicManager> getGmms() {
+		return gmms;
+	}
+
+	public static void addGmm(long id, GuildMusicManager gmm) {
+		gmms.put(id, gmm);
+	}
+
+	public static ShiroEvents getShiroEvents() {
+		return shiroEvents;
+	}
+
 	public static ResourceBundle getLocale(I18n lang) {
 		return ResourceBundle.getBundle("locale", lang.getLocale());
 	}
@@ -212,96 +275,13 @@ public class ShiroInfo {
 		return Stream.concat(developers.stream(), supports.keySet().stream()).distinct().collect(Collectors.toList());
 	}
 
-	public static double getProcessCpuLoad() {
-		try {
-			MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-			ObjectName name = ObjectName.getInstance("java.lang:type=OperatingSystem");
-			AttributeList list = mbs.getAttributes(name, new String[]{"ProcessCpuLoad"});
-
-			if (list.isEmpty()) return Double.NaN;
-
-			return list.stream()
-					.map(a -> (double) ((Attribute) a).getValue())
-					.filter(d -> d >= 0)
-					.map(d -> Helper.round(d, 4))
-					.findFirst()
-					.orElse(0D);
-		} catch (ReflectionException | MalformedObjectNameException | InstanceNotFoundException e) {
-			return 0;
-		}
-	}
-
 	//NON-STATIC
-	public float getCPULoad() {
-		return (float) Helper.round(tBean.getCurrentThreadCpuTime() * 100, 2);
-	}
-
-	public ThreadPoolExecutor getCompilationPool() {
-		return compilationPool;
-	}
-
-	public static ThreadPoolExecutor getHandlingPool() {
-		return handlingPool;
-	}
-
-	public String getBotToken() {
-		return botToken;
-	}
-
-	public String getYoutubeToken() {
-		return youtubeToken;
-	}
-
-	public static String getDblToken() {
-		return dblToken;
-	}
-
 	public DiscordBotListAPI getDblApi() {
 		return dblApi;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getFullName() {
-		return MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_version"), name, version);
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public String getDefaultPrefix() {
-		return default_prefix;
-	}
-
-	public String getDBFileName() {
-		return nomeDB;
-	}
-
-	public Map<String, Map<String, String>> getPolls() {
-		return polls;
-	}
-
 	public ScheduledExecutorService getScheduler() {
 		return Executors.newSingleThreadScheduledExecutor();
-	}
-
-	public AudioPlayerManager getApm() {
-		return apm;
-	}
-
-	Map<Long, GuildMusicManager> getGmms() {
-		return gmms;
-	}
-
-	void addGmm(long id, GuildMusicManager gmm) {
-		gmms.put(id, gmm);
-	}
-
-	public ShiroEvents getShiroEvents() {
-		return shiroEvents;
 	}
 
 	public Map<String, Game> getGames() {
