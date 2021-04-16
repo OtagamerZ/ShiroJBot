@@ -42,7 +42,7 @@ public class BotStatsDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT b FROM BotStats b ORDER BY b.id DESC", BotStats.class);
-		q.setMaxResults(43200);
+		q.setMaxResults(200);
 
 		try {
 			return q.getResultList();
