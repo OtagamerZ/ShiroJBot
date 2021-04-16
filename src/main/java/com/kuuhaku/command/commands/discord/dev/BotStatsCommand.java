@@ -55,9 +55,13 @@ public class BotStatsCommand implements Executable {
 			XYChart chart = Helper.buildXYChart(
 					"Estatísticas sobre a Shiro J. Bot",
 					Pair.of("Data", ""),
-					stats.stream()
-							.map(s -> Helper.getRandomColor(s.hashCode()))
-							.collect(Collectors.toList())
+					List.of(
+							Helper.getRandomColor(),
+							Helper.getRandomColor(),
+							Helper.getRandomColor(),
+							Helper.getRandomColor(),
+							Helper.getRandomColor()
+					)
 			);
 
 			AxesChartStyler styler = chart.getStyler()
