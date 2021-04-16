@@ -13,15 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado comando para ver estatísticas sobre a Shiro">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no gráfico de estatísticas sobre a Shiro">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedRankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedRankCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BotStatsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BotStatsDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/BotStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/BotStats.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1164,13 +1157,6 @@
       <workItem from="1618533715550" duration="113000" />
       <workItem from="1618537815178" duration="7460000" />
     </task>
-    <task id="LOCAL-04119" summary="Redução nos multiplicadores do slots">
-      <created>1618256242509</created>
-      <option name="number" value="04119" />
-      <option name="presentableId" value="LOCAL-04119" />
-      <option name="project" value="LOCAL" />
-      <updated>1618256242509</updated>
-    </task>
     <task id="LOCAL-04120" summary="Correção no calculo de raça dos modos arcade">
       <created>1618257985436</created>
       <option name="number" value="04120" />
@@ -1507,7 +1493,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618545003693</updated>
     </task>
-    <option name="localTasksCounter" value="4168" />
+    <task id="LOCAL-04168" summary="Correção no gráfico de estatísticas sobre a Shiro">
+      <created>1618580860268</created>
+      <option name="number" value="04168" />
+      <option name="presentableId" value="LOCAL-04168" />
+      <option name="project" value="LOCAL" />
+      <updated>1618580860269</updated>
+    </task>
+    <option name="localTasksCounter" value="4169" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1593,7 +1586,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Reversão pra versão 2.1.6 da biblioteca de paginação" />
     <MESSAGE value="Adicionados contadores de cartas no cemitério" />
     <MESSAGE value="Adicionados mais 2 gatilhos de efeito" />
     <MESSAGE value="Melhoria no sistema de taxas e rebalanceamento do slots" />
@@ -1618,7 +1610,8 @@
     <MESSAGE value="Adicionado comando para limpar o deck" />
     <MESSAGE value="Adicionado registrador de dados sobre a Shiro" />
     <MESSAGE value="Adicionado comando para ver estatísticas sobre a Shiro" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionado comando para ver estatísticas sobre a Shiro" />
+    <MESSAGE value="Correção no gráfico de estatísticas sobre a Shiro" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no gráfico de estatísticas sobre a Shiro" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
