@@ -117,8 +117,7 @@ public class CardValueCommand implements Executable {
 				foilValues.merge(Date.from(fc.getPublishDate().toInstant()), Math.round(fc.getPrice() / 1000f), Helper::average);
 
 			if (normalValues.size() <= 1 && foilValues.size() <= 1) {
-				channel.sendMessage("❌ | Essa carta ainda não foi vendida nos últimos 30 dias ou possui apenas 1 venda .").queue();
-				m.delete().queue();
+				m.editMessage("❌ | Essa carta ainda não foi vendida nos últimos 30 dias ou possui apenas 1 venda.").queue();
 				return;
 			}
 
