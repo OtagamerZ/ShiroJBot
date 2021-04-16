@@ -88,11 +88,10 @@ public class PixelCanvasCommand implements Executable {
 			if (t == null) {
 				channel.sendMessage("❌ | Você ainda não possui um token de acesso ao ShiroCanvas, por favor faça login em https://shirojbot.site para gerar um automaticamente.").queue();
 				return;
-			}
-			if (t.isDisabled()) {
+			} else if (t.isDisabled()) {
 				channel.sendMessage("❌ | Seu token foi proibido de interagir com o canvas.").queue();
 				return;
-			}
+			} else if (opts[2].length() != 7) throw new NullPointerException();
 
 			try {
 				PixelOperation op = new PixelOperation(
