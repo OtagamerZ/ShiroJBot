@@ -42,9 +42,9 @@ import java.awt.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -108,22 +108,15 @@ public class CardValueCommand implements Executable {
 					List.of(new Color(0, 150, 0), Color.yellow)
 			);
 
-			Map<Date, Integer> normalValues = new HashMap<>();
+			Map<Date, Integer> normalValues = new TreeMap<>(Date::compareTo);
 			for (Market nc : normalCards)
-				normalValues.merge(Date.from(nc.getPublishDate().toInstant()), nc.getPrice(), Helper::average);
+				normalValues.merge(Date.from(nc.getPublishDate().toInstant()), Math.round(nc.getPrice() / 1000f), Helper::average);
 
-			Map<Date, Integer> foilValues = new HashMap<>();
+			Map<Date, Integer> foilValues = new TreeMap<>(Date::compareTo);
 			for (Market fc : foilCards)
-				foilValues.merge(Date.from(fc.getPublishDate().toInstant()), fc.getPrice(), Helper::average);
+				foilValues.merge(Date.from(fc.getPublishDate().toInstant()), Math.round(fc.getPrice() / 1000f), Helper::average);
 
-			List<Map.Entry<Date, Integer>> normalData = normalValues.entrySet()
-					.stream()
-					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
-			List<Map.Entry<Date, Integer>> foilData = foilValues.entrySet()
-					.stream()
-					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
-
-			if (normalData.size() <= 1 && foilData.size() <= 1) {
+			if (normalValues.size() <= 1 && foilValues.size() <= 1) {
 				channel.sendMessage("❌ | Essa carta ainda não foi vendida nos últimos 30 dias ou possui apenas 1 venda .").queue();
 				m.delete().queue();
 				return;
@@ -131,24 +124,14 @@ public class CardValueCommand implements Executable {
 
 			if (normalCards.size() > 1)
 				chart.addSeries("Normal",
-						normalData.stream()
-								.map(Map.Entry::getKey)
-								.collect(Collectors.toList()),
-						normalData.stream()
-								.map(Map.Entry::getValue)
-								.map(v -> Helper.round(v / 1000d, 1))
-								.collect(Collectors.toList())
+						List.copyOf(normalValues.keySet()),
+						List.copyOf(normalValues.values())
 				).setMarker(SeriesMarkers.NONE);
 
 			if (foilCards.size() > 1)
 				chart.addSeries("Cromada",
-						foilData.stream()
-								.map(Map.Entry::getKey)
-								.collect(Collectors.toList()),
-						foilData.stream()
-								.map(Map.Entry::getValue)
-								.map(v -> Helper.round(v / 1000d, 1))
-								.collect(Collectors.toList())
+						List.copyOf(foilValues.keySet()),
+						List.copyOf(foilValues.values())
 				).setMarker(SeriesMarkers.NONE);
 
 			channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "chart.png").queue();
