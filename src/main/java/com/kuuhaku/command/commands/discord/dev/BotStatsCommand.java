@@ -71,6 +71,11 @@ public class BotStatsCommand implements Executable {
 		}
 
 		channel.sendMessage("<a:loading:697879726630502401> Gerando gráfico...").queue(m -> {
+			if (reducedStats.size() <= 1) {
+				m.editMessage("❌ | Dados insuficientes para gerar gráfico.").queue();
+				return;
+			}
+
 			XYChart chart = Helper.buildXYChart(
 					"Estatísticas sobre a Shiro J. Bot",
 					Pair.of("Data", ""),
