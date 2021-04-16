@@ -58,7 +58,7 @@ public class BotStats {
 	}
 
 	public BotStats get() {
-		memoryUsage = ShiroInfo.getSystemInfo().getTotalMemorySize() - ShiroInfo.getSystemInfo().getFreeMemorySize();
+		memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 		memoryPrcnt = Helper.prcnt(memoryUsage, ShiroInfo.getSystemInfo().getTotalMemorySize());
 		cpuUsage = ShiroInfo.getSystemInfo().getProcessCpuLoad();
 		servers = Main.getShiroShards().getGuilds().size();
