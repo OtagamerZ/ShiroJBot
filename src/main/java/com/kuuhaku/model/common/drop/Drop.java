@@ -44,6 +44,7 @@ public abstract class Drop<P> implements Prize<P> {
 	private final List<Pair<String, Function<User, Boolean>>> condition;
 	private final Pair<String, Function<User, Boolean>> chosen;
 	private final P prize;
+	private String captcha;
 
 	protected Drop(P prize) {
 		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
@@ -118,7 +119,9 @@ public abstract class Drop<P> implements Prize<P> {
 
 	@Override
 	public String getRealCaptcha() {
-		return Helper.getOr(Helper.generateRandomHash(6), String.valueOf(System.currentTimeMillis()).substring(0, 6));
+		if (captcha == null)
+			captcha = Helper.getOr(Helper.generateRandomHash(6), String.valueOf(System.currentTimeMillis()).substring(0, 6));
+		return captcha;
 	}
 
 	@Override
