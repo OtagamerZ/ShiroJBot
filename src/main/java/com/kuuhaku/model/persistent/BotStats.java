@@ -35,7 +35,7 @@ public class BotStats {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime timestamp = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	//INFO

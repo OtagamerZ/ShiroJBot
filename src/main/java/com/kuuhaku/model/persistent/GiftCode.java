@@ -23,7 +23,10 @@ import bsh.Interpreter;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.utils.Helper;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -43,7 +46,7 @@ public class GiftCode {
 	@Column(columnDefinition = "TEXT NOT NULL DEFAULT ''")
 	private String gift = "";
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime redeemed = null;
 
 	public GiftCode(String code) {
