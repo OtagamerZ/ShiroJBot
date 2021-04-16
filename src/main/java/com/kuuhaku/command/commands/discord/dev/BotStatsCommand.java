@@ -38,9 +38,9 @@ import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.awt.*;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Command(
@@ -55,7 +55,7 @@ public class BotStatsCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		List<BotStats> stats = BotStatsDAO.getStats();
 
-		Map<Date, BotStats> reducedStats = new HashMap<>();
+		Map<Date, BotStats> reducedStats = new TreeMap<>(Date::compareTo);
 		for (BotStats stat : stats) {
 			reducedStats.merge(Date.from(stat.getTimestamp().toInstant()), stat, (p, n) ->
 					new BotStats(
