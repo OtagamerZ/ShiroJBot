@@ -36,10 +36,12 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.XYChart;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.awt.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,18 +108,18 @@ public class CardValueCommand implements Executable {
 					List.of(new Color(0, 150, 0), Color.yellow)
 			);
 
-			Map<ZonedDateTime, Integer> normalValues = new HashMap<>();
+			Map<Date, Integer> normalValues = new HashMap<>();
 			for (Market nc : normalCards)
-				normalValues.merge(nc.getPublishDate(), nc.getPrice(), Helper::average);
+				normalValues.merge(Date.from(nc.getPublishDate().toInstant()), nc.getPrice(), Helper::average);
 
-			Map<ZonedDateTime, Integer> foilValues = new HashMap<>();
+			Map<Date, Integer> foilValues = new HashMap<>();
 			for (Market fc : foilCards)
-				foilValues.merge(fc.getPublishDate(), fc.getPrice(), Helper::average);
+				foilValues.merge(Date.from(fc.getPublishDate().toInstant()), fc.getPrice(), Helper::average);
 
-			List<Map.Entry<ZonedDateTime, Integer>> normalData = normalValues.entrySet()
+			List<Map.Entry<Date, Integer>> normalData = normalValues.entrySet()
 					.stream()
 					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
-			List<Map.Entry<ZonedDateTime, Integer>> foilData = foilValues.entrySet()
+			List<Map.Entry<Date, Integer>> foilData = foilValues.entrySet()
 					.stream()
 					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
 
@@ -136,7 +138,7 @@ public class CardValueCommand implements Executable {
 								.map(Map.Entry::getValue)
 								.map(v -> Helper.round(v / 1000d, 1))
 								.collect(Collectors.toList())
-				);
+				).setMarker(SeriesMarkers.NONE);
 
 			if (foilCards.size() > 1)
 				chart.addSeries("Cromada",
@@ -147,7 +149,7 @@ public class CardValueCommand implements Executable {
 								.map(Map.Entry::getValue)
 								.map(v -> Helper.round(v / 1000d, 1))
 								.collect(Collectors.toList())
-				);
+				).setMarker(SeriesMarkers.NONE);
 
 			channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "chart.png").queue();
 			m.delete().queue();
