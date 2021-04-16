@@ -47,7 +47,7 @@ public class CardMarket implements Market {
 	@Column(columnDefinition = "INT NOT NULL")
 	private int price;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime publishDate = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	public CardMarket(String seller, String buyer, KawaiponCard card, int price) {

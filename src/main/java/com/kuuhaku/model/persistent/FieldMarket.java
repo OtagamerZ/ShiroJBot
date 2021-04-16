@@ -44,7 +44,7 @@ public class FieldMarket implements Market {
 	@Column(columnDefinition = "INT NOT NULL")
 	private int price;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime publishDate = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	public FieldMarket(String seller, String buyer, Field card, int price) {

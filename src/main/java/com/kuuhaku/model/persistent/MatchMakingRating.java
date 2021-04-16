@@ -67,7 +67,7 @@ public class MatchMakingRating {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int losses = 0;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime blockedUntil = null;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")

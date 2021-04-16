@@ -18,7 +18,10 @@
 
 package com.kuuhaku.model.persistent;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -32,7 +35,7 @@ public class Blacklist {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String blockedBy = "";
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime blockDate = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	public Blacklist(String uid, String by) {

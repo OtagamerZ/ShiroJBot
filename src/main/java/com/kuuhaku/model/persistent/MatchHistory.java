@@ -56,7 +56,7 @@ public class MatchHistory {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<Integer, MatchRound> rounds = new HashMap<>();
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime timestamp = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	public int getId() {
