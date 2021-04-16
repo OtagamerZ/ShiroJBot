@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado comando para ver estatísticas sobre a Shiro" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionado comando para ver estatísticas sobre a Shiro">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1153,21 +1155,7 @@
       <workItem from="1618514248824" duration="109000" />
       <workItem from="1618515062982" duration="4386000" />
       <workItem from="1618533715550" duration="113000" />
-      <workItem from="1618537815178" duration="6778000" />
-    </task>
-    <task id="LOCAL-04116" summary="Decks não são mais ordenados">
-      <created>1618244559118</created>
-      <option name="number" value="04116" />
-      <option name="presentableId" value="LOCAL-04116" />
-      <option name="project" value="LOCAL" />
-      <updated>1618244559118</updated>
-    </task>
-    <task id="LOCAL-04117" summary="Decks não são mais ordenados">
-      <created>1618254797302</created>
-      <option name="number" value="04117" />
-      <option name="presentableId" value="LOCAL-04117" />
-      <option name="project" value="LOCAL" />
-      <updated>1618254797303</updated>
+      <workItem from="1618537815178" duration="7103000" />
     </task>
     <task id="LOCAL-04118" summary="Adicionado modo arcade &quot;cardmaster&quot;">
       <created>1618255321515</created>
@@ -1498,7 +1486,21 @@
       <option name="project" value="LOCAL" />
       <updated>1618544621160</updated>
     </task>
-    <option name="localTasksCounter" value="4165" />
+    <task id="LOCAL-04165" summary="Adicionado comando para ver estatísticas sobre a Shiro">
+      <created>1618544783377</created>
+      <option name="number" value="04165" />
+      <option name="presentableId" value="LOCAL-04165" />
+      <option name="project" value="LOCAL" />
+      <updated>1618544783377</updated>
+    </task>
+    <task id="LOCAL-04166" summary="Adicionado comando para ver estatísticas sobre a Shiro">
+      <created>1618544879615</created>
+      <option name="number" value="04166" />
+      <option name="presentableId" value="LOCAL-04166" />
+      <option name="project" value="LOCAL" />
+      <updated>1618544879615</updated>
+    </task>
+    <option name="localTasksCounter" value="4167" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
