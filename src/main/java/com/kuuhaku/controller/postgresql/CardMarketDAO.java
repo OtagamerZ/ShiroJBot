@@ -29,7 +29,8 @@ import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.util.Calendar;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class CardMarketDAO {
@@ -143,8 +144,7 @@ public class CardMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.MONTH, -1);
+			ZonedDateTime last = ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(1);
 
 			Query q = em.createQuery("""
 					SELECT cm.price * 1.0
@@ -155,7 +155,7 @@ public class CardMarketDAO {
 					AND cm.buyer <> cm.seller
 					""");
 			q.setParameter("card", c);
-			q.setParameter("date", cal.getTime());
+			q.setParameter("date", last);
 
 			double[] before = ArrayUtils.toPrimitive(((List<Double>) q.getResultList()).toArray(Double[]::new));
 

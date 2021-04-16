@@ -32,13 +32,14 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.knowm.xchart.*;
-import org.knowm.xchart.style.Styler;
+import org.apache.commons.lang3.tuple.Pair;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.XYChart;
 
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -70,24 +71,11 @@ public class ExceedRankCommand implements Executable {
 						colors.add(ex.getPalette());
 					}
 
-					CategoryChart chart = new CategoryChartBuilder()
-							.width(800)
-							.height(600)
-							.title("Ranking dos Exceeds")
-							.yAxisTitle("Pontos (x1000)")
-							.build();
-
-					chart.getStyler()
-							.setPlotGridLinesColor(new Color(64, 68, 71))
-							.setAxisTickLabelsColor(Color.WHITE)
-							.setAnnotationsFontColor(Color.WHITE)
-							.setChartFontColor(Color.WHITE)
-							.setHasAnnotations(true)
-							.setLegendPosition(Styler.LegendPosition.InsideNE)
-							.setSeriesColors(colors.stream().map(Color::darker).toArray(Color[]::new))
-							.setPlotBackgroundColor(new Color(32, 34, 37))
-							.setChartBackgroundColor(new Color(16, 17, 20))
-							.setLegendBackgroundColor(new Color(16, 17, 20, 100));
+					CategoryChart chart = Helper.buildBarChart(
+							"Ranking dos Exceeds",
+							Pair.of("", "Pontos (x1000)"),
+							colors.stream().map(Color::darker).collect(Collectors.toList())
+					);
 
 					for (Exceed ex : exceeds) {
 						chart.addSeries(ex.getExceed().getName(),
@@ -110,27 +98,15 @@ public class ExceedRankCommand implements Executable {
 						colors.add(ex.getPalette());
 					}
 
-					XYChart chart = new XYChartBuilder()
-							.width(800)
-							.height(600)
-							.title("Ranking dos Exceeds")
-							.xAxisTitle("Mês")
-							.yAxisTitle("Pontos (x1000)")
-							.build();
-
+					XYChart chart = Helper.buildXYChart(
+							"Ranking dos Exceeds",
+							Pair.of("Mês", "Pontos (x1000)"),
+							colors
+					);
 
 					chart.getStyler()
-							.setPlotGridLinesColor(new Color(64, 68, 71))
 							.setXAxisMin(1d)
-							.setXAxisMax(12d)
-							.setAxisTickLabelsColor(Color.WHITE)
-							.setChartFontColor(Color.WHITE)
-							.setLegendPosition(Styler.LegendPosition.InsideNE)
-							.setSeriesColors(colors.stream().map(Color::darker).toArray(Color[]::new))
-							.setPlotBackgroundColor(new Color(32, 34, 37))
-							.setChartBackgroundColor(new Color(16, 17, 20))
-							.setLegendBackgroundColor(new Color(16, 17, 20, 100))
-							.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
+							.setXAxisMax(12d);
 
 					for (List<ExceedScore> ex : exceeds) {
 						ExceedEnum ee = ex.get(0).getExceed();
