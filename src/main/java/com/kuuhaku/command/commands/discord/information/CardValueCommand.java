@@ -33,15 +33,13 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.tuple.Pair;
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.XYChart;
-import org.knowm.xchart.XYChartBuilder;
-import org.knowm.xchart.style.Styler;
 
 import java.awt.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,24 +100,11 @@ public class CardValueCommand implements Executable {
 						.collect(Collectors.toList());
 			}
 
-			XYChart chart = new XYChartBuilder()
-					.width(800)
-					.height(600)
-					.title("Valores de venda da " + (c == null ? "raridade" : "carta") + " \"" + (c == null ? r.toString() : c.getName()) + "\"")
-					.yAxisTitle("Valor (x1000)")
-					.xAxisTitle("Data")
-					.build();
-
-			chart.getStyler()
-					.setPlotGridLinesColor(new Color(64, 68, 71))
-					.setAxisTickLabelsColor(Color.WHITE)
-					.setChartFontColor(Color.WHITE)
-					.setLegendPosition(Styler.LegendPosition.InsideNE)
-					.setSeriesColors(new Color[]{new Color(0, 150, 0), Color.yellow})
-					.setPlotBackgroundColor(new Color(32, 34, 37))
-					.setChartBackgroundColor(new Color(16, 17, 20))
-					.setLegendBackgroundColor(new Color(16, 17, 20, 100))
-					.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
+			XYChart chart = Helper.buildXYChart(
+					"Valores de venda da " + (c == null ? "raridade" : "carta") + " \"" + (c == null ? r.toString() : c.getName()) + "\"",
+					Pair.of("Data", "Valor (x1000)"),
+					List.of(new Color(0, 150, 0), Color.yellow)
+			);
 
 			Map<ZonedDateTime, Integer> normalValues = new HashMap<>();
 			for (Market nc : normalCards)
@@ -164,7 +149,7 @@ public class CardValueCommand implements Executable {
 								.collect(Collectors.toList())
 				);
 
-			channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue();
+			channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "chart.png").queue();
 			m.delete().queue();
 		});
 	}
