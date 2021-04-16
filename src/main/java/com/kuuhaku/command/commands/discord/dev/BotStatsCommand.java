@@ -35,6 +35,7 @@ import org.knowm.xchart.XYChart;
 import org.knowm.xchart.style.AxesChartStyler;
 import org.knowm.xchart.style.Styler;
 
+import java.awt.*;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,11 +57,11 @@ public class BotStatsCommand implements Executable {
 					"Estatísticas sobre a Shiro J. Bot",
 					Pair.of("Data", ""),
 					List.of(
-							Helper.getRandomColor(100),
-							Helper.getRandomColor(200),
-							Helper.getRandomColor(300),
-							Helper.getRandomColor(400),
-							Helper.getRandomColor(500)
+							new Color(60, 177, 28),
+							new Color(158, 220, 140),
+							new Color(224, 123, 46),
+							new Color(36, 172, 227),
+							new Color(130, 32, 243)
 					)
 			);
 
@@ -87,16 +88,16 @@ public class BotStatsCommand implements Executable {
 			).setYAxisGroup(1);
 
 			chart.addSeries(
-					"Uso de CPU (%)",
-					dates,
-					stats.stream().map(s -> Helper.round(s.getCpuUsage() * 100, 1)).collect(Collectors.toList())
-			).setYAxisGroup(1);
-
-			chart.addSeries(
 					"Uso de memória (MB)",
 					dates,
 					stats.stream().map(s -> StorageUnit.MB.convert(s.getMemoryUsage(), StorageUnit.B)).collect(Collectors.toList())
 			).setYAxisGroup(0);
+
+			chart.addSeries(
+					"Uso de CPU (%)",
+					dates,
+					stats.stream().map(s -> Helper.round(s.getCpuUsage() * 100, 1)).collect(Collectors.toList())
+			).setYAxisGroup(1);
 
 			chart.addSeries(
 					"Ping (ms)",
