@@ -33,6 +33,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -91,13 +93,23 @@ public class SweepCommand implements Executable {
                     missingIds.get(e.getKey()).addAll(e.getValue().stream().map(id -> id + e.getKey()).collect(Collectors.toList()));
                     Helper.logger(this.getClass()).debug("GID " + e.getKey() + " is null, added to trash bin");
                 } else {
-                    List<Member> membrs = g.loadMembers().get();
-                    foundIds.addAll(
-                            membrs.stream()
-                                    .map(m -> m.getId() + e.getKey())
-                                    .collect(Collectors.toList())
-                    );
-                    Helper.logger(this.getClass()).debug(g.getName() + ": Loaded " + membrs.size() + " members");
+                    try {
+                        CompletableFuture<Boolean> loaded = new CompletableFuture<>();
+                        g.loadMembers().onSuccess(res -> {
+                            foundIds.addAll(
+                                    res.stream()
+                                            .filter(m -> !m.getUser().isBot())
+                                            .map(m -> m.getId() + e.getKey())
+                                            .collect(Collectors.toList())
+                            );
+
+                            loaded.complete(true);
+                            Helper.logger(this.getClass()).debug(g.getName() + ": Loaded " + res.size() + " members");
+                        });
+                        loaded.get();
+                    } catch (ExecutionException | InterruptedException err) {
+                        foundIds.addAll(mbs.stream().map(com.kuuhaku.model.persistent.Member::getId).collect(Collectors.toList()));
+                    }
                 }
             }
 
