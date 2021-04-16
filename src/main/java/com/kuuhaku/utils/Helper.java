@@ -2366,8 +2366,8 @@ public class Helper {
 
 	public static XYChart buildXYChart(String title, Pair<String, String> axis, List<Color> colors) {
 		XYChart chart = new XYChartBuilder()
-				.width(800)
-				.height(600)
+				.width(1920)
+				.height(1080)
 				.title(title)
 				.xAxisTitle(axis.getLeft())
 				.yAxisTitle(axis.getRight())
@@ -2391,8 +2391,8 @@ public class Helper {
 
 	public static CategoryChart buildBarChart(String title, Pair<String, String> axis, List<Color> colors) {
 		CategoryChart chart = new CategoryChartBuilder()
-				.width(800)
-				.height(600)
+				.width(1920)
+				.height(1080)
 				.title(title)
 				.xAxisTitle(axis.getLeft())
 				.yAxisTitle(axis.getRight())
