@@ -56,11 +56,11 @@ public class BotStatsCommand implements Executable {
 					"Estatísticas sobre a Shiro J. Bot",
 					Pair.of("Data", ""),
 					List.of(
-							Helper.getRandomColor(),
-							Helper.getRandomColor(),
-							Helper.getRandomColor(),
-							Helper.getRandomColor(),
-							Helper.getRandomColor()
+							Helper.getRandomColor(1),
+							Helper.getRandomColor(2),
+							Helper.getRandomColor(3),
+							Helper.getRandomColor(4),
+							Helper.getRandomColor(5)
 					)
 			);
 
