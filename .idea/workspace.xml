@@ -13,12 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no gráfico de estatísticas sobre a Shiro">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SweepCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/SweepCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Drop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Drop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no gráfico de estatísticas sobre a Shiro" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1157,14 +1152,7 @@
       <workItem from="1618515062982" duration="4386000" />
       <workItem from="1618533715550" duration="113000" />
       <workItem from="1618537815178" duration="7460000" />
-      <workItem from="1618593814709" duration="5774000" />
-    </task>
-    <task id="LOCAL-04128" summary="Melhoria na API de cartas">
-      <created>1618332613191</created>
-      <option name="number" value="04128" />
-      <option name="presentableId" value="LOCAL-04128" />
-      <option name="project" value="LOCAL" />
-      <updated>1618332613191</updated>
+      <workItem from="1618593814709" duration="6487000" />
     </task>
     <task id="LOCAL-04129" summary="Melhoria na API de cartas">
       <created>1618340284412</created>
@@ -1502,7 +1490,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618601456699</updated>
     </task>
-    <option name="localTasksCounter" value="4177" />
+    <task id="LOCAL-04177" summary="Correção no gráfico de estatísticas sobre a Shiro">
+      <created>1618602227114</created>
+      <option name="number" value="04177" />
+      <option name="presentableId" value="LOCAL-04177" />
+      <option name="project" value="LOCAL" />
+      <updated>1618602227114</updated>
+    </task>
+    <option name="localTasksCounter" value="4178" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
