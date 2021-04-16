@@ -26,7 +26,6 @@ import org.json.JSONObject;
 import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.concurrent.ExecutionException;
 
 @Entity
 @Table(name = "botstats")
@@ -63,18 +62,7 @@ public class BotStats {
 		memoryPrcnt = Helper.prcnt(memoryUsage, Runtime.getRuntime().totalMemory());
 		cpuUsage = ShiroInfo.getProcessCpuLoad();
 		servers = Main.getShiroShards().getGuilds().size();
-
-		long start = System.currentTimeMillis();
-		try {
-			Main.getShiroShards()
-					.retrieveUserById(ShiroInfo.getNiiChan())
-					.submit()
-					.get();
-
-			ping = System.currentTimeMillis() - start;
-		} catch (InterruptedException | ExecutionException e) {
-			ping = 0;
-		}
+		ping = Math.round(Main.getShiroShards().getAverageGatewayPing());
 
 		return this;
 	}
