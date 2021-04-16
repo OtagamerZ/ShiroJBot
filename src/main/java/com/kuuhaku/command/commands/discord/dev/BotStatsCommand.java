@@ -37,6 +37,7 @@ import org.knowm.xchart.style.Styler;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.awt.*;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class BotStatsCommand implements Executable {
 
 		Map<Date, BotStats> reducedStats = new TreeMap<>(Date::compareTo);
 		for (BotStats stat : stats) {
-			reducedStats.merge(Date.from(stat.getTimestamp().toInstant()), stat, (p, n) ->
+			reducedStats.merge(Date.from(stat.getTimestamp().truncatedTo(ChronoUnit.HOURS).toInstant()), stat, (p, n) ->
 					new BotStats(
 							stat.getTimestamp(),
 							Helper.average(p.getPing(), n.getPing()),

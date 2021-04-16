@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no gráfico de estatísticas sobre a Shiro">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no gráfico de estatísticas sobre a Shiro" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1157,13 +1155,6 @@
       <workItem from="1618533715550" duration="113000" />
       <workItem from="1618537815178" duration="7460000" />
     </task>
-    <task id="LOCAL-04120" summary="Correção no calculo de raça dos modos arcade">
-      <created>1618257985436</created>
-      <option name="number" value="04120" />
-      <option name="presentableId" value="LOCAL-04120" />
-      <option name="project" value="LOCAL" />
-      <updated>1618257985436</updated>
-    </task>
     <task id="LOCAL-04121" summary="Correção no calculo de raça dos modos arcade">
       <created>1618316786518</created>
       <option name="number" value="04121" />
@@ -1500,7 +1491,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618580860269</updated>
     </task>
-    <option name="localTasksCounter" value="4169" />
+    <task id="LOCAL-04169" summary="Correção no gráfico de estatísticas sobre a Shiro">
+      <created>1618581162832</created>
+      <option name="number" value="04169" />
+      <option name="presentableId" value="LOCAL-04169" />
+      <option name="project" value="LOCAL" />
+      <updated>1618581162832</updated>
+    </task>
+    <option name="localTasksCounter" value="4170" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
