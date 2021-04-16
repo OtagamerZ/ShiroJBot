@@ -46,105 +46,105 @@ import java.util.stream.Collectors;
 @Requires({Permission.MESSAGE_EXT_EMOJI})
 public class SweepCommand implements Executable {
 
-    @Override
-    public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-        if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
+	@Override
+	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
 		}
 
-        channel.sendMessage("<a:loading:697879726630502401> | Comparando índices...").queue(s -> {
-            Set<GuildConfig> gds = new HashSet<>(GuildDAO.getAllGuilds());
-            Set<com.kuuhaku.model.persistent.Member> mbs = new HashSet<>(MemberDAO.getAllMembers());
+		channel.sendMessage("<a:loading:697879726630502401> | Comparando índices...").queue(s -> {
+			Set<GuildConfig> gds = new HashSet<>(GuildDAO.getAllGuilds());
+			Set<com.kuuhaku.model.persistent.Member> mbs = new HashSet<>(MemberDAO.getAllMembers());
 
-            Set<String> guildTrashBin = new HashSet<>();
-            Set<String> memberTrashBin = new HashSet<>();
+			Set<String> guildTrashBin = new HashSet<>();
+			Set<String> memberTrashBin = new HashSet<>();
 
-            s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + gds.size() + " guilds)").queue();
+			s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + gds.size() + " guilds)").queue();
 
-            for (GuildConfig gd : gds) {
-                if (Main.getInfo().getGuildByID(gd.getGuildID()) == null) {
-                    guildTrashBin.add(gd.getGuildID());
-                    Helper.logger(this.getClass()).debug(gd.getName() + " is null, added to trash bin");
-                }
-            }
+			for (GuildConfig gd : gds) {
+				if (Main.getInfo().getGuildByID(gd.getGuildID()) == null) {
+					guildTrashBin.add(gd.getGuildID());
+					Helper.logger(this.getClass()).debug(gd.getName() + " is null, added to trash bin");
+				}
+			}
 
-            s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + mbs.size() + " membros)").queue();
+			s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + mbs.size() + " membros)").queue();
 
-            Map<String, List<String>> members = new HashMap<>();
-            for (com.kuuhaku.model.persistent.Member mb1 : mbs) {
-                members.putIfAbsent(mb1.getSid(), new ArrayList<>());
-                members.get(mb1.getSid()).add(mb1.getUid());
-            }
+			Map<String, List<String>> members = new HashMap<>();
+			for (com.kuuhaku.model.persistent.Member mb1 : mbs) {
+				members.putIfAbsent(mb1.getSid(), new ArrayList<>());
+				members.get(mb1.getSid()).add(mb1.getUid());
+			}
 
-            Set<String> foundIds = new HashSet<>();
-            Map<String, Set<String>> missingIds = new HashMap<>();
-            for (Map.Entry<String, List<String>> e : members.entrySet()) {
-                if (guildTrashBin.contains(e.getKey())) {
-                    missingIds.putIfAbsent(e.getKey(), new HashSet<>());
-                    missingIds.get(e.getKey()).addAll(e.getValue());
-                    continue;
-                }
+			Set<String> foundIds = new HashSet<>();
+			Map<String, Set<String>> missingIds = new HashMap<>();
+			for (Map.Entry<String, List<String>> e : members.entrySet()) {
+				if (guildTrashBin.contains(e.getKey())) {
+					missingIds.putIfAbsent(e.getKey(), new HashSet<>());
+					missingIds.get(e.getKey()).addAll(e.getValue());
+					continue;
+				}
 
-                Guild g = Main.getInfo().getGuildByID(e.getKey());
-                if (g == null) {
-                    guildTrashBin.add(e.getKey());
-                    missingIds.putIfAbsent(e.getKey(), new HashSet<>());
-                    missingIds.get(e.getKey()).addAll(e.getValue().stream().map(id -> id + e.getKey()).collect(Collectors.toList()));
-                    Helper.logger(this.getClass()).debug("GID " + e.getKey() + " is null, added to trash bin");
-                } else {
-                    try {
-                        CompletableFuture<Boolean> loaded = new CompletableFuture<>();
-                        g.loadMembers().onSuccess(res -> {
-                            foundIds.addAll(
-                                    res.stream()
-                                            .filter(m -> !m.getUser().isBot())
-                                            .map(m -> m.getId() + e.getKey())
-                                            .collect(Collectors.toList())
-                            );
+				Guild g = Main.getInfo().getGuildByID(e.getKey());
+				if (g == null) {
+					guildTrashBin.add(e.getKey());
 
-                            loaded.complete(true);
-                            Helper.logger(this.getClass()).debug(g.getName() + ": Loaded " + res.size() + " members");
-                        });
-                        loaded.get();
-                    } catch (ExecutionException | InterruptedException err) {
-                        foundIds.addAll(mbs.stream().map(com.kuuhaku.model.persistent.Member::getId).collect(Collectors.toList()));
-                    }
-                }
-            }
+					missingIds.computeIfAbsent(e.getKey(), t -> new HashSet<>())
+							.addAll(e.getValue().stream().map(id -> id + e.getKey()).collect(Collectors.toList()));
+					Helper.logger(this.getClass()).debug("GID " + e.getKey() + " is null, added to trash bin");
+				} else {
+					try {
+						CompletableFuture<Void> loaded = new CompletableFuture<>();
+						g.findMembers(m -> !m.getUser().isBot()).onSuccess(res -> {
+							foundIds.addAll(
+									res.stream()
+											.map(m -> m.getId() + e.getKey())
+											.collect(Collectors.toList())
+							);
 
-            for (com.kuuhaku.model.persistent.Member mb1 : mbs) {
-                if (!foundIds.contains(mb1.getId())) {
-                    missingIds.putIfAbsent(mb1.getSid(), new HashSet<>());
-                    missingIds.get(mb1.getSid()).add(mb1.getUid());
-                }
-            }
+							loaded.complete(null);
+							Helper.logger(this.getClass()).debug(g.getName() + ": Loaded " + res.size() + " members");
+						});
+						loaded.get();
+					} catch (ExecutionException | InterruptedException err) {
+						foundIds.addAll(mbs.stream().map(com.kuuhaku.model.persistent.Member::getId).collect(Collectors.toList()));
+					}
+				}
+			}
 
-            for (Map.Entry<String, Set<String>> entry : missingIds.entrySet()) {
-                String k = entry.getKey();
-                Set<String> v = entry.getValue();
-                for (String id : v) {
-                    memberTrashBin.add(id + k);
-                }
-            }
+			for (com.kuuhaku.model.persistent.Member mb1 : mbs) {
+				if (!foundIds.contains(mb1.getId())) {
+					missingIds.putIfAbsent(mb1.getSid(), new HashSet<>());
+					missingIds.get(mb1.getSid()).add(mb1.getUid());
+				}
+			}
 
-            if (guildTrashBin.size() + memberTrashBin.size() > 0) {
-                Main.getInfo().getConfirmationPending().put(author.getId(), true);
-                String gText = guildTrashBin.size() > 0 ? guildTrashBin.size() == 1 ? guildTrashBin.size() + " índice de servidor" : guildTrashBin.size() + " índices de servidores" : "";
-                String mText = memberTrashBin.size() > 0 ? memberTrashBin.size() == 1 ? memberTrashBin.size() + " membro" : memberTrashBin.size() + " membros" : "";
+			for (Map.Entry<String, Set<String>> entry : missingIds.entrySet()) {
+				String k = entry.getKey();
+				Set<String> v = entry.getValue();
+				for (String id : v) {
+					memberTrashBin.add(id + k);
+				}
+			}
 
-                s.editMessage(":warning: | " + (guildTrashBin.size() + memberTrashBin.size() > 1 ? "Foram encontrados " : "Foi encontrado ") + gText + (!gText.isBlank() && !mText.isBlank() ? " e " : "") + mText + (guildTrashBin.size() + memberTrashBin.size() > 1 ? " inexistentes" : " inexistente") + ", deseja executar a limpeza?")
-                        .queue(m -> Pages.buttonize(m, Map.of(Helper.ACCEPT, (mb, ms) -> {
-                                    Main.getInfo().getConfirmationPending().remove(author.getId());
-                                    Sweeper.sweep(guildTrashBin, memberTrashBin);
+			if (guildTrashBin.size() + memberTrashBin.size() > 0) {
+				Main.getInfo().getConfirmationPending().put(author.getId(), true);
+				String gText = guildTrashBin.size() > 0 ? guildTrashBin.size() == 1 ? guildTrashBin.size() + " índice de servidor" : guildTrashBin.size() + " índices de servidores" : "";
+				String mText = memberTrashBin.size() > 0 ? memberTrashBin.size() == 1 ? memberTrashBin.size() + " membro" : memberTrashBin.size() + " membros" : "";
 
-                                    m.delete().queue(null, Helper::doNothing);
-                                    channel.sendMessage("✅ | Entradas limpas com sucesso!").queue();
-                                }), true, 1, TimeUnit.MINUTES,
-                                u -> u.getId().equals(author.getId()),
-                                ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-                        ));
-            } else s.editMessage("✅ | Não há entradas para serem limpas.").queue();
-        });
-    }
+				s.editMessage(":warning: | " + (guildTrashBin.size() + memberTrashBin.size() > 1 ? "Foram encontrados " : "Foi encontrado ") + gText + (!gText.isBlank() && !mText.isBlank() ? " e " : "") + mText + (guildTrashBin.size() + memberTrashBin.size() > 1 ? " inexistentes" : " inexistente") + ", deseja executar a limpeza?")
+						.queue(m -> Pages.buttonize(m, Map.of(Helper.ACCEPT, (mb, ms) -> {
+									Main.getInfo().getConfirmationPending().remove(author.getId());
+									Sweeper.sweep(guildTrashBin, memberTrashBin);
+
+									m.delete().queue(null, Helper::doNothing);
+									channel.sendMessage("✅ | Entradas limpas com sucesso!").queue();
+								}), true, 1, TimeUnit.MINUTES,
+								u -> u.getId().equals(author.getId()),
+								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+						));
+			} else s.editMessage("✅ | Não há entradas para serem limpas.").queue();
+		});
+	}
 }
