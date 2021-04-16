@@ -114,13 +114,13 @@ public class Account {
 	@Column(columnDefinition = "TEXT")
 	private String dailyProgress = "{}";
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime lastQuest = null;
 
 	@Enumerated(value = EnumType.STRING)
 	private FrameColor frame = FrameColor.PINK;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime lastDaily = null;
 
 	public String getUid() {

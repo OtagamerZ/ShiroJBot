@@ -44,7 +44,7 @@ public class EquipmentMarket implements Market {
 	@Column(columnDefinition = "INT NOT NULL")
 	private int price;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime publishDate = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	public EquipmentMarket(String seller, String buyer, Equipment card, int price) {
