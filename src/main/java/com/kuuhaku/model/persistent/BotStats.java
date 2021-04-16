@@ -67,6 +67,15 @@ public class BotStats {
 		return this;
 	}
 
+	public BotStats(ZonedDateTime timestamp, long ping, long memoryUsage, double memoryPrcnt, double cpuUsage, int servers) {
+		this.timestamp = timestamp;
+		this.ping = ping;
+		this.memoryUsage = memoryUsage;
+		this.memoryPrcnt = memoryPrcnt;
+		this.cpuUsage = cpuUsage;
+		this.servers = servers;
+	}
+
 	public int getId() {
 		return id;
 	}
