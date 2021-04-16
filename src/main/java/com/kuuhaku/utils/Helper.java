@@ -58,9 +58,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
-import org.apache.commons.math3.util.Pair;
 import org.apache.commons.math3.util.Precision;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
@@ -69,6 +69,11 @@ import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.style.Styler;
 
 import javax.annotation.Nonnull;
 import javax.crypto.Mac;
@@ -253,6 +258,10 @@ public class Helper {
 
 	public static int rng(int maxValue, Random random, boolean exclusive) {
 		return Math.abs(random.nextInt(maxValue + (exclusive ? 0 : 1)));
+	}
+
+	public static int rng(int maxValue, long seed, boolean exclusive) {
+		return Math.abs(new Random(seed).nextInt(maxValue + (exclusive ? 0 : 1)));
 	}
 
 	public static Color colorThief(String url) throws IOException {
@@ -461,6 +470,10 @@ public class Helper {
 
 	public static Color getRandomColor() {
 		return Color.decode("#%06x".formatted(rng(0xFFFFFF, false)));
+	}
+
+	public static Color getRandomColor(long seed) {
+		return Color.decode("#%06x".formatted(rng(0xFFFFFF, seed, false)));
 	}
 
 	public static boolean compareWithValues(int value, int... compareWith) {
@@ -1284,7 +1297,7 @@ public class Helper {
 		if (cbUltimate || chance((3 - clamp(prcnt(channel.getGuild().getMemberCount(), 5000), 0, 1)) * (cardBuff != null ? cardBuff.getMult() : 1))) {
 			KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
-					.map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
+					.map(r -> org.apache.commons.math3.util.Pair.create(r, (6 - r.getIndex()) / 12d))
 					.collect(Collectors.toList())
 			);
 
@@ -1335,7 +1348,7 @@ public class Helper {
 			kr = getRandom(cds.stream()
 					.map(Card::getRarity)
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
-					.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
+					.map(r -> org.apache.commons.math3.util.Pair.create(r, (7 - r.getIndex()) / 12d))
 					.collect(Collectors.toList())
 			);
 
@@ -1343,7 +1356,7 @@ public class Helper {
 		} else {
 			kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
-					.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
+					.map(r -> org.apache.commons.math3.util.Pair.create(r, (7 - r.getIndex()) / 12d))
 					.collect(Collectors.toList())
 			);
 
@@ -1837,7 +1850,7 @@ public class Helper {
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static void keepMaximumNFiles(File folder, int maximum) {
 		if (!folder.isDirectory()) return;
-		List<org.apache.commons.lang3.tuple.Pair<File, FileTime>> files = Arrays.stream(folder.listFiles())
+		List<Pair<File, FileTime>> files = Arrays.stream(folder.listFiles())
 				.map(f -> {
 					FileTime time;
 					try {
@@ -1845,7 +1858,7 @@ public class Helper {
 					} catch (IOException e) {
 						time = null;
 					}
-					return org.apache.commons.lang3.tuple.Pair.of(f, time);
+					return Pair.of(f, time);
 				})
 				.collect(Collectors.toList());
 
@@ -1853,7 +1866,7 @@ public class Helper {
 
 		if (files.size() <= maximum) return;
 
-		files.sort(Comparator.comparing(org.apache.commons.lang3.tuple.Pair::getRight));
+		files.sort(Comparator.comparing(Pair::getRight));
 		while (files.size() > maximum) {
 			files.remove(0).getLeft().delete();
 		}
@@ -1877,11 +1890,11 @@ public class Helper {
 		return String.join(ANTICOPY, input.split(""));
 	}
 
-	public static <T> T getRandom(List<Pair<T, Double>> values) {
+	public static <T> T getRandom(List<org.apache.commons.math3.util.Pair<T, Double>> values) {
 		EnumeratedDistribution<T> ed = new EnumeratedDistribution<>(
 				values.stream()
-						.sorted(Comparator.comparingDouble(Pair::getValue))
-						.map(p -> p.getValue() < 0 ? Pair.create(p.getFirst(), 0d) : p)
+						.sorted(Comparator.comparingDouble(org.apache.commons.math3.util.Pair::getValue))
+						.map(p -> p.getValue() < 0 ? org.apache.commons.math3.util.Pair.create(p.getFirst(), 0d) : p)
 						.collect(Collectors.toList())
 		);
 
@@ -2349,5 +2362,54 @@ public class Helper {
 
 	public static int average(int a, int b) {
 		return Math.round((a + b) / 2f);
+	}
+
+	public static XYChart buildXYChart(String title, Pair<String, String> axis, List<Color> colors) {
+		XYChart chart = new XYChartBuilder()
+				.width(800)
+				.height(600)
+				.title(title)
+				.xAxisTitle(axis.getLeft())
+				.yAxisTitle(axis.getRight())
+				.build();
+
+		chart.getStyler()
+				.setPlotGridLinesColor(new Color(64, 68, 71))
+				.setAxisTickLabelsColor(Color.WHITE)
+				.setAnnotationsFontColor(Color.WHITE)
+				.setChartFontColor(Color.WHITE)
+				.setHasAnnotations(true)
+				.setLegendPosition(Styler.LegendPosition.InsideNE)
+				.setSeriesColors(colors.toArray(Color[]::new))
+				.setPlotBackgroundColor(new Color(32, 34, 37))
+				.setChartBackgroundColor(new Color(16, 17, 20))
+				.setLegendBackgroundColor(new Color(16, 17, 20, 100))
+				.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
+
+		return chart;
+	}
+
+	public static CategoryChart buildBarChart(String title, Pair<String, String> axis, List<Color> colors) {
+		CategoryChart chart = new CategoryChartBuilder()
+				.width(800)
+				.height(600)
+				.title(title)
+				.xAxisTitle(axis.getLeft())
+				.yAxisTitle(axis.getRight())
+				.build();
+
+		chart.getStyler()
+				.setPlotGridLinesColor(new Color(64, 68, 71))
+				.setAxisTickLabelsColor(Color.WHITE)
+				.setAnnotationsFontColor(Color.WHITE)
+				.setChartFontColor(Color.WHITE)
+				.setHasAnnotations(true)
+				.setLegendPosition(Styler.LegendPosition.InsideNE)
+				.setSeriesColors(colors.toArray(Color[]::new))
+				.setPlotBackgroundColor(new Color(32, 34, 37))
+				.setChartBackgroundColor(new Color(16, 17, 20))
+				.setLegendBackgroundColor(new Color(16, 17, 20, 100));
+
+		return chart;
 	}
 }
