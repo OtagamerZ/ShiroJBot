@@ -20,16 +20,17 @@ package com.kuuhaku.handlers.games.tabletop.games.hitotsu;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ThrowingBiConsumer;
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -98,7 +99,17 @@ public class Hitotsu extends Game {
 		}
 
 		Collections.shuffle(available);
-		deque.addAll(available.subList(0, Math.min(available.size(), 150)));
+		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.COMMON).limit(25).collect(Collectors.toList()));
+		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.UNCOMMON).limit(25).collect(Collectors.toList()));
+		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.RARE).limit(25).collect(Collectors.toList()));
+		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.ULTRA_RARE).limit(25).collect(Collectors.toList()));
+		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.LEGENDARY).limit(25).collect(Collectors.toList()));
+		deque.addAll(available.stream().filter(KawaiponCard::isFoil).collect(Collectors.toList()));
+
+		if (deque.size() < 150)
+			deque.addAll(available.subList(0, 150 - deque.size()));
+
+		Collections.shuffle(deque);
 
 		for (User u : players) {
 			seats.put(new Hand(u, deque));
@@ -110,7 +121,7 @@ public class Hitotsu extends Game {
 		channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
 				.queue(s -> {
 					this.message = s;
-					Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), listener);
+					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
 					seats.get(getCurrent().getId()).showHand();
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
