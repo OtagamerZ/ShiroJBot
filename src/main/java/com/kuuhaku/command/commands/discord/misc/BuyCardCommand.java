@@ -303,12 +303,12 @@ public class BuyCardCommand implements Executable {
 					User buyerU = Main.getInfo().getUserByID(cm.getBuyer());
 					if (taxed) {
 						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
+										c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
 								Helper::doNothing
 						);
 					} else {
 						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
+										c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
 								Helper::doNothing
 						);
 					}
@@ -369,12 +369,12 @@ public class BuyCardCommand implements Executable {
 					User buyerU = Main.getInfo().getUserByID(em.getBuyer());
 					if (taxed) {
 						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + em.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
+										c.sendMessage("✅ | Sua carta `" + em.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
 								Helper::doNothing
 						);
 					} else {
 						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + em.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
+										c.sendMessage("✅ | Sua carta `" + em.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
 								Helper::doNothing
 						);
 					}
@@ -432,12 +432,12 @@ public class BuyCardCommand implements Executable {
 					User buyerU = Main.getInfo().getUserByID(fm.getBuyer());
 					if (taxed) {
 						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
+										c.sendMessage("✅ | Sua carta `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
 								Helper::doNothing
 						);
 					} else {
 						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
+										c.sendMessage("✅ | Sua carta `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
 								Helper::doNothing
 						);
 					}
