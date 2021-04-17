@@ -136,7 +136,8 @@ public class DeckStash {
 	}
 
 	public boolean hasInvalidEquipmentCopyCount() {
-		return equipments.stream().distinct().anyMatch(c -> Collections.frequency(equipments, c) > getEquipmentMaxCopies(c));
+		return equipments.stream().distinct().anyMatch(c -> Collections.frequency(equipments, c) > getEquipmentMaxCopies(c))
+			   || equipments.stream().filter(c -> c.getTier() == 4).count() > getEquipmentMaxCopies(true);
 	}
 
 	public Field getField(Card card) {
@@ -182,6 +183,14 @@ public class DeckStash {
 	public int getEquipmentMaxCopies(Equipment eq) {
 		if (eq == null) return 0;
 		else if (eq.getTier() == 4) {
+			return getCombo().getLeft() == Race.BESTIAL ? 2 : 1;
+		} else {
+			return getCombo().getLeft() == Race.BESTIAL ? 4 : 3;
+		}
+	}
+
+	public int getEquipmentMaxCopies(boolean mythic) {
+		if (mythic) {
 			return getCombo().getLeft() == Race.BESTIAL ? 2 : 1;
 		} else {
 			return getCombo().getLeft() == Race.BESTIAL ? 4 : 3;
