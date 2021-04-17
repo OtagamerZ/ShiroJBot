@@ -158,7 +158,12 @@ public class Kawaipon {
 	}
 
 	public boolean hasInvalidEquipmentCopyCount() {
-		return equipments.stream().distinct().anyMatch(c -> Collections.frequency(equipments, c) > getEquipmentMaxCopies(c));
+		return equipments.stream().distinct().anyMatch(c -> Collections.frequency(equipments, c) > getEquipmentMaxCopies(c))
+			   || equipments.stream().filter(c -> c.getTier() == 4).count() > getEquipmentMaxCopies(true);
+	}
+
+	public boolean hasTierFour() {
+		return equipments.stream().anyMatch(c -> c.getTier() == 4);
 	}
 
 	public Field getField(Card card) {
@@ -212,6 +217,14 @@ public class Kawaipon {
 	public int getEquipmentMaxCopies(Equipment eq) {
 		if (eq == null) return 0;
 		else if (eq.getTier() == 4) {
+			return getCombo().getLeft() == Race.BESTIAL ? 2 : 1;
+		} else {
+			return getCombo().getLeft() == Race.BESTIAL ? 4 : 3;
+		}
+	}
+
+	public int getEquipmentMaxCopies(boolean mythic) {
+		if (mythic) {
 			return getCombo().getLeft() == Race.BESTIAL ? 2 : 1;
 		} else {
 			return getCombo().getLeft() == Race.BESTIAL ? 4 : 3;
