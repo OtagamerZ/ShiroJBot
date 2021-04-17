@@ -588,7 +588,7 @@ public class TradeCardCommand implements Executable {
 								AccountDAO.saveAccount(tacc);
 
 								if (taxed) {
-									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (taxa de venda: " + Helper.roundToString((liquidAmount * 100D / price) - 100, 1) + "%)")).queue(null, Helper::doNothing);
+									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (taxa de venda: " + Helper.roundToString(Helper.prcnt(price, liquidAmount) * 100 - 100, 1) + "%)")).queue(null, Helper::doNothing);
 								} else {
 									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (Exceed vitorioso isento de taxa)")).queue(null, Helper::doNothing);
 								}
@@ -802,7 +802,7 @@ public class TradeCardCommand implements Executable {
 								AccountDAO.saveAccount(tacc);
 
 								if (taxed) {
-									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (taxa de venda: " + Helper.roundToString((liquidAmount * 100D / price) - 100, 1) + "%)")).queue(null, Helper::doNothing);
+									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (taxa de venda: " + Helper.roundToString(Helper.prcnt(price, liquidAmount) * 100 - 100, 1) + "%)")).queue(null, Helper::doNothing);
 								} else {
 									s.delete().flatMap(n -> channel.sendMessage("✅ | Venda concluída com sucesso! (Exceed vitorioso isento de taxa)")).queue(null, Helper::doNothing);
 								}
