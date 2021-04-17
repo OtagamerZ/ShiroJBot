@@ -782,7 +782,7 @@ public class Shoukan extends GlobalGame {
 								hands.get(next).getUser().getName(),
 								yPower,
 								(getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "")
-								+ (demonFac > 1 ? " (efeito de raça: +" + Helper.roundToString(demonFac, 0) + "%)" : "")
+								+ (demonFac > 1 ? " (efeito de raça: +" + Helper.roundToString(demonFac * 100 - 100, 0) + "%)" : "")
 								)
 						).addFile(Helper.getBytes(arena.render(this, hands)), "board.jpg")
 								.queue(s -> {
