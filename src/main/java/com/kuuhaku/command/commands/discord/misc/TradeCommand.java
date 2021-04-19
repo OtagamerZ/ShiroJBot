@@ -139,7 +139,6 @@ public class TradeCommand implements Executable {
 															return;
 														}
 
-														System.out.println("Added " + kc.getName());
 														if (add) tc.getCards().add(kc);
 														else tc.getCards().remove(kc);
 													}
