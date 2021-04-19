@@ -121,8 +121,8 @@ public class TradeContent {
 
 			if ((cards.size() > 0 || equipments.size() > 0) && fields.size() > 0) sb.appendNewLine("");
 			if (fields.size() > 0) sb.appendNewLine("[ Campo ]");
-			for (KawaiponCard card : cards) {
-				sb.appendIndentNewLine(card.getName(), 1);
+			for (Field field : fields) {
+				sb.appendIndentNewLine(field.getCard().getName(), 1);
 			}
 		}
 
