@@ -100,6 +100,10 @@ public class Kawaipon implements Cloneable {
 		this.cards.remove(card);
 	}
 
+	public void removeCards(Set<KawaiponCard> cards) {
+		this.cards.removeAll(cards);
+	}
+
 	public Champion getChampion(Card card) {
 		return champions.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
 	}
@@ -156,6 +160,10 @@ public class Kawaipon implements Cloneable {
 		this.equipments.remove(equipment);
 	}
 
+	public void removeEquipments(List<Equipment> equipments) {
+		this.equipments.removeAll(equipments);
+	}
+
 	public int getEquipmentCopies(Card card) {
 		return (int) equipments.stream().filter(k -> k.getCard().equals(card)).count();
 	}
@@ -191,6 +199,10 @@ public class Kawaipon implements Cloneable {
 
 	public void removeField(Field field) {
 		this.fields.remove(field);
+	}
+
+	public void removeFields(List<Field> fields) {
+		this.fields.removeAll(fields);
 	}
 
 	public int getFieldCopies(Card card) {
