@@ -227,7 +227,12 @@ public class TradeCommand implements Executable {
 												}
 
 												if (code == 0) {
-													if (TradeContent.isValidTrade(offers.values())) {
+													if (offers.values().stream().mapToInt(t -> t.getCards().size() + t.getEquipments().size() + t.getFields().size()).sum() == 0) {
+														channel.sendMessage("❌ | Transação inválida, você não pode realizar uma troca sem itens.").queue();
+														for (TradeContent offer : offers.values()) {
+															offer.setClosed(false);
+														}
+													} else if (TradeContent.isValidTrade(offers.values())) {
 														msg.delete().queue(null, Helper::doNothing);
 														sml.close();
 														channel.sendMessage("Transação realizada com sucesso!").queue();
