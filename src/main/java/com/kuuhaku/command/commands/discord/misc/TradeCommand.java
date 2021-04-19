@@ -212,13 +212,15 @@ public class TradeCommand implements Executable {
 													}
 
 													Kawaipon other = KawaiponDAO.getKawaipon(
-															offers.get(
-																	offers.keySet().stream()
-																			.filter(id -> !id.equals(offer.getUid()))
-																			.findFirst().orElseThrow()
-															).getUid()
+															offers.keySet().stream()
+																	.filter(id -> !id.equals(offer.getUid()))
+																	.findFirst().orElseThrow()
 													);
-													code = offer.canReceive(other) ? 0 : 2;
+													if (offer.canReceive(other)) code = 0;
+													else {
+														inv = offer.getUid().equals(author.getId()) ? author : tgt;
+														code = 2;
+													}
 												}
 
 												if (code == 0) {
