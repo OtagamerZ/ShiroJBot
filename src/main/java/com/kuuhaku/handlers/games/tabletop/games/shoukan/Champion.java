@@ -378,7 +378,7 @@ public class Champion implements Drawable, Cloneable {
 				cBonus += game.getArena().getGraveyard().get(s).size() / 200f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altAtk - redAtk + efctAtk) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null ? 1.25f : 1))), 25);
+		return Helper.roundTrunc(Math.max(0, Math.round((altAtk - redAtk + efctAtk) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null ? 1.1f : 1))), 25);
 	}
 
 	public int getDef() {
@@ -401,7 +401,7 @@ public class Champion implements Drawable, Cloneable {
 				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altDef - redDef + efctDef) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null ? 1.25f : 1))), 25);
+		return Helper.roundTrunc(Math.max(0, Math.round((altDef - redDef + efctDef) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null ? 1.1f : 1))), 25);
 	}
 
 	public int getAltAtk() {
