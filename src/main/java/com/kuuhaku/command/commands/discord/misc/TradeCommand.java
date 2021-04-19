@@ -122,7 +122,10 @@ public class TradeCommand implements Executable {
 											if (StringUtils.isNumeric(offer)) {
 												try {
 													int c = Integer.parseInt(offer);
-													if (acc.getBalance() < c) {
+													if (c < 0) {
+														channel.sendMessage("❌ | O valor deve ser maior ou igual a 0.").queue();
+														return;
+													} else if (acc.getBalance() < c) {
 														channel.sendMessage("❌ | Você não possui créditos suficientes.").queue();
 														return;
 													}
@@ -189,6 +192,8 @@ public class TradeCommand implements Executable {
 								};
 
 								Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (_mb, _ms) -> {
+											offers.get(_mb.getId()).setClosed(true);
+
 											if (offers.values().stream().allMatch(TradeContent::isClosed)) {
 												int code = 0;
 												User inv = null;
@@ -239,17 +244,18 @@ public class TradeCommand implements Executable {
 												}
 											}
 
-											offers.get(_mb.getId()).setClosed(true);
 											eb.clearFields()
 													.addField((offers.get(author.getId()).isClosed() ? "(CONFIRMADO) " : "") + author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(author.getId()).getValue()), true)
 													.addField((offers.get(tgt.getId()).isClosed() ? "(CONFIRMADO) " : "") + tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(tgt.getId()).getValue()), true)
 													.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
 
 											msg.editMessage(eb.build()).queue();
-										}), true, 1, TimeUnit.MINUTES,
+										}), true, 5, TimeUnit.MINUTES,
 										u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
 										_ms -> {
-											msg.editMessage("Transação cancelada.").embed(null).queue();
+											msg.editMessage("Transação cancelada.")
+													.flatMap(m -> m.suppressEmbeds(true))
+													.queue();
 											sml.close();
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											Main.getInfo().getConfirmationPending().remove(tgt.getId());
