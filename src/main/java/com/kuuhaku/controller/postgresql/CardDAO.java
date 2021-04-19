@@ -783,6 +783,7 @@ public class CardDAO {
 	public static CardType identifyType(String name) {
 		if (getField(name) != null) return CardType.FIELD;
 		else if (getEquipment(name) != null) return CardType.EVOGEAR;
-		else return CardType.KAWAIPON;
+		else if (getCard(name) != null) return CardType.KAWAIPON;
+		else return CardType.NONE;
 	}
 }
