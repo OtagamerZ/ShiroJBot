@@ -198,8 +198,8 @@ public class TradeCommand implements Executable {
 												int code = 0;
 												User inv = null;
 												for (TradeContent offer : offers.values()) {
-													Account oAcc = AccountDAO.getAccount(offer.getUid());
-													Kawaipon oKp = KawaiponDAO.getKawaipon(offer.getUid());
+													Account oAcc = offer.getAccount();
+													Kawaipon oKp = offer.getKawaipon();
 
 													code = oAcc.getBalance() >= offer.getCredits()
 														   && oKp.getCards().containsAll(offer.getCards())
@@ -211,14 +211,13 @@ public class TradeCommand implements Executable {
 														break;
 													}
 
-													Kawaipon other = KawaiponDAO.getKawaipon(
-															offers.keySet().stream()
-																	.filter(id -> !id.equals(offer.getUid()))
-																	.findFirst().orElseThrow()
-													);
-													if (offer.canReceive(other)) code = 0;
+													TradeContent oT = offers.values().stream()
+															.filter(t -> !t.getUid().equals(offer.getUid()))
+															.findFirst().orElseThrow();
+
+													if (offer.canReceive(oT.getKawaipon())) code = 0;
 													else {
-														inv = offer.getUid().equals(author.getId()) ? author : tgt;
+														inv = oT.getUid().equals(author.getId()) ? author : tgt;
 														code = 2;
 													}
 												}
@@ -228,6 +227,7 @@ public class TradeCommand implements Executable {
 														msg.delete().queue(null, Helper::doNothing);
 														sml.close();
 														channel.sendMessage("Transação realizada com sucesso!").queue();
+														TradeContent.trade(offers.values());
 														return;
 													} else {
 														channel.sendMessage("❌ | Transação inválida, o valor entre as ofertas é injusto.").queue();

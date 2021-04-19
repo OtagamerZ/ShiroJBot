@@ -149,6 +149,10 @@ public class Kawaipon implements Cloneable {
 		this.equipments.add(equipment);
 	}
 
+	public void addEquipments(List<Equipment> equipments) {
+		this.equipments.addAll(equipments);
+	}
+
 	public void removeEquipment(Equipment equipment) {
 		this.equipments.remove(equipment);
 	}
@@ -180,6 +184,10 @@ public class Kawaipon implements Cloneable {
 
 	public void addField(Field field) {
 		this.fields.add(field);
+	}
+
+	public void addFields(List<Field> fields) {
+		this.fields.addAll(fields);
 	}
 
 	public void removeField(Field field) {
