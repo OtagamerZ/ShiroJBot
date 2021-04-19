@@ -19,5 +19,5 @@
 package com.kuuhaku.model.enums;
 
 public enum CardType {
-	KAWAIPON, EVOGEAR, FIELD
+	KAWAIPON, EVOGEAR, FIELD, NONE
 }

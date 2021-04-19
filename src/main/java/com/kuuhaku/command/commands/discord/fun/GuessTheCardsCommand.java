@@ -43,10 +43,11 @@ import org.jetbrains.annotations.NotNull;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -60,7 +61,6 @@ import java.util.stream.Collectors;
 @Requires({Permission.MESSAGE_ATTACH_FILES})
 public class GuessTheCardsCommand implements Executable {
 
-
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().gameInProgress(author.getId())) {
@@ -69,7 +69,11 @@ public class GuessTheCardsCommand implements Executable {
 		}
 
 		try {
-			BufferedImage mask = Helper.toColorSpace(ImageIO.read(Objects.requireNonNull(GuessTheCardsCommand.class.getClassLoader().getResourceAsStream("assets/gtc_mask.png"))), BufferedImage.TYPE_INT_ARGB);
+			File[] masks = new File(Helper.getResource(this.getClass(), "assets/masks").toURI()).listFiles();
+			assert masks != null;
+
+			BufferedImage mask = Helper.toColorSpace(ImageIO.read(masks[Helper.rng(masks.length, true)]), BufferedImage.TYPE_INT_ARGB);
+
 			List<Card> c = Helper.getRandomN(CardDAO.getCards(), 3, 1);
 			List<String> names = c.stream().map(Card::getId).collect(Collectors.toList());
 			List<BufferedImage> imgs = c.stream()
@@ -88,7 +92,7 @@ public class GuessTheCardsCommand implements Executable {
 
 			channel.sendMessage("Quais são as 3 cartas nesta imagem? Escreva os três nomes com `_` no lugar de espaços e separados por ponto-e-vírgula (`;`).")
 					.addFile(Helper.getBytes(img, "png"), "image.png")
-					.queue(ms -> Main.getInfo().getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+					.queue(ms -> ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
 						private final Consumer<Void> success = s -> {
 							ms.delete().queue(null, Helper::doNothing);
 							close();
@@ -177,7 +181,7 @@ public class GuessTheCardsCommand implements Executable {
 							timeout = null;
 						}
 					}));
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
