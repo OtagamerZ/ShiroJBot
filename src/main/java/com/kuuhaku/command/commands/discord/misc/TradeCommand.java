@@ -55,7 +55,7 @@ import java.util.stream.Stream;
 @Command(
 		name = "trocar",
 		aliases = {"trade"},
-		usage = "req_user",
+		usage = "req_mention",
 		category = Category.MISC
 )
 @Requires({
