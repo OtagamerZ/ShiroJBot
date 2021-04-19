@@ -148,11 +148,17 @@ public class TradeContent {
 		kp1.addCards(tc2.cards);
 		kp1.addEquipments(tc2.equipments);
 		kp1.addFields(tc2.fields);
+		kp2.removeCards(tc2.cards);
+		kp2.removeEquipments(tc2.equipments);
+		kp2.removeFields(tc2.fields);
 
 		acc2.addCredit(liquidAmount2, TradeContent.class);
 		kp2.addCards(tc1.cards);
 		kp2.addEquipments(tc1.equipments);
 		kp2.addFields(tc1.fields);
+		kp1.removeCards(tc1.cards);
+		kp1.removeEquipments(tc1.equipments);
+		kp1.removeFields(tc1.fields);
 
 		KawaiponDAO.saveKawaipon(kp1);
 		KawaiponDAO.saveKawaipon(kp2);
