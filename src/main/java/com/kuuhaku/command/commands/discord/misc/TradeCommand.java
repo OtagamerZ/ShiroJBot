@@ -53,8 +53,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 @Command(
-		name = "ttrocar",
-		aliases = {"ttrade"},
+		name = "trocar",
+		aliases = {"trade"},
 		usage = "req_user",
 		category = Category.MISC
 )
