@@ -106,7 +106,11 @@ public class TradeCommand implements Executable {
 
 										if (Helper.equalsAny(usr.getId(), author.getId(), tgt.getId()) && (content.startsWith("+") || content.startsWith("-"))) {
 											boolean add = content.startsWith("+");
-											String offer = content.replaceFirst("\\+|-", "").trim();
+											String[] rawOffer = content.replaceFirst("\\+|-", "").trim().split(" ");
+											if (rawOffer.length < 1) return;
+
+											boolean foil = Helper.equalsAny(rawOffer, "c");
+											String offer = rawOffer[0];
 											TradeContent tc = offers.get(usr.getId());
 											if (tc.isClosed()) {
 												channel.sendMessage("❌ | Você já confirmou sua oferta.").queue();
@@ -133,7 +137,7 @@ public class TradeCommand implements Executable {
 												CardType ct = CardDAO.identifyType(offer);
 												switch (ct) {
 													case KAWAIPON -> {
-														KawaiponCard kc = new KawaiponCard(CardDAO.getCard(offer), StringUtils.containsIgnoreCase(offer, " c"));
+														KawaiponCard kc = new KawaiponCard(CardDAO.getCard(offer), foil);
 														if (!kp.getCards().contains(kc)) {
 															channel.sendMessage("❌ | Você não possui essa carta.").queue();
 															return;
@@ -223,6 +227,7 @@ public class TradeCommand implements Executable {
 												}
 											}
 
+											offers.get(_mb.getId()).setClosed(true);
 											eb.clearFields()
 													.addField((offers.get(author.getId()).isClosed() ? "(CONFIRMADO) " : "") + author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(author.getId()).getValue()), true)
 													.addField((offers.get(tgt.getId()).isClosed() ? "(CONFIRMADO) " : "") + tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(tgt.getId()).getValue()), true)
