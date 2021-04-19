@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção referente ao último commit">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1159,13 +1159,6 @@
       <workItem from="1618593814709" duration="8461000" />
       <workItem from="1618679070507" duration="419000" />
     </task>
-    <task id="LOCAL-04133" summary="Correção nos efeitos por tempo do Shoukan">
-      <created>1618409623345</created>
-      <option name="number" value="04133" />
-      <option name="presentableId" value="LOCAL-04133" />
-      <option name="project" value="LOCAL" />
-      <updated>1618409623345</updated>
-    </task>
     <task id="LOCAL-04134" summary="Correção nos efeitos por tempo do Shoukan">
       <created>1618409718888</created>
       <option name="number" value="04134" />
@@ -1502,7 +1495,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618848241553</updated>
     </task>
-    <option name="localTasksCounter" value="4182" />
+    <task id="LOCAL-04182" summary="Correção referente ao último commit">
+      <created>1618848278482</created>
+      <option name="number" value="04182" />
+      <option name="presentableId" value="LOCAL-04182" />
+      <option name="project" value="LOCAL" />
+      <updated>1618848278482</updated>
+    </task>
+    <option name="localTasksCounter" value="4183" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
