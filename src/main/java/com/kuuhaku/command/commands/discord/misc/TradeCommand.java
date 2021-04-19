@@ -58,7 +58,11 @@ import java.util.stream.Stream;
 		usage = "req_user",
 		category = Category.MISC
 )
-@Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
+@Requires({
+		Permission.MESSAGE_MANAGE,
+		Permission.MESSAGE_ADD_REACTION,
+		Permission.MESSAGE_EMBED_LINKS
+})
 public class TradeCommand implements Executable {
 
 	@Override
