@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ *  
  * You should have received a copy of the GNU General Public License
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
@@ -88,6 +88,7 @@ public class ClanRevertCardCommand implements Executable {
 			case KAWAIPON -> CardDAO.getChampion(args[0]);
 			case EVOGEAR -> CardDAO.getEquipment(args[0]);
 			case FIELD -> CardDAO.getField(args[0]);
+			case NONE -> null;
 		};
 		if (tc == null) {
 			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
