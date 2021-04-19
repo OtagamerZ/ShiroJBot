@@ -81,6 +81,7 @@ public class TradeCommand implements Executable {
 		User tgt = message.getMentionedUsers().get(0);
 		channel.sendMessage(tgt.getAsMention() + ", " + author.getAsMention() + " deseja negociar com você, deseja aceitar?").queue(s ->
 				Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
+							if (!mb.getId().equals(tgt.getId())) return;
 							s.delete().queue(null, Helper::doNothing);
 							Map<String, TradeContent> offers = Map.of(
 									author.getId(), new TradeContent(author.getId()),
@@ -92,10 +93,10 @@ public class TradeCommand implements Executable {
 
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle("Comércio entre " + author.getName() + " e " + tgt.getName())
-									.setDescription("Para adicionar uma oferta digite `+ nome_da_carta [C]`, para oferecer uma quantia de créditos digite apenas `+ valor`.")
+									.setDescription("Para adicionar/remover uma oferta digite `+/- nome_da_carta [C]`, para definir uma quantia de créditos digite apenas `+ valor`.")
 									.addField(author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + offers.get(author.getId()).getValue(), true)
 									.addField(tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + offers.get(tgt.getId()).getValue(), true)
-									.setFooter(author.getName() + ": " + acc.getBalance() + " CR\n" + tgt.getName() + ": " + tacc.getBalance() + " CR");
+									.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
 
 							channel.sendMessage(eb.build()).queue(orig -> {
 								AtomicReference<Message> msg = new AtomicReference<>(orig);
@@ -106,8 +107,9 @@ public class TradeCommand implements Executable {
 										User usr = event.getAuthor();
 										String content = event.getMessage().getContentRaw();
 
-										if (Helper.equalsAny(usr.getId(), author.getId(), tgt.getId()) && content.startsWith("+")) {
-											String offer = content.replace("+", "").trim();
+										if (Helper.equalsAny(usr.getId(), author.getId(), tgt.getId()) && (content.startsWith("+") || content.startsWith("-"))) {
+											boolean add = content.startsWith("+");
+											String offer = content.replaceFirst("\\+|-", "").trim();
 											TradeContent tc = offers.get(usr.getId());
 											if (tc.isClosed()) {
 												channel.sendMessage("❌ | Você já confirmou sua oferta.").queue();
@@ -140,7 +142,8 @@ public class TradeCommand implements Executable {
 															return;
 														}
 
-														tc.getCards().add(kc);
+														if (add) tc.getCards().add(kc);
+														else tc.getCards().remove(kc);
 													}
 													case EVOGEAR -> {
 														Equipment e = CardDAO.getEquipment(offer);
@@ -149,7 +152,8 @@ public class TradeCommand implements Executable {
 															return;
 														}
 
-														tc.getEquipments().add(e);
+														if (add) tc.getEquipments().add(e);
+														else tc.getEquipments().remove(e);
 													}
 													case FIELD -> {
 														Field f = CardDAO.getField(offer);
@@ -158,7 +162,8 @@ public class TradeCommand implements Executable {
 															return;
 														}
 
-														tc.getFields().add(f);
+														if (add) tc.getFields().add(f);
+														else tc.getFields().remove(f);
 													}
 													case NONE -> {
 														channel.sendMessage("❌ | Carta inexistente, você não quis dizer `" + Helper.didYouMean(args[2], Stream.of(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames(), CardDAO.getAllFieldNames()).flatMap(Collection::stream).toArray(String[]::new)) + "`?").queue();
@@ -173,11 +178,13 @@ public class TradeCommand implements Executable {
 											eb.clearFields()
 													.addField(author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + offers.get(author.getId()).getValue(), true)
 													.addField(tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + offers.get(tgt.getId()).getValue(), true)
-													.setFooter(author.getName() + ": " + acc.getBalance() + " CR\n" + tgt.getName() + ": " + tacc.getBalance() + " CR");
+													.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
 
 											orig.editMessage(eb.build())
 													.onErrorFlatMap(t -> channel.sendMessage(eb.build()))
 													.queue(msg::set);
+
+											event.getMessage().delete().queue(null, Helper::doNothing);
 										}
 									}
 								};
@@ -224,7 +231,7 @@ public class TradeCommand implements Executable {
 											eb.clearFields()
 													.addField((offers.get(author.getId()).isClosed() ? "(CONFIRMADO) " : "") + author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + offers.get(author.getId()).getValue(), true)
 													.addField((offers.get(tgt.getId()).isClosed() ? "(CONFIRMADO) " : "") + tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + offers.get(tgt.getId()).getValue(), true)
-													.setFooter(author.getName() + ": " + acc.getBalance() + " CR\n" + tgt.getName() + ": " + tacc.getBalance() + " CR");
+													.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
 
 											orig.editMessage(eb.build())
 													.onErrorFlatMap(t -> channel.sendMessage(eb.build()))
