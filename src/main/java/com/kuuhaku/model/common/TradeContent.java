@@ -71,16 +71,16 @@ public class TradeContent {
 
 	public int getValue() {
 		return Stream.of(cards, equipments, fields)
-				.flatMap(Collection::stream)
-				.mapToInt(o -> {
-					if (o instanceof KawaiponCard) {
-						KawaiponCard kc = (KawaiponCard) o;
-						return kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE / 2 * (kc.isFoil() ? 2 : 1);
-					} else if (o instanceof Equipment) {
-						Equipment e = (Equipment) o;
-						return e.getTier() * Helper.BASE_EQUIPMENT_PRICE / 2;
-					} else return Helper.BASE_FIELD_PRICE / 2;
-				}).sum();
+					   .flatMap(Collection::stream)
+					   .mapToInt(o -> {
+						   if (o instanceof KawaiponCard) {
+							   KawaiponCard kc = (KawaiponCard) o;
+							   return kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE / 2 * (kc.isFoil() ? 2 : 1);
+						   } else if (o instanceof Equipment) {
+							   Equipment e = (Equipment) o;
+							   return e.getTier() * Helper.BASE_EQUIPMENT_PRICE / 2;
+						   } else return Helper.BASE_FIELD_PRICE / 2;
+					   }).sum() * (getAccount().getLoan() > 0 ? 4 : 1);
 	}
 
 	public void setClosed(boolean closed) {
