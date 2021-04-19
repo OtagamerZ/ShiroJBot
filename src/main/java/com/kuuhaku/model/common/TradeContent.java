@@ -22,6 +22,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.XStringBuilder;
@@ -85,6 +86,23 @@ public class TradeContent {
 
 	public boolean isClosed() {
 		return closed;
+	}
+
+	public boolean canReceive(Kawaipon kp) {
+		Kawaipon aux = kp.clone();
+		if (aux.getCards().stream().anyMatch(cards::contains)) return false;
+
+		for (Equipment equipment : new HashSet<>(equipments)) {
+			if (aux.checkEquipmentError(equipment) == 0) aux.addEquipment(equipment);
+			else return false;
+		}
+
+		for (Field field : new HashSet<>(fields)) {
+			if (aux.checkFieldError(field) == 0) aux.addField(field);
+			else return false;
+		}
+
+		return true;
 	}
 
 	public static boolean isValidTrade(Collection<TradeContent> offers) {
