@@ -2456,6 +2456,6 @@ public class Helper {
 	}
 
 	public static int roundTrunc(int value, int mult) {
-		return value * Math.round((float) (value % mult) / mult);
+		return Math.round(value * ((float) value % mult / mult));
 	}
 }
