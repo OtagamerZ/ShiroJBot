@@ -50,7 +50,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 @Command(
@@ -94,13 +93,11 @@ public class TradeCommand implements Executable {
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle("Comércio entre " + author.getName() + " e " + tgt.getName())
 									.setDescription("Para adicionar/remover uma oferta digite `+/- nome_da_carta [C]`, para definir uma quantia de créditos digite apenas `+ valor`.")
-									.addField(author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + offers.get(author.getId()).getValue(), true)
-									.addField(tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + offers.get(tgt.getId()).getValue(), true)
+									.addField(author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(author.getId()).getValue()), true)
+									.addField(tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(tgt.getId()).getValue()), true)
 									.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
 
-							channel.sendMessage(eb.build()).queue(orig -> {
-								AtomicReference<Message> msg = new AtomicReference<>(orig);
-
+							channel.sendMessage(eb.build()).queue(msg -> {
 								SimpleMessageListener sml = new SimpleMessageListener() {
 									@Override
 									public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -133,7 +130,7 @@ public class TradeCommand implements Executable {
 												}
 											} else {
 												Kawaipon kp = KawaiponDAO.getKawaipon(usr.getId());
-												CardType ct = CardDAO.identifyType(content.replace("+", "").trim());
+												CardType ct = CardDAO.identifyType(offer);
 												switch (ct) {
 													case KAWAIPON -> {
 														KawaiponCard kc = new KawaiponCard(CardDAO.getCard(offer), StringUtils.containsIgnoreCase(offer, " c"));
@@ -142,6 +139,7 @@ public class TradeCommand implements Executable {
 															return;
 														}
 
+														System.out.println("Added " + kc.getName());
 														if (add) tc.getCards().add(kc);
 														else tc.getCards().remove(kc);
 													}
@@ -166,7 +164,7 @@ public class TradeCommand implements Executable {
 														else tc.getFields().remove(f);
 													}
 													case NONE -> {
-														channel.sendMessage("❌ | Carta inexistente, você não quis dizer `" + Helper.didYouMean(args[2], Stream.of(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames(), CardDAO.getAllFieldNames()).flatMap(Collection::stream).toArray(String[]::new)) + "`?").queue();
+														channel.sendMessage("❌ | Carta inexistente, você não quis dizer `" + Helper.didYouMean(offer, Stream.of(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames(), CardDAO.getAllFieldNames()).flatMap(Collection::stream).toArray(String[]::new)) + "`?").queue();
 														return;
 													}
 												}
@@ -176,20 +174,18 @@ public class TradeCommand implements Executable {
 												of.setClosed(false);
 											}
 											eb.clearFields()
-													.addField(author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + offers.get(author.getId()).getValue(), true)
-													.addField(tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + offers.get(tgt.getId()).getValue(), true)
+													.addField(author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(author.getId()).getValue()), true)
+													.addField(tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(tgt.getId()).getValue()), true)
 													.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
 
-											orig.editMessage(eb.build())
-													.onErrorFlatMap(t -> channel.sendMessage(eb.build()))
-													.queue(msg::set);
+											msg.editMessage(eb.build()).queue();
 
 											event.getMessage().delete().queue(null, Helper::doNothing);
 										}
 									}
 								};
 
-								Pages.buttonize(orig, Collections.singletonMap(Helper.ACCEPT, (_mb, _ms) -> {
+								Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (_mb, _ms) -> {
 											if (offers.values().stream().allMatch(TradeContent::isClosed)) {
 												boolean valid = true;
 												User inv = null;
@@ -210,7 +206,7 @@ public class TradeCommand implements Executable {
 
 												if (valid) {
 													if (TradeContent.isValidTrade(offers.values())) {
-														orig.delete().queue(null, Helper::doNothing);
+														msg.delete().queue(null, Helper::doNothing);
 														sml.close();
 														channel.sendMessage("Transação realizada com sucesso!").queue();
 														return;
@@ -229,16 +225,16 @@ public class TradeCommand implements Executable {
 											}
 
 											eb.clearFields()
-													.addField((offers.get(author.getId()).isClosed() ? "(CONFIRMADO) " : "") + author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + offers.get(author.getId()).getValue(), true)
-													.addField((offers.get(tgt.getId()).isClosed() ? "(CONFIRMADO) " : "") + tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + offers.get(tgt.getId()).getValue(), true)
+													.addField((offers.get(author.getId()).isClosed() ? "(CONFIRMADO) " : "") + author.getName() + " oferece:", offers.get(author.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(author.getId()).getValue()), true)
+													.addField((offers.get(tgt.getId()).isClosed() ? "(CONFIRMADO) " : "") + tgt.getName() + " oferece:", offers.get(tgt.getId()).toString() + "\nValor base da oferta: " + Helper.separate(offers.get(tgt.getId()).getValue()), true)
 													.setFooter(author.getName() + ": " + Helper.separate(acc.getBalance()) + " CR\n" + tgt.getName() + ": " + Helper.separate(tacc.getBalance()) + " CR");
 
-											orig.editMessage(eb.build())
-													.onErrorFlatMap(t -> channel.sendMessage(eb.build()))
-													.queue(msg::set);
+											msg.editMessage(eb.build()).queue();
 										}), true, 1, TimeUnit.MINUTES,
 										u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
 										_ms -> {
+											msg.editMessage("Transação cancelada.").queue();
+											sml.close();
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											Main.getInfo().getConfirmationPending().remove(tgt.getId());
 										}

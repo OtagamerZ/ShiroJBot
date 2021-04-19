@@ -106,7 +106,7 @@ public class TradeContent {
 		if (credits + cards.size() + equipments.size() + fields.size() == 0) {
 			sb.appendNewLine("Nada");
 		} else {
-			if (credits > 0) sb.appendNewLine(credits + " .CR");
+			if (credits > 0) sb.appendNewLine(Helper.separate(credits) + " .CR");
 
 			if (cards.size() > 0) sb.appendNewLine("[ Kawaipon ]");
 			for (KawaiponCard card : cards) {
