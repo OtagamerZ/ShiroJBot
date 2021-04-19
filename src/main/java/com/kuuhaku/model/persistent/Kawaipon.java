@@ -389,7 +389,7 @@ public class Kawaipon implements Cloneable {
 		return 0;
 	}
 
-	public Kawaipon clone() {
+	public Kawaipon copy() {
 		try {
 			return (Kawaipon) super.clone();
 		} catch (CloneNotSupportedException e) {

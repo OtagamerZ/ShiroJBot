@@ -89,8 +89,10 @@ public class TradeContent {
 	}
 
 	public boolean canReceive(Kawaipon kp) {
-		Kawaipon aux = kp.clone();
-		if (aux.getCards().stream().anyMatch(cards::contains)) return false;
+		Kawaipon aux = kp.copy();
+		for (KawaiponCard card : cards) {
+			if (aux.getCards().contains(card)) return false;
+		}
 
 		for (Equipment equipment : new HashSet<>(equipments)) {
 			if (aux.checkEquipmentError(equipment) == 0) aux.addEquipment(equipment);
