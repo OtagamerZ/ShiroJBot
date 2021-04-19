@@ -89,7 +89,6 @@ public class Kawaipon implements Cloneable {
 	}
 
 	public void addCards(Set<KawaiponCard> cards) {
-		this.cards.removeIf(kc -> !kc.isFoil());
 		this.cards.addAll(cards);
 	}
 
