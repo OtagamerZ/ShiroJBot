@@ -50,4 +50,9 @@ public class XStringBuilder {
 		sb.append("\n").append(StringUtils.repeat("\t", indent)).append(value);
 		return this;
 	}
+
+	@Override
+	public String toString() {
+		return sb.toString();
+	}
 }
