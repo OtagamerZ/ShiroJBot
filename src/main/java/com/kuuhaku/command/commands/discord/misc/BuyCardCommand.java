@@ -217,9 +217,9 @@ public class BuyCardCommand implements Executable {
 							eb.addField(
 									"`ID: " + em.getId() + "` | " + em.getCard().getCard().getName() + " (" + em.getCard().getCard().getRarity().toString() + ")",
 									blackfriday ?
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50) ? "**`valor muito alto`**" : "~~" + Helper.separate(em.getPrice()) + "~~ **" + Helper.separate(Math.round(em.getPrice() * 0.75)) + "** créditos")
+											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_EQUIPMENT_PRICE * 50) ? "**`valor muito alto`**" : "~~" + Helper.separate(em.getPrice()) + "~~ **" + Helper.separate(Math.round(em.getPrice() * 0.75)) + "** créditos")
 											:
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50) ? "**`valor muito alto`**" : "**" + Helper.separate(em.getPrice()) + "** créditos"),
+											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_EQUIPMENT_PRICE * 50) ? "**`valor muito alto`**" : "**" + Helper.separate(em.getPrice()) + "** créditos"),
 									false
 							);
 						}
