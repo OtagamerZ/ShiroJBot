@@ -173,7 +173,7 @@ public class TradeContent {
 		} else {
 			if (credits > 0) {
 				int liquidAmount = Helper.applyTax(uid, credits, 0.1);
-				sb.appendNewLine(Helper.separate(credits) + " .CR" + (liquidAmount == credits ? "" : "(Taxa: " + Helper.roundToString(Helper.prcnt(credits, liquidAmount) * 100 - 100, 1) + "%)"));
+				sb.appendNewLine(Helper.separate(credits) + " .CR" + (liquidAmount == credits ? "" : " (Taxa: " + Helper.roundToString(Helper.prcnt(credits, liquidAmount) * 100 - 100, 1) + "%)"));
 			}
 
 			if (cards.size() > 0) sb.appendNewLine("[ Kawaipon ]");
