@@ -53,6 +53,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
+import net.dv8tion.jda.api.events.user.UserTypingEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -824,24 +825,6 @@ public class ShiroEvents extends ListenerAdapter {
 							event.getChannel().sendMessage("❌ | ID inválido.").queue();
 						}
 					}
-					case "mark", "m" -> {
-						EmbedBuilder eb = new EmbedBuilder()
-								.setTitle("Marcador de atividade:")
-								.setDescription(event.getAuthor().getName() + " marcou que está acompanhando o chat de suporte.")
-								.setColor(Color.decode("#800080"))
-								.setThumbnail("https://iconsplace.com/wp-content/uploads/_icons/800080/256/png/support-icon-13-256.png")
-								.setFooter("Aguarde alguns minutos antes de responder as mensagens dos usuários para evitar interferir.")
-								.setTimestamp(Instant.now());
-
-						for (String d : staffIds) {
-							if (!d.equals(event.getAuthor().getId())) {
-								Main.getInfo().getUserByID(d).openPrivateChannel()
-										.flatMap(c -> c.sendMessage(eb.build()))
-										.queue();
-							}
-						}
-						event.getChannel().sendMessage("✅ | Atividade marcada com sucesso!").queue();
-					}
 				}
 			} catch (NullPointerException ignore) {
 			}
@@ -917,6 +900,20 @@ public class ShiroEvents extends ListenerAdapter {
 		long time = curr - Helper.getOr(voiceTime.remove(mb.getId()), curr);
 		m.setVoiceTime(time);
 		MemberDAO.updateMemberConfigs(m);
+	}
+
+	@Override
+	public void onUserTyping(@NotNull UserTypingEvent event) {
+		User u = event.getUser();
+		if (event.isFromType(ChannelType.PRIVATE) && ShiroInfo.getStaff().contains(u.getId())) {
+			for (String d : ShiroInfo.getStaff()) {
+				if (!d.equals(u.getId())) {
+					Main.getInfo().getUserByID(d).openPrivateChannel()
+							.flatMap(PrivateChannel::sendTyping)
+							.queue();
+				}
+			}
+		}
 	}
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
