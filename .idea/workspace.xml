@@ -13,7 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção referente ao último commit" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção referente ao último commit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCommand.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1157,20 +1160,6 @@
       <workItem from="1618593814709" duration="8461000" />
       <workItem from="1618679070507" duration="419000" />
     </task>
-    <task id="LOCAL-04137" summary="Correção nos efeitos por tempo do Shoukan">
-      <created>1618411409300</created>
-      <option name="number" value="04137" />
-      <option name="presentableId" value="LOCAL-04137" />
-      <option name="project" value="LOCAL" />
-      <updated>1618411409300</updated>
-    </task>
-    <task id="LOCAL-04138" summary="Correção nos efeitos por tempo do Shoukan">
-      <created>1618411864558</created>
-      <option name="number" value="04138" />
-      <option name="presentableId" value="LOCAL-04138" />
-      <option name="project" value="LOCAL" />
-      <updated>1618411864558</updated>
-    </task>
     <task id="LOCAL-04139" summary="Correção nos efeitos por tempo do Shoukan">
       <created>1618412001448</created>
       <option name="number" value="04139" />
@@ -1500,7 +1489,21 @@
       <option name="project" value="LOCAL" />
       <updated>1618848977791</updated>
     </task>
-    <option name="localTasksCounter" value="4186" />
+    <task id="LOCAL-04186" summary="Correção referente ao último commit">
+      <created>1618849271591</created>
+      <option name="number" value="04186" />
+      <option name="presentableId" value="LOCAL-04186" />
+      <option name="project" value="LOCAL" />
+      <updated>1618849271591</updated>
+    </task>
+    <task id="LOCAL-04187" summary="Correção referente ao último commit">
+      <created>1618849433253</created>
+      <option name="number" value="04187" />
+      <option name="presentableId" value="LOCAL-04187" />
+      <option name="project" value="LOCAL" />
+      <updated>1618849433253</updated>
+    </task>
+    <option name="localTasksCounter" value="4188" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
