@@ -109,7 +109,7 @@ public class TradeCommand implements Executable {
 											String[] rawOffer = content.replaceFirst("\\+|-", "").trim().split(" ");
 											if (rawOffer.length < 1) return;
 
-											boolean foil = Helper.equalsAny(rawOffer, "c");
+											boolean foil = Helper.equalsAny("c", rawOffer);
 											String offer = rawOffer[0];
 											TradeContent tc = offers.get(usr.getId());
 											if (tc.isClosed()) {
@@ -190,24 +190,33 @@ public class TradeCommand implements Executable {
 
 								Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (_mb, _ms) -> {
 											if (offers.values().stream().allMatch(TradeContent::isClosed)) {
-												boolean valid = true;
+												int code = 0;
 												User inv = null;
 												for (TradeContent offer : offers.values()) {
 													Account oAcc = AccountDAO.getAccount(offer.getUid());
 													Kawaipon oKp = KawaiponDAO.getKawaipon(offer.getUid());
 
-													valid = oAcc.getBalance() >= offer.getCredits()
-															&& oKp.getCards().containsAll(offer.getCards())
-															&& oKp.getEquipments().containsAll(offer.getEquipments())
-															&& oKp.getFields().containsAll(offer.getFields());
+													code = oAcc.getBalance() >= offer.getCredits()
+														   && oKp.getCards().containsAll(offer.getCards())
+														   && oKp.getEquipments().containsAll(offer.getEquipments())
+														   && oKp.getFields().containsAll(offer.getFields()) ? 0 : 1;
 
-													if (!valid) {
+													if (code != 0) {
 														inv = offer.getUid().equals(author.getId()) ? author : tgt;
 														break;
 													}
+
+													Kawaipon other = KawaiponDAO.getKawaipon(
+															offers.get(
+																	offers.keySet().stream()
+																			.filter(id -> !id.equals(offer.getUid()))
+																			.findFirst().orElseThrow()
+															).getUid()
+													);
+													code = offer.canReceive(other) ? 0 : 2;
 												}
 
-												if (valid) {
+												if (code == 0) {
 													if (TradeContent.isValidTrade(offers.values())) {
 														msg.delete().queue(null, Helper::doNothing);
 														sml.close();
@@ -220,7 +229,10 @@ public class TradeCommand implements Executable {
 														}
 													}
 												} else {
-													channel.sendMessage("❌ | Transação inválida, " + inv.getAsMention() + " não possui todos os itens oferecidos ou não possui créditos suficientes.").queue();
+													switch (code) {
+														case 1 -> channel.sendMessage("❌ | Transação inválida, " + inv.getAsMention() + " não possui todos os itens oferecidos ou não possui créditos suficientes.").queue();
+														case 2 -> channel.sendMessage("❌ | Transação inválida, " + inv.getAsMention() + " possui um dos itens oferecidos.").queue();
+													}
 													for (TradeContent offer : offers.values()) {
 														offer.setClosed(false);
 													}
@@ -237,7 +249,7 @@ public class TradeCommand implements Executable {
 										}), true, 1, TimeUnit.MINUTES,
 										u -> Helper.equalsAny(u.getId(), author.getId(), tgt.getId()),
 										_ms -> {
-											msg.editMessage("Transação cancelada.").queue();
+											msg.editMessage("Transação cancelada.").embed(null).queue();
 											sml.close();
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											Main.getInfo().getConfirmationPending().remove(tgt.getId());
