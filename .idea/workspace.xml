@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção referente ao último commit">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção referente ao último commit" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1159,13 +1157,6 @@
       <workItem from="1618593814709" duration="8461000" />
       <workItem from="1618679070507" duration="419000" />
     </task>
-    <task id="LOCAL-04136" summary="Correção nos efeitos por tempo do Shoukan">
-      <created>1618411029048</created>
-      <option name="number" value="04136" />
-      <option name="presentableId" value="LOCAL-04136" />
-      <option name="project" value="LOCAL" />
-      <updated>1618411029048</updated>
-    </task>
     <task id="LOCAL-04137" summary="Correção nos efeitos por tempo do Shoukan">
       <created>1618411409300</created>
       <option name="number" value="04137" />
@@ -1502,7 +1493,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618848766806</updated>
     </task>
-    <option name="localTasksCounter" value="4185" />
+    <task id="LOCAL-04185" summary="Correção referente ao último commit">
+      <created>1618848977791</created>
+      <option name="number" value="04185" />
+      <option name="presentableId" value="LOCAL-04185" />
+      <option name="project" value="LOCAL" />
+      <updated>1618848977791</updated>
+    </task>
+    <option name="localTasksCounter" value="4186" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
