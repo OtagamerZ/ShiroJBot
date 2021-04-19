@@ -13,22 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/TradeContent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/XStringBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/masks/001.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/masks/002.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/masks/003.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/masks/004.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheCardsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheCardsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/CardType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/CardType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/gtc_mask.png" beforeDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;&#10;Campeões sem efeito agora possuem 125% dos atributos;" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1172,13 +1157,6 @@
       <workItem from="1618593814709" duration="8461000" />
       <workItem from="1618679070507" duration="419000" />
     </task>
-    <task id="LOCAL-04131" summary="Correções menores">
-      <created>1618353324361</created>
-      <option name="number" value="04131" />
-      <option name="presentableId" value="LOCAL-04131" />
-      <option name="project" value="LOCAL" />
-      <updated>1618353324361</updated>
-    </task>
     <task id="LOCAL-04132" summary="Correções menores">
       <created>1618355670193</created>
       <option name="number" value="04132" />
@@ -1515,7 +1493,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618618762434</updated>
     </task>
-    <option name="localTasksCounter" value="4180" />
+    <task id="LOCAL-04180" summary="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;&#10;Campeões sem efeito agora possuem 125% dos atributos;">
+      <created>1618844428576</created>
+      <option name="number" value="04180" />
+      <option name="presentableId" value="LOCAL-04180" />
+      <option name="project" value="LOCAL" />
+      <updated>1618844428577</updated>
+    </task>
+    <option name="localTasksCounter" value="4181" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1601,7 +1586,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria no sistema de taxas e rebalanceamento do slots" />
     <MESSAGE value="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);" />
     <MESSAGE value="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;" />
     <MESSAGE value="Correção no Shoukan em duplas" />
@@ -1626,7 +1610,8 @@
     <MESSAGE value="Correção no gráfico de estatísticas sobre a Shiro" />
     <MESSAGE value="Correção no Hitotsu" />
     <MESSAGE value="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;" />
+    <MESSAGE value="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;&#10;Campeões sem efeito agora possuem 125% dos atributos;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;&#10;Campeões sem efeito agora possuem 125% dos atributos;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
