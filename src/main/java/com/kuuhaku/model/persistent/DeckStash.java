@@ -202,10 +202,10 @@ public class DeckStash {
 		if (c == null || c.isFusion()) {
 			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
 			return true;
-		} else if (getChampions().stream().filter(c::equals).count() >= max) {
+		} else if (Collections.frequency(getChampions(), c) >= max) {
 			channel.sendMessage("❌ | Seu clã só pode ter no máximo " + max + " cópias de cada campeão no deck.").queue();
 			return true;
-		} else if (getChampions().size() == 36) {
+		} else if (getChampions().size() >= 36) {
 			channel.sendMessage("❌ | Seu clã só pode ter no máximo 36 campeões no deck.").queue();
 			return true;
 		}
@@ -216,9 +216,9 @@ public class DeckStash {
 	public int checkChampionError(Champion c) {
 		if (c == null || c.isFusion()) {
 			return 1;
-		} else if (getChampions().stream().filter(c::equals).count() == 3) {
+		} else if (Collections.frequency(getChampions(), c) >= getChampionMaxCopies()) {
 			return 2;
-		} else if (getChampions().size() == 36) {
+		} else if (getChampions().size() >= 36) {
 			return 3;
 		}
 
@@ -227,7 +227,7 @@ public class DeckStash {
 
 	public boolean checkEquipment(Equipment e, TextChannel channel) {
 		int max = getEquipmentMaxCopies(e);
-		if (getEquipments().stream().filter(e::equals).count() == max) {
+		if (Collections.frequency(getEquipments(), e) >= max) {
 			channel.sendMessage("❌ | Seu clã só pode ter no máximo " + max + " cópias desse equipamento no deck.").queue();
 			return true;
 		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
@@ -243,7 +243,7 @@ public class DeckStash {
 
 	public int checkEquipmentError(Equipment e) {
 		int max = getEquipmentMaxCopies(e);
-		if (getEquipments().stream().filter(e::equals).count() == max) {
+		if (Collections.frequency(getEquipments(), e) >= max) {
 			return 1;
 		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
 			return 2;
@@ -255,7 +255,7 @@ public class DeckStash {
 	}
 
 	public boolean checkField(Field f, TextChannel channel) {
-		if (getFields().stream().filter(f::equals).count() == 3) {
+		if (Collections.frequency(getFields(), f) >= 3) {
 			channel.sendMessage("❌ | Seu clã só pode ter no máximo 3 cópias de cada campo no deck.").queue();
 			return true;
 		} else if (getFields().size() >= 3) {
@@ -267,7 +267,7 @@ public class DeckStash {
 	}
 
 	public int checkFieldError(Field f) {
-		if (getFields().stream().filter(f::equals).count() == 3) {
+		if (Collections.frequency(getFields(), f) >= 3) {
 			return 1;
 		} else if (getFields().size() >= 3) {
 			return 2;

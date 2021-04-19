@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "kawaipon")
-public class Kawaipon {
+public class Kawaipon implements Cloneable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -236,10 +236,10 @@ public class Kawaipon {
 		if (c == null || c.isFusion()) {
 			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
 			return true;
-		} else if (getChampions().stream().filter(c::equals).count() >= max) {
+		} else if (Collections.frequency(getChampions(), c) >= max) {
 			channel.sendMessage("❌ | Você só pode ter no máximo " + max + " cópias de cada campeão no deck.").queue();
 			return true;
-		} else if (getChampions().size() == 36) {
+		} else if (getChampions().size() >= 36) {
 			channel.sendMessage("❌ | Você só pode ter no máximo 36 campeões no deck.").queue();
 			return true;
 		}
@@ -252,10 +252,10 @@ public class Kawaipon {
 		if (c == null || c.isFusion()) {
 			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
 			return true;
-		} else if (kp.getChampions().stream().filter(c::equals).count() == max) {
+		} else if (Collections.frequency(kp.getChampions(), c) == max) {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo " + max + " cópias de cada campeão no deck.").queue();
 			return true;
-		} else if (kp.getChampions().size() == 36) {
+		} else if (kp.getChampions().size() >= 36) {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 36 campeões no deck.").queue();
 			return true;
 		}
@@ -266,9 +266,9 @@ public class Kawaipon {
 	public int checkChampionError(Champion c) {
 		if (c == null || c.isFusion()) {
 			return 1;
-		} else if (getChampions().stream().filter(c::equals).count() == 3) {
+		} else if (Collections.frequency(getChampions(), c) >= getChampionMaxCopies()) {
 			return 2;
-		} else if (getChampions().size() == 36) {
+		} else if (getChampions().size() >= 36) {
 			return 3;
 		}
 
@@ -278,9 +278,9 @@ public class Kawaipon {
 	public static int checkChampionError(Kawaipon kp, Champion c) {
 		if (c == null || c.isFusion()) {
 			return 1;
-		} else if (kp.getChampions().stream().filter(c::equals).count() == 3) {
+		} else if (Collections.frequency(kp.getChampions(), c) >= kp.getChampionMaxCopies()) {
 			return 2;
-		} else if (kp.getChampions().size() == 36) {
+		} else if (kp.getChampions().size() >= 36) {
 			return 3;
 		}
 
@@ -289,7 +289,7 @@ public class Kawaipon {
 
 	public boolean checkEquipment(Equipment e, TextChannel channel) {
 		int max = getEquipmentMaxCopies(e);
-		if (getEquipments().stream().filter(e::equals).count() == max) {
+		if (Collections.frequency(getEquipments(), e) >= max) {
 			channel.sendMessage("❌ | Você só pode ter no máximo " + max + " cópias desse equipamento no deck.").queue();
 			return true;
 		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
@@ -305,7 +305,7 @@ public class Kawaipon {
 
 	public static boolean checkEquipment(Kawaipon kp, Equipment e, TextChannel channel) {
 		int max = kp.getEquipmentMaxCopies(e);
-		if (kp.getEquipments().stream().filter(e::equals).count() == max) {
+		if (Collections.frequency(kp.getEquipments(), e) >= max) {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo " + max + " cópias desse equipamento no deck.").queue();
 			return true;
 		} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
@@ -321,7 +321,7 @@ public class Kawaipon {
 
 	public int checkEquipmentError(Equipment e) {
 		int max = getEquipmentMaxCopies(e);
-		if (getEquipments().stream().filter(e::equals).count() == max) {
+		if (Collections.frequency(getEquipments(), e) >= max) {
 			return 1;
 		} else if (getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
 			return 2;
@@ -334,7 +334,7 @@ public class Kawaipon {
 
 	public static int checkEquipmentError(Kawaipon kp, Equipment e) {
 		int max = kp.getEquipmentMaxCopies(e);
-		if (kp.getEquipments().stream().filter(e::equals).count() == max) {
+		if (Collections.frequency(kp.getEquipments(), e) >= max) {
 			return 1;
 		} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
 			return 2;
@@ -346,7 +346,7 @@ public class Kawaipon {
 	}
 
 	public boolean checkField(Field f, TextChannel channel) {
-		if (getFields().stream().filter(f::equals).count() == 3) {
+		if (Collections.frequency(getFields(), f) >= 3) {
 			channel.sendMessage("❌ | Você só pode ter no máximo 3 cópias de cada campo no deck.").queue();
 			return true;
 		} else if (getFields().size() >= 3) {
@@ -358,7 +358,7 @@ public class Kawaipon {
 	}
 
 	public static boolean checkField(Kawaipon kp, Field f, TextChannel channel) {
-		if (kp.getFields().stream().filter(f::equals).count() == 3) {
+		if (Collections.frequency(kp.getFields(), f) >= 3) {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 3 cópias de cada campo no deck.").queue();
 			return true;
 		} else if (kp.getFields().size() >= 3) {
@@ -370,7 +370,7 @@ public class Kawaipon {
 	}
 
 	public int checkFieldError(Field f) {
-		if (getFields().stream().filter(f::equals).count() == 3) {
+		if (Collections.frequency(getFields(), f) >= 3) {
 			return 1;
 		} else if (getFields().size() >= 3) {
 			return 2;
@@ -380,12 +380,20 @@ public class Kawaipon {
 	}
 
 	public static int checkFieldError(Kawaipon kp, Field f) {
-		if (kp.getFields().stream().filter(f::equals).count() == 3) {
+		if (Collections.frequency(kp.getFields(), f) >= 3) {
 			return 1;
 		} else if (kp.getFields().size() >= 3) {
 			return 2;
 		}
 
 		return 0;
+	}
+
+	public Kawaipon clone() {
+		try {
+			return (Kawaipon) super.clone();
+		} catch (CloneNotSupportedException e) {
+			return new Kawaipon();
+		}
 	}
 }
