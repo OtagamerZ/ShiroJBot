@@ -1038,6 +1038,7 @@ public class Helper {
 
 	public static void doNothing(Throwable t) {
 		try {
+			logger(Helper.class).debug(t + " | " + t.getStackTrace()[0]);
 			throw t;
 		} catch (Throwable ignore) {
 		}
@@ -2440,5 +2441,21 @@ public class Helper {
 		} catch (NoSuchAlgorithmException e) {
 			return "";
 		}
+	}
+
+	public static URL getResource(Class<?> klass, String path) {
+		URL url = klass.getClassLoader().getResource(path);
+		if (url == null) throw new NullPointerException();
+		else return url;
+	}
+
+	public static InputStream getResourceAsStream(Class<?> klass, String path) {
+		InputStream is = klass.getClassLoader().getResourceAsStream(path);
+		if (is == null) throw new NullPointerException();
+		else return is;
+	}
+
+	public static int roundTrunc(int value, int mult) {
+		return value * Math.round((float) value / mult);
 	}
 }
