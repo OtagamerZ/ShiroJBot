@@ -88,6 +88,7 @@ public class ClanConvertCardCommand implements Executable {
 			case KAWAIPON -> CardDAO.getChampion(args[0]);
 			case EVOGEAR -> CardDAO.getEquipment(args[0]);
 			case FIELD -> CardDAO.getField(args[0]);
+			case NONE -> null;
 		};
 		if (tc == null) {
 			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
