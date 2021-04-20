@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.dev;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.BotStatsDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.Profile;
@@ -171,9 +172,18 @@ public class BotStatsCommand implements Executable {
 				)
 		);
 
+		AxesChartStyler styler = chart.getStyler()
+				.setYAxisMin(1, 0d)
+				.setYAxisMax(1, 100d);
+
+		//noinspection SuspiciousNameCombination
+		styler.setYAxisGroupPosition(0, Styler.YAxisPosition.Left);
+		//noinspection SuspiciousNameCombination
+		styler.setYAxisGroupPosition(1, Styler.YAxisPosition.Right);
 		chart.getStyler().setDecimalPattern("0");
 
 		chart.setYAxisGroupTitle(0, "Absoluto");
+		chart.setYAxisGroupTitle(1, "%");
 
 		chart.addSeries(
 				"Ratelimit",
@@ -210,12 +220,13 @@ public class BotStatsCommand implements Executable {
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
+		long maxCards = CardDAO.getTotalCards();
 		chart.addSeries(
-				"Cartas em cache",
+				"Cartas em cache (%)",
 				List.copyOf(reducedStats.keySet()),
-				reducedStats.values().stream().map(BotStats::getCardCacheCount).collect(Collectors.toList())
+				reducedStats.values().stream().map(s -> Helper.prcnt(s.getCardCacheCount(), maxCards) * 100).collect(Collectors.toList())
 		).setMarker(SeriesMarkers.NONE)
-				.setYAxisGroup(0);
+				.setYAxisGroup(1);
 
 		return Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png");
 	}
