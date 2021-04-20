@@ -137,7 +137,6 @@ public class ShiroInfo {
 	//CACHES
 	private final TempCache<String, Boolean> ratelimit = new TempCache<>(3, TimeUnit.SECONDS);
 	private final TempCache<String, Boolean> confirmationPending = new TempCache<>(1, TimeUnit.MINUTES);
-	private final TempCache<String, Integer> pendingJoin = new TempCache<>(1, TimeUnit.MINUTES);
 	private final TempCache<String, Boolean> specialEvent = new TempCache<>(30, TimeUnit.MINUTES);
 	private final TempCache<String, KawaiponCard> currentCard = new TempCache<>(1, TimeUnit.MINUTES);
 	private final TempCache<String, Prize<?>> currentDrop = new TempCache<>(1, TimeUnit.MINUTES);
@@ -394,10 +393,6 @@ public class ShiroInfo {
 
 	public TempCache<String, byte[]> getCardCache() {
 		return cardCache;
-	}
-
-	public TempCache<String, Integer> getPendingJoin() {
-		return pendingJoin;
 	}
 
 	public TempCache<String, Boolean> getRatelimit() {

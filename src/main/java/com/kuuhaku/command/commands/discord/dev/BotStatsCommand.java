@@ -56,18 +56,17 @@ public class BotStatsCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		List<BotStats> stats = BotStatsDAO.getStats();
 
+		for (int i = 1; i < stats.size() - 1; i++) {
+			BotStats prev = stats.get(i - 1);
+			BotStats curr = stats.get(i);
+			BotStats next = stats.get(i + 1);
+
+			curr.setAverageMemory(Helper.average(prev.getMemoryUsage(), curr.getMemoryUsage(), next.getMemoryUsage()));
+		}
+
 		Map<Date, BotStats> reducedStats = new TreeMap<>(Date::compareTo);
 		for (BotStats stat : stats) {
-			reducedStats.merge(Date.from(stat.getTimestamp().truncatedTo(ChronoUnit.MINUTES).toInstant()), stat, (p, n) ->
-					new BotStats(
-							stat.getTimestamp(),
-							Helper.average(p.getPing(), n.getPing()),
-							Helper.average(p.getMemoryUsage(), n.getMemoryUsage()),
-							Helper.average(p.getMemoryPrcnt(), n.getMemoryPrcnt()),
-							Helper.average(p.getCpuUsage(), n.getCpuUsage()),
-							Helper.average(p.getServers(), n.getServers())
-					)
-			);
+			reducedStats.put(Date.from(stat.getTimestamp().truncatedTo(ChronoUnit.MINUTES).toInstant()), stat);
 		}
 
 		channel.sendMessage("<a:loading:697879726630502401> Gerando gráfico...").queue(m -> {
@@ -79,64 +78,148 @@ public class BotStatsCommand implements Executable {
 			XYChart chart = Helper.buildXYChart(
 					"Estatísticas sobre a Shiro J. Bot",
 					Pair.of("Data", ""),
-					List.of(
-							new Color(60, 177, 28),
-							new Color(158, 220, 140),
-							new Color(224, 123, 46),
-							new Color(36, 172, 227),
-							new Color(130, 32, 243)
-					)
+					List.of()
 			);
 
 			AxesChartStyler styler = chart.getStyler()
 					.setYAxisMin(1, 0d)
 					.setYAxisMax(1, 100d);
 
-			//noinspection SuspiciousNameCombination
-			styler.setYAxisGroupPosition(0, Styler.YAxisPosition.Left);
-			//noinspection SuspiciousNameCombination
-			styler.setYAxisGroupPosition(1, Styler.YAxisPosition.Right);
+			byte[] generalStats = getGeneralStats(reducedStats, chart, styler);
+			byte[] cacheStats = getCacheStats(reducedStats, chart, styler);
 
-			chart.setYAxisGroupTitle(0, "Absoluto");
-			chart.setYAxisGroupTitle(1, "%");
-
-			chart.addSeries(
-					"Uso de memória (%)",
-					List.copyOf(reducedStats.keySet()),
-					reducedStats.values().stream().map(s -> Helper.round(s.getMemoryPrcnt() * 100, 1)).collect(Collectors.toList())
-			).setMarker(SeriesMarkers.NONE)
-					.setYAxisGroup(1);
-
-			chart.addSeries(
-					"Uso de memória (MB)",
-					List.copyOf(reducedStats.keySet()),
-					reducedStats.values().stream().map(s -> StorageUnit.MB.convert(s.getMemoryUsage(), StorageUnit.B)).collect(Collectors.toList())
-			).setMarker(SeriesMarkers.NONE)
-					.setYAxisGroup(0);
-
-			chart.addSeries(
-					"Uso de CPU (%)",
-					List.copyOf(reducedStats.keySet()),
-					reducedStats.values().stream().map(s -> Helper.round(s.getCpuUsage() * 100, 1)).collect(Collectors.toList())
-			).setMarker(SeriesMarkers.NONE)
-					.setYAxisGroup(1);
-
-			chart.addSeries(
-					"Ping (ms)",
-					List.copyOf(reducedStats.keySet()),
-					reducedStats.values().stream().map(BotStats::getPing).collect(Collectors.toList())
-			).setMarker(SeriesMarkers.NONE)
-					.setYAxisGroup(0);
-
-			chart.addSeries(
-					"Servidores",
-					List.copyOf(reducedStats.keySet()),
-					reducedStats.values().stream().map(BotStats::getServers).collect(Collectors.toList())
-			).setMarker(SeriesMarkers.NONE)
-					.setYAxisGroup(0);
-
-			channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "chart.png").queue();
-			m.delete().queue();
+			channel.sendFile(generalStats, "general.png")
+					.addFile(cacheStats, "cache.png")
+					.flatMap(s -> m.delete())
+					.queue();
 		});
+	}
+
+	private byte[] getGeneralStats(Map<Date, BotStats> reducedStats, XYChart chart, AxesChartStyler styler) {
+		//noinspection SuspiciousNameCombination
+		styler.setYAxisGroupPosition(0, Styler.YAxisPosition.Left);
+		//noinspection SuspiciousNameCombination
+		styler.setYAxisGroupPosition(1, Styler.YAxisPosition.Right);
+		styler.setSeriesColors(
+				List.of(
+						new Color(60, 177, 28),
+						new Color(158, 220, 140, 128),
+						new Color(158, 220, 140),
+						new Color(224, 123, 46),
+						new Color(36, 172, 227),
+						new Color(130, 32, 243)
+				).toArray(Color[]::new)
+		);
+
+		chart.setYAxisGroupTitle(0, "Absoluto");
+		chart.setYAxisGroupTitle(1, "%");
+
+		chart.addSeries(
+				"Uso de memória (%)",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(s -> Helper.round(s.getMemoryPrcnt() * 100, 1)).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(1);
+
+		chart.addSeries(
+				"Uso de memória (MB)",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(s -> StorageUnit.MB.convert(s.getMemoryUsage(), StorageUnit.B)).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(0);
+
+		chart.addSeries(
+				"Uso de memória (Avg)",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(s -> StorageUnit.MB.convert(s.getAverageMemory(), StorageUnit.B)).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(0);
+
+		chart.addSeries(
+				"Uso de CPU (%)",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(s -> Helper.round(s.getCpuUsage() * 100, 1)).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(1);
+
+		chart.addSeries(
+				"Ping (ms)",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(BotStats::getPing).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(0);
+
+		chart.addSeries(
+				"Servidores",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(BotStats::getServers).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(0);
+
+		return Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png");
+	}
+
+	private byte[] getCacheStats(Map<Date, BotStats> reducedStats, XYChart chart, AxesChartStyler styler) {
+		//noinspection SuspiciousNameCombination
+		styler.setYAxisGroupPosition(0, Styler.YAxisPosition.Left);
+		//noinspection SuspiciousNameCombination
+		styler.setYAxisGroupPosition(1, Styler.YAxisPosition.Right);
+		styler.setSeriesColors(
+				List.of(
+						new Color(180, 0, 0),
+						new Color(180, 114, 0),
+						new Color(0, 180, 159),
+						new Color(27, 180, 0),
+						new Color(180, 0, 162),
+						new Color(111, 0, 180)
+				).toArray(Color[]::new)
+		);
+
+		chart.setYAxisGroupTitle(0, "Absoluto");
+		chart.setYAxisGroupTitle(1, "%");
+
+		chart.addSeries(
+				"Ratelimit",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(BotStats::getRatelimitCount).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(0);
+
+		chart.addSeries(
+				"Confirmações",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(BotStats::getConfirmationPendingCount).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(0);
+
+		chart.addSeries(
+				"Eventos especiais",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(BotStats::getSpecialEventCount).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(0);
+
+		chart.addSeries(
+				"Drops spawnados",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(BotStats::getCurrentDropCount).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(0);
+
+		chart.addSeries(
+				"Cartas spawnadas",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(BotStats::getCurrentCardCount).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(0);
+
+		chart.addSeries(
+				"Cartas em cache",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(BotStats::getCardCacheCount).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(0);
+
+		return Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png");
 	}
 }
