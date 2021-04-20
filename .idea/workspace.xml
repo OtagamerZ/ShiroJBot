@@ -13,13 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção referente ao último commit">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/BotStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/BotStats.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de nova escala no gráfico sobre a Shiro" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1149,14 +1143,7 @@
       <workItem from="1618537815178" duration="7460000" />
       <workItem from="1618593814709" duration="8461000" />
       <workItem from="1618679070507" duration="419000" />
-      <workItem from="1618919976913" duration="4469000" />
-    </task>
-    <task id="LOCAL-04156" summary="Adicionado registrador de dados sobre a Shiro">
-      <created>1618519228074</created>
-      <option name="number" value="04156" />
-      <option name="presentableId" value="LOCAL-04156" />
-      <option name="project" value="LOCAL" />
-      <updated>1618519228074</updated>
+      <workItem from="1618919976913" duration="4804000" />
     </task>
     <task id="LOCAL-04157" summary="Adicionado registrador de dados sobre a Shiro">
       <created>1618519455076</created>
@@ -1494,7 +1481,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618858034281</updated>
     </task>
-    <option name="localTasksCounter" value="4205" />
+    <task id="LOCAL-04205" summary="Adição de nova escala no gráfico sobre a Shiro">
+      <created>1618926850456</created>
+      <option name="number" value="04205" />
+      <option name="presentableId" value="LOCAL-04205" />
+      <option name="project" value="LOCAL" />
+      <updated>1618926850457</updated>
+    </task>
+    <option name="localTasksCounter" value="4206" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1580,7 +1574,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de evento de páscoa;&#10;Melhorado lojas (créditos e gemas);&#10;Outras correções menores;" />
     <MESSAGE value="Correção no Shoukan em duplas" />
     <MESSAGE value="Correção no alinhamento dos icones de combo" />
     <MESSAGE value="Correção nas lojas de itens" />
@@ -1605,7 +1598,8 @@
     <MESSAGE value="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;" />
     <MESSAGE value="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;&#10;Campeões sem efeito agora possuem 125% dos atributos;" />
     <MESSAGE value="Correção referente ao último commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção referente ao último commit" />
+    <MESSAGE value="Adição de nova escala no gráfico sobre a Shiro" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de nova escala no gráfico sobre a Shiro" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

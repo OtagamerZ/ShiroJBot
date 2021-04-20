@@ -75,18 +75,8 @@ public class BotStatsCommand implements Executable {
 				return;
 			}
 
-			XYChart chart = Helper.buildXYChart(
-					"Estatísticas sobre a Shiro J. Bot",
-					Pair.of("Data", ""),
-					List.of()
-			);
-
-			AxesChartStyler styler = chart.getStyler()
-					.setYAxisMin(1, 0d)
-					.setYAxisMax(1, 100d);
-
-			byte[] generalStats = getGeneralStats(reducedStats, chart, styler);
-			byte[] cacheStats = getCacheStats(reducedStats, chart, styler);
+			byte[] generalStats = getGeneralStats(reducedStats);
+			byte[] cacheStats = getCacheStats(reducedStats);
 
 			channel.sendFile(generalStats, "general.png")
 					.addFile(cacheStats, "cache.png")
@@ -95,21 +85,28 @@ public class BotStatsCommand implements Executable {
 		});
 	}
 
-	private byte[] getGeneralStats(Map<Date, BotStats> reducedStats, XYChart chart, AxesChartStyler styler) {
-		//noinspection SuspiciousNameCombination
-		styler.setYAxisGroupPosition(0, Styler.YAxisPosition.Left);
-		//noinspection SuspiciousNameCombination
-		styler.setYAxisGroupPosition(1, Styler.YAxisPosition.Right);
-		styler.setSeriesColors(
+	private byte[] getGeneralStats(Map<Date, BotStats> reducedStats) {
+		XYChart chart = Helper.buildXYChart(
+				"Estatísticas sobre a Shiro J. Bot",
+				Pair.of("Data", ""),
 				List.of(
 						new Color(60, 177, 28),
-						new Color(158, 220, 140, 128),
+						new Color(158, 220, 140, 26),
 						new Color(158, 220, 140),
 						new Color(224, 123, 46),
 						new Color(36, 172, 227),
 						new Color(130, 32, 243)
-				).toArray(Color[]::new)
+				)
 		);
+
+		AxesChartStyler styler = chart.getStyler()
+				.setYAxisMin(1, 0d)
+				.setYAxisMax(1, 100d);
+
+		//noinspection SuspiciousNameCombination
+		styler.setYAxisGroupPosition(0, Styler.YAxisPosition.Left);
+		//noinspection SuspiciousNameCombination
+		styler.setYAxisGroupPosition(1, Styler.YAxisPosition.Right);
 
 		chart.setYAxisGroupTitle(0, "Absoluto");
 		chart.setYAxisGroupTitle(1, "%");
@@ -159,12 +156,10 @@ public class BotStatsCommand implements Executable {
 		return Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png");
 	}
 
-	private byte[] getCacheStats(Map<Date, BotStats> reducedStats, XYChart chart, AxesChartStyler styler) {
-		//noinspection SuspiciousNameCombination
-		styler.setYAxisGroupPosition(0, Styler.YAxisPosition.Left);
-		//noinspection SuspiciousNameCombination
-		styler.setYAxisGroupPosition(1, Styler.YAxisPosition.Right);
-		styler.setSeriesColors(
+	private byte[] getCacheStats(Map<Date, BotStats> reducedStats) {
+		XYChart chart = Helper.buildXYChart(
+				"Caching da Shiro J. Bot",
+				Pair.of("Data", ""),
 				List.of(
 						new Color(180, 0, 0),
 						new Color(180, 114, 0),
@@ -172,7 +167,7 @@ public class BotStatsCommand implements Executable {
 						new Color(27, 180, 0),
 						new Color(180, 0, 162),
 						new Color(111, 0, 180)
-				).toArray(Color[]::new)
+				)
 		);
 
 		chart.setYAxisGroupTitle(0, "Absoluto");
