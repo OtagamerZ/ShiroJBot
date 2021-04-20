@@ -37,6 +37,21 @@ import java.util.List;
 import java.util.Set;
 
 public class CardDAO {
+	public static long getTotalCards() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT COUNT(c.id) FROM Card c");
+		q.setMaxResults(1);
+
+		try {
+			return (long) q.getSingleResult();
+		} catch (NoResultException e) {
+			return 0;
+		} finally {
+			em.close();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static Set<AddedAnime> getValidAnime() {
 		EntityManager em = Manager.getEntityManager();
