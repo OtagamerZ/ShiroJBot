@@ -107,6 +107,7 @@ public class BotStatsCommand implements Executable {
 		styler.setYAxisGroupPosition(0, Styler.YAxisPosition.Left);
 		//noinspection SuspiciousNameCombination
 		styler.setYAxisGroupPosition(1, Styler.YAxisPosition.Right);
+		chart.getStyler().setDecimalPattern("0");
 
 		chart.setYAxisGroupTitle(0, "Absoluto");
 		chart.setYAxisGroupTitle(1, "%");
@@ -170,8 +171,9 @@ public class BotStatsCommand implements Executable {
 				)
 		);
 
+		chart.getStyler().setDecimalPattern("0");
+
 		chart.setYAxisGroupTitle(0, "Absoluto");
-		chart.setYAxisGroupTitle(1, "%");
 
 		chart.addSeries(
 				"Ratelimit",
