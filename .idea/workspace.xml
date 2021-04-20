@@ -14,7 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de nova escala no gráfico sobre a Shiro">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1145,14 +1146,7 @@
       <workItem from="1618537815178" duration="7460000" />
       <workItem from="1618593814709" duration="8461000" />
       <workItem from="1618679070507" duration="419000" />
-      <workItem from="1618919976913" duration="5221000" />
-    </task>
-    <task id="LOCAL-04158" summary="Adicionado registrador de dados sobre a Shiro">
-      <created>1618519521767</created>
-      <option name="number" value="04158" />
-      <option name="presentableId" value="LOCAL-04158" />
-      <option name="project" value="LOCAL" />
-      <updated>1618519521767</updated>
+      <workItem from="1618919976913" duration="6440000" />
     </task>
     <task id="LOCAL-04159" summary="Adicionado registrador de dados sobre a Shiro">
       <created>1618526029293</created>
@@ -1490,7 +1484,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618927364404</updated>
     </task>
-    <option name="localTasksCounter" value="4207" />
+    <task id="LOCAL-04207" summary="Adição de nova escala no gráfico sobre a Shiro">
+      <created>1618927556183</created>
+      <option name="number" value="04207" />
+      <option name="presentableId" value="LOCAL-04207" />
+      <option name="project" value="LOCAL" />
+      <updated>1618927556184</updated>
+    </task>
+    <option name="localTasksCounter" value="4208" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
