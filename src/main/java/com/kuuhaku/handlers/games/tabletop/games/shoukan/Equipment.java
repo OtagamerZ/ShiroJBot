@@ -25,6 +25,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Arguments;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
@@ -95,7 +96,7 @@ public class Equipment implements Drawable, Cloneable {
 
 			if (charm != null && charm.equals(Charm.SPELL)) {
 				g2d.drawImage(acc.getFrame().getFrontSpell(), 0, 0, null);
-				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 
@@ -114,7 +115,7 @@ public class Equipment implements Drawable, Cloneable {
 				Profile.drawStringMultiLineNO(g2d, description, 205, 9, 277);
 			} else {
 				g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);
-				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 				Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 

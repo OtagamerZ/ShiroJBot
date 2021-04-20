@@ -25,6 +25,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Clan;
@@ -439,7 +440,7 @@ public class Hand {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 90));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
 		for (int i = 0; i < cards.size(); i++) {
 			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
@@ -462,7 +463,7 @@ public class Hand {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 90));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
 		List<Drawable> cards = enemy.getCards();
 
@@ -490,7 +491,7 @@ public class Hand {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 90));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 90));
 
 		List<Drawable> cards = op.getDeque().subList(0, amount);
 

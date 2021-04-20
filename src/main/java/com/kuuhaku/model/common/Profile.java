@@ -23,10 +23,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.model.enums.ExceedEnum;
-import com.kuuhaku.model.enums.RankedTier;
-import com.kuuhaku.model.enums.Tag;
-import com.kuuhaku.model.enums.TagIcons;
+import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.Member;
@@ -54,17 +51,8 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Profile {
-	public static Font FONT;
 	public static final int WIDTH = 944;
 	public static final int HEIGHT = 600;
-
-	static {
-		try {
-			FONT = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Profile.class.getClassLoader().getResourceAsStream("font/Doreking.ttf")));
-		} catch (FontFormatException | IOException e) {
-			Helper.logger(Profile.class).error(e + " | " + e.getStackTrace()[0]);
-		}
-	}
 
 	public static BufferedImage makeProfile(net.dv8tion.jda.api.entities.Member m, Guild g) throws IOException {
 		BufferedImage avatar;
@@ -153,7 +141,7 @@ public class Profile {
 			g2d.drawLine(268, 370 + (177 / 3 * i), 445, 370 + (177 / 3 * i));
 		}
 
-		g2d.setFont(FONT.deriveFont(Font.PLAIN, 50));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 50));
 		g2d.setColor(Color.WHITE);
 		printCenteredString("LEVEL", 196, 52, 440, g2d);
 		String name = m.getEffectiveName();
@@ -163,22 +151,22 @@ public class Profile {
 
 		try {
 			if (!Member.getWaifu(m.getUser().getId()).isEmpty()) {
-				g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
+				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
 				drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(Member.getWaifu(m.getUser().getId())).getName(), 270, 298, g2d);
 			}
 		} catch (NullPointerException ignore) {
 		}
 
-		g2d.setFont(FONT.deriveFont(Font.BOLD, 85));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 85));
 		printCenteredString(String.valueOf(mb.getLevel()), 196, 52, 515, g2d);
 
-		g2d.setFont(FONT.deriveFont(Font.PLAIN, 25));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 25));
 		printCenteredString(Helper.getShortenedValue(mb.getXp(), 1000) + "/" + Helper.getShortenedValue((int) Math.pow(mb.getLevel(), 2) * 100L, 1000), 196, 52, 538, g2d);
 
 		int pos = MemberDAO.getMemberRankPos(mb.getUid(), mb.getSid(), false);
 		int posG = MemberDAO.getMemberRankPos(mb.getUid(), mb.getSid(), true);
 
-		g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
 		g2d.setColor(Color.WHITE);
 		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 585, g2d);
 
