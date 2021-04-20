@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Clan;
@@ -67,7 +68,7 @@ public class Field implements Drawable, Cloneable {
 			g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
 
 			g2d.drawImage(acc.getFrame().getFrontArena(), 0, 0, null);
-			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 			Profile.printCenteredString(StringUtils.abbreviate(card.getName(), 18), 205, 10, 32, g2d);
 

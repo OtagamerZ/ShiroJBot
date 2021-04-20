@@ -13,18 +13,24 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de nova escala no gráfico sobre a Shiro">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Nova tag: Investidor">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/StocksPanel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Fonts.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/font/DJBGetDigital.ttf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ActionsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ActionsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/InvestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/InvestCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RecoverCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RecoverCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Tag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/TagIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/TagIcons.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/font/CaviarDreams.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/font/friz-quadrata-bold-bt.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/font/no_game_no_life.ttf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +141,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="- shiro" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/ShiroWebsite" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/font" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -151,11 +157,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\font" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\avatar\usa-tan" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\avatar\nero" />
       <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\charm" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.utils.Helper" />
@@ -182,11 +188,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.model.common" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.command.commands.discord.dev" />
       <recent name="com.kuuhaku.controller.postgresql" />
       <recent name="com.kuuhaku.model.common.drop" />
-      <recent name="com.kuuhaku.model.common" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -206,15 +212,13 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -1169,14 +1173,8 @@
       <workItem from="1618593814709" duration="8461000" />
       <workItem from="1618679070507" duration="419000" />
       <workItem from="1618919976913" duration="8057000" />
-      <workItem from="1618937718317" duration="7041000" />
-    </task>
-    <task id="LOCAL-04161" summary="Adicionado registrador de dados sobre a Shiro">
-      <created>1618533804175</created>
-      <option name="number" value="04161" />
-      <option name="presentableId" value="LOCAL-04161" />
-      <option name="project" value="LOCAL" />
-      <updated>1618533804175</updated>
+      <workItem from="1618937718317" duration="9133000" />
+      <workItem from="1618948553012" duration="1846000" />
     </task>
     <task id="LOCAL-04162" summary="Adicionado comando para ver estatísticas sobre a Shiro">
       <created>1618544224132</created>
@@ -1514,7 +1512,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618929687749</updated>
     </task>
-    <option name="localTasksCounter" value="4210" />
+    <task id="LOCAL-04210" summary="Nova tag: Investidor">
+      <created>1618945992701</created>
+      <option name="number" value="04210" />
+      <option name="presentableId" value="LOCAL-04210" />
+      <option name="project" value="LOCAL" />
+      <updated>1618945992701</updated>
+    </task>
+    <option name="localTasksCounter" value="4211" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1600,7 +1605,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no Shoukan em duplas" />
     <MESSAGE value="Correção no alinhamento dos icones de combo" />
     <MESSAGE value="Correção nas lojas de itens" />
     <MESSAGE value="Removidas travas de hash (biblioteca de paginação faz automaticamente);&#10;Corrigido modo 2v2 do Shoukan;" />
@@ -1625,7 +1629,8 @@
     <MESSAGE value="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;&#10;Campeões sem efeito agora possuem 125% dos atributos;" />
     <MESSAGE value="Correção referente ao último commit" />
     <MESSAGE value="Adição de nova escala no gráfico sobre a Shiro" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de nova escala no gráfico sobre a Shiro" />
+    <MESSAGE value="Nova tag: Investidor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Nova tag: Investidor" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

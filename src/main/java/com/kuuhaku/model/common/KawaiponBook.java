@@ -22,6 +22,7 @@ import com.kuuhaku.controller.postgresql.RarityColorsDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
@@ -76,7 +77,7 @@ public class KawaiponBook {
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 72));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 72));
 		if (foil) g2d.setColor(Color.yellow);
 		Profile.printCenteredString(text, 4026, 35, 168, g2d);
 
@@ -122,7 +123,7 @@ public class KawaiponBook {
 						int y = ((height - CARD_HEIGHT) / 2);
 
 						if (cards.contains(chunk.get(i))) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+							g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 							RarityColors rc = RarityColorsDAO.getColor(chunk.get(i).getCard().getRarity());
 
 							g.setBackground(rc.getSecondary());
@@ -132,14 +133,14 @@ public class KawaiponBook {
 							g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 							Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getName(), 15), CARD_WIDTH, x, y + 274, g);
 						} else if (chunk.get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+							g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
 							g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 							Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getName(), 15), CARD_WIDTH, x, y + 274, g);
 						} else {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+							g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
@@ -194,7 +195,7 @@ public class KawaiponBook {
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 72));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 72));
 		Profile.printCenteredString(title, 4026, 35, 168, g2d);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
@@ -239,7 +240,7 @@ public class KawaiponBook {
 						int height = row.getHeight();
 						int y = ((height - CARD_HEIGHT) / 2);
 
-						g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+						g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 						g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 						Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getCard().getName(), 15), CARD_WIDTH, x, y + 274, g);
 					}
