@@ -53,6 +53,27 @@ public class BotStats {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int servers;
 
+	//CACHES
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int ratelimitCount;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int confirmationPendingCount;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int specialEventCount;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int currentCardCount;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int currentDropCount;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int cardCacheCount;
+
+	private transient long averageMemory = 0;
+
 	public BotStats() {
 
 	}
@@ -64,16 +85,14 @@ public class BotStats {
 		servers = Main.getShiroShards().getGuilds().size();
 		ping = Math.round(Main.getShiroShards().getAverageGatewayPing());
 
-		return this;
-	}
+		ratelimitCount = Main.getInfo().getRatelimit().size();
+		confirmationPendingCount = Main.getInfo().getConfirmationPending().size();
+		specialEventCount = Main.getInfo().getSpecialEvent().size();
+		currentCardCount = Main.getInfo().getCurrentCard().size();
+		currentDropCount = Main.getInfo().getCurrentDrop().size();
+		cardCacheCount = Main.getInfo().getCardCache().size();
 
-	public BotStats(ZonedDateTime timestamp, long ping, long memoryUsage, double memoryPrcnt, double cpuUsage, int servers) {
-		this.timestamp = timestamp;
-		this.ping = ping;
-		this.memoryUsage = memoryUsage;
-		this.memoryPrcnt = memoryPrcnt;
-		this.cpuUsage = cpuUsage;
-		this.servers = servers;
+		return this;
 	}
 
 	public int getId() {
@@ -90,6 +109,14 @@ public class BotStats {
 
 	public void setTimestamp(ZonedDateTime timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public long getPing() {
+		return ping;
+	}
+
+	public void setPing(long ping) {
+		this.ping = ping;
 	}
 
 	public long getMemoryUsage() {
@@ -124,12 +151,60 @@ public class BotStats {
 		this.servers = servers;
 	}
 
-	public long getPing() {
-		return ping;
+	public int getRatelimitCount() {
+		return ratelimitCount;
 	}
 
-	public void setPing(long ping) {
-		this.ping = ping;
+	public void setRatelimitCount(int ratelimitCount) {
+		this.ratelimitCount = ratelimitCount;
+	}
+
+	public int getConfirmationPendingCount() {
+		return confirmationPendingCount;
+	}
+
+	public void setConfirmationPendingCount(int confirmationPendingCount) {
+		this.confirmationPendingCount = confirmationPendingCount;
+	}
+
+	public int getSpecialEventCount() {
+		return specialEventCount;
+	}
+
+	public void setSpecialEventCount(int specialEventCount) {
+		this.specialEventCount = specialEventCount;
+	}
+
+	public int getCurrentCardCount() {
+		return currentCardCount;
+	}
+
+	public void setCurrentCardCount(int currentCardCount) {
+		this.currentCardCount = currentCardCount;
+	}
+
+	public int getCurrentDropCount() {
+		return currentDropCount;
+	}
+
+	public void setCurrentDropCount(int currentDropCount) {
+		this.currentDropCount = currentDropCount;
+	}
+
+	public int getCardCacheCount() {
+		return cardCacheCount;
+	}
+
+	public void setCardCacheCount(int cardCacheCount) {
+		this.cardCacheCount = cardCacheCount;
+	}
+
+	public long getAverageMemory() {
+		return averageMemory == 0 ? memoryUsage : averageMemory;
+	}
+
+	public void setAverageMemory(long averageMemory) {
+		this.averageMemory = averageMemory;
 	}
 
 	@Override
