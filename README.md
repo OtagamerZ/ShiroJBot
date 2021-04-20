@@ -10,21 +10,21 @@ Precisa de um bot de reações? Talvez uma bot de moderação de servidor? Ou at
 
 Não tenha medo de pedir ajuda, sugerir novas funções ou deixar o seu comentário sobre a Shiro, estamos sempre abertos para o seu *feedback*!
 
-## Seja um parceiro!
+## Entre na área 51!
 
-Pela Shiro estar em desenvolvimento constante, foram criados dois bots adicionais para testar novos módulos, a Jibril e o Tet. Ambos estão disponíveis para uso em servidores que aceitem tornar-se parceiros, assim como comandos exclusivos!
+Pela Shiro estar em desenvolvimento constante, foram criados dois bots adicionais para testar novos módulos, a Jibril e o Tet assim como comandos exclusivos. Tudo disponível para uso em servidores que possuam acesso beta!
 
-**Obs: A Shiro é uma bot aberta e livre para uso em qualquer servidor, apenas a Jibril e o Tet requerem que o usuário seja parceiro para tê-los.**
+**Obs: A Shiro é uma bot aberta e livre para uso em qualquer servidor, apenas a Jibril e o Tet requerem que o servidor tenha acesso beta para obtê-los.**
 
-### Para ser um parceiro
+### Para ganhar acesso beta
 
-* Convidar um dos desenvolvedores para participar do servidor, de modo a monitorar o uso da Shiro.
-* Ter uma administração ativa, com pelo menos regras de comportamento.
-* Ter ao menos 20 membros ativos \(exceto bots e contas fake\).
+* Convidar um dos membros da equipe para participar do servidor, de modo a monitorar o uso da Shiro.
+* Ter uma administração decente, com pelo menos regras de comportamento.
+* Ter vários membros ativos \(exceto bots e contas fake\).
 * Utilizar a Shiro ativamente \(não deixar ela apenas como "mais um bot"\).
   - O servidor deve estar entre os maiores usuários da Shiro para ser elegível (classificação oculta).
   - Você será notificado caso preencha este requisito.
-* Informar os desenvolvedores caso ocorram erros no uso da Shiro.
+* Relatar à equipe caso ocorram erros durante o uso da Shiro.
 
 ### Para informar erros
 
