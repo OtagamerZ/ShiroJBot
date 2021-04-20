@@ -2362,19 +2362,19 @@ public class Helper {
 	}
 
 	public static int average(int... values) {
-		return Math.round(Arrays.stream(values).sum() / 2f);
+		return Math.round(Arrays.stream(values).sum() / (float) values.length);
 	}
 
 	public static long average(long... values) {
-		return Math.round(Arrays.stream(values).sum() / 2d);
+		return Math.round(Arrays.stream(values).sum() / (double) values.length);
 	}
 
 	public static float average(Float... values) {
-		return (float) (Arrays.stream(values).mapToDouble(Double::valueOf).sum() / 2);
+		return (float) Arrays.stream(values).mapToDouble(Double::valueOf).average().orElse(0);
 	}
 
 	public static double average(double... values) {
-		return Arrays.stream(values).sum() / 2;
+		return Arrays.stream(values).average().orElse(0);
 	}
 
 	public static XYChart buildXYChart(String title, Pair<String, String> axis, List<Color> colors) {
