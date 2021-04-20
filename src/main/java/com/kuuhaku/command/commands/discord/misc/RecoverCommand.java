@@ -91,6 +91,7 @@ public class RecoverCommand implements Executable {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							acc.addCredit(readjust, this.getClass());
+							acc.addProfit(readjust);
 							AccountDAO.saveAccount(acc);
 
 							StockMarketDAO.saveInvestment(sm);

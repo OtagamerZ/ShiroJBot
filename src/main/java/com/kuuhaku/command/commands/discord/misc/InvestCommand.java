@@ -87,6 +87,7 @@ public class InvestCommand implements Executable {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 							acc.removeCredit(amount, this.getClass());
+							acc.removeProfit(amount);
 							AccountDAO.saveAccount(acc);
 
 							StockMarketDAO.saveInvestment(sm);

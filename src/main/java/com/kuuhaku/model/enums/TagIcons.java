@@ -47,7 +47,8 @@ public enum TagIcons {
 	RANKED_WIN,
 	RANKED_LOSE,
 	RANKED_PENDING,
-	EASTER_EGG;
+	EASTER_EGG,
+	INVESTOR;
 
 	public String getTag(int lvl) {
 		return switch (this) {
@@ -73,7 +74,8 @@ public enum TagIcons {
 			case RANKED_WIN -> "<:ranked_win:789231688122236939> ";
 			case RANKED_LOSE -> "<:ranked_lose:789231689820930048> ";
 			case RANKED_PENDING -> "<:ranked_pending:789231687950663691> ";
-			case EASTER_EGG -> "<:easteregg:828634002197970955>";
+			case EASTER_EGG -> "<:easteregg:828634002197970955> ";
+			case INVESTOR -> "<:investor:834141511108919347> ";
 		};
 	}
 
@@ -102,6 +104,7 @@ public enum TagIcons {
 			case RANKED_LOSE -> "789231689820930048";
 			case RANKED_PENDING -> "789231687950663691";
 			case EASTER_EGG -> "828634002197970955";
+			case INVESTOR -> "834141511108919347";
 		};
 	}
 

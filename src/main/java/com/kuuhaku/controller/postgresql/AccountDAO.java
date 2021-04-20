@@ -138,4 +138,22 @@ public class AccountDAO {
 			em.close();
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Account> getStocksRank() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT a FROM Account a ORDER BY a.stocksProfit DESC", Account.class);
+		q.setLockMode(LockModeType.PESSIMISTIC_READ);
+
+		try {
+			em.getTransaction().begin();
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.getTransaction().commit();
+			em.close();
+		}
+	}
 }
