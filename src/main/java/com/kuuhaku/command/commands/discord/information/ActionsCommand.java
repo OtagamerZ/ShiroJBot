@@ -23,10 +23,12 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.StockMarketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.StockMarket;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -52,6 +54,7 @@ public class ActionsCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		Account acc = AccountDAO.getAccount(author.getId());
 		List<Page> pages = new ArrayList<>();
 		List<StockMarket> act = StockMarketDAO.getInvestments(author.getId());
 
@@ -63,16 +66,17 @@ public class ActionsCommand implements Executable {
 		List<List<StockMarket>> actions = Helper.chunkify(act, 10);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(":chart_with_upwards_trend: | Ações de " + author.getName());
+				.setTitle(":chart_with_upwards_trend: | Ações de " + author.getName())
+				.setDescription(":moneybag: | Lucro obtido: " + Helper.separate(acc.getStocksProfit()));
 
 		StringBuilder sb = new StringBuilder();
 		for (List<StockMarket> chunk : actions) {
 			sb.setLength(0);
 
 			for (StockMarket sm : chunk)
-				sb.append("%s - %s ações\n".formatted(sm.getCard().getName(), sm.getInvestment()));
+				sb.append("%s - %s ações\n".formatted(sm.getCard().getName(), Helper.separate(sm.getInvestment())));
 
-			eb.setDescription(sb.toString());
+			eb.clearFields().addField(Helper.VOID, sb.toString(), false);
 			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
 
