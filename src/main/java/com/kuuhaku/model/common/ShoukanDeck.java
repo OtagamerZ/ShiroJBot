@@ -22,6 +22,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.DeckStash;
@@ -77,7 +78,7 @@ public class ShoukanDeck {
 		Graphics2D g2d = deck.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 30));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
 
 		g2d.drawImage(acc.getFrame().getBack(acc), 1746, 2241, null);
 
@@ -138,7 +139,7 @@ public class ShoukanDeck {
 		Graphics2D g2d = deck.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 30));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
 
 		g2d.drawImage(acc.getFrame().getBack(acc), 1746, 2241, null);
 
