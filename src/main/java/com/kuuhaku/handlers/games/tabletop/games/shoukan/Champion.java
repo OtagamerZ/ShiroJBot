@@ -27,6 +27,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Clan;
@@ -139,7 +140,7 @@ public class Champion implements Drawable, Cloneable {
 				g2d.drawImage(card.drawCardNoBorder(useFoil), 0, 0, null);
 			}
 			g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
-			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 			if (fakeCard != null) {
 				Profile.printCenteredString(StringUtils.abbreviate(fakeCard.getCard().getName(), 15), 181, 38, 32, g2d);
@@ -158,11 +159,11 @@ public class Champion implements Drawable, Cloneable {
 			String data = bonus.getSpecialData().optString("write");
 			if (!data.isBlank()) {
 				g2d.setColor(Color.yellow);
-				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 16));
+				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 16));
 				Profile.drawOutlinedText(data, 20, 66, g2d);
 			}
 
-			g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
+			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 			g2d.setColor(Color.red);
 			if (fakeCard != null)

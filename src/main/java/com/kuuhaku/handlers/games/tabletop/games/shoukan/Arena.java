@@ -23,6 +23,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -101,7 +102,7 @@ public class Arena {
 				Hand h = hands.get(key);
 				LinkedList<Drawable> grv = graveyard.get(key);
 				g2d.setColor(Color.white);
-				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 75));
+				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 75));
 
 				String name;
 				if (game.getClans() != null) {
@@ -146,7 +147,7 @@ public class Arena {
 
 					float prcnt = (float) h.getHp() / h.getBaseHp();
 					g2d.setColor(prcnt > 2 / 3f ? Color.green : prcnt > 1 / 3f ? Color.yellow : Color.red);
-					g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 75));
+					g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 75));
 
 					String hp = StringUtils.leftPad(String.valueOf(h.getHp()), 4, "0");
 					String mp = h.isNullMode() ? "--" : StringUtils.leftPad(String.valueOf(h.getMana()), 2, "0");

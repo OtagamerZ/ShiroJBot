@@ -19,7 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games.hitotsu;
 
 import com.kuuhaku.controller.postgresql.RarityColorsDAO;
-import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.RarityColors;
 import com.kuuhaku.utils.Helper;
@@ -66,7 +66,7 @@ public class Hand {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 50));
+		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 50));
 
 		List<KawaiponCard> cards = new ArrayList<>(getCards());
 		g2d.translate(bi.getWidth() / 2f - 104, 75);
