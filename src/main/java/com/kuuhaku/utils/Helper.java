@@ -2361,20 +2361,20 @@ public class Helper {
 		return a - b;
 	}
 
-	public static int average(int a, int b) {
-		return Math.round((a + b) / 2f);
+	public static int average(int... values) {
+		return Math.round(Arrays.stream(values).sum() / 2f);
 	}
 
-	public static long average(long a, long b) {
-		return Math.round((a + b) / 2d);
+	public static long average(long... values) {
+		return Math.round(Arrays.stream(values).sum() / 2d);
 	}
 
-	public static float average(float a, float b) {
-		return Math.round((a + b) / 2);
+	public static float average(Float... values) {
+		return (float) (Arrays.stream(values).mapToDouble(Double::valueOf).sum() / 2);
 	}
 
-	public static double average(double a, double b) {
-		return Math.round((a + b) / 2);
+	public static double average(double... values) {
+		return Arrays.stream(values).sum() / 2;
 	}
 
 	public static XYChart buildXYChart(String title, Pair<String, String> axis, List<Color> colors) {
