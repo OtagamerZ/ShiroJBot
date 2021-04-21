@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.StockMarketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.StockValue;
 import com.kuuhaku.model.common.StocksPanel;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
@@ -54,8 +55,9 @@ public class StockMarketCommand implements Executable {
 			return;
 		}
 
-		int value = StockMarketDAO.getValues().get(c.getId()).getValue();
-		double growth = Math.floor(StockMarketDAO.getValues().get(c.getId()).getGrowth() * 1000) / 1000;
+		StockValue sv = StockMarketDAO.getValues().get(c.getId());
+		int value = sv.getValue();
+		double growth = Math.floor(sv.getGrowth() * 1000) / 1000;
 
 		String emote;
 		if (growth > 0)
