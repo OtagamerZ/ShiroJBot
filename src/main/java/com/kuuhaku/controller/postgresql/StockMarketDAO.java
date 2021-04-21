@@ -18,13 +18,19 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.kuuhaku.model.common.StockValue;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.StockMarket;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StockMarketDAO {
 	@SuppressWarnings("unchecked")
@@ -76,5 +82,82 @@ public class StockMarketDAO {
 		em.getTransaction().commit();
 
 		em.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<String, StockValue> getValues() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query prev = em.createNativeQuery("""
+				SELECT c.id
+					 , c.name
+				     , COALESCE(x.values, '0')
+				FROM Card c
+				LEFT JOIN (
+						SELECT x.card_id
+				        	 , STRING_AGG(x.price::text, ',') AS values
+				    	FROM (
+				             SELECT c.id                                                     AS card_id
+				                  , COALESCE(cm.price, em.price, fm.price)                   AS price
+				                  , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
+				                  , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
+				                  , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
+				             FROM Card c
+				        	 LEFT JOIN Equipment e ON e.card_id = c.id
+				             LEFT JOIN Field f ON f.card_id = c.id
+				        	 LEFT JOIN CardMarket cm ON cm.card_id = c.id
+				             LEFT JOIN EquipmentMarket em ON em.card_id = e.id
+				             LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				        ) x
+						WHERE x.publishDate < :date
+				        AND x.buyer <> ''
+				        AND x.buyer <> x.seller
+				    	GROUP BY x.card_id
+				) x ON x.card_id = c.id
+				""")
+				.setParameter("date", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(1));
+
+		Query curr = em.createNativeQuery("""
+				SELECT c.id
+					 , c.name
+				     , COALESCE(x.values, '0')
+				FROM Card c
+				LEFT JOIN (
+						SELECT x.card_id
+				        	 , STRING_AGG(x.price::text, ',') AS values
+				    	FROM (
+				             SELECT c.id                                                     AS card_id
+				                  , COALESCE(cm.price, em.price, fm.price)                   AS price
+				                  , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
+				                  , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
+				             FROM Card c
+				        	 LEFT JOIN Equipment e ON e.card_id = c.id
+				             LEFT JOIN Field f ON f.card_id = c.id
+				        	 LEFT JOIN CardMarket cm ON cm.card_id = c.id
+				             LEFT JOIN EquipmentMarket em ON em.card_id = e.id
+				             LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				        ) x
+				        WHERE x.buyer <> ''
+				        AND x.buyer <> x.seller
+				    	GROUP BY x.card_id
+				) x ON x.card_id = c.id
+				""");
+
+		Map<String, StockValue> out = new HashMap<>();
+		List<Object[]> prevResults = (List<Object[]>) prev.getResultList();
+		List<Object[]> currResults = (List<Object[]>) curr.getResultList();
+
+		for (int i = 0; i < prevResults.size(); i++) {
+			Double[] prevValues = Arrays.stream(String.valueOf(prevResults.get(i)[2]).split(",")).map(Double::valueOf).toArray(Double[]::new);
+			Double[] currValues = Arrays.stream(String.valueOf(currResults.get(i)[2]).split(",")).map(Double::valueOf).toArray(Double[]::new);
+
+			out.put(String.valueOf(prevResults.get(i)[0]), new StockValue(
+					String.valueOf(prevResults.get(i)[0]),
+					String.valueOf(prevResults.get(i)[1]),
+					prevValues, currValues
+			));
+		}
+
+		return out;
 	}
 }

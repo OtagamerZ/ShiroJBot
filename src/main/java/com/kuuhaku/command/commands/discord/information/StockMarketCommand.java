@@ -21,19 +21,16 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.CardMarketDAO;
-import com.kuuhaku.controller.postgresql.EquipmentMarketDAO;
-import com.kuuhaku.controller.postgresql.FieldMarketDAO;
+import com.kuuhaku.controller.postgresql.StockMarketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.StocksPanel;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-
-import java.util.stream.DoubleStream;
 
 @Command(
 		name = "bolsa",
@@ -47,7 +44,7 @@ public class StockMarketCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage("❌ | Você precisa informar uma carta.").queue();
+			channel.sendFile(Helper.getBytes(new StocksPanel().view(), "jpg"), "panel.jpg").queue();
 			return;
 		}
 
@@ -57,22 +54,13 @@ public class StockMarketCommand implements Executable {
 			return;
 		}
 
-		double stock = DoubleStream.of(
-				CardMarketDAO.getStockValue(c),
-				EquipmentMarketDAO.getStockValue(c),
-				FieldMarketDAO.getStockValue(c)
-		).filter(d -> d > 0).average().orElse(0);
-
-		double current = DoubleStream.of(
-				CardMarketDAO.getAverageValue(c),
-				EquipmentMarketDAO.getAverageValue(c),
-				FieldMarketDAO.getAverageValue(c)
-		).filter(d -> d > 0).average().orElse(0);
+		int value = StockMarketDAO.getValues().get(c.getId()).getValue();
+		double growth = StockMarketDAO.getValues().get(c.getId()).getGrowth();
 
 		String emote;
-		if (stock > 0)
+		if (growth > 0)
 			emote = "<:growth:801508203480481862>";
-		else if (stock < 0)
+		else if (growth < 0)
 			emote = "<:noun:801508203510235186>";
 		else
 			emote = "<:stall:801508203384799233>";
@@ -80,8 +68,8 @@ public class StockMarketCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(c.getName())
 				.setImage("attachment://card.png")
-				.addField("Valor de mercado", current == 0 ? "desconhecido" : Math.round(current) + " créditos", true)
-				.addField("Variação de valor", emote + (stock > 0 ? " +" : " ") + (Helper.round(stock * 100, 3)) + "%", true);
+				.addField("Valor de mercado", value == 0 ? "desconhecido" : Helper.separate(Math.round(value)) + " créditos", true)
+				.addField("Variação de valor", emote + (growth > 0 ? " +" : " ") + Helper.round(growth * 100, 3) + "%", true);
 
 		channel.sendMessage(eb.build())
 				.addFile(Helper.getBytes(c.drawCardNoBorder(), "png"), "card.png")
