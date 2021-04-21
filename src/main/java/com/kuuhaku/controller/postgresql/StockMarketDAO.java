@@ -109,13 +109,14 @@ public class StockMarketDAO {
 				             LEFT JOIN EquipmentMarket em ON em.card_id = e.id
 				             LEFT JOIN FieldMarket fm ON fm.card_id = f.id
 				        ) x
-						WHERE x.publishDate < :date
+						WHERE x.publishDate BETWEEN :from AND :to
 				        AND x.buyer <> ''
 				        AND x.buyer <> x.seller
 				    	GROUP BY x.card_id
 				) x ON x.card_id = c.id
 				""")
-				.setParameter("date", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(1));
+				.setParameter("from", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(2))
+				.setParameter("to", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(1));
 
 		Query curr = em.createNativeQuery("""
 				SELECT c.id
@@ -138,7 +139,7 @@ public class StockMarketDAO {
 				             LEFT JOIN EquipmentMarket em ON em.card_id = e.id
 				             LEFT JOIN FieldMarket fm ON fm.card_id = f.id
 				        ) x
-						WHERE x.publishDate >= :date
+						WHERE x.publishDate > :date
 				        AND x.buyer <> ''
 				        AND x.buyer <> x.seller
 				    	GROUP BY x.card_id
