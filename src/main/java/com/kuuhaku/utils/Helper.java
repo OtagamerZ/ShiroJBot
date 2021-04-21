@@ -2345,19 +2345,19 @@ public class Helper {
 	public static int[] normalize(int[] vector, RoundingMode roundingMode) {
 		double length = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
 		return switch (roundingMode) {
-			case UP, CEILING, HALF_UP -> new int[]{mirroredCeil(vector[0] / length), mirroredCeil(vector[1] / length)};
-			case DOWN, FLOOR, HALF_DOWN -> new int[]{mirroredFloor(vector[0] / length), mirroredFloor(vector[1] / length)};
+			case UP, CEILING, HALF_UP -> new int[]{(int) mirroredCeil(vector[0] / length), (int) mirroredCeil(vector[1] / length)};
+			case DOWN, FLOOR, HALF_DOWN -> new int[]{(int) mirroredFloor(vector[0] / length), (int) mirroredFloor(vector[1] / length)};
 			case HALF_EVEN -> new int[]{(int) Math.round(vector[0] / length), (int) Math.round(vector[1] / length)};
 			default -> throw new IllegalArgumentException();
 		};
 	}
 
-	public static int mirroredCeil(double value) {
-		return (int) (value < 0 ? Math.floor(value) : Math.ceil(value));
+	public static double mirroredCeil(double value) {
+		return value < 0 ? Math.floor(value) : Math.ceil(value);
 	}
 
-	public static int mirroredFloor(double value) {
-		return (int) (value > 0 ? Math.floor(value) : Math.ceil(value));
+	public static double mirroredFloor(double value) {
+		return value > 0 ? Math.floor(value) : Math.ceil(value);
 	}
 
 	public static boolean findParam(String[] args, String... param) {
