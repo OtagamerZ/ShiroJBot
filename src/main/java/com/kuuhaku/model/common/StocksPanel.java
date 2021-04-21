@@ -36,12 +36,18 @@ public class StocksPanel {
 
 	public StocksPanel() {
 		List<StockValue> values = StockMarketDAO.getValues().values().stream()
-				.sorted(Comparator.comparingDouble(StockValue::getGrowth))
-				.collect(Collectors.toList());
+				.sorted(Comparator
+						.<StockValue>comparingDouble(sv -> Math.floor(sv.getGrowth() * 1000) / 1000)
+						.thenComparing(StockValue::getId)
+				).collect(Collectors.toList());
 
-		this.values.addAll(values.stream().filter(sv -> sv.getGrowth() > 0).limit(20).collect(Collectors.toList()));
-		this.values.addAll(values.stream().filter(sv -> sv.getGrowth() == 0).limit(20).collect(Collectors.toList()));
-		this.values.addAll(values.stream().filter(sv -> sv.getGrowth() < 0).limit(20).collect(Collectors.toList()));
+		List<StockValue> high = values.stream().filter(sv -> sv.getGrowth() > 0).limit(20).collect(Collectors.toList());
+		List<StockValue> low = values.stream().filter(sv -> sv.getGrowth() < 0).limit(20).collect(Collectors.toList());
+		List<StockValue> stale = values.stream().filter(sv -> sv.getGrowth() == 0).limit(60 - high.size() + low.size()).collect(Collectors.toList());
+
+		this.values.addAll(high);
+		this.values.addAll(stale);
+		this.values.addAll(low);
 	}
 
 	public BufferedImage view() {
@@ -72,7 +78,7 @@ public class StocksPanel {
 			Profile.printCenteredString(sv.getName(), width, posX, posY + height / 3 - 9, g2d);
 
 			g2d.setFont(Fonts.DJB_GET_DIGITAL.deriveFont(Font.PLAIN, 50));
-			double growth = sv.getGrowth();
+			double growth = Math.floor(sv.getGrowth() * 1000) / 1000;
 			df.setPositivePrefix(growth == 0 ? "" : "+");
 			if (growth > 0) {
 				g2d.setColor(Color.GREEN);
