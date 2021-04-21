@@ -793,10 +793,17 @@ public class Helper {
 			JSONObject root = gc.getButtonConfigs();
 			String msgId = channel.retrieveMessageById(args[0]).complete().getId();
 
-			JSONObject msg = new JSONObject();
+			String id;
+			if (EmojiUtils.containsEmoji(s2)) id = s2;
+			else {
+				Emote e = Main.getShiroShards().getEmoteById(s2);
+				if (e == null) throw new IllegalArgumentException();
+				else id = e.getId();
+			}
 
+			JSONObject msg = new JSONObject();
 			JSONObject btn = new JSONObject() {{
-				put("emote", EmojiUtils.containsEmoji(s2) ? s2 : Objects.requireNonNull(Main.getShiroShards().getEmoteById(s2)).getId());
+				put("emote", id);
 				put("role", message.getMentionedRoles().get(0).getId());
 			}};
 
@@ -817,7 +824,7 @@ public class Helper {
 
 			gc.setButtonConfigs(root);
 			GuildDAO.updateGuildSettings(gc);
-		} catch (ErrorResponseException e) {
+		} catch (ErrorResponseException | IllegalArgumentException e) {
 			JSONObject jo = gc.getButtonConfigs();
 			if (gatekeeper) jo.remove("gatekeeper");
 			else jo.remove(message.getId());
