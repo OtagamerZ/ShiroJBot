@@ -19,7 +19,6 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.utils.Helper;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 
 public class StockValue {
@@ -28,13 +27,13 @@ public class StockValue {
 	private final int value;
 	private final double growth;
 
-	public StockValue(String id, String name, Double[] before, Double[] now) {
+	public StockValue(String id, String name, double[] before, double[] now) {
 		this.id = id;
 		this.name = name;
 
 		GeometricMean gm = new GeometricMean();
-		this.value = (int) Math.round(gm.evaluate(ArrayUtils.toPrimitive(now)));
-		this.growth = Helper.mirroredFloor((Helper.prcnt(gm.evaluate(ArrayUtils.toPrimitive(now)), gm.evaluate(ArrayUtils.toPrimitive(before))) - 1) * 1000) / 1000d;
+		this.value = (int) Math.round(gm.evaluate(now));
+		this.growth = Helper.mirroredFloor((Helper.prcnt(gm.evaluate(now), gm.evaluate(before)) - 1) * 1000) / 1000d;
 	}
 
 	public String getId() {
