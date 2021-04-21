@@ -145,6 +145,7 @@ public class TradeContent {
 		Kawaipon kp2 = tc2.getKawaipon();
 
 		acc1.addCredit(liquidAmount2, TradeContent.class);
+		acc2.removeCredit(liquidAmount2, TradeContent.class);
 		kp1.addCards(tc2.cards);
 		kp1.addEquipments(tc2.equipments);
 		kp1.addFields(tc2.fields);
@@ -153,6 +154,7 @@ public class TradeContent {
 		kp2.removeFields(tc2.fields);
 
 		acc2.addCredit(liquidAmount1, TradeContent.class);
+		acc1.removeCredit(liquidAmount1, TradeContent.class);
 		kp2.addCards(tc1.cards);
 		kp2.addEquipments(tc1.equipments);
 		kp2.addFields(tc1.fields);
