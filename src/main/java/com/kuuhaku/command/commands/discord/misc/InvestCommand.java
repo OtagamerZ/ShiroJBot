@@ -70,7 +70,7 @@ public class InvestCommand implements Executable {
 		int amount = Integer.parseInt(args[1]);
 
 		StockValue sv = StockMarketDAO.getValues().get(c.getId());
-		double growth = 1 + Math.floor(sv.getGrowth() * 1000) / 1000;
+		double growth = 1 + sv.getGrowth();
 
 		int readjust = growth == 0 ? 0 : (int) Math.round(amount / growth);
 		if (acc.getBalance() < readjust) {
