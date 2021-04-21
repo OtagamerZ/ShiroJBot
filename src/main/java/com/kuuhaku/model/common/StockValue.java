@@ -35,7 +35,7 @@ public class StockValue {
 		this.value = (int) Math.round(gm.evaluate(now));
 		if (before.length == 0) this.growth = 0;
 		else
-			this.growth = Helper.mirroredFloor((Helper.prcnt(gm.evaluate(now), gm.evaluate(before)) * 100000) - 100) / 1000d;
+			this.growth = Helper.mirroredFloor((Helper.prcnt(gm.evaluate(now), gm.evaluate(before)) * 1000) - 1) / 1000d;
 	}
 
 	public String getId() {
