@@ -79,7 +79,7 @@ public class RecoverCommand implements Executable {
 		}
 
 		StockValue sv = StockMarketDAO.getValues().get(c.getId());
-		double growth = 1 + Math.floor(sv.getGrowth() * 1000) / 1000;
+		double growth = 1 + sv.getGrowth();
 
 		int readjust = (int) Math.round(amount * growth);
 
