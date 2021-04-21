@@ -14,23 +14,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Nova tag: Investidor">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/StocksPanel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/Fonts.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/font/DJBGetDigital.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/StockValue.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ShoukanDeck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/font/CaviarDreams.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/font/friz-quadrata-bold-bt.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/font/no_game_no_life.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/StockMarketCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/StockMarketCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StockMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StockMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/StocksPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/StocksPanel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,17 +200,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1175,6 +1152,7 @@
       <workItem from="1618919976913" duration="8057000" />
       <workItem from="1618937718317" duration="9133000" />
       <workItem from="1618948553012" duration="1846000" />
+      <workItem from="1618969734788" duration="1551000" />
     </task>
     <task id="LOCAL-04162" summary="Adicionado comando para ver estatísticas sobre a Shiro">
       <created>1618544224132</created>

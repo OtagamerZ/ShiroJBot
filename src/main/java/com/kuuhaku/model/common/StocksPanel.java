@@ -18,31 +18,38 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.tabletop.utils.Helper;
-import org.apache.commons.io.FileUtils;
+import com.kuuhaku.controller.postgresql.StockMarketDAO;
+import com.kuuhaku.model.enums.Fonts;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StocksPanel {
-	private final int WIDTH = 260;
-	private final int HEIGHT = 110;
-	private final List<String> val = FileUtils.readLines(new File(this.getClass().getClassLoader().getResource("values.txt").toURI()), StandardCharsets.UTF_8);
+	public final int WIDTH = 260;
+	public final int HEIGHT = 110;
+	private final List<StockValue> values = new ArrayList<>();
 
-	public StocksPanel() throws URISyntaxException, IOException {
+	public StocksPanel() {
+		List<StockValue> values = StockMarketDAO.getValues().values().stream()
+				.sorted(Comparator.comparingDouble(StockValue::getGrowth))
+				.collect(Collectors.toList());
+
+		this.values.addAll(values.stream().filter(sv -> sv.getGrowth() > 0).limit(20).collect(Collectors.toList()));
+		this.values.addAll(values.stream().filter(sv -> sv.getGrowth() == 0).limit(20).collect(Collectors.toList()));
+		this.values.addAll(values.stream().filter(sv -> sv.getGrowth() < 0).limit(20).collect(Collectors.toList()));
 	}
 
 	public BufferedImage view() {
 		DecimalFormat df = new DecimalFormat("0.000'%'");
 		BufferedImage panel = new BufferedImage(WIDTH * 6, HEIGHT * 10, BufferedImage.TYPE_INT_RGB);
 
-		for (int i = 0; i < 60; i++) {
+		for (int i = 0; i < values.size(); i++) {
+			StockValue sv = values.get(i);
 			Graphics2D g2d = panel.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -62,10 +69,10 @@ public class StocksPanel {
 
 			g2d.setColor(Color.white);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 18));
-			Helper.printCenteredString(val.get(i), width, posX, posY + height / 3 - 9, g2d);
+			Profile.printCenteredString(sv.getName(), width, posX, posY + height / 3 - 9, g2d);
 
 			g2d.setFont(Fonts.DJB_GET_DIGITAL.deriveFont(Font.PLAIN, 50));
-			double growth = Math.random() * 20 - 10;
+			double growth = sv.getGrowth();
 			df.setPositivePrefix(growth == 0 ? "" : "+");
 			if (growth > 0) {
 				g2d.setColor(Color.GREEN);
@@ -98,7 +105,7 @@ public class StocksPanel {
 			} else {
 				g2d.setColor(Color.ORANGE);
 			}
-			Helper.printCenteredString(df.format(growth), width - 30, posX + 30, posY + height - 15, g2d);
+			Profile.printCenteredString(df.format(growth), width - 30, posX + 30, posY + height - 15, g2d);
 
 			g2d.dispose();
 		}
