@@ -128,6 +128,7 @@ public class StockMarketDAO {
 				    	FROM (
 				             SELECT c.id                                                     AS card_id
 				                  , COALESCE(cm.price, em.price, fm.price)                   AS price
+				                  , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
 				                  , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
 				                  , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
 				             FROM Card c
@@ -137,11 +138,13 @@ public class StockMarketDAO {
 				             LEFT JOIN EquipmentMarket em ON em.card_id = e.id
 				             LEFT JOIN FieldMarket fm ON fm.card_id = f.id
 				        ) x
-				        WHERE x.buyer <> ''
+						WHERE x.publishDate >= :date
+				        AND x.buyer <> ''
 				        AND x.buyer <> x.seller
 				    	GROUP BY x.card_id
 				) x ON x.card_id = c.id
-				""");
+				""")
+				.setParameter("date", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(1));
 
 		Map<String, StockValue> out = new HashMap<>();
 		List<Object[]> prevResults = (List<Object[]>) prev.getResultList();
