@@ -33,7 +33,7 @@ public class StockValue {
 
 		GeometricMean gm = new GeometricMean();
 		this.value = (int) Math.round(gm.evaluate(now));
-		this.growth = Helper.mirroredFloor((1d - Helper.prcnt(gm.evaluate(before), gm.evaluate(now))) * -100000) / 1000d;
+		this.growth = Helper.mirroredFloor(Helper.prcnt(gm.evaluate(now), gm.evaluate(before)) * 100000) / 1000d - 100;
 	}
 
 	public String getId() {
