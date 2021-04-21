@@ -155,8 +155,12 @@ public class StockMarketDAO {
 			Object[] prevRes = prevResults.get(i);
 			Object[] currRes = currResults.get(i);
 
-			double[] prevValues = Arrays.stream(String.valueOf(prevRes[2]).split(",")).mapToDouble(Double::valueOf).toArray();
-			double[] currValues = Arrays.stream(String.valueOf(currRes[2]).split(",")).mapToDouble(Double::valueOf).toArray();
+			double[] prevValues = Arrays.stream(String.valueOf(prevRes[2]).split(","))
+					.filter(s -> !s.isBlank())
+					.mapToDouble(Double::valueOf).toArray();
+			double[] currValues = Arrays.stream(String.valueOf(currRes[2]).split(","))
+					.filter(s -> !s.isBlank())
+					.mapToDouble(Double::valueOf).toArray();
 
 			out.put(String.valueOf(prevRes[0]), new StockValue(
 					String.valueOf(prevRes[0]),
