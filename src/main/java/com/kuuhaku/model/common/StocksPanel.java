@@ -37,7 +37,7 @@ public class StocksPanel {
 	public StocksPanel() {
 		List<StockValue> values = StockMarketDAO.getValues().values().stream()
 				.sorted(Comparator
-						.comparingDouble(StockValue::getGrowth)
+						.comparingDouble(StockValue::getGrowth).reversed()
 						.thenComparing(StockValue::getId)
 				).collect(Collectors.toList());
 
