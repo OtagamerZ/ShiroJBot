@@ -78,7 +78,7 @@ public class StocksPanel {
 			Profile.printCenteredString(sv.getName(), width, posX, posY + height / 3 - 9, g2d);
 
 			g2d.setFont(Fonts.DJB_GET_DIGITAL.deriveFont(Font.PLAIN, 50));
-			double growth = sv.getGrowth();
+			double growth = sv.getGrowth() * 100;
 			df.setPositivePrefix(growth == 0 ? "" : "+");
 			if (growth > 0) {
 				g2d.setColor(Color.GREEN);
