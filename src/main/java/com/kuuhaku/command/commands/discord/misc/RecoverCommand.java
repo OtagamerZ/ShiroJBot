@@ -22,9 +22,12 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.StockMarketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.common.StockValue;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
@@ -37,7 +40,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.DoubleStream;
 
 @Command(
 		name = "retirar",
@@ -76,13 +78,10 @@ public class RecoverCommand implements Executable {
 			return;
 		}
 
-		double stock = 1 + DoubleStream.of(
-				CardMarketDAO.getStockValue(c),
-				EquipmentMarketDAO.getStockValue(c),
-				FieldMarketDAO.getStockValue(c)
-		).filter(d -> d > 0).average().orElse(0);
+		StockValue sv = StockMarketDAO.getValues().get(c.getId());
+		double growth = 1 + Math.floor(sv.getGrowth() * 1000) / 1000;
 
-		int readjust = (int) Math.round(amount * stock);
+		int readjust = (int) Math.round(amount * growth);
 
 		sm.setInvestment(sm.getInvestment() - amount);
 
