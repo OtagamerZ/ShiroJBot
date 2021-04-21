@@ -31,6 +31,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -94,29 +95,34 @@ public class AnimeCommand implements Executable {
 					eb.setColor(anime.getcColor());
 					if (hentai) eb.setAuthor("Bem, aqui está um novo hentai para você assistir! ( ͡° ͜ʖ ͡°)\n");
 					else eb.setAuthor("Bem, aqui está um novo anime para você assistir!\n");
-					eb.setTitle(anime.gettRomaji() + (!anime.gettRomaji().equals(anime.gettEnglish()) ? " (" + anime.gettEnglish() + ")" : ""));
 
-					eb.setImage(anime.getcImage());
-					eb.addField("Estúdio:", anime.getStudio(), true);
-					eb.addField("Criado por:", anime.getCreator(), true);
-					eb.addField("Ano:", anime.getsDate(), true);
-					eb.addField("Estado:", anime.getStatus(), true);
-					eb.addField("Episódios:", anime.getDuration(), true);
+					eb.setTitle(anime.gettRomaji() + (!anime.gettRomaji().equals(anime.gettEnglish()) ? " (" + anime.gettEnglish() + ")" : ""))
+							.setImage(anime.getcImage())
+							.addField("Estúdio:", anime.getStudio(), true)
+							.addField("Criado por:", anime.getCreator(), true)
+							.addField("Ano:", anime.getsDate(), true)
+							.addField("Estado:", anime.getStatus(), true)
+							.addField("Episódios:", anime.getDuration(), true);
+
 					if (anime.getNaeAiringAt() != null)
 						eb.addField("Próximo episódio:", anime.getNaeAiringAt(), true);
-					eb.addField("Nota:", anime.getScore() == -1 ? "Nenhuma" : Float.toString(anime.getScore() / 10), true);
-					eb.addField("Popularidade:", Integer.toString(anime.getPopularity()), true);
-					eb.addField("Assista em:", link, true);
+
+					eb.addField("Nota:", anime.getScore() == -1 ? "Nenhuma" : Float.toString(anime.getScore() / 10), true)
+							.addField("Popularidade:", Integer.toString(anime.getPopularity()), true)
+							.addField("Assista em:", link, true);
 
 					if (!link.equalsIgnoreCase("Link indisponível")) {
-						eb.setDescription(jo.getString("desc"));
+						eb.setDescription(StringUtils.abbreviate(jo.getString("desc"), 2048));
 					} else {
-						eb.setDescription(anime.getDescription()
-								.replace("<br>", "\n")
-								.replaceAll("(<i>|</i>)", "_")
-								.replaceAll("(<b>|</b>)", "**")
-								.replaceAll("(<u>|</u>)", "__")
-								.replaceAll("(<p>|</p>)", "")
+						eb.setDescription(
+								StringUtils.abbreviate(
+										anime.getDescription()
+												.replace("<br>", "\n")
+												.replaceAll("(<i>|</i>)", "_")
+												.replaceAll("(<b>|</b>)", "**")
+												.replaceAll("(<u>|</u>)", "__")
+												.replaceAll("(<p>|</p>)", "")
+										, 2048)
 						);
 					}
 					eb.addField("Gêneros:", anime.getGenres(), false);
