@@ -91,7 +91,7 @@ public class StockMarketDAO {
 		Query prev = em.createNativeQuery("""
 				SELECT c.id
 					 , c.name
-				     , COALESCE(x.values, '1')
+				     , COALESCE(x.values, '')
 				FROM Card c
 				LEFT JOIN (
 						SELECT x.card_id
@@ -121,7 +121,7 @@ public class StockMarketDAO {
 		Query curr = em.createNativeQuery("""
 				SELECT c.id
 					 , c.name
-				     , COALESCE(x.values, '1')
+				     , COALESCE(x.values, '')
 				FROM Card c
 				LEFT JOIN (
 						SELECT x.card_id
