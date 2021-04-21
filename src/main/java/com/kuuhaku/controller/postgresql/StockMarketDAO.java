@@ -95,7 +95,7 @@ public class StockMarketDAO {
 				FROM Card c
 				LEFT JOIN (
 						SELECT x.card_id
-				        	 , STRING_AGG(x.price, ',') AS values
+				        	 , STRING_AGG(CAST(x.price AS VARCHAR(32)), ',') 				 AS values
 				    	FROM (
 				             SELECT c.id                                                     AS card_id
 				                  , COALESCE(cm.price, em.price, fm.price)                   AS price
@@ -124,7 +124,7 @@ public class StockMarketDAO {
 				FROM Card c
 				LEFT JOIN (
 						SELECT x.card_id
-				        	 , STRING_AGG(x.price::text, ',') AS values
+				        	 , STRING_AGG(CAST(x.price AS VARCHAR(32)), ',') 				 AS values
 				    	FROM (
 				             SELECT c.id                                                     AS card_id
 				                  , COALESCE(cm.price, em.price, fm.price)                   AS price
