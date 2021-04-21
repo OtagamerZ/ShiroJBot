@@ -33,7 +33,7 @@ public class StockValue {
 
 		GeometricMean gm = new GeometricMean();
 		this.value = (int) Math.round(gm.evaluate(now));
-		if (before.length == 0) this.growth = 0;
+		if (before.length == 0 || now.length == 0) this.growth = 0;
 		else
 			this.growth = Helper.prcnt(gm.evaluate(now), gm.evaluate(before)) - 1;
 	}

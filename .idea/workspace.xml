@@ -14,8 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Nova tag: Investidor">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/custom/CriteriaBuilderHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StockMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StockMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/StockValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/StockValue.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,17 +198,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1160,175 +1150,8 @@
       <workItem from="1618919976913" duration="8057000" />
       <workItem from="1618937718317" duration="9133000" />
       <workItem from="1618948553012" duration="1846000" />
-      <workItem from="1618969734788" duration="2949000" />
-    </task>
-    <task id="LOCAL-04164" summary="Adicionado comando para ver estatísticas sobre a Shiro">
-      <created>1618544621160</created>
-      <option name="number" value="04164" />
-      <option name="presentableId" value="LOCAL-04164" />
-      <option name="project" value="LOCAL" />
-      <updated>1618544621160</updated>
-    </task>
-    <task id="LOCAL-04165" summary="Adicionado comando para ver estatísticas sobre a Shiro">
-      <created>1618544783377</created>
-      <option name="number" value="04165" />
-      <option name="presentableId" value="LOCAL-04165" />
-      <option name="project" value="LOCAL" />
-      <updated>1618544783377</updated>
-    </task>
-    <task id="LOCAL-04166" summary="Adicionado comando para ver estatísticas sobre a Shiro">
-      <created>1618544879615</created>
-      <option name="number" value="04166" />
-      <option name="presentableId" value="LOCAL-04166" />
-      <option name="project" value="LOCAL" />
-      <updated>1618544879615</updated>
-    </task>
-    <task id="LOCAL-04167" summary="Adicionado comando para ver estatísticas sobre a Shiro">
-      <created>1618545003693</created>
-      <option name="number" value="04167" />
-      <option name="presentableId" value="LOCAL-04167" />
-      <option name="project" value="LOCAL" />
-      <updated>1618545003693</updated>
-    </task>
-    <task id="LOCAL-04168" summary="Correção no gráfico de estatísticas sobre a Shiro">
-      <created>1618580860268</created>
-      <option name="number" value="04168" />
-      <option name="presentableId" value="LOCAL-04168" />
-      <option name="project" value="LOCAL" />
-      <updated>1618580860269</updated>
-    </task>
-    <task id="LOCAL-04169" summary="Correção no gráfico de estatísticas sobre a Shiro">
-      <created>1618581162832</created>
-      <option name="number" value="04169" />
-      <option name="presentableId" value="LOCAL-04169" />
-      <option name="project" value="LOCAL" />
-      <updated>1618581162832</updated>
-    </task>
-    <task id="LOCAL-04170" summary="Correção no gráfico de estatísticas sobre a Shiro">
-      <created>1618581781398</created>
-      <option name="number" value="04170" />
-      <option name="presentableId" value="LOCAL-04170" />
-      <option name="project" value="LOCAL" />
-      <updated>1618581781398</updated>
-    </task>
-    <task id="LOCAL-04171" summary="Correção no gráfico de estatísticas sobre a Shiro">
-      <created>1618582016781</created>
-      <option name="number" value="04171" />
-      <option name="presentableId" value="LOCAL-04171" />
-      <option name="project" value="LOCAL" />
-      <updated>1618582016781</updated>
-    </task>
-    <task id="LOCAL-04172" summary="Correção no gráfico de estatísticas sobre a Shiro">
-      <created>1618582993453</created>
-      <option name="number" value="04172" />
-      <option name="presentableId" value="LOCAL-04172" />
-      <option name="project" value="LOCAL" />
-      <updated>1618582993453</updated>
-    </task>
-    <task id="LOCAL-04173" summary="Correção no gráfico de estatísticas sobre a Shiro">
-      <created>1618583407171</created>
-      <option name="number" value="04173" />
-      <option name="presentableId" value="LOCAL-04173" />
-      <option name="project" value="LOCAL" />
-      <updated>1618583407171</updated>
-    </task>
-    <task id="LOCAL-04174" summary="Correção no gráfico de estatísticas sobre a Shiro">
-      <created>1618597410511</created>
-      <option name="number" value="04174" />
-      <option name="presentableId" value="LOCAL-04174" />
-      <option name="project" value="LOCAL" />
-      <updated>1618597410511</updated>
-    </task>
-    <task id="LOCAL-04175" summary="Correção no gráfico de estatísticas sobre a Shiro">
-      <created>1618600900679</created>
-      <option name="number" value="04175" />
-      <option name="presentableId" value="LOCAL-04175" />
-      <option name="project" value="LOCAL" />
-      <updated>1618600900680</updated>
-    </task>
-    <task id="LOCAL-04176" summary="Correção no gráfico de estatísticas sobre a Shiro">
-      <created>1618601456699</created>
-      <option name="number" value="04176" />
-      <option name="presentableId" value="LOCAL-04176" />
-      <option name="project" value="LOCAL" />
-      <updated>1618601456699</updated>
-    </task>
-    <task id="LOCAL-04177" summary="Correção no gráfico de estatísticas sobre a Shiro">
-      <created>1618602227114</created>
-      <option name="number" value="04177" />
-      <option name="presentableId" value="LOCAL-04177" />
-      <option name="project" value="LOCAL" />
-      <updated>1618602227114</updated>
-    </task>
-    <task id="LOCAL-04178" summary="Correção no gráfico de estatísticas sobre a Shiro">
-      <created>1618603123836</created>
-      <option name="number" value="04178" />
-      <option name="presentableId" value="LOCAL-04178" />
-      <option name="project" value="LOCAL" />
-      <updated>1618603123836</updated>
-    </task>
-    <task id="LOCAL-04179" summary="Correção no Hitotsu">
-      <created>1618618762434</created>
-      <option name="number" value="04179" />
-      <option name="presentableId" value="LOCAL-04179" />
-      <option name="project" value="LOCAL" />
-      <updated>1618618762434</updated>
-    </task>
-    <task id="LOCAL-04180" summary="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;&#10;Campeões sem efeito agora possuem 125% dos atributos;">
-      <created>1618844428576</created>
-      <option name="number" value="04180" />
-      <option name="presentableId" value="LOCAL-04180" />
-      <option name="project" value="LOCAL" />
-      <updated>1618844428577</updated>
-    </task>
-    <task id="LOCAL-04181" summary="Correção referente ao último commit">
-      <created>1618848241553</created>
-      <option name="number" value="04181" />
-      <option name="presentableId" value="LOCAL-04181" />
-      <option name="project" value="LOCAL" />
-      <updated>1618848241553</updated>
-    </task>
-    <task id="LOCAL-04182" summary="Correção referente ao último commit">
-      <created>1618848278482</created>
-      <option name="number" value="04182" />
-      <option name="presentableId" value="LOCAL-04182" />
-      <option name="project" value="LOCAL" />
-      <updated>1618848278482</updated>
-    </task>
-    <task id="LOCAL-04183" summary="Correção referente ao último commit">
-      <created>1618848597714</created>
-      <option name="number" value="04183" />
-      <option name="presentableId" value="LOCAL-04183" />
-      <option name="project" value="LOCAL" />
-      <updated>1618848597714</updated>
-    </task>
-    <task id="LOCAL-04184" summary="Correção referente ao último commit">
-      <created>1618848766806</created>
-      <option name="number" value="04184" />
-      <option name="presentableId" value="LOCAL-04184" />
-      <option name="project" value="LOCAL" />
-      <updated>1618848766806</updated>
-    </task>
-    <task id="LOCAL-04185" summary="Correção referente ao último commit">
-      <created>1618848977791</created>
-      <option name="number" value="04185" />
-      <option name="presentableId" value="LOCAL-04185" />
-      <option name="project" value="LOCAL" />
-      <updated>1618848977791</updated>
-    </task>
-    <task id="LOCAL-04186" summary="Correção referente ao último commit">
-      <created>1618849271591</created>
-      <option name="number" value="04186" />
-      <option name="presentableId" value="LOCAL-04186" />
-      <option name="project" value="LOCAL" />
-      <updated>1618849271591</updated>
-    </task>
-    <task id="LOCAL-04187" summary="Correção referente ao último commit">
-      <created>1618849433253</created>
-      <option name="number" value="04187" />
-      <option name="presentableId" value="LOCAL-04187" />
-      <option name="project" value="LOCAL" />
-      <updated>1618849433253</updated>
+      <workItem from="1618969734788" duration="8114000" />
+      <workItem from="1619032275465" duration="877000" />
     </task>
     <task id="LOCAL-04188" summary="Correção referente ao último commit">
       <created>1618850147985</created>
@@ -1505,7 +1328,175 @@
       <option name="project" value="LOCAL" />
       <updated>1618972232988</updated>
     </task>
-    <option name="localTasksCounter" value="4213" />
+    <task id="LOCAL-04213" summary="Nova tag: Investidor">
+      <created>1618972860125</created>
+      <option name="number" value="04213" />
+      <option name="presentableId" value="LOCAL-04213" />
+      <option name="project" value="LOCAL" />
+      <updated>1618972860125</updated>
+    </task>
+    <task id="LOCAL-04214" summary="Nova tag: Investidor">
+      <created>1618972986046</created>
+      <option name="number" value="04214" />
+      <option name="presentableId" value="LOCAL-04214" />
+      <option name="project" value="LOCAL" />
+      <updated>1618972986046</updated>
+    </task>
+    <task id="LOCAL-04215" summary="Nova tag: Investidor">
+      <created>1618973236009</created>
+      <option name="number" value="04215" />
+      <option name="presentableId" value="LOCAL-04215" />
+      <option name="project" value="LOCAL" />
+      <updated>1618973236009</updated>
+    </task>
+    <task id="LOCAL-04216" summary="Nova tag: Investidor">
+      <created>1618973614237</created>
+      <option name="number" value="04216" />
+      <option name="presentableId" value="LOCAL-04216" />
+      <option name="project" value="LOCAL" />
+      <updated>1618973614237</updated>
+    </task>
+    <task id="LOCAL-04217" summary="Nova tag: Investidor">
+      <created>1618973684615</created>
+      <option name="number" value="04217" />
+      <option name="presentableId" value="LOCAL-04217" />
+      <option name="project" value="LOCAL" />
+      <updated>1618973684615</updated>
+    </task>
+    <task id="LOCAL-04218" summary="Nova tag: Investidor">
+      <created>1618973822123</created>
+      <option name="number" value="04218" />
+      <option name="presentableId" value="LOCAL-04218" />
+      <option name="project" value="LOCAL" />
+      <updated>1618973822123</updated>
+    </task>
+    <task id="LOCAL-04219" summary="Nova tag: Investidor">
+      <created>1618973976948</created>
+      <option name="number" value="04219" />
+      <option name="presentableId" value="LOCAL-04219" />
+      <option name="project" value="LOCAL" />
+      <updated>1618973976948</updated>
+    </task>
+    <task id="LOCAL-04220" summary="Nova tag: Investidor">
+      <created>1618974068612</created>
+      <option name="number" value="04220" />
+      <option name="presentableId" value="LOCAL-04220" />
+      <option name="project" value="LOCAL" />
+      <updated>1618974068612</updated>
+    </task>
+    <task id="LOCAL-04221" summary="Nova tag: Investidor">
+      <created>1618974652711</created>
+      <option name="number" value="04221" />
+      <option name="presentableId" value="LOCAL-04221" />
+      <option name="project" value="LOCAL" />
+      <updated>1618974652711</updated>
+    </task>
+    <task id="LOCAL-04222" summary="Nova tag: Investidor">
+      <created>1618975109553</created>
+      <option name="number" value="04222" />
+      <option name="presentableId" value="LOCAL-04222" />
+      <option name="project" value="LOCAL" />
+      <updated>1618975109553</updated>
+    </task>
+    <task id="LOCAL-04223" summary="Nova tag: Investidor">
+      <created>1618975195846</created>
+      <option name="number" value="04223" />
+      <option name="presentableId" value="LOCAL-04223" />
+      <option name="project" value="LOCAL" />
+      <updated>1618975195846</updated>
+    </task>
+    <task id="LOCAL-04224" summary="Nova tag: Investidor">
+      <created>1618975281630</created>
+      <option name="number" value="04224" />
+      <option name="presentableId" value="LOCAL-04224" />
+      <option name="project" value="LOCAL" />
+      <updated>1618975281630</updated>
+    </task>
+    <task id="LOCAL-04225" summary="Nova tag: Investidor">
+      <created>1618975805122</created>
+      <option name="number" value="04225" />
+      <option name="presentableId" value="LOCAL-04225" />
+      <option name="project" value="LOCAL" />
+      <updated>1618975805122</updated>
+    </task>
+    <task id="LOCAL-04226" summary="Nova tag: Investidor">
+      <created>1618975983478</created>
+      <option name="number" value="04226" />
+      <option name="presentableId" value="LOCAL-04226" />
+      <option name="project" value="LOCAL" />
+      <updated>1618975983478</updated>
+    </task>
+    <task id="LOCAL-04227" summary="Nova tag: Investidor">
+      <created>1618976224665</created>
+      <option name="number" value="04227" />
+      <option name="presentableId" value="LOCAL-04227" />
+      <option name="project" value="LOCAL" />
+      <updated>1618976224665</updated>
+    </task>
+    <task id="LOCAL-04228" summary="Nova tag: Investidor">
+      <created>1618976508182</created>
+      <option name="number" value="04228" />
+      <option name="presentableId" value="LOCAL-04228" />
+      <option name="project" value="LOCAL" />
+      <updated>1618976508182</updated>
+    </task>
+    <task id="LOCAL-04229" summary="Nova tag: Investidor">
+      <created>1618976582675</created>
+      <option name="number" value="04229" />
+      <option name="presentableId" value="LOCAL-04229" />
+      <option name="project" value="LOCAL" />
+      <updated>1618976582675</updated>
+    </task>
+    <task id="LOCAL-04230" summary="Nova tag: Investidor">
+      <created>1618976676037</created>
+      <option name="number" value="04230" />
+      <option name="presentableId" value="LOCAL-04230" />
+      <option name="project" value="LOCAL" />
+      <updated>1618976676037</updated>
+    </task>
+    <task id="LOCAL-04231" summary="Nova tag: Investidor">
+      <created>1618976872706</created>
+      <option name="number" value="04231" />
+      <option name="presentableId" value="LOCAL-04231" />
+      <option name="project" value="LOCAL" />
+      <updated>1618976872706</updated>
+    </task>
+    <task id="LOCAL-04232" summary="Nova tag: Investidor">
+      <created>1618976958550</created>
+      <option name="number" value="04232" />
+      <option name="presentableId" value="LOCAL-04232" />
+      <option name="project" value="LOCAL" />
+      <updated>1618976958550</updated>
+    </task>
+    <task id="LOCAL-04233" summary="Nova tag: Investidor">
+      <created>1618977054253</created>
+      <option name="number" value="04233" />
+      <option name="presentableId" value="LOCAL-04233" />
+      <option name="project" value="LOCAL" />
+      <updated>1618977054253</updated>
+    </task>
+    <task id="LOCAL-04234" summary="Nova tag: Investidor">
+      <created>1618977408187</created>
+      <option name="number" value="04234" />
+      <option name="presentableId" value="LOCAL-04234" />
+      <option name="project" value="LOCAL" />
+      <updated>1618977408187</updated>
+    </task>
+    <task id="LOCAL-04235" summary="Nova tag: Investidor">
+      <created>1618977623952</created>
+      <option name="number" value="04235" />
+      <option name="presentableId" value="LOCAL-04235" />
+      <option name="project" value="LOCAL" />
+      <updated>1618977623952</updated>
+    </task>
+    <task id="LOCAL-04236" summary="Nova tag: Investidor">
+      <created>1618977704606</created>
+      <option name="number" value="04236" />
+      <option name="presentableId" value="LOCAL-04236" />
+      <option name="project" value="LOCAL" />
+      <updated>1618977704610</updated>
+    </task>
+    <option name="localTasksCounter" value="4237" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
