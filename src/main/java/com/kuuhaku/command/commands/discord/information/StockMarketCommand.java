@@ -57,7 +57,7 @@ public class StockMarketCommand implements Executable {
 
 		StockValue sv = StockMarketDAO.getValues().get(c.getId());
 		int value = sv.getValue();
-		double growth = Math.floor(sv.getGrowth() * 1000) / 1000;
+		double growth = sv.getGrowth();
 
 		String emote;
 		if (growth > 0)

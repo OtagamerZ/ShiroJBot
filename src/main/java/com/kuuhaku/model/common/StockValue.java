@@ -50,6 +50,6 @@ public class StockValue {
 	}
 
 	public double getGrowth() {
-		return growth;
+		return Helper.mirroredFloor(growth * 1000) / 1000d;
 	}
 }
