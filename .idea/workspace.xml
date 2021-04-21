@@ -14,8 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Nova tag: Investidor">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/custom/CriteriaBuilderHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,6 +197,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1149,14 +1160,7 @@
       <workItem from="1618919976913" duration="8057000" />
       <workItem from="1618937718317" duration="9133000" />
       <workItem from="1618948553012" duration="1846000" />
-      <workItem from="1618969734788" duration="2266000" />
-    </task>
-    <task id="LOCAL-04163" summary="Adicionado comando para ver estatísticas sobre a Shiro">
-      <created>1618544337632</created>
-      <option name="number" value="04163" />
-      <option name="presentableId" value="LOCAL-04163" />
-      <option name="project" value="LOCAL" />
-      <updated>1618544337632</updated>
+      <workItem from="1618969734788" duration="2949000" />
     </task>
     <task id="LOCAL-04164" summary="Adicionado comando para ver estatísticas sobre a Shiro">
       <created>1618544621160</created>
@@ -1494,7 +1498,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618971566682</updated>
     </task>
-    <option name="localTasksCounter" value="4212" />
+    <task id="LOCAL-04212" summary="Nova tag: Investidor">
+      <created>1618972232988</created>
+      <option name="number" value="04212" />
+      <option name="presentableId" value="LOCAL-04212" />
+      <option name="project" value="LOCAL" />
+      <updated>1618972232988</updated>
+    </task>
+    <option name="localTasksCounter" value="4213" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
