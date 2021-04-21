@@ -148,12 +148,15 @@ public class StockMarketDAO {
 		List<Object[]> currResults = (List<Object[]>) curr.getResultList();
 
 		for (int i = 0; i < prevResults.size(); i++) {
-			Double[] prevValues = Arrays.stream(String.valueOf(prevResults.get(i)[2]).split(",")).map(Double::valueOf).toArray(Double[]::new);
-			Double[] currValues = Arrays.stream(String.valueOf(currResults.get(i)[2]).split(",")).map(Double::valueOf).toArray(Double[]::new);
+			Object[] prevRes = prevResults.get(i);
+			Object[] currRes = currResults.get(i);
 
-			out.put(String.valueOf(prevResults.get(i)[0]), new StockValue(
-					String.valueOf(prevResults.get(i)[0]),
-					String.valueOf(prevResults.get(i)[1]),
+			double[] prevValues = Arrays.stream(String.valueOf(prevRes[2]).split(",")).mapToDouble(Double::valueOf).toArray();
+			double[] currValues = Arrays.stream(String.valueOf(currRes[2]).split(",")).mapToDouble(Double::valueOf).toArray();
+
+			out.put(String.valueOf(prevRes[0]), new StockValue(
+					String.valueOf(prevRes[0]),
+					String.valueOf(prevRes[1]),
 					prevValues, currValues
 			));
 		}
