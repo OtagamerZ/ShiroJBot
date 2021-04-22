@@ -27,12 +27,16 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Command(
 		name = "banir",
 		aliases = {"ban"},
-		usage = "req_mention-id-reason",
+		usage = "req_mentions-ids-reason",
 		category = Category.MODERATION
 )
 @Requires({Permission.BAN_MEMBERS})
@@ -40,33 +44,62 @@ public class BanMemberCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (message.getMentionedUsers().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-member-to-ban")).queue();
-			return;
-		} else if (message.getMentionedUsers().size() > 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_too-many-mentions")).queue();
+		if (message.getMentionedMembers().isEmpty()) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mention-required")).queue();
 			return;
 		} else if (!member.hasPermission(Permission.BAN_MEMBERS)) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_ban-not-allowed")).queue();
 			return;
-		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0)) || !Helper.hasRoleHigherThan(guild.getSelfMember(), message.getMentionedMembers().get(0))) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cant-ban-high-role")).queue();
-			return;
-		} else if (ShiroInfo.getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cant-ban-dev")).queue();
-			return;
 		}
 
-		try {
-			if (args.length < 2) {
-				guild.ban(message.getMentionedMembers().get(0), 7).queue();
-				channel.sendMessage("✅ | Membro banido com sucesso!").queue();
-			} else {
-				guild.ban(message.getMentionedMembers().get(0), 7, String.join(" ", args).replace(args[0], "").trim()).queue();
-				channel.sendMessage("✅ | Membro banido com sucesso!\nMotivo: `" + String.join(" ", args).replace(args[0], "").trim() + "`").queue();
+		for (Member mb : message.getMentionedMembers()) {
+			if (Helper.hasRoleHigherThan(mb, member)) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-ban-high-role")).queue();
+				return;
+			} else if (ShiroInfo.getStaff().contains(mb.getId())) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-ban-staff")).queue();
+				return;
+			} else if (Helper.hasRoleHigherThan(mb, guild.getSelfMember())) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-ban-high-role-me")).queue();
+				return;
 			}
-		} catch (InsufficientPermissionException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cant-ban-no-permission")).queue();
-        }
+		}
+
+		String reason = argsAsText.replaceAll(Helper.MENTION, "").trim();
+		if (message.getMentionedMembers().size() > 1) {
+			if (reason.isBlank()) {
+				List<AuditableRestAction<Void>> acts = new ArrayList<>();
+
+				for (Member mb : message.getMentionedMembers()) {
+					acts.add(mb.ban(7));
+				}
+
+				RestAction.allOf(acts)
+						.mapToResult()
+						.flatMap(s -> channel.sendMessage("✅ | Membros banidos com sucesso!"))
+						.queue(null, Helper::doNothing);
+			} else {
+				List<AuditableRestAction<Void>> acts = new ArrayList<>();
+
+				for (Member mb : message.getMentionedMembers()) {
+					acts.add(mb.ban(7, reason));
+				}
+
+				RestAction.allOf(acts)
+						.mapToResult()
+						.flatMap(s -> channel.sendMessage("✅ | Membros banidos com sucesso!\nRazão: `" + reason + "`"))
+						.queue(null, Helper::doNothing);
+			}
+		} else {
+			if (reason.isBlank()) {
+				message.getMentionedMembers().get(0).ban(7)
+						.flatMap(s -> channel.sendMessage("✅ | Membro banido com sucesso!"))
+						.queue(null, Helper::doNothing);
+			} else {
+				message.getMentionedMembers().get(0).ban(7, reason)
+						.flatMap(s -> channel.sendMessage("✅ | Membro banido com sucesso!\nRazão: `" + reason + "`"))
+						.queue(null, Helper::doNothing);
+			}
+		}
 	}
 }

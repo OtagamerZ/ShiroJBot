@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent;
+package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.postgresql.GuildBuffDAO;
 import com.kuuhaku.utils.ServerBuff;
@@ -82,7 +82,7 @@ public class GuildBuff {
 
 	public boolean addBuff(ServerBuff buff) {
 		Set<ServerBuff> sb = getBuffs();
-		if (sb.stream().anyMatch(buff::equals)) return false;
+		if (sb.stream().anyMatch(b -> b.getTier() > buff.getTier() && b.equals(buff))) return false;
 
 		sb.add(buff);
 		setBuffs(sb);

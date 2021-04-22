@@ -16,32 +16,42 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.discord.dev;
+package com.kuuhaku.command.commands.discord.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
-		name = "permlock",
-		category = Category.DEV
+		name = "canalavisos",
+		aliases = {"canalav", "alertchannel"},
+		usage = "req_channel-reset",
+		category = Category.MODERATION
 )
-public class MmLockCommand implements Executable {
+public class AlertChannelCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		if (message.getMentionedChannels().isEmpty() && args.length == 0) {
+			TextChannel chn = gc.getAlertChannel();
+			if (chn == null)
+				channel.sendMessage("Ainda não foi definido um canal de avisos.").queue();
+			else
+				channel.sendMessage("O canal de avisos atual do servidor é " + chn + ".").queue();
+			return;
+		}
 
-		gc.switchServerMMLock();
-
-
-		if (!gc.isServerMMLocked()) {
-			channel.sendMessage("Trava de permissões liberada neste servidor.").queue();
+		if (Helper.equalsAny(args[0], "limpar", "reset")) {
+			gc.setAlertChannel(null);
+			channel.sendMessage("✅ | Canal de avisos limpo com sucesso.").queue();
 		} else {
-			channel.sendMessage("Trava de permissões ativada neste servidor.").queue();
+			gc.setAlertChannel(message.getMentionedChannels().get(0).getId());
+			channel.sendMessage("✅ | Canal de avisos definido com sucesso.").queue();
 		}
 
 		GuildDAO.updateGuildSettings(gc);

@@ -47,7 +47,6 @@ public class UnlockChannelCommand implements Executable {
 		}
 
 		List<PermissionOverride> overrides = channel.getPermissionOverrides();
-
 		if (channel.getParent() == null) {
 			List<PermissionOverrideAction> acts = new ArrayList<>();
 

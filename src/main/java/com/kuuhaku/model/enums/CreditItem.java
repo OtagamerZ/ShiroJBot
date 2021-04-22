@@ -22,7 +22,7 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.AddedAnime;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.TriFunction;
 import net.dv8tion.jda.api.entities.Member;
@@ -30,7 +30,6 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.Locale;
-import java.util.Objects;
 
 public enum CreditItem {
 	XP_BOOST(
@@ -45,13 +44,9 @@ public enum CreditItem {
 				boolean lvlUp = m.getLevel() > lvl;
 				try {
 					GuildConfig gc = GuildDAO.getGuildById(chn.getGuild().getId());
-					TextChannel lvlChannel = null;
-					try {
-						lvlChannel = chn.getGuild().getTextChannelById(gc.getCanalLvl());
-					} catch (Exception ignore) {
-					}
-					if (lvlUp && gc.isLvlNotif()) {
-						Objects.requireNonNullElse(lvlChannel, chn).sendMessage(mb.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+					TextChannel lvlChannel = gc.getLevelChannel();
+					if (lvlUp && gc.isLevelNotif()) {
+						Helper.getOr(lvlChannel, chn).sendMessage(mb.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
 					}
 				} catch (InsufficientPermissionException e) {
 					chn.sendMessage(mb.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
