@@ -42,7 +42,7 @@ public class LevelChannelCommand implements Executable {
 			if (chn == null)
 				channel.sendMessage("Ainda não foi definido um canal de nível.").queue();
 			else
-				channel.sendMessage("O canal de nível atual do servidor é " + chn + ".").queue();
+				channel.sendMessage("O canal de nível atual do servidor é " + chn.getAsMention() + ".").queue();
 			return;
 		}
 

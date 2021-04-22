@@ -42,7 +42,7 @@ public class GeneralChannelCommand implements Executable {
 			if (chn == null)
 				channel.sendMessage("Ainda não foi definido um canal geral.").queue();
 			else
-				channel.sendMessage("O canal geral atual do servidor é " + chn + ".").queue();
+				channel.sendMessage("O canal geral atual do servidor é " + chn.getAsMention() + ".").queue();
 			return;
 		}
 
