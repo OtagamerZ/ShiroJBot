@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "cargolevel",
 		aliases = {"levelrole"},
-		usage = "req_role-level",
+		usage = "req_level-role",
 		category = Category.MODERATION
 )
 @Requires({Permission.MANAGE_ROLES})
