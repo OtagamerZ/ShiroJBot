@@ -120,18 +120,18 @@ public class HelpCommand implements Executable {
 				pages.put(cat.getEmoteId(), new Page(PageType.EMBED, ceb.build()));
 			}
 
-			EmbedBuilder ceb = new ColorlessEmbedBuilder();
-			ceb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_tips-and-tricks"));
-			ceb.setFooter(ShiroInfo.getFullName(), null);
-			ceb.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getShiroShards().getEmoteById("684039810079522846")).getImageUrl()));
-
-			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_quick-emote-tip"), prefix), false);
-			ceb.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_pagination-tip"), false);
-			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_waifu-tip"), prefix), false);
-			ceb.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_exceed-tip"), false);
-			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_kawaipon-tip"), prefix), false);
-			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_edit-message-tip"), prefix), false);
-			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_loan-tip"), prefix), false);
+			EmbedBuilder ceb = new ColorlessEmbedBuilder()
+					.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_tips-and-tricks"))
+					.setFooter(ShiroInfo.getFullName(), null)
+					.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getShiroShards().getEmoteById("684039810079522846")).getImageUrl()))
+					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_quick-emote-tip"), prefix), false)
+					.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_pagination-tip"), false)
+					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_waifu-tip"), prefix), false)
+					.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_exceed-tip"), false)
+					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_kawaipon-tip"), prefix), false)
+					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_edit-message-tip"), prefix), false)
+					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_loan-tip"), prefix), false)
+					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_placeholder-tip"), prefix), false);
 
 			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
 

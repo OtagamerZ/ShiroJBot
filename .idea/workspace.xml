@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção completa do s!settings">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção completa do s!settings" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1169,20 +1166,6 @@
       <workItem from="1618969734788" duration="8114000" />
       <workItem from="1619032275465" duration="2431000" />
     </task>
-    <task id="LOCAL-04190" summary="Correção referente ao último commit">
-      <created>1618851212780</created>
-      <option name="number" value="04190" />
-      <option name="presentableId" value="LOCAL-04190" />
-      <option name="project" value="LOCAL" />
-      <updated>1618851212780</updated>
-    </task>
-    <task id="LOCAL-04191" summary="Correção referente ao último commit">
-      <created>1618851688854</created>
-      <option name="number" value="04191" />
-      <option name="presentableId" value="LOCAL-04191" />
-      <option name="project" value="LOCAL" />
-      <updated>1618851688854</updated>
-    </task>
     <task id="LOCAL-04192" summary="Correção referente ao último commit">
       <created>1618853421428</created>
       <option name="number" value="04192" />
@@ -1512,7 +1495,21 @@
       <option name="project" value="LOCAL" />
       <updated>1619120876827</updated>
     </task>
-    <option name="localTasksCounter" value="4239" />
+    <task id="LOCAL-04239" summary="Remoção completa do s!settings">
+      <created>1619123620731</created>
+      <option name="number" value="04239" />
+      <option name="presentableId" value="LOCAL-04239" />
+      <option name="project" value="LOCAL" />
+      <updated>1619123620731</updated>
+    </task>
+    <task id="LOCAL-04240" summary="Remoção completa do s!settings">
+      <created>1619123704850</created>
+      <option name="number" value="04240" />
+      <option name="presentableId" value="LOCAL-04240" />
+      <option name="project" value="LOCAL" />
+      <updated>1619123704850</updated>
+    </task>
+    <option name="localTasksCounter" value="4241" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
