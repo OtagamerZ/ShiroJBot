@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -34,15 +34,13 @@ public class LiteModeCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		if (gc.isLiteMode()) {
-			gc.setLiteMode(false);
-			channel.sendMessage("Modo lite está desligado").queue();
-		} else {
-			gc.setLiteMode(true);
-			channel.sendMessage("Modo lite está ligado, as mensagens globais estarão em um padrão mais leve.").queue();
-		}
+		gc.toggleLiteMode();
+		if (gc.isLiteMode())
+			channel.sendMessage("✅ | Modo lite ativado, as mensagens globais estarão em um padrão mais leve.").queue();
+		else
+			channel.sendMessage("✅ | Modo lite desativado.").queue();
 
 		GuildDAO.updateGuildSettings(gc);
 	}

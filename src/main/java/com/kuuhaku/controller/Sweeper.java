@@ -36,7 +36,7 @@ public class Sweeper {
 		List<List<String>> mids = Helper.chunkify(memberIDs, 1000);
 
 		if (gids.size() > 0)
-			executeSweep(pem, gids, "DELETE FROM GuildConfig WHERE guildID IN :ids");
+			executeSweep(pem, gids, "DELETE FROM GuildConfig WHERE guildId IN :ids");
 
 		if (mids.size() > 0) {
 			executeSweep(pem, mids, "DELETE FROM Member WHERE id IN :ids");

@@ -31,6 +31,7 @@ import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -256,7 +257,7 @@ public class TenthSecondEvent implements Job {
 	private void sendSoloConfirmation(Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>> p1, TextChannel p1Channel, TextChannel p2Channel, List<Pair<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>, Boolean>> match, Runnable result) {
 		MatchMakingRating mmr1 = p1.getKey();
 
-		Main.getInfo().getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
+		ShiroInfo.getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
 			private Future<?> timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, você está impedido de entrar no saguão novamente por " + (10 * (mmr1.getEvades() + 1)) + " minutos.")
 					.queueAfter(1, TimeUnit.MINUTES, msg -> {
 						mmr1.setEvades(mmr1.getEvades() + 1);
@@ -322,7 +323,7 @@ public class TenthSecondEvent implements Job {
 			add(rd.getP2().getUid());
 		}};
 
-		Main.getInfo().getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
+		ShiroInfo.getShiroEvents().addHandler(p1Channel.getGuild(), new SimpleMessageListener() {
 			private Future<?> p1Timeout = p1Channel.sendMessage("Tempo para aceitar a partida esgotado, " + rd.getP1().getUser().getName() + " está impedido de entrar no saguão novamente por " + (10 * (rd.getP1().getEvades() + 1)) + " minutos.")
 					.queueAfter(1, TimeUnit.MINUTES, msg -> {
 						MatchMakingRating mmr = rd.getP1();

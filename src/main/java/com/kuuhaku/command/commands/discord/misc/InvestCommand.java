@@ -56,7 +56,7 @@ public class InvestCommand implements Executable {
 			channel.sendMessage("❌ | Você precisa informar uma carta e um valor para investir.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_amount-not-valid")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
 			return;
 		}
 

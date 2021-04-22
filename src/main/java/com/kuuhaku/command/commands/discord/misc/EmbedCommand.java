@@ -26,7 +26,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.PrivilegeLevel;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -50,7 +50,7 @@ public class EmbedCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Construindo embed...").queue(m -> {
 			if (Helper.hasPermission(member, PrivilegeLevel.MOD) && args.length > 0 && Helper.equalsAny(args[0], "reset", "resetar")) {
-				GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
+				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 				gc.setEmbedTemplate(null);
 				GuildDAO.updateGuildSettings(gc);
 
@@ -90,7 +90,7 @@ public class EmbedCommand implements Executable {
 							.embed(eb.build())
 							.queue(s ->
 									Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-												GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
+												GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 												gc.setEmbedTemplate(json);
 												GuildDAO.updateGuildSettings(gc);
 

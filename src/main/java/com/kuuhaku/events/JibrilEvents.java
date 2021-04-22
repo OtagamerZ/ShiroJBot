@@ -89,7 +89,7 @@ public class JibrilEvents extends ListenerAdapter {
 
 	@Override
 	public void onPrivateMessageReceived(@NotNull PrivateMessageReceivedEvent event) {
-		Main.getInfo().getShiroEvents().onPrivateMessageReceived(event);
+		ShiroInfo.getShiroEvents().onPrivateMessageReceived(event);
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class JibrilEvents extends ListenerAdapter {
 			if (BlacklistDAO.isBlacklisted(author) || author.isBot() || !beta) return;
 
 			if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getJibril().getSelfUser().getId())) {
-				channel.sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores deste servidor usando `" + com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId()).getPrefix() + "settings crelay #CANAL`!").queue(null, Helper::doNothing);
+				channel.sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores deste servidor usando `" + GuildDAO.getGuildById(guild.getId()).getPrefix() + "settings crelay #CANAL`!").queue(null, Helper::doNothing);
 				return;
 			}
 

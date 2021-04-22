@@ -61,7 +61,7 @@ public class GuessTheNumberCommand implements Executable {
 
 		channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
 
-		Main.getInfo().getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+		ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
 			private final Consumer<Void> success = s -> close();
 			private Future<?> timeout = channel.sendMessage("Acabou o tempo, o número escolhido por mim era **" + theValue + "**.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
 			int chances = 4;

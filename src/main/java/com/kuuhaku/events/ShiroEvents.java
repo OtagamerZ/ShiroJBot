@@ -33,6 +33,8 @@ import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
+import com.kuuhaku.model.persistent.guild.LevelRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -311,79 +313,56 @@ public class ShiroEvents extends ListenerAdapter {
 					acc.addLoan(1000);
 				}*/
 
-				if (gc.isKawaiponEnabled()) Helper.spawnKawaipon(gc, channel);
-				if (gc.isDropEnabled()) Helper.spawnDrop(gc, channel);
+				if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
+				if (gc.isDropSpawn()) Helper.spawnDrop(gc, channel);
 
 				Calendar cal = Calendar.getInstance();
-				if (cal.get(Calendar.MONTH) == Calendar.DECEMBER && gc.isDropEnabled())
+				if (cal.get(Calendar.MONTH) == Calendar.DECEMBER && gc.isDropSpawn())
 					Helper.spawnPadoru(gc, channel);
-				else if (cal.get(Calendar.MONTH) == Calendar.APRIL && gc.isDropEnabled())
+				else if (cal.get(Calendar.MONTH) == Calendar.APRIL && gc.isDropSpawn())
 					Helper.spawnUsaTan(gc, channel);
 
-				MessageChannel lvlChannel = null;
 				try {
-					lvlChannel = guild.getTextChannelById(gc.getCanalLvl());
-				} catch (Exception ignore) {
-				}
-				try {
-					Map<String, Object> rawLvls = gc.getCargoslvl().entrySet()
+					com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
+					Set<LevelRole> roles = gc.getLevelRoles()
 							.stream()
-							.filter(e -> {
-								com.kuuhaku.model.persistent.Member mb = MemberDAO.getMember(author.getId(), guild.getId());
-								return mb.getLevel() >= Integer.parseInt(e.getKey());
-							})
-							.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-					Map<Integer, Role> sortedLvls = new TreeMap<>();
-					for (Map.Entry<String, Object> entry : rawLvls.entrySet()) {
-						sortedLvls.put(
-								Integer.parseInt(entry.getKey()),
-								guild.getRoleById((String) entry.getValue())
-						);
-					}
-					MessageChannel finalLvlChannel = lvlChannel;
-					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
-						if (gc.isLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
-							try {
-								if (!guild.getSelfMember().getRoles().get(0).canInteract(sortedLvls.get(i))) return;
-								guild.addRoleToMember(member, sortedLvls.get(i)).queue(s -> {
-									String content = author.getAsMention() + " ganhou o cargo **`" + sortedLvls.get(i).getName() + "`**! :tada:";
-									if (finalLvlChannel != null) {
-										finalLvlChannel.getHistory().retrievePast(5).queue(m -> {
-											if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-												finalLvlChannel.sendMessage(content).queue(null, Helper::doNothing);
-											}
-										}, Helper::doNothing);
-									} else {
-										channel.getHistory().retrievePast(5).queue(m -> {
-											if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-												channel.sendMessage(content).queue(null, Helper::doNothing);
-											}
-										}, Helper::doNothing);
-									}
-								}, Helper::doNothing);
-							} catch (IllegalArgumentException e) {
-								Map<String, Object> cl = gc.getCargoslvl();
-								cl.remove(String.valueOf(i));
-								GuildDAO.updateGuildSettings(gc);
-							} catch (ErrorResponseException ignore) {
-							}
-						}
-						rawLvls.remove(String.valueOf(i));
-						List<Role> list = new ArrayList<>();
-						for (Map.Entry<String, Object> entry : rawLvls.entrySet()) {
-							String k = entry.getKey();
-							Object v = entry.getValue();
-							Role r = guild.getRoleById((String) v);
+							.filter(e -> mb.getLevel() >= e.getLevel())
+							.collect(Collectors.toSet());
 
-							if (r != null) list.add(r);
-							else {
-								Map<String, Object> cl = gc.getCargoslvl();
-								cl.remove(String.valueOf(i));
-								GuildDAO.updateGuildSettings(gc);
+					int curr = roles.stream().mapToInt(LevelRole::getLevel).max().orElse(0);
+					if (curr > 0) {
+						List<Role> prev = new ArrayList<>();
+						List<Role> rols = new ArrayList<>();
+						for (LevelRole role : roles) {
+							Role r = guild.getRoleById(role.getId());
+							if (r == null) {
+								gc.removeLevelRole(role.getId());
+								continue;
+							}
+
+							if (role.getLevel() < curr) {
+								prev.add(r);
+							} else {
+								rols.add(r);
 							}
 						}
-						guild.modifyMemberRoles(member, null, list).queue(null, Helper::doNothing);
-					});
+						GuildDAO.updateGuildSettings(gc);
+
+						rols.removeIf(member.getRoles()::contains);
+						if (!rols.isEmpty()) {
+							guild.modifyMemberRoles(member, rols, prev).queue(null, Helper::doNothing);
+							if (gc.isLevelNotif()) {
+								TextChannel chn = Helper.getOr(gc.getLevelChannel(), channel);
+								if (rols.size() > 1) {
+									String names = rols.stream()
+											.map(rl -> "**`" + rl.getName() + "`**")
+											.collect(Collectors.joining(", "));
+									chn.sendMessage(author.getAsMention() + " ganhou os cargos " + names + "! :tada:").queue();
+								} else
+									chn.sendMessage(author.getAsMention() + " ganhou o cargo **`" + rols.get(0).getName() + "`**! :tada:").queue();
+							}
+						}
+					}
 				} catch (HierarchyException | InsufficientPermissionException ignore) {
 				}
 
@@ -403,13 +382,13 @@ public class ShiroEvents extends ListenerAdapter {
 					boolean lvlUp = m.addXp(guild);
 					MemberDAO.updateMemberConfigs(m);
 					try {
-						if (lvlUp && gc.isLvlNotif()) {
+						if (lvlUp && gc.isLevelNotif()) {
 							if (m.getLevel() % 210 == 0)
-								Helper.getOr(lvlChannel, channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
+								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
 										.addFile(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("assets/transition_" + m.getLevel() + ".gif")), "upgrade.gif")
 										.queue();
 							else
-								Helper.getOr(lvlChannel, channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
+								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
 						}
 					} catch (InsufficientPermissionException e) {
 						if (m.getLevel() % 210 == 0)
@@ -486,11 +465,11 @@ public class ShiroEvents extends ListenerAdapter {
 	@Override
 	public void onRoleDelete(@NotNull RoleDeleteEvent event) {
 		GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
-		Map<String, Object> jo = gc.getCargoslvl();
 
-		jo.entrySet().removeIf(e -> String.valueOf(e.getValue()).equals(event.getRole().getId()));
+		gc.removeLevelRole(event.getRole().getId());
 
 		GuildDAO.updateGuildSettings(gc);
+		Helper.logToChannel(null, false, null, "Cargo deletado: " + event.getRole().getName(), event.getGuild());
 	}
 
 	@Override
@@ -559,7 +538,7 @@ public class ShiroEvents extends ListenerAdapter {
 				return;
 			}
 
-			if (!gc.getMsgBoasVindas().isBlank()) {
+			if (!gc.getWelcomeMessage().isBlank()) {
 				URL url = new URL(author.getEffectiveAvatarUrl());
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -589,7 +568,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 					if (template.has("image")) eb.setImage(template.getString("image"));
 
-					eb.setDescription(Helper.replaceTags(gc.getMsgBoasVindas(), author, guild));
+					eb.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild));
 
 					if (template.has("fields")) {
 						for (Object j : template.getJSONArray("fields")) {
@@ -617,12 +596,12 @@ public class ShiroEvents extends ListenerAdapter {
 							)
 							.setAuthor(author.getAsTag(), author.getEffectiveAvatarUrl(), author.getEffectiveAvatarUrl())
 							.setColor(Helper.colorThief(image))
-							.setDescription(Helper.replaceTags(gc.getMsgBoasVindas(), author, guild))
+							.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild))
 							.setThumbnail(author.getEffectiveAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
 
-				TextChannel chn = guild.getTextChannelById(gc.getCanalBV());
+				TextChannel chn = gc.getWelcomeChannel();
 				if (chn != null) {
 					chn.sendMessage(author.getAsMention()).embed(eb.build()).queue();
 					if (author.getId().equals(ShiroInfo.getNiiChan()))
@@ -645,7 +624,7 @@ public class ShiroEvents extends ListenerAdapter {
 			m.setMarkForDelete(true);
 			MemberDAO.updateMemberConfigs(m);*/
 
-			if (!gc.getMsgAdeus().isBlank()) {
+			if (!gc.getByeMessage().isBlank()) {
 				URL url = new URL(author.getEffectiveAvatarUrl());
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -675,7 +654,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 					if (template.has("image")) eb.setImage(template.getString("image"));
 
-					eb.setDescription(Helper.replaceTags(gc.getMsgAdeus(), author, guild));
+					eb.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild));
 
 					if (template.has("fields")) {
 						for (Object j : template.getJSONArray("fields")) {
@@ -703,12 +682,12 @@ public class ShiroEvents extends ListenerAdapter {
 							)
 							.setAuthor(author.getAsTag(), author.getEffectiveAvatarUrl(), author.getEffectiveAvatarUrl())
 							.setColor(Helper.colorThief(image))
-							.setDescription(Helper.replaceTags(gc.getMsgAdeus(), author, guild))
+							.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild))
 							.setThumbnail(author.getEffectiveAvatarUrl())
 							.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
 				}
 
-				TextChannel chn = guild.getTextChannelById(gc.getCanalAdeus());
+				TextChannel chn = gc.getByeChannel();
 				if (chn != null)
 					chn.sendMessage(eb.build()).queue();
 				Helper.logToChannel(author, false, null, "Um usuário saiu do servidor", guild);
@@ -925,8 +904,8 @@ public class ShiroEvents extends ListenerAdapter {
 			});
 
 			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-			if (gc.getCargoMute() != null && !gc.getCargoMute().isBlank()) try {
-				Role r = guild.getRoleById(gc.getCargoMute());
+			if (gc.getMuteRole() != null) try {
+				Role r = gc.getMuteRole();
 				if (r != null) {
 					JSONArray roles = new JSONArray(member.getRoles().stream().filter(rl -> !rl.isManaged()).map(Role::getId).collect(Collectors.toList()));
 
@@ -935,7 +914,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 					guild.modifyMemberRoles(member, rls).queue(null, Helper::doNothing);
 					MutedMember mm = Helper.getOr(com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId(), roles));
-					mm.mute(GuildDAO.getGuildById(guild.getId()).getWarnTime());
+					mm.mute(GuildDAO.getGuildById(guild.getId()).getMuteTime());
 
 					com.kuuhaku.controller.postgresql.MemberDAO.saveMutedMember(mm);
 				}
