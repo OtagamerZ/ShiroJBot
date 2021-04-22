@@ -42,7 +42,7 @@ public class RelayChannelCommand implements Executable {
 			if (chn == null)
 				channel.sendMessage("Ainda não foi definido um canal global.").queue();
 			else
-				channel.sendMessage("O canal global atual do servidor é " + chn + ".").queue();
+				channel.sendMessage("O canal global atual do servidor é " + chn.getAsMention() + ".").queue();
 			return;
 		}
 
