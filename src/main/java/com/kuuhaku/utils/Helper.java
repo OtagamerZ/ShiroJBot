@@ -41,6 +41,8 @@ import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.model.persistent.guild.GuildBuff;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -122,6 +124,7 @@ public class Helper {
 	public static final String CANCEL = "❎";
 	public static final String ACCEPT = "✅";
 	public static final String ANTICOPY = "͏"; //U+034F
+	public static final String MENTION = "<@\\d+>|<@!\\d+>";
 	public static final int CANVAS_SIZE = 2049;
 	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
 	public static final DateTimeFormatter onlyDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -394,11 +397,11 @@ public class Helper {
 
 	public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g) {
 		GuildConfig gc = GuildDAO.getGuildById(g.getId());
-		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
+		if (gc.getLogChannel() == null) return;
 
-		TextChannel tc = g.getTextChannelById(gc.getCanalLog());
+		TextChannel tc = gc.getLogChannel();
 		if (tc == null) {
-			gc.setCanalLog("");
+			gc.setLogChannel(null);
 			return;
 		}
 
@@ -407,13 +410,13 @@ public class Helper {
 
 			eb.setAuthor("Relatório de log");
 			eb.setDescription(StringUtils.abbreviate(msg, 2048));
-			eb.addField("Referente:", u.getAsMention(), true);
+			if (u != null) eb.addField("Referente:", u.getAsMention(), true);
 			if (isCommand) eb.addField("Comando:", gc.getPrefix() + c.getName(), true);
 			eb.setTimestamp(Instant.now());
 
 			tc.sendMessage(eb.build()).queue(null, Helper::doNothing);
 		} catch (Exception e) {
-			gc.setCanalLog("");
+			gc.setLogChannel("");
 			GuildDAO.updateGuildSettings(gc);
 			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
 			Member owner = g.getOwner();
@@ -426,11 +429,11 @@ public class Helper {
 
 	public static void logToChannel(User u, boolean isCommand, PreparedCommand c, String msg, Guild g, String args) {
 		GuildConfig gc = GuildDAO.getGuildById(g.getId());
-		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
+		if (gc.getLogChannel() == null) return;
 
-		TextChannel tc = g.getTextChannelById(gc.getCanalLog());
+		TextChannel tc = gc.getLogChannel();
 		if (tc == null) {
-			gc.setCanalLog("");
+			gc.setLogChannel(null);
 			return;
 		}
 
@@ -448,7 +451,7 @@ public class Helper {
 
 			tc.sendMessage(eb.build()).queue();
 		} catch (Exception e) {
-			gc.setCanalLog("");
+			gc.setLogChannel("");
 			GuildDAO.updateGuildSettings(gc);
 			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
 			Member owner = g.getOwner();
@@ -661,7 +664,7 @@ public class Helper {
 
 		if (source.isEmpty()) return;
 
-		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+		Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
 		if (g != null) {
 			for (String k : source.keySet()) {
 				try {
@@ -766,7 +769,7 @@ public class Helper {
 
 		if (ja.isEmpty()) return;
 
-		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+		Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
 
 		for (String k : ja.keySet()) {
 			JSONObject jo = ja.getJSONObject(k);
@@ -1166,7 +1169,7 @@ public class Helper {
 	}
 
 	public static void awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act) {
-		Main.getInfo().getShiroEvents().addHandler(chn.getGuild(), new SimpleMessageListener() {
+		ShiroInfo.getShiroEvents().addHandler(chn.getGuild(), new SimpleMessageListener() {
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 				if (event.getChannel().getId().equals(chn.getId()) && event.getAuthor().getId().equals(u.getId())) {
@@ -1295,7 +1298,7 @@ public class Helper {
 	}
 
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
-		if (Main.getInfo().getRatelimit().containsKey("kawaipon_" + gc.getGuildID())) return;
+		if (Main.getInfo().getRatelimit().containsKey("kawaipon_" + gc.getGuildId())) return;
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff cardBuff = gb.getBuffs().stream().filter(b -> b.getId() == 2).findFirst().orElse(null);
 		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
@@ -1326,13 +1329,13 @@ public class Helper {
 			else
 				eb.setImage("attachment://kawaipon.png");
 
-			if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
+			if (gc.getKawaiponChannel() == null) {
 				channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			} else {
-				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalKawaipon());
+				TextChannel tc = gc.getKawaiponChannel();
 
 				if (tc == null) {
-					gc.setCanalKawaipon(null);
+					gc.setKawaiponChannel(null);
 					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 				} else {
@@ -1340,7 +1343,7 @@ public class Helper {
 				}
 			}
 			Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
-			Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildID(), true);
+			Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
 		}
 	}
 
@@ -1387,13 +1390,13 @@ public class Helper {
 		else
 			eb.setImage("attachment://kawaipon.png");
 
-		if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
+		if (gc.getKawaiponChannel() == null) {
 			channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 		} else {
-			TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalKawaipon());
+			TextChannel tc = gc.getKawaiponChannel();
 
 			if (tc == null) {
-				gc.setCanalKawaipon(null);
+				gc.setKawaiponChannel(null);
 				GuildDAO.updateGuildSettings(gc);
 				channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			} else {
@@ -1401,11 +1404,11 @@ public class Helper {
 			}
 		}
 		Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
-		Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildID(), true);
+		Main.getInfo().getRatelimit().put("kawaipon_" + gc.getGuildId(), true);
 	}
 
 	public static void spawnDrop(GuildConfig gc, TextChannel channel) {
-		if (Main.getInfo().getRatelimit().containsKey("drop_" + gc.getGuildID())) return;
+		if (Main.getInfo().getRatelimit().containsKey("drop_" + gc.getGuildId())) return;
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff dropBuff = gb.getBuffs().stream().filter(b -> b.getId() == 3).findFirst().orElse(null);
 		boolean dbUltimate = dropBuff != null && dropBuff.getTier() == 4;
@@ -1430,13 +1433,13 @@ public class Helper {
 					.addField("Código captcha:", drop.getCaptcha(), true)
 					.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisito: " + drop.getRequirement().getKey() + ").", null);
 
-			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
+			if (gc.getDropChannel() == null) {
 				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			} else {
-				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
+				TextChannel tc = gc.getDropChannel();
 
 				if (tc == null) {
-					gc.setCanalDrop(null);
+					gc.setDropChannel(null);
 					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 				} else {
@@ -1444,17 +1447,17 @@ public class Helper {
 				}
 			}
 			Main.getInfo().getCurrentDrop().put(channel.getGuild().getId(), drop);
-			Main.getInfo().getRatelimit().put("drop_" + gc.getGuildID(), true);
+			Main.getInfo().getRatelimit().put("drop_" + gc.getGuildId(), true);
 		}
 	}
 
 	public static void spawnPadoru(GuildConfig gc, TextChannel channel) {
 		String padoru = ShiroInfo.RESOURCES_URL + "/assets/padoru_padoru.gif";
-		if (Main.getInfo().getSpecialEvent().containsKey(gc.getGuildID())) return;
+		if (Main.getInfo().getSpecialEvent().containsKey(gc.getGuildId())) return;
 
 		if (chance(0.1 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.09, 5000), 0, 0.09))) {
 			try {
-				TextChannel tc = getOr(channel.getGuild().getTextChannelById(getOr(gc.getCanalDrop(), "1")), channel);
+				TextChannel tc = getOr(gc.getDropChannel(), channel);
 				Webhook wh = getOrCreateWebhook(tc, "Shiro");
 				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 
@@ -1505,7 +1508,7 @@ public class Helper {
 					}
 				};
 
-				Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), sml);
+				ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), sml);
 				Consumer<Message> act = msg -> {
 					if (users.size() > 0) {
 						List<String> ids = new ArrayList<>(users);
@@ -1535,7 +1538,7 @@ public class Helper {
 				};
 
 				ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
-				if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
+				if (gc.getDropChannel() == null) {
 					tc.retrieveMessageById(rm.getId())
 							.delay(1, TimeUnit.MINUTES)
 							.queue(msg -> {
@@ -1551,18 +1554,18 @@ public class Helper {
 							});
 				}
 
-				Main.getInfo().getSpecialEvent().put(gc.getGuildID(), true);
+				Main.getInfo().getSpecialEvent().put(gc.getGuildId(), true);
 			} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
 			}
 		}
 	}
 
 	public static void spawnUsaTan(GuildConfig gc, TextChannel channel) {
-		if (Main.getInfo().getSpecialEvent().containsKey(gc.getGuildID())) return;
+		if (Main.getInfo().getSpecialEvent().containsKey(gc.getGuildId())) return;
 
 		if (chance(0.15 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.5, 5000), 0, 0.05))) {
 			try {
-				TextChannel tc = getOr(channel.getGuild().getTextChannelById(getOr(gc.getCanalDrop(), "1")), channel);
+				TextChannel tc = getOr(gc.getDropChannel(), channel);
 				Webhook wh = getOrCreateWebhook(tc, "Shiro");
 				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 
@@ -1639,7 +1642,7 @@ public class Helper {
 				), false, 2, TimeUnit.MINUTES);
 
 				ReadonlyMessage rm = wc.send(wmb.addEmbeds(web.build()).build()).get();
-				if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
+				if (gc.getDropChannel() == null) {
 					tc.retrieveMessageById(rm.getId())
 							.delay(2, TimeUnit.MINUTES)
 							.queue(msg -> {
@@ -1655,7 +1658,7 @@ public class Helper {
 							}, Helper::doNothing);
 				}
 
-				Main.getInfo().getSpecialEvent().put(gc.getGuildID(), true);
+				Main.getInfo().getSpecialEvent().put(gc.getGuildId(), true);
 			} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
 			}
 		}
@@ -1961,10 +1964,10 @@ public class Helper {
 			sb.setLength(0);
 
 			for (GuildConfig gc : gs) {
-				Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+				Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
 				if (g == null) continue;
 				try {
-					TextChannel c = g.getTextChannelById(gc.getCanalAvisos());
+					TextChannel c = gc.getAlertChannel();
 					if (c != null && c.canTalk()) {
 						Webhook wh = getOrCreateWebhook(c, "Notificações Shiro");
 						if (wh == null) result.put(g.getName(), false);

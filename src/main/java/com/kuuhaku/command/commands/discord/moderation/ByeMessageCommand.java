@@ -22,29 +22,37 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.persistent.GuildConfig;
-import net.dv8tion.jda.api.Permission;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
-		name = "cargosexceed",
-		aliases = {"exceedroles", "exroles", "cargosex"},
+		name = "mensagemadeus",
+		aliases = {"msgaad", "byemessage", "byemsg"},
+		usage = "req_text",
 		category = Category.MODERATION
 )
-@Requires({Permission.MANAGE_ROLES})
-public class ToggleExceedRolesCommand implements Executable {
+public class ByeMessageCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		if (args.length == 0) {
+			channel.sendMessage("A mensagem de adeus atual do servidor é ```" + gc.getByeMessage() + "```.").queue();
+			return;
+		}
 
-		if (gc.isExceedRolesEnabled()) {
-			gc.toggleExceedRoles();
-			channel.sendMessage("Cargos de Exceed automáticos estão desligados.").queue();
+		if (!Helper.between(argsAsText.length(), 0, 2048)) {
+			channel.sendMessage("❌ | A mensagem deve possuir entre 0 e 2048 caracteres.").queue();
+			return;
+		}
+
+		if (argsAsText.length() == 0) {
+			gc.setByeMessage(null);
+			channel.sendMessage("✅ | Mensagem de adeus limpa com sucesso.").queue();
 		} else {
-			gc.toggleExceedRoles();
-			channel.sendMessage("Cargos de Exceed automáticos estão ligados, eu irei gerenciar os cargos que possuam `imanity`, `flugel`, `ex-machina`, `werebeast`, `seiren` ou `elf` no nome.").queue();
+			gc.setByeMessage(argsAsText);
+			channel.sendMessage("✅ | Mensagem de adeus definida com sucesso.").queue();
 		}
 
 		GuildDAO.updateGuildSettings(gc);

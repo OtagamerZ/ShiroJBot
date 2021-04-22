@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -35,22 +35,20 @@ public class AllowKawaiponCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (message.getMentionedChannels().size() < 1) {
-			if (gc.isKawaiponEnabled()) {
-				gc.toggleKawaipon();
-				gc.setCanalKawaipon(null);
-				channel.sendMessage("Não aparecerão mais cartas Kawaipon.").queue();
-			} else {
-				gc.toggleKawaipon();
-				gc.setCanalKawaipon(null);
-				channel.sendMessage("Agora aparecerão cartas Kawaipon neste servidor.").queue();
-			}
+			gc.toggleCardSpawn();
+			gc.setKawaiponChannel(null);
+
+			if (gc.isCardSpawn())
+				channel.sendMessage("✅ | Agora aparecerão cartas Kawaipon neste servidor.").queue();
+			else
+				channel.sendMessage("✅ | Não aparecerão mais cartas Kawaipon.").queue();
 		} else {
-			gc.setKawaiponEnabled(true);
-			gc.setCanalKawaipon(message.getMentionedChannels().get(0).getId());
-			channel.sendMessage("Agora aparecerão cartas Kawaipon no canal " + message.getMentionedChannels().get(0).getAsMention() + ".").queue();
+			gc.setCardSpawn(true);
+			gc.setKawaiponChannel(message.getMentionedChannels().get(0).getId());
+			channel.sendMessage("✅ | Agora aparecerão cartas Kawaipon no canal " + message.getMentionedChannels().get(0).getAsMention() + ".").queue();
 		}
 
 		GuildDAO.updateGuildSettings(gc);

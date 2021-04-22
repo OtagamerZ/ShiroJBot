@@ -19,9 +19,9 @@
 package com.kuuhaku.controller;
 
 import com.google.api.services.youtube.YouTube;
-import com.kuuhaku.Main;
 import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +37,7 @@ import java.util.List;
 
 public class Youtube {
 	public static List<YoutubeVideo> getData(String query) throws IOException {
-		URL url = new URL(YouTube.DEFAULT_BASE_URL + "search?key=" + Main.getInfo().getYoutubeToken() + "&part=snippet&type=playlist,video&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8.toString()) + "&maxResults=5");
+		URL url = new URL(YouTube.DEFAULT_BASE_URL + "search?key=" + ShiroInfo.getYoutubeToken() + "&part=snippet&type=playlist,video&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8.toString()) + "&maxResults=5");
 		JSONArray ja = requestVideoData(url);
 		List<YoutubeVideo> videos = new ArrayList<>();
 		try {
@@ -73,7 +73,7 @@ public class Youtube {
 	}
 
 	public static YoutubeVideo getSingleData(String query) throws IOException {
-		URL url = new URL(YouTube.DEFAULT_BASE_URL + "search?key=" + Main.getInfo().getYoutubeToken() + "&part=snippet&type=playlist,video&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8.toString()) + "&maxResults=5");
+		URL url = new URL(YouTube.DEFAULT_BASE_URL + "search?key=" + ShiroInfo.getYoutubeToken() + "&part=snippet&type=playlist,video&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8.toString()) + "&maxResults=5");
 		JSONArray ja = requestVideoData(url);
 		JSONObject jid = ja.getJSONObject(0).getJSONObject("id");
 		JSONObject jsnippet = ja.getJSONObject(0).getJSONObject("snippet");

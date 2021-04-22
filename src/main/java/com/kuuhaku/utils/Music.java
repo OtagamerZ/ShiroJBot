@@ -21,7 +21,6 @@ package com.kuuhaku.utils;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
-import com.kuuhaku.Main;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
@@ -174,7 +173,7 @@ public class Music {
     public static void loadAndPlay(final Member m, final TextChannel channel, final String trackUrl) {
         GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
-        Main.getInfo().getApm().loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+        ShiroInfo.getApm().loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 if (Objects.requireNonNull(m.getVoiceState()).inVoiceChannel()) {
@@ -217,11 +216,11 @@ public class Music {
 
     public static synchronized GuildMusicManager getGuildAudioPlayer(Guild guild, TextChannel channel) {
         long guildId = guild.getIdLong();
-        GuildMusicManager musicManager = Main.getInfo().getGmms().get(guildId);
+        GuildMusicManager musicManager = ShiroInfo.getGmms().get(guildId);
 
         if (musicManager == null) {
-            musicManager = new GuildMusicManager(Main.getInfo().getApm(), channel);
-            Main.getInfo().addGmm(guildId, musicManager);
+            musicManager = new GuildMusicManager(ShiroInfo.getApm(), channel);
+            ShiroInfo.addGmm(guildId, musicManager);
         }
 
         guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());

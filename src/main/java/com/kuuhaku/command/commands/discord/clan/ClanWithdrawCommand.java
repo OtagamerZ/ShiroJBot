@@ -61,7 +61,7 @@ public class ClanWithdrawCommand implements Executable {
 			channel.sendMessage("❌ | Você precisa especificar uma quantia de créditos para serem sacados.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_amount-not-valid")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
 			return;
 		}
 

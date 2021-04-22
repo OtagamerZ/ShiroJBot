@@ -24,16 +24,19 @@ import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.ColorRole;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 
 import java.awt.*;
 import java.util.Locale;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "cargocor",
@@ -42,20 +45,19 @@ import java.util.Locale;
 		category = Category.MODERATION
 )
 @Requires({Permission.MANAGE_ROLES})
-public class AddColorRoleCommand implements Executable {
+public class ConfigColorRoleCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		if (!guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-missing-permissions")).queue();
-			return;
-		} else if (args.length < 1) {
+		if (args.length < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-enough-args")).queue();
 			return;
 		}
 
+		Map<String, ColorRole> roles = gc.getColorRoles().stream()
+				.collect(Collectors.toMap(cr -> StringUtils.capitalize(cr.getName().toLowerCase(Locale.ROOT)), Function.identity()));
 		try {
 			String name = StringUtils.capitalize(args[0].toLowerCase(Locale.ROOT));
 
@@ -64,17 +66,15 @@ public class AddColorRoleCommand implements Executable {
 				return;
 			}
 
-			JSONObject jo = gc.getColorRoles();
-
-			if (jo.has(name) && guild.getRoleById(jo.getJSONObject(name).getString("role")) != null) {
+			if (roles.containsKey(name) && guild.getRoleById(roles.get(name).getId()) != null) {
 				try {
-					Role r = guild.getRoleById(jo.getJSONObject(name).getString("role"));
+					Role r = guild.getRoleById(roles.get(name).getId());
 					assert r != null;
 					r.getManager()
 							.setColor(Color.decode(args[1]))
 							.complete();
 
-					gc.addColorRole(name, args[1], r);
+					gc.addColorRole(r.getId(), args[1], name);
 					channel.sendMessage("✅ | Cor modificada com sucesso!").queue();
 					return;
 				} catch (HierarchyException e) {
@@ -92,18 +92,19 @@ public class AddColorRoleCommand implements Executable {
 					.selectPosition(r)
 					.moveTo(guild.getSelfMember().getRoles().get(0).getPosition() - 1)
 					.complete();
-			gc.addColorRole(name, args[1], r);
+			gc.addColorRole(r.getId(), args[1], name);
 
 			channel.sendMessage("✅ | Cor adicionada com sucesso!").queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
         } catch (ArrayIndexOutOfBoundsException e) {
 			String name = StringUtils.capitalize(args[0].toLowerCase(Locale.ROOT));
-			if (!gc.getColorRoles().has(name)) {
-				channel.sendMessage("Essa cor não existe!").queue();
+
+			if (!roles.containsKey(name)) {
+				channel.sendMessage("❌ | Essa cor não existe!").queue();
 				return;
 			}
-			Role r = guild.getRoleById(gc.getColorRoles().getJSONObject(name).getString("role"));
+			Role r = guild.getRoleById(roles.get(name).getId());
 
 			if (r != null) r.delete().queue();
 			gc.removeColorRole(name);

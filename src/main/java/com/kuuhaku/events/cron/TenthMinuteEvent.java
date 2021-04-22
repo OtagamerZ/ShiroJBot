@@ -28,7 +28,7 @@ import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.SupportTier;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.ExceedMember;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
 import com.kuuhaku.utils.ShiroInfo;
@@ -75,12 +75,12 @@ public class TenthMinuteEvent implements Job {
 			}
 		}
 
-		List<GuildConfig> guilds = com.kuuhaku.controller.postgresql.GuildDAO.getAllGuildsWithExceedRoles();
+		List<GuildConfig> guilds = GuildDAO.getAllGuildsWithExceedRoles();
 		List<ExceedMember> ems = ExceedDAO.getExceedMembers();
 		String[] exNames = {"imanity", "ex-machina", "exmachina", "flugel", "flügel", "werebeast", "elf", "seiren"};
 
 		for (GuildConfig gc : guilds) {
-			Guild guild = Main.getInfo().getGuildByID(gc.getGuildID());
+			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
 			if (guild == null) continue;
 
 			List<Member> mbs = guild.getMembers()
@@ -146,23 +146,23 @@ public class TenthMinuteEvent implements Job {
 
 
 		for (GuildConfig gc : GuildDAO.getAllGuildsWithGeneralChannel()) {
-			Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+			Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
 			if (g != null && !Helper.getOr(gc.getGeneralTopic(), "").isBlank()) {
-				TextChannel tc = g.getTextChannelById(gc.getCanalGeral());
+				TextChannel tc = gc.getGeneralChannel();
 				if (tc != null)
 					try {
 						tc.getManager()
 								.setTopic(gc.getGeneralTopic().replace("%count%", Helper.getFancyNumber(g.getMemberCount(), false)))
 								.queue(null, t -> {
-									gc.setCanalGeral(null);
+									gc.setGeneralChannel(null);
 									GuildDAO.updateGuildSettings(gc);
 								});
 					} catch (InsufficientPermissionException e) {
-						gc.setCanalGeral(null);
+						gc.setGeneralChannel(null);
 						GuildDAO.updateGuildSettings(gc);
 					}
 				else {
-					gc.setCanalGeral(null);
+					gc.setGeneralChannel(null);
 					GuildDAO.updateGuildSettings(gc);
 				}
 			}

@@ -51,12 +51,12 @@ public class PruneCommand implements Executable {
 			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
 			msgs.removeIf(m -> !m.getAuthor().isBot() || m.isPinned());
 			channel.purgeMessages(msgs);
-			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de bot limpa." : "ns de bots limpas.")).queue();
+			channel.sendMessage("✅ | " + msgs.size() + " mensage" + (msgs.size() == 1 ? "m de bot limpa." : "ns de bots limpas.")).queue();
 		} else if (StringUtils.isNumeric(args[0]) && args[0].length() >= 10) {
 			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
 			msgs.removeIf(m -> !m.getAuthor().getId().equals(args[0]) || m.isPinned());
 			channel.purgeMessages(msgs);
-			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de <@" + args[0] + "> limpa." : "ns de <@" + args[0] + "> limpas.")).queue(null, Helper::doNothing);
+			channel.sendMessage("✅ | " + msgs.size() + " mensage" + (msgs.size() == 1 ? "m de <@" + args[0] + "> limpa." : "ns de <@" + args[0] + "> limpas.")).queue(null, Helper::doNothing);
 		} else if (StringUtils.isNumeric(args[0])) {
 			if (!Helper.between(Integer.parseInt(args[0]), 1, 101)) {
 				channel.sendMessage("❌ | Só é possível apagar entre 1 e 100 mensagens de uma vez").queue();
@@ -65,18 +65,18 @@ public class PruneCommand implements Executable {
 
 			List<Message> msgs = channel.getHistory().retrievePast(Integer.parseInt(args[0]) == 100 ? 100 : Integer.parseInt(args[0]) + 1).complete();
 			channel.purgeMessages(msgs);
-			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue(null, Helper::doNothing);
+			channel.sendMessage("✅ | " + msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue(null, Helper::doNothing);
 		} else if (message.getMentionedUsers().size() > 0) {
 			User target = message.getMentionedUsers().get(0);
 			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
 			msgs.removeIf(m -> !m.getAuthor().getId().equals(target.getId()) || m.isPinned());
 			channel.purgeMessages(msgs);
-			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de " + target.getAsMention() + " limpa." : "ns de " + target.getAsMention() + " limpas.")).queue(null, Helper::doNothing);
+			channel.sendMessage("✅ | " + msgs.size() + " mensage" + (msgs.size() == 1 ? "m de " + target.getAsMention() + " limpa." : "ns de " + target.getAsMention() + " limpas.")).queue(null, Helper::doNothing);
 		} else if (Helper.equalsAny(args[0], "user", "usuarios")) {
 			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
 			msgs.removeIf(m -> m.getAuthor().isBot() || m.isPinned());
 			channel.purgeMessages(msgs);
-			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de usuário limpa." : "ns de usuários limpas.")).queue(null, Helper::doNothing);
+			channel.sendMessage("✅ | " + msgs.size() + " mensage" + (msgs.size() == 1 ? "m de usuário limpa." : "ns de usuários limpas.")).queue(null, Helper::doNothing);
 		} else if (Helper.equalsAny(args[0], "all", "tudo")) {
 			channel.retrievePinnedMessages().queue(p -> {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
@@ -115,7 +115,7 @@ public class PruneCommand implements Executable {
 							));
 			});
 		} else {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_amount-not-valid")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
 		}
 	}
 }
