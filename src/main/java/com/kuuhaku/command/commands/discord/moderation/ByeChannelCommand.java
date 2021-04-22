@@ -42,7 +42,7 @@ public class ByeChannelCommand implements Executable {
 			if (chn == null)
 				channel.sendMessage("Ainda não foi definido um canal de adeus.").queue();
 			else
-				channel.sendMessage("O canal de adeus atual do servidor é " + chn + ".").queue();
+				channel.sendMessage("O canal de adeus atual do servidor é " + chn.getAsMention() + ".").queue();
 			return;
 		}
 

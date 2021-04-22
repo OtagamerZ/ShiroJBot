@@ -42,7 +42,7 @@ public class SuggestionChannelCommand implements Executable {
 			if (chn == null)
 				channel.sendMessage("Ainda não foi definido um canal de sugestões.").queue();
 			else
-				channel.sendMessage("O canal de sugestões atual do servidor é " + chn + ".").queue();
+				channel.sendMessage("O canal de sugestões atual do servidor é " + chn.getAsMention() + ".").queue();
 			return;
 		}
 
