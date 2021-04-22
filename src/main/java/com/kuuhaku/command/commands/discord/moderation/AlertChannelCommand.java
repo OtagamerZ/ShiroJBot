@@ -42,7 +42,7 @@ public class AlertChannelCommand implements Executable {
 			if (chn == null)
 				channel.sendMessage("Ainda não foi definido um canal de avisos.").queue();
 			else
-				channel.sendMessage("O canal de avisos atual do servidor é " + chn + ".").queue();
+				channel.sendMessage("O canal de avisos atual do servidor é " + chn.getAsMention() + ".").queue();
 			return;
 		}
 
