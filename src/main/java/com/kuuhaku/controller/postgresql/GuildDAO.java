@@ -21,6 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -137,7 +138,12 @@ public class GuildDAO {
 		List<GuildConfig> gc = q.getResultList();
 		gc.removeIf(g -> Main.getJibril().getGuildById(g.getGuildId()) == null);
 		for (GuildConfig g : gc) {
-			relays.put(g.getGuildId(), g.getRelayChannel().getId());
+			TextChannel chn = g.getRelayChannel();
+			if (chn != null) relays.put(g.getGuildId(), chn.getId());
+			else {
+				g.setRelayChannel(null);
+				updateGuildSettings(g);
+			}
 		}
 
 		em.close();
