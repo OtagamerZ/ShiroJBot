@@ -59,7 +59,7 @@ public class ConfigLevelRoleCommand implements Executable {
 			Role r = message.getMentionedRoles().get(0);
 			gc.removeLevelRole(r.getId());
 
-			channel.sendMessage("✅ | Cargo `" + r.getAsMention() + "` removido da listagem com sucesso!").queue();
+			channel.sendMessage("✅ | Cargo `" + r.getName() + "` removido da listagem com sucesso!").queue();
 			GuildDAO.updateGuildSettings(gc);
 			return;
 		} else if (args.length < 1) {
@@ -105,7 +105,7 @@ public class ConfigLevelRoleCommand implements Executable {
 			Role r = message.getMentionedRoles().get(0);
 			gc.addLevelRole(r.getId(), level);
 
-			channel.sendMessage("✅ | Membros com nível " + level + " receberão o cargo `" + r.getAsMention() + "`!").queue();
+			channel.sendMessage("✅ | Membros com nível " + level + " receberão o cargo `" + r.getName() + "`!").queue();
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-level")).queue();
