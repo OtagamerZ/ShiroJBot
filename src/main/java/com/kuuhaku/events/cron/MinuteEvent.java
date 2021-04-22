@@ -52,7 +52,7 @@ public class MinuteEvent implements Job {
 				try {
 					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) continue;
 					Member mb = g.getMemberById(m.getUid());
-					Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoMute());
+					Role r = GuildDAO.getGuildById(g.getId()).getMuteRole();
 					assert r != null;
 					assert mb != null;
 

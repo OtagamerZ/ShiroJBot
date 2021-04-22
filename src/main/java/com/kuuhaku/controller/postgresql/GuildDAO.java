@@ -19,7 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
@@ -60,7 +60,7 @@ public class GuildDAO {
 	}
 
 	public static void removeGuildFromDB(GuildConfig gc) {
-		if (gc.getGuildID() == null) return;
+		if (gc.getGuildId() == null) return;
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
@@ -84,7 +84,7 @@ public class GuildDAO {
 	public static List<GuildConfig> getAllGuildsWithExceedRoles() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE exceedRolesEnabled = TRUE", GuildConfig.class);
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE autoExceedRoles = TRUE", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
@@ -108,7 +108,7 @@ public class GuildDAO {
 	public static List<GuildConfig> getAllGuildsWithGeneralChannel() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE canalGeral <> ''", GuildConfig.class);
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE generalChannel <> ''", GuildConfig.class);
 		List<GuildConfig> gcs = gc.getResultList();
 
 		em.close();
@@ -132,12 +132,12 @@ public class GuildDAO {
 	public static void updateRelays(Map<String, String> relays) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE canalrelay <> '' AND canalrelay IS NOT NULL", GuildConfig.class);
+		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE relayChannel <> ''", GuildConfig.class);
 
 		List<GuildConfig> gc = q.getResultList();
-		gc.removeIf(g -> Main.getJibril().getGuildById(g.getGuildID()) == null);
+		gc.removeIf(g -> Main.getJibril().getGuildById(g.getGuildId()) == null);
 		for (GuildConfig g : gc) {
-			relays.put(g.getGuildID(), g.getCanalRelay());
+			relays.put(g.getGuildId(), g.getRelayChannel().getId());
 		}
 
 		em.close();

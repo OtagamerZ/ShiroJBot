@@ -24,7 +24,7 @@ import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;

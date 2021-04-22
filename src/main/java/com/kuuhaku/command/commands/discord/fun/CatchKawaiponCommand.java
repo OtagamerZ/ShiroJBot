@@ -29,9 +29,9 @@ import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -51,7 +51,7 @@ public class CatchKawaiponCommand implements Executable {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		TextChannel chn = gc.getCanalKawaipon().isBlank() ? null : guild.getTextChannelById(gc.getCanalKawaipon());
+		TextChannel chn = gc.getKawaiponChannel();
 		KawaiponCard kc = Main.getInfo().getCurrentCard().get(guild.getId());
 
 		if (chn != null && !channel.getId().equals(chn.getId())) {

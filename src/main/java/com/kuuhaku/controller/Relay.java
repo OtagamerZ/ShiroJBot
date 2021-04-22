@@ -33,7 +33,7 @@ import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.GlobalMessage;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -147,43 +147,27 @@ public class Relay {
 		for (Map.Entry<String, String> entry : relays.entrySet()) {
 			String k = entry.getKey();
 			String r = entry.getValue();
-			if (k.equals(s.getId()) && com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser())
+			if (k.equals(s.getId()) && GuildDAO.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser())
 				continue;
 			try {
 				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
 				assert t != null;
-				if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isAllowImg()) {
-					if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isLiteMode()) {
-						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
-						if (client != null) {
-							client.send(getMessage(msg, m, s));
-							client.close();
-						}
-					} else {
-						if (img != null) {
-							t.sendMessage(mb.build()).addFile(img.toByteArray(), "image.png").queue();
-						} else {
-							t.sendMessage(mb.build()).queue();
-						}
+				if (GuildDAO.getGuildById(k).isLiteMode()) {
+					WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
+					if (client != null) {
+						client.send(getMessage(msg, m, s));
+						client.close();
 					}
 				} else {
-					if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isLiteMode()) {
-						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
-						if (client != null) {
-							client.send(getMessage(msg, m, s));
-							client.close();
-						}
-					} else {
-						t.sendMessage(mb.build()).queue();
-					}
+					t.sendMessage(mb.build()).queue();
 				}
 			} catch (NullPointerException e) {
-				com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).setCanalRelay(null);
+				GuildDAO.getGuildById(k).setRelayChannel(null);
 			} catch (InsufficientPermissionException ignore) {
 			}
 		}
 		try {
-			if (!com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(s.getId()).isLiteMode()) {
+			if (!GuildDAO.getGuildById(s.getId()).isLiteMode()) {
 				source.delete().queue();
 			}
 		} catch (InsufficientPermissionException ignore) {
@@ -216,29 +200,17 @@ public class Relay {
 			try {
 				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
 				assert t != null;
-				if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isAllowImg()) {
-					if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isLiteMode()) {
-						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
-						if (client != null) {
-							client.send(getMessage(gm));
-							client.close();
-						}
-					} else {
-						t.sendMessage(mb.build()).queue();
+				if (GuildDAO.getGuildById(k).isLiteMode()) {
+					WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
+					if (client != null) {
+						client.send(getMessage(gm));
+						client.close();
 					}
 				} else {
-					if (com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(k).isLiteMode()) {
-						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
-						if (client != null) {
-							client.send(getMessage(gm));
-							client.close();
-						}
-					} else {
-						t.sendMessage(mb.build()).queue();
-					}
+					t.sendMessage(mb.build()).queue();
 				}
 			} catch (NullPointerException e) {
-				GuildDAO.getGuildById(k).setCanalRelay(null);
+				GuildDAO.getGuildById(k).setRelayChannel(null);
 			} catch (InsufficientPermissionException ex) {
 				Guild g = Main.getJibril().getGuildById(k);
 				assert g != null;
@@ -282,9 +254,8 @@ public class Relay {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle(":globe_with_meridians: Dados do relay");
-		eb.addField(":busts_in_silhouette: Clientes conectados: " + relays.size(), "Canal relay: " + (gc.getCanalRelay() == null ? "Não configurado" : Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalRelay())).getAsMention()), false);
+		eb.addField(":busts_in_silhouette: Clientes conectados: " + relays.size(), "Canal relay: " + (gc.getRelayChannel() == null ? "Não configurado" : gc.getRelayChannel().getAsMention()), false);
 		eb.addField("Modo:", gc.isLiteMode() ? "Lite" : "Normal", true);
-		eb.addField("Imagens:", gc.isAllowImg() ? "Permitidas" : "Negadas", true);
 
 		return eb.build();
 	}

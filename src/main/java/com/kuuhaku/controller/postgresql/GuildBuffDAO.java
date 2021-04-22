@@ -18,7 +18,7 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.GuildBuff;
+import com.kuuhaku.model.persistent.guild.GuildBuff;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

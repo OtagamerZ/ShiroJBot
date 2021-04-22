@@ -20,7 +20,6 @@ package com.kuuhaku.handlers.games.tabletop.games.crisscross;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ThrowingBiConsumer;
-import com.kuuhaku.Main;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
@@ -31,6 +30,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.handlers.games.tabletop.games.crisscross.pieces.Circle;
 import com.kuuhaku.handlers.games.tabletop.games.crisscross.pieces.Cross;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -90,7 +90,7 @@ public class CrissCross extends Game {
 				.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
 				.queue(s -> {
 					this.message = s;
-					Main.getInfo().getShiroEvents().addHandler(channel.getGuild(), listener);
+					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 				});
 	}

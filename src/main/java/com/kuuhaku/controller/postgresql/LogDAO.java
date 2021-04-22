@@ -35,7 +35,7 @@ public class LogDAO {
 		em.getTransaction().commit();
 
 		em.getTransaction().begin();
-		em.createQuery("DELETE FROM Log l WHERE l.guildId NOT IN (SELECT g.guildID FROM GuildConfig g)").executeUpdate();
+		em.createQuery("DELETE FROM Log l WHERE l.guildId NOT IN (SELECT g.guildId FROM GuildConfig g)").executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();

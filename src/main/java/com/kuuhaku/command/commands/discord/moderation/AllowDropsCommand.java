@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -35,22 +35,20 @@ public class AllowDropsCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (message.getMentionedChannels().size() < 1) {
-			if (gc.isDropEnabled()) {
-				gc.toggleDrop();
-				gc.setCanalDrop(null);
-				channel.sendMessage("Não aparecerão mais drops.").queue();
-			} else {
-				gc.toggleDrop();
-				gc.setCanalDrop(null);
-				channel.sendMessage("Agora aparecerão drops neste servidor.").queue();
-			}
+			gc.toggleDropSpawn();
+			gc.setDropChannel(null);
+
+			if (gc.isDropSpawn())
+				channel.sendMessage("✅ | Agora aparecerão drops neste servidor.").queue();
+			else
+				channel.sendMessage("✅ | Não aparecerão mais drops.").queue();
 		} else {
-			gc.setDropEnabled(true);
-			gc.setCanalDrop(message.getMentionedChannels().get(0).getId());
-			channel.sendMessage("Agora aparecerão drops no canal " + message.getMentionedChannels().get(0).getAsMention() + ".").queue();
+			gc.setDropSpawn(true);
+			gc.setDropChannel(message.getMentionedChannels().get(0).getId());
+			channel.sendMessage("✅ | Agora aparecerão drops no canal " + message.getMentionedChannels().get(0).getAsMention() + ".").queue();
 		}
 
 		GuildDAO.updateGuildSettings(gc);
