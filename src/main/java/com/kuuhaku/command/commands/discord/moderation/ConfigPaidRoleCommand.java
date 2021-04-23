@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 
 @Command(
 		name = "cargopago",
-		aliases = {"paidrole"},
+		aliases = {"cargop", "paidrole", "prole"},
 		usage = "req_value-role",
 		category = Category.MODERATION
 )
@@ -75,15 +75,14 @@ public class ConfigPaidRoleCommand implements Executable {
 			}
 
 			Map<Integer, String> fields = new TreeMap<>();
-			for (int i = 0; i < roles.size(); i++) {
-				PaidRole role = roles.get(i);
+			for (PaidRole role : roles) {
 				Role r = guild.getRoleById(role.getId());
 				if (r == null) {
 					gc.removeLevelRole(role.getId());
 					continue;
 				}
 
-				fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention(), (p, n) -> String.join("\n", p, n));
+				fields.merge(role.getPrice(), r.getAsMention(), (p, n) -> String.join("\n", p, n));
 			}
 			GuildDAO.updateGuildSettings(gc);
 
@@ -112,7 +111,7 @@ public class ConfigPaidRoleCommand implements Executable {
 			Role r = message.getMentionedRoles().get(0);
 			gc.addPaidRole(r.getId(), value);
 
-			channel.sendMessage("✅ | O cargo " + r.getName() + " agora poderá ser comprado por **" + value + " créditos**!").queue();
+			channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + value + " créditos**!").queue();
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-price")).queue();
