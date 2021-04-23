@@ -14,7 +14,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção completa do s!settings">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyRoleCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigPaidRoleCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigLevelRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigLevelRoleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StockMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StockMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/StockValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/StockValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,11 +182,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
       <recent name="com.kuuhaku.model.persistent.guild" />
       <recent name="com.kuuhaku.model.persistent" />
       <recent name="com.kuuhaku.model.common" />
-      <recent name="com.kuuhaku.command.commands.discord.misc" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -200,19 +206,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1167,13 +1160,7 @@
       <workItem from="1618948553012" duration="1846000" />
       <workItem from="1618969734788" duration="8114000" />
       <workItem from="1619032275465" duration="2431000" />
-    </task>
-    <task id="LOCAL-04196" summary="Correção referente ao último commit">
-      <created>1618855918755</created>
-      <option name="number" value="04196" />
-      <option name="presentableId" value="LOCAL-04196" />
-      <option name="project" value="LOCAL" />
-      <updated>1618855918755</updated>
+      <workItem from="1619179096403" duration="5111000" />
     </task>
     <task id="LOCAL-04197" summary="Correção referente ao último commit">
       <created>1618855987042</created>
@@ -1511,7 +1498,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619124475815</updated>
     </task>
-    <option name="localTasksCounter" value="4245" />
+    <task id="LOCAL-04245" summary="Remoção completa do s!settings">
+      <created>1619125136946</created>
+      <option name="number" value="04245" />
+      <option name="presentableId" value="LOCAL-04245" />
+      <option name="project" value="LOCAL" />
+      <updated>1619125136947</updated>
+    </task>
+    <option name="localTasksCounter" value="4246" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
