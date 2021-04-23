@@ -853,17 +853,6 @@ public class Shoukan extends GlobalGame {
 			if (applyEot(POST_ATTACK, current, is[0])) return;
 			if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-			if (is[0] > 0) {
-				Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
-				if (c != null && applyEffect(POST_ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-					return;
-			}
-			if (is[0] < 4) {
-				Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
-				if (c != null && applyEffect(POST_ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-					return;
-			}
-
 			resetTimerKeepTurn();
 			moveLock = true;
 			channel.sendMessage("Cálculo de combate ignorado por efeito do atacante!")
@@ -1176,25 +1165,27 @@ public class Shoukan extends GlobalGame {
 
 		if (is[0] > 0) {
 			Champion c = arena.getSlots().get(current).get(is[0] - 1).getTop();
-			if (c != null && applyEffect(POST_ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-				return;
+			if (c != null)
+				applyEffect(POST_ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]));
 		}
 		if (is[0] < 4) {
 			Champion c = arena.getSlots().get(current).get(is[0] + 1).getTop();
-			if (c != null && applyEffect(POST_ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-				return;
+			if (c != null)
+				applyEffect(POST_ATTACK_ASSIST, c, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]));
 		}
 
 		if (is[1] > 0) {
 			Champion c = arena.getSlots().get(next).get(is[1] - 1).getTop();
-			if (c != null && applyEffect(POST_DEFENSE_ASSIST, c, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1])))
-				return;
+			if (c != null)
+				applyEffect(POST_DEFENSE_ASSIST, c, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]));
 		}
 		if (is[1] < 4) {
 			Champion c = arena.getSlots().get(next).get(is[1] + 1).getTop();
 			if (c != null)
 				applyEffect(POST_DEFENSE_ASSIST, c, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]));
 		}
+
+		postCombat();
 	}
 
 	public void forceAttack(int[] is) {
