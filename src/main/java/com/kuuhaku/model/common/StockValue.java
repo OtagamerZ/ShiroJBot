@@ -32,8 +32,7 @@ public class StockValue {
 
 		this.value = (int) Math.round(Helper.average(before, now));
 		if (before == 0 || now == 0) this.growth = 0;
-		else
-			this.growth = Helper.prcnt(now, before) - 1;
+		else this.growth = Helper.prcnt(now, before) - 1;
 	}
 
 	public String getId() {

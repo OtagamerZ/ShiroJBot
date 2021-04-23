@@ -90,68 +90,68 @@ public class StockMarketDAO {
 
 		Query prev = em.createNativeQuery("""
 				SELECT c.id
-				              	 , c.name
-				              	 , CASE x.sold >= 3
-				                      WHEN TRUE THEN x.value
-				             	 END AS value
-				         	FROM Card c
-				         	LEFT JOIN (
-				         	    SELECT x.card_id
-				         	         , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
-				         	         , COUNT(x.card_id)                                              AS sold
-				         	    FROM (
-				         	       SELECT c.id                                                     AS card_id
-				         	            , COALESCE(cm.price, em.price, fm.price)                   AS price
-				         	            , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
-				         	            , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
-				         	            , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
-				         	       FROM Card c
-				         	       LEFT JOIN Equipment e ON e.card_id = c.id
-				         	       LEFT JOIN Field f ON f.card_id = c.id
-				         	       LEFT JOIN CardMarket cm ON cm.card_id = c.id
-				         	       LEFT JOIN EquipmentMarket em ON em.card_id = e.id
-				         	       LEFT JOIN FieldMarket fm ON fm.card_id = f.id
-				         	    ) x
-				         	    WHERE x.publishDate BETWEEN :from AND :to
-				         	      AND x.buyer <> ''
-				         	      AND x.buyer <> x.seller
-				         	    GROUP BY x.card_id
-				         	) x ON x.card_id = c.id
-				         	ORDER BY c.id
+				  	 , c.name
+				  	 , CASE x.sold >= 3
+				          WHEN TRUE THEN x.value
+				 	 END AS value
+				FROM Card c
+				LEFT JOIN (
+				    SELECT x.card_id
+				         , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
+				         , COUNT(x.card_id)                                              AS sold
+				    FROM (
+				       SELECT c.id                                                     AS card_id
+				            , COALESCE(cm.price, em.price, fm.price)                   AS price
+				            , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
+				            , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
+				            , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
+				       FROM Card c
+				       LEFT JOIN Equipment e ON e.card_id = c.id
+				       LEFT JOIN Field f ON f.card_id = c.id
+				       LEFT JOIN CardMarket cm ON cm.card_id = c.id
+				       LEFT JOIN EquipmentMarket em ON em.card_id = e.id
+				       LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				    ) x
+				    WHERE x.publishDate BETWEEN :from AND :to
+				      AND x.buyer <> ''
+				      AND x.buyer <> x.seller
+				    GROUP BY x.card_id
+				) x ON x.card_id = c.id
+				ORDER BY c.id
 				""")
-				.setParameter("from", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(1))
-				.setParameter("to", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(2));
+				.setParameter("from", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(2))
+				.setParameter("to", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(1));
 
 		Query curr = em.createNativeQuery("""
 				SELECT c.id
-				                 , c.name
-				                 , CASE x.sold >= 3
-				                       WHEN TRUE THEN x.value
-				                 END AS value
-				            FROM Card c
-				                     LEFT JOIN (
-				                SELECT x.card_id
-				                     , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
-				                     , COUNT(x.card_id)                                              AS sold
-				                FROM (
-				                   SELECT c.id                                                     AS card_id
-				                        , COALESCE(cm.price, em.price, fm.price)                   AS price
-				                        , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
-				                        , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
-				                        , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
-				                   FROM Card c
-				                   LEFT JOIN Equipment e ON e.card_id = c.id
-				                   LEFT JOIN Field f ON f.card_id = c.id
-				                   LEFT JOIN CardMarket cm ON cm.card_id = c.id
-				                   LEFT JOIN EquipmentMarket em ON em.card_id = e.id
-				                   LEFT JOIN FieldMarket fm ON fm.card_id = f.id
-				                ) x
-				                WHERE x.publishDate > :date
-				                  AND x.buyer <> ''
-				                  AND x.buyer <> x.seller
-				                GROUP BY x.card_id
-				            ) x ON x.card_id = c.id
-				            ORDER BY c.id
+				     , c.name
+				     , CASE x.sold >= 3
+				           WHEN TRUE THEN x.value
+				     END AS value
+				FROM Card c
+				         LEFT JOIN (
+				    SELECT x.card_id
+				         , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
+				         , COUNT(x.card_id)                                              AS sold
+				    FROM (
+				       SELECT c.id                                                     AS card_id
+				            , COALESCE(cm.price, em.price, fm.price)                   AS price
+				            , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
+				            , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
+				            , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
+				       FROM Card c
+				       LEFT JOIN Equipment e ON e.card_id = c.id
+				       LEFT JOIN Field f ON f.card_id = c.id
+				       LEFT JOIN CardMarket cm ON cm.card_id = c.id
+				       LEFT JOIN EquipmentMarket em ON em.card_id = e.id
+				       LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				    ) x
+				    WHERE x.publishDate > :date
+				      AND x.buyer <> ''
+				      AND x.buyer <> x.seller
+				    GROUP BY x.card_id
+				) x ON x.card_id = c.id
+				ORDER BY c.id
 				""")
 				.setParameter("date", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(1));
 
