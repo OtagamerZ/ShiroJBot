@@ -93,6 +93,7 @@ public class CommonHandler {
 
 				return new HttpEntity<>(bytes, headers);
 			} else if (name.isBlank()) {
+				page = page.replace("%;", "%%;");
 				item = """
 						<td>
 						    <a href="?anime={0}&name={1}">
