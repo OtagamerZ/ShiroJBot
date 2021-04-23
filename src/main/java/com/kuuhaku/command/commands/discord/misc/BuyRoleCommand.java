@@ -112,6 +112,9 @@ public class BuyRoleCommand implements Executable {
 			} else if (acc.getBalance() < pr.getPrice()) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 				return;
+			} else if (member.getRoles().contains(r)) {
+				channel.sendMessage("❌ | Você já possui esse cargo.").queue();
+				return;
 			}
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
