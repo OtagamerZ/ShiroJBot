@@ -99,7 +99,7 @@ public class CommonHandler {
 						    <a href="?anime={0}&name={1}">
 						        <img alt="{0}" src="?anime={0}&name={1}"/>
 						    </a>
-						    <div>{0}</div>
+						    <div>{1}</div>
 						</td>
 						""";
 
@@ -115,7 +115,7 @@ public class CommonHandler {
 
 				for (int i = 0; i < available.length; i++) {
 					String s = available[i];
-					if (i % 4 == 0) {
+					if (i % 5 == 0) {
 						if (i > 0) sb.append("\n</tr>\n");
 						sb.append("\n<tr>\n");
 					}
