@@ -69,14 +69,15 @@ public class BuyRoleCommand implements Executable {
 			}
 
 			Map<Integer, String> fields = new TreeMap<>();
-			for (PaidRole role : prs) {
+			for (int i = 0; i < prs.size(); i++) {
+				PaidRole role = prs.get(i);
 				Role r = guild.getRoleById(role.getId());
 				if (r == null) {
 					gc.removeLevelRole(role.getId());
 					continue;
 				}
 
-				fields.merge(role.getPrice(), r.getAsMention(), (p, n) -> String.join("\n", p, n));
+				fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention(), (p, n) -> String.join("\n", p, n));
 			}
 
 			List<List<Integer>> chunks = Helper.chunkify(fields.keySet(), 10);
