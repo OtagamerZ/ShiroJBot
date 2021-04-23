@@ -15,6 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na listagem de imagens das cartas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/template.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/template.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +131,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/font" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/gifs" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -1157,14 +1159,7 @@
       <workItem from="1619179096403" duration="6693000" />
       <workItem from="1619186290330" duration="1323000" />
       <workItem from="1619188460781" duration="758000" />
-      <workItem from="1619196991932" duration="5003000" />
-    </task>
-    <task id="LOCAL-04206" summary="Adição de nova escala no gráfico sobre a Shiro">
-      <created>1618927364404</created>
-      <option name="number" value="04206" />
-      <option name="presentableId" value="LOCAL-04206" />
-      <option name="project" value="LOCAL" />
-      <updated>1618927364404</updated>
+      <workItem from="1619196991932" duration="8539000" />
     </task>
     <task id="LOCAL-04207" summary="Adição de nova escala no gráfico sobre a Shiro">
       <created>1618927556183</created>
@@ -1502,7 +1497,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619201213299</updated>
     </task>
-    <option name="localTasksCounter" value="4255" />
+    <task id="LOCAL-04255" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619202284019</created>
+      <option name="number" value="04255" />
+      <option name="presentableId" value="LOCAL-04255" />
+      <option name="project" value="LOCAL" />
+      <updated>1619202284019</updated>
+    </task>
+    <option name="localTasksCounter" value="4256" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
