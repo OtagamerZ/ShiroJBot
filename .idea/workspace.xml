@@ -14,9 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na listagem de imagens das cartas">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1159,28 +1158,7 @@
       <workItem from="1619179096403" duration="6693000" />
       <workItem from="1619186290330" duration="1323000" />
       <workItem from="1619188460781" duration="758000" />
-      <workItem from="1619196991932" duration="9150000" />
-    </task>
-    <task id="LOCAL-04208" summary="Adição de nova escala no gráfico sobre a Shiro">
-      <created>1618928788984</created>
-      <option name="number" value="04208" />
-      <option name="presentableId" value="LOCAL-04208" />
-      <option name="project" value="LOCAL" />
-      <updated>1618928788984</updated>
-    </task>
-    <task id="LOCAL-04209" summary="Adição de nova escala no gráfico sobre a Shiro">
-      <created>1618929687749</created>
-      <option name="number" value="04209" />
-      <option name="presentableId" value="LOCAL-04209" />
-      <option name="project" value="LOCAL" />
-      <updated>1618929687749</updated>
-    </task>
-    <task id="LOCAL-04210" summary="Nova tag: Investidor">
-      <created>1618945992701</created>
-      <option name="number" value="04210" />
-      <option name="presentableId" value="LOCAL-04210" />
-      <option name="project" value="LOCAL" />
-      <updated>1618945992701</updated>
+      <workItem from="1619196991932" duration="9768000" />
     </task>
     <task id="LOCAL-04211" summary="Nova tag: Investidor">
       <created>1618971566682</created>
@@ -1504,7 +1482,28 @@
       <option name="project" value="LOCAL" />
       <updated>1619207290138</updated>
     </task>
-    <option name="localTasksCounter" value="4257" />
+    <task id="LOCAL-04257" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619207949735</created>
+      <option name="number" value="04257" />
+      <option name="presentableId" value="LOCAL-04257" />
+      <option name="project" value="LOCAL" />
+      <updated>1619207949735</updated>
+    </task>
+    <task id="LOCAL-04258" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619208067375</created>
+      <option name="number" value="04258" />
+      <option name="presentableId" value="LOCAL-04258" />
+      <option name="project" value="LOCAL" />
+      <updated>1619208067375</updated>
+    </task>
+    <task id="LOCAL-04259" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619208141851</created>
+      <option name="number" value="04259" />
+      <option name="presentableId" value="LOCAL-04259" />
+      <option name="project" value="LOCAL" />
+      <updated>1619208141851</updated>
+    </task>
+    <option name="localTasksCounter" value="4260" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
