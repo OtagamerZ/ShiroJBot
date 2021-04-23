@@ -89,7 +89,7 @@ public class ConfigLevelRoleCommand implements Executable {
 			List<List<Integer>> chunks = Helper.chunkify(fields.keySet(), 10);
 			for (List<Integer> chunk : chunks) {
 				eb.clearFields();
-				for (Integer level : chunk)
+				for (int level : chunk)
 					eb.addField("Nível " + level, fields.get(level), true);
 
 				pages.add(new Page(PageType.EMBED, eb.build()));
