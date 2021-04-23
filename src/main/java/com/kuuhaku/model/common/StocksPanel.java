@@ -41,9 +41,20 @@ public class StocksPanel {
 						.thenComparing(StockValue::getId)
 				).collect(Collectors.toList());
 
-		List<StockValue> high = values.stream().filter(sv -> sv.getGrowth() > 0).limit(20).collect(Collectors.toList());
-		List<StockValue> low = values.stream().filter(sv -> sv.getGrowth() < 0).limit(20).collect(Collectors.toList());
-		List<StockValue> stale = values.stream().filter(sv -> sv.getGrowth() == 0).limit(60 - high.size() + low.size()).collect(Collectors.toList());
+		List<StockValue> high = values.stream()
+				.filter(sv -> sv.getGrowth() > 0)
+				.limit(20)
+				.collect(Collectors.toList());
+
+		List<StockValue> low = values.stream()
+				.filter(sv -> sv.getGrowth() < 0)
+				.limit(20)
+				.collect(Collectors.toList());
+
+		List<StockValue> stale = values.stream()
+				.filter(sv -> sv.getGrowth() == 0)
+				.limit(60 - (high.size() + low.size()))
+				.collect(Collectors.toList());
 
 		this.values.addAll(high);
 		this.values.addAll(stale);
