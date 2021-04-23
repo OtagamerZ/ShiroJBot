@@ -29,7 +29,7 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.model.persistent.guild.LevelRole;
+import com.kuuhaku.model.persistent.guild.PaidRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -43,13 +43,13 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 @Command(
-		name = "cargolevel",
-		aliases = {"levelrole"},
-		usage = "req_level-role",
+		name = "cargopago",
+		aliases = {"paidrole"},
+		usage = "req_value-role",
 		category = Category.MODERATION
 )
 @Requires({Permission.MANAGE_ROLES})
-public class ConfigLevelRoleCommand implements Executable {
+public class ConfigPaidRoleCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -66,23 +66,24 @@ public class ConfigLevelRoleCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setTitle(":dna: | Cargos de level configurados no servidor");
+					.setTitle(":bank: | Cargos pagos configurados no servidor");
 
-			List<LevelRole> roles = new ArrayList<>(gc.getLevelRoles());
+			List<PaidRole> roles = new ArrayList<>(gc.getPaidRoles());
 			if (roles.size() == 0) {
-				channel.sendMessage("Não há nenhum cargo de nível configurado neste servidor.").queue();
+				channel.sendMessage("Não há nenhum cargo pago configurado neste servidor.").queue();
 				return;
 			}
 
 			Map<Integer, String> fields = new TreeMap<>();
-			for (LevelRole role : roles) {
+			for (int i = 0; i < roles.size(); i++) {
+				PaidRole role = roles.get(i);
 				Role r = guild.getRoleById(role.getId());
 				if (r == null) {
 					gc.removeLevelRole(role.getId());
 					continue;
 				}
 
-				fields.merge(role.getLevel(), r.getAsMention(), (p, n) -> String.join("\n", p, n));
+				fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention(), (p, n) -> String.join("\n", p, n));
 			}
 			GuildDAO.updateGuildSettings(gc);
 
@@ -90,7 +91,7 @@ public class ConfigLevelRoleCommand implements Executable {
 			for (List<Integer> chunk : chunks) {
 				eb.clearFields();
 				for (Integer level : chunk)
-					eb.addField("Nível " + level, fields.get(level), true);
+					eb.addField("Valor: " + level + " créditos", fields.get(level), true);
 
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
@@ -102,19 +103,19 @@ public class ConfigLevelRoleCommand implements Executable {
 		}
 
 		try {
-			int level = Integer.parseInt(args[0]);
-			if (level <= 0) {
-				channel.sendMessage("❌ | O nível deve ser um valor maior que 0.").queue();
+			int value = Integer.parseInt(args[0]);
+			if (value <= 0) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
 				return;
 			}
 
 			Role r = message.getMentionedRoles().get(0);
-			gc.addLevelRole(r.getId(), level);
+			gc.addPaidRole(r.getId(), value);
 
-			channel.sendMessage("✅ | Membros com nível " + level + " receberão o cargo `" + r.getName() + "`!").queue();
+			channel.sendMessage("✅ | O cargo " + r.getName() + " agora poderá ser comprado por **" + value + " créditos**!").queue();
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-level")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-price")).queue();
 		}
 	}
 }
