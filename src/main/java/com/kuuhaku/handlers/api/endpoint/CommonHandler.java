@@ -69,7 +69,8 @@ public class CommonHandler {
 
 			if (anime.isBlank()) {
 				page = page.replace("<table>", "<ul>")
-						.replace("</table>", "</ul>");
+						.replace("</table>", "</ul>")
+						.replace("%;", "%%;");
 
 				File f = new File(System.getenv("CARDS_PATH"));
 				if (!f.exists()) throw new FileNotFoundException();
