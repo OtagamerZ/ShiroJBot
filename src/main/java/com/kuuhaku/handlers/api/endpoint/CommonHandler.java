@@ -35,6 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Locale;
 
 @RestController
 public class CommonHandler {
@@ -55,6 +56,9 @@ public class CommonHandler {
 	@RequestMapping(value = "/card", method = RequestMethod.GET)
 	public @ResponseBody
 	HttpEntity<byte[]> serveCardImage(@RequestParam(value = "name", defaultValue = "") String name, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
+		if (name != null) name = name.toUpperCase(Locale.ROOT);
+		if (anime != null) anime = anime.toUpperCase(Locale.ROOT);
+
 		try {
 			URL pageUrl = this.getClass().getClassLoader().getResource("template.html");
 			if (pageUrl == null) throw new IllegalArgumentException();
