@@ -13,11 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de cargos pagos">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na listagem de imagens das cartas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/template.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/template.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1160,14 +1158,7 @@
       <workItem from="1619179096403" duration="6693000" />
       <workItem from="1619186290330" duration="1323000" />
       <workItem from="1619188460781" duration="758000" />
-      <workItem from="1619196991932" duration="2889000" />
-    </task>
-    <task id="LOCAL-04204" summary="Correção referente ao último commit">
-      <created>1618858034281</created>
-      <option name="number" value="04204" />
-      <option name="presentableId" value="LOCAL-04204" />
-      <option name="project" value="LOCAL" />
-      <updated>1618858034281</updated>
+      <workItem from="1619196991932" duration="3907000" />
     </task>
     <task id="LOCAL-04205" summary="Adição de nova escala no gráfico sobre a Shiro">
       <created>1618926850456</created>
@@ -1505,7 +1496,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619189165450</updated>
     </task>
-    <option name="localTasksCounter" value="4253" />
+    <task id="LOCAL-04253" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619200122695</created>
+      <option name="number" value="04253" />
+      <option name="presentableId" value="LOCAL-04253" />
+      <option name="project" value="LOCAL" />
+      <updated>1619200122696</updated>
+    </task>
+    <option name="localTasksCounter" value="4254" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1591,7 +1589,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Removidas travas de hash (biblioteca de paginação faz automaticamente);&#10;Corrigido modo 2v2 do Shoukan;" />
     <MESSAGE value="Correção na evolução de clans" />
     <MESSAGE value="Correção na evolução de clãs" />
     <MESSAGE value="Melhoria no fluxo de efeitos no Shoukan" />
@@ -1616,7 +1613,8 @@
     <MESSAGE value="Nova tag: Investidor" />
     <MESSAGE value="Remoção completa do s!settings" />
     <MESSAGE value="Adição de cargos pagos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de cargos pagos" />
+    <MESSAGE value="Melhoria na listagem de imagens das cartas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria na listagem de imagens das cartas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

@@ -1308,7 +1308,7 @@ public class Helper {
 		if (cbUltimate || chance((3 - clamp(prcnt(channel.getGuild().getMemberCount(), 5000), 0, 1)) * (cardBuff != null ? cardBuff.getMult() : 1))) {
 			KawaiponRarity kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
-					.map(r -> org.apache.commons.math3.util.Pair.create(r, (6 - r.getIndex()) / 12d))
+					.map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
 					.collect(Collectors.toList())
 			);
 
@@ -1359,7 +1359,7 @@ public class Helper {
 			kr = getRandom(cds.stream()
 					.map(Card::getRarity)
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
-					.map(r -> org.apache.commons.math3.util.Pair.create(r, (7 - r.getIndex()) / 12d))
+					.map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
 					.collect(Collectors.toList())
 			);
 
@@ -1367,7 +1367,7 @@ public class Helper {
 		} else {
 			kr = getRandom(Arrays.stream(KawaiponRarity.validValues())
 					.filter(r -> r != KawaiponRarity.ULTIMATE)
-					.map(r -> org.apache.commons.math3.util.Pair.create(r, (7 - r.getIndex()) / 12d))
+					.map(r -> org.apache.commons.math3.util.Pair.create(r, (15 - r.getIndex()) / 60d))
 					.collect(Collectors.toList())
 			);
 
