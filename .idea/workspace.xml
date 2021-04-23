@@ -14,9 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na listagem de imagens das cartas">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/template.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/template.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,11 +147,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\font" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\avatar\usa-tan" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\avatar\nero" />
       <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.utils.Helper" />
@@ -1159,14 +1159,7 @@
       <workItem from="1619179096403" duration="6693000" />
       <workItem from="1619186290330" duration="1323000" />
       <workItem from="1619188460781" duration="758000" />
-      <workItem from="1619196991932" duration="8539000" />
-    </task>
-    <task id="LOCAL-04207" summary="Adição de nova escala no gráfico sobre a Shiro">
-      <created>1618927556183</created>
-      <option name="number" value="04207" />
-      <option name="presentableId" value="LOCAL-04207" />
-      <option name="project" value="LOCAL" />
-      <updated>1618927556184</updated>
+      <workItem from="1619196991932" duration="9150000" />
     </task>
     <task id="LOCAL-04208" summary="Adição de nova escala no gráfico sobre a Shiro">
       <created>1618928788984</created>
@@ -1504,7 +1497,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619202284019</updated>
     </task>
-    <option name="localTasksCounter" value="4256" />
+    <task id="LOCAL-04256" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619207290138</created>
+      <option name="number" value="04256" />
+      <option name="presentableId" value="LOCAL-04256" />
+      <option name="project" value="LOCAL" />
+      <updated>1619207290138</updated>
+    </task>
+    <option name="localTasksCounter" value="4257" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
