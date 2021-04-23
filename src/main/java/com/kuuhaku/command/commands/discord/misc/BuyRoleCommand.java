@@ -56,6 +56,7 @@ public class BuyRoleCommand implements Executable {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		Account acc = AccountDAO.getAccount(author.getId());
 		List<PaidRole> prs = new ArrayList<>(gc.getPaidRoles());
+		prs.sort(Comparator.comparingInt(PaidRole::getPrice));
 
 		if (args.length == 0) {
 			List<Page> pages = new ArrayList<>();
@@ -83,8 +84,8 @@ public class BuyRoleCommand implements Executable {
 			List<List<Integer>> chunks = Helper.chunkify(fields.keySet(), 10);
 			for (List<Integer> chunk : chunks) {
 				eb.clearFields();
-				for (Integer level : chunk)
-					eb.addField("Valor: " + level + " créditos", fields.get(level), true);
+				for (int value : chunk)
+					eb.addField("Valor: " + Helper.separate(value) + " créditos", fields.get(value), true);
 
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
@@ -119,7 +120,7 @@ public class BuyRoleCommand implements Executable {
 			}
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Você está prestes a comprar o cargo `" + r.getName() + "` por **" + pr.getPrice() + " créditos**, deseja confirmar?").queue(s ->
+			channel.sendMessage("Você está prestes a comprar o cargo `" + r.getName() + "` por **" + Helper.separate(pr.getPrice()) + " créditos**, deseja confirmar?").queue(s ->
 					Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
