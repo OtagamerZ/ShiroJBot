@@ -60,7 +60,7 @@ public class KickMemberCommand implements Executable {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-kick-staff")).queue();
 				return;
 			} else if (Helper.hasRoleHigherThan(mb, guild.getSelfMember())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-kick-high-role-me")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-kick-higher-role-me")).queue();
 				return;
 			}
 		}
