@@ -13,12 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na listagem de imagens das cartas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/InvestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/InvestCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RecoverCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RecoverCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/TradeContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/TradeContent.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,6 +97,9 @@
     </ignored-facets>
   </component>
   <component name="JupyterTrust" id="3cddea61-70ea-4139-828d-65ac523ec76d" />
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="2" />
+  </component>
   <component name="ProjectId" id="1W4mCBhJx2V4Iv1OVHtn8NLtKvt" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="false" id="Update" />
@@ -116,6 +115,7 @@
     <property name="DatabaseDriversLRU" value="postgresql" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="RESOURCE_BUNDLE_EXPRESSION_USED" value="resourceBundle" />
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
@@ -128,8 +128,8 @@
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
-    <property name="last.edited.regexp" value="- shiro" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/font" />
+    <property name="last.edited.regexp" value="" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/gifs" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -145,11 +145,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\font" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\avatar\usa-tan" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\avatar\nero" />
       <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.utils.Helper" />
@@ -176,11 +176,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.model.common" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
-      <recent name="com.kuuhaku.command.commands.discord.dev" />
-      <recent name="com.kuuhaku.controller.postgresql" />
-      <recent name="com.kuuhaku.model.common.drop" />
+      <recent name="com.kuuhaku.command.commands.discord.moderation" />
+      <recent name="com.kuuhaku.model.persistent.guild" />
+      <recent name="com.kuuhaku.model.persistent" />
+      <recent name="com.kuuhaku.model.common" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -1153,164 +1153,11 @@
       <workItem from="1618937718317" duration="9133000" />
       <workItem from="1618948553012" duration="1846000" />
       <workItem from="1618969734788" duration="8114000" />
-      <workItem from="1619032275465" duration="2518000" />
-      <workItem from="1619047691721" duration="425000" />
-      <workItem from="1619284691023" duration="294000" />
-      <workItem from="1619285009459" duration="763000" />
-    </task>
-    <task id="LOCAL-04190" summary="Correção referente ao último commit">
-      <created>1618851212780</created>
-      <option name="number" value="04190" />
-      <option name="presentableId" value="LOCAL-04190" />
-      <option name="project" value="LOCAL" />
-      <updated>1618851212780</updated>
-    </task>
-    <task id="LOCAL-04191" summary="Correção referente ao último commit">
-      <created>1618851688854</created>
-      <option name="number" value="04191" />
-      <option name="presentableId" value="LOCAL-04191" />
-      <option name="project" value="LOCAL" />
-      <updated>1618851688854</updated>
-    </task>
-    <task id="LOCAL-04192" summary="Correção referente ao último commit">
-      <created>1618853421428</created>
-      <option name="number" value="04192" />
-      <option name="presentableId" value="LOCAL-04192" />
-      <option name="project" value="LOCAL" />
-      <updated>1618853421428</updated>
-    </task>
-    <task id="LOCAL-04193" summary="Correção referente ao último commit">
-      <created>1618853886793</created>
-      <option name="number" value="04193" />
-      <option name="presentableId" value="LOCAL-04193" />
-      <option name="project" value="LOCAL" />
-      <updated>1618853886793</updated>
-    </task>
-    <task id="LOCAL-04194" summary="Correção referente ao último commit">
-      <created>1618854325860</created>
-      <option name="number" value="04194" />
-      <option name="presentableId" value="LOCAL-04194" />
-      <option name="project" value="LOCAL" />
-      <updated>1618854325860</updated>
-    </task>
-    <task id="LOCAL-04195" summary="Correção referente ao último commit">
-      <created>1618854713914</created>
-      <option name="number" value="04195" />
-      <option name="presentableId" value="LOCAL-04195" />
-      <option name="project" value="LOCAL" />
-      <updated>1618854713914</updated>
-    </task>
-    <task id="LOCAL-04196" summary="Correção referente ao último commit">
-      <created>1618855918755</created>
-      <option name="number" value="04196" />
-      <option name="presentableId" value="LOCAL-04196" />
-      <option name="project" value="LOCAL" />
-      <updated>1618855918755</updated>
-    </task>
-    <task id="LOCAL-04197" summary="Correção referente ao último commit">
-      <created>1618855987042</created>
-      <option name="number" value="04197" />
-      <option name="presentableId" value="LOCAL-04197" />
-      <option name="project" value="LOCAL" />
-      <updated>1618855987042</updated>
-    </task>
-    <task id="LOCAL-04198" summary="Correção referente ao último commit">
-      <created>1618856009557</created>
-      <option name="number" value="04198" />
-      <option name="presentableId" value="LOCAL-04198" />
-      <option name="project" value="LOCAL" />
-      <updated>1618856009557</updated>
-    </task>
-    <task id="LOCAL-04199" summary="Correção referente ao último commit">
-      <created>1618856203489</created>
-      <option name="number" value="04199" />
-      <option name="presentableId" value="LOCAL-04199" />
-      <option name="project" value="LOCAL" />
-      <updated>1618856203489</updated>
-    </task>
-    <task id="LOCAL-04200" summary="Correção referente ao último commit">
-      <created>1618856240426</created>
-      <option name="number" value="04200" />
-      <option name="presentableId" value="LOCAL-04200" />
-      <option name="project" value="LOCAL" />
-      <updated>1618856240426</updated>
-    </task>
-    <task id="LOCAL-04201" summary="Correção referente ao último commit">
-      <created>1618856341198</created>
-      <option name="number" value="04201" />
-      <option name="presentableId" value="LOCAL-04201" />
-      <option name="project" value="LOCAL" />
-      <updated>1618856341198</updated>
-    </task>
-    <task id="LOCAL-04202" summary="Correção referente ao último commit">
-      <created>1618857180424</created>
-      <option name="number" value="04202" />
-      <option name="presentableId" value="LOCAL-04202" />
-      <option name="project" value="LOCAL" />
-      <updated>1618857180425</updated>
-    </task>
-    <task id="LOCAL-04203" summary="Correção referente ao último commit">
-      <created>1618857887128</created>
-      <option name="number" value="04203" />
-      <option name="presentableId" value="LOCAL-04203" />
-      <option name="project" value="LOCAL" />
-      <updated>1618857887128</updated>
-    </task>
-    <task id="LOCAL-04204" summary="Correção referente ao último commit">
-      <created>1618858034281</created>
-      <option name="number" value="04204" />
-      <option name="presentableId" value="LOCAL-04204" />
-      <option name="project" value="LOCAL" />
-      <updated>1618858034281</updated>
-    </task>
-    <task id="LOCAL-04205" summary="Adição de nova escala no gráfico sobre a Shiro">
-      <created>1618926850456</created>
-      <option name="number" value="04205" />
-      <option name="presentableId" value="LOCAL-04205" />
-      <option name="project" value="LOCAL" />
-      <updated>1618926850457</updated>
-    </task>
-    <task id="LOCAL-04206" summary="Adição de nova escala no gráfico sobre a Shiro">
-      <created>1618927364404</created>
-      <option name="number" value="04206" />
-      <option name="presentableId" value="LOCAL-04206" />
-      <option name="project" value="LOCAL" />
-      <updated>1618927364404</updated>
-    </task>
-    <task id="LOCAL-04207" summary="Adição de nova escala no gráfico sobre a Shiro">
-      <created>1618927556183</created>
-      <option name="number" value="04207" />
-      <option name="presentableId" value="LOCAL-04207" />
-      <option name="project" value="LOCAL" />
-      <updated>1618927556184</updated>
-    </task>
-    <task id="LOCAL-04208" summary="Adição de nova escala no gráfico sobre a Shiro">
-      <created>1618928788984</created>
-      <option name="number" value="04208" />
-      <option name="presentableId" value="LOCAL-04208" />
-      <option name="project" value="LOCAL" />
-      <updated>1618928788984</updated>
-    </task>
-    <task id="LOCAL-04209" summary="Adição de nova escala no gráfico sobre a Shiro">
-      <created>1618929687749</created>
-      <option name="number" value="04209" />
-      <option name="presentableId" value="LOCAL-04209" />
-      <option name="project" value="LOCAL" />
-      <updated>1618929687749</updated>
-    </task>
-    <task id="LOCAL-04210" summary="Nova tag: Investidor">
-      <created>1618945992701</created>
-      <option name="number" value="04210" />
-      <option name="presentableId" value="LOCAL-04210" />
-      <option name="project" value="LOCAL" />
-      <updated>1618945992701</updated>
-    </task>
-    <task id="LOCAL-04211" summary="Nova tag: Investidor">
-      <created>1618971566682</created>
-      <option name="number" value="04211" />
-      <option name="presentableId" value="LOCAL-04211" />
-      <option name="project" value="LOCAL" />
-      <updated>1618971566682</updated>
+      <workItem from="1619032275465" duration="2431000" />
+      <workItem from="1619179096403" duration="6693000" />
+      <workItem from="1619186290330" duration="1323000" />
+      <workItem from="1619188460781" duration="758000" />
+      <workItem from="1619196991932" duration="11167000" />
     </task>
     <task id="LOCAL-04212" summary="Nova tag: Investidor">
       <created>1618972232988</created>
@@ -1494,14 +1341,168 @@
       <option name="project" value="LOCAL" />
       <updated>1619033292335</updated>
     </task>
-    <task id="LOCAL-04238" summary="Nova tag: Investidor">
-      <created>1619038149742</created>
+    <task id="LOCAL-04238" summary="Remoção completa do s!settings">
+      <created>1619120876826</created>
       <option name="number" value="04238" />
       <option name="presentableId" value="LOCAL-04238" />
       <option name="project" value="LOCAL" />
-      <updated>1619038149743</updated>
+      <updated>1619120876827</updated>
     </task>
-    <option name="localTasksCounter" value="4239" />
+    <task id="LOCAL-04239" summary="Remoção completa do s!settings">
+      <created>1619123620731</created>
+      <option name="number" value="04239" />
+      <option name="presentableId" value="LOCAL-04239" />
+      <option name="project" value="LOCAL" />
+      <updated>1619123620731</updated>
+    </task>
+    <task id="LOCAL-04240" summary="Remoção completa do s!settings">
+      <created>1619123704850</created>
+      <option name="number" value="04240" />
+      <option name="presentableId" value="LOCAL-04240" />
+      <option name="project" value="LOCAL" />
+      <updated>1619123704850</updated>
+    </task>
+    <task id="LOCAL-04241" summary="Remoção completa do s!settings">
+      <created>1619124113349</created>
+      <option name="number" value="04241" />
+      <option name="presentableId" value="LOCAL-04241" />
+      <option name="project" value="LOCAL" />
+      <updated>1619124113349</updated>
+    </task>
+    <task id="LOCAL-04242" summary="Remoção completa do s!settings">
+      <created>1619124172173</created>
+      <option name="number" value="04242" />
+      <option name="presentableId" value="LOCAL-04242" />
+      <option name="project" value="LOCAL" />
+      <updated>1619124172173</updated>
+    </task>
+    <task id="LOCAL-04243" summary="Remoção completa do s!settings">
+      <created>1619124317488</created>
+      <option name="number" value="04243" />
+      <option name="presentableId" value="LOCAL-04243" />
+      <option name="project" value="LOCAL" />
+      <updated>1619124317488</updated>
+    </task>
+    <task id="LOCAL-04244" summary="Remoção completa do s!settings">
+      <created>1619124475815</created>
+      <option name="number" value="04244" />
+      <option name="presentableId" value="LOCAL-04244" />
+      <option name="project" value="LOCAL" />
+      <updated>1619124475815</updated>
+    </task>
+    <task id="LOCAL-04245" summary="Remoção completa do s!settings">
+      <created>1619125136946</created>
+      <option name="number" value="04245" />
+      <option name="presentableId" value="LOCAL-04245" />
+      <option name="project" value="LOCAL" />
+      <updated>1619125136947</updated>
+    </task>
+    <task id="LOCAL-04246" summary="Adição de cargos pagos">
+      <created>1619184320810</created>
+      <option name="number" value="04246" />
+      <option name="presentableId" value="LOCAL-04246" />
+      <option name="project" value="LOCAL" />
+      <updated>1619184320810</updated>
+    </task>
+    <task id="LOCAL-04247" summary="Adição de cargos pagos">
+      <created>1619184677335</created>
+      <option name="number" value="04247" />
+      <option name="presentableId" value="LOCAL-04247" />
+      <option name="project" value="LOCAL" />
+      <updated>1619184677335</updated>
+    </task>
+    <task id="LOCAL-04248" summary="Adição de cargos pagos">
+      <created>1619185540487</created>
+      <option name="number" value="04248" />
+      <option name="presentableId" value="LOCAL-04248" />
+      <option name="project" value="LOCAL" />
+      <updated>1619185540487</updated>
+    </task>
+    <task id="LOCAL-04249" summary="Adição de cargos pagos">
+      <created>1619186585719</created>
+      <option name="number" value="04249" />
+      <option name="presentableId" value="LOCAL-04249" />
+      <option name="project" value="LOCAL" />
+      <updated>1619186585720</updated>
+    </task>
+    <task id="LOCAL-04250" summary="Adição de cargos pagos">
+      <created>1619187811807</created>
+      <option name="number" value="04250" />
+      <option name="presentableId" value="LOCAL-04250" />
+      <option name="project" value="LOCAL" />
+      <updated>1619187811807</updated>
+    </task>
+    <task id="LOCAL-04251" summary="Adição de cargos pagos">
+      <created>1619188589028</created>
+      <option name="number" value="04251" />
+      <option name="presentableId" value="LOCAL-04251" />
+      <option name="project" value="LOCAL" />
+      <updated>1619188589029</updated>
+    </task>
+    <task id="LOCAL-04252" summary="Adição de cargos pagos">
+      <created>1619189165450</created>
+      <option name="number" value="04252" />
+      <option name="presentableId" value="LOCAL-04252" />
+      <option name="project" value="LOCAL" />
+      <updated>1619189165450</updated>
+    </task>
+    <task id="LOCAL-04253" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619200122695</created>
+      <option name="number" value="04253" />
+      <option name="presentableId" value="LOCAL-04253" />
+      <option name="project" value="LOCAL" />
+      <updated>1619200122696</updated>
+    </task>
+    <task id="LOCAL-04254" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619201213299</created>
+      <option name="number" value="04254" />
+      <option name="presentableId" value="LOCAL-04254" />
+      <option name="project" value="LOCAL" />
+      <updated>1619201213299</updated>
+    </task>
+    <task id="LOCAL-04255" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619202284019</created>
+      <option name="number" value="04255" />
+      <option name="presentableId" value="LOCAL-04255" />
+      <option name="project" value="LOCAL" />
+      <updated>1619202284019</updated>
+    </task>
+    <task id="LOCAL-04256" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619207290138</created>
+      <option name="number" value="04256" />
+      <option name="presentableId" value="LOCAL-04256" />
+      <option name="project" value="LOCAL" />
+      <updated>1619207290138</updated>
+    </task>
+    <task id="LOCAL-04257" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619207949735</created>
+      <option name="number" value="04257" />
+      <option name="presentableId" value="LOCAL-04257" />
+      <option name="project" value="LOCAL" />
+      <updated>1619207949735</updated>
+    </task>
+    <task id="LOCAL-04258" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619208067375</created>
+      <option name="number" value="04258" />
+      <option name="presentableId" value="LOCAL-04258" />
+      <option name="project" value="LOCAL" />
+      <updated>1619208067375</updated>
+    </task>
+    <task id="LOCAL-04259" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619208141851</created>
+      <option name="number" value="04259" />
+      <option name="presentableId" value="LOCAL-04259" />
+      <option name="project" value="LOCAL" />
+      <updated>1619208141851</updated>
+    </task>
+    <task id="LOCAL-04260" summary="Melhoria na listagem de imagens das cartas">
+      <created>1619208534677</created>
+      <option name="number" value="04260" />
+      <option name="presentableId" value="LOCAL-04260" />
+      <option name="project" value="LOCAL" />
+      <updated>1619208534677</updated>
+    </task>
+    <option name="localTasksCounter" value="4261" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1587,9 +1588,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no alinhamento dos icones de combo" />
-    <MESSAGE value="Correção nas lojas de itens" />
-    <MESSAGE value="Removidas travas de hash (biblioteca de paginação faz automaticamente);&#10;Corrigido modo 2v2 do Shoukan;" />
     <MESSAGE value="Correção na evolução de clans" />
     <MESSAGE value="Correção na evolução de clãs" />
     <MESSAGE value="Melhoria no fluxo de efeitos no Shoukan" />
@@ -1598,6 +1596,7 @@
     <MESSAGE value="Redução nos multiplicadores do slots" />
     <MESSAGE value="Correção no calculo de raça dos modos arcade" />
     <MESSAGE value="Melhoria na API de cartas" />
+    <MESSAGE value="Correções menores" />
     <MESSAGE value="Correção nos efeitos por tempo do Shoukan" />
     <MESSAGE value="Drops agora possuem chance de conter cartas do Shoukan" />
     <MESSAGE value="Adicionada opção de ignorar mensagem de confirmação nos comandos de converter e reverter cartas" />
@@ -1611,8 +1610,10 @@
     <MESSAGE value="Correção referente ao último commit" />
     <MESSAGE value="Adição de nova escala no gráfico sobre a Shiro" />
     <MESSAGE value="Nova tag: Investidor" />
-    <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Remoção completa do s!settings" />
+    <MESSAGE value="Adição de cargos pagos" />
+    <MESSAGE value="Melhoria na listagem de imagens das cartas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria na listagem de imagens das cartas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

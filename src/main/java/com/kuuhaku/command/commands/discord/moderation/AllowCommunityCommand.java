@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -34,14 +34,14 @@ public class AllowCommunityCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
-		if (gc.isNotAnyTell()) {
-			channel.sendMessage(":loud_sound: | Agora irei ouvir as respostas da comunidade!").queue();
-			gc.setAnyTell(true);
-		} else {
-			channel.sendMessage(":mute: | Não irei mais ouvir as respostas da comunidade!").queue();
-			gc.setAnyTell(false);
-		}
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+
+		gc.toggleAnyTell();
+		if (gc.isAnyTell())
+			channel.sendMessage("✅ | Agora irei ouvir as respostas da comunidade!").queue();
+		else
+			channel.sendMessage("✅ | Não irei mais ouvir as respostas da comunidade!").queue();
+
 		GuildDAO.updateGuildSettings(gc);
 	}
 }

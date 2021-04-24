@@ -26,7 +26,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -43,7 +43,7 @@ public class CatchDropCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		TextChannel chn = gc.getCanalDrop().isBlank() ? null : guild.getTextChannelById(gc.getCanalDrop());
+		TextChannel chn = gc.getDropChannel();
 
 		if (chn != null && !channel.getId().equals(chn.getId())) {
 			channel.sendMessage("❌ | O spawn de drops está configurado no canal " + chn.getAsMention() + ", você não pode coletá-los aqui.").queue();

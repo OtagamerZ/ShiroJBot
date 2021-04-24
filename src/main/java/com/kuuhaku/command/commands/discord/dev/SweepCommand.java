@@ -27,7 +27,7 @@ import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -63,8 +63,8 @@ public class SweepCommand implements Executable {
 			s.editMessage("<a:loading:697879726630502401> | Comparando índices... (" + gds.size() + " guilds)").queue();
 
 			for (GuildConfig gd : gds) {
-				if (Main.getInfo().getGuildByID(gd.getGuildID()) == null) {
-					guildTrashBin.add(gd.getGuildID());
+				if (Main.getInfo().getGuildByID(gd.getGuildId()) == null) {
+					guildTrashBin.add(gd.getGuildId());
 					Helper.logger(this.getClass()).debug(gd.getName() + " is null, added to trash bin");
 				}
 			}

@@ -27,7 +27,7 @@ import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -74,7 +74,7 @@ public class PollCommand implements Executable {
 			return;
 		}
 
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		JSONArray options = null;
 		if (Helper.containsAll(text, ";", "[", "]")) {
@@ -106,15 +106,15 @@ public class PollCommand implements Executable {
 				for (int i = 0; i < finalOptions.length(); i++) {
 					String emote = Helper.getRegionalIndicator(i);
 					buttons.put(emote, (mb, msg) -> {
-						if (Main.getInfo().getPolls().get(m.getId()).containsKey(mb.getId())) return;
-						Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), emote);
-						eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + Main.getInfo().getPolls().get(m.getId()).size() + ")");
+						if (ShiroInfo.getPolls().get(m.getId()).containsKey(mb.getId())) return;
+						ShiroInfo.getPolls().get(m.getId()).put(mb.getId(), emote);
+						eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + ShiroInfo.getPolls().get(m.getId()).size() + ")");
 						m.editMessage(eb.build()).queue();
 					});
 				}
 				buttons.put("❌", (mb, msg) -> {
 					if (mb.getId().equals(author.getId())) msg.delete().queue();
-					Main.getInfo().getPolls().remove(msg.getId());
+					ShiroInfo.getPolls().remove(msg.getId());
 				});
 				return buttons;
 			};
@@ -131,38 +131,38 @@ public class PollCommand implements Executable {
 		Consumer<Message> sendSimple = m -> {
 			Pages.buttonize(m, new LinkedHashMap<>() {{
 				put("\uD83D\uDC4D", (mb, msg) -> {
-					if (Main.getInfo().getPolls().get(m.getId()).containsKey(mb.getId())) return;
-					Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4D");
-					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + Main.getInfo().getPolls().get(m.getId()).size() + ")");
+					if (ShiroInfo.getPolls().get(m.getId()).containsKey(mb.getId())) return;
+					ShiroInfo.getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4D");
+					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + ShiroInfo.getPolls().get(m.getId()).size() + ")");
 					m.editMessage(eb.build()).queue();
 				});
 				put("\uD83D\uDC4E", (mb, msg) -> {
-					if (Main.getInfo().getPolls().get(m.getId()).containsKey(mb.getId())) return;
-					Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4E");
-					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + Main.getInfo().getPolls().get(m.getId()).size() + ")");
+					if (ShiroInfo.getPolls().get(m.getId()).containsKey(mb.getId())) return;
+					ShiroInfo.getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4E");
+					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + ShiroInfo.getPolls().get(m.getId()).size() + ")");
 					m.editMessage(eb.build()).queue();
 				});
 				put("❌", (mb, msg) -> {
 					if (mb.getId().equals(author.getId())) {
 						msg.delete().queue();
-						Main.getInfo().getPolls().remove(msg.getId());
+						ShiroInfo.getPolls().remove(msg.getId());
 					}
 				});
-			}}, false, gc.getPollTime(), TimeUnit.SECONDS);
-			Main.getInfo().getPolls().put(m.getId(), new HashMap<>());
-			Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
+			}}, false, gc.getPollTime(), TimeUnit.MINUTES);
+			ShiroInfo.getPolls().put(m.getId(), new HashMap<>());
+			Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.MINUTES);
 		};
 
 		Function<Message, Map<String, ThrowingBiConsumer<Member, Message>>> finalOpts = opts;
 		Consumer<Message> sendOptions = m -> {
 			assert finalOpts != null;
-			Pages.buttonize(m, finalOpts.apply(m), false, gc.getPollTime(), TimeUnit.SECONDS);
-			Main.getInfo().getPolls().put(m.getId(), new HashMap<>());
-			Main.getInfo().getScheduler().schedule(() -> showResultOP(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
+			Pages.buttonize(m, finalOpts.apply(m), false, gc.getPollTime(), TimeUnit.MINUTES);
+			ShiroInfo.getPolls().put(m.getId(), new HashMap<>());
+			Main.getInfo().getScheduler().schedule(() -> showResultOP(m, member, eb), gc.getPollTime(), TimeUnit.MINUTES);
 		};
 
-		if (gc.getCanalSUG() == null || gc.getCanalSUG().isBlank()) {
-			gc.setCanalSUG("");
+		if (gc.getSuggestionChannel() == null) {
+			gc.setSuggestionChannel(null);
 			GuildDAO.updateGuildSettings(gc);
 
 			if (options != null) channel.sendMessage(eb.build()).queue(sendOptions);
@@ -170,36 +170,32 @@ public class PollCommand implements Executable {
 		} else {
 			try {
 				if (options != null)
-					Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).sendMessage(eb.build()).queue(sendOptions);
+					gc.getSuggestionChannel().sendMessage(eb.build()).queue(sendOptions);
 				else
-					Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).sendMessage(eb.build()).queue(sendSimple);
+					gc.getSuggestionChannel().sendMessage(eb.build()).queue(sendSimple);
 			} catch (Exception e) {
 				try {
-					if (gc.getCanalSUG() == null || gc.getCanalSUG().isBlank())
+					if (gc.getSuggestionChannel() == null)
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed")).queue();
 					else
-						channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed-in-channel"), Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention())).queue();
+						channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed-in-channel"), gc.getSuggestionChannel().getAsMention())).queue();
 					return;
 				} catch (NullPointerException ex) {
-					gc.setCanalSUG(null);
+					gc.setSuggestionChannel(null);
 					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed")).queue();
 				}
 			}
 		}
 
-		channel.sendMessage("✅ | Enquete criada com sucesso, ela encerrará automaticamente em " + gc.getPollTime() + " segundos.").queue();
+		channel.sendMessage("✅ | Enquete criada com sucesso, ela encerrará automaticamente em " + gc.getPollTime() + " minutos.").queue();
 	}
 
 	private static void showResult(Message msg, Member member, EmbedBuilder eb) {
-		int pos = (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals("\uD83D\uDC4D")).count();
-		int neg = (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals("\uD83D\uDC4E")).count();
-		Main.getInfo().getPolls().remove(msg.getId());
-		boolean NOVOTE = false;
-
-		if (pos == 0 && neg == 0) {
-			NOVOTE = true;
-		}
+		int pos = (int) ShiroInfo.getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals("\uD83D\uDC4D")).count();
+		int neg = (int) ShiroInfo.getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals("\uD83D\uDC4E")).count();
+		ShiroInfo.getPolls().remove(msg.getId());
+		boolean NOVOTE = pos == 0 && neg == 0;
 
 		eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
 		eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") + ")");
@@ -214,15 +210,15 @@ public class PollCommand implements Executable {
 
 	private static void showResultOP(Message msg, Member member, EmbedBuilder eb) {
 		Map<String, Integer> votes = new HashMap<>();
-		for (Map.Entry<String, String> entry : Main.getInfo()
+		for (Map.Entry<String, String> entry : ShiroInfo
 				.getPolls()
 				.get(msg.getId()).entrySet()) {
 			String key = entry.getKey();
 			String value = entry.getValue();
-			votes.put(value, (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals(value)).count());
+			votes.put(value, (int) ShiroInfo.getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals(value)).count());
 		}
 
-		Main.getInfo().getPolls().remove(msg.getId());
+		ShiroInfo.getPolls().remove(msg.getId());
 		boolean NOVOTE = false;
 		int totalVotes = votes.values().stream().mapToInt(Integer::intValue).sum();
 

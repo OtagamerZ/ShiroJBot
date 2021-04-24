@@ -19,13 +19,12 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
+import com.kuuhaku.model.persistent.guild.LevelRole;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.Map;
 
 public class ExportableGuildConfig {
 	private final JSONObject gc = new JSONObject();
@@ -33,93 +32,66 @@ public class ExportableGuildConfig {
 	public ExportableGuildConfig(GuildConfig g) {
 		gc.put("prefix", g.getPrefix());
 		gc.put("welcomeChannel", new JSONObject() {{
-			put("id", g.getCanalBV());
+			put("id", g.getWelcomeChannel().getId());
 
 			TextChannel bv;
 			try {
-				bv = Main.getShiroShards().getTextChannelById(g.getCanalBV());
+				bv = Main.getShiroShards().getTextChannelById(g.getWelcomeChannel().getId());
 			} catch (IllegalArgumentException e) {
 				bv = null;
 			}
 			if (bv != null) put("name", bv.getName());
 		}});
-		gc.put("welcomeMessage", g.getMsgBoasVindas());
+		gc.put("welcomeMessage", g.getWelcomeMessage());
 		gc.put("goodbyeChannel", new JSONObject() {{
-			put("id", g.getCanalAdeus());
+			put("id", g.getByeChannel().getId());
 
-			TextChannel ad;
-			try {
-				ad = Main.getShiroShards().getTextChannelById(g.getCanalAdeus());
-			} catch (IllegalArgumentException e) {
-				ad = null;
-			}
+			TextChannel ad = g.getByeChannel();
 			if (ad != null) put("name", ad.getName());
 		}});
-		gc.put("goodbyeMessage", g.getMsgAdeus());
+		gc.put("goodbyeMessage", g.getByeMessage());
 		gc.put("suggestionChannel", new JSONObject() {{
-			put("id", g.getCanalSUG());
+			put("id", g.getSuggestionChannel().getId());
 
-			TextChannel sg;
-			try {
-				sg = Main.getShiroShards().getTextChannelById(g.getCanalSUG());
-			} catch (IllegalArgumentException e) {
-				sg = null;
-			}
+			TextChannel sg = g.getSuggestionChannel();
 			if (sg != null) put("name", sg.getName());
 		}});
 		gc.put("pollTime", g.getPollTime());
-		gc.put("muteTime", g.getWarnTime());
+		gc.put("muteTime", g.getMuteTime());
 		gc.put("muteRole", new JSONObject() {{
-			put("id", g.getCargoMute());
+			put("id", g.getMuteRole().getId());
 
-			Role r;
-			try {
-				r = Main.getInfo().getRoleByID(g.getCargoMute());
-			} catch (IllegalArgumentException e) {
-				r = null;
-			}
+			Role r = g.getMuteRole();
 			if (r != null) put("name", r.getName());
 		}});
 		gc.put("levelUpChannel", new JSONObject() {{
-			put("id", g.getCanalLvl());
+			put("id", g.getLevelChannel().getId());
 
-			TextChannel lvl;
-			try {
-				lvl = Main.getShiroShards().getTextChannelById(g.getCanalLvl());
-			} catch (IllegalArgumentException e) {
-				lvl = null;
-			}
+			TextChannel lvl = g.getLevelChannel();
 			if (lvl != null) put("name", lvl.getName());
 		}});
 		gc.put("levelRoles", new JSONArray() {{
-			for (Map.Entry<String, Object> entry : g.getCargoslvl().entrySet()) {
-				String key = entry.getKey();
-				Object value = entry.getValue();
+			for (LevelRole role : g.getLevelRoles()) {
 				put(new JSONObject() {{
-					put("id", String.valueOf(value));
+					put("id", role.getId());
 
 					Role r;
 					try {
-						r = Main.getInfo().getRoleByID(String.valueOf(value));
+						r = Main.getInfo().getRoleByID(role.getId());
 					} catch (IllegalArgumentException e) {
 						r = null;
 					}
 					if (r != null) {
 						put("name", r.getName());
-						put("level", key);
+						put("level", role.getLevel());
 					}
 				}});
 			}
 		}});
 		gc.put("relayChannel", new JSONObject() {{
-			put("id", g.getCanalRelay());
+			put("id", g.getRelayChannel().getId());
 
-			TextChannel rl;
-			try {
-				rl = Main.getShiroShards().getTextChannelById(g.getCanalRelay());
-			} catch (IllegalArgumentException e) {
-				rl = null;
-			}
+			TextChannel rl = g.getRelayChannel();
 			if (rl != null) put("name", rl.getName());
 		}});
 	}
