@@ -21,13 +21,13 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.model.common.StockValue;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.StockMarket;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,68 +90,66 @@ public class StockMarketDAO {
 
 		Query prev = em.createNativeQuery("""
 				SELECT c.id
-					 , c.name
-				     , CASE x.sold >= 3 
-				     	  WHEN TRUE THEN x.values
-				     	  ELSE ''
-				     END
+				  	 , c.name
+				  	 , CASE x.sold >= 3
+				          WHEN TRUE THEN x.value
+				 	 END AS value
 				FROM Card c
 				LEFT JOIN (
-						SELECT x.card_id
-				        	 , STRING_AGG(CAST(x.price AS VARCHAR(32)), ',') 				 AS values
-				        	 , COUNT(x.card_id)												 AS sold
-				    	FROM (
-				             SELECT c.id                                                     AS card_id
-				                  , COALESCE(cm.price, em.price, fm.price)                   AS price
-				                  , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
-				                  , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
-				                  , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
-				             FROM Card c
-				        	 LEFT JOIN Equipment e ON e.card_id = c.id
-				             LEFT JOIN Field f ON f.card_id = c.id
-				        	 LEFT JOIN CardMarket cm ON cm.card_id = c.id
-				             LEFT JOIN EquipmentMarket em ON em.card_id = e.id
-				             LEFT JOIN FieldMarket fm ON fm.card_id = f.id
-				        ) x
-				        WHERE x.publishDate BETWEEN :from AND :to
-				        AND x.buyer <> ''
-				        AND x.buyer <> x.seller
-				    	GROUP BY x.card_id
+				    SELECT x.card_id
+				         , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
+				         , COUNT(x.card_id)                                              AS sold
+				    FROM (
+				       SELECT c.id                                                     AS card_id
+				            , COALESCE(cm.price, em.price, fm.price)                   AS price
+				            , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
+				            , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
+				            , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
+				       FROM Card c
+				       LEFT JOIN Equipment e ON e.card_id = c.id
+				       LEFT JOIN Field f ON f.card_id = c.id
+				       LEFT JOIN CardMarket cm ON cm.card_id = c.id
+				       LEFT JOIN EquipmentMarket em ON em.card_id = e.id
+				       LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				    ) x
+				    WHERE x.publishDate BETWEEN :from AND :to
+				      AND x.buyer <> ''
+				      AND x.buyer <> x.seller
+				    GROUP BY x.card_id
 				) x ON x.card_id = c.id
 				ORDER BY c.id
 				""")
-				.setParameter("from", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(1))
-				.setParameter("to", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(2));
+				.setParameter("from", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(2))
+				.setParameter("to", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(1));
 
 		Query curr = em.createNativeQuery("""
 				SELECT c.id
-					 , c.name
-				     , CASE x.sold >= 3 
-				     	  WHEN TRUE THEN x.values
-				     	  ELSE ''
-				     END
+				     , c.name
+				     , CASE x.sold >= 3
+				           WHEN TRUE THEN x.value
+				     END AS value
 				FROM Card c
-				LEFT JOIN (
-						SELECT x.card_id
-				        	 , STRING_AGG(CAST(x.price AS VARCHAR(32)), ',') 				 AS values
-				        	 , COUNT(x.card_id)												 AS sold
-				    	FROM (
-				             SELECT c.id                                                     AS card_id
-				                  , COALESCE(cm.price, em.price, fm.price)                   AS price
-				                  , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
-				                  , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
-				                  , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
-				             FROM Card c
-				        	 LEFT JOIN Equipment e ON e.card_id = c.id
-				             LEFT JOIN Field f ON f.card_id = c.id
-				        	 LEFT JOIN CardMarket cm ON cm.card_id = c.id
-				             LEFT JOIN EquipmentMarket em ON em.card_id = e.id
-				             LEFT JOIN FieldMarket fm ON fm.card_id = f.id
-				        ) x
-				        WHERE x.publishDate > :date
-				        AND x.buyer <> ''
-				        AND x.buyer <> x.seller
-				    	GROUP BY x.card_id
+				         LEFT JOIN (
+				    SELECT x.card_id
+				         , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
+				         , COUNT(x.card_id)                                              AS sold
+				    FROM (
+				       SELECT c.id                                                     AS card_id
+				            , COALESCE(cm.price, em.price, fm.price)                   AS price
+				            , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
+				            , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
+				            , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
+				       FROM Card c
+				       LEFT JOIN Equipment e ON e.card_id = c.id
+				       LEFT JOIN Field f ON f.card_id = c.id
+				       LEFT JOIN CardMarket cm ON cm.card_id = c.id
+				       LEFT JOIN EquipmentMarket em ON em.card_id = e.id
+				       LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				    ) x
+				    WHERE x.publishDate > :date
+				      AND x.buyer <> ''
+				      AND x.buyer <> x.seller
+				    GROUP BY x.card_id
 				) x ON x.card_id = c.id
 				ORDER BY c.id
 				""")
@@ -165,17 +163,11 @@ public class StockMarketDAO {
 			Object[] prevRes = prevResults.get(i);
 			Object[] currRes = currResults.get(i);
 
-			double[] prevValues = Arrays.stream(String.valueOf(prevRes[2]).split(","))
-					.filter(s -> !s.isBlank())
-					.mapToDouble(Double::valueOf).toArray();
-			double[] currValues = Arrays.stream(String.valueOf(currRes[2]).split(","))
-					.filter(s -> !s.isBlank())
-					.mapToDouble(Double::valueOf).toArray();
-
-			out.put(String.valueOf(prevRes[0]), new StockValue(
-					String.valueOf(prevRes[0]),
-					String.valueOf(prevRes[1]),
-					prevValues, currValues
+			out.put(String.valueOf(currRes[0]), new StockValue(
+					String.valueOf(currRes[0]),
+					String.valueOf(currRes[1]),
+					Helper.getOr((Double) prevRes[2], 0d),
+					Helper.getOr((Double) currRes[2], 0d)
 			));
 		}
 

@@ -23,6 +23,7 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.api.endpoint.payload.Bonus;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.TrophyType;
+import com.kuuhaku.model.persistent.guild.GuildBuff;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.DynamicUpdate;

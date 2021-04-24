@@ -29,8 +29,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.exceptions.HierarchyException;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.List;
 import java.util.Objects;
@@ -48,31 +46,28 @@ public class UnmuteMemberCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-member-to-ban")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mention-required")).queue();
 			return;
 		} else if (!member.hasPermission(Permission.MESSAGE_MANAGE)) {
 			channel.sendMessage("❌ | Você não possui permissão para dessilenciar membros.").queue();
 			return;
-		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0))) {
+		} else if (Helper.hasRoleHigherThan(message.getMentionedMembers().get(0), member)) {
 			channel.sendMessage("❌ | Você não pode dessilenciar membros que possuem o mesmo cargo ou maior.").queue();
 			return;
 		} else if (MemberDAO.getMutedMemberById(message.getMentionedMembers().get(0).getId()) == null) {
-			channel.sendMessage("❌ | Este membro não está silenciado.").queue();
+			channel.sendMessage("❌ | Esse membro não está silenciado.").queue();
 			return;
 		}
 
 		Member mb = message.getMentionedMembers().get(0);
 
-		try {
-			MutedMember m = MemberDAO.getMutedMemberById(mb.getId());
-			List<Role> roles = m.getRoles().toList().stream().map(rol -> guild.getRoleById((String) rol)).filter(Objects::nonNull).collect(Collectors.toList());
-			guild.modifyMemberRoles(mb, roles).queue(null, Helper::doNothing);
-			MemberDAO.removeMutedMember(m);
-
-			Helper.logToChannel(author, false, null, mb.getAsMention() + " foi dessilenciado por " + author.getAsMention(), guild);
-			channel.sendMessage("✅ | Usuário dessilenciado com sucesso!").queue();
-		} catch (InsufficientPermissionException | HierarchyException e) {
-			channel.sendMessage("❌ | Não possuo a permissão para dessilenciar membros.").queue();
-		}
+		MutedMember m = MemberDAO.getMutedMemberById(mb.getId());
+		List<Role> roles = m.getRoles().toList().stream().map(rol -> guild.getRoleById((String) rol)).filter(Objects::nonNull).collect(Collectors.toList());
+		guild.modifyMemberRoles(mb, roles)
+				.flatMap(s -> channel.sendMessage("✅ | Usuário dessilenciado com sucesso!"))
+				.queue(s -> {
+					Helper.logToChannel(author, false, null, mb.getAsMention() + " foi dessilenciado por " + author.getAsMention(), guild);
+					MemberDAO.removeMutedMember(m);
+				}, Helper::doNothing);
 	}
 }

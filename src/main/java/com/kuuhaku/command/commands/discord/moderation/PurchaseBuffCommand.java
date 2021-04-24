@@ -27,7 +27,7 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.GuildBuff;
+import com.kuuhaku.model.persistent.guild.GuildBuff;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ServerBuff;
 import com.kuuhaku.utils.ShiroInfo;
@@ -148,7 +148,7 @@ public class PurchaseBuffCommand implements Executable {
 		acc.consumeCredit(sb.getPrice(), this.getClass());
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		if (!gb.addBuff(sb)) {
-			channel.sendMessage("❌ | Este servidor já possui uma melhoria dessa categoria.").queue();
+			channel.sendMessage("❌ | Este servidor já possui uma melhoria de tier superior nessa categoria.").queue();
 			return;
 		}
 

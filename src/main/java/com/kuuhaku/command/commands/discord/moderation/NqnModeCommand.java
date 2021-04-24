@@ -23,7 +23,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -42,14 +42,14 @@ public class NqnModeCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (gc.isNQNMode()) {
 			gc.toggleNQNMode();
-			channel.sendMessage("Modo NQN desativado.").queue();
+			channel.sendMessage("✅ | Modo NQN desativado.").queue();
 		} else {
 			gc.toggleNQNMode();
-			channel.sendMessage("Modo NQN ativado.").queue();
+			channel.sendMessage("✅ | Modo NQN ativado.").queue();
 		}
 
 		GuildDAO.updateGuildSettings(gc);

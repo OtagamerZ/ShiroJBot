@@ -38,7 +38,7 @@ import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.managers.TwitchCommandManager;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
@@ -94,7 +94,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		EnumSet<GatewayIntent> intents = EnumSet.allOf(GatewayIntent.class);
 
-		shiroShards = DefaultShardManagerBuilder.create(info.getBotToken(), intents)
+		shiroShards = DefaultShardManagerBuilder.create(ShiroInfo.getBotToken(), intents)
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
@@ -112,7 +112,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		info.setStartTime(System.currentTimeMillis());
-		Helper.logger(Main.class).info("Criada pool de compilação: " + info.getCompilationPool().getCorePoolSize() + " espaços alocados");
+		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
 
 		Manager.connect();
 		if (com.kuuhaku.controller.sqlite.BackupDAO.restoreData(BackupDAO.getData()))
@@ -126,8 +126,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		Executors.newSingleThreadExecutor().execute(ScheduledEvents::new);
 
-		AudioSourceManagers.registerRemoteSources(getInfo().getApm());
-		AudioSourceManagers.registerLocalSource(getInfo().getApm());
+		AudioSourceManagers.registerRemoteSources(ShiroInfo.getApm());
+		AudioSourceManagers.registerLocalSource(ShiroInfo.getApm());
 
 		spring = SpringApplication.run(Application.class, args);
 
@@ -181,7 +181,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
 		Helper.logger(Main.class).info("Estou pronta!");
 
-		shiroShards.addEventListener(info.getShiroEvents());
+		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
 		jbr.addEventListener(new JibrilEvents());
 
 		shiroShards.setActivity(getRandomActivity());
@@ -189,7 +189,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static Activity getRandomActivity() {
 		List<Activity> activities = new ArrayList<>() {{
-			add(Activity.playing("Digite " + info.getDefaultPrefix() + "ajuda para ver meus comandos!"));
+			add(Activity.playing("Digite " + ShiroInfo.getDefaultPrefix() + "ajuda para ver meus comandos!"));
 			add(Activity.playing("Nico nico nii!!"));
 			add(Activity.listening(shiroShards.getGuilds().size() + " servidores, e isso ainda é só o começo!"));
 			add(Activity.watching("No Game No Life pela 30ª vez, e ainda não enjoei de ver como eu atuo bem!"));

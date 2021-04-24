@@ -51,6 +51,7 @@ public class LockChannelCommand implements Executable {
 
 		if (guild.getBotRole() != null)
 			acts.add(channel.upsertPermissionOverride(guild.getBotRole()).grant(Permission.MESSAGE_WRITE));
+
 		acts.add(channel.upsertPermissionOverride(guild.getPublicRole()).deny(Permission.MESSAGE_WRITE));
 		for (PermissionOverride override : overrides) {
 			IPermissionHolder holder = override.getPermissionHolder();
