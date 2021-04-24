@@ -13,9 +13,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Nova tag: Investidor">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/InvestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/InvestCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RecoverCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RecoverCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/TradeContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/TradeContent.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1150,14 +1153,10 @@
       <workItem from="1618937718317" duration="9133000" />
       <workItem from="1618948553012" duration="1846000" />
       <workItem from="1618969734788" duration="8114000" />
-      <workItem from="1619032275465" duration="2431000" />
-    </task>
-    <task id="LOCAL-04189" summary="Correção referente ao último commit">
-      <created>1618851032069</created>
-      <option name="number" value="04189" />
-      <option name="presentableId" value="LOCAL-04189" />
-      <option name="project" value="LOCAL" />
-      <updated>1618851032069</updated>
+      <workItem from="1619032275465" duration="2518000" />
+      <workItem from="1619047691721" duration="425000" />
+      <workItem from="1619284691023" duration="294000" />
+      <workItem from="1619285009459" duration="763000" />
     </task>
     <task id="LOCAL-04190" summary="Correção referente ao último commit">
       <created>1618851212780</created>
@@ -1495,7 +1494,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619033292335</updated>
     </task>
-    <option name="localTasksCounter" value="4238" />
+    <task id="LOCAL-04238" summary="Nova tag: Investidor">
+      <created>1619038149742</created>
+      <option name="number" value="04238" />
+      <option name="presentableId" value="LOCAL-04238" />
+      <option name="project" value="LOCAL" />
+      <updated>1619038149743</updated>
+    </task>
+    <option name="localTasksCounter" value="4239" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1592,7 +1598,6 @@
     <MESSAGE value="Redução nos multiplicadores do slots" />
     <MESSAGE value="Correção no calculo de raça dos modos arcade" />
     <MESSAGE value="Melhoria na API de cartas" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Correção nos efeitos por tempo do Shoukan" />
     <MESSAGE value="Drops agora possuem chance de conter cartas do Shoukan" />
     <MESSAGE value="Adicionada opção de ignorar mensagem de confirmação nos comandos de converter e reverter cartas" />
@@ -1606,7 +1611,8 @@
     <MESSAGE value="Correção referente ao último commit" />
     <MESSAGE value="Adição de nova escala no gráfico sobre a Shiro" />
     <MESSAGE value="Nova tag: Investidor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Nova tag: Investidor" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
