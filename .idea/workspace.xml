@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria na listagem de imagens das cartas">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1158,6 +1158,8 @@
       <workItem from="1619186290330" duration="1323000" />
       <workItem from="1619188460781" duration="758000" />
       <workItem from="1619196991932" duration="11167000" />
+      <workItem from="1619287208017" duration="168000" />
+      <workItem from="1619287583078" duration="1943000" />
     </task>
     <task id="LOCAL-04212" summary="Nova tag: Investidor">
       <created>1618972232988</created>
