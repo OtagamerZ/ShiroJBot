@@ -24,7 +24,7 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
@@ -48,7 +48,7 @@ public class DisableCommandCommand implements Executable {
 			return;
 		}
 
-		GuildConfig gc = com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		Set<Class<?>> disabled = gc.getDisabledCommands().stream()
 				.map(s -> {
 					try {
@@ -84,7 +84,7 @@ public class DisableCommandCommand implements Executable {
 		disabled.addAll(commands.stream().map(Executable::getClass).collect(Collectors.toSet()));
 
 		channel.sendMessage("✅ | " + (commands.size() == 1 ? "1 comando desativado" : commands.size() + " comandos desativados") + " com sucesso!").queue();
-		gc.saveDisabledCommands(disabled);
+		gc.setDisabledCommands(disabled);
 		GuildDAO.updateGuildSettings(gc);
 	}
 }

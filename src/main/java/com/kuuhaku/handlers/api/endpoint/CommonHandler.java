@@ -34,7 +34,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Locale;
 
 @RestController
 public class CommonHandler {
@@ -55,6 +57,9 @@ public class CommonHandler {
 	@RequestMapping(value = "/card", method = RequestMethod.GET)
 	public @ResponseBody
 	HttpEntity<byte[]> serveCardImage(@RequestParam(value = "name", defaultValue = "") String name, @RequestParam(value = "anime", defaultValue = "") String anime) throws IOException {
+		name = name.toUpperCase(Locale.ROOT);
+		anime = anime.toUpperCase(Locale.ROOT);
+
 		try {
 			URL pageUrl = this.getClass().getClassLoader().getResource("template.html");
 			if (pageUrl == null) throw new IllegalArgumentException();
@@ -63,6 +68,10 @@ public class CommonHandler {
 			String item = "<li><a href=\"%s\">%s</a></li>\n";
 
 			if (anime.isBlank()) {
+				page = page.replace("<table>", "<ul>")
+						.replace("</table>", "</ul>")
+						.replace("%;", "%%;");
+
 				File f = new File(System.getenv("CARDS_PATH"));
 				if (!f.exists()) throw new FileNotFoundException();
 
@@ -84,6 +93,16 @@ public class CommonHandler {
 
 				return new HttpEntity<>(bytes, headers);
 			} else if (name.isBlank()) {
+				page = page.replace("%;", "%%;");
+				item = """
+						<td>
+						    <a href="?anime={0}&name={1}">
+						        <img alt="{0}" src="?anime={0}&name={1}"/>
+						    </a>
+						    <div>{1}</div>
+						</td>
+						""";
+
 				File f = new File(System.getenv("CARDS_PATH") + anime);
 				if (!f.exists()) throw new FileNotFoundException();
 
@@ -94,8 +113,13 @@ public class CommonHandler {
 						.sorted()
 						.toArray(String[]::new);
 
-				for (String s : available) {
-					sb.append(item.formatted("?anime=" + anime + "&name=" + s, s));
+				for (int i = 0; i < available.length; i++) {
+					String s = available[i];
+					if (i % 5 == 0) {
+						if (i > 0) sb.append("\n</tr>\n");
+						sb.append("\n<tr>\n");
+					}
+					sb.append(MessageFormat.format(item, anime, s));
 				}
 
 				byte[] bytes = page.formatted(sb.toString()).getBytes(StandardCharsets.UTF_8);

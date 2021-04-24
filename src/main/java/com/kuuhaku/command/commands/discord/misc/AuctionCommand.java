@@ -35,6 +35,7 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -268,7 +269,7 @@ public class AuctionCommand implements Executable {
 									));
 
 									s.delete().flatMap(d -> channel.sendMessage("✅ | Leilão aberto com sucesso, se não houver ofertas maiores que " + price + " dentro de 30 segundos irei fechá-lo!")).queue();
-									Main.getInfo().getShiroEvents().addHandler(guild, listener);
+									ShiroInfo.getShiroEvents().addHandler(guild, listener);
 								}
 							}), true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
