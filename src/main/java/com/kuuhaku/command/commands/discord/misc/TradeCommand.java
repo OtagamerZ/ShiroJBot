@@ -24,7 +24,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
@@ -121,15 +120,13 @@ public class TradeCommand implements Executable {
 												return;
 											}
 
-											Account acc = AccountDAO.getAccount(usr.getId());
-
 											if (StringUtils.isNumeric(offer)) {
 												try {
 													int c = Integer.parseInt(offer);
 													if (c < 0) {
 														channel.sendMessage("❌ | O valor deve ser maior ou igual a 0.").queue();
 														return;
-													} else if (acc.getBalance() < c) {
+													} else if (tc.getAcc().getBalance() < c) {
 														channel.sendMessage("❌ | Você não possui créditos suficientes.").queue();
 														return;
 													}
@@ -140,38 +137,52 @@ public class TradeCommand implements Executable {
 													return;
 												}
 											} else {
-												Kawaipon kp = KawaiponDAO.getKawaipon(usr.getId());
 												CardType ct = CardDAO.identifyType(offer);
 												switch (ct) {
 													case KAWAIPON -> {
 														KawaiponCard kc = new KawaiponCard(CardDAO.getCard(offer), foil);
-														if (!kp.getCards().contains(kc)) {
+														if (!tc.getKawaipon().getCards().contains(kc)) {
 															channel.sendMessage("❌ | Você não possui essa carta.").queue();
 															return;
 														}
 
-														if (add) tc.getCards().add(kc);
-														else tc.getCards().remove(kc);
+														if (add) {
+															tc.getCards().add(kc);
+															tc.getKp().removeCard(kc);
+														} else {
+															tc.getCards().remove(kc);
+															tc.getKp().addCard(kc);
+														}
 													}
 													case EVOGEAR -> {
 														Equipment e = CardDAO.getEquipment(offer);
-														if (!kp.getEquipments().contains(e)) {
+														if (!tc.getKawaipon().getEquipments().contains(e)) {
 															channel.sendMessage("❌ | Você não possui essa carta.").queue();
 															return;
 														}
 
-														if (add) tc.getEquipments().add(e);
-														else tc.getEquipments().remove(e);
+														if (add) {
+															tc.getEquipments().add(e);
+															tc.getKp().removeEquipment(e);
+														} else {
+															tc.getEquipments().remove(e);
+															tc.getKp().addEquipment(e);
+														}
 													}
 													case FIELD -> {
 														Field f = CardDAO.getField(offer);
-														if (!kp.getFields().contains(f)) {
+														if (!tc.getKawaipon().getFields().contains(f)) {
 															channel.sendMessage("❌ | Você não possui essa carta.").queue();
 															return;
 														}
 
-														if (add) tc.getFields().add(f);
-														else tc.getFields().remove(f);
+														if (add) {
+															tc.getFields().add(f);
+															tc.getKp().removeField(f);
+														} else {
+															tc.getFields().remove(f);
+															tc.getKp().addField(f);
+														}
 													}
 													case NONE -> {
 														channel.sendMessage("❌ | Carta inexistente, você não quis dizer `" + Helper.didYouMean(offer, Stream.of(CardDAO.getAllCardNames(), CardDAO.getAllEquipmentNames(), CardDAO.getAllFieldNames()).flatMap(Collection::stream).toArray(String[]::new)) + "`?").queue();
