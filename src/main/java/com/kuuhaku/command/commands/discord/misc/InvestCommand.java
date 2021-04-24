@@ -73,6 +73,9 @@ public class InvestCommand implements Executable {
 		if (acc.getBalance() < amount) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
+		} else if (sm.getInvestment() + amount >= 100000) {
+			channel.sendMessage("❌ | O limite máximo de ações por carta é 100.000 créditos.").queue();
+			return;
 		}
 
 		StockValue sv = StockMarketDAO.getValues().get(c.getId());
