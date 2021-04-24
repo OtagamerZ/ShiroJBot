@@ -29,7 +29,6 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <!-- entidade mapeada -->
-        <class>com.kuuhaku.model.persistent.GuildConfig</class>
         <class>com.kuuhaku.model.persistent.Member</class>
         <class>com.kuuhaku.model.persistent.CustomAnswer</class>
         <class>com.kuuhaku.model.persistent.Tags</class>
@@ -55,7 +54,6 @@
         <class>com.kuuhaku.model.persistent.Card</class>
         <class>com.kuuhaku.model.persistent.KawaiponCard</class>
         <class>com.kuuhaku.model.persistent.CardMarket</class>
-        <class>com.kuuhaku.model.persistent.GuildBuff</class>
         <class>com.kuuhaku.model.persistent.Transaction</class>
         <class>com.kuuhaku.model.persistent.DynamicParameter</class>
         <class>com.kuuhaku.model.persistent.PixelOperation</class>
@@ -79,6 +77,11 @@
         <class>com.kuuhaku.model.persistent.StockMarket</class>
         <class>com.kuuhaku.model.persistent.AddedAnime</class>
         <class>com.kuuhaku.model.persistent.BotStats</class>
+        <class>com.kuuhaku.model.persistent.guild.GuildConfig</class>
+        <class>com.kuuhaku.model.persistent.guild.GuildBuff</class>
+        <class>com.kuuhaku.model.persistent.guild.LevelRole</class>
+        <class>com.kuuhaku.model.persistent.guild.PaidRole</class>
+        <class>com.kuuhaku.model.persistent.guild.ColorRole</class>
 
         <properties>
             <!-- dados da conexao -->

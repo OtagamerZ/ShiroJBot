@@ -77,8 +77,8 @@ public class TwitchEvents {
 
 		Account acc = AccountDAO.getAccountByTwitchId(author.getId());
 
-		if (rawMessage.toLowerCase(Locale.ROOT).startsWith(Main.getInfo().getDefaultPrefix())) {
-			rawMsgNoPrefix = rawMessage.substring(Main.getInfo().getDefaultPrefix().length()).trim();
+		if (rawMessage.toLowerCase(Locale.ROOT).startsWith(ShiroInfo.getDefaultPrefix())) {
+			rawMsgNoPrefix = rawMessage.substring(ShiroInfo.getDefaultPrefix().length()).trim();
 			commandName = rawMsgNoPrefix.split(" ")[0].trim();
 		}
 

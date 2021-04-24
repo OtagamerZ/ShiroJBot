@@ -43,7 +43,7 @@ public class BackupDAO {
 
 			for (int i = 0; i < mDump.size(); i++) {
 				em.merge(mDump.get(i));
-				saveChunk(em, i, mDump.size(), "membros");
+				saveChunk(em, i, mDump.size());
 			}
 			if (mDump.size() > 0) Helper.logger(Main.class).info(mDump.size() + " membros salvos com sucesso!");
 
@@ -62,7 +62,7 @@ public class BackupDAO {
 		}
 	}
 
-	private static void saveChunk(EntityManager em, int i, int size, String name) {
+	private static void saveChunk(EntityManager em, int i, int size) {
 		if (i % 20 == 0) {
 			em.flush();
 			em.clear();
@@ -71,7 +71,7 @@ public class BackupDAO {
 			em.getTransaction().commit();
 			em.clear();
 			em.getTransaction().begin();
-			Helper.logger(BackupDAO.class).debug("Salvo chunk de " + name + " (" + (i / 1000) + "/" + (size / 1000) + ")");
+			Helper.logger(BackupDAO.class).debug("Salvo chunk de membros" + " (" + (i / 1000) + "/" + (size / 1000) + ")");
 		}
 	}
 

@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +36,7 @@ public class GuildHandler {
 
 	@RequestMapping(value = "/guild/get", method = RequestMethod.GET)
 	public GuildConfig requestGuild(@RequestParam(value = "id") String id) {
-		return com.kuuhaku.controller.postgresql.GuildDAO.getGuildById(id);
+		return GuildDAO.getGuildById(id);
 	}
 
 	@RequestMapping(value = "/guild/update", method = RequestMethod.POST)
