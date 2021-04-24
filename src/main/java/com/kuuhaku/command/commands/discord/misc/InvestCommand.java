@@ -67,18 +67,19 @@ public class InvestCommand implements Executable {
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
+		StockMarket sm = StockMarketDAO.getCardInvestment(author.getId(), c);
+
 		int amount = Integer.parseInt(args[1]);
+		if (acc.getBalance() < amount) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+			return;
+		}
 
 		StockValue sv = StockMarketDAO.getValues().get(c.getId());
 		double growth = 1 + sv.getGrowth();
 
 		int readjust = growth == 0 ? 0 : (int) Math.round(amount / growth);
-		if (acc.getBalance() < readjust) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
-			return;
-		}
 
-		StockMarket sm = StockMarketDAO.getCardInvestment(author.getId(), c);
 		sm.setInvestment(sm.getInvestment() + readjust);
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);

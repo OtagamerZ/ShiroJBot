@@ -35,6 +35,8 @@ import java.util.stream.Stream;
 
 public class TradeContent {
 	private final String uid;
+	private final Account acc;
+	private final Kawaipon kp;
 	private final Set<KawaiponCard> cards = new HashSet<>();
 	private final List<Equipment> equipments = new ArrayList<>();
 	private final List<Field> fields = new ArrayList<>();
@@ -43,10 +45,20 @@ public class TradeContent {
 
 	public TradeContent(String uid) {
 		this.uid = uid;
+		this.acc = AccountDAO.getAccount(uid);
+		this.kp = KawaiponDAO.getKawaipon(uid);
 	}
 
 	public String getUid() {
 		return uid;
+	}
+
+	public Account getAcc() {
+		return acc;
+	}
+
+	public Kawaipon getKp() {
+		return kp;
 	}
 
 	public Set<KawaiponCard> getCards() {
