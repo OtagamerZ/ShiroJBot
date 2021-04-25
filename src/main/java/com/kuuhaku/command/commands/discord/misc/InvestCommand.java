@@ -74,7 +74,7 @@ public class InvestCommand implements Executable {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
 		} else if (sm.getInvestment() + amount >= 100000) {
-			channel.sendMessage("❌ | O limite máximo de ações por carta é 100.000 créditos.").queue();
+			channel.sendMessage("❌ | O limite máximo por carta é 100.000 ações.").queue();
 			return;
 		}
 
