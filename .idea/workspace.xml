@@ -1160,21 +1160,8 @@
       <workItem from="1619196991932" duration="11167000" />
       <workItem from="1619287208017" duration="168000" />
       <workItem from="1619287583078" duration="1943000" />
-      <workItem from="1619290400357" duration="1430000" />
-    </task>
-    <task id="LOCAL-04213" summary="Nova tag: Investidor">
-      <created>1618972860125</created>
-      <option name="number" value="04213" />
-      <option name="presentableId" value="LOCAL-04213" />
-      <option name="project" value="LOCAL" />
-      <updated>1618972860125</updated>
-    </task>
-    <task id="LOCAL-04214" summary="Nova tag: Investidor">
-      <created>1618972986046</created>
-      <option name="number" value="04214" />
-      <option name="presentableId" value="LOCAL-04214" />
-      <option name="project" value="LOCAL" />
-      <updated>1618972986046</updated>
+      <workItem from="1619290400357" duration="1720000" />
+      <workItem from="1619305342519" duration="167000" />
     </task>
     <task id="LOCAL-04215" summary="Nova tag: Investidor">
       <created>1618973236009</created>
@@ -1505,7 +1492,21 @@
       <option name="project" value="LOCAL" />
       <updated>1619290480608</updated>
     </task>
-    <option name="localTasksCounter" value="4262" />
+    <task id="LOCAL-04262" summary="Correções menores">
+      <created>1619297883860</created>
+      <option name="number" value="04262" />
+      <option name="presentableId" value="LOCAL-04262" />
+      <option name="project" value="LOCAL" />
+      <updated>1619297883860</updated>
+    </task>
+    <task id="LOCAL-04263" summary="Correções menores">
+      <created>1619297939307</created>
+      <option name="number" value="04263" />
+      <option name="presentableId" value="LOCAL-04263" />
+      <option name="project" value="LOCAL" />
+      <updated>1619297939307</updated>
+    </task>
+    <option name="localTasksCounter" value="4264" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
