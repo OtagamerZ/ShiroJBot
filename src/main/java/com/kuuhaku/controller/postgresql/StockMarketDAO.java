@@ -91,7 +91,7 @@ public class StockMarketDAO {
 		Query prev = em.createNativeQuery("""
 				SELECT c.id
 				  	 , c.name
-				  	 , CASE x.sold >= 3
+				  	 , CASE x.sold >= 5
 				          WHEN TRUE THEN x.value
 				 	 END AS value
 				FROM Card c
@@ -121,7 +121,7 @@ public class StockMarketDAO {
 		Query curr = em.createNativeQuery("""
 				SELECT c.id
 				     , c.name
-				     , CASE x.sold >= 3
+				     , CASE x.sold >= 5
 				           WHEN TRUE THEN x.value
 				     END AS value
 				FROM Card c
