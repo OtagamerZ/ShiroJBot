@@ -24,6 +24,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
+import java.io.File;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -48,6 +49,22 @@ public class GameChannel {
 				.map(ids -> ids.split(Pattern.quote(".")))
 				.map(ids -> Main.getInfo().getGuildByID(ids[0]).getTextChannelById(ids[1]))
 				.collect(Collectors.toList());
+	}
+
+	public ClusterAction sendFile(File f) {
+		List<MessageAction> acts = new ArrayList<>();
+		for (String chn : channels) {
+			String[] ids = chn.split(Pattern.quote("."));
+			try {
+				acts.add(Objects.requireNonNull(Main.getInfo()
+						.getGuildByID(ids[0])
+						.getTextChannelById(ids[1]))
+						.sendFile(f)
+				);
+			} catch (NullPointerException ignore) {
+			}
+		}
+		return new ClusterAction(acts);
 	}
 
 	public ClusterAction sendFile(byte[] bytes, String filename) {

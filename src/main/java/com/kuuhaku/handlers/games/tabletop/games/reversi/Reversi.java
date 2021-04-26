@@ -78,7 +78,7 @@ public class Reversi extends Game {
 		setActions(
 				s -> {
 					close();
-					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
+					channel.sendFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							});
@@ -86,7 +86,7 @@ public class Reversi extends Game {
 				s -> {
 					getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 					close();
-					channel.sendFile(Helper.getBytes(getBoard().render()), "board.jpg")
+					channel.sendFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							});
@@ -97,7 +97,7 @@ public class Reversi extends Game {
 	@Override
 	public void start() {
 		channel.sendMessage(getCurrent().getAsMention() + " você começa!")
-				.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+				.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
 				.queue(s -> {
 					this.message = s;
 					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
@@ -150,23 +150,29 @@ public class Reversi extends Game {
 			if (whiteCount + blackCount == 64) {
 				if (whiteCount > blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
-					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue(null, Helper::doNothing);
+					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)")
+							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+							.queue(null, Helper::doNothing);
 					getBoard().awardWinner(this, winner.getId());
 					close();
 				} else if (whiteCount < blackCount) {
 					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> !e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
-					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue(null, Helper::doNothing);
+					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)")
+							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+							.queue(null, Helper::doNothing);
 					getBoard().awardWinner(this, winner.getId());
 					close();
 				} else {
 					close();
-					channel.sendMessage("Temos um empate!").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue(null, Helper::doNothing);
+					channel.sendMessage("Temos um empate!")
+							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+							.queue(null, Helper::doNothing);
 				}
 			} else {
 				resetTimer();
 				draw = false;
 				channel.sendMessage("Turno de " + getCurrent().getAsMention())
-						.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = msg;
@@ -195,7 +201,7 @@ public class Reversi extends Game {
 					getBoard().awardWinner(this, winner.getId());
 					close();
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)")
-							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							});
@@ -205,7 +211,7 @@ public class Reversi extends Game {
 					getBoard().awardWinner(this, winner.getId());
 					close();
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)")
-							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							});
@@ -213,7 +219,7 @@ public class Reversi extends Game {
 				} else {
 					close();
 					channel.sendMessage("Temos um empate!")
-							.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							});
@@ -225,7 +231,7 @@ public class Reversi extends Game {
 			resetTimer();
 			draw = true;
 			channel.sendMessage(current.getName() + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
-					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+					.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
 					.queue(s -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = s;
@@ -236,7 +242,7 @@ public class Reversi extends Game {
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 			close();
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
-					.addFile(Helper.getBytes(getBoard().render()), "board.jpg")
+					.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
 					.queue(msg -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					});
