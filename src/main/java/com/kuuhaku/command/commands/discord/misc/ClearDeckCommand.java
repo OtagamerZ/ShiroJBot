@@ -39,6 +39,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -74,7 +75,9 @@ public class ClearDeckCommand implements Executable {
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-deck")).queue(m -> {
 			try {
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(sd.view(kp), "jpg", 0.5f), "deque.jpg")
+				File f = Helper.writeAndGet(sd.view(kp));
+				if (f == null) throw new IOException();
+				channel.sendMessage(eb.build()).addFile(f)
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 
@@ -100,10 +103,10 @@ public class ClearDeckCommand implements Executable {
 									}
 									fkp.getEquipments().clear();
 
-									for (Field f : fkp.getFields()) {
+									for (Field fd : fkp.getFields()) {
 										FieldMarket fm = new FieldMarket(
 												author.getId(),
-												f,
+												fd,
 												9999999
 										);
 										FieldMarketDAO.saveCard(fm);

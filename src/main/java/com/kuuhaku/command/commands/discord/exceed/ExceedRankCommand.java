@@ -85,7 +85,8 @@ public class ExceedRankCommand implements Executable {
 						);
 					}
 
-					channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES, null, Helper::doNothing));
+					channel.sendFile(Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "ranking", "png"))
+							.queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES, null, Helper::doNothing));
 					m.delete().queue();
 				} else if (args[0].equalsIgnoreCase("historico")) {
 					List<List<ExceedScore>> exceeds = new ArrayList<>();
@@ -122,7 +123,8 @@ public class ExceedRankCommand implements Executable {
 						).setMarker(SeriesMarkers.NONE);
 					}
 
-					channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES, null, Helper::doNothing));
+					channel.sendFile(Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "ranking", "png"))
+							.queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES, null, Helper::doNothing));
 					m.delete().queue();
 				} else {
 					m.editMessage("❌ | Você precisa digitar `historico` se deseja ver o histórico de ranking, ou não digitar nada se deseja ver o ranking atual.").queue();

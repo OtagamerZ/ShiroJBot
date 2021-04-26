@@ -38,6 +38,7 @@ import org.knowm.xchart.style.Styler;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.awt.*;
+import java.io.File;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
@@ -76,8 +77,8 @@ public class BotStatsCommand implements Executable {
 				return;
 			}
 
-			byte[] generalStats = getGeneralStats(reducedStats);
-			byte[] cacheStats = getCacheStats(reducedStats);
+			File generalStats = getGeneralStats(reducedStats);
+			File cacheStats = getCacheStats(reducedStats);
 
 			channel.sendFile(generalStats, "general.png")
 					.addFile(cacheStats, "cache.png")
@@ -86,7 +87,7 @@ public class BotStatsCommand implements Executable {
 		});
 	}
 
-	private byte[] getGeneralStats(Map<Date, BotStats> reducedStats) {
+	private File getGeneralStats(Map<Date, BotStats> reducedStats) {
 		XYChart chart = Helper.buildXYChart(
 				"Estatísticas sobre a Shiro J. Bot",
 				Pair.of("Data", ""),
@@ -155,10 +156,10 @@ public class BotStatsCommand implements Executable {
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(0);
 
-		return Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png");
+		return Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "stats", "png");
 	}
 
-	private byte[] getCacheStats(Map<Date, BotStats> reducedStats) {
+	private File getCacheStats(Map<Date, BotStats> reducedStats) {
 		XYChart chart = Helper.buildXYChart(
 				"Caching da Shiro J. Bot",
 				Pair.of("Data", ""),
@@ -228,6 +229,6 @@ public class BotStatsCommand implements Executable {
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(1);
 
-		return Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png");
+		return Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "cache", "png");
 	}
 }
