@@ -112,6 +112,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
@@ -2533,5 +2534,34 @@ public class Helper {
 		}
 
 		return f;
+	}
+
+	public static void forEachPixel(BufferedImage bi, BiConsumer<int[], Integer> act) {
+		int x = 0;
+		int y = 0;
+		int i = 0;
+		while (x < bi.getWidth() && y < bi.getHeight()) {
+			x = i % bi.getWidth();
+			y = i / bi.getWidth();
+
+			act.accept(new int[]{x, y}, bi.getRGB(x, y));
+			i++;
+		}
+	}
+
+	public static int hip(int cat1, int cat2) {
+		return (int) Math.round(Math.sqrt(Math.pow(cat1, 2) + Math.pow(cat2, 2)));
+	}
+
+	public static long hip(long cat1, long cat2) {
+		return Math.round(Math.sqrt(Math.pow(cat1, 2) + Math.pow(cat2, 2)));
+	}
+
+	public static float hip(float cat1, float cat2) {
+		return Math.round(Math.sqrt(Math.pow(cat1, 2) + Math.pow(cat2, 2)));
+	}
+
+	public static double hip(double cat1, double cat2) {
+		return Math.round(Math.sqrt(Math.pow(cat1, 2) + Math.pow(cat2, 2)));
 	}
 }
