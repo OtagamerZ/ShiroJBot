@@ -105,7 +105,7 @@ public class RevertCardCommand implements Executable {
 			eb.setImage("attachment://card.png");
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage(eb.build()).addFile(Helper.getBytes(kc.getCard().drawCard(false), "png"), "card.png")
+			channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(kc.getCard().drawCard(false), "s_" + kc.getCard().getId(), "png"), "card.png")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								kp.addCard(kc);

@@ -45,7 +45,7 @@ public class StockMarketCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendFile(Helper.getBytes(new StocksPanel().view(), "jpg"), "panel.jpg").queue();
+			channel.sendFile(Helper.writeAndGet(new StocksPanel().view())).queue();
 			return;
 		}
 
@@ -74,7 +74,7 @@ public class StockMarketCommand implements Executable {
 				.addField("Variação de valor", emote + (growth > 0 ? " +" : " ") + Helper.round(growth * 100, 3) + "%", true);
 
 		channel.sendMessage(eb.build())
-				.addFile(Helper.getBytes(c.drawCardNoBorder(), "png"), "card.png")
+				.addFile(Helper.writeAndGet(c.drawCardNoBorder(), "card", "png"), "card.png")
 				.queue();
 	}
 }

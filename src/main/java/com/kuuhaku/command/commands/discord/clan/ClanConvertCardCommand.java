@@ -113,20 +113,22 @@ public class ClanConvertCardCommand implements Executable {
 				eb.setImage("attachment://card.png");
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(c.drawCard(false), "png"), "card.png").queue(s ->
-						Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-									kp.removeCard(kc);
-									cl.getDeck().addChampion(c);
-									KawaiponDAO.saveKawaipon(kp);
-									cl.getTransactions().add(author.getAsTag() + " adicionou a carta " + tc.getCard().getName() + " ao deck");
-									ClanDAO.saveClan(cl);
-									s.delete().queue();
-									channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();
-								}), true, 1, TimeUnit.MINUTES,
-								u -> u.getId().equals(author.getId()),
-								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-						));
+				channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(c.drawCard(false), "kp_" + c.getId(), "png"), "card.png")
+						.queue(s ->
+								Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+											Main.getInfo().getConfirmationPending().remove(author.getId());
+											kp.removeCard(kc);
+											cl.getDeck().addChampion(c);
+											KawaiponDAO.saveKawaipon(kp);
+											cl.getTransactions().add(author.getAsTag() + " adicionou a carta " + tc.getCard().getName() + " ao deck");
+											ClanDAO.saveClan(cl);
+											s.delete().queue();
+											channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();
+										}), true, 1, TimeUnit.MINUTES,
+										u -> u.getId().equals(author.getId()),
+										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+								)
+						);
 			}
 			case EVOGEAR -> {
 				Equipment e = (Equipment) tc;
@@ -144,20 +146,22 @@ public class ClanConvertCardCommand implements Executable {
 				eb.setImage("attachment://card.png");
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(e.drawCard(false), "png"), "card.png").queue(s ->
-						Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-									kp.removeEquipment(e);
-									cl.getDeck().addEquipment(e);
-									KawaiponDAO.saveKawaipon(kp);
-									cl.getTransactions().add(author.getAsTag() + " adicionou a carta " + tc.getCard().getName() + " ao deck");
-									ClanDAO.saveClan(cl);
-									s.delete().queue();
-									channel.sendMessage("✅ | Transferência realizada com sucesso!").queue();
-								}), true, 1, TimeUnit.MINUTES,
-								u -> u.getId().equals(author.getId()),
-								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-						));
+				channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(e.drawCard(false), "kp_" + e.getCard().getId(), "png"), "card.png")
+						.queue(s ->
+								Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+											Main.getInfo().getConfirmationPending().remove(author.getId());
+											kp.removeEquipment(e);
+											cl.getDeck().addEquipment(e);
+											KawaiponDAO.saveKawaipon(kp);
+											cl.getTransactions().add(author.getAsTag() + " adicionou a carta " + tc.getCard().getName() + " ao deck");
+											ClanDAO.saveClan(cl);
+											s.delete().queue();
+											channel.sendMessage("✅ | Transferência realizada com sucesso!").queue();
+										}), true, 1, TimeUnit.MINUTES,
+										u -> u.getId().equals(author.getId()),
+										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+								)
+						);
 			}
 			case FIELD -> {
 				Field f = (Field) tc;
@@ -175,20 +179,22 @@ public class ClanConvertCardCommand implements Executable {
 				eb.setImage("attachment://card.png");
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(f.drawCard(false), "png"), "card.png").queue(s ->
-						Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-									Main.getInfo().getConfirmationPending().remove(author.getId());
-									kp.removeField(f);
-									cl.getDeck().addField(f);
-									KawaiponDAO.saveKawaipon(kp);
-									cl.getTransactions().add(author.getAsTag() + " adicionou a carta " + tc.getCard().getName() + " ao deck");
-									ClanDAO.saveClan(cl);
-									s.delete().queue();
-									channel.sendMessage("✅ | Transferência realizada com sucesso!").queue();
-								}), true, 1, TimeUnit.MINUTES,
-								u -> u.getId().equals(author.getId()),
-								ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-						));
+				channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(f.drawCard(false), "kp_" + f.getCard().getId(), "png"), "card.png")
+						.queue(s ->
+								Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+											Main.getInfo().getConfirmationPending().remove(author.getId());
+											kp.removeField(f);
+											cl.getDeck().addField(f);
+											KawaiponDAO.saveKawaipon(kp);
+											cl.getTransactions().add(author.getAsTag() + " adicionou a carta " + tc.getCard().getName() + " ao deck");
+											ClanDAO.saveClan(cl);
+											s.delete().queue();
+											channel.sendMessage("✅ | Transferência realizada com sucesso!").queue();
+										}), true, 1, TimeUnit.MINUTES,
+										u -> u.getId().equals(author.getId()),
+										ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+								)
+						);
 			}
 		}
 	}

@@ -452,7 +452,7 @@ public class Hand {
 
 		user.openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Escolha uma carta para jogar (digite a posição da carta na mão, no campo e se ela posicionada em modo de ataque (`A`), defesa (`D`) ou virada para baixo (`B`). Ex: `0,0,a`), mude a postura de uma carta (digite apenas a posição da carta no campo) ou use os botões na mensagem enviada para avançar o turno, comprar uma carta ou render-se.")
-						.addFile(Helper.getBytes(bi, "png"), "hand.png")
+						.addFile(Helper.writeAndGet(bi, "hand", "png"))
 				)
 				.queue(null, Helper::doNothing);
 	}
@@ -480,7 +480,7 @@ public class Hand {
 
 		user.openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Visualizando as cartas na mão do oponente.")
-						.addFile(Helper.getBytes(bi, "png"), "hand.png")
+						.addFile(Helper.writeAndGet(bi, "hand", "png"))
 				)
 				.queue(null, Helper::doNothing);
 	}
@@ -508,7 +508,7 @@ public class Hand {
 
 		user.openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Visualizando as próximas " + amount + " cartas do oponente.")
-						.addFile(Helper.getBytes(bi, "png"), "hand.png")
+						.addFile(Helper.writeAndGet(bi, "hand", "png"))
 				)
 				.queue(null, Helper::doNothing);
 	}

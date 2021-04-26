@@ -29,6 +29,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.github.ygimenez.type.PageType;
+import com.google.common.primitives.Longs;
 import com.google.gson.Gson;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
@@ -1330,16 +1331,25 @@ public class Helper {
 				eb.setImage("attachment://kawaipon.png");
 
 			if (gc.getKawaiponChannel() == null) {
-				channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				channel.sendMessage(eb.build()).addFile(writeAndGet(img, "kp_" + c.getId(), "png"), "kawaipon.png")
+						.delay(1, TimeUnit.MINUTES)
+						.flatMap(Message::delete)
+						.queue(null, Helper::doNothing);
 			} else {
 				TextChannel tc = gc.getKawaiponChannel();
 
 				if (tc == null) {
 					gc.setKawaiponChannel(null);
 					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+					channel.sendMessage(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+							.delay(1, TimeUnit.MINUTES)
+							.flatMap(Message::delete)
+							.queue(null, Helper::doNothing);
 				} else {
-					tc.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+					tc.sendMessage(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+							.delay(1, TimeUnit.MINUTES)
+							.flatMap(Message::delete)
+							.queue(null, Helper::doNothing);
 				}
 			}
 			Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
@@ -1391,16 +1401,25 @@ public class Helper {
 			eb.setImage("attachment://kawaipon.png");
 
 		if (gc.getKawaiponChannel() == null) {
-			channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			channel.sendMessage(eb.build()).addFile(writeAndGet(img, "kp_" + c.getId(), "png"), "kawaipon.png")
+					.delay(1, TimeUnit.MINUTES)
+					.flatMap(Message::delete)
+					.queue(null, Helper::doNothing);
 		} else {
 			TextChannel tc = gc.getKawaiponChannel();
 
 			if (tc == null) {
 				gc.setKawaiponChannel(null);
 				GuildDAO.updateGuildSettings(gc);
-				channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				channel.sendMessage(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+						.delay(1, TimeUnit.MINUTES)
+						.flatMap(Message::delete)
+						.queue(null, Helper::doNothing);
 			} else {
-				tc.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				tc.sendMessage(eb.build()).addFile(writeAndGet(c.drawCard(foil), "kp_" + c.getId() + (foil ? "_f" : ""), "png"), "kawaipon.png")
+						.delay(1, TimeUnit.MINUTES)
+						.flatMap(Message::delete)
+						.queue(null, Helper::doNothing);
 			}
 		}
 		Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
@@ -2467,5 +2486,52 @@ public class Helper {
 
 	public static int roundTrunc(int value, int mult) {
 		return mult * (Math.round((float) value / mult));
+	}
+
+	public static File writeAndGet(BufferedImage bi) {
+		File tempFolder = Main.getInfo().getTemporaryFolder();
+		File f = new File(tempFolder, hash(Longs.toByteArray(System.currentTimeMillis()), "MD5") + ".jpg");
+
+		try {
+			ImageIO.write(bi, "jpg", f);
+		} catch (IOException ignore) {
+		}
+
+		return f;
+	}
+
+	public static File writeAndGet(BufferedImage bi, String name) {
+		File tempFolder = Main.getInfo().getTemporaryFolder();
+		File f = new File(tempFolder, name + ".jpg");
+
+		try {
+			ImageIO.write(bi, "jpg", f);
+		} catch (IOException ignore) {
+		}
+
+		return f;
+	}
+
+	public static File writeAndGet(BufferedImage bi, String name, String extension) {
+		File tempFolder = Main.getInfo().getTemporaryFolder();
+		File f = new File(tempFolder, name + "." + extension);
+
+		try {
+			ImageIO.write(bi, extension, f);
+		} catch (IOException ignore) {
+		}
+
+		return f;
+	}
+
+	public static File writeAndGet(BufferedImage bi, String name, String extension, File parent) {
+		File f = new File(parent, name + "." + extension);
+
+		try {
+			ImageIO.write(bi, extension, f);
+		} catch (IOException ignore) {
+		}
+
+		return f;
 	}
 }

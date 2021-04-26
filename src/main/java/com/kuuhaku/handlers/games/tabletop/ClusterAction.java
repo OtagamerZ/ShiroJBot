@@ -22,6 +22,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -35,6 +36,11 @@ public class ClusterAction {
 
 	public ClusterAction embed(MessageEmbed eb) {
 		actions.replaceAll(msg -> msg.embed(eb));
+		return this;
+	}
+
+	public ClusterAction addFile(File f) {
+		actions.replaceAll(msg -> msg.addFile(f));
 		return this;
 	}
 
