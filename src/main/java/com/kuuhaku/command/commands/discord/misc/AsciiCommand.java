@@ -33,6 +33,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "ascii",
@@ -84,29 +85,28 @@ public class AsciiCommand implements Executable {
 		g2d.drawImage(bi, 0, 0, 100, 100, null);
 		g2d.dispose();
 
-		int threshold = getGrayScale(in.getRGB(0, 0));
-		for (int y = 0; y < in.getHeight(); y++) {
-			for (int x = 0; x < in.getWidth(); x++) {
-				if (in.getRGB(x, y) == Color.BLACK.getRGB() || in.getRGB(x, y) == Color.WHITE.getRGB()) continue;
-				threshold = (threshold + getGrayScale(in.getRGB(x, y))) / 2;
+		AtomicInteger threshold = new AtomicInteger(getGrayScale(in.getRGB(0, 0)));
+		Helper.forEachPixel(in, (coords, rgb) -> {
+			if (rgb != 0xFFFFFF && rgb != 0x000000) {
+				threshold.set(Helper.average(threshold.get(), getGrayScale(rgb)));
 			}
-		}
+		});
 
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < in.getHeight(); y += 4) {
 			for (int x = 0; x < in.getWidth(); x += 2) {
 				int bytes = 0;
 
-				if (getGrayScale(in.getRGB(x, y)) >= threshold) bytes += 1;
-				if (getGrayScale(in.getRGB(x, y + 1)) >= threshold) bytes += 2;
-				if (getGrayScale(in.getRGB(x, y + 2)) >= threshold) bytes += 4;
+				if (getGrayScale(in.getRGB(x, y)) >= threshold.get()) bytes += 1;
+				if (getGrayScale(in.getRGB(x, y + 1)) >= threshold.get()) bytes += 2;
+				if (getGrayScale(in.getRGB(x, y + 2)) >= threshold.get()) bytes += 4;
 
-				if (getGrayScale(in.getRGB(x + 1, y)) >= threshold) bytes += 8;
-				if (getGrayScale(in.getRGB(x + 1, y + 1)) >= threshold) bytes += 16;
-				if (getGrayScale(in.getRGB(x + 1, y + 2)) >= threshold) bytes += 32;
+				if (getGrayScale(in.getRGB(x + 1, y)) >= threshold.get()) bytes += 8;
+				if (getGrayScale(in.getRGB(x + 1, y + 1)) >= threshold.get()) bytes += 16;
+				if (getGrayScale(in.getRGB(x + 1, y + 2)) >= threshold.get()) bytes += 32;
 
-				if (getGrayScale(in.getRGB(x, y + 3)) >= threshold) bytes += 64;
-				if (getGrayScale(in.getRGB(x + 1, y + 3)) >= threshold) bytes += 128;
+				if (getGrayScale(in.getRGB(x, y + 3)) >= threshold.get()) bytes += 64;
+				if (getGrayScale(in.getRGB(x + 1, y + 3)) >= threshold.get()) bytes += 128;
 
 				if (bytes > 0) sb.append(Character.toString(base + bytes));
 				else sb.append("⡀");
