@@ -46,12 +46,17 @@ public class AlertChannelCommand implements Executable {
 			return;
 		}
 
-		if (Helper.equalsAny(args[0], "limpar", "reset")) {
-			gc.setAlertChannel(null);
-			channel.sendMessage("✅ | Canal de avisos limpo com sucesso.").queue();
-		} else {
-			gc.setAlertChannel(message.getMentionedChannels().get(0).getId());
-			channel.sendMessage("✅ | Canal de avisos definido com sucesso.").queue();
+		try {
+			if (Helper.equalsAny(args[0], "limpar", "reset")) {
+				gc.setAlertChannel(null);
+				channel.sendMessage("✅ | Canal de avisos limpo com sucesso.").queue();
+			} else {
+				gc.setAlertChannel(message.getMentionedChannels().get(0).getId());
+				channel.sendMessage("✅ | Canal de avisos definido com sucesso.").queue();
+			}
+		} catch (IndexOutOfBoundsException e) {
+			channel.sendMessage("❌ | Você precisa mencionar um canal ou digitar `limpar`.").queue();
+			return;
 		}
 
 		GuildDAO.updateGuildSettings(gc);
