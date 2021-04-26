@@ -46,12 +46,17 @@ public class LevelChannelCommand implements Executable {
 			return;
 		}
 
-		if (Helper.equalsAny(args[0], "limpar", "reset")) {
-			gc.setLevelChannel(null);
-			channel.sendMessage("✅ | Canal de nível limpo com sucesso.").queue();
-		} else {
-			gc.setLevelChannel(message.getMentionedChannels().get(0).getId());
-			channel.sendMessage("✅ | Canal de nível definido com sucesso.").queue();
+		try {
+			if (Helper.equalsAny(args[0], "limpar", "reset")) {
+				gc.setLevelChannel(null);
+				channel.sendMessage("✅ | Canal de nível limpo com sucesso.").queue();
+			} else {
+				gc.setLevelChannel(message.getMentionedChannels().get(0).getId());
+				channel.sendMessage("✅ | Canal de nível definido com sucesso.").queue();
+			}
+		} catch (IndexOutOfBoundsException e) {
+			channel.sendMessage("❌ | Você precisa mencionar um canal ou digitar `limpar`.").queue();
+			return;
 		}
 
 		GuildDAO.updateGuildSettings(gc);

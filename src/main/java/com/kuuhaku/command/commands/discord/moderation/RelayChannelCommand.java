@@ -46,12 +46,17 @@ public class RelayChannelCommand implements Executable {
 			return;
 		}
 
-		if (Helper.equalsAny(args[0], "limpar", "reset")) {
-			gc.setRelayChannel(null);
-			channel.sendMessage("✅ | Canal global limpo com sucesso.").queue();
-		} else {
-			gc.setRelayChannel(message.getMentionedChannels().get(0).getId());
-			channel.sendMessage("✅ | Canal global definido com sucesso.").queue();
+		try {
+			if (Helper.equalsAny(args[0], "limpar", "reset")) {
+				gc.setRelayChannel(null);
+				channel.sendMessage("✅ | Canal global limpo com sucesso.").queue();
+			} else {
+				gc.setRelayChannel(message.getMentionedChannels().get(0).getId());
+				channel.sendMessage("✅ | Canal global definido com sucesso.").queue();
+			}
+		} catch (IndexOutOfBoundsException e) {
+			channel.sendMessage("❌ | Você precisa mencionar um canal ou digitar `limpar`.").queue();
+			return;
 		}
 
 		GuildDAO.updateGuildSettings(gc);
