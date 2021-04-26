@@ -38,7 +38,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 @Command(
@@ -68,8 +67,7 @@ public class ShoukanDeckCommand implements Executable {
 							.setImage("attachment://deck.jpg");
 
 					m.delete().queue();
-					File f = Helper.writeAndGet(cards);
-					channel.sendMessage(eb.build()).addFile(f).queue();
+					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck")).queue();
 				} catch (IOException e) {
 					m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
@@ -91,14 +89,13 @@ public class ShoukanDeckCommand implements Executable {
 								.setImage("attachment://deck.jpg");
 
 						m.delete().queue();
-						File f = Helper.writeAndGet(cards);
 						if (showPrivate) {
 							author.openPrivateChannel()
-									.flatMap(c -> c.sendMessage(eb.build()).addFile(f))
+									.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck")))
 									.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
 									.queue(null, Helper::doNothing);
 						} else {
-							channel.sendMessage(eb.build()).addFile(f).queue();
+							channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck")).queue();
 						}
 					} catch (IOException e) {
 						m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
@@ -118,14 +115,13 @@ public class ShoukanDeckCommand implements Executable {
 								.setImage("attachment://deck.jpg");
 
 						m.delete().queue();
-						File f = Helper.writeAndGet(cards);
 						if (showPrivate) {
 							author.openPrivateChannel()
-									.flatMap(c -> c.sendMessage(eb.build()).addFile(f))
+									.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck")))
 									.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
 									.queue(null, Helper::doNothing);
 						} else {
-							channel.sendMessage(eb.build()).addFile(f).queue();
+							channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck")).queue();
 						}
 					} catch (IOException e) {
 						m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
