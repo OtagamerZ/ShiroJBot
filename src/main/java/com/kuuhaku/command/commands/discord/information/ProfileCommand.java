@@ -52,9 +52,13 @@ public class ProfileCommand implements Executable {
 			try {
 				if (acc.hasAnimatedBg() && Helper.getFileType(acc.getBg()).contains("gif")) {
 					File pf = Profile.applyAnimatedBackground(acc, Profile.makeProfile(member, guild));
-					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(pf, "perfil.gif").queue(s -> m.delete().queue());
+					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention()))
+							.addFile(pf, "perfil.gif")
+							.queue(s -> m.delete().queue());
 				} else
-					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(Helper.getBytes(Profile.makeProfile(member, guild), "png"), "perfil.png").queue(s -> m.delete().queue());
+					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention()))
+							.addFile(Helper.writeAndGet(Profile.makeProfile(member, guild), "perfil", "png"))
+							.queue(s -> m.delete().queue());
 			} catch (IOException | NullPointerException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-generation-error")).queue();
 			} catch (InsufficientPermissionException e) {

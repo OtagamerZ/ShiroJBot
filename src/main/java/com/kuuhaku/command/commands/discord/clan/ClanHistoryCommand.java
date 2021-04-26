@@ -85,8 +85,8 @@ public class ClanHistoryCommand implements Executable {
 		}
 
 		MessageAction ma = channel.sendMessage((MessageEmbed) pages.get(0).getContent());
-		if (c.getIcon() != null) ma = ma.addFile(Helper.getBytes(c.getIcon(), "png"), "icon.png");
-		if (c.getBanner() != null) ma = ma.addFile(Helper.getBytes(c.getBanner(), "png"), "banner.png");
+		if (c.getIcon() != null) ma = ma.addFile(Helper.writeAndGet(c.getIcon(), "icon", "png"));
+		if (c.getBanner() != null) ma = ma.addFile(Helper.writeAndGet(c.getBanner(), "banner", "png"));
 		ma.queue(s ->
 				Pages.paginate(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);

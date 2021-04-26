@@ -43,8 +43,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
@@ -95,7 +93,7 @@ public class KawaiponsCommand implements Executable {
                     eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
 
                     m.delete().queue();
-                    channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
+                    channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "cards", "png")).queue();
                     return;
                 }
 
@@ -195,13 +193,7 @@ public class KawaiponsCommand implements Executable {
 
     private void send(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l) throws IOException {
         String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
-        File f = new File(Main.getInfo().getCollectionsFolder(), hash + ".jpg");
-        byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
-        //byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg");
-        try (FileOutputStream fos = new FileOutputStream(f)) {
-            fos.write(bytes);
-        }
-
+        Helper.writeAndGet(Helper.removeAlpha(cards), hash, "jpg", Main.getInfo().getCollectionsFolder());
         Helper.keepMaximumNFiles(Main.getInfo().getCollectionsFolder(), 20);
 
         EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -222,13 +214,7 @@ public class KawaiponsCommand implements Executable {
 
     private void send(User author, MessageChannel channel, Message m, BufferedImage cards, String s, Class c) throws IOException {
         String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
-        File f = new File(Main.getInfo().getCollectionsFolder(), hash + ".jpg");
-        byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
-        //byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg");
-        try (FileOutputStream fos = new FileOutputStream(f)) {
-            fos.write(bytes);
-        }
-
+        Helper.writeAndGet(Helper.removeAlpha(cards), hash, "jpg", Main.getInfo().getCollectionsFolder());
         Helper.keepMaximumNFiles(Main.getInfo().getCollectionsFolder(), 20);
 
         EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -244,13 +230,7 @@ public class KawaiponsCommand implements Executable {
 
     private void send(User author, MessageChannel channel, Message m, BufferedImage cards, Race r, String s) throws IOException {
         String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
-        File f = new File(Main.getInfo().getCollectionsFolder(), hash + ".jpg");
-        byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
-        //byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg");
-        try (FileOutputStream fos = new FileOutputStream(f)) {
-            fos.write(bytes);
-        }
-
+        Helper.writeAndGet(Helper.removeAlpha(cards), hash, "jpg", Main.getInfo().getCollectionsFolder());
         Helper.keepMaximumNFiles(Main.getInfo().getCollectionsFolder(), 20);
 
         EmbedBuilder eb = new ColorlessEmbedBuilder();

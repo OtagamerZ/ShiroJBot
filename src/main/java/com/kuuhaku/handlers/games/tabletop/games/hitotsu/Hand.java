@@ -89,7 +89,7 @@ public class Hand {
 
 		user.openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Escolha uma carta que seja do mesmo anime ou raridade da ultima jogada no monte, clique em \uD83D\uDCCB para ver detalhes sobre as cartas ou clique em \uD83D\uDCE4 para comprar uma carta e passar a vez.")
-						.addFile(Helper.getBytes(bi, "png"), "hand.png"))
+						.addFile(Helper.writeAndGet(bi, "hand", "png")))
 				.queue(null, Helper::doNothing);
 	}
 }

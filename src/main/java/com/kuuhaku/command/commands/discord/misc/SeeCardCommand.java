@@ -88,7 +88,7 @@ public class SeeCardCommand implements Executable {
 				eb.addField("Amuleto:", ((Equipment) d).getCharm().getName(), true);
 			eb.setImage("attachment://kawaipon.png");
 
-			channel.sendMessage(eb.build()).addFile(Helper.getBytes(d.drawCard(false), "png"), "kawaipon.png").queue();
+			channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(d.drawCard(false), "s_" + d.getCard().getId(), "png"), "kawaipon.png").queue();
 		} else {
 			Card tc = CardDAO.getCard(args[0], true);
 			if (tc == null) {
@@ -107,24 +107,23 @@ public class SeeCardCommand implements Executable {
 			}
 
 			Champion c = CardDAO.getChampion(card.getCard());
-			EmbedBuilder eb = new EmbedBuilder();
-
-			eb.setTitle((foil ? ":star2:" : ":flower_playing_cards:") + " | " + card.getName());
-			eb.setColor(RarityColorsDAO.getColor(tc.getRarity()).getPrimary());
-			eb.addField("Obtida:", cards.contains(card) ? "Sim" : "Não", true);
-			eb.addField("Elegível:", c != null && !c.isFusion() ? "Sim" : "Não", true);
-			eb.addField("Raridade:", tc.getRarity().toString(), true);
-			eb.addField("Tipo:", tc.getRarity() == KawaiponRarity.ULTIMATE ? "Única" : (card.isFoil() ? "Cromada" : "Normal"), true);
-			eb.addField("Anime:", tc.getAnime().toString(), true);
-			eb.setImage("attachment://kawaipon." + (cards.contains(card) ? "png" : "jpg"));
+			EmbedBuilder eb = new EmbedBuilder()
+					.setTitle((foil ? ":star2:" : ":flower_playing_cards:") + " | " + card.getName())
+					.setColor(RarityColorsDAO.getColor(tc.getRarity()).getPrimary())
+					.addField("Obtida:", cards.contains(card) ? "Sim" : "Não", true)
+					.addField("Elegível:", c != null && !c.isFusion() ? "Sim" : "Não", true)
+					.addField("Raridade:", tc.getRarity().toString(), true)
+					.addField("Tipo:", tc.getRarity() == KawaiponRarity.ULTIMATE ? "Única" : (card.isFoil() ? "Cromada" : "Normal"), true)
+					.addField("Anime:", tc.getAnime().toString(), true)
+					.setImage("attachment://kawaipon." + (cards.contains(card) ? "png" : "jpg"));
 
 			try {
 				BufferedImage bi = (ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/missing.jpg"))));
 
 				if (cards.contains(card))
-					channel.sendMessage(eb.build()).addFile(Helper.getBytes(tc.drawCard(foil), "png"), "kawaipon.png").queue();
+					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(tc.drawCard(foil), "kp_" + tc.getId(), "png"), "kawaipon.png").queue();
 				else
-					channel.sendMessage(eb.build()).addFile(Helper.getBytes(bi), "kawaipon.jpg").queue();
+					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(bi, "unknown"), "kawaipon.jpg").queue();
 			} catch (IOException e) {
 				channel.sendMessage("❌ | Deu um pequeno erro aqui na hora de mostrar a carta, logo logo um dos meus desenvolvedores irá corrigi-lo!").queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
