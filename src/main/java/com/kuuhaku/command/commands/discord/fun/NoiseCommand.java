@@ -70,7 +70,7 @@ public class NoiseCommand implements Executable {
 
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Aqui está sua imagem!")
-								.addFile(Helper.writeAndGet(ImageFilters.noise(bi)))
+								.addFile(Helper.writeAndGet(ImageFilters.noise(bi), "noised", "png"))
 								.queue();
 					} catch (IOException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
