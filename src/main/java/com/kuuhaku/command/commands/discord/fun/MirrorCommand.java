@@ -53,11 +53,11 @@ public class MirrorCommand implements Executable {
 				.queue(s -> {
 					channel.getHistory().getRetrievedHistory().clear();
 					Message msg;
-					if (message.getAttachments().size() > 0 && message.getAttachments().get(0).isImage())
+					if (Helper.getImageFrom(message) != null)
 						msg = message;
 					else
 						msg = s.stream()
-								.filter(m -> m.getAttachments().size() > 0 && m.getAttachments().get(0).isImage())
+								.filter(m -> Helper.getImageFrom(m) != null)
 								.max(Comparator.comparing(ISnowflake::getTimeCreated))
 								.orElse(null);
 
@@ -68,7 +68,7 @@ public class MirrorCommand implements Executable {
 					}
 
 					try {
-						BufferedImage bi = ImageIO.read(Helper.getImage(msg.getAttachments().get(0).getUrl()));
+						BufferedImage bi = ImageIO.read(Helper.getImage(Helper.getImageFrom(msg)));
 						int mode = 0;
 						if (args.length > 0) {
 							mode = Integer.parseInt(args[0]);
