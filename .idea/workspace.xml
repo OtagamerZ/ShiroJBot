@@ -13,12 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionadas bordas de efeito do campo">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/critical.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de dano por carga">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1183,13 +1179,6 @@
       <workItem from="1619478658148" duration="1316000" />
       <workItem from="1619492864823" duration="1674000" />
     </task>
-    <task id="LOCAL-04222" summary="Nova tag: Investidor">
-      <created>1618975109553</created>
-      <option name="number" value="04222" />
-      <option name="presentableId" value="LOCAL-04222" />
-      <option name="project" value="LOCAL" />
-      <updated>1618975109553</updated>
-    </task>
     <task id="LOCAL-04223" summary="Nova tag: Investidor">
       <created>1618975195846</created>
       <option name="number" value="04223" />
@@ -1526,7 +1515,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619533556180</updated>
     </task>
-    <option name="localTasksCounter" value="4271" />
+    <task id="LOCAL-04271" summary="Adição de dano por carga">
+      <created>1619535471104</created>
+      <option name="number" value="04271" />
+      <option name="presentableId" value="LOCAL-04271" />
+      <option name="project" value="LOCAL" />
+      <updated>1619535471105</updated>
+    </task>
+    <option name="localTasksCounter" value="4272" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1612,7 +1608,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria no fluxo de efeitos no Shoukan" />
     <MESSAGE value="Decks não são mais ordenados" />
     <MESSAGE value="Adicionado modo arcade &quot;cardmaster&quot;" />
     <MESSAGE value="Redução nos multiplicadores do slots" />
@@ -1637,7 +1632,8 @@
     <MESSAGE value="Adição de comandos de filtros de imagem." />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Adicionadas bordas de efeito do campo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionadas bordas de efeito do campo" />
+    <MESSAGE value="Adição de dano por carga" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de dano por carga" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
