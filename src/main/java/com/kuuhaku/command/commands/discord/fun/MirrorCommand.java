@@ -80,7 +80,7 @@ public class MirrorCommand implements Executable {
 
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Aqui está sua imagem!")
-								.addFile(Helper.writeAndGet(ImageFilters.mirror(bi, mode)))
+								.addFile(Helper.writeAndGet(ImageFilters.mirror(bi, mode), "mirrored", "png"))
 								.queue();
 					} catch (IOException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
