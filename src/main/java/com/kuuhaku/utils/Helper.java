@@ -2576,8 +2576,11 @@ public class Helper {
 			MessageEmbed emb = m.getEmbeds().get(0);
 			if (emb.getImage() != null)
 				return emb.getImage().getUrl();
-		} else if (m.getEmotes().size() > 0)
-			return m.getEmotes().get(0).getImageUrl();
+		} else if (m.getEmotes().size() > 0) {
+			Emote e = m.getEmotes().stream().filter(e -> !e.isAnimated()).findFirst().orElse(null);
+			if (e != null)
+				return m.getEmotes().get(0).getImageUrl();
+		}
 
 		return null;
 	}
