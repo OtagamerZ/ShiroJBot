@@ -66,6 +66,9 @@ public class Champion implements Drawable, Cloneable {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int def;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int chargeBonus;
+
 	@Column(columnDefinition = "VARCHAR(140) NOT NULL DEFAULT ''")
 	private String description;
 
@@ -106,6 +109,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient boolean permastun = false;
 	private transient double dodge = 0;
 	private transient double mDodge = 0;
+	private transient int charge;
 
 	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
 		this.card = card;
@@ -171,35 +175,21 @@ public class Champion implements Drawable, Cloneable {
 
 			g2d.setColor(Color.red);
 			if (fakeCard != null)
-				Profile.drawOutlinedText(String.valueOf(fakeCard.getAtk()), 45, 250, g2d);
+				Profile.drawOutlinedText(String.valueOf(fakeCard.getFinAtk()), 45, 250, g2d);
 			else
-				Profile.drawOutlinedText(String.valueOf(getAtk()), 45, 250, g2d);
+				Profile.drawOutlinedText(String.valueOf(getFinAtk()), 45, 250, g2d);
 
-			if (bonus.getAtk() != 0)
-				Profile.drawOutlinedText((bonus.getAtk() >= 0 ? "+" : "-") + Math.abs(bonus.getAtk()), 45, 225, g2d);
-			for (int i = 0, slot = bonus.getAtk() != 0 ? 2 : 1; i < linkedTo.size(); i++) {
-				int eAtk = linkedTo.get(i).getAtk();
-				if (eAtk != 0) {
-					Profile.drawOutlinedText((eAtk >= 0 ? "+" : "-") + Math.abs(eAtk), 45, 250 - (25 * slot), g2d);
-					slot++;
-				}
+			if (charge > 0) {
+				g2d.setColor(Color.orange);
+				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/critical.png"), 19, 225, null);
+				Profile.drawOutlinedText("+" + (chargeBonus * charge), 45, 225, g2d);
 			}
 
 			g2d.setColor(Color.green);
 			if (fakeCard != null)
-				Profile.drawOutlinedText(String.valueOf(fakeCard.getDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(fakeCard.getDef())), 250, g2d);
+				Profile.drawOutlinedText(String.valueOf(fakeCard.getFinDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(fakeCard.getDef())), 250, g2d);
 			else
-				Profile.drawOutlinedText(String.valueOf(getDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getDef())), 250, g2d);
-
-			if (bonus.getDef() != 0)
-				Profile.drawOutlinedText((bonus.getDef() >= 0 ? "+" : "-") + Math.abs(bonus.getDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(Math.abs(bonus.getDef()))), 225, g2d);
-			for (int i = 0, slot = bonus.getDef() != 0 ? 2 : 1; i < linkedTo.size(); i++) {
-				int eDef = linkedTo.get(i).getDef();
-				if (eDef != 0) {
-					Profile.drawOutlinedText(Math.abs(eDef) + (eDef >= 0 ? "+" : "-"), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(Math.abs(eDef))), 250 - (25 * slot), g2d);
-					slot++;
-				}
-			}
+				Profile.drawOutlinedText(String.valueOf(getFinDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getDef())), 250, g2d);
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(Color.black);
@@ -417,6 +407,14 @@ public class Champion implements Drawable, Cloneable {
 		this.altAtk = Math.max(-1, altAtk);
 	}
 
+	public int getChargeBonus() {
+		return chargeBonus;
+	}
+
+	public void setChargeBonus(int chargeBonus) {
+		this.chargeBonus = chargeBonus;
+	}
+
 	public int getAltDef() {
 		return altDef;
 	}
@@ -514,7 +512,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getFinAtk() {
-		return Math.max(0, getEffAtk() + getLinkedTo().stream().mapToInt(Equipment::getAtk).sum());
+		return Math.max(0, getEffAtk() + (chargeBonus * charge) + getLinkedTo().stream().mapToInt(Equipment::getAtk).sum());
 	}
 
 	public int getFinDef() {
@@ -684,7 +682,9 @@ public class Champion implements Drawable, Cloneable {
 		this.stun = Math.max(stun - 1, 0);
 	}
 
+
 	public boolean isBuffed() {
+		if (game == null) return false;
 		Field f = game.getArena().getField();
 		if (f != null)
 			return f.getModifiers().optFloat(getRace().name(), 1f) > 0;
@@ -693,11 +693,20 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean isNerfed() {
+		if (game == null) return false;
 		Field f = game.getArena().getField();
 		if (f != null)
 			return f.getModifiers().optFloat(getRace().name(), 1f) < 0;
 
 		return false;
+	}
+
+	public int getCharge() {
+		return charge;
+	}
+
+	public void setCharge(int charge) {
+		this.charge = charge;
 	}
 
 	@Override
