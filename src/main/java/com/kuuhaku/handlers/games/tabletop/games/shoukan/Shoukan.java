@@ -80,6 +80,7 @@ public class Shoukan extends GlobalGame {
 	private final Map<String, Message> message = new HashMap<>();
 	private final List<Champion> fusions = CardDAO.getFusions();
 	private final boolean[] changed = {false, false, false, false, false};
+	private final boolean[] attacked = {false, false, false, false, false};
 	private final boolean daily;
 	private final boolean team;
 	private final Map<Side, Map<Race, Integer>> summoned = Map.of(
@@ -763,6 +764,7 @@ public class Shoukan extends GlobalGame {
 					if (changeTurn)
 						for (int i = 0; i < 5; i++) {
 							changed[i] = false;
+							attacked[i] = false;
 						}
 				});
 	}
@@ -772,6 +774,7 @@ public class Shoukan extends GlobalGame {
 		Champion his = getArena().getSlots().get(next).get(is[1]).getTop();
 
 		if (yours.isDefending()) return;
+		attacked[is[0]] = true;
 
 		if (applyEot(ON_ATTACK, current, is[0])) return;
 		if (is[0] > 0) {
@@ -1493,6 +1496,8 @@ public class Shoukan extends GlobalGame {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
 						c.setAvailable(c.getStun() == 0);
+						if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0)
+							c.setCharge(c.getCharge() + 1);
 
 						c.resetAttribs();
 						if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
@@ -1648,6 +1653,8 @@ public class Shoukan extends GlobalGame {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
 							c.setAvailable(c.getStun() == 0);
+							if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0)
+								c.setCharge(c.getCharge() + 1);
 
 							c.resetAttribs();
 							if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
