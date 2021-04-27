@@ -694,7 +694,7 @@ public class Shoukan extends GlobalGame {
 					if (enemy.getCombo().getRight() == Race.DEMON)
 						demonFac *= 1.33f;
 
-					int yPower = Math.round(c.getFinAtk() * (getRound() < 2 ? 0.5f : 1));
+					int yPower = Math.round((c.getFinAtk() + c.getChargeAtk()) * (getRound() < 2 ? 0.5f : 1));
 
 					if (!c.getCard().getId().equals("DECOY")) enemy.removeHp(yPower);
 					c.setAvailable(false);
@@ -795,6 +795,7 @@ public class Shoukan extends GlobalGame {
 			if (applyEot(POST_ATTACK, current, is[0])) return;
 			if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
+			yours.setCharge(0);
 			reportEvent(null, "Cálculo de combate ignorado por efeito do atacante!", true, false);
 			return;
 		}
@@ -820,7 +821,7 @@ public class Shoukan extends GlobalGame {
 		} else {
 			int yPower;
 			if (!yours.getCard().getId().equals("DECOY")) {
-				yPower = yours.getFinAtk();
+				yPower = yours.getFinAtk() + yours.getChargeAtk();
 			} else {
 				yPower = 0;
 			}
@@ -859,6 +860,8 @@ public class Shoukan extends GlobalGame {
 					if (applyEot(POST_ATTACK, current, is[0])) return;
 					if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
 						return;
+
+					yours.setCharge(0);
 
 					if (applyEot(ON_DEATH, next, is[1])) return;
 					if (applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
@@ -1496,7 +1499,7 @@ public class Shoukan extends GlobalGame {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
 						c.setAvailable(c.getStun() == 0);
-						if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0)
+						if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0 && !c.hasEffect())
 							c.setCharge(c.getCharge() + 1);
 
 						c.resetAttribs();
@@ -1653,7 +1656,7 @@ public class Shoukan extends GlobalGame {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
 							c.setAvailable(c.getStun() == 0);
-							if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0)
+							if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0 && !c.hasEffect())
 								c.setCharge(c.getCharge() + 1);
 
 							c.resetAttribs();
