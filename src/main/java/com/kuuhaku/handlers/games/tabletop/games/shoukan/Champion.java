@@ -44,6 +44,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
+import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.ON_RENDER;
+
 @Entity
 @Table(name = "champion")
 public class Champion implements Drawable, Cloneable {
@@ -126,6 +128,9 @@ public class Champion implements Drawable, Cloneable {
 
 	@Override
 	public BufferedImage drawCard(boolean flipped) {
+		if (hasEffect() && game != null)
+			game.applyEffect(ON_RENDER, this, -1, game.getSideById(acc.getUid()), Pair.of(this, -1), null);
+
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
