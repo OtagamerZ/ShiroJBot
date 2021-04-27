@@ -2540,9 +2540,11 @@ public class Helper {
 		int x = 0;
 		int y = 0;
 		int i = 0;
-		while (x < bi.getWidth() && y < bi.getHeight()) {
+		while (true) {
 			x = i % bi.getWidth();
 			y = i / bi.getWidth();
+
+			if (x >= bi.getWidth() || y >= bi.getHeight()) break;
 
 			act.accept(new int[]{x, y}, bi.getRGB(x, y));
 			i++;
