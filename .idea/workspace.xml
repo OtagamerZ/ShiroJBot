@@ -13,14 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GlitchCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/PixelOp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ImageFilters.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de mensagem de erro nos comandos de configurar canais">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/MirrorCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShiftCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AsciiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AsciiCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GlitchCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GlitchCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -207,17 +204,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1181,6 +1167,7 @@
       <workItem from="1619290400357" duration="1720000" />
       <workItem from="1619305342519" duration="167000" />
       <workItem from="1619442885129" duration="5704000" />
+      <workItem from="1619478658148" duration="1231000" />
     </task>
     <task id="LOCAL-04216" summary="Nova tag: Investidor">
       <created>1618973614237</created>

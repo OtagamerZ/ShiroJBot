@@ -34,18 +34,18 @@ import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Command(
-		name = "bugar",
-		aliases = {"glitch"},
+		name = "polarizar",
+		aliases = {"polarize", "shift"},
 		usage = "req_intensity",
 		category = Category.FUN
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_HISTORY})
-public class GlitchCommand implements Executable {
+public class ShiftCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		AtomicReference<Message> ms = new AtomicReference<>();
-		channel.sendMessage("<a:loading:697879726630502401> Bugando a imagem...")
+		channel.sendMessage("<a:loading:697879726630502401> Polarizando a imagem...")
 				.flatMap(s -> {
 					ms.set(s);
 					return channel.getHistory().retrievePast(25);
@@ -71,16 +71,16 @@ public class GlitchCommand implements Executable {
 						int pow = 5;
 						if (args.length > 0) {
 							pow = Integer.parseInt(args[0]);
-							if (!Helper.between(pow, 1, 21)) {
+							if (!Helper.between(pow, -20, 21)) {
 								ms.get().delete().queue(null, Helper::doNothing);
-								channel.sendMessage("❌ | A intensidade deve ser um valor entre 1 e 20.").queue();
+								channel.sendMessage("❌ | A intensidade deve ser um valor entre -20 e 20.").queue();
 								return;
 							}
 						}
 
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Aqui está sua imagem!")
-								.addFile(Helper.writeAndGet(ImageFilters.glitch(bi, pow)))
+								.addFile(Helper.writeAndGet(ImageFilters.shift(bi, pow)))
 								.queue();
 					} catch (IOException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
