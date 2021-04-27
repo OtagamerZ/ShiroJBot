@@ -68,7 +68,7 @@ public class MirrorCommand implements Executable {
 
 					try {
 						BufferedImage bi = ImageIO.read(Helper.getImage(msg.getAttachments().get(0).getUrl()));
-						int mode = 5;
+						int mode = 0;
 						if (args.length > 0) {
 							mode = Integer.parseInt(args[0]);
 							if (!Helper.between(mode, 0, 4)) {
