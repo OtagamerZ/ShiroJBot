@@ -80,7 +80,7 @@ public class GlitchCommand implements Executable {
 
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Aqui está sua imagem!")
-								.addFile(Helper.writeAndGet(ImageFilters.glitch(bi, pow)))
+								.addFile(Helper.writeAndGet(ImageFilters.glitch(bi, pow), "glitched", "png"))
 								.queue();
 					} catch (IOException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
