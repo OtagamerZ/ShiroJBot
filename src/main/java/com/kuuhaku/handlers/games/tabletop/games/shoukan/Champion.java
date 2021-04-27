@@ -140,6 +140,10 @@ public class Champion implements Drawable, Cloneable {
 				g2d.drawImage(card.drawCardNoBorder(useFoil), 0, 0, null);
 			}
 			g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
+			if (isBuffed())
+				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 0, 0, null);
+			else if (isNerfed())
+				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 			if (fakeCard != null) {
@@ -678,6 +682,22 @@ public class Champion implements Drawable, Cloneable {
 
 	public void reduceStun() {
 		this.stun = Math.max(stun - 1, 0);
+	}
+
+	public boolean isBuffed() {
+		Field f = game.getArena().getField();
+		if (f != null)
+			return f.getModifiers().optFloat(getRace().name(), 1f) > 0;
+
+		return false;
+	}
+
+	public boolean isNerfed() {
+		Field f = game.getArena().getField();
+		if (f != null)
+			return f.getModifiers().optFloat(getRace().name(), 1f) < 0;
+
+		return false;
 	}
 
 	@Override
