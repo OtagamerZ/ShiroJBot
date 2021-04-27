@@ -25,49 +25,37 @@ import java.awt.image.BufferedImage;
 public class ImageFilters {
 	public static BufferedImage noise(BufferedImage in) {
 		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		int i = 0;
-		while (true) {
-			int x = i % out.getWidth();
-			int y = i / out.getWidth();
+		Helper.forEachPixel(in, (coords, rgb) -> {
+			int x = coords[0];
+			int y = coords[1];
 
-			if (x >= out.getWidth() || y >= out.getHeight()) break;
-			int color = in.getRGB(x, y);
-
-			out.setRGB(x, y, PixelOp.MULTIPLY.get(color, 0xFF000000 | (int) (Math.random() * 0xFFFFFF)));
-			i++;
-		}
+			out.setRGB(x, y, PixelOp.MULTIPLY.get(rgb, 0xFF000000 | (int) (Math.random() * 0xFFFFFF)));
+		});
 
 		return out;
 	}
 
 	public static BufferedImage shift(BufferedImage in, int offset) {
 		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		int i = 0;
-		while (true) {
-			int x = i % out.getWidth();
-			int y = i / out.getWidth();
-
-			if (x >= out.getWidth() || y >= out.getHeight()) break;
+		Helper.forEachPixel(in, (coords, rgb) -> {
+			int x = coords[0];
+			int y = coords[1];
 
 			try {
-				if (y % 2 == 0) out.setRGB(x - offset, y, in.getRGB(x, y));
-				else out.setRGB(x + offset, y, in.getRGB(x, y));
+				if (y % 2 == 0) out.setRGB(x - offset, y, rgb);
+				else out.setRGB(x + offset, y, rgb);
 			} catch (ArrayIndexOutOfBoundsException ignore) {
 			}
-			i++;
-		}
+		});
 
 		return out;
 	}
 
 	public static BufferedImage mirror(BufferedImage in, int type) {
 		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		int i = 0;
-		while (true) {
-			int x = i % out.getWidth();
-			int y = i / out.getWidth();
-
-			if (x >= out.getWidth() || y >= out.getHeight()) break;
+		Helper.forEachPixel(in, (coords, rgb) -> {
+			int x = coords[0];
+			int y = coords[1];
 
 			int pos = switch (type) {
 				case 0 -> (int) ((out.getWidth() / (2d * Math.PI)) * Math.acos(Math.cos(((2 * Math.PI) / out.getWidth()) * x)));
@@ -81,9 +69,7 @@ public class ImageFilters {
 				out.setRGB(x, y, type > 1 ? in.getRGB(x, pos) : in.getRGB(pos, y));
 			} catch (ArrayIndexOutOfBoundsException ignore) {
 			}
-
-			i++;
-		}
+		});
 
 		return out;
 	}
@@ -97,18 +83,16 @@ public class ImageFilters {
 		};
 
 		int diag = Helper.hip(offset, offset);
-		int i = 0;
-		while (true) {
-			int x = i % out.getWidth();
-			int y = i / out.getWidth();
+		Helper.forEachPixel(in, (coords, rgb) -> {
+			int x = coords[0];
+			int y = coords[1];
 
-			if (x >= out.getWidth() || y >= out.getHeight()) break;
-			int[] rgb = Helper.unpackRGB(in.getRGB(x, y));
+			int[] colors = Helper.unpackRGB(in.getRGB(x, y));
 			int[] ext = new int[3];
 
-			ext[0] = (rgb[1] / 3) << 24 | rgb[1] << 16;
-			ext[1] = (rgb[2] / 3) << 24 | rgb[2] << 8;
-			ext[2] = (rgb[3] / 3) << 24 | rgb[3];
+			ext[0] = (colors[1] / 3) << 24 | colors[1] << 16;
+			ext[1] = (colors[2] / 3) << 24 | colors[2] << 8;
+			ext[2] = (colors[3] / 3) << 24 | colors[3];
 
 			for (int j = 0; j < layers.length; j++) {
 				try {
@@ -120,16 +104,11 @@ public class ImageFilters {
 				} catch (ArrayIndexOutOfBoundsException ignore) {
 				}
 			}
+		});
 
-			i++;
-		}
-
-		i = 0;
-		while (true) {
-			int x = i % out.getWidth();
-			int y = i / out.getWidth();
-
-			if (x >= out.getWidth() || y >= out.getHeight()) break;
+		Helper.forEachPixel(out, (coords, rgb) -> {
+			int x = coords[0];
+			int y = coords[1];
 
 			int[] color = new int[3];
 			for (int k = 0; k < layers.length; k++) {
@@ -137,9 +116,24 @@ public class ImageFilters {
 			}
 
 			out.setRGB(x, y, 0xFF << 24 | color[0] << 16 | color[1] << 8 | color[2]);
+		});
 
-			i++;
-		}
+		return out;
+	}
+
+	public static BufferedImage invert(BufferedImage in) {
+		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Helper.forEachPixel(in, (coords, rgb) -> {
+			int x = coords[0];
+			int y = coords[1];
+
+			int[] colors = Helper.unpackRGB(rgb);
+			for (int i = 1; i < colors.length; i++) {
+				colors[i] = ~colors[i];
+			}
+
+			out.setRGB(x, y, colors[0] << 24 | colors[1] << 16 | colors[2] << 8 | colors[3]);
+		});
 
 		return out;
 	}
