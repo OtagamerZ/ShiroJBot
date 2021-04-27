@@ -58,7 +58,7 @@ public class GlitchCommand implements Executable {
 					else
 						msg = s.stream()
 								.filter(m -> m.getAttachments().size() > 0 && m.getAttachments().get(0).isImage())
-								.min(Comparator.comparing(ISnowflake::getTimeCreated))
+								.max(Comparator.comparing(ISnowflake::getTimeCreated))
 								.orElse(null);
 
 					if (msg == null) {
