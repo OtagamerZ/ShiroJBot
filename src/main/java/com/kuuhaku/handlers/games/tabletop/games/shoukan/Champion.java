@@ -358,7 +358,7 @@ public class Champion implements Drawable, Cloneable {
 			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().opt("charm") == Charm.SOULLINK)) {
 				Field f = game.getArena().getField();
 				if (f != null)
-					fBonus = f.getModifiers().optFloat(getRace().name(), 0);
+					fBonus = f.getModifiers().optFloat(getRace().name(), 1);
 			}
 
 			Side s = game.getSideById(acc.getUid());
@@ -381,7 +381,7 @@ public class Champion implements Drawable, Cloneable {
 			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().opt("charm") == Charm.SOULLINK)) {
 				Field f = game.getArena().getField();
 				if (f != null)
-					fBonus = f.getModifiers().optFloat(getRace().name(), 0);
+					fBonus = f.getModifiers().optFloat(getRace().name(), 1);
 			}
 
 			Side s = game.getSideById(acc.getUid());
