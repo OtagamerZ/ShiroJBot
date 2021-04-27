@@ -144,10 +144,6 @@ public class Champion implements Drawable, Cloneable {
 				g2d.drawImage(card.drawCardNoBorder(useFoil), 0, 0, null);
 			}
 			g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
-			if (isBuffed())
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 0, 0, null);
-			else if (isNerfed())
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 0, 0, null);
 			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 
 			if (fakeCard != null) {
@@ -362,7 +358,7 @@ public class Champion implements Drawable, Cloneable {
 			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().opt("charm") == Charm.SOULLINK)) {
 				Field f = game.getArena().getField();
 				if (f != null)
-					fBonus = f.getModifiers().optFloat(getRace().name(), 1f);
+					fBonus = f.getModifiers().optFloat(getRace().name(), 0);
 			}
 
 			Side s = game.getSideById(acc.getUid());
@@ -385,7 +381,7 @@ public class Champion implements Drawable, Cloneable {
 			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().opt("charm") == Charm.SOULLINK)) {
 				Field f = game.getArena().getField();
 				if (f != null)
-					fBonus = f.getModifiers().optFloat(getRace().name(), 1f);
+					fBonus = f.getModifiers().optFloat(getRace().name(), 0);
 			}
 
 			Side s = game.getSideById(acc.getUid());
@@ -687,7 +683,7 @@ public class Champion implements Drawable, Cloneable {
 		if (game == null) return false;
 		Field f = game.getArena().getField();
 		if (f != null)
-			return f.getModifiers().optFloat(getRace().name(), 1f) > 0;
+			return f.getModifiers().optFloat(getRace().name(), 0) > 0;
 
 		return false;
 	}
@@ -696,7 +692,7 @@ public class Champion implements Drawable, Cloneable {
 		if (game == null) return false;
 		Field f = game.getArena().getField();
 		if (f != null)
-			return f.getModifiers().optFloat(getRace().name(), 1f) < 0;
+			return f.getModifiers().optFloat(getRace().name(), 0) < 0;
 
 		return false;
 	}
