@@ -52,11 +52,11 @@ public class NoiseCommand implements Executable {
 				.queue(s -> {
 					channel.getHistory().getRetrievedHistory().clear();
 					Message msg;
-					if (message.getAttachments().size() > 0 && message.getAttachments().get(0).isImage())
+					if (Helper.getImageFrom(message) != null)
 						msg = message;
 					else
 						msg = s.stream()
-								.filter(m -> m.getAttachments().size() > 0 && m.getAttachments().get(0).isImage())
+								.filter(m -> Helper.getImageFrom(m) != null)
 								.max(Comparator.comparing(ISnowflake::getTimeCreated))
 								.orElse(null);
 
@@ -67,7 +67,7 @@ public class NoiseCommand implements Executable {
 					}
 
 					try {
-						BufferedImage bi = ImageIO.read(Helper.getImage(msg.getAttachments().get(0).getUrl()));
+						BufferedImage bi = ImageIO.read(Helper.getImage(Helper.getImageFrom(msg)));
 
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Aqui está sua imagem!")
