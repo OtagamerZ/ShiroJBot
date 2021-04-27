@@ -87,6 +87,10 @@ public enum RankedTier {
 		}
 	}
 
+	public int getPromRP() {
+		return tier >= RankedTier.MASTER.getTier() ? (tier - 4) * 125 : 100;
+	}
+
 	public RankedTier getNext() {
 		return Helper.getNext(this, values());
 	}
