@@ -13,7 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de dano por carga" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de dano por carga">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1177,13 +1180,6 @@
       <workItem from="1619478658148" duration="1316000" />
       <workItem from="1619492864823" duration="1674000" />
     </task>
-    <task id="LOCAL-04226" summary="Nova tag: Investidor">
-      <created>1618975983478</created>
-      <option name="number" value="04226" />
-      <option name="presentableId" value="LOCAL-04226" />
-      <option name="project" value="LOCAL" />
-      <updated>1618975983478</updated>
-    </task>
     <task id="LOCAL-04227" summary="Nova tag: Investidor">
       <created>1618976224665</created>
       <option name="number" value="04227" />
@@ -1520,7 +1516,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619540633512</updated>
     </task>
-    <option name="localTasksCounter" value="4275" />
+    <task id="LOCAL-04275" summary="Adição de dano por carga">
+      <created>1619540939565</created>
+      <option name="number" value="04275" />
+      <option name="presentableId" value="LOCAL-04275" />
+      <option name="project" value="LOCAL" />
+      <updated>1619540939565</updated>
+    </task>
+    <option name="localTasksCounter" value="4276" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
