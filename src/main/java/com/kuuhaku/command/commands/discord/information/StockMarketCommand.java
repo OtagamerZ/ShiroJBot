@@ -45,7 +45,7 @@ public class StockMarketCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendFile(Helper.writeAndGet(new StocksPanel().view())).queue();
+			channel.sendFile(Helper.writeAndGet(new StocksPanel().view(), "stocks", "png")).queue();
 			return;
 		}
 
