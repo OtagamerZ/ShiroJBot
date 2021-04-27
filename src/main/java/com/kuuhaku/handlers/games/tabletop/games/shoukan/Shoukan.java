@@ -989,7 +989,7 @@ public class Shoukan extends GlobalGame {
 										Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 										moveLock = false;
 									});
-						}
+						} else return;
 					} else if (yours.getCard().getId().equals("DECOY")) {
 						resetTimerKeepTurn();
 						moveLock = true;
@@ -1054,7 +1054,7 @@ public class Shoukan extends GlobalGame {
 									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 									moveLock = false;
 								});
-					}
+					} else return;
 				} else if (his.getCard().getId().equals("DECOY")) {
 					killCard(current, is[0]);
 					resetTimerKeepTurn();
@@ -1112,7 +1112,7 @@ public class Shoukan extends GlobalGame {
 									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 									moveLock = false;
 								});
-					}
+					} else return;
 				} else if (Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 					killCard(next, is[1]);
 					killCard(current, is[0]);
@@ -1660,41 +1660,41 @@ public class Shoukan extends GlobalGame {
 	}
 
 	public boolean postCombat() {
-		AtomicBoolean finished = new AtomicBoolean(false);
+		boolean finished = false;
 		for (Map.Entry<Side, Hand> entry : hands.entrySet()) {
 			Hand h = entry.getValue();
-			if (!finished.get()) {
-				Hand op = hands.get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
-				if (h.getHp() == 0) {
-					if (getCustom() == null) {
-						getHistory().setWinner(op.getSide());
-						getBoard().awardWinner(this, daily, op.getUser().getId());
-					}
-
-					close();
-					finished.set(true);
-					if (team)
-						channel.sendMessage(((TeamHand) op).getMentions() + " zeraram os pontos de vida de " + ((TeamHand) h).getMentions() + ", temos os vencedores! (" + getRound() + " turnos)")
-								.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-								.queue(msg ->
-										this.message.compute(msg.getChannel().getId(), (id, m) -> {
-											if (m != null)
-												m.delete().queue(null, Helper::doNothing);
-											return msg;
-										}));
-					else
-						channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
-								.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-								.queue(msg ->
-										this.message.compute(msg.getChannel().getId(), (id, m) -> {
-											if (m != null)
-												m.delete().queue(null, Helper::doNothing);
-											return msg;
-										}));
+			Hand op = hands.get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
+			if (h.getHp() == 0) {
+				if (getCustom() == null) {
+					getHistory().setWinner(op.getSide());
+					getBoard().awardWinner(this, daily, op.getUser().getId());
 				}
+
+				close();
+				finished = true;
+				if (team)
+					channel.sendMessage(((TeamHand) op).getMentions() + " zeraram os pontos de vida de " + ((TeamHand) h).getMentions() + ", temos os vencedores! (" + getRound() + " turnos)")
+							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+							.queue(msg ->
+									this.message.compute(msg.getChannel().getId(), (id, m) -> {
+										if (m != null)
+											m.delete().queue(null, Helper::doNothing);
+										return msg;
+									}));
+				else
+					channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
+							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+							.queue(msg ->
+									this.message.compute(msg.getChannel().getId(), (id, m) -> {
+										if (m != null)
+											m.delete().queue(null, Helper::doNothing);
+										return msg;
+									}));
+				break;
 			}
 		}
-		return finished.get();
+
+		return finished;
 	}
 
 	@Override

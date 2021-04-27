@@ -24,8 +24,9 @@ import java.awt.image.BufferedImage;
 
 public class ImageFilters {
 	public static BufferedImage noise(BufferedImage in) {
-		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Helper.forEachPixel(in, (coords, rgb) -> {
+		BufferedImage source = Helper.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Helper.forEachPixel(source, (coords, rgb) -> {
 			int x = coords[0];
 			int y = coords[1];
 
@@ -36,8 +37,9 @@ public class ImageFilters {
 	}
 
 	public static BufferedImage shift(BufferedImage in, int offset) {
-		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Helper.forEachPixel(in, (coords, rgb) -> {
+		BufferedImage source = Helper.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Helper.forEachPixel(source, (coords, rgb) -> {
 			int x = coords[0];
 			int y = coords[1];
 
@@ -52,8 +54,9 @@ public class ImageFilters {
 	}
 
 	public static BufferedImage mirror(BufferedImage in, int type) {
-		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Helper.forEachPixel(in, (coords, rgb) -> {
+		BufferedImage source = Helper.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Helper.forEachPixel(source, (coords, rgb) -> {
 			int x = coords[0];
 			int y = coords[1];
 
@@ -66,7 +69,7 @@ public class ImageFilters {
 			};
 
 			try {
-				out.setRGB(x, y, type > 1 ? in.getRGB(x, pos) : in.getRGB(pos, y));
+				out.setRGB(x, y, type > 1 ? source.getRGB(x, pos) : source.getRGB(pos, y));
 			} catch (ArrayIndexOutOfBoundsException ignore) {
 			}
 		});
@@ -75,7 +78,8 @@ public class ImageFilters {
 	}
 
 	public static BufferedImage glitch(BufferedImage in, int offset) {
-		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage source = Helper.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		BufferedImage[] layers = {
 				new BufferedImage(out.getWidth(), out.getHeight(), BufferedImage.TYPE_INT_ARGB),
 				new BufferedImage(out.getWidth(), out.getHeight(), BufferedImage.TYPE_INT_ARGB),
@@ -83,11 +87,11 @@ public class ImageFilters {
 		};
 
 		int diag = Helper.hip(offset, offset);
-		Helper.forEachPixel(in, (coords, rgb) -> {
+		Helper.forEachPixel(source, (coords, rgb) -> {
 			int x = coords[0];
 			int y = coords[1];
 
-			int[] colors = Helper.unpackRGB(in.getRGB(x, y));
+			int[] colors = Helper.unpackRGB(source.getRGB(x, y));
 			int[] ext = new int[3];
 
 			ext[0] = (colors[1] / 3) << 24 | colors[1] << 16;
@@ -122,8 +126,9 @@ public class ImageFilters {
 	}
 
 	public static BufferedImage invert(BufferedImage in) {
-		BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Helper.forEachPixel(in, (coords, rgb) -> {
+		BufferedImage source = Helper.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Helper.forEachPixel(source, (coords, rgb) -> {
 			int x = coords[0];
 			int y = coords[1];
 
