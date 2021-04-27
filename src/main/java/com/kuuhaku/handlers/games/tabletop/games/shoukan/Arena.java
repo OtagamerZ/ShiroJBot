@@ -197,13 +197,10 @@ public class Arena {
 					}
 
 					if (h.getLockTime() > 0) {
-						try {
-							BufferedImage lock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/locked.png")));
-							g2d.drawImage(lock,
-									key == Side.TOP ? 137 : 1889,
-									key == Side.TOP ? 193 : 1206, null);
-						} catch (IOException ignore) {
-						}
+						BufferedImage lock = Helper.getResourceAsImage(this.getClass(), "shoukan/locked.png");
+						g2d.drawImage(lock,
+								key == Side.TOP ? 137 : 1889,
+								key == Side.TOP ? 193 : 1206, null);
 					}
 				}
 			}
@@ -218,6 +215,35 @@ public class Arena {
 			}
 
 			g2d.drawImage(frames, 0, 0, null);
+
+			for (Map.Entry<Side, List<SlotColumn<Champion, Equipment>>> entry : slots.entrySet()) {
+				Side key = entry.getKey();
+				List<SlotColumn<Champion, Equipment>> value = entry.getValue();
+
+				for (int i = 0; i < value.size(); i++) {
+					SlotColumn<Champion, Equipment> c = value.get(i);
+					switch (key) {
+						case TOP -> {
+							if (c.getTop() != null && !c.getTop().isFlipped()) {
+								Champion d = c.getTop();
+								if (d.isBuffed())
+									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 377, null);
+								else if (d.isNerfed())
+									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 0, 0, null);
+							}
+						}
+						case BOTTOM -> {
+							if (c.getTop() != null && !c.getTop().isFlipped()) {
+								Champion d = c.getTop();
+								if (d.isBuffed())
+									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 1003, null);
+								else if (d.isNerfed())
+									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 0, 0, null);
+							}
+						}
+					}
+				}
+			}
 
 			Map<String, Integer> locks = Map.of(
 					"fusion", game.getFusionLock(),

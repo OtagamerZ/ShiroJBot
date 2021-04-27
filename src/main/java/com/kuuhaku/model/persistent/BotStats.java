@@ -72,6 +72,9 @@ public class BotStats {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int cardCacheCount;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int resourceCacheCount;
+
 	private transient long averageMemory = 0;
 
 	public BotStats() {
@@ -91,6 +94,7 @@ public class BotStats {
 		currentCardCount = Main.getInfo().getCurrentCard().size();
 		currentDropCount = Main.getInfo().getCurrentDrop().size();
 		cardCacheCount = Main.getInfo().getCardCache().size();
+		resourceCacheCount = Main.getInfo().getResourceCache().size();
 
 		return this;
 	}
@@ -197,6 +201,14 @@ public class BotStats {
 
 	public void setCardCacheCount(int cardCacheCount) {
 		this.cardCacheCount = cardCacheCount;
+	}
+
+	public int getResourceCacheCount() {
+		return resourceCacheCount;
+	}
+
+	public void setResourceCacheCount(int resourceCacheCount) {
+		this.resourceCacheCount = resourceCacheCount;
 	}
 
 	public long getAverageMemory() {

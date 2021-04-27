@@ -27,6 +27,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.DeckStash;
 import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.utils.Helper;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -72,9 +73,10 @@ public class ShoukanDeck {
 				.peek(f -> f.setAcc(acc))
 				.collect(Collectors.toList());
 
-		BufferedImage deck = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/deck.jpg")));
-		BufferedImage destiny = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/destiny.png")));
+		BufferedImage deck = Helper.getResourceAsImage(this.getClass(), "shoukan/deck.jpg");
+		BufferedImage destiny = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/destiny.png");
 
+		assert deck != null;
 		Graphics2D g2d = deck.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -133,9 +135,10 @@ public class ShoukanDeck {
 				.peek(f -> f.setAcc(acc))
 				.collect(Collectors.toList());
 
-		BufferedImage deck = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/deck.jpg")));
-		BufferedImage destiny = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/destiny.png")));
+		BufferedImage deck = Helper.getResourceAsImage(this.getClass(), "shoukan/deck.jpg");
+		BufferedImage destiny = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/destiny.png");
 
+		assert deck != null;
 		Graphics2D g2d = deck.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
