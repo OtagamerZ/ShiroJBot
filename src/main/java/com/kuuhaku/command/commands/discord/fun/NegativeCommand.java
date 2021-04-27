@@ -34,18 +34,17 @@ import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Command(
-		name = "bugar",
-		aliases = {"glitch"},
-		usage = "req_intensity",
+		name = "negativo",
+		aliases = {"negative"},
 		category = Category.FUN
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_HISTORY})
-public class GlitchCommand implements Executable {
+public class NegativeCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		AtomicReference<Message> ms = new AtomicReference<>();
-		channel.sendMessage("<a:loading:697879726630502401> Bugando a imagem...")
+		channel.sendMessage("<a:loading:697879726630502401> Negativando a imagem...")
 				.flatMap(s -> {
 					ms.set(s);
 					return channel.getHistory().retrievePast(25);
@@ -69,26 +68,14 @@ public class GlitchCommand implements Executable {
 
 					try {
 						BufferedImage bi = ImageIO.read(Helper.getImage(Helper.getImageFrom(msg)));
-						int pow = 4;
-						if (args.length > 0) {
-							pow = Integer.parseInt(args[0]);
-							if (!Helper.between(pow, 1, 21)) {
-								ms.get().delete().queue(null, Helper::doNothing);
-								channel.sendMessage("❌ | A intensidade deve ser um valor entre 1 e 20.").queue();
-								return;
-							}
-						}
 
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Aqui está sua imagem!")
-								.addFile(Helper.writeAndGet(ImageFilters.glitch(bi, pow), "glitched", "png"))
+								.addFile(Helper.writeAndGet(ImageFilters.invert(bi), "inverted", "png"))
 								.queue();
 					} catch (IOException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("❌ | Deu erro ao baixar a imagem, tente com outra.").queue();
-					} catch (NumberFormatException e) {
-						ms.get().delete().queue(null, Helper::doNothing);
-						channel.sendMessage("❌ | A intensidade deve ser um valor numérico.").queue();
 					}
 				});
 	}

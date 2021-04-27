@@ -2564,4 +2564,19 @@ public class Helper {
 	public static double hip(double cat1, double cat2) {
 		return Math.round(Math.sqrt(Math.pow(cat1, 2) + Math.pow(cat2, 2)));
 	}
+
+	public static String getImageFrom(Message m) {
+		if (m.getAttachments().size() > 0) {
+			Message.Attachment att = m.getAttachments().get(0);
+			if (att.isImage())
+				return att.getUrl();
+		} else if (m.getEmbeds().size() > 0) {
+			MessageEmbed emb = m.getEmbeds().get(0);
+			if (emb.getImage() != null)
+				return emb.getImage().getUrl();
+		} else if (m.getEmotes().size() > 0)
+			return m.getEmotes().get(0).getImageUrl();
+
+		return null;
+	}
 }
