@@ -789,7 +789,7 @@ public class Shoukan extends GlobalGame {
 		}
 		if (applyEffect(ON_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-		if (yours.getBonus().getSpecialData().remove("skipCombat") != null || yours.getCard().getId().equals("DECOY")) {
+		if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
 			yours.setAvailable(false);
 			yours.resetAttribs();
 			if (applyEot(POST_ATTACK, current, is[0])) return;
@@ -813,7 +813,7 @@ public class Shoukan extends GlobalGame {
 		}
 		if (applyEffect(ON_DEFEND, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-		if (his.getBonus().getSpecialData().remove("skipCombat") != null || his.getCard().getId().equals("DECOY")) {
+		if (his.getBonus().getSpecialData().remove("skipCombat") != null) {
 			if (applyEot(POST_DEFENSE, next, is[1])) return;
 			if (applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
