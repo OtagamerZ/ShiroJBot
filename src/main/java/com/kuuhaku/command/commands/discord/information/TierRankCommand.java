@@ -76,7 +76,7 @@ public class TierRankCommand implements Executable {
 
 
 			for (MatchMakingRating mm : top10) {
-				if (mm.getRankPoints() == 100) {
+				if (mm.getRankPoints() == mm.getTier().getPromRP()) {
 					StringBuilder md = new StringBuilder();
 
 					for (int i = 0; i < mm.getPromWins(); i++)

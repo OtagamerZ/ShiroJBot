@@ -74,7 +74,7 @@ public class TierCommand implements Executable {
 			sb.setLength(0);
 
 			for (MatchMakingRating mm : chunk) {
-				if (mm.getRankPoints() == 100) {
+				if (mm.getRankPoints() == mmr.getTier().getPromRP()) {
 					StringBuilder md = new StringBuilder();
 
 					for (int i = 0; i < mm.getPromWins(); i++)
