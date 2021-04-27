@@ -51,6 +51,7 @@ public class GlitchCommand implements Executable {
 					return channel.getHistory().retrievePast(25);
 				})
 				.queue(s -> {
+					channel.getHistory().getRetrievedHistory().clear();
 					Message msg;
 					if (message.getAttachments().size() > 0 && message.getAttachments().get(0).isImage())
 						msg = message;
