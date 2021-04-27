@@ -169,7 +169,8 @@ public class BotStatsCommand implements Executable {
 						new Color(0, 180, 159),
 						new Color(27, 180, 0),
 						new Color(180, 0, 162),
-						new Color(111, 0, 180)
+						new Color(111, 0, 180),
+						new Color(0, 60, 180)
 				)
 		);
 
@@ -228,6 +229,13 @@ public class BotStatsCommand implements Executable {
 				reducedStats.values().stream().map(s -> Helper.prcnt(s.getCardCacheCount(), maxCards) * 100).collect(Collectors.toList())
 		).setMarker(SeriesMarkers.NONE)
 				.setYAxisGroup(1);
+
+		chart.addSeries(
+				"Recursos em cache",
+				List.copyOf(reducedStats.keySet()),
+				reducedStats.values().stream().map(BotStats::getResourceCacheCount).collect(Collectors.toList())
+		).setMarker(SeriesMarkers.NONE)
+				.setYAxisGroup(0);
 
 		return Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "cache", "png");
 	}
