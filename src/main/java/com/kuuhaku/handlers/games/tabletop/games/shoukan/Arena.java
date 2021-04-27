@@ -229,7 +229,7 @@ public class Arena {
 								if (d.isBuffed())
 									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 377, null);
 								else if (d.isNerfed())
-									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 0, 0, null);
+									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 489 + (257 * i), 377, null);
 							}
 						}
 						case BOTTOM -> {
@@ -238,7 +238,7 @@ public class Arena {
 								if (d.isBuffed())
 									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 1003, null);
 								else if (d.isNerfed())
-									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 0, 0, null);
+									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 489 + (257 * i), 1003, null);
 							}
 						}
 					}
