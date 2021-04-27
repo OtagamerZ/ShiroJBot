@@ -80,7 +80,7 @@ public class ShiftCommand implements Executable {
 
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Aqui está sua imagem!")
-								.addFile(Helper.writeAndGet(ImageFilters.shift(bi, pow)))
+								.addFile(Helper.writeAndGet(ImageFilters.shift(bi, pow), "shifted", "png"))
 								.queue();
 					} catch (IOException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
