@@ -2577,7 +2577,7 @@ public class Helper {
 			if (emb.getImage() != null)
 				return emb.getImage().getUrl();
 		} else if (m.getEmotes().size() > 0) {
-			Emote e = m.getEmotes().stream().filter(e -> !e.isAnimated()).findFirst().orElse(null);
+			Emote e = m.getEmotes().stream().filter(emt -> !emt.isAnimated()).findFirst().orElse(null);
 			if (e != null)
 				return m.getEmotes().get(0).getImageUrl();
 		}
