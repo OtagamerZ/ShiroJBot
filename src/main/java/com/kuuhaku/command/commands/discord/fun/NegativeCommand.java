@@ -55,7 +55,7 @@ public class NegativeCommand implements Executable {
 						msg = message;
 					else
 						msg = s.stream()
-								.filter(m -> Helper.getImageFrom(m) != null)
+								.filter(m -> Helper.getImageFrom(m) != null && !m.getId().equals(ms.get().getId()))
 								.max(Comparator.comparing(ISnowflake::getTimeCreated))
 								.orElse(null);
 
