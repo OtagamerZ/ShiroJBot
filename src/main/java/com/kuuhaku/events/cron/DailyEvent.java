@@ -31,6 +31,7 @@ import org.quartz.JobExecutionContext;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DailyEvent implements Job {
 	public static JobDetail daily;
@@ -56,6 +57,16 @@ public class DailyEvent implements Job {
 				Main.getInfo().getUserByID(mmr.getUid()).openPrivateChannel()
 						.flatMap(ch -> ch.sendMessage("Parabéns por alcançar o ranking **%s** nesta temporada, como recompensa você recebeu **%s créditos**. GG WP!".formatted(mmr.getTier().getName(), Helper.separate(credits))))
 						.queue(null, Helper::doNothing);
+			}
+		} else {
+			List<MatchMakingRating> mmrs = MatchMakingRatingDAO.getMMRRank().stream()
+					.filter(mmr -> mmr.getTier().getTier() >= RankedTier.ADEPT_IV.getTier())
+					.collect(Collectors.toList());
+
+			for (MatchMakingRating mmr : mmrs) {
+				mmr.applyInactivityPenalty();
+
+				MatchMakingRatingDAO.saveMMR(mmr);
 			}
 		}
 	}

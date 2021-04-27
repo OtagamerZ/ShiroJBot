@@ -136,7 +136,7 @@ public class MyStatsCommand implements Executable {
 					), false)
 					.addField("Ranking no Shoukan", mmr.getTier().getName(), false);
 
-			if (mmr.getRankPoints() == 100 || mmr.getTier() == RankedTier.UNRANKED) {
+			if (mmr.getRankPoints() == mmr.getTier().getPromRP() || mmr.getTier() == RankedTier.UNRANKED) {
 				StringBuilder sb = new StringBuilder();
 
 				for (int i = 0; i < mmr.getPromWins(); i++)
@@ -150,7 +150,7 @@ public class MyStatsCommand implements Executable {
 
 				eb.addField("Progresso para o próximo tier", sb.toString(), false);
 			} else
-				eb.addField("Progresso para o próximo tier", mmr.getRankPoints() + "/100 Pontos de Ranking", false);
+				eb.addField("Progresso para o próximo tier", mmr.getRankPoints() + "/" + mmr.getTier().getPromRP() + " Pontos de Ranking", false);
 
 			categories.put("\uD83D\uDCCB", new Page(PageType.EMBED, eb.build()));
 		}

@@ -67,6 +67,9 @@ public class MatchMakingRating {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int losses = 0;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int banked = 0;
+
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime blockedUntil = null;
 
@@ -116,6 +119,8 @@ public class MatchMakingRating {
 	}
 
 	public void increaseRankPoints(long opMMR) {
+		if (tier.getTier() >= RankedTier.ADEPT_IV.getTier())
+			banked = Math.min(7 - (tier.getTier() - 4), 28);
 		double mmrModif = Helper.prcnt(mmr, Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) opMMR, mmr);
 		int rpValue = Helper.clamp((int) Math.round(mmrModif * 15), 5, 30);
 		if (tier == RankedTier.UNRANKED) {
@@ -158,7 +163,7 @@ public class MatchMakingRating {
 					DynamicParameterDAO.setParam("freeSynth_" + uid, String.valueOf(NumberUtils.toInt(freeRolls.getValue()) + 5));
 				} else {
 					Main.getInfo().getUserByID(uid).openPrivateChannel()
-							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+							.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)!".formatted(tier.getTier(), tier.getName())))
 							.queue(null, Helper::doNothing);
 				}
 
@@ -174,6 +179,8 @@ public class MatchMakingRating {
 	}
 
 	public void decreaseRankPoints(long opMMR) {
+		if (tier.getTier() >= RankedTier.ADEPT_IV.getTier())
+			banked = Math.min(7 - (tier.getTier() - 4), 28);
 		double mmrModif = Helper.prcnt(Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) opMMR);
 		int rpValue = Helper.clamp((int) Math.round(mmrModif * 15), 5, 30);
 
@@ -187,7 +194,7 @@ public class MatchMakingRating {
 
 				if (this.master.isBlank()) this.master = "none";
 				Main.getInfo().getUserByID(uid).openPrivateChannel()
-						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+						.flatMap(c -> c.sendMessage("Parabéns, você foi promovido para o tier %s (%s)!".formatted(tier.getTier(), tier.getName())))
 						.queue(null, Helper::doNothing);
 			}
 			return;
@@ -206,12 +213,30 @@ public class MatchMakingRating {
 			tier = tier.getPrevious();
 			rankPoints = 75;
 			Main.getInfo().getUserByID(uid).openPrivateChannel()
-					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s)".formatted(tier.getTier(), tier.getName())))
+					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s).".formatted(tier.getTier(), tier.getName())))
 					.queue(null, Helper::doNothing);
 			return;
 		}
 
 		rankPoints = Math.max(0, rankPoints - rpValue);
+	}
+
+	public void applyInactivityPenalty() {
+		if (banked > 0) {
+			banked--;
+			return;
+		}
+
+		if (rankPoints == 0 && tier != RankedTier.INITIATE_IV) {
+			tier = tier.getPrevious();
+			rankPoints = 75;
+			Main.getInfo().getUserByID(uid).openPrivateChannel()
+					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s) por inatividade.".formatted(tier.getTier(), tier.getName())))
+					.queue(null, Helper::doNothing);
+			return;
+		}
+
+		rankPoints = Math.max(0, rankPoints - 25 * (tier.getTier() - 3));
 	}
 
 	public RankedTier getTier() {
@@ -240,6 +265,10 @@ public class MatchMakingRating {
 
 	public void addLoss() {
 		losses++;
+	}
+
+	public int getBanked() {
+		return banked;
 	}
 
 	public String getWinrate() {
