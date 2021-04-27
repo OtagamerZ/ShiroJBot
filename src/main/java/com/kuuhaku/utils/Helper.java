@@ -2485,6 +2485,18 @@ public class Helper {
 		else return is;
 	}
 
+	public static BufferedImage getResourceAsImage(Class<?> klass, String path) {
+		InputStream is = klass.getClassLoader().getResourceAsStream(path);
+		if (is == null) return null;
+		else {
+			try {
+				return ImageIO.read(is);
+			} catch (IOException e) {
+				return null;
+			}
+		}
+	}
+
 	public static int roundTrunc(int value, int mult) {
 		return mult * (Math.round((float) value / mult));
 	}

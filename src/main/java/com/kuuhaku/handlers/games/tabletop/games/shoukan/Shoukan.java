@@ -28,7 +28,6 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.events.SimpleMessageListener;
-import com.kuuhaku.handlers.games.tabletop.ClusterAction;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.GameChannel;
 import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
@@ -88,6 +87,7 @@ public class Shoukan extends GlobalGame {
 			Side.BOTTOM, new HashMap<>()
 	);
 	private final List<EffectOverTime> eot = new ArrayList<>();
+
 	private Phase phase = Phase.PLAN;
 	private boolean draw = false;
 	private Side current = Side.BOTTOM;
@@ -280,18 +280,7 @@ public class Shoukan extends GlobalGame {
 		Hand h = hands.get(current);
 
 		if (cmd.equalsIgnoreCase("reload")) {
-			moveLock = true;
-			channel.sendMessage(message.getAuthor().getName() + " recriou a mensagem do jogo.")
-					.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-					.queue(s -> {
-						this.message.compute(s.getChannel().getId(), (id, m) -> {
-							if (m != null)
-								m.delete().queue(null, Helper::doNothing);
-							return s;
-						});
-						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						moveLock = false;
-					});
+			reportEvent(h, message.getAuthor().getName() + " recriou a mensagem do jogo.", false, false);
 			return;
 		}
 
@@ -327,37 +316,25 @@ public class Shoukan extends GlobalGame {
 					if (applyEot(ON_SWITCH, current, index)) return;
 					if (applyEffect(ON_SWITCH, c, index, current, Pair.of(c, index), null)) return;
 
-					ClusterAction act;
+					String msg;
 					if (c.isFlipped()) {
 						c.setFlipped(false);
 						c.setDefending(true);
-						act = channel.sendMessage("Carta virada para cima em modo de defesa.");
+						msg = "Carta virada para cima em modo de defesa.";
 					} else if (c.isDefending()) {
 						c.setDefending(false);
-						act = channel.sendMessage("Carta trocada para modo de ataque.");
+						msg = "Carta trocada para modo de ataque.";
 					} else {
 						c.setDefending(true);
-						act = channel.sendMessage("Carta trocada para modo de defesa.");
+						msg = "Carta trocada para modo de defesa.";
 					}
 
 					changed[index] = true;
-					resetTimerKeepTurn();
-					moveLock = true;
-					act.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-							});
+					reportEvent(h, msg, true, false);
 					return;
 				}
 
 				Drawable d = h.getCards().get(index);
-				String msg;
 
 				if (!d.isAvailable()) {
 					channel.sendMessage("❌ | Essa carta já foi jogada neste turno.").queue(null, Helper::doNothing);
@@ -370,27 +347,11 @@ public class Shoukan extends GlobalGame {
 
 					if (makeFusion(h)) return;
 
-					resetTimerKeepTurn();
-					AtomicBoolean shownHand = new AtomicBoolean(false);
-					moveLock = true;
-					channel.sendMessage(h.getUser().getName() + " descartou a carta " + d.getCard().getName() + ".")
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-								if (!shownHand.get()) {
-									shownHand.set(true);
-									h.showHand();
-								}
-							});
+					reportEvent(h, h.getUser().getName() + " descartou a carta " + d.getCard().getName() + ".", true, false);
 					return;
 				}
 
+				String msg;
 				if (d instanceof Equipment) {
 					Equipment e = (Equipment) d.copy();
 
@@ -534,26 +495,7 @@ public class Shoukan extends GlobalGame {
 							}
 						};
 
-						if (!postCombat()) {
-							resetTimerKeepTurn();
-							AtomicBoolean shownHand = new AtomicBoolean(false);
-							moveLock = true;
-							channel.sendMessage(result)
-									.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-									.queue(s -> {
-										this.message.compute(s.getChannel().getId(), (id, m) -> {
-											if (m != null)
-												m.delete().queue(null, Helper::doNothing);
-											return s;
-										});
-										Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-										moveLock = false;
-										if (!shownHand.get()) {
-											shownHand.set(true);
-											h.showHand();
-										}
-									});
-						}
+						if (!postCombat()) reportEvent(h, result, true, false);
 						return;
 					}
 
@@ -696,25 +638,7 @@ public class Shoukan extends GlobalGame {
 					h.removeMana(((Champion) d).getMana());
 
 				if (makeFusion(h)) return;
-
-				resetTimerKeepTurn();
-				AtomicBoolean shownHand = new AtomicBoolean(false);
-				moveLock = true;
-				channel.sendMessage(msg)
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							moveLock = false;
-							if (!shownHand.get()) {
-								shownHand.set(true);
-								h.showHand();
-							}
-						});
+				reportEvent(h, msg, true, false);
 			} catch (IndexOutOfBoundsException e) {
 				channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue(null, Helper::doNothing);
 			} catch (NumberFormatException e) {
@@ -775,25 +699,15 @@ public class Shoukan extends GlobalGame {
 					c.setAvailable(false);
 
 					if (!postCombat()) {
-						resetTimerKeepTurn();
-						moveLock = true;
-						channel.sendMessage("%s atacou %s causando %s de dano direto!%s".formatted(
-								c.getName(),
-								hands.get(next).getUser().getName(),
-								yPower,
-								(getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "")
-								+ (demonFac > 1 ? " (efeito de raça: +" + Helper.roundToString(demonFac * 100 - 100, 0) + "%)" : "")
+						reportEvent(h,
+								"%s atacou %s causando %s de dano direto!%s".formatted(
+										c.getName(),
+										hands.get(next).getUser().getName(),
+										yPower,
+										(getRound() < 2 ? " (dano reduzido por ser o 1º turno)" : "")
+										+ (demonFac > 1 ? " (efeito de raça: +" + Helper.roundToString(demonFac * 100 - 100, 0) + "%)" : "")
 								)
-						).addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-								.queue(s -> {
-									this.message.compute(s.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return s;
-									});
-									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-									moveLock = false;
-								});
+								, true, false);
 					}
 					return;
 				}
@@ -828,6 +742,31 @@ public class Shoukan extends GlobalGame {
 		}
 	}
 
+	private void reportEvent(Hand h, String msg, boolean resetTimer, boolean changeTurn) {
+		if (resetTimer) resetTimerKeepTurn();
+		AtomicBoolean shownHand = new AtomicBoolean(false);
+		moveLock = true;
+		channel.sendMessage(msg)
+				.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+				.queue(s -> {
+					this.message.compute(s.getChannel().getId(), (id, m) -> {
+						if (m != null)
+							m.delete().queue(null, Helper::doNothing);
+						return s;
+					});
+					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					moveLock = false;
+					if (!shownHand.get() && h != null) {
+						shownHand.set(true);
+						h.showHand();
+					}
+					if (changeTurn)
+						for (int i = 0; i < 5; i++) {
+							changed[i] = false;
+						}
+				});
+	}
+
 	public void attack(Side current, Side next, int[] is) {
 		Champion yours = getArena().getSlots().get(current).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(next).get(is[1]).getTop();
@@ -853,19 +792,7 @@ public class Shoukan extends GlobalGame {
 			if (applyEot(POST_ATTACK, current, is[0])) return;
 			if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-			resetTimerKeepTurn();
-			moveLock = true;
-			channel.sendMessage("Cálculo de combate ignorado por efeito do atacante!")
-					.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-					.queue(s -> {
-						this.message.compute(s.getChannel().getId(), (id, m) -> {
-							if (m != null)
-								m.delete().queue(null, Helper::doNothing);
-							return s;
-						});
-						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						moveLock = false;
-					});
+			reportEvent(null, "Cálculo de combate ignorado por efeito do atacante!", true, false);
 			return;
 		}
 
@@ -886,21 +813,8 @@ public class Shoukan extends GlobalGame {
 			if (applyEot(POST_DEFENSE, next, is[1])) return;
 			if (applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-			resetTimerKeepTurn();
-			moveLock = true;
-			channel.sendMessage("Cálculo de combate ignorado por efeito do defensor!")
-					.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-					.queue(s -> {
-						this.message.compute(s.getChannel().getId(), (id, m) -> {
-							if (m != null)
-								m.delete().queue(null, Helper::doNothing);
-							return s;
-						});
-						Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-						moveLock = false;
-					});
+			reportEvent(null, "Cálculo de combate ignorado por efeito do defensor!", true, false);
 		} else {
-
 			int yPower;
 			if (!yours.getCard().getId().equals("DECOY")) {
 				yPower = yours.getFinAtk();
@@ -937,19 +851,7 @@ public class Shoukan extends GlobalGame {
 					if (applyEot(ON_DODGE, next, is[1])) return;
 					if (applyEffect(ON_DODGE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-					resetTimerKeepTurn();
-					moveLock = true;
-					channel.sendMessage(his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)")
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-							});
+					reportEvent(null, his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)", true, false);
 				} else {
 					if (applyEot(POST_ATTACK, current, is[0])) return;
 					if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
@@ -976,49 +878,15 @@ public class Shoukan extends GlobalGame {
 					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 						killCard(next, is[1]);
 						if (!postCombat()) {
-							resetTimerKeepTurn();
-							moveLock = true;
-							channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")")
-									.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-									.queue(s -> {
-										this.message.compute(s.getChannel().getId(), (id, m) -> {
-											if (m != null)
-												m.delete().queue(null, Helper::doNothing);
-											return s;
-										});
-										Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-										moveLock = false;
-									});
+							String msg = yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")";
+
+							reportEvent(null, msg, true, false);
 						} else return;
 					} else if (yours.getCard().getId().equals("DECOY")) {
-						resetTimerKeepTurn();
-						moveLock = true;
-						channel.sendMessage(yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
-								.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-								.queue(s -> {
-									this.message.compute(s.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return s;
-									});
-									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-									moveLock = false;
-								});
+						reportEvent(null, yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
 					} else {
 						killCard(next, is[1]);
-						resetTimerKeepTurn();
-						moveLock = true;
-						channel.sendMessage("Essa carta era na verdade uma isca!")
-								.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-								.queue(s -> {
-									this.message.compute(s.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return s;
-									});
-									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-									moveLock = false;
-								});
+						reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 					}
 				}
 			} else if (yPower < hPower || hisDodge) {
@@ -1041,49 +909,13 @@ public class Shoukan extends GlobalGame {
 				if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 					killCard(current, is[0]);
 					if (!postCombat()) {
-						resetTimerKeepTurn();
-						moveLock = true;
-						channel.sendMessage(yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")")
-								.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-								.queue(s -> {
-									this.message.compute(s.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return s;
-									});
-									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-									moveLock = false;
-								});
+						reportEvent(null, yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")", true, false);
 					} else return;
 				} else if (his.getCard().getId().equals("DECOY")) {
 					killCard(current, is[0]);
-					resetTimerKeepTurn();
-					moveLock = true;
-					channel.sendMessage(yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")")
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-							});
+					reportEvent(null, yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
 				} else {
-					resetTimerKeepTurn();
-					moveLock = true;
-					channel.sendMessage("Essa carta era na verdade uma isca!")
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-							});
+					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 				}
 			} else {
 				yours.setAvailable(false);
@@ -1099,66 +931,18 @@ public class Shoukan extends GlobalGame {
 					killCard(current, is[0]);
 
 					if (!postCombat()) {
-						resetTimerKeepTurn();
-						moveLock = true;
-						channel.sendMessage("As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")")
-								.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-								.queue(s -> {
-									this.message.compute(s.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return s;
-									});
-									Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-									moveLock = false;
-								});
+						reportEvent(null, "As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")", true, false);
 					} else return;
 				} else if (Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 					killCard(next, is[1]);
 					killCard(current, is[0]);
-					resetTimerKeepTurn();
-					moveLock = true;
-					channel.sendMessage("As duas cartas na verdade eram iscas! (" + yPower + " = " + hPower + ")")
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-							});
+					reportEvent(null, "As duas cartas na verdade eram iscas! (" + yPower + " = " + hPower + ")", true, false);
 				} else if (his.getCard().getId().equals("DECOY")) {
 					killCard(next, is[1]);
-					resetTimerKeepTurn();
-					moveLock = true;
-					channel.sendMessage("As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")")
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-							});
+					reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")", true, false);
 				} else {
 					killCard(current, is[0]);
-					resetTimerKeepTurn();
-					moveLock = true;
-					channel.sendMessage("As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")")
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-							});
+					reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")", true, false);
 				}
 			}
 		}
@@ -1670,26 +1454,22 @@ public class Shoukan extends GlobalGame {
 					getBoard().awardWinner(this, daily, op.getUser().getId());
 				}
 
+				String msg;
+				if (team)
+					msg = ((TeamHand) op).getMentions() + " zeraram os pontos de vida de " + ((TeamHand) h).getMentions() + ", temos os vencedores! (" + getRound() + " turnos)";
+				else
+					msg = op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)";
+
 				close();
 				finished = true;
-				if (team)
-					channel.sendMessage(((TeamHand) op).getMentions() + " zeraram os pontos de vida de " + ((TeamHand) h).getMentions() + ", temos os vencedores! (" + getRound() + " turnos)")
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(msg ->
-									this.message.compute(msg.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return msg;
-									}));
-				else
-					channel.sendMessage(op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)")
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(msg ->
-									this.message.compute(msg.getChannel().getId(), (id, m) -> {
-										if (m != null)
-											m.delete().queue(null, Helper::doNothing);
-										return msg;
-									}));
+				channel.sendMessage(msg)
+						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+						.queue(ms ->
+								this.message.compute(ms.getChannel().getId(), (id, m) -> {
+									if (m != null)
+										m.delete().queue(null, Helper::doNothing);
+									return ms;
+								}));
 				break;
 			}
 		}
@@ -1758,45 +1538,16 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 
-				AtomicBoolean shownHand = new AtomicBoolean(false);
-				moveLock = true;
-				channel.sendMessage(u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention() + " (turno " + getRound() + ")")
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							moveLock = false;
-							if (!shownHand.get()) {
-								shownHand.set(true);
-								h.get().showHand();
-							}
-							for (int i = 0; i < 5; i++) {
-								changed[i] = false;
-							}
-						});
+				String msg = u.getName() + " encerrou o turno, agora é sua vez " + getCurrent().getAsMention() + " (turno " + getRound() + ")";
+
+				reportEvent(h.get(), msg, false, true);
 			});
 		else
 			buttons.put("▶️", (mb, ms) -> {
 				phase = Phase.ATTACK;
 				draw = false;
 				reroll = false;
-				resetTimerKeepTurn();
-				moveLock = true;
-				channel.sendMessage("**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate")
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							moveLock = false;
-						});
+				reportEvent(null, "**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate", true, false);
 			});
 		if (phase == Phase.PLAN)
 			buttons.put("\uD83D\uDCE4", (mb, ms) -> {
@@ -1819,47 +1570,27 @@ public class Shoukan extends GlobalGame {
 						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 					}
 
-					close();
+					String msg;
 					if (team)
-						channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + ((TeamHand) hands.get(next)).getMentions() + " venceram! (" + getRound() + " turnos)")
-								.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-								.queue(msg ->
-										this.message.compute(msg.getChannel().getId(), (id, m) -> {
-											if (m != null)
-												m.delete().queue(null, Helper::doNothing);
-											return msg;
-										}));
+						msg = getCurrent().getAsMention() + " não possui mais cartas no deck, " + ((TeamHand) hands.get(next)).getMentions() + " venceram! (" + getRound() + " turnos)";
 					else
-						channel.sendMessage(getCurrent().getAsMention() + " não possui mais cartas no deck, " + hands.get(next).getUser().getAsMention() + " venceu! (" + getRound() + " turnos)")
-								.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-								.queue(msg ->
-										this.message.compute(msg.getChannel().getId(), (id, m) -> {
-											if (m != null)
-												m.delete().queue(null, Helper::doNothing);
-											return msg;
-										}));
+						msg = getCurrent().getAsMention() + " não possui mais cartas no deck, " + hands.get(next).getUser().getAsMention() + " venceu! (" + getRound() + " turnos)";
+
+					close();
+					channel.sendMessage(msg)
+							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+							.queue(mm ->
+									this.message.compute(mm.getChannel().getId(), (id, m) -> {
+										if (m != null)
+											m.delete().queue(null, Helper::doNothing);
+										return mm;
+									}));
+
 					return;
 				}
 
 				remaining = h.getMaxCards() - h.getCards().size();
-				resetTimerKeepTurn();
-				AtomicBoolean shownHand = new AtomicBoolean(false);
-				moveLock = true;
-				channel.sendMessage(getCurrent().getName() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")")
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							moveLock = false;
-							if (!shownHand.get()) {
-								shownHand.set(true);
-								h.showHand();
-							}
-						});
+				reportEvent(h, getCurrent().getName() + " puxou uma carta (" + (remaining == 0 ? "não pode puxar mais cartas" : "pode puxar mais " + remaining + " carta" + (remaining == 1 ? "" : "s")) + ")", true, false);
 			});
 		if (reroll && getRound() == 1 && phase == Phase.PLAN)
 			buttons.put("\uD83D\uDD04", (mb, ms) -> {
@@ -1872,24 +1603,7 @@ public class Shoukan extends GlobalGame {
 				h.redrawHand();
 
 				reroll = false;
-				resetTimerKeepTurn();
-				AtomicBoolean shownHand = new AtomicBoolean(false);
-				moveLock = true;
-				channel.sendMessage(getCurrent().getName() + " rolou novamente as cartas na mão!")
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							moveLock = false;
-							if (!shownHand.get()) {
-								shownHand.set(true);
-								h.showHand();
-							}
-						});
+				reportEvent(h, getCurrent().getName() + " rolou novamente as cartas na mão!", true, false);
 			});
 		if (hands.get(current).getHp() < hands.get(current).getBaseHp() / 3 && hands.get(current).getDestinyDeck().size() > 0 && phase == Phase.PLAN)
 			buttons.put("\uD83E\uDDE7", (mb, ms) -> {
@@ -1901,24 +1615,7 @@ public class Shoukan extends GlobalGame {
 				Hand h = hands.get(current);
 				h.destinyDraw();
 
-				resetTimerKeepTurn();
-				AtomicBoolean shownHand = new AtomicBoolean(false);
-				moveLock = true;
-				channel.sendMessage(getCurrent().getName() + " executou um saque do destino!")
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-						.queue(s -> {
-							this.message.compute(s.getChannel().getId(), (id, m) -> {
-								if (m != null)
-									m.delete().queue(null, Helper::doNothing);
-								return s;
-							});
-							Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-							moveLock = false;
-							if (!shownHand.get()) {
-								shownHand.set(true);
-								h.showHand();
-							}
-						});
+				reportEvent(h, getCurrent().getName() + " executou um saque do destino!", true, false);
 			});
 		if (phase == Phase.PLAN)
 			buttons.put("\uD83E\uDD1D", (mb, ms) -> {
@@ -1928,14 +1625,16 @@ public class Shoukan extends GlobalGame {
 				}
 
 				if (draw) {
+					String msg = "Por acordo mútuo, declaro empate! (" + getRound() + " turnos)";
+
 					close();
-					channel.sendMessage("Por acordo mútuo, declaro empate! (" + getRound() + " turnos)")
+					channel.sendMessage(msg)
 							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(msg ->
-									this.message.compute(msg.getChannel().getId(), (id, m) -> {
+							.queue(mm ->
+									this.message.compute(mm.getChannel().getId(), (id, m) -> {
 										if (m != null)
 											m.delete().queue(null, Helper::doNothing);
-										return msg;
+										return mm;
 									}));
 				} else {
 					User u = getCurrent();
@@ -1994,27 +1693,8 @@ public class Shoukan extends GlobalGame {
 						}
 					}
 
-					AtomicBoolean shownHand = new AtomicBoolean(false);
 					draw = true;
-					moveLock = true;
-					channel.sendMessage(u.getName() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D caso queira aceitar ou continue jogando normalmente.")
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-							.queue(s -> {
-								this.message.compute(s.getChannel().getId(), (id, m) -> {
-									if (m != null)
-										m.delete().queue(null, Helper::doNothing);
-									return s;
-								});
-								Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
-								moveLock = false;
-								if (!shownHand.get()) {
-									shownHand.set(true);
-									h.get().showHand();
-								}
-								for (int i = 0; i < 5; i++) {
-									changed[i] = false;
-								}
-							});
+					reportEvent(h.get(), u.getName() + " deseja um acordo de empate, " + getCurrent().getAsMention() + " agora é sua vez, clique em \uD83E\uDD1D caso queira aceitar ou continue jogando normalmente.", false, true);
 				}
 			});
 		if (getRound() > 8)
@@ -2024,14 +1704,16 @@ public class Shoukan extends GlobalGame {
 					getBoard().awardWinner(this, getBoard().getPlayers().get(1).getId());
 				}
 
+				String msg = getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)";
+
 				close();
-				channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
+				channel.sendMessage(msg)
 						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
-						.queue(msg ->
-								this.message.compute(msg.getChannel().getId(), (id, m) -> {
+						.queue(mm ->
+								this.message.compute(mm.getChannel().getId(), (id, m) -> {
 									if (m != null)
 										m.delete().queue(null, Helper::doNothing);
-									return msg;
+									return mm;
 								}));
 			});
 
