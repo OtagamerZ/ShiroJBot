@@ -134,7 +134,7 @@ public class ImageFilters {
 
 			int[] colors = Helper.unpackRGB(rgb);
 			for (int i = 1; i < colors.length; i++) {
-				colors[i] = ~colors[i];
+				colors[i] = ~colors[i] & 0xFF;
 			}
 
 			out.setRGB(x, y, colors[0] << 24 | colors[1] << 16 | colors[2] << 8 | colors[3]);
