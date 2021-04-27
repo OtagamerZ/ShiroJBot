@@ -139,7 +139,7 @@ public class Helper {
 
 	static {
 		try {
-			HAMMERSMITH = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Helper.class.getClassLoader().getResourceAsStream("font/HammersmithOne.ttf")));
+			HAMMERSMITH = Font.createFont(Font.TRUETYPE_FONT, getResourceAsStream(Helper.class, "font/HammersmithOne.ttf"));
 		} catch (FontFormatException | IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 		}
@@ -2486,14 +2486,23 @@ public class Helper {
 	}
 
 	public static BufferedImage getResourceAsImage(Class<?> klass, String path) {
-		InputStream is = klass.getClassLoader().getResourceAsStream(path);
-		if (is == null) return null;
-		else {
-			try {
-				return ImageIO.read(is);
-			} catch (IOException e) {
-				return null;
+		byte[] bytes = Main.getInfo().getResourceCache().computeIfAbsent(path, s -> {
+			InputStream is = klass.getClassLoader().getResourceAsStream(path);
+
+			if (is == null) return new byte[0];
+			else {
+				try {
+					return Helper.getBytes(ImageIO.read(is), path.split("\\.")[1]);
+				} catch (IOException e) {
+					return new byte[0];
+				}
 			}
+		});
+
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
+			return ImageIO.read(bais);
+		} catch (IOException e) {
+			return null;
 		}
 	}
 
