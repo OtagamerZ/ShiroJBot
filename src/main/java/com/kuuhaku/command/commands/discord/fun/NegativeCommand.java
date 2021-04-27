@@ -50,7 +50,6 @@ public class NegativeCommand implements Executable {
 					return channel.getHistory().retrievePast(25);
 				})
 				.queue(s -> {
-					channel.getHistory().getRetrievedHistory().clear();
 					Message msg;
 					if (Helper.getImageFrom(message) != null)
 						msg = message;
