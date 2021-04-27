@@ -1499,8 +1499,11 @@ public class Shoukan extends GlobalGame {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
 						c.setAvailable(c.getStun() == 0);
-						if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0 && !c.hasEffect())
+						if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0 && !c.hasEffect()) {
 							c.setCharge(c.getCharge() + 1);
+							if (applyEot(ON_CHARGE, current, i)) return;
+							if (applyEffect(ON_CHARGE, c, i, current, Pair.of(c, i), null)) return;
+						}
 
 						c.resetAttribs();
 						if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
@@ -1656,8 +1659,11 @@ public class Shoukan extends GlobalGame {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
 							c.setAvailable(c.getStun() == 0);
-							if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0 && !c.hasEffect())
+							if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0 && !c.hasEffect()) {
 								c.setCharge(c.getCharge() + 1);
+								if (applyEot(ON_CHARGE, current, i)) return;
+								if (applyEffect(ON_CHARGE, c, i, current, Pair.of(c, i), null)) return;
+							}
 
 							c.resetAttribs();
 							if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
