@@ -316,6 +316,29 @@ public class TeamHand extends Hand {
 		}
 	}
 
+	public Drawable draw(String name) {
+		if (getLockTime() > 0) return null;
+		try {
+			List<Drawable> cards = getCards();
+
+			Drawable dr = getDeque().stream().filter(c -> c.getCard().getId().equals(name)).findFirst().orElseThrow();
+			getDeque().remove(dr);
+			cards.add(dr.copy());
+
+			if (dr instanceof Equipment) {
+				Equipment e = (Equipment) dr;
+				if (e.getCharm() == Charm.SPELL && combo.getLeft() == Race.MYSTICAL)
+					addMana(1);
+				else if (e.getCharm() != Charm.SPELL && combo.getLeft() == Race.MACHINE)
+					addHp(250);
+			}
+
+			return dr;
+		} catch (NoSuchElementException ignore) {
+			return null;
+		}
+	}
+
 	public Drawable drawChampion() {
 		if (getLockTime() > 0) return null;
 		try {
