@@ -91,7 +91,7 @@ public class GuessTheCardsCommand implements Executable {
 			g2d.dispose();
 
 			channel.sendMessage("Quais são as 3 cartas nesta imagem? Escreva os três nomes com `_` no lugar de espaços e separados por ponto-e-vírgula (`;`).")
-					.addFile(Helper.writeAndGet(img))
+					.addFile(Helper.writeAndGet(img, "cards", "png"))
 					.queue(ms -> ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
 						private final Consumer<Void> success = s -> {
 							ms.delete().queue(null, Helper::doNothing);

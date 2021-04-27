@@ -2495,7 +2495,11 @@ public class Helper {
 
 		try {
 			ImageIO.write(bi, "jpg", f);
-		} catch (IOException ignore) {
+		} catch (IOException e) {
+			try {
+				ImageIO.write(bi, "png", f);
+			} catch (IOException ignore) {
+			}
 		}
 
 		return f;
@@ -2507,7 +2511,11 @@ public class Helper {
 
 		try {
 			ImageIO.write(bi, "jpg", f);
-		} catch (IOException ignore) {
+		} catch (IOException e) {
+			try {
+				ImageIO.write(bi, "png", f);
+			} catch (IOException ignore) {
+			}
 		}
 
 		return f;
@@ -2519,7 +2527,11 @@ public class Helper {
 
 		try {
 			ImageIO.write(bi, extension, f);
-		} catch (IOException ignore) {
+		} catch (IOException e) {
+			try {
+				ImageIO.write(bi, extension.equals("png") ? "jpg" : "png", f);
+			} catch (IOException ignore) {
+			}
 		}
 
 		return f;
