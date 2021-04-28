@@ -698,6 +698,7 @@ public class Shoukan extends GlobalGame {
 
 					if (!c.getCard().getId().equals("DECOY")) enemy.removeHp(yPower);
 					c.setAvailable(false);
+					attacked[is[0]] = true;
 
 					if (!postCombat()) {
 						reportEvent(h,
@@ -792,7 +793,6 @@ public class Shoukan extends GlobalGame {
 		if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
 			yours.setAvailable(false);
 			yours.resetAttribs();
-			yours.setCharge(0);
 
 			if (applyEot(POST_ATTACK, current, is[0])) return;
 			if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
@@ -848,7 +848,6 @@ public class Shoukan extends GlobalGame {
 			if (yPower > hPower || (yPower == hPower && yourDodge)) {
 				yours.setAvailable(false);
 				yours.resetAttribs();
-				yours.setCharge(0);
 
 				if (hisDodge) {
 					if (applyEot(ON_MISS, current, is[0])) return;

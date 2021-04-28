@@ -182,7 +182,7 @@ public class Champion implements Drawable, Cloneable {
 
 			if (charge > 0) {
 				g2d.setColor(Color.orange);
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/critical.png"), 19, 225, null);
+				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/critical.png"), 19, 203, null);
 				Profile.drawOutlinedText("+" + (chargeBonus * charge), 45, 225, g2d);
 			}
 
@@ -255,6 +255,7 @@ public class Champion implements Drawable, Cloneable {
 	@Override
 	public void setAvailable(boolean available) {
 		this.available = available;
+		this.charge = 0;
 	}
 
 	@Override
