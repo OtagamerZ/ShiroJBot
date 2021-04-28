@@ -19,28 +19,10 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.GiftCode;
-import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
-import java.security.SecureRandom;
 
 public class GiftCodeDAO {
-	public static void generateGiftCodes(int amount) {
-		EntityManager em = Manager.getEntityManager();
-
-		SecureRandom sr = new SecureRandom();
-		byte[] bytes = new byte[64];
-
-		em.getTransaction().begin();
-		for (int i = 0; i < amount; i++) {
-			sr.nextBytes(bytes);
-			em.merge(new GiftCode(Helper.hash(bytes, "MD5")));
-		}
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
 	public static GiftCode redeemGiftCode(String id, String code) {
 		EntityManager em = Manager.getEntityManager();
 
