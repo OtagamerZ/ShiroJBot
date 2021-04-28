@@ -32,7 +32,6 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -47,76 +46,112 @@ public class PruneCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (args.length == 0) {
-			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
-			msgs.removeIf(m -> !m.getAuthor().isBot() || m.isPinned());
-			channel.purgeMessages(msgs);
-			channel.sendMessage("✅ | " + msgs.size() + " mensage" + (msgs.size() == 1 ? "m de bot limpa." : "ns de bots limpas.")).queue();
-		} else if (StringUtils.isNumeric(args[0]) && args[0].length() >= 10) {
-			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
-			msgs.removeIf(m -> !m.getAuthor().getId().equals(args[0]) || m.isPinned());
-			channel.purgeMessages(msgs);
-			channel.sendMessage("✅ | " + msgs.size() + " mensage" + (msgs.size() == 1 ? "m de <@" + args[0] + "> limpa." : "ns de <@" + args[0] + "> limpas.")).queue(null, Helper::doNothing);
-		} else if (StringUtils.isNumeric(args[0])) {
-			if (!Helper.between(Integer.parseInt(args[0]), 1, 101)) {
-				channel.sendMessage("❌ | Só é possível apagar entre 1 e 100 mensagens de uma vez").queue();
-				return;
-			}
+		message.delete()
+				.flatMap(s -> channel.getHistory().retrievePast(100))
+				.queue(msgs -> {
+					String msg = "✅ | ";
 
-			List<Message> msgs = channel.getHistory().retrievePast(Integer.parseInt(args[0]) == 100 ? 100 : Integer.parseInt(args[0]) + 1).complete();
-			msgs.removeIf(m -> m.getAuthor().isBot() || m.isPinned());
-			channel.purgeMessages(msgs);
-			channel.sendMessage("✅ | " + msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue(null, Helper::doNothing);
-		} else if (message.getMentionedUsers().size() > 0) {
-			User target = message.getMentionedUsers().get(0);
-			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
-			msgs.removeIf(m -> !m.getAuthor().getId().equals(target.getId()) || m.isPinned());
-			channel.purgeMessages(msgs);
-			channel.sendMessage("✅ | " + msgs.size() + " mensage" + (msgs.size() == 1 ? "m de " + target.getAsMention() + " limpa." : "ns de " + target.getAsMention() + " limpas.")).queue(null, Helper::doNothing);
-		} else if (Helper.equalsAny(args[0], "user", "usuarios")) {
-			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
-			msgs.removeIf(m -> m.getAuthor().isBot() || m.isPinned());
-			channel.purgeMessages(msgs);
-			channel.sendMessage("✅ | " + msgs.size() + " mensage" + (msgs.size() == 1 ? "m de usuário limpa." : "ns de usuários limpas.")).queue(null, Helper::doNothing);
-		} else if (Helper.equalsAny(args[0], "all", "tudo")) {
-			channel.retrievePinnedMessages().queue(p -> {
-				Main.getInfo().getConfirmationPending().put(author.getId(), true);
+					int pinned = msgs.size();
+					msgs.removeIf(Message::isPinned);
+					pinned -= msgs.size();
 
-				if (p.size() > 0)
-					channel.sendMessage("Há " + p.size() + " mensage" + (p.size() == 1 ? "m fixada " : "ns fixadas ") + "neste canal, tem certeza que deseja limpá-lo?")
-							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-										Main.getInfo().getConfirmationPending().remove(author.getId());
-										channel.createCopy().queue(c -> {
-											try {
-												channel.delete().queue();
-												c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
-											} catch (InsufficientPermissionException e) {
-												channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
-											}
-										});
-									}), true, 1, TimeUnit.MINUTES,
-									u -> u.getId().equals(author.getId()),
-									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-							));
-				else
-					channel.sendMessage("O canal será recriado, tem certeza que deseja limpá-lo?")
-							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
-										Main.getInfo().getConfirmationPending().remove(author.getId());
-										channel.createCopy().queue(c -> {
-											try {
-												channel.delete().queue();
-												c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
-											} catch (InsufficientPermissionException e) {
-												channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
-											}
-										});
-									}), true, 1, TimeUnit.MINUTES,
-									u -> u.getId().equals(author.getId()),
-									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-							));
-			});
-		} else {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
-		}
+					if (args.length == 0) {
+						msgs.removeIf(m -> !m.getAuthor().isBot());
+
+						if (msgs.size() != 1)
+							msg += msgs.size() + " mensagens de bots limpas.";
+						else
+							msg += msgs.size() + " mensagem de bot limpa.";
+					} else if (StringUtils.isNumeric(args[0]) && args[0].length() >= 10) {
+						msgs.removeIf(m -> !m.getAuthor().getId().equals(args[0]));
+
+						if (msgs.size() != 1)
+							msg += msgs.size() + " mensagens de <@" + args[0] + "> limpas.";
+						else
+							msg += msgs.size() + " mensagem de <@" + args[0] + "> limpa.";
+					} else if (StringUtils.isNumeric(args[0])) {
+						int amount = Integer.parseInt(args[0]);
+						if (!Helper.between(amount, 1, 101)) {
+							channel.sendMessage("❌ | Só é possível apagar entre 1 e 100 mensagens de uma vez").queue();
+							return;
+						}
+
+						msgs = msgs.subList(0, amount);
+
+						if (msgs.size() != 1)
+							msg += msgs.size() + " mensagens de limpas.";
+						else
+							msg += msgs.size() + " mensagem de limpa.";
+					} else if (message.getMentionedUsers().size() > 0) {
+						User target = message.getMentionedUsers().get(0);
+
+						msgs.removeIf(m -> !m.getAuthor().getId().equals(target.getId()));
+
+						if (msgs.size() != 1)
+							msg += msgs.size() + " mensagens de " + target.getAsMention() + " limpas.";
+						else
+							msg += msgs.size() + " mensagem de " + target.getAsMention() + " limpa.";
+					} else if (Helper.equalsAny(args[0], "user", "usuarios")) {
+						msgs.removeIf(m -> m.getAuthor().isBot());
+
+						if (msgs.size() != 1)
+							msg += msgs.size() + " mensagens de usuarios limpas.";
+						else
+							msg += msgs.size() + " mensagem de usuario limpa.";
+					} else if (Helper.equalsAny(args[0], "all", "tudo")) {
+						channel.retrievePinnedMessages().queue(p -> {
+							Main.getInfo().getConfirmationPending().put(author.getId(), true);
+
+							if (p.size() > 0)
+								channel.sendMessage("Há " + p.size() + " mensage" + (p.size() == 1 ? "m fixada " : "ns fixadas ") + "neste canal, tem certeza que deseja limpá-lo?")
+										.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+													Main.getInfo().getConfirmationPending().remove(author.getId());
+													channel.createCopy()
+															.setPosition(channel.getPosition())
+															.queue(c -> {
+																try {
+																	channel.delete().queue();
+																	c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
+																} catch (InsufficientPermissionException e) {
+																	channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
+																}
+															});
+												}), true, 1, TimeUnit.MINUTES,
+												u -> u.getId().equals(author.getId()),
+												ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+										));
+							else
+								channel.sendMessage("O canal será recriado, tem certeza que deseja limpá-lo?")
+										.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
+													Main.getInfo().getConfirmationPending().remove(author.getId());
+													channel.createCopy()
+															.setPosition(channel.getPosition())
+															.queue(c -> {
+																try {
+																	channel.delete().queue();
+																	c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
+																} catch (InsufficientPermissionException e) {
+																	channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
+																}
+															});
+												}), true, 1, TimeUnit.MINUTES,
+												u -> u.getId().equals(author.getId()),
+												ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+										));
+						});
+						return;
+					} else {
+						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
+						return;
+					}
+
+					if (pinned > 1)
+						msg += " (" + pinned + " mensagens ignoradas)";
+					else if (pinned == 1)
+						msg += " (" + pinned + " mensagem ignorada)";
+
+					channel.purgeMessages(msgs);
+					channel.sendMessage(msg).queue();
+				});
 	}
 }
