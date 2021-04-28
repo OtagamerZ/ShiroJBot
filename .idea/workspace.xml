@@ -15,9 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de penalidade por inatividade em rankings maiores que Adepto IV">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MatchStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MatchStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,10 +63,10 @@
         <option value="XML Properties File" />
         <option value="Interface" />
         <option value="GraphQL File" />
-        <option value="JavaScript File" />
         <option value="AnnotationType" />
         <option value="Enum" />
         <option value="Class" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -127,7 +125,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="GenericSQL&#10;JavaScript&#10;TEXT" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JavaScript&#10;GenericSQL&#10;TEXT" />
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
@@ -203,6 +201,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1169,21 +1178,7 @@
       <workItem from="1619478658148" duration="1316000" />
       <workItem from="1619492864823" duration="1674000" />
       <workItem from="1619556247010" duration="1009000" />
-      <workItem from="1619612753305" duration="2264000" />
-    </task>
-    <task id="LOCAL-04237" summary="Nova tag: Investidor">
-      <created>1619033292331</created>
-      <option name="number" value="04237" />
-      <option name="presentableId" value="LOCAL-04237" />
-      <option name="project" value="LOCAL" />
-      <updated>1619033292335</updated>
-    </task>
-    <task id="LOCAL-04238" summary="Remoção completa do s!settings">
-      <created>1619120876826</created>
-      <option name="number" value="04238" />
-      <option name="presentableId" value="LOCAL-04238" />
-      <option name="project" value="LOCAL" />
-      <updated>1619120876827</updated>
+      <workItem from="1619612753305" duration="4339000" />
     </task>
     <task id="LOCAL-04239" summary="Remoção completa do s!settings">
       <created>1619123620731</created>
@@ -1514,7 +1509,21 @@
       <option name="project" value="LOCAL" />
       <updated>1619557252989</updated>
     </task>
-    <option name="localTasksCounter" value="4286" />
+    <task id="LOCAL-04286" summary="Adição de penalidade por inatividade em rankings maiores que Adepto IV">
+      <created>1619615064182</created>
+      <option name="number" value="04286" />
+      <option name="presentableId" value="LOCAL-04286" />
+      <option name="project" value="LOCAL" />
+      <updated>1619615064183</updated>
+    </task>
+    <task id="LOCAL-04287" summary="Adição de penalidade por inatividade em rankings maiores que Adepto IV">
+      <created>1619615330174</created>
+      <option name="number" value="04287" />
+      <option name="presentableId" value="LOCAL-04287" />
+      <option name="project" value="LOCAL" />
+      <updated>1619615330174</updated>
+    </task>
+    <option name="localTasksCounter" value="4288" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
