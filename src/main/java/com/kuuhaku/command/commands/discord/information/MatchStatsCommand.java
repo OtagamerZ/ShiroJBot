@@ -29,6 +29,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
@@ -36,13 +37,9 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -113,51 +110,125 @@ public class MatchStatsCommand implements Executable {
 			return;
 		}
 
-		Map<Side, String> players = mh.getPlayers().entrySet().stream()
-				.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
-		Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcSoloMMR(mh);
 
-		String p1 = checkUser(players.get(Side.BOTTOM));
-		String p2 = checkUser(players.get(Side.TOP));
+		Map<Side, List<String>> players = new HashMap<>();
+		for (Map.Entry<String, Side> entry : mh.getPlayers().entrySet()) {
+			players.computeIfAbsent(entry.getValue(), s -> new ArrayList<>())
+					.add(entry.getKey());
+		}
+
 		JSONObject stats = getStats(mh);
 		JSONObject bottom = stats.getJSONObject("BOTTOM");
 		JSONObject top = stats.getJSONObject("TOP");
 
-		boolean p1WO = mh.isWo() && mh.getWinner() != Side.BOTTOM;
-		boolean p2WO = mh.isWo() && mh.getWinner() != Side.TOP;
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		if (bottom.keySet().size() == 1) {
+			String p1 = checkUser(players.get(Side.BOTTOM).get(0));
+			String p2 = checkUser(players.get(Side.TOP).get(0));
+			JSONObject p1Stats = bottom.getJSONObject(players.get(Side.BOTTOM).get(0));
+			JSONObject p2Stats = top.getJSONObject(players.get(Side.TOP).get(0));
+			boolean botWO = mh.isWo() && mh.getWinner() != Side.BOTTOM;
+			boolean topWO = mh.isWo() && mh.getWinner() != Side.TOP;
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("Partida de " + p1 + " VS " + p2)
-				.addField("Jogada em", mh.getTimestamp().format(Helper.onlyDate), true)
-				.addField("Tipo", mh.isRanked() ? "Ranqueada" : "Normal", true)
-				.addField("Ordem de jogada", """
-						1º: %s %s
-						2º: %s %s
-						""".formatted(
-						p1,
-						mh.getWinner() == Side.BOTTOM ? "(VENCEDOR)" : p1WO ? "(W.O.)" : "",
-						p2,
-						mh.getWinner() == Side.TOP ? "(VENCEDOR)" : p2WO ? "(W.O.)" : ""
-				), true)
-				.addField("Duração", mh.getRounds().size() + " turnos", true)
-				.addField("Eficiencia de " + p1, """
-						Eficiência de mana: %s%%
-						Dano X turno: %s%%
-						Vida X turno: %s%%
-						""".formatted(
-						Math.round(bottom.getDouble("manaEff") * 100),
-						Math.round(bottom.getDouble("damageEff") * 100),
-						Math.round(bottom.getDouble("sustainEff") * 100)
-				), false)
-				.addField("Eficiencia de " + p2, """
-						Eficiência de mana: %s%%
-						Dano X turno: %s%%
-						Vida X turno: %s%%
-						""".formatted(
-						Math.round(top.getDouble("manaEff") * 100),
-						Math.round(top.getDouble("damageEff") * 100),
-						Math.round(top.getDouble("sustainEff") * 100)
-				), false);
+			eb.setTitle("Partida de " + p1 + " VS " + p2)
+					.addField("Jogada em", mh.getTimestamp().format(Helper.onlyDate), true)
+					.addField("Tipo", mh.isRanked() ? "Ranqueada" : "Normal", true)
+					.addField("Ordem de jogada", """
+							1º: %s %s
+							2º: %s %s
+							""".formatted(
+							p1,
+							mh.getWinner() == Side.BOTTOM ? "(VENCEDOR)" : botWO ? "(W.O.)" : "",
+							p2,
+							mh.getWinner() == Side.TOP ? "(VENCEDOR)" : topWO ? "(W.O.)" : ""
+					), true)
+					.addField("Duração", mh.getRounds().size() + " turnos", true)
+					.addField("Eficiencia de " + p1, """
+							Eficiência de mana: %s%%
+							Dano X turno: %s%%
+							Vida X turno: %s%%
+							""".formatted(
+							Math.round(p1Stats.getDouble("manaEff") * 100),
+							Math.round(p1Stats.getDouble("damageEff") * 100),
+							Math.round(p1Stats.getDouble("sustainEff") * 100)
+					), false)
+					.addField("Eficiencia de " + p2, """
+							Eficiência de mana: %s%%
+							Dano X turno: %s%%
+							Vida X turno: %s%%
+							""".formatted(
+							Math.round(p2Stats.getDouble("manaEff") * 100),
+							Math.round(p2Stats.getDouble("damageEff") * 100),
+							Math.round(p2Stats.getDouble("sustainEff") * 100)
+					), false);
+		} else {
+			String p1 = checkUser(players.get(Side.BOTTOM).get(0));
+			String p2 = checkUser(players.get(Side.TOP).get(0));
+			String p3 = checkUser(players.get(Side.BOTTOM).get(1));
+			String p4 = checkUser(players.get(Side.TOP).get(1));
+			JSONObject p1Stats = bottom.getJSONObject(players.get(Side.BOTTOM).get(0));
+			JSONObject p2Stats = top.getJSONObject(players.get(Side.TOP).get(0));
+			JSONObject p3Stats = bottom.getJSONObject(players.get(Side.BOTTOM).get(1));
+			JSONObject p4Stats = top.getJSONObject(players.get(Side.TOP).get(1));
+			boolean botWO = mh.isWo() && mh.getWinner() != Side.BOTTOM;
+			boolean topWO = mh.isWo() && mh.getWinner() != Side.TOP;
+
+			eb.setTitle("Partida de " + p1 + " e " + p3 + " VS " + p2 + " e " + p4)
+					.addField("Jogada em", mh.getTimestamp().format(Helper.onlyDate), true)
+					.addField("Tipo", mh.isRanked() ? "Ranqueada" : "Normal", true)
+					.addField("Ordem de jogada", """
+							1º: %s %s
+							2º: %s %s
+							3º: %s %s
+							4º: %s %s
+							""".formatted(
+							p1,
+							mh.getWinner() == Side.BOTTOM ? "(VENCEDOR)" : botWO ? "(W.O.)" : "",
+							p2,
+							mh.getWinner() == Side.TOP ? "(VENCEDOR)" : topWO ? "(W.O.)" : "",
+							p3,
+							mh.getWinner() == Side.BOTTOM ? "(VENCEDOR)" : botWO ? "(W.O.)" : "",
+							p4,
+							mh.getWinner() == Side.TOP ? "(VENCEDOR)" : topWO ? "(W.O.)" : ""
+					), true)
+					.addField("Duração", mh.getRounds().size() + " turnos", true)
+					.addField("Eficiencia de " + p1, """
+							Eficiência de mana: %s%%
+							Dano X turno: %s%%
+							Vida X turno: %s%%
+							""".formatted(
+							Math.round(p1Stats.getDouble("manaEff") * 100),
+							Math.round(p1Stats.getDouble("damageEff") * 100),
+							Math.round(p1Stats.getDouble("sustainEff") * 100)
+					), false)
+					.addField("Eficiencia de " + p2, """
+							Eficiência de mana: %s%%
+							Dano X turno: %s%%
+							Vida X turno: %s%%
+							""".formatted(
+							Math.round(p2Stats.getDouble("manaEff") * 100),
+							Math.round(p2Stats.getDouble("damageEff") * 100),
+							Math.round(p2Stats.getDouble("sustainEff") * 100)
+					), false)
+					.addField("Eficiencia de " + p3, """
+							Eficiência de mana: %s%%
+							Dano X turno: %s%%
+							Vida X turno: %s%%
+							""".formatted(
+							Math.round(p3Stats.getDouble("manaEff") * 100),
+							Math.round(p3Stats.getDouble("damageEff") * 100),
+							Math.round(p3Stats.getDouble("sustainEff") * 100)
+					), false)
+					.addField("Eficiencia de " + p4, """
+							Eficiência de mana: %s%%
+							Dano X turno: %s%%
+							Vida X turno: %s%%
+							""".formatted(
+							Math.round(p4Stats.getDouble("manaEff") * 100),
+							Math.round(p4Stats.getDouble("damageEff") * 100),
+							Math.round(p4Stats.getDouble("sustainEff") * 100)
+					), false);
+		}
 
 		channel.sendMessage(eb.build()).queue();
 	}
@@ -172,36 +243,47 @@ public class MatchStatsCommand implements Executable {
 
 	private JSONObject getStats(MatchHistory history) {
 		JSONObject out = new JSONObject();
-		Map<Side, Pair<String, Map<String, Integer>>> result = MatchMakingRating.calcSoloMMR(history);
+		Map<Side, List<MatchInfo>> result = MatchMakingRating.calcMMR(history);
 		for (Side s : Side.values()) {
 			Side other = s == Side.TOP ? Side.BOTTOM : Side.TOP;
-			Map<String, Integer> yourResult = result.get(s).getRight();
-			Map<String, Integer> hisResult = result.get(other).getRight();
-			int spentMana = yourResult.get("mana");
-			int damageDealt = hisResult.get("hp");
 
-			if (history.getWinner() == s) {
-				double manaEff = 1 + Math.max(-0.75, Math.min(spentMana * 0.5 / 5, 0.25));
-				double damageEff = (double) -damageDealt / yourResult.size();
-				double expEff = 5000d / yourResult.size();
-				double sustainEff = 1 + yourResult.get("hp") / 5000f;
+			for (MatchInfo info : result.get(s)) {
+				Map<String, Integer> yourResult = info.getInfo();
+				Map<String, Integer> theirResult = Helper.mergeInfo(result.get(other)).getInfo();
+				int spentMana = yourResult.get("mana");
+				int damageDealt = theirResult.get("hp");
 
-				out.put(s.name(), new JSONObject() {{
-					put("manaEff", manaEff);
-					put("damageEff", damageEff / expEff);
-					put("sustainEff", sustainEff);
-				}});
-			} else if (history.getWinner() == other) {
-				double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
-				double damageEff = (double) -damageDealt / yourResult.size();
-				double expEff = 5000d / yourResult.size();
-				double sustainEff = 1 + yourResult.get("hp") / 5000d;
+				if (history.getWinner() == s) {
+					double manaEff = 1 + Math.max(-0.75, Math.min(spentMana * 0.5 / 5, 0.25));
+					double damageEff = (double) -damageDealt / yourResult.size();
+					double expEff = 5000d / yourResult.size();
+					double sustainEff = 1 + yourResult.get("hp") / 5000f;
 
-				out.put(s.name(), new JSONObject() {{
-					put("manaEff", manaEff);
-					put("damageEff", damageEff / expEff);
-					put("sustainEff", sustainEff);
-				}});
+					JSONObject data = Helper.getOr(out.optJSONObject(s.name()), new JSONObject());
+
+					data.put(info.getId(), new JSONObject() {{
+						put("manaEff", manaEff);
+						put("damageEff", damageEff / expEff);
+						put("sustainEff", sustainEff);
+					}});
+
+					out.put(s.name(), data);
+				} else if (history.getWinner() == other) {
+					double manaEff = 1 + Math.max(-0.75, Math.min(5 * 0.5 / spentMana, 0.25));
+					double damageEff = (double) -damageDealt / yourResult.size();
+					double expEff = 5000d / yourResult.size();
+					double sustainEff = 1 + yourResult.get("hp") / 5000d;
+
+					JSONObject data = Helper.getOr(out.optJSONObject(s.name()), new JSONObject());
+
+					data.put(info.getId(), new JSONObject() {{
+						put("manaEff", manaEff);
+						put("damageEff", damageEff / expEff);
+						put("sustainEff", sustainEff);
+					}});
+
+					out.put(s.name(), data);
+				}
 			}
 		}
 
