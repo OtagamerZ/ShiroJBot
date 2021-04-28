@@ -23,7 +23,7 @@ Ao usar a Shiro, você concorda que coletemos os seguintes dados em servidores q
 
 - ID, nome de usuário, avatar e cargos adquiridos no servidor por você;
 - ID, nome, avatar, canais, cargos e membros de servidores;
-- Mensagens enviadas e seus autores;
+- Comandos enviados e seus autores;
 
 ## 3. Por que coletamos
 
