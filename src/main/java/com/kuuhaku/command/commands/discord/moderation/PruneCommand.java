@@ -64,6 +64,7 @@ public class PruneCommand implements Executable {
 			}
 
 			List<Message> msgs = channel.getHistory().retrievePast(Integer.parseInt(args[0]) == 100 ? 100 : Integer.parseInt(args[0]) + 1).complete();
+			msgs.removeIf(m -> m.getAuthor().isBot() || m.isPinned());
 			channel.purgeMessages(msgs);
 			channel.sendMessage("✅ | " + msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue(null, Helper::doNothing);
 		} else if (message.getMentionedUsers().size() > 0) {
