@@ -23,53 +23,34 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GiftCodeDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.persistent.GiftCode;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
 		name = "giftcode",
-		usage = "req_type-amount-code",
+		usage = "req_giftcode",
 		category = Category.MISC
 )
 public class GiftCodeCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (args.length < 2) {
-			channel.sendMessage("❌ | Você precisa informar o tipo da operação (gerar ou resgatar) e a quantidade/código.").queue();
+		if (args.length < 1) {
+			channel.sendMessage("❌ | Você precisa informar o código a ser resgatado.").queue();
 			return;
 		}
 
-		switch (args[0]) {
-			case "gerar", "generate" -> {
-				if (!ShiroInfo.getDevelopers().contains(author.getId())) {
-					channel.sendMessage("❌ | Você não possui permissão para gerar gift codes.").queue();
-					return;
-				}
-
-				try {
-					int i = Integer.parseInt(args[1]);
-					GiftCodeDAO.generateGiftCodes(i);
-					channel.sendMessage("✅ | Códigos gerados com sucesso.").queue();
-				} catch (NumberFormatException e) {
-					channel.sendMessage("❌ | Quantidade inválida.").queue();
-				}
-			}
-			case "resgatar", "redeem" -> {
-				if (args[1].length() != 32) {
-					channel.sendMessage("❌ | Código inválido.").queue();
-					return;
-				}
-
-				GiftCode gc = GiftCodeDAO.redeemGiftCode(author.getId(), args[1]);
-				if (gc == null) {
-					channel.sendMessage("❌ | Código já utilizado.").queue();
-					return;
-				}
-				gc.useCode(author.getId());
-
-				channel.sendMessage("✅ | Código para `" + gc.getDescription() + "` resgatado com sucesso.").queue();
-			}
+		if (args[0].length() != 32) {
+			channel.sendMessage("❌ | Código inválido.").queue();
+			return;
 		}
+
+		GiftCode gc = GiftCodeDAO.redeemGiftCode(author.getId(), args[0]);
+		if (gc == null) {
+			channel.sendMessage("❌ | Código já utilizado.").queue();
+			return;
+		}
+		gc.useCode(author.getId());
+
+		channel.sendMessage("✅ | Código para `" + gc.getDescription() + "` resgatado com sucesso.").queue();
 	}
 }

@@ -13,8 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no comando prune">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/GiftCodeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/GiftCodeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GiftCodeDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GiftCodeDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1177,14 +1179,7 @@
       <workItem from="1619478658148" duration="1316000" />
       <workItem from="1619492864823" duration="1674000" />
       <workItem from="1619556247010" duration="1009000" />
-      <workItem from="1619612753305" duration="9607000" />
-    </task>
-    <task id="LOCAL-04242" summary="Remoção completa do s!settings">
-      <created>1619124172173</created>
-      <option name="number" value="04242" />
-      <option name="presentableId" value="LOCAL-04242" />
-      <option name="project" value="LOCAL" />
-      <updated>1619124172173</updated>
+      <workItem from="1619612753305" duration="12252000" />
     </task>
     <task id="LOCAL-04243" summary="Remoção completa do s!settings">
       <created>1619124317488</created>
@@ -1522,7 +1517,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619621427628</updated>
     </task>
-    <option name="localTasksCounter" value="4291" />
+    <task id="LOCAL-04291" summary="Correções menores">
+      <created>1619628211153</created>
+      <option name="number" value="04291" />
+      <option name="presentableId" value="LOCAL-04291" />
+      <option name="project" value="LOCAL" />
+      <updated>1619628211153</updated>
+    </task>
+    <option name="localTasksCounter" value="4292" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1628,12 +1630,12 @@
     <MESSAGE value="Adição de cargos pagos" />
     <MESSAGE value="Melhoria na listagem de imagens das cartas" />
     <MESSAGE value="Adição de comandos de filtros de imagem." />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Adicionadas bordas de efeito do campo" />
     <MESSAGE value="Adição de dano por carga" />
     <MESSAGE value="Adição de penalidade por inatividade em rankings maiores que Adepto IV" />
     <MESSAGE value="Correção no comando prune" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no comando prune" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
