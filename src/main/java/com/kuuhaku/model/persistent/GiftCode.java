@@ -89,8 +89,9 @@ public class GiftCode {
 	public void useCode(String id) {
 		String imports = """
 				//%s
-				import com.kuuhaku.model.persistent.Account;
-				import com.kuuhaku.model.persistent.GiftCode;
+				import com.kuuhaku.model.controller.*;
+				import com.kuuhaku.model.persistent.*;
+				import com.kuuhaku.utils.*;
 								
 				          """.formatted(code);
 

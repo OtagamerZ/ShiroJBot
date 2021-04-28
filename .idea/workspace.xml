@@ -14,9 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/GiftCodeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/GiftCodeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GiftCodeDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GiftCodeDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GiftCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GiftCode.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +124,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JavaScript&#10;GenericSQL&#10;TEXT" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JAVA&#10;JavaScript&#10;GenericSQL&#10;TEXT" />
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
@@ -1179,14 +1177,7 @@
       <workItem from="1619478658148" duration="1316000" />
       <workItem from="1619492864823" duration="1674000" />
       <workItem from="1619556247010" duration="1009000" />
-      <workItem from="1619612753305" duration="12252000" />
-    </task>
-    <task id="LOCAL-04243" summary="Remoção completa do s!settings">
-      <created>1619124317488</created>
-      <option name="number" value="04243" />
-      <option name="presentableId" value="LOCAL-04243" />
-      <option name="project" value="LOCAL" />
-      <updated>1619124317488</updated>
+      <workItem from="1619612753305" duration="15296000" />
     </task>
     <task id="LOCAL-04244" summary="Remoção completa do s!settings">
       <created>1619124475815</created>
@@ -1524,7 +1515,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619628211153</updated>
     </task>
-    <option name="localTasksCounter" value="4292" />
+    <task id="LOCAL-04292" summary="Correções menores">
+      <created>1619631320758</created>
+      <option name="number" value="04292" />
+      <option name="presentableId" value="LOCAL-04292" />
+      <option name="project" value="LOCAL" />
+      <updated>1619631320758</updated>
+    </task>
+    <option name="localTasksCounter" value="4293" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
