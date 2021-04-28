@@ -152,6 +152,9 @@ public class MyStatsCommand implements Executable {
 			} else
 				eb.addField("Progresso para o próximo tier", mmr.getRankPoints() + "/" + mmr.getTier().getPromRP() + " Pontos de Ranking", false);
 
+			if (mmr.getTier().getTier() >= RankedTier.ADEPT_IV.getTier())
+				eb.addField("Jogos em banca", mmr.getBanked() + "/28", false);
+
 			categories.put("\uD83D\uDCCB", new Page(PageType.EMBED, eb.build()));
 		}
 

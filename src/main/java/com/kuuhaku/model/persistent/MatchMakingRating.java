@@ -29,7 +29,6 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
 import javax.persistence.*;
@@ -120,7 +119,7 @@ public class MatchMakingRating {
 
 	public void increaseRankPoints(long opMMR) {
 		if (tier.getTier() >= RankedTier.ADEPT_IV.getTier())
-			banked = Math.min(7 - (tier.getTier() - 4), 28);
+			banked = Math.min(banked + 7 - (tier.getTier() - 4), 28);
 		double mmrModif = Helper.prcnt(mmr, Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) opMMR, mmr);
 		int rpValue = Helper.clamp((int) Math.round(mmrModif * 15), 5, 30);
 		if (tier == RankedTier.UNRANKED) {
@@ -138,7 +137,7 @@ public class MatchMakingRating {
 				return;
 			}
 			return;
-		} else if (rankPoints == 100) {
+		} else if (rankPoints == tier.getPromRP()) {
 			promWins++;
 
 			if (promWins > tier.getMd() / 2f) {
@@ -173,14 +172,14 @@ public class MatchMakingRating {
 		}
 
 		if (tier != RankedTier.ARCHMAGE)
-			rankPoints = Math.min(rankPoints + rpValue, 100);
+			rankPoints = Math.min(rankPoints + rpValue, tier.getPromRP());
 		else
 			rankPoints += rpValue;
 	}
 
 	public void decreaseRankPoints(long opMMR) {
 		if (tier.getTier() >= RankedTier.ADEPT_IV.getTier())
-			banked = Math.min(7 - (tier.getTier() - 4), 28);
+			banked = Math.min(banked + 7 - (tier.getTier() - 4), 28);
 		double mmrModif = Helper.prcnt(Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) opMMR);
 		int rpValue = Helper.clamp((int) Math.round(mmrModif * 15), 5, 30);
 
@@ -198,7 +197,7 @@ public class MatchMakingRating {
 						.queue(null, Helper::doNothing);
 			}
 			return;
-		} else if (rankPoints == 100) {
+		} else if (rankPoints == tier.getPromRP()) {
 			promLosses++;
 
 			if (promLosses > tier.getMd() / 2f) {
@@ -211,7 +210,7 @@ public class MatchMakingRating {
 
 		if (rankPoints == 0 && Helper.chance(20 * mmrModif) && tier != RankedTier.INITIATE_IV) {
 			tier = tier.getPrevious();
-			rankPoints = 75;
+			rankPoints -= rpValue;
 			Main.getInfo().getUserByID(uid).openPrivateChannel()
 					.flatMap(c -> c.sendMessage("Você foi rebaixado para o tier %s (%s).".formatted(tier.getTier(), tier.getName())))
 					.queue(null, Helper::doNothing);
@@ -349,94 +348,6 @@ public class MatchMakingRating {
 		}
 
 		return data;
-	}
-
-	public static Map<Side, Pair<String, Map<String, Integer>>> calcSoloMMR(MatchHistory mh) {
-		Map<Side, Pair<String, Map<String, Integer>>> finalData = new HashMap<>();
-		for (Side s : Side.values()) {
-			List<MatchRound> rounds = mh.getRounds().entrySet().stream()
-					.sorted(Comparator.comparingInt(Map.Entry::getKey))
-					.map(Map.Entry::getValue)
-					.filter(mr -> mr.getSide() == s)
-					.collect(Collectors.toList());
-			Pair<String, Map<String, Integer>> fd = Pair.of(
-					rounds.get(0)
-							.getScript()
-							.getJSONObject(s.name().toLowerCase(Locale.ROOT))
-							.getString("id"),
-					new HashMap<>()
-			);
-
-			JSONObject ph = null;
-			for (MatchRound round : rounds) {
-				JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase(Locale.ROOT));
-				for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
-					String key = entry.getKey();
-					Object value = entry.getValue();
-					if (!key.equals("id")) {
-						if (ph == null) {
-							fd.getRight().put(key, (int) value);
-						} else {
-							int rv = (int) value - ph.optInt(key);
-							fd.getRight().computeIfPresent(key, (k, v) -> rv);
-						}
-					}
-				}
-
-				ph = jo;
-			}
-
-			finalData.put(s, fd);
-		}
-
-		return finalData;
-	}
-
-	public static Map<Side, List<Pair<String, Map<String, Integer>>>> calcDuoMMR(MatchHistory mh) {
-		Map<Side, List<Pair<String, Map<String, Integer>>>> finalData = new HashMap<>();
-		for (Side s : Side.values()) {
-			List<MatchRound> rounds = mh.getRounds().entrySet().stream()
-					.sorted(Comparator.comparingInt(Map.Entry::getKey))
-					.map(Map.Entry::getValue)
-					.filter(mr -> mr.getSide() == s)
-					.collect(Collectors.toList());
-
-			Set<String> ids = new HashSet<>();
-			for (MatchRound round : rounds) {
-				ids.add(round.getScript()
-						.getJSONObject(s.name().toLowerCase(Locale.ROOT))
-						.getString("id"));
-			}
-
-			for (String id : ids) {
-				Pair<String, Map<String, Integer>> fd = Pair.of(id, new HashMap<>());
-
-				JSONObject ph = null;
-				for (MatchRound round : rounds) {
-					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase(Locale.ROOT));
-					if (!jo.getString("id").equals(id)) continue;
-					else {
-						for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
-							String key = entry.getKey();
-							Object value = entry.getValue();
-							if (!key.equals("id")) {
-								if (ph == null) {
-									fd.getRight().put(key, (int) value);
-								} else {
-									int rv = (int) value - ph.optInt(key);
-									fd.getRight().computeIfPresent(key, (k, v) -> rv);
-								}
-							}
-						}
-					}
-
-					ph = jo;
-				}
-				finalData.computeIfAbsent(s, k -> new ArrayList<>()).add(fd);
-			}
-		}
-
-		return finalData;
 	}
 
 	@Override
