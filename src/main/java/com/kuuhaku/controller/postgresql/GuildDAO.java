@@ -138,11 +138,14 @@ public class GuildDAO {
 		List<GuildConfig> gc = q.getResultList();
 		gc.removeIf(g -> Main.getJibril().getGuildById(g.getGuildId()) == null);
 		for (GuildConfig g : gc) {
-			TextChannel chn = g.getRelayChannel();
-			if (chn != null) relays.put(g.getGuildId(), chn.getId());
-			else {
-				g.setRelayChannel(null);
-				updateGuildSettings(g);
+			try {
+				TextChannel chn = g.getRelayChannel();
+				if (chn != null) relays.put(g.getGuildId(), chn.getId());
+				else {
+					g.setRelayChannel(null);
+					updateGuildSettings(g);
+				}
+			} catch (NullPointerException ignore) {
 			}
 		}
 
