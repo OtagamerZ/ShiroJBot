@@ -49,6 +49,18 @@ public class BlacklistCommand implements Executable {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 			}
 		}
+
+		String[] ids = {
+
+		};
+		String prize = "";
+		for (String id : ids) {
+			try {
+				PrivateChannel chn = message.getJDA().getUserById(id).openPrivateChannel().complete();
+				chn.sendMessage("Parabéns, você foi um dos sorteados no sorteio de aniversário da Shiro, por favor vá ao servidor de suporte e mencione um dos moderadores ou responda esta mensagem com a frase `quero receber o prêmio.`\n**Prêmio:" + prize + "**").queue();
+			} catch (Exception ignore) {
+			}
+		}
 	}
 
 	private void resolveBlacklistById(User author, String[] args, MessageChannel channel) {
