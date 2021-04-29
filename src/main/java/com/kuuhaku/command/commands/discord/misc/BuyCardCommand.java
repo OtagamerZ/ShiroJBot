@@ -30,6 +30,7 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -160,7 +161,7 @@ public class BuyCardCommand implements Executable {
 								byName.get(),
 								minPrice.get(),
 								maxPrice.get(),
-								byRarity.get(),
+								byRarity.get() == null ? null : KawaiponRarity.getByFragment(byRarity.get()),
 								byAnime.get(),
 								onlyFoil.get(),
 								onlyMine.get() ? author.getId() : null
