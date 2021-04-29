@@ -83,11 +83,15 @@ public enum KawaiponRarity {
 	}
 
 	public static KawaiponRarity getByFragment(String fragment) {
-		return valueOf(Helper.didYouMean(fragment,
+		String result = Helper.didYouMean(
+				fragment,
 				Arrays.stream(validValues())
 						.filter(r -> StringUtils.containsIgnoreCase(r.name(), fragment) || StringUtils.containsIgnoreCase(r.toString(), fragment))
-						.map(KawaiponRarity::name)
+						.map(Enum::name)
 						.toArray(String[]::new)
-		));
+		);
+
+		if (result.isBlank()) return null;
+		return valueOf(result);
 	}
 }
