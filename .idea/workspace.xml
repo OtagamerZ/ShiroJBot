@@ -13,11 +13,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de comandos de filtros de imagem.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/feedback.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/MirrorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/MirrorCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/KawaiponRarity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/KawaiponRarity.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1169,8 +1172,14 @@
       <workItem from="1619478658148" duration="1316000" />
       <workItem from="1619492864823" duration="1674000" />
       <workItem from="1619556247010" duration="1009000" />
-      <workItem from="1619612753305" duration="19512000" />
-      <workItem from="1619697810464" duration="13372000" />
+      <workItem from="1619612753305" duration="15296000" />
+    </task>
+    <task id="LOCAL-04244" summary="Remoção completa do s!settings">
+      <created>1619124475815</created>
+      <option name="number" value="04244" />
+      <option name="presentableId" value="LOCAL-04244" />
+      <option name="project" value="LOCAL" />
+      <updated>1619124475815</updated>
     </task>
     <task id="LOCAL-04245" summary="Remoção completa do s!settings">
       <created>1619125136946</created>
@@ -1508,14 +1517,7 @@
       <option name="project" value="LOCAL" />
       <updated>1619631320758</updated>
     </task>
-    <task id="LOCAL-04293" summary="Correções menores">
-      <created>1619634376007</created>
-      <option name="number" value="04293" />
-      <option name="presentableId" value="LOCAL-04293" />
-      <option name="project" value="LOCAL" />
-      <updated>1619634376007</updated>
-    </task>
-    <option name="localTasksCounter" value="4294" />
+    <option name="localTasksCounter" value="4293" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
