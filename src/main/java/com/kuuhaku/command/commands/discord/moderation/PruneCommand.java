@@ -76,7 +76,7 @@ public class PruneCommand implements Executable {
 							return;
 						}
 
-						msgs = msgs.subList(0, amount);
+						msgs = msgs.subList(0, Math.min(amount, msgs.size()));
 
 						if (msgs.size() != 1)
 							msg += msgs.size() + " mensagens de limpas.";
