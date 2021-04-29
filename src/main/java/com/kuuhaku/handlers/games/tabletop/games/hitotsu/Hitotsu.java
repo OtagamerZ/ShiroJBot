@@ -72,7 +72,7 @@ public class Hitotsu extends Game {
 		setActions(
 				s -> {
 					close();
-					channel.sendFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+					channel.sendFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode())))
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							});
@@ -85,7 +85,7 @@ public class Hitotsu extends Game {
 						getBoard().awardWinner(this, u.getId());
 						close();
 						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
-								.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+								.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode())))
 								.queue(msg -> {
 									if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 								});
@@ -172,7 +172,7 @@ public class Hitotsu extends Game {
 			if (winners.size() == 1) {
 				Hand h = winners.get(0);
 				channel.sendMessage(h.getUser().getAsMention() + " é o jogador que possui menos cartas, temos um vencedor!! (" + getRound() + " turnos)")
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+						.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode())))
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						});
@@ -180,7 +180,7 @@ public class Hitotsu extends Game {
 				close();
 			} else if (winners.size() != getBoard().getPlayers().size()) {
 				channel.sendMessage(String.join(", ", winners.stream().map(h -> h.getUser().getAsMention()).toArray(String[]::new)) + " são os jogadores que possuem menos cartas, temos " + winners.size() + " vencedores!! (" + getRound() + " turnos)")
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+						.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode())))
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						});
@@ -189,7 +189,7 @@ public class Hitotsu extends Game {
 			} else {
 				close();
 				channel.sendMessage("Temos um empate! (" + getRound() + " turnos)")
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+						.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode())))
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						});
@@ -201,7 +201,7 @@ public class Hitotsu extends Game {
 		getBoard().awardWinner(this, getCurrent().getId());
 		close();
 		channel.sendMessage("Não restam mais cartas para " + getCurrent().getAsMention() + ", temos um vencedor!! (" + getRound() + " turnos)")
-				.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+				.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode())))
 				.queue(msg -> {
 					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 				});
@@ -276,7 +276,7 @@ public class Hitotsu extends Game {
 		}
 		resetTimer();
 		channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
-				.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+				.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode())))
 				.queue(s -> {
 					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = s;
@@ -298,7 +298,7 @@ public class Hitotsu extends Game {
 		g2d.dispose();
 
 		channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
-				.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+				.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode())))
 				.queue(s -> {
 					if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					this.message = s;
@@ -384,7 +384,7 @@ public class Hitotsu extends Game {
 			User u = getCurrent();
 			resetTimer();
 			channel.sendMessage(u.getName() + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
-					.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+					.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode())))
 					.queue(s -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						this.message = s;
@@ -401,13 +401,13 @@ public class Hitotsu extends Game {
 				getBoard().awardWinner(this, getCurrent().getId());
 				close();
 				channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)")
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+						.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode())))
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						});
 			} else {
 				channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : ""))
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+						.addFile(Helper.writeAndGet(mount, String.valueOf(this.hashCode())))
 						.queue(s -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = s;

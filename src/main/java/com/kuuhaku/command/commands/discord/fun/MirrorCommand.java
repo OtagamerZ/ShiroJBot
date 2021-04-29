@@ -71,9 +71,9 @@ public class MirrorCommand implements Executable {
 						int mode = 0;
 						if (args.length > 0) {
 							mode = Integer.parseInt(args[0]);
-							if (!Helper.between(mode, 0, 5)) {
+							if (!Helper.between(mode, 0, 4)) {
 								ms.get().delete().queue(null, Helper::doNothing);
-								channel.sendMessage("❌ | A direção deve ser 1 (esq. para dir.), 2 (dir. para esq.), 3 (cima pra baixo) ou 4 (baixo pra cima).").queue();
+								channel.sendMessage("❌ | A direção deve ser 0 (esq. para dir.), 1 (dir. para esq.), 2 (cima pra baixo) ou 3 (baixo pra cima).").queue();
 								return;
 							}
 						}
