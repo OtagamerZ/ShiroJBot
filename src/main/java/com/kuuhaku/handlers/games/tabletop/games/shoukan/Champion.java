@@ -128,7 +128,7 @@ public class Champion implements Drawable, Cloneable {
 
 	@Override
 	public BufferedImage drawCard(boolean flipped) {
-		if (hasEffect() && game != null)
+		if (hasEffect() && game != null && game.getEffectLock() == 0)
 			getEffect(new EffectParameters(ON_RENDER, game, -1, game.getSideById(acc.getUid()), Duelists.of(this, -1, null, -1), game.getChannel()));
 
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
