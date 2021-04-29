@@ -79,6 +79,8 @@ public class Equipment implements Drawable, Cloneable {
 	private transient Account acc = null;
 	private transient Clan clan = null;
 	private transient Pair<Integer, Champion> linkedTo = null;
+	private transient int altAtk = -1;
+	private transient int altDef = -1;
 
 	@Override
 	public BufferedImage drawCard(boolean flipped) {
@@ -227,11 +229,29 @@ public class Equipment implements Drawable, Cloneable {
 	}
 
 	public int getAtk() {
-		return atk;
+		if (altAtk == -1) altAtk = atk;
+		return altAtk;
 	}
 
 	public int getDef() {
-		return def;
+		if (altDef == -1) altDef = def;
+		return altDef;
+	}
+
+	public int getAltAtk() {
+		return altAtk;
+	}
+
+	public void setAltAtk(int altAtk) {
+		this.altAtk = Math.max(-1, altAtk);
+	}
+
+	public int getAltDef() {
+		return altDef;
+	}
+
+	public void setAltDef(int altDef) {
+		this.altDef = Math.max(-1, altDef);
 	}
 
 	public int getMana() {
