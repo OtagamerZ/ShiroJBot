@@ -1178,21 +1178,7 @@
       <workItem from="1619492864823" duration="1674000" />
       <workItem from="1619556247010" duration="1009000" />
       <workItem from="1619612753305" duration="15296000" />
-      <workItem from="1619798402294" duration="8754000" />
-    </task>
-    <task id="LOCAL-04253" summary="Melhoria na listagem de imagens das cartas">
-      <created>1619200122695</created>
-      <option name="number" value="04253" />
-      <option name="presentableId" value="LOCAL-04253" />
-      <option name="project" value="LOCAL" />
-      <updated>1619200122696</updated>
-    </task>
-    <task id="LOCAL-04254" summary="Melhoria na listagem de imagens das cartas">
-      <created>1619201213299</created>
-      <option name="number" value="04254" />
-      <option name="presentableId" value="LOCAL-04254" />
-      <option name="project" value="LOCAL" />
-      <updated>1619201213299</updated>
+      <workItem from="1619798402294" duration="9077000" />
     </task>
     <task id="LOCAL-04255" summary="Melhoria na listagem de imagens das cartas">
       <created>1619202284019</created>
@@ -1523,7 +1509,21 @@
       <option name="project" value="LOCAL" />
       <updated>1619815302566</updated>
     </task>
-    <option name="localTasksCounter" value="4302" />
+    <task id="LOCAL-04302" summary="Comando de adicionar Emotes agora aceita menções">
+      <created>1619815466976</created>
+      <option name="number" value="04302" />
+      <option name="presentableId" value="LOCAL-04302" />
+      <option name="project" value="LOCAL" />
+      <updated>1619815466976</updated>
+    </task>
+    <task id="LOCAL-04303" summary="Comando de adicionar Emotes agora aceita menções">
+      <created>1619815576816</created>
+      <option name="number" value="04303" />
+      <option name="presentableId" value="LOCAL-04303" />
+      <option name="project" value="LOCAL" />
+      <updated>1619815576816</updated>
+    </task>
+    <option name="localTasksCounter" value="4304" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

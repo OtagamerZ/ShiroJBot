@@ -145,7 +145,6 @@ public class AddEmoteCommand implements Executable {
 			int added = 0;
 			for (Emote emote : toadd) {
 				try {
-					if (guild.getEmotes().size() + added >= guild.getMaxEmotes()) break;
 					acts.add(guild.createEmote(emote.getName(), Icon.from(Helper.getImage(emote.getImageUrl())), message.getMentionedRoles().toArray(new Role[0])));
 					added++;
 				} catch (IOException ignore) {
