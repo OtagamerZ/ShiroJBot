@@ -128,7 +128,7 @@ public class Shoukan extends GlobalGame {
 		setActions(
 				s -> {
 					close();
-					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg ->
 									this.message.compute(msg.getChannel().getId(), (id, m) -> {
 										if (m != null)
@@ -148,7 +148,7 @@ public class Shoukan extends GlobalGame {
 						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 						close();
 					}
-					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg ->
 									this.message.compute(msg.getChannel().getId(), (id, m) -> {
 										if (m != null)
@@ -203,7 +203,7 @@ public class Shoukan extends GlobalGame {
 		setActions(
 				s -> {
 					close();
-					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg ->
 									this.message.compute(msg.getChannel().getId(), (id, m) -> {
 										if (m != null)
@@ -223,7 +223,7 @@ public class Shoukan extends GlobalGame {
 						getBoard().awardWinner(this, daily, getBoard().getPlayers().get(1).getId());
 						close();
 					}
-					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+					channel.sendFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg ->
 									this.message.compute(msg.getChannel().getId(), (id, m) -> {
 										if (m != null)
@@ -244,7 +244,7 @@ public class Shoukan extends GlobalGame {
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		AtomicReference<String> previous = new AtomicReference<>("");
 		channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
-				.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+				.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 				.queue(s -> {
 					this.message.put(s.getChannel().getId(), s);
 					if (!s.getGuild().getId().equals(previous.get())) {
@@ -749,7 +749,7 @@ public class Shoukan extends GlobalGame {
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		moveLock = true;
 		channel.sendMessage(msg)
-				.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+				.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 				.queue(s -> {
 					this.message.compute(s.getChannel().getId(), (id, m) -> {
 						if (m != null)
@@ -1468,7 +1468,7 @@ public class Shoukan extends GlobalGame {
 				close();
 				finished = true;
 				channel.sendMessage(msg)
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 						.queue(ms ->
 								this.message.compute(ms.getChannel().getId(), (id, m) -> {
 									if (m != null)
@@ -1588,7 +1588,7 @@ public class Shoukan extends GlobalGame {
 
 					close();
 					channel.sendMessage(msg)
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(mm ->
 									this.message.compute(mm.getChannel().getId(), (id, m) -> {
 										if (m != null)
@@ -1639,7 +1639,7 @@ public class Shoukan extends GlobalGame {
 
 					close();
 					channel.sendMessage(msg)
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 							.queue(mm ->
 									this.message.compute(mm.getChannel().getId(), (id, m) -> {
 										if (m != null)
@@ -1723,7 +1723,7 @@ public class Shoukan extends GlobalGame {
 
 				close();
 				channel.sendMessage(msg)
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode())))
+						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
 						.queue(mm ->
 								this.message.compute(mm.getChannel().getId(), (id, m) -> {
 									if (m != null)

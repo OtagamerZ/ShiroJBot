@@ -67,7 +67,7 @@ public class ShoukanDeckCommand implements Executable {
 							.setImage("attachment://deck.jpg");
 
 					m.delete().queue();
-					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck")).queue();
+					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
 				} catch (IOException e) {
 					m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
@@ -91,11 +91,11 @@ public class ShoukanDeckCommand implements Executable {
 						m.delete().queue();
 						if (showPrivate) {
 							author.openPrivateChannel()
-									.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck")))
+									.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
 									.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
 									.queue(null, Helper::doNothing);
 						} else {
-							channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck")).queue();
+							channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
 						}
 					} catch (IOException e) {
 						m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
@@ -117,11 +117,11 @@ public class ShoukanDeckCommand implements Executable {
 						m.delete().queue();
 						if (showPrivate) {
 							author.openPrivateChannel()
-									.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck")))
+									.flatMap(c -> c.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")))
 									.flatMap(c -> channel.sendMessage("Deck enviado nas suas mensagens privadas."))
 									.queue(null, Helper::doNothing);
 						} else {
-							channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck")).queue();
+							channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
 						}
 					} catch (IOException e) {
 						m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
