@@ -542,7 +542,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public void setModDodge(double dodge) {
-		this.mDodge += dodge;
+		this.mDodge = dodge;
 	}
 
 	public void resetAttribs() {
