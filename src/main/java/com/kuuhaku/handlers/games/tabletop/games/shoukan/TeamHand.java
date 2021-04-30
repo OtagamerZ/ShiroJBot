@@ -196,7 +196,7 @@ public class TeamHand extends Hand {
 		setManaPerTurn(getBaseManaPerTurn());
 
 		setMaxCards(Math.max(maxCards
-							 + (combo.getLeft() == Race.CREATURE ? 2 : 0)
+							 + (combo.getLeft() == Race.CREATURE ? 2 : combo.getLeft() == Race.HUMAN ? 3 : 0)
 							 + (combo.getRight() == Race.CREATURE ? 1 : 0), 1)
 		);
 
@@ -469,7 +469,7 @@ public class TeamHand extends Hand {
 	public void next() {
 		users.getNext();
 		deques.getNext();
-		cards.getNext();
+		if (combo.getLeft() != Race.HUMAN) cards.getNext();
 		destinyDecks.getNext();
 	}
 

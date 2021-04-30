@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 public enum Race {
 	HUMAN("Humano",
-			"+1 Limite de cópias para campeões",
+			"**(SOLO)** +1 Limite de cópias para campeões\n**(DUO)** Você e seu parceiro dividem a mesma mão (+3 limite de cartas na mão)",
 			"+750 HP",
 			"Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia."
 	),
@@ -41,7 +41,7 @@ public enum Race {
 			"Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade torna-os altamente mortais no campo de batalha."
 	),
 	BESTIAL("Bestial",
-			"+1 Limite de cópias para evogears",
+			"**(SOLO)** +1 Limite de cópias para evogears\n**(DUO)** Cartas descartadas voltam para o deck e o embaralham-no",
 			"Inicia com 1 ponto de mana extra",
 			"Metade humano e metade fera, possuem uma incrível força e instintos aguçados. Não se engane, uma garota-gato ainda é mortal o suficiente para te pegar desprevenido."
 	),
