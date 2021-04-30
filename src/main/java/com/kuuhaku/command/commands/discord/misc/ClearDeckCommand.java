@@ -75,7 +75,7 @@ public class ClearDeckCommand implements Executable {
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-deck")).queue(m -> {
 			try {
-				File f = Helper.writeAndGet(sd.view(kp), "deque", "png");
+				File f = Helper.writeAndGet(sd.view(kp), "deque", "jpg");
 				channel.sendMessage(eb.build()).addFile(f)
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());

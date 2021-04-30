@@ -89,11 +89,11 @@ public class KawaiponsCommand implements Executable {
                     eb.addField(":books: | Coleções completas:", count + " de " + CardDAO.getValidAnime().size() + " (" + Helper.prcntToInt(count, CardDAO.getValidAnime().size()) + "%)", true);
                     eb.addField(":red_envelope: | Total de cartas normais:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
                     eb.addField(":star2: | Total de cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(foil, CardDAO.totalCards()) + "%)", true);
-                    eb.setImage("attachment://cards.png");
+                    eb.setImage("attachment://cards.jpg");
                     eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
 
                     m.delete().queue();
-                    channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "cards", "png")).queue();
+                    channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "cards", "jpg")).queue();
                     return;
                 }
 

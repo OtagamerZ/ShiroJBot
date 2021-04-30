@@ -13,9 +13,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação de novos métodos nos equipamentos">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na renderização dos tabuleiros">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanRevertCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheCardsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheCardsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/StockMarketCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/StockMarketCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ClearDeckCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ClearDeckCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1169,13 +1174,6 @@
       <workItem from="1619556247010" duration="1009000" />
       <workItem from="1619612753305" duration="15296000" />
     </task>
-    <task id="LOCAL-04246" summary="Adição de cargos pagos">
-      <created>1619184320810</created>
-      <option name="number" value="04246" />
-      <option name="presentableId" value="LOCAL-04246" />
-      <option name="project" value="LOCAL" />
-      <updated>1619184320810</updated>
-    </task>
     <task id="LOCAL-04247" summary="Adição de cargos pagos">
       <created>1619184677335</created>
       <option name="number" value="04247" />
@@ -1512,7 +1510,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619723199431</updated>
     </task>
-    <option name="localTasksCounter" value="4295" />
+    <task id="LOCAL-04295" summary="Correção na renderização dos tabuleiros">
+      <created>1619749841571</created>
+      <option name="number" value="04295" />
+      <option name="presentableId" value="LOCAL-04295" />
+      <option name="project" value="LOCAL" />
+      <updated>1619749841579</updated>
+    </task>
+    <option name="localTasksCounter" value="4296" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1598,7 +1603,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria na API de cartas" />
     <MESSAGE value="Correção nos efeitos por tempo do Shoukan" />
     <MESSAGE value="Drops agora possuem chance de conter cartas do Shoukan" />
     <MESSAGE value="Adicionada opção de ignorar mensagem de confirmação nos comandos de converter e reverter cartas" />
@@ -1623,7 +1627,8 @@
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Implementação de novos métodos" />
     <MESSAGE value="Implementação de novos métodos nos equipamentos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementação de novos métodos nos equipamentos" />
+    <MESSAGE value="Correção na renderização dos tabuleiros" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na renderização dos tabuleiros" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
