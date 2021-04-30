@@ -70,7 +70,7 @@ public class AddEmoteCommand implements Executable {
 			}
 		}
 
-		if (message.getEmotes().isEmpty()) {
+		if (message.getEmotes().isEmpty() && emts.isEmpty()) {
 			if (args[0].length() < 2) {
 				channel.sendMessage("❌ | Emotes devem ter no mínimo 2 caracteres no nome.").queue();
 				return;
