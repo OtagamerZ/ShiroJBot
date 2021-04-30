@@ -74,7 +74,7 @@ public class StockMarketCommand implements Executable {
 				.addField("Variação de valor", emote + (growth > 0 ? " +" : " ") + Helper.round(growth * 100, 3) + "%", true);
 
 		channel.sendMessage(eb.build())
-				.addFile(Helper.writeAndGet(c.drawCardNoBorder(), "card", "png"), "card.png")
+				.addFile(Helper.writeAndGet(c.drawCardNoBorder(), "card", "png"))
 				.queue();
 	}
 }

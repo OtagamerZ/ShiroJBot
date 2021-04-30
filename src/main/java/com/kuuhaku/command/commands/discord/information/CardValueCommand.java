@@ -133,7 +133,7 @@ public class CardValueCommand implements Executable {
 						List.copyOf(foilValues.values())
 				).setMarker(SeriesMarkers.NONE);
 
-			channel.sendFile(Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "chart", "png"), "chart.png").queue();
+			channel.sendFile(Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "chart", "png")).queue();
 			m.delete().queue();
 		});
 	}
