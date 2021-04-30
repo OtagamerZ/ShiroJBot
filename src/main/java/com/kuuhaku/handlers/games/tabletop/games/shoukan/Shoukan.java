@@ -850,6 +850,8 @@ public class Shoukan extends GlobalGame {
 				yours.resetAttribs();
 
 				if (hisDodge) {
+					his.resetAttribs();
+
 					if (applyEot(ON_MISS, current, is[0])) return;
 					if (applyEffect(ON_MISS, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
