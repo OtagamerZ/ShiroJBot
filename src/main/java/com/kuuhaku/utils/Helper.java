@@ -1966,7 +1966,7 @@ public class Helper {
 
 	public static String extract(String text, @Language("RegExp") String regex) {
 		Matcher m = Pattern.compile(regex).matcher(text);
-		if (!m.matches()) return m.group();
+		if (m.find()) return m.group();
 		else return null;
 	}
 
