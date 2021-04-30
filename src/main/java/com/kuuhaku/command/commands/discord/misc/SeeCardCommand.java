@@ -126,7 +126,7 @@ public class SeeCardCommand implements Executable {
 				if (cards.contains(card))
 					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(tc.drawCard(foil), "kp_" + tc.getId(), "png"), "kawaipon.png").queue();
 				else
-					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(bi, "unknown"), "kawaipon.jpg").queue();
+					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(bi, "unknown", "jpg"), "kawaipon.jpg").queue();
 			} catch (IOException e) {
 				channel.sendMessage("❌ | Deu um pequeno erro aqui na hora de mostrar a carta, logo logo um dos meus desenvolvedores irá corrigi-lo!").queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);

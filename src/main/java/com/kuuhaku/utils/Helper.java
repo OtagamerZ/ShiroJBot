@@ -29,7 +29,6 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.github.ygimenez.type.PageType;
-import com.google.common.primitives.Longs;
 import com.google.gson.Gson;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
@@ -2508,38 +2507,6 @@ public class Helper {
 
 	public static int roundTrunc(int value, int mult) {
 		return mult * (Math.round((float) value / mult));
-	}
-
-	public static File writeAndGet(BufferedImage bi) {
-		File tempFolder = Main.getInfo().getTemporaryFolder();
-		File f = new File(tempFolder, hash(Longs.toByteArray(System.currentTimeMillis()), "MD5") + ".jpg");
-
-		try {
-			ImageIO.write(bi, "jpg", f);
-		} catch (IOException e) {
-			try {
-				ImageIO.write(bi, "png", f);
-			} catch (IOException ignore) {
-			}
-		}
-
-		return f;
-	}
-
-	public static File writeAndGet(BufferedImage bi, String name) {
-		File tempFolder = Main.getInfo().getTemporaryFolder();
-		File f = new File(tempFolder, name + ".jpg");
-
-		try {
-			ImageIO.write(bi, "jpg", f);
-		} catch (IOException e) {
-			try {
-				ImageIO.write(bi, "png", f);
-			} catch (IOException ignore) {
-			}
-		}
-
-		return f;
 	}
 
 	public static File writeAndGet(BufferedImage bi, String name, String extension) {
