@@ -13,8 +13,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na renderização dos tabuleiros">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/VoiceRole.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,11 +180,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.model.persistent.guild" />
       <recent name="com.kuuhaku.command.commands.discord.fun" />
       <recent name="com.kuuhaku.utils" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
-      <recent name="com.kuuhaku.model.persistent.guild" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -200,6 +204,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1167,13 +1182,7 @@
       <workItem from="1619492864823" duration="1674000" />
       <workItem from="1619556247010" duration="1009000" />
       <workItem from="1619612753305" duration="15296000" />
-    </task>
-    <task id="LOCAL-04247" summary="Adição de cargos pagos">
-      <created>1619184677335</created>
-      <option name="number" value="04247" />
-      <option name="presentableId" value="LOCAL-04247" />
-      <option name="project" value="LOCAL" />
-      <updated>1619184677335</updated>
+      <workItem from="1619798402294" duration="4159000" />
     </task>
     <task id="LOCAL-04248" summary="Adição de cargos pagos">
       <created>1619185540487</created>
@@ -1511,7 +1520,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619749841579</updated>
     </task>
-    <option name="localTasksCounter" value="4296" />
+    <task id="LOCAL-04296" summary="Correções menores">
+      <created>1619793958977</created>
+      <option name="number" value="04296" />
+      <option name="presentableId" value="LOCAL-04296" />
+      <option name="project" value="LOCAL" />
+      <updated>1619793958977</updated>
+    </task>
+    <option name="localTasksCounter" value="4297" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1618,11 +1634,11 @@
     <MESSAGE value="Adição de dano por carga" />
     <MESSAGE value="Adição de penalidade por inatividade em rankings maiores que Adepto IV" />
     <MESSAGE value="Correção no comando prune" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Implementação de novos métodos" />
     <MESSAGE value="Implementação de novos métodos nos equipamentos" />
     <MESSAGE value="Correção na renderização dos tabuleiros" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na renderização dos tabuleiros" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
