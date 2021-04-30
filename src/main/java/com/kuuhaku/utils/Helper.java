@@ -1965,7 +1965,9 @@ public class Helper {
 	}
 
 	public static String extract(String text, @Language("RegExp") String regex) {
-		return Pattern.compile(regex).matcher(text).group();
+		Matcher m = Pattern.compile(regex).matcher(text);
+		if (m.matches()) return m.group();
+		else return null;
 	}
 
 	public static void broadcast(String message, TextChannel channel, User author) {
