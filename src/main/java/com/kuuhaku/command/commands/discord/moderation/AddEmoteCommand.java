@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.discord.moderation;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
@@ -32,7 +33,9 @@ import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Command(
@@ -50,9 +53,21 @@ public class AddEmoteCommand implements Executable {
 		long currAnim = guild.getEmotes().stream().filter(Emote::isAnimated).count();
 		long currNormal = guild.getEmotes().size() - currAnim;
 
-		if (message.getEmotes().isEmpty() && (args.length < 1 || att == null)) {
+		if (message.getEmotes().isEmpty() && args.length < 1) {
 			channel.sendMessage("❌ | Você precisa informar ao menos 1 emote para adicionar.").queue();
 			return;
+		}
+
+		Set<Emote> emts = new HashSet<>();
+		for (String arg : args) {
+			if (Helper.regex(arg, "\\{a?&\\w+&\\d{10,}}")) {
+				Emote e = Main.getShiroShards().getEmoteById(Helper.extract(arg, "(?<=&)\\d+(?=})"));
+				if (e == null) {
+					channel.sendMessage("❌ | Emote `" + arg + "` não encontrado, verifique se digitou a menção correta no formato usado por mim no `" + prefix + "semotes`.").queue();
+					return;
+				}
+				emts.add(e);
+			}
 		}
 
 		if (message.getEmotes().isEmpty()) {
@@ -108,14 +123,19 @@ public class AddEmoteCommand implements Executable {
 				guild.createEmote(args[0], Icon.from(bytes, type), message.getMentionedRoles().toArray(new Role[0]))
 						.flatMap(s -> channel.sendMessage(msg))
 						.queue(null, Helper::doNothing);
-			} catch (IOException e) {
+			} catch (IOException ex) {
 				channel.sendMessage("❌ | Não foi possível obter a imagem.").queue();
 			}
 		} else {
 			List<AuditableRestAction<Emote>> acts = new ArrayList<>();
 
-			long anim = message.getEmotes().stream().filter(Emote::isAnimated).count();
-			long normal = message.getEmotes().size() - anim;
+			Set<Emote> toadd = new HashSet<>() {{
+				addAll(emts);
+				addAll(message.getEmotes());
+			}};
+
+			long anim = toadd.stream().filter(Emote::isAnimated).count();
+			long normal = toadd.size() - anim;
 
 			if (currAnim + anim > guild.getMaxEmotes() || currNormal + normal > guild.getMaxEmotes()) {
 				channel.sendMessage("❌ | O servidor não tem espaço suficiente para emotes.").queue();
@@ -123,7 +143,7 @@ public class AddEmoteCommand implements Executable {
 			}
 
 			int added = 0;
-			for (Emote emote : message.getEmotes()) {
+			for (Emote emote : toadd) {
 				try {
 					if (guild.getEmotes().size() + added >= guild.getMaxEmotes()) break;
 					acts.add(guild.createEmote(emote.getName(), Icon.from(Helper.getImage(emote.getImageUrl())), message.getMentionedRoles().toArray(new Role[0])));
