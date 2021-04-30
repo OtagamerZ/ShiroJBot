@@ -98,6 +98,9 @@ public class MarryCommand implements Executable {
 
 					if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
+						success.accept(null);
+						timeout.cancel(true);
+						timeout = null;
 						return;
 					}
 
