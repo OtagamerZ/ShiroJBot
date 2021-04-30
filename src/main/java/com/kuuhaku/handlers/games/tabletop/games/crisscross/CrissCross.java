@@ -68,7 +68,7 @@ public class CrissCross extends Game {
 		setActions(
 				s -> {
 					close();
-					channel.sendFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+					channel.sendFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							});
@@ -76,7 +76,7 @@ public class CrissCross extends Game {
 				s -> {
 					getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 					close();
-					channel.sendFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+					channel.sendFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 							.queue(msg -> {
 								if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							});
@@ -87,7 +87,7 @@ public class CrissCross extends Game {
 	@Override
 	public void start() {
 		channel.sendMessage(getCurrent().getAsMention() + " você começa!")
-				.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+				.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 				.queue(s -> {
 					this.message = s;
 					ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), listener);
@@ -147,21 +147,21 @@ public class CrissCross extends Game {
 				getBoard().awardWinner(this, winner);
 				close();
 				channel.sendMessage(getCurrent().getAsMention() + " venceu! (" + getRound() + " turnos)")
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						});
 			} else if (fullRows == 3) {
 				close();
 				channel.sendMessage("Temos um empate!")
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 						});
 			} else {
 				resetTimer();
 				channel.sendMessage("Turno de " + getCurrent().getAsMention())
-						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+						.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 						.queue(msg -> {
 							if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 							this.message = msg;
@@ -180,7 +180,7 @@ public class CrissCross extends Game {
 			getBoard().awardWinner(this, getBoard().getPlayers().getNext().getId());
 			close();
 			channel.sendMessage(getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)")
-					.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode())))
+					.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 					.queue(msg -> {
 						if (this.message != null) this.message.delete().queue(null, Helper::doNothing);
 					});
