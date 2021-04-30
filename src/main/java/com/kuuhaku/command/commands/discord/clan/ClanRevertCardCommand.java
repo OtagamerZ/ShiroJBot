@@ -179,7 +179,7 @@ public class ClanRevertCardCommand implements Executable {
 				eb.setImage("attachment://card.png");
 
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(f.drawCard(false), f.getCard().getId(), "png"), "card.png")
+				channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(f.drawCard(false), "kp_" + f.getCard().getId(), "png"), "card.png")
 						.queue(s ->
 								Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
