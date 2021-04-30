@@ -1511,7 +1511,11 @@ public class Shoukan extends GlobalGame {
 					}
 				}
 
-				arena.getGraveyard().get(current).addAll(discardBatch.stream().map(Drawable::copy).collect(Collectors.toList()));
+				if (team && h.get().getCombo().getLeft() == Race.BESTIAL) {
+					h.get().getDeque().addAll(discardBatch.stream().map(Drawable::copy).collect(Collectors.toList()));
+					Collections.shuffle(h.get().getDeque());
+				} else
+					arena.getGraveyard().get(current).addAll(discardBatch.stream().map(Drawable::copy).collect(Collectors.toList()));
 				discardBatch.clear();
 
 				if (getRound() > 0) reroll = false;
