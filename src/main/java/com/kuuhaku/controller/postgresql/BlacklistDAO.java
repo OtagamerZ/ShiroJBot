@@ -25,6 +25,7 @@ import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.ParameterMode;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -107,7 +108,6 @@ public class BlacklistDAO {
 			acc = null;
 		}
 
-		boolean blacklisted = false;
 		if (acc != null) {
 			q = em.createQuery("SELECT b FROM Blacklist b WHERE uid = :id", Blacklist.class);
 			q.setParameter("id", acc.getUid());
@@ -130,7 +130,8 @@ public class BlacklistDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.createNativeQuery("SELECT purge_all_data(:id)")
+		em.createStoredProcedureQuery("purge_all_data")
+				.registerStoredProcedureParameter("id", String.class, ParameterMode.IN)
 				.setParameter("id", bl.getUid())
 				.executeUpdate();
 		em.getTransaction().commit();

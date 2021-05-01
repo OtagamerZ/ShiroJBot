@@ -186,9 +186,9 @@ public class CardMarketDAO {
 		try {
 			Query q = em.createNativeQuery("""
 					SELECT ''
-						 , AVG(ms.month) AS avg_month
-						 , AVG(ms.sold) AS avg_sold
-						 , AVG(ms.unique_buyers) AS avg_unique_buyers 
+						 , EXTRACT(MONTH FROM current_date) AS month
+						 , COALESCE(AVG(ms.sold), 10) AS avg_sold
+						 , COALESCE(AVG(ms.unique_buyers), 2) AS avg_unique_buyers 
 					FROM "GetMerchantStats" ms 
 					WHERE ms.month = EXTRACT(MONTH FROM current_date)
 					""");
@@ -264,7 +264,7 @@ public class CardMarketDAO {
 		if (!params[0].isBlank()) q.setParameter("name", "%" + name + "%");
 		if (!params[1].isBlank()) q.setParameter("min", min);
 		if (!params[2].isBlank()) q.setParameter("max", max);
-		if (!params[3].isBlank()) q.setParameter("rarity", rarity);
+		if (!params[3].isBlank()) q.setParameter("rarity", rarity.name());
 		if (!params[4].isBlank()) q.setParameter("anime", "%" + anime + "%");
 		if (!params[5].isBlank()) q.setParameter("foil", foil);
 		if (!params[6].isBlank()) q.setParameter("seller", seller);

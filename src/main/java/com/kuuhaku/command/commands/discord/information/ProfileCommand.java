@@ -54,15 +54,13 @@ public class ProfileCommand implements Executable {
 					File pf = Profile.applyAnimatedBackground(acc, Profile.makeProfile(member, guild));
 					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention()))
 							.addFile(pf, "perfil.gif")
-							.onErrorFlatMap(t -> m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-too-big")))
 							.flatMap(s -> m.delete())
-							.queue(null, Helper::doNothing);
+							.queue(null, t -> m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-too-big")).queue());
 				} else
 					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention()))
 							.addFile(Helper.writeAndGet(Profile.makeProfile(member, guild), "perfil", "png"))
-							.onErrorFlatMap(t -> m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-too-big")))
 							.flatMap(s -> m.delete())
-							.queue(null, Helper::doNothing);
+							.queue(null, t -> m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-too-big")).queue());
 			} catch (IOException | NullPointerException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-generation-error")).queue();
 			} catch (InsufficientPermissionException e) {
