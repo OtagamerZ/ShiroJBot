@@ -22,7 +22,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Objects;
 
 @Entity
 @Table(name = "paidrole")
@@ -55,20 +54,5 @@ public class PaidRole {
 
 	public void setPrice(int price) {
 		this.price = price;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		else if (o == null || (getClass() != o.getClass() && o.getClass() != String.class)) return false;
-		else if (o instanceof String) return id.equalsIgnoreCase((String) o);
-
-		PaidRole colorRole = (PaidRole) o;
-		return Objects.equals(id, colorRole.id) && Objects.equals(price, colorRole.price);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, price);
 	}
 }
