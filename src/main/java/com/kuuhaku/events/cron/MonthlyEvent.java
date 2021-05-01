@@ -73,7 +73,8 @@ public class MonthlyEvent implements Job {
 								Helper.separate(prize),
 								total
 						)).queue(null, Helper::doNothing);
-					} catch (Exception ignore) {
+					} catch (Exception e) {
+						Helper.logger(MonthlyEvent.class).error(e + " | " + e.getStackTrace()[0]);
 					}
 					acc.addCredit(prize, MonthlyEvent.class);
 					AccountDAO.saveAccount(acc);
