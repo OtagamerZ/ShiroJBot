@@ -175,7 +175,7 @@ public class Profile {
 		String s = acc.getBio();
 		drawStringMultiLine(g2d, s.isEmpty() ? "Sem biografia" : s, 440, 474, 403);
 
-		drawBadges(m, mb, g, g2d);
+		drawBadges(m, mb, g2d);
 
 		g2d.setClip(new Ellipse2D.Float(50, 200, avatar.getWidth(), avatar.getHeight()));
 		g2d.fillOval(50, 200, avatar.getWidth(), avatar.getHeight());
@@ -217,7 +217,7 @@ public class Profile {
 		return bi;
 	}
 
-	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Member mb, Guild s, Graphics2D g2d) throws IOException {
+	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Member mb, Graphics2D g2d) throws IOException {
 		List<BufferedImage> badges = new ArrayList<>() {{
 			String exceed = ExceedDAO.getExceed(m.getId());
 			if (!exceed.isEmpty()) {
@@ -243,7 +243,7 @@ public class Profile {
 			}
 		}};
 
-		for (int i = 0; i < badges.size(); i++) {
+		for (int i = 0; i < Math.min(badges.size(), 9); i++) {
 			g2d.drawImage(badges.get(i), coords.get(i)[0], coords.get(i)[1], 44, 44, null);
 		}
 	}
