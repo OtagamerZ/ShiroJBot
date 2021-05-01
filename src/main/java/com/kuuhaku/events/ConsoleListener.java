@@ -18,11 +18,9 @@
 
 package com.kuuhaku.events;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -72,13 +70,6 @@ public class ConsoleListener extends BufferedReader {
 								com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()
 						), true)
 				);
-			}
-			case "notifyNoMemo" -> {
-				for (String s : ShiroInfo.getDevelopers()) {
-					Main.getInfo().getUserByID(s).openPrivateChannel()
-							.flatMap(ch -> ch.sendMessage("Alerta, minha memória esgotou, causando um erro OutOfMemory. Por favor leia o arquivo de profile gerado na pasta de logs para mais informações."))
-							.queue();
-				}
 			}
 		}
     }
