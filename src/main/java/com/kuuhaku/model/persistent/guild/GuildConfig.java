@@ -505,9 +505,8 @@ public class GuildConfig {
 		levelRoles.add(new LevelRole(id, level));
 	}
 
-	@SuppressWarnings("EqualsBetweenInconvertibleTypes")
 	public void removeLevelRole(String id) {
-		levelRoles.removeIf(id::equals);
+		levelRoles.removeIf(lr -> lr.getId().equals(id));
 	}
 
 	public void setLevelRoles(Set<LevelRole> levelRoles) {
@@ -526,9 +525,8 @@ public class GuildConfig {
 		colorRoles.add(new ColorRole(id, color, name));
 	}
 
-	@SuppressWarnings("EqualsBetweenInconvertibleTypes")
 	public void removeColorRole(String id) {
-		colorRoles.removeIf(id::equals);
+		colorRoles.removeIf(cr -> cr.getId().equals(id));
 	}
 
 	public void setColorRoles(Set<ColorRole> levelRoles) {
@@ -543,9 +541,8 @@ public class GuildConfig {
 		paidRoles.add(new PaidRole(id, price));
 	}
 
-	@SuppressWarnings("EqualsBetweenInconvertibleTypes")
 	public void removePaidRole(String id) {
-		paidRoles.removeIf(id::equals);
+		paidRoles.removeIf(pr -> pr.getId().equals(id));
 	}
 
 	public void setPaidRoles(Set<PaidRole> levelRoles) {
