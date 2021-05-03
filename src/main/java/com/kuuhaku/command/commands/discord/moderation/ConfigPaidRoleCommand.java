@@ -54,6 +54,10 @@ public class ConfigPaidRoleCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		int highest = member.getRoles().stream()
+				.map(Role::getPosition)
+				.max(Integer::compareTo)
+				.orElse(-1);
 
 		if (args.length < 2 && !message.getMentionedRoles().isEmpty()) {
 			Role r = message.getMentionedRoles().get(0);
@@ -109,6 +113,11 @@ public class ConfigPaidRoleCommand implements Executable {
 			}
 
 			Role r = message.getMentionedRoles().get(0);
+			if (r.getPosition() > highest) {
+				channel.sendMessage("❌ | Você não pode atribuir cargos maiores que os seus.").queue();
+				return;
+			}
+
 			gc.addPaidRole(r.getId(), value);
 
 			channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + Helper.separate(value) + " créditos**!").queue();

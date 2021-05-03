@@ -89,7 +89,7 @@ public class Member {
 		if (ExceedDAO.hasExceed(u.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(u.getId())))
 			bonuses.add(new Bonus(0, "Exceed Vitorioso", 2));
 		if (!getWaifu(u.getId()).isEmpty())
-			bonuses.add(new Bonus(1, "Waifu", WaifuDAO.getMultiplier(u).getMult()));
+			bonuses.add(new Bonus(1, "Waifu", WaifuDAO.getMultiplier(u.getId()).getMult()));
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
 		if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 1)
@@ -111,15 +111,14 @@ public class Member {
 	}
 
 	public synchronized boolean addXp(Guild g) {
-		User u = Main.getInfo().getUserByID(uid);
 		AtomicReference<Double> mult = new AtomicReference<>(1d);
 
 		if (ExceedDAO.hasExceed(uid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(uid)))
 			mult.updateAndGet(v -> v * 2);
-		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(Member.getWaifu(u.getId())))
-			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(u).getMult());
+		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(Member.getWaifu(uid)))
+			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(uid).getMult());
 
-		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+		Kawaipon kp = KawaiponDAO.getKawaipon(uid);
 		if (kp.getCards().size() / ((float) CardDAO.totalCards()) * 2 >= 1) {
 			mult.updateAndGet(v -> v * 1.5f);
 		} else if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 0.75)

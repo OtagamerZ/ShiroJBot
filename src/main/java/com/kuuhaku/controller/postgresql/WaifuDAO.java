@@ -45,7 +45,7 @@ public class WaifuDAO {
 		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando = :id OR waifu = :id");
 		q.setParameter("id", u.getId());
 
-		CoupleMultiplier cm = getMultiplier(u);
+		CoupleMultiplier cm = getMultiplier(u.getId());
 
 		em.getTransaction().begin();
 		em.remove(q.getSingleResult());
@@ -104,11 +104,11 @@ public class WaifuDAO {
 		}
 	}
 
-	public static CoupleMultiplier getMultiplier(User u) {
+	public static CoupleMultiplier getMultiplier(String id) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return em.find(CoupleMultiplier.class, u.getId());
+			return em.find(CoupleMultiplier.class, id);
 		} finally {
 			em.close();
 		}

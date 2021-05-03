@@ -94,7 +94,7 @@ public class MyStatsCommand implements Executable {
 
 			int xp = (int) (15
 							* (victorious ? 2 : 1)
-							* (waifu ? WaifuDAO.getMultiplier(author).getMult() : 1)
+							* (waifu ? WaifuDAO.getMultiplier(author.getId()).getMult() : 1)
 							* (gb.getBuff(1) != null ? gb.getBuff(1).getMult() : 1)
 			);
 
