@@ -252,7 +252,10 @@ public class ShiroEvents extends ListenerAdapter {
 				found = command.getCategory().isEnabled(guild, author) && !gc.getDisabledCommands().contains(command.getCommand().getClass().getName());
 
 				if (found) {
-					if (author.getId().equals(Main.getSelfUser().getId())) {
+					if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
+						channel.sendMessage("❌ | Comandos estão bloqueados neste canal").queue();
+						return;
+					} else if (author.getId().equals(Main.getSelfUser().getId())) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_human-command")).queue();
 						return;
 					} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {
