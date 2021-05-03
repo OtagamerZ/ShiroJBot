@@ -124,6 +124,8 @@ public class ConfigLevelRoleCommand implements Executable {
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-level")).queue();
+		} catch (IndexOutOfBoundsException e) {
+			channel.sendMessage("❌ | Você precisa mencionar um cargo.").queue();
 		}
 	}
 }
