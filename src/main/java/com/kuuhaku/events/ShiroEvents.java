@@ -303,7 +303,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 			}
 
-			if (!found && !author.isBot() && !blacklisted) {
+			if (!found && !author.isBot() && !blacklisted && !gc.getNoCommandChannels().contains(channel.getId())) {
 				Account acc = AccountDAO.getAccount(author.getId());
 				if (!acc.getTwitchId().isBlank() && channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
 					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.stripEmotesAndMentions(rawMessage));
