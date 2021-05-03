@@ -27,17 +27,20 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.NContract;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
 import java.time.ZoneId;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "suporte",
@@ -80,25 +83,35 @@ public class RequestAssistCommand implements Executable {
 								return;
 							}
 
-							Map<String, String> ids = new HashMap<>();
-							for (String dev : ShiroInfo.getStaff()) {
+							NContract<Pair<String, String>> act = new NContract<>(ShiroInfo.getStaff().size());
+							act.setAction(ps -> {
+								Map<String, String> ids = ps.stream().collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
+
+								author.openPrivateChannel()
+										.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
+										.queue(null, Helper::doNothing);
+
+								TicketDAO.setIds(number, ids);
+								ia.setMaxUses(1).queue(i -> Main.getInfo().getRequests().put(guild.getId(), i));
+
+								s.delete().queue(null, Helper::doNothing);
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
+								return null;
+							});
+
+							List<String> staff = ShiroInfo.getStaff();
+							for (int i = 0; i < staff.size(); i++) {
+								String dev = staff.get(i);
+
+								int finalI = i;
 								Main.getInfo().getUserByID(dev).openPrivateChannel()
 										.flatMap(m -> m.sendMessage(eb.build()))
 										.flatMap(m -> {
-											ids.put(dev, m.getId());
+											act.addSignature(finalI, Pair.of(dev, m.getId()));
 											return m.pin();
 										})
-										.complete();
+										.queue(null, Helper::doNothing);
 							}
-
-							author.openPrivateChannel()
-									.flatMap(c -> c.sendMessage("**ATUALIZAÇÃO DE TICKET:** O número do seu ticket é " + number + ", você será atualizado do progresso dele."))
-									.queue(null, Helper::doNothing);
-
-							ia.setMaxUses(1).queue(i -> Main.getInfo().getRequests().put(guild.getId(), i));
-							TicketDAO.setIds(number, ids);
-							s.delete().queue(null, Helper::doNothing);
-							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
 						}), true, 60, TimeUnit.SECONDS,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
