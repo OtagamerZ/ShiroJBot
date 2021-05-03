@@ -15,8 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
       <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/VoiceRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1181,14 +1182,7 @@
       <workItem from="1619556247010" duration="1009000" />
       <workItem from="1619612753305" duration="15296000" />
       <workItem from="1619798402294" duration="9077000" />
-      <workItem from="1620047915384" duration="11550000" />
-    </task>
-    <task id="LOCAL-04270" summary="Adicionadas bordas de efeito do campo">
-      <created>1619533556180</created>
-      <option name="number" value="04270" />
-      <option name="presentableId" value="LOCAL-04270" />
-      <option name="project" value="LOCAL" />
-      <updated>1619533556180</updated>
+      <workItem from="1620047915384" duration="12633000" />
     </task>
     <task id="LOCAL-04271" summary="Adição de dano por carga">
       <created>1619535471104</created>
@@ -1526,7 +1520,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620063026123</updated>
     </task>
-    <option name="localTasksCounter" value="4319" />
+    <task id="LOCAL-04319" summary="Correções gerais">
+      <created>1620063323824</created>
+      <option name="number" value="04319" />
+      <option name="presentableId" value="LOCAL-04319" />
+      <option name="project" value="LOCAL" />
+      <updated>1620063323825</updated>
+    </task>
+    <option name="localTasksCounter" value="4320" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
