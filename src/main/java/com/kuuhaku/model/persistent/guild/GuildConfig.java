@@ -528,8 +528,8 @@ public class GuildConfig {
 		colorRoles.add(new ColorRole(id, color, name));
 	}
 
-	public void removeColorRole(String id) {
-		colorRoles.removeIf(cr -> cr.getId().equals(id));
+	public void removeColorRole(String name) {
+		colorRoles.removeIf(cr -> cr.getName().equals(name));
 	}
 
 	public void setColorRoles(Set<ColorRole> levelRoles) {
