@@ -76,6 +76,7 @@ public class ConfigColorRoleCommand implements Executable {
 
 					gc.addColorRole(r.getId(), args[1], name);
 					channel.sendMessage("✅ | Cor modificada com sucesso!").queue();
+					GuildDAO.updateGuildSettings(gc);
 					return;
 				} catch (HierarchyException e) {
 					channel.sendMessage("❌ | Não posso modificar um cargo de cor que está acima de mim.").queue();

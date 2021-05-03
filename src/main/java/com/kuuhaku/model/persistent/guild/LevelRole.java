@@ -22,6 +22,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Table(name = "levelrole")
@@ -54,5 +55,18 @@ public class LevelRole {
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		LevelRole levelRole = (LevelRole) o;
+		return Objects.equals(id, levelRole.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }
