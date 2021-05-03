@@ -252,6 +252,7 @@ public class Helper {
 				, Helper::doNothing);
 	}
 
+
 	public static int rng(int maxValue, boolean exclusive) {
 		return Math.abs(new Random().nextInt(maxValue + (exclusive ? 0 : 1)));
 	}

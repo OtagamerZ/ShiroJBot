@@ -22,6 +22,8 @@ import com.kuuhaku.utils.Helper;
 import org.json.JSONObject;
 
 import javax.persistence.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 @Entity
 @Table(name = "kawaiponcard")
@@ -37,7 +39,9 @@ public class KawaiponCard {
 	private boolean foil = false;
 
 	@Column(unique = true, columnDefinition = "CHAR(64) NOT NULL")
-	private String hash;
+	private String hash = Helper.hash(
+			Helper.generateToken(String.valueOf(System.currentTimeMillis() * Math.random()), 256)
+					.getBytes(StandardCharsets.UTF_8), "SHA-256");
 
 	public KawaiponCard(Card card, boolean foil) {
 		this.card = card;
@@ -77,6 +81,19 @@ public class KawaiponCard {
 
 	public String getHash() {
 		return hash;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		KawaiponCard that = (KawaiponCard) o;
+		return foil == that.foil && Objects.equals(card, that.card);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(card, foil);
 	}
 
 	@Override
