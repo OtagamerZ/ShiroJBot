@@ -39,6 +39,7 @@ import java.text.MessageFormat;
 @Command(
 		name = "perfil",
 		aliases = {"xp", "profile", "pf"},
+		usage = "req_mention-opt",
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EXT_EMOJI})
@@ -46,19 +47,23 @@ public class ProfileCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		Member mb;
+		if (message.getMentionedMembers().isEmpty()) mb = member;
+		else mb = message.getMentionedMembers().get(0);
+
+		Account acc = AccountDAO.getAccount(mb.getUser().getId());
 
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-profile")).queue(m -> {
 			try {
 				if (acc.hasAnimatedBg() && Helper.getFileType(acc.getBg()).contains("gif")) {
-					File pf = Profile.applyAnimatedBackground(acc, Profile.makeProfile(member, guild));
-					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention()))
+					File pf = Profile.applyAnimatedBackground(acc, Profile.makeProfile(mb, mb.getGuild()));
+					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), mb.getEffectiveName()))
 							.addFile(pf, "perfil.gif")
 							.flatMap(s -> m.delete())
 							.queue(null, t -> m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-too-big")).queue());
 				} else
-					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention()))
-							.addFile(Helper.writeAndGet(Profile.makeProfile(member, guild), "perfil", "png"))
+					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), mb.getEffectiveName()))
+							.addFile(Helper.writeAndGet(Profile.makeProfile(mb, mb.getGuild()), "perfil", "png"))
 							.flatMap(s -> m.delete())
 							.queue(null, t -> m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-too-big")).queue());
 			} catch (IOException | NullPointerException e) {
