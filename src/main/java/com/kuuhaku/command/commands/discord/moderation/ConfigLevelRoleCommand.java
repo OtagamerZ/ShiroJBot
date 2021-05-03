@@ -54,6 +54,10 @@ public class ConfigLevelRoleCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		int highest = member.getRoles().stream()
+				.map(Role::getPosition)
+				.max(Integer::compareTo)
+				.orElse(-1);
 
 		if (args.length < 2 && !message.getMentionedRoles().isEmpty()) {
 			Role r = message.getMentionedRoles().get(0);
@@ -109,6 +113,11 @@ public class ConfigLevelRoleCommand implements Executable {
 			}
 
 			Role r = message.getMentionedRoles().get(0);
+			if (r.getPosition() > highest) {
+				channel.sendMessage("❌ | Você não pode atribuir cargos maiores que os seus.").queue();
+				return;
+			}
+
 			gc.addLevelRole(r.getId(), level);
 
 			channel.sendMessage("✅ | Membros com nível " + level + " receberão o cargo `" + r.getName() + "`!").queue();

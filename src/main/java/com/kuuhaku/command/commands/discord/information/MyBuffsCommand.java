@@ -57,7 +57,7 @@ public class MyBuffsCommand implements Executable {
 
 		if (exceed) eb.addField("Seu Exceed foi vitorioso", "+200% XP ganho", false);
 		if (waifu)
-			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + (int) (WaifuDAO.getMultiplier(author).getMult() * 100 - 100) + "% XP ganho", false);
+			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + (int) (WaifuDAO.getMultiplier(author.getId()).getMult() * 100 - 100) + "% XP ganho", false);
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		if (kp.getCards().size() / ((float) CardDAO.totalCards() * 2) >= 1)

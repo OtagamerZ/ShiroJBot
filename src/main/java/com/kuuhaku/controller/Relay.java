@@ -168,7 +168,7 @@ public class Relay {
 		}
 		try {
 			if (!GuildDAO.getGuildById(s.getId()).isLiteMode()) {
-				source.delete().queue();
+				source.delete().queue(null, Helper::doNothing);
 			}
 		} catch (InsufficientPermissionException ignore) {
 		}

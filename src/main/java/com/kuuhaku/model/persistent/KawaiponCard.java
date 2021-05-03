@@ -37,6 +37,9 @@ public class KawaiponCard {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean foil = false;
 
+	@Column(unique = true, columnDefinition = "CHAR(64) NOT NULL")
+	private String hash;
+
 	public KawaiponCard(Card card, boolean foil) {
 		this.card = card;
 		this.foil = foil;
@@ -73,18 +76,21 @@ public class KawaiponCard {
 		this.foil = foil;
 	}
 
+	public String getHash() {
+		return hash;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		KawaiponCard that = (KawaiponCard) o;
-		return foil == that.foil &&
-			   Objects.equals(card, that.card);
+		return hash.equals(that.hash);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(card, foil);
+		return Objects.hash(hash);
 	}
 
 	@Override
