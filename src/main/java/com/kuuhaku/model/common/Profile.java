@@ -120,9 +120,9 @@ public class Profile {
 		g2d.setColor(lvlBar);
 		g2d.setClip(new Rectangle2D.Float(0, 100, WIDTH, 250));
 
-		long xpToNext = (long) ((Math.pow(mb.getLevel(), 2) * 100) - (Math.pow(mb.getLevel() - 1, 2) * 100));
-		long currentXp = (long) (mb.getXp() - (Math.pow(mb.getLevel() - 1, 2) * 100));
-		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (int) -Helper.clamp(currentXp * 240 / xpToNext, 0, 240));
+		int current = (int) (mb.getXp() - Math.pow(mb.getLevel() - 1, 2) * 100);
+		int toNext = (int) (Math.pow(mb.getLevel(), 2) * 100 - Math.pow(mb.getLevel() - 1, 2) * 100);
+		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, Helper.clamp(current * 240 / toNext, 0, 240));
 
 		g2d.setColor(main);
 		g2d.setClip(null);
@@ -161,7 +161,7 @@ public class Profile {
 		printCenteredString(String.valueOf(mb.getLevel()), 196, 52, 515, g2d);
 
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 25));
-		printCenteredString(Helper.getShortenedValue(mb.getXp(), 1000) + "/" + Helper.getShortenedValue((int) Math.pow(mb.getLevel(), 2) * 100L, 1000), 196, 52, 538, g2d);
+		printCenteredString(Helper.getShortenedValue(current, 1000) + "/" + Helper.getShortenedValue(toNext, 1000), 196, 52, 538, g2d);
 
 		int pos = MemberDAO.getMemberRankPos(mb.getUid(), mb.getSid(), false);
 		int posG = MemberDAO.getMemberRankPos(mb.getUid(), mb.getSid(), true);
@@ -169,7 +169,6 @@ public class Profile {
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
 		g2d.setColor(Color.WHITE);
 		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 585, g2d);
-
 
 		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
 		String s = acc.getBio();

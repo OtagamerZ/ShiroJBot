@@ -58,7 +58,7 @@ public class Member {
 	private String pseudoAvatar = "";
 
 	//NUMBERS
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 1")
 	private int level = 1;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
