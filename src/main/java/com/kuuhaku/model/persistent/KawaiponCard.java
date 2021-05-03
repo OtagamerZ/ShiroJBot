@@ -19,8 +19,6 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.utils.Helper;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.json.JSONObject;
 
 import javax.persistence.*;
@@ -38,7 +36,6 @@ public class KawaiponCard {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean foil = false;
 
-	@Generated(GenerationTime.INSERT)
 	@Column(unique = true, columnDefinition = "CHAR(64) NOT NULL")
 	private String hash;
 
