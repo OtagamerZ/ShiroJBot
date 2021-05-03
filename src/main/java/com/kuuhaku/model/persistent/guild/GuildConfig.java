@@ -505,7 +505,10 @@ public class GuildConfig {
 	}
 
 	public void addLevelRole(String id, int level) {
-		levelRoles.add(new LevelRole(id, level));
+		LevelRole lr = new LevelRole(id, level);
+
+		levelRoles.remove(lr);
+		levelRoles.add(lr);
 	}
 
 	public void removeLevelRole(String id) {
@@ -525,7 +528,10 @@ public class GuildConfig {
 	}
 
 	public void addColorRole(String id, String color, String name) {
-		colorRoles.add(new ColorRole(id, color, name));
+		ColorRole cr = new ColorRole(id, color, name);
+
+		colorRoles.remove(cr);
+		colorRoles.add(cr);
 	}
 
 	public void removeColorRole(String name) {
@@ -541,7 +547,10 @@ public class GuildConfig {
 	}
 
 	public void addPaidRole(String id, int price) {
-		paidRoles.add(new PaidRole(id, price));
+		PaidRole pr = new PaidRole(id, price);
+
+		paidRoles.remove(pr);
+		paidRoles.add(pr);
 	}
 
 	public void removePaidRole(String id) {
