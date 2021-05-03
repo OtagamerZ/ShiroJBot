@@ -22,6 +22,7 @@ import com.kuuhaku.utils.Helper;
 import org.json.JSONObject;
 
 import javax.persistence.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 @Entity
@@ -37,8 +38,8 @@ public class KawaiponCard {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean foil = false;
 
-	@Column(unique = true, columnDefinition = "CHAR(64)")
-	private String hash;
+	@Column(unique = true, columnDefinition = "CHAR(64) NOT NULL")
+	private String hash = Helper.hash((String.valueOf(System.currentTimeMillis()) + id + card.getId() + (foil ? 1 : 0)).getBytes(StandardCharsets.UTF_8), "SHA-256");
 
 	public KawaiponCard(Card card, boolean foil) {
 		this.card = card;
