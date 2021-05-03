@@ -38,9 +38,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -61,7 +59,8 @@ public class ColorRoleCommand implements Executable {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_manage-roles")).queue();
 			return;
 		} else if (args.length < 1) {
-			Set<ColorRole> roles = gc.getColorRoles();
+			Set<ColorRole> roles = new TreeSet<>(Comparator.comparing(ColorRole::getName));
+			roles.addAll(gc.getColorRoles());
 			if (roles.isEmpty()) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-found")).queue();
 				return;
