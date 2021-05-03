@@ -37,8 +37,8 @@ public class KawaiponCard {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean foil = false;
 
-	@Column(unique = true, columnDefinition = "CHAR(64) NOT NULL")
-	private String hash = "" + id + card + foil + System.currentTimeMillis();
+	@Column(unique = true, columnDefinition = "CHAR(64)")
+	private String hash;
 
 	public KawaiponCard(Card card, boolean foil) {
 		this.card = card;
