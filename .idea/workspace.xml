@@ -14,10 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/NoCommandCommand.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/VoiceRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +128,7 @@
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
-    <property name="last.edited.regexp" value="{&amp;KEKW&amp;827973840884858891}" />
+    <property name="last.edited.regexp" value="NoCommandCommand" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/gifs" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
@@ -1182,14 +1179,7 @@
       <workItem from="1619556247010" duration="1009000" />
       <workItem from="1619612753305" duration="15296000" />
       <workItem from="1619798402294" duration="9077000" />
-      <workItem from="1620047915384" duration="10804000" />
-    </task>
-    <task id="LOCAL-04268" summary="Correções menores">
-      <created>1619526169582</created>
-      <option name="number" value="04268" />
-      <option name="presentableId" value="LOCAL-04268" />
-      <option name="project" value="LOCAL" />
-      <updated>1619526169582</updated>
+      <workItem from="1620047915384" duration="11190000" />
     </task>
     <task id="LOCAL-04269" summary="Correções menores">
       <created>1619526963396</created>
@@ -1527,7 +1517,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620062173083</updated>
     </task>
-    <option name="localTasksCounter" value="4317" />
+    <task id="LOCAL-04317" summary="Correções gerais">
+      <created>1620062767821</created>
+      <option name="number" value="04317" />
+      <option name="presentableId" value="LOCAL-04317" />
+      <option name="project" value="LOCAL" />
+      <updated>1620062767821</updated>
+    </task>
+    <option name="localTasksCounter" value="4318" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
