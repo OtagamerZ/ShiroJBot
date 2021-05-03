@@ -170,6 +170,9 @@ public class GuildConfig {
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> noSpamChannels = new HashSet<>();
 
+	@ElementCollection(fetch = FetchType.EAGER)
+	private Set<String> noCommandChannels = new HashSet<>();
+
 	//CONFIGS
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> rules = new ArrayList<>();
@@ -579,6 +582,22 @@ public class GuildConfig {
 
 	public void setNoSpamChannels(Set<String> noSpamChannels) {
 		this.noSpamChannels = noSpamChannels;
+	}
+
+	public Set<String> getNoCommandChannels() {
+		return noCommandChannels;
+	}
+
+	public void addNoCommandChannel(String channel) {
+		noCommandChannels.add(channel);
+	}
+
+	public void removeNoCommandChannel(String channel) {
+		noCommandChannels.remove(channel);
+	}
+
+	public void setNoCommandChannels(Set<String> noCommandChannels) {
+		this.noCommandChannels = noCommandChannels;
 	}
 
 	public List<String> getRules() {
