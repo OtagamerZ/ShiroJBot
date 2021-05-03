@@ -122,7 +122,7 @@ public class Profile {
 
 		int current = (int) (mb.getXp() - Math.pow(mb.getLevel() - 1, 2) * 100);
 		int toNext = (int) (Math.pow(mb.getLevel(), 2) * 100 - Math.pow(mb.getLevel() - 1, 2) * 100);
-		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, Helper.clamp(current * 240 / toNext, 0, 240));
+		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, -Helper.clamp(current * 240 / toNext, 0, 240));
 
 		g2d.setColor(main);
 		g2d.setClip(null);
