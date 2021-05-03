@@ -39,7 +39,7 @@ public class KawaiponCard {
 	private boolean foil = false;
 
 	@Column(unique = true, columnDefinition = "CHAR(64) NOT NULL")
-	private String hash = Helper.hash((String.valueOf(System.currentTimeMillis()) + card.getId() + (foil ? 1 : 0)).getBytes(StandardCharsets.UTF_8), "SHA-256");
+	private String hash = Helper.hash((String.valueOf(System.currentTimeMillis())).getBytes(StandardCharsets.UTF_8), "SHA-256");
 
 	public KawaiponCard(Card card, boolean foil) {
 		this.card = card;
