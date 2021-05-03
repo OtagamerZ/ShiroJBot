@@ -48,7 +48,10 @@ public class Kawaipon implements Cloneable {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "kawaipon_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Set<KawaiponCard> cards = new HashSet<>();
+	private Set<KawaiponCard> cards = new TreeSet<>(
+			Comparator.comparing(KawaiponCard::getName)
+					.thenComparing(KawaiponCard::isFoil)
+	);
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
