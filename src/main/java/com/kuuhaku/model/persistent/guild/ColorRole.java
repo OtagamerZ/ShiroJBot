@@ -23,18 +23,20 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.awt.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "colorrole")
 public class ColorRole {
 	@Id
-	private String id;
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	private String name;
 
 	@Column(columnDefinition = "VARCHAR(7) NOT NULL")
 	private String hex;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
-	private String name;
+	private String id;
 
 	public ColorRole() {
 	}
@@ -48,16 +50,15 @@ public class ColorRole {
 	public ColorRole(String id, Color color, String name) {
 		this.id = id;
 		this.hex = String.format("#%02X%02X%02X", color.getRed(), color.getGreen(), color.getBlue());
-		;
 		this.name = name;
 	}
 
-	public String getId() {
-		return id;
+	public String getName() {
+		return name;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Color getColor() {
@@ -68,11 +69,24 @@ public class ColorRole {
 		this.hex = String.format("#%02X%02X%02X", color.getRed(), color.getGreen(), color.getBlue());
 	}
 
-	public String getName() {
-		return name;
+	public String getId() {
+		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ColorRole colorRole = (ColorRole) o;
+		return Objects.equals(name, colorRole.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
 	}
 }
