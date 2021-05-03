@@ -24,7 +24,6 @@ import org.hibernate.annotations.GenerationTime;
 import org.json.JSONObject;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "kawaiponcard")
@@ -84,22 +83,10 @@ public class KawaiponCard {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		KawaiponCard that = (KawaiponCard) o;
-		return hash.equals(that.hash);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(hash);
-	}
-
-	@Override
 	public String toString() {
 		return new JSONObject(card.toString()) {{
 			put("foil", foil);
+			put("hash", hash);
 		}}.toString();
 	}
 
