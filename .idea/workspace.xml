@@ -1179,35 +1179,7 @@
       <workItem from="1619556247010" duration="1009000" />
       <workItem from="1619612753305" duration="15296000" />
       <workItem from="1619798402294" duration="9077000" />
-      <workItem from="1620047915384" duration="5459000" />
-    </task>
-    <task id="LOCAL-04259" summary="Melhoria na listagem de imagens das cartas">
-      <created>1619208141851</created>
-      <option name="number" value="04259" />
-      <option name="presentableId" value="LOCAL-04259" />
-      <option name="project" value="LOCAL" />
-      <updated>1619208141851</updated>
-    </task>
-    <task id="LOCAL-04260" summary="Melhoria na listagem de imagens das cartas">
-      <created>1619208534677</created>
-      <option name="number" value="04260" />
-      <option name="presentableId" value="LOCAL-04260" />
-      <option name="project" value="LOCAL" />
-      <updated>1619208534677</updated>
-    </task>
-    <task id="LOCAL-04261" summary="Correções menores">
-      <created>1619290480608</created>
-      <option name="number" value="04261" />
-      <option name="presentableId" value="LOCAL-04261" />
-      <option name="project" value="LOCAL" />
-      <updated>1619290480608</updated>
-    </task>
-    <task id="LOCAL-04262" summary="Correções menores">
-      <created>1619297883860</created>
-      <option name="number" value="04262" />
-      <option name="presentableId" value="LOCAL-04262" />
-      <option name="project" value="LOCAL" />
-      <updated>1619297883860</updated>
+      <workItem from="1620047915384" duration="5732000" />
     </task>
     <task id="LOCAL-04263" summary="Correções menores">
       <created>1619297939307</created>
@@ -1524,7 +1496,35 @@
       <option name="project" value="LOCAL" />
       <updated>1620053376401</updated>
     </task>
-    <option name="localTasksCounter" value="4308" />
+    <task id="LOCAL-04308" summary="Correções gerais">
+      <created>1620053467356</created>
+      <option name="number" value="04308" />
+      <option name="presentableId" value="LOCAL-04308" />
+      <option name="project" value="LOCAL" />
+      <updated>1620053467356</updated>
+    </task>
+    <task id="LOCAL-04309" summary="Correções gerais">
+      <created>1620053527173</created>
+      <option name="number" value="04309" />
+      <option name="presentableId" value="LOCAL-04309" />
+      <option name="project" value="LOCAL" />
+      <updated>1620053527173</updated>
+    </task>
+    <task id="LOCAL-04310" summary="Correções gerais">
+      <created>1620053556567</created>
+      <option name="number" value="04310" />
+      <option name="presentableId" value="LOCAL-04310" />
+      <option name="project" value="LOCAL" />
+      <updated>1620053556567</updated>
+    </task>
+    <task id="LOCAL-04311" summary="Correções gerais">
+      <created>1620053567589</created>
+      <option name="number" value="04311" />
+      <option name="presentableId" value="LOCAL-04311" />
+      <option name="project" value="LOCAL" />
+      <updated>1620053567589</updated>
+    </task>
+    <option name="localTasksCounter" value="4312" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
