@@ -39,20 +39,28 @@ public class MuteRoleCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (message.getMentionedRoles().isEmpty() && args.length == 0) {
-			channel.sendMessage("❌ | É necessário mencionar um cargo.").queue();
-			return;
-		}
-
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		if (Helper.equalsAny(args[0], "limpar", "reset")) {
+		int highest = member.getRoles().stream()
+				.map(Role::getPosition)
+				.max(Integer::compareTo)
+				.orElse(-1);
+
+		if (args.length > 0 && Helper.equalsAny(args[0], "limpar", "reset")) {
 			gc.setMuteRole(null);
 			channel.sendMessage("✅ | Cargo mute limpo com sucesso.").queue();
 		} else {
+			if (message.getMentionedRoles().isEmpty()) {
+				channel.sendMessage("❌ | É necessário mencionar um cargo.").queue();
+				return;
+			}
+
 			Role r = message.getMentionedRoles().get(0);
 
 			if (r.getPosition() > guild.getSelfMember().getRoles().get(0).getPosition()) {
 				channel.sendMessage("❌ | Esse cargo está acima de mim.").queue();
+				return;
+			} else if (r.getPosition() > highest) {
+				channel.sendMessage("❌ | Você não pode atribuir cargos maiores que os seus.").queue();
 				return;
 			}
 
