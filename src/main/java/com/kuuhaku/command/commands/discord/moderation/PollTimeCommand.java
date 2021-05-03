@@ -52,7 +52,7 @@ public class PollTimeCommand implements Executable {
 
 			gc.setPollTime(time);
 			channel.sendMessage("✅ | Tempo de enquetes definido como " + time + " minutos com sucesso!").queue();
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-time")).queue();
 		}
 
