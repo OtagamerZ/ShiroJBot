@@ -87,9 +87,9 @@ public class ConfigPaidRoleCommand implements Executable {
 				}
 
 				if (role.getDuration() > -1)
-					fields.merge(role.getPrice(), r.getAsMention(), (p, n) -> String.join("\n", p, n));
-				else
 					fields.merge(role.getPrice(), r.getAsMention() + " (" + Helper.toStringDuration(role.getDuration()) + ")", (p, n) -> String.join("\n", p, n));
+				else
+					fields.merge(role.getPrice(), r.getAsMention(), (p, n) -> String.join("\n", p, n));
 			}
 			GuildDAO.updateGuildSettings(gc);
 
