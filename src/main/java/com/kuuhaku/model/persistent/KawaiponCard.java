@@ -83,6 +83,10 @@ public class KawaiponCard {
 		return hash;
 	}
 
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

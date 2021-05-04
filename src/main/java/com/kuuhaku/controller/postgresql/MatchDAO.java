@@ -23,6 +23,8 @@ import com.kuuhaku.model.persistent.MatchHistory;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,9 +68,9 @@ public class MatchDAO {
 	public static void cleanHistory() {
 		EntityManager em = Manager.getEntityManager();
 
-
 		em.getTransaction().begin();
-		em.createQuery("SELECT mh FROM MatchHistory mh WHERE mh.timestamp < current_date - 30", MatchHistory.class)
+		em.createQuery("SELECT mh FROM MatchHistory mh WHERE mh.timestamp < :date", MatchHistory.class)
+				.setParameter("date", ZonedDateTime.now(ZoneId.of("GMT-3")).minusDays(30))
 				.getResultStream()
 				.forEach(em::remove);
 		em.getTransaction().commit();

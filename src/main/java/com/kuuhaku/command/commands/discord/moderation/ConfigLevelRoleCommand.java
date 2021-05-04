@@ -72,7 +72,7 @@ public class ConfigLevelRoleCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(":dna: | Cargos de level configurados no servidor");
 
-			List<LevelRole> roles = new ArrayList<>(gc.getLevelRoles());
+			List<LevelRole> roles = List.copyOf(gc.getLevelRoles());
 			if (roles.size() == 0) {
 				channel.sendMessage("Não há nenhum cargo de nível configurado neste servidor.").queue();
 				return;

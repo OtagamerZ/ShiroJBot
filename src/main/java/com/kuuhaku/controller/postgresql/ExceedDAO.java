@@ -244,7 +244,7 @@ public class ExceedDAO {
         Query q = em.createNativeQuery("""
                 SELECT x.prcnt
                 FROM (
-                         SELECT em.uid 
+                         SELECT em.uid
                               , em.contribution /
                                 NULLIF((SELECT SUM(emi.contribution) FROM ExceedMember emi WHERE emi.exceed = em.exceed), 0) AS prcnt
                          FROM ExceedMember em

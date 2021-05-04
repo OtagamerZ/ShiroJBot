@@ -151,8 +151,8 @@ public class MemberDAO {
 					SELECT x.row
 					FROM (
 						SELECT m.uid
-							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row 
-						FROM Member m 
+							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row
+						FROM Member m
 						WHERE m.uid IS NOT NULL
 					) x
 					WHERE x.uid = :mid
@@ -162,9 +162,9 @@ public class MemberDAO {
 					SELECT x.row
 					FROM (
 						SELECT m.uid
-							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row 
-						FROM Member m 
-						WHERE m.sid = :id 
+							 , row_number() OVER (ORDER BY m.level DESC, m.xp DESC) AS row
+						FROM Member m
+						WHERE m.sid = :id
 						AND m.uid IS NOT NULL
 					) x
 					WHERE x.uid = :mid
@@ -204,9 +204,9 @@ public class MemberDAO {
 				SELECT x.row
 				FROM (
 					SELECT m.uid
-						 , row_number() OVER (ORDER BY m.voiceTime DESC) AS row 
-					FROM Member m 
-					WHERE m.sid = :id 
+						 , row_number() OVER (ORDER BY m.voiceTime DESC) AS row
+					FROM Member m
+					WHERE m.sid = :id
 					AND m.uid IS NOT NULL
 				) x
 				WHERE x.uid = :mid

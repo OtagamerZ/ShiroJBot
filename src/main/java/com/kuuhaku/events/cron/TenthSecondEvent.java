@@ -54,7 +54,7 @@ public class TenthSecondEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		if (lock) return;
 		lock = true;
-		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> soloLobby = new ArrayList<>(Main.getInfo().getMatchMaking().getSoloLobby().entrySet());
+		List<Map.Entry<MatchMakingRating, Pair<Integer, TextChannel>>> soloLobby = List.copyOf(Main.getInfo().getMatchMaking().getSoloLobby().entrySet());
 		if (soloLobby.size() > 1) {
 			var indexes = Helper.getRandomN(Helper.getNumericList(0, soloLobby.size()), 2, 1);
 			if (tryMatching(soloLobby, indexes.get(0), indexes.get(1))) {
@@ -65,7 +65,7 @@ public class TenthSecondEvent implements Job {
 			Main.getInfo().getMatchMaking().getSoloLobby().computeIfPresent(soloLobby.get(indexes.get(0)).getKey(), (mmr, p) -> Pair.of(p.getLeft() + 1, p.getRight()));
 		}
 
-		List<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>> duoLobby = new ArrayList<>(Main.getInfo().getMatchMaking().getDuoLobby().entrySet());
+		List<Map.Entry<RankedDuo, Pair<Integer, TextChannel>>> duoLobby = List.copyOf(Main.getInfo().getMatchMaking().getDuoLobby().entrySet());
 		if (duoLobby.size() > 3) {
 			var indexes = Helper.getRandomN(Helper.getNumericList(0, duoLobby.size()), 4, 1);
 			if (tryMatching(duoLobby, indexes.get(0), indexes.get(1), indexes.get(2), indexes.get(3))) {

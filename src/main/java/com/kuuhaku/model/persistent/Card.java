@@ -88,6 +88,7 @@ public class Card {
 				}
 			});
 
+			assert cardBytes != null;
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
@@ -119,6 +120,8 @@ public class Card {
 					return null;
 				}
 			});
+
+			assert cardBytes != null;
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				return ImageIO.read(bais);
 			}
@@ -136,6 +139,8 @@ public class Card {
 					return null;
 				}
 			});
+
+			assert cardBytes != null;
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				return foil ? adjust(ImageIO.read(bais)) : ImageIO.read(bais);
 			}

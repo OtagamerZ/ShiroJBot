@@ -67,7 +67,6 @@ public class GiftCode {
 	public void setRedeemedBy(String redeemedBy) {
 		this.redeemedBy = redeemedBy;
 		this.redeemed = ZonedDateTime.now(ZoneId.of("GMT-3"));
-		;
 	}
 
 	public String getDescription() {

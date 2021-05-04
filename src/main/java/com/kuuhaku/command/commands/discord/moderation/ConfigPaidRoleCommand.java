@@ -72,7 +72,7 @@ public class ConfigPaidRoleCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(":bank: | Cargos pagos configurados no servidor");
 
-			List<PaidRole> roles = new ArrayList<>(gc.getPaidRoles());
+			List<PaidRole> roles = List.copyOf(gc.getPaidRoles());
 			if (roles.size() == 0) {
 				channel.sendMessage("Não há nenhum cargo pago configurado neste servidor.").queue();
 				return;
