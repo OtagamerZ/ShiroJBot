@@ -34,7 +34,7 @@ public class PaidRole {
 	@Column(columnDefinition = "INT NOT NULL")
 	private int price;
 
-	@Column(columnDefinition = "INT NOT NULL")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT -1")
 	private long duration;
 
 	@ElementCollection(fetch = FetchType.EAGER)
