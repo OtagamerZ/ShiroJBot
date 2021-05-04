@@ -43,11 +43,11 @@ public class TagsCommand implements Executable {
 		eb.setTitle(":label: Emblemas disponíveis");
 		for (Tag t : Tag.values()) {
 			if (t.equals(Tag.LEVEL)) {
-				eb.addField(":tada: " + t.toString(), t.getDescription(), false);
+				eb.addField(":tada: " + t, t.getDescription(), false);
 			} else if (t.toString().contains("Coletado")) {
-				eb.addField(t.getEmote().getTag(0) + t.toString() + "%", t.getDescription(), false);
+				eb.addField(t.getEmote().getTag(0) + t + "%", t.getDescription(), false);
 			} else {
-				eb.addField(t.getEmote().getTag(0) + t.toString(), t.getDescription(), false);
+				eb.addField(t.getEmote().getTag(0) + t, t.getDescription(), false);
 			}
 		}
 

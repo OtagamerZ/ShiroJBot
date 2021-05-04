@@ -36,8 +36,10 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -62,7 +64,7 @@ public class KawaiponBook {
 		if (foil) text = "« " + title + " »";
 		else text = title;
 		assert this.cards != null;
-		List<KawaiponCard> cards = new ArrayList<>(this.cards);
+		List<KawaiponCard> cards = List.copyOf(this.cards);
 		cardList.sort(Comparator
 				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)

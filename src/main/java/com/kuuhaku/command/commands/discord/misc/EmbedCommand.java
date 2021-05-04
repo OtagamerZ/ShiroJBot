@@ -51,7 +51,7 @@ public class EmbedCommand implements Executable {
 		channel.sendMessage("<a:loading:697879726630502401> Construindo embed...").queue(m -> {
 			if (Helper.hasPermission(member, PrivilegeLevel.MOD) && args.length > 0 && Helper.equalsAny(args[0], "reset", "resetar")) {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-				gc.setEmbedTemplate(null);
+				gc.setEmbedTemplate(new JSONObject());
 				GuildDAO.updateGuildSettings(gc);
 
 				m.delete().queue(null, Helper::doNothing);

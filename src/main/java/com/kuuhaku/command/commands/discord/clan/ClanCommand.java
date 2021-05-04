@@ -112,7 +112,7 @@ public class ClanCommand implements Executable {
 				<String, ClanHierarchy>comparingByValue(Comparator.comparingInt(ClanHierarchy::ordinal))
 				.thenComparing(Map.Entry::getKey, String.CASE_INSENSITIVE_ORDER)
 		);
-		List<MessageEmbed.Field> fixed = new ArrayList<>(eb.getFields());
+		List<MessageEmbed.Field> fixed = List.copyOf(eb.getFields());
 		List<List<Map.Entry<String, ClanHierarchy>>> chunks = Helper.chunkify(mbs, 10);
 		for (List<Map.Entry<String, ClanHierarchy>> chunk : chunks) {
 			sb.setLength(0);

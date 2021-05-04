@@ -470,7 +470,7 @@ public class Helper {
 		for (int i = 0; i < 6; i++) {
 			sb.append(colorTable[clamp(new Random().nextInt(16), 0, 16)]);
 		}
-		return "#" + sb.toString();
+		return "#" + sb;
 	}
 
 	public static Color getRandomColor() {
@@ -497,6 +497,7 @@ public class Helper {
 		return Arrays.stream(string).map(String::toLowerCase).allMatch(s -> ArrayUtils.contains(compareWith, s));
 	}
 
+	@SafeVarargs
 	public static <T> boolean containsAll(T[] value, T... compareWith) {
 		return Arrays.stream(value).allMatch(t -> ArrayUtils.contains(compareWith, t));
 	}
@@ -505,6 +506,7 @@ public class Helper {
 		return Arrays.stream(string).map(String::toLowerCase).anyMatch(s -> ArrayUtils.contains(compareWith, s));
 	}
 
+	@SafeVarargs
 	public static <T> boolean containsAny(T[] value, T... compareWith) {
 		return Arrays.stream(value).anyMatch(s -> ArrayUtils.contains(compareWith, s));
 	}
@@ -513,6 +515,7 @@ public class Helper {
 		return Arrays.stream(compareWith).allMatch(string::equalsIgnoreCase);
 	}
 
+	@SafeVarargs
 	public static <T> boolean equalsAll(T value, T... compareWith) {
 		return Arrays.stream(compareWith).allMatch(value::equals);
 	}
@@ -521,6 +524,7 @@ public class Helper {
 		return Arrays.stream(compareWith).anyMatch(string::equalsIgnoreCase);
 	}
 
+	@SafeVarargs
 	public static <T> boolean equalsAny(T value, T... compareWith) {
 		return Arrays.asList(compareWith).contains(value);
 	}
@@ -576,7 +580,7 @@ public class Helper {
 	}
 
 	public static <T> List<List<T>> chunkify(Collection<T> col, int chunkSize) {
-		List<T> list = new ArrayList<>(col);
+		List<T> list = List.copyOf(col);
 		int overflow = list.size() % chunkSize;
 		List<List<T>> chunks = new ArrayList<>();
 
@@ -603,7 +607,7 @@ public class Helper {
 	}
 
 	public static <T> List<List<T>> chunkify(Set<T> set, int chunkSize) {
-		List<T> list = new ArrayList<>(set);
+		List<T> list = List.copyOf(set);
 		int overflow = list.size() % chunkSize;
 		List<List<T>> chunks = new ArrayList<>();
 
@@ -617,7 +621,7 @@ public class Helper {
 	}
 
 	public static <K, V> List<List<Map.Entry<K, V>>> chunkify(Map<K, V> map, int chunkSize) {
-		List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
+		List<Map.Entry<K, V>> list = List.copyOf(map.entrySet());
 		int overflow = list.size() % chunkSize;
 		List<List<Map.Entry<K, V>>> chunks = new ArrayList<>();
 
@@ -723,7 +727,7 @@ public class Helper {
 						GuildDAO.updateGuildSettings(gc);
 					}
 				} catch (JSONException e) {
-					logger(Helper.class).error("Error in buttons JSON: " + source.toString() + "\nReason: " + e.getMessage());
+					logger(Helper.class).error("Error in buttons JSON: " + source + "\nReason: " + e.getMessage());
 					gc.setButtonConfigs(new JSONObject());
 					GuildDAO.updateGuildSettings(gc);
 				}
@@ -959,7 +963,7 @@ public class Helper {
 		for (String line : lines) {
 			sb.setLength(0);
 			for (String word : line.split(" ")) {
-				if (g2d.getFontMetrics().stringWidth(sb.toString() + word) > bi.getWidth() - 50) {
+				if (g2d.getFontMetrics().stringWidth(sb + word) > bi.getWidth() - 50) {
 					wrappedLines.add(sb.toString().trim());
 					sb.setLength(0);
 				}
@@ -1531,7 +1535,7 @@ public class Helper {
 				ShiroInfo.getShiroEvents().addHandler(channel.getGuild(), sml);
 				Consumer<Message> act = msg -> {
 					if (users.size() > 0) {
-						List<String> ids = new ArrayList<>(users);
+						List<String> ids = List.copyOf(users);
 						User u = Main.getInfo().getUserByID(ids.get(rng(ids.size(), true)));
 
 						Account acc = AccountDAO.getAccount(u.getId());
@@ -1881,7 +1885,7 @@ public class Helper {
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static void keepMaximumNFiles(File folder, int maximum) {
 		if (!folder.isDirectory()) return;
-		List<Pair<File, FileTime>> files = Arrays.stream(folder.listFiles())
+		List<Pair<File, FileTime>> files = Arrays.stream(Objects.requireNonNull(folder.listFiles()))
 				.map(f -> {
 					FileTime time;
 					try {
@@ -2121,6 +2125,7 @@ public class Helper {
 		return index == -1 ? null : sequence.get(Math.min(index + 1, sequence.size() - 1));
 	}
 
+	@SafeVarargs
 	public static <T> T getNext(T current, T... sequence) {
 		int index = ArrayUtils.indexOf(sequence, current);
 		return index == -1 ? null : sequence[Math.min(index + 1, sequence.length - 1)];
@@ -2131,6 +2136,7 @@ public class Helper {
 		return index == -1 ? null : sequence.get(Math.max(index - 1, 0));
 	}
 
+	@SafeVarargs
 	public static <T> T getPrevious(T current, T... sequence) {
 		int index = ArrayUtils.indexOf(sequence, current);
 		return index == -1 ? null : sequence[Math.max(index - 1, 0)];
@@ -2197,6 +2203,7 @@ public class Helper {
 		return out;
 	}
 
+	@SafeVarargs
 	public static <T> boolean isTwice(T... objs) {
 		List<T> elements = List.of(objs);
 		for (T obj : elements) {
@@ -2206,6 +2213,7 @@ public class Helper {
 		return false;
 	}
 
+	@SafeVarargs
 	public static <T> Triple<List<T>, Double, List<T>> balanceSides(ToIntFunction<T> extractor, T... objs) {
 		LinkedList<T> elements = new LinkedList<>(Arrays.asList(objs));
 		elements.sort(Comparator.comparingInt(extractor));

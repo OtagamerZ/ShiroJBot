@@ -150,10 +150,10 @@ public class EquipmentMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		String query = """
-				SELECT em 
+				SELECT em
 				FROM EquipmentMarket em
 				JOIN em.card e
-				JOIN e.card c 
+				JOIN e.card c
 				WHERE em.buyer = ''
 				%s
 				""";

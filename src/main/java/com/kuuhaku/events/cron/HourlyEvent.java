@@ -38,6 +38,7 @@ import org.quartz.JobExecutionContext;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class HourlyEvent implements Job {
 	public static JobDetail hourly;
@@ -74,7 +75,7 @@ public class HourlyEvent implements Job {
 
 		System.gc();
 
-		for (File file : Main.getInfo().getCollectionsFolder().listFiles()) {
+		for (File file : Objects.requireNonNull(Main.getInfo().getCollectionsFolder().listFiles())) {
 			file.delete();
 		}
 

@@ -87,7 +87,7 @@ public class RemainingCardsCommand implements Executable {
 		);
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		eb.setTitle(":flower_playing_cards: | Cartas coletadas de " + anime.toString());
+		eb.setTitle(":flower_playing_cards: | Cartas coletadas de " + anime);
 		eb.addField("Progresso:", collected.size() + " de " + cards.size() + " (" + (Helper.prcntToInt(collected.size(), cards.size())) + "%)", false);
 
 		StringBuilder sb = new StringBuilder();

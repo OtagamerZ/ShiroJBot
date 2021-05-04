@@ -68,7 +68,7 @@ public class Hand {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 50));
 
-		List<KawaiponCard> cards = new ArrayList<>(getCards());
+		List<KawaiponCard> cards = List.copyOf(getCards());
 		g2d.translate(bi.getWidth() / 2f - 104, 75);
 
 		for (int i = 0; i < cards.size(); i++) {
