@@ -752,7 +752,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 							EmbedBuilder eb = new EmbedBuilder()
 									.setTitle("Você foi bloqueado dos canais de comunicação da Shiro")
-									.setDescription("Razão: ```" + msgNoArgs + "```")
+									.setDescription("Razão: ```" + msgNoArgs + "```\n\nCaso acredite ser um engano ou deseje recorrer a um desbloqueio, por favor [preencha este formulário.](https://forms.gle/KrPHLZcijpzCXDoh9)")
 									.setColor(Color.red)
 									.setThumbnail("https://cdn.icon-icons.com/icons2/1380/PNG/512/vcsconflicting_93497.png")
 									.setTimestamp(Instant.now());
