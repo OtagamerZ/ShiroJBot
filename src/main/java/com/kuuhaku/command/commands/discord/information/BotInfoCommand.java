@@ -70,13 +70,15 @@ public class BotInfoCommand implements Executable {
 								[Reddit](https://www.reddit.com/r/ShiroJBot/)
 								[%s](https://top.gg/bot/572413282653306901/invite)
 								[%s](https://donatebot.io/checkout/421495229594730496)
+								[%s](https://forms.gle/KrPHLZcijpzCXDoh9)
 								"""
 								.formatted(
 										ShiroInfo.getLocale(I18n.PT).getString("str_support"),
 										ShiroInfo.getLocale(I18n.PT).getString("str_vote"),
 										ShiroInfo.getLocale(I18n.PT).getString("str_privacy-policy"),
 										ShiroInfo.getLocale(I18n.PT).getString("str_invite"),
-										ShiroInfo.getLocale(I18n.PT).getString("str_donate")
+										ShiroInfo.getLocale(I18n.PT).getString("str_donate"),
+										ShiroInfo.getLocale(I18n.PT).getString("str_unblock-form")
 								)
 						, false
 				)
