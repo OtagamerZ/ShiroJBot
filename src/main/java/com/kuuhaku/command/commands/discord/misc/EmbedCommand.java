@@ -102,7 +102,7 @@ public class EmbedCommand implements Executable {
 												channel.sendMessage(eb.build()).queue();
 												ms.delete().queue();
 											}
-									)
+									), Helper::doNothing
 							);
 				else
 					channel.sendMessage(eb.build()).queue();
