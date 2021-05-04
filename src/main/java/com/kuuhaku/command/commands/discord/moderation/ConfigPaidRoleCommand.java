@@ -121,7 +121,7 @@ public class ConfigPaidRoleCommand implements Executable {
 				return;
 			}
 
-			long time = args.length > 2 ? Math.max(1, Long.parseLong(args[3])) : -1;
+			long time = args.length > 2 ? Math.max(1, Long.parseLong(args[3])) * Helper.MILLIS_IN_MINUTE : -1;
 			gc.addPaidRole(r.getId(), value, time);
 
 			if (time > -1)
@@ -130,7 +130,7 @@ public class ConfigPaidRoleCommand implements Executable {
 				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + Helper.separate(value) + " créditos**!").queue();
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-price")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-price-time")).queue();
 		} catch (IndexOutOfBoundsException e) {
 			channel.sendMessage("❌ | Você precisa mencionar um cargo.").queue();
 		}
