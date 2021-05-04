@@ -15,8 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
       <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/VoiceRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyRoleCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigPaidRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigPaidRoleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1180,21 +1180,7 @@
       <workItem from="1619798402294" duration="9077000" />
       <workItem from="1620047915384" duration="21711000" />
       <workItem from="1620130460139" duration="9378000" />
-      <workItem from="1620144203454" duration="4762000" />
-    </task>
-    <task id="LOCAL-04284" summary="Adição de dano por carga">
-      <created>1619554379262</created>
-      <option name="number" value="04284" />
-      <option name="presentableId" value="LOCAL-04284" />
-      <option name="project" value="LOCAL" />
-      <updated>1619554379262</updated>
-    </task>
-    <task id="LOCAL-04285" summary="Adição de penalidade por inatividade em rankings maiores que Adepto IV">
-      <created>1619557252989</created>
-      <option name="number" value="04285" />
-      <option name="presentableId" value="LOCAL-04285" />
-      <option name="project" value="LOCAL" />
-      <updated>1619557252989</updated>
+      <workItem from="1620144203454" duration="5078000" />
     </task>
     <task id="LOCAL-04286" summary="Adição de penalidade por inatividade em rankings maiores que Adepto IV">
       <created>1619615064182</created>
@@ -1525,7 +1511,21 @@
       <option name="project" value="LOCAL" />
       <updated>1620155711287</updated>
     </task>
-    <option name="localTasksCounter" value="4333" />
+    <task id="LOCAL-04333" summary="Correções gerais">
+      <created>1620155897998</created>
+      <option name="number" value="04333" />
+      <option name="presentableId" value="LOCAL-04333" />
+      <option name="project" value="LOCAL" />
+      <updated>1620155897998</updated>
+    </task>
+    <task id="LOCAL-04334" summary="Correções gerais">
+      <created>1620155978754</created>
+      <option name="number" value="04334" />
+      <option name="presentableId" value="LOCAL-04334" />
+      <option name="project" value="LOCAL" />
+      <updated>1620155978754</updated>
+    </task>
+    <option name="localTasksCounter" value="4335" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
