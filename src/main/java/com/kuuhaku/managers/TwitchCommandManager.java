@@ -55,7 +55,6 @@ public class TwitchCommandManager {
 		if (cmd == null) return null;
 
 		try {
-			//noinspection JavaReflectionInvocation
 			return cmd.getKey()
 					.getConstructor(String.class, String[].class, String.class, String.class, boolean.class)
 					.newInstance(cmd.getValue().getArguments());

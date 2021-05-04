@@ -34,7 +34,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class TempCache<K, V> implements Map<K, V> {
-	Cache<K, V> cache;
+	private final Cache<K, V> cache;
 
 	public TempCache() {
 		this.cache = CacheBuilder.newBuilder().build();

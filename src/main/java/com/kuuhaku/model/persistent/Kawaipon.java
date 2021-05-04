@@ -218,11 +218,13 @@ public class Kawaipon implements Cloneable {
 		return Arrays.stream(destinyDraw.split(",")).map(Integer::parseInt).collect(Collectors.toList());
 	}
 
-	public void setDestinyDraw(Integer[] destinyDraw) {
+	public void setDestinyDraw(List<Integer> destinyDraw) {
 		if (destinyDraw == null)
 			this.destinyDraw = "";
 		else
-			this.destinyDraw = Arrays.stream(destinyDraw).map(String::valueOf).collect(Collectors.joining(","));
+			this.destinyDraw = destinyDraw.stream()
+					.map(String::valueOf)
+					.collect(Collectors.joining(","));
 	}
 
 	public Pair<Race, Race> getCombo() {

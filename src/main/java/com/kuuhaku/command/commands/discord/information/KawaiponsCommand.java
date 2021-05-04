@@ -191,7 +191,7 @@ public class KawaiponsCommand implements Executable {
         });
     }
 
-    private void send(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l) throws IOException {
+    private void send(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l) {
         String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
         Helper.writeAndGet(Helper.removeAlpha(cards), hash, "jpg", Main.getInfo().getCollectionsFolder());
         Helper.keepMaximumNFiles(Main.getInfo().getCollectionsFolder(), 20);
@@ -212,7 +212,7 @@ public class KawaiponsCommand implements Executable {
         channel.sendMessage(eb.build()).queue();
     }
 
-    private void send(User author, MessageChannel channel, Message m, BufferedImage cards, String s, Class c) throws IOException {
+    private void send(User author, MessageChannel channel, Message m, BufferedImage cards, String s, Class c) {
         String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
         Helper.writeAndGet(Helper.removeAlpha(cards), hash, "jpg", Main.getInfo().getCollectionsFolder());
         Helper.keepMaximumNFiles(Main.getInfo().getCollectionsFolder(), 20);
@@ -228,7 +228,7 @@ public class KawaiponsCommand implements Executable {
         channel.sendMessage(eb.build()).queue();
     }
 
-    private void send(User author, MessageChannel channel, Message m, BufferedImage cards, Race r, String s) throws IOException {
+    private void send(User author, MessageChannel channel, Message m, BufferedImage cards, Race r, String s) {
         String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
         Helper.writeAndGet(Helper.removeAlpha(cards), hash, "jpg", Main.getInfo().getCollectionsFolder());
         Helper.keepMaximumNFiles(Main.getInfo().getCollectionsFolder(), 20);

@@ -42,7 +42,7 @@ public class PingCommand implements Executable {
 				.flatMap(m -> m.editMessage(m.getContentRaw() + """
 						 %s ms!
 						:floppy_disk: %s MB!
-						:telephone: %s 
+						:telephone: %s
 						""".formatted(
 						System.currentTimeMillis() - currTime,
 						fp,
