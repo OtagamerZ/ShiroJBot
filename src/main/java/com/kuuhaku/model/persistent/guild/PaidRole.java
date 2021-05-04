@@ -38,7 +38,7 @@ public class PaidRole {
 	private long duration;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	private HashMap<String, Long> users = new HashMap<>();
+	private Map<String, Long> users = new HashMap<>();
 
 	public PaidRole() {
 	}
