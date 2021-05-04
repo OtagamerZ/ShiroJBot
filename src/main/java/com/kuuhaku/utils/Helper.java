@@ -2604,7 +2604,7 @@ public class Helper {
 		return objs -> {
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < objs.size(); i++) {
-				if (i == objs.size() - 1) sb.append(" e ");
+				if (i == objs.size() - 1 && objs.size() > 1) sb.append(" e ");
 				else if (i > 0) sb.append(", ");
 
 				sb.append(objs.get(i));
