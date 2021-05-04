@@ -133,6 +133,10 @@ public class Helper {
 	public static final int BASE_CARD_PRICE = 400;
 	public static final int BASE_EQUIPMENT_PRICE = 500;
 	public static final int BASE_FIELD_PRICE = 50000;
+	public static final long MILLIS_IN_DAY = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
+	public static final long MILLIS_IN_HOUR = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS);
+	public static final long MILLIS_IN_MINUTE = TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES);
+	public static final long MILLIS_IN_SECOND = TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS);
 
 	public static Font HAMMERSMITH;
 
@@ -2608,5 +2612,23 @@ public class Helper {
 
 			return sb.toString();
 		};
+	}
+
+	public static String toStringDuration(long millis) {
+		long days = millis / MILLIS_IN_DAY;
+		millis %= MILLIS_IN_DAY;
+		long hours = millis / MILLIS_IN_HOUR;
+		millis %= MILLIS_IN_HOUR;
+		long minutes = millis / MILLIS_IN_MINUTE;
+		millis %= MILLIS_IN_MINUTE;
+		long seconds = millis / MILLIS_IN_SECOND;
+		seconds %= MILLIS_IN_SECOND;
+
+		return List.of(
+				days > 0 ? days + " dias" : "",
+				hours > 0 ? hours + " horas" : "",
+				minutes > 0 ? minutes + " minutos" : "",
+				seconds > 0 ? seconds + " segundos" : ""
+		).stream().filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(Collectors.toList(), properlyJoin()));
 	}
 }

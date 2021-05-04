@@ -94,6 +94,18 @@ public class GuildDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<GuildConfig> getAllGuildsWithPaidRoles() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE SIZE(paidRoles) > 0", GuildConfig.class);
+		List<GuildConfig> gcs = gc.getResultList();
+
+		em.close();
+
+		return gcs;
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<GuildConfig> getAllGuildsWithButtons() {
 		EntityManager em = Manager.getEntityManager();
 
