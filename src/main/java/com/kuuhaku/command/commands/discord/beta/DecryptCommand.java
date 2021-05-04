@@ -33,10 +33,6 @@ import org.jasypt.util.binary.StrongBinaryEncryptor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.concurrent.Executors;
 
 @Command(
 		name = "descriptografar",
@@ -65,28 +61,25 @@ public class DecryptCommand implements Executable {
 
 		StrongBinaryEncryptor ste = new StrongBinaryEncryptor();
 
-		Executors.newSingleThreadExecutor().execute(() -> {
-			try {
-				MessageDigest md = MessageDigest.getInstance("SHA-256");
-				ste.setPassword(Arrays.toString(md.digest(args[0].getBytes(StandardCharsets.UTF_8))));
-				att.downloadToFile(File.createTempFile(Helper.atob(author.getId().getBytes(StandardCharsets.UTF_8)), "shr")).thenAcceptAsync(f -> {
-					try {
-						byte[] data = FileUtils.readFileToByteArray(f);
-						byte[] encData = ste.decrypt(data);
+		try {
+			ste.setPassword(Helper.hash(args[0].getBytes(StandardCharsets.UTF_8), "SHA-256"));
+			att.downloadToFile(File.createTempFile(Helper.atob(author.getId().getBytes(StandardCharsets.UTF_8)), "shr")).thenAcceptAsync(f -> {
+				try {
+					byte[] data = FileUtils.readFileToByteArray(f);
+					byte[] encData = ste.decrypt(data);
 
-						channel.sendMessage("Aqui está seu arquivo descriptografado com a chave `" + args[0] + "`")
-								.addFile(encData, att.getFileName().replace(".shr", ""))
-								.flatMap(s -> message.delete())
-								.queue(null, Helper::doNothing);
-					} catch (IOException e) {
-						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-					} catch (EncryptionOperationNotPossibleException | EncryptionInitializationException e) {
-						channel.sendMessage("❌ | Esta não foi a senha usada pra criptografar este arquivo!").queue();
-					}
-				});
-			} catch (IOException | NoSuchAlgorithmException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-			}
-		});
+					channel.sendMessage("Aqui está seu arquivo descriptografado com a chave `" + args[0] + "`")
+							.addFile(encData, att.getFileName().replace(".shr", ""))
+							.flatMap(s -> message.delete())
+							.queue(null, Helper::doNothing);
+				} catch (IOException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				} catch (EncryptionOperationNotPossibleException | EncryptionInitializationException e) {
+					channel.sendMessage("❌ | Esta não foi a senha usada pra criptografar este arquivo!").queue();
+				}
+			});
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		}
 	}
 }

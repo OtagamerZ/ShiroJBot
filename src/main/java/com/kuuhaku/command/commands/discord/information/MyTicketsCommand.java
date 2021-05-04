@@ -59,7 +59,7 @@ public class MyTicketsCommand implements Executable {
 					i + 1,
 					Arrays.stream(l.get(i).getDozens().split(","))
 							.sorted(Comparator.comparingInt(Integer::parseInt))
-							.collect(Collectors.joining(","))
+							.collect(Collectors.joining("-"))
 			));
 		}
 

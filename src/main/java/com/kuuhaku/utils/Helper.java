@@ -544,9 +544,9 @@ public class Helper {
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
 							  perms.stream()
-									  .map(p -> "✅ -> " + p.getName() + "\n")
+									  .map(p -> "✅ -> " + p.getName())
 									  .sorted()
-									  .collect(Collectors.joining());
+									  .collect(Collectors.joining("\n"));
 			}
 		} catch (NoResultException ignore) {
 		}
@@ -556,9 +556,9 @@ public class Helper {
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
 			   perms.stream()
-					   .map(p -> "✅ -> " + p.getName() + "\n")
+					   .map(p -> "✅ -> " + p.getName())
 					   .sorted()
-					   .collect(Collectors.joining()) +
+					   .collect(Collectors.joining("\n")) +
 			   jibrilPerms;
 	}
 
@@ -2594,5 +2594,19 @@ public class Helper {
 		}
 
 		return null;
+	}
+
+	public static Function<List<String>, String> properlyJoin() {
+		return objs -> {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < objs.size(); i++) {
+				if (i == objs.size() - 1) sb.append(" e ");
+				else if (i > 0) sb.append(", ");
+
+				sb.append(objs.get(i));
+			}
+
+			return sb.toString();
+		};
 	}
 }
