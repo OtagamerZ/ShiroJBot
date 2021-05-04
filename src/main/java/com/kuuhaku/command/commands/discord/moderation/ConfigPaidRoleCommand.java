@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "cargopago",
 		aliases = {"cargop", "paidrole", "prole"},
-		usage = "req_value-role",
+		usage = "req_value-role-time",
 		category = Category.MODERATION
 )
 @Requires({Permission.MANAGE_ROLES})
