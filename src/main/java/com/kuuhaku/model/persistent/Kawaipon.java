@@ -214,7 +214,7 @@ public class Kawaipon implements Cloneable {
 	}
 
 	public List<Integer> getDestinyDraw() {
-		if (destinyDraw.isBlank()) return null;
+		if (destinyDraw.isBlank()) return List.of();
 		return Arrays.stream(destinyDraw.split(",")).map(Integer::parseInt).collect(Collectors.toList());
 	}
 
