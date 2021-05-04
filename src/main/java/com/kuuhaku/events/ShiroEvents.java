@@ -357,7 +357,7 @@ public class ShiroEvents extends ListenerAdapter {
 								if (rols.size() > 1) {
 									String names = rols.stream()
 											.map(rl -> "**`" + rl.getName() + "`**")
-											.collect(Collectors.joining(", "));
+											.collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
 									chn.sendMessage(author.getAsMention() + " ganhou os cargos " + names + "! :tada:").queue();
 								} else
 									chn.sendMessage(author.getAsMention() + " ganhou o cargo **`" + rols.get(0).getName() + "`**! :tada:").queue();
