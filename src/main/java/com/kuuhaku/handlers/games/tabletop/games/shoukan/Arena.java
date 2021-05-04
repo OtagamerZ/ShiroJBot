@@ -109,7 +109,7 @@ public class Arena {
 					name = game.getClans().get(key).getName();
 				} else {
 					if (h instanceof TeamHand) {
-						name = ((TeamHand) h).getNames().stream().map(n -> StringUtils.abbreviate(n, 16)).collect(Collectors.joining(" e "));
+						name = ((TeamHand) h).getNames().stream().map(n -> StringUtils.abbreviate(n, 16)).collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin()));
 					} else {
 						name = StringUtils.abbreviate(h.getUser().getName(), 32);
 					}

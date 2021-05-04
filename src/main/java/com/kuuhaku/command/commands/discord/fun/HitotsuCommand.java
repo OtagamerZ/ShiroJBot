@@ -111,7 +111,7 @@ public class HitotsuCommand implements Executable {
 			}
 		}
 
-		String id = author.getId() + "." + message.getMentionedUsers().stream().map(User::getId).map(s -> s + ".").collect(Collectors.joining()) + guild.getId();
+		String id = author.getId() + "." + message.getMentionedUsers().stream().map(User::getId).collect(Collectors.joining(".")) + "." + guild.getId();
 
 		if (Main.getInfo().gameInProgress(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
@@ -130,11 +130,10 @@ public class HitotsuCommand implements Executable {
 		Game t = new Hitotsu(Main.getShiroShards(), channel, bet, players.toArray(User[]::new));
 		String msg;
 		if (players.size() > 2)
-			msg = message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
+			msg = message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + ", vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
 		else
 			msg = message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + Helper.separate(bet) + " créditos)" : "");
 
-		long millis = System.currentTimeMillis();
 		for (User player : players) {
 			Main.getInfo().getConfirmationPending().put(player.getId(), true);
 		}

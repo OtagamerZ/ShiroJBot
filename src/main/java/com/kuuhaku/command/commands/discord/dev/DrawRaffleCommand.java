@@ -28,11 +28,12 @@ import com.kuuhaku.model.persistent.Upvote;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -54,26 +55,46 @@ public class DrawRaffleCommand implements Executable {
 			return;
 		}
 
-		int days = Integer.parseInt(args[0]);
-		List<String> votes = UpvoteDAO.getVotes().stream().filter(u -> u.getVotedAt().isAfter(LocalDateTime.now().minusDays(days)) && Main.getInfo().getUserByID(u.getUid()) != null).map(Upvote::getUid).collect(Collectors.toList());
-		Collections.shuffle(votes);
+		try {
+			int days = Integer.parseInt(args[0]);
+			int amount = Math.max(1, args.length > 1 ? Integer.parseInt(args[1]) : 1);
+			List<String> votes = UpvoteDAO.getVotes().stream()
+					.filter(u -> u.getVotedAt().isAfter(LocalDateTime.now().minusDays(days)))
+					.map(Upvote::getUid)
+					.map(Main.getInfo()::getUserByID)
+					.filter(Objects::nonNull)
+					.map(User::getAsMention)
+					.collect(Collectors.toList());
 
-		if (votes.isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_raffle-no-votes")).queue();
-			return;
+			if (votes.isEmpty()) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_raffle-no-votes")).queue();
+				return;
+			} else if (amount < votes.stream().distinct().count()) {
+				channel.sendMessage("❌ | Não há usuários suficientes para sortear " + amount + " vencedores.").queue();
+				return;
+			}
+
+			List<String> winners = Helper.getRandomN(votes, amount, 1);
+			MessageAction ma;
+			if (winners.size() == 1) {
+				ma = channel.sendMessage("E o vencedor do sorteio é");
+			} else {
+				ma = channel.sendMessage("E os vencedores do sorteio são");
+			}
+
+			ma.delay(2, TimeUnit.SECONDS)
+					.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
+					.delay(2, TimeUnit.SECONDS)
+					.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
+					.delay(2, TimeUnit.SECONDS)
+					.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
+					.delay(2, TimeUnit.SECONDS)
+					.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
+					.delay(2, TimeUnit.SECONDS)
+					.flatMap(s -> s.editMessage(s.getContentRaw() + Helper.properlyJoin().apply(winners) + ", parabéns!\nUm membro da equipe entrará em contato para discutir sobre a premiação."))
+					.queue();
+		} catch (NumberFormatException e) {
+			channel.sendMessage("❌ | A quantidade precisa ser um valor inteiro.").queue();
 		}
-
-		channel.sendMessage("E o vencedor do sorteio é")
-				.delay(2, TimeUnit.SECONDS)
-				.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
-				.delay(2, TimeUnit.SECONDS)
-				.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
-				.delay(2, TimeUnit.SECONDS)
-				.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
-				.delay(2, TimeUnit.SECONDS)
-				.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
-				.delay(2, TimeUnit.SECONDS)
-				.flatMap(s -> s.editMessage(s.getContentRaw() + Main.getInfo().getUserByID(votes.get(Helper.rng(votes.size(), true))).getAsMention() + ", parabéns!\nUm desenvolvedor entrará em contato para discutir sobre a premiação."))
-				.queue();
 	}
 }

@@ -149,14 +149,14 @@ public class Reversi extends Game {
 
 			if (whiteCount + blackCount == 64) {
 				if (whiteCount > blackCount) {
-					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
+					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> e.getValue().isWhite()).map(Map.Entry::getKey).findFirst().orElseThrow());
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + whiteCount + " peças)")
 							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 							.queue(null, Helper::doNothing);
 					getBoard().awardWinner(this, winner.getId());
 					close();
 				} else if (whiteCount < blackCount) {
-					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> !e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
+					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> !e.getValue().isWhite()).map(Map.Entry::getKey).findFirst().orElseThrow());
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)")
 							.addFile(Helper.writeAndGet(getBoard().render(), String.valueOf(this.hashCode()), "jpg"))
 							.queue(null, Helper::doNothing);
@@ -207,7 +207,7 @@ public class Reversi extends Game {
 							});
 					return;
 				} else if (whiteCount < blackCount) {
-					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> !e.getValue().isWhite()).map(Map.Entry::getKey).collect(Collectors.joining()));
+					User winner = getPlayerById(pieces.entrySet().stream().filter(e -> !e.getValue().isWhite()).map(Map.Entry::getKey).findFirst().orElseThrow());
 					getBoard().awardWinner(this, winner.getId());
 					close();
 					channel.sendMessage(winner.getAsMention() + " venceu! (" + blackCount + " peças)")
