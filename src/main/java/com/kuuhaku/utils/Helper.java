@@ -2625,10 +2625,10 @@ public class Helper {
 		seconds %= MILLIS_IN_SECOND;
 
 		return List.of(
-				days > 0 ? days + " dias" : "",
-				hours > 0 ? hours + " horas" : "",
-				minutes > 0 ? minutes + " minutos" : "",
-				seconds > 0 ? seconds + " segundos" : ""
+				days > 0 ? days + " dia" + (days != 1 ? "s" : "") : "",
+				hours > 0 ? hours + " hora" + (hours != 1 ? "s" : "") : "",
+				minutes > 0 ? minutes + " minuto" + (minutes != 1 ? "s" : "") : "",
+				seconds > 0 ? seconds + " segundo" + (seconds != 1 ? "s" : "") : ""
 		).stream().filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(Collectors.toList(), properlyJoin()));
 	}
 }

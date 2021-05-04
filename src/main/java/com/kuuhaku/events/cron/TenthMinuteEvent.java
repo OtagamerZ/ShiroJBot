@@ -146,8 +146,9 @@ public class TenthMinuteEvent implements Job {
 				Role r = guild.getRoleById(pr.getId());
 				if (r == null) continue;
 
+				Set<String> valid = pr.getUsers().keySet();
 				Set<String> toExpire = pr.getExpiredUsers();
-				if (toExpire.size() == 0) continue;
+				valid.removeAll(toExpire);
 
 				List<AuditableRestAction<Void>> acts = new ArrayList<>();
 				for (String s : toExpire) {
@@ -155,6 +156,12 @@ public class TenthMinuteEvent implements Job {
 					if (m == null) continue;
 
 					acts.add(guild.removeRoleFromMember(m, r));
+				}
+				for (String s : valid) {
+					Member m = guild.getMemberById(s);
+					if (m == null) continue;
+
+					acts.add(guild.addRoleToMember(m, r));
 				}
 
 				RestAction.allOf(acts)
