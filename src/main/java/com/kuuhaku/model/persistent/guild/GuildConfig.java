@@ -546,8 +546,8 @@ public class GuildConfig {
 		return paidRoles;
 	}
 
-	public void addPaidRole(String id, int price) {
-		PaidRole pr = new PaidRole(id, price);
+	public void addPaidRole(String id, int price, long expiration) {
+		PaidRole pr = new PaidRole(id, price, expiration);
 
 		paidRoles.remove(pr);
 		paidRoles.add(pr);
