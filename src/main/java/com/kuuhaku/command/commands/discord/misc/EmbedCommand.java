@@ -70,7 +70,7 @@ public class EmbedCommand implements Executable {
 				if (json.has("color")) eb.setColor(Color.decode(json.getString("color")));
 				if (json.has("thumbnail")) eb.setThumbnail(json.getString("thumbnail"));
 				if (json.has("image")) eb.setImage(json.getString("image"));
-				if (json.has("body")) eb.setDescription(json.getString("body"));
+				eb.setDescription(json.optString("body", Helper.VOID));
 
 				if (json.has("fields")) {
 					for (Object j : json.getJSONArray("fields")) {
