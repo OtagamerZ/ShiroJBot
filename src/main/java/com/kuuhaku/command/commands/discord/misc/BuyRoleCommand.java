@@ -79,9 +79,9 @@ public class BuyRoleCommand implements Executable {
 				}
 
 				if (role.getDuration() > -1)
-					fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention(), (p, n) -> String.join("\n", p, n));
-				else
 					fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention() + " (" + Helper.toStringDuration(role.getDuration()) + ")", (p, n) -> String.join("\n", p, n));
+				else
+					fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention(), (p, n) -> String.join("\n", p, n));
 			}
 
 			List<List<Integer>> chunks = Helper.chunkify(fields.keySet(), 10);
@@ -124,9 +124,9 @@ public class BuyRoleCommand implements Executable {
 
 			String msg;
 			if (pr.getDuration() > -1)
-				msg = "Você está prestes a comprar o cargo `" + r.getName() + "` por **" + Helper.separate(pr.getPrice()) + " créditos**, deseja confirmar?";
-			else
 				msg = "Você está prestes a comprar o cargo `" + r.getName() + "` por **" + Helper.separate(pr.getPrice()) + " créditos**, deseja confirmar? (" + Helper.toStringDuration(pr.getDuration()) + ")";
+			else
+				msg = "Você está prestes a comprar o cargo `" + r.getName() + "` por **" + Helper.separate(pr.getPrice()) + " créditos**, deseja confirmar?";
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage(msg).queue(s ->

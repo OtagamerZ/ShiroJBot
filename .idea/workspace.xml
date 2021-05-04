@@ -15,14 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
       <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/VoiceRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyRoleCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigPaidRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigPaidRoleCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/GuildDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/PaidRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/PaidRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1186,28 +1180,7 @@
       <workItem from="1619798402294" duration="9077000" />
       <workItem from="1620047915384" duration="21711000" />
       <workItem from="1620130460139" duration="9378000" />
-      <workItem from="1620144203454" duration="4409000" />
-    </task>
-    <task id="LOCAL-04281" summary="Adição de dano por carga">
-      <created>1619546713850</created>
-      <option name="number" value="04281" />
-      <option name="presentableId" value="LOCAL-04281" />
-      <option name="project" value="LOCAL" />
-      <updated>1619546713850</updated>
-    </task>
-    <task id="LOCAL-04282" summary="Adição de dano por carga">
-      <created>1619548276368</created>
-      <option name="number" value="04282" />
-      <option name="presentableId" value="LOCAL-04282" />
-      <option name="project" value="LOCAL" />
-      <updated>1619548276368</updated>
-    </task>
-    <task id="LOCAL-04283" summary="Adição de dano por carga">
-      <created>1619548535694</created>
-      <option name="number" value="04283" />
-      <option name="presentableId" value="LOCAL-04283" />
-      <option name="project" value="LOCAL" />
-      <updated>1619548535694</updated>
+      <workItem from="1620144203454" duration="4762000" />
     </task>
     <task id="LOCAL-04284" summary="Adição de dano por carga">
       <created>1619554379262</created>
@@ -1531,7 +1504,28 @@
       <option name="project" value="LOCAL" />
       <updated>1620144429349</updated>
     </task>
-    <option name="localTasksCounter" value="4330" />
+    <task id="LOCAL-04330" summary="Correções gerais">
+      <created>1620155585013</created>
+      <option name="number" value="04330" />
+      <option name="presentableId" value="LOCAL-04330" />
+      <option name="project" value="LOCAL" />
+      <updated>1620155585013</updated>
+    </task>
+    <task id="LOCAL-04331" summary="Correções gerais">
+      <created>1620155685299</created>
+      <option name="number" value="04331" />
+      <option name="presentableId" value="LOCAL-04331" />
+      <option name="project" value="LOCAL" />
+      <updated>1620155685299</updated>
+    </task>
+    <task id="LOCAL-04332" summary="Correções gerais">
+      <created>1620155711287</created>
+      <option name="number" value="04332" />
+      <option name="presentableId" value="LOCAL-04332" />
+      <option name="project" value="LOCAL" />
+      <updated>1620155711287</updated>
+    </task>
+    <option name="localTasksCounter" value="4333" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
