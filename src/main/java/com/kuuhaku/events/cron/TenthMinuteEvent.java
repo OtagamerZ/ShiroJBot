@@ -132,6 +132,7 @@ public class TenthMinuteEvent implements Job {
 				}
 			}
 
+			if (acts.isEmpty()) continue;
 			RestAction.allOf(acts)
 					.mapToResult()
 					.queue();
@@ -164,6 +165,7 @@ public class TenthMinuteEvent implements Job {
 					acts.add(guild.addRoleToMember(m, r));
 				}
 
+				if (acts.isEmpty()) continue;
 				RestAction.allOf(acts)
 						.mapToResult()
 						.queue();
