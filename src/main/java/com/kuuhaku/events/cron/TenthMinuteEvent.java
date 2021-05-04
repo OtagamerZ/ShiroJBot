@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.SupportTier;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
+import com.kuuhaku.model.persistent.guild.PaidRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
 import com.kuuhaku.utils.ShiroInfo;
@@ -37,6 +38,8 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.quartz.Job;
@@ -105,8 +108,10 @@ public class TenthMinuteEvent implements Job {
 				roles.computeIfAbsent(ee, k -> new ArrayList<>()).add(addRole.getRight());
 			}
 
+			List<AuditableRestAction<Void>> acts = new ArrayList<>();
 			for (Member mb : mbs) {
 				ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
+
 				if (ex != null) {
 					List<Role> validRoles = roles.get(ex);
 					List<Role> invalidRoles = roles.entrySet()
@@ -116,15 +121,45 @@ public class TenthMinuteEvent implements Job {
 							.flatMap(List::stream)
 							.collect(Collectors.toList());
 
-					guild.modifyMemberRoles(mb, validRoles, invalidRoles).queue();
+					acts.add(guild.modifyMemberRoles(mb, validRoles, invalidRoles));
 				} else {
 					List<Role> invalidRoles = roles.values()
 							.stream()
 							.flatMap(List::stream)
 							.collect(Collectors.toList());
 
-					guild.modifyMemberRoles(mb, null, invalidRoles).queue();
+					acts.add(guild.modifyMemberRoles(mb, null, invalidRoles));
 				}
+			}
+
+			RestAction.allOf(acts)
+					.mapToResult()
+					.queue();
+		}
+
+		guilds = GuildDAO.getAllGuildsWithPaidRoles();
+		for (GuildConfig gc : guilds) {
+			Guild guild = Main.getInfo().getGuildByID(gc.getGuildId());
+			if (guild == null) continue;
+
+			for (PaidRole pr : gc.getPaidRoles()) {
+				Role r = guild.getRoleById(pr.getId());
+				if (r == null) continue;
+
+				Set<String> toExpire = pr.getExpiredUsers();
+				if (toExpire.size() == 0) continue;
+
+				List<AuditableRestAction<Void>> acts = new ArrayList<>();
+				for (String s : toExpire) {
+					Member m = guild.getMemberById(s);
+					if (m == null) continue;
+
+					acts.add(guild.removeRoleFromMember(m, r));
+				}
+
+				RestAction.allOf(acts)
+						.mapToResult()
+						.queue();
 			}
 		}
 

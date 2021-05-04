@@ -78,14 +78,17 @@ public class BuyRoleCommand implements Executable {
 					continue;
 				}
 
-				fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention(), (p, n) -> String.join("\n", p, n));
+				if (role.getDuration() > -1)
+					fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention(), (p, n) -> String.join("\n", p, n));
+				else
+					fields.merge(role.getPrice(), "`ID: " + i + "` | " + r.getAsMention() + " (" + Helper.toStringDuration(role.getDuration()) + ")", (p, n) -> String.join("\n", p, n));
 			}
 
 			List<List<Integer>> chunks = Helper.chunkify(fields.keySet(), 10);
 			for (List<Integer> chunk : chunks) {
 				eb.clearFields();
 				for (int value : chunk)
-					eb.addField("Valor: " + Helper.separate(value) + " créditos", fields.get(value), true);
+					eb.addField("Valor: " + Helper.separate(value) + " créditos", fields.get(value), false);
 
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
@@ -119,8 +122,14 @@ public class BuyRoleCommand implements Executable {
 				return;
 			}
 
+			String msg;
+			if (pr.getDuration() > -1)
+				msg = "Você está prestes a comprar o cargo `" + r.getName() + "` por **" + Helper.separate(pr.getPrice()) + " créditos**, deseja confirmar?";
+			else
+				msg = "Você está prestes a comprar o cargo `" + r.getName() + "` por **" + Helper.separate(pr.getPrice()) + " créditos**, deseja confirmar? (" + Helper.toStringDuration(pr.getDuration()) + ")";
+
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Você está prestes a comprar o cargo `" + r.getName() + "` por **" + Helper.separate(pr.getPrice()) + " créditos**, deseja confirmar?").queue(s ->
+			channel.sendMessage(msg).queue(s ->
 					Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 
@@ -138,6 +147,15 @@ public class BuyRoleCommand implements Executable {
 
 											AccountDAO.saveAccount(facc);
 											AccountDAO.saveAccount(oacc);
+
+											GuildConfig fgc = GuildDAO.getGuildById(guild.getId());
+											for (PaidRole role : fgc.getPaidRoles()) {
+												if (role.equals(pr)) {
+													role.getUsers().put(author.getId(), System.currentTimeMillis() + role.getDuration());
+													break;
+												}
+											}
+											GuildDAO.updateGuildSettings(fgc);
 
 											s.delete().queue(null, Helper::doNothing);
 										}, t -> channel.sendMessage("❌ | Erro ao comprar o cargo.").queue());
