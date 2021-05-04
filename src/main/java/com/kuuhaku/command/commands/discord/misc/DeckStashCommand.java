@@ -41,7 +41,6 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,22 +141,22 @@ public class DeckStashCommand implements Executable {
 
 			DeckStash ds = DeckStashDAO.getStash(author.getId()).get(slot);
 
-			List<Champion> champions = new ArrayList<>(kp.getChampions());
-			List<Equipment> equipments = new ArrayList<>(kp.getEquipments());
-			List<Field> fields = new ArrayList<>(kp.getFields());
-			List<Integer> destinyDraw = kp.getDestinyDraw();
+			List<Champion> champions = List.copyOf(kp.getChampions());
+			List<Equipment> equipments = List.copyOf(kp.getEquipments());
+			List<Field> fields = List.copyOf(kp.getFields());
+			List<Integer> destinyDraw = List.copyOf(kp.getDestinyDraw());
 
-			kp.setChampions(new ArrayList<>(ds.getChampions()));
-			kp.setEquipments(new ArrayList<>(ds.getEquipments()));
-			kp.setFields(new ArrayList<>(ds.getFields()));
-			if (ds.getDestinyDraw() != null) kp.setDestinyDraw(ds.getDestinyDraw().toArray(Integer[]::new));
-			else kp.setDestinyDraw(new Integer[0]);
+			kp.setChampions(List.copyOf(ds.getChampions()));
+			kp.setEquipments(List.copyOf(ds.getEquipments()));
+			kp.setFields(List.copyOf(ds.getFields()));
+			if (ds.getDestinyDraw() != null) kp.setDestinyDraw(List.copyOf(ds.getDestinyDraw()));
+			else kp.setDestinyDraw(List.of());
 
 			ds.setChampions(champions);
 			ds.setEquipments(equipments);
 			ds.setFields(fields);
-			if (destinyDraw != null) ds.setDestinyDraw(destinyDraw.toArray(Integer[]::new));
-			else ds.setDestinyDraw(new Integer[0]);
+			if (destinyDraw != null) ds.setDestinyDraw(destinyDraw);
+			else ds.setDestinyDraw(List.of());
 
 			DeckStashDAO.saveStash(ds);
 			KawaiponDAO.saveKawaipon(kp);

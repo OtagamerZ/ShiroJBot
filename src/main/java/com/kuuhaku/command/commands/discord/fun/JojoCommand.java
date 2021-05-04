@@ -36,7 +36,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,7 +57,7 @@ public class JojoCommand implements Executable {
 			return;
 		}
 
-		List<User> usrs = new ArrayList<>(message.getMentionedUsers());
+		List<User> usrs = List.copyOf(message.getMentionedUsers());
 		String mention = "<@!{0}>";
 		String oldMention = "<@{0}>";
 

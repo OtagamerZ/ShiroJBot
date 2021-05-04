@@ -46,7 +46,7 @@ public class BinaryCommand implements Executable {
 				}
 				binary.append(' ');
 			}
-			channel.sendMessage(":1234: `" + binary.toString() + "`").queue();
+			channel.sendMessage(":1234: `" + binary + "`").queue();
 		} catch (IllegalStateException | IllegalArgumentException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_message-too-long")).queue();
 		}

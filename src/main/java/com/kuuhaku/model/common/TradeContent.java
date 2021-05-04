@@ -131,7 +131,7 @@ public class TradeContent {
 	}
 
 	public static boolean isValidTrade(Collection<TradeContent> offers) {
-		List<TradeContent> off = new ArrayList<>(offers);
+		List<TradeContent> off = List.copyOf(offers);
 		TradeContent off1 = off.get(0);
 		TradeContent off2 = off.get(1);
 
@@ -143,7 +143,7 @@ public class TradeContent {
 	}
 
 	public static void trade(Collection<TradeContent> offers) {
-		List<TradeContent> off = new ArrayList<>(offers);
+		List<TradeContent> off = List.copyOf(offers);
 		TradeContent tc1 = off.get(0);
 		TradeContent tc2 = off.get(1);
 

@@ -150,10 +150,10 @@ public class FieldMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		String query = """
-				SELECT fm 
+				SELECT fm
 				FROM FieldMarket fm
 				JOIN fm.card f
-				JOIN f.card c 
+				JOIN f.card c
 				WHERE fm.buyer = ''
 				%s
 				""";

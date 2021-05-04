@@ -143,9 +143,7 @@ public class MonthlyEvent implements Job {
 			acc.addCredit(value.getValue() / winners.size(), MonthlyEvent.class);
 			AccountDAO.saveAccount(acc);
 
-			Main.getInfo().getUserByID(l.getUid()).openPrivateChannel().queue(c -> {
-				c.sendMessage("Você ganhou " + Helper.separate(value.getValue() / winners.size()) + " créditos na loteria, parabéns!").queue(null, Helper::doNothing);
-			}, Helper::doNothing);
+			Main.getInfo().getUserByID(l.getUid()).openPrivateChannel().queue(c -> c.sendMessage("Você ganhou " + Helper.separate(value.getValue() / winners.size()) + " créditos na loteria, parabéns!").queue(null, Helper::doNothing), Helper::doNothing);
 		}
 
 		LotteryDAO.closeLotteries();

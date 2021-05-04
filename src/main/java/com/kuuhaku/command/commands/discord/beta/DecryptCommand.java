@@ -55,13 +55,15 @@ public class DecryptCommand implements Executable {
 		} else if (args.length < 1) {
 			channel.sendMessage("❌ | Você precisa digitar uma chave para descriptografar o arquivo.").queue();
 			return;
-		} else if (message.getAttachments().get(0).getFileExtension() == null || !message.getAttachments().get(0).getFileExtension().equals("shr")) {
+		}
+
+		Message.Attachment att = message.getAttachments().get(0);
+		if (att.getFileExtension() == null || !att.getFileExtension().equals("shr")) {
 			channel.sendMessage("❌ | Este não é um arquivo que foi criptografado por mim!").queue();
 			return;
 		}
 
 		StrongBinaryEncryptor ste = new StrongBinaryEncryptor();
-		Message.Attachment att = message.getAttachments().get(0);
 
 		Executors.newSingleThreadExecutor().execute(() -> {
 			try {

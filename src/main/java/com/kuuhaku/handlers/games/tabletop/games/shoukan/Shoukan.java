@@ -1302,7 +1302,7 @@ public class Shoukan extends GlobalGame {
 					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
 						unequipCard(to, i, slts);
 						return;
-					} else if ((eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLMIRROR) && source != -1) {
+					} else if (eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLMIRROR) {
 						convertCard(from, source, to, target);
 						unequipCard(to, i, slts);
 						return;
@@ -1396,6 +1396,7 @@ public class Shoukan extends GlobalGame {
 					unequipCard(to, i, slts);
 			}
 
+			if (chi == null) return;
 			List<SlotColumn<Champion, Equipment>> slots = getArena().getSlots().get(from);
 
 			chi.clearLinkedTo();

@@ -121,7 +121,7 @@ public class TradeCommand implements Executable {
 
 					if (Helper.equalsAny(usr.getId(), author.getId(), tgt.getId()) && (content.startsWith("+") || content.startsWith("-"))) {
 						boolean add = content.startsWith("+");
-						String[] rawOffer = content.replaceFirst("\\+|-", "").trim().split(" ");
+						String[] rawOffer = content.replaceFirst("[+\\-]", "").trim().split(" ");
 						if (rawOffer.length < 1) return;
 
 						boolean foil = Helper.equalsAny("c", rawOffer);

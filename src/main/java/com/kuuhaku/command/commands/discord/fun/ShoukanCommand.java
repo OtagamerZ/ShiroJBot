@@ -408,7 +408,7 @@ public class ShoukanCommand implements Executable {
 						));
 			} else if (clan) {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, List.of(c, other), author, message.getMentionedUsers().get(0));
+				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, false, false, List.of(c, other), author, message.getMentionedUsers().get(0));
 				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " seu clã foi desafiado a uma partida de Shoukan, deseja aceitar?" + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {

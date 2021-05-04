@@ -116,7 +116,7 @@ public class SlotsCommand implements Executable {
 									%s
 									         
 									<a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503>
-									Seu prêmio é de __**%s créditos**__!         
+									Seu prêmio é de __**%s créditos**__!
 									<a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503>
 									""".formatted(combo.getMessage(), Helper.separate(prize))
 					).queue();
@@ -155,7 +155,7 @@ public class SlotsCommand implements Executable {
 				"""
 						%
 												
-						**Prêmio acumulado: __%__**						    
+						**Prêmio acumulado: __%__**
 						┌─┬─┬─┬─┬─┐
 						┤%│%│%│%│%├
 						└═┴═┴═┴═┴═┘

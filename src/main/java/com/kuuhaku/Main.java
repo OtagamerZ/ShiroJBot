@@ -82,7 +82,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		Helper.logger(Main.class).info("""
 				Shiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)
-				This program comes with ABSOLUTELY NO WARRANTY 
+				This program comes with ABSOLUTELY NO WARRANTY
 				This is free software, and you are welcome to redistribute it under certain conditions
 				See license for more information regarding redistribution conditions
 				""");

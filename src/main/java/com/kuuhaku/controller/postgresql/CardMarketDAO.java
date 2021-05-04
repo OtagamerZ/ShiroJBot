@@ -52,10 +52,10 @@ public class CardMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT cm 
-				FROM CardMarket cm 
-				WHERE cm.card.id = UPPER(:id) 
-				AND cm.foil = :foil 
+				SELECT cm
+				FROM CardMarket cm
+				WHERE cm.card.id = UPPER(:id)
+				AND cm.foil = :foil
 				AND cm.publishDate IS NOT NULL
 				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
@@ -75,10 +75,10 @@ public class CardMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT cm 
-				FROM CardMarket cm 
-				WHERE cm.card.rarity = :rarity 
-				AND cm.foil = :foil 
+				SELECT cm
+				FROM CardMarket cm
+				WHERE cm.card.rarity = :rarity
+				AND cm.foil = :foil
 				AND cm.publishDate IS NOT NULL
 				AND cm.buyer <> ''
 				AND cm.buyer <> cm.seller
@@ -188,8 +188,8 @@ public class CardMarketDAO {
 					SELECT ''
 						 , EXTRACT(MONTH FROM current_date) AS month
 						 , COALESCE(AVG(ms.sold), 10) AS avg_sold
-						 , COALESCE(AVG(ms.unique_buyers), 2) AS avg_unique_buyers 
-					FROM "GetMerchantStats" ms 
+						 , COALESCE(AVG(ms.unique_buyers), 2) AS avg_unique_buyers
+					FROM "GetMerchantStats" ms
 					WHERE ms.month = EXTRACT(MONTH FROM current_date)
 					""");
 
@@ -209,8 +209,8 @@ public class CardMarketDAO {
 					SELECT ms.seller
 						 , ms.month
 						 , ms.sold
-						 , ms.unique_buyers 
-					FROM "GetMerchantStats" ms 
+						 , ms.unique_buyers
+					FROM "GetMerchantStats" ms
 					WHERE ms.seller = :id
 					AND ms.month = EXTRACT(MONTH FROM current_date)
 					""");
@@ -229,7 +229,7 @@ public class CardMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		String query = """
-				SELECT cm 
+				SELECT cm
 				FROM CardMarket cm
 				JOIN cm.card c
 				JOIN c.anime a
