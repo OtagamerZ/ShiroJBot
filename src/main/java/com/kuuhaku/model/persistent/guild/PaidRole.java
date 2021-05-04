@@ -18,11 +18,12 @@
 
 package com.kuuhaku.model.persistent.guild;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "paidrole")
@@ -33,12 +34,19 @@ public class PaidRole {
 	@Column(columnDefinition = "INT NOT NULL")
 	private int price;
 
+	@Column(columnDefinition = "INT NOT NULL")
+	private long duration;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	private HashMap<String, Long> users = new HashMap<>();
+
 	public PaidRole() {
 	}
 
-	public PaidRole(String id, int price) {
+	public PaidRole(String id, int price, long duration) {
 		this.id = id;
 		this.price = price;
+		this.duration = duration;
 	}
 
 	public String getId() {
@@ -55,6 +63,30 @@ public class PaidRole {
 
 	public void setPrice(int price) {
 		this.price = price;
+	}
+
+	public long getDuration() {
+		return duration;
+	}
+
+	public void setDuration(long expiration) {
+		this.duration = expiration;
+	}
+
+	public Map<String, Long> getUsers() {
+		return users;
+	}
+
+	public Set<String> getExpiredUsers() {
+		if (duration == -1) return Set.of();
+		return users.entrySet().stream()
+				.filter(e -> e.getValue() <= System.currentTimeMillis())
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toSet());
+	}
+
+	public void setUsers(HashMap<String, Long> users) {
+		this.users = users;
 	}
 
 	@Override
