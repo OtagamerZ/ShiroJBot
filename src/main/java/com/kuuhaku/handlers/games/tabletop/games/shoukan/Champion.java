@@ -68,9 +68,6 @@ public class Champion implements Drawable, Cloneable {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int def;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int chargeBonus;
-
 	@Column(columnDefinition = "VARCHAR(140) NOT NULL DEFAULT ''")
 	private String description;
 
@@ -111,7 +108,6 @@ public class Champion implements Drawable, Cloneable {
 	private transient boolean permastun = false;
 	private transient double dodge = 0;
 	private transient double mDodge = 0;
-	private transient int charge;
 
 	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
 		this.card = card;
@@ -179,12 +175,6 @@ public class Champion implements Drawable, Cloneable {
 				Profile.drawOutlinedText(String.valueOf(fakeCard.getFinAtk()), 45, 250, g2d);
 			else
 				Profile.drawOutlinedText(String.valueOf(getFinAtk()), 45, 250, g2d);
-
-			if (charge > 0) {
-				g2d.setColor(Color.orange);
-				g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "shoukan/critical.png"), 19, 203, null);
-				Profile.drawOutlinedText("+" + (chargeBonus * charge), 45, 225, g2d);
-			}
 
 			g2d.setColor(Color.green);
 			if (fakeCard != null)
@@ -255,7 +245,6 @@ public class Champion implements Drawable, Cloneable {
 	@Override
 	public void setAvailable(boolean available) {
 		this.available = available;
-		this.charge = 0;
 	}
 
 	@Override
@@ -407,14 +396,6 @@ public class Champion implements Drawable, Cloneable {
 
 	public void setAltAtk(int altAtk) {
 		this.altAtk = Math.max(-1, altAtk);
-	}
-
-	public int getChargeBonus() {
-		return chargeBonus;
-	}
-
-	public void setChargeBonus(int chargeBonus) {
-		this.chargeBonus = chargeBonus;
 	}
 
 	public int getAltDef() {
@@ -701,18 +682,6 @@ public class Champion implements Drawable, Cloneable {
 			return f.getModifiers().optFloat(getRace().name(), 0) < 0;
 
 		return false;
-	}
-
-	public int getChargeAtk() {
-		return chargeBonus * charge;
-	}
-
-	public int getCharge() {
-		return charge;
-	}
-
-	public void setCharge(int charge) {
-		this.charge = charge;
 	}
 
 	@Override
