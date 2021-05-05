@@ -694,7 +694,7 @@ public class Shoukan extends GlobalGame {
 					if (enemy.getCombo().getRight() == Race.DEMON)
 						demonFac *= 1.33f;
 
-					int yPower = Math.round((c.getFinAtk() + c.getChargeAtk()) * (getRound() < 2 ? 0.5f : 1));
+					int yPower = Math.round(c.getFinAtk() * (getRound() < 2 ? 0.5f : 1));
 
 					if (!c.getCard().getId().equals("DECOY")) enemy.removeHp(yPower);
 					c.setAvailable(false);
@@ -822,7 +822,7 @@ public class Shoukan extends GlobalGame {
 		} else {
 			int yPower;
 			if (!yours.getCard().getId().equals("DECOY")) {
-				yPower = yours.getFinAtk() + yours.getChargeAtk();
+				yPower = yours.getFinAtk();
 			} else {
 				yPower = 0;
 			}
@@ -1501,12 +1501,6 @@ public class Shoukan extends GlobalGame {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
 						c.setAvailable(c.getStun() == 0);
-						if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0 && !c.hasEffect()) {
-							c.setCharge(c.getCharge() + 1);
-							if (applyEot(ON_CHARGE, current, i)) return;
-							if (applyEffect(ON_CHARGE, c, i, current, Pair.of(c, i), null)) return;
-						}
-
 						c.resetAttribs();
 						if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
 							|| makeFusion(h.get())
@@ -1665,12 +1659,6 @@ public class Shoukan extends GlobalGame {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
 							c.setAvailable(c.getStun() == 0);
-							if (!attacked[i] && !c.isDefending() && c.getChargeBonus() > 0 && !c.hasEffect()) {
-								c.setCharge(c.getCharge() + 1);
-								if (applyEot(ON_CHARGE, current, i)) return;
-								if (applyEffect(ON_CHARGE, c, i, current, Pair.of(c, i), null)) return;
-							}
-
 							c.resetAttribs();
 							if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
 								|| makeFusion(h.get())
