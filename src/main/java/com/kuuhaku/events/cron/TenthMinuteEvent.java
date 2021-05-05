@@ -173,7 +173,6 @@ public class TenthMinuteEvent implements Job {
 		}
 
 		Guild supportServer = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
-		Role devRole = supportServer.getRoleById("585170918700220418");
 		Role seniorRole = supportServer.getRoleById("815429753058230292");
 		Role supRole = supportServer.getRoleById("738837622805364876");
 
@@ -182,10 +181,6 @@ public class TenthMinuteEvent implements Job {
 				supportServer.addRoleToMember(sup.getKey(), seniorRole);
 			if (supRole != null)
 				supportServer.addRoleToMember(sup.getKey(), supRole);
-		}
-		for (String dev : ShiroInfo.getDevelopers()) {
-			if (devRole != null)
-				supportServer.addRoleToMember(dev, devRole);
 		}
 
 
