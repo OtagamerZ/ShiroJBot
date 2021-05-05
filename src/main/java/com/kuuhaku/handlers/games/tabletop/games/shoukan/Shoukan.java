@@ -51,8 +51,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.springframework.util.CollectionUtils;
 
-import java.io.File;
-import java.net.URL;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -1975,11 +1973,7 @@ public class Shoukan extends GlobalGame {
 						.setUsername(c.getName());
 
 				if (gif != null) {
-					URL url = this.getClass().getClassLoader().getResource("shoukan/gifs/" + gif + ".gif");
-					if (url != null) {
-						File f = new File(url.getFile());
-						wmb.addFile("effect.gif", f);
-					}
+					wmb.addFile("effect.gif", Helper.getResourceAsStream(this.getClass(), "shoukan/gifs/" + gif + ".gif"));
 				}
 
 				try {
@@ -1989,7 +1983,7 @@ public class Shoukan extends GlobalGame {
 				} catch (InterruptedException | ExecutionException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
-			} catch (InsufficientPermissionException | InterruptedException | ExecutionException ignore) {
+			} catch (InsufficientPermissionException | InterruptedException | ExecutionException | NullPointerException ignore) {
 			}
 		}
 	}
