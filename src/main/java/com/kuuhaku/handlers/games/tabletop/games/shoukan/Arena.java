@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
@@ -28,12 +27,12 @@ import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Arena {
@@ -88,10 +87,11 @@ public class Arena {
 
 	public BufferedImage render(Shoukan game, Map<Side, Hand> hands) {
 		try {
-			BufferedImage back = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/backdrop.jpg")));
-			BufferedImage arena = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/arenas/" + (field == null ? "default" : field.getField().toLowerCase(Locale.ROOT)) + ".png")));
-			BufferedImage frames = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/frames.png")));
+			BufferedImage back = Helper.getResourceAsImage(this.getClass(), "shoukan/backdrop.jpg");
+			BufferedImage arena = Helper.getResourceAsImage(this.getClass(), "shoukan/arenas/" + (field == null ? "default" : field.getField().toLowerCase(Locale.ROOT)) + ".png");
 
+			assert back != null;
+			assert arena != null;
 			Graphics2D g2d = back.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 			g2d.drawImage(arena, 0, 0, null);
@@ -127,6 +127,13 @@ public class Arena {
 							if (c.getTop() != null) {
 								Champion d = c.getTop();
 								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 387, null);
+
+								if (!d.isFlipped()) {
+									if (d.isBuffed())
+										g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 377, null);
+									else if (d.isNerfed())
+										g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 489 + (257 * i), 377, null);
+								}
 							}
 							if (c.getBottom() != null) {
 								Equipment d = c.getBottom();
@@ -137,6 +144,13 @@ public class Arena {
 							if (c.getTop() != null) {
 								Champion d = c.getTop();
 								g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1013, null);
+
+								if (!d.isFlipped()) {
+									if (d.isBuffed())
+										g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 1003, null);
+									else if (d.isNerfed())
+										g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 489 + (257 * i), 1003, null);
+								}
 							}
 							if (c.getBottom() != null) {
 								Equipment d = c.getBottom();
@@ -214,37 +228,6 @@ public class Arena {
 				g2d.drawImage(d.drawCard(false), 137, 700, null);
 			}
 
-			g2d.drawImage(frames, 0, 0, null);
-
-			for (Map.Entry<Side, List<SlotColumn<Champion, Equipment>>> entry : slots.entrySet()) {
-				Side key = entry.getKey();
-				List<SlotColumn<Champion, Equipment>> value = entry.getValue();
-
-				for (int i = 0; i < value.size(); i++) {
-					SlotColumn<Champion, Equipment> c = value.get(i);
-					switch (key) {
-						case TOP -> {
-							if (c.getTop() != null && !c.getTop().isFlipped()) {
-								Champion d = c.getTop();
-								if (d.isBuffed())
-									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 377, null);
-								else if (d.isNerfed())
-									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 489 + (257 * i), 377, null);
-							}
-						}
-						case BOTTOM -> {
-							if (c.getTop() != null && !c.getTop().isFlipped()) {
-								Champion d = c.getTop();
-								if (d.isBuffed())
-									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/buffed.png"), 489 + (257 * i), 1003, null);
-								else if (d.isNerfed())
-									g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/nerfed.png"), 489 + (257 * i), 1003, null);
-							}
-						}
-					}
-				}
-			}
-
 			Map<String, Integer> locks = Map.of(
 					"fusion", game.getFusionLock(),
 					"spell", game.getSpellLock(),
@@ -261,11 +244,7 @@ public class Arena {
 			for (int i = 0; i < lockNames.length; i++) {
 				String name = locks.get(lockNames[i]) > 0 ? lockNames[i] + "_lock" : lockNames[i] + "_unlock";
 				BufferedImage icon;
-				try {
-					icon = ImageIO.read(Objects.requireNonNull(Charm.class.getClassLoader().getResourceAsStream("shoukan/" + name + ".png")));
-				} catch (IOException e) {
-					icon = null;
-				}
+				icon = Helper.getResourceAsImage(this.getClass(), "shoukan/" + name + ".png");
 				g2d.drawImage(icon, 919 + (i * 166), 835, null);
 				if (locks.get(lockNames[i]) > 0)
 					Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 1009 + (i * 166), 860 + g2d.getFontMetrics().getHeight() / 2, g2d);
@@ -274,7 +253,7 @@ public class Arena {
 			g2d.dispose();
 
 			return back;
-		} catch (IOException e) {
+		} catch (NullPointerException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
