@@ -85,8 +85,6 @@ public class SeeCardCommand implements Executable {
 			if (d instanceof Champion) {
 				Champion c = (Champion) d;
 				eb.addField("Classe:", c.getCategory() == null ? "Nenhuma" : c.getCategory().getName(), true);
-				if (c.getChargeBonus() != 0)
-					eb.addField("Dano extra por carga:", c.getChargeBonus() < 0 ? "Definido por efeito" : String.valueOf(c.getChargeBonus()), true);
 			} else if (d instanceof Equipment && ((Equipment) d).getCharm() != null)
 				eb.addField("Amuleto:", ((Equipment) d).getCharm().getName(), true);
 			eb.setImage("attachment://kawaipon.png");
