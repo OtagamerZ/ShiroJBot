@@ -14,9 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/VoiceRole.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1171,14 +1170,7 @@
       <workItem from="1620130460139" duration="9378000" />
       <workItem from="1620144203454" duration="7452000" />
       <workItem from="1620217362058" duration="7923000" />
-      <workItem from="1620231414172" duration="328000" />
-    </task>
-    <task id="LOCAL-04297" summary="Adição de versões DUO para os efeitos das raças humano e bestial">
-      <created>1619809271697</created>
-      <option name="number" value="04297" />
-      <option name="presentableId" value="LOCAL-04297" />
-      <option name="project" value="LOCAL" />
-      <updated>1619809271697</updated>
+      <workItem from="1620231414172" duration="2320000" />
     </task>
     <task id="LOCAL-04298" summary="Adição de versões DUO para os efeitos das raças humano e bestial">
       <created>1619811081354</created>
@@ -1516,7 +1508,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620225686408</updated>
     </task>
-    <option name="localTasksCounter" value="4346" />
+    <task id="LOCAL-04346" summary="Correções gerais">
+      <created>1620231821108</created>
+      <option name="number" value="04346" />
+      <option name="presentableId" value="LOCAL-04346" />
+      <option name="project" value="LOCAL" />
+      <updated>1620231821109</updated>
+    </task>
+    <option name="localTasksCounter" value="4347" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
