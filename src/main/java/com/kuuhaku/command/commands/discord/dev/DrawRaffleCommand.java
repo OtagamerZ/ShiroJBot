@@ -63,7 +63,7 @@ public class DrawRaffleCommand implements Executable {
 					.map(Upvote::getUid)
 					.map(Main.getInfo()::getUserByID)
 					.filter(Objects::nonNull)
-					.map(u -> u.getAsMention() + " (" + u.getName() + ")")
+					.map(u -> u.getAsMention() + " (" + Helper.bugText(u.getName()) + ")")
 					.collect(Collectors.toList());
 
 			if (votes.isEmpty()) {
