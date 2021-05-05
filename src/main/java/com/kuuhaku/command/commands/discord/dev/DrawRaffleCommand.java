@@ -69,7 +69,7 @@ public class DrawRaffleCommand implements Executable {
 			if (votes.isEmpty()) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_raffle-no-votes")).queue();
 				return;
-			} else if (amount < votes.stream().distinct().count()) {
+			} else if (amount > votes.stream().distinct().count()) {
 				channel.sendMessage("❌ | Não há usuários suficientes para sortear " + amount + " vencedores.").queue();
 				return;
 			}
