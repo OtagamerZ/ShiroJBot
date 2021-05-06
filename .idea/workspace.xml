@@ -13,28 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/sleep.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/stasis.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/stun.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__club_minnced_opus_java_api_1_0_4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__club_minnced_opus_java_natives_1_0_4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__club_minnced_opus_java_pom_1_0_4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_neovisionaries_nv_websocket_client_2_10.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_dv8tion_JDA_4_2_0_227.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_java_dev_jna_jna_4_4_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_sf_trove4j_trove4j_3_0_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_apache_commons_commons_collections4_4_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca JDA">
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/arenas/default.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/arenas/default.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/backdrop.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/backdrop.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/critical.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/stunned.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1204,14 +1184,7 @@
       <workItem from="1620217362058" duration="7923000" />
       <workItem from="1620231414172" duration="5008000" />
       <workItem from="1620242128176" duration="1999000" />
-      <workItem from="1620308814667" duration="13203000" />
-    </task>
-    <task id="LOCAL-04303" summary="Comando de adicionar Emotes agora aceita menções">
-      <created>1619815576816</created>
-      <option name="number" value="04303" />
-      <option name="presentableId" value="LOCAL-04303" />
-      <option name="project" value="LOCAL" />
-      <updated>1619815576816</updated>
+      <workItem from="1620308814667" duration="13507000" />
     </task>
     <task id="LOCAL-04304" summary="Correções gerais">
       <created>1620051819808</created>
@@ -1549,7 +1522,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620331587187</updated>
     </task>
-    <option name="localTasksCounter" value="4352" />
+    <task id="LOCAL-04352" summary="Atualização da biblioteca JDA">
+      <created>1620334390130</created>
+      <option name="number" value="04352" />
+      <option name="presentableId" value="LOCAL-04352" />
+      <option name="project" value="LOCAL" />
+      <updated>1620334390130</updated>
+    </task>
+    <option name="localTasksCounter" value="4353" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1635,7 +1615,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adicionado comando para limpar o deck" />
     <MESSAGE value="Adicionado registrador de dados sobre a Shiro" />
     <MESSAGE value="Adicionado comando para ver estatísticas sobre a Shiro" />
     <MESSAGE value="Correção no gráfico de estatísticas sobre a Shiro" />
@@ -1660,7 +1639,8 @@
     <MESSAGE value="Correção na renderização dos tabuleiros" />
     <MESSAGE value="Comando de adicionar Emotes agora aceita menções" />
     <MESSAGE value="Correções gerais" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções gerais" />
+    <MESSAGE value="Atualização da biblioteca JDA" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualização da biblioteca JDA" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
