@@ -14,7 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/CustomAnswerCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1184,14 +1186,7 @@
       <workItem from="1620217362058" duration="7923000" />
       <workItem from="1620231414172" duration="5008000" />
       <workItem from="1620242128176" duration="1999000" />
-      <workItem from="1620308814667" duration="7904000" />
-    </task>
-    <task id="LOCAL-04301" summary="Comando de adicionar Emotes agora aceita menções">
-      <created>1619815302566</created>
-      <option name="number" value="04301" />
-      <option name="presentableId" value="LOCAL-04301" />
-      <option name="project" value="LOCAL" />
-      <updated>1619815302566</updated>
+      <workItem from="1620308814667" duration="10378000" />
     </task>
     <task id="LOCAL-04302" summary="Comando de adicionar Emotes agora aceita menções">
       <created>1619815466976</created>
@@ -1529,7 +1524,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620327997081</updated>
     </task>
-    <option name="localTasksCounter" value="4350" />
+    <task id="LOCAL-04350" summary="Correções gerais">
+      <created>1620328504946</created>
+      <option name="number" value="04350" />
+      <option name="presentableId" value="LOCAL-04350" />
+      <option name="project" value="LOCAL" />
+      <updated>1620328504947</updated>
+    </task>
+    <option name="localTasksCounter" value="4351" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
