@@ -40,7 +40,6 @@ import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -307,8 +306,14 @@ public class Shoukan extends GlobalGame {
 					} else if (changed[index]) {
 						channel.sendMessage("❌ | Você já mudou a postura dessa carta neste turno.").queue(null, Helper::doNothing);
 						return;
-					} else if (c.getStun() > 0 || c.getStun() == -1) {
+					} else if (c.isStasis()) {
+						channel.sendMessage("❌ | Essa carta está inalvejável.").queue(null, Helper::doNothing);
+						return;
+					} else if (c.isStunned()) {
 						channel.sendMessage("❌ | Essa carta está atordoada.").queue(null, Helper::doNothing);
+						return;
+					} else if (c.isSleeping()) {
+						channel.sendMessage("❌ | Essa carta está dormindo.").queue(null, Helper::doNothing);
 						return;
 					}
 
@@ -675,8 +680,14 @@ public class Shoukan extends GlobalGame {
 					} else if (c.isFlipped()) {
 						channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue(null, Helper::doNothing);
 						return;
-					} else if (c.getStun() > 0 || c.getStun() == -1) {
+					} else if (c.isStasis()) {
+						channel.sendMessage("❌ | Essa carta está inalvejável.").queue(null, Helper::doNothing);
+						return;
+					} else if (c.isStunned()) {
 						channel.sendMessage("❌ | Essa carta está atordoada.").queue(null, Helper::doNothing);
+						return;
+					} else if (c.isSleeping()) {
+						channel.sendMessage("❌ | Essa carta está dormindo.").queue(null, Helper::doNothing);
 						return;
 					} else if (c.isDefending()) {
 						channel.sendMessage("❌ | Você não pode atacar com cartas em modo de defesa.").queue(null, Helper::doNothing);
@@ -694,7 +705,7 @@ public class Shoukan extends GlobalGame {
 
 					int yPower = Math.round(c.getFinAtk() * (getRound() < 2 ? 0.5f : 1));
 
-					if (!c.getCard().getId().equals("DECOY")) enemy.removeHp(yPower);
+					if (!c.getCard().getId().equals("DECOY")) enemy.removeHp(Math.round(yPower * demonFac));
 					c.setAvailable(false);
 					attacked[is[0]] = true;
 
@@ -724,8 +735,14 @@ public class Shoukan extends GlobalGame {
 				} else if (yours.isFlipped()) {
 					channel.sendMessage("❌ | Você não pode atacar com cartas viradas para baixo.").queue(null, Helper::doNothing);
 					return;
-				} else if (yours.getStun() > 0 || his.getStun() == -1) {
+				} else if (yours.isStasis()) {
+					channel.sendMessage("❌ | Essa carta está inalvejável.").queue(null, Helper::doNothing);
+					return;
+				} else if (yours.isStunned()) {
 					channel.sendMessage("❌ | Essa carta está atordoada.").queue(null, Helper::doNothing);
+					return;
+				} else if (yours.isSleeping()) {
+					channel.sendMessage("❌ | Essa carta está dormindo.").queue(null, Helper::doNothing);
 					return;
 				} else if (yours.isDefending()) {
 					channel.sendMessage("❌ | Você não pode atacar com cartas em modo de defesa.").queue(null, Helper::doNothing);
@@ -771,6 +788,11 @@ public class Shoukan extends GlobalGame {
 	public void attack(Side current, Side next, int[] is) {
 		Champion yours = getArena().getSlots().get(current).get(is[0]).getTop();
 		Champion his = getArena().getSlots().get(next).get(is[1]).getTop();
+
+		if (his.isStasis()) {
+			reportEvent(null, "❌ | Você não pode atacar cartas inalvejáveis.", false, false);
+			return;
+		}
 
 		if (yours.isDefending()) return;
 		attacked[is[0]] = true;
@@ -865,17 +887,34 @@ public class Shoukan extends GlobalGame {
 					if (applyEot(ON_DEATH, next, is[1])) return;
 					if (applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
+					float demonFac = 1;
+
+					if (getHands().get(current).getCombo().getRight() == Race.DEMON)
+						demonFac *= 1.25f;
+					if (getHands().get(next).getCombo().getRight() == Race.DEMON)
+						demonFac *= 1.33f;
+
+					boolean sleeping = his.isSleeping();
 					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 						if (his.isDefending()) {
-							int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
-							Hand enemy = hands.get(next);
-							enemy.removeHp(apDamage);
-						} else if (!(his.isDefending() || his.getStun() > 0 || his.getStun() == -1) && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+							if (his.isSleeping()) {
+								Hand enemy = hands.get(next);
+								if (yours.getBonus().getSpecialData().has("totalDamage"))
+									enemy.removeHp(Math.round(yPower * 1.5f * demonFac));
+								else {
+									enemy.removeHp(Math.round((yPower * 1.5f - hPower) * demonFac));
+								}
+							} else {
+								int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
+								Hand enemy = hands.get(next);
+								enemy.removeHp(apDamage);
+							}
+						} else if (getCustom() == null || !getCustom().optBoolean("semdano")) {
 							Hand enemy = hands.get(next);
 							if (yours.getBonus().getSpecialData().has("totalDamage"))
-								enemy.removeHp(yPower);
+								enemy.removeHp(Math.round(yPower * demonFac));
 							else {
-								enemy.removeHp(Math.round(yPower - hPower));
+								enemy.removeHp(Math.round((yPower - hPower) * demonFac));
 							}
 						}
 					}
@@ -883,7 +922,14 @@ public class Shoukan extends GlobalGame {
 					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 						killCard(next, is[1]);
 						if (!postCombat()) {
-							String msg = yours.getName() + " derrotou " + his.getCard().getName() + "! (" + yPower + " > " + hPower + ")";
+							String msg = "%s derrotou %s! (%d > %d)%s%s".formatted(
+									yours.getName(),
+									his.getCard().getName(),
+									yPower,
+									hPower,
+									demonFac > 1 ? " (efeito de raça: +" + Helper.roundToString(demonFac * 100 - 100, 0) + "%)" : "",
+									sleeping ? " (alvo dormindo: +50%)" : ""
+							);
 
 							reportEvent(null, msg, true, false);
 						} else return;
@@ -1498,7 +1544,7 @@ public class Shoukan extends GlobalGame {
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
-						c.setAvailable(c.getStun() == 0);
+						c.setAvailable(!c.isStasis() && !c.isStunned() && !c.isSleeping());
 						c.resetAttribs();
 						if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
 							|| makeFusion(h.get())
@@ -1527,7 +1573,9 @@ public class Shoukan extends GlobalGame {
 				for (int i = 0; i < slots.size(); i++) {
 					Champion c = slots.get(i).getTop();
 					if (c != null) {
-						if (c.getStun() > 0 && c.getStun() != -1) c.reduceStun();
+						if (c.isStasis()) c.reduceStasis();
+						if (c.isStunned()) c.reduceStun();
+						if (c.isSleeping()) c.reduceSleep();
 
 						if (applyEffect(BEFORE_TURN, c, i, current, Pair.of(c, i), null)
 							|| makeFusion(h.get())
@@ -1656,7 +1704,7 @@ public class Shoukan extends GlobalGame {
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
-							c.setAvailable(c.getStun() == 0);
+							c.setAvailable(!c.isStasis() && !c.isStunned() && !c.isSleeping());
 							c.resetAttribs();
 							if (applyEffect(AFTER_TURN, c, i, current, Pair.of(c, i), null)
 								|| makeFusion(h.get())
@@ -1681,7 +1729,9 @@ public class Shoukan extends GlobalGame {
 					for (int i = 0; i < slots.size(); i++) {
 						Champion c = slots.get(i).getTop();
 						if (c != null) {
-							if (c.getStun() > 0 && c.getStun() != -1) c.reduceStun();
+							if (c.isStasis()) c.reduceStasis();
+							if (c.isStunned()) c.reduceStun();
+							if (c.isSleeping()) c.reduceSleep();
 
 							if (applyEffect(BEFORE_TURN, c, i, current, Pair.of(c, i), null)
 								|| makeFusion(h.get())
