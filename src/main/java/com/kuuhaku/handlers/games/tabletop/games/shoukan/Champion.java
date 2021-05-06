@@ -104,8 +104,9 @@ public class Champion implements Drawable, Cloneable {
 	private transient int efctMana = 0;
 	private transient int efctAtk = 0;
 	private transient int efctDef = 0;
+	private transient int stasis = 0;
 	private transient int stun = 0;
-	private transient boolean permastun = false;
+	private transient int sleep = 0;
 	private transient double dodge = 0;
 	private transient double mDodge = 0;
 
@@ -189,7 +190,7 @@ public class Champion implements Drawable, Cloneable {
 			g2d.setFont(Helper.HAMMERSMITH.deriveFont(Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, fakeCard != null ? fakeCard.getDescription() : Helper.getOr(altDescription, description), 205, 9, 293);
 
-			if (getStun() > 0 || getStun() == -1) {
+			if (isStasis() || isStunned() || isSleeping()) {
 				available = false;
 			}
 
@@ -198,9 +199,21 @@ public class Champion implements Drawable, Cloneable {
 				g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 			}
 
-			if (getStun() > 0 || getStun() == -1) {
+			if (isStasis()) {
+				try {
+					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/stasis.png")));
+					g2d.drawImage(dm, 0, 0, null);
+				} catch (IOException ignore) {
+				}
+			} else if (isStunned()) {
 				try {
 					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/stunned.png")));
+					g2d.drawImage(dm, 0, 0, null);
+				} catch (IOException ignore) {
+				}
+			} else if (isSleeping()) {
+				try {
+					BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/sleep.png")));
 					g2d.drawImage(dm, 0, 0, null);
 				} catch (IOException ignore) {
 				}
@@ -305,7 +318,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean isDefending() {
-		return flipped || defending || getStun() > 0 || getStun() == -1;
+		return flipped || defending || getStun() > 0 || getStasis() > 0;
 	}
 
 	public void setDefending(boolean defending) {
@@ -633,8 +646,9 @@ public class Champion implements Drawable, Cloneable {
 		efctMana = 0;
 		efctAtk = 0;
 		efctDef = 0;
+		stasis = 0;
 		stun = 0;
-		permastun = false;
+		sleep = 0;
 		dodge = 0;
 	}
 
@@ -646,25 +660,56 @@ public class Champion implements Drawable, Cloneable {
 		this.requiredCards = requiredCards;
 	}
 
+	public boolean isStasis() {
+		return stasis > 0;
+	}
+
+	public int getStasis() {
+		return stasis;
+	}
+
+	public void setStasis(int stasis) {
+		this.stasis = stasis;
+		if (getStasis() > 0) defending = true;
+	}
+
+	public void reduceStasis() {
+		this.stasis = Math.max(stasis - 1, 0);
+	}
+
+	public boolean isStunned() {
+		return !isStasis() && stun > 0;
+	}
+
 	public int getStun() {
-		if (permastun) return -1;
 		return stun;
 	}
 
 	public void setStun(int stun) {
 		this.stun = stun;
-		if (getStun() > 0 || getStun() == -1) defending = true;
-	}
-
-	public void setPermaStun(boolean perma) {
-		this.permastun = perma;
-		if (getStun() > 0 || getStun() == -1) defending = true;
+		if (getStun() > 0) defending = true;
 	}
 
 	public void reduceStun() {
 		this.stun = Math.max(stun - 1, 0);
 	}
 
+	public boolean isSleeping() {
+		return !isStunned() && sleep > 0;
+	}
+
+	public int getSleep() {
+		return sleep;
+	}
+
+	public void setSleep(int stasis) {
+		this.sleep = stasis;
+		if (getSleep() > 0) defending = true;
+	}
+
+	public void reduceSleep() {
+		this.stasis = Math.max(sleep - 1, 0);
+	}
 
 	public boolean isBuffed() {
 		if (game == null) return false;
