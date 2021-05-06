@@ -15,7 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/BotStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/BotStats.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,6 +200,19 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1170,14 +1185,9 @@
       <workItem from="1620130460139" duration="9378000" />
       <workItem from="1620144203454" duration="7452000" />
       <workItem from="1620217362058" duration="7923000" />
-      <workItem from="1620231414172" duration="2320000" />
-    </task>
-    <task id="LOCAL-04298" summary="Adição de versões DUO para os efeitos das raças humano e bestial">
-      <created>1619811081354</created>
-      <option name="number" value="04298" />
-      <option name="presentableId" value="LOCAL-04298" />
-      <option name="project" value="LOCAL" />
-      <updated>1619811081354</updated>
+      <workItem from="1620231414172" duration="5008000" />
+      <workItem from="1620242128176" duration="1999000" />
+      <workItem from="1620308814667" duration="6476000" />
     </task>
     <task id="LOCAL-04299" summary="Comando de adicionar Emotes agora aceita menções">
       <created>1619813781785</created>
@@ -1515,7 +1525,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620231821109</updated>
     </task>
-    <option name="localTasksCounter" value="4347" />
+    <task id="LOCAL-04347" summary="Correções gerais">
+      <created>1620237671803</created>
+      <option name="number" value="04347" />
+      <option name="presentableId" value="LOCAL-04347" />
+      <option name="project" value="LOCAL" />
+      <updated>1620237671803</updated>
+    </task>
+    <option name="localTasksCounter" value="4348" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
