@@ -26,13 +26,7 @@
                     disableAnsi="false"/>
         </Console>
 
-        <File name="DebugLog" fileName="logs/debug.log" append="false">
-            <PatternLayout
-                    pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %logger{36}.%M():%L - %msg\r\n\r\n"
-                    disableAnsi="false"/>
-        </File>
-
-        <File name="Log" fileName="logs/stacktrace.log" append="false">
+        <File name="InfoLog" fileName="logs/stacktrace.log" append="false">
             <PatternLayout
                     pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %logger{36}.%M():%L - %msg\r\n\r\n"
                     disableAnsi="false"/>
@@ -55,8 +49,7 @@
         <root level="debug">
             <AppenderRef ref="Console" level="info"/>
 
-            <AppenderRef ref="DebugLog" level="debug"/>
-            <AppenderRef ref="Log" level="info"/>
+            <AppenderRef ref="InfoLog" level="info"/>
             <AppenderRef ref="ErrorLog" level="error"/>
             <AppenderRef ref="CrashLog" level="fatal"/>
         </root>
