@@ -46,6 +46,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url "https://jitpack.io" }
+    maven { url 'https://m2.dv8tion.net/releases' }
 }
 
 task stage(dependsOn: ["build", "clean"])
@@ -63,7 +64,7 @@ task copyToLib(type: Copy) {
 stage.dependsOn(copyToLib)
 
 dependencies {
-    implementation group: "net.dv8tion", name: "JDA", version: "4.2.0_227"
+    implementation group: "net.dv8tion", name: "JDA", version: "4.2.1_262"
     implementation group: "club.minnced", name: "discord-webhooks", version: "0.3.1"
     implementation group: "com.github.SvenWoltmann", name: "color-thief-java", version: "v1.1.2"
     implementation group: "com.enigmabridge", name: "hibernate4-sqlite-dialect", version: "0.1.2"
