@@ -63,7 +63,7 @@ task copyToLib(type: Copy) {
 stage.dependsOn(copyToLib)
 
 dependencies {
-    implementation group: "net.dv8tion", name: "JDA", version: "4.2.1_253"
+    implementation group: "net.dv8tion", name: "JDA", version: "4.2.0_227"
     implementation group: "club.minnced", name: "discord-webhooks", version: "0.3.1"
     implementation group: "com.github.SvenWoltmann", name: "color-thief-java", version: "v1.1.2"
     implementation group: "com.enigmabridge", name: "hibernate4-sqlite-dialect", version: "0.1.2"
