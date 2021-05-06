@@ -1983,7 +1983,8 @@ public class Shoukan extends GlobalGame {
 				} catch (InterruptedException | ExecutionException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
-			} catch (InsufficientPermissionException | InterruptedException | ExecutionException | NullPointerException ignore) {
+			} catch (InsufficientPermissionException | InterruptedException | ExecutionException | NullPointerException e) {
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		}
 	}

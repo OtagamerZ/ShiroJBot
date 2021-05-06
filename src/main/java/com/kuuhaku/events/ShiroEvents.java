@@ -822,9 +822,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 
 				event.getAuthor().openPrivateChannel().queue(c -> {
-					if (RelayDAO.blockedList().contains(event.getAuthor().getId())) {
-						c.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-blocked")).queue(null, Helper::doNothing);
-					} else
+					if (!RelayDAO.blockedList().contains(event.getAuthor().getId())) {
 						c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
 								.queue(s -> {
 									EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -840,6 +838,7 @@ public class ShiroEvents extends ListenerAdapter {
 									}
 									s.delete().queueAfter(1, TimeUnit.MINUTES);
 								}, Helper::doNothing);
+					}
 				});
 			} catch (Exception ignored) {
 			}
