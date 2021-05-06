@@ -86,7 +86,7 @@ public class BotStats {
 		memoryPrcnt = Helper.prcnt(memoryUsage, ShiroInfo.getSystemInfo().getTotalMemorySize());
 		cpuUsage = ShiroInfo.getSystemInfo().getProcessCpuLoad();
 		servers = Main.getShiroShards().getGuilds().size();
-		ping = Math.round(Main.getShiroShards().getAverageGatewayPing());
+		ping = Main.getShiroShards().getShards().get(0).getRestPing().complete();
 
 		ratelimitCount = Main.getInfo().getRatelimit().size();
 		confirmationPendingCount = Main.getInfo().getConfirmationPending().size();

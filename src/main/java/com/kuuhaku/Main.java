@@ -162,7 +162,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		try {
 			Paginator p = PaginatorBuilder.createPaginator()
 					.setHandler(shiroShards)
-					.shouldRemoveOnReact(true)
 					.shouldEventLock(true)
 					.build();
 
