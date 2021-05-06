@@ -42,7 +42,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: com.github.ygimenez:Pagination-Utils:2.1.8" level="project" />
-    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.2.0_227" level="project" />
+    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.2.1_262" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:discord-webhooks:0.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.SvenWoltmann:color-thief-java:v1.1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.enigmabridge:hibernate4-sqlite-dialect:0.1.2" level="project" />
@@ -86,9 +86,9 @@
     <orderEntry type="library" name="Gradle: net.oneandone.reflections8:reflections8:0.11.7" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:18.0.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.neovisionaries:nv-websocket-client:2.10" level="project" />
+    <orderEntry type="library" name="Gradle: com.neovisionaries:nv-websocket-client:2.14" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.14.9" level="project" />
-    <orderEntry type="library" name="Gradle: club.minnced:opus-java:pom:1.0.4" level="project" />
+    <orderEntry type="library" name="Gradle: club.minnced:opus-java:pom:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-collections4:4.1" level="project" />
     <orderEntry type="library" name="Gradle: org.json:json:20180813" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api-client:google-api-client:1.25.0" level="project" />
@@ -148,8 +148,8 @@
     <orderEntry type="library" name="Gradle: de.erichseifert.vectorgraphics2d:VectorGraphics2D:0.13" level="project" />
     <orderEntry type="library" name="Gradle: com.madgag:animated-gif-lib:1.4" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.17.2" level="project" />
-    <orderEntry type="library" name="Gradle: club.minnced:opus-java-api:1.0.4" level="project" />
-    <orderEntry type="library" name="Gradle: club.minnced:opus-java-natives:1.0.4" level="project" />
+    <orderEntry type="library" name="Gradle: club.minnced:opus-java-api:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: club.minnced:opus-java-natives:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.oauth-client:google-oauth-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client-jackson2:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava:20.0" level="project" />
