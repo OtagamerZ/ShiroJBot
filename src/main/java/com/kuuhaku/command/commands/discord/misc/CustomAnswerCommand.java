@@ -106,13 +106,15 @@ public class CustomAnswerCommand implements Executable {
 		String[] txt = String.join(" ", args).split(";");
 
 		if (txt.length > 1) {
-			if (txt[0].length() <= 200) {
-				if (txt[1].length() <= 200) {
+			if (Helper.between(txt[0].length(), 4, 501)) {
+				if (txt[1].length() <= 500) {
 					CustomAnswerDAO.addCAtoDB(guild, txt[0].trim(), txt[1].trim());
 					channel.sendMessage("Agora quando alguém disser `" + txt[0] + "` irei responder `" + txt[1] + "`.").queue();
 				} else {
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-reply-too-long")).queue();
 				}
+			} else if (txt[0].length() <= 3) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-trigger-too-short")).queue();
 			} else {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-trigger-too-long")).queue();
 			}
