@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.api.endpoint.payload.Bonus;
+import com.kuuhaku.model.enums.BuffType;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.TrophyType;
 import com.kuuhaku.model.persistent.guild.GuildBuff;
@@ -129,7 +130,10 @@ public class Member {
 			mult.updateAndGet(v -> v * 1.12f);
 
 		GuildBuff gb = GuildBuffDAO.getBuffs(g.getId());
-		gb.getBuffs().stream().filter(b -> b.getId() == 1).findAny().ifPresent(b -> mult.updateAndGet(v -> v * b.getMult()));
+		gb.getBuffs().stream()
+				.filter(b -> b.getType() == BuffType.XP)
+				.findAny()
+				.ifPresent(b -> mult.updateAndGet(v -> v * b.getMult()));
 
 		float spamModif = Math.max(0, Math.min((System.currentTimeMillis() - lastEarntXp) / 1000f, 1));
 		xp += 15 * mult.get() * spamModif;
