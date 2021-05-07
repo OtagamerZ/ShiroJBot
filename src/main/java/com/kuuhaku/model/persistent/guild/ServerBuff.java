@@ -98,11 +98,11 @@ public class ServerBuff {
 		} * tier * (tier == 4 ? 10 : 1);
 	}
 
-	public float getMult() {
+	public double getMult() {
 		return 1 + switch (type) {
-			case XP -> 0.3f;
-			case CARD, DROP -> 0.2f;
-			case FOIL -> 0.25f;
+			case XP -> 0.3;
+			case CARD, DROP -> 0.2;
+			case FOIL -> 0.25;
 		};
 	}
 }

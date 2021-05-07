@@ -79,24 +79,24 @@ public class MyBuffsCommand implements Executable {
 
 				String chance = Helper.toPercent(b.getMult() - 1);
 				switch (b.getType()) {
-					case XP -> eb.addField("Melhoria de servidor (XP)", "+" + chance + "% XP ganho (até " + until + ")", false);
+					case XP -> eb.addField("Melhoria de servidor (XP)", "+" + chance + " XP ganho (até " + until + ")", false);
 					case CARD -> {
 						if (isUltimate)
 							eb.addField("Melhoria de servidor (cartas)", "Bônus ultimate, todas as mensagens tem 100% de chance de spawn de cartas (1 minuto)", false);
 						else
-							eb.addField("Melhoria de servidor (cartas)", "+" + chance + "% chance de spawn de cartas (até " + until + ")", false);
+							eb.addField("Melhoria de servidor (cartas)", "+" + chance + " chance de spawn de cartas (até " + until + ")", false);
 					}
 					case DROP -> {
 						if (isUltimate)
 							eb.addField("Melhoria de servidor (drops)", "Bônus ultimate, todas as mensagens tem 100% de chance de spawn de drops (1 minuto)", false);
 						else
-							eb.addField("Melhoria de servidor (drops)", "+" + chance + "% chance de spawn de drops (até " + until + ")", false);
+							eb.addField("Melhoria de servidor (drops)", "+" + chance + " chance de spawn de drops (até " + until + ")", false);
 					}
 					case FOIL -> {
 						if (isUltimate)
 							eb.addField("Melhoria de servidor (cromadas)", "Bônus ultimate, todas as cartas tem 100% de chance de serem cromadas (1 minuto)", false);
 						else
-							eb.addField("Melhoria de servidor (cromadas)", "+" + chance + "% chance de spawn de cartas cromadas (até " + until + ")", false);
+							eb.addField("Melhoria de servidor (cromadas)", "+" + chance + " chance de spawn de cartas cromadas (até " + until + ")", false);
 					}
 				}
 			}
