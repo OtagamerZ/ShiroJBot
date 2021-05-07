@@ -79,6 +79,7 @@
         <class>com.kuuhaku.model.persistent.BotStats</class>
         <class>com.kuuhaku.model.persistent.guild.GuildConfig</class>
         <class>com.kuuhaku.model.persistent.guild.GuildBuff</class>
+        <class>com.kuuhaku.model.persistent.guild.ServerBuff</class>
         <class>com.kuuhaku.model.persistent.guild.LevelRole</class>
         <class>com.kuuhaku.model.persistent.guild.PaidRole</class>
         <class>com.kuuhaku.model.persistent.guild.ColorRole</class>
