@@ -1183,14 +1183,7 @@
       <workItem from="1620231414172" duration="5008000" />
       <workItem from="1620242128176" duration="1999000" />
       <workItem from="1620308814667" duration="13795000" />
-      <workItem from="1620403337331" duration="8622000" />
-    </task>
-    <task id="LOCAL-04313" summary="Correções gerais">
-      <created>1620054042730</created>
-      <option name="number" value="04313" />
-      <option name="presentableId" value="LOCAL-04313" />
-      <option name="project" value="LOCAL" />
-      <updated>1620054042730</updated>
+      <workItem from="1620403337331" duration="9854000" />
     </task>
     <task id="LOCAL-04314" summary="Correções gerais">
       <created>1620059924187</created>
@@ -1528,7 +1521,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620411514116</updated>
     </task>
-    <option name="localTasksCounter" value="4362" />
+    <task id="LOCAL-04362" summary="Atualização da biblioteca JDA">
+      <created>1620412306843</created>
+      <option name="number" value="04362" />
+      <option name="presentableId" value="LOCAL-04362" />
+      <option name="project" value="LOCAL" />
+      <updated>1620412306843</updated>
+    </task>
+    <option name="localTasksCounter" value="4363" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

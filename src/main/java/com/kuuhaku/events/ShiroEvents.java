@@ -899,16 +899,16 @@ public class ShiroEvents extends ListenerAdapter {
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
 		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) && h.size() >= GuildDAO.getGuildById(guild.getId()).getNoSpamAmount() && Helper.hasRoleHigherThan(guild.getSelfMember(), member)) {
-			((TextChannel) channel).deleteMessagesByIds(h.stream().map(Message::getId).collect(Collectors.toList())).queue(null, Helper::doNothing);
-			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(msg -> {
-				msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
-				Helper.logToChannel(member.getUser(), false, null, "Um membro estava spammando no canal " + ((TextChannel) channel).getAsMention(), guild, msg.getContentRaw());
-			});
-
 			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 			if (gc.getMuteRole() != null) try {
 				Role r = gc.getMuteRole();
-				if (r != null) {
+				if (r != null && !member.getRoles().contains(r)) {
+					((TextChannel) channel).deleteMessagesByIds(h.stream().map(Message::getId).collect(Collectors.toList())).queue(null, Helper::doNothing);
+					channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(msg -> {
+						msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing);
+						Helper.logToChannel(member.getUser(), false, null, "Um membro estava spammando no canal " + ((TextChannel) channel).getAsMention(), guild, msg.getContentRaw());
+					});
+
 					JSONArray roles = new JSONArray(member.getRoles().stream().filter(rl -> !rl.isManaged()).map(Role::getId).collect(Collectors.toList()));
 
 					List<Role> rls = member.getRoles().stream().filter(Role::isManaged).collect(Collectors.toList());
