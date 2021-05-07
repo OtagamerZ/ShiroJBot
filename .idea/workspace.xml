@@ -197,13 +197,15 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -1183,14 +1185,7 @@
       <workItem from="1620231414172" duration="5008000" />
       <workItem from="1620242128176" duration="1999000" />
       <workItem from="1620308814667" duration="13795000" />
-      <workItem from="1620403337331" duration="9854000" />
-    </task>
-    <task id="LOCAL-04314" summary="Correções gerais">
-      <created>1620059924187</created>
-      <option name="number" value="04314" />
-      <option name="presentableId" value="LOCAL-04314" />
-      <option name="project" value="LOCAL" />
-      <updated>1620059924188</updated>
+      <workItem from="1620403337331" duration="11318000" />
     </task>
     <task id="LOCAL-04315" summary="Correções gerais">
       <created>1620061025781</created>
@@ -1528,7 +1523,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620412306843</updated>
     </task>
-    <option name="localTasksCounter" value="4363" />
+    <task id="LOCAL-04363" summary="Atualização da biblioteca JDA">
+      <created>1620413700464</created>
+      <option name="number" value="04363" />
+      <option name="presentableId" value="LOCAL-04363" />
+      <option name="project" value="LOCAL" />
+      <updated>1620413700464</updated>
+    </task>
+    <option name="localTasksCounter" value="4364" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
