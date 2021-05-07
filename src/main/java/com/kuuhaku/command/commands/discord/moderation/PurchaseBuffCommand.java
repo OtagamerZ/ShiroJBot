@@ -37,6 +37,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.concurrent.TimeUnit;
+
 @Command(
 		name = "melhorar",
 		aliases = {"upgrade", "up"},
@@ -119,7 +121,9 @@ public class PurchaseBuffCommand implements Executable {
 
 		GuildBuffDAO.saveBuffs(gb);
 		AccountDAO.saveAccount(acc);
-		if (tier != 4) channel.sendMessage("✅ | Melhoria aplicada com sucesso! (" + sb.getTime() + " dias).").queue();
-		else channel.sendMessage("✅ | Melhoria aplicada com sucesso! (" + sb.getTime() + " minuto). CORRA!!!").queue();
+		if (tier != 4)
+			channel.sendMessage("✅ | Melhoria aplicada com sucesso! (" + TimeUnit.DAYS.convert(sb.getTime(), TimeUnit.MILLISECONDS) + " dias).").queue();
+		else
+			channel.sendMessage("✅ | Melhoria aplicada com sucesso! (" + TimeUnit.MINUTES.convert(sb.getTime(), TimeUnit.MILLISECONDS) + " minuto). CORRA!!!").queue();
 	}
 }
