@@ -702,13 +702,13 @@ public class Champion implements Drawable, Cloneable {
 		return sleep;
 	}
 
-	public void setSleep(int stasis) {
-		this.sleep = stasis;
+	public void setSleep(int sleep) {
+		this.sleep = sleep;
 		if (getSleep() > 0) defending = true;
 	}
 
 	public void reduceSleep() {
-		this.stasis = Math.max(sleep - 1, 0);
+		this.sleep = Math.max(sleep - 1, 0);
 	}
 
 	public boolean isBuffed() {
