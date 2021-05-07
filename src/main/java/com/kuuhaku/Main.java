@@ -249,5 +249,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
 		Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		e.printStackTrace();
 	}
 }
