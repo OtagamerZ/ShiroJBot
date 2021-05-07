@@ -57,7 +57,7 @@ public class GuildBuff {
 	}
 
 	public Set<ServerBuff> getBuffs() {
-		if (buffs.removeIf(b -> System.currentTimeMillis() - b.getAcquiredAt() > b.getTier()))
+		if (buffs.removeIf(b -> System.currentTimeMillis() - b.getAcquiredAt() > b.getTime()))
 			GuildBuffDAO.saveBuffs(this);
 
 		return buffs;
