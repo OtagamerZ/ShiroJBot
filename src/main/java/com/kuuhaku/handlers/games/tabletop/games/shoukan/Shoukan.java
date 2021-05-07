@@ -901,9 +901,9 @@ public class Shoukan extends GlobalGame {
 							if (his.isSleeping()) {
 								Hand enemy = hands.get(next);
 								if (yours.getBonus().getSpecialData().has("totalDamage"))
-									enemy.removeHp(Math.round(yPower * 1.5f * demonFac));
+									enemy.removeHp(Math.round(yPower * 1.25f * demonFac));
 								else {
-									enemy.removeHp(Math.round((yPower * 1.5f - hPower) * demonFac));
+									enemy.removeHp(Math.round((yPower * 1.25f - hPower) * demonFac));
 								}
 							} else {
 								int apDamage = yours.getLinkedTo().stream().filter(e -> e.getCharm() == Charm.ARMORPIERCING).mapToInt(Equipment::getAtk).sum();
@@ -929,7 +929,7 @@ public class Shoukan extends GlobalGame {
 									yPower,
 									hPower,
 									demonFac > 1 ? " (efeito de raça: +" + Helper.roundToString(demonFac * 100 - 100, 0) + "%)" : "",
-									sleeping ? " (alvo dormindo: +50%)" : ""
+									sleeping ? " (alvo dormindo: +25%)" : ""
 							);
 
 							reportEvent(null, msg, true, false);
