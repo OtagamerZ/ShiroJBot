@@ -27,8 +27,8 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.guild.GuildBuff;
+import com.kuuhaku.model.persistent.guild.ServerBuff;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ServerBuff;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -76,25 +76,27 @@ public class MyBuffsCommand implements Executable {
 				String until = ZonedDateTime.ofInstant(Instant.ofEpochMilli(b.getAcquiredAt()), ZoneId.of("GMT-3"))
 						.plusDays(b.getTime())
 						.format(Helper.onlyDate);
-				switch (b.getId()) {
-					case 1 -> eb.addField("Melhoria de servidor (XP)", "+" + (int) ((b.getMult() * 100) - 100) + "% XP ganho (até " + until + ")", false);
-					case 2 -> {
+
+				String chance = Helper.toPercent(b.getMult() - 1);
+				switch (b.getType()) {
+					case XP -> eb.addField("Melhoria de servidor (XP)", "+" + chance + "% XP ganho (até " + until + ")", false);
+					case CARD -> {
 						if (isUltimate)
 							eb.addField("Melhoria de servidor (cartas)", "Bônus ultimate, todas as mensagens tem 100% de chance de spawn de cartas (1 minuto)", false);
 						else
-							eb.addField("Melhoria de servidor (cartas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas (até " + until + ")", false);
+							eb.addField("Melhoria de servidor (cartas)", "+" + chance + "% chance de spawn de cartas (até " + until + ")", false);
 					}
-					case 3 -> {
+					case DROP -> {
 						if (isUltimate)
 							eb.addField("Melhoria de servidor (drops)", "Bônus ultimate, todas as mensagens tem 100% de chance de spawn de drops (1 minuto)", false);
 						else
-							eb.addField("Melhoria de servidor (drops)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de drops (até " + until + ")", false);
+							eb.addField("Melhoria de servidor (drops)", "+" + chance + "% chance de spawn de drops (até " + until + ")", false);
 					}
-					case 4 -> {
+					case FOIL -> {
 						if (isUltimate)
 							eb.addField("Melhoria de servidor (cromadas)", "Bônus ultimate, todas as cartas tem 100% de chance de serem cromadas (1 minuto)", false);
 						else
-							eb.addField("Melhoria de servidor (cromadas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas cromadas (até " + until + ")", false);
+							eb.addField("Melhoria de servidor (cromadas)", "+" + chance + "% chance de spawn de cartas cromadas (até " + until + ")", false);
 					}
 				}
 			}

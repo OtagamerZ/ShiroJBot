@@ -25,18 +25,17 @@ import com.kuuhaku.controller.postgresql.GuildBuffDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.BuffType;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.guild.GuildBuff;
+import com.kuuhaku.model.persistent.guild.ServerBuff;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ServerBuff;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.Locale;
 
 @Command(
 		name = "melhorar",
@@ -57,32 +56,32 @@ public class PurchaseBuffCommand implements Executable {
 			eb.setTitle(":level_slider: | Melhorias de servidor");
 			eb.setDescription("Melhorias são aplicadas a todos os membros do servidor por um certo período, use-as para oferecer vantagens aos seus membros.");
 			eb.addField("Melhoria de XP (`" + prefix + "up xp TIER`)", """
-							**Tier 1** (1500 créditos): `+50% XP ganho` (15 dias)
-							**Tier 2** (4000 créditos): `+75% XP ganho` (10 dias)
-							**Tier 3** (10000 créditos): `+100% XP ganho` (5 dias)
+							**Tier 1** (2500 créditos): `+30% XP ganho` (15 dias)
+							**Tier 2** (5000 créditos): `+60% XP ganho` (11 dias)
+							**Tier 3** (7500 créditos): `+90% XP ganho` (7 dias)
 							"""
 					, false);
 			eb.addBlankField(false);
 			eb.addField("Melhoria de cartas (`" + prefix + "up carta TIER`)", """
-							**Tier 1** (1000 créditos): `+20% chance de aparecer cartas` (15 dias)
-							**Tier 2** (3000 créditos): `+30% chance de aparecer cartas` (10 dias)
-							**Tier 3** (5000 créditos): `+40% chance de aparecer cartas` (5 dias)
-							**:warning: Tier Ultimate** (50000 créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer cartas`
+							**Tier 1** (2000 créditos): `+20% chance de aparecer cartas` (15 dias)
+							**Tier 2** (4000 créditos): `+30% chance de aparecer cartas` (11 dias)
+							**Tier 3** (6000 créditos): `+40% chance de aparecer cartas` (7 dias)
+							**:warning: Tier Ultimate** (60000 créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer cartas`
 							"""
 					, false);
 			eb.addBlankField(false);
 			eb.addField("Melhoria de drops (`" + prefix + "up drop TIER`)", """
-							**Tier 1** (1250 créditos): `+20% chance de aparecer drops` (15 dias)
-							**Tier 2** (3500 créditos): `+30% chance de aparecer drops` (10 dias)
-							**Tier 3** (6000 créditos): `+40% chance de aparecer drops` (5 dias)
-							**:warning: Tier Ultimate** (60000 créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer drops`
+							**Tier 1** (1400 créditos): `+20% chance de aparecer drops` (15 dias)
+							**Tier 2** (2800 créditos): `+30% chance de aparecer drops` (11 dias)
+							**Tier 3** (4200 créditos): `+40% chance de aparecer drops` (7 dias)
+							**:warning: Tier Ultimate** (42000 créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer drops`
 							"""
 					, false);
 			eb.addBlankField(false);
 			eb.addField("Melhoria de cartas cromadas (`" + prefix + "up cromada TIER`)", """
-							**Tier 1** (5000 créditos): `+20% chance de aparecer cartas cromadas` (15 dias)
-							**Tier 2** (8000 créditos): `+50% chance de aparecer cartas cromadas` (10 dias)
-							**Tier 3** (12000 créditos): `+100% chance de aparecer cartas cromadas` (5 dias)
+							**Tier 1** (4000 créditos): `+25% chance de aparecer cartas cromadas` (15 dias)
+							**Tier 2** (8000 créditos): `+50% chance de aparecer cartas cromadas` (11 dias)
+							**Tier 3** (12000 créditos): `+75% chance de aparecer cartas cromadas` (7 dias)
 							**:warning: Tier Ultimate** (120000 créditos): `Uma completa loucura, por 1 minuto TODAS as cartas que aparecerem serão cromadas`
 							"""
 					, false);
@@ -99,46 +98,12 @@ public class PurchaseBuffCommand implements Executable {
 		}
 
 		int tier = args[1].equalsIgnoreCase("ultimate") ? 4 : Integer.parseInt(args[1]);
-		if (tier < 1 || tier > 4) {
+		if (!Helper.between(tier, 1, 5)) {
 			channel.sendMessage("❌ | O tier da melhoria deve ser um valor entre 1 e 3 ou `ultimate`.").queue();
 			return;
 		}
 
-		ServerBuff sb = null;
-		switch (args[0].toUpperCase(Locale.ROOT)) {
-			case "XP" -> sb = switch (tier) {
-				case 1 -> new ServerBuff(tier, ServerBuff.XP_TIER_1);
-				case 2 -> new ServerBuff(tier, ServerBuff.XP_TIER_2);
-				case 3 -> new ServerBuff(tier, ServerBuff.XP_TIER_3);
-				default -> null;
-			};
-			case "CARTA" -> sb = switch (tier) {
-				case 1 -> new ServerBuff(tier, ServerBuff.CARD_TIER_1);
-				case 2 -> new ServerBuff(tier, ServerBuff.CARD_TIER_2);
-				case 3 -> new ServerBuff(tier, ServerBuff.CARD_TIER_3);
-				case 4 -> new ServerBuff(tier, ServerBuff.CARD_TIER_U);
-				default -> sb;
-			};
-			case "DROP" -> sb = switch (tier) {
-				case 1 -> new ServerBuff(tier, ServerBuff.DROP_TIER_1);
-				case 2 -> new ServerBuff(tier, ServerBuff.DROP_TIER_2);
-				case 3 -> new ServerBuff(tier, ServerBuff.DROP_TIER_3);
-				case 4 -> new ServerBuff(tier, ServerBuff.DROP_TIER_U);
-				default -> sb;
-			};
-			case "CROMADA" -> sb = switch (tier) {
-				case 1 -> new ServerBuff(tier, ServerBuff.FOIL_TIER_1);
-				case 2 -> new ServerBuff(tier, ServerBuff.FOIL_TIER_2);
-				case 3 -> new ServerBuff(tier, ServerBuff.FOIL_TIER_3);
-				case 4 -> new ServerBuff(tier, ServerBuff.FOIL_TIER_U);
-				default -> sb;
-			};
-		}
-
-		if (sb == null) {
-			channel.sendMessage("❌ | Melhoria inválida, use `" + prefix + "up` para ver a lista de melhorias.").queue();
-			return;
-		}
+		ServerBuff sb = new ServerBuff(BuffType.of(args[0]), tier);
 
 		if (acc.getTotalBalance() < sb.getPrice()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();

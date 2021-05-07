@@ -18,7 +18,6 @@
 
 package com.kuuhaku.utils;
 
-import com.google.gson.GsonBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
@@ -108,7 +107,6 @@ public class ShiroInfo {
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 	private static final ShiroEvents shiroEvents = new ShiroEvents();
-	private static final GsonBuilder JSONFactory = new GsonBuilder();
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 	private static final HashMap<String, String> emoteCache = new HashMap<>();
 
@@ -212,10 +210,6 @@ public class ShiroInfo {
 
 	public static ResourceBundle getLocale(I18n lang) {
 		return ResourceBundle.getBundle("locale", lang.getLocale());
-	}
-
-	public static GsonBuilder getJSONFactory() {
-		return JSONFactory;
 	}
 
 	public static String getSupportServerName() {
