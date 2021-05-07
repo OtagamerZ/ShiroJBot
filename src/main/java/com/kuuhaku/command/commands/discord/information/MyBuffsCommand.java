@@ -36,6 +36,7 @@ import net.dv8tion.jda.api.entities.*;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
 @Command(
@@ -74,7 +75,7 @@ public class MyBuffsCommand implements Executable {
 			for (ServerBuff b : gb.getBuffs()) {
 				boolean isUltimate = b.getTier() == 4;
 				String until = ZonedDateTime.ofInstant(Instant.ofEpochMilli(b.getAcquiredAt()), ZoneId.of("GMT-3"))
-						.plusDays(b.getTime())
+						.plus(b.getTime(), ChronoUnit.MILLIS)
 						.format(Helper.onlyDate);
 
 				String chance = Helper.toPercent(b.getMult() - 1);
