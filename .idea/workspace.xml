@@ -14,16 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca JDA">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/BuffType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PurchaseBuffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PurchaseBuffCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildBuff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildBuff.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ServerBuff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/ServerBuff.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1192,14 +1183,7 @@
       <workItem from="1620231414172" duration="5008000" />
       <workItem from="1620242128176" duration="1999000" />
       <workItem from="1620308814667" duration="13795000" />
-      <workItem from="1620403337331" duration="5827000" />
-    </task>
-    <task id="LOCAL-04308" summary="Correções gerais">
-      <created>1620053467356</created>
-      <option name="number" value="04308" />
-      <option name="presentableId" value="LOCAL-04308" />
-      <option name="project" value="LOCAL" />
-      <updated>1620053467356</updated>
+      <workItem from="1620403337331" duration="6416000" />
     </task>
     <task id="LOCAL-04309" summary="Correções gerais">
       <created>1620053527173</created>
@@ -1537,7 +1521,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620405693837</updated>
     </task>
-    <option name="localTasksCounter" value="4357" />
+    <task id="LOCAL-04357" summary="Atualização da biblioteca JDA">
+      <created>1620409398300</created>
+      <option name="number" value="04357" />
+      <option name="presentableId" value="LOCAL-04357" />
+      <option name="project" value="LOCAL" />
+      <updated>1620409398300</updated>
+    </task>
+    <option name="localTasksCounter" value="4358" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
