@@ -14,8 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca JDA">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,6 +199,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1172,14 +1184,8 @@
       <workItem from="1620217362058" duration="7923000" />
       <workItem from="1620231414172" duration="5008000" />
       <workItem from="1620242128176" duration="1999000" />
-      <workItem from="1620308814667" duration="13573000" />
-    </task>
-    <task id="LOCAL-04305" summary="Correções gerais">
-      <created>1620052706488</created>
-      <option name="number" value="04305" />
-      <option name="presentableId" value="LOCAL-04305" />
-      <option name="project" value="LOCAL" />
-      <updated>1620052706488</updated>
+      <workItem from="1620308814667" duration="13795000" />
+      <workItem from="1620403337331" duration="729000" />
     </task>
     <task id="LOCAL-04306" summary="Correções gerais">
       <created>1620052951690</created>
@@ -1517,7 +1523,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620334631171</updated>
     </task>
-    <option name="localTasksCounter" value="4354" />
+    <task id="LOCAL-04354" summary="Atualização da biblioteca JDA">
+      <created>1620334787161</created>
+      <option name="number" value="04354" />
+      <option name="presentableId" value="LOCAL-04354" />
+      <option name="project" value="LOCAL" />
+      <updated>1620334787162</updated>
+    </task>
+    <option name="localTasksCounter" value="4355" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
