@@ -48,7 +48,6 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -249,10 +248,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
-		if (e.getClass().getCanonicalName().equals(ContextException.class.getCanonicalName())) {
-			return;
-		}
-		e.printStackTrace();
 		Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 	}
 }

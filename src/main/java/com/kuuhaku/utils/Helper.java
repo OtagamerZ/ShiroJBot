@@ -316,8 +316,7 @@ public class Helper {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static Logger logger(Class source) {
+	public static Logger logger(Class<?> source) {
 		return LogManager.getLogger(source.getName());
 	}
 
