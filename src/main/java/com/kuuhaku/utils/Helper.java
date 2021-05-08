@@ -29,17 +29,20 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.github.ygimenez.type.PageType;
+import com.google.gson.Gson;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.common.drop.*;
-import com.kuuhaku.model.enums.*;
+import com.kuuhaku.model.enums.CardStatus;
+import com.kuuhaku.model.enums.KawaiponRarity;
+import com.kuuhaku.model.enums.PrivilegeLevel;
+import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildBuff;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.model.persistent.guild.ServerBuff;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -1306,12 +1309,8 @@ public class Helper {
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
 		if (Main.getInfo().getRatelimit().containsKey("kawaipon_" + gc.getGuildId())) return;
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
-		ServerBuff cardBuff = gb.getBuffs().stream()
-				.filter(b -> b.getType() == BuffType.CARD)
-				.findFirst().orElse(null);
-		ServerBuff foilBuff = gb.getBuffs().stream()
-				.filter(b -> b.getType() == BuffType.FOIL)
-				.findFirst().orElse(null);
+		ServerBuff cardBuff = gb.getBuffs().stream().filter(b -> b.getId() == 2).findFirst().orElse(null);
+		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
 		boolean cbUltimate = cardBuff != null && cardBuff.getTier() == 4;
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
 
@@ -1368,9 +1367,7 @@ public class Helper {
 
 	public static void forceSpawnKawaipon(GuildConfig gc, TextChannel channel, User user, AddedAnime anime, boolean foil) {
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
-		ServerBuff foilBuff = gb.getBuffs().stream()
-				.filter(b -> b.getType() == BuffType.FOIL)
-				.findFirst().orElse(null);
+		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
 		KawaiponRarity kr;
 		List<Card> cards;
@@ -1440,9 +1437,7 @@ public class Helper {
 	public static void spawnDrop(GuildConfig gc, TextChannel channel) {
 		if (Main.getInfo().getRatelimit().containsKey("drop_" + gc.getGuildId())) return;
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
-		ServerBuff dropBuff = gb.getBuffs().stream()
-				.filter(b -> b.getType() == BuffType.DROP)
-				.findFirst().orElse(null);
+		ServerBuff dropBuff = gb.getBuffs().stream().filter(b -> b.getId() == 3).findFirst().orElse(null);
 		boolean dbUltimate = dropBuff != null && dropBuff.getTier() == 4;
 
 		if (dbUltimate || chance((2.5 - clamp(prcnt(channel.getGuild().getMemberCount() * 0.75f, 5000), 0, 0.75)) * (dropBuff != null ? dropBuff.getMult() : 1))) {
@@ -1784,7 +1779,7 @@ public class Helper {
 					w = image.getWidth();
 					h = image.getHeight();
 				}
-				JSONObject metadata = new JSONObject(ir.getImageMetadata(i));
+				JSONObject metadata = new JSONObject(new Gson().toJson(ir.getImageMetadata(i)));
 
 				BufferedImage master = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = master.createGraphics();
@@ -1817,7 +1812,7 @@ public class Helper {
 					w = image.getWidth();
 					h = image.getHeight();
 				}
-				JSONObject metadata = new JSONObject(ir.getImageMetadata(i));
+				JSONObject metadata = new JSONObject(new Gson().toJson(ir.getImageMetadata(i)));
 
 				BufferedImage master = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = master.createGraphics();
