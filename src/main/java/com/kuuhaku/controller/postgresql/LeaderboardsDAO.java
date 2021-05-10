@@ -80,7 +80,7 @@ public class LeaderboardsDAO {
 
 		try {
 			return ((List<Object[]>) q.getResultList()).stream()
-					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), ((Long) o[4]).intValue()))
+					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), (int) o[4]))
 					.collect(Collectors.toList());
 		} finally {
 			em.close();
@@ -106,7 +106,7 @@ public class LeaderboardsDAO {
 
 		try {
 			return ((List<Object[]>) q.getResultList()).stream()
-					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), ((Long) o[4]).intValue()))
+					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), (int) o[4]))
 					.collect(Collectors.toList());
 		} finally {
 			em.close();
@@ -122,7 +122,7 @@ public class LeaderboardsDAO {
 					 , l.uid
 					 , l.usr
 					 , l.minigame
-					 , SUM(l.score) AS score
+					 , CAST(SUM(l.score) AS INTEGER) AS score
 				FROM Leaderboards l
 				WHERE l.minigame = :minigame
 				GROUP BY l.uid, l.usr, l.minigame
@@ -132,7 +132,7 @@ public class LeaderboardsDAO {
 
 		try {
 			return ((List<Object[]>) q.getResultList()).stream()
-					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), ((Long) o[4]).intValue()))
+					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), (int) o[4]))
 					.collect(Collectors.toList());
 		} finally {
 			em.close();
