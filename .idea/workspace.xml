@@ -14,8 +14,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/LeaderboardsCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/FaceoffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/FaceoffCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/LeaderboardsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/LeaderboardsDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,11 +177,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.information" />
       <recent name="com.kuuhaku.command.commands.discord.fun" />
       <recent name="com.kuuhaku.controller.postgresql" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
-      <recent name="com.kuuhaku.model.persistent.guild" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -198,6 +201,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1176,13 +1190,6 @@
       <workItem from="1620403337331" duration="11318000" />
       <workItem from="1620416460646" duration="590000" />
     </task>
-    <task id="LOCAL-04324" summary="Correções gerais">
-      <created>1620070804287</created>
-      <option name="number" value="04324" />
-      <option name="presentableId" value="LOCAL-04324" />
-      <option name="project" value="LOCAL" />
-      <updated>1620070804288</updated>
-    </task>
     <task id="LOCAL-04325" summary="Correções gerais">
       <created>1620071345074</created>
       <option name="number" value="04325" />
@@ -1519,7 +1526,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620656407720</updated>
     </task>
-    <option name="localTasksCounter" value="4373" />
+    <task id="LOCAL-04373" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
+      <created>1620656956840</created>
+      <option name="number" value="04373" />
+      <option name="presentableId" value="LOCAL-04373" />
+      <option name="project" value="LOCAL" />
+      <updated>1620656956840</updated>
+    </task>
+    <option name="localTasksCounter" value="4374" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
