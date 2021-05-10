@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
 
 @Command(
 		name = "top10",
-		aliases = {"rank", "ranking", "lb", "leaderboards"},
+		aliases = {"rank", "ranking"},
 		usage = "req_rank",
 		category = Category.INFO
 )
