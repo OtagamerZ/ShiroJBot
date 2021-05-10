@@ -39,6 +39,14 @@ public class Leaderboards {
 	@Column(columnDefinition = "INT NOT NULL")
 	private int score;
 
+	public Leaderboards(int id, String uid, String usr, String minigame, int score) {
+		this.id = id;
+		this.uid = uid;
+		this.usr = usr;
+		this.minigame = minigame;
+		this.score = score;
+	}
+
 	public Leaderboards(String uid, String usr, String minigame, int score) {
 		this.uid = uid;
 		this.usr = usr;
