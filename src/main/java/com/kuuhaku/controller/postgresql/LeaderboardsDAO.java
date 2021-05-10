@@ -26,6 +26,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LeaderboardsDAO {
 	public static void submit(User u, Class<?> minigame, int score) {
@@ -65,16 +66,22 @@ public class LeaderboardsDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(MAX(l.id), l.uid, l.usr, l.minigame, MIN(l.score))
+				SELECT MAX(l.id) AS id
+					 , l.uid
+					 , l.usr
+					 , l.minigame
+					 , MIN(l.score) AS score
 				FROM Leaderboards l
 				WHERE l.minigame = 'FaceoffCommand'
 				GROUP BY l.uid, l.usr, l.minigame
 				ORDER BY score, id
-				""", Leaderboards.class);
+				""");
 		q.setMaxResults(10);
 
 		try {
-			return (List<Leaderboards>) q.getResultList();
+			return ((List<Object[]>) q.getResultList()).stream()
+					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), ((Long) o[4]).intValue()))
+					.collect(Collectors.toList());
 		} finally {
 			em.close();
 		}
@@ -85,16 +92,22 @@ public class LeaderboardsDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(MAX(l.id), l.uid, l.usr, l.minigame, MAX(l.score))
+				SELECT MAX(l.id) AS id
+					 , l.uid
+					 , l.usr
+					 , l.minigame
+					 , MAX(l.score) AS score
 				FROM Leaderboards l
 				WHERE l.minigame = 'SlotsCommand'
 				GROUP BY l.uid, l.usr, l.minigame
 				ORDER BY score DESC, id
-				""", Leaderboards.class);
+				""");
 		q.setMaxResults(10);
 
 		try {
-			return (List<Leaderboards>) q.getResultList();
+			return ((List<Object[]>) q.getResultList()).stream()
+					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), ((Long) o[4]).intValue()))
+					.collect(Collectors.toList());
 		} finally {
 			em.close();
 		}
@@ -105,16 +118,22 @@ public class LeaderboardsDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(MAX(l.id), l.uid, l.usr, l.minigame, CAST(SUM(l.score) AS integer))
+				SELECT MAX(l.id) AS id
+					 , l.uid
+					 , l.usr
+					 , l.minigame
+					 , SUM(l.score) AS score
 				FROM Leaderboards l
 				WHERE l.minigame = :minigame
 				GROUP BY l.uid, l.usr, l.minigame
 				ORDER BY score DESC, id
-				""", Leaderboards.class);
+				""");
 		q.setParameter("minigame", minigame.getSimpleName());
 
 		try {
-			return (List<Leaderboards>) q.getResultList();
+			return ((List<Object[]>) q.getResultList()).stream()
+					.map(o -> new Leaderboards((int) o[0], String.valueOf(o[1]), String.valueOf(o[2]), String.valueOf(o[3]), ((Long) o[4]).intValue()))
+					.collect(Collectors.toList());
 		} finally {
 			em.close();
 		}
