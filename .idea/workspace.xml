@@ -13,19 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Atualização da biblioteca JDA">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/FaceoffCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/LeaderboardsDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Leaderboards.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheCardsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheCardsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheNumberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GuessTheNumberCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/JankenponCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/JankenponCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/FaceoffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/FaceoffCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1186,13 +1175,6 @@
       <workItem from="1620403337331" duration="11318000" />
       <workItem from="1620416460646" duration="590000" />
     </task>
-    <task id="LOCAL-04317" summary="Correções gerais">
-      <created>1620062767821</created>
-      <option name="number" value="04317" />
-      <option name="presentableId" value="LOCAL-04317" />
-      <option name="project" value="LOCAL" />
-      <updated>1620062767821</updated>
-    </task>
     <task id="LOCAL-04318" summary="Correções gerais">
       <created>1620063026123</created>
       <option name="number" value="04318" />
@@ -1529,7 +1511,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620508809861</updated>
     </task>
-    <option name="localTasksCounter" value="4366" />
+    <task id="LOCAL-04366" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
+      <created>1620654121698</created>
+      <option name="number" value="04366" />
+      <option name="presentableId" value="LOCAL-04366" />
+      <option name="project" value="LOCAL" />
+      <updated>1620654121699</updated>
+    </task>
+    <option name="localTasksCounter" value="4367" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1615,7 +1604,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adicionado registrador de dados sobre a Shiro" />
     <MESSAGE value="Adicionado comando para ver estatísticas sobre a Shiro" />
     <MESSAGE value="Correção no gráfico de estatísticas sobre a Shiro" />
     <MESSAGE value="Correção no Hitotsu" />
@@ -1640,7 +1628,8 @@
     <MESSAGE value="Comando de adicionar Emotes agora aceita menções" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Atualização da biblioteca JDA" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualização da biblioteca JDA" />
+    <MESSAGE value="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE." />
+    <option name="LAST_COMMIT_MESSAGE" value="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
