@@ -35,10 +35,12 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.requests.RestAction;
 
 import javax.annotation.Nonnull;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
@@ -66,59 +68,74 @@ public class FaceoffCommand implements Executable {
 			if (!Helper.between(level, 0, 4)) throw new NumberFormatException();
 
 			int min = 150 + ((3 - level) * 50);
-			int max = Helper.rng(700 - ((3 - level) * 100), false) + guild.getJDA().getRestPing().complete().intValue();
+			int max = Helper.rng(700 - (level * 100), false) + guild.getJDA().getRestPing().complete().intValue();
 			int time = min + max;
 			AtomicLong start = new AtomicLong(0);
 
-			channel.sendMessage("Prepare-se, o duelo começará em 3 segundos (digite `bang` quando eu disser fogo)!")
+			RestAction<Message> rst = channel.sendMessage("Prepare-se, o duelo começará em 3 segundos (digite `bang` quando eu disser fogo)!")
 					.delay(3, TimeUnit.SECONDS)
-					.flatMap(s -> s.editMessage("Em suas marcas..."))
-					.delay(500 + Helper.rng(1500, false), TimeUnit.MILLISECONDS)
-					.flatMap(s -> s.editMessage("**FOGO!**"))
-					.queue(t -> {
-						start.set(System.currentTimeMillis());
-						ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
-							private final Consumer<Void> success = s -> close();
-							private ScheduledFuture<?> timeout = Main.getInfo().getScheduler().schedule(() -> {
-										success.accept(null);
-										channel.sendMessage(":gun: BANG! Você perdeu..").complete();
-									}, time, TimeUnit.MILLISECONDS
-							);
+					.flatMap(s -> s.editMessage("Em suas marcas..."));
 
-							@Override
-							public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-								if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
-									return;
+			if (level > 1 && Helper.chance(50)) {
+				rst = rst.delay(500 + Helper.rng(1500, false), TimeUnit.MILLISECONDS)
+						.flatMap(s -> s.editMessage("Ainda não..."))
+						.delay(500 + Helper.rng(2500, false), TimeUnit.MILLISECONDS)
+						.flatMap(s -> s.editMessage("**FOGO!**"));
+			} else {
+				rst = rst.delay(500 + Helper.rng(4500, false), TimeUnit.MILLISECONDS)
+						.flatMap(s -> s.editMessage("**FOGO!**"));
+			}
 
-								String value = event.getMessage().getContentRaw();
-								if (!value.equalsIgnoreCase("bang")) {
-									channel.sendMessage("Você errou o gatilho.").queue();
+			rst.queue(t -> {
+				start.set(System.currentTimeMillis());
+				ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
+					private final Consumer<Void> success = s -> close();
+					private final AtomicBoolean win = new AtomicBoolean();
+					private ScheduledFuture<?> timeout = Main.getInfo().getScheduler().schedule(() -> {
+								if (!win.get()) {
 									success.accept(null);
-									timeout.cancel(true);
-									timeout = null;
-									return;
+									channel.sendMessage(":gun: BANG! Você perdeu..").complete();
 								}
+							}, time, TimeUnit.MILLISECONDS
+					);
 
-								long react = Helper.clamp(System.currentTimeMillis() - start.get(), min, time);
-								success.accept(null);
-								timeout.cancel(true);
-								timeout = null;
+					@Override
+					public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+						if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
+							return;
 
-								int prize = (int) Math.round(min * Helper.rng(750f * (level + 1), false) / react);
-								channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " créditos**!").queue();
-								acc.addCredit(prize, this.getClass());
-								AccountDAO.saveAccount(acc);
+						String value = event.getMessage().getContentRaw();
+						if (!value.equalsIgnoreCase("bang")) {
+							channel.sendMessage("Você errou o gatilho.").queue();
+							success.accept(null);
+							timeout.cancel(true);
+							timeout = null;
+							return;
+						}
 
-								if (ExceedDAO.hasExceed(author.getId())) {
-									PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
-									ps.modifyInfluence(10 * level);
-									PStateDAO.savePoliticalState(ps);
-								}
+						if (!win.get()) {
+							win.set(true);
+							long react = Helper.clamp(System.currentTimeMillis() - start.get(), min, time);
+							success.accept(null);
+							timeout.cancel(true);
+							timeout = null;
 
-								LeaderboardsDAO.submit(author, FaceoffCommand.class, (int) react);
+							int prize = (int) Math.round(min * Helper.rng(750f * (level + 1), false) / react);
+							channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " créditos**!").queue();
+							acc.addCredit(prize, this.getClass());
+							AccountDAO.saveAccount(acc);
+
+							if (ExceedDAO.hasExceed(author.getId())) {
+								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
+								ps.modifyInfluence(10 * level);
+								PStateDAO.savePoliticalState(ps);
 							}
-						});
-					});
+
+							LeaderboardsDAO.submit(author, FaceoffCommand.class, (int) react);
+						}
+					}
+				});
+			});
 		} catch (NumberFormatException e) {
 			channel.sendMessage("❌ | Dificuldade inválida, ela deve ser um valor entre 0 (fácil) e 3 (difícil).").queue();
 		}

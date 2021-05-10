@@ -60,13 +60,70 @@ public class LeaderboardsDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Blacklist> getBlacklist() {
+	public static List<Leaderboards> getFaceoffLeaderboards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT b FROM Blacklist b", Blacklist.class);
+		Query q = em.createQuery("""
+				SELECT max(l.id) AS id
+				     , l.uid
+				     , l.usr
+				     , l.minigame
+				     , min(l.score) AS score
+				FROM Leaderboards l
+				WHERE l.minigame = 'FaceoffCommand'
+				GROUP BY l.uid, l.usr, l.minigame
+				ORDER BY score, id
+				""", Leaderboards.class);
 
 		try {
-			return q.getResultList();
+			return (List<Leaderboards>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Leaderboards> getSlotsLeaderboards() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT max(l.id) AS id
+				     , l.uid
+				     , l.usr
+				     , l.minigame
+				     , max(l.score) AS score
+				FROM Leaderboards l
+				WHERE l.minigame = 'SlotsCommand'
+				GROUP BY l.uid, l.usr, l.minigame
+				ORDER BY score DESC, id
+				""", Leaderboards.class);
+
+		try {
+			return (List<Leaderboards>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Leaderboards> getCommonLeaderboards(Class<?> minigame) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("""
+				SELECT max(l.id) AS id
+				     , l.uid
+				     , l.usr
+				     , l.minigame
+				     , max(l.score) AS score
+				FROM Leaderboards l
+				WHERE l.minigame = :minigame
+				GROUP BY l.uid, l.usr, l.minigame
+				ORDER BY score DESC, id
+				""", Leaderboards.class);
+		q.setParameter("minigame", minigame.getSimpleName())
+
+		try {
+			return (List<Leaderboards>) q.getResultList();
 		} finally {
 			em.close();
 		}
