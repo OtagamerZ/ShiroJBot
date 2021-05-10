@@ -1186,20 +1186,6 @@
       <workItem from="1620403337331" duration="11318000" />
       <workItem from="1620416460646" duration="590000" />
     </task>
-    <task id="LOCAL-04330" summary="Correções gerais">
-      <created>1620155585013</created>
-      <option name="number" value="04330" />
-      <option name="presentableId" value="LOCAL-04330" />
-      <option name="project" value="LOCAL" />
-      <updated>1620155585013</updated>
-    </task>
-    <task id="LOCAL-04331" summary="Correções gerais">
-      <created>1620155685299</created>
-      <option name="number" value="04331" />
-      <option name="presentableId" value="LOCAL-04331" />
-      <option name="project" value="LOCAL" />
-      <updated>1620155685299</updated>
-    </task>
     <task id="LOCAL-04332" summary="Correções gerais">
       <created>1620155711287</created>
       <option name="number" value="04332" />
@@ -1529,7 +1515,21 @@
       <option name="project" value="LOCAL" />
       <updated>1620663580097</updated>
     </task>
-    <option name="localTasksCounter" value="4379" />
+    <task id="LOCAL-04379" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
+      <created>1620663679581</created>
+      <option name="number" value="04379" />
+      <option name="presentableId" value="LOCAL-04379" />
+      <option name="project" value="LOCAL" />
+      <updated>1620663679581</updated>
+    </task>
+    <task id="LOCAL-04380" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
+      <created>1620663875677</created>
+      <option name="number" value="04380" />
+      <option name="presentableId" value="LOCAL-04380" />
+      <option name="project" value="LOCAL" />
+      <updated>1620663875678</updated>
+    </task>
+    <option name="localTasksCounter" value="4381" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
