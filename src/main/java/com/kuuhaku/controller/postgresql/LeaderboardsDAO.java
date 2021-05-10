@@ -18,7 +18,6 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.Blacklist;
 import com.kuuhaku.model.persistent.Leaderboards;
 import net.dv8tion.jda.api.entities.User;
 
@@ -47,7 +46,7 @@ public class LeaderboardsDAO {
 				FROM Leaderboards l 
 				WHERE l.uid = :uid 
 				AND l.minigame = :minigame
-				""", Blacklist.class);
+				""", Long.class);
 		q.setParameter("uid", id);
 		q.setParameter("minigame", minigame);
 		q.setMaxResults(10);
