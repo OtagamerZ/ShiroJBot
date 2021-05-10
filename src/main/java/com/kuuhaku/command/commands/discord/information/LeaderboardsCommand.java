@@ -96,7 +96,14 @@ public class LeaderboardsCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("10 melhores jogadores de " + cmd.getName())
+				.setTitle("10 melhores jogadores de " + switch (cmd.getCommand().getClass().getSimpleName()) {
+					case "FaceoffCommand" -> "confronto";
+					case "SlotsCommand" -> "slots";
+					case "GuessTheCardsCommand" -> "adivinhe as cartas";
+					case "GuessTheNumberCommand" -> "adivinhe o número";
+					case "JankenponCommand" -> "pedra-papel-tesoura";
+					default -> "";
+				})
 				.setDescription(sb.toString());
 
 		channel.sendMessage(eb.build()).queue();
