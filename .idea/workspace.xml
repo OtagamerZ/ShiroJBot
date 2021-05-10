@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/FaceoffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/FaceoffCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1175,13 +1175,6 @@
       <workItem from="1620403337331" duration="11318000" />
       <workItem from="1620416460646" duration="590000" />
     </task>
-    <task id="LOCAL-04321" summary="Correções gerais">
-      <created>1620064895984</created>
-      <option name="number" value="04321" />
-      <option name="presentableId" value="LOCAL-04321" />
-      <option name="project" value="LOCAL" />
-      <updated>1620064895984</updated>
-    </task>
     <task id="LOCAL-04322" summary="Correções gerais">
       <created>1620066004053</created>
       <option name="number" value="04322" />
@@ -1518,7 +1511,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620654737801</updated>
     </task>
-    <option name="localTasksCounter" value="4370" />
+    <task id="LOCAL-04370" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
+      <created>1620655636608</created>
+      <option name="number" value="04370" />
+      <option name="presentableId" value="LOCAL-04370" />
+      <option name="project" value="LOCAL" />
+      <updated>1620655636608</updated>
+    </task>
+    <option name="localTasksCounter" value="4371" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
