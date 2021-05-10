@@ -120,7 +120,7 @@ public class LeaderboardsDAO {
 				GROUP BY l.uid, l.usr, l.minigame
 				ORDER BY score DESC, id
 				""", Leaderboards.class);
-		q.setParameter("minigame", minigame.getSimpleName())
+		q.setParameter("minigame", minigame.getSimpleName());
 
 		try {
 			return (List<Leaderboards>) q.getResultList();
