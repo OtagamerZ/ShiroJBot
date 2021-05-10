@@ -14,8 +14,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/LeaderboardsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/LeaderboardsCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/LeaderboardsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/LeaderboardsDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1188,13 +1186,6 @@
       <workItem from="1620403337331" duration="11318000" />
       <workItem from="1620416460646" duration="590000" />
     </task>
-    <task id="LOCAL-04327" summary="Correções gerais">
-      <created>1620138657918</created>
-      <option name="number" value="04327" />
-      <option name="presentableId" value="LOCAL-04327" />
-      <option name="project" value="LOCAL" />
-      <updated>1620138657919</updated>
-    </task>
     <task id="LOCAL-04328" summary="Correções gerais">
       <created>1620139423055</created>
       <option name="number" value="04328" />
@@ -1531,7 +1522,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620659167663</updated>
     </task>
-    <option name="localTasksCounter" value="4376" />
+    <task id="LOCAL-04376" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
+      <created>1620663066797</created>
+      <option name="number" value="04376" />
+      <option name="presentableId" value="LOCAL-04376" />
+      <option name="project" value="LOCAL" />
+      <updated>1620663066797</updated>
+    </task>
+    <option name="localTasksCounter" value="4377" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
