@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1186,13 +1184,6 @@
       <workItem from="1620403337331" duration="11318000" />
       <workItem from="1620416460646" duration="590000" />
     </task>
-    <task id="LOCAL-04340" summary="Correções gerais">
-      <created>1620217709402</created>
-      <option name="number" value="04340" />
-      <option name="presentableId" value="LOCAL-04340" />
-      <option name="project" value="LOCAL" />
-      <updated>1620217709403</updated>
-    </task>
     <task id="LOCAL-04341" summary="Correções gerais">
       <created>1620219812763</created>
       <option name="number" value="04341" />
@@ -1529,7 +1520,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620672071117</updated>
     </task>
-    <option name="localTasksCounter" value="4389" />
+    <task id="LOCAL-04389" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
+      <created>1620672775669</created>
+      <option name="number" value="04389" />
+      <option name="presentableId" value="LOCAL-04389" />
+      <option name="project" value="LOCAL" />
+      <updated>1620672775669</updated>
+    </task>
+    <option name="localTasksCounter" value="4390" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
