@@ -23,6 +23,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.controller.postgresql.PStateDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
@@ -113,6 +114,8 @@ public class GuessTheNumberCommand implements Executable {
 					success.accept(null);
 					timeout.cancel(true);
 					timeout = null;
+					int lost = chances == 4 ? 0 : LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
+					LeaderboardsDAO.submit(author, GuessTheNumberCommand.class, chances - lost);
 				} else {
 					if (chances > 0) {
 						channel.sendMessage("(" + chances + " chances restantes) | Você errou, esse número está " + hint + "o número escolhido por mim.").queue();
@@ -122,6 +125,9 @@ public class GuessTheNumberCommand implements Executable {
 						success.accept(null);
 						timeout.cancel(true);
 						timeout = null;
+						int lost = LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
+						if (lost > 0)
+							LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, -lost);
 					}
 				}
 			}

@@ -49,6 +49,7 @@
     <orderEntry type="library" name="Gradle: com.google.apis:google-api-services-youtube:v3-rev212-1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.liheyuan:simple-emoji-4j:f26d3b39be" level="project" />
     <orderEntry type="library" name="Gradle: org.discordbots:DBL-Java-Library:2.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.6" level="project" />
     <orderEntry type="library" name="Gradle: com.github.gwenn:sqlite-dialect:0.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.postgresql:postgresql:42.2.12" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-data-jpa:2.3.4.RELEASE" level="project" />
@@ -92,7 +93,6 @@
     <orderEntry type="library" name="Gradle: org.json:json:20180813" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api-client:google-api-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.6" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.data:spring-data-jpa:2.3.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-jdbc:2.3.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-aop:2.3.4.RELEASE" level="project" />

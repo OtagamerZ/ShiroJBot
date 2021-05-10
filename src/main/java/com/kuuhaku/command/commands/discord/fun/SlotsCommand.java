@@ -21,10 +21,7 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.PStateDAO;
-import com.kuuhaku.controller.postgresql.SlotsDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -120,6 +117,7 @@ public class SlotsCommand implements Executable {
 									<a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503>
 									""".formatted(combo.getMessage(), Helper.separate(prize))
 					).queue();
+					LeaderboardsDAO.submit(author, SlotsCommand.class, (int) prize);
 				} else {
 					long prize = Math.round(bet.get() * combo.getMultiplier());
 					SlotsDAO.saveSlots(slts);
@@ -131,6 +129,7 @@ public class SlotsCommand implements Executable {
 							%s
 							Seu prêmio é de __**%s créditos**__!
 							""".formatted(combo.getMessage(), Helper.separate(prize))).queue();
+					LeaderboardsDAO.submit(author, SlotsCommand.class, (int) prize);
 				}
 
 				if (ExceedDAO.hasExceed(author.getId())) {
