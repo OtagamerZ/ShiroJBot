@@ -111,7 +111,7 @@ public class FaceoffCommand implements Executable {
 									PStateDAO.savePoliticalState(ps);
 								}
 
-								LeaderboardsDAO.submit(author, FaceoffCommand.class, (int) Math.max(min, time - react));
+								LeaderboardsDAO.submit(author, FaceoffCommand.class, (int) react);
 							}
 						});
 					});
