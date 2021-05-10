@@ -22,7 +22,6 @@ import com.kuuhaku.model.persistent.Leaderboards;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +41,7 @@ public class LeaderboardsDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT SUM(l.score)
+				SELECT COALESCE(SUM(l.score), 0)
 				FROM Leaderboards l 
 				WHERE l.uid = :uid 
 				AND l.minigame = :minigame
@@ -53,8 +52,6 @@ public class LeaderboardsDAO {
 
 		try {
 			return ((Long) q.getSingleResult()).intValue();
-		} catch (NoResultException e) {
-			return 0;
 		} finally {
 			em.close();
 		}
