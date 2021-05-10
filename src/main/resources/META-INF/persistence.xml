@@ -83,6 +83,7 @@
         <class>com.kuuhaku.model.persistent.guild.LevelRole</class>
         <class>com.kuuhaku.model.persistent.guild.PaidRole</class>
         <class>com.kuuhaku.model.persistent.guild.ColorRole</class>
+        <class>com.kuuhaku.model.persistent.Leaderboards</class>
 
         <properties>
             <!-- dados da conexao -->
