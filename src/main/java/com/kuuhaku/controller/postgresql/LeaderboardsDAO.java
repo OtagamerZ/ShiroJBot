@@ -48,7 +48,7 @@ public class LeaderboardsDAO {
 				AND l.minigame = :minigame
 				""", Long.class);
 		q.setParameter("uid", id);
-		q.setParameter("minigame", minigame);
+		q.setParameter("minigame", minigame.getSimpleName());
 		q.setMaxResults(10);
 
 		try {
