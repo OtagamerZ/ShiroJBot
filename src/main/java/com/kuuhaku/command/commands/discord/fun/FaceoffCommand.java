@@ -79,11 +79,16 @@ public class FaceoffCommand implements Executable {
 						start.set(System.currentTimeMillis());
 						ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
 							private final Consumer<Void> success = s -> close();
-							private Future<?> timeout = channel.sendMessage(":gun: BANG! Você perdeu..").queueAfter(time, TimeUnit.MILLISECONDS, msg -> success.accept(null));
+							private Future<?> timeout = channel.sendMessage(":gun: BANG! Você perdeu..")
+									.queueAfter(time, TimeUnit.MILLISECONDS, msg -> {
+										win = false;
+										success.accept(null);
+									});
+							private boolean win = true;
 
 							@Override
 							public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-								if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
+								if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()) || !win)
 									return;
 
 								String value = event.getMessage().getContentRaw();
