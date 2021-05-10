@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.controller.postgresql.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.annotations.Command;
@@ -92,6 +93,9 @@ public class JankenponCommand implements Executable {
 							ps.modifyInfluence(false);
 							com.kuuhaku.controller.postgresql.PStateDAO.savePoliticalState(ps);
 						}
+						int lost = LeaderboardsDAO.getUserScore(author.getId(), JankenponCommand.class);
+						if (lost > 0)
+							LeaderboardsDAO.submit(author, JankenponCommand.class, -lost);
 						yield "\nVocê perdeu!";
 					}
 					case 1 -> {
@@ -103,6 +107,7 @@ public class JankenponCommand implements Executable {
 							ps.modifyInfluence(2);
 							PStateDAO.savePoliticalState(ps);
 						}
+						LeaderboardsDAO.submit(author, JankenponCommand.class, 1);
 						yield "\nVocê ganhou! Aqui, " + Helper.separate(crd) + " créditos por ter jogado comigo!";
 					}
 					case 2 -> "\nEmpate!";

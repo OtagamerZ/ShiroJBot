@@ -21,10 +21,7 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.PStateDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.annotations.Command;
@@ -150,29 +147,45 @@ public class GuessTheCardsCommand implements Executable {
 								PStateDAO.savePoliticalState(ps);
 							}
 							switch (points) {
-								case 0 -> channel.sendMessage(
-										"Você não acertou nenhum dos 3 nomes, que eram `%s`, `%s` e `%s`."
-												.formatted(
-														names.get(0),
-														names.get(1),
-														names.get(2)
-												)).queue();
-								case 1 -> channel.sendMessage(
-										"Você acertou 1 dos 3 nomes, os outro eram `%s` e `%s`. (Recebeu %s créditos)."
-												.formatted(
-														names.get(0),
-														names.get(1),
-														Helper.separate(reward)
-												)).queue();
-								case 2 -> channel.sendMessage(
-										"Você acertou 2 dos 3 nomes, o outro era `%s`. (Recebeu %s créditos)."
-												.formatted(
-														names.get(0),
-														Helper.separate(reward)
-												)).queue();
-								case 3 -> channel.sendMessage(
-										"Você acertou todos os nomes, parabéns! (Recebeu %s créditos)."
-												.formatted(Helper.separate(reward))).queue();
+								case 0 -> {
+									channel.sendMessage(
+											"Você não acertou nenhum dos 3 nomes, que eram `%s`, `%s` e `%s`."
+													.formatted(
+															names.get(0),
+															names.get(1),
+															names.get(2)
+													)).queue();
+									int lost = LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
+									if (lost > 0)
+										LeaderboardsDAO.submit(author, GuessTheNumberCommand.class, -lost);
+								}
+								case 1 -> {
+									channel.sendMessage(
+											"Você acertou 1 dos 3 nomes, os outro eram `%s` e `%s`. (Recebeu %s créditos)."
+													.formatted(
+															names.get(0),
+															names.get(1),
+															Helper.separate(reward)
+													)).queue();
+									int lost = LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
+									LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, 1 - lost);
+								}
+								case 2 -> {
+									channel.sendMessage(
+											"Você acertou 2 dos 3 nomes, o outro era `%s`. (Recebeu %s créditos)."
+													.formatted(
+															names.get(0),
+															Helper.separate(reward)
+													)).queue();
+									int lost = LeaderboardsDAO.getUserScore(author.getId(), GuessTheCardsCommand.class);
+									LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, 2 - lost);
+								}
+								case 3 -> {
+									channel.sendMessage(
+											"Você acertou todos os nomes, parabéns! (Recebeu %s créditos)."
+													.formatted(Helper.separate(reward))).queue();
+									LeaderboardsDAO.submit(author, GuessTheCardsCommand.class, 3);
+								}
 							}
 
 							AccountDAO.saveAccount(acc);
