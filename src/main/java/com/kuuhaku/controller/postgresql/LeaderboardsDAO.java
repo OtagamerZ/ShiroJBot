@@ -73,7 +73,7 @@ public class LeaderboardsDAO {
 				FROM Leaderboards l
 				WHERE l.minigame = 'FaceoffCommand'
 				GROUP BY l.uid, l.usr, l.minigame
-				ORDER BY score, id
+				ORDER BY score, id DESC
 				""");
 		q.setMaxResults(10);
 
@@ -99,7 +99,7 @@ public class LeaderboardsDAO {
 				FROM Leaderboards l
 				WHERE l.minigame = 'SlotsCommand'
 				GROUP BY l.uid, l.usr, l.minigame
-				ORDER BY score DESC, id
+				ORDER BY score DESC, id DESC
 				""");
 		q.setMaxResults(10);
 
@@ -125,7 +125,7 @@ public class LeaderboardsDAO {
 				FROM Leaderboards l
 				WHERE l.minigame = :minigame
 				GROUP BY l.uid, l.usr, l.minigame
-				ORDER BY score DESC, id
+				ORDER BY score DESC, id DESC
 				""");
 		q.setParameter("minigame", minigame.getSimpleName());
 
