@@ -67,7 +67,7 @@ public class FaceoffCommand implements Executable {
 			int level = Integer.parseInt(args[0]);
 			if (!Helper.between(level, 0, 4)) throw new NumberFormatException();
 
-			int min = 150 + ((3 - level) * 50);
+			int min = 100 + ((3 - level) * 75);
 			int max = Helper.rng(700 - (level * 100), false) + guild.getJDA().getRestPing().complete().intValue();
 			int time = min + max;
 			AtomicLong start = new AtomicLong(0);
@@ -120,7 +120,7 @@ public class FaceoffCommand implements Executable {
 							timeout.cancel(true);
 							timeout = null;
 
-							int prize = (int) Math.round(min * Helper.rng(750f * (level + 1), false) / react);
+							int prize = (int) Math.round(min * Helper.rng(500f * (level + 1), false) / react);
 							channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " créditos**!").queue();
 							acc.addCredit(prize, this.getClass());
 							AccountDAO.saveAccount(acc);
