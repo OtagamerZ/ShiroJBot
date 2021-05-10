@@ -28,12 +28,14 @@ import com.kuuhaku.command.commands.discord.fun.JankenponCommand;
 import com.kuuhaku.controller.postgresql.LeaderboardsDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Leaderboards;
+import com.kuuhaku.utils.XStringBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.List;
-
 
 @Command(
 		name = "placares",
@@ -60,7 +62,7 @@ public class LeaderboardsCommand implements Executable {
 			return;
 		}
 
-		sendLeaderboards(
+		sendLeaderboards(cmd,
 				switch (cmd.getCommand().getClass().getSimpleName()) {
 					case "FaceoffCommand" -> LeaderboardsDAO.getFaceoffLeaderboards();
 					case "SlotsCommand" -> LeaderboardsDAO.getSlotsLeaderboards();
@@ -71,7 +73,32 @@ public class LeaderboardsCommand implements Executable {
 				}, channel);
 	}
 
-	private void sendLeaderboards(List<Leaderboards> lb, TextChannel channel) {
-		channel.sendMessage("❌ | Esse comando não é um minigame ou não possui placares.").queue();
+	private void sendLeaderboards(PreparedCommand cmd, List<Leaderboards> lb, TextChannel channel) {
+		if (lb == null) {
+			channel.sendMessage("❌ | Esse comando não é um minigame ou não possui placares.").queue();
+			return;
+		}
+
+		XStringBuilder sb = new XStringBuilder();
+		for (int i = 0; i < lb.size(); i++) {
+			Leaderboards l = lb.get(i);
+			String unit = switch (cmd.getCommand().getClass().getSimpleName()) {
+				case "FaceoffCommand" -> "ms";
+				case "SlotsCommand" -> "crédito" + (l.getScore() == 1 ? "" : "s");
+				case "GuessTheCardsCommand", "JankenponCommand", "GuessTheNumberCommand" -> "ponto" + (l.getScore() == 1 ? "" : "s");
+				default -> "";
+			};
+
+			if (i == 0)
+				sb.appendNewLine("**%dº - %s (%d %s)**".formatted(i + 1, l.getUsr(), l.getScore(), unit));
+			else
+				sb.appendNewLine("%dº - %s (%d %s)".formatted(i + 1, l.getUsr(), l.getScore(), unit));
+		}
+
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setTitle("10 melhores jogadores de " + cmd.getName())
+				.setDescription(sb.toString());
+
+		channel.sendMessage(eb.build()).queue();
 	}
 }

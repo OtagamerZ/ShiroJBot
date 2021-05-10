@@ -49,6 +49,7 @@ public class LeaderboardsDAO {
 				""", Blacklist.class);
 		q.setParameter("uid", id);
 		q.setParameter("minigame", minigame);
+		q.setMaxResults(10);
 
 		try {
 			return ((Long) q.getSingleResult()).intValue();
@@ -74,6 +75,7 @@ public class LeaderboardsDAO {
 				GROUP BY l.uid, l.usr, l.minigame
 				ORDER BY score, id
 				""", Leaderboards.class);
+		q.setMaxResults(10);
 
 		try {
 			return (List<Leaderboards>) q.getResultList();
@@ -97,6 +99,7 @@ public class LeaderboardsDAO {
 				GROUP BY l.uid, l.usr, l.minigame
 				ORDER BY score DESC, id
 				""", Leaderboards.class);
+		q.setMaxResults(10);
 
 		try {
 			return (List<Leaderboards>) q.getResultList();
@@ -114,7 +117,7 @@ public class LeaderboardsDAO {
 				     , l.uid
 				     , l.usr
 				     , l.minigame
-				     , max(l.score) AS score
+				     , sum(l.score) AS score
 				FROM Leaderboards l
 				WHERE l.minigame = :minigame
 				GROUP BY l.uid, l.usr, l.minigame
