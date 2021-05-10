@@ -37,7 +37,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.annotation.Nonnull;
-import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
@@ -79,31 +79,24 @@ public class FaceoffCommand implements Executable {
 						start.set(System.currentTimeMillis());
 						ShiroInfo.getShiroEvents().addHandler(guild, new SimpleMessageListener() {
 							private final Consumer<Void> success = s -> close();
-							private Future<?> timeout = channel.sendMessage(":gun: BANG! Você perdeu..")
-									.queueAfter(time, TimeUnit.MILLISECONDS, msg -> {
-										success.accept(null);
-									});
+							private ScheduledFuture<?> timeout = channel.sendMessage(":gun: BANG! Você perdeu..").queueAfter(time, TimeUnit.MILLISECONDS, msg -> success.accept(null));
 
 							@Override
 							public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 								if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
 									return;
 
-								String value = event.getMessage().getContentRaw();
-								if (!value.equalsIgnoreCase("bang")) {
-									channel.sendMessage("Você errou o gatilho.").queue();
-									success.accept(null);
-									timeout.cancel(true);
-									timeout = null;
-									return;
-								}
-
 								long react = Helper.clamp(System.currentTimeMillis() - start.get(), min, time);
 								success.accept(null);
 								timeout.cancel(true);
 								timeout = null;
 
-								if (react > time) return;
+								String value = event.getMessage().getContentRaw();
+								if (!value.equalsIgnoreCase("bang")) {
+									channel.sendMessage("Você errou o gatilho.").queue();
+									return;
+								}
+
 								int prize = (int) Math.round(min * Helper.rng(750f * (level + 1), false) / react);
 								channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " créditos**!").queue();
 								acc.addCredit(prize, this.getClass());
