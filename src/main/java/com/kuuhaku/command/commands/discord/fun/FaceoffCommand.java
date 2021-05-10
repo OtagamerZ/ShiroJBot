@@ -81,14 +81,12 @@ public class FaceoffCommand implements Executable {
 							private final Consumer<Void> success = s -> close();
 							private Future<?> timeout = channel.sendMessage(":gun: BANG! Você perdeu..")
 									.queueAfter(time, TimeUnit.MILLISECONDS, msg -> {
-										win = false;
 										success.accept(null);
 									});
-							private boolean win = true;
 
 							@Override
 							public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-								if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()) || !win)
+								if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
 									return;
 
 								String value = event.getMessage().getContentRaw();
@@ -105,6 +103,7 @@ public class FaceoffCommand implements Executable {
 								timeout.cancel(true);
 								timeout = null;
 
+								if (react > time) return;
 								int prize = (int) Math.round(min * Helper.rng(750f * (level + 1), false) / react);
 								channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " créditos**!").queue();
 								acc.addCredit(prize, this.getClass());
