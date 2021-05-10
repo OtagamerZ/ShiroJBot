@@ -65,12 +65,7 @@ public class LeaderboardsDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(
-				     l.uid
-				     , l.usr
-				     , l.minigame
-				     , min(l.score) AS score
-				)
+				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(l.uid, l.usr, l.minigame, min(l.score))
 				FROM Leaderboards l
 				WHERE l.minigame = 'FaceoffCommand'
 				GROUP BY l.uid, l.usr, l.minigame
@@ -90,12 +85,7 @@ public class LeaderboardsDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(
-				     l.uid
-				     , l.usr
-				     , l.minigame
-				     , max(l.score) AS score
-				)
+				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(l.uid, l.usr, l.minigame, max(l.score))
 				FROM Leaderboards l
 				WHERE l.minigame = 'SlotsCommand'
 				GROUP BY l.uid, l.usr, l.minigame
@@ -115,12 +105,7 @@ public class LeaderboardsDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("""
-				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(
-				     l.uid
-				     , l.usr
-				     , l.minigame
-				     , sum(l.score) AS score
-				)
+				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(l.uid, l.usr, l.minigame, sum(l.score))
 				FROM Leaderboards l
 				WHERE l.minigame = :minigame
 				GROUP BY l.uid, l.usr, l.minigame
