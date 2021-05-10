@@ -66,7 +66,7 @@ public class LeaderboardsDAO {
 
 		Query q = em.createQuery("""
 				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(
-				     , l.uid
+				     l.uid
 				     , l.usr
 				     , l.minigame
 				     , min(l.score) AS score
@@ -91,7 +91,7 @@ public class LeaderboardsDAO {
 
 		Query q = em.createQuery("""
 				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(
-				     , l.uid
+				     l.uid
 				     , l.usr
 				     , l.minigame
 				     , max(l.score) AS score
@@ -116,7 +116,7 @@ public class LeaderboardsDAO {
 
 		Query q = em.createQuery("""
 				SELECT NEW com.kuuhaku.model.persistent.Leaderboards(
-				     , l.uid
+				     l.uid
 				     , l.usr
 				     , l.minigame
 				     , sum(l.score) AS score
