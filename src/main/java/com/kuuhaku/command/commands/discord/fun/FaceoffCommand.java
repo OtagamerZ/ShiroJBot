@@ -100,7 +100,7 @@ public class FaceoffCommand implements Executable {
 								timeout.cancel(true);
 								timeout = null;
 
-								int prize = (int) (min * Helper.rng(750 * level, false) / react);
+								int prize = (int) Math.round(min * Helper.rng(750f * level, false) / react);
 								channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " créditos**!").queue();
 								acc.addCredit(prize, this.getClass());
 								AccountDAO.saveAccount(acc);
