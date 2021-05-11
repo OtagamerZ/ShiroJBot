@@ -82,7 +82,7 @@ public class MatchStatsCommand implements Executable {
 					Map<Side, String> players = mh.getPlayers().entrySet().stream()
 							.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 					sb.append("(%s)\n`%sID: %s` - %s **VS** %s **(%s)**\n\n".formatted(
-							mh.getTimestamp().format(Helper.dateformat),
+							mh.getTimestamp().format(Helper.fullDateFormat),
 							mh.isRanked() ? "\uD83D\uDC51 " : "",
 							mh.getId(),
 							checkUser(players.get(Side.BOTTOM)),
@@ -131,7 +131,7 @@ public class MatchStatsCommand implements Executable {
 			boolean topWO = mh.isWo() && mh.getWinner() != Side.TOP;
 
 			eb.setTitle("Partida de " + p1 + " VS " + p2)
-					.addField("Jogada em", mh.getTimestamp().format(Helper.onlyDate), true)
+					.addField("Jogada em", mh.getTimestamp().format(Helper.dateFormat), true)
 					.addField("Tipo", mh.isRanked() ? "Ranqueada" : "Normal", true)
 					.addField("Ordem de jogada", """
 							1º: %s %s
@@ -174,7 +174,7 @@ public class MatchStatsCommand implements Executable {
 			boolean topWO = mh.isWo() && mh.getWinner() != Side.TOP;
 
 			eb.setTitle("Partida de " + p1 + " e " + p3 + " VS " + p2 + " e " + p4)
-					.addField("Jogada em", mh.getTimestamp().format(Helper.onlyDate), true)
+					.addField("Jogada em", mh.getTimestamp().format(Helper.dateFormat), true)
 					.addField("Tipo", mh.isRanked() ? "Ranqueada" : "Normal", true)
 					.addField("Ordem de jogada", """
 							1º: %s %s

@@ -26,7 +26,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -113,7 +112,7 @@ public class PruneCommand implements Executable {
 																	channel.delete().queue();
 																	c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
 																} catch (InsufficientPermissionException e) {
-																	channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
+																	channel.sendMessage(I18n.getString("err_prune-permission-required")).queue(null, Helper::doNothing);
 																}
 															});
 												}), true, 1, TimeUnit.MINUTES,
@@ -131,7 +130,7 @@ public class PruneCommand implements Executable {
 																	channel.delete().queue();
 																	c.sendMessage("✅ | Canal limpo com sucesso!").queue(null, Helper::doNothing);
 																} catch (InsufficientPermissionException e) {
-																	channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue(null, Helper::doNothing);
+																	channel.sendMessage(I18n.getString("err_prune-permission-required")).queue(null, Helper::doNothing);
 																}
 															});
 												}), true, 1, TimeUnit.MINUTES,
@@ -141,7 +140,7 @@ public class PruneCommand implements Executable {
 						});
 						return;
 					} else {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
+						channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
 						return;
 					}
 

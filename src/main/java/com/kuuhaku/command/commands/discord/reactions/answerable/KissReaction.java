@@ -24,7 +24,6 @@ import com.kuuhaku.command.commands.discord.reactions.Action;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -43,7 +42,7 @@ public class KissReaction extends Action implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			channel.sendMessage(I18n.getString("err_no-user")).queue();
 			return;
 		}
 		setInteraction(new User[]{author, message.getMentionedUsers().get(0)});

@@ -19,7 +19,6 @@
 package com.kuuhaku.managers;
 
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.ShiroInfo;
 import org.jetbrains.annotations.NonNls;
 
 public class TwitchArgument {
@@ -66,8 +65,8 @@ public class TwitchArgument {
 		return new Object[]{
 				name,
 				aliases,
-				usage.isBlank() ? "" : ShiroInfo.getLocale(I18n.PT).getString(usage),
-				description.isBlank() ? "" : ShiroInfo.getLocale(I18n.PT).getString(description),
+				usage.isBlank() ? "" : I18n.getString(usage),
+				description.isBlank() ? "" : I18n.getString(description),
 				requiresBinding
 		};
 	}
@@ -82,12 +81,12 @@ public class TwitchArgument {
 
 	public String getUsage() {
 		if (usage.isBlank()) return "";
-		return ShiroInfo.getLocale(I18n.PT).getString(usage);
+		return I18n.getString(usage);
 	}
 
 	public String getDescription() {
 		if (description.isBlank()) return "";
-		return ShiroInfo.getLocale(I18n.PT).getString(description);
+		return I18n.getString(description);
 	}
 
 	public boolean requiresBinding() {

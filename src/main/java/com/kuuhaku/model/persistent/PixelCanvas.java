@@ -22,7 +22,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.hibernate.annotations.DynamicUpdate;
@@ -122,7 +121,7 @@ public class PixelCanvas {
 		} catch (IOException | IllegalArgumentException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
-		return channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas"));
+		return channel.sendMessage(I18n.getString("err_canvas"));
 	}
 
 	public RestAction<?> viewSection(TextChannel channel, int number) {
@@ -146,7 +145,7 @@ public class PixelCanvas {
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
-		return channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas"));
+		return channel.sendMessage(I18n.getString("err_canvas"));
 	}
 
 	public RestAction<?> viewChunk(TextChannel channel, int[] coords, int zoom, boolean section) {
@@ -170,7 +169,7 @@ public class PixelCanvas {
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
-		return channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-chunk"));
+		return channel.sendMessage(I18n.getString("err_canvas-chunk"));
 	}
 
 	public RestAction<?> addPixel(TextChannel channel, int[] coords, Color color) {

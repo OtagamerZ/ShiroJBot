@@ -27,14 +27,12 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 @Command(
 		name = "perfil",
@@ -53,23 +51,23 @@ public class ProfileCommand implements Executable {
 
 		Account acc = AccountDAO.getAccount(mb.getUser().getId());
 
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-profile")).queue(m -> {
+		channel.sendMessage(I18n.getString("str_generating-profile")).queue(m -> {
 			try {
 				if (acc.hasAnimatedBg() && Helper.getFileType(acc.getBg()).contains("gif")) {
 					File pf = Profile.applyAnimatedBackground(acc, Profile.makeProfile(mb, mb.getGuild()));
-					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), mb.getEffectiveName()))
+					channel.sendMessage(I18n.getString("str_profile", mb.getEffectiveName()))
 							.addFile(pf, "perfil.gif")
 							.flatMap(s -> m.delete())
-							.queue(null, t -> m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-too-big")).queue());
+							.queue(null, t -> m.editMessage(I18n.getString("err_profile-too-big")).queue());
 				} else
-					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), mb.getEffectiveName()))
+					channel.sendMessage(I18n.getString("str_profile", mb.getEffectiveName()))
 							.addFile(Helper.writeAndGet(Profile.makeProfile(mb, mb.getGuild()), "perfil", "png"))
 							.flatMap(s -> m.delete())
-							.queue(null, t -> m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-too-big")).queue());
+							.queue(null, t -> m.editMessage(I18n.getString("err_profile-too-big")).queue());
 			} catch (IOException | NullPointerException e) {
-				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-generation-error")).queue();
+				m.editMessage(I18n.getString("err_profile-generation-error")).queue();
 			} catch (InsufficientPermissionException e) {
-				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-attach-files-permission")).queue();
+				m.editMessage(I18n.getString("err_no-attach-files-permission")).queue();
 			}
 		});
 	}

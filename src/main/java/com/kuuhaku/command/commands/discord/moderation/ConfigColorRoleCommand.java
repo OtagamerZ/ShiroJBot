@@ -26,7 +26,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.ColorRole;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
@@ -52,7 +51,7 @@ public class ConfigColorRoleCommand implements Executable {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-enough-args")).queue();
+			channel.sendMessage(I18n.getString("err_color-not-enough-args")).queue();
 			return;
 		}
 
@@ -62,7 +61,7 @@ public class ConfigColorRoleCommand implements Executable {
 			String name = StringUtils.capitalize(args[0].toLowerCase(Locale.ROOT));
 
 			if (name.length() > 15) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-name-too-long")).queue();
+				channel.sendMessage(I18n.getString("err_color-name-too-long")).queue();
 				return;
 			}
 
@@ -97,7 +96,7 @@ public class ConfigColorRoleCommand implements Executable {
 
 			channel.sendMessage("✅ | Cor adicionada com sucesso!").queue();
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-color")).queue();
         } catch (ArrayIndexOutOfBoundsException e) {
 			String name = StringUtils.capitalize(args[0].toLowerCase(Locale.ROOT));
 

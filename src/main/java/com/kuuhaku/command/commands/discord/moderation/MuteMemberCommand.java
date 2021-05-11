@@ -51,26 +51,26 @@ public class MuteMemberCommand implements Executable {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (message.getMentionedMembers().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mention-required")).queue();
+			channel.sendMessage(I18n.getString("err_mention-required")).queue();
 			return;
 		} else if (args.length < 3) {
 			channel.sendMessage("❌ | Você precisa informar um tempo (em minutos) e um motivo.").queue();
 			return;
 		} else if (!member.hasPermission(Permission.MESSAGE_MANAGE)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mute-not-allowed")).queue();
+			channel.sendMessage(I18n.getString("err_mute-not-allowed")).queue();
 			return;
 		}
 
 		Member mb = message.getMentionedMembers().get(0);
 
 		if (Helper.hasRoleHigherThan(mb, member)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-mute-higher-role")).queue();
+			channel.sendMessage(I18n.getString("err_cannot-mute-higher-role")).queue();
 			return;
 		} else if (Helper.hasRoleHigherThan(mb, guild.getSelfMember())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-mute-higher-role-me")).queue();
+			channel.sendMessage(I18n.getString("err_cannot-mute-higher-role-me")).queue();
 			return;
 		} else if (ShiroInfo.getStaff().contains(mb.getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-mute-staff")).queue();
+			channel.sendMessage(I18n.getString("err_cannot-mute-staff")).queue();
 			return;
 		} else if (gc.getMuteRole() == null) {
 			channel.sendMessage("❌ | Nenhum cargo de mute configurado neste servidor.").queue();
@@ -104,7 +104,7 @@ public class MuteMemberCommand implements Executable {
 						MemberDAO.saveMutedMember(m);
 					}, Helper::doNothing);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
 		} catch (HierarchyException e) {
 			channel.sendMessage("❌ | O cargo de mute está acima de mim.").queue();
 		}

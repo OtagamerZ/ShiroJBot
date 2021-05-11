@@ -29,7 +29,6 @@ import com.kuuhaku.model.enums.GemItem;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -78,7 +77,7 @@ public class GemStoreCommand implements Executable {
 
 			GemItem gi = GemItem.values()[i];
 			if (acc.getGems() < gi.getPrice()) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+				channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 				return;
 			}
 

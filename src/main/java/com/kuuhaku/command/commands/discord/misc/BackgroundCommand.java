@@ -26,7 +26,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.StorageUnit;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 import java.io.IOException;
@@ -43,7 +42,7 @@ public class BackgroundCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-image")).queue();
+			channel.sendMessage(I18n.getString("err_no-image")).queue();
 			return;
 		} else if (Helper.containsAny(args[0], "google", "goo.gl")) {
 			channel.sendMessage("❌ | Você pegou o link da **pesquisa do Google** bobo!").queue();
@@ -66,7 +65,7 @@ public class BackgroundCommand implements Executable {
 				channel.sendMessage(":warning: | Imagens que utilizam o CDN do Discord (postadas no Discord) correm o risco de serem apagadas com o tempo, mas de todo modo: Imagem de fundo trocada com sucesso!").queue();
 			else channel.sendMessage("✅ | Imagem de fundo trocada com sucesso!").queue();
 		} catch (IOException | NullPointerException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-image")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-image")).queue();
 		}
 	}
 }

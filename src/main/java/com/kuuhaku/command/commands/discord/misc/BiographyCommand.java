@@ -24,7 +24,6 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -38,13 +37,13 @@ public class BiographyCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (String.join(" ", args).length() > 140) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_biography-too-long")).queue();
+			channel.sendMessage(I18n.getString("err_biography-too-long")).queue();
 			return;
 		}
 
 		for (String s : args)
 			if (s.length() > 20) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_biography-big-words")).queue();
+				channel.sendMessage(I18n.getString("err_biography-big-words")).queue();
 				return;
 			}
 

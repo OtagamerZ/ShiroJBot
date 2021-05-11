@@ -268,14 +268,14 @@ public class Account {
 	public void voted() {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		try {
-			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
+			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.fullDateFormat);
 
 			Helper.logger(this.getClass()).info("""
 															
 					Voto anterior: %s
 					Hoje: %s
 					Acumula? %s
-					""".formatted(lastVote.format(Helper.dateformat), today.format(Helper.dateformat), today.isBefore(lastVote.plusHours(24)))
+					""".formatted(lastVote.format(Helper.fullDateFormat), today.format(Helper.fullDateFormat), today.isBefore(lastVote.plusHours(24)))
 			);
 
 			if (today.isBefore(lastVote.plusHours(24)) || streak == 0) streak = Helper.clamp(streak + 1, 0, 7);
@@ -283,7 +283,7 @@ public class Account {
 		} catch (DateTimeParseException ignore) {
 		}
 
-		lastVoted = today.format(Helper.dateformat);
+		lastVoted = today.format(Helper.fullDateFormat);
 		notified = false;
 		voted = true;
 		AccountDAO.saveAccount(this);
@@ -293,7 +293,7 @@ public class Account {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		try {
 			try {
-				ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
+				ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.fullDateFormat);
 
 				if (today.isBefore(lastVote.plusHours(12)) && voted) {
 					return true;
@@ -336,7 +336,7 @@ public class Account {
 	public void notifyVote() {
 		if (!notified && !lastVoted.equalsIgnoreCase("Nunca")) {
 			ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
-			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
+			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.fullDateFormat);
 
 			if (today.isAfter(lastVote.plusHours(12))) {
 				try {
@@ -368,7 +368,7 @@ public class Account {
 	public int getStreak() {
 		try {
 			ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
-			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
+			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.fullDateFormat);
 
 			if (today.isAfter(lastVote.plusHours(24))) streak = 0;
 		} catch (DateTimeParseException ignore) {

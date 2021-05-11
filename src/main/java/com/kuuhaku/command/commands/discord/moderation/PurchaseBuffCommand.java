@@ -31,7 +31,6 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.guild.GuildBuff;
 import com.kuuhaku.model.persistent.guild.ServerBuff;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -108,7 +107,7 @@ public class PurchaseBuffCommand implements Executable {
 		ServerBuff sb = new ServerBuff(BuffType.of(args[0]), tier);
 
 		if (acc.getTotalBalance() < sb.getPrice()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 			return;
 		}
 

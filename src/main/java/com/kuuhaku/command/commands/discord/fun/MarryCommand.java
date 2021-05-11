@@ -50,28 +50,28 @@ public class MarryCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		try {
 			if (message.getMentionedUsers().size() < 1) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+				channel.sendMessage(I18n.getString("err_no-user")).queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == author) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-yourself")).queue();
+				channel.sendMessage(I18n.getString("err_cannot-marry-yourself")).queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getSelfUser() && !author.getId().equals(ShiroInfo.getNiiChan())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-shiro")).queue();
+				channel.sendMessage(I18n.getString("err_cannot-marry-shiro")).queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getJibril().getSelfUser() && !author.getId().equals(ShiroInfo.getNiiChan())) {
 				try {
 					TextChannel chn = Main.getJibril().getTextChannelById(channel.getId());
 					assert chn != null;
-					chn.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-jibril")).queue();
+					chn.sendMessage(I18n.getString("err_cannot-marry-jibril")).queue();
 				} catch (InsufficientPermissionException e) {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-the-answer-is-no")).queue();
+					channel.sendMessage(I18n.getString("err_marry-the-answer-is-no")).queue();
 				}
 				return;
 			} else if (WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
+				channel.sendMessage(I18n.getString("err_already-married")).queue();
 				return;
 			} else if (WaifuDAO.isWaifued(author.getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-married")).queue();
+				channel.sendMessage(I18n.getString("err_you-are-married")).queue();
 				return;
 			} else if (author.getId().equals(Main.getSelfUser().getId())) {
 				channel.sendMessage("Ei, o que você acha que está fazendo ao me forçar a me casar? :rage:").queue();
@@ -97,7 +97,7 @@ public class MarryCommand implements Executable {
 						return;
 
 					if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
+						channel.sendMessage(I18n.getString("err_already-married")).queue();
 						success.accept(null);
 						timeout.cancel(true);
 						timeout = null;
@@ -122,7 +122,7 @@ public class MarryCommand implements Executable {
 							}
 						}
 					} catch (InsufficientPermissionException e) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-message-history-permission")).queue();
+						channel.sendMessage(I18n.getString("err_no-message-history-permission")).queue();
 						success.accept(null);
 						timeout.cancel(true);
 						timeout = null;

@@ -21,7 +21,6 @@ package com.kuuhaku.handlers.games.disboard.model;
 import com.kuuhaku.controller.postgresql.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import javax.imageio.ImageIO;
@@ -34,7 +33,7 @@ import java.util.Objects;
 
 public class Disboard {
 	public static void view(TextChannel chn) {
-		chn.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-map")).queue(s -> {
+		chn.sendMessage(I18n.getString("str_generating-map")).queue(s -> {
 			try {
 				List<PoliticalState> state = PStateDAO.getAllPoliticalState();
 				BufferedImage ocean = getImage("layers/oceando.png");

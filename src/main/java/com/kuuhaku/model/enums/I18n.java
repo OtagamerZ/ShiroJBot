@@ -18,6 +18,9 @@
 
 package com.kuuhaku.model.enums;
 
+import com.kuuhaku.utils.ShiroInfo;
+
+import java.text.MessageFormat;
 import java.util.Locale;
 
 public enum I18n {
@@ -33,5 +36,18 @@ public enum I18n {
 
 	public Locale getLocale() {
 		return locale;
+	}
+
+	public static String getString(String key, Object... params) {
+		String prefix;
+		if (key.contains("_"))
+			prefix = key.split("_")[0];
+		else
+			prefix = "misc";
+
+		if (params.length > 0)
+			return MessageFormat.format(ShiroInfo.getLocale(PT, prefix).getString(key), params);
+		else
+			return ShiroInfo.getLocale(PT, prefix).getString(key);
 	}
 }

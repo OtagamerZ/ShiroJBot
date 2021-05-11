@@ -46,20 +46,20 @@ public class MarkTicketCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-ticket-id")).queue();
+			channel.sendMessage(I18n.getString("err_no-ticket-id")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-ticket-id")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-ticket-id")).queue();
 			return;
 		}
 
 		Ticket t = TicketDAO.getTicket(Integer.parseInt(args[0]));
 
 		if (t == null) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-ticket")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-ticket")).queue();
 			return;
 		} else if (t.isSolved()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_ticket-already-solved")).queue();
+			channel.sendMessage(I18n.getString("err_ticket-already-solved")).queue();
 			return;
 		}
 
@@ -70,7 +70,7 @@ public class MarkTicketCommand implements Executable {
 		if (Helper.getOr(t.getUid(), null) != null)
 			eb.addField("Aberto por:", Main.getInfo().getUserByID(t.getUid()).getAsTag(), true);
 		eb.addField("Resolvido por:", author.getAsTag(), true);
-		eb.addField("Fechado em:", Helper.dateformat.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
+		eb.addField("Fechado em:", Helper.fullDateFormat.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
 		eb.setColor(Color.green);
 
 		for (String dev : ShiroInfo.getStaff()) {
@@ -88,6 +88,6 @@ public class MarkTicketCommand implements Executable {
 				.queue(null, Helper::doNothing);
 
 		TicketDAO.updateTicket(t);
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-solved-ticket")).queue();
+		channel.sendMessage(I18n.getString("str_successfully-solved-ticket")).queue();
 	}
 }

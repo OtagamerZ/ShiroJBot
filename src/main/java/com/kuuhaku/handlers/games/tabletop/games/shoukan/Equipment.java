@@ -113,7 +113,7 @@ public class Equipment implements Drawable, Cloneable {
 				Profile.drawOutlinedText(String.valueOf(mana), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(mana)), 66, g2d);
 
 				g2d.setColor(Color.black);
-				g2d.setFont(Helper.HAMMERSMITH.deriveFont(Font.PLAIN, 11));
+				g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 11));
 				Profile.drawStringMultiLineNO(g2d, description, 205, 9, 277);
 			} else {
 				g2d.drawImage(acc.getFrame().getFrontEquipment(), 0, 0, null);

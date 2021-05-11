@@ -25,7 +25,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -48,10 +47,10 @@ public class DrakeCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_meme-no-message")).queue();
+			channel.sendMessage(I18n.getString("err_meme-no-message")).queue();
 			return;
 		} else if (String.join(" ", args).split(";").length < 2) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_meme-require-two")).queue();
+			channel.sendMessage(I18n.getString("err_meme-require-two")).queue();
 			return;
 		}
 

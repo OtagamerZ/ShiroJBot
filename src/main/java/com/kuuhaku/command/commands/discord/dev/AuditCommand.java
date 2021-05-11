@@ -30,7 +30,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -66,7 +65,7 @@ public class AuditCommand implements Executable {
 		User usr = Main.getInfo().getUserByID(args[1]);
 
 		if (usr == null) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-id")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-id")).queue();
 			return;
 		}
 
