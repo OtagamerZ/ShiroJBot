@@ -52,10 +52,10 @@ public class ReportUserCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 
 		if (message.getMentionedUsers().size() < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mention-required")).queue();
+			channel.sendMessage(I18n.getString("err_mention-required")).queue();
 			return;
 		} else if (args.length < 2) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_report-reason-required")).queue();
+			channel.sendMessage(I18n.getString("err_report-reason-required")).queue();
 			return;
 		}
 
@@ -71,7 +71,7 @@ public class ReportUserCommand implements Executable {
 		EmbedBuilder eb = new EmbedBuilder()
 				.setTitle("Relatório de report (Ticket Nº " + number + ")")
 				.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true)
-				.addField("Enviado em:", Helper.dateformat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
+				.addField("Enviado em:", Helper.fullDateFormat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
 				.addField("Usuário reportado:", message.getMentionedUsers().get(0).getAsTag(), true)
 				.addField("Relatório:", "```" + mensagem + "```", false)
 				.setFooter(author.getId())
@@ -98,7 +98,7 @@ public class ReportUserCommand implements Executable {
 									.queue(null, Helper::doNothing);
 							TicketDAO.setIds(number, ids);
 							s.delete().queue(null, Helper::doNothing);
-							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-reported-user")).queue();
+							channel.sendMessage(I18n.getString("str_successfully-reported-user")).queue();
 						}), true, 60, TimeUnit.SECONDS,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

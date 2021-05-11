@@ -32,7 +32,6 @@ import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.DeckStash;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -53,7 +52,7 @@ public class ShoukanDeckCommand implements Executable {
 		boolean showPrivate = Helper.equalsAny("p", args);
 		boolean showClan = Helper.equalsAny("c", args) && ClanDAO.isMember(author.getId());
 
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-deck")).queue(m -> {
+		channel.sendMessage(I18n.getString("str_generating-deck")).queue(m -> {
 			if (Helper.containsAny(args, "daily", "diario")) {
 				try {
 					Kawaipon kp = Helper.getDailyDeck();
@@ -69,7 +68,7 @@ public class ShoukanDeckCommand implements Executable {
 					m.delete().queue();
 					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
 				} catch (IOException e) {
-					m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
+					m.editMessage(I18n.getString("err_deck-generation-error")).queue();
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			} else {
@@ -98,7 +97,7 @@ public class ShoukanDeckCommand implements Executable {
 							channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
 						}
 					} catch (IOException e) {
-						m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
+						m.editMessage(I18n.getString("err_deck-generation-error")).queue();
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					}
 				} else {
@@ -124,7 +123,7 @@ public class ShoukanDeckCommand implements Executable {
 							channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
 						}
 					} catch (IOException e) {
-						m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_deck-generation-error")).queue();
+						m.editMessage(I18n.getString("err_deck-generation-error")).queue();
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					}
 				}

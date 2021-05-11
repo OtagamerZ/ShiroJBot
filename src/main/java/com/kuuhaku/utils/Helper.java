@@ -125,8 +125,8 @@ public class Helper {
 	public static final String ANTICOPY = "͏"; //U+034F
 	public static final String MENTION = "<@\\d+>|<@!\\d+>";
 	public static final int CANVAS_SIZE = 2049;
-	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
-	public static final DateTimeFormatter onlyDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	public static final DateTimeFormatter fullDateFormat = DateTimeFormatter.ofPattern(I18n.getString("full-date-format"));
+	public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(I18n.getString("date-format"));
 	public static final String HOME = "674261700366827539";
 	public static final int BASE_CARD_PRICE = 400;
 	public static final int BASE_EQUIPMENT_PRICE = 500;
@@ -135,16 +135,6 @@ public class Helper {
 	public static final long MILLIS_IN_HOUR = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS);
 	public static final long MILLIS_IN_MINUTE = TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES);
 	public static final long MILLIS_IN_SECOND = TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS);
-
-	public static Font HAMMERSMITH;
-
-	static {
-		try {
-			HAMMERSMITH = Font.createFont(Font.TRUETYPE_FONT, getResourceAsStream(Helper.class, "font/HammersmithOne.ttf"));
-		} catch (FontFormatException | IOException e) {
-			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
-		}
-	}
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (member == null)

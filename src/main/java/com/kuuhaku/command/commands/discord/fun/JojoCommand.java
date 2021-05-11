@@ -25,7 +25,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +49,7 @@ public class JojoCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 3) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_meme-no-message")).queue();
+			channel.sendMessage(I18n.getString("err_meme-no-message")).queue();
 			return;
 		} else if (message.getMentionedUsers().size() < 2) {
 			channel.sendMessage("❌ | Você precisa mencionar 2 usuários antes da mensagem.").queue();

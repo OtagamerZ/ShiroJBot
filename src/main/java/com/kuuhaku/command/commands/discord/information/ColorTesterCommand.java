@@ -24,7 +24,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -34,7 +33,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 @Command(
 		name = "quecor",
@@ -48,7 +46,7 @@ public class ColorTesterCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1 || !args[0].contains("#") || !Helper.between(args[0].length(), 7, 8)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-color")).queue();
 			return;
 		}
 
@@ -65,13 +63,13 @@ public class ColorTesterCommand implements Executable {
 
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.decode(args[0]));
-			eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_color"), args[0]));
+			eb.setTitle(I18n.getString("str_color", args[0]));
 			eb.setThumbnail("attachment://color.png");
 
 			channel.sendMessage(eb.build()).addFile(baos.toByteArray(), "color.png").queue();
 
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-color")).queue();
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}

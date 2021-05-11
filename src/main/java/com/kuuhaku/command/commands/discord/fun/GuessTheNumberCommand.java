@@ -52,7 +52,7 @@ public class GuessTheNumberCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().gameInProgress(author.getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+			channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 			return;
 		}
 
@@ -80,7 +80,7 @@ public class GuessTheNumberCommand implements Executable {
 					timeout = null;
 					return;
 				} else if (!StringUtils.isNumeric(value) || Integer.parseInt(value) < 0 || Integer.parseInt(value) > 100) {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-number")).queue();
+					channel.sendMessage(I18n.getString("err_invalid-number")).queue();
 					return;
 				}
 

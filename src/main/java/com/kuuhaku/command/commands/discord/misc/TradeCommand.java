@@ -67,7 +67,7 @@ public class TradeCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			channel.sendMessage(I18n.getString("err_no-user")).queue();
 			return;
 		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
 			channel.sendMessage("❌ | Você não pode trocar cartas com você mesmo.").queue();

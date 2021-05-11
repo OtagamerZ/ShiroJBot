@@ -31,7 +31,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.LevelRole;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -123,7 +122,7 @@ public class ConfigLevelRoleCommand implements Executable {
 			channel.sendMessage("✅ | Membros com nível " + level + " receberão o cargo `" + r.getName() + "`!").queue();
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-level")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-level")).queue();
 		} catch (IndexOutOfBoundsException e) {
 			channel.sendMessage("❌ | Você precisa mencionar um cargo.").queue();
 		}

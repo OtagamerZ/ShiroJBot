@@ -23,7 +23,6 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.persistence.NoResultException;
@@ -39,7 +38,7 @@ public class DivorceCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		try {
 			if (!WaifuDAO.isWaifued(author.getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_divorce-no-waifu")).queue();
+				channel.sendMessage(I18n.getString("err_divorce-no-waifu")).queue();
 				return;
 			}
 

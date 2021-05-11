@@ -42,7 +42,6 @@ import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Pattern;
@@ -173,7 +172,7 @@ public class ShiroInfo {
 	}
 
 	public static String getFullName() {
-		return MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_version"), name, version);
+		return I18n.getString("str_version", name, version);
 	}
 
 	public static String getVersion() {
@@ -208,8 +207,8 @@ public class ShiroInfo {
 		return shiroEvents;
 	}
 
-	public static ResourceBundle getLocale(I18n lang) {
-		return ResourceBundle.getBundle("locale", lang.getLocale());
+	public static ResourceBundle getLocale(I18n lang, String prefix) {
+		return ResourceBundle.getBundle("i18n/" + prefix + "/locale", lang.getLocale());
 	}
 
 	public static String getSupportServerName() {

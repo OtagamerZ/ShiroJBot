@@ -41,7 +41,6 @@ import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -93,7 +92,7 @@ public class ShoukanCommand implements Executable {
 			String id = author.getId() + "." + 0 + "." + guild.getId();
 
 			if (Main.getInfo().gameInProgress(author.getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+				channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 				return;
 			}
 
@@ -135,12 +134,12 @@ public class ShoukanCommand implements Executable {
 			String id = author.getId() + "." + 0 + "." + guild.getId();
 
 			if (Main.getInfo().gameInProgress(author.getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+				channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 				return;
 			}
 
 			if (mm.inGame(author.getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+				channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 				return;
 			} else if (mm.getSoloLobby().containsKey(mmr) || mm.getDuoLobby().keySet().stream().anyMatch(rd -> rd.getP1().equals(mmr) || rd.getP2().equals(mmr))) {
 				channel.sendMessage("❌ | Você já está em um saguão, por favor cancele-o antes de tentar entrar novamente.").queue();
@@ -169,7 +168,7 @@ public class ShoukanCommand implements Executable {
 				}
 				case DUO -> {
 					if (message.getMentionedUsers().isEmpty()) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+						channel.sendMessage(I18n.getString("err_no-user")).queue();
 						return;
 					}
 
@@ -220,7 +219,7 @@ public class ShoukanCommand implements Executable {
 			}
 		} else {
 			if (message.getMentionedUsers().isEmpty()) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+				channel.sendMessage(I18n.getString("err_no-user")).queue();
 				return;
 			} else if (message.getMentionedUsers().size() != 1 && message.getMentionedUsers().size() != 3) {
 				channel.sendMessage("❌ | Você precisa mencionar 1 usuário para jogar solo, ou 3 para jogar em equipes (1º e 3º equipe 1, você e o 2º equipe 2).").queue();
@@ -251,13 +250,13 @@ public class ShoukanCommand implements Executable {
 				if (args.length > 1 && StringUtils.isNumeric(args[1]) && custom == null) {
 					bet = Integer.parseInt(args[1]);
 					if (bet < 0) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
+						channel.sendMessage(I18n.getString("err_invalid-credit-amount")).queue();
 						return;
 					} else if (uacc.getBalance() < bet) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+						channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 						return;
 					} else if (tacc.getBalance() < bet) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
+						channel.sendMessage(I18n.getString("err_insufficient-credits-target")).queue();
 						return;
 					}
 				}
@@ -330,13 +329,13 @@ public class ShoukanCommand implements Executable {
 			String id = author.getId() + "." + users.get(0).getId() + "." + guild.getId();
 
 			if (Main.getInfo().gameInProgress(author.getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+				channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 				return;
 			} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+				channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 				return;
 			} else if (users.stream().anyMatch(u -> u.getId().equals(author.getId()))) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
+				channel.sendMessage(I18n.getString("err_cannot-play-with-yourself")).queue();
 				return;
 			}
 
@@ -379,10 +378,10 @@ public class ShoukanCommand implements Executable {
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (players.contains(mb.getUser())) {
 										if (Main.getInfo().gameInProgress(mb.getId())) {
-											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
 										} else if (Main.getInfo().gameInProgress(author.getId())) {
-											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 											return;
 										}
 
@@ -414,10 +413,10 @@ public class ShoukanCommand implements Executable {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										if (Main.getInfo().gameInProgress(mb.getId())) {
-											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
 										} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
-											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 											return;
 										}
 
@@ -437,10 +436,10 @@ public class ShoukanCommand implements Executable {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										if (Main.getInfo().gameInProgress(mb.getId())) {
-											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+											channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 											return;
 										} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
-											channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+											channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 											return;
 										}
 

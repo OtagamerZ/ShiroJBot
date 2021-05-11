@@ -25,7 +25,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -47,7 +46,7 @@ public class AvatarCommand implements Executable {
 		if (args.length > 0) {
 			if (Helper.equalsAny(args[0], "guild", "server", "servidor")) {
 				if (guild.getIconUrl() == null) {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-icon")).queue();
+					channel.sendMessage(I18n.getString("err_no-icon")).queue();
 					return;
 				}
 				eb.setTitle("Ícone do servidor");

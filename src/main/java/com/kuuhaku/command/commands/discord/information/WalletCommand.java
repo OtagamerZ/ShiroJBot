@@ -27,12 +27,9 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-
-import java.text.MessageFormat;
 
 @Command(
 		name = "carteira",
@@ -47,17 +44,17 @@ public class WalletCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-title"), author.getName()))
+				.setTitle(I18n.getString("str_balance-title", author.getName()))
 				.addField(
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-field-title"), Helper.separate(acc.getBalance())),
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-loan-bugs"),
+						I18n.getString("str_balance-field-title", Helper.separate(acc.getBalance())),
+						I18n.getString("str_balance-loan-bugs",
 								Helper.separate(acc.getVBalance()),
 								Helper.separate(acc.getLoan()),
 								Helper.separate(acc.getBugs())
 						), true
 				)
 				.addField(
-						ShiroInfo.getLocale(I18n.PT).getString("str_balance-last-voted"),
+						I18n.getString("str_balance-last-voted"),
 						acc.getLastVoted(),
 						true
 				)

@@ -30,7 +30,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +53,7 @@ public class CrissCrossCommand implements Executable {
     @Override
     public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
         if (message.getMentionedUsers().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			channel.sendMessage(I18n.getString("err_no-user")).queue();
 			return;
 		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
@@ -70,13 +69,13 @@ public class CrissCrossCommand implements Executable {
         if (args.length > 1 && StringUtils.isNumeric(args[1])) {
             bet = Integer.parseInt(args[1]);
             if (bet < 0) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
+                channel.sendMessage(I18n.getString("err_invalid-credit-amount")).queue();
                 return;
             } else if (uacc.getBalance() < bet) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+                channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
                 return;
             } else if (tacc.getBalance() < bet) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
+                channel.sendMessage(I18n.getString("err_insufficient-credits-target")).queue();
                 return;
             }
         }
@@ -84,13 +83,13 @@ public class CrissCrossCommand implements Executable {
         String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
 
         if (Main.getInfo().gameInProgress(author.getId())) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+            channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
             return;
         } else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+            channel.sendMessage(I18n.getString("err_user-in-game")).queue();
             return;
         } else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
+            channel.sendMessage(I18n.getString("err_cannot-play-with-yourself")).queue();
             return;
         }
 
@@ -101,10 +100,10 @@ public class CrissCrossCommand implements Executable {
 							if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								if (Main.getInfo().gameInProgress(mb.getId())) {
-									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+									channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 									return;
 								} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
-									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+									channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 									return;
 								}
 

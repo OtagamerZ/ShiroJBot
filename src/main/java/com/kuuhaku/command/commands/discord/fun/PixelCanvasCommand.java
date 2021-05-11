@@ -30,13 +30,11 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.text.MessageFormat;
 
 import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
@@ -60,14 +58,14 @@ public class PixelCanvasCommand implements Executable {
 
 		try {
 			if (opts.length <= 1) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-arguments")).queue();
+				channel.sendMessage(I18n.getString("err_canvas-invalid-arguments")).queue();
 				return;
 			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
-				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-coordinates-out-of-bounds"), CANVAS_SIZE / 2, CANVAS_SIZE / 2)).queue();
+				channel.sendMessage(I18n.getString("err_canvas-coordinates-out-of-bounds", CANVAS_SIZE / 2, CANVAS_SIZE / 2)).queue();
 				return;
 			}
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-coordinates")).queue();
+			channel.sendMessage(I18n.getString("err_canvas-invalid-coordinates")).queue();
 			return;
 		}
 
@@ -76,7 +74,7 @@ public class PixelCanvasCommand implements Executable {
 
 			if (StringUtils.isNumeric(opts[2])) {
 				if (Integer.parseInt(opts[2]) <= 0 || Integer.parseInt(opts[2]) > 10) {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-zoom")).queue();
+					channel.sendMessage(I18n.getString("err_canvas-invalid-zoom")).queue();
 					return;
 				}
 				Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2]), false).queue();
@@ -114,7 +112,7 @@ public class PixelCanvasCommand implements Executable {
 
 			CanvasDAO.saveCanvas(canvas);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-color")).queue();
 		}
 	}
 }
