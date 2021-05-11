@@ -72,7 +72,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
@@ -289,14 +292,7 @@ public class ShiroEvents extends ListenerAdapter {
 					command.execute(author, member, commandName, argsAsText, args, message, channel, guild, prefix);
 					Helper.spawnAd(channel);
 
-					LogDAO.saveLog(
-							new Log()
-									.setGuildId(guild.getId())
-									.setGuild(guild.getName())
-									.setUser(author)
-									.setCommand(rawMessage)
-									.setTimestamp(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat))
-					);
+					LogDAO.saveLog(new Log(guild, author, rawMessage));
 					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, rawMessage);
 				}
 			}

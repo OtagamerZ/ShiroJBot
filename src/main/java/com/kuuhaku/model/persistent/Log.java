@@ -18,9 +18,13 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Table(name = "logs")
@@ -44,60 +48,70 @@ public class Log {
 	@Column(columnDefinition = "TEXT")
 	private String command = "";
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String timestamp = "";
+
+	public Log(Guild guild, User user, String command) {
+		this.guildId = guild.getId();
+		this.guild = guild.getName();
+		this.usr = user.getAsMention();
+		this.uid = user.getId();
+		this.command = command;
+		this.timestamp = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat);
+	}
+
+	public Log() {
+	}
 
 	public int getId() {
 		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getGuildId() {
 		return guildId;
 	}
 
-	public Log setGuildId(String guildId) {
+	public void setGuildId(String guildId) {
 		this.guildId = guildId;
-		return this;
 	}
 
-	public String getUser() {
+	public String getUsr() {
 		return usr;
 	}
 
-	public Log setUser(User user) {
-		this.usr = user.getAsTag();
-		this.uid = user.getId();
-		return this;
+	public void setUsr(String usr) {
+		this.usr = usr;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public String getGuild() {
 		return guild;
 	}
 
-	public Log setGuild(String guild) {
+	public void setGuild(String guild) {
 		this.guild = guild;
-		return this;
 	}
 
 	public String getCommand() {
 		return command;
 	}
 
-	public Log setCommand(String command) {
+	public void setCommand(String command) {
 		this.command = command;
-		return this;
 	}
 
 	public String getTimestamp() {
 		return timestamp;
 	}
 
-	public Log setTimestamp(String timestamp) {
+	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
-		return this;
 	}
 }
