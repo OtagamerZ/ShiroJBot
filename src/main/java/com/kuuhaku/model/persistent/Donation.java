@@ -45,7 +45,7 @@ public class Donation {
 	private float value = 0;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat);
+	private String date = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String status = "";
@@ -56,6 +56,7 @@ public class Donation {
 		this.bundle = bundle;
 		this.value = value;
 		this.status = status;
+		this.date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat);
 	}
 
 	public Donation() {
