@@ -41,12 +41,13 @@ public class Transaction {
 	private long value = 0;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat);
+	private String date = "";
 
 	public Transaction(String id, String from, long value) {
 		this.uid = id;
 		this.fromClass = from;
 		this.value = value;
+		this.date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat);
 	}
 
 	public Transaction() {
