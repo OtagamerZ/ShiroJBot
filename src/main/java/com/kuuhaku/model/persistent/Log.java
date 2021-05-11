@@ -18,12 +18,9 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 
 @Entity
 @Table(name = "logs")
@@ -47,8 +44,8 @@ public class Log {
 	@Column(columnDefinition = "TEXT")
 	private String command = "";
 
-	@Column(columnDefinition = "VARCHAR(191)")
-	private String timestamp = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat);
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	private String timestamp = "";
 
 	public int getId() {
 		return id;
@@ -99,7 +96,8 @@ public class Log {
 		return timestamp;
 	}
 
-	public void setTimestamp(String timestamp) {
+	public Log setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
+		return this;
 	}
 }
