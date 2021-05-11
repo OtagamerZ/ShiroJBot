@@ -209,14 +209,10 @@ public class Hand {
 			d.setClan(cl);
 		}
 
-		int hpMod = (combo.getLeft() == Race.DEMON ? -2000 : 0)
+		int hpMod = (combo.getLeft() == Race.DEMON ? -1500 : 0)
 					+ (combo.getRight() == Race.HUMAN ? 750 : 0);
 
-		int manaMod = switch (combo.getLeft()) {
-			case ELF -> 1;
-			case DEMON -> 2;
-			default -> 0;
-		};
+		int manaMod = combo.getLeft() == Race.ELF ? 1 : 0;
 
 		this.baseHp = hp = Math.max(baseHp + hpMod, 1);
 		this.baseManaPerTurn = manaPerTurn = Math.max(baseManaPerTurn + manaMod, 0);
