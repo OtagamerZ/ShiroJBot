@@ -72,10 +72,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
@@ -298,6 +295,7 @@ public class ShiroEvents extends ListenerAdapter {
 									.setGuild(guild.getName())
 									.setUser(author)
 									.setCommand(rawMessage)
+									.setTimestamp(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat))
 					);
 					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, rawMessage);
 				}
