@@ -14,7 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais e melhoria nas bordas das raridades">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/I18n.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/I18n.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Donation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Donation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Log.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Log.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1186,14 +1188,7 @@
       <workItem from="1620403337331" duration="11318000" />
       <workItem from="1620416460646" duration="590000" />
       <workItem from="1620734580665" duration="3170000" />
-      <workItem from="1620749133558" duration="3442000" />
-    </task>
-    <task id="LOCAL-04344" summary="Correções gerais">
-      <created>1620221996733</created>
-      <option name="number" value="04344" />
-      <option name="presentableId" value="LOCAL-04344" />
-      <option name="project" value="LOCAL" />
-      <updated>1620221996733</updated>
+      <workItem from="1620749133558" duration="3754000" />
     </task>
     <task id="LOCAL-04345" summary="Correções gerais">
       <created>1620225686408</created>
@@ -1531,7 +1526,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620752531052</updated>
     </task>
-    <option name="localTasksCounter" value="4393" />
+    <task id="LOCAL-04393" summary="Correções gerais e melhoria nas bordas das raridades">
+      <created>1620752690168</created>
+      <option name="number" value="04393" />
+      <option name="presentableId" value="LOCAL-04393" />
+      <option name="project" value="LOCAL" />
+      <updated>1620752690168</updated>
+    </task>
+    <option name="localTasksCounter" value="4394" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
