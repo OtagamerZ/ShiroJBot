@@ -71,7 +71,7 @@ public enum Race {
 			"Almas e espíritos de pessoas e criaturas que não puderam quebrar o vínculo ao mundo material. Algumas tornam-se almas penadas, fazendo-as tornarem-se hostis e malígnas, mas outras conseguem manter sua essência intacta."
 	),
 	DEMON("Demônio",
-			"-2000 HP, +2 Mana",
+			"-1500 HP, +1 Mana para cada 20% de HP perdido do oponente",
 			"+25% dano direto causado, +33% dano direto sofrido",
 			"Seres das trevas que vieram ao mundo material para coletar almas para aumentar seu poder. Sua astúcia e metodologia geralmente reflete seu status no submundo, e são altamente temidas por todos os seres vivos."
 	),
