@@ -29,7 +29,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -79,7 +78,7 @@ public class InviteCommand implements Executable {
 
 		try {
 			if (!Main.getInfo().getRequests().containsKey(args[0])) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_assist-not-requested")).queue();
+				channel.sendMessage(I18n.getString("err_assist-not-requested")).queue();
 				return;
 			}
 
@@ -88,7 +87,7 @@ public class InviteCommand implements Executable {
 		} catch (ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage("Escolha o servidor que devo criar um convite!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 		} catch (NullPointerException ex) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-server")).embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+			channel.sendMessage(I18n.getString("err_invalid-server")).embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 		}
 	}
 }

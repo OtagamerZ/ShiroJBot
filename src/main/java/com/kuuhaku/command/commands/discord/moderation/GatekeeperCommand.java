@@ -26,7 +26,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -46,13 +45,13 @@ public class GatekeeperCommand implements Executable {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length < 2) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_gatekeeper-no-id")).queue();
+			channel.sendMessage(I18n.getString("err_gatekeeper-no-id")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-message-id")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-message-id")).queue();
 			return;
 		} else if (message.getMentionedRoles().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_gatekeeper-no-role")).queue();
+			channel.sendMessage(I18n.getString("err_gatekeeper-no-role")).queue();
 			return;
 		}
 
@@ -63,7 +62,7 @@ public class GatekeeperCommand implements Executable {
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage("❌ | Erro em um dos argumentos: " + e).queue();
 		} catch (ErrorResponseException e) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-channel")).queue();
+            channel.sendMessage(I18n.getString("err_role-chooser-invalid-channel")).queue();
         }
 	}
 }

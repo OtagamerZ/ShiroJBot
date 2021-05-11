@@ -33,17 +33,17 @@ import java.util.Arrays;
 import java.util.Set;
 
 public enum Category {
-	DEV(ShiroInfo.getLocale(I18n.PT).getString("cat_dev-name"), "<:dev:674261700333142046>", "674261700333142046", ShiroInfo.getLocale(I18n.PT).getString("cat_dev-description"), PrivilegeLevel.DEV),
-	SUPPORT(ShiroInfo.getLocale(I18n.PT).getString("cat_support-name"), "<:sheriff:674261700538662913>", "674261700538662913", ShiroInfo.getLocale(I18n.PT).getString("cat_support-description"), PrivilegeLevel.SUPPORT),
-	MODERATION(ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-name"), "<:mod:674261700844716082>", "674261700844716082", ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-description"), PrivilegeLevel.MOD),
-	BETA(ShiroInfo.getLocale(I18n.PT).getString("cat_beta-name"), "<:beta:674261701109219328>", "674261701109219328", ShiroInfo.getLocale(I18n.PT).getString("cat_beta-description"), PrivilegeLevel.USER),
-	FUN(ShiroInfo.getLocale(I18n.PT).getString("cat_fun-name"), "<:rpg:674261700962418688>", "674261700962418688", ShiroInfo.getLocale(I18n.PT).getString("cat_fun-description"), PrivilegeLevel.USER),
-	MISC(ShiroInfo.getLocale(I18n.PT).getString("cat_misc-name"), "<:misc:674261700354113536>", "674261700354113536", ShiroInfo.getLocale(I18n.PT).getString("cat_misc-description"), PrivilegeLevel.USER),
-	INFO(ShiroInfo.getLocale(I18n.PT).getString("cat_info-name"), "<:info:674261700643651645>", "674261700643651645", ShiroInfo.getLocale(I18n.PT).getString("cat_info-description"), PrivilegeLevel.USER),
-	MUSIC(ShiroInfo.getLocale(I18n.PT).getString("cat_music-name"), "<:music:674261701507678220>", "674261701507678220", ShiroInfo.getLocale(I18n.PT).getString("cat_music-description"), PrivilegeLevel.USER),
-	EXCEED(ShiroInfo.getLocale(I18n.PT).getString("cat_exceed-name"), "<:exceed:674261700312170496>", "674261700312170496", ShiroInfo.getLocale(I18n.PT).getString("cat_exceed-description"), PrivilegeLevel.USER),
-	CLAN(ShiroInfo.getLocale(I18n.PT).getString("cat_clan-name"), "<:fun:674261700941185035>", "674261700941185035", ShiroInfo.getLocale(I18n.PT).getString("cat_clan-description"), PrivilegeLevel.USER),
-	NSFW(ShiroInfo.getLocale(I18n.PT).getString("cat_nsfw-name"), "<:nsfw:687649035204558894>", "687649035204558894", ShiroInfo.getLocale(I18n.PT).getString("cat_nsfw-description"), PrivilegeLevel.USER);
+	DEV(I18n.getString("cat_dev-name"), "<:dev:674261700333142046>", "674261700333142046", I18n.getString("cat_dev-description"), PrivilegeLevel.DEV),
+	SUPPORT(I18n.getString("cat_support-name"), "<:sheriff:674261700538662913>", "674261700538662913", I18n.getString("cat_support-description"), PrivilegeLevel.SUPPORT),
+	MODERATION(I18n.getString("cat_moderation-name"), "<:mod:674261700844716082>", "674261700844716082", I18n.getString("cat_moderation-description"), PrivilegeLevel.MOD),
+	BETA(I18n.getString("cat_beta-name"), "<:beta:674261701109219328>", "674261701109219328", I18n.getString("cat_beta-description"), PrivilegeLevel.USER),
+	FUN(I18n.getString("cat_fun-name"), "<:rpg:674261700962418688>", "674261700962418688", I18n.getString("cat_fun-description"), PrivilegeLevel.USER),
+	MISC(I18n.getString("cat_misc-name"), "<:misc:674261700354113536>", "674261700354113536", I18n.getString("cat_misc-description"), PrivilegeLevel.USER),
+	INFO(I18n.getString("cat_info-name"), "<:info:674261700643651645>", "674261700643651645", I18n.getString("cat_info-description"), PrivilegeLevel.USER),
+	MUSIC(I18n.getString("cat_music-name"), "<:music:674261701507678220>", "674261701507678220", I18n.getString("cat_music-description"), PrivilegeLevel.USER),
+	EXCEED(I18n.getString("cat_exceed-name"), "<:exceed:674261700312170496>", "674261700312170496", I18n.getString("cat_exceed-description"), PrivilegeLevel.USER),
+	CLAN(I18n.getString("cat_clan-name"), "<:fun:674261700941185035>", "674261700941185035", I18n.getString("cat_clan-description"), PrivilegeLevel.USER),
+	NSFW(I18n.getString("cat_nsfw-name"), "<:nsfw:687649035204558894>", "687649035204558894", I18n.getString("cat_nsfw-description"), PrivilegeLevel.USER);
 
 	private final String name;
 	private final String emote;

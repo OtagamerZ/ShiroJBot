@@ -23,10 +23,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-
-import java.text.MessageFormat;
 
 @Command(
 		name = "ping",
@@ -46,7 +43,7 @@ public class PingCommand implements Executable {
 						""".formatted(
 						System.currentTimeMillis() - currTime,
 						fp,
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_listeners"), Main.getShiroShards().getShards().get(0).getEventManager().getRegisteredListeners().size())
+						I18n.getString("str_listeners", Main.getShiroShards().getShards().get(0).getEventManager().getRegisteredListeners().size())
 				)))
 				.queue();
 	}

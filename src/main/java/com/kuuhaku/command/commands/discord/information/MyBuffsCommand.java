@@ -76,7 +76,7 @@ public class MyBuffsCommand implements Executable {
 				boolean isUltimate = b.getTier() == 4;
 				String until = ZonedDateTime.ofInstant(Instant.ofEpochMilli(b.getAcquiredAt()), ZoneId.of("GMT-3"))
 						.plus(b.getTime(), ChronoUnit.MILLIS)
-						.format(Helper.onlyDate);
+						.format(Helper.dateFormat);
 
 				String chance = Helper.toPercent(b.getMult() - 1);
 				switch (b.getType()) {

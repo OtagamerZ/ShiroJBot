@@ -25,13 +25,11 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,7 +50,7 @@ public class UnbanMemberCommand implements Executable {
 			channel.sendMessage("❌ | Você precisa digitar o ID de ao menos um usuário.").queue();
 			return;
 		} else if (!member.hasPermission(Permission.BAN_MEMBERS)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_unban-not-allowed")).queue();
+			channel.sendMessage(I18n.getString("err_unban-not-allowed")).queue();
 			return;
 		}
 
@@ -61,12 +59,12 @@ public class UnbanMemberCommand implements Executable {
 			try {
 				User u = Main.getInfo().getUserByID(id);
 				if (u == null) {
-					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-user-with-id"), id)).queue();
+					channel.sendMessage(I18n.getString("err_invalid-user-with-id", id)).queue();
 					return;
 				}
 				users.add(u);
 			} catch (NumberFormatException e) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-id-value")).queue();
+				channel.sendMessage(I18n.getString("err_invalid-id-value")).queue();
 			}
 		}
 

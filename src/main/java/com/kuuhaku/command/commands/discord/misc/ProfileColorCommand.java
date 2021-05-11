@@ -25,7 +25,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Locale;
@@ -50,7 +49,7 @@ public class ProfileColorCommand implements Executable {
 			channel.sendMessage("✅ | Cor de perfil restaurada ao padrão com sucesso!").queue();
 			return;
 		} else if (!args[0].contains("#") || !Helper.between(args[0].length(), 7, 8)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-color")).queue();
 			return;
 		}
 
@@ -59,7 +58,7 @@ public class ProfileColorCommand implements Executable {
 			AccountDAO.saveAccount(acc);
 			channel.sendMessage("✅ | Cor de perfil definida com sucesso!").queue();
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-color")).queue();
 		}
 	}
 }

@@ -31,7 +31,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +57,7 @@ public class ClanDepositCommand implements Executable {
 			channel.sendMessage("❌ | Você precisa especificar uma quantia de créditos para serem depositados.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
 			return;
 		}
 
@@ -66,7 +65,7 @@ public class ClanDepositCommand implements Executable {
 		int amount = Integer.parseInt(args[0]);
 
 		if (acc.getBalance() < amount) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 			return;
 		} else if (acc.getLoan() > 0) {
 			channel.sendMessage("❌ | Você não pode depositar se possuir dívida ativa.").queue();

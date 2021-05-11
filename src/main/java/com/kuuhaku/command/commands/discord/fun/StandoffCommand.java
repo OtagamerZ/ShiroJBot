@@ -46,16 +46,16 @@ import java.util.function.Consumer;
 
 @Command(
 		name = "confronto",
-		aliases = {"faceoff", "highnoon", "duelo"},
+		aliases = {"standoff", "highnoon", "duelo"},
 		usage = "req_difficulty",
 		category = Category.FUN
 )
-public class FaceoffCommand implements Executable {
+public class StandoffCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().gameInProgress(author.getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+			channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 			return;
 		} else if (args.length < 1) {
 			channel.sendMessage("❌ | Você precisa informar uma dificuldade.").queue();
@@ -131,7 +131,7 @@ public class FaceoffCommand implements Executable {
 								PStateDAO.savePoliticalState(ps);
 							}
 
-							LeaderboardsDAO.submit(author, FaceoffCommand.class, (int) react);
+							LeaderboardsDAO.submit(author, StandoffCommand.class, (int) react);
 						}
 					}
 				});

@@ -32,7 +32,6 @@ import com.kuuhaku.model.enums.Slot;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Slots;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -72,10 +71,10 @@ public class SlotsCommand implements Executable {
 			channel.sendMessage(eb.build()).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 1000) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_slots-invalid-number")).queue();
+			channel.sendMessage(I18n.getString("err_slots-invalid-number")).queue();
 			return;
 		} else if (Main.getInfo().gameInProgress(author.getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+			channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 			return;
 		}
 
@@ -83,7 +82,7 @@ public class SlotsCommand implements Executable {
 		AtomicLong bet = new AtomicLong(Long.parseLong(args[0]));
 
 		if (acc.getTotalBalance() < bet.get()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 			return;
 		}
 

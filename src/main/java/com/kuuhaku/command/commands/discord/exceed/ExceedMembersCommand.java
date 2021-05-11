@@ -32,7 +32,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -57,7 +56,7 @@ public class ExceedMembersCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (!ExceedDAO.hasExceed(author.getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-members-no-exceed")).queue();
+			channel.sendMessage(I18n.getString("err_exceed-members-no-exceed")).queue();
 			return;
 		}
 
@@ -99,7 +98,7 @@ public class ExceedMembersCommand implements Executable {
 		try {
 			return Main.getInfo().getUserByID(id).getName();
 		} catch (Exception e) {
-			return ShiroInfo.getLocale(I18n.PT).getString("str_invalid-user");
+			return I18n.getString("str_invalid-user");
 		}
 	}
 }

@@ -45,7 +45,7 @@ public class Donation {
 	private float value = 0;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
+	private String date = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat);
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String status = "";

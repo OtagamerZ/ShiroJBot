@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -56,11 +55,11 @@ public class PreparedCommand implements Executable {
 	}
 
 	public String getUsage() {
-		return usage.isBlank() ? "" : ShiroInfo.getLocale(I18n.PT).getString(usage);
+		return usage.isBlank() ? "" : I18n.getString(usage);
 	}
 
 	public String getDescription() {
-		return description.isBlank() ? "" : ShiroInfo.getLocale(I18n.PT).getString(description);
+		return description.isBlank() ? "" : I18n.getString(description);
 	}
 
 	public Category getCategory() {

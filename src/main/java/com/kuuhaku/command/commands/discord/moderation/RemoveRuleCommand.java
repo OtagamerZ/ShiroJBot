@@ -25,7 +25,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.List;
@@ -60,7 +59,7 @@ public class RemoveRuleCommand implements Executable {
 
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-index")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-index")).queue();
 		}
 	}
 }

@@ -23,7 +23,6 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -46,7 +45,7 @@ public class AsciiCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
 			if (message.getAttachments().isEmpty() || !message.getAttachments().get(0).isImage()) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_ascii-no-text-or-image")).queue();
+				channel.sendMessage(I18n.getString("err_ascii-no-text-or-image")).queue();
 				return;
 			}
 
@@ -54,7 +53,7 @@ public class AsciiCommand implements Executable {
 				channel.sendMessage(":warning: | O texto ASCII pode parecer deformado devido ao tamanho do seu ecrã!\n\n" + asciify(ImageIO.read(Helper.getImage(message.getAttachments().get(0).getUrl()))) + "").queue();
 			} catch (IOException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_image-error")).queue();
+				channel.sendMessage(I18n.getString("err_image-error")).queue();
 			}
 
 			return;
@@ -73,7 +72,7 @@ public class AsciiCommand implements Executable {
 			assert response.body() != null;
 			channel.sendMessage(":warning: | O texto ASCII pode parecer deformado devido ao tamanho do seu ecrã!\n```\n" + response.body().string() + "\n```").queue();
 		} catch (IOException | IllegalArgumentException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_api-error")).queue();
+			channel.sendMessage(I18n.getString("err_api-error")).queue();
 		}
 	}
 

@@ -31,7 +31,6 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Tags;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -56,10 +55,10 @@ public class BroadcastCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-no-type")).queue();
+			channel.sendMessage(I18n.getString("err_broadcast-no-type")).queue();
 			return;
 		} else if (args.length < 2) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-no-message")).queue();
+			channel.sendMessage(I18n.getString("err_broadcast-no-message")).queue();
 			return;
 		}
 
@@ -107,7 +106,7 @@ public class BroadcastCommand implements Executable {
 				}
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 			}
-			default -> channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-invalid-type")).queue();
+			default -> channel.sendMessage(I18n.getString("err_broadcast-invalid-type")).queue();
 		}
 	}
 }

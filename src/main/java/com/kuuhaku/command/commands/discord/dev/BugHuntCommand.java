@@ -26,7 +26,6 @@ import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.persistence.NoResultException;
@@ -54,7 +53,7 @@ public class BugHuntCommand implements Executable {
 					}
 				}
 			} catch (ArrayIndexOutOfBoundsException e) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+				channel.sendMessage(I18n.getString("err_no-user")).queue();
 			}
 		}
 	}

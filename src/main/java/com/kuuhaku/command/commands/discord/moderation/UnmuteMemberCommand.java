@@ -26,7 +26,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -46,7 +45,7 @@ public class UnmuteMemberCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mention-required")).queue();
+			channel.sendMessage(I18n.getString("err_mention-required")).queue();
 			return;
 		} else if (!member.hasPermission(Permission.MESSAGE_MANAGE)) {
 			channel.sendMessage("❌ | Você não possui permissão para dessilenciar membros.").queue();

@@ -70,7 +70,7 @@ public class OpenTicketCommand implements Executable {
 		EmbedBuilder eb = new EmbedBuilder()
 				.setTitle("Ticket Nº " + number + "")
 				.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true)
-				.addField("Enviado em:", Helper.dateformat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
+				.addField("Enviado em:", Helper.fullDateFormat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
 				.addField("Descrição:", "```" + mensagem + "```", false)
 				.setFooter(author.getId())
 				.setColor(Color.yellow);
@@ -96,7 +96,7 @@ public class OpenTicketCommand implements Executable {
 									.queue(null, Helper::doNothing);
 							TicketDAO.setIds(number, ids);
 							s.delete().queue(null, Helper::doNothing);
-							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-opened-ticket")).queue();
+							channel.sendMessage(I18n.getString("str_successfully-opened-ticket")).queue();
 						}), true, 60, TimeUnit.SECONDS,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

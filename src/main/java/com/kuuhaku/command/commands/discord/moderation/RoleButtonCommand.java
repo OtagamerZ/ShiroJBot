@@ -27,13 +27,10 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.apache.commons.lang3.StringUtils;
-
-import java.text.MessageFormat;
 
 @Command(
 		name = "botaocargo",
@@ -53,22 +50,22 @@ public class RoleButtonCommand implements Executable {
 			channel.sendMessage("✅ | Botões atualizados com sucesso!").queue();
 			return;
 		} else if (args.length < 3) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-arguments")).queue();
+			channel.sendMessage(I18n.getString("err_role-chooser-invalid-arguments")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-message-id")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-message-id")).queue();
 			return;
 		} else if (message.getMentionedRoles().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-role")).queue();
+			channel.sendMessage(I18n.getString("err_role-chooser-invalid-role")).queue();
 			return;
 		} else if (message.getMentionedRoles().get(0).getPosition() > guild.getSelfMember().getRoles().get(0).getPosition()) {
 			channel.sendMessage("❌ | Não posso manipular cargos que estejam acima de mim.").queue();
 			return;
 		} else if (args[1].equals(Helper.CANCEL)) {
-			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-cannot-assign-role"), Helper.CANCEL)).queue();
+			channel.sendMessage(I18n.getString("err_role-chooser-cannot-assign-role", Helper.CANCEL)).queue();
 			return;
 		} else if (!EmojiUtils.containsEmoji(args[1]) && message.getEmotes().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid emote")).queue();
+			channel.sendMessage(I18n.getString("err_role-chooser-invalid emote")).queue();
 			return;
 		}
 
@@ -77,9 +74,9 @@ public class RoleButtonCommand implements Executable {
 
 			channel.sendMessage("✅ | Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc));
 		} catch (IllegalArgumentException e) {
-			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-argument-error"), e)).queue();
+			channel.sendMessage(I18n.getString("err_role-chooser-argument-error", e)).queue();
 		} catch (ErrorResponseException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-channel")).queue();
+			channel.sendMessage(I18n.getString("err_role-chooser-invalid-channel")).queue();
 		}
 	}
 }

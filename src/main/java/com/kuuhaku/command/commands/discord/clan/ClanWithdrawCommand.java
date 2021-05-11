@@ -31,7 +31,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -61,7 +60,7 @@ public class ClanWithdrawCommand implements Executable {
 			channel.sendMessage("❌ | Você precisa especificar uma quantia de créditos para serem sacados.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
 			return;
 		}
 

@@ -25,7 +25,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -55,7 +54,7 @@ public class AntiraidCommand implements Executable {
 				gc.setAntiRaid(true);
 				channel.sendMessage("✅ | Modo anti-raid ativado, expulsarei novos membros que tiverem uma conta com tempo menor que " + gc.getAntiRaidTime() + " minutos.").queue();
 			} catch (NumberFormatException e) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
+				channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
 			}
 		} else {
 			gc.toggleAntiRaid();

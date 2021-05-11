@@ -26,7 +26,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
@@ -53,7 +52,7 @@ public class MuteTimeCommand implements Executable {
 			gc.setMuteTime(time);
 			channel.sendMessage("✅ | Tempo de mute definido como " + time + " minutos com sucesso!").queue();
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-time")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-time")).queue();
 		}
 
 		GuildDAO.updateGuildSettings(gc);
