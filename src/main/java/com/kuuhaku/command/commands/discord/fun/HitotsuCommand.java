@@ -32,12 +32,10 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -58,7 +56,7 @@ public class HitotsuCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			channel.sendMessage(I18n.getString("err_no-user")).queue();
 			return;
 		} else if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
@@ -75,16 +73,16 @@ public class HitotsuCommand implements Executable {
 		for (User u : message.getMentionedUsers()) {
 			Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
 			if (k.getCards().size() < 25) {
-				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_not-enough-cards-mention"), u.getAsMention())).queue();
+				channel.sendMessage(I18n.getString("err_not-enough-cards-mention", u.getAsMention())).queue();
 				return;
 			} else if (Main.getInfo().getConfirmationPending().get(u.getId()) != null) {
 				channel.sendMessage("❌ | " + u.getAsMention() + " possui um comando com confirmação pendente, por favor espere ele resolve-lo antes de usar este comando novamente.").queue();
 				return;
 			} else if (Main.getInfo().gameInProgress(u.getId())) {
-				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_mention-in-game"), u.getAsMention())).queue();
+				channel.sendMessage(I18n.getString("err_mention-in-game", u.getAsMention())).queue();
 				return;
 			} else if (u.getId().equals(author.getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
+				channel.sendMessage(I18n.getString("err_cannot-play-with-yourself")).queue();
 				return;
 			}
 		}
@@ -95,17 +93,17 @@ public class HitotsuCommand implements Executable {
 		if (args.length > 1 && StringUtils.isNumeric(args[0])) {
 			bet = Integer.parseInt(args[0]);
 			if (bet < 0) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
+				channel.sendMessage(I18n.getString("err_invalid-credit-amount")).queue();
 				return;
 			} else if (acc.getBalance() < bet) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+				channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 				return;
 			}
 
 			for (User u : message.getMentionedUsers()) {
 				Account a = AccountDAO.getAccount(u.getId());
 				if (a.getBalance() < bet) {
-					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-mention"), u.getAsMention())).queue();
+					channel.sendMessage(I18n.getString("err_insufficient-credits-mention", u.getAsMention())).queue();
 					return;
 				}
 			}
@@ -114,7 +112,7 @@ public class HitotsuCommand implements Executable {
 		String id = author.getId() + "." + message.getMentionedUsers().stream().map(User::getId).collect(Collectors.joining(".")) + "." + guild.getId();
 
 		if (Main.getInfo().gameInProgress(author.getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+			channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 			return;
 		}
 
@@ -140,10 +138,10 @@ public class HitotsuCommand implements Executable {
 		channel.sendMessage(msg).queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (players.contains(mb.getUser())) {
 						if (Main.getInfo().gameInProgress(mb.getId())) {
-							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+							channel.sendMessage(I18n.getString("err_you-are-in-game")).queue();
 							return;
 						} else if (Main.getInfo().gameInProgress(author.getId())) {
-							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+							channel.sendMessage(I18n.getString("err_user-in-game")).queue();
 							return;
 						}
 

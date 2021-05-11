@@ -45,22 +45,22 @@ public class KickMemberCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedMembers().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mention-required")).queue();
+			channel.sendMessage(I18n.getString("err_mention-required")).queue();
 			return;
 		} else if (!member.hasPermission(Permission.KICK_MEMBERS)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_kick-not-allowed")).queue();
+			channel.sendMessage(I18n.getString("err_kick-not-allowed")).queue();
 			return;
 		}
 
 		for (Member mb : message.getMentionedMembers()) {
 			if (Helper.hasRoleHigherThan(mb, member)) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-kick-higher-role")).queue();
+				channel.sendMessage(I18n.getString("err_cannot-kick-higher-role")).queue();
 				return;
 			} else if (ShiroInfo.getStaff().contains(mb.getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-kick-staff")).queue();
+				channel.sendMessage(I18n.getString("err_cannot-kick-staff")).queue();
 				return;
 			} else if (Helper.hasRoleHigherThan(mb, guild.getSelfMember())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-kick-higher-role-me")).queue();
+				channel.sendMessage(I18n.getString("err_cannot-kick-higher-role-me")).queue();
 				return;
 			}
 		}

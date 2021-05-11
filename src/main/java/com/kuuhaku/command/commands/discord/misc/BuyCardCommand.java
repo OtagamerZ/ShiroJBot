@@ -33,7 +33,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -256,7 +255,7 @@ public class BuyCardCommand implements Executable {
 		FieldMarket fm = FieldMarketDAO.getCard(Integer.parseInt(args[0]));
 
 		if (buyer.getLoan() > 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-with-loan")).queue();
+			channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
 			return;
 		}
 
@@ -269,7 +268,7 @@ public class BuyCardCommand implements Executable {
 						channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
 						return;
 					} else if (buyer.getBalance() < (blackfriday ? cm.getPrice() * 0.75 : cm.getPrice())) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+						channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 						return;
 					}
 
@@ -338,7 +337,7 @@ public class BuyCardCommand implements Executable {
 						channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
 						return;
 					} else if (buyer.getBalance() < (blackfriday ? em.getPrice() * 0.75 : em.getPrice())) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+						channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 						return;
 					}
 
@@ -401,7 +400,7 @@ public class BuyCardCommand implements Executable {
 						channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
 						return;
 					} else if (buyer.getBalance() < (blackfriday ? fm.getPrice() * 0.75 : fm.getPrice())) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+						channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 						return;
 					}
 

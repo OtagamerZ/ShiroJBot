@@ -114,7 +114,7 @@ public class DashboardSocket extends WebSocketServer {
 					EmbedBuilder eb = new EmbedBuilder()
 							.setTitle("Feedback via site (Ticket Nº " + number + ")")
 							.addField("Enviador por:", t.getHolder(), true)
-							.addField("Enviado em:", Helper.dateformat.format(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
+							.addField("Enviado em:", Helper.fullDateFormat.format(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"))), true)
 							.addField("Assunto", payload.getString("subject"), false)
 							.addField("Mensagem:", "```" + payload.getString("message") + "```", false)
 							.setFooter(t.getUid())

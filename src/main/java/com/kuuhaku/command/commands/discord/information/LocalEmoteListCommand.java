@@ -27,7 +27,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -70,13 +69,13 @@ public class LocalEmoteListCommand implements Executable {
 					eb.addField(field);
 				}
 
-				eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_available-server-emotes"));
+				eb.setTitle(I18n.getString("str_available-server-emotes"));
 				Helper.finishEmbed(guild, pages, f, eb, i);
 			}
 
 			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 		} catch (IndexOutOfBoundsException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_emote-not-found")).queue();
+			channel.sendMessage(I18n.getString("err_emote-not-found")).queue();
 		}
 	}
 }

@@ -33,7 +33,6 @@ import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -73,7 +72,7 @@ public class ClearDeckCommand implements Executable {
 		eb.setImage("attachment://deque.jpg");
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-deck")).queue(m -> {
+		channel.sendMessage(I18n.getString("str_generating-deck")).queue(m -> {
 			try {
 				File f = Helper.writeAndGet(sd.view(kp), "deque", "jpg");
 				channel.sendMessage(eb.build()).addFile(f)

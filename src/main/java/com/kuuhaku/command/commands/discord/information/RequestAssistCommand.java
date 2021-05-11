@@ -67,7 +67,7 @@ public class RequestAssistCommand implements Executable {
 		eb.setTitle("Requisição de auxílio (Ticket Nº " + number + ")");
 		eb.addField("ID do servidor:", guild.getId(), true);
 		eb.addField("Requisitado por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
-		eb.addField("Requisitado em:", Helper.dateformat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
+		eb.addField("Requisitado em:", Helper.fullDateFormat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
 		eb.setFooter(author.getId());
 		eb.setColor(Color.cyan);
 
@@ -95,7 +95,7 @@ public class RequestAssistCommand implements Executable {
 								ia.setMaxUses(1).queue(i -> Main.getInfo().getRequests().put(guild.getId(), i));
 
 								s.delete().queue(null, Helper::doNothing);
-								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
+								channel.sendMessage(I18n.getString("str_successfully-requested-assist")).queue();
 								return null;
 							});
 

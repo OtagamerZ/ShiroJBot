@@ -33,7 +33,6 @@ import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Map;
@@ -58,16 +57,16 @@ public class CatchKawaiponCommand implements Executable {
 			channel.sendMessage("❌ | O spawn de Kawaipons está configurado no canal " + chn.getAsMention() + ", você não pode coletá-los aqui.").queue();
 			return;
 		} else if (kc == null) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-card")).queue();
+			channel.sendMessage(I18n.getString("err_no-card")).queue();
 			return;
 		}
 
 		int cost = kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * (kc.isFoil() ? 2 : 1);
 		if (acc.getTotalBalance() < cost) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 			return;
 		} else if (kp.getCards().contains(kc)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_card-owned")).queue();
+			channel.sendMessage(I18n.getString("err_card-owned")).queue();
 			return;
 		}
 

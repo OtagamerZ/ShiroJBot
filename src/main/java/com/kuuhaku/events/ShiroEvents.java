@@ -256,25 +256,25 @@ public class ShiroEvents extends ListenerAdapter {
 						channel.sendMessage("❌ | Comandos estão bloqueados neste canal").queue();
 						return;
 					} else if (author.getId().equals(Main.getSelfUser().getId())) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_human-command")).queue();
+						channel.sendMessage(I18n.getString("err_human-command")).queue();
 						return;
 					} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {
 						try {
-							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_nsfw-in-non-nsfw-channel")).queue();
+							channel.sendMessage(I18n.getString("err_nsfw-in-non-nsfw-channel")).queue();
 						} catch (InsufficientPermissionException ignore) {
 						}
 						return;
 					} else if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
 						try {
-							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_not-enough-permission")).queue();
+							channel.sendMessage(I18n.getString("err_not-enough-permission")).queue();
 						} catch (InsufficientPermissionException ignore) {
 						}
 						return;
 					} else if (blacklisted) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted")).queue();
+						channel.sendMessage(I18n.getString("err_user-blacklisted")).queue();
 						return;
 					} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited")).queue();
+						channel.sendMessage(I18n.getString("err_user-ratelimited")).queue();
 						Main.getInfo().getRatelimit().put(author.getId(), true);
 						return;
 					} else if (command.getMissingPerms(channel).length > 0) {

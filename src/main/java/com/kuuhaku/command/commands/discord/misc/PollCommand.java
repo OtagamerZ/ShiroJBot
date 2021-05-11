@@ -37,7 +37,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.awt.*;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -60,17 +59,17 @@ public class PollCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-no-question")).queue();
+			channel.sendMessage(I18n.getString("err_poll-no-question")).queue();
 			return;
 		}
 
 		String text = String.join(" ", args);
 
 		if (String.join(" ", args).length() < 10) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-too-short")).queue();
+			channel.sendMessage(I18n.getString("err_poll-too-short")).queue();
 			return;
 		} else if (text.length() > 2000 && !Helper.containsAll(text, ";", "[", "]")) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-too-long")).queue();
+			channel.sendMessage(I18n.getString("err_poll-too-long")).queue();
 			return;
 		}
 
@@ -97,7 +96,7 @@ public class PollCommand implements Executable {
 
 		Function<Message, Map<String, ThrowingBiConsumer<Member, Message>>> opts = null;
 		if (options != null && options.length() > 10) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-too-many-options")).queue();
+			channel.sendMessage(I18n.getString("err_poll-too-many-options")).queue();
 			return;
 		} else if (options != null) {
 			JSONArray finalOptions = options;
@@ -176,14 +175,14 @@ public class PollCommand implements Executable {
 			} catch (Exception e) {
 				try {
 					if (gc.getSuggestionChannel() == null)
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed")).queue();
+						channel.sendMessage(I18n.getString("err_send-embed")).queue();
 					else
-						channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed-in-channel"), gc.getSuggestionChannel().getAsMention())).queue();
+						channel.sendMessage(I18n.getString("err_send-embed-in-channel", gc.getSuggestionChannel().getAsMention())).queue();
 					return;
 				} catch (NullPointerException ex) {
 					gc.setSuggestionChannel(null);
 					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed")).queue();
+					channel.sendMessage(I18n.getString("err_send-embed")).queue();
 				}
 			}
 		}

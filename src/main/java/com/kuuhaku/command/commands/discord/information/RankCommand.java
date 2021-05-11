@@ -33,13 +33,11 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -105,7 +103,7 @@ public class RankCommand implements Executable {
 		String champ = "1 - %s %s %s".formatted(
 				global ? checkGuild(mbs.get(0)) : "",
 				checkUser(mbs.get(0)),
-				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL), mbs.get(0).getLevel())
+				I18n.getString(STR_LEVEL, mbs.get(0).getLevel())
 		);
 		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
@@ -114,7 +112,7 @@ public class RankCommand implements Executable {
 					i + 2,
 					global ? checkGuild(sub9.get(i)) : "",
 					checkUser(sub9.get(i)),
-					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL), sub9.get(i).getLevel())
+					I18n.getString(STR_LEVEL, sub9.get(i).getLevel())
 			));
 		}
 
@@ -131,7 +129,7 @@ public class RankCommand implements Executable {
 						i + 1,
 						global ? checkGuild(mbs.get(i)) : "",
 						checkUser(mbs.get(i)),
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL), mbs.get(i).getLevel())
+						I18n.getString(STR_LEVEL, mbs.get(i).getLevel())
 				));
 			}
 
@@ -145,7 +143,7 @@ public class RankCommand implements Executable {
 
 		String champ = "1 - %s %s".formatted(
 				checkUser(accs.get(0)),
-				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), Helper.separate(accs.get(0).getBalance()))
+				I18n.getString(STR_CREDIT, Helper.separate(accs.get(0).getBalance()))
 		);
 		List<Account> sub9 = accs.subList(1, Math.min(accs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
@@ -153,7 +151,7 @@ public class RankCommand implements Executable {
 			sub9Formatted.append("%s - %s %s\n".formatted(
 					i + 2,
 					checkUser(sub9.get(i)),
-					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), Helper.separate(sub9.get(i).getBalance()))
+					I18n.getString(STR_CREDIT, Helper.separate(sub9.get(i).getBalance()))
 			));
 		}
 
@@ -169,7 +167,7 @@ public class RankCommand implements Executable {
 				next10.append("%s - %s %s\n".formatted(
 						i + 1,
 						checkUser(accs.get(i)),
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT), accs.get(i).getBalance())
+						I18n.getString(STR_CREDIT, accs.get(i).getBalance())
 				));
 			}
 
@@ -183,7 +181,7 @@ public class RankCommand implements Executable {
 
 		String champ = "1 - %s %s".formatted(
 				checkUser(kps.get(0)),
-				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD), kps.get(0)[1])
+				I18n.getString(STR_CARD, kps.get(0)[1])
 		);
 		List<Object[]> sub9 = kps.subList(1, Math.min(kps.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
@@ -191,7 +189,7 @@ public class RankCommand implements Executable {
 			sub9Formatted.append("%s - %s %s\n".formatted(
 					i + 2,
 					checkUser(sub9.get(i)),
-					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD), sub9.get(i)[1])
+					I18n.getString(STR_CARD, sub9.get(i)[1])
 			));
 		}
 
@@ -207,7 +205,7 @@ public class RankCommand implements Executable {
 				next10.append("%s - %s %s\n".formatted(
 						i + 1,
 						checkUser(kps.get(i)),
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD), kps.get(i)[1])
+						I18n.getString(STR_CARD, kps.get(i)[1])
 				));
 			}
 
@@ -222,7 +220,7 @@ public class RankCommand implements Executable {
 
 		String champ = "1 - %s %s".formatted(
 				checkUser(mbs.get(0)),
-				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_TIME), DurationFormatUtils.formatDuration(mbs.get(0).getVoiceTime(), "d'd,' H'h', m'm e' s's'"))
+				I18n.getString(STR_TIME, DurationFormatUtils.formatDuration(mbs.get(0).getVoiceTime(), "d'd,' H'h', m'm e' s's'"))
 		);
 		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
@@ -230,7 +228,7 @@ public class RankCommand implements Executable {
 			sub9Formatted.append("%s - %s %s\n".formatted(
 					i + 2,
 					checkUser(sub9.get(i)),
-					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_TIME), DurationFormatUtils.formatDuration(sub9.get(i).getVoiceTime(), "d'd,' H'h', m'm e' s's'"))
+					I18n.getString(STR_TIME, DurationFormatUtils.formatDuration(sub9.get(i).getVoiceTime(), "d'd,' H'h', m'm e' s's'"))
 			));
 		}
 
@@ -246,7 +244,7 @@ public class RankCommand implements Executable {
 				next10.append("%s - %s %s\n".formatted(
 						i + 1,
 						checkUser(mbs.get(i)),
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_TIME), DurationFormatUtils.formatDuration(mbs.get(i).getVoiceTime(), "d'd,' H'h', m'm e' s's'"))
+						I18n.getString(STR_TIME, DurationFormatUtils.formatDuration(mbs.get(i).getVoiceTime(), "d'd,' H'h', m'm e' s's'"))
 				));
 			}
 
@@ -260,7 +258,7 @@ public class RankCommand implements Executable {
 
 		String champ = "1 - %s %s".formatted(
 				checkUser(accs.get(0)),
-				MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_PROFIT), Helper.separate(accs.get(0).getStocksProfit()))
+				I18n.getString(STR_PROFIT, Helper.separate(accs.get(0).getStocksProfit()))
 		);
 		List<Account> sub9 = accs.subList(1, Math.min(accs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
@@ -268,7 +266,7 @@ public class RankCommand implements Executable {
 			sub9Formatted.append("%s - %s %s\n".formatted(
 					i + 2,
 					checkUser(sub9.get(i)),
-					MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_PROFIT), Helper.separate(sub9.get(i).getStocksProfit()))
+					I18n.getString(STR_PROFIT, Helper.separate(sub9.get(i).getStocksProfit()))
 			));
 		}
 
@@ -284,7 +282,7 @@ public class RankCommand implements Executable {
 				next10.append("%s - %s %s\n".formatted(
 						i + 1,
 						checkUser(accs.get(i)),
-						MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_PROFIT), accs.get(i).getStocksProfit())
+						I18n.getString(STR_PROFIT, accs.get(i).getStocksProfit())
 				));
 			}
 
@@ -293,7 +291,7 @@ public class RankCommand implements Executable {
 	}
 
 	private void makeEmbed(boolean global, List<Page> pages, StringBuilder next10, EmbedBuilder eb, String aVoid) {
-		eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(SRT_USER_RANKING_TITLE), global ? ShiroInfo.getLocale(I18n.PT).getString(STR_GLOBAL) : ShiroInfo.getLocale(I18n.PT).getString(STR_LOCAL)));
+		eb.setTitle(I18n.getString(SRT_USER_RANKING_TITLE, global ? I18n.getString(STR_GLOBAL) : I18n.getString(STR_LOCAL)));
 		eb.addField(aVoid, next10.toString(), false);
 		eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 

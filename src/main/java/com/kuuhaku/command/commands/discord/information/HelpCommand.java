@@ -38,7 +38,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.*;
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -69,10 +68,9 @@ public class HelpCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, channel) && args.length == 0) {
-			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_TITLE));
+			eb.setTitle(I18n.getString(STR_COMMAND_LIST_TITLE));
 			eb.setDescription(
-					MessageFormat.format(
-							ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION),
+					I18n.getString(STR_COMMAND_LIST_DESCRIPTION,
 							prefix,
 							Arrays.stream(Category.values()).filter(c -> c.isEnabled(guild, author)).count(),
 							Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(guild, author)).count()
@@ -83,7 +81,7 @@ public class HelpCommand implements Executable {
 					eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
 			}
 
-			eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_tips"), Helper.VOID, true);
+			eb.addField(I18n.getString("str_tips"), Helper.VOID, true);
 
 			eb.setColor(Color.PINK);
 			eb.setFooter(ShiroInfo.getFullName(), null);
@@ -97,12 +95,12 @@ public class HelpCommand implements Executable {
 				ceb.setFooter(ShiroInfo.getFullName(), null);
 				ceb.setThumbnail(Objects.requireNonNull(Main.getShiroShards().getEmoteById(cat.getEmoteId())).getImageUrl());
 
-				ceb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_prefix"), prefix, cat.getCommands().size()));
+				ceb.setDescription(I18n.getString("str_prefix", prefix, cat.getCommands().size()));
 
 				if (!cat.isEnabled(guild, author))
 					continue;
 				if (cat.getCommands().isEmpty()) {
-					ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_empty-category"), cat.getDescription()), false);
+					ceb.addField(Helper.VOID, I18n.getString("str_empty-category", cat.getDescription()), false);
 					continue;
 				}
 
@@ -116,38 +114,37 @@ public class HelpCommand implements Executable {
 				}
 
 				ceb.addField(Helper.VOID, cat.getDescription() + "\n" + sb.toString().trim(), false);
-				ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-single-help-tip"), prefix), false);
+				ceb.addField(Helper.VOID, I18n.getString("str_command-list-single-help-tip", prefix), false);
 				pages.put(cat.getEmoteId(), new Page(PageType.EMBED, ceb.build()));
 			}
 
 			EmbedBuilder ceb = new ColorlessEmbedBuilder()
-					.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_tips-and-tricks"))
+					.setTitle(I18n.getString("str_tips-and-tricks"))
 					.setFooter(ShiroInfo.getFullName(), null)
 					.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getShiroShards().getEmoteById("684039810079522846")).getImageUrl()))
-					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_quick-emote-tip"), prefix), false)
-					.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_pagination-tip"), false)
-					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_waifu-tip"), prefix), false)
-					.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_exceed-tip"), false)
-					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_kawaipon-tip"), prefix), false)
-					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_edit-message-tip"), prefix), false)
-					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_loan-tip"), prefix), false)
-					.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_placeholder-tip"), prefix), false);
+					.addField(Helper.VOID, I18n.getString("str_quick-emote-tip", prefix), false)
+					.addField(Helper.VOID, I18n.getString("str_pagination-tip"), false)
+					.addField(Helper.VOID, I18n.getString("str_waifu-tip", prefix), false)
+					.addField(Helper.VOID, I18n.getString("str_exceed-tip"), false)
+					.addField(Helper.VOID, I18n.getString("str_kawaipon-tip", prefix), false)
+					.addField(Helper.VOID, I18n.getString("str_edit-message-tip", prefix), false)
+					.addField(Helper.VOID, I18n.getString("str_loan-tip", prefix), false)
+					.addField(Helper.VOID, I18n.getString("str_placeholder-tip", prefix), false);
 
 			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
 
 			channel.sendMessage(eb.build()).queue(s -> Pages.categorize(s, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())), Helper::doNothing);
 			return;
 		} else if (args.length == 0) {
-			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_TITLE));
+			eb.setTitle(I18n.getString(STR_COMMAND_LIST_TITLE));
 			eb.setDescription(
-					MessageFormat.format(
-							ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION),
+					I18n.getString(STR_COMMAND_LIST_DESCRIPTION,
 							prefix,
 							Arrays.stream(Category.values()).filter(c -> c.isEnabled(guild, author)).count(),
 							Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(guild, author)).count()
 					)
 			);
-			eb.appendDescription(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-alert"));
+			eb.appendDescription(I18n.getString("str_command-list-alert"));
 			StringBuilder sb = new StringBuilder();
 			for (Category cat : Category.values()) {
 				if (cat.isEnabled(guild, author)) {
@@ -180,7 +177,7 @@ public class HelpCommand implements Executable {
 			if (cmmd.getName().equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(guild, author))
 				found = true;
 			else if (cmmd.getName().equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(guild, author)) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_module-disabled")).queue();
+				channel.sendMessage(I18n.getString("err_module-disabled")).queue();
 				return;
 			}
 
@@ -189,7 +186,7 @@ public class HelpCommand implements Executable {
 					found = true;
 					break;
 				} else if (alias.equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(guild, author)) {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_module-disabled")).queue();
+					channel.sendMessage(I18n.getString("err_module-disabled")).queue();
 					return;
 				}
 			}
@@ -201,19 +198,19 @@ public class HelpCommand implements Executable {
 		}
 
 		if (cmd == null) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_command-not-found")).queue();
+			channel.sendMessage(I18n.getString("err_command-not-found")).queue();
 			return;
 		}
 
 		eb.setTitle(cmd.getName() + (cmd.getUsage() != null ? " " + cmd.getUsage() : ""));
 
-		StringBuilder aliases = new StringBuilder(ShiroInfo.getLocale(I18n.PT).getString("str_aliases")).append(" ");
+		StringBuilder aliases = new StringBuilder(I18n.getString("str_aliases")).append(" ");
 
 		for (String al : cmd.getAliases()) {
 			aliases.append("`").append(al).append("`  ");
 		}
 
-		eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-category"), cmd.getDescription(), cmd.getAliases().length != 0 ? aliases.toString().trim() + "\n" : "", cmd.getCategory().getName()));
+		eb.setDescription(I18n.getString("str_command-list-category", cmd.getDescription(), cmd.getAliases().length != 0 ? aliases.toString().trim() + "\n" : "", cmd.getCategory().getName()));
 
 		channel.sendMessage(eb.build()).queue();
 

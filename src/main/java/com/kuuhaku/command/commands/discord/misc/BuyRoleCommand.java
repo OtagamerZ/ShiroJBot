@@ -34,7 +34,6 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.PaidRole;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -115,7 +114,7 @@ public class BuyRoleCommand implements Executable {
 				channel.sendMessage("O cargo não existe mais no servidor, já removi da listagem.").queue();
 				return;
 			} else if (acc.getBalance() < pr.getPrice()) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+				channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 				return;
 			} else if (member.getRoles().contains(r)) {
 				channel.sendMessage("❌ | Você já possui esse cargo.").queue();
@@ -164,7 +163,7 @@ public class BuyRoleCommand implements Executable {
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId()))
 			);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-id-value")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-id-value")).queue();
 		}
 	}
 }

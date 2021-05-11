@@ -29,7 +29,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,16 +43,16 @@ public class TransferCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 2) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_transfer-no-amount")).queue();
+			channel.sendMessage(I18n.getString("err_transfer-no-amount")).queue();
 			return;
 		} else if (message.getMentionedUsers().isEmpty()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			channel.sendMessage(I18n.getString("err_no-user")).queue();
 			return;
 		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-to-yourself")).queue();
+			channel.sendMessage(I18n.getString("err_cannot-transfer-to-yourself")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
 			return;
 		}
 
@@ -67,13 +66,13 @@ public class TransferCommand implements Executable {
 		int liquidAmount = rawAmount - (victorious ? 0 : (int) Math.floor(rawAmount * tax));
 
 		if (from.getBalance() < rawAmount) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 			return;
 		} else if (rawAmount <= 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-negative-or-zero")).queue();
+			channel.sendMessage(I18n.getString("err_cannot-transfer-negative-or-zero")).queue();
 			return;
 		} else if (from.getLoan() > 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-with-loan")).queue();
+			channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
 			return;
 		}
 

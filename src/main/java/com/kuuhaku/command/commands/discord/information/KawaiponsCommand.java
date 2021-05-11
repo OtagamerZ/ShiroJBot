@@ -37,7 +37,6 @@ import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -62,7 +61,7 @@ public class KawaiponsCommand implements Executable {
 
     @Override
     public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-        channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-collection")).queue(m -> {
+        channel.sendMessage(I18n.getString("str_generating-collection")).queue(m -> {
             try {
                 Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
@@ -185,7 +184,7 @@ public class KawaiponsCommand implements Executable {
                     send(author, channel, m, collection, cards, rr.toString(), CardDAO.totalCards(rr));
                 }
             } catch (IOException | InterruptedException e) {
-                m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_collection-generation-error")).queue();
+                m.editMessage(I18n.getString("err_collection-generation-error")).queue();
                 Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
             }
         });

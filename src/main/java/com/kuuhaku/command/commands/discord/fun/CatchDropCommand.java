@@ -28,7 +28,6 @@ import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -49,7 +48,7 @@ public class CatchDropCommand implements Executable {
 			channel.sendMessage("❌ | O spawn de drops está configurado no canal " + chn.getAsMention() + ", você não pode coletá-los aqui.").queue();
 			return;
 		} else if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-captcha")).queue();
+			channel.sendMessage(I18n.getString("err_no-captcha")).queue();
 			return;
 		} else if (args[0].contains(Helper.ANTICOPY)) {
 			channel.sendMessage("❌ | Espertinho né? Que tal tentarmos sem `Ctrl+C / Ctrl+V` para ficar justo?").queue();
@@ -59,13 +58,13 @@ public class CatchDropCommand implements Executable {
 		Prize<?> p = Main.getInfo().getCurrentDrop().get(guild.getId());
 
 		if (p == null) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-drop")).queue();
+			channel.sendMessage(I18n.getString("err_no-drop")).queue();
 			return;
 		} else if (!p.getRequirement().getValue().apply(author)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_requirements-not-fulfilled")).queue();
+			channel.sendMessage(I18n.getString("err_requirements-not-fulfilled")).queue();
 			return;
 		} else if (!p.getRealCaptcha().equals(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-captcha")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-captcha")).queue();
 			return;
 		}
 

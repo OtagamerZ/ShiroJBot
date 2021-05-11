@@ -27,7 +27,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.ColorRole;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -56,13 +55,13 @@ public class ColorRoleCommand implements Executable {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (!guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_manage-roles")).queue();
+			channel.sendMessage(I18n.getString("err_manage-roles")).queue();
 			return;
 		} else if (args.length < 1) {
 			Set<ColorRole> roles = new TreeSet<>(Comparator.comparing(ColorRole::getName));
 			roles.addAll(gc.getColorRoles());
 			if (roles.isEmpty()) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-found")).queue();
+				channel.sendMessage(I18n.getString("err_color-not-found")).queue();
 				return;
 			}
 
@@ -105,7 +104,7 @@ public class ColorRoleCommand implements Executable {
 		String name = StringUtils.capitalize(args[0].toLowerCase(Locale.ROOT));
 
 		if (!roles.containsKey(name)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-registered")).queue();
+			channel.sendMessage(I18n.getString("err_color-not-registered")).queue();
 			return;
 		}
 

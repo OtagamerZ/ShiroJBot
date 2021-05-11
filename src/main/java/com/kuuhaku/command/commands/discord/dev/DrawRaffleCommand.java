@@ -26,7 +26,6 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Upvote;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.lang3.StringUtils;
@@ -48,10 +47,10 @@ public class DrawRaffleCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-period")).queue();
+			channel.sendMessage(I18n.getString("err_no-period")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-period")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-period")).queue();
 			return;
 		}
 
@@ -67,7 +66,7 @@ public class DrawRaffleCommand implements Executable {
 					.collect(Collectors.toList());
 
 			if (votes.isEmpty()) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_raffle-no-votes")).queue();
+				channel.sendMessage(I18n.getString("err_raffle-no-votes")).queue();
 				return;
 			} else if (amount > votes.stream().distinct().count()) {
 				channel.sendMessage("❌ | Não há usuários suficientes para sortear " + amount + " vencedores.").queue();

@@ -32,7 +32,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.CustomAnswer;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -58,10 +57,10 @@ public class CustomAnswerCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !GuildDAO.getGuildById(guild.getId()).isAnyTell()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-community-disabled")).queue();
+			channel.sendMessage(I18n.getString("err_custom-answer-community-disabled")).queue();
 			return;
 		} else if (args.length == 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-not-enough-args")).queue();
+			channel.sendMessage(I18n.getString("err_custom-answer-not-enough-args")).queue();
 			return;
 		} else if (args[0].equals("lista")) {
 			List<Page> pages = new ArrayList<>();
@@ -89,7 +88,7 @@ public class CustomAnswerCommand implements Executable {
 			List<CustomAnswer> ca = CustomAnswerDAO.getCAByGuild(guild.getId());
 			ca.removeIf(a -> !String.valueOf(a.getId()).equals(args[0]));
 			if (ca.isEmpty()) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-not-found")).queue();
+				channel.sendMessage(I18n.getString("err_custom-answer-not-found")).queue();
 				return;
 			}
 			CustomAnswer c = ca.get(0);
@@ -111,15 +110,15 @@ public class CustomAnswerCommand implements Executable {
 					CustomAnswerDAO.addCAtoDB(guild, txt[0].trim(), txt[1].trim());
 					channel.sendMessage("Agora quando alguém disser `" + txt[0] + "` irei responder `" + txt[1] + "`.").queue();
 				} else {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-reply-too-long")).queue();
+					channel.sendMessage(I18n.getString("err_custom-answer-reply-too-long")).queue();
 				}
 			} else if (txt[0].length() <= 3) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-trigger-too-short")).queue();
+				channel.sendMessage(I18n.getString("err_custom-answer-trigger-too-short")).queue();
 			} else {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-trigger-too-long")).queue();
+				channel.sendMessage(I18n.getString("err_custom-answer-trigger-too-long")).queue();
 			}
 		} else {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-invalid-arguments")).queue();
+			channel.sendMessage(I18n.getString("err_custom-answer-invalid-arguments")).queue();
 		}
 	}
 }

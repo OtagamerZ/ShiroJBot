@@ -31,7 +31,6 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.PaidRole;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -111,7 +110,7 @@ public class ConfigPaidRoleCommand implements Executable {
 		try {
 			int value = Integer.parseInt(args[0]);
 			if (value <= 0) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
+				channel.sendMessage(I18n.getString("err_invalid-credit-amount")).queue();
 				return;
 			}
 
@@ -130,7 +129,7 @@ public class ConfigPaidRoleCommand implements Executable {
 				channel.sendMessage("✅ | O cargo `" + r.getName() + "` agora poderá ser comprado por **" + Helper.separate(value) + " créditos**!").queue();
 			GuildDAO.updateGuildSettings(gc);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-price-time")).queue();
+			channel.sendMessage(I18n.getString("err_invalid-price-time")).queue();
 		} catch (IndexOutOfBoundsException e) {
 			channel.sendMessage("❌ | Você precisa mencionar um cargo.").queue();
 		}

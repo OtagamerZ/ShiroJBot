@@ -25,7 +25,6 @@ import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Blacklist;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 @Command(
@@ -46,7 +45,7 @@ public class BlacklistCommand implements Executable {
 					resolveBlacklistById(message.getAuthor(), args, channel);
 				}
 			} catch (ArrayIndexOutOfBoundsException e) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+				channel.sendMessage(I18n.getString("err_no-user")).queue();
 			}
 		}
 	}

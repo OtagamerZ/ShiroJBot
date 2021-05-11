@@ -29,7 +29,6 @@ import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.ExceedScore;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.tuple.Pair;
@@ -59,7 +58,7 @@ public class ExceedRankCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Gerando placares...").queue(m -> {
 			if (ExceedDAO.getExceed(author.getId()).isBlank()) {
-				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-rank-no-exceed")).queue();
+				m.editMessage(I18n.getString("err_exceed-rank-no-exceed")).queue();
 				return;
 			}
 
@@ -130,7 +129,7 @@ public class ExceedRankCommand implements Executable {
 					m.editMessage("❌ | Você precisa digitar `historico` se deseja ver o histórico de ranking, ou não digitar nada se deseja ver o ranking atual.").queue();
 				}
 			} catch (Exception e) {
-				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-rank")).queue();
+				m.editMessage(I18n.getString("err_exceed-rank")).queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
