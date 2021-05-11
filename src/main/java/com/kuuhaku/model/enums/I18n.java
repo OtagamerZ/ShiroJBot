@@ -44,7 +44,6 @@ public enum I18n {
 			prefix = key.split("_")[0];
 		else
 			prefix = "misc";
-		System.out.println(prefix);
 
 		if (params.length > 0)
 			return MessageFormat.format(ShiroInfo.getLocale(PT, prefix).getString(key), params);
