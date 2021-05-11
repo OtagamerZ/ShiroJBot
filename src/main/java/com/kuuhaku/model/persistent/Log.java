@@ -71,47 +71,23 @@ public class Log {
 		return guildId;
 	}
 
-	public void setGuildId(String guildId) {
-		this.guildId = guildId;
-	}
-
 	public String getUsr() {
 		return usr;
-	}
-
-	public void setUsr(String usr) {
-		this.usr = usr;
 	}
 
 	public String getUid() {
 		return uid;
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
-
 	public String getGuild() {
 		return guild;
-	}
-
-	public void setGuild(String guild) {
-		this.guild = guild;
 	}
 
 	public String getCommand() {
 		return command;
 	}
 
-	public void setCommand(String command) {
-		this.command = command;
-	}
-
 	public String getTimestamp() {
 		return timestamp;
-	}
-
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
 	}
 }
