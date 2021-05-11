@@ -15,16 +15,10 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais e melhoria nas bordas das raridades">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/common.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/common.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/legendary.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/legendary.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/rare.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/rare.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/ultra_rare.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/ultra_rare.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/uncommon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/uncommon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old/common.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old/common.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old/legendary.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old/legendary.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old/rare.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old/rare.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old/ultra_rare.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old/ultra_rare.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old/uncommon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old/uncommon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1196,14 +1190,7 @@
       <workItem from="1620403337331" duration="11318000" />
       <workItem from="1620416460646" duration="590000" />
       <workItem from="1620734580665" duration="3170000" />
-      <workItem from="1620749133558" duration="5990000" />
-    </task>
-    <task id="LOCAL-04348" summary="Correções gerais">
-      <created>1620327029282</created>
-      <option name="number" value="04348" />
-      <option name="presentableId" value="LOCAL-04348" />
-      <option name="project" value="LOCAL" />
-      <updated>1620327029283</updated>
+      <workItem from="1620749133558" duration="7328000" />
     </task>
     <task id="LOCAL-04349" summary="Correções gerais">
       <created>1620327997081</created>
@@ -1541,7 +1528,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620752979199</updated>
     </task>
-    <option name="localTasksCounter" value="4397" />
+    <task id="LOCAL-04397" summary="Correções gerais e melhoria nas bordas das raridades">
+      <created>1620757641784</created>
+      <option name="number" value="04397" />
+      <option name="presentableId" value="LOCAL-04397" />
+      <option name="project" value="LOCAL" />
+      <updated>1620757641784</updated>
+    </task>
+    <option name="localTasksCounter" value="4398" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
