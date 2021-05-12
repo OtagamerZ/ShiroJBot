@@ -15,11 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no efeito da raça demônio">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/StandoffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/StandoffCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/common.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/common.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/rare.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/rare.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/ultra_rare.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/ultra_rare.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/uncommon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/uncommon.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1194,14 +1189,7 @@
       <workItem from="1620416460646" duration="590000" />
       <workItem from="1620734580665" duration="3170000" />
       <workItem from="1620749133558" duration="8234000" />
-      <workItem from="1620820840715" duration="7531000" />
-    </task>
-    <task id="LOCAL-04350" summary="Correções gerais">
-      <created>1620328504946</created>
-      <option name="number" value="04350" />
-      <option name="presentableId" value="LOCAL-04350" />
-      <option name="project" value="LOCAL" />
-      <updated>1620328504947</updated>
+      <workItem from="1620820840715" duration="8277000" />
     </task>
     <task id="LOCAL-04351" summary="Correções gerais">
       <created>1620331587186</created>
@@ -1539,7 +1527,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620762876499</updated>
     </task>
-    <option name="localTasksCounter" value="4399" />
+    <task id="LOCAL-04399" summary="Melhoria no efeito da raça demônio">
+      <created>1620831214766</created>
+      <option name="number" value="04399" />
+      <option name="presentableId" value="LOCAL-04399" />
+      <option name="project" value="LOCAL" />
+      <updated>1620831214767</updated>
+    </task>
+    <option name="localTasksCounter" value="4400" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
