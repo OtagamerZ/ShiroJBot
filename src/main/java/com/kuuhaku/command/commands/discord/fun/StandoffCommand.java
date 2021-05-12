@@ -68,7 +68,7 @@ public class StandoffCommand implements Executable {
 			if (!Helper.between(level, 0, 4)) throw new NumberFormatException();
 
 			int min = 100 + ((3 - level) * 75);
-			int max = Helper.rng(700 - (level * 100), false) + guild.getJDA().getRestPing().complete().intValue();
+			int max = Helper.rng(700 - (level * 100), false);
 			int time = min + max;
 			AtomicLong start = new AtomicLong(0);
 
