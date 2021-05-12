@@ -170,7 +170,7 @@ public class Kawaipon implements Cloneable {
 
 	public boolean hasInvalidEquipmentCopyCount() {
 		return equipments.stream().distinct().anyMatch(c -> Collections.frequency(equipments, c) > getEquipmentMaxCopies(c))
-			   || equipments.stream().filter(c -> c.getTier() == 4).count() > getEquipmentMaxCopies(true);
+			   || equipments.stream().filter(c -> c.getTier() == 4).count() > getEquipmentMaxCopies(4);
 	}
 
 	public boolean hasTierFour() {
@@ -237,19 +237,11 @@ public class Kawaipon implements Cloneable {
 
 	public int getEquipmentMaxCopies(Equipment eq) {
 		if (eq == null) return 0;
-		else if (eq.getTier() == 4) {
-			return getCombo().getLeft() == Race.BESTIAL ? 2 : 1;
-		} else {
-			return getCombo().getLeft() == Race.BESTIAL ? 4 : 3;
-		}
+		return 5 - eq.getTier() + (getCombo().getLeft() == Race.BESTIAL ? 1 : 0);
 	}
 
-	public int getEquipmentMaxCopies(boolean mythic) {
-		if (mythic) {
-			return getCombo().getLeft() == Race.BESTIAL ? 2 : 1;
-		} else {
-			return getCombo().getLeft() == Race.BESTIAL ? 4 : 3;
-		}
+	public int getEquipmentMaxCopies(int tier) {
+		return 5 - tier + (getCombo().getLeft() == Race.BESTIAL ? 1 : 0);
 	}
 
 	public boolean checkChampion(Champion c, TextChannel channel) {
