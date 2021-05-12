@@ -13,12 +13,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais e melhoria nas bordas das raridades">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no efeito da raça demônio">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/StandoffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/StandoffCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/common.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/common.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/rare.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/rare.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/ultra_rare.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/ultra_rare.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/uncommon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new/uncommon.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,11 +126,11 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JAVA&#10;JavaScript&#10;GenericSQL&#10;TEXT" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JavaScript&#10;JAVA&#10;GenericSQL&#10;TEXT" />
     <property name="database.data.extractors.current.export.id" value="SQL Inserts" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
-    <property name="last.edited.regexp" value="cmd_aaa-bbb" />
+    <property name="last.edited.regexp" value="aaaa111" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
@@ -160,11 +161,11 @@
       <recent name="com.kuuhaku.handlers.games.rpg.Utils" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames\old" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\avatar" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners\apprentice" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\banners\initiate" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source\trophy.xcf" />
     </key>
     <key name="IntroduceConstantDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.managers.CommandManager" />
@@ -201,13 +202,15 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -1190,14 +1193,8 @@
       <workItem from="1620403337331" duration="11318000" />
       <workItem from="1620416460646" duration="590000" />
       <workItem from="1620734580665" duration="3170000" />
-      <workItem from="1620749133558" duration="7328000" />
-    </task>
-    <task id="LOCAL-04349" summary="Correções gerais">
-      <created>1620327997081</created>
-      <option name="number" value="04349" />
-      <option name="presentableId" value="LOCAL-04349" />
-      <option name="project" value="LOCAL" />
-      <updated>1620327997081</updated>
+      <workItem from="1620749133558" duration="8234000" />
+      <workItem from="1620820840715" duration="7531000" />
     </task>
     <task id="LOCAL-04350" summary="Correções gerais">
       <created>1620328504946</created>
@@ -1535,7 +1532,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620757641784</updated>
     </task>
-    <option name="localTasksCounter" value="4398" />
+    <task id="LOCAL-04398" summary="Melhoria no efeito da raça demônio">
+      <created>1620762876498</created>
+      <option name="number" value="04398" />
+      <option name="presentableId" value="LOCAL-04398" />
+      <option name="project" value="LOCAL" />
+      <updated>1620762876499</updated>
+    </task>
+    <option name="localTasksCounter" value="4399" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1622,7 +1626,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no gráfico de estatísticas sobre a Shiro" />
     <MESSAGE value="Correção no Hitotsu" />
     <MESSAGE value="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;" />
     <MESSAGE value="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;&#10;Campeões sem efeito agora possuem 125% dos atributos;" />
@@ -1647,7 +1650,8 @@
     <MESSAGE value="Atualização da biblioteca JDA" />
     <MESSAGE value="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE." />
     <MESSAGE value="Correções gerais e melhoria nas bordas das raridades" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções gerais e melhoria nas bordas das raridades" />
+    <MESSAGE value="Melhoria no efeito da raça demônio" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no efeito da raça demônio" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
