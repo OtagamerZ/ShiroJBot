@@ -196,7 +196,7 @@ public class SynthesizeCardCommand implements Executable {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
-									if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= kp.getEquipmentMaxCopies(true) && e.getTier() == 4) || kp.getEvoWeight() + e.getWeight(kp) > 24) {
+									if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= kp.getEquipmentMaxCopies(4) && e.getTier() == 4) || kp.getEvoWeight() + e.getWeight(kp) > 24) {
 										int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
 
 										Account acc = AccountDAO.getAccount(author.getId());
