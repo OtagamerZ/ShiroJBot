@@ -72,15 +72,13 @@ public class InvestCommand implements Executable {
 		if (acc.getBalance() < amount) {
 			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
 			return;
-		} else if (sm.getInvestment() + amount >= 100000) {
+		} else if (sm.getInvestment() + amount >= 1000) {
 			channel.sendMessage("❌ | O limite máximo por carta é 100.000 ações.").queue();
 			return;
 		}
 
 		StockValue sv = StockMarketDAO.getValues().get(c.getId());
-		double growth = 1 + sv.getGrowth();
-
-		int readjust = growth == 0 ? 0 : (int) Math.round(amount / growth);
+		double readjust = Helper.round(amount / (double) sv.getValue(), 3);
 
 		sm.setInvestment(sm.getInvestment() + readjust);
 
