@@ -13,13 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Segunda tentativa na centralização dos decks">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckNameCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de comando para nomear decks">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckNameCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckNameCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Deck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1194,13 +1191,6 @@
       <workItem from="1620749133558" duration="8234000" />
       <workItem from="1620820840715" duration="10604000" />
     </task>
-    <task id="LOCAL-04361" summary="Atualização da biblioteca JDA">
-      <created>1620411514116</created>
-      <option name="number" value="04361" />
-      <option name="presentableId" value="LOCAL-04361" />
-      <option name="project" value="LOCAL" />
-      <updated>1620411514116</updated>
-    </task>
     <task id="LOCAL-04362" summary="Atualização da biblioteca JDA">
       <created>1620412306843</created>
       <option name="number" value="04362" />
@@ -1537,7 +1527,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620932816030</updated>
     </task>
-    <option name="localTasksCounter" value="4410" />
+    <task id="LOCAL-04410" summary="Adição de comando para nomear decks">
+      <created>1620934075206</created>
+      <option name="number" value="04410" />
+      <option name="presentableId" value="LOCAL-04410" />
+      <option name="project" value="LOCAL" />
+      <updated>1620934075206</updated>
+    </task>
+    <option name="localTasksCounter" value="4411" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1624,7 +1621,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;" />
     <MESSAGE value="Novo comando de trocas;&#10;Novas máscaras para o comando GuessTheCards;&#10;Campeões sem efeito agora possuem 125% dos atributos;" />
     <MESSAGE value="Correção referente ao último commit" />
     <MESSAGE value="Adição de nova escala no gráfico sobre a Shiro" />
@@ -1649,7 +1645,8 @@
     <MESSAGE value="Correções gerais e melhoria nas bordas das raridades" />
     <MESSAGE value="Melhoria no efeito da raça demônio" />
     <MESSAGE value="Segunda tentativa na centralização dos decks" />
-    <option name="LAST_COMMIT_MESSAGE" value="Segunda tentativa na centralização dos decks" />
+    <MESSAGE value="Adição de comando para nomear decks" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de comando para nomear decks" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

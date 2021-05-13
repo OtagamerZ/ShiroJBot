@@ -150,6 +150,7 @@ public class DeckStashCommand implements Executable {
 			channel.sendMessage("✅ | Deck alternado com sucesso.").queue();
 		} catch (NumberFormatException e) {
 			Deck dk = kp.getDecks().stream()
+					.filter(d -> d.getName() != null)
 					.filter(d -> d.getName().equalsIgnoreCase(args[0]))
 					.findFirst()
 					.orElse(null);
