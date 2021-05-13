@@ -19,9 +19,6 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.OnDelete;
@@ -48,21 +45,6 @@ public class Kawaipon implements Cloneable {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<KawaiponCard> cards = new HashSet<>();
 
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private List<Champion> champions = new ArrayList<>();
-
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private List<Equipment> equipments = new ArrayList<>();
-
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private List<Field> fields = new ArrayList<>();
-
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int activeDeck = 0;
 
@@ -71,9 +53,6 @@ public class Kawaipon implements Cloneable {
 	@JoinColumn(name = "kawaipon_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Deck> decks = new ArrayList<>();
-
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String destinyDraw = "";
 
 	public String getUid() {
 		return uid;
@@ -116,6 +95,17 @@ public class Kawaipon implements Cloneable {
 	}
 
 	public List<Deck> getDecks() {
+		if (uid == null) {
+			decks.add(new Deck());
+		} else {
+			Account acc = AccountDAO.getAccount(uid);
+			if (decks.size() < acc.getStashCapacity()) {
+				for (int i = 0; i < acc.getStashCapacity(); i++) {
+					decks.add(new Deck());
+				}
+			}
+		}
+
 		return decks;
 	}
 
