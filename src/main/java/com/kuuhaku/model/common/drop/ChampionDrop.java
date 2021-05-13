@@ -24,6 +24,7 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -38,8 +39,9 @@ public class ChampionDrop extends Drop<Champion> {
 	@Override
 	public void award(User u) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		if (kp.getChampions().size() < 36 && kp.getChampionCopies(getPrize().getCard()) < kp.getChampionMaxCopies()) {
-			kp.addChampion(getPrize());
+		Deck dk = kp.getDeck();
+		if (dk.getChampions().size() < 36 && dk.getChampionCopies(getPrize().getCard()) < dk.getChampionMaxCopies()) {
+			dk.addChampion(getPrize());
 		} else {
 			awardInstead(u, getPrize().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE);
 			return;
@@ -63,7 +65,8 @@ public class ChampionDrop extends Drop<Champion> {
 	@Override
 	public String toString(User u) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		if (kp.getChampions().size() < 36)
+		Deck dk = kp.getDeck();
+		if (dk.getChampions().size() < 36)
 			return "Campeão " + getPrize().getCard().getName();
 		else
 			return "~~Campeão %s~~\n(convertido em %s créditos)".formatted(

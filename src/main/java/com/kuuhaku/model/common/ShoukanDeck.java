@@ -25,8 +25,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.model.persistent.DeckStash;
-import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -57,17 +56,17 @@ public class ShoukanDeck {
 		this.clan = null;
 	}
 
-	public BufferedImage view(Kawaipon kp) throws IOException {
-		List<Champion> champs = kp.getChampions();
-		List<Equipment> equips = kp.getEquipments();
-		List<Field> fields = kp.getFields();
+	public BufferedImage view(Deck dk) throws IOException {
+		List<Champion> champs = dk.getChampions();
+		List<Equipment> equips = dk.getEquipments();
+		List<Field> fields = dk.getFields();
 
 		champs = champs.stream()
 				.peek(c -> c.setAcc(acc))
 				.collect(Collectors.toList());
 		equips = equips.stream()
 				.peek(e -> e.setAcc(acc))
-				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(Math.max(e.getWeight(kp) - 1, 0), new Equipment())).stream())
+				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(Math.max(e.getWeight(dk) - 1, 0), new Equipment())).stream())
 				.collect(Collectors.toList());
 		fields = fields.stream()
 				.peek(f -> f.setAcc(acc))
@@ -87,7 +86,7 @@ public class ShoukanDeck {
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / SENSHI_COLUMNS) {
 			Champion c = champs.get(i);
 			g2d.drawImage(c.drawCard(false), 95 + 279 * (i - SENSHI_COLUMNS * y), 349 + 419 * y, null);
-			if (kp.getDestinyDraw() != null && kp.getDestinyDraw().contains(i))
+			if (dk.getDestinyDraw() != null && dk.getDestinyDraw().contains(i))
 				g2d.drawImage(destiny, 85 + 279 * (i - SENSHI_COLUMNS * y), 339 + 419 * y, null);
 			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 225, 95 + 279 * (i - SENSHI_COLUMNS * y), 739 + 419 * y, g2d);
 		}
@@ -109,73 +108,11 @@ public class ShoukanDeck {
 			Profile.printCenteredString(StringUtils.abbreviate(f.getCard().getName(), 15), 225, 1769, 1159 + (419 * i), g2d);
 		}
 
-		Pair<Race, Race> combo = kp.getCombo();
+		Pair<Race, Race> combo = dk.getCombo();
 		if (combo.getLeft() != Race.NONE)
 			g2d.drawImage(combo.getLeft().getIcon(), 1233, 122, 128, 128, null);
 		if (combo.getRight() != Race.NONE)
 			g2d.drawImage(combo.getRight().getIcon(), 1381, 136, 100, 100, null);
-
-		g2d.dispose();
-		return deck;
-	}
-
-	public BufferedImage view(DeckStash ds) throws IOException {
-		List<Champion> champs = ds.getChampions();
-		List<Equipment> equips = ds.getEquipments();
-		List<Field> fields = ds.getFields();
-
-		champs = champs.stream()
-				.peek(c -> c.setAcc(acc))
-				.collect(Collectors.toList());
-		equips = equips.stream()
-				.peek(e -> e.setAcc(acc))
-				.flatMap(e -> ListUtils.union(List.of(e), Collections.nCopies(e.getWeight(ds) - 1, new Equipment())).stream())
-				.collect(Collectors.toList());
-		fields = fields.stream()
-				.peek(f -> f.setAcc(acc))
-				.collect(Collectors.toList());
-
-		BufferedImage deck = Helper.getResourceAsImage(this.getClass(), "shoukan/deck.jpg");
-		BufferedImage destiny = Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/destiny.png");
-
-		assert deck != null;
-		Graphics2D g2d = deck.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 30));
-
-		g2d.drawImage(acc.getFrame().getBack(acc), 1746, 2241, null);
-
-		for (int i = 0, y = 0; i < champs.size(); i++, y = i / SENSHI_COLUMNS) {
-			Champion c = champs.get(i);
-			g2d.drawImage(c.drawCard(false), 95 + 279 * (i - SENSHI_COLUMNS * y), 349 + 419 * y, null);
-			if (ds.getDestinyDraw() != null && ds.getDestinyDraw().contains(i))
-				g2d.drawImage(destiny, 85 + 279 * (i - SENSHI_COLUMNS * y), 339 + 419 * y, null);
-			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 225, 95 + 279 * (i - SENSHI_COLUMNS * y), 739 + 419 * y, g2d);
-		}
-
-		BufferedImage slotLock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/slot_lock.png")));
-		for (int i = 0, y = 0; i < equips.size(); i++, y = i / EVOGEAR_COLUMNS) {
-			Equipment e = equips.get(i);
-			if (e.getTier() == 0)
-				g2d.drawImage(slotLock, 2048 + 279 * (i - EVOGEAR_COLUMNS * y), 349 + 419 * y, null);
-			else {
-				g2d.drawImage(e.drawCard(false), 2048 + 279 * (i - EVOGEAR_COLUMNS * y), 349 + 419 * y, null);
-				Profile.printCenteredString(StringUtils.abbreviate(e.getCard().getName(), 15), 225, 2048 + 279 * (i - EVOGEAR_COLUMNS * y), 739 + 419 * y, g2d);
-			}
-		}
-
-		for (int i = 0; i < fields.size(); i++) {
-			Field f = fields.get(i);
-			g2d.drawImage(f.drawCard(false), 1769, 769 + (419 * i), null);
-			Profile.printCenteredString(StringUtils.abbreviate(f.getCard().getName(), 15), 225, 1769, 1159 + (419 * i), g2d);
-		}
-
-		Pair<Race, Race> combo = ds.getCombo();
-		if (combo.getLeft() != Race.NONE)
-			g2d.drawImage(combo.getLeft().getIcon(), 1233, 122, 128, 128, null);
-		if (combo.getRight() != Race.NONE)
-			g2d.drawImage(combo.getRight().getIcon(), 1381, 147, 78, 78, null);
 
 		g2d.dispose();
 		return deck;

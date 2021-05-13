@@ -60,7 +60,7 @@ public class Clan {
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private DeckStash deck = new DeckStash();
+	private Deck clanDeck = new Deck();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> transactions = new ArrayList<>();
@@ -242,12 +242,12 @@ public class Clan {
 		transactions.add(u.getAsTag() + " evoluiu o tier do clã por " + Helper.separate(tier) + " créditos.");
 	}
 
-	public DeckStash getDeck() {
-		return deck;
+	public Deck getDeck() {
+		return clanDeck;
 	}
 
-	public void setDeck(DeckStash deck) {
-		this.deck = deck;
+	public void setDeck(Deck clanDeck) {
+		this.clanDeck = clanDeck;
 	}
 
 	public List<String> getTransactions() {

@@ -21,6 +21,12 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.OnDelete;
@@ -28,7 +34,10 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "deck")
@@ -66,7 +75,7 @@ public class Deck {
 		this.id = id;
 	}
 
-	/*public Champion getChampion(Card card) {
+	public Champion getChampion(Card card) {
 		return champions.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
 	}
 
@@ -416,5 +425,5 @@ public class Deck {
 		}
 
 		return false;
-	}*/
+	}
 }

@@ -24,6 +24,7 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -38,8 +39,9 @@ public class FieldDrop extends Drop<Field> {
 	@Override
 	public void award(User u) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		if (kp.getFields().size() < 3) {
-			kp.addField(getPrize());
+		Deck dk = kp.getDeck();
+		if (dk.getFields().size() < 3) {
+			dk.addField(getPrize());
 		} else {
 			awardInstead(u, Helper.BASE_FIELD_PRICE);
 		}
@@ -62,7 +64,8 @@ public class FieldDrop extends Drop<Field> {
 	@Override
 	public String toString(User u) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		if (kp.getFields().size() < 3)
+		Deck dk = kp.getDeck();
+		if (dk.getFields().size() < 3)
 			return "Campo " + getPrize().getCard().getName();
 		else
 			return "~~Campo %s~~\n(convertido em %s créditos)".formatted(

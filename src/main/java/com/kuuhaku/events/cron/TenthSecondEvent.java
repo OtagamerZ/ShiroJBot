@@ -283,19 +283,7 @@ public class TenthSecondEvent implements Job {
 					return;
 
 				Kawaipon kp = KawaiponDAO.getKawaipon(msg.getAuthor().getId());
-				if (kp.getChampions().size() < 30) {
-					p1Channel.sendMessage("❌ | Você está com um deck que possui menos que 30 cartas. Você precisa corrigir antes de poder aceitar a partida.").queue();
-					return;
-				} else if (kp.getEvoWeight() > 24) {
-					p1Channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, você precisa corrigir antes de poder aceitar a partida.").queue();
-					return;
-				} else if (kp.hasInvalidChampionCopyCount()) {
-					p1Channel.sendMessage("❌ | Seus campeões ultrapassam o limite máximo de cópias permitidas, você precisa corrigir antes de poder aceitar a partida.").queue();
-					return;
-				} else if (kp.hasInvalidEquipmentCopyCount()) {
-					p1Channel.sendMessage("❌ | Seus equipamentos ultrapassam o limite máximo de cópias permitidas, você precisa corrigir antes de poder aceitar a partida.").queue();
-					return;
-				}
+				if (kp.getDeck().hasInvalidDeck(p1Channel)) return;
 
 				if (p1Channel.getId().equals(p2Channel.getId()))
 					msg.addReaction(Helper.ACCEPT)
@@ -360,19 +348,7 @@ public class TenthSecondEvent implements Job {
 					return;
 
 				Kawaipon kp = KawaiponDAO.getKawaipon(msg.getAuthor().getId());
-				if (kp.getChampions().size() < 30) {
-					p1Channel.sendMessage("❌ | Você está com um deck que possui menos que 30 cartas. Você precisa corrigir antes de poder aceitar a partida.").queue();
-					return;
-				} else if (kp.getEvoWeight() > 24) {
-					p1Channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, você precisa corrigir antes de poder aceitar a partida.").queue();
-					return;
-				} else if (kp.hasInvalidChampionCopyCount()) {
-					p1Channel.sendMessage("❌ | Seus campeões ultrapassam o limite máximo de cópias permitidas, você precisa corrigir antes de poder aceitar a partida.").queue();
-					return;
-				} else if (kp.hasInvalidEquipmentCopyCount()) {
-					p1Channel.sendMessage("❌ | Seus equipamentos ultrapassam o limite máximo de cópias permitidas, você precisa corrigir antes de poder aceitar a partida.").queue();
-					return;
-				}
+				if (kp.getDeck().hasInvalidDeck(p1Channel)) return;
 
 				if (p1Channel.getId().equals(p2Channel.getId()))
 					msg.addReaction(Helper.ACCEPT)
