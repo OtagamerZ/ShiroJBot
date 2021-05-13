@@ -1187,20 +1187,6 @@
       <workItem from="1620749133558" duration="8234000" />
       <workItem from="1620820840715" duration="10604000" />
     </task>
-    <task id="LOCAL-04354" summary="Atualização da biblioteca JDA">
-      <created>1620334787161</created>
-      <option name="number" value="04354" />
-      <option name="presentableId" value="LOCAL-04354" />
-      <option name="project" value="LOCAL" />
-      <updated>1620334787162</updated>
-    </task>
-    <task id="LOCAL-04355" summary="Atualização da biblioteca JDA">
-      <created>1620404115344</created>
-      <option name="number" value="04355" />
-      <option name="presentableId" value="LOCAL-04355" />
-      <option name="project" value="LOCAL" />
-      <updated>1620404115345</updated>
-    </task>
     <task id="LOCAL-04356" summary="Atualização da biblioteca JDA">
       <created>1620405693837</created>
       <option name="number" value="04356" />
@@ -1530,7 +1516,21 @@
       <option name="project" value="LOCAL" />
       <updated>1620930825796</updated>
     </task>
-    <option name="localTasksCounter" value="4403" />
+    <task id="LOCAL-04403" summary="Segunda tentativa na centralização dos decks">
+      <created>1620931044927</created>
+      <option name="number" value="04403" />
+      <option name="presentableId" value="LOCAL-04403" />
+      <option name="project" value="LOCAL" />
+      <updated>1620931044928</updated>
+    </task>
+    <task id="LOCAL-04404" summary="Segunda tentativa na centralização dos decks">
+      <created>1620931154263</created>
+      <option name="number" value="04404" />
+      <option name="presentableId" value="LOCAL-04404" />
+      <option name="project" value="LOCAL" />
+      <updated>1620931154263</updated>
+    </task>
+    <option name="localTasksCounter" value="4405" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
