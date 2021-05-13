@@ -75,8 +75,8 @@ public class Account {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int bugs = 0;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 1")
-	private int stashCapacity = 1;
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 2")
+	private int stashCapacity = 2;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean remind = false;
