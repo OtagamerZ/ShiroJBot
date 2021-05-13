@@ -18,38 +18,24 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-import net.dv8tion.jda.api.entities.TextChannel;
-import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "kawaipon")
-public class Kawaipon implements Cloneable {
+@Table(name = "deck")
+public class Deck {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''", unique = true)
-	private String uid = "";
-
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "kawaipon_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Set<KawaiponCard> cards = new HashSet<>();
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
@@ -66,70 +52,21 @@ public class Kawaipon implements Cloneable {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Field> fields = new ArrayList<>();
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int activeDeck = 0;
-
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany
-	@JoinColumn(name = "kawaipon_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private List<Deck> decks = new ArrayList<>();
-
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String destinyDraw = "";
 
-	public String getUid() {
-		return uid;
+	public Deck() {
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
+	public int getId() {
+		return id;
 	}
 
-	public KawaiponCard getCard(Card card, boolean foil) {
-		return cards.stream().filter(k -> k.getCard().equals(card) && k.isFoil() == foil).findFirst().orElse(null);
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public Set<KawaiponCard> getCards() {
-		return cards;
-	}
-
-	public void setCards(Set<KawaiponCard> cards) {
-		this.cards = cards;
-	}
-
-	public void addCards(Set<KawaiponCard> cards) {
-		this.cards.addAll(cards);
-	}
-
-	public void addCard(KawaiponCard card) {
-		this.cards.add(card);
-	}
-
-	public void removeCard(KawaiponCard card) {
-		this.cards.remove(card);
-	}
-
-	public void removeCards(Set<KawaiponCard> cards) {
-		this.cards.removeAll(cards);
-	}
-
-	public Deck getDeck() {
-		Account acc = AccountDAO.getAccount(uid);
-		if (decks.size() < acc.getStashCapacity()) {
-			for (int i = 0; i < acc.getStashCapacity(); i++) {
-				decks.add(new Deck());
-			}
-		}
-
-		return decks.get(activeDeck);
-	}
-
-	public void setDeck(int i) {
-		this.activeDeck = i;
-	}
-
-	public Champion getChampion(Card card) {
+	/*public Champion getChampion(Card card) {
 		return champions.stream().filter(k -> k.getCard().equals(card)).findFirst().orElse(null);
 	}
 
@@ -285,15 +222,15 @@ public class Kawaipon implements Cloneable {
 		return false;
 	}
 
-	public static boolean checkChampion(Kawaipon kp, Champion c, TextChannel channel) {
-		int max = kp.getChampionMaxCopies();
+	public static boolean checkChampion(Deck d, Champion c, TextChannel channel) {
+		int max = d.getChampionMaxCopies();
 		if (c == null || c.isFusion()) {
 			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
 			return true;
-		} else if (Collections.frequency(kp.getChampions(), c) == max) {
+		} else if (Collections.frequency(d.getChampions(), c) == max) {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo " + max + " cópias de cada campeão no deck.").queue();
 			return true;
-		} else if (kp.getChampions().size() >= 36) {
+		} else if (d.getChampions().size() >= 36) {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 36 campeões no deck.").queue();
 			return true;
 		}
@@ -313,12 +250,12 @@ public class Kawaipon implements Cloneable {
 		return 0;
 	}
 
-	public static int checkChampionError(Kawaipon kp, Champion c) {
+	public static int checkChampionError(Deck d, Champion c) {
 		if (c == null || c.isFusion()) {
 			return 1;
-		} else if (Collections.frequency(kp.getChampions(), c) >= kp.getChampionMaxCopies()) {
+		} else if (Collections.frequency(d.getChampions(), c) >= d.getChampionMaxCopies()) {
 			return 2;
-		} else if (kp.getChampions().size() >= 36) {
+		} else if (d.getChampions().size() >= 36) {
 			return 3;
 		}
 
@@ -341,15 +278,15 @@ public class Kawaipon implements Cloneable {
 		return false;
 	}
 
-	public static boolean checkEquipment(Kawaipon kp, Equipment e, TextChannel channel) {
-		int max = kp.getEquipmentMaxCopies(e);
-		if (Collections.frequency(kp.getEquipments(), e) >= max) {
+	public static boolean checkEquipment(Deck d, Equipment e, TextChannel channel) {
+		int max = d.getEquipmentMaxCopies(e);
+		if (Collections.frequency(d.getEquipments(), e) >= max) {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo " + max + " cópias desse equipamento no deck.").queue();
 			return true;
-		} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
+		} else if (d.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
 			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para evogears tier 4!").queue();
 			return true;
-		} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
+		} else if (d.getEvoWeight() + e.getWeight(d) > 24) {
 			channel.sendMessage("❌ | Ele/Ela não possui mais espaços para evogears no deck.").queue();
 			return true;
 		}
@@ -370,13 +307,13 @@ public class Kawaipon implements Cloneable {
 		return 0;
 	}
 
-	public static int checkEquipmentError(Kawaipon kp, Equipment e) {
-		int max = kp.getEquipmentMaxCopies(e);
-		if (Collections.frequency(kp.getEquipments(), e) >= max) {
+	public static int checkEquipmentError(Deck d, Equipment e) {
+		int max = d.getEquipmentMaxCopies(e);
+		if (Collections.frequency(d.getEquipments(), e) >= max) {
 			return 1;
-		} else if (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
+		} else if (d.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= max) {
 			return 2;
-		} else if (kp.getEvoWeight() + e.getWeight(kp) > 24) {
+		} else if (d.getEvoWeight() + e.getWeight(d) > 24) {
 			return 3;
 		}
 
@@ -395,11 +332,11 @@ public class Kawaipon implements Cloneable {
 		return false;
 	}
 
-	public static boolean checkField(Kawaipon kp, Field f, TextChannel channel) {
-		if (Collections.frequency(kp.getFields(), f) >= 3) {
+	public static boolean checkField(Deck d, Field f, TextChannel channel) {
+		if (Collections.frequency(d.getFields(), f) >= 3) {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 3 cópias de cada campo no deck.").queue();
 			return true;
-		} else if (kp.getFields().size() >= 3) {
+		} else if (d.getFields().size() >= 3) {
 			channel.sendMessage("❌ | Ele/Ela só pode ter no máximo 3 cartas de campo no deck.").queue();
 			return true;
 		}
@@ -417,21 +354,67 @@ public class Kawaipon implements Cloneable {
 		return 0;
 	}
 
-	public static int checkFieldError(Kawaipon kp, Field f) {
-		if (Collections.frequency(kp.getFields(), f) >= 3) {
+	public static int checkFieldError(Deck d, Field f) {
+		if (Collections.frequency(d.getFields(), f) >= 3) {
 			return 1;
-		} else if (kp.getFields().size() >= 3) {
+		} else if (d.getFields().size() >= 3) {
 			return 2;
 		}
 
 		return 0;
 	}
 
-	public Kawaipon copy() {
-		try {
-			return (Kawaipon) super.clone();
-		} catch (CloneNotSupportedException e) {
-			return new Kawaipon();
+	public boolean hasInvalidDeck(TextChannel chn) {
+		if (getChampions().size() < 30) {
+			chn.sendMessage("❌ | É necessário ter ao menos 30 cartas no deck para poder jogar Shoukan.").queue();
+			return true;
+		} else if (getEvoWeight() > 24) {
+			chn.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
+			return true;
+		} else if (hasInvalidChampionCopyCount()) {
+			chn.sendMessage("❌ | Seus campeões ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+			return true;
+		} else if (hasInvalidEquipmentCopyCount()) {
+			chn.sendMessage("❌ | Seus equipamentos ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+			return true;
 		}
+
+		return false;
 	}
+
+	public static boolean hasInvalidDeck(Deck d, TextChannel chn) {
+		if (d.getChampions().size() < 30) {
+			chn.sendMessage("❌ | Ele/ela não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
+			return true;
+		} else if (d.getEvoWeight() > 24) {
+			chn.sendMessage("❌ | Os equipamentos dele/dela ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
+			return true;
+		} else if (d.hasInvalidChampionCopyCount()) {
+			chn.sendMessage("❌ | Os campeões dele/dela ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+			return true;
+		} else if (d.hasInvalidEquipmentCopyCount()) {
+			chn.sendMessage("❌ | Os equipamentos dele/dela ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean hasInvalidDeck(Deck d, User u, TextChannel chn) {
+		if (d.getChampions().size() < 30) {
+			chn.sendMessage("❌ | " + u.getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
+			return true;
+		} else if (d.getEvoWeight() > 24) {
+			chn.sendMessage("❌ | Os equipamentos de " + u.getAsMention() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
+			return true;
+		} else if (d.hasInvalidChampionCopyCount()) {
+			chn.sendMessage("❌ | Os campeões de " + u.getAsMention() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+			return true;
+		} else if (d.hasInvalidEquipmentCopyCount()) {
+			chn.sendMessage("❌ | Os equipamentos de " + u.getAsMention() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
+			return true;
+		}
+
+		return false;
+	}*/
 }

@@ -72,6 +72,7 @@
         <class>com.kuuhaku.model.persistent.Trophy</class>
         <class>com.kuuhaku.model.persistent.MatchMakingRating</class>
         <class>com.kuuhaku.model.persistent.DeckStash</class>
+        <class>com.kuuhaku.model.persistent.Deck</class>
         <class>com.kuuhaku.model.persistent.GiftCode</class>
         <class>com.kuuhaku.model.persistent.Clan</class>
         <class>com.kuuhaku.model.persistent.StockMarket</class>
