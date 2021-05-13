@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.DeckStashDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
@@ -32,7 +31,6 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.model.persistent.DeckStash;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -57,17 +55,16 @@ public class DeckStashCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		Deck dk = kp.getDeck();
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (args.length == 0) {
-			List<DeckStash> stashes = DeckStashDAO.getStash(author.getId());
+			List<Deck> stashes = kp.getDecks();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Decks reserva (capacidade: " + acc.getStashCapacity() + " slots)");
 
 			for (int j = 0; j < stashes.size(); j++) {
-				DeckStash ds = stashes.get(j);
+				Deck dk = stashes.get(j);
 				Map<Class, Integer> count = new HashMap<>() {{
 					put(Class.DUELIST, 0);
 					put(Class.SUPPORT, 0);
