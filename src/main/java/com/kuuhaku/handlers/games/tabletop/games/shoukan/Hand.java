@@ -29,7 +29,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
@@ -62,7 +62,7 @@ public class Hand {
 	private int manaReturn = 0;
 	private int nullTime = 0;
 
-	public Hand(Shoukan game, User user, Kawaipon kp, Side side) {
+	public Hand(Shoukan game, User user, Deck dk, Side side, Clan clan) {
 		if (user == null) {
 			this.game = game;
 			this.side = side;
@@ -72,25 +72,12 @@ public class Hand {
 		setData(
 				game,
 				user,
-				kp.getChampions(),
-				kp.getEquipments(),
-				kp.getFields(),
-				kp.getDestinyDraw(),
+				dk.getChampions(),
+				dk.getEquipments(),
+				dk.getFields(),
+				dk.getDestinyDraw(),
 				side,
-				null
-		);
-	}
-
-	public Hand(Shoukan game, User user, Clan cl, Side side) {
-		setData(
-				game,
-				user,
-				cl.getDeck().getChampions(),
-				cl.getDeck().getEquipments(),
-				cl.getDeck().getFields(),
-				cl.getDeck().getDestinyDraw(),
-				side,
-				cl
+				clan
 		);
 	}
 

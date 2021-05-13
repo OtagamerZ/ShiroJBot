@@ -64,6 +64,7 @@ public class ClearDeckCommand implements Executable {
 		}
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 		ShoukanDeck sd = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -74,14 +75,15 @@ public class ClearDeckCommand implements Executable {
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(I18n.getString("str_generating-deck")).queue(m -> {
 			try {
-				File f = Helper.writeAndGet(sd.view(kp), "deque", "jpg");
+				File f = Helper.writeAndGet(sd.view(dk), "deque", "jpg");
 				channel.sendMessage(eb.build()).addFile(f)
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 
 									Kawaipon fkp = KawaiponDAO.getKawaipon(author.getId());
+									Deck fdk = fkp.getDeck();
 
-									for (Champion c : fkp.getChampions()) {
+									for (Champion c : fdk.getChampions()) {
 										CardMarket cm = new CardMarket(
 												author.getId(),
 												new KawaiponCard(c.getCard(), false),
@@ -89,9 +91,9 @@ public class ClearDeckCommand implements Executable {
 										);
 										CardMarketDAO.saveCard(cm);
 									}
-									fkp.getChampions().clear();
+									fdk.getChampions().clear();
 
-									for (Equipment e : fkp.getEquipments()) {
+									for (Equipment e : fdk.getEquipments()) {
 										EquipmentMarket em = new EquipmentMarket(
 												author.getId(),
 												e,
@@ -99,9 +101,9 @@ public class ClearDeckCommand implements Executable {
 										);
 										EquipmentMarketDAO.saveCard(em);
 									}
-									fkp.getEquipments().clear();
+									fdk.getEquipments().clear();
 
-									for (Field fd : fkp.getFields()) {
+									for (Field fd : fdk.getFields()) {
 										FieldMarket fm = new FieldMarket(
 												author.getId(),
 												fd,
@@ -109,7 +111,7 @@ public class ClearDeckCommand implements Executable {
 										);
 										FieldMarketDAO.saveCard(fm);
 									}
-									fkp.getFields().clear();
+									fdk.getFields().clear();
 
 									KawaiponDAO.saveKawaipon(fkp);
 									s.delete().queue();

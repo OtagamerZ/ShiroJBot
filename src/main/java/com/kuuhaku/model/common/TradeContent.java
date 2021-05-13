@@ -23,10 +23,7 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
-import com.kuuhaku.model.persistent.LotteryValue;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.XStringBuilder;
 
@@ -59,6 +56,10 @@ public class TradeContent {
 
 	public Kawaipon getKp() {
 		return kp;
+	}
+
+	public Deck getDk() {
+		return kp.getDeck();
 	}
 
 	public Set<KawaiponCard> getCards() {
@@ -105,17 +106,18 @@ public class TradeContent {
 
 	public boolean canReceive(Kawaipon kp) {
 		Kawaipon aux = kp.copy();
+		Deck dk = aux.getDeck();
 		for (KawaiponCard card : cards) {
 			if (aux.getCards().contains(card)) return false;
 		}
 
 		for (Equipment equipment : new HashSet<>(equipments)) {
-			if (aux.checkEquipmentError(equipment) == 0) aux.addEquipment(equipment);
+			if (dk.checkEquipmentError(equipment) == 0) dk.addEquipment(equipment);
 			else return false;
 		}
 
 		for (Field field : new HashSet<>(fields)) {
-			if (aux.checkFieldError(field) == 0) aux.addField(field);
+			if (dk.checkFieldError(field) == 0) dk.addField(field);
 			else return false;
 		}
 
@@ -128,6 +130,10 @@ public class TradeContent {
 
 	public Kawaipon getKawaipon() {
 		return KawaiponDAO.getKawaipon(uid);
+	}
+
+	public Deck getDeck() {
+		return KawaiponDAO.getKawaipon(uid).getDeck();
 	}
 
 	public static boolean isValidTrade(Collection<TradeContent> offers) {
@@ -154,25 +160,27 @@ public class TradeContent {
 		int liquidAmount2 = Helper.applyTax(tc2.uid, tc2.credits, 0.1);
 
 		Kawaipon kp1 = tc1.getKawaipon();
+		Deck dk1 = kp1.getDeck();
 		Kawaipon kp2 = tc2.getKawaipon();
+		Deck dk2 = kp2.getDeck();
 
 		acc1.addCredit(liquidAmount2, TradeContent.class);
 		acc2.removeCredit(liquidAmount2, TradeContent.class);
 		kp1.addCards(tc2.cards);
-		kp1.addEquipments(tc2.equipments);
-		kp1.addFields(tc2.fields);
+		dk1.addEquipments(tc2.equipments);
+		dk1.addFields(tc2.fields);
 		kp2.removeCards(tc2.cards);
-		kp2.removeEquipments(tc2.equipments);
-		kp2.removeFields(tc2.fields);
+		dk2.removeEquipments(tc2.equipments);
+		dk2.removeFields(tc2.fields);
 
 		acc2.addCredit(liquidAmount1, TradeContent.class);
 		acc1.removeCredit(liquidAmount1, TradeContent.class);
 		kp2.addCards(tc1.cards);
-		kp2.addEquipments(tc1.equipments);
-		kp2.addFields(tc1.fields);
+		dk2.addEquipments(tc1.equipments);
+		dk2.addFields(tc1.fields);
 		kp1.removeCards(tc1.cards);
-		kp1.removeEquipments(tc1.equipments);
-		kp1.removeFields(tc1.fields);
+		dk1.removeEquipments(tc1.equipments);
+		dk1.removeFields(tc1.fields);
 
 		KawaiponDAO.saveKawaipon(kp1);
 		KawaiponDAO.saveKawaipon(kp2);

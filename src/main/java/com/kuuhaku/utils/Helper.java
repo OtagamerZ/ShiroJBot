@@ -1935,16 +1935,16 @@ public class Helper {
 		return ed.sample();
 	}
 
-	public static Kawaipon getDailyDeck() {
+	public static Deck getDailyDeck() {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		long seed = Long.parseLong("" + today.getYear() + today.getMonthValue() + today.getDayOfMonth());
-		Kawaipon kp = new Kawaipon();
+		Deck dk = new Deck();
 
-		kp.setChampions(getRandomN(CardDAO.getAllChampions(false), 30, 3, seed));
-		kp.setEquipments(getRandomN(CardDAO.getAllEquipments(), 6, 3, seed));
-		kp.setFields(getRandomN(CardDAO.getAllAvailableFields(), 1, 3, seed));
+		dk.setChampions(getRandomN(CardDAO.getAllChampions(false), 30, 3, seed));
+		dk.setEquipments(getRandomN(CardDAO.getAllEquipments(), 6, 3, seed));
+		dk.setFields(getRandomN(CardDAO.getAllAvailableFields(), 1, 3, seed));
 
-		return kp;
+		return dk;
 	}
 
 	public static String toPercent(double value) {

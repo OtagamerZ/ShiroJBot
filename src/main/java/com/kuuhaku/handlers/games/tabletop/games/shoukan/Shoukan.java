@@ -105,8 +105,8 @@ public class Shoukan extends GlobalGame {
 		this.team = false;
 
 		this.hands = Map.of(
-				Side.TOP, new Hand(this, players[0], clans.get(0), Side.TOP),
-				Side.BOTTOM, new Hand(this, players[1], clans.get(1), Side.BOTTOM)
+				Side.TOP, new Hand(this, players[0], clans.get(0).getDeck(), Side.TOP, clans.get(0)),
+				Side.BOTTOM, new Hand(this, players[1], clans.get(1).getDeck(), Side.BOTTOM, clans.get(1))
 		);
 		this.combos = Map.of(
 				Side.TOP, hands.get(Side.TOP).getCombo(),
@@ -164,13 +164,13 @@ public class Shoukan extends GlobalGame {
 		this.team = players.length == 4;
 
 		if (team) {
-			List<Kawaipon> kps = daily ?
+			List<Deck> kps = daily ?
 					Collections.nCopies(4, Helper.getDailyDeck()) :
 					List.of(
-							KawaiponDAO.getKawaipon(players[2].getId()),
-							KawaiponDAO.getKawaipon(players[0].getId()),
-							KawaiponDAO.getKawaipon(players[3].getId()),
-							KawaiponDAO.getKawaipon(players[1].getId())
+							KawaiponDAO.getKawaipon(players[2].getId()).getDeck(),
+							KawaiponDAO.getKawaipon(players[0].getId()).getDeck(),
+							KawaiponDAO.getKawaipon(players[3].getId()).getDeck(),
+							KawaiponDAO.getKawaipon(players[1].getId()).getDeck()
 					);
 
 			this.hands = Map.of(
@@ -178,12 +178,12 @@ public class Shoukan extends GlobalGame {
 					Side.BOTTOM, new TeamHand(this, List.of(players[3], players[1]), kps.subList(2, 4), Side.BOTTOM)
 			);
 		} else {
-			Kawaipon p1 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[0].getId());
-			Kawaipon p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[1].getId());
+			Deck p1 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[0].getId()).getDeck();
+			Deck p2 = daily ? Helper.getDailyDeck() : KawaiponDAO.getKawaipon(players[1].getId()).getDeck();
 
 			this.hands = Map.of(
-					Side.TOP, new Hand(this, players[0], p1, Side.TOP),
-					Side.BOTTOM, new Hand(this, players[1], p2, Side.BOTTOM)
+					Side.TOP, new Hand(this, players[0], p1, Side.TOP, null),
+					Side.BOTTOM, new Hand(this, players[1], p2, Side.BOTTOM, null)
 			);
 		}
 		this.combos = Map.of(
