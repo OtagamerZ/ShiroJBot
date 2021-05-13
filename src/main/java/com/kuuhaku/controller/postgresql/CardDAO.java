@@ -780,9 +780,9 @@ public class CardDAO {
 				FROM (
 						SELECT COUNT(1) AS total
 						     , c.category
-						FROM kawaipon_champion kc
-						         INNER JOIN champion c on c.id = kc.champions_id
-						GROUP BY kc.kawaipon_id, c.category
+						FROM deck_champion dc
+						         INNER JOIN champion c on c.id = dc.champions_id
+						GROUP BY dc.deck_id, c.category
 					) x
 				WHERE x.category = :cat
 				""");
