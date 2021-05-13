@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.utils.Helper;
+
 import javax.persistence.*;
 
 @Entity
@@ -33,8 +35,8 @@ public class StockMarket {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Card card;
 
-	@Column(columnDefinition = "INT NOT NULL")
-	private long investment;
+	@Column(columnDefinition = "FLOAT NOT NULL")
+	private double investment;
 
 	public StockMarket(String uid, Card card, long investment) {
 		this.uid = uid;
@@ -65,11 +67,11 @@ public class StockMarket {
 		this.card = card;
 	}
 
-	public long getInvestment() {
-		return investment;
+	public double getInvestment() {
+		return Helper.round(investment, 3);
 	}
 
-	public void setInvestment(long investment) {
+	public void setInvestment(double investment) {
 		this.investment = investment;
 	}
 }
