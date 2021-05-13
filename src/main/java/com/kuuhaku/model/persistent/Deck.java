@@ -46,6 +46,9 @@ public class Deck {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@Column(columnDefinition = "VARCHAR(191)")
+	private String name = "";
+
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -73,6 +76,14 @@ public class Deck {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Champion getChampion(Card card) {

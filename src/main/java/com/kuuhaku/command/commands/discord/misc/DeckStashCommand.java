@@ -95,7 +95,11 @@ public class DeckStashCommand implements Executable {
 
 				Pair<Race, Race> combo = dk.getCombo();
 				eb.addField(
-						"`Slot %s%s | %sreserva %s`".formatted(j, kp.getDecks().indexOf(dk) == kp.getActiveDeck() ? " (ATUAL)" : "", prefix, j),
+						"`Slot %s%s | %sreserva %s`".formatted(
+								j,
+								kp.getDecks().indexOf(dk) == kp.getActiveDeck() ? " (ATUAL)" : "",
+								prefix,
+								Helper.getOr(dk.getName(), String.valueOf(j))),
 						"""
 								:crossed_swords: | Cartas Senshi: %s
 								:large_orange_diamond: | Efeito primário: %s (%s)
@@ -135,6 +139,9 @@ public class DeckStashCommand implements Executable {
 			if (slot < 0 || slot >= acc.getStashCapacity()) {
 				channel.sendMessage("❌ | Slot inválido.").queue();
 				return;
+			} else if (slot == kp.getActiveDeck()) {
+				channel.sendMessage("❌ | Este já é seu deck atual.").queue();
+				return;
 			}
 
 			kp.setDeck(slot);
@@ -142,7 +149,25 @@ public class DeckStashCommand implements Executable {
 
 			channel.sendMessage("✅ | Deck alternado com sucesso.").queue();
 		} catch (NumberFormatException e) {
-			channel.sendMessage("❌ | O número do slot precisa ser um valor inteiro.").queue();
+			Deck dk = kp.getDecks().stream()
+					.filter(d -> d.getName().equalsIgnoreCase(args[0]))
+					.findFirst()
+					.orElse(null);
+			if (dk == null) {
+				channel.sendMessage("❌ | Nenhum deck com o nome `" + Helper.bugText(args[0]) + "` encontrado.").queue();
+				return;
+			}
+
+			int slot = kp.getDecks().indexOf(dk);
+			if (slot == kp.getActiveDeck()) {
+				channel.sendMessage("❌ | Este já é seu deck atual.").queue();
+				return;
+			}
+
+			kp.setDeck(slot);
+			KawaiponDAO.saveKawaipon(kp);
+
+			channel.sendMessage("✅ | Deck alternado com sucesso.").queue();
 		}
 	}
 }

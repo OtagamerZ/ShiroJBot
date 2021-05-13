@@ -14,8 +14,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Segunda tentativa na centralização dos decks">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckNameCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Deck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,10 +178,10 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.command.commands.discord.information" />
       <recent name="com.kuuhaku.command.commands.discord.fun" />
       <recent name="com.kuuhaku.controller.postgresql" />
-      <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.command.commands.discord.moderation" />
     </key>
   </component>
@@ -1190,20 +1194,6 @@
       <workItem from="1620749133558" duration="8234000" />
       <workItem from="1620820840715" duration="10604000" />
     </task>
-    <task id="LOCAL-04359" summary="Atualização da biblioteca JDA">
-      <created>1620409927815</created>
-      <option name="number" value="04359" />
-      <option name="presentableId" value="LOCAL-04359" />
-      <option name="project" value="LOCAL" />
-      <updated>1620409927815</updated>
-    </task>
-    <task id="LOCAL-04360" summary="Atualização da biblioteca JDA">
-      <created>1620410550321</created>
-      <option name="number" value="04360" />
-      <option name="presentableId" value="LOCAL-04360" />
-      <option name="project" value="LOCAL" />
-      <updated>1620410550321</updated>
-    </task>
     <task id="LOCAL-04361" summary="Atualização da biblioteca JDA">
       <created>1620411514116</created>
       <option name="number" value="04361" />
@@ -1533,7 +1523,21 @@
       <option name="project" value="LOCAL" />
       <updated>1620931559551</updated>
     </task>
-    <option name="localTasksCounter" value="4408" />
+    <task id="LOCAL-04408" summary="Segunda tentativa na centralização dos decks">
+      <created>1620932742958</created>
+      <option name="number" value="04408" />
+      <option name="presentableId" value="LOCAL-04408" />
+      <option name="project" value="LOCAL" />
+      <updated>1620932742958</updated>
+    </task>
+    <task id="LOCAL-04409" summary="Segunda tentativa na centralização dos decks">
+      <created>1620932816030</created>
+      <option name="number" value="04409" />
+      <option name="presentableId" value="LOCAL-04409" />
+      <option name="project" value="LOCAL" />
+      <updated>1620932816030</updated>
+    </task>
+    <option name="localTasksCounter" value="4410" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
