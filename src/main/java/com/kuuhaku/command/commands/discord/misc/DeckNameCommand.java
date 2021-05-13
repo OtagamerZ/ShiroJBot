@@ -43,7 +43,7 @@ public class DeckNameCommand implements Executable {
 		Deck dk = kp.getDeck();
 
 		if (args.length == 0) {
-			dk.setDestinyDraw(null);
+			dk.setName(null);
 
 			channel.sendMessage("✅ | Nome do deck atual limpo com sucesso.").queue();
 		} else {
