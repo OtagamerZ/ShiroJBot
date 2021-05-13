@@ -77,7 +77,7 @@ public class InvestCommand implements Executable {
 		StockValue sv = StockMarketDAO.getValues().get(c.getId());
 		double readjust = Helper.round(amount / (double) sv.getValue(), 3);
 
-		if (sm.getInvestment() + amount >= 1000) {
+		if (sm.getInvestment() + readjust >= 1000) {
 			channel.sendMessage("❌ | O limite máximo por carta é 1.000 ações.").queue();
 			return;
 		}
