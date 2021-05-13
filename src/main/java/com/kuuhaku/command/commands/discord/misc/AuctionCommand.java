@@ -30,13 +30,11 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -87,6 +85,7 @@ public class AuctionCommand implements Executable {
 		}
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 		Object obj;
 		boolean foil = args[1].equalsIgnoreCase("C");
 		switch (type) {
@@ -113,7 +112,7 @@ public class AuctionCommand implements Executable {
 				if (c == null) {
 					channel.sendMessage("❌ | Esse equipamento não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
 					return;
-				} else if (!kp.getEquipments().contains(c)) {
+				} else if (!dk.getEquipments().contains(c)) {
 					channel.sendMessage("❌ | Você não pode leiloar um equipamento que não possui!").queue();
 					return;
 				}
@@ -126,7 +125,7 @@ public class AuctionCommand implements Executable {
 				if (f == null) {
 					channel.sendMessage("❌ | Essa arena não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllFieldNames().toArray(String[]::new)) + "`?").queue();
 					return;
-				} else if (!kp.getFields().contains(f)) {
+				} else if (!dk.getFields().contains(f)) {
 					channel.sendMessage("❌ | Você não pode leiloar uma arena que não possui!").queue();
 					return;
 				}
@@ -170,6 +169,7 @@ public class AuctionCommand implements Executable {
 
 							if (offer >= price && (highest.get() == null || offer > highest.get().getRight())) {
 								Kawaipon offerer = KawaiponDAO.getKawaipon(evt.getAuthor().getId());
+								Deck dk = offerer.getDeck();
 								AtomicReference<Account> oacc = new AtomicReference<>(AccountDAO.getAccount(evt.getAuthor().getId()));
 
 								switch (type) {
@@ -180,10 +180,10 @@ public class AuctionCommand implements Executable {
 										}
 									}
 									case 2 -> {
-										if (offerer.checkEquipment((Equipment) obj, channel)) return;
+										if (dk.checkEquipment((Equipment) obj, channel)) return;
 									}
 									default -> {
-										if (offerer.checkField((Field) obj, channel)) return;
+										if (dk.checkField((Field) obj, channel)) return;
 									}
 								}
 
@@ -204,7 +204,10 @@ public class AuctionCommand implements Executable {
 
 										if (!author.getId().equals(highest.get().getLeft().getId())) {
 											Kawaipon k = KawaiponDAO.getKawaipon(author.getId());
+											Deck sdk = k.getDeck();
+
 											Kawaipon buyer = KawaiponDAO.getKawaipon(highest.get().getLeft().getId());
+											Deck bdk = buyer.getDeck();
 
 											Account acc = AccountDAO.getAccount(author.getId());
 											Account bacc = AccountDAO.getAccount(highest.get().getLeft().getId());
@@ -218,12 +221,12 @@ public class AuctionCommand implements Executable {
 													buyer.addCard((KawaiponCard) obj);
 												}
 												case 2 -> {
-													k.removeEquipment((Equipment) obj);
-													buyer.addEquipment((Equipment) obj);
+													sdk.removeEquipment((Equipment) obj);
+													bdk.addEquipment((Equipment) obj);
 												}
 												default -> {
-													k.removeField((Field) obj);
-													buyer.addField((Field) obj);
+													sdk.removeField((Field) obj);
+													bdk.addField((Field) obj);
 												}
 											}
 

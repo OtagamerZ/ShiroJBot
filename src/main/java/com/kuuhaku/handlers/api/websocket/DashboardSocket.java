@@ -344,6 +344,7 @@ public class DashboardSocket extends WebSocketServer {
 				}
 				case "card_buy" -> {
 					Kawaipon kp = KawaiponDAO.getKawaipon(t.getUid());
+					Deck dk = kp.getDeck();
 					Account acc = AccountDAO.getAccount(t.getUid());
 
 					int id = payload.getInt("id");
@@ -422,14 +423,14 @@ public class DashboardSocket extends WebSocketServer {
 								int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
 								boolean taxed = rawAmount != liquidAmount;
 
-								int err = kp.checkEquipmentError(e.getCard());
+								int err = dk.checkEquipmentError(e.getCard());
 								if (err == 0) {
 									if (seller.getUid().equals(t.getUid())) {
 										code.set(HttpURLConnection.HTTP_OK);
 										msg.set("Carta retirada com sucesso!");
 
 										e.setBuyer(t.getUid());
-										kp.addEquipment(e.getCard());
+										dk.addEquipment(e.getCard());
 
 										KawaiponDAO.saveKawaipon(kp);
 										EquipmentMarketDAO.saveCard(e);
@@ -439,7 +440,7 @@ public class DashboardSocket extends WebSocketServer {
 											msg.set("Saldo insuficiente.");
 										} else {
 											e.setBuyer(t.getUid());
-											kp.addEquipment(e.getCard());
+											dk.addEquipment(e.getCard());
 											acc.removeCredit(blackfriday ? Math.round(rawAmount * 0.75) : rawAmount, this.getClass());
 											seller.addCredit(liquidAmount, this.getClass());
 
@@ -470,7 +471,7 @@ public class DashboardSocket extends WebSocketServer {
 								} else {
 									code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
 									switch (err) {
-										case 1 -> msg.set("Você já possui " + kp.getEquipmentMaxCopies(e.getCard()) + " cópias desse evogears.");
+										case 1 -> msg.set("Você já possui " + dk.getEquipmentMaxCopies(e.getCard()) + " cópias desse evogears.");
 										case 2 -> msg.set("Você não possui mais espaços para evogears tier 4.");
 										case 3 -> msg.set("Você não possui mais espaços para evogears no deck.");
 									}
@@ -485,14 +486,14 @@ public class DashboardSocket extends WebSocketServer {
 								int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
 								boolean taxed = rawAmount != liquidAmount;
 
-								int err = kp.checkFieldError(f.getCard());
+								int err = dk.checkFieldError(f.getCard());
 								if (err == 0) {
 									if (seller.getUid().equals(t.getUid())) {
 										code.set(HttpURLConnection.HTTP_OK);
 										msg.set("Carta retirada com sucesso!");
 
 										f.setBuyer(t.getUid());
-										kp.addField(f.getCard());
+										dk.addField(f.getCard());
 
 										KawaiponDAO.saveKawaipon(kp);
 										FieldMarketDAO.saveCard(f);
@@ -502,7 +503,7 @@ public class DashboardSocket extends WebSocketServer {
 											msg.set("Saldo insuficiente.");
 										} else {
 											f.setBuyer(t.getUid());
-											kp.addField(f.getCard());
+											dk.addField(f.getCard());
 											acc.removeCredit(blackfriday ? Math.round(rawAmount * 0.75) : rawAmount, this.getClass());
 											seller.addCredit(liquidAmount, this.getClass());
 

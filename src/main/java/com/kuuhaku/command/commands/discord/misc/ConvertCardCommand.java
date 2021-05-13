@@ -29,13 +29,11 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Map;
@@ -64,6 +62,7 @@ public class ConvertCardCommand implements Executable {
 
 		Account acc = AccountDAO.getAccount(author.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa digitar o nome da carta kawaipon que quer converter para carta senshi.").queue();
@@ -87,14 +86,14 @@ public class ConvertCardCommand implements Executable {
 		}
 
 		Champion c = CardDAO.getChampion(tc);
-		if (kp.checkChampion(c, channel)) return;
+		if (dk.checkChampion(c, channel)) return;
 
 		assert c != null;
 		c.setAcc(acc);
 
 		if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
 			kp.removeCard(kc);
-			kp.addChampion(c);
+			dk.addChampion(c);
 			KawaiponDAO.saveKawaipon(kp);
 			channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();
 		} else {
@@ -108,7 +107,7 @@ public class ConvertCardCommand implements Executable {
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								kp.removeCard(kc);
-								kp.addChampion(c);
+								dk.addChampion(c);
 								KawaiponDAO.saveKawaipon(kp);
 								s.delete().queue();
 								channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();

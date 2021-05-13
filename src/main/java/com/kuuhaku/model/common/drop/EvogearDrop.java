@@ -24,6 +24,7 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -38,8 +39,9 @@ public class EvogearDrop extends Drop<Equipment> {
 	@Override
 	public void award(User u) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		if (kp.getEvoWeight() + getPrize().getWeight(kp) <= 24 && kp.getEquipmentCopies(getPrize().getCard()) < kp.getEquipmentMaxCopies(getPrize()) && !(kp.hasTierFour() && getPrize().getTier() == 4)) {
-			kp.addEquipment(getPrize());
+		Deck dk = kp.getDeck();
+		if (dk.getEvoWeight() + getPrize().getWeight(dk) <= 24 && dk.getEquipmentCopies(getPrize().getCard()) < dk.getEquipmentMaxCopies(getPrize()) && !(dk.hasTierFour() && getPrize().getTier() == 4)) {
+			dk.addEquipment(getPrize());
 		} else {
 			awardInstead(u, getPrize().getTier() * Helper.BASE_EQUIPMENT_PRICE);
 			return;
@@ -63,7 +65,8 @@ public class EvogearDrop extends Drop<Equipment> {
 	@Override
 	public String toString(User u) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		if (kp.getEvoWeight() + getPrize().getWeight(kp) <= 24)
+		Deck dk = kp.getDeck();
+		if (dk.getEvoWeight() + getPrize().getWeight(dk) <= 24)
 			return "Evogear " + getPrize().getCard().getName();
 		else
 			return "~~Evogear %s~~\n(convertido em %s créditos)".formatted(

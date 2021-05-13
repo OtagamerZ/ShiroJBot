@@ -26,7 +26,10 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
-import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Clan;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -266,18 +269,9 @@ public class Equipment implements Drawable, Cloneable {
 		return tier;
 	}
 
-	public int getWeight(Kawaipon kp) {
+	public int getWeight(Deck d) {
 		return Math.max(
-				switch (kp.getCombo().getLeft()) {
-					case MACHINE -> charm != Charm.SPELL ? tier - 1 : tier;
-					case MYSTICAL -> charm == Charm.SPELL ? tier - 1 : tier;
-					default -> tier;
-				}, 1);
-	}
-
-	public int getWeight(DeckStash ds) {
-		return Math.max(
-				switch (ds.getCombo().getLeft()) {
+				switch (d.getCombo().getLeft()) {
 					case MACHINE -> charm != Charm.SPELL ? tier - 1 : tier;
 					case MYSTICAL -> charm == Charm.SPELL ? tier - 1 : tier;
 					default -> tier;

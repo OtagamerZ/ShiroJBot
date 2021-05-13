@@ -29,7 +29,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.model.persistent.DeckStash;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -55,10 +55,10 @@ public class ShoukanDeckCommand implements Executable {
 		channel.sendMessage(I18n.getString("str_generating-deck")).queue(m -> {
 			if (Helper.containsAny(args, "daily", "diario")) {
 				try {
-					Kawaipon kp = Helper.getDailyDeck();
+					Deck dk = Helper.getDailyDeck();
 
 					ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
-					BufferedImage cards = kb.view(kp);
+					BufferedImage cards = kb.view(dk);
 
 					EmbedBuilder eb = new ColorlessEmbedBuilder()
 							.setTitle(":date: | Deck de Diário")
@@ -76,15 +76,15 @@ public class ShoukanDeckCommand implements Executable {
 					try {
 						Clan cl = ClanDAO.getUserClan(author.getId());
 						assert cl != null;
-						DeckStash kp = cl.getDeck();
+						Deck dk = cl.getDeck();
 
 						ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()), cl);
-						BufferedImage cards = kb.view(kp);
+						BufferedImage cards = kb.view(dk);
 
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
 								.setTitle(":beginner: | Deck do clã " + cl.getName())
-								.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 36", true)
-								.addField(":shield: | Peso evogear:", kp.getEvoWeight() + " de 24", true)
+								.addField(":crossed_swords: | Cartas Senshi:", dk.getChampions().size() + " de 36", true)
+								.addField(":shield: | Peso evogear:", dk.getEvoWeight() + " de 24", true)
 								.setImage("attachment://deck.jpg");
 
 						m.delete().queue();
@@ -103,14 +103,15 @@ public class ShoukanDeckCommand implements Executable {
 				} else {
 					try {
 						Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+						Deck dk = kp.getDeck();
 
 						ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
-						BufferedImage cards = kb.view(kp);
+						BufferedImage cards = kb.view(dk);
 
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
 								.setTitle(":beginner: | Deck de " + author.getName())
-								.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 36", true)
-								.addField(":shield: | Peso evogear:", kp.getEvoWeight() + " de 24", true)
+								.addField(":crossed_swords: | Cartas Senshi:", dk.getChampions().size() + " de 36", true)
+								.addField(":shield: | Peso evogear:", dk.getEvoWeight() + " de 24", true)
 								.setImage("attachment://deck.jpg");
 
 						m.delete().queue();

@@ -50,6 +50,7 @@ public class SellCardCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 
 		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
@@ -117,7 +118,7 @@ public class SellCardCommand implements Executable {
 				if (eq == null) {
 					channel.sendMessage("❌ | Esse equipamento não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
 					return;
-				} else if (!kp.getEquipments().contains(eq)) {
+				} else if (!dk.getEquipments().contains(eq)) {
 					channel.sendMessage("❌ | Você não pode vender um equipamento que não possui!").queue();
 					return;
 				}
@@ -141,7 +142,8 @@ public class SellCardCommand implements Executable {
 										if (mb.getId().equals(author.getId())) {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
-											finalKp.removeEquipment(eq);
+											Deck fdk = finalKp.getDeck();
+											fdk.removeEquipment(eq);
 
 											EquipmentMarket em = new EquipmentMarket(author.getId(), eq, price);
 											EquipmentMarketDAO.saveCard(em);
@@ -162,7 +164,7 @@ public class SellCardCommand implements Executable {
 				if (f == null) {
 					channel.sendMessage("❌ | Essa arena não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllFieldNames().toArray(String[]::new)) + "`?").queue();
 					return;
-				} else if (!kp.getFields().contains(f)) {
+				} else if (!dk.getFields().contains(f)) {
 					channel.sendMessage("❌ | Você não pode vender uma arena que não possui!").queue();
 					return;
 				}
@@ -186,7 +188,8 @@ public class SellCardCommand implements Executable {
 										if (mb.getId().equals(author.getId())) {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
 											Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
-											finalKp.removeField(f);
+											Deck fdk = finalKp.getDeck();
+											fdk.removeField(f);
 
 											FieldMarket fm = new FieldMarket(author.getId(), f, price);
 											FieldMarketDAO.saveCard(fm);

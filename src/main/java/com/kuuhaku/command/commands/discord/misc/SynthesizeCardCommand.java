@@ -80,6 +80,7 @@ public class SynthesizeCardCommand implements Executable {
 		String[] names = args[0].split(";");
 		boolean foilSynth = args[1].equalsIgnoreCase("c");
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 
 		if (names.length < 3) {
 			channel.sendMessage("❌ | Você precisa informar 3 cartas para sintetizar um" + (foilSynth ? "a arena" : " equipamento") + ".").queue();
@@ -115,14 +116,14 @@ public class SynthesizeCardCommand implements Executable {
 								buttons.put(Helper.ACCEPT, (ms, mb) -> {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 
-									if (kp.getFields().size() == 3) {
+									if (dk.getFields().size() == 3) {
 										int change = (int) Math.round((350 + (score * 1400 / 15f)) * 2.5);
 
 										Account acc = AccountDAO.getAccount(author.getId());
 										acc.addCredit(change, this.getClass());
 										AccountDAO.saveAccount(acc);
 
-										if (kp.getFields().size() == 3)
+										if (dk.getFields().size() == 3)
 											channel.sendMessage("❌ | Você já possui 3 campos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " créditos.").queue();
 
 										if (dp.getValue().isBlank()) {
@@ -139,7 +140,7 @@ public class SynthesizeCardCommand implements Executable {
 										return;
 									}
 
-									kp.addField(f);
+									dk.addField(f);
 
 									if (dp.getValue().isBlank()) {
 										for (Card t : tributes) {
@@ -196,7 +197,7 @@ public class SynthesizeCardCommand implements Executable {
 									Main.getInfo().getConfirmationPending().remove(author.getId());
 									String tier = StringUtils.repeat("\uD83D\uDFCA", e.getTier());
 
-									if (kp.getEquipments().stream().filter(e::equals).count() == 3 || (kp.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= kp.getEquipmentMaxCopies(4) && e.getTier() == 4) || kp.getEvoWeight() + e.getWeight(kp) > 24) {
+									if (dk.getEquipments().stream().filter(e::equals).count() == 3 || (dk.getEquipments().stream().filter(eq -> eq.getTier() == 4).count() >= dk.getEquipmentMaxCopies(4) && e.getTier() == 4) || dk.getEvoWeight() + e.getWeight(dk) > 24) {
 										int change = (int) Math.round((350 + (score * 1400 / 15f)) * (e.getTier() == 4 ? 3.5 : 2.5));
 
 										Account acc = AccountDAO.getAccount(author.getId());
@@ -204,11 +205,11 @@ public class SynthesizeCardCommand implements Executable {
 										AccountDAO.saveAccount(acc);
 
 										channel.sendMessage(
-												switch (kp.checkEquipmentError(e)) {
+												switch (dk.checkEquipmentError(e)) {
 													case 1 -> "❌ | Você já possui 3 cópias de **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " créditos.";
 													case 2 -> "❌ | Você já possui 1 equipamento tier 4, **" + e.getCard().getName() + "**! (" + tier + "), as cartas usadas foram convertidas em " + Helper.separate(change) + " créditos.";
 													case 3 -> "❌ | Você não possui mais espaços para equipamentos, as cartas usadas cartas foram convertidas em " + Helper.separate(change) + " créditos.";
-													default -> throw new IllegalStateException("Unexpected value: " + kp.checkEquipmentError(e));
+													default -> throw new IllegalStateException("Unexpected value: " + dk.checkEquipmentError(e));
 												}
 										).queue();
 
@@ -226,7 +227,7 @@ public class SynthesizeCardCommand implements Executable {
 										return;
 									}
 
-									kp.addEquipment(e);
+									dk.addEquipment(e);
 
 									if (dp.getValue().isBlank()) {
 										for (Card t : tributes) {

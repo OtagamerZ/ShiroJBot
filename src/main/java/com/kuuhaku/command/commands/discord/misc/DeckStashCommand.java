@@ -25,13 +25,13 @@ import com.kuuhaku.controller.postgresql.DeckStashDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.DeckStash;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
@@ -57,6 +57,7 @@ public class DeckStashCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (args.length == 0) {
@@ -76,7 +77,7 @@ public class DeckStashCommand implements Executable {
 					put(Class.TRAP, 0);
 					put(Class.LEVELER, 0);
 				}};
-				for (Champion c : ds.getChampions())
+				for (Champion c : dk.getChampions())
 					count.merge(c.getCategory(), 1, Integer::sum);
 
 				count.remove(null);
@@ -88,16 +89,16 @@ public class DeckStashCommand implements Executable {
 					data[i * 2 + 1] = ct != 1 ? "s" : "";
 				}
 
-				double manaCost = ListUtils.union(ds.getChampions(), ds.getEquipments())
+				double manaCost = ListUtils.union(dk.getChampions(), dk.getEquipments())
 						.stream()
 						.mapToInt(d -> d instanceof Champion ? ((Champion) d).getMana() : ((Equipment) d).getMana())
 						.filter(i -> i != 0)
 						.average()
 						.orElse(0);
 
-				Pair<Race, Race> combo = ds.getCombo();
+				Pair<Race, Race> combo = dk.getCombo();
 				eb.addField(
-						"`Slot %s | %sreserva %s`".formatted(j, prefix, j),
+						"`Slot %s%s | %sreserva %s`".formatted(j, kp.getDecks().indexOf(dk) == kp.getActiveDeck() ? " (ATUAL)" : "", prefix, j),
 						"""
 								:crossed_swords: | Cartas Senshi: %s
 								:large_orange_diamond: | Efeito primário: %s (%s)
@@ -107,12 +108,12 @@ public class DeckStashCommand implements Executable {
 																	
 								%s
 								""".formatted(
-								ds.getChampions().size(),
+								dk.getChampions().size(),
 								combo.getLeft(),
 								combo.getLeft().getMajorDesc(),
 								combo.getRight(),
 								combo.getRight().getMinorDesc(),
-								ds.getEvoWeight(),
+								dk.getEvoWeight(),
 								Helper.round(manaCost, 2),
 								"""
 										:abacus: | Classes
@@ -139,26 +140,7 @@ public class DeckStashCommand implements Executable {
 				return;
 			}
 
-			DeckStash ds = DeckStashDAO.getStash(author.getId()).get(slot);
-
-			List<Champion> champions = List.copyOf(kp.getChampions());
-			List<Equipment> equipments = List.copyOf(kp.getEquipments());
-			List<Field> fields = List.copyOf(kp.getFields());
-			List<Integer> destinyDraw = List.copyOf(kp.getDestinyDraw());
-
-			kp.setChampions(List.copyOf(ds.getChampions()));
-			kp.setEquipments(List.copyOf(ds.getEquipments()));
-			kp.setFields(List.copyOf(ds.getFields()));
-			if (ds.getDestinyDraw() != null) kp.setDestinyDraw(List.copyOf(ds.getDestinyDraw()));
-			else kp.setDestinyDraw(List.of());
-
-			ds.setChampions(champions);
-			ds.setEquipments(equipments);
-			ds.setFields(fields);
-			if (destinyDraw != null) ds.setDestinyDraw(destinyDraw);
-			else ds.setDestinyDraw(List.of());
-
-			DeckStashDAO.saveStash(ds);
+			kp.setDeck(slot);
 			KawaiponDAO.saveKawaipon(kp);
 
 			channel.sendMessage("✅ | Deck alternado com sucesso.").queue();

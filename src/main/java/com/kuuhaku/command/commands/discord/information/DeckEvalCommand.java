@@ -29,6 +29,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -53,6 +54,7 @@ public class DeckEvalCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 
 		Map<Class, Integer> count = new HashMap<>() {{
 			put(Class.DUELIST, 0);
@@ -63,7 +65,7 @@ public class DeckEvalCommand implements Executable {
 			put(Class.TRAP, 0);
 			put(Class.LEVELER, 0);
 		}};
-		for (Champion c : kp.getChampions())
+		for (Champion c : dk.getChampions())
 			count.merge(c.getCategory(), 1, Integer::sum);
 
 		count.remove(null);
@@ -75,18 +77,18 @@ public class DeckEvalCommand implements Executable {
 			data[i * 2 + 1] = ct != 1 ? "s" : "";
 		}
 
-		double manaCost = ListUtils.union(kp.getChampions(), kp.getEquipments())
+		double manaCost = ListUtils.union(dk.getChampions(), dk.getEquipments())
 				.stream()
 				.mapToInt(d -> d instanceof Champion ? ((Champion) d).getMana() : ((Equipment) d).getMana())
 				.filter(i -> i != 0)
 				.average()
 				.orElse(0);
 
-		Pair<Race, Race> combo = kp.getCombo();
+		Pair<Race, Race> combo = dk.getCombo();
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle("Análise do deck de " + author.getName())
 				.addField(
-						":crossed_swords: | Cartas Senshi: " + kp.getChampions().size(),
+						":crossed_swords: | Cartas Senshi: " + dk.getChampions().size(),
 						"""
 								:large_orange_diamond: | Efeito primário: %s (%s)
 								:small_orange_diamond: | Efeito secundário: %s (%s)
@@ -98,7 +100,7 @@ public class DeckEvalCommand implements Executable {
 										combo.getLeft().getMajorDesc(),
 										combo.getRight(),
 										combo.getRight().getMinorDesc(),
-										kp.getEvoWeight(),
+										dk.getEvoWeight(),
 										Helper.round(manaCost, 2)
 								),
 						false
@@ -150,7 +152,7 @@ public class DeckEvalCommand implements Executable {
 		if (manaCost >= 3.5)
 			tips.add("Seu deck possui um custo de mana muito alto. Apesar das cartas de custo alto serem mais forte, não adianta nada se você conseguir invocar apenas 1 por turno.");
 
-		if (kp.getChampions().size() < 30)
+		if (dk.getChampions().size() < 30)
 			eb.setDescription("Seu deck ainda não está pronto para duelos.");
 		else
 			eb.setDescription(tips.isEmpty() ? "Seu deck está bem distribuído, parabéns!" : String.join("\n\n", tips));

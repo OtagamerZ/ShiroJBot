@@ -35,13 +35,11 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.ClanPermission;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Map;
@@ -77,6 +75,7 @@ public class ClanConvertCardCommand implements Executable {
 
 		Account acc = AccountDAO.getAccount(author.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa digitar o nome da carta kawaipon que quer converter para carta senshi.").queue();
@@ -132,7 +131,7 @@ public class ClanConvertCardCommand implements Executable {
 			}
 			case EVOGEAR -> {
 				Equipment e = (Equipment) tc;
-				if (kp.getEquipment(tc.getCard()) == null) {
+				if (dk.getEquipment(tc.getCard()) == null) {
 					channel.sendMessage("❌ | Você não possui esse equipamento.").queue();
 					return;
 				}
@@ -150,7 +149,7 @@ public class ClanConvertCardCommand implements Executable {
 						.queue(s ->
 								Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
-											kp.removeEquipment(e);
+											dk.removeEquipment(e);
 											cl.getDeck().addEquipment(e);
 											KawaiponDAO.saveKawaipon(kp);
 											cl.getTransactions().add(author.getAsTag() + " adicionou a carta " + tc.getCard().getName() + " ao deck");
@@ -165,7 +164,7 @@ public class ClanConvertCardCommand implements Executable {
 			}
 			case FIELD -> {
 				Field f = (Field) tc;
-				if (kp.getField(tc.getCard()) == null) {
+				if (dk.getField(tc.getCard()) == null) {
 					channel.sendMessage("❌ | Você não possui esse campo.").queue();
 					return;
 				}
@@ -183,7 +182,7 @@ public class ClanConvertCardCommand implements Executable {
 						.queue(s ->
 								Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
-											kp.removeField(f);
+											dk.removeField(f);
 											cl.getDeck().addField(f);
 											KawaiponDAO.saveKawaipon(kp);
 											cl.getTransactions().add(author.getAsTag() + " adicionou a carta " + tc.getCard().getName() + " ao deck");

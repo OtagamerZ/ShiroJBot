@@ -76,7 +76,7 @@ public class ClanPermissionCommand implements Executable {
 						Expulsar membros: %s
 						Sacar créditos do cofre: %s
 						Convidar membros: %s
-						Alterar o deck: %s
+						Alterar o clanDeck: %s
 						""".formatted(
 						perms.contains(ClanPermission.ALTER_HIERARCHY) ? "✅" : "❌",
 						perms.contains(ClanPermission.KICK) ? "✅" : "❌",
@@ -182,7 +182,7 @@ public class ClanPermissionCommand implements Executable {
 						Expulsar membros: %s
 						Sacar créditos do cofre: %s
 						Convidar membros: %s
-						Alterar o deck: %s
+						Alterar o clanDeck: %s
 						""".formatted(
 						p.contains(ClanPermission.ALTER_HIERARCHY) ? "✅" : "❌",
 						p.contains(ClanPermission.KICK) ? "✅" : "❌",
