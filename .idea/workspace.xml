@@ -13,12 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de comando para nomear decks">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/InvestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/InvestCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RecoverCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RecoverCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/StockMarket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/StockMarket.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de comando para nomear decks" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1192,13 +1187,6 @@
       <workItem from="1620749133558" duration="8234000" />
       <workItem from="1620820840715" duration="10604000" />
     </task>
-    <task id="LOCAL-04364" summary="Atualização da biblioteca JDA">
-      <created>1620416579173</created>
-      <option name="number" value="04364" />
-      <option name="presentableId" value="LOCAL-04364" />
-      <option name="project" value="LOCAL" />
-      <updated>1620416579173</updated>
-    </task>
     <task id="LOCAL-04365" summary="Atualização da biblioteca JDA">
       <created>1620508809860</created>
       <option name="number" value="04365" />
@@ -1535,7 +1523,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620936068107</updated>
     </task>
-    <option name="localTasksCounter" value="4413" />
+    <task id="LOCAL-04413" summary="Adição de comando para nomear decks">
+      <created>1620938643191</created>
+      <option name="number" value="04413" />
+      <option name="presentableId" value="LOCAL-04413" />
+      <option name="project" value="LOCAL" />
+      <updated>1620938643191</updated>
+    </task>
+    <option name="localTasksCounter" value="4414" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
