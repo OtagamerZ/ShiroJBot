@@ -19,8 +19,6 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -48,8 +46,7 @@ public class Kawaipon implements Cloneable {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int activeDeck = 0;
 
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "kawaipon_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Deck> decks = new ArrayList<>();
