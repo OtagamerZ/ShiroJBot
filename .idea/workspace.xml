@@ -15,8 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de comando para nomear decks">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckNameCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckNameCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/DeckStashCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1191,13 +1189,6 @@
       <workItem from="1620749133558" duration="8234000" />
       <workItem from="1620820840715" duration="10604000" />
     </task>
-    <task id="LOCAL-04362" summary="Atualização da biblioteca JDA">
-      <created>1620412306843</created>
-      <option name="number" value="04362" />
-      <option name="presentableId" value="LOCAL-04362" />
-      <option name="project" value="LOCAL" />
-      <updated>1620412306843</updated>
-    </task>
     <task id="LOCAL-04363" summary="Atualização da biblioteca JDA">
       <created>1620413700464</created>
       <option name="number" value="04363" />
@@ -1534,7 +1525,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620934075206</updated>
     </task>
-    <option name="localTasksCounter" value="4411" />
+    <task id="LOCAL-04411" summary="Adição de comando para nomear decks">
+      <created>1620934736655</created>
+      <option name="number" value="04411" />
+      <option name="presentableId" value="LOCAL-04411" />
+      <option name="project" value="LOCAL" />
+      <updated>1620934736655</updated>
+    </task>
+    <option name="localTasksCounter" value="4412" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
