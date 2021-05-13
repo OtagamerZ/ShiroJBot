@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de comando para nomear decks" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de comando para nomear decks">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1187,20 +1189,6 @@
       <workItem from="1620749133558" duration="8234000" />
       <workItem from="1620820840715" duration="10604000" />
     </task>
-    <task id="LOCAL-04365" summary="Atualização da biblioteca JDA">
-      <created>1620508809860</created>
-      <option name="number" value="04365" />
-      <option name="presentableId" value="LOCAL-04365" />
-      <option name="project" value="LOCAL" />
-      <updated>1620508809861</updated>
-    </task>
-    <task id="LOCAL-04366" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
-      <created>1620654121698</created>
-      <option name="number" value="04366" />
-      <option name="presentableId" value="LOCAL-04366" />
-      <option name="project" value="LOCAL" />
-      <updated>1620654121699</updated>
-    </task>
     <task id="LOCAL-04367" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
       <created>1620654410955</created>
       <option name="number" value="04367" />
@@ -1530,7 +1518,21 @@
       <option name="project" value="LOCAL" />
       <updated>1620938643191</updated>
     </task>
-    <option name="localTasksCounter" value="4414" />
+    <task id="LOCAL-04414" summary="Adição de comando para nomear decks">
+      <created>1620939192098</created>
+      <option name="number" value="04414" />
+      <option name="presentableId" value="LOCAL-04414" />
+      <option name="project" value="LOCAL" />
+      <updated>1620939192098</updated>
+    </task>
+    <task id="LOCAL-04415" summary="Adição de comando para nomear decks">
+      <created>1620939199155</created>
+      <option name="number" value="04415" />
+      <option name="presentableId" value="LOCAL-04415" />
+      <option name="project" value="LOCAL" />
+      <updated>1620939199155</updated>
+    </task>
+    <option name="localTasksCounter" value="4416" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
