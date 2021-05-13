@@ -35,13 +35,11 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.ClanPermission;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Map;
@@ -77,6 +75,7 @@ public class ClanRevertCardCommand implements Executable {
 
 		Account acc = AccountDAO.getAccount(author.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa digitar o nome da carta senshi que quer converter para carta kawaipon.").queue();
@@ -104,7 +103,7 @@ public class ClanRevertCardCommand implements Executable {
 					return;
 				}
 
-				if (kp.checkChampion(c, channel)) return;
+				if (dk.checkChampion(c, channel)) return;
 
 				c.setAcc(acc);
 				EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -137,7 +136,7 @@ public class ClanRevertCardCommand implements Executable {
 					return;
 				}
 
-				if (kp.checkEquipment(e, channel)) return;
+				if (dk.checkEquipment(e, channel)) return;
 
 				e.setAcc(acc);
 				EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -150,7 +149,7 @@ public class ClanRevertCardCommand implements Executable {
 						.queue(s ->
 								Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
-											kp.addEquipment(e);
+											dk.addEquipment(e);
 											cl.getDeck().removeEquipment(e);
 											KawaiponDAO.saveKawaipon(kp);
 											cl.getTransactions().add(author.getAsTag() + " removeu a carta " + tc.getCard().getName() + " do deck");
@@ -170,7 +169,7 @@ public class ClanRevertCardCommand implements Executable {
 					return;
 				}
 
-				if (kp.checkField(f, channel)) return;
+				if (dk.checkField(f, channel)) return;
 
 				f.setAcc(acc);
 				EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -183,7 +182,7 @@ public class ClanRevertCardCommand implements Executable {
 						.queue(s ->
 								Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 											Main.getInfo().getConfirmationPending().remove(author.getId());
-											kp.addField(f);
+											dk.addField(f);
 											cl.getDeck().removeField(f);
 											KawaiponDAO.saveKawaipon(kp);
 											cl.getTransactions().add(author.getAsTag() + " removeu a carta " + tc.getCard().getName() + " do deck");

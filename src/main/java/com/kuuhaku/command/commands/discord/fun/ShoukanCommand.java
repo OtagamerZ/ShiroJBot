@@ -36,12 +36,10 @@ import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.common.RankedDuo;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.RankedQueue;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.MatchMakingRating;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -74,19 +72,7 @@ public class ShoukanCommand implements Executable {
 
 			if (!daily) {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-				if (kp.getChampions().size() < 30) {
-					channel.sendMessage("❌ | É necessário ter ao menos 30 cartas no deck para poder jogar Shoukan.").queue();
-					return;
-				} else if (kp.getEvoWeight() > 24) {
-					channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (kp.hasInvalidChampionCopyCount()) {
-					channel.sendMessage("❌ | Seus campeões ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (kp.hasInvalidEquipmentCopyCount()) {
-					channel.sendMessage("❌ | Seus equipamentos ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-					return;
-				}
+				if (kp.getDeck().hasInvalidDeck(channel)) return;
 			}
 
 			String id = author.getId() + "." + 0 + "." + guild.getId();
@@ -117,19 +103,7 @@ public class ShoukanCommand implements Executable {
 			}
 
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-			if (kp.getChampions().size() < 30) {
-				channel.sendMessage("❌ | É necessário ter ao menos 30 cartas no deck para poder jogar Shoukan.").queue();
-				return;
-			} else if (kp.getEvoWeight() > 24) {
-				channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
-				return;
-			} else if (kp.hasInvalidChampionCopyCount()) {
-				channel.sendMessage("❌ | Seus campeões ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-				return;
-			} else if (kp.hasInvalidEquipmentCopyCount()) {
-				channel.sendMessage("❌ | Seus equipamentos ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-				return;
-			}
+			if (kp.getDeck().hasInvalidDeck(channel)) return;
 
 			String id = author.getId() + "." + 0 + "." + guild.getId();
 
@@ -299,31 +273,8 @@ public class ShoukanCommand implements Executable {
 			} else if (!daily) {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 				Kawaipon target = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
-				if (kp.getChampions().size() < 30) {
-					channel.sendMessage("❌ | É necessário ter ao menos 30 cartas no deck para poder jogar Shoukan.").queue();
-					return;
-				} else if (target.getChampions().size() < 30) {
-					channel.sendMessage("❌ | " + message.getMentionedUsers().get(0).getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
-					return;
-				} else if (kp.getEvoWeight() > 24) {
-					channel.sendMessage("❌ | Seus equipamentos ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (kp.hasInvalidChampionCopyCount()) {
-					channel.sendMessage("❌ | Seus campeões ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (kp.hasInvalidEquipmentCopyCount()) {
-					channel.sendMessage("❌ | Seus equipamentos ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (target.getEvoWeight() > 24) {
-					channel.sendMessage("❌ | Os equipamentos de " + message.getMentionedUsers().get(0).getAsMention() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (target.hasInvalidChampionCopyCount()) {
-					channel.sendMessage("❌ | Os campeões de " + message.getMentionedUsers().get(0).getAsMention() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-					return;
-				} else if (target.hasInvalidEquipmentCopyCount()) {
-					channel.sendMessage("❌ | Os equipamentos de " + message.getMentionedUsers().get(0).getAsMention() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-					return;
-				}
+				if (kp.getDeck().hasInvalidDeck(channel)
+					|| Deck.hasInvalidDeck(target.getDeck(), message.getMentionedUsers().get(0), channel)) return;
 			}
 
 			String id = author.getId() + "." + users.get(0).getId() + "." + guild.getId();
@@ -345,19 +296,7 @@ public class ShoukanCommand implements Executable {
 						User u = message.getMentionedUsers().get(i);
 						Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
 
-						if (k.getChampions().size() < 30) {
-							channel.sendMessage("❌ | " + u.getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 30 cartas para poder jogar Shoukan.").queue();
-							return;
-						} else if (k.getEvoWeight() > 24) {
-							channel.sendMessage("❌ | Os equipamentos de " + u.getAsMention() + " ultrapassam a soma total de slots permitidos, remova alguns antes de poder jogar.").queue();
-							return;
-						} else if (k.hasInvalidChampionCopyCount()) {
-							channel.sendMessage("❌ | Os campeões de " + u.getAsMention() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-							return;
-						} else if (k.hasInvalidEquipmentCopyCount()) {
-							channel.sendMessage("❌ | Os equipamentos de " + u.getAsMention() + " ultrapassam o limite máximo de cópias permitidas, remova alguns antes de poder jogar.").queue();
-							return;
-						}
+						if (Deck.hasInvalidDeck(k.getDeck(), u, channel)) return;
 					}
 
 				List<User> players = new ArrayList<>() {{

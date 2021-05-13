@@ -342,10 +342,11 @@ public class BuyCardCommand implements Executable {
 					}
 
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+					Deck dk = kp.getDeck();
 
-					if (kp.checkEquipment(em.getCard(), channel)) return;
+					if (dk.checkEquipment(em.getCard(), channel)) return;
 
-					kp.addEquipment(em.getCard());
+					dk.addEquipment(em.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
 					int rawAmount = em.getPrice();
@@ -381,10 +382,11 @@ public class BuyCardCommand implements Executable {
 					channel.sendMessage("✅ | Equipamento comprado com sucesso!").queue();
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+					Deck dk = kp.getDeck();
 
-					if (kp.checkEquipment(em.getCard(), channel)) return;
+					if (dk.checkEquipment(em.getCard(), channel)) return;
 
-					kp.addEquipment(em.getCard());
+					dk.addEquipment(em.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
 					em.setBuyer(author.getId());
@@ -405,10 +407,11 @@ public class BuyCardCommand implements Executable {
 					}
 
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+					Deck dk = kp.getDeck();
 
-					if (kp.checkField(fm.getCard(), channel)) return;
+					if (dk.checkField(fm.getCard(), channel)) return;
 
-					kp.addField(fm.getCard());
+					dk.addField(fm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
 					int rawAmount = fm.getPrice();
@@ -444,10 +447,11 @@ public class BuyCardCommand implements Executable {
 					channel.sendMessage("✅ | Arena comprada com sucesso!").queue();
 				} else {
 					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+					Deck dk = kp.getDeck();
 
-					if (kp.checkField(fm.getCard(), channel)) return;
+					if (dk.checkField(fm.getCard(), channel)) return;
 
-					kp.addField(fm.getCard());
+					dk.addField(fm.getCard());
 					KawaiponDAO.saveKawaipon(kp);
 
 					fm.setBuyer(author.getId());

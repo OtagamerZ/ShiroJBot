@@ -47,10 +47,10 @@ public class LogDAO {
 
 		Query q = em.createNativeQuery("SELECT * FROM shiro.\"GetUsage\"");
 
-		return q.getResultList();
+		return (List<Object[]>) q.getResultList();
 	}
 
-	@SuppressWarnings("SqlResolve")
+	@SuppressWarnings({"unchecked", "SqlResolve"})
 	public static List<Object[]> auditUser(String id, String type) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -67,7 +67,7 @@ public class LogDAO {
 							""");
 					q.setParameter("id", id);
 
-					yield q.getResultList();
+					yield (List<Object[]>) q.getResultList();
 				}
 				case "C" -> {
 					Query q = em.createNativeQuery("""
@@ -80,7 +80,7 @@ public class LogDAO {
 							""");
 					q.setParameter("id", id);
 
-					yield q.getResultList();
+					yield (List<Object[]>) q.getResultList();
 				}
 				default -> new ArrayList<>();
 			};

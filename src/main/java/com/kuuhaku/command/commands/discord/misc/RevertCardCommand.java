@@ -29,6 +29,7 @@ import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
@@ -61,6 +62,7 @@ public class RevertCardCommand implements Executable {
 		}
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 
 		if (args.length == 0) {
 			channel.sendMessage("❌ | Você precisa digitar o nome da carta senshi que quer converter para carta kawaipon.").queue();
@@ -81,7 +83,7 @@ public class RevertCardCommand implements Executable {
 		if (c == null) {
 			channel.sendMessage("❌ | Essa carta não é elegível para conversão.").queue();
 			return;
-		} else if (!kp.getChampions().contains(c)) {
+		} else if (!dk.getChampions().contains(c)) {
 			channel.sendMessage("❌ | Você não possui essa carta.").queue();
 			return;
 		}
@@ -95,7 +97,7 @@ public class RevertCardCommand implements Executable {
 
 		if (args.length > 1 && args[1].equalsIgnoreCase("s")) {
 			kp.addCard(kc);
-			kp.removeChampion(c);
+			dk.removeChampion(c);
 			KawaiponDAO.saveKawaipon(kp);
 			channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();
 		} else {
@@ -109,7 +111,7 @@ public class RevertCardCommand implements Executable {
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								kp.addCard(kc);
-								kp.removeChampion(c);
+								dk.removeChampion(c);
 								KawaiponDAO.saveKawaipon(kp);
 								s.delete().queue();
 								channel.sendMessage("✅ | Conversão realizada com sucesso!").queue();

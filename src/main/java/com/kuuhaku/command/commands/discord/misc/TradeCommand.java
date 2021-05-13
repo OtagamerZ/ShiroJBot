@@ -34,6 +34,7 @@ import com.kuuhaku.model.common.TradeContent;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
@@ -168,32 +169,32 @@ public class TradeCommand implements Executable {
 								}
 								case EVOGEAR -> {
 									Equipment e = CardDAO.getEquipment(offer);
-									if (!tc.getKawaipon().getEquipments().contains(e)) {
+									if (!tc.getDeck().getEquipments().contains(e)) {
 										channel.sendMessage("❌ | Você não possui essa carta.").queue();
 										return;
 									}
 
 									if (add) {
 										tc.getEquipments().add(e);
-										tc.getKp().removeEquipment(e);
+										tc.getDk().removeEquipment(e);
 									} else {
 										tc.getEquipments().remove(e);
-										tc.getKp().addEquipment(e);
+										tc.getDk().addEquipment(e);
 									}
 								}
 								case FIELD -> {
 									Field f = CardDAO.getField(offer);
-									if (!tc.getKawaipon().getFields().contains(f)) {
+									if (!tc.getDeck().getFields().contains(f)) {
 										channel.sendMessage("❌ | Você não possui essa carta.").queue();
 										return;
 									}
 
 									if (add) {
 										tc.getFields().add(f);
-										tc.getKp().removeField(f);
+										tc.getDk().removeField(f);
 									} else {
 										tc.getFields().remove(f);
-										tc.getKp().addField(f);
+										tc.getDk().addField(f);
 									}
 								}
 								case NONE -> {
@@ -230,11 +231,12 @@ public class TradeCommand implements Executable {
 							for (TradeContent offer : offers.values()) {
 								Account oAcc = offer.getAccount();
 								Kawaipon oKp = offer.getKawaipon();
+								Deck oDk = oKp.getDeck();
 
 								code = oAcc.getBalance() >= offer.getCredits()
 									   && oKp.getCards().containsAll(offer.getCards())
-									   && oKp.getEquipments().containsAll(offer.getEquipments())
-									   && oKp.getFields().containsAll(offer.getFields()) ? 0 : 1;
+									   && oDk.getEquipments().containsAll(offer.getEquipments())
+									   && oDk.getFields().containsAll(offer.getFields()) ? 0 : 1;
 
 								if (code != 0) {
 									inv = offer.getUid().equals(author.getId()) ? author : tgt;

@@ -28,7 +28,7 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.InfiniteList;
 import net.dv8tion.jda.api.entities.User;
@@ -51,14 +51,14 @@ public class TeamHand extends Hand {
 	private final InfiniteList<List<Drawable>> destinyDecks = new InfiniteList<>();
 
 
-	public TeamHand(Shoukan game, List<User> users, List<Kawaipon> kps, Side side) {
-		super(game, null, (Kawaipon) null, side);
+	public TeamHand(Shoukan game, List<User> users, List<Deck> dks, Side side) {
+		super(game, null, null, side, null);
 
 		for (int i = 0; i < users.size(); i++) {
-			Kawaipon kp = kps.get(i);
+			Deck dk = dks.get(i);
 			User user = users.get(i);
 
-			LinkedList<Drawable> deque = Stream.of(kp.getChampions(), kp.getEquipments(), kp.getFields())
+			LinkedList<Drawable> deque = Stream.of(dk.getChampions(), dk.getEquipments(), dk.getFields())
 					.flatMap(List::stream)
 					.collect(Collectors.toCollection(LinkedList::new));
 
@@ -115,9 +115,9 @@ public class TeamHand extends Hand {
 				}
 			}
 
-			if (kp.getDestinyDraw() != null) {
-				int champs = kp.getChampions().size();
-				for (int x : kp.getDestinyDraw()) {
+			if (dk.getDestinyDraw() != null) {
+				int champs = dk.getChampions().size();
+				for (int x : dk.getDestinyDraw()) {
 					if (x > champs) {
 						destinyDeck.clear();
 						break;
@@ -144,7 +144,7 @@ public class TeamHand extends Hand {
 			this.cards.add(new ArrayList<>());
 		}
 
-		combo = Race.getCombo(kps.stream().flatMap(kp -> kp.getChampions().stream()).collect(Collectors.toList()));
+		combo = Race.getCombo(dks.stream().flatMap(kp -> kp.getChampions().stream()).collect(Collectors.toList()));
 		if (combo.getLeft() == Race.DIVINITY) {
 			for (LinkedList<Drawable> deque : deques) {
 				deque.stream()

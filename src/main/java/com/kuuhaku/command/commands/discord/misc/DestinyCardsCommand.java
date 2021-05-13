@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
+import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
@@ -40,9 +41,10 @@ public class DestinyCardsCommand implements Executable {
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		Deck dk = kp.getDeck();
 
 		if (args.length == 0) {
-			kp.setDestinyDraw(null);
+			dk.setDestinyDraw(null);
 
 			channel.sendMessage("✅ | Cartas do destino limpas com sucesso.").queue();
 		} else {
@@ -62,7 +64,7 @@ public class DestinyCardsCommand implements Executable {
 					}
 				}
 
-				kp.setDestinyDraw(Arrays.stream(values).map(i -> i - 1).collect(Collectors.toList()));
+				dk.setDestinyDraw(Arrays.stream(values).map(i -> i - 1).collect(Collectors.toList()));
 
 				channel.sendMessage("✅ | Cartas do destino definidas com sucesso.").queue();
 			} catch (NumberFormatException e) {
