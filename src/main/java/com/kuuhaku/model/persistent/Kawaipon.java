@@ -19,14 +19,12 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.utils.Helper;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "kawaipon")
@@ -103,6 +101,7 @@ public class Kawaipon implements Cloneable {
 			}
 		}
 
+		decks.sort(Comparator.comparingInt(d -> Helper.getOr(d.getId(), 0)));
 		return decks;
 	}
 
@@ -118,6 +117,7 @@ public class Kawaipon implements Cloneable {
 			}
 		}
 
+		decks.sort(Comparator.comparingInt(d -> Helper.getOr(d.getId(), 0)));
 		return decks.get(activeDeck);
 	}
 
