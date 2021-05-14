@@ -1934,6 +1934,10 @@ public class Shoukan extends GlobalGame {
 		return fusionLock;
 	}
 
+	public void setFusionLock(int fusionLock) {
+		this.fusionLock = fusionLock;
+	}
+
 	public void addFLockTime(int time) {
 		fusionLock += time;
 	}
@@ -1946,6 +1950,10 @@ public class Shoukan extends GlobalGame {
 		return spellLock;
 	}
 
+	public void setSpellLock(int spellLock) {
+		this.spellLock = spellLock;
+	}
+
 	public void addSLockTime(int time) {
 		spellLock += time;
 	}
@@ -1956,6 +1964,10 @@ public class Shoukan extends GlobalGame {
 
 	public int getEffectLock() {
 		return effectLock;
+	}
+
+	public void setEffectLock(int effectLock) {
+		this.effectLock = effectLock;
 	}
 
 	public void addELockTime(int time) {
@@ -1976,6 +1988,10 @@ public class Shoukan extends GlobalGame {
 
 	public List<EffectOverTime> getEot() {
 		return eot;
+	}
+
+	public void removeEot(String name) {
+		eot.removeIf(e -> e.getSource().equalsIgnoreCase(name));
 	}
 
 	public boolean applyEot(EffectTrigger trigger, Side to, int index) {
