@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.utils.Helper;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -95,9 +96,10 @@ public class Kawaipon implements Cloneable {
 		} else {
 			Account acc = AccountDAO.getAccount(uid);
 			if (decks.size() < acc.getStashCapacity()) {
-				for (int i = 0; i < acc.getStashCapacity(); i++) {
+				for (int i = 0; i < acc.getStashCapacity() - decks.size(); i++) {
 					decks.add(new Deck());
 				}
+				KawaiponDAO.saveKawaipon(this);
 			}
 		}
 
@@ -111,9 +113,10 @@ public class Kawaipon implements Cloneable {
 		} else {
 			Account acc = AccountDAO.getAccount(uid);
 			if (decks.size() < acc.getStashCapacity()) {
-				for (int i = 0; i < acc.getStashCapacity(); i++) {
+				for (int i = 0; i < acc.getStashCapacity() - decks.size(); i++) {
 					decks.add(new Deck());
 				}
+				KawaiponDAO.saveKawaipon(this);
 			}
 		}
 
