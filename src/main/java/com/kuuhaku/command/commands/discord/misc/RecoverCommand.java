@@ -35,7 +35,6 @@ import com.kuuhaku.model.persistent.StockMarket;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -58,9 +57,6 @@ public class RecoverCommand implements Executable {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar uma carta e um valor para recuperar.").queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[1])) {
-			channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
-			return;
 		}
 
 		Card c = CardDAO.getRawCard(args[0]);
@@ -72,31 +68,35 @@ public class RecoverCommand implements Executable {
 		Account acc = AccountDAO.getAccount(author.getId());
 		StockMarket sm = StockMarketDAO.getCardInvestment(author.getId(), c);
 
-		double amount = Helper.round(Double.parseDouble(args[1]), 2);
-		if (sm.getInvestment() < amount) {
-			channel.sendMessage("❌ | Você não tem ações suficientes.").queue();
-			return;
+		try {
+			double amount = Helper.round(Double.parseDouble(args[1]), 2);
+			if (sm.getInvestment() < amount) {
+				channel.sendMessage("❌ | Você não tem ações suficientes.").queue();
+				return;
+			}
+
+			StockValue sv = StockMarketDAO.getValues().get(c.getId());
+			int readjust = (int) Math.round(sv.getValue() * amount);
+
+			sm.setInvestment(sm.getInvestment() - amount);
+
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			channel.sendMessage("Você está prestes vender " + amount + " ações (" + Helper.separate(readjust) + " créditos) da carta " + c.getName() + ", deseja confirmar?")
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								acc.addCredit(readjust, this.getClass());
+								acc.addProfit(readjust);
+								AccountDAO.saveAccount(acc);
+
+								StockMarketDAO.saveInvestment(sm);
+
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Ações vendidas com sucesso!")).queue();
+							}), true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+					));
+		} catch (NumberFormatException e) {
+			channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
 		}
-
-		StockValue sv = StockMarketDAO.getValues().get(c.getId());
-		int readjust = (int) Math.round(sv.getValue() * amount);
-
-		sm.setInvestment(sm.getInvestment() - amount);
-
-		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes vender " + amount + " ações (" + Helper.separate(readjust) + " créditos) da carta " + c.getName() + ", deseja confirmar?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-							acc.addCredit(readjust, this.getClass());
-							acc.addProfit(readjust);
-							AccountDAO.saveAccount(acc);
-
-							StockMarketDAO.saveInvestment(sm);
-
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Ações vendidas com sucesso!")).queue();
-						}), true, 1, TimeUnit.MINUTES,
-						u -> u.getId().equals(author.getId()),
-						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-				));
 	}
 }
