@@ -35,7 +35,6 @@ import com.kuuhaku.model.persistent.StockMarket;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -54,9 +53,6 @@ public class InvestCommand implements Executable {
 		if (args.length < 2) {
 			channel.sendMessage("❌ | Você precisa informar uma carta e um valor para investir.").queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[1])) {
-			channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
-			return;
 		}
 
 		Card c = CardDAO.getRawCard(args[0]);
@@ -68,41 +64,45 @@ public class InvestCommand implements Executable {
 		Account acc = AccountDAO.getAccount(author.getId());
 		StockMarket sm = StockMarketDAO.getCardInvestment(author.getId(), c);
 
-		int amount = Integer.parseInt(args[1]);
-		if (acc.getBalance() < amount) {
-			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
-			return;
+		try {
+			int amount = Integer.parseInt(args[1]);
+			if (acc.getBalance() < amount) {
+				channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
+				return;
+			}
+
+			StockValue sv = StockMarketDAO.getValues().get(c.getId());
+			if (sv.getValue() == 0) {
+				channel.sendMessage("❌ | Essa carta ainda não está disponível para compra de ações.").queue();
+				return;
+			}
+
+			double readjust = Helper.round(amount / (double) sv.getValue(), 3);
+
+			if (sm.getInvestment() + readjust >= 1000) {
+				channel.sendMessage("❌ | O limite máximo por carta é 1.000 ações.").queue();
+				return;
+			}
+
+			sm.setInvestment(sm.getInvestment() + readjust);
+
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			channel.sendMessage("Você está prestes comprar " + readjust + " ações (" + Helper.separate(amount) + " créditos) da carta " + c.getName() + ", deseja confirmar?")
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								acc.removeCredit(amount, this.getClass());
+								acc.removeProfit(amount);
+								AccountDAO.saveAccount(acc);
+
+								StockMarketDAO.saveInvestment(sm);
+
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Ações compradas com sucesso!")).queue();
+							}), true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+					));
+		} catch (NumberFormatException e) {
+			channel.sendMessage(I18n.getString("err_invalid-amount")).queue();
 		}
-
-		StockValue sv = StockMarketDAO.getValues().get(c.getId());
-		if (sv.getValue() == 0) {
-			channel.sendMessage("❌ | Essa carta ainda não está disponível para compra de ações.").queue();
-			return;
-		}
-
-		double readjust = Helper.round(amount / (double) sv.getValue(), 3);
-
-		if (sm.getInvestment() + readjust >= 1000) {
-			channel.sendMessage("❌ | O limite máximo por carta é 1.000 ações.").queue();
-			return;
-		}
-
-		sm.setInvestment(sm.getInvestment() + readjust);
-
-		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Você está prestes comprar " + readjust + " ações (" + Helper.separate(amount) + " créditos) da carta " + c.getName() + ", deseja confirmar?")
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-							Main.getInfo().getConfirmationPending().remove(author.getId());
-							acc.removeCredit(amount, this.getClass());
-							acc.removeProfit(amount);
-							AccountDAO.saveAccount(acc);
-
-							StockMarketDAO.saveInvestment(sm);
-
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Ações compradas com sucesso!")).queue();
-						}), true, 1, TimeUnit.MINUTES,
-						u -> u.getId().equals(author.getId()),
-						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-				));
 	}
 }
