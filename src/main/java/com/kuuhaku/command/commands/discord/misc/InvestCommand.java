@@ -75,6 +75,11 @@ public class InvestCommand implements Executable {
 		}
 
 		StockValue sv = StockMarketDAO.getValues().get(c.getId());
+		if (sv.getValue() == 0) {
+			channel.sendMessage("❌ | Essa carta ainda não está disponível para compra de ações.").queue();
+			return;
+		}
+
 		double readjust = Helper.round(amount / (double) sv.getValue(), 3);
 
 		if (sm.getInvestment() + readjust >= 1000) {
