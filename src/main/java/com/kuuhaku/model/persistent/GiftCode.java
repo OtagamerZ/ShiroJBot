@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent;
 
 import bsh.EvalError;
 import bsh.Interpreter;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.Column;
@@ -94,14 +93,11 @@ public class GiftCode {
 								
 				          """.formatted(code);
 
-		Account acc = AccountDAO.getAccount(id);
-
 		try {
 			Interpreter i = new Interpreter();
 			i.setStrictJava(true);
-			i.set("acc", acc);
+			i.set("id", id);
 			i.eval(imports + gift);
-			AccountDAO.saveAccount(acc);
 		} catch (EvalError e) {
 			Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 		}
