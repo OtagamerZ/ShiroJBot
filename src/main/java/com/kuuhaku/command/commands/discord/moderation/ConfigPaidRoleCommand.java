@@ -120,7 +120,7 @@ public class ConfigPaidRoleCommand implements Executable {
 				return;
 			}
 
-			long time = args.length > 2 ? Math.max(1, Long.parseLong(args[3])) * Helper.MILLIS_IN_MINUTE : -1;
+			long time = args.length > 2 ? Math.max(1, Integer.parseInt(args[3])) * Helper.MILLIS_IN_MINUTE : -1;
 			gc.addPaidRole(r.getId(), value, time);
 
 			if (time > -1)
