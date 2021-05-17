@@ -79,8 +79,7 @@ public class Hand {
 
 			RarityColors rc = RarityColorsDAO.getColor(kc.getCard().getRarity());
 
-			if (kc.isFoil()) g2d.setColor(rc.getPrimary().brighter());
-			else g2d.setColor(rc.getPrimary());
+			g2d.setColor(kc.isFoil() ? rc.getSecondary() : rc.getPrimary());
 
 			Helper.writeRotated(g2d, kc.isFoil() ? "*" + i + "*" : String.valueOf(i), 128, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
 		}

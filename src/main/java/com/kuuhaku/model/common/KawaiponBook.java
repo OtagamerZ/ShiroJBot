@@ -128,9 +128,7 @@ public class KawaiponBook {
 							g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
 							RarityColors rc = RarityColorsDAO.getColor(chunk.get(i).getCard().getRarity());
 
-							g.setBackground(rc.getSecondary());
-							if (foil) g.setColor(rc.getPrimary().brighter());
-							else g.setColor(rc.getPrimary());
+							g2d.setColor(foil ? rc.getSecondary() : rc.getPrimary());
 
 							g.drawImage(card, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 							Profile.printCenteredString(StringUtils.abbreviate(chunk.get(i).getName(), 15), CARD_WIDTH, x, y + 274, g);
