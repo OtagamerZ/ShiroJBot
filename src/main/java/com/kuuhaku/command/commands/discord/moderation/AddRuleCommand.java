@@ -52,9 +52,7 @@ public class AddRuleCommand implements Executable {
 		if (r[0].length() > 100) {
 			channel.sendMessage("❌ | O título da regra só pode conter no máximo 100 caractéres.").queue();
 			return;
-		}
-
-		if (r[1].length() > 1000) {
+		} else if (r[1].length() > 1000) {
 			channel.sendMessage("❌ | O corpo da regra só pode conter no máximo 1000 caractéres.").queue();
 			return;
 		}
