@@ -44,7 +44,7 @@ public class RelayBlockList {
 		for (String d : ShiroInfo.getStaff()) {
 			Main.getJibril().retrieveUserById(d).queue(u ->
 					u.openPrivateChannel().queue(c -> {
-						String msg = "Usuário bloqueado do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
+						String msg = "Usuário bloqueado do chat global.\n\nUsuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\nRazão: " + reason;
 						c.sendMessage(msg).queue();
 					}));
 		}
@@ -64,7 +64,7 @@ public class RelayBlockList {
 		for (String d : ShiroInfo.getStaff()) {
 			Main.getJibril().retrieveUserById(d).queue(u ->
 					u.openPrivateChannel().queue(c -> {
-						String msg = "Usuário bloqueado permanentemente do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
+						String msg = "Usuário bloqueado permanentemente do chat global.\n\nUsuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\nRazão: " + reason;
 						c.sendMessage(msg).queue();
 					}));
 		}
