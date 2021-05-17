@@ -21,7 +21,6 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
@@ -155,22 +154,19 @@ public class Card {
 
 		for (int y = 0; y < bi.getHeight(); y++) {
 			for (int x = 0; x < bi.getWidth(); x++) {
-				int color = bi.getRGB(x, y);
+				int[] rgb = Helper.unpackRGB(bi.getRGB(x, y));
+				int alpha = rgb[0];
+				float[] hsv;
+				if (border) {
+					hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
+				} else {
+					hsv = Color.RGBtoHSB(rgb[1], rgb[3], rgb[2], null);
+				}
 
-				out.setRGB(x, y, ShiroInfo.getColorLookup().computeIfAbsent(color, i -> {
-					int[] rgb = Helper.unpackRGB(color);
-					int alpha = rgb[0];
-					float[] hsv;
-					if (border) {
-						hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
-					} else {
-						hsv = Color.RGBtoHSB(rgb[1], rgb[3], rgb[2], null);
-					}
+				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
+				rgb = Helper.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
 
-					hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
-					rgb = Helper.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-					return Helper.packRGB(alpha, rgb[1], rgb[2], rgb[3]);
-				}));
+				out.setRGB(x, y, Helper.packRGB(alpha, rgb[1], rgb[2], rgb[3]));
 			}
 		}
 
