@@ -155,7 +155,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		ConsoleListener console = new ConsoleListener();
 
 		for (Emote emote : shiroShards.getEmotes()) {
-			ShiroInfo.getEmoteCache().put(":" + emote.getName() + ":", emote.getId());
+			ShiroInfo.getEmoteLookup().put(":" + emote.getName() + ":", emote.getId());
 		}
 
 		try {
