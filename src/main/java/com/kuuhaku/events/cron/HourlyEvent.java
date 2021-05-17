@@ -68,9 +68,9 @@ public class HourlyEvent implements Job {
 			}
 		}
 
-		ShiroInfo.getEmoteCache().clear();
+		ShiroInfo.getEmoteLookup().clear();
 		for (Emote emote : Main.getShiroShards().getEmotes()) {
-			ShiroInfo.getEmoteCache().put(":" + emote.getName() + ":", emote.getId());
+			ShiroInfo.getEmoteLookup().put(":" + emote.getName() + ":", emote.getId());
 		}
 
 		System.gc();
