@@ -927,10 +927,10 @@ public class ShiroEvents extends ListenerAdapter {
 				if (be.getReactionEmote() != null) msg.addReaction(be.getReactionEmote()).queue();
 			} else if (be.matchConfirmation(msg.getContentRaw()).find()) {
 				String[] args = msg.getContentRaw().replaceAll(be.getConfirmation(), "").replace(",", "").split(" ");
-				long value = 0;
+				int value = 0;
 				for (String arg : args) {
 					if (StringUtils.isNumeric(arg)) {
-						value = Long.parseLong(arg);
+						value = Integer.parseInt(arg);
 						break;
 					}
 				}

@@ -15,11 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/SlotsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigPaidRoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/ConfigPaidRoleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1197,34 +1195,6 @@
       <workItem from="1621010188720" duration="6639000" />
       <workItem from="1621119509106" duration="521000" />
     </task>
-    <task id="LOCAL-04376" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
-      <created>1620663066797</created>
-      <option name="number" value="04376" />
-      <option name="presentableId" value="LOCAL-04376" />
-      <option name="project" value="LOCAL" />
-      <updated>1620663066797</updated>
-    </task>
-    <task id="LOCAL-04377" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
-      <created>1620663450085</created>
-      <option name="number" value="04377" />
-      <option name="presentableId" value="LOCAL-04377" />
-      <option name="project" value="LOCAL" />
-      <updated>1620663450085</updated>
-    </task>
-    <task id="LOCAL-04378" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
-      <created>1620663580096</created>
-      <option name="number" value="04378" />
-      <option name="presentableId" value="LOCAL-04378" />
-      <option name="project" value="LOCAL" />
-      <updated>1620663580097</updated>
-    </task>
-    <task id="LOCAL-04379" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
-      <created>1620663679581</created>
-      <option name="number" value="04379" />
-      <option name="presentableId" value="LOCAL-04379" />
-      <option name="project" value="LOCAL" />
-      <updated>1620663679581</updated>
-    </task>
     <task id="LOCAL-04380" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
       <created>1620663875677</created>
       <option name="number" value="04380" />
@@ -1540,7 +1510,35 @@
       <option name="project" value="LOCAL" />
       <updated>1621272533539</updated>
     </task>
-    <option name="localTasksCounter" value="4425" />
+    <task id="LOCAL-04425" summary="Correções menores">
+      <created>1621273272034</created>
+      <option name="number" value="04425" />
+      <option name="presentableId" value="LOCAL-04425" />
+      <option name="project" value="LOCAL" />
+      <updated>1621273272034</updated>
+    </task>
+    <task id="LOCAL-04426" summary="Correções menores">
+      <created>1621273329109</created>
+      <option name="number" value="04426" />
+      <option name="presentableId" value="LOCAL-04426" />
+      <option name="project" value="LOCAL" />
+      <updated>1621273329109</updated>
+    </task>
+    <task id="LOCAL-04427" summary="Correções menores">
+      <created>1621273349144</created>
+      <option name="number" value="04427" />
+      <option name="presentableId" value="LOCAL-04427" />
+      <option name="project" value="LOCAL" />
+      <updated>1621273349144</updated>
+    </task>
+    <task id="LOCAL-04428" summary="Correções menores">
+      <created>1621274816774</created>
+      <option name="number" value="04428" />
+      <option name="presentableId" value="LOCAL-04428" />
+      <option name="project" value="LOCAL" />
+      <updated>1621274816774</updated>
+    </task>
+    <option name="localTasksCounter" value="4429" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
