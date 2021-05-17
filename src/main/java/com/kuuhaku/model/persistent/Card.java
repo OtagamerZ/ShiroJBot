@@ -98,12 +98,12 @@ public class Card {
 
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2d.drawImage(card, 15, 15, null);
-				g2d.drawImage(frame, 0, 0, null);
+				g2d.drawImage(foil ? adjust(card, false) : card, 15, 15, null);
+				g2d.drawImage(foil ? adjust(frame, true) : frame, 0, 0, null);
 
 				g2d.dispose();
 
-				return foil ? adjust(canvas) : canvas;
+				return canvas;
 			}
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
@@ -142,26 +142,29 @@ public class Card {
 
 			assert cardBytes != null;
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
-				return foil ? adjust(ImageIO.read(bais)) : ImageIO.read(bais);
+				return foil ? adjust(ImageIO.read(bais), false) : ImageIO.read(bais);
 			}
 		} catch (IOException e) {
 			return null;
 		}
 	}
 
-	private BufferedImage adjust(BufferedImage bi) {
+	private BufferedImage adjust(BufferedImage bi, boolean border) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		for (int y = 0; y < bi.getHeight(); y++) {
 			for (int x = 0; x < bi.getWidth(); x++) {
 				int[] rgb = Helper.unpackRGB(bi.getRGB(x, y));
 				int alpha = rgb[0];
+				float[] hsv;
+				if (border) {
+					hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
+				} else {
+					hsv = Color.RGBtoHSB(rgb[1], rgb[3], rgb[2], null);
+				}
 
-				float[] hsv = Color.RGBtoHSB(rgb[1], rgb[3], rgb[2], null);
 				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
-
 				rgb = Helper.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-
 				out.setRGB(x, y, Helper.packRGB(alpha, rgb[1], rgb[2], rgb[3]));
 			}
 		}
