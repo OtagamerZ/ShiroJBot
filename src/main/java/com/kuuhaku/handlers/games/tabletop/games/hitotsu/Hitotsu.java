@@ -98,15 +98,15 @@ public class Hitotsu extends Game {
 		}
 
 		Collections.shuffle(available);
-		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.COMMON).limit(25).collect(Collectors.toList()));
-		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.UNCOMMON).limit(25).collect(Collectors.toList()));
-		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.RARE).limit(25).collect(Collectors.toList()));
-		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.ULTRA_RARE).limit(25).collect(Collectors.toList()));
-		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.LEGENDARY).limit(25).collect(Collectors.toList()));
+		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.COMMON).limit(20).collect(Collectors.toList()));
+		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.UNCOMMON).limit(20).collect(Collectors.toList()));
+		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.RARE).limit(20).collect(Collectors.toList()));
+		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.ULTRA_RARE).limit(20).collect(Collectors.toList()));
+		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.LEGENDARY).limit(20).collect(Collectors.toList()));
 		deque.addAll(available.stream().filter(KawaiponCard::isFoil).collect(Collectors.toList()));
 
-		if (deque.size() < 150)
-			deque.addAll(available.subList(0, 150 - deque.size()));
+		if (deque.size() < 120)
+			deque.addAll(available.subList(0, 120 - deque.size()));
 
 		Collections.shuffle(deque);
 
