@@ -41,7 +41,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.kuuhaku.model.enums.Slot.*;
 
@@ -79,7 +79,7 @@ public class SlotsCommand implements Executable {
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
-		AtomicLong bet = new AtomicLong(Long.parseLong(args[0]));
+		AtomicInteger bet = new AtomicInteger(Integer.parseInt(args[0]));
 
 		if (acc.getTotalBalance() < bet.get()) {
 			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
@@ -161,7 +161,7 @@ public class SlotsCommand implements Executable {
 		);
 
 		List<String> vals = new ArrayList<>() {{
-			add(":white_flower: | **Aposta de " + author.getAsMention() + ": __" + Helper.separate(args[0]) + "__**");
+			add(":white_flower: | **Aposta de " + author.getAsMention() + ": __" + Helper.separate(Integer.parseInt(args[0])) + "__**");
 			add(Helper.separate(slt.getPot()));
 		}};
 
