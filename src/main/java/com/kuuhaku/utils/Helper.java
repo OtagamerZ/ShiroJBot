@@ -932,7 +932,7 @@ public class Helper {
 
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith(":") && args[i].endsWith(":")) {
-				Emote e = Main.getShiroShards().getEmoteById(ShiroInfo.getEmoteCache().get(args[i]));
+				Emote e = Main.getShiroShards().getEmoteById(ShiroInfo.getEmoteLookup().get(args[i]));
 				if (e != null)
 					args[i] = e.getAsMention();
 			}
@@ -999,7 +999,7 @@ public class Helper {
 				}
 
 				boolean makenew = false;
-				String id = ShiroInfo.getEmoteCache().get(oldWords[i]);
+				String id = ShiroInfo.getEmoteLookup().get(oldWords[i]);
 				Emote e = id == null ? null : Main.getShiroShards().getEmoteById(id);
 				if (e != null && !Objects.requireNonNull(e.getGuild()).getId().equals(g.getId()))
 					makenew = true;
@@ -2078,7 +2078,7 @@ public class Helper {
 	public static boolean hasEmote(String text) {
 		for (String word : text.split(" ")) {
 			if (word.startsWith(":") && word.endsWith(":")) {
-				if (ShiroInfo.getEmoteCache().containsKey(word)) return true;
+				if (ShiroInfo.getEmoteLookup().containsKey(word)) return true;
 			}
 		}
 
