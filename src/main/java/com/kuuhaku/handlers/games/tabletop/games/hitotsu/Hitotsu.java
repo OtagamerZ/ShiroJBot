@@ -105,8 +105,8 @@ public class Hitotsu extends Game {
 		deque.addAll(available.stream().filter(kc -> kc.getCard().getRarity() == KawaiponRarity.LEGENDARY).limit(20).collect(Collectors.toList()));
 		deque.addAll(available.stream().filter(KawaiponCard::isFoil).collect(Collectors.toList()));
 
-		if (deque.size() < 120)
-			deque.addAll(available.subList(0, 120 - deque.size()));
+		if (deque.size() < 100)
+			deque.addAll(available.subList(0, 100 - deque.size()));
 
 		Collections.shuffle(deque);
 
