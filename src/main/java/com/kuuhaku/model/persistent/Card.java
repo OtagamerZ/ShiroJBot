@@ -79,7 +79,7 @@ public class Card {
 
 	public BufferedImage drawCard(boolean foil) {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id + (foil ? "_F" : "_N"), k -> {
+			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
 				try {
 					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
 				} catch (IOException e) {
