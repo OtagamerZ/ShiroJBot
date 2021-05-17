@@ -19,8 +19,10 @@
 package com.kuuhaku.handlers.games.tabletop.games.hitotsu;
 
 import com.kuuhaku.model.enums.KawaiponRarity;
+import com.kuuhaku.model.persistent.KawaiponCard;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public enum CardEffect {
@@ -42,10 +44,11 @@ public enum CardEffect {
 		for (int i = 0; i < 4; i++) hand.draw(game.getDeque());
 	}),
 	SWAP_HANDS(KawaiponRarity.LEGENDARY, (game, hand) -> {
-		game.getChannel().sendMessage(game.getCurrent().getAsMention() + " jogou um `+2` para todo mundo!").queue();
-		for (Hand h : game.getSeats().values())
-			for (int i = 0; i < 4; i++)
-				h.draw(game.getDeque());
+		game.getChannel().sendMessage(game.getCurrent().getAsMention() + " trocou de mão com " + hand.getUser().getAsMention() + "!").queue();
+		List<KawaiponCard> aux = List.copyOf(hand.getCards());
+		Hand you = game.getSeats().get(game.getCurrent().getId());
+		hand.setCards(you.getCards());
+		you.setCards(aux);
 	});
 
 	private final KawaiponRarity rarity;
