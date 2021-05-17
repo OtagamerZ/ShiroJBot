@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
@@ -79,7 +80,7 @@ public class Card {
 
 	public BufferedImage drawCard(boolean foil) {
 		try {
-			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+			byte[] cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id + (foil ? "_F" : "_N"), k -> {
 				try {
 					return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
 				} catch (IOException e) {
@@ -88,22 +89,37 @@ public class Card {
 				}
 			});
 
-			assert cardBytes != null;
-			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
-				BufferedImage card = ImageIO.read(bais);
+			if (cardBytes == null) {
+				cardBytes = Main.getInfo().getCardCache().computeIfAbsent(id, k -> {
+					try {
+						return FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH") + anime.getName(), id + ".png"));
+					} catch (IOException e) {
+						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+						return null;
+					}
+				});
 
-				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/new/" + rarity.name().toLowerCase(Locale.ROOT) + ".png")));
-				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g2d = canvas.createGraphics();
+				assert cardBytes != null;
+				try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
+					BufferedImage card = ImageIO.read(bais);
 
-				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2d.drawImage(foil ? adjust(card, false) : card, 15, 15, null);
-				g2d.drawImage(foil ? adjust(frame, true) : frame, 0, 0, null);
+					BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/new/" + rarity.name().toLowerCase(Locale.ROOT) + ".png")));
+					BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
+					Graphics2D g2d = canvas.createGraphics();
 
-				g2d.dispose();
+					g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+					g2d.drawImage(foil ? adjust(card, false) : card, 15, 15, null);
+					g2d.drawImage(foil ? adjust(frame, true) : frame, 0, 0, null);
 
-				return canvas;
+					g2d.dispose();
+
+					return canvas;
+				}
+			} else {
+				try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
+					return ImageIO.read(bais);
+				}
 			}
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
@@ -154,18 +170,22 @@ public class Card {
 
 		for (int y = 0; y < bi.getHeight(); y++) {
 			for (int x = 0; x < bi.getWidth(); x++) {
-				int[] rgb = Helper.unpackRGB(bi.getRGB(x, y));
-				int alpha = rgb[0];
-				float[] hsv;
-				if (border) {
-					hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
-				} else {
-					hsv = Color.RGBtoHSB(rgb[1], rgb[3], rgb[2], null);
-				}
+				int color = bi.getRGB(x, y);
 
-				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
-				rgb = Helper.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-				out.setRGB(x, y, Helper.packRGB(alpha, rgb[1], rgb[2], rgb[3]));
+				out.setRGB(x, y, ShiroInfo.getColorLookup().computeIfAbsent(color, i -> {
+					int[] rgb = Helper.unpackRGB(color);
+					int alpha = rgb[0];
+					float[] hsv;
+					if (border) {
+						hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
+					} else {
+						hsv = Color.RGBtoHSB(rgb[1], rgb[3], rgb[2], null);
+					}
+
+					hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
+					rgb = Helper.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
+					return Helper.packRGB(alpha, rgb[1], rgb[2], rgb[3]);
+				}));
 			}
 		}
 
