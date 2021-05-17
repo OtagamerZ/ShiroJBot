@@ -19,7 +19,9 @@
 package com.kuuhaku.handlers.games.tabletop.games.hitotsu;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.github.ygimenez.type.PageType;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.events.SimpleMessageListener;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
@@ -32,10 +34,7 @@ import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.StringUtils;
@@ -357,26 +356,34 @@ public class Hitotsu extends Game {
 	public Map<String, ThrowingBiConsumer<Member, Message>> getButtons() {
 		Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 		buttons.put("\uD83D\uDCCB", (mb, ms) -> {
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
-			StringBuilder sb = new StringBuilder();
-			List<KawaiponCard> cards = seats.get(getCurrent().getId()).getCards();
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setTitle("Suas cartas");
 
-			eb.setTitle("Suas cartas");
-			for (int i = 0; i < cards.size(); i++) {
-				sb.append("**%s** - (%s)%s%s\n".formatted(
-						i,
-						cards.get(i).getCard().getAnime(),
-						cards.get(i).getCard().getRarity().getEmote(),
-						cards.get(i).getName()
-				));
-			}
-			eb.setDescription(sb.toString());
 			if (played.size() > 0)
 				eb.addField("Carta atual", "(" + played.getLast().getCard().getAnime().toString() + ")" + played.getLast().getCard().getRarity().getEmote() + played.getLast().getName(), false);
 
+			List<Page> pages = new ArrayList<>();
+			List<List<KawaiponCard>> chunks = Helper.chunkify(seats.get(getCurrent().getId()).getCards(), 10);
+
+			int j = 0;
+			StringBuilder sb = new StringBuilder();
+			for (List<KawaiponCard> cards : chunks) {
+				for (int i = 0; i < cards.size(); i++) {
+					sb.append("**%s** - (%s)%s%s\n".formatted(
+							i + j * 10,
+							cards.get(i).getCard().getAnime(),
+							cards.get(i).getCard().getRarity().getEmote(),
+							cards.get(i).getName()
+					));
+				}
+				eb.setDescription(sb.toString());
+				pages.add(new Page(PageType.EMBED, eb.build()));
+				j++;
+			}
+
 			getCurrent().openPrivateChannel()
-					.flatMap(c -> c.sendMessage(eb.build()))
-					.queue(null, Helper::doNothing);
+					.flatMap(c -> c.sendMessage((MessageEmbed) pages.get(0).getContent()))
+					.queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES), Helper::doNothing);
 		});
 		buttons.put("\uD83D\uDCE4", (mb, ms) -> {
 			seats.get(getCurrent().getId()).draw(getDeque());
