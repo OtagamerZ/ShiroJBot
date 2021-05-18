@@ -172,10 +172,11 @@ public class GuildConfig {
 
 	//CONFIGS
 	@ElementCollection(fetch = FetchType.EAGER)
-	private List<String> rules = new ArrayList<>();
-
-	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> disabledCommands = new HashSet<>();
+
+	//LAZY
+	@ElementCollection(fetch = FetchType.LAZY)
+	private List<String> rules = new ArrayList<>();
 
 	public GuildConfig(String guildId, String name) {
 		this.guildId = guildId;
