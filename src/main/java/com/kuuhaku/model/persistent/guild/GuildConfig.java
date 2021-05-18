@@ -23,12 +23,12 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.json.JSONObject;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "guildconfig")
+@Transactional
 public class GuildConfig {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
@@ -609,20 +610,19 @@ public class GuildConfig {
 	}
 
 	public List<String> getRules() {
-		Hibernate.initialize(rules);
 		return rules;
 	}
 
 	public void addRule(String rule) {
-		getRules().add(rule);
+		rules.add(rule);
 	}
 
 	public void removeRule(int index) {
-		getRules().remove(index);
+		rules.remove(index);
 	}
 
 	public void moveRule(int from, int to) {
-		getRules().add(to, rules.remove(from));
+		rules.add(to, rules.remove(from));
 	}
 
 	public void setRules(List<String> rules) {
