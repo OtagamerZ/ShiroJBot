@@ -25,8 +25,6 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.OptimisticLockType;
-import org.hibernate.annotations.OptimisticLocking;
 import org.json.JSONObject;
 
 import javax.persistence.*;
@@ -39,7 +37,6 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "guildconfig")
-@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class GuildConfig {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
@@ -613,17 +610,17 @@ public class GuildConfig {
 		return rules;
 	}
 
-	public void addRule(String rule) {
+	/*public void addRule(String rule) {
 		rules.add(rule);
-	}
+	}*/
 
-	public void removeRule(int index) {
+	/*public void removeRule(int index) {
 		rules.remove(index);
-	}
+	}*/
 
-	public void moveRule(int from, int to) {
+	/*public void moveRule(int from, int to) {
 		rules.add(to, rules.remove(from));
-	}
+	}*/
 
 	public void setRules(List<String> rules) {
 		this.rules = rules;
