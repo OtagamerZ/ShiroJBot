@@ -26,9 +26,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.json.JSONObject;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,7 +39,6 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "guildconfig")
-@Transactional
 public class GuildConfig {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
@@ -610,19 +610,24 @@ public class GuildConfig {
 	}
 
 	public List<String> getRules() {
+		return getRules(guildId);
+	}
+
+	@Query("SELECT r FROM GuildConfig gc JOIN FETCH gc.rules r WHERE gc.guildId = :id")
+	public List<String> getRules(@Param("id") String id) {
 		return rules;
 	}
 
 	public void addRule(String rule) {
-		rules.add(rule);
+		getRules().add(rule);
 	}
 
 	public void removeRule(int index) {
-		rules.remove(index);
+		getRules().remove(index);
 	}
 
 	public void moveRule(int from, int to) {
-		rules.add(to, rules.remove(from));
+		getRules().add(to, rules.remove(from));
 	}
 
 	public void setRules(List<String> rules) {
