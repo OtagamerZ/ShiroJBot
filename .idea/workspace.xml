@@ -14,8 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/kotori_asobi.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/timeline_change.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/fissure.gif" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1194,14 +1193,7 @@
       <workItem from="1621010188720" duration="6639000" />
       <workItem from="1621119509106" duration="521000" />
       <workItem from="1621339007881" duration="10602000" />
-      <workItem from="1621353802538" duration="7051000" />
-    </task>
-    <task id="LOCAL-04404" summary="Segunda tentativa na centralização dos decks">
-      <created>1620931154263</created>
-      <option name="number" value="04404" />
-      <option name="presentableId" value="LOCAL-04404" />
-      <option name="project" value="LOCAL" />
-      <updated>1620931154263</updated>
+      <workItem from="1621353802538" duration="11919000" />
     </task>
     <task id="LOCAL-04405" summary="Segunda tentativa na centralização dos decks">
       <created>1620931333612</created>
@@ -1539,7 +1531,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621357332710</updated>
     </task>
-    <option name="localTasksCounter" value="4453" />
+    <task id="LOCAL-04453" summary="Correções menores">
+      <created>1621362760379</created>
+      <option name="number" value="04453" />
+      <option name="presentableId" value="LOCAL-04453" />
+      <option name="project" value="LOCAL" />
+      <updated>1621362760379</updated>
+    </task>
+    <option name="localTasksCounter" value="4454" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
