@@ -15,7 +15,10 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchHistory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/PaidRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/PaidRole.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1194,14 +1197,7 @@
       <workItem from="1620997808287" duration="1608000" />
       <workItem from="1621010188720" duration="6639000" />
       <workItem from="1621119509106" duration="521000" />
-      <workItem from="1621339007881" duration="6836000" />
-    </task>
-    <task id="LOCAL-04396" summary="Correções gerais e melhoria nas bordas das raridades">
-      <created>1620752979199</created>
-      <option name="number" value="04396" />
-      <option name="presentableId" value="LOCAL-04396" />
-      <option name="project" value="LOCAL" />
-      <updated>1620752979199</updated>
+      <workItem from="1621339007881" duration="7401000" />
     </task>
     <task id="LOCAL-04397" summary="Correções gerais e melhoria nas bordas das raridades">
       <created>1620757641784</created>
@@ -1539,7 +1535,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621345780190</updated>
     </task>
-    <option name="localTasksCounter" value="4445" />
+    <task id="LOCAL-04445" summary="Correções menores">
+      <created>1621346275666</created>
+      <option name="number" value="04445" />
+      <option name="presentableId" value="LOCAL-04445" />
+      <option name="project" value="LOCAL" />
+      <updated>1621346275667</updated>
+    </task>
+    <option name="localTasksCounter" value="4446" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
