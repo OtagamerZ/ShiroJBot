@@ -58,7 +58,7 @@ public class Clan {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long vault = 0;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Deck clanDeck = new Deck();
 
@@ -156,48 +156,48 @@ public class Clan {
 		ClanHierarchy ch = members.get(id);
 		ClanHierarchy next = Helper.getNext(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
 		members.put(id, Helper.getOr(next, ch));
-		getTransactions().add(u.getAsTag() + " promoveu o membro com ID " + id + ".");
+		transactions.add(u.getAsTag() + " promoveu o membro com ID " + id + ".");
 	}
 
 	public void promote(User tgt, User u) {
 		ClanHierarchy ch = members.get(tgt.getId());
 		ClanHierarchy next = Helper.getNext(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
 		members.put(tgt.getId(), Helper.getOr(next, ch));
-		getTransactions().add(u.getAsTag() + " promoveu o membro " + tgt.getAsTag() + ".");
+		transactions.add(u.getAsTag() + " promoveu o membro " + tgt.getAsTag() + ".");
 	}
 
 	public void demote(String id, User u) {
 		ClanHierarchy ch = members.get(id);
 		ClanHierarchy previous = Helper.getPrevious(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
 		members.put(id, Helper.getOr(previous, ch));
-		getTransactions().add(u.getAsTag() + " rebaixou o membro com ID " + id + ".");
+		transactions.add(u.getAsTag() + " rebaixou o membro com ID " + id + ".");
 	}
 
 	public void demote(User tgt, User u) {
 		ClanHierarchy ch = members.get(tgt.getId());
 		ClanHierarchy previous = Helper.getPrevious(ch, ClanHierarchy.MEMBER, ClanHierarchy.CAPTAIN, ClanHierarchy.SUBLEADER);
 		members.put(tgt.getId(), Helper.getOr(previous, ch));
-		getTransactions().add(u.getAsTag() + " rebaixou o membro " + tgt.getAsTag() + ".");
+		transactions.add(u.getAsTag() + " rebaixou o membro " + tgt.getAsTag() + ".");
 	}
 
 	public void kick(String id, User u) {
 		members.remove(id);
-		getTransactions().add(u.getAsTag() + " expulsou o membro com ID " + id + ".");
+		transactions.add(u.getAsTag() + " expulsou o membro com ID " + id + ".");
 	}
 
 	public void kick(User tgt, User u) {
 		members.remove(tgt.getId());
-		getTransactions().add(u.getAsTag() + " expulsou o membro " + tgt.getAsTag() + ".");
+		transactions.add(u.getAsTag() + " expulsou o membro " + tgt.getAsTag() + ".");
 	}
 
 	public void invite(String id, User u) {
 		members.put(id, ClanHierarchy.MEMBER);
-		getTransactions().add(u.getAsTag() + " adicionou o membro com ID " + id + ".");
+		transactions.add(u.getAsTag() + " adicionou o membro com ID " + id + ".");
 	}
 
 	public void invite(User tgt, User u) {
 		members.put(tgt.getId(), ClanHierarchy.MEMBER);
-		getTransactions().add(u.getAsTag() + " adicionou o membro " + tgt.getAsTag() + ".");
+		transactions.add(u.getAsTag() + " adicionou o membro " + tgt.getAsTag() + ".");
 	}
 
 	public void leave(String id) {
@@ -228,18 +228,18 @@ public class Clan {
 
 	public void deposit(long amount, User u) {
 		this.vault += amount;
-		getTransactions().add(u.getAsTag() + " depositou " + Helper.separate(amount) + " créditos.");
+		transactions.add(u.getAsTag() + " depositou " + Helper.separate(amount) + " créditos.");
 	}
 
 	public void withdraw(long amount, User u) {
 		this.vault -= amount;
-		getTransactions().add(u.getAsTag() + " sacou " + Helper.separate(amount) + " créditos.");
+		transactions.add(u.getAsTag() + " sacou " + Helper.separate(amount) + " créditos.");
 	}
 
 	public void upgrade(User u) {
 		this.vault -= tier.getCost();
 		this.tier = this.tier.getNext();
-		getTransactions().add(u.getAsTag() + " evoluiu o tier do clã por " + Helper.separate(tier) + " créditos.");
+		transactions.add(u.getAsTag() + " evoluiu o tier do clã por " + Helper.separate(tier) + " créditos.");
 	}
 
 	public Deck getDeck() {
@@ -251,7 +251,6 @@ public class Clan {
 	}
 
 	public List<String> getTransactions() {
-
 		return transactions;
 	}
 
