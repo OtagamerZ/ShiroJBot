@@ -37,7 +37,7 @@ public class Kawaipon implements Cloneable {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''", unique = true)
 	private String uid = "";
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "kawaipon_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<KawaiponCard> cards = new HashSet<>();
@@ -45,7 +45,7 @@ public class Kawaipon implements Cloneable {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int activeDeck = 0;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "kawaipon_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Deck> decks = new ArrayList<>();
