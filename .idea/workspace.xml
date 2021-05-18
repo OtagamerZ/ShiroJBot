@@ -16,6 +16,9 @@
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddRuleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddRuleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MoveRuleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MoveRuleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RemoveRuleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RemoveRuleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,17 +201,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1192,13 +1184,7 @@
       <workItem from="1620997808287" duration="1608000" />
       <workItem from="1621010188720" duration="6639000" />
       <workItem from="1621119509106" duration="521000" />
-    </task>
-    <task id="LOCAL-04384" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
-      <created>1620664481451</created>
-      <option name="number" value="04384" />
-      <option name="presentableId" value="LOCAL-04384" />
-      <option name="project" value="LOCAL" />
-      <updated>1620664481451</updated>
+      <workItem from="1621339007881" duration="1619000" />
     </task>
     <task id="LOCAL-04385" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
       <created>1620664749946</created>
@@ -1536,7 +1522,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621279443857</updated>
     </task>
-    <option name="localTasksCounter" value="4433" />
+    <task id="LOCAL-04433" summary="Correções menores">
+      <created>1621284589716</created>
+      <option name="number" value="04433" />
+      <option name="presentableId" value="LOCAL-04433" />
+      <option name="project" value="LOCAL" />
+      <updated>1621284589716</updated>
+    </task>
+    <option name="localTasksCounter" value="4434" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
