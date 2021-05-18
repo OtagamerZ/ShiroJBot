@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RecoverCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RecoverCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,15 +198,13 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -1193,14 +1192,8 @@
       <workItem from="1620997808287" duration="1608000" />
       <workItem from="1621010188720" duration="6639000" />
       <workItem from="1621119509106" duration="521000" />
-      <workItem from="1621339007881" duration="10211000" />
-    </task>
-    <task id="LOCAL-04400" summary="Melhoria no efeito da raça demônio">
-      <created>1620835349996</created>
-      <option name="number" value="04400" />
-      <option name="presentableId" value="LOCAL-04400" />
-      <option name="project" value="LOCAL" />
-      <updated>1620835349996</updated>
+      <workItem from="1621339007881" duration="10602000" />
+      <workItem from="1621353802538" duration="596000" />
     </task>
     <task id="LOCAL-04401" summary="Segunda tentativa na centralização dos decks">
       <created>1620924131072</created>
@@ -1538,7 +1531,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621348884500</updated>
     </task>
-    <option name="localTasksCounter" value="4449" />
+    <task id="LOCAL-04449" summary="Correções menores">
+      <created>1621349725782</created>
+      <option name="number" value="04449" />
+      <option name="presentableId" value="LOCAL-04449" />
+      <option name="project" value="LOCAL" />
+      <updated>1621349725783</updated>
+    </task>
+    <option name="localTasksCounter" value="4450" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
