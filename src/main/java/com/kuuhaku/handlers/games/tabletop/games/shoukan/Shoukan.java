@@ -78,7 +78,6 @@ public class Shoukan extends GlobalGame {
 	private final Map<String, Message> message = new HashMap<>();
 	private final List<Champion> fusions = CardDAO.getFusions();
 	private final boolean[] changed = {false, false, false, false, false};
-	private final boolean[] attacked = {false, false, false, false, false};
 	private final boolean daily;
 	private final boolean team;
 	private final Map<Side, Map<Race, Integer>> summoned = Map.of(
@@ -708,7 +707,6 @@ public class Shoukan extends GlobalGame {
 
 					if (!c.getCard().getId().equals("DECOY")) enemy.removeHp(Math.round(yPower * demonFac));
 					c.setAvailable(false);
-					attacked[is[0]] = true;
 
 					if (!postCombat()) {
 						reportEvent(h,
@@ -779,10 +777,7 @@ public class Shoukan extends GlobalGame {
 						h.showHand();
 					}
 					if (changeTurn)
-						for (int i = 0; i < 5; i++) {
-							changed[i] = false;
-							attacked[i] = false;
-						}
+						for (int i = 0; i < 5; i++) changed[i] = false;
 				});
 	}
 
@@ -796,7 +791,6 @@ public class Shoukan extends GlobalGame {
 		}
 
 		if (yours.isDefending()) return;
-		attacked[is[0]] = true;
 
 		if (applyEot(ON_ATTACK, current, is[0])) return;
 		if (is[0] > 0) {
@@ -1033,6 +1027,7 @@ public class Shoukan extends GlobalGame {
 		List<Champion> champsInField = arena.getSlots().get(current)
 				.stream()
 				.map(SlotColumn::getTop)
+				.filter(c -> !c.isSealed())
 				.collect(Collectors.toList());
 
 		List<Equipment> equipsInField = arena.getSlots().get(current)

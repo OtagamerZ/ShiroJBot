@@ -86,6 +86,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient boolean flipped = false;
 	private transient boolean available = true;
 	private transient boolean defending = false;
+	private transient boolean sealed = false;
 	private transient Shoukan game = null;
 	private transient Account acc = null;
 	private transient Clan clan = null;
@@ -325,6 +326,14 @@ public class Champion implements Drawable, Cloneable {
 		this.defending = defending;
 	}
 
+	public boolean isSealed() {
+		return sealed;
+	}
+
+	public void setSealed(boolean sealed) {
+		this.sealed = sealed;
+	}
+
 	public Race getRace() {
 		return Helper.getOr(altRace, race);
 	}
@@ -562,7 +571,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public String getDescription() {
-		return description;
+		return sealed ? "Carta selada." : description;
 	}
 
 	public void setAltDescription(String description) {
@@ -570,7 +579,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public boolean hasEffect() {
-		return effect != null;
+		return effect != null && !sealed;
 	}
 
 	public boolean isFusion() {
@@ -582,7 +591,7 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public String getRawEffect() {
-		return effect;
+		return sealed ? null : effect;
 	}
 
 	public void setRawEffect(String effect) {
