@@ -55,7 +55,7 @@ public class MoveRuleCommand implements Executable {
 				return;
 			}
 
-			gc.moveRule(from, to);
+			//gc.moveRule(from, to);
 			channel.sendMessage("✅ | Regra movida com sucesso!").queue();
 
 			GuildDAO.updateGuildSettings(gc);

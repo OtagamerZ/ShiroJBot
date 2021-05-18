@@ -54,7 +54,7 @@ public class RemoveRuleCommand implements Executable {
 				return;
 			}
 
-			gc.removeRule(i);
+			//gc.removeRule(i);
 			channel.sendMessage("✅ | Regra removida com sucesso!").queue();
 
 			GuildDAO.updateGuildSettings(gc);
