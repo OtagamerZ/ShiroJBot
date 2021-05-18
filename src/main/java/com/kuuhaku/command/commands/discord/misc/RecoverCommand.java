@@ -69,7 +69,7 @@ public class RecoverCommand implements Executable {
 		StockMarket sm = StockMarketDAO.getCardInvestment(author.getId(), c);
 
 		try {
-			double amount = Helper.round(Double.parseDouble(args[1]), 2);
+			double amount = Helper.round(Double.parseDouble(args[1]), 3);
 			if (sm.getInvestment() < amount) {
 				channel.sendMessage("❌ | Você não tem ações suficientes.").queue();
 				return;
