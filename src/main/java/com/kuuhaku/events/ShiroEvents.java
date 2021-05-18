@@ -127,6 +127,10 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+		if (ShiroInfo.MAINTENANCE && !ShiroInfo.getDevelopers().contains(event.getAuthor().getId())) {
+			event.getChannel().sendMessage("Shiro está temporariamente em manutenção, por favor aguarde.").queue();
+			return;
+		}
 		try {
 			User author = event.getAuthor();
 			Member member = event.getMember();

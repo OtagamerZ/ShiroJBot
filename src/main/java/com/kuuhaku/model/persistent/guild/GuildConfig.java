@@ -172,7 +172,7 @@ public class GuildConfig {
 
 	//CONFIGS
 	@ElementCollection(fetch = FetchType.EAGER)
-	private List<String> autoRules = new ArrayList<>();
+	private List<String> rules = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> disabledCommands = new HashSet<>();
@@ -606,24 +606,24 @@ public class GuildConfig {
 		this.noCommandChannels = noCommandChannels;
 	}
 
-	public List<String> getAutoRules() {
-		return autoRules;
+	public List<String> getRules() {
+		return rules;
 	}
 
-	public void addAutoRule(String rule) {
-		autoRules.add(rule);
+	public void addRule(String rule) {
+		rules.add(rule);
 	}
 
-	public void removeAutoRule(int index) {
-		autoRules.remove(index);
+	public void removeRule(int index) {
+		rules.remove(index);
 	}
 
-	public void moveAutoRule(int from, int to) {
-		autoRules.add(to, autoRules.remove(from));
+	public void moveRule(int from, int to) {
+		rules.add(to, rules.remove(from));
 	}
 
-	public void setAutoRules(List<String> rules) {
-		this.autoRules = rules;
+	public void setRules(List<String> rules) {
+		this.rules = rules;
 	}
 
 	public Set<String> getDisabledCommands() {
