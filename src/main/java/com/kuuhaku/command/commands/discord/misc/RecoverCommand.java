@@ -81,7 +81,7 @@ public class RecoverCommand implements Executable {
 			sm.setInvestment(sm.getInvestment() - amount);
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Você está prestes vender " + amount + " ações (" + Helper.separate(readjust) + " créditos) da carta " + c.getName() + ", deseja confirmar?")
+			channel.sendMessage("Você está prestes vender " + Helper.separate(amount) + " ações (" + Helper.separate(readjust) + " créditos) da carta " + c.getName() + ", deseja confirmar?")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								acc.addCredit(readjust, this.getClass());

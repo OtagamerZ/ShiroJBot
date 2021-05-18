@@ -87,7 +87,7 @@ public class InvestCommand implements Executable {
 			sm.setInvestment(sm.getInvestment() + readjust);
 
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
-			channel.sendMessage("Você está prestes comprar " + readjust + " ações (" + Helper.separate(amount) + " créditos) da carta " + c.getName() + ", deseja confirmar?")
+			channel.sendMessage("Você está prestes comprar " + Helper.separate(readjust) + " ações (" + Helper.separate(amount) + " créditos) da carta " + c.getName() + ", deseja confirmar?")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
 								acc.removeCredit(amount, this.getClass());
