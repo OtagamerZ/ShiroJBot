@@ -45,7 +45,7 @@ public class MoveRuleCommand implements Executable {
 		}
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		List<String> rules = gc.getRules();
+		List<String> rules = gc.getAutoRules();
 
 		try {
 			int from = Integer.parseInt(args[0]);
@@ -55,7 +55,7 @@ public class MoveRuleCommand implements Executable {
 				return;
 			}
 
-			//gc.moveRule(from, to);
+			gc.moveAutoRule(from, to);
 			channel.sendMessage("✅ | Regra movida com sucesso!").queue();
 
 			GuildDAO.updateGuildSettings(gc);
