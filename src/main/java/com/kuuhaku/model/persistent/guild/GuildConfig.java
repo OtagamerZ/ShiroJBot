@@ -23,6 +23,8 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.json.JSONObject;
@@ -175,7 +177,8 @@ public class GuildConfig {
 	private Set<String> disabledCommands = new HashSet<>();
 
 	//LAZY
-	@ElementCollection(fetch = FetchType.LAZY)
+	@Fetch(FetchMode.SUBSELECT)
+	@ElementCollection
 	private List<String> rules = new ArrayList<>();
 
 	public GuildConfig(String guildId, String name) {
