@@ -1027,18 +1027,18 @@ public class Shoukan extends GlobalGame {
 		List<Champion> champsInField = arena.getSlots().get(current)
 				.stream()
 				.map(SlotColumn::getTop)
-				.filter(c -> !c.isSealed())
+				.filter(c -> c != null && !c.isSealed())
 				.collect(Collectors.toList());
 
 		List<Equipment> equipsInField = arena.getSlots().get(current)
 				.stream()
 				.map(SlotColumn::getBottom)
+				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
 
 		List<String> allCards = new ArrayList<>() {{
 			addAll(Stream.of(champsInField, equipsInField)
 					.flatMap(List::stream)
-					.filter(Objects::nonNull)
 					.map(dr -> dr.getCard().getId())
 					.collect(Collectors.toList())
 			);
