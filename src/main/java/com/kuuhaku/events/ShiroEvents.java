@@ -92,6 +92,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildUpdateName(GuildUpdateNameEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 		gc.setName(event.getNewName());
 		GuildDAO.updateGuildSettings(gc);
@@ -99,6 +100,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildUpdateOwner(@NotNull GuildUpdateOwnerEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		assert event.getOldOwner() != null;
 		assert event.getNewOwner() != null;
 
@@ -117,7 +119,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageUpdate(@NotNull GuildMessageUpdateEvent event) {
-		if (event.getAuthor().isBot()) return;
+		if (event.getAuthor().isBot() || ShiroInfo.MAINTENANCE) return;
 		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
 		onGuildMessageReceived(new GuildMessageReceivedEvent(event.getJDA(), event.getResponseNumber(), event.getMessage()));
 
@@ -127,10 +129,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-		if (ShiroInfo.MAINTENANCE && !ShiroInfo.getDevelopers().contains(event.getAuthor().getId())) {
-			event.getChannel().sendMessage("Shiro está temporariamente em manutenção, por favor aguarde.").queue();
-			return;
-		}
+		if (ShiroInfo.MAINTENANCE && !ShiroInfo.getDevelopers().contains(event.getAuthor().getId())) return;
 		try {
 			User author = event.getAuthor();
 			Member member = event.getMember();
@@ -463,6 +462,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onRoleDelete(@NotNull RoleDeleteEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 
 		gc.removeLevelRole(event.getRole().getId());
@@ -482,6 +482,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildJoin(@NotNull GuildJoinEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		try {
 			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Obrigada por me adicionar ao seu servidor, utilize `s!ajuda` em um dos canais do servidor para ver meus comandos!\n\nDúvidas? Pergunte-me diretamente e um de meus suportes responderá assim que possível!");
 		} catch (Exception err) {
@@ -504,6 +505,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildLeave(@NotNull GuildLeaveEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		for (String d : ShiroInfo.getDevelopers()) {
 			Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 				GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
@@ -517,6 +519,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		Guild guild = event.getGuild();
 		Member member = event.getMember();
 		User author = event.getUser();
@@ -615,6 +618,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		Guild guild = event.getGuild();
 		User author = event.getUser();
 		try {
@@ -699,6 +703,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		List<String> staffIds = ShiroInfo.getStaff();
 		if (staffIds.contains(event.getAuthor().getId())) {
 			String msg = event.getMessage().getContentRaw();
@@ -845,6 +850,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageDelete(@NotNull GuildMessageDeleteEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
 
 		if (msg == null || msg.getAuthor().isBot()) return;
@@ -854,6 +860,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildVoiceJoin(@NotNull GuildVoiceJoinEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		Member mb = event.getMember();
 		if (mb.getUser().isBot()) return;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(event.getMember().getUser());
@@ -863,6 +870,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		Member mb = event.getMember();
 		if (mb.getUser().isBot()) return;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(mb.getUser());
@@ -883,6 +891,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onUserTyping(@NotNull UserTypingEvent event) {
+		if (ShiroInfo.MAINTENANCE) return;
 		User u = event.getUser();
 		if (event.isFromType(ChannelType.PRIVATE) && ShiroInfo.getStaff().contains(u.getId())) {
 			for (String d : ShiroInfo.getStaff()) {
