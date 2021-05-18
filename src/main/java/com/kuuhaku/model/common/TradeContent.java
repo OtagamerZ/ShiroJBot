@@ -165,7 +165,7 @@ public class TradeContent {
 		Deck dk2 = kp2.getDeck();
 
 		acc1.addCredit(liquidAmount2, TradeContent.class);
-		acc2.removeCredit(liquidAmount2, TradeContent.class);
+		acc2.removeCredit(tc2.credits, TradeContent.class);
 		kp1.addCards(tc2.cards);
 		dk1.addEquipments(tc2.equipments);
 		dk1.addFields(tc2.fields);
@@ -174,7 +174,7 @@ public class TradeContent {
 		dk2.removeFields(tc2.fields);
 
 		acc2.addCredit(liquidAmount1, TradeContent.class);
-		acc1.removeCredit(liquidAmount1, TradeContent.class);
+		acc1.removeCredit(tc1.credits, TradeContent.class);
 		kp2.addCards(tc1.cards);
 		dk2.addEquipments(tc1.equipments);
 		dk2.addFields(tc1.fields);
