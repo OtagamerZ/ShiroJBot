@@ -26,8 +26,6 @@ import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import javax.persistence.*;
 import java.awt.image.BufferedImage;
@@ -252,13 +250,9 @@ public class Clan {
 		this.clanDeck = clanDeck;
 	}
 
-	@Query("SELECT t FROM Clan c JOIN FETCH c.transactions t WHERE c.hash = :hash")
-	public List<String> getTransactions(@Param("hash") String hash) {
-		return transactions;
-	}
-
 	public List<String> getTransactions() {
-		return getTransactions(hash);
+
+		return transactions;
 	}
 
 	public void setTransactions(List<String> transactions) {
