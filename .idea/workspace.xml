@@ -13,13 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddRuleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddRuleCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MoveRuleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MoveRuleCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RemoveRuleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RemoveRuleCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1184,14 +1178,7 @@
       <workItem from="1620997808287" duration="1608000" />
       <workItem from="1621010188720" duration="6639000" />
       <workItem from="1621119509106" duration="521000" />
-      <workItem from="1621339007881" duration="1619000" />
-    </task>
-    <task id="LOCAL-04385" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
-      <created>1620664749946</created>
-      <option name="number" value="04385" />
-      <option name="presentableId" value="LOCAL-04385" />
-      <option name="project" value="LOCAL" />
-      <updated>1620664749946</updated>
+      <workItem from="1621339007881" duration="2247000" />
     </task>
     <task id="LOCAL-04386" summary="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE.">
       <created>1620667959975</created>
@@ -1529,7 +1516,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621284589716</updated>
     </task>
-    <option name="localTasksCounter" value="4434" />
+    <task id="LOCAL-04434" summary="Correções menores">
+      <created>1621340880306</created>
+      <option name="number" value="04434" />
+      <option name="presentableId" value="LOCAL-04434" />
+      <option name="project" value="LOCAL" />
+      <updated>1621340880307</updated>
+    </task>
+    <option name="localTasksCounter" value="4435" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
