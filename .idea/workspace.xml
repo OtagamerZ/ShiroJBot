@@ -14,6 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/kotori_asobi.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/timeline_change.gif" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -126,7 +128,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="aaaa111" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/kawaipon/frames/new" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/gifs" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -142,11 +144,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames\new" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames\old" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\misc" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\cat" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\str" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.utils.Helper" />
@@ -1192,14 +1194,7 @@
       <workItem from="1621010188720" duration="6639000" />
       <workItem from="1621119509106" duration="521000" />
       <workItem from="1621339007881" duration="10602000" />
-      <workItem from="1621353802538" duration="2537000" />
-    </task>
-    <task id="LOCAL-04403" summary="Segunda tentativa na centralização dos decks">
-      <created>1620931044927</created>
-      <option name="number" value="04403" />
-      <option name="presentableId" value="LOCAL-04403" />
-      <option name="project" value="LOCAL" />
-      <updated>1620931044928</updated>
+      <workItem from="1621353802538" duration="7051000" />
     </task>
     <task id="LOCAL-04404" summary="Segunda tentativa na centralização dos decks">
       <created>1620931154263</created>
@@ -1537,7 +1532,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621354505705</updated>
     </task>
-    <option name="localTasksCounter" value="4452" />
+    <task id="LOCAL-04452" summary="Correções menores">
+      <created>1621357332710</created>
+      <option name="number" value="04452" />
+      <option name="presentableId" value="LOCAL-04452" />
+      <option name="project" value="LOCAL" />
+      <updated>1621357332710</updated>
+    </task>
+    <option name="localTasksCounter" value="4453" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
