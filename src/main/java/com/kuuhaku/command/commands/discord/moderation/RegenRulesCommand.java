@@ -45,9 +45,9 @@ public class RegenRulesCommand implements Executable {
 
 		message.delete().complete();
 		try {
-			String[] rules = new String[gc.getAutoRules().size()];
-			for (int i = 0; i < gc.getAutoRules().size(); i++) {
-				String[] rule = gc.getAutoRules().get(i).split(";");
+			String[] rules = new String[gc.getRules().size()];
+			for (int i = 0; i < gc.getRules().size(); i++) {
+				String[] rule = gc.getRules().get(i).split(";");
 				rules[i] = "**%s - %s**\n%s".formatted(i + 1, rule[0], rule[1]);
 			}
 
