@@ -62,7 +62,7 @@ public class Clan {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Deck clanDeck = new Deck();
 
-	@ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.LAZY)
 	private List<String> transactions = new ArrayList<>();
 
 	@Enumerated(value = EnumType.STRING)
