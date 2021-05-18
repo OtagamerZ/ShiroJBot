@@ -26,8 +26,6 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.json.JSONObject;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -610,24 +608,19 @@ public class GuildConfig {
 	}
 
 	public List<String> getRules() {
-		return getRules(guildId);
-	}
-
-	@Query("SELECT r FROM GuildConfig gc JOIN FETCH gc.rules r WHERE gc.guildId = :id")
-	public List<String> getRules(@Param("id") String id) {
 		return rules;
 	}
 
 	public void addRule(String rule) {
-		getRules().add(rule);
+		rules.add(rule);
 	}
 
 	public void removeRule(int index) {
-		getRules().remove(index);
+		rules.remove(index);
 	}
 
 	public void moveRule(int from, int to) {
-		getRules().add(to, rules.remove(from));
+		rules.add(to, rules.remove(from));
 	}
 
 	public void setRules(List<String> rules) {

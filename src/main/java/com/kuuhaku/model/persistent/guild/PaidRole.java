@@ -37,7 +37,7 @@ public class PaidRole {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT -1")
 	private long duration;
 
-	@ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.LAZY)
 	private Map<String, Long> users = new HashMap<>();
 
 	public PaidRole() {
