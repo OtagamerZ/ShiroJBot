@@ -45,7 +45,7 @@ public class RemoveRuleCommand implements Executable {
 		}
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		List<String> rules = gc.getRules();
+		List<String> rules = gc.getAutoRules();
 
 		try {
 			int i = Integer.parseInt(args[0]);
@@ -54,7 +54,7 @@ public class RemoveRuleCommand implements Executable {
 				return;
 			}
 
-			//gc.removeRule(i);
+			gc.removeAutoRule(i);
 			channel.sendMessage("✅ | Regra removida com sucesso!").queue();
 
 			GuildDAO.updateGuildSettings(gc);
