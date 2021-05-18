@@ -24,6 +24,8 @@ import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.tuple.Pair;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -62,7 +64,8 @@ public class Clan {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Deck clanDeck = new Deck();
 
-	@ElementCollection(fetch = FetchType.LAZY)
+	@Fetch(FetchMode.SUBSELECT)
+	@ElementCollection
 	private List<String> transactions = new ArrayList<>();
 
 	@Enumerated(value = EnumType.STRING)
