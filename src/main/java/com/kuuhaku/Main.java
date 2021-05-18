@@ -101,17 +101,14 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.setEventPool(Executors.newCachedThreadPool(), true)
 				.build();
 
-		if (!ShiroInfo.MAINTENANCE)
-			jbr = JDABuilder.createLight(System.getenv("JIBRIL_TOKEN"))
-					.setMaxReconnectDelay(32)
-					.setEventPool(Executors.newCachedThreadPool(), true)
-					.build()
-					.awaitReady();
+		jbr = JDABuilder.createLight(System.getenv("JIBRIL_TOKEN"))
+				.setMaxReconnectDelay(32)
+				.setEventPool(Executors.newCachedThreadPool(), true)
+				.build()
+				.awaitReady();
 
-		if (!ShiroInfo.MAINTENANCE) {
-			shiroShards.setActivity(Activity.playing("Iniciando..."));
-			jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
-		}
+		shiroShards.setActivity(Activity.playing("Iniciando..."));
+		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		info.setStartTime(System.currentTimeMillis());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
@@ -124,14 +121,12 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			return;
 		}
 
-		if (!ShiroInfo.MAINTENANCE) {
-			Executors.newSingleThreadExecutor().execute(ScheduledEvents::new);
+		Executors.newSingleThreadExecutor().execute(ScheduledEvents::new);
 
-			AudioSourceManagers.registerRemoteSources(ShiroInfo.getApm());
-			AudioSourceManagers.registerLocalSource(ShiroInfo.getApm());
+		AudioSourceManagers.registerRemoteSources(ShiroInfo.getApm());
+		AudioSourceManagers.registerLocalSource(ShiroInfo.getApm());
 
-			spring = SpringApplication.run(Application.class, args);
-		}
+		spring = SpringApplication.run(Application.class, args);
 
 		if (System.getenv().containsKey("TWITCH_TOKEN")) {
 			OAuth2Credential cred = new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN"));
@@ -153,10 +148,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	private static void finishStartUp() {
-		if (!ShiroInfo.MAINTENANCE) {
-			jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
-			getInfo().setWinner(ExceedDAO.getWinner());
-		}
+		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
+		getInfo().setWinner(ExceedDAO.getWinner());
 		ConsoleListener console = new ConsoleListener();
 
 		for (Emote emote : shiroShards.getEmotes()) {
@@ -187,10 +180,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
 		jbr.addEventListener(new JibrilEvents());
 
-		if (!ShiroInfo.MAINTENANCE)
-			shiroShards.setActivity(getRandomActivity());
-		else
-			shiroShards.setActivity(Activity.playing("Manutenção"));
+		shiroShards.setActivity(getRandomActivity());
 	}
 
 	public static Activity getRandomActivity() {
