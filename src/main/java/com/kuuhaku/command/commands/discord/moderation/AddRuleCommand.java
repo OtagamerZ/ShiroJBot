@@ -57,7 +57,7 @@ public class AddRuleCommand implements Executable {
 			return;
 		}
 
-		gc.addAutoRule(argsAsText);
+		gc.addRule(argsAsText);
 		channel.sendMessage("✅ | Regra adicionada com sucesso!").queue();
 
 		GuildDAO.updateGuildSettings(gc);
