@@ -159,11 +159,12 @@ public class Card {
 				float[] hsv;
 				if (border) {
 					hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
+					hsv[0] = ((hsv[0] * 360 + 180) % 360) / 360;
 				} else {
 					hsv = Color.RGBtoHSB(rgb[1], rgb[3], rgb[2], null);
+					hsv[0] = ((hsv[0] * 360 + 42) % 360) / 360;
 				}
 
-				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
 				rgb = Helper.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
 
 				out.setRGB(x, y, Helper.packRGB(alpha, rgb[1], rgb[2], rgb[3]));
