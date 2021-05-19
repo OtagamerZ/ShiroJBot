@@ -14,8 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/gifs/fissure.gif" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,17 +199,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1193,14 +1183,9 @@
       <workItem from="1621010188720" duration="6639000" />
       <workItem from="1621119509106" duration="521000" />
       <workItem from="1621339007881" duration="10602000" />
-      <workItem from="1621353802538" duration="11919000" />
-    </task>
-    <task id="LOCAL-04405" summary="Segunda tentativa na centralização dos decks">
-      <created>1620931333612</created>
-      <option name="number" value="04405" />
-      <option name="presentableId" value="LOCAL-04405" />
-      <option name="project" value="LOCAL" />
-      <updated>1620931333612</updated>
+      <workItem from="1621353802538" duration="12929000" />
+      <workItem from="1621426037643" duration="115000" />
+      <workItem from="1621455491280" duration="1207000" />
     </task>
     <task id="LOCAL-04406" summary="Segunda tentativa na centralização dos decks">
       <created>1620931482593</created>
@@ -1538,7 +1523,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621362760379</updated>
     </task>
-    <option name="localTasksCounter" value="4454" />
+    <task id="LOCAL-04454" summary="Correções menores">
+      <created>1621370649948</created>
+      <option name="number" value="04454" />
+      <option name="presentableId" value="LOCAL-04454" />
+      <option name="project" value="LOCAL" />
+      <updated>1621370649948</updated>
+    </task>
+    <option name="localTasksCounter" value="4455" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

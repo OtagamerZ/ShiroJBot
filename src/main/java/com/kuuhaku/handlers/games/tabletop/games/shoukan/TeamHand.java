@@ -451,8 +451,7 @@ public class TeamHand extends Hand {
 		cards.removeIf(Drawable::isAvailable);
 
 		Collections.shuffle(deque);
-		int toDraw = Math.max(0, getMaxCards() - cards.size())
-					 + (combo.getLeft() == Race.BESTIAL ? 4 : 0);
+		int toDraw = Math.max(0, getMaxCards() - cards.size());
 		for (int i = 0; i < toDraw; i++) manualDraw();
 
 		switch (combo.getRight()) {
