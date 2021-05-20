@@ -21,22 +21,15 @@ package com.kuuhaku.handlers.api.websocket;
 import java.net.InetSocketAddress;
 
 public class WebSocketConfig {
-	private final ChatSocket chat;
 	private final DashboardSocket dashboard;
 	private final CanvasSocket canvas;
 
 	public WebSocketConfig() {
-		chat = new ChatSocket(new InetSocketAddress(8001));
-		dashboard = new DashboardSocket(new InetSocketAddress(8002));
-		canvas = new CanvasSocket(new InetSocketAddress(8003));
+		dashboard = new DashboardSocket(new InetSocketAddress(8001));
+		canvas = new CanvasSocket(new InetSocketAddress(8002));
 
-		chat.start();
 		dashboard.start();
 		canvas.start();
-	}
-
-	public ChatSocket getChat() {
-		return chat;
 	}
 
 	public DashboardSocket getDashboard() {

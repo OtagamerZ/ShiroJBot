@@ -66,9 +66,6 @@ public class GuildConfig {
 	private String levelChannel = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String relayChannel = "";
-
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String logChannel = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
@@ -252,14 +249,6 @@ public class GuildConfig {
 
 	public void setLevelChannel(String levelChannel) {
 		this.levelChannel = Helper.getOr(levelChannel, "");
-	}
-
-	public TextChannel getRelayChannel() {
-		return Main.getInfo().getGuildByID(guildId).getTextChannelById(Helper.getOr(relayChannel, "1"));
-	}
-
-	public void setRelayChannel(String relayChannel) {
-		this.relayChannel = Helper.getOr(relayChannel, "");
 	}
 
 	public TextChannel getLogChannel() {
