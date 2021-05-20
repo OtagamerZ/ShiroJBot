@@ -201,6 +201,7 @@ public class StockMarketDAO {
 				WHERE x.buyer <> ''
 				  AND x.buyer <> x.seller
 				  AND x.card_id = :card
+				  AND x.publishdate > DATE_TRUNC('DAY', NOW() - INTERVAL '1 YEAR')
 				GROUP BY x.publishdate, x.card_id, x.price
 				    WINDOW w AS (PARTITION BY x.card_id, x.publishdate ORDER BY x.publishdate)
 				ORDER BY publishdate
@@ -241,6 +242,7 @@ public class StockMarketDAO {
 				WHERE x.buyer <> ''
 				  AND x.buyer <> x.seller
 				  AND x.rarity = :rarity
+				  AND x.publishdate > DATE_TRUNC('DAY', NOW() - INTERVAL '1 YEAR')
 				GROUP BY x.publishdate, x.rarity, x.price
 				    WINDOW w AS (PARTITION BY x.rarity, x.publishdate ORDER BY x.publishdate)
 				ORDER BY publishdate
