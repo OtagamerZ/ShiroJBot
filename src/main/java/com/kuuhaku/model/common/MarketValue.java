@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class MarketValue {
@@ -26,9 +27,9 @@ public class MarketValue {
 	private final int high;
 	private final int low;
 	private final int close;
-	private final Date date;
+	private final Timestamp date;
 
-	public MarketValue(String id, int open, int high, int low, int close, Date date) {
+	public MarketValue(String id, int open, int high, int low, int close, Timestamp date) {
 		this.id = id;
 		this.open = open;
 		this.high = high;
