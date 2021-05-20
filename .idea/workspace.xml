@@ -14,7 +14,52 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção da Jibril">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/ascii.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/biografia.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/fundo.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-1.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-10.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-11.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-12.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-13.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-14.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-15.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-16.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-17.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-18.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-2.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-3.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-4.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-5.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-6.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-7.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-8.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/diversos/untitled-9.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/anime.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/bug.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/carteira.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/catnet.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/emotes-da-shiro.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/emotes-locais.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/help-command.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/info.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/notas.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/perfil.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/ping.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/que-cor.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/rank.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/reportar.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/seus-buffs.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/suas-tags.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/suporte.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/tags.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia/meus-comandos/informacao/uptime.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/solucao-de-problemas/perguntas-frequentes.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,19 +242,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1198,21 +1230,8 @@
       <workItem from="1621426037643" duration="115000" />
       <workItem from="1621455491280" duration="2196000" />
       <workItem from="1621512203144" duration="1634000" />
-      <workItem from="1621514581188" duration="5189000" />
-    </task>
-    <task id="LOCAL-04415" summary="Adição de comando para nomear decks">
-      <created>1620939199155</created>
-      <option name="number" value="04415" />
-      <option name="presentableId" value="LOCAL-04415" />
-      <option name="project" value="LOCAL" />
-      <updated>1620939199155</updated>
-    </task>
-    <task id="LOCAL-04416" summary="Correções menores">
-      <created>1620998818975</created>
-      <option name="number" value="04416" />
-      <option name="presentableId" value="LOCAL-04416" />
-      <option name="project" value="LOCAL" />
-      <updated>1620998818975</updated>
+      <workItem from="1621514581188" duration="5735000" />
+      <workItem from="1621526675233" duration="554000" />
     </task>
     <task id="LOCAL-04417" summary="Correções menores">
       <created>1621013922225</created>
@@ -1543,7 +1562,21 @@
       <option name="project" value="LOCAL" />
       <updated>1621522054362</updated>
     </task>
-    <option name="localTasksCounter" value="4464" />
+    <task id="LOCAL-04464" summary="Remoção da Jibril">
+      <created>1621522343114</created>
+      <option name="number" value="04464" />
+      <option name="presentableId" value="LOCAL-04464" />
+      <option name="project" value="LOCAL" />
+      <updated>1621522343114</updated>
+    </task>
+    <task id="LOCAL-04465" summary="Remoção da Jibril">
+      <created>1621522579823</created>
+      <option name="number" value="04465" />
+      <option name="presentableId" value="LOCAL-04465" />
+      <option name="project" value="LOCAL" />
+      <updated>1621522579823</updated>
+    </task>
+    <option name="localTasksCounter" value="4466" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
