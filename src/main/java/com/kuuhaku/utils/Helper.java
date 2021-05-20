@@ -2455,7 +2455,6 @@ public class Helper {
 				.build();
 
 		chart.getStyler()
-				.setDefaultSeriesRenderStyle(OHLCSeries.OHLCSeriesRenderStyle.HiLo)
 				.setPlotGridLinesColor(new Color(64, 68, 71))
 				.setAxisTickLabelsColor(Color.WHITE)
 				.setAnnotationsFontColor(Color.WHITE)
