@@ -88,12 +88,6 @@ public class ExportableGuildConfig {
 				}});
 			}
 		}});
-		gc.put("relayChannel", new JSONObject() {{
-			put("id", g.getRelayChannel().getId());
-
-			TextChannel rl = g.getRelayChannel();
-			if (rl != null) put("name", rl.getName());
-		}});
 	}
 
 	public JSONObject getGuildConfig() {

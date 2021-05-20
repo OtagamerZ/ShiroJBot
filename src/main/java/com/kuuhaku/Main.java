@@ -25,13 +25,11 @@ import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Paginator;
 import com.github.ygimenez.model.PaginatorBuilder;
-import com.kuuhaku.controller.Relay;
 import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.ConsoleListener;
-import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
 import com.kuuhaku.events.TwitchEvents;
 import com.kuuhaku.handlers.api.Application;
@@ -44,7 +42,6 @@ import com.kuuhaku.utils.ShiroInfo;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.User;
@@ -64,11 +61,9 @@ import java.util.concurrent.Executors;
 public class Main implements Thread.UncaughtExceptionHandler {
 
 	private static ShiroInfo info;
-	private static Relay relay;
 	private static CommandManager cmdManager;
 	private static TwitchCommandManager tCmdManager;
 	private static ShardManager shiroShards;
-	private static JDA jbr;
 	private static JDA tet;
 	private static TwitchClient twitch;
 	private static TwitchEvents twitchManager;
@@ -87,7 +82,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				""");
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
 		info = new ShiroInfo();
-		relay = new Relay();
 		cmdManager = new CommandManager();
 		tCmdManager = new TwitchCommandManager();
 
@@ -101,14 +95,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.setEventPool(Executors.newCachedThreadPool(), true)
 				.build();
 
-		jbr = JDABuilder.createLight(System.getenv("JIBRIL_TOKEN"))
-				.setMaxReconnectDelay(32)
-				.setEventPool(Executors.newCachedThreadPool(), true)
-				.build()
-				.awaitReady();
-
 		shiroShards.setActivity(Activity.playing("Iniciando..."));
-		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		info.setStartTime(System.currentTimeMillis());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
@@ -148,7 +135,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	private static void finishStartUp() {
-		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 		getInfo().setWinner(ExceedDAO.getWinner());
 		ConsoleListener console = new ConsoleListener();
 
@@ -178,8 +164,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Helper.logger(Main.class).info("Estou pronta!");
 
 		shiroShards.addEventListener(ShiroInfo.getShiroEvents());
-		jbr.addEventListener(new JibrilEvents());
-
 		shiroShards.setActivity(getRandomActivity());
 	}
 
@@ -223,21 +207,12 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		exiting = true;
 
 		SpringApplication.exit(spring);
-		jbr.shutdownNow();
 		shiroShards.shutdown();
 		return true;
 	}
 
-	public static Relay getRelay() {
-		return relay;
-	}
-
 	public static ShardManager getShiroShards() {
 		return shiroShards;
-	}
-
-	public static JDA getJibril() {
-		return jbr;
 	}
 
 	public static JDA getTet() {
