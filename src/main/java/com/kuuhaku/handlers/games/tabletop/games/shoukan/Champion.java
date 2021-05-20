@@ -168,9 +168,9 @@ public class Champion implements Drawable, Cloneable {
 
 				g2d.setColor(new Color(0, 165, 255));
 				if (fakeCard != null)
-					Profile.drawOutlinedText(String.valueOf(fakeCard.getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(fakeCard.getMana())), 70, g2d);
+					Profile.drawOutlinedText(String.valueOf(fakeCard.getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(fakeCard.getMana())), 67, g2d);
 				else
-					Profile.drawOutlinedText(String.valueOf(getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getMana())), 70, g2d);
+					Profile.drawOutlinedText(String.valueOf(getMana()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getMana())), 67, g2d);
 
 				drawnMana = true;
 			}
@@ -180,9 +180,9 @@ public class Champion implements Drawable, Cloneable {
 
 				g2d.setColor(new Color(255, 51, 0));
 				if (fakeCard != null)
-					Profile.drawOutlinedText(String.valueOf(fakeCard.getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(fakeCard.getBlood())), 70 + (drawnMana ? 22 : 0), g2d);
+					Profile.drawOutlinedText(String.valueOf(fakeCard.getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(fakeCard.getBlood())), 67 + (drawnMana ? 22 : 0), g2d);
 				else
-					Profile.drawOutlinedText(String.valueOf(getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getBlood())), 70 + (drawnMana ? 22 : 0), g2d);
+					Profile.drawOutlinedText(String.valueOf(getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getBlood())), 67 + (drawnMana ? 22 : 0), g2d);
 			}
 
 			String data = bonus.getSpecialData().optString("write");
