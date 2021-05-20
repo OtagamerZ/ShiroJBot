@@ -37,7 +37,6 @@
         <class>com.kuuhaku.model.persistent.PixelCanvas</class>
         <class>com.kuuhaku.model.persistent.Log</class>
         <class>com.kuuhaku.model.persistent.Token</class>
-        <class>com.kuuhaku.model.persistent.GlobalMessage</class>
         <class>com.kuuhaku.model.persistent.Account</class>
         <class>com.kuuhaku.model.persistent.Slots</class>
         <class>com.kuuhaku.model.persistent.Version</class>
