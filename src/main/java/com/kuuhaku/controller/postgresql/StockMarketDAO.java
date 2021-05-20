@@ -180,30 +180,30 @@ public class StockMarketDAO {
 
 		Query q = em.createNativeQuery("""
 				SELECT :card                       AS id
-				                 , FIRST_VALUE(x.price) OVER w AS open
-				                 , MAX(x.price)                AS high
-				                 , MIN(x.price)                AS low
-				                 , LAST_VALUE(x.price) OVER w  AS close
-				                 , x.publishdate
-				            FROM (
-				                     SELECT c.id                                                                        AS card_id
-				                          , COALESCE(cm.price, em.price, fm.price)                                      AS price
-				                          , COALESCE(cm.buyer, em.buyer, fm.buyer)                                      AS buyer
-				                          , COALESCE(cm.seller, em.seller, fm.seller)                                   AS seller
-				                          , DATE_TRUNC('DAY', COALESCE(cm.publishdate, em.publishdate, fm.publishdate)) AS publishdate
-				                     FROM Card c
-				                              LEFT JOIN Equipment e ON e.card_id = c.id
-				                              LEFT JOIN Field f ON f.card_id = c.id
-				                              LEFT JOIN CardMarket cm ON cm.card_id = c.id
-				                              LEFT JOIN EquipmentMarket em ON em.card_id = e.id
-				                              LEFT JOIN FieldMarket fm ON fm.card_id = f.id
-				                 ) x
-				            WHERE x.buyer <> ''
-				              AND x.buyer <> x.seller
-				              AND x.card_id = :card
-				            GROUP BY x.publishdate, x.card_id, x.price
-				                WINDOW w AS (PARTITION BY x.card_id, x.publishdate ORDER BY x.publishdate)
-				            ORDER BY publishdate
+				     , FIRST_VALUE(x.price) OVER w AS open
+				     , MAX(x.price)                AS high
+				     , MIN(x.price)                AS low
+				     , LAST_VALUE(x.price) OVER w  AS close
+				     , x.publishdate
+				FROM (
+				         SELECT c.id                                                                        AS card_id
+				              , COALESCE(cm.price, em.price, fm.price)                                      AS price
+				              , COALESCE(cm.buyer, em.buyer, fm.buyer)                                      AS buyer
+				              , COALESCE(cm.seller, em.seller, fm.seller)                                   AS seller
+				              , DATE_TRUNC('DAY', COALESCE(cm.publishdate, em.publishdate, fm.publishdate)) AS publishdate
+				         FROM Card c
+				                  LEFT JOIN Equipment e ON e.card_id = c.id
+				                  LEFT JOIN Field f ON f.card_id = c.id
+				                  LEFT JOIN CardMarket cm ON cm.card_id = c.id
+				                  LEFT JOIN EquipmentMarket em ON em.card_id = e.id
+				                  LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				     ) x
+				WHERE x.buyer <> ''
+				  AND x.buyer <> x.seller
+				  AND x.card_id = :card
+				GROUP BY x.publishdate, x.card_id, x.price
+				    WINDOW w AS (PARTITION BY x.card_id, x.publishdate ORDER BY x.publishdate)
+				ORDER BY publishdate
 				""")
 				.setParameter("card", c.getId());
 
@@ -219,31 +219,31 @@ public class StockMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT :card                       AS id
-				                 , FIRST_VALUE(x.price) OVER w AS open
-				                 , MAX(x.price)                AS high
-				                 , MIN(x.price)                AS low
-				                 , LAST_VALUE(x.price) OVER w  AS close
-				                 , x.publishdate
-				            FROM (
-				                     SELECT c.rarity                                                                    AS rarity
-				                          , COALESCE(cm.price, em.price, fm.price)                                      AS price
-				                          , COALESCE(cm.buyer, em.buyer, fm.buyer)                                      AS buyer
-				                          , COALESCE(cm.seller, em.seller, fm.seller)                                   AS seller
-				                          , DATE_TRUNC('DAY', COALESCE(cm.publishdate, em.publishdate, fm.publishdate)) AS publishdate
-				                     FROM Card c
-				                              LEFT JOIN Equipment e ON e.card_id = c.id
-				                              LEFT JOIN Field f ON f.card_id = c.id
-				                              LEFT JOIN CardMarket cm ON cm.card_id = c.id
-				                              LEFT JOIN EquipmentMarket em ON em.card_id = e.id
-				                              LEFT JOIN FieldMarket fm ON fm.card_id = f.id
-				                 ) x
-				            WHERE x.buyer <> ''
-				              AND x.buyer <> x.seller
-				              AND x.rarity = :rarity
-				            GROUP BY x.publishdate, x.card_id, x.price
-				                WINDOW w AS (PARTITION BY x.card_id, x.publishdate ORDER BY x.publishdate)
-				            ORDER BY publishdate
+				SELECT :rarity                       AS id
+				     , FIRST_VALUE(x.price) OVER w AS open
+				     , MAX(x.price)                AS high
+				     , MIN(x.price)                AS low
+				     , LAST_VALUE(x.price) OVER w  AS close
+				     , x.publishdate
+				FROM (
+				         SELECT c.rarity                                                                    AS rarity
+				              , COALESCE(cm.price, em.price, fm.price)                                      AS price
+				              , COALESCE(cm.buyer, em.buyer, fm.buyer)                                      AS buyer
+				              , COALESCE(cm.seller, em.seller, fm.seller)                                   AS seller
+				              , DATE_TRUNC('DAY', COALESCE(cm.publishdate, em.publishdate, fm.publishdate)) AS publishdate
+				         FROM Card c
+				                  LEFT JOIN Equipment e ON e.card_id = c.id
+				                  LEFT JOIN Field f ON f.card_id = c.id
+				                  LEFT JOIN CardMarket cm ON cm.card_id = c.id
+				                  LEFT JOIN EquipmentMarket em ON em.card_id = e.id
+				                  LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				     ) x
+				WHERE x.buyer <> ''
+				  AND x.buyer <> x.seller
+				  AND x.rarity = :rarity
+				GROUP BY x.publishdate, x.rarity, x.price
+				    WINDOW w AS (PARTITION BY x.rarity, x.publishdate ORDER BY x.publishdate)
+				ORDER BY publishdate
 				""")
 				.setParameter("rarity", r.name());
 
