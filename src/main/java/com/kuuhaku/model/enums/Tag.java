@@ -90,7 +90,7 @@ public enum Tag {
 			(user, member) -> AccountDAO.getAccount(user.getId()).getBugs() > 25),
 
 	INVESTIDOR(TagIcons.INVESTOR, "Você lucrou muito comprando e vendendo ações.",
-			(user, member) -> AccountDAO.getAccount(user.getId()).getStocksProfit() > 1000000);
+			(user, member) -> AccountDAO.getAccount(user.getId()).getStocksProfit() > 5000000);
 
 	private final TagIcons emote;
 	private final String description;
