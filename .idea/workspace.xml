@@ -14,8 +14,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/blood.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/mana.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/arena.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/banner.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_back.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_arena.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_equip.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_spell.xcf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/trophy.xcf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_blue.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_blue.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_cyan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_cyan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_green.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_green.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_grey.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_grey.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_pink.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_pink.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_purple.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_purple.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_red.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_red.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_yellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_yellow.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,6 +217,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1185,14 +1215,7 @@
       <workItem from="1621353802538" duration="12929000" />
       <workItem from="1621426037643" duration="115000" />
       <workItem from="1621455491280" duration="2196000" />
-      <workItem from="1621512203144" duration="443000" />
-    </task>
-    <task id="LOCAL-04410" summary="Adição de comando para nomear decks">
-      <created>1620934075206</created>
-      <option name="number" value="04410" />
-      <option name="presentableId" value="LOCAL-04410" />
-      <option name="project" value="LOCAL" />
-      <updated>1620934075206</updated>
+      <workItem from="1621512203144" duration="1308000" />
     </task>
     <task id="LOCAL-04411" summary="Adição de comando para nomear decks">
       <created>1620934736655</created>
@@ -1530,7 +1553,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621512467150</updated>
     </task>
-    <option name="localTasksCounter" value="4459" />
+    <task id="LOCAL-04459" summary="Correções menores">
+      <created>1621512666071</created>
+      <option name="number" value="04459" />
+      <option name="presentableId" value="LOCAL-04459" />
+      <option name="project" value="LOCAL" />
+      <updated>1621512666071</updated>
+    </task>
+    <option name="localTasksCounter" value="4460" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
