@@ -176,12 +176,12 @@ public class StockMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT :card                                                         AS id
-				     , FIRST_VALUE(x.price) OVER w                                   AS open
-				     , MAX(x.price)                                                  AS high
-				     , MIN(x.price)                                                  AS low
-				     , LAST_VALUE(x.price) OVER w                                    AS close
-				     , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
+				SELECT :card                                                                      AS id
+				     , FIRST_VALUE(x.price) OVER w                                                AS open
+				     , MAX(x.price)                                                               AS high
+				     , MIN(x.price)                                                               AS low
+				     , LAST_VALUE(x.price) OVER w                                                 AS close
+				     , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
 				     , x.publishdate
 				FROM (
 				         SELECT c.id                                                                        AS card_id
@@ -218,12 +218,12 @@ public class StockMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT :rarity                                                       AS id
-				     , FIRST_VALUE(x.price) OVER w                                   AS open
-				     , MAX(x.price)                                                  AS high
-				     , MIN(x.price)                                                  AS low
-				     , LAST_VALUE(x.price) OVER w                                    AS close
-				     , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
+				SELECT :rarity                                                                    AS id
+				     , FIRST_VALUE(x.price) OVER w                                                AS open
+				     , MAX(x.price)                                                               AS high
+				     , MIN(x.price)                                                               AS low
+				     , LAST_VALUE(x.price) OVER w                                                 AS close
+				     , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
 				     , x.publishdate
 				FROM (
 				         SELECT c.rarity                                                                    AS rarity
