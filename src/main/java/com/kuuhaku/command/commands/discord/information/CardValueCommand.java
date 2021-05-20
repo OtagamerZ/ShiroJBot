@@ -85,7 +85,7 @@ public class CardValueCommand implements Executable {
 				return;
 			}
 
-			chart.addSeries("Valor",
+			chart.addSeries("Variação",
 					values.stream().map(MarketValue::getDate).collect(Collectors.toList()),
 					values.stream().map(MarketValue::getOpen).collect(Collectors.toList()),
 					values.stream().map(MarketValue::getHigh).collect(Collectors.toList()),
