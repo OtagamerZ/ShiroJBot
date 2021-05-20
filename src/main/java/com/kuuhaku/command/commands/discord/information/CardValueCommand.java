@@ -21,12 +21,10 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.CardMarketDAO;
-import com.kuuhaku.controller.postgresql.EquipmentMarketDAO;
-import com.kuuhaku.controller.postgresql.FieldMarketDAO;
+import com.kuuhaku.controller.postgresql.StockMarketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.common.Market;
+import com.kuuhaku.model.common.MarketValue;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Card;
@@ -35,18 +33,12 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.knowm.xchart.BitmapEncoder;
-import org.knowm.xchart.XYChart;
+import org.knowm.xchart.OHLCChart;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.awt.*;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Command(
 		name = "valor",
@@ -75,63 +67,30 @@ public class CardValueCommand implements Executable {
 				return;
 			}
 
-			List<Market> normalCards;
-			List<Market> foilCards;
+			List<MarketValue> values;
 
-			ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
-			if (c != null) {
-				normalCards = Stream.of(
-						CardMarketDAO.getCardsByCard(c.getId(), false),
-						EquipmentMarketDAO.getCardsByCard(c.getId()),
-						FieldMarketDAO.getCardsByCard(c.getId())
-				).flatMap(List::stream)
-						.filter(cm -> cm.getPublishDate().isAfter(today.minusDays(30)))
-						.collect(Collectors.toList());
-				foilCards = CardMarketDAO.getCardsByCard(c.getId(), true)
-						.stream()
-						.filter(cm -> cm.getPublishDate().isAfter(today.minusDays(30)))
-						.collect(Collectors.toList());
-			} else {
-				normalCards = CardMarketDAO.getCardsByRarity(r, false)
-						.stream()
-						.filter(cm -> cm.getPublishDate().isAfter(today.minusDays(30)))
-						.collect(Collectors.toList());
-				foilCards = CardMarketDAO.getCardsByRarity(r, true)
-						.stream()
-						.filter(cm -> cm.getPublishDate().isAfter(today.minusDays(30)))
-						.collect(Collectors.toList());
-			}
+			if (c != null)
+				values = StockMarketDAO.getCardHistory(c);
+			else
+				values = StockMarketDAO.getRarityHistory(r);
 
-			XYChart chart = Helper.buildXYChart(
+			OHLCChart chart = Helper.buildOHLCChart(
 					"Valores de venda da " + (c == null ? "raridade" : "carta") + " \"" + (c == null ? r.toString() : c.getName()) + "\"",
 					Pair.of("Data", "Valor (x1000)"),
 					List.of(new Color(0, 150, 0), Color.yellow)
 			);
 
-			Map<Date, Integer> normalValues = new TreeMap<>(Date::compareTo);
-			for (Market nc : normalCards)
-				normalValues.merge(Date.from(nc.getPublishDate().toInstant()), Math.round(nc.getPrice() / 1000f), Helper::average);
-
-			Map<Date, Integer> foilValues = new TreeMap<>(Date::compareTo);
-			for (Market fc : foilCards)
-				foilValues.merge(Date.from(fc.getPublishDate().toInstant()), Math.round(fc.getPrice() / 1000f), Helper::average);
-
-			if (normalValues.size() <= 1 && foilValues.size() <= 1) {
-				m.editMessage("❌ | Essa carta ainda não foi vendida nos últimos 30 dias ou possui apenas 1 venda.").queue();
+			if (values.size() <= 1) {
+				m.editMessage("❌ | Essa carta ainda não foi vendida ou possui apenas 1 venda.").queue();
 				return;
 			}
 
-			if (normalCards.size() > 1)
-				chart.addSeries("Normal",
-						List.copyOf(normalValues.keySet()),
-						List.copyOf(normalValues.values())
-				).setMarker(SeriesMarkers.NONE);
-
-			if (foilCards.size() > 1)
-				chart.addSeries("Cromada",
-						List.copyOf(foilValues.keySet()),
-						List.copyOf(foilValues.values())
-				).setMarker(SeriesMarkers.NONE);
+			chart.addSeries("Valor",
+					values.stream().map(MarketValue::getOpen).collect(Collectors.toList()),
+					values.stream().map(MarketValue::getHigh).collect(Collectors.toList()),
+					values.stream().map(MarketValue::getLow).collect(Collectors.toList()),
+					values.stream().map(MarketValue::getClose).collect(Collectors.toList())
+			).setMarker(SeriesMarkers.NONE);
 
 			channel.sendFile(Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "chart", "png")).queue();
 			m.delete().queue();
