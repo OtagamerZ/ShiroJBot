@@ -121,9 +121,7 @@ public class StockMarketDAO {
 		Query curr = em.createNativeQuery("""
 				SELECT c.id
 				     , c.name
-				     , CASE x.sold >= 5
-				           WHEN TRUE THEN x.value
-				     END AS value
+				     , x.value
 				FROM Card c
 				         LEFT JOIN (
 				    SELECT x.card_id
