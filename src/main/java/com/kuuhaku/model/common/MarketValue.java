@@ -26,14 +26,16 @@ public class MarketValue {
 	private final int high;
 	private final int low;
 	private final int close;
+	private final int value;
 	private final Timestamp date;
 
-	public MarketValue(String id, Integer open, Integer high, Integer low, Integer close, Timestamp date) {
+	public MarketValue(String id, int open, int high, int low, int close, int value, Timestamp date) {
 		this.id = id;
 		this.open = open;
 		this.high = high;
 		this.low = low;
 		this.close = close;
+		this.value = value;
 		this.date = date;
 	}
 
@@ -55,6 +57,10 @@ public class MarketValue {
 
 	public int getClose() {
 		return close;
+	}
+
+	public int getValue() {
+		return value;
 	}
 
 	public Timestamp getDate() {
