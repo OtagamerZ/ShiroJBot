@@ -123,9 +123,6 @@ public class GuildConfig {
 	private boolean antiRaid = false;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean liteMode = false;
-
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean nqnMode = false;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
@@ -413,18 +410,6 @@ public class GuildConfig {
 
 	public void toggleAntiRaid() {
 		this.antiRaid = !antiRaid;
-	}
-
-	public boolean isLiteMode() {
-		return liteMode;
-	}
-
-	public void setLiteMode(boolean liteMode) {
-		this.liteMode = liteMode;
-	}
-
-	public void toggleLiteMode() {
-		this.liteMode = !liteMode;
 	}
 
 	public boolean isNQNMode() {
