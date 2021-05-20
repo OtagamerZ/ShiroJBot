@@ -2074,7 +2074,7 @@ public class Shoukan extends GlobalGame {
 
 				if (acc.hasPendingQuest()) {
 					Map<DailyTask, Integer> pg = acc.getDailyProgress();
-					DailyQuest dq = DailyQuest.getQuest(getCurrent().getIdLong());
+					DailyQuest dq = DailyQuest.getQuest(Long.parseLong(acc.getUid()));
 					int summons = summoned.get(s).getOrDefault(dq.getChosenRace(), 0);
 					pg.merge(DailyTask.RACE_TASK, summons, Integer::sum);
 					acc.setDailyProgress(pg);
