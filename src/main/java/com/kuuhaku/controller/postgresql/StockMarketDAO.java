@@ -28,8 +28,6 @@ import com.kuuhaku.utils.Helper;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,14 +140,13 @@ public class StockMarketDAO {
 				        LEFT JOIN EquipmentMarket em ON em.card_id = e.id
 				        LEFT JOIN FieldMarket fm ON fm.card_id = f.id
 				    ) x
-				    WHERE x.publishDate > :date
+				    WHERE x.publishDate > NOW() - INTERVAL '7 DAY'
 				      AND x.buyer <> ''
 				      AND x.buyer <> x.seller
 				    GROUP BY x.card_id
 				) x ON x.card_id = c.id
 				ORDER BY c.id
-				""")
-				.setParameter("date", ZonedDateTime.now(ZoneId.of("GMT-3")).minusWeeks(1));
+				""");
 
 		Map<String, StockValue> out = new HashMap<>();
 		List<Object[]> prevResults = (List<Object[]>) prev.getResultList();
@@ -179,11 +176,12 @@ public class StockMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT :card                       AS id
-				     , FIRST_VALUE(x.price) OVER w AS open
-				     , MAX(x.price)                AS high
-				     , MIN(x.price)                AS low
-				     , LAST_VALUE(x.price) OVER w  AS close
+				SELECT :card                                                         AS id
+				     , FIRST_VALUE(x.price) OVER w                                   AS open
+				     , MAX(x.price)                                                  AS high
+				     , MIN(x.price)                                                  AS low
+				     , LAST_VALUE(x.price) OVER w                                    AS close
+				     , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
 				     , x.publishdate
 				FROM (
 				         SELECT c.id                                                                        AS card_id
@@ -220,11 +218,12 @@ public class StockMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT :rarity                       AS id
-				     , FIRST_VALUE(x.price) OVER w AS open
-				     , MAX(x.price)                AS high
-				     , MIN(x.price)                AS low
-				     , LAST_VALUE(x.price) OVER w  AS close
+				SELECT :rarity                                                       AS id
+				     , FIRST_VALUE(x.price) OVER w                                   AS open
+				     , MAX(x.price)                                                  AS high
+				     , MIN(x.price)                                                  AS low
+				     , LAST_VALUE(x.price) OVER w                                    AS close
+				     , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
 				     , x.publishdate
 				FROM (
 				         SELECT c.rarity                                                                    AS rarity
