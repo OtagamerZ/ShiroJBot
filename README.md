@@ -1,7 +1,3 @@
----
-description: Vamos apresentar a Shiro!
----
-
 # Página Inicial
 
 Precisa de um bot de reações? Talvez uma bot de moderação de servidor? Ou até mesmo quem sabe um jogo estilo Yu-Gi-Oh? Seja o que for, Shiro pode complementar seu servidor com mais de 150 comandos dos mais diversos tipos!
@@ -12,9 +8,8 @@ Não tenha medo de pedir ajuda, sugerir novas funções ou deixar o seu comentá
 
 ## Entre na área 51!
 
-Pela Shiro estar em desenvolvimento constante, foram criados dois bots adicionais para testar novos módulos, a Jibril e o Tet assim como comandos exclusivos. Tudo disponível para uso em servidores que possuam acesso beta!
-
-**Obs: A Shiro é uma bot aberta e livre para uso em qualquer servidor, apenas a Jibril e o Tet requerem que o servidor tenha acesso beta para obtê-los.**
+Receba novas funções primeiro que os outros e sugira novas funções diretamente à equipe, para isso basta ter o acesso
+beta!
 
 ### Para ganhar acesso beta
 
