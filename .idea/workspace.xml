@@ -13,19 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção da Jibril">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/arena.xcf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/banner.xcf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_back.xcf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front.xcf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_arena.xcf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_equip.xcf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_spell.xcf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/deck.xcf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/trophy.xcf" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Criação da arena Daten City">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/deck.xcf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/source.7z" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StockMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StockMarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1208,14 +1199,7 @@
       <workItem from="1621455491280" duration="2196000" />
       <workItem from="1621512203144" duration="1634000" />
       <workItem from="1621514581188" duration="5735000" />
-      <workItem from="1621526675233" duration="3309000" />
-    </task>
-    <task id="LOCAL-04418" summary="Correções menores">
-      <created>1621030512201</created>
-      <option name="number" value="04418" />
-      <option name="presentableId" value="LOCAL-04418" />
-      <option name="project" value="LOCAL" />
-      <updated>1621030512202</updated>
+      <workItem from="1621526675233" duration="4948000" />
     </task>
     <task id="LOCAL-04419" summary="Correções menores">
       <created>1621256085510</created>
@@ -1553,7 +1537,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621527261784</updated>
     </task>
-    <option name="localTasksCounter" value="4467" />
+    <task id="LOCAL-04467" summary="Criação da arena Daten City">
+      <created>1621534285264</created>
+      <option name="number" value="04467" />
+      <option name="presentableId" value="LOCAL-04467" />
+      <option name="project" value="LOCAL" />
+      <updated>1621534285264</updated>
+    </task>
+    <option name="localTasksCounter" value="4468" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1640,7 +1631,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção referente ao último commit" />
     <MESSAGE value="Adição de nova escala no gráfico sobre a Shiro" />
     <MESSAGE value="Nova tag: Investidor" />
     <MESSAGE value="Remoção completa do s!settings" />
@@ -1665,7 +1655,8 @@
     <MESSAGE value="Adição de comando para nomear decks" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Remoção da Jibril" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remoção da Jibril" />
+    <MESSAGE value="Criação da arena Daten City" />
+    <option name="LAST_COMMIT_MESSAGE" value="Criação da arena Daten City" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
