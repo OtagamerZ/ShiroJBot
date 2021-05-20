@@ -582,6 +582,9 @@ public class Shoukan extends GlobalGame {
 					} else if (!h.isNullMode() && (h.getMana() < c.getMana())) {
 						channel.sendMessage("❌ | Você não tem mana suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
 						return;
+					} else if (h.getHp() <= c.getBlood()) {
+						channel.sendMessage("❌ | Você não tem HP suficiente para invocar essa carta, encerre o turno reagindo com :arrow_forward: ou jogue cartas de equipamento ou campo.").queue(null, Helper::doNothing);
+						return;
 					}
 
 					if (!StringUtils.isNumeric(args[1])) {
