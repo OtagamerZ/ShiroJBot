@@ -563,7 +563,7 @@ public class Shoukan extends GlobalGame {
 									dp.addRedDef(Math.round(dp.getAltDef() * 0.25f));
 									dp.setBonus(t.getBonus().copy());
 									dp.setEfctMana(-dp.getMana());
-									dp.setFusion(true);
+									dp.setGravelocked(true);
 
 									sc.setTop(dp);
 								}
