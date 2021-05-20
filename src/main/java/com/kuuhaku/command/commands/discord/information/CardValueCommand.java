@@ -76,8 +76,8 @@ public class CardValueCommand implements Executable {
 
 			OHLCChart chart = Helper.buildOHLCChart(
 					"Valores de venda da " + (c == null ? "raridade" : "carta") + " \"" + (c == null ? r.toString() : c.getName()) + "\"",
-					Pair.of("Data", "Valor (x1000)"),
-					List.of(new Color(0, 150, 0), Color.yellow)
+					Pair.of("Data", "Valor"),
+					List.of(new Color(0, 0, 0), Color.white)
 			);
 
 			if (values.size() <= 1) {
@@ -91,6 +91,12 @@ public class CardValueCommand implements Executable {
 					values.stream().map(MarketValue::getHigh).collect(Collectors.toList()),
 					values.stream().map(MarketValue::getLow).collect(Collectors.toList()),
 					values.stream().map(MarketValue::getClose).collect(Collectors.toList())
+			).setDownColor(new Color(255, 0, 0, 100))
+					.setUpColor(new Color(0, 255, 0, 100));
+
+			chart.addSeries("Valor",
+					values.stream().map(MarketValue::getDate).collect(Collectors.toList()),
+					values.stream().map(MarketValue::getValue).collect(Collectors.toList())
 			).setMarker(SeriesMarkers.NONE);
 
 			channel.sendFile(Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "chart", "png")).queue();
