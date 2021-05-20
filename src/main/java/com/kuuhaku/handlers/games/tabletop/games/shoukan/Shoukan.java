@@ -638,8 +638,11 @@ public class Shoukan extends GlobalGame {
 					msg = h.getUser().getName() + " invocou o campo " + f.getCard().getName() + ".";
 				}
 
-				if (d instanceof Champion)
-					h.removeMana(((Champion) d).getMana());
+				if (d instanceof Champion) {
+					Champion c = (Champion) d;
+					h.removeMana(c.getMana());
+					h.removeHp(c.getBlood());
+				}
 
 				if (makeFusion(h)) return;
 				reportEvent(h, msg, true, false);
@@ -1084,6 +1087,7 @@ public class Shoukan extends GlobalGame {
 					if (applyEffect(ON_SUMMON, aFusion, i, current, Pair.of(aFusion, i), null)) return true;
 
 					h.removeMana(aFusion.getMana());
+					h.removeHp(aFusion.getBlood());
 					break;
 				}
 			}
