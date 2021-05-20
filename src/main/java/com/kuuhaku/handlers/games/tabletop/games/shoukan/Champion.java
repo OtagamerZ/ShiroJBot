@@ -63,6 +63,9 @@ public class Champion implements Drawable, Cloneable {
 	private int mana;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int blood;
+
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int atk;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
@@ -103,6 +106,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient int redAtk = 0;
 	private transient int redDef = 0;
 	private transient int efctMana = 0;
+	private transient int efctBlood = 0;
 	private transient int efctAtk = 0;
 	private transient int efctDef = 0;
 	private transient int stasis = 0;
@@ -357,6 +361,26 @@ public class Champion implements Drawable, Cloneable {
 
 	public void removeEfctMana(int mana) {
 		this.efctMana -= mana;
+	}
+
+	public int getBlood() {
+		return blood + efctBlood;
+	}
+
+	public void setEfctBlood(int blood) {
+		this.efctBlood = blood;
+	}
+
+	public void addEfctBlood(int blood) {
+		this.efctBlood += blood;
+	}
+
+	public void removeEfctBlood(int blood) {
+		this.efctBlood -= blood;
+	}
+
+	public void setBlood(int blood) {
+		this.blood = blood;
 	}
 
 	public int getBaseAtk() {
