@@ -1058,7 +1058,8 @@ public class Shoukan extends GlobalGame {
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
 						allCards.containsAll(f.getRequiredCards()) &&
-						(h.isNullMode() || h.getMana() >= f.getMana())
+						(h.isNullMode() || h.getMana() >= f.getMana()) &&
+						h.getHp() > f.getBlood()
 				)
 				.findFirst()
 				.map(Champion::copy)
