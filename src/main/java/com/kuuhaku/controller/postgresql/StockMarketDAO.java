@@ -91,7 +91,7 @@ public class StockMarketDAO {
 		Query prev = em.createNativeQuery("""
 				SELECT c.id
 				  	 , c.name
-				  	 , CASE x.sold >= 5
+				  	 , CASE x.sold >= 10
 				          WHEN TRUE THEN x.value
 				 	 END AS value
 				FROM Card c
@@ -149,7 +149,7 @@ public class StockMarketDAO {
 				) x ON x.card_id = c.id
 				ORDER BY c.id
 				""")
-				.setParameter("date", ZonedDateTime.now(ZoneId.of("GMT-3")).minusMonths(1));
+				.setParameter("date", ZonedDateTime.now(ZoneId.of("GMT-3")).minusWeeks(1));
 
 		Map<String, StockValue> out = new HashMap<>();
 		List<Object[]> prevResults = (List<Object[]>) prev.getResultList();

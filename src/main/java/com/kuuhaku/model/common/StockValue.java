@@ -26,13 +26,13 @@ public class StockValue {
 	private final int value;
 	private final double growth;
 
-	public StockValue(String id, String name, double before, double now) {
+	public StockValue(String id, String name, double allTime, double lastWeek) {
 		this.id = id;
 		this.name = name;
 
-		this.value = (int) Math.round(Helper.average(before, now));
-		if (before == 0 || now == 0) this.growth = 0;
-		else this.growth = Helper.prcnt(now, before) - 1;
+		this.value = (int) Math.round(allTime);
+		if (allTime == 0 || lastWeek == 0) this.growth = 0;
+		else this.growth = Helper.prcnt(lastWeek, allTime) - 1;
 	}
 
 	public String getId() {
