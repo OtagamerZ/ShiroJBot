@@ -58,15 +58,6 @@ public class MarryCommand implements Executable {
 			} else if (message.getMentionedUsers().get(0) == Main.getSelfUser() && !author.getId().equals(ShiroInfo.getNiiChan())) {
 				channel.sendMessage(I18n.getString("err_cannot-marry-shiro")).queue();
 				return;
-			} else if (message.getMentionedUsers().get(0) == Main.getJibril().getSelfUser() && !author.getId().equals(ShiroInfo.getNiiChan())) {
-				try {
-					TextChannel chn = Main.getJibril().getTextChannelById(channel.getId());
-					assert chn != null;
-					chn.sendMessage(I18n.getString("err_cannot-marry-jibril")).queue();
-				} catch (InsufficientPermissionException e) {
-					channel.sendMessage(I18n.getString("err_marry-the-answer-is-no")).queue();
-				}
-				return;
 			} else if (WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
 				channel.sendMessage(I18n.getString("err_already-married")).queue();
 				return;

@@ -525,23 +525,6 @@ public class Helper {
 	}
 
 	public static String getCurrentPerms(TextChannel c) {
-		String jibrilPerms = "";
-
-		try {
-			if (TagDAO.getTagById(c.getGuild().getOwnerId()).isBeta() && c.getGuild().getMembers().contains(c.getGuild().getMember(Main.getJibril().getSelfUser()))) {
-				Member jibril = c.getGuild().getMemberById(Main.getJibril().getSelfUser().getId());
-				assert jibril != null;
-				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissionsExplicit(c);
-
-				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
-							  perms.stream()
-									  .map(p -> "✅ -> " + p.getName())
-									  .sorted()
-									  .collect(Collectors.joining("\n"));
-			}
-		} catch (NoResultException ignore) {
-		}
-
 		Member shiro = c.getGuild().getSelfMember();
 		EnumSet<Permission> perms = shiro.getPermissionsExplicit(c);
 
@@ -549,8 +532,7 @@ public class Helper {
 			   perms.stream()
 					   .map(p -> "✅ -> " + p.getName())
 					   .sorted()
-					   .collect(Collectors.joining("\n")) +
-			   jibrilPerms;
+					   .collect(Collectors.joining("\n"));
 	}
 
 	public static <T> T getOr(T get, T or) {

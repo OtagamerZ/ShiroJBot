@@ -22,7 +22,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
-import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.SupportTier;
@@ -46,7 +45,6 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
-import javax.persistence.NoResultException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -61,9 +59,6 @@ public class TenthMinuteEvent implements Job {
 	@Override
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public void execute(JobExecutionContext context) {
-		for (Guild g : Main.getJibril().getGuilds()) {
-			notif(g);
-		}
 		for (Account account : AccountDAO.getNotifiableAccounts()) {
 			account.notifyVote();
 		}
@@ -216,32 +211,6 @@ public class TenthMinuteEvent implements Job {
 					file.delete();
 			} catch (IOException ignore) {
 			}
-		}
-	}
-
-	private static void notif(Guild g) {
-		try {
-			if (!TagDAO.getTagById(g.getOwnerId()).isBeta() && !ShiroInfo.getDevelopers().contains(g.getOwnerId())) {
-				g.retrieveOwner().queue(o -> {
-							Helper.logger(TenthMinuteEvent.class).info("Saí do servidor " + g.getName() + " por " + o.getUser().getAsTag() + " não estar na lista de acesso beta.");
-							g.leave().queue();
-						}
-						, f -> {
-							Helper.logger(TenthMinuteEvent.class).info("Saí do servidor " + g.getName() + " por DESCONHECIDO não estar na lista de acesso beta.");
-							g.leave().queue();
-						}
-				);
-			}
-		} catch (NoResultException e) {
-			g.retrieveOwner().queue(o -> {
-						Helper.logger(TenthMinuteEvent.class).info("Saí do servidor " + g.getName() + " por " + o.getUser().getAsTag() + " não possuir tags.");
-						g.leave().queue();
-					}
-					, f -> {
-						Helper.logger(TenthMinuteEvent.class).info("Saí do servidor " + g.getName() + " por DESCONHECIDO não possuir tags.");
-						g.leave().queue();
-					}
-			);
 		}
 	}
 }

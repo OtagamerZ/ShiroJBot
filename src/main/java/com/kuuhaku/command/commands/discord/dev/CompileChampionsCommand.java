@@ -45,27 +45,7 @@ public class CompileChampionsCommand implements Executable {
 		int errored = 0;
 		for (Champion c : champions) {
 			if (!c.hasEffect()) continue;
-
-			String imports = """
-					//%s
-					import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
-					import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
-					import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.ArenaField;
-					import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
-					import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
-					import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
-					import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
-					import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-					import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
-					import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-					import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
-					import com.kuuhaku.controller.postgresql.AccountDAO;
-					import com.kuuhaku.controller.postgresql.CardDAO;
-					import com.kuuhaku.model.enums.AnimeName;
-					import com.kuuhaku.utils.Helper;
-					import org.json.JSONArray;
-					          				
-					          """.formatted(c.getName());
+			String imports = EffectParameters.IMPORTS.formatted(c.getName());
 
 			try {
 				Interpreter i = new Interpreter();
