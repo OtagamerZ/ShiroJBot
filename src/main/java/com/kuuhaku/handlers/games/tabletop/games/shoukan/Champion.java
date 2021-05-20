@@ -110,6 +110,7 @@ public class Champion implements Drawable, Cloneable {
 	private transient int sleep = 0;
 	private transient double dodge = 0;
 	private transient double mDodge = 0;
+	private transient boolean gravelocked = false;
 
 	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
 		this.card = card;
@@ -724,7 +725,7 @@ public class Champion implements Drawable, Cloneable {
 		if (game == null) return false;
 		Field f = game.getArena().getField();
 		if (f != null)
-			return f.getModifiers().optFloat(getRace().name(), 0) > 0;
+			return f.getModifiers().optFloat(getRace().name(), 1) > 1;
 
 		return false;
 	}
@@ -733,9 +734,17 @@ public class Champion implements Drawable, Cloneable {
 		if (game == null) return false;
 		Field f = game.getArena().getField();
 		if (f != null)
-			return f.getModifiers().optFloat(getRace().name(), 0) < 0;
+			return f.getModifiers().optFloat(getRace().name(), 1) < 1;
 
 		return false;
+	}
+
+	public boolean isGravelocked() {
+		return fusion || gravelocked;
+	}
+
+	public void setGravelocked(boolean gravelocked) {
+		this.gravelocked = gravelocked;
 	}
 
 	@Override
