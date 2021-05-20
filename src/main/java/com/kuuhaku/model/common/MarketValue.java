@@ -28,7 +28,7 @@ public class MarketValue {
 	private final int close;
 	private final Timestamp date;
 
-	public MarketValue(String id, int open, int high, int low, int close, Timestamp date) {
+	public MarketValue(String id, Integer open, Integer high, Integer low, Integer close, Timestamp date) {
 		this.id = id;
 		this.open = open;
 		this.high = high;
