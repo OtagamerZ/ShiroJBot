@@ -19,7 +19,6 @@
 package com.kuuhaku.model.common;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class MarketValue {
 	private final String id;
@@ -58,7 +57,7 @@ public class MarketValue {
 		return close;
 	}
 
-	public Date getDate() {
+	public Timestamp getDate() {
 		return date;
 	}
 }
