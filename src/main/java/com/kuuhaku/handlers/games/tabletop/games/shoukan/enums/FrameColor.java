@@ -22,13 +22,10 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Objects;
 
 public enum FrameColor {
 	PINK("A cor característica da Shiro, batalhe com estratégia e perspicácia!"),
@@ -47,54 +44,34 @@ public enum FrameColor {
 	}
 
 	public BufferedImage getFront() {
-		try {
-			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/frames/card_front_" + name().toLowerCase(Locale.ROOT) + ".png")));
-		} catch (IOException e) {
-			return null;
-		}
+		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_" + name().toLowerCase(Locale.ROOT) + ".png");
 	}
 
 	public BufferedImage getBack(Account acc) {
-		try {
-			boolean withUlt = !acc.getUltimate().isBlank() && CardDAO.hasCompleted(acc.getUid(), acc.getUltimate(), false);
-			BufferedImage cover = ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/frames/card_back_" + name().toLowerCase(Locale.ROOT) + (withUlt ? "_t" : "") + ".png")));
-			BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2d = canvas.createGraphics();
+		boolean withUlt = !acc.getUltimate().isBlank() && CardDAO.hasCompleted(acc.getUid(), acc.getUltimate(), false);
+		BufferedImage cover = Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_back_" + name().toLowerCase(Locale.ROOT) + (withUlt ? "_t" : "") + ".png");
+		BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = canvas.createGraphics();
 
-			if (withUlt) {
-				g2d.drawImage(CardDAO.getUltimate(acc.getUltimate()).drawCardNoBorder(), 26, 43, 172, 268, null);
-			}
-
-			g2d.drawImage(cover, 0, 0, null);
-
-			return canvas;
-		} catch (IOException e) {
-			return null;
+		if (withUlt) {
+			g2d.drawImage(CardDAO.getUltimate(acc.getUltimate()).drawCardNoBorder(), 26, 43, 172, 268, null);
 		}
+
+		g2d.drawImage(cover, 0, 0, null);
+
+		return canvas;
 	}
 
 	public BufferedImage getFrontEquipment() {
-		try {
-			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/frames/card_front_equip_" + name().toLowerCase(Locale.ROOT) + ".png")));
-		} catch (IOException e) {
-			return null;
-		}
+		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_equip_" + name().toLowerCase(Locale.ROOT) + ".png");
 	}
 
 	public BufferedImage getFrontArena() {
-		try {
-			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/frames/card_front_arena_" + name().toLowerCase(Locale.ROOT) + ".png")));
-		} catch (IOException e) {
-			return null;
-		}
+		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_arena_" + name().toLowerCase(Locale.ROOT) + ".png");
 	}
 
 	public BufferedImage getFrontSpell() {
-		try {
-			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/frames/card_front_spell_" + name().toLowerCase(Locale.ROOT) + ".png")));
-		} catch (IOException e) {
-			return null;
-		}
+		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_spell_" + name().toLowerCase(Locale.ROOT) + ".png");
 	}
 
 	public String getDescription() {
