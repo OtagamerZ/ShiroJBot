@@ -18,7 +18,9 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.kuuhaku.model.common.MarketValue;
 import com.kuuhaku.model.common.StockValue;
+import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.StockMarket;
 import com.kuuhaku.utils.Helper;
@@ -128,17 +130,17 @@ public class StockMarketDAO {
 				         , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
 				         , COUNT(x.card_id)                                              AS sold
 				    FROM (
-				       SELECT c.id                                                     AS card_id
-				            , COALESCE(cm.price, em.price, fm.price)                   AS price
-				            , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
-				            , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
-				            , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
-				       FROM Card c
-				       LEFT JOIN Equipment e ON e.card_id = c.id
-				       LEFT JOIN Field f ON f.card_id = c.id
-				       LEFT JOIN CardMarket cm ON cm.card_id = c.id
-				       LEFT JOIN EquipmentMarket em ON em.card_id = e.id
-				       LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				        SELECT c.id                                                     AS card_id
+				             , COALESCE(cm.price, em.price, fm.price)                   AS price
+				             , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
+				             , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
+				             , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
+				        FROM Card c
+				        LEFT JOIN Equipment e ON e.card_id = c.id
+				        LEFT JOIN Field f ON f.card_id = c.id
+				        LEFT JOIN CardMarket cm ON cm.card_id = c.id
+				        LEFT JOIN EquipmentMarket em ON em.card_id = e.id
+				        LEFT JOIN FieldMarket fm ON fm.card_id = f.id
 				    ) x
 				    WHERE x.publishDate > :date
 				      AND x.buyer <> ''
@@ -165,6 +167,90 @@ public class StockMarketDAO {
 			));
 		}
 
-		return out;
+		try {
+			return out;
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<MarketValue> getCardHistory(Card c) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("""
+				SELECT :card                       AS id
+				                 , FIRST_VALUE(x.price) OVER w AS open
+				                 , MAX(x.price)                AS high
+				                 , MIN(x.price)                AS low
+				                 , LAST_VALUE(x.price) OVER w  AS close
+				                 , x.publishdate
+				            FROM (
+				                     SELECT c.id                                                                        AS card_id
+				                          , COALESCE(cm.price, em.price, fm.price)                                      AS price
+				                          , COALESCE(cm.buyer, em.buyer, fm.buyer)                                      AS buyer
+				                          , COALESCE(cm.seller, em.seller, fm.seller)                                   AS seller
+				                          , DATE_TRUNC('DAY', COALESCE(cm.publishdate, em.publishdate, fm.publishdate)) AS publishdate
+				                     FROM Card c
+				                              LEFT JOIN Equipment e ON e.card_id = c.id
+				                              LEFT JOIN Field f ON f.card_id = c.id
+				                              LEFT JOIN CardMarket cm ON cm.card_id = c.id
+				                              LEFT JOIN EquipmentMarket em ON em.card_id = e.id
+				                              LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				                 ) x
+				            WHERE x.buyer <> ''
+				              AND x.buyer <> x.seller
+				              AND x.card_id = :card
+				            GROUP BY x.publishdate, x.card_id, x.price
+				                WINDOW w AS (PARTITION BY x.card_id, x.publishdate ORDER BY x.publishdate)
+				            ORDER BY publishdate
+				""")
+				.setParameter("card", c.getId());
+
+		try {
+			return Helper.map(MarketValue.class, q.getResultList());
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<MarketValue> getRarityHistory(KawaiponRarity r) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("""
+				SELECT :card                       AS id
+				                 , FIRST_VALUE(x.price) OVER w AS open
+				                 , MAX(x.price)                AS high
+				                 , MIN(x.price)                AS low
+				                 , LAST_VALUE(x.price) OVER w  AS close
+				                 , x.publishdate
+				            FROM (
+				                     SELECT c.rarity                                                                    AS rarity
+				                          , COALESCE(cm.price, em.price, fm.price)                                      AS price
+				                          , COALESCE(cm.buyer, em.buyer, fm.buyer)                                      AS buyer
+				                          , COALESCE(cm.seller, em.seller, fm.seller)                                   AS seller
+				                          , DATE_TRUNC('DAY', COALESCE(cm.publishdate, em.publishdate, fm.publishdate)) AS publishdate
+				                     FROM Card c
+				                              LEFT JOIN Equipment e ON e.card_id = c.id
+				                              LEFT JOIN Field f ON f.card_id = c.id
+				                              LEFT JOIN CardMarket cm ON cm.card_id = c.id
+				                              LEFT JOIN EquipmentMarket em ON em.card_id = e.id
+				                              LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				                 ) x
+				            WHERE x.buyer <> ''
+				              AND x.buyer <> x.seller
+				              AND x.rarity = :rarity
+				            GROUP BY x.publishdate, x.card_id, x.price
+				                WINDOW w AS (PARTITION BY x.card_id, x.publishdate ORDER BY x.publishdate)
+				            ORDER BY publishdate
+				""")
+				.setParameter("rarity", r.name());
+
+		try {
+			return Helper.map(MarketValue.class, q.getResultList());
+		} finally {
+			em.close();
+		}
 	}
 }

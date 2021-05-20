@@ -69,10 +69,7 @@ import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.knowm.xchart.CategoryChart;
-import org.knowm.xchart.CategoryChartBuilder;
-import org.knowm.xchart.XYChart;
-import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 
 import javax.annotation.Nonnull;
@@ -86,6 +83,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
@@ -2447,6 +2445,32 @@ public class Helper {
 		return chart;
 	}
 
+	public static OHLCChart buildOHLCChart(String title, Pair<String, String> axis, List<Color> colors) {
+		OHLCChart chart = new OHLCChartBuilder()
+				.width(1920)
+				.height(1080)
+				.title(title)
+				.xAxisTitle(axis.getLeft())
+				.yAxisTitle(axis.getRight())
+				.build();
+
+		chart.getStyler()
+				.setDefaultSeriesRenderStyle(OHLCSeries.OHLCSeriesRenderStyle.Candle)
+				.setPlotGridLinesColor(new Color(64, 68, 71))
+				.setAxisTickLabelsColor(Color.WHITE)
+				.setAnnotationsFontColor(Color.WHITE)
+				.setChartFontColor(Color.WHITE)
+				.setHasAnnotations(true)
+				.setLegendPosition(Styler.LegendPosition.InsideNE)
+				.setSeriesColors(colors.toArray(Color[]::new))
+				.setPlotBackgroundColor(new Color(32, 34, 37))
+				.setChartBackgroundColor(new Color(16, 17, 20))
+				.setLegendBackgroundColor(new Color(16, 17, 20, 100))
+				.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
+
+		return chart;
+	}
+
 	public static String generateRandomHash(int length) {
 		try {
 			String method;
@@ -2607,5 +2631,26 @@ public class Helper {
 				minutes > 0 ? minutes + " minuto" + (minutes != 1 ? "s" : "") : "",
 				seconds > 0 ? seconds + " segundo" + (seconds != 1 ? "s" : "") : ""
 		).stream().filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(Collectors.toList(), properlyJoin()));
+	}
+
+	public static <T> T map(Class<T> type, Object[] tuple) {
+		List<Class<?>> tupleTypes = new ArrayList<>();
+		for (Object field : tuple) {
+			tupleTypes.add(field.getClass());
+		}
+		try {
+			Constructor<T> ctor = type.getConstructor(tupleTypes.toArray(new Class<?>[tuple.length]));
+			return ctor.newInstance(tuple);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> List<T> map(Class<T> type, List<Object[]> records) {
+		List<T> result = new LinkedList<>();
+		for (Object[] record : records) {
+			result.add(map(type, record));
+		}
+		return result;
 	}
 }
