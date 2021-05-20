@@ -1109,7 +1109,7 @@ public class Shoukan extends GlobalGame {
 		}
 
 		ch.reset();
-		if (!ch.isFusion())
+		if (!ch.isGravelocked())
 			arena.getGraveyard().get(to).add(ch.copy());
 	}
 
@@ -1148,7 +1148,7 @@ public class Shoukan extends GlobalGame {
 			}
 
 			ch.reset();
-			if (!ch.isFusion())
+			if (!ch.isGravelocked())
 				arena.getGraveyard().get(to).add(ch.copy());
 		}
 	}
@@ -1281,7 +1281,7 @@ public class Shoukan extends GlobalGame {
 			}
 
 			ch.reset();
-			if (!ch.isFusion())
+			if (!ch.isGravelocked())
 				arena.getBanished().add(ch);
 		}
 	}
