@@ -107,13 +107,13 @@ public class SellCardCommand implements Executable {
 			}
 			if (matches.contains(CardType.EVOGEAR)) {
 				btns.put(Helper.getRegionalIndicator(4), (mb, ms) -> {
-					chosen.complete(Triple.of(CardDAO.getCard(name), CardType.EVOGEAR, false));
+					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.EVOGEAR, false));
 					ms.delete().queue(null, Helper::doNothing);
 				});
 			}
 			if (matches.contains(CardType.FIELD)) {
 				btns.put(Helper.getRegionalIndicator(2), (mb, ms) -> {
-					chosen.complete(Triple.of(CardDAO.getCard(name), CardType.FIELD, false));
+					chosen.complete(Triple.of(CardDAO.getRawCard(name), CardType.FIELD, false));
 					ms.delete().queue(null, Helper::doNothing);
 				});
 			}
@@ -135,7 +135,7 @@ public class SellCardCommand implements Executable {
 			CardType type = matches.stream().findFirst().orElse(CardType.NONE);
 			switch (type) {
 				case KAWAIPON -> chooseVersion(author, channel, kp, name, chosen);
-				case EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getCard(name), type, false));
+				case EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getRawCard(name), type, false));
 				case NONE -> chosen.complete(null);
 			}
 		}
