@@ -2456,7 +2456,6 @@ public class Helper {
 
 		chart.getStyler()
 				.setPlotGridLinesColor(new Color(64, 68, 71))
-				.setYAxisLogarithmic(true)
 				.setAxisTickLabelsColor(Color.WHITE)
 				.setAnnotationsFontColor(Color.WHITE)
 				.setChartFontColor(Color.WHITE)
