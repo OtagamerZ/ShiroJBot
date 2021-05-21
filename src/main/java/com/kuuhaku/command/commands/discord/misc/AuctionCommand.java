@@ -139,8 +139,8 @@ public class AuctionCommand implements Executable {
 			int price = Integer.parseInt(args[2]);
 			int min = switch (type) {
 				case 1 -> ((KawaiponCard) obj).getCard().getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
-				case 2 -> ((Equipment) obj).getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
-				default -> hasLoan ? 20000 : 5000;
+				case 2 -> hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2;
+				default -> hasLoan ? Helper.BASE_FIELD_PRICE * 2 : Helper.BASE_FIELD_PRICE / 2;
 			};
 
 			if (price < min) {

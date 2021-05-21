@@ -165,8 +165,8 @@ public class BuyCardCommand implements Executable {
 				for (int p = i * 10; p < cards.size() && p < 10 * (i + 1); p++) {
 					Market m = cards.get(p);
 					User seller = Main.getInfo().getUserByID(m.getSeller());
-					String name = switch (m.getRawCard().getRarity()) {
-						case EQUIPMENT -> m.getRawCard().getName();
+					String name = switch (m.getType()) {
+						case EVOGEAR -> m.getRawCard().getName();
 						case FIELD -> m.getRawCard().getName();
 						default -> ((KawaiponCard) m.getCard()).getName();
 					};
@@ -215,8 +215,8 @@ public class BuyCardCommand implements Executable {
 			}
 
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-			switch (m.getRawCard().getRarity()) {
-				case EQUIPMENT -> {
+			switch (m.getType()) {
+				case EVOGEAR -> {
 					Deck dk = kp.getDeck();
 
 					if (dk.checkEquipment(m.getCard(), channel)) return;
@@ -262,8 +262,8 @@ public class BuyCardCommand implements Executable {
 			User sellerU = Main.getInfo().getUserByID(m.getSeller());
 			User buyerU = Main.getInfo().getUserByID(m.getBuyer());
 
-			String name = switch (m.getRawCard().getRarity()) {
-				case EQUIPMENT -> m.getRawCard().getName();
+			String name = switch (m.getType()) {
+				case EVOGEAR -> m.getRawCard().getName();
 				case FIELD -> m.getRawCard().getName();
 				default -> ((KawaiponCard) m.getCard()).getName();
 			};
@@ -282,8 +282,8 @@ public class BuyCardCommand implements Executable {
 			channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
 		} else {
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-			switch (m.getRawCard().getRarity()) {
-				case EQUIPMENT -> {
+			switch (m.getType()) {
+				case EVOGEAR -> {
 					Deck dk = kp.getDeck();
 
 					if (dk.checkEquipment(m.getCard(), channel)) return;
