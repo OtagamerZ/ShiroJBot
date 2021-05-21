@@ -110,7 +110,7 @@ public class MarketDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Market> getOffers(String name, int min, int max, KawaiponRarity rarity, String anime, boolean foil, String seller) {
+	public static List<Market> getOffers(String name, int min, int max, KawaiponRarity rarity, String anime, boolean foil, boolean onlyKp, boolean onlyEq, boolean onlyFd, String seller) {
 		EntityManager em = Manager.getEntityManager();
 
 		String query = """
@@ -150,6 +150,9 @@ public class MarketDAO {
 				rarity != null ? "AND c.rarity LIKE UPPER(:rarity)" : "",
 				anime != null ? "AND a.id LIKE UPPER(:anime)" : "",
 				foil ? "AND m.foil = :foil" : "",
+				onlyKp ? "AND c.rarity <> 'EQUIPMENT' AND c.rarity <> 'FIELD'" : "",
+				onlyEq ? "AND c.rarity = 'EQUIPMENT'" : "",
+				onlyFd ? "AND c.rarity = 'FIELD'" : "",
 				seller != null ? "AND m.seller = :seller" : "",
 				seller == null ? priceCheck : "",
 				"ORDER BY cm.price, m.foil DESC, c.rarity DESC, a.id, c.id"

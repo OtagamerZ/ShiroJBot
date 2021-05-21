@@ -24,11 +24,13 @@ import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.LotteryDAO;
+import com.kuuhaku.controller.postgresql.MarketDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.*;
@@ -38,7 +40,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -48,7 +49,6 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "comprar",
@@ -74,10 +74,10 @@ public class BuyCardCommand implements Executable {
 			AtomicReference<String> byAnime = new AtomicReference<>(null);
 			AtomicReference<Integer> minPrice = new AtomicReference<>(-1);
 			AtomicReference<Integer> maxPrice = new AtomicReference<>(-1);
-			AtomicReference<Integer> onlyEquip = new AtomicReference<>(-1);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
 			AtomicBoolean onlyMine = new AtomicBoolean();
 			AtomicBoolean onlyKawaipon = new AtomicBoolean();
+			AtomicBoolean onlyEquip = new AtomicBoolean();
 			AtomicBoolean onlyField = new AtomicBoolean();
 
 			if (args.length > 0) {
@@ -118,13 +118,7 @@ public class BuyCardCommand implements Executable {
 
 				onlyKawaipon.set(params.stream().anyMatch("-k"::equalsIgnoreCase) || byAnime.get() != null || byRarity.get() != null || onlyFoil.get());
 
-				if (params.stream().anyMatch(p -> p.startsWith("-e")))
-					onlyEquip.set(params.stream()
-							.filter(s -> s.startsWith("-e") && s.length() > 2)
-							.filter(s -> StringUtils.isNumeric(s.substring(2)))
-							.mapToInt(s -> Integer.parseInt(s.substring(2)))
-							.findFirst()
-							.orElse(0));
+				onlyEquip.set(params.stream().anyMatch("-e"::equalsIgnoreCase));
 
 				onlyField.set(params.stream().anyMatch("-f"::equalsIgnoreCase));
 			}
@@ -140,7 +134,7 @@ public class BuyCardCommand implements Executable {
 					`-a` - Busca cartas por anime
 					`-c` - Busca apenas cartas cromadas
 					`-k` - Busca apenas cartas kawaipon
-					`-e` - Busca apenas cartas-equipamento (podendo informar um tier)
+					`-e` - Busca apenas cartas-equipamento
 					`-f` - Busca apenas cartas de campo
 					`-m` - Busca apenas suas cartas anunciadas
 					`-min` - Define um preço mínimo
@@ -152,90 +146,39 @@ public class BuyCardCommand implements Executable {
 			eb.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 			List<Page> pages = new ArrayList<>();
-			List<Pair<Object, CardType>> cards = new ArrayList<>();
-
-			if (onlyEquip.get() == -1 && !onlyField.get())
-				cards.addAll(
-						CardMarketDAO.getCardsForMarket(
-								byName.get(),
-								minPrice.get(),
-								maxPrice.get(),
-								byRarity.get() == null ? null : KawaiponRarity.getByFragment(byRarity.get()),
-								byAnime.get(),
-								onlyFoil.get(),
-								onlyMine.get() ? author.getId() : null
-						).stream()
-								.map(cm -> Pair.of((Object) cm, CardType.KAWAIPON))
-								.collect(Collectors.toList())
-				);
-
-			if (!onlyKawaipon.get() && !onlyField.get())
-				cards.addAll(
-						EquipmentMarketDAO.getCardsForMarket(
-								byName.get(),
-								minPrice.get(),
-								maxPrice.get(),
-								onlyEquip.get() > 0 ? onlyEquip.get() : -1,
-								onlyMine.get() ? author.getId() : null
-						).stream()
-								.map(em -> Pair.of((Object) em, CardType.EVOGEAR))
-								.collect(Collectors.toList())
-				);
-
-			if (!onlyKawaipon.get() && onlyEquip.get() == -1)
-				cards.addAll(
-						FieldMarketDAO.getCardsForMarket(
-								byName.get(),
-								minPrice.get(),
-								maxPrice.get(),
-								onlyMine.get() ? author.getId() : null
-						).stream()
-								.map(fm -> Pair.of((Object) fm, CardType.FIELD))
-								.collect(Collectors.toList())
-				);
+			List<Market> cards = MarketDAO.getOffers(
+					byName.get(),
+					minPrice.get(),
+					maxPrice.get(),
+					byRarity.get() == null ? null : KawaiponRarity.getByFragment(byRarity.get()),
+					byAnime.get(),
+					onlyFoil.get(),
+					onlyKawaipon.get(),
+					onlyEquip.get(),
+					onlyField.get(),
+					onlyMine.get() ? author.getId() : null
+			);
 
 			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();
 
 				for (int p = i * 10; p < cards.size() && p < 10 * (i + 1); p++) {
-					switch (cards.get(p).getRight()) {
-						case KAWAIPON -> {
-							CardMarket cm = (CardMarket) cards.get(p).getLeft();
-							User seller = Main.getInfo().getUserByID(cm.getSeller());
-							eb.addField(
-									"`ID: " + cm.getId() + "` | " + cm.getCard().getName() + " (" + cm.getCard().getCard().getRarity().toString() + ")",
-									blackfriday ?
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "**`valor muito alto`**" : "~~" + Helper.separate(cm.getPrice()) + "~~ **" + Helper.separate(Math.round(cm.getPrice() * 0.75)) + "** créditos")
-											:
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "**`valor muito alto`**" : "**" + Helper.separate(cm.getPrice()) + "** créditos"),
-									false
-							);
-						}
-						case EVOGEAR -> {
-							EquipmentMarket em = (EquipmentMarket) cards.get(p).getLeft();
-							User seller = Main.getInfo().getUserByID(em.getSeller());
-							eb.addField(
-									"`ID: " + em.getId() + "` | " + em.getCard().getCard().getName() + " (" + em.getCard().getCard().getRarity().toString() + ")",
-									blackfriday ?
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_EQUIPMENT_PRICE * 50) ? "**`valor muito alto`**" : "~~" + Helper.separate(em.getPrice()) + "~~ **" + Helper.separate(Math.round(em.getPrice() * 0.75)) + "** créditos")
-											:
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (em.getPrice() > (em.getCard().getTier() * Helper.BASE_EQUIPMENT_PRICE * 50) ? "**`valor muito alto`**" : "**" + Helper.separate(em.getPrice()) + "** créditos"),
-									false
-							);
-						}
-						case FIELD -> {
-							FieldMarket fm = (FieldMarket) cards.get(p).getLeft();
-							User seller = Main.getInfo().getUserByID(fm.getSeller());
-							eb.addField(
-									"`ID: " + fm.getId() + "` | " + fm.getCard().getCard().getName() + " (" + fm.getCard().getCard().getRarity().toString() + ")",
-									blackfriday ?
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (fm.getPrice() > Helper.BASE_FIELD_PRICE ? "**`valor muito alto`**" : "~~" + Helper.separate(fm.getPrice()) + "~~ **" + Helper.separate(Math.round(fm.getPrice() * 0.75)) + "** créditos")
-											:
-											"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (fm.getPrice() > Helper.BASE_FIELD_PRICE ? "**`valor muito alto`**" : "**" + Helper.separate(fm.getPrice()) + "** créditos"),
-									false
-							);
-						}
-					}
+					Market m = cards.get(p);
+					User seller = Main.getInfo().getUserByID(m.getSeller());
+					String name = switch (m.getRawCard().getRarity()) {
+						case EQUIPMENT -> m.getRawCard().getName();
+						case FIELD -> m.getRawCard().getName();
+						default -> ((KawaiponCard) m.getCard()).getName();
+					};
+
+					eb.addField(
+							"`ID: " + m.getId() + "` | " + name + " (" + m.getRawCard().getRarity().toString() + ")",
+							blackfriday ?
+									"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "** créditos")
+									:
+									"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "**" + Helper.separate(m.getPrice()) + "** créditos"),
+							false
+					);
 				}
 
 				pages.add(new Page(PageType.EMBED, eb.build()));
@@ -250,217 +193,126 @@ public class BuyCardCommand implements Executable {
 			return;
 		}
 
-		CardMarket cm = CardMarketDAO.getCard(Integer.parseInt(args[0]));
-		EquipmentMarket em = EquipmentMarketDAO.getCard(Integer.parseInt(args[0]));
-		FieldMarket fm = FieldMarketDAO.getCard(Integer.parseInt(args[0]));
+		Market m = MarketDAO.getCard(Integer.parseInt(args[0]));
+		if (m == null) {
+			channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+			return;
+		}
 
 		if (buyer.getLoan() > 0) {
 			channel.sendMessage(I18n.getString("err_cannot-transfer-with-loan")).queue();
 			return;
 		}
 
-		int type = cm == null ? em == null ? fm == null ? -1 : 3 : 2 : 1;
-		switch (type) {
-			case 1 -> {
-				Account seller = AccountDAO.getAccount(cm.getSeller());
-				if (!seller.getUid().equals(author.getId())) {
-					if (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1))) {
-						channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
-						return;
-					} else if (buyer.getBalance() < (blackfriday ? cm.getPrice() * 0.75 : cm.getPrice())) {
-						channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
-						return;
-					}
+		Account seller = AccountDAO.getAccount(m.getSeller());
+		if (!seller.getUid().equals(author.getId())) {
+			if (m.getPrice() > m.getPriceLimit()) {
+				channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
+				return;
+			} else if (buyer.getBalance() < (blackfriday ? m.getPrice() * 0.75 : m.getPrice())) {
+				channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
+				return;
+			}
 
-					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+			switch (m.getRawCard().getRarity()) {
+				case EQUIPMENT -> {
+					Deck dk = kp.getDeck();
 
-					if (kp.getCards().contains(cm.getCard())) {
+					if (dk.checkEquipment(m.getCard(), channel)) return;
+
+					dk.addEquipment(m.getCard());
+				}
+				case FIELD -> {
+					Deck dk = kp.getDeck();
+
+					if (dk.checkField(m.getCard(), channel)) return;
+
+					dk.addField(m.getCard());
+
+				}
+				default -> {
+					if (kp.getCards().contains((KawaiponCard) m.getCard())) {
 						channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
 						return;
 					}
 
-					kp.addCard(cm.getCard());
-					KawaiponDAO.saveKawaipon(kp);
+					kp.addCard(m.getCard());
+				}
+			}
+			KawaiponDAO.saveKawaipon(kp);
 
-					int rawAmount = cm.getPrice();
-					int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
-					boolean taxed = rawAmount != liquidAmount;
+			int rawAmount = m.getPrice();
+			int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
+			boolean taxed = rawAmount != liquidAmount;
 
-					seller.addCredit(liquidAmount, this.getClass());
-					buyer.removeCredit(blackfriday ? Math.round(cm.getPrice() * 0.75) : cm.getPrice(), this.getClass());
+			seller.addCredit(liquidAmount, this.getClass());
+			buyer.removeCredit(blackfriday ? Math.round(m.getPrice() * 0.75) : m.getPrice(), this.getClass());
 
-					LotteryValue lv = LotteryDAO.getLotteryValue();
-					lv.addValue(rawAmount - liquidAmount);
-					LotteryDAO.saveLotteryValue(lv);
+			LotteryValue lv = LotteryDAO.getLotteryValue();
+			lv.addValue(rawAmount - liquidAmount);
+			LotteryDAO.saveLotteryValue(lv);
 
-					AccountDAO.saveAccount(seller);
-					AccountDAO.saveAccount(buyer);
+			AccountDAO.saveAccount(seller);
+			AccountDAO.saveAccount(buyer);
 
-					cm.setBuyer(author.getId());
-					CardMarketDAO.saveCard(cm);
+			m.setBuyer(author.getId());
+			MarketDAO.saveCard(m);
 
-					User sellerU = Main.getInfo().getUserByID(cm.getSeller());
-					User buyerU = Main.getInfo().getUserByID(cm.getBuyer());
-					if (taxed) {
-						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
-								Helper::doNothing
-						);
-					} else {
-						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(cm.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
-								Helper::doNothing
-						);
-					}
-					channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
-				} else {
-					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+			User sellerU = Main.getInfo().getUserByID(m.getSeller());
+			User buyerU = Main.getInfo().getUserByID(m.getBuyer());
 
-					if (kp.getCards().contains(cm.getCard())) {
+			String name = switch (m.getRawCard().getRarity()) {
+				case EQUIPMENT -> m.getRawCard().getName();
+				case FIELD -> m.getRawCard().getName();
+				default -> ((KawaiponCard) m.getCard()).getName();
+			};
+			if (taxed) {
+				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
+						Helper::doNothing
+				);
+			} else {
+				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
+						Helper::doNothing
+				);
+			}
+
+			channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
+		} else {
+			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+			switch (m.getRawCard().getRarity()) {
+				case EQUIPMENT -> {
+					Deck dk = kp.getDeck();
+
+					if (dk.checkEquipment(m.getCard(), channel)) return;
+
+					dk.addEquipment(m.getCard());
+				}
+				case FIELD -> {
+					Deck dk = kp.getDeck();
+
+					if (dk.checkField(m.getCard(), channel)) return;
+
+					dk.addField(m.getCard());
+
+				}
+				default -> {
+					if (kp.getCards().contains((KawaiponCard) m.getCard())) {
 						channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
 						return;
 					}
 
-					kp.addCard(cm.getCard());
-					KawaiponDAO.saveKawaipon(kp);
-
-					cm.setBuyer(author.getId());
-					CardMarketDAO.saveCard(cm);
-
-					channel.sendMessage("✅ | Carta retirada com sucesso!").queue();
+					kp.addCard(m.getCard());
 				}
 			}
-			case 2 -> {
-				Account seller = AccountDAO.getAccount(em.getSeller());
-				if (!seller.getUid().equals(author.getId())) {
-					if (em.getPrice() > (em.getCard().getTier() * Helper.BASE_CARD_PRICE * 50)) {
-						channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
-						return;
-					} else if (buyer.getBalance() < (blackfriday ? em.getPrice() * 0.75 : em.getPrice())) {
-						channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
-						return;
-					}
+			KawaiponDAO.saveKawaipon(kp);
 
-					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-					Deck dk = kp.getDeck();
+			m.setBuyer(author.getId());
+			MarketDAO.saveCard(m);
 
-					if (dk.checkEquipment(em.getCard(), channel)) return;
-
-					dk.addEquipment(em.getCard());
-					KawaiponDAO.saveKawaipon(kp);
-
-					int rawAmount = em.getPrice();
-					int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
-					boolean taxed = rawAmount != liquidAmount;
-
-					seller.addCredit(liquidAmount, this.getClass());
-					buyer.removeCredit(blackfriday ? Math.round(em.getPrice() * 0.75) : em.getPrice(), this.getClass());
-
-					LotteryValue lv = LotteryDAO.getLotteryValue();
-					lv.addValue(rawAmount - liquidAmount);
-					LotteryDAO.saveLotteryValue(lv);
-
-					AccountDAO.saveAccount(seller);
-					AccountDAO.saveAccount(buyer);
-
-					em.setBuyer(author.getId());
-					EquipmentMarketDAO.saveCard(em);
-
-					User sellerU = Main.getInfo().getUserByID(em.getSeller());
-					User buyerU = Main.getInfo().getUserByID(em.getBuyer());
-					if (taxed) {
-						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + em.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
-								Helper::doNothing
-						);
-					} else {
-						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + em.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(em.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
-								Helper::doNothing
-						);
-					}
-					channel.sendMessage("✅ | Equipamento comprado com sucesso!").queue();
-				} else {
-					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-					Deck dk = kp.getDeck();
-
-					if (dk.checkEquipment(em.getCard(), channel)) return;
-
-					dk.addEquipment(em.getCard());
-					KawaiponDAO.saveKawaipon(kp);
-
-					em.setBuyer(author.getId());
-					EquipmentMarketDAO.saveCard(em);
-
-					channel.sendMessage("✅ | Equipamento retirado com sucesso!").queue();
-				}
-			}
-			case 3 -> {
-				Account seller = AccountDAO.getAccount(fm.getSeller());
-				if (!seller.getUid().equals(author.getId())) {
-					if (fm.getPrice() > Helper.BASE_FIELD_PRICE) {
-						channel.sendMessage("❌ | Essa carta está marcada como privada!").queue();
-						return;
-					} else if (buyer.getBalance() < (blackfriday ? fm.getPrice() * 0.75 : fm.getPrice())) {
-						channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
-						return;
-					}
-
-					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-					Deck dk = kp.getDeck();
-
-					if (dk.checkField(fm.getCard(), channel)) return;
-
-					dk.addField(fm.getCard());
-					KawaiponDAO.saveKawaipon(kp);
-
-					int rawAmount = fm.getPrice();
-					int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
-					boolean taxed = rawAmount != liquidAmount;
-
-					seller.addCredit(liquidAmount, this.getClass());
-					buyer.removeCredit(blackfriday ? Math.round(fm.getPrice() * 0.75) : fm.getPrice(), this.getClass());
-
-					LotteryValue lv = LotteryDAO.getLotteryValue();
-					lv.addValue(rawAmount - liquidAmount);
-					LotteryDAO.saveLotteryValue(lv);
-
-					AccountDAO.saveAccount(seller);
-					AccountDAO.saveAccount(buyer);
-
-					fm.setBuyer(author.getId());
-					FieldMarketDAO.saveCard(fm);
-
-					User sellerU = Main.getInfo().getUserByID(fm.getSeller());
-					User buyerU = Main.getInfo().getUserByID(fm.getBuyer());
-					if (taxed) {
-						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
-								Helper::doNothing
-						);
-					} else {
-						if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-										c.sendMessage("✅ | Sua carta `" + fm.getCard().getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(fm.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
-								Helper::doNothing
-						);
-					}
-					channel.sendMessage("✅ | Arena comprada com sucesso!").queue();
-				} else {
-					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-					Deck dk = kp.getDeck();
-
-					if (dk.checkField(fm.getCard(), channel)) return;
-
-					dk.addField(fm.getCard());
-					KawaiponDAO.saveKawaipon(kp);
-
-					fm.setBuyer(author.getId());
-					FieldMarketDAO.saveCard(fm);
-
-					channel.sendMessage("✅ | Arena retirada com sucesso!").queue();
-				}
-			}
-			case -1 -> channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
+			channel.sendMessage("✅ | Carta retirada com sucesso!").queue();
 		}
 	}
 }
