@@ -76,7 +76,7 @@ public class CardValueCommand implements Executable {
 
 			OHLCChart chart = Helper.buildOHLCChart(
 					"Valores de venda da " + (c == null ? "raridade" : "carta") + " \"" + (c == null ? r.toString() : c.getName()) + "\"",
-					Pair.of("Data", "Valor"),
+					Pair.of("Data", "Valor (x1000)"),
 					List.of(new Color(0, 0, 0), Color.white)
 			);
 
@@ -85,24 +85,18 @@ public class CardValueCommand implements Executable {
 				return;
 			}
 
-			chart.setYAxisGroupTitle(0, "Valor");
-			chart.setYAxisGroupTitle(1, "Variação");
-
 			chart.addSeries("Variação",
 					values.stream().map(MarketValue::getDate).collect(Collectors.toList()),
-					values.stream().map(MarketValue::getOpen).collect(Collectors.toList()),
-					values.stream().map(MarketValue::getHigh).collect(Collectors.toList()),
-					values.stream().map(MarketValue::getLow).collect(Collectors.toList()),
-					values.stream().map(MarketValue::getClose).collect(Collectors.toList())
+					values.stream().map(MarketValue::getOpen).map(i -> (double) i / 1000).collect(Collectors.toList()),
+					values.stream().map(MarketValue::getHigh).map(i -> (double) i / 1000).collect(Collectors.toList()),
+					values.stream().map(MarketValue::getLow).map(i -> (double) i / 1000).collect(Collectors.toList()),
+					values.stream().map(MarketValue::getClose).map(i -> (double) i / 1000).collect(Collectors.toList())
 			).setDownColor(new Color(255, 0, 0, 100))
-					.setUpColor(new Color(0, 255, 0, 100))
-					.setYAxisGroup(1);
-
+					.setUpColor(new Color(0, 255, 0, 100));
 			chart.addSeries("Valor",
 					values.stream().map(MarketValue::getDate).collect(Collectors.toList()),
-					values.stream().map(MarketValue::getValue).collect(Collectors.toList())
-			).setMarker(SeriesMarkers.NONE)
-					.setYAxisGroup(0);
+					values.stream().map(MarketValue::getValue).map(i -> (double) i / 1000).collect(Collectors.toList())
+			).setMarker(SeriesMarkers.NONE);
 
 			channel.sendFile(Helper.writeAndGet(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "chart", "png")).queue();
 			m.delete().queue();
