@@ -52,7 +52,6 @@
         <class>com.kuuhaku.model.persistent.Kawaipon</class>
         <class>com.kuuhaku.model.persistent.Card</class>
         <class>com.kuuhaku.model.persistent.KawaiponCard</class>
-        <class>com.kuuhaku.model.persistent.CardMarket</class>
         <class>com.kuuhaku.model.persistent.Market</class>
         <class>com.kuuhaku.model.persistent.Transaction</class>
         <class>com.kuuhaku.model.persistent.DynamicParameter</class>
@@ -63,9 +62,7 @@
         <class>com.kuuhaku.model.persistent.ExceedScore</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment</class>
-        <class>com.kuuhaku.model.persistent.EquipmentMarket</class>
         <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Field</class>
-        <class>com.kuuhaku.model.persistent.FieldMarket</class>
         <class>com.kuuhaku.model.persistent.Donation</class>
         <class>com.kuuhaku.model.persistent.MatchHistory</class>
         <class>com.kuuhaku.model.persistent.MatchRound</class>
