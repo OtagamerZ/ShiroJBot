@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.guild;
 import com.kuuhaku.model.enums.BuffType;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Entity
@@ -104,5 +105,18 @@ public class ServerBuff {
 			case CARD, DROP -> 0.2;
 			case FOIL -> 0.25;
 		};
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ServerBuff that = (ServerBuff) o;
+		return type == that.type;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(type);
 	}
 }
