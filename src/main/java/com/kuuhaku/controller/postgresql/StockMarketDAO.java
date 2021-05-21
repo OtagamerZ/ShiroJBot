@@ -176,15 +176,15 @@ public class StockMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT :card                                                                      AS id
-				     , FIRST_VALUE(x.price) OVER w                                                AS open
-				     , MAX(x.price)                                                               AS high
-				     , MIN(x.price)                                                               AS low
-				     , LAST_VALUE(x.price) OVER w                                                 AS close
-				     , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
-				     , x.publishdate
+				SELECT DISTINCT x.card_id                                                                   AS id
+				              , (ARRAY_AGG(x.price ORDER BY x.publishdate))[1]                             AS open
+				              , MAX(x.price)                                                               AS high
+				              , MIN(x.price)                                                               AS low
+				              , (ARRAY_AGG(x.price ORDER BY x.publishdate DESC))[1]                        AS close
+				              , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
+				              , x.publishdate
 				FROM (
-				         SELECT c.id                                                                        AS card_id
+				         SELECT c.id                                                                    AS card_id
 				              , COALESCE(cm.price, em.price, fm.price)                                      AS price
 				              , COALESCE(cm.buyer, em.buyer, fm.buyer)                                      AS buyer
 				              , COALESCE(cm.seller, em.seller, fm.seller)                                   AS seller
@@ -200,8 +200,7 @@ public class StockMarketDAO {
 				  AND x.buyer <> x.seller
 				  AND x.card_id = :card
 				  AND x.publishdate > DATE_TRUNC('DAY', NOW() - INTERVAL '1 YEAR')
-				GROUP BY x.publishdate, x.card_id, x.price
-				    WINDOW w AS (PARTITION BY x.card_id, x.publishdate ORDER BY x.publishdate)
+				GROUP BY x.card_id, x.publishdate
 				ORDER BY publishdate
 				""")
 				.setParameter("card", c.getId());
@@ -218,13 +217,13 @@ public class StockMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT :rarity                                                                    AS id
-				     , FIRST_VALUE(x.price) OVER w                                                AS open
-				     , MAX(x.price)                                                               AS high
-				     , MIN(x.price)                                                               AS low
-				     , LAST_VALUE(x.price) OVER w                                                 AS close
-				     , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
-				     , x.publishdate
+				SELECT DISTINCT x.rarity                                                                   AS id
+				              , (ARRAY_AGG(x.price ORDER BY x.publishdate))[1]                             AS open
+				              , MAX(x.price)                                                               AS high
+				              , MIN(x.price)                                                               AS low
+				              , (ARRAY_AGG(x.price ORDER BY x.publishdate DESC))[1]                        AS close
+				              , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
+				              , x.publishdate
 				FROM (
 				         SELECT c.rarity                                                                    AS rarity
 				              , COALESCE(cm.price, em.price, fm.price)                                      AS price
@@ -242,8 +241,7 @@ public class StockMarketDAO {
 				  AND x.buyer <> x.seller
 				  AND x.rarity = :rarity
 				  AND x.publishdate > DATE_TRUNC('DAY', NOW() - INTERVAL '1 YEAR')
-				GROUP BY x.publishdate, x.rarity, x.price
-				    WINDOW w AS (PARTITION BY x.rarity, x.publishdate ORDER BY x.publishdate)
+				GROUP BY x.rarity, x.publishdate
 				ORDER BY publishdate
 				""")
 				.setParameter("rarity", r.name());
