@@ -22,7 +22,9 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.MarketDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
@@ -31,11 +33,13 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.model.persistent.Deck;
+import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.Market;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 
 import java.io.File;
@@ -83,34 +87,33 @@ public class ClearDeckCommand implements Executable {
 									Kawaipon fkp = KawaiponDAO.getKawaipon(author.getId());
 									Deck fdk = fkp.getDeck();
 
-
 									for (Champion c : fdk.getChampions()) {
-										CardMarket cm = new CardMarket(
+										Market mk = new Market(
 												author.getId(),
 												new KawaiponCard(c.getCard(), false),
 												9999999
 										);
-										CardMarketDAO.saveCard(cm);
+										MarketDAO.saveCard(mk);
 									}
 									fdk.getChampions().clear();
 
 									for (Equipment e : fdk.getEquipments()) {
-										EquipmentMarket em = new EquipmentMarket(
+										Market mk = new Market(
 												author.getId(),
 												e,
 												9999999
 										);
-										EquipmentMarketDAO.saveCard(em);
+										MarketDAO.saveCard(mk);
 									}
 									fdk.getEquipments().clear();
 
 									for (Field fd : fdk.getFields()) {
-										FieldMarket fm = new FieldMarket(
+										Market mk = new Market(
 												author.getId(),
 												fd,
 												9999999
 										);
-										FieldMarketDAO.saveCard(fm);
+										MarketDAO.saveCard(mk);
 									}
 									fdk.getFields().clear();
 
