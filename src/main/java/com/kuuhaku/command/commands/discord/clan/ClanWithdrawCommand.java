@@ -24,12 +24,14 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
+import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.ClanPermission;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
+import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -65,25 +67,35 @@ public class ClanWithdrawCommand implements Executable {
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
-		int amount = Integer.parseInt(args[0]);
+		int rawAmount = Integer.parseInt(args[0]);
+		int liquidAmount = Helper.applyTax(author.getId(), rawAmount, 0.05);
+		boolean taxed = rawAmount != liquidAmount;
 
-		if (c.getVault() < amount) {
+		if (c.getVault() < rawAmount) {
 			channel.sendMessage("❌ | O cofre do clã não possui créditos suficientes.").queue();
 			return;
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja sacar " + Helper.separate(amount) + " créditos do cofre do clã?")
+		channel.sendMessage("Tem certeza que deseja sacar " + Helper.separate(rawAmount) + " créditos do cofre do clã?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
-							acc.addCredit(amount, this.getClass());
-							c.withdraw(amount, author);
+							acc.addCredit(liquidAmount, this.getClass());
+							c.withdraw(rawAmount, author);
 
 							ClanDAO.saveClan(c);
 							AccountDAO.saveAccount(acc);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso.")).queue();
+							LotteryValue lv = LotteryDAO.getLotteryValue();
+							lv.addValue(rawAmount - liquidAmount);
+							LotteryDAO.saveLotteryValue(lv);
+
+							if (taxed) {
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso. (Taxa de transferência: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)")).queue();
+							} else {
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso. (Exceed vitorioso isento de taxa)")).queue();
+							}
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
