@@ -19,29 +19,39 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.MarketDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "anunciar",
-		aliases = {"sell"},
-		usage = "req_card-type-price",
+		aliases = {"sell", "vender"},
+		usage = "req_card",
 		category = Category.MISC
 )
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
@@ -55,157 +65,174 @@ public class SellCardCommand implements Executable {
 		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
-		} else if (args.length < 3) {
-			channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
+		} else if (args.length < 2) {
+			channel.sendMessage("❌ | Você precisa informar uma carta e o preço dela.").queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[2])) {
+		} else if (!StringUtils.isNumeric(args[1])) {
 			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
 			return;
 		}
 
-		switch (args[1].toUpperCase(Locale.ROOT)) {
-			case "N", "C" -> {
-				boolean foil = args[1].equalsIgnoreCase("C");
-				Card c = CardDAO.getCard(args[0], foil);
-				if (c == null) {
-					channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
-					return;
-				}
+		String name = args[0].toUpperCase(Locale.ROOT);
+		EnumSet<CardType> matches = EnumSet.noneOf(CardType.class);
+		kp.getCards().stream()
+				.filter(kc -> kc.getCard().getId().equals(name))
+				.findFirst()
+				.ifPresent(kc -> matches.add(CardType.KAWAIPON));
+		dk.getEquipments().stream()
+				.filter(e -> e.getCard().getId().equals(name))
+				.findFirst()
+				.ifPresent(e -> matches.add(CardType.EVOGEAR));
+		dk.getFields().stream()
+				.filter(f -> f.getCard().getId().equals(name))
+				.findFirst()
+				.ifPresent(f -> matches.add(CardType.FIELD));
 
-				KawaiponCard card = kp.getCard(c, foil);
-				if (card == null) {
-					channel.sendMessage("❌ | Você não pode vender uma carta que não possui!").queue();
-					return;
-				}
+		CompletableFuture<Pair<Card, Boolean>> chosen = new CompletableFuture<>();
+		if (matches.size() > 1) {
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setTitle("Por favor escolha uma")
+					.setDescription(
+							(matches.contains(CardType.KAWAIPON) ? (Helper.getRegionalIndicator(10) + " -> Kawaipon\n") : "") +
+							(matches.contains(CardType.EVOGEAR) ? (Helper.getRegionalIndicator(4) + " -> Evogear\n") : "") +
+							(matches.contains(CardType.FIELD) ? (Helper.getRegionalIndicator(2) + " -> Campo\n") : "")
+					);
 
-				try {
-					boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
-					int price = Integer.parseInt(args[2]);
-					int min = c.getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
-
-					if (price < min) {
-						if (hasLoan)
-							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
-						else
-							channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
-						return;
-					}
-
-					Main.getInfo().getConfirmationPending().put(author.getId(), true);
-					channel.sendMessage("Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?")
-							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-										if (mb.getId().equals(author.getId())) {
-											Main.getInfo().getConfirmationPending().remove(author.getId());
-											Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
-											finalKp.removeCard(card);
-
-											CardMarket cm = new CardMarket(author.getId(), card, price);
-											CardMarketDAO.saveCard(cm);
-											KawaiponDAO.saveKawaipon(finalKp);
-
-											s.delete().flatMap(d -> channel.sendMessage("✅ | Carta anunciada com sucesso!")).queue();
-										}
-									}), true, 1, TimeUnit.MINUTES,
-									u -> u.getId().equals(author.getId()),
-									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-							));
-				} catch (NumberFormatException e) {
-					channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
-				}
+			Map<String, ThrowingBiConsumer<Member, Message>> btns = new LinkedHashMap<>();
+			if (matches.contains(CardType.KAWAIPON)) {
+				btns.put(Helper.getRegionalIndicator(10), (mb, ms) -> {
+					chooseVersion(author, channel, kp, name, chosen);
+					ms.delete().queue(null, Helper::doNothing);
+				});
 			}
-			case "E" -> {
-				Equipment eq = CardDAO.getEquipment(args[0]);
-				if (eq == null) {
-					channel.sendMessage("❌ | Esse equipamento não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllEquipmentNames().toArray(String[]::new)) + "`?").queue();
-					return;
-				} else if (!dk.getEquipments().contains(eq)) {
-					channel.sendMessage("❌ | Você não pode vender um equipamento que não possui!").queue();
-					return;
-				}
-
-				try {
-					boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
-					int price = Integer.parseInt(args[2]);
-					int min = eq.getTier() * (hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2);
-
-					if (price < min) {
-						if (hasLoan)
-							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
-						else
-							channel.sendMessage("❌ | Você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
-						return;
-					}
-
-					Main.getInfo().getConfirmationPending().put(author.getId(), true);
-					channel.sendMessage("Este equipamento sairá da sua coleção, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?")
-							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-										if (mb.getId().equals(author.getId())) {
-											Main.getInfo().getConfirmationPending().remove(author.getId());
-											Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
-											Deck fdk = finalKp.getDeck();
-											fdk.removeEquipment(eq);
-
-											EquipmentMarket em = new EquipmentMarket(author.getId(), eq, price);
-											EquipmentMarketDAO.saveCard(em);
-											KawaiponDAO.saveKawaipon(finalKp);
-
-											s.delete().flatMap(d -> channel.sendMessage("✅ | Equipamento anunciado com sucesso!")).queue();
-										}
-									}), true, 1, TimeUnit.MINUTES,
-									u -> u.getId().equals(author.getId()),
-									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-							));
-				} catch (NumberFormatException e) {
-					channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
-				}
+			if (matches.contains(CardType.EVOGEAR)) {
+				btns.put(Helper.getRegionalIndicator(4), (mb, ms) -> {
+					chosen.complete(Pair.of(CardDAO.getCard(name), false));
+					ms.delete().queue(null, Helper::doNothing);
+				});
 			}
-			case "F" -> {
-				Field f = CardDAO.getField(args[0]);
-				if (f == null) {
-					channel.sendMessage("❌ | Essa arena não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllFieldNames().toArray(String[]::new)) + "`?").queue();
-					return;
-				} else if (!dk.getFields().contains(f)) {
-					channel.sendMessage("❌ | Você não pode vender uma arena que não possui!").queue();
-					return;
-				}
-
-				try {
-					boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
-					int price = Integer.parseInt(args[2]);
-					int min = hasLoan ? 20000 : 5000;
-
-					if (price < min) {
-						if (hasLoan)
-							channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender esse equipamento por menos que " + Helper.separate(min) + " créditos.").queue();
-						else
-							channel.sendMessage("❌ | Você não pode vender essa arena por menos que " + Helper.separate(min) + " créditos.").queue();
-						return;
-					}
-
-					Main.getInfo().getConfirmationPending().put(author.getId(), true);
-					channel.sendMessage("Esta arena sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?")
-							.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-										if (mb.getId().equals(author.getId())) {
-											Main.getInfo().getConfirmationPending().remove(author.getId());
-											Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
-											Deck fdk = finalKp.getDeck();
-											fdk.removeField(f);
-
-											FieldMarket fm = new FieldMarket(author.getId(), f, price);
-											FieldMarketDAO.saveCard(fm);
-											KawaiponDAO.saveKawaipon(finalKp);
-
-											s.delete().flatMap(d -> channel.sendMessage("✅ | Arena anunciada com sucesso!")).queue();
-										}
-									}), true, 1, TimeUnit.MINUTES,
-									u -> u.getId().equals(author.getId()),
-									ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
-							));
-				} catch (NumberFormatException e) {
-					channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
-				}
+			if (matches.contains(CardType.FIELD)) {
+				btns.put(Helper.getRegionalIndicator(2), (mb, ms) -> {
+					chosen.complete(Pair.of(CardDAO.getCard(name), false));
+					ms.delete().queue(null, Helper::doNothing);
+				});
 			}
-			default -> channel.sendMessage("❌ | Tipo inválido, o tipo deve ser um dos seguntes valores: `N` = normal, `C` = cromada, `E` = evogear e `F` = campo.").queue();
+
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			channel.sendMessage(eb.build())
+					.queue(s -> Pages.buttonize(s, btns, true,
+							1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								chosen.complete(null);
+							}
+					));
+		} else if (matches.isEmpty()) {
+			channel.sendMessage("❌ | Você não pode vender uma carta que não possui!").queue();
+			return;
+		} else {
+			switch (matches.stream().findFirst().orElse(CardType.NONE)) {
+				case KAWAIPON -> chooseVersion(author, channel, kp, name, chosen);
+				case EVOGEAR, FIELD -> chosen.complete(Pair.of(CardDAO.getCard(name), false));
+				case NONE -> chosen.complete(null);
+			}
+		}
+
+		try {
+			Pair<Card, Boolean> off = chosen.get();
+			if (off == null) {
+				channel.sendMessage("Venda cancelada.").queue();
+				return;
+			}
+
+			boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
+			int price = Integer.parseInt(args[1]);
+			int min = switch (off.getLeft().getRarity()) {
+				case EQUIPMENT -> hasLoan ? Helper.BASE_EQUIPMENT_PRICE * 2 : Helper.BASE_EQUIPMENT_PRICE / 2;
+				case FIELD -> hasLoan ? Helper.BASE_FIELD_PRICE * 2 : Helper.BASE_FIELD_PRICE / 2;
+				default -> off.getLeft().getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (off.getRight() ? 2 : 1);
+			};
+
+			if (price < min) {
+				if (hasLoan)
+					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
+				else
+					channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + Helper.separate(min) + " créditos.").queue();
+				return;
+			}
+
+			String msg = switch (off.getLeft().getRarity()) {
+				case EQUIPMENT -> "Este equipamento sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
+				case FIELD -> "Este campo sairá do seu deck, você ainda poderá comprá-lo novamente pelo mesmo preço. Deseja mesmo anunciá-lo?";
+				default -> "Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?";
+			};
+
+			channel.sendMessage(msg)
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
+								Deck fDk = finalKp.getDeck();
+
+								Market m = null;
+								switch (off.getLeft().getRarity()) {
+									case COMMON, UNCOMMON, RARE, ULTRA_RARE, LEGENDARY -> {
+										KawaiponCard kc = new KawaiponCard(off.getLeft(), off.getRight());
+										finalKp.removeCard(kc);
+										m = new Market(author.getId(), kc, price);
+									}
+									case EQUIPMENT -> {
+										Equipment e = CardDAO.getEquipment(off.getLeft());
+										fDk.removeEquipment(e);
+										m = new Market(author.getId(), e, price);
+									}
+									case FIELD -> {
+										Field f = CardDAO.getField(off.getLeft());
+										fDk.removeField(f);
+										m = new Market(author.getId(), f, price);
+									}
+								}
+
+								MarketDAO.saveCard(m);
+								KawaiponDAO.saveKawaipon(finalKp);
+
+								s.delete().flatMap(d -> channel.sendMessage("✅ | Carta anunciada com sucesso!")).queue();
+							}), true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
+					));
+		} catch (InterruptedException | ExecutionException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		}
+	}
+
+	private void chooseVersion(User author, TextChannel channel, Kawaipon kp, String name, CompletableFuture<Pair<Card, Boolean>> chosen) {
+		List<KawaiponCard> kcs = kp.getCards().stream()
+				.filter(kc -> kc.getCard().getId().equals(name))
+				.sorted(Comparator.comparing(KawaiponCard::isFoil))
+				.collect(Collectors.toList());
+
+		if (kcs.size() > 1) {
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
+			channel.sendMessage("Foram encontradas 2 versões dessa carta (normal e cromada). Por favor selecione **:one: para normal** ou **:two: para cromada**.")
+					.queue(s -> Pages.buttonize(s, new LinkedHashMap<>() {{
+								put(Helper.getNumericEmoji(1), (mb, ms) -> {
+									chosen.complete(Pair.of(kcs.get(0).getCard(), false));
+									ms.delete().queue(null, Helper::doNothing);
+								});
+								put(Helper.getNumericEmoji(2), (mb, ms) -> {
+									chosen.complete(Pair.of(kcs.get(1).getCard(), true));
+									ms.delete().queue(null, Helper::doNothing);
+								});
+							}}, true, 1, TimeUnit.MINUTES,
+							u -> u.getId().equals(author.getId()),
+							ms -> {
+								Main.getInfo().getConfirmationPending().remove(author.getId());
+								chosen.complete(null);
+							}
+					));
+		} else {
+			chosen.complete(Pair.of(kcs.get(0).getCard(), kcs.get(0).isFoil()));
 		}
 	}
 }
