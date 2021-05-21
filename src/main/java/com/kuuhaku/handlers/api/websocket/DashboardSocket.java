@@ -34,7 +34,6 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.lang3.tuple.Pair;
 import org.java_websocket.WebSocket;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ClientHandshake;
@@ -235,64 +234,18 @@ public class DashboardSocket extends WebSocketServer {
 					}
 				}
 				case "store" -> {
-					List<Pair<Object, CardType>> cards = new ArrayList<>() {{
-						addAll(
-								CardMarketDAO.getCardsForMarket(null, -1, -1, null, null, false, null)
-										.stream()
-										.map(cm -> Pair.of((Object) cm, CardType.KAWAIPON))
-										.collect(Collectors.toList())
-						);
-						addAll(
-								EquipmentMarketDAO.getCardsForMarket(null, -1, -1, -1, null)
-										.stream()
-										.map(em -> Pair.of((Object) em, CardType.EVOGEAR))
-										.collect(Collectors.toList())
-						);
-						addAll(
-								FieldMarketDAO.getCardsForMarket(null, -1, -1, null)
-										.stream()
-										.map(fm -> Pair.of((Object) fm, CardType.FIELD))
-										.collect(Collectors.toList())
-						);
-					}};
+					List<Market> cards = MarketDAO.getOffers(null, -1, -1, null, null, false, false, false, false, null);
 
 					JSONObject data = new JSONObject();
-					for (Pair<Object, CardType> card : cards) {
-						switch (card.getRight()) {
-							case KAWAIPON -> {
-								CardMarket cm = (CardMarket) card.getLeft();
-								User seller = Main.getInfo().getUserByID(cm.getSeller());
-								data.put(String.valueOf(cm.getId()), new JSONObject() {{
-									put("id", cm.getId());
-									put("price", cm.getPrice());
-									put("seller", seller == null ? "Desconhecido" : seller.getName());
-									put("type", card.getRight().name().toLowerCase(Locale.ROOT));
-									put("card", cm.getCard().toString());
-								}});
-							}
-							case EVOGEAR -> {
-								EquipmentMarket em = (EquipmentMarket) card.getLeft();
-								User seller = Main.getInfo().getUserByID(em.getSeller());
-								data.put(String.valueOf(em.getId()), new JSONObject() {{
-									put("id", em.getId());
-									put("price", em.getPrice());
-									put("seller", seller == null ? "Desconhecido" : seller.getName());
-									put("type", card.getRight().name().toLowerCase(Locale.ROOT));
-									put("card", em.getCard().toString());
-								}});
-							}
-							case FIELD -> {
-								FieldMarket fm = (FieldMarket) card.getLeft();
-								User seller = Main.getInfo().getUserByID(fm.getSeller());
-								data.put(String.valueOf(fm.getId()), new JSONObject() {{
-									put("id", fm.getId());
-									put("price", fm.getPrice());
-									put("seller", seller == null ? "Desconhecido" : seller.getName());
-									put("type", card.getRight().name().toLowerCase(Locale.ROOT));
-									put("card", fm.getCard().toString());
-								}});
-							}
-						}
+					for (Market offer : cards) {
+						User seller = Main.getInfo().getUserByID(offer.getSeller());
+						data.put(String.valueOf(offer.getId()), new JSONObject() {{
+							put("id", offer.getId());
+							put("price", offer.getPrice());
+							put("seller", seller == null ? "Desconhecido" : seller.getName());
+							put("type", offer.getType());
+							put("card", offer.getCard().toString());
+						}});
 					}
 
 					conn.send(new JSONObject() {{
@@ -355,185 +308,105 @@ public class DashboardSocket extends WebSocketServer {
 
 					AtomicInteger code = new AtomicInteger(0);
 					AtomicReference<String> msg = new AtomicReference<>("");
-					switch (ct) {
-						case KAWAIPON -> {
-							CardMarket c = CardMarketDAO.getCard(id);
-							if (c != null) {
-								Account seller = AccountDAO.getAccount(c.getSeller());
-								int rawAmount = c.getPrice();
-								int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
-								boolean taxed = rawAmount != liquidAmount;
+					Market m = MarketDAO.getCard(id);
+					if (m != null) {
+						Account seller = AccountDAO.getAccount(m.getSeller());
+						int rawAmount = m.getPrice();
+						int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
+						boolean taxed = rawAmount != liquidAmount;
 
-								int err = kp.getCards().contains(c.getCard()) ? 1 : 0;
-								if (err == 0) {
-									if (seller.getUid().equals(t.getUid())) {
-										code.set(HttpURLConnection.HTTP_OK);
-										msg.set("Carta retirada com sucesso!");
-
-										c.setBuyer(t.getUid());
-										kp.addCard(c.getCard());
-
-										KawaiponDAO.saveKawaipon(kp);
-										CardMarketDAO.saveCard(c);
-									} else {
-										if (acc.getBalance() < rawAmount) {
-											code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
-											msg.set("Saldo insuficiente.");
-										} else {
-											c.setBuyer(t.getUid());
-											kp.addCard(c.getCard());
-											acc.removeCredit(blackfriday ? Math.round(rawAmount * 0.75) : rawAmount, this.getClass());
-											seller.addCredit(liquidAmount, this.getClass());
-
-											LotteryValue lv = LotteryDAO.getLotteryValue();
-											lv.addValue(rawAmount - liquidAmount);
-											LotteryDAO.saveLotteryValue(lv);
-
-											KawaiponDAO.saveKawaipon(kp);
-											AccountDAO.saveAccount(acc);
-											CardMarketDAO.saveCard(c);
-
-											User sellerU = Main.getInfo().getUserByID(c.getSeller());
-											User buyerU = Main.getInfo().getUserByID(c.getBuyer());
-											if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
-														if (taxed) {
-															chn.sendMessage("✅ | Sua carta `" + c.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(c.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing);
-														} else {
-															chn.sendMessage("✅ | Sua carta `" + c.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(c.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing);
-														}
-													},
-													Helper::doNothing
-											);
-
-											code.set(HttpURLConnection.HTTP_OK);
-											msg.set("Carta comprada com sucesso!");
-										}
-									}
-								} else {
-									code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
-									msg.set("Você já possui essa carta.");
-								}
+						int err;
+						switch (m.getType()) {
+							case EVOGEAR -> {
+								Equipment e = m.getCard();
+								err = dk.checkEquipmentError(e);
+							}
+							case FIELD -> {
+								Field f = m.getCard();
+								err = dk.checkFieldError(f);
+							}
+							default -> {
+								KawaiponCard kc = m.getCard();
+								err = kp.getCards().contains(kc) ? 1 : 0;
 							}
 						}
-						case EVOGEAR -> {
-							EquipmentMarket e = EquipmentMarketDAO.getCard(id);
-							if (e != null) {
-								Account seller = AccountDAO.getAccount(e.getSeller());
-								int rawAmount = e.getPrice();
-								int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
-								boolean taxed = rawAmount != liquidAmount;
 
-								int err = dk.checkEquipmentError(e.getCard());
-								if (err == 0) {
-									if (seller.getUid().equals(t.getUid())) {
-										code.set(HttpURLConnection.HTTP_OK);
-										msg.set("Carta retirada com sucesso!");
+						if (err == 0) {
+							if (seller.getUid().equals(t.getUid())) {
+								code.set(HttpURLConnection.HTTP_OK);
+								msg.set("Carta retirada com sucesso!");
 
-										e.setBuyer(t.getUid());
-										dk.addEquipment(e.getCard());
+								m.setBuyer(t.getUid());
+								switch (m.getType()) {
+									case EVOGEAR -> dk.addEquipment(m.getCard());
+									case FIELD -> dk.addField(m.getCard());
+									default -> kp.addCard(m.getCard());
+								}
 
-										KawaiponDAO.saveKawaipon(kp);
-										EquipmentMarketDAO.saveCard(e);
-									} else {
-										if (acc.getBalance() < rawAmount) {
-											code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
-											msg.set("Saldo insuficiente.");
-										} else {
-											e.setBuyer(t.getUid());
-											dk.addEquipment(e.getCard());
-											acc.removeCredit(blackfriday ? Math.round(rawAmount * 0.75) : rawAmount, this.getClass());
-											seller.addCredit(liquidAmount, this.getClass());
-
-											LotteryValue lv = LotteryDAO.getLotteryValue();
-											lv.addValue(rawAmount - liquidAmount);
-											LotteryDAO.saveLotteryValue(lv);
-
-											KawaiponDAO.saveKawaipon(kp);
-											AccountDAO.saveAccount(acc);
-											EquipmentMarketDAO.saveCard(e);
-
-											User sellerU = Main.getInfo().getUserByID(e.getSeller());
-											User buyerU = Main.getInfo().getUserByID(e.getBuyer());
-											if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
-														if (taxed) {
-															chn.sendMessage("✅ | Seu equipamento `" + e.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(e.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing);
-														} else {
-															chn.sendMessage("✅ | Seu equipamento `" + e.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(e.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing);
-														}
-													},
-													Helper::doNothing
-											);
-
-											code.set(HttpURLConnection.HTTP_OK);
-											msg.set("Carta comprada com sucesso!");
-										}
-									}
-								} else {
+								KawaiponDAO.saveKawaipon(kp);
+								MarketDAO.saveCard(m);
+							} else {
+								if (acc.getBalance() < rawAmount) {
 									code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
+									msg.set("Saldo insuficiente.");
+								} else {
+									m.setBuyer(t.getUid());
+									switch (m.getType()) {
+										case EVOGEAR -> dk.addEquipment(m.getCard());
+										case FIELD -> dk.addField(m.getCard());
+										default -> kp.addCard(m.getCard());
+									}
+
+									acc.removeCredit(blackfriday ? Math.round(rawAmount * 0.75) : rawAmount, this.getClass());
+									seller.addCredit(liquidAmount, this.getClass());
+
+									LotteryValue lv = LotteryDAO.getLotteryValue();
+									lv.addValue(rawAmount - liquidAmount);
+									LotteryDAO.saveLotteryValue(lv);
+
+									KawaiponDAO.saveKawaipon(kp);
+									AccountDAO.saveAccount(acc);
+									MarketDAO.saveCard(m);
+
+									User sellerU = Main.getInfo().getUserByID(m.getSeller());
+									User buyerU = Main.getInfo().getUserByID(m.getBuyer());
+									String name = switch (m.getType()) {
+										case EVOGEAR -> m.getRawCard().getName();
+										case FIELD -> m.getRawCard().getName();
+										default -> ((KawaiponCard) m.getCard()).getName();
+									};
+
+									if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
+												if (taxed) {
+													chn.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing);
+												} else {
+													chn.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing);
+												}
+											},
+											Helper::doNothing
+									);
+
+									code.set(HttpURLConnection.HTTP_OK);
+									msg.set("Carta comprada com sucesso!");
+								}
+							}
+						} else {
+							code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
+							switch (m.getType()) {
+								case EVOGEAR -> {
 									switch (err) {
-										case 1 -> msg.set("Você já possui " + dk.getEquipmentMaxCopies(e.getCard()) + " cópias desse evogears.");
+										case 1 -> msg.set("Você já possui " + dk.getEquipmentMaxCopies(m.getCard()) + " cópias desse evogears.");
 										case 2 -> msg.set("Você não possui mais espaços para evogears tier 4.");
 										case 3 -> msg.set("Você não possui mais espaços para evogears no deck.");
 									}
 								}
-							}
-						}
-						case FIELD -> {
-							FieldMarket f = FieldMarketDAO.getCard(id);
-							if (f != null) {
-								Account seller = AccountDAO.getAccount(f.getSeller());
-								int rawAmount = f.getPrice();
-								int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
-								boolean taxed = rawAmount != liquidAmount;
-
-								int err = dk.checkFieldError(f.getCard());
-								if (err == 0) {
-									if (seller.getUid().equals(t.getUid())) {
-										code.set(HttpURLConnection.HTTP_OK);
-										msg.set("Carta retirada com sucesso!");
-
-										f.setBuyer(t.getUid());
-										dk.addField(f.getCard());
-
-										KawaiponDAO.saveKawaipon(kp);
-										FieldMarketDAO.saveCard(f);
-									} else {
-										if (acc.getBalance() < rawAmount) {
-											code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
-											msg.set("Saldo insuficiente.");
-										} else {
-											f.setBuyer(t.getUid());
-											dk.addField(f.getCard());
-											acc.removeCredit(blackfriday ? Math.round(rawAmount * 0.75) : rawAmount, this.getClass());
-											seller.addCredit(liquidAmount, this.getClass());
-
-											KawaiponDAO.saveKawaipon(kp);
-											AccountDAO.saveAccount(acc);
-											FieldMarketDAO.saveCard(f);
-
-											User sellerU = Main.getInfo().getUserByID(f.getSeller());
-											User buyerU = Main.getInfo().getUserByID(f.getBuyer());
-											if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
-														if (taxed) {
-															chn.sendMessage("✅ | Seu campo `" + f.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(f.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing);
-														} else {
-															chn.sendMessage("✅ | Seu campo `" + f.getCard().getCard().getName() + "` foi comprado por " + buyerU.getName() + " por " + Helper.separate(f.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing);
-														}
-													},
-													Helper::doNothing
-											);
-
-											code.set(HttpURLConnection.HTTP_OK);
-											msg.set("Carta comprada com sucesso!");
-										}
-									}
-								} else {
-									code.set(HttpURLConnection.HTTP_UNAUTHORIZED);
+								case FIELD -> {
 									switch (err) {
 										case 1 -> msg.set("Você já possui 3 cópias desse campo.");
 										case 2 -> msg.set("Você não possui mais espaços para campos no deck.");
 									}
 								}
+								default -> msg.set("Você já possui essa carta.");
 							}
 						}
 					}
