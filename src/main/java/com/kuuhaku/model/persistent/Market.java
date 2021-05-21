@@ -111,7 +111,7 @@ public class Market implements com.kuuhaku.model.common.Market {
 		return (T) switch (type) {
 			case EVOGEAR -> CardDAO.getEquipment(card);
 			case FIELD -> CardDAO.getField(card);
-			default -> new KawaiponCard(card, foil)
+			default -> new KawaiponCard(card, foil);
 		};
 	}
 
