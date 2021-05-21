@@ -217,16 +217,16 @@ public class SellCardNewCommand implements Executable {
 		if (kcs.size() > 1) {
 			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("Foram encontradas 2 versões dessa carta (normal e cromada). Por favor selecione **:one: para normal** ou **:two: para cromada**.")
-					.queue(s -> Pages.buttonize(s, Map.of(
-							Helper.getNumericEmoji(1), (mb, ms) -> {
-								chosen.complete(Pair.of(kcs.get(0).getCard(), false));
-								ms.delete().queue(null, Helper::doNothing);
-							},
-							Helper.getNumericEmoji(2), (mb, ms) -> {
-								chosen.complete(Pair.of(kcs.get(1).getCard(), true));
-								ms.delete().queue(null, Helper::doNothing);
-							}
-							), true, 1, TimeUnit.MINUTES,
+					.queue(s -> Pages.buttonize(s, new LinkedHashMap<>() {{
+								put(Helper.getNumericEmoji(1), (mb, ms) -> {
+									chosen.complete(Pair.of(kcs.get(0).getCard(), false));
+									ms.delete().queue(null, Helper::doNothing);
+								});
+								put(Helper.getNumericEmoji(2), (mb, ms) -> {
+									chosen.complete(Pair.of(kcs.get(1).getCard(), true));
+									ms.delete().queue(null, Helper::doNothing);
+								});
+							}}, true, 1, TimeUnit.MINUTES,
 							u -> u.getId().equals(author.getId()),
 							ms -> {
 								Main.getInfo().getConfirmationPending().remove(author.getId());
