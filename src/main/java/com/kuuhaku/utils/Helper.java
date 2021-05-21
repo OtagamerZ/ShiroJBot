@@ -2280,8 +2280,6 @@ public class Helper {
 
 	public static int applyTax(String id, int raw, double tax) {
 		boolean victorious = ExceedDAO.hasExceed(id) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(id));
-		boolean trusted = isTrustedMerchant(id);
-		tax = trusted ? tax / 2 : tax;
 
 		return raw - (victorious ? 0 : (int) (raw * tax));
 	}
