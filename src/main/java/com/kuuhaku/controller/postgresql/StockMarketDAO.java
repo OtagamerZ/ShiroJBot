@@ -176,15 +176,15 @@ public class StockMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT DISTINCT x.card_id                                                                   AS id
-				              , (ARRAY_AGG(x.price ORDER BY x.publishdate))[1]                             AS open
-				              , MAX(x.price)                                                               AS high
-				              , MIN(x.price)                                                               AS low
-				              , (ARRAY_AGG(x.price ORDER BY x.publishdate DESC))[1]                        AS close
-				              , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
-				              , x.publishdate
+				SELECT x.card_id                                                                  AS id
+				     , (ARRAY_AGG(x.price ORDER BY x.publishdate))[1]                             AS open
+				     , MAX(x.price)                                                               AS high
+				     , MIN(x.price)                                                               AS low
+				     , (ARRAY_REVERSE(ARRAY_AGG(x.price ORDER BY x.publishdate DESC)))[1]         AS close
+				     , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
+				     , x.publishdate
 				FROM (
-				         SELECT c.id                                                                    AS card_id
+				         SELECT c.id                                                                        AS card_id
 				              , COALESCE(cm.price, em.price, fm.price)                                      AS price
 				              , COALESCE(cm.buyer, em.buyer, fm.buyer)                                      AS buyer
 				              , COALESCE(cm.seller, em.seller, fm.seller)                                   AS seller
@@ -217,13 +217,13 @@ public class StockMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT DISTINCT x.rarity                                                                   AS id
-				              , (ARRAY_AGG(x.price ORDER BY x.publishdate))[1]                             AS open
-				              , MAX(x.price)                                                               AS high
-				              , MIN(x.price)                                                               AS low
-				              , (ARRAY_AGG(x.price ORDER BY x.publishdate DESC))[1]                        AS close
-				              , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
-				              , x.publishdate
+				SELECT x.rarity                                                                   AS id
+				     , (ARRAY_AGG(x.price ORDER BY x.publishdate))[1]                             AS open
+				     , MAX(x.price)                                                               AS high
+				     , MIN(x.price)                                                               AS low
+				     , (ARRAY_REVERSE(ARRAY_AGG(x.price ORDER BY x.publishdate DESC)))[1]         AS close
+				     , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
+				     , x.publishdate
 				FROM (
 				         SELECT c.rarity                                                                    AS rarity
 				              , COALESCE(cm.price, em.price, fm.price)                                      AS price
