@@ -14,9 +14,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de venda de cartas">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MerchantLicenseCommand.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AuctionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AuctionCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/req/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/TradeContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/TradeContent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/EvogearDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/EvogearDrop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1190,27 +1193,6 @@
       <workItem from="1621514581188" duration="5735000" />
       <workItem from="1621526675233" duration="12335000" />
     </task>
-    <task id="LOCAL-04450" summary="Correções menores">
-      <created>1621354418829</created>
-      <option name="number" value="04450" />
-      <option name="presentableId" value="LOCAL-04450" />
-      <option name="project" value="LOCAL" />
-      <updated>1621354418829</updated>
-    </task>
-    <task id="LOCAL-04451" summary="Correções menores">
-      <created>1621354505705</created>
-      <option name="number" value="04451" />
-      <option name="presentableId" value="LOCAL-04451" />
-      <option name="project" value="LOCAL" />
-      <updated>1621354505705</updated>
-    </task>
-    <task id="LOCAL-04452" summary="Correções menores">
-      <created>1621357332710</created>
-      <option name="number" value="04452" />
-      <option name="presentableId" value="LOCAL-04452" />
-      <option name="project" value="LOCAL" />
-      <updated>1621357332710</updated>
-    </task>
     <task id="LOCAL-04453" summary="Correções menores">
       <created>1621362760379</created>
       <option name="number" value="04453" />
@@ -1533,7 +1515,28 @@
       <option name="project" value="LOCAL" />
       <updated>1621626708902</updated>
     </task>
-    <option name="localTasksCounter" value="4499" />
+    <task id="LOCAL-04499" summary="Melhoria no comando de venda de cartas">
+      <created>1621627049343</created>
+      <option name="number" value="04499" />
+      <option name="presentableId" value="LOCAL-04499" />
+      <option name="project" value="LOCAL" />
+      <updated>1621627049343</updated>
+    </task>
+    <task id="LOCAL-04500" summary="Melhoria no comando de venda de cartas">
+      <created>1621627206903</created>
+      <option name="number" value="04500" />
+      <option name="presentableId" value="LOCAL-04500" />
+      <option name="project" value="LOCAL" />
+      <updated>1621627206904</updated>
+    </task>
+    <task id="LOCAL-04501" summary="Melhoria no comando de venda de cartas">
+      <created>1621627217743</created>
+      <option name="number" value="04501" />
+      <option name="presentableId" value="LOCAL-04501" />
+      <option name="project" value="LOCAL" />
+      <updated>1621627217743</updated>
+    </task>
+    <option name="localTasksCounter" value="4502" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
