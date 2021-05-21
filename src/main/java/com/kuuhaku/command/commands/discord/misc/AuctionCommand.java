@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Command(
 		name = "leilao",
 		aliases = {"auction", "auct"},
-		usage = "req_card-type-price",
+		usage = "req_card-price",
 		category = Category.MISC
 )
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
