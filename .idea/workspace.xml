@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de venda de cartas">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MarketDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Market.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Market.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1188,20 +1188,6 @@
       <workItem from="1621514581188" duration="5735000" />
       <workItem from="1621526675233" duration="12335000" />
     </task>
-    <task id="LOCAL-04446" summary="Correções menores">
-      <created>1621346831596</created>
-      <option name="number" value="04446" />
-      <option name="presentableId" value="LOCAL-04446" />
-      <option name="project" value="LOCAL" />
-      <updated>1621346831596</updated>
-    </task>
-    <task id="LOCAL-04447" summary="Correções menores">
-      <created>1621347056568</created>
-      <option name="number" value="04447" />
-      <option name="presentableId" value="LOCAL-04447" />
-      <option name="project" value="LOCAL" />
-      <updated>1621347056568</updated>
-    </task>
     <task id="LOCAL-04448" summary="Correções menores">
       <created>1621348884500</created>
       <option name="number" value="04448" />
@@ -1531,7 +1517,21 @@
       <option name="project" value="LOCAL" />
       <updated>1621624114708</updated>
     </task>
-    <option name="localTasksCounter" value="4495" />
+    <task id="LOCAL-04495" summary="Melhoria no comando de venda de cartas">
+      <created>1621626116872</created>
+      <option name="number" value="04495" />
+      <option name="presentableId" value="LOCAL-04495" />
+      <option name="project" value="LOCAL" />
+      <updated>1621626116872</updated>
+    </task>
+    <task id="LOCAL-04496" summary="Melhoria no comando de venda de cartas">
+      <created>1621626389649</created>
+      <option name="number" value="04496" />
+      <option name="presentableId" value="LOCAL-04496" />
+      <option name="project" value="LOCAL" />
+      <updated>1621626389651</updated>
+    </task>
+    <option name="localTasksCounter" value="4497" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
