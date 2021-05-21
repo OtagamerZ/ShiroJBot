@@ -91,7 +91,7 @@ public class StockMarketDAO {
 		Query prev = em.createNativeQuery("""
 				SELECT c.id
 				  	 , c.name
-				  	 , CASE x.sold >= 20
+				  	 , CASE x.sold >= 25
 				          WHEN TRUE THEN x.value
 				 	 END AS value
 				FROM Card c
