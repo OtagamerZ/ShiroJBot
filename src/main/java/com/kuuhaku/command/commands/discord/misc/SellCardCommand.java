@@ -40,7 +40,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -88,7 +88,7 @@ public class SellCardCommand implements Executable {
 				.findFirst()
 				.ifPresent(f -> matches.add(CardType.FIELD));
 
-		CompletableFuture<Pair<Card, Boolean>> chosen = new CompletableFuture<>();
+		CompletableFuture<Triple<Card, CardType, Boolean>> chosen = new CompletableFuture<>();
 		if (matches.size() > 1) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Por favor escolha uma")
@@ -107,13 +107,13 @@ public class SellCardCommand implements Executable {
 			}
 			if (matches.contains(CardType.EVOGEAR)) {
 				btns.put(Helper.getRegionalIndicator(4), (mb, ms) -> {
-					chosen.complete(Pair.of(CardDAO.getCard(name), false));
+					chosen.complete(Triple.of(CardDAO.getCard(name), CardType.EVOGEAR, false));
 					ms.delete().queue(null, Helper::doNothing);
 				});
 			}
 			if (matches.contains(CardType.FIELD)) {
 				btns.put(Helper.getRegionalIndicator(2), (mb, ms) -> {
-					chosen.complete(Pair.of(CardDAO.getCard(name), false));
+					chosen.complete(Triple.of(CardDAO.getCard(name), CardType.FIELD, false));
 					ms.delete().queue(null, Helper::doNothing);
 				});
 			}
@@ -132,15 +132,16 @@ public class SellCardCommand implements Executable {
 			channel.sendMessage("❌ | Você não pode vender uma carta que não possui!").queue();
 			return;
 		} else {
-			switch (matches.stream().findFirst().orElse(CardType.NONE)) {
+			CardType type = matches.stream().findFirst().orElse(CardType.NONE);
+			switch (type) {
 				case KAWAIPON -> chooseVersion(author, channel, kp, name, chosen);
-				case EVOGEAR, FIELD -> chosen.complete(Pair.of(CardDAO.getCard(name), false));
+				case EVOGEAR, FIELD -> chosen.complete(Triple.of(CardDAO.getCard(name), type, false));
 				case NONE -> chosen.complete(null);
 			}
 		}
 
 		try {
-			Pair<Card, Boolean> off = chosen.get();
+			Triple<Card, CardType, Boolean> off = chosen.get();
 			if (off == null) {
 				channel.sendMessage("Venda cancelada.").queue();
 				return;
@@ -175,13 +176,8 @@ public class SellCardCommand implements Executable {
 								Deck fDk = finalKp.getDeck();
 
 								Market m = null;
-								switch (off.getLeft().getRarity()) {
-									case COMMON, UNCOMMON, RARE, ULTRA_RARE, LEGENDARY -> {
-										KawaiponCard kc = new KawaiponCard(off.getLeft(), off.getRight());
-										finalKp.removeCard(kc);
-										m = new Market(author.getId(), kc, price);
-									}
-									case EQUIPMENT -> {
+								switch (off.getMiddle()) {
+									case EVOGEAR -> {
 										Equipment e = CardDAO.getEquipment(off.getLeft());
 										fDk.removeEquipment(e);
 										m = new Market(author.getId(), e, price);
@@ -190,6 +186,11 @@ public class SellCardCommand implements Executable {
 										Field f = CardDAO.getField(off.getLeft());
 										fDk.removeField(f);
 										m = new Market(author.getId(), f, price);
+									}
+									default -> {
+										KawaiponCard kc = new KawaiponCard(off.getLeft(), off.getRight());
+										finalKp.removeCard(kc);
+										m = new Market(author.getId(), kc, price);
 									}
 								}
 
@@ -206,7 +207,7 @@ public class SellCardCommand implements Executable {
 		}
 	}
 
-	private void chooseVersion(User author, TextChannel channel, Kawaipon kp, String name, CompletableFuture<Pair<Card, Boolean>> chosen) {
+	private void chooseVersion(User author, TextChannel channel, Kawaipon kp, String name, CompletableFuture<Triple<Card, CardType, Boolean>> chosen) {
 		List<KawaiponCard> kcs = kp.getCards().stream()
 				.filter(kc -> kc.getCard().getId().equals(name))
 				.sorted(Comparator.comparing(KawaiponCard::isFoil))
@@ -217,11 +218,11 @@ public class SellCardCommand implements Executable {
 			channel.sendMessage("Foram encontradas 2 versões dessa carta (normal e cromada). Por favor selecione **:one: para normal** ou **:two: para cromada**.")
 					.queue(s -> Pages.buttonize(s, new LinkedHashMap<>() {{
 								put(Helper.getNumericEmoji(1), (mb, ms) -> {
-									chosen.complete(Pair.of(kcs.get(0).getCard(), false));
+									chosen.complete(Triple.of(kcs.get(0).getCard(), CardType.KAWAIPON, false));
 									ms.delete().queue(null, Helper::doNothing);
 								});
 								put(Helper.getNumericEmoji(2), (mb, ms) -> {
-									chosen.complete(Pair.of(kcs.get(1).getCard(), true));
+									chosen.complete(Triple.of(kcs.get(1).getCard(), CardType.KAWAIPON, true));
 									ms.delete().queue(null, Helper::doNothing);
 								});
 							}}, true, 1, TimeUnit.MINUTES,
@@ -232,7 +233,7 @@ public class SellCardCommand implements Executable {
 							}
 					));
 		} else {
-			chosen.complete(Pair.of(kcs.get(0).getCard(), kcs.get(0).isFoil()));
+			chosen.complete(Triple.of(kcs.get(0).getCard(), CardType.KAWAIPON, kcs.get(0).isFoil()));
 		}
 	}
 }
