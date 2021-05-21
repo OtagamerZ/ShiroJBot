@@ -66,6 +66,7 @@ public class GuildBuff {
 	public boolean addBuff(ServerBuff buff) {
 		if (buffs.stream().anyMatch(b -> buff.getType() == b.getType() && buff.getTier() < b.getTier())) return false;
 
+		buffs.remove(buff);
 		buffs.add(buff);
 		return true;
 	}
