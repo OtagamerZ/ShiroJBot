@@ -133,12 +133,12 @@ public class MarketDAO {
 					WHEN 'FIELD'      THEN 1
 				END *
 				CASE c.rarity
-					WHEN 'COMMON'     THEN :cbase * CASE cm.foil WHEN TRUE THEN 50 ELSE 25 END
-					WHEN 'UNCOMMON'   THEN :cbase * CASE cm.foil WHEN TRUE THEN 50 ELSE 25 END
-					WHEN 'RARE'       THEN :cbase * CASE cm.foil WHEN TRUE THEN 50 ELSE 25 END
-					WHEN 'ULTRA_RARE' THEN :cbase * CASE cm.foil WHEN TRUE THEN 50 ELSE 25 END
-					WHEN 'LEGENDARY'  THEN :cbase * CASE cm.foil WHEN TRUE THEN 50 ELSE 25 END
-					WHEN 'EQUIPMENT'  THEN :ebase * 50
+					WHEN 'COMMON'     THEN (:cbase * CASE cm.foil WHEN TRUE THEN 50 ELSE 25 END)
+					WHEN 'UNCOMMON'   THEN (:cbase * CASE cm.foil WHEN TRUE THEN 50 ELSE 25 END)
+					WHEN 'RARE'       THEN (:cbase * CASE cm.foil WHEN TRUE THEN 50 ELSE 25 END)
+					WHEN 'ULTRA_RARE' THEN (:cbase * CASE cm.foil WHEN TRUE THEN 50 ELSE 25 END)
+					WHEN 'LEGENDARY'  THEN (:cbase * CASE cm.foil WHEN TRUE THEN 50 ELSE 25 END)
+					WHEN 'EQUIPMENT'  THEN (:ebase * 50)
 					WHEN 'FIELD'      THEN :fbase
 				END
 				""";
