@@ -18,11 +18,9 @@
 
 package com.kuuhaku.command.commands.discord.misc;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.enums.I18n;
@@ -60,10 +58,10 @@ public class TransferCommand implements Executable {
 		Account from = AccountDAO.getAccount(author.getId());
 		Account to = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
 
-		boolean victorious = ExceedDAO.hasExceed(author.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
 		int rawAmount = Integer.parseInt(args[1]);
 		double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
-		int liquidAmount = rawAmount - (victorious ? 0 : (int) Math.floor(rawAmount * tax));
+		int liquidAmount = Helper.applyTax(author.getId(), rawAmount, tax);
+		boolean taxed = rawAmount != liquidAmount;
 
 		if (from.getBalance() < rawAmount) {
 			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
@@ -86,9 +84,10 @@ public class TransferCommand implements Executable {
 		AccountDAO.saveAccount(to);
 		AccountDAO.saveAccount(from);
 
-		if (victorious)
+		if (taxed) {
+			channel.sendMessage("✅ | **" + Helper.separate(liquidAmount) + "** créditos transferidos com sucesso! (Taxa de transferência: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue();
+		} else {
 			channel.sendMessage("✅ | **" + Helper.separate(liquidAmount) + "** créditos transferidos com sucesso! (Exceed vitorioso isento de taxa)").queue();
-		else
-			channel.sendMessage("✅ | **" + Helper.separate(liquidAmount) + "** créditos transferidos com sucesso! (Taxa de transferência: " + Helper.roundToString(tax * 100, 1) + "%)").queue();
+		}
 	}
 }
