@@ -14,13 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de venda de cartas">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardMarketDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/EquipmentMarketDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/FieldMarketDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/MerchantStats.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1207,13 +1201,6 @@
       <workItem from="1621514581188" duration="5735000" />
       <workItem from="1621526675233" duration="12335000" />
     </task>
-    <task id="LOCAL-04454" summary="Correções menores">
-      <created>1621370649948</created>
-      <option name="number" value="04454" />
-      <option name="presentableId" value="LOCAL-04454" />
-      <option name="project" value="LOCAL" />
-      <updated>1621370649948</updated>
-    </task>
     <task id="LOCAL-04455" summary="Correções menores">
       <created>1621456716696</created>
       <option name="number" value="04455" />
@@ -1550,7 +1537,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621627565286</updated>
     </task>
-    <option name="localTasksCounter" value="4503" />
+    <task id="LOCAL-04503" summary="Melhoria no comando de venda de cartas">
+      <created>1621628409450</created>
+      <option name="number" value="04503" />
+      <option name="presentableId" value="LOCAL-04503" />
+      <option name="project" value="LOCAL" />
+      <updated>1621628409450</updated>
+    </task>
+    <option name="localTasksCounter" value="4504" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
