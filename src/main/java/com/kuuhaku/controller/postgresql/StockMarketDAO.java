@@ -91,7 +91,7 @@ public class StockMarketDAO {
 		Query prev = em.createNativeQuery("""
 				SELECT c.id
 				  	 , c.name
-				  	 , CASE x.sold >= 10
+				  	 , CASE x.sold >= 20
 				          WHEN TRUE THEN x.value
 				 	 END AS value
 				FROM Card c
@@ -100,10 +100,10 @@ public class StockMarketDAO {
 				         , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
 				         , COUNT(x.card_id)                                              AS sold
 				    FROM (
-				       SELECT c.id                                                     AS card_id
-				            , COALESCE(cm.price, em.price, fm.price)                   AS price
-				            , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
-				            , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
+				       SELECT c.id                                                       AS card_id
+				            , COALESCE(cm.price, em.price, fm.price)                     AS price
+				            , COALESCE(cm.buyer, em.buyer, fm.buyer)                     AS buyer
+				            , COALESCE(cm.seller, em.seller, fm.seller)                  AS seller
 				       FROM Card c
 				       LEFT JOIN Equipment e ON e.card_id = c.id
 				       LEFT JOIN Field f ON f.card_id = c.id
@@ -128,11 +128,11 @@ public class StockMarketDAO {
 				         , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
 				         , COUNT(x.card_id)                                              AS sold
 				    FROM (
-				        SELECT c.id                                                     AS card_id
-				             , COALESCE(cm.price, em.price, fm.price)                   AS price
-				             , COALESCE(cm.publishdate, em.publishdate, fm.publishdate) AS publishdate
-				             , COALESCE(cm.buyer, em.buyer, fm.buyer)                   AS buyer
-				             , COALESCE(cm.seller, em.seller, fm.seller)                AS seller
+				        SELECT c.id                                                      AS card_id
+				             , COALESCE(cm.price, em.price, fm.price)                    AS price
+				             , COALESCE(cm.publishdate, em.publishdate, fm.publishdate)  AS publishdate
+				             , COALESCE(cm.buyer, em.buyer, fm.buyer)                    AS buyer
+				             , COALESCE(cm.seller, em.seller, fm.seller)                 AS seller
 				        FROM Card c
 				        LEFT JOIN Equipment e ON e.card_id = c.id
 				        LEFT JOIN Field f ON f.card_id = c.id

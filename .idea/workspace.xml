@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StockMarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/StockMarketDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1188,13 +1188,6 @@
       <workItem from="1621514581188" duration="5735000" />
       <workItem from="1621526675233" duration="12335000" />
     </task>
-    <task id="LOCAL-04430" summary="Correções menores">
-      <created>1621276037998</created>
-      <option name="number" value="04430" />
-      <option name="presentableId" value="LOCAL-04430" />
-      <option name="project" value="LOCAL" />
-      <updated>1621276037998</updated>
-    </task>
     <task id="LOCAL-04431" summary="Correções menores">
       <created>1621276213051</created>
       <option name="number" value="04431" />
@@ -1531,7 +1524,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621543350063</updated>
     </task>
-    <option name="localTasksCounter" value="4479" />
+    <task id="LOCAL-04479" summary="Correções menores">
+      <created>1621556809947</created>
+      <option name="number" value="04479" />
+      <option name="presentableId" value="LOCAL-04479" />
+      <option name="project" value="LOCAL" />
+      <updated>1621556809948</updated>
+    </task>
+    <option name="localTasksCounter" value="4480" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1640,10 +1640,10 @@
     <MESSAGE value="Melhoria no efeito da raça demônio" />
     <MESSAGE value="Segunda tentativa na centralização dos decks" />
     <MESSAGE value="Adição de comando para nomear decks" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Remoção da Jibril" />
     <MESSAGE value="Criação da arena Daten City" />
-    <option name="LAST_COMMIT_MESSAGE" value="Criação da arena Daten City" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
