@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 @Command(
 		name = "anunciar",
 		aliases = {"sell", "vender"},
-		usage = "req_card",
+		usage = "req_card-price",
 		category = Category.MISC
 )
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
