@@ -90,31 +90,27 @@ public class StockMarketDAO {
 
 		Query prev = em.createNativeQuery("""
 				SELECT c.id
-				  	 , c.name
-				  	 , CASE x.sold >= 25
-				          WHEN TRUE THEN x.value
-				 	 END AS value
+				     , c.name
+				     , CASE x.sold >= 25
+				           WHEN TRUE THEN x.value
+				    END AS value
 				FROM Card c
-				LEFT JOIN (
-				    SELECT x.card_id
+				         LEFT JOIN (
+				    SELECT x.id
 				         , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
-				         , COUNT(x.card_id)                                              AS sold
+				         , COUNT(x.id)                                                   AS sold
 				    FROM (
-				       SELECT c.id                                                       AS card_id
-				            , COALESCE(cm.price, em.price, fm.price)                     AS price
-				            , COALESCE(cm.buyer, em.buyer, fm.buyer)                     AS buyer
-				            , COALESCE(cm.seller, em.seller, fm.seller)                  AS seller
-				       FROM Card c
-				       LEFT JOIN Equipment e ON e.card_id = c.id
-				       LEFT JOIN Field f ON f.card_id = c.id
-				       LEFT JOIN CardMarket cm ON cm.card_id = c.id
-				       LEFT JOIN EquipmentMarket em ON em.card_id = e.id
-				       LEFT JOIN FieldMarket fm ON fm.card_id = f.id
-				    ) x
-				      WHERE x.buyer <> ''
+				             SELECT c.id
+				                  , m.price
+				                  , m.buyer
+				                  , m.seller
+				             FROM Card c
+				                      LEFT JOIN Market m ON m.card_id = c.id
+				         ) x
+				    WHERE x.buyer <> ''
 				      AND x.buyer <> x.seller
-				    GROUP BY x.card_id
-				) x ON x.card_id = c.id
+				    GROUP BY x.id
+				) x ON x.id = c.id
 				ORDER BY c.id
 				""");
 
@@ -124,27 +120,23 @@ public class StockMarketDAO {
 				     , x.value
 				FROM Card c
 				         LEFT JOIN (
-				    SELECT x.card_id
+				    SELECT x.id
 				         , ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS value
-				         , COUNT(x.card_id)                                              AS sold
+				         , COUNT(x.id)                                                   AS sold
 				    FROM (
-				        SELECT c.id                                                      AS card_id
-				             , COALESCE(cm.price, em.price, fm.price)                    AS price
-				             , COALESCE(cm.publishdate, em.publishdate, fm.publishdate)  AS publishdate
-				             , COALESCE(cm.buyer, em.buyer, fm.buyer)                    AS buyer
-				             , COALESCE(cm.seller, em.seller, fm.seller)                 AS seller
-				        FROM Card c
-				        LEFT JOIN Equipment e ON e.card_id = c.id
-				        LEFT JOIN Field f ON f.card_id = c.id
-				        LEFT JOIN CardMarket cm ON cm.card_id = c.id
-				        LEFT JOIN EquipmentMarket em ON em.card_id = e.id
-				        LEFT JOIN FieldMarket fm ON fm.card_id = f.id
-				    ) x
+				             SELECT c.id
+				                  , m.price
+				                  , m.publishdate
+				                  , m.buyer
+				                  , m.seller
+				             FROM Card c
+				                      LEFT JOIN Market m ON m.card_id = c.id
+				         ) x
 				    WHERE x.publishDate > NOW() - INTERVAL '7 DAY'
 				      AND x.buyer <> ''
 				      AND x.buyer <> x.seller
-				    GROUP BY x.card_id
-				) x ON x.card_id = c.id
+				    GROUP BY x.id
+				) x ON x.id = c.id
 				ORDER BY c.id
 				""");
 
@@ -176,7 +168,7 @@ public class StockMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT x.card_id                                                                  AS id
+				SELECT x.id                                                                       AS id
 				     , (ARRAY_AGG(x.price ORDER BY x.publishdate))[1]                             AS open
 				     , MAX(x.price)                                                               AS high
 				     , MIN(x.price)                                                               AS low
@@ -184,23 +176,19 @@ public class StockMarketDAO {
 				     , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
 				     , x.publishdate
 				FROM (
-				         SELECT c.id                                                                        AS card_id
-				              , COALESCE(cm.price, em.price, fm.price)                                      AS price
-				              , COALESCE(cm.buyer, em.buyer, fm.buyer)                                      AS buyer
-				              , COALESCE(cm.seller, em.seller, fm.seller)                                   AS seller
-				              , DATE_TRUNC('DAY', COALESCE(cm.publishdate, em.publishdate, fm.publishdate)) AS publishdate
+				         SELECT c.id
+				              , m.price
+				              , m.buyer
+				              , m.seller
+				              , DATE_TRUNC('DAY', m.publishdate) AS publishdate
 				         FROM Card c
-				                  LEFT JOIN Equipment e ON e.card_id = c.id
-				                  LEFT JOIN Field f ON f.card_id = c.id
-				                  LEFT JOIN CardMarket cm ON cm.card_id = c.id
-				                  LEFT JOIN EquipmentMarket em ON em.card_id = e.id
-				                  LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				                  LEFT JOIN Market m ON m.card_id = c.id
 				     ) x
 				WHERE x.buyer <> ''
 				  AND x.buyer <> x.seller
-				  AND x.card_id = :card
+				  AND x.id = :card
 				  AND x.publishdate > DATE_TRUNC('DAY', NOW() - INTERVAL '1 YEAR')
-				GROUP BY x.card_id, x.publishdate
+				GROUP BY x.id, x.publishdate
 				ORDER BY publishdate
 				""")
 				.setParameter("card", c.getId());
@@ -217,7 +205,7 @@ public class StockMarketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT x.rarity                                                                   AS id
+				SELECT x.rarity                                                                   AS rarity
 				     , (ARRAY_AGG(x.price ORDER BY x.publishdate))[1]                             AS open
 				     , MAX(x.price)                                                               AS high
 				     , MIN(x.price)                                                               AS low
@@ -225,17 +213,13 @@ public class StockMarketDAO {
 				     , CAST(ROUND(EXP(SUM(LN(x.price)) * (1.0 / COUNT(1))) * 1000) / 1000 AS INT) AS value
 				     , x.publishdate
 				FROM (
-				         SELECT c.rarity                                                                    AS rarity
-				              , COALESCE(cm.price, em.price, fm.price)                                      AS price
-				              , COALESCE(cm.buyer, em.buyer, fm.buyer)                                      AS buyer
-				              , COALESCE(cm.seller, em.seller, fm.seller)                                   AS seller
-				              , DATE_TRUNC('DAY', COALESCE(cm.publishdate, em.publishdate, fm.publishdate)) AS publishdate
+				         SELECT c.rarity
+				              , m.price
+				              , m.buyer
+				              , m.seller
+				              , DATE_TRUNC('DAY', m.publishdate) AS publishdate
 				         FROM Card c
-				                  LEFT JOIN Equipment e ON e.card_id = c.id
-				                  LEFT JOIN Field f ON f.card_id = c.id
-				                  LEFT JOIN CardMarket cm ON cm.card_id = c.id
-				                  LEFT JOIN EquipmentMarket em ON em.card_id = e.id
-				                  LEFT JOIN FieldMarket fm ON fm.card_id = f.id
+				                  LEFT JOIN Market m ON m.card_id = c.id
 				     ) x
 				WHERE x.buyer <> ''
 				  AND x.buyer <> x.seller

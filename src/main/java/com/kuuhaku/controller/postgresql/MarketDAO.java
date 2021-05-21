@@ -19,7 +19,6 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.enums.KawaiponRarity;
-import com.kuuhaku.model.persistent.CardMarket;
 import com.kuuhaku.model.persistent.Market;
 import com.kuuhaku.utils.Helper;
 
@@ -76,7 +75,7 @@ public class MarketDAO {
 				AND m.publishDate IS NOT NULL
 				AND m.buyer <> ''
 				AND m.buyer <> m.seller
-				""", CardMarket.class);
+				""", Market.class);
 		q.setParameter("rarity", r);
 		q.setParameter("foil", foil);
 
