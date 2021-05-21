@@ -166,8 +166,8 @@ public class MarketDAO {
 		if (!params[3].isBlank()) q.setParameter("rarity", rarity.name());
 		if (!params[4].isBlank()) q.setParameter("anime", "%" + anime + "%");
 		if (!params[5].isBlank()) q.setParameter("foil", foil);
-		if (!params[6].isBlank()) q.setParameter("seller", seller);
-		if (!params[7].isBlank()) {
+		if (!params[9].isBlank()) q.setParameter("seller", seller);
+		if (!params[10].isBlank()) {
 			q.setParameter("cbase", Helper.BASE_CARD_PRICE);
 			q.setParameter("ebase", Helper.BASE_EQUIPMENT_PRICE);
 			q.setParameter("fbase", Helper.BASE_FIELD_PRICE);
