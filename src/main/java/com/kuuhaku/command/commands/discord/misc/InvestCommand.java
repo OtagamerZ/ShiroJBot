@@ -79,8 +79,8 @@ public class InvestCommand implements Executable {
 
 			double readjust = Helper.round(amount / (double) sv.getValue(), 3);
 
-			if (sm.getInvestment() + readjust >= 1000) {
-				channel.sendMessage("❌ | O limite máximo por carta é 1.000 ações.").queue();
+			if (sm.getInvestment() + readjust >= 500) {
+				channel.sendMessage("❌ | O limite máximo por carta é 500 ações.").queue();
 				return;
 			}
 
