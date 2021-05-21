@@ -34,7 +34,10 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.SimpleMessageListener;
-import com.kuuhaku.model.common.*;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.ColorlessWebhookEmbedBuilder;
+import com.kuuhaku.model.common.Extensions;
+import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.common.drop.*;
 import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.persistent.*;
@@ -2154,14 +2157,6 @@ public class Helper {
 		return text.replace("%user%", author.getName())
 				.replace("%guild%", guild.getName())
 				.replace("%count%", String.valueOf(guild.getMemberCount()));
-	}
-
-	public static boolean isTrustedMerchant(String id) {
-		MerchantStats ms = CardMarketDAO.getMerchantStats(id);
-		MerchantStats avg = CardMarketDAO.getAverageMerchantStats();
-
-		if (ms == null || avg == null) return false;
-		return prcnt(ms.getSold(), avg.getSold()) > 2 && prcnt(ms.getUniqueBuyers(), avg.getUniqueBuyers()) > 1;
 	}
 
 	public static boolean isPureMention(String msg) {
