@@ -83,6 +83,7 @@ public class ClearDeckCommand implements Executable {
 									Kawaipon fkp = KawaiponDAO.getKawaipon(author.getId());
 									Deck fdk = fkp.getDeck();
 
+
 									for (Champion c : fdk.getChampions()) {
 										CardMarket cm = new CardMarket(
 												author.getId(),
