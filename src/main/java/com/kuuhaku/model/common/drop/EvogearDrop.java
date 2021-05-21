@@ -43,7 +43,7 @@ public class EvogearDrop extends Drop<Equipment> {
 		if (dk.getEvoWeight() + getPrize().getWeight(dk) <= 24 && dk.getEquipmentCopies(getPrize().getCard()) < dk.getEquipmentMaxCopies(getPrize()) && !(dk.hasTierFour() && getPrize().getTier() == 4)) {
 			dk.addEquipment(getPrize());
 		} else {
-			awardInstead(u, getPrize().getTier() * Helper.BASE_EQUIPMENT_PRICE);
+			awardInstead(u, Helper.BASE_EQUIPMENT_PRICE);
 			return;
 		}
 		KawaiponDAO.saveKawaipon(kp);
@@ -71,7 +71,7 @@ public class EvogearDrop extends Drop<Equipment> {
 		else
 			return "~~Evogear %s~~\n(convertido em %s créditos)".formatted(
 					getPrize().getCard().getName(),
-					getPrize().getTier() * Helper.BASE_EQUIPMENT_PRICE
+					Helper.BASE_EQUIPMENT_PRICE
 			);
 	}
 }
