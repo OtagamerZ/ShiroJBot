@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
@@ -52,11 +53,15 @@ public class Market implements com.kuuhaku.model.common.Market {
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime publishDate = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
+	@Enumerated(EnumType.STRING)
+	private CardType type;
+
 	public Market(String seller, KawaiponCard card, int price) {
 		this.seller = seller;
 		this.card = card.getCard();
 		this.foil = card.isFoil();
 		this.price = price;
+		this.type = CardType.KAWAIPON;
 	}
 
 	public Market(String seller, Equipment card, int price) {
@@ -64,6 +69,7 @@ public class Market implements com.kuuhaku.model.common.Market {
 		this.card = card.getCard();
 		this.foil = false;
 		this.price = price;
+		this.type = CardType.EVOGEAR;
 	}
 
 	public Market(String seller, Field card, int price) {
@@ -71,6 +77,7 @@ public class Market implements com.kuuhaku.model.common.Market {
 		this.card = card.getCard();
 		this.foil = false;
 		this.price = price;
+		this.type = CardType.FIELD;
 	}
 
 	public Market() {
@@ -101,10 +108,10 @@ public class Market implements com.kuuhaku.model.common.Market {
 	}
 
 	public <T> T getCard() {
-		return (T) switch (card.getRarity()) {
-			case COMMON, UNCOMMON, RARE, ULTRA_RARE, LEGENDARY, FUSION, ULTIMATE -> new KawaiponCard(card, foil);
-			case EQUIPMENT -> CardDAO.getEquipment(card);
+		return (T) switch (type) {
+			case EVOGEAR -> CardDAO.getEquipment(card);
 			case FIELD -> CardDAO.getField(card);
+			default -> new KawaiponCard(card, foil)
 		};
 	}
 
@@ -132,6 +139,10 @@ public class Market implements com.kuuhaku.model.common.Market {
 
 	public void setPublishDate(ZonedDateTime publishDate) {
 		this.publishDate = publishDate;
+	}
+
+	public CardType getType() {
+		return type;
 	}
 
 	public int getPriceLimit() {
