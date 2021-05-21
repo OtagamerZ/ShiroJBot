@@ -15,7 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1188,13 +1188,8 @@
       <workItem from="1621512203144" duration="1634000" />
       <workItem from="1621514581188" duration="5735000" />
       <workItem from="1621526675233" duration="12335000" />
-    </task>
-    <task id="LOCAL-04456" summary="Correções menores">
-      <created>1621456900454</created>
-      <option name="number" value="04456" />
-      <option name="presentableId" value="LOCAL-04456" />
-      <option name="project" value="LOCAL" />
-      <updated>1621456900454</updated>
+      <workItem from="1621635181794" duration="58000" />
+      <workItem from="1621635854472" duration="307000" />
     </task>
     <task id="LOCAL-04457" summary="Correções menores">
       <created>1621456986034</created>
@@ -1532,7 +1527,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621629053192</updated>
     </task>
-    <option name="localTasksCounter" value="4505" />
+    <task id="LOCAL-04505" summary="Correções menores">
+      <created>1621633112880</created>
+      <option name="number" value="04505" />
+      <option name="presentableId" value="LOCAL-04505" />
+      <option name="project" value="LOCAL" />
+      <updated>1621633112895</updated>
+    </task>
+    <option name="localTasksCounter" value="4506" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1642,9 +1644,9 @@
     <MESSAGE value="Adição de comando para nomear decks" />
     <MESSAGE value="Remoção da Jibril" />
     <MESSAGE value="Criação da arena Daten City" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Melhoria no comando de venda de cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no comando de venda de cartas" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

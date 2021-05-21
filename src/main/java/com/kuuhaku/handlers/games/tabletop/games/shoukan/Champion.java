@@ -202,9 +202,9 @@ public class Champion implements Drawable, Cloneable {
 
 			g2d.setColor(Color.green);
 			if (fakeCard != null)
-				Profile.drawOutlinedText(String.valueOf(fakeCard.getFinDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(fakeCard.getDef())), 250, g2d);
+				Profile.drawOutlinedText(String.valueOf(fakeCard.getFinDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(fakeCard.getFinDef())), 250, g2d);
 			else
-				Profile.drawOutlinedText(String.valueOf(getFinDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getDef())), 250, g2d);
+				Profile.drawOutlinedText(String.valueOf(getFinDef()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getFinDef())), 250, g2d);
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(Color.black);
