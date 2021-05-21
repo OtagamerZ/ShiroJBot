@@ -13,7 +13,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Criação da arena Daten City" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Criação da arena Daten City">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MarketDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Market.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -171,11 +176,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.controller.postgresql" />
+      <recent name="com.kuuhaku.model.persistent" />
       <recent name="com.kuuhaku.model.common" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.command.commands.discord.information" />
-      <recent name="com.kuuhaku.command.commands.discord.fun" />
-      <recent name="com.kuuhaku.controller.postgresql" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -195,17 +200,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1195,28 +1189,8 @@
       <workItem from="1621455491280" duration="2196000" />
       <workItem from="1621512203144" duration="1634000" />
       <workItem from="1621514581188" duration="5735000" />
-      <workItem from="1621526675233" duration="12335000" />
-    </task>
-    <task id="LOCAL-04430" summary="Correções menores">
-      <created>1621276037998</created>
-      <option name="number" value="04430" />
-      <option name="presentableId" value="LOCAL-04430" />
-      <option name="project" value="LOCAL" />
-      <updated>1621276037998</updated>
-    </task>
-    <task id="LOCAL-04431" summary="Correções menores">
-      <created>1621276213051</created>
-      <option name="number" value="04431" />
-      <option name="presentableId" value="LOCAL-04431" />
-      <option name="project" value="LOCAL" />
-      <updated>1621276213051</updated>
-    </task>
-    <task id="LOCAL-04432" summary="Correções menores">
-      <created>1621279443856</created>
-      <option name="number" value="04432" />
-      <option name="presentableId" value="LOCAL-04432" />
-      <option name="project" value="LOCAL" />
-      <updated>1621279443857</updated>
+      <workItem from="1621526675233" duration="13281000" />
+      <workItem from="1621598773825" duration="6729000" />
     </task>
     <task id="LOCAL-04433" summary="Correções menores">
       <created>1621284589716</created>
@@ -1540,7 +1514,28 @@
       <option name="project" value="LOCAL" />
       <updated>1621543350063</updated>
     </task>
-    <option name="localTasksCounter" value="4479" />
+    <task id="LOCAL-04479" summary="Criação da arena Daten City">
+      <created>1621543545556</created>
+      <option name="number" value="04479" />
+      <option name="presentableId" value="LOCAL-04479" />
+      <option name="project" value="LOCAL" />
+      <updated>1621543545556</updated>
+    </task>
+    <task id="LOCAL-04480" summary="Criação da arena Daten City">
+      <created>1621543636539</created>
+      <option name="number" value="04480" />
+      <option name="presentableId" value="LOCAL-04480" />
+      <option name="project" value="LOCAL" />
+      <updated>1621543636540</updated>
+    </task>
+    <task id="LOCAL-04481" summary="Criação da arena Daten City">
+      <created>1621543721791</created>
+      <option name="number" value="04481" />
+      <option name="presentableId" value="LOCAL-04481" />
+      <option name="project" value="LOCAL" />
+      <updated>1621543721791</updated>
+    </task>
+    <option name="localTasksCounter" value="4482" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
