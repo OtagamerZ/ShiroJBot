@@ -65,10 +65,10 @@ public class SellCardNewCommand implements Executable {
 		if (Main.getInfo().getConfirmationPending().get(author.getId()) != null) {
 			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
 			return;
-		} else if (args.length < 3) {
-			channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada, `E` = evogear, `F` = campo) e o preço dela.").queue();
+		} else if (args.length < 2) {
+			channel.sendMessage("❌ | Você precisa informar uma carta e o preço dela.").queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[2])) {
+		} else if (!StringUtils.isNumeric(args[1])) {
 			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
 			return;
 		}
