@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no comando de venda de cartas">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ClearDeckCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ClearDeckCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MarketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/MarketDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1188,13 +1188,6 @@
       <workItem from="1621514581188" duration="5735000" />
       <workItem from="1621526675233" duration="12335000" />
     </task>
-    <task id="LOCAL-04445" summary="Correções menores">
-      <created>1621346275666</created>
-      <option name="number" value="04445" />
-      <option name="presentableId" value="LOCAL-04445" />
-      <option name="project" value="LOCAL" />
-      <updated>1621346275667</updated>
-    </task>
     <task id="LOCAL-04446" summary="Correções menores">
       <created>1621346831596</created>
       <option name="number" value="04446" />
@@ -1531,7 +1524,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621624032735</updated>
     </task>
-    <option name="localTasksCounter" value="4494" />
+    <task id="LOCAL-04494" summary="Melhoria no comando de venda de cartas">
+      <created>1621624114708</created>
+      <option name="number" value="04494" />
+      <option name="presentableId" value="LOCAL-04494" />
+      <option name="project" value="LOCAL" />
+      <updated>1621624114708</updated>
+    </task>
+    <option name="localTasksCounter" value="4495" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
