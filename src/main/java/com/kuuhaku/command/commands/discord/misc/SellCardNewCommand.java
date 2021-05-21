@@ -233,6 +233,8 @@ public class SellCardNewCommand implements Executable {
 								chosen.complete(null);
 							}
 					));
+		} else {
+			chosen.complete(Pair.of(kcs.get(0).getCard(), kcs.get(0).isFoil()));
 		}
 	}
 }
