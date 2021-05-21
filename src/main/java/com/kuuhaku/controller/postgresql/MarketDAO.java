@@ -155,7 +155,7 @@ public class MarketDAO {
 				onlyFd ? "AND c.rarity = 'FIELD'" : "",
 				seller != null ? "AND m.seller = :seller" : "",
 				seller == null ? priceCheck : "",
-				"ORDER BY cm.price, m.foil DESC, c.rarity DESC, a.id, c.id"
+				"ORDER BY m.price, m.foil DESC, c.rarity DESC, a.id, c.id"
 		};
 
 		Query q = em.createQuery(query.formatted(String.join("\n", params)), Market.class);
