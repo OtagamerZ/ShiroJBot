@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1188,20 +1188,6 @@
       <workItem from="1621514581188" duration="5735000" />
       <workItem from="1621526675233" duration="12335000" />
     </task>
-    <task id="LOCAL-04437" summary="Correções menores">
-      <created>1621342493632</created>
-      <option name="number" value="04437" />
-      <option name="presentableId" value="LOCAL-04437" />
-      <option name="project" value="LOCAL" />
-      <updated>1621342493632</updated>
-    </task>
-    <task id="LOCAL-04438" summary="Correções menores">
-      <created>1621342641864</created>
-      <option name="number" value="04438" />
-      <option name="presentableId" value="LOCAL-04438" />
-      <option name="project" value="LOCAL" />
-      <updated>1621342641864</updated>
-    </task>
     <task id="LOCAL-04439" summary="Correções menores">
       <created>1621342781535</created>
       <option name="number" value="04439" />
@@ -1531,7 +1517,21 @@
       <option name="project" value="LOCAL" />
       <updated>1621558442999</updated>
     </task>
-    <option name="localTasksCounter" value="4486" />
+    <task id="LOCAL-04486" summary="Correções menores">
+      <created>1621558546332</created>
+      <option name="number" value="04486" />
+      <option name="presentableId" value="LOCAL-04486" />
+      <option name="project" value="LOCAL" />
+      <updated>1621558546332</updated>
+    </task>
+    <task id="LOCAL-04487" summary="Correções menores">
+      <created>1621558801693</created>
+      <option name="number" value="04487" />
+      <option name="presentableId" value="LOCAL-04487" />
+      <option name="project" value="LOCAL" />
+      <updated>1621558801693</updated>
+    </task>
+    <option name="localTasksCounter" value="4488" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
