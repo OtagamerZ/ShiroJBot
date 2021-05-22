@@ -14,7 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DailyQuest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DailyQuest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,17 +199,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1200,20 +1191,7 @@
       <workItem from="1621526675233" duration="12335000" />
       <workItem from="1621635181794" duration="58000" />
       <workItem from="1621635854472" duration="307000" />
-    </task>
-    <task id="LOCAL-04461" summary="Correções menores">
-      <created>1621515864880</created>
-      <option name="number" value="04461" />
-      <option name="presentableId" value="LOCAL-04461" />
-      <option name="project" value="LOCAL" />
-      <updated>1621515864880</updated>
-    </task>
-    <task id="LOCAL-04462" summary="Correções menores">
-      <created>1621516532881</created>
-      <option name="number" value="04462" />
-      <option name="presentableId" value="LOCAL-04462" />
-      <option name="project" value="LOCAL" />
-      <updated>1621516532882</updated>
+      <workItem from="1621715930888" duration="316000" />
     </task>
     <task id="LOCAL-04463" summary="Remoção da Jibril">
       <created>1621522054362</created>
@@ -1544,7 +1522,21 @@
       <option name="project" value="LOCAL" />
       <updated>1621656563756</updated>
     </task>
-    <option name="localTasksCounter" value="4510" />
+    <task id="LOCAL-04510" summary="Correções menores">
+      <created>1621656737420</created>
+      <option name="number" value="04510" />
+      <option name="presentableId" value="LOCAL-04510" />
+      <option name="project" value="LOCAL" />
+      <updated>1621656737420</updated>
+    </task>
+    <task id="LOCAL-04511" summary="Correções menores">
+      <created>1621657038951</created>
+      <option name="number" value="04511" />
+      <option name="presentableId" value="LOCAL-04511" />
+      <option name="project" value="LOCAL" />
+      <updated>1621657038951</updated>
+    </task>
+    <option name="localTasksCounter" value="4512" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
