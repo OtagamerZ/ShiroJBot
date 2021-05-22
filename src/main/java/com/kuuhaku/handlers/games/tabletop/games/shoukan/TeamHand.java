@@ -58,6 +58,7 @@ public class TeamHand extends Hand {
 		for (int i = 0; i < users.size(); i++) {
 			Deck dk = dks.get(i);
 			User user = users.get(i);
+			game.getDivergence().put(user.getId(), dk.getAverageDivergence());
 
 			LinkedList<Drawable> deque = Stream.of(dk.getChampions(), dk.getEquipments(), dk.getFields())
 					.flatMap(List::stream)

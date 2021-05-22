@@ -70,6 +70,8 @@ public class Hand {
 			return;
 		}
 
+		game.getDivergence().put(user.getId(), dk.getAverageDivergence());
+
 		setData(
 				game,
 				user,
