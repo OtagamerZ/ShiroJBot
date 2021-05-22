@@ -250,12 +250,12 @@ public class Helper {
 		return Math.abs(new Random().nextInt(maxValue + (exclusive ? 0 : 1)));
 	}
 
-	public static double rng(double maxValue, boolean exclusive) {
-		return Math.abs(new Random().nextDouble() * maxValue + (exclusive ? 0 : 1));
+	public static double rng(double maxValue) {
+		return Math.abs(new Random().nextDouble() * maxValue);
 	}
 
-	public static double rng(double maxValue, Random random, boolean exclusive) {
-		return Math.abs(random.nextDouble() * maxValue + (exclusive ? 0 : 1));
+	public static double rng(double maxValue, Random random) {
+		return Math.abs(random.nextDouble() * maxValue);
 	}
 
 	public static int rng(int maxValue, Random random, boolean exclusive) {
