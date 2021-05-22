@@ -18,11 +18,14 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.collections4.ListUtils;
@@ -33,10 +36,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -224,6 +224,90 @@ public class Deck {
 
 	public int getEquipmentMaxCopies(int tier) {
 		return 5 - tier + (getCombo().getLeft() == Race.BESTIAL ? 1 : 0);
+	}
+
+	public double[] getMetaDivergence() {
+		List<String> champ = CardDAO.getChampionMeta();
+		List<String> equip = CardDAO.getEquipmentMeta();
+		List<String> field = CardDAO.getFieldMeta();
+
+		return new double[]{
+				1 - Helper.prcnt(champions.stream().map(c -> c.getCard().getId()).filter(champ::contains).count(), champions.size()),
+				1 - Helper.prcnt(equipments.stream().map(c -> c.getCard().getId()).filter(equip::contains).count(), equipments.size()),
+				1 - Helper.prcnt(fields.stream().map(c -> c.getCard().getId()).filter(field::contains).count(), fields.size()),
+		};
+	}
+
+	public double getAverageDivergence() {
+		return Helper.average(getMetaDivergence());
+	}
+
+	public Map<Class, Integer> getComposition() {
+		Map<Class, Integer> count = new HashMap<>() {{
+			put(Class.DUELIST, 0);
+			put(Class.SUPPORT, 0);
+			put(Class.TANK, 0);
+			put(Class.SPECIALIST, 0);
+			put(Class.NUKE, 0);
+			put(Class.TRAP, 0);
+			put(Class.LEVELER, 0);
+		}};
+		for (Champion c : champions)
+			count.merge(c.getCategory(), 1, Integer::sum);
+
+		count.remove(null);
+
+		return count;
+	}
+
+	public double getAverageCost() {
+		return ListUtils.union(champions, equipments)
+				.stream()
+				.mapToInt(d -> d instanceof Champion ? ((Champion) d).getMana() : ((Equipment) d).getMana())
+				.filter(i -> i != 0)
+				.average()
+				.orElse(0);
+	}
+
+	public List<String> getTips() {
+		List<String> tips = new ArrayList<>();
+		for (Map.Entry<Class, Integer> e : getComposition().entrySet()) {
+			switch (e.getKey()) {
+				case DUELIST -> {
+					if (e.getValue() < CardDAO.getCategoryMeta(Class.DUELIST))
+						tips.add("É importante ter várias cartas do tipo duelista, pois elas costumam ser as mais baratas e oferecem versatilidade durante as partidas.");
+				}
+				case SUPPORT -> {
+					if (e.getValue() < CardDAO.getCategoryMeta(Class.SUPPORT))
+						tips.add("Decks que possuem cartas de suporte costumam sobressair em partidas extensas, lembre-se que nem sempre dano é o fator vitorioso.");
+				}
+				case TANK -> {
+					if (e.getValue() < CardDAO.getCategoryMeta(Class.TANK))
+						tips.add("Um deck sem tanques possui uma defesa muito fraca, lembre-se que após cada turno será a vez do oponente.");
+				}
+				case SPECIALIST -> {
+					if (e.getValue() < CardDAO.getCategoryMeta(Class.SPECIALIST))
+						tips.add("Apesar de serem cartas situacionais, as cartas-especialista são essenciais em qualquer deck pois nunca se sabe que rumo a partida irá tomar.");
+				}
+				case NUKE -> {
+					if (e.getValue() < CardDAO.getCategoryMeta(Class.NUKE))
+						tips.add("Existem cartas com alto ataque ou defesa, seu deck estará vulnerável sem uma carta para explodi-las.");
+				}
+				case TRAP -> {
+					if (e.getValue() < CardDAO.getCategoryMeta(Class.TRAP))
+						tips.add("Sem cartas-armadilha à sua disposição, o oponente não precisará se preocupar em atacar cartas viradas para baixo, o que te torna um alvo fácil.");
+				}
+				case LEVELER -> {
+					if (e.getValue() < CardDAO.getCategoryMeta(Class.LEVELER))
+						tips.add("Cartas niveladoras são essenciais para defender-se de um turno ruim, não subestime o poder delas.");
+				}
+			}
+		}
+
+		if (getAverageCost() >= 3.5)
+			tips.add("Seu deck possui um custo de mana muito alto. Apesar das cartas de custo alto serem mais forte, não adianta nada se você conseguir invocar apenas 1 por turno.");
+
+		return tips;
 	}
 
 	public boolean checkChampion(Champion c, TextChannel channel) {
@@ -436,5 +520,48 @@ public class Deck {
 		}
 
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		Pair<Race, Race> combo = getCombo();
+		double[] divs = getMetaDivergence();
+		Map<Class, Integer> comp = getComposition();
+		String[] data = new String[14];
+		for (int i = 0; i < Class.values().length; i++) {
+			int ct = comp.getOrDefault(Class.values()[i], 0);
+			data[i * 2] = String.valueOf(ct);
+			data[i * 2 + 1] = ct != 1 ? "s" : "";
+		}
+
+		return """
+					   __**:crossed_swords: | Cartas Senshi:** %s__
+					   				
+					   :large_orange_diamond: | Efeito primário: %s (%s)
+					   :small_orange_diamond: | Efeito secundário: %s (%s)
+					   :shield: | Peso evogear: %s
+					   :thermometer: | Custo médio de mana: %s
+					   :recycle: | Divergência do meta: %s/%s/%s
+					   				
+					   """
+					   .formatted(
+							   champions.size(),
+							   combo.getLeft(), combo.getLeft().getMajorDesc(),
+							   combo.getRight(), combo.getRight().getMinorDesc(),
+							   getEvoWeight(),
+							   Helper.round(getAverageCost(), 2),
+							   Helper.roundToString(divs[0] * 100, 1),
+							   Helper.roundToString(divs[1] * 100, 1),
+							   Helper.roundToString(divs[2] * 100, 1)
+					   ) + """
+					   __**:abacus: | Classes**__
+					   **Duelista:** %s carta%s
+					   **Tanque:** %s carta%s
+					   **Suporte:** %s carta%s
+					   **Nuker:** %s carta%s
+					   **Armadilha:** %s carta%s
+					   **Nivelador:** %s carta%s
+					   **Especialista:** %s carta%s
+					   """.formatted((Object[]) data);
 	}
 }
