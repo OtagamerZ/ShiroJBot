@@ -26,6 +26,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.RankedQueue;
@@ -41,6 +42,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -57,6 +59,7 @@ public abstract class GlobalGame {
 	private final GameChannel channel;
 	private final JSONObject custom;
 	private final MatchHistory history = new MatchHistory();
+	private final Map<String, Double> divergence = new HashMap<>();
 	private final boolean ranked;
 	private Consumer<Message> onExpiration;
 	private Consumer<Message> onWO;
@@ -264,6 +267,10 @@ public abstract class GlobalGame {
 		return history;
 	}
 
+	public Map<String, Double> getDivergence() {
+		return divergence;
+	}
+
 	public abstract Map<String, ThrowingBiConsumer<Member, Message>> getButtons();
 
 	public GameChannel getChannel() {
@@ -317,6 +324,13 @@ public abstract class GlobalGame {
 						if (acc.hasPendingQuest()) {
 							Map<DailyTask, Integer> pg = acc.getDailyProgress();
 							pg.merge(DailyTask.WINS_TASK, 1, Integer::sum);
+
+							double div = divergence.getOrDefault(yourMMR.getUid(), -1d);
+							if (div > -1) {
+								DailyQuest dq = DailyQuest.getQuest(Long.parseLong(yourMMR.getUid()));
+								if (div >= dq.getDivergence()) pg.merge(DailyTask.OFFMETA_TASK, 1, Integer::sum);
+							}
+
 							acc.setDailyProgress(pg);
 							AccountDAO.saveAccount(acc);
 						}

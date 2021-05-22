@@ -541,7 +541,7 @@ public class Deck {
 					   :small_orange_diamond: | Efeito secundário: %s (%s)
 					   :shield: | Peso evogear: %s
 					   :thermometer: | Custo médio de mana: %s
-					   :recycle: | Divergência do meta: %s/%s/%s
+					   :recycle: | Divergência do meta: %s/%s/%s (%s)
 					   				
 					   """
 					   .formatted(
@@ -552,7 +552,8 @@ public class Deck {
 							   Helper.round(getAverageCost(), 2),
 							   Helper.roundToString(divs[0] * 100, 1),
 							   Helper.roundToString(divs[1] * 100, 1),
-							   Helper.roundToString(divs[2] * 100, 1)
+							   Helper.roundToString(divs[2] * 100, 1),
+							   Helper.roundToString(getAverageDivergence() * 100, 1)
 					   ) + """
 					   __**:abacus: | Classes**__
 					   **Duelista:** %s carta%s
