@@ -2381,10 +2381,6 @@ public class Helper {
 		return Math.round(Arrays.stream(values).sum() / (double) values.length);
 	}
 
-	public static float average(Float... values) {
-		return (float) Arrays.stream(values).mapToDouble(Double::valueOf).average().orElse(0);
-	}
-
 	public static double average(double... values) {
 		return Arrays.stream(values).average().orElse(0);
 	}
