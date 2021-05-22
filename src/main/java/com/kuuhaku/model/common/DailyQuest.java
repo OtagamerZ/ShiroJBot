@@ -41,15 +41,14 @@ public class DailyQuest {
 		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
 		this.chosenAnime = animes.get(Helper.rng(animes.size(), r, true));
 		this.chosenRace = Race.validValues()[Helper.rng(Race.validValues().length, r, true)];
-		this.divergence = Helper.round(0.1 + Helper.rng(0.8, false), 3);
+		this.divergence = Helper.round(0.2 + Helper.rng(0.4, r, false), 3);
 		for (DailyTask task : tasks) {
 			this.tasks.put(task,
 					switch (task) {
 						case CREDIT_TASK -> 5000 + Helper.rng(45000, r, false);
 						case CARD_TASK -> 5 + Helper.rng(20, r, false);
 						case DROP_TASK -> 10 + Helper.rng(10, r, false);
-						case WINS_TASK -> 1 + Helper.rng(4, r, false);
-						case OFFMETA_TASK -> 1 + Helper.rng(4, r, false);
+						case WINS_TASK, OFFMETA_TASK -> 1 + Helper.rng(4, r, false);
 						case XP_TASK -> 1000 + Helper.rng(9000, r, false);
 						case ANIME_TASK -> 1 + Helper.rng(2, r, false);
 						case RACE_TASK -> 2 + Helper.rng(8, r, false);
