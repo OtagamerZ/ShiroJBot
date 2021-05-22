@@ -553,7 +553,7 @@ public class Deck {
 							   Helper.roundToString(divs[0] * 100, 1),
 							   Helper.roundToString(divs[1] * 100, 1),
 							   Helper.roundToString(divs[2] * 100, 1),
-							   Helper.roundToString(getAverageDivergence() * 100, 1)
+							   Helper.roundToString(getAverageDivergence() * 100, 1) + "%"
 					   ) + """
 					   __**:abacus: | Classes**__
 					   **Duelista:** %s carta%s
