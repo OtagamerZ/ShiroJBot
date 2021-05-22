@@ -22,9 +22,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Class;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
@@ -36,12 +33,9 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Command(
 		name = "reserva",
@@ -65,33 +59,6 @@ public class DeckStashCommand implements Executable {
 
 			for (int j = 0; j < stashes.size(); j++) {
 				Deck dk = stashes.get(j);
-				Map<Class, Integer> count = new HashMap<>() {{
-					put(Class.DUELIST, 0);
-					put(Class.SUPPORT, 0);
-					put(Class.TANK, 0);
-					put(Class.SPECIALIST, 0);
-					put(Class.NUKE, 0);
-					put(Class.TRAP, 0);
-					put(Class.LEVELER, 0);
-				}};
-				for (Champion c : dk.getChampions())
-					count.merge(c.getCategory(), 1, Integer::sum);
-
-				count.remove(null);
-
-				String[] data = new String[14];
-				for (int i = 0; i < Class.values().length; i++) {
-					int ct = count.getOrDefault(Class.values()[i], 0);
-					data[i * 2] = String.valueOf(ct);
-					data[i * 2 + 1] = ct != 1 ? "s" : "";
-				}
-
-				double manaCost = ListUtils.union(dk.getChampions(), dk.getEquipments())
-						.stream()
-						.mapToInt(d -> d instanceof Champion ? ((Champion) d).getMana() : ((Equipment) d).getMana())
-						.filter(i -> i != 0)
-						.average()
-						.orElse(0);
 
 				Pair<Race, Race> combo = dk.getCombo();
 				eb.addField(
@@ -100,32 +67,7 @@ public class DeckStashCommand implements Executable {
 								kp.getDecks().indexOf(dk) == kp.getActiveDeck() ? " (ATUAL)" : "",
 								prefix,
 								Helper.getOr(dk.getName(), String.valueOf(j))),
-						"""
-								:crossed_swords: | Cartas Senshi: %s
-								:large_orange_diamond: | Efeito primário: %s (%s)
-								:small_orange_diamond: | Efeito secundário: %s (%s)
-								:shield: | Peso evogear: %s
-								:thermometer: | Custo médio de mana: %s
-																	
-								%s
-								""".formatted(
-								dk.getChampions().size(),
-								combo.getLeft(),
-								combo.getLeft().getMajorDesc(),
-								combo.getRight(),
-								combo.getRight().getMinorDesc(),
-								dk.getEvoWeight(),
-								Helper.round(manaCost, 2),
-								"""
-										:abacus: | Classes
-											**├─Duelista:** %s carta%s
-											**├─Tanque:** %s carta%s
-											**├─Suporte:** %s carta%s
-											**├─Nuker:** %s carta%s
-											**├─Armadilha:** %s carta%s
-											**├─Nivelador:** %s carta%s
-											**└─Especialista:** %s carta%s
-											""".formatted((Object[]) data)),
+						dk.toString(),
 						true);
 			}
 
