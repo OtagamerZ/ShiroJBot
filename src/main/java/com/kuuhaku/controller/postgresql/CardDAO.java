@@ -805,9 +805,8 @@ public class CardDAO {
 				         INNER JOIN champion c on c.id = dc.champions_id
 				GROUP BY c.card_id
 				ORDER BY COUNT(1) DESC
-				LIMIT 36
 				""");
-		q.setMaxResults(1);
+		q.setMaxResults(36);
 
 		try {
 			return (List<String>) q.getResultList();
@@ -826,9 +825,8 @@ public class CardDAO {
 				         INNER JOIN equipment e on e.id = de.equipments_id
 				GROUP BY e.card_id
 				ORDER BY COUNT(1) DESC
-				LIMIT 24
 				""");
-		q.setMaxResults(1);
+		q.setMaxResults(24);
 
 		try {
 			return (List<String>) q.getResultList();
@@ -847,9 +845,8 @@ public class CardDAO {
 				         INNER JOIN field f on f.id = df.fields_id
 				GROUP BY f.card_id
 				ORDER BY COUNT(1) DESC
-				LIMIT 3
 				""");
-		q.setMaxResults(1);
+		q.setMaxResults(3);
 
 		try {
 			return (List<String>) q.getResultList();
