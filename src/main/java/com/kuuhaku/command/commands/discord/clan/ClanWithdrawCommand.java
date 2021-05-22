@@ -69,7 +69,6 @@ public class ClanWithdrawCommand implements Executable {
 		Account acc = AccountDAO.getAccount(author.getId());
 		int rawAmount = Integer.parseInt(args[0]);
 		int liquidAmount = Helper.applyTax(author.getId(), rawAmount, 0.05);
-		boolean taxed = rawAmount != liquidAmount;
 
 		if (c.getVault() < rawAmount) {
 			channel.sendMessage("❌ | O cofre do clã não possui créditos suficientes.").queue();
@@ -91,11 +90,9 @@ public class ClanWithdrawCommand implements Executable {
 							lv.addValue(rawAmount - liquidAmount);
 							LotteryDAO.saveLotteryValue(lv);
 
-							if (taxed) {
-								s.delete().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso. (Taxa de transferência: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)")).queue();
-							} else {
-								s.delete().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso. (Exceed vitorioso isento de taxa)")).queue();
-							}
+							boolean taxed = rawAmount != liquidAmount;
+							String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, rawAmount) * 100, 1) + "%)" : "";
+							s.delete().flatMap(d -> channel.sendMessage("✅ | Valor sacado com sucesso." + taxMsg)).queue();
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
