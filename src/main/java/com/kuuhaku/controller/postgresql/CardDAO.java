@@ -772,7 +772,7 @@ public class CardDAO {
 		}
 	}
 
-	public static double getMeta(Class cat) {
+	public static double getCategoryMeta(Class cat) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
@@ -790,6 +790,69 @@ public class CardDAO {
 
 		try {
 			return ((Number) q.getSingleResult()).doubleValue();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getChampionMeta() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("""
+				SELECT c.card_id
+				FROM deck_champion dc
+				         INNER JOIN champion c on c.id = dc.champions_id
+				GROUP BY c.card_id
+				ORDER BY COUNT(1) DESC
+				LIMIT 36
+				""");
+		q.setMaxResults(1);
+
+		try {
+			return (List<String>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getEquipmentMeta() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("""
+				SELECT e.card_id
+				FROM deck_equipment de
+				         INNER JOIN equipment e on e.id = de.equipments_id
+				GROUP BY e.card_id
+				ORDER BY COUNT(1) DESC
+				LIMIT 24
+				""");
+		q.setMaxResults(1);
+
+		try {
+			return (List<String>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getFieldMeta() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("""
+				SELECT f.card_id
+				FROM deck_field df
+				         INNER JOIN field f on f.id = df.fields_id
+				GROUP BY f.card_id
+				ORDER BY COUNT(1) DESC
+				LIMIT 3
+				""");
+		q.setMaxResults(1);
+
+		try {
+			return (List<String>) q.getResultList();
 		} finally {
 			em.close();
 		}
