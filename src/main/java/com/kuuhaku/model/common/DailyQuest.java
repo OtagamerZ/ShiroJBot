@@ -30,6 +30,7 @@ public class DailyQuest {
 	private final HashMap<DailyTask, Integer> tasks = new HashMap<>();
 	private final AddedAnime chosenAnime;
 	private final Race chosenRace;
+	private final double divergence;
 
 	private DailyQuest(long id) {
 		Calendar today = Calendar.getInstance(TimeZone.getTimeZone("GMT-3:00"));
@@ -40,6 +41,7 @@ public class DailyQuest {
 		List<AddedAnime> animes = List.copyOf(CardDAO.getValidAnime());
 		this.chosenAnime = animes.get(Helper.rng(animes.size(), r, true));
 		this.chosenRace = Race.validValues()[Helper.rng(Race.validValues().length, r, true)];
+		this.divergence = Helper.round(0.1 + Helper.rng(0.8, false), 3);
 		for (DailyTask task : tasks) {
 			this.tasks.put(task,
 					switch (task) {
@@ -47,6 +49,7 @@ public class DailyQuest {
 						case CARD_TASK -> 5 + Helper.rng(20, r, false);
 						case DROP_TASK -> 10 + Helper.rng(10, r, false);
 						case WINS_TASK -> 1 + Helper.rng(4, r, false);
+						case OFFMETA_TASK -> 1 + Helper.rng(4, r, false);
 						case XP_TASK -> 1000 + Helper.rng(9000, r, false);
 						case ANIME_TASK -> 1 + Helper.rng(2, r, false);
 						case RACE_TASK -> 2 + Helper.rng(8, r, false);
@@ -67,7 +70,8 @@ public class DailyQuest {
 				case CREDIT_TASK -> Helper.prcnt(task.getValue(), 50000) * 0.75;
 				case CARD_TASK -> Helper.prcnt(task.getValue(), 25);
 				case DROP_TASK -> Helper.prcnt(task.getValue(), 20);
-				case WINS_TASK -> Helper.prcnt(task.getValue(), 5) * 1.50;
+				case WINS_TASK -> Helper.prcnt(task.getValue(), 5) * 1.25;
+				case OFFMETA_TASK -> Helper.prcnt(task.getValue(), 1.75);
 				case XP_TASK -> Helper.prcnt(task.getValue(), 10000) * 0.75;
 				case ANIME_TASK -> Helper.prcnt(task.getValue(), 3) * 0.9;
 				case RACE_TASK -> Helper.prcnt(task.getValue(), 10) * 1.1;
@@ -95,5 +99,9 @@ public class DailyQuest {
 
 	public Race getChosenRace() {
 		return chosenRace;
+	}
+
+	public double getDivergence() {
+		return divergence;
 	}
 }

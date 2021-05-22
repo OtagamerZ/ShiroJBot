@@ -22,7 +22,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -33,7 +32,6 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
@@ -60,13 +58,13 @@ public class DeckStashCommand implements Executable {
 			for (int j = 0; j < stashes.size(); j++) {
 				Deck dk = stashes.get(j);
 
-				Pair<Race, Race> combo = dk.getCombo();
 				eb.addField(
 						"`Slot %s%s | %sreserva %s`".formatted(
 								j,
 								kp.getDecks().indexOf(dk) == kp.getActiveDeck() ? " (ATUAL)" : "",
 								prefix,
-								Helper.getOr(dk.getName(), String.valueOf(j))),
+								Helper.getOr(dk.getName(), String.valueOf(j))
+						),
 						dk.toString(),
 						true);
 			}
