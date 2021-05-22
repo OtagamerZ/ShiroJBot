@@ -337,20 +337,4 @@ public abstract class GlobalGame {
 			}
 		}
 	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		GlobalGame game = (GlobalGame) o;
-		return handler.equals(game.handler) &&
-				board.equals(game.board) &&
-				channel.equals(game.channel) &&
-				custom.equals(game.custom);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(handler, board, channel, custom);
-	}
 }

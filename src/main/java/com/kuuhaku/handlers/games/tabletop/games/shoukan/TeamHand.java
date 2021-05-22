@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
@@ -45,7 +46,7 @@ import java.util.stream.Stream;
 
 public class TeamHand extends Hand {
 	private final Pair<Race, Race> combo;
-	private final InfiniteList<User> users = new InfiniteList<>();
+	private final InfiniteList<String> users = new InfiniteList<>();
 	private final InfiniteList<LinkedList<Drawable>> deques = new InfiniteList<>();
 	private final InfiniteList<List<Drawable>> cards = new InfiniteList<>();
 	private final InfiniteList<List<Drawable>> destinyDecks = new InfiniteList<>();
@@ -64,7 +65,7 @@ public class TeamHand extends Hand {
 
 			List<Drawable> destinyDeck = new ArrayList<>();
 
-			this.users.add(user);
+			this.users.add(user.getId());
 
 			if (game.getCustom() != null) {
 				if (game.getCustom().optBoolean("semequip"))
@@ -469,11 +470,13 @@ public class TeamHand extends Hand {
 	}
 
 	public User getUser() {
-		return users.getCurrent();
+		return Main.getInfo().getUserByID(users.getCurrent());
 	}
 
 	public InfiniteList<User> getUsers() {
-		return users;
+		return users.stream()
+				.map(Main.getInfo()::getUserByID)
+				.collect(Collectors.toCollection(InfiniteList::new));
 	}
 
 	public Pair<Race, Race> getCombo() {
@@ -589,10 +592,10 @@ public class TeamHand extends Hand {
 	}
 
 	public String getMentions() {
-		return getUser().getAsMention() + " e " + users.peekNext().getAsMention();
+		return getUser().getAsMention() + " e " + getUsers().peekNext().getAsMention();
 	}
 
 	public List<String> getNames() {
-		return List.of(getUser().getName(), users.peekNext().getName());
+		return List.of(getUser().getName(), getUsers().peekNext().getName());
 	}
 }

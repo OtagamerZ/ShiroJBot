@@ -782,6 +782,7 @@ public class Shoukan extends GlobalGame {
 						shownHand.set(true);
 						h.showHand();
 					}
+
 					if (changeTurn)
 						for (int i = 0; i < 5; i++) changed[i] = false;
 				});
