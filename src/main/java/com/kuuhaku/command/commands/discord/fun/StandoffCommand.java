@@ -120,7 +120,7 @@ public class StandoffCommand implements Executable {
 							timeout.cancel(true);
 							timeout = null;
 
-							int prize = (int) Math.round(min * Helper.rng(500f * (level + 1), false) / react);
+							int prize = (int) Math.round(min * Helper.rng(500f * (level + 1)) / react);
 							channel.sendMessage("Você ganhou com um tempo de reação de **" + react + " ms**. Seu prêmio é de **" + prize + " créditos**!").queue();
 							acc.addCredit(prize, this.getClass());
 							AccountDAO.saveAccount(acc);
