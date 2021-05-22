@@ -244,7 +244,6 @@ public class BuyCardCommand implements Executable {
 
 			int rawAmount = m.getPrice();
 			int liquidAmount = Helper.applyTax(seller.getUid(), rawAmount, 0.1);
-			boolean taxed = rawAmount != liquidAmount;
 
 			seller.addCredit(liquidAmount, this.getClass());
 			buyer.removeCredit(blackfriday ? Math.round(m.getPrice() * 0.75) : m.getPrice(), this.getClass());
@@ -263,21 +262,16 @@ public class BuyCardCommand implements Executable {
 			User buyerU = Main.getInfo().getUserByID(m.getBuyer());
 
 			String name = switch (m.getType()) {
-				case EVOGEAR -> m.getRawCard().getName();
-				case FIELD -> m.getRawCard().getName();
+				case EVOGEAR, FIELD -> m.getRawCard().getName();
 				default -> ((KawaiponCard) m.getCard()).getName();
 			};
-			if (taxed) {
-				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing),
-						Helper::doNothing
-				);
-			} else {
-				if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-								c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing),
-						Helper::doNothing
-				);
-			}
+
+			boolean taxed = rawAmount != liquidAmount;
+			String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, rawAmount) * 100, 1) + "%)" : "";
+			if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+							c.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!" + taxMsg).queue(null, Helper::doNothing),
+					Helper::doNothing
+			);
 
 			channel.sendMessage("✅ | Carta comprada com sucesso!").queue();
 		} else {

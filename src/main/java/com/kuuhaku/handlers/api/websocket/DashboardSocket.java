@@ -313,7 +313,6 @@ public class DashboardSocket extends WebSocketServer {
 						Account seller = AccountDAO.getAccount(m.getSeller());
 						int rawAmount = m.getPrice();
 						int liquidAmount = Helper.applyTax(acc.getUid(), rawAmount, 0.1);
-						boolean taxed = rawAmount != liquidAmount;
 
 						int err;
 						switch (m.getType()) {
@@ -371,17 +370,14 @@ public class DashboardSocket extends WebSocketServer {
 									User sellerU = Main.getInfo().getUserByID(m.getSeller());
 									User buyerU = Main.getInfo().getUserByID(m.getBuyer());
 									String name = switch (m.getType()) {
-										case EVOGEAR -> m.getRawCard().getName();
-										case FIELD -> m.getRawCard().getName();
+										case EVOGEAR, FIELD -> m.getRawCard().getName();
 										default -> ((KawaiponCard) m.getCard()).getName();
 									};
 
 									if (sellerU != null) sellerU.openPrivateChannel().queue(chn -> {
-												if (taxed) {
-													chn.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!  (Taxa de venda: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue(null, Helper::doNothing);
-												} else {
-													chn.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!  (Exceed vitorioso isento de taxa)").queue(null, Helper::doNothing);
-												}
+												boolean taxed = rawAmount != liquidAmount;
+												String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, rawAmount) * 100, 1) + "%)" : "";
+												chn.sendMessage("✅ | Sua carta `" + name + "` foi comprada por " + buyerU.getName() + " por " + Helper.separate(m.getPrice()) + " créditos!" + taxMsg).queue(null, Helper::doNothing);
 											},
 											Helper::doNothing
 									);

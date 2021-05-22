@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Charm;
@@ -45,7 +46,7 @@ import java.util.stream.Stream;
 
 public class Hand {
 	private Shoukan game;
-	private User user;
+	private String user;
 	private Pair<Race, Race> combo;
 	private final LinkedList<Drawable> deque = new LinkedList<>();
 	private final List<Drawable> cards = new ArrayList<>();
@@ -88,7 +89,7 @@ public class Hand {
 						.collect(Collectors.toList())
 		);
 
-		this.user = user;
+		this.user = user.getId();
 		this.side = side;
 		this.game = game;
 
@@ -384,7 +385,7 @@ public class Hand {
 	}
 
 	public User getUser() {
-		return user;
+		return Main.getInfo().getUserByID(user);
 	}
 
 	public Pair<Race, Race> getCombo() {
@@ -432,7 +433,7 @@ public class Hand {
 
 		g2d.dispose();
 
-		user.openPrivateChannel()
+		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Escolha uma carta para jogar (digite a posição da carta na mão, no campo e se ela posicionada em modo de ataque (`A`), defesa (`D`) ou virada para baixo (`B`). Ex: `0,0,a`), mude a postura de uma carta (digite apenas a posição da carta no campo) ou use os botões na mensagem enviada para avançar o turno, comprar uma carta ou render-se.")
 						.addFile(Helper.writeAndGet(bi, "hand", "png"))
 				)
@@ -460,7 +461,7 @@ public class Hand {
 
 		g2d.dispose();
 
-		user.openPrivateChannel()
+		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Visualizando as cartas na mão do oponente.")
 						.addFile(Helper.writeAndGet(bi, "hand", "png"))
 				)
@@ -488,7 +489,7 @@ public class Hand {
 
 		g2d.dispose();
 
-		user.openPrivateChannel()
+		getUser().openPrivateChannel()
 				.flatMap(c -> c.sendMessage("Visualizando as próximas " + amount + " cartas do oponente.")
 						.addFile(Helper.writeAndGet(bi, "hand", "png"))
 				)

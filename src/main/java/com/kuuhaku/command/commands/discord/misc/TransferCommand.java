@@ -61,7 +61,6 @@ public class TransferCommand implements Executable {
 		int rawAmount = Integer.parseInt(args[1]);
 		double tax = 0.01 + Helper.clamp(0.29 * Helper.offsetPrcnt(from.getBalance(), 500000, 100000), 0, 0.29);
 		int liquidAmount = Helper.applyTax(author.getId(), rawAmount, tax);
-		boolean taxed = rawAmount != liquidAmount;
 
 		if (from.getBalance() < rawAmount) {
 			channel.sendMessage(I18n.getString("err_insufficient-credits-user")).queue();
@@ -84,10 +83,8 @@ public class TransferCommand implements Executable {
 		AccountDAO.saveAccount(to);
 		AccountDAO.saveAccount(from);
 
-		if (taxed) {
-			channel.sendMessage("✅ | **" + Helper.separate(liquidAmount) + "** créditos transferidos com sucesso! (Taxa de transferência: " + Helper.roundToString((liquidAmount * 100D / rawAmount) - 100, 1) + "%)").queue();
-		} else {
-			channel.sendMessage("✅ | **" + Helper.separate(liquidAmount) + "** créditos transferidos com sucesso! (Exceed vitorioso isento de taxa)").queue();
-		}
+		boolean taxed = rawAmount != liquidAmount;
+		String taxMsg = taxed ? " (Taxa: " + Helper.roundToString(100 - Helper.prcnt(liquidAmount, rawAmount) * 100, 1) + "%)" : "";
+		channel.sendMessage("✅ | **" + Helper.separate(liquidAmount) + "** créditos transferidos com sucesso!" + taxMsg).queue();
 	}
 }
