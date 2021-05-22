@@ -23,6 +23,7 @@ public enum DailyTask {
 	CARD_TASK("Colete %s cartas"),
 	DROP_TASK("Abra %s drops"),
 	WINS_TASK("Ganhe %s partidas de Shoukan"),
+	OFFMETA_TASK("Ganhe %s partidas de Shoukan com um deck com divergência do meta acima de %s%%"),
 	XP_TASK("Ganhe %s pontos de XP"),
 	ANIME_TASK("Colete %s cartas do anime %s"),
 	RACE_TASK("Use %s cartas da raça %s");
@@ -43,6 +44,7 @@ public enum DailyTask {
 			case CARD_TASK -> "Viciado em cartas";
 			case DROP_TASK -> "Baú do pirata";
 			case WINS_TASK -> "Pro-player";
+			case OFFMETA_TASK -> "Explorador";
 			case XP_TASK -> "Alto-falante";
 			case ANIME_TASK -> "Otaku";
 			case RACE_TASK -> "Invocador";

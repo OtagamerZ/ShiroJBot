@@ -68,6 +68,7 @@ public class DailyQuestCommand implements Executable {
 									switch (task.getKey()) {
 										case ANIME_TASK -> dq.getChosenAnime().toString();
 										case RACE_TASK -> dq.getChosenRace().getName();
+										case OFFMETA_TASK -> Helper.roundToString(dq.getDivergence() * 100, 1);
 										default -> "";
 									}
 							),
