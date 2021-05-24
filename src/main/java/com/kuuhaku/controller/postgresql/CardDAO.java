@@ -630,7 +630,7 @@ public class CardDAO {
 
 		try {
 			Object[] res = q.getSingleResult();
-			return new String[]{res[0], res[1]};
+			return new String[]{(String) res[0], (String) res[1]};
 		} catch (NoResultException e) {
 			return new String[2];
 		} finally {
