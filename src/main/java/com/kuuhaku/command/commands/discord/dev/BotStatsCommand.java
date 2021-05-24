@@ -71,9 +71,9 @@ public class BotStatsCommand implements Executable {
 			reducedStats.put(Date.from(stat.getTimestamp().truncatedTo(ChronoUnit.MINUTES).toInstant()), stat);
 		}
 
-		channel.sendMessage("<a:loading:697879726630502401> Gerando gráfico...").queue(m -> {
+		channel.sendMessage("<a:loading:697879726630502401> Gerando gráficos...").queue(m -> {
 			if (reducedStats.size() <= 1) {
-				m.editMessage("❌ | Dados insuficientes para gerar gráfico.").queue();
+				m.editMessage("❌ | Dados insuficientes para gerar os gráficos.").queue();
 				return;
 			}
 

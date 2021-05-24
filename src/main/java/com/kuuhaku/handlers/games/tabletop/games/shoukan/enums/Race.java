@@ -51,7 +51,7 @@ public enum Race {
 			"Máquinas infundidas com magia, permitindo que ajam por vontade própria e até mesmo tenham emoções. São imbatíveis quando o assunto é poder de fogo."
 	),
 	DIVINITY("Divindade",
-			"-1 Custo de mana (mínimo 1 para campeões)",
+			"Todas as cartas que não possuem efeito passam a possuir um aleatório (exceto de fusões).",
 			"Inicia com 1 campeão extra",
 			"Divindades que criaram formas físicas para interagir com o mundo dos mortais. Seu poder vem da crença de seus seguidores, o que permite que criem e destruam matéria com um mero estalar de dedos."
 	),

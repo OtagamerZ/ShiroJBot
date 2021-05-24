@@ -166,10 +166,8 @@ public class Hand {
 					.forEach(d -> {
 						if (d instanceof Champion) {
 							Champion c = (Champion) d;
-							c.setMana(Math.max(c.getMana() - 1, 1));
-						} else if (d instanceof Equipment) {
-							Equipment e = (Equipment) d;
-							e.setMana(Math.max(e.getMana() - 1, 0));
+							if (!c.hasEffect())
+								c.setRawEffect(CardDAO.getRandomEffect());
 						}
 					});
 		}
