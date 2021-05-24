@@ -616,6 +616,10 @@ public class Champion implements Drawable, Cloneable {
 		return sealed ? "Carta selada." : description;
 	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public void setAltDescription(String description) {
 		this.altDescription = description;
 	}

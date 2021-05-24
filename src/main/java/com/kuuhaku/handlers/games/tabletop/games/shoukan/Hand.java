@@ -166,8 +166,11 @@ public class Hand {
 					.forEach(d -> {
 						if (d instanceof Champion) {
 							Champion c = (Champion) d;
-							if (!c.hasEffect())
-								c.setRawEffect(CardDAO.getRandomEffect());
+							if (!c.hasEffect()) {
+								String[] de = CardDAO.getRandomEffect();
+								c.setDescription(de[0]);
+								c.setRawEffect(de[1]);
+							}
 						}
 					});
 		}
