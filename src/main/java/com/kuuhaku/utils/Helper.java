@@ -1934,10 +1934,6 @@ public class Helper {
 		return dk;
 	}
 
-	public static String toPercent(double value) {
-		return (int) (value * 100) + "%";
-	}
-
 	public static double log(double value, double base) {
 		return Math.log(value) / Math.log(base);
 	}
