@@ -101,9 +101,9 @@ public class ServerBuff {
 
 	public double getMult() {
 		return 1 + switch (type) {
-			case XP -> 0.3;
-			case CARD, DROP -> 0.2;
-			case FOIL -> 0.25;
+			case XP -> 0.3 * tier;
+			case CARD, DROP -> 0.2 * tier;
+			case FOIL -> 0.25 * tier;
 		};
 	}
 
