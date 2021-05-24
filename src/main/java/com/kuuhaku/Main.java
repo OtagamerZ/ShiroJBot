@@ -92,7 +92,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
 				.setAudioSendFactory(new NativeAudioSendFactory())
-				.setEventPool(Executors.newCachedThreadPool(), true)
+				.setEventPool(Executors.newFixedThreadPool(20), true)
 				.build();
 
 		shiroShards.setActivity(Activity.playing("Iniciando..."));
@@ -159,6 +159,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			Helper.refreshButtons(guildConfig);
 		}
 
+		System.runFinalization();
 		System.gc();
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
 		Helper.logger(Main.class).info("Estou pronta!");

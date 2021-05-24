@@ -290,6 +290,7 @@ public abstract class GlobalGame {
 		closed = true;
 		if (timeout != null) timeout.cancel(true);
 		timeout = null;
+		executor.shutdownNow();
 
 		if (round > 0 && custom == null) {
 			history.setRanked(ranked);

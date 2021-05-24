@@ -62,7 +62,6 @@ public class ShiroInfo {
 	//PRIVATE CONSTANTS
 	private static final OperatingSystemMXBean systemInfo = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean());
 	private static final ThreadPoolExecutor compilationPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
-	private static final ThreadPoolExecutor handlingPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 	private static final String botToken = System.getenv("BOT_TOKEN");
 	private static final String youtubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String dblToken;
@@ -149,10 +148,6 @@ public class ShiroInfo {
 
 	public static ThreadPoolExecutor getCompilationPool() {
 		return compilationPool;
-	}
-
-	public static ThreadPoolExecutor getHandlingPool() {
-		return handlingPool;
 	}
 
 	public static String getBotToken() {
