@@ -621,6 +621,21 @@ public class CardDAO {
 		}
 	}
 
+	public static String getRandomEffect() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c.effect FROM Champion c WHERE c.fusion = FALSE ORDER BY RANDOM()");
+		q.setMaxResults(1);
+
+		try {
+			return (String) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static Champion getFakeChampion() {
 		EntityManager em = Manager.getEntityManager();
