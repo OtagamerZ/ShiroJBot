@@ -78,7 +78,7 @@ public class MyBuffsCommand implements Executable {
 						.plus(b.getTime(), ChronoUnit.MILLIS)
 						.format(Helper.dateFormat);
 
-				String chance = Helper.toPercent(b.getMult() - 1);
+				String chance = Helper.roundToString(b.getMult() * 100 - 100, 0);
 				switch (b.getType()) {
 					case XP -> eb.addField("Melhoria de servidor (XP)", "+" + chance + " XP ganho (até " + until + ")", false);
 					case CARD -> {

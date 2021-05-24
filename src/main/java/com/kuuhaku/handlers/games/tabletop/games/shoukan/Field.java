@@ -91,7 +91,7 @@ public class Field implements Drawable, Cloneable {
 				g2d.setColor(colors[i]);
 				g2d.drawImage(icon, 20, 59 + (26 * i), 23, 23, null);
 				float modif = getModifiers().optFloat(r.name(), 1f) - 1;
-				Profile.drawOutlinedText((modif > 0 ? "+" : "") + Helper.toPercent(modif), 45, 80 + (26 * i), g2d);
+				Profile.drawOutlinedText((modif > 0 ? "+" : "") + Helper.roundToString(modif * 100, 0), 45, 80 + (26 * i), g2d);
 				i++;
 			}
 		}
