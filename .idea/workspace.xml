@@ -15,13 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BotStatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileChampionsCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/TeamHand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1200,63 +1193,7 @@
       <workItem from="1621716557525" duration="59000" />
       <workItem from="1621725106421" duration="739000" />
       <workItem from="1621864928006" duration="3515000" />
-      <workItem from="1621875529566" duration="2264000" />
-    </task>
-    <task id="LOCAL-04465" summary="Remoção da Jibril">
-      <created>1621522579823</created>
-      <option name="number" value="04465" />
-      <option name="presentableId" value="LOCAL-04465" />
-      <option name="project" value="LOCAL" />
-      <updated>1621522579823</updated>
-    </task>
-    <task id="LOCAL-04466" summary="Remoção da Jibril">
-      <created>1621527261784</created>
-      <option name="number" value="04466" />
-      <option name="presentableId" value="LOCAL-04466" />
-      <option name="project" value="LOCAL" />
-      <updated>1621527261784</updated>
-    </task>
-    <task id="LOCAL-04467" summary="Criação da arena Daten City">
-      <created>1621534285264</created>
-      <option name="number" value="04467" />
-      <option name="presentableId" value="LOCAL-04467" />
-      <option name="project" value="LOCAL" />
-      <updated>1621534285264</updated>
-    </task>
-    <task id="LOCAL-04468" summary="Criação da arena Daten City">
-      <created>1621536077743</created>
-      <option name="number" value="04468" />
-      <option name="presentableId" value="LOCAL-04468" />
-      <option name="project" value="LOCAL" />
-      <updated>1621536077743</updated>
-    </task>
-    <task id="LOCAL-04469" summary="Criação da arena Daten City">
-      <created>1621536670991</created>
-      <option name="number" value="04469" />
-      <option name="presentableId" value="LOCAL-04469" />
-      <option name="project" value="LOCAL" />
-      <updated>1621536670991</updated>
-    </task>
-    <task id="LOCAL-04470" summary="Criação da arena Daten City">
-      <created>1621536735840</created>
-      <option name="number" value="04470" />
-      <option name="presentableId" value="LOCAL-04470" />
-      <option name="project" value="LOCAL" />
-      <updated>1621536735840</updated>
-    </task>
-    <task id="LOCAL-04471" summary="Criação da arena Daten City">
-      <created>1621539846060</created>
-      <option name="number" value="04471" />
-      <option name="presentableId" value="LOCAL-04471" />
-      <option name="project" value="LOCAL" />
-      <updated>1621539846060</updated>
-    </task>
-    <task id="LOCAL-04472" summary="Criação da arena Daten City">
-      <created>1621540310638</created>
-      <option name="number" value="04472" />
-      <option name="presentableId" value="LOCAL-04472" />
-      <option name="project" value="LOCAL" />
-      <updated>1621540310638</updated>
+      <workItem from="1621875529566" duration="5388000" />
     </task>
     <task id="LOCAL-04473" summary="Criação da arena Daten City">
       <created>1621540402014</created>
@@ -1545,7 +1482,63 @@
       <option name="project" value="LOCAL" />
       <updated>1621862387624</updated>
     </task>
-    <option name="localTasksCounter" value="4514" />
+    <task id="LOCAL-04514" summary="Correções menores">
+      <created>1621877819950</created>
+      <option name="number" value="04514" />
+      <option name="presentableId" value="LOCAL-04514" />
+      <option name="project" value="LOCAL" />
+      <updated>1621877819950</updated>
+    </task>
+    <task id="LOCAL-04515" summary="Correções menores">
+      <created>1621877919032</created>
+      <option name="number" value="04515" />
+      <option name="presentableId" value="LOCAL-04515" />
+      <option name="project" value="LOCAL" />
+      <updated>1621877919032</updated>
+    </task>
+    <task id="LOCAL-04516" summary="Correções menores">
+      <created>1621877940422</created>
+      <option name="number" value="04516" />
+      <option name="presentableId" value="LOCAL-04516" />
+      <option name="project" value="LOCAL" />
+      <updated>1621877940422</updated>
+    </task>
+    <task id="LOCAL-04517" summary="Correções menores">
+      <created>1621877979974</created>
+      <option name="number" value="04517" />
+      <option name="presentableId" value="LOCAL-04517" />
+      <option name="project" value="LOCAL" />
+      <updated>1621877979974</updated>
+    </task>
+    <task id="LOCAL-04518" summary="Correções menores">
+      <created>1621878069069</created>
+      <option name="number" value="04518" />
+      <option name="presentableId" value="LOCAL-04518" />
+      <option name="project" value="LOCAL" />
+      <updated>1621878069069</updated>
+    </task>
+    <task id="LOCAL-04519" summary="Correções menores">
+      <created>1621878195625</created>
+      <option name="number" value="04519" />
+      <option name="presentableId" value="LOCAL-04519" />
+      <option name="project" value="LOCAL" />
+      <updated>1621878195625</updated>
+    </task>
+    <task id="LOCAL-04520" summary="Correções menores">
+      <created>1621878416497</created>
+      <option name="number" value="04520" />
+      <option name="presentableId" value="LOCAL-04520" />
+      <option name="project" value="LOCAL" />
+      <updated>1621878416497</updated>
+    </task>
+    <task id="LOCAL-04521" summary="Correções menores">
+      <created>1621879972302</created>
+      <option name="number" value="04521" />
+      <option name="presentableId" value="LOCAL-04521" />
+      <option name="project" value="LOCAL" />
+      <updated>1621879972302</updated>
+    </task>
+    <option name="localTasksCounter" value="4522" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
