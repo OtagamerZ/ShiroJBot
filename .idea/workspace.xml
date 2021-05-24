@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/ServerBuff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/ServerBuff.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1193,35 +1194,7 @@
       <workItem from="1621716557525" duration="59000" />
       <workItem from="1621725106421" duration="739000" />
       <workItem from="1621864928006" duration="3515000" />
-      <workItem from="1621875529566" duration="5388000" />
-    </task>
-    <task id="LOCAL-04473" summary="Criação da arena Daten City">
-      <created>1621540402014</created>
-      <option name="number" value="04473" />
-      <option name="presentableId" value="LOCAL-04473" />
-      <option name="project" value="LOCAL" />
-      <updated>1621540402014</updated>
-    </task>
-    <task id="LOCAL-04474" summary="Criação da arena Daten City">
-      <created>1621540515957</created>
-      <option name="number" value="04474" />
-      <option name="presentableId" value="LOCAL-04474" />
-      <option name="project" value="LOCAL" />
-      <updated>1621540515957</updated>
-    </task>
-    <task id="LOCAL-04475" summary="Criação da arena Daten City">
-      <created>1621541223029</created>
-      <option name="number" value="04475" />
-      <option name="presentableId" value="LOCAL-04475" />
-      <option name="project" value="LOCAL" />
-      <updated>1621541223029</updated>
-    </task>
-    <task id="LOCAL-04476" summary="Criação da arena Daten City">
-      <created>1621541347694</created>
-      <option name="number" value="04476" />
-      <option name="presentableId" value="LOCAL-04476" />
-      <option name="project" value="LOCAL" />
-      <updated>1621541347694</updated>
+      <workItem from="1621875529566" duration="7029000" />
     </task>
     <task id="LOCAL-04477" summary="Criação da arena Daten City">
       <created>1621541381435</created>
@@ -1538,7 +1511,35 @@
       <option name="project" value="LOCAL" />
       <updated>1621879972302</updated>
     </task>
-    <option name="localTasksCounter" value="4522" />
+    <task id="LOCAL-04522" summary="Correções menores">
+      <created>1621885067262</created>
+      <option name="number" value="04522" />
+      <option name="presentableId" value="LOCAL-04522" />
+      <option name="project" value="LOCAL" />
+      <updated>1621885067262</updated>
+    </task>
+    <task id="LOCAL-04523" summary="Correções menores">
+      <created>1621885205395</created>
+      <option name="number" value="04523" />
+      <option name="presentableId" value="LOCAL-04523" />
+      <option name="project" value="LOCAL" />
+      <updated>1621885205396</updated>
+    </task>
+    <task id="LOCAL-04524" summary="Correções menores">
+      <created>1621885223231</created>
+      <option name="number" value="04524" />
+      <option name="presentableId" value="LOCAL-04524" />
+      <option name="project" value="LOCAL" />
+      <updated>1621885223231</updated>
+    </task>
+    <task id="LOCAL-04525" summary="Correções menores">
+      <created>1621885256288</created>
+      <option name="number" value="04525" />
+      <option name="presentableId" value="LOCAL-04525" />
+      <option name="project" value="LOCAL" />
+      <updated>1621885256288</updated>
+    </task>
+    <option name="localTasksCounter" value="4526" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
