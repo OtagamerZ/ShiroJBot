@@ -629,7 +629,7 @@ public class CardDAO {
 		q.setMaxResults(1);
 
 		try {
-			Object[] res = q.getSingleResult();
+			Object[] res = (Object[]) q.getSingleResult();
 			return new String[]{(String) res[0], (String) res[1]};
 		} catch (NoResultException e) {
 			return new String[2];
