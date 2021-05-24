@@ -621,10 +621,11 @@ public class CardDAO {
 		}
 	}
 
-	public static String[] getRandomEffect() {
+	public static String[] getRandomEffect(int mana) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c.description, c.effect FROM Champion c WHERE c.fusion = FALSE ORDER BY RANDOM()", String.class);
+		Query q = em.createQuery("SELECT c.description, c.effect FROM Champion c WHERE c.fusion AND c.mana = :mana = FALSE ORDER BY RANDOM()", String.class);
+		q.setParameter("mana", mana);
 		q.setMaxResults(1);
 
 		try {
