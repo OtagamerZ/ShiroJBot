@@ -71,6 +71,7 @@ public class HourlyEvent implements Job {
 			ShiroInfo.getEmoteLookup().put(":" + emote.getName() + ":", emote.getId());
 		}
 
+		System.runFinalization();
 		System.gc();
 
 		for (File file : Objects.requireNonNull(Main.getInfo().getCollectionsFolder().listFiles())) {

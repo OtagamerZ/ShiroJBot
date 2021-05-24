@@ -85,7 +85,6 @@ public class KawaiponBook {
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
-			System.gc();
 			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (299 * imgs.size()), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = bg.createGraphics();
 			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -103,7 +102,7 @@ public class KawaiponBook {
 			return bg;
 		});
 
-		ExecutorService th = Executors.newFixedThreadPool(10);
+		ExecutorService th = Executors.newFixedThreadPool(5);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
 			th.execute(() -> {
@@ -162,6 +161,8 @@ public class KawaiponBook {
 			return act.get();
 		} catch (ExecutionException e) {
 			return null;
+		} finally {
+			th.shutdownNow();
 		}
 	}
 
@@ -200,7 +201,6 @@ public class KawaiponBook {
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
-			System.gc();
 			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (299 * imgs.size()), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = bg.createGraphics();
 			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -218,7 +218,7 @@ public class KawaiponBook {
 			return bg;
 		});
 
-		ExecutorService th = Executors.newFixedThreadPool(10);
+		ExecutorService th = Executors.newFixedThreadPool(5);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
 			th.execute(() -> {
@@ -258,6 +258,8 @@ public class KawaiponBook {
 			return act.get();
 		} catch (ExecutionException e) {
 			return null;
+		} finally {
+			th.shutdownNow();
 		}
 	}
 }

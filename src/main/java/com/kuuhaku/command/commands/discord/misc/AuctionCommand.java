@@ -236,9 +236,11 @@ public class AuctionCommand implements Executable {
 											AccountDAO.saveAccount(bacc);
 										}
 
+
 										Main.getInfo().getConfirmationPending().remove(author.getId());
 										close();
 										event.get().cancel(true);
+										exec.shutdownNow();
 									} else {
 										switch (phase.get()) {
 											case 1 -> channel.sendMessage("Dou-lhe 1...").queue();
