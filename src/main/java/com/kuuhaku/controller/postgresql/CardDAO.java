@@ -630,7 +630,7 @@ public class CardDAO {
 		try {
 			return (String[]) q.getSingleResult();
 		} catch (NoResultException e) {
-			return null;
+			return new String[2];
 		} finally {
 			em.close();
 		}
