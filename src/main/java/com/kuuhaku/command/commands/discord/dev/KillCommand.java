@@ -26,8 +26,6 @@ import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
-import java.util.concurrent.Executors;
-
 @Command(
 		name = "desligar",
 		aliases = {"kill"},
@@ -43,10 +41,8 @@ public class KillCommand implements Executable {
 			channel.sendMessage("Iniciando o protocolo de encerramento...").queue();
 		}
 
-		Executors.newSingleThreadExecutor().execute(() ->
-				BackupDAO.dumpData(new DataDump(
-						com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()
-				), true)
-		);
+		BackupDAO.dumpData(new DataDump(
+				com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()
+		), true);
 	}
 }

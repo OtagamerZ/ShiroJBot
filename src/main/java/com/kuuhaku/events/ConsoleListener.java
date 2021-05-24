@@ -26,51 +26,48 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.Executors;
 
 public class ConsoleListener extends BufferedReader {
-    private final Thread thread = new Thread(this::exec);
-    private boolean interrupted = false;
+	private final Thread thread = new Thread(this::exec);
+	private boolean interrupted = false;
 
-    public ConsoleListener() {
-        super(new InputStreamReader(System.in, StandardCharsets.UTF_8));
-    }
+	public ConsoleListener() {
+		super(new InputStreamReader(System.in, StandardCharsets.UTF_8));
+	}
 
-    public void start() {
-        thread.start();
-    }
+	public void start() {
+		thread.start();
+	}
 
-    private void exec() {
-        while (!interrupted) {
-            try {
-                handleCommand(readLine());
-            } catch (IOException e) {
-                Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-            }
-        }
-    }
-
-    @Override
-    public void close() {
-        try {
-            super.close();
-            interrupted = true;
-        } catch (IOException e) {
-            Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-        }
-    }
-
-    private void handleCommand(String command) {
-        switch (command) {
-            case "test" -> System.out.println("No need to test, I'm working!");
-            case "kill" -> {
-                System.out.println("Sayonara, Nii-chan <3");
-                Executors.newSingleThreadExecutor().execute(() ->
-						BackupDAO.dumpData(new DataDump(
-								com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()
-						), true)
-				);
+	private void exec() {
+		while (!interrupted) {
+			try {
+				handleCommand(readLine());
+			} catch (IOException e) {
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		}
-    }
+	}
+
+	@Override
+	public void close() {
+		try {
+			super.close();
+			interrupted = true;
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		}
+	}
+
+	private void handleCommand(String command) {
+		switch (command) {
+			case "test" -> System.out.println("No need to test, I'm working!");
+			case "kill" -> {
+				System.out.println("Sayonara, Nii-chan <3");
+				BackupDAO.dumpData(new DataDump(
+						com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()
+				), true);
+			}
+		}
+	}
 }
