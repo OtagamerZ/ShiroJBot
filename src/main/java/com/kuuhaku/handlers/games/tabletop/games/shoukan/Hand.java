@@ -167,7 +167,7 @@ public class Hand {
 						if (d instanceof Champion) {
 							Champion c = (Champion) d;
 							if (!c.hasEffect()) {
-								String[] de = CardDAO.getRandomEffect();
+								String[] de = CardDAO.getRandomEffect(c.getMana());
 								c.setDescription(de[0]);
 								c.setRawEffect(de[1]);
 							}
