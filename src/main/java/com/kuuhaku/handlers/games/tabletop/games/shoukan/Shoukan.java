@@ -818,6 +818,7 @@ public class Shoukan extends GlobalGame {
 		if (yours.getBonus().getSpecialData().remove("skipCombat") != null) {
 			yours.setAvailable(false);
 			yours.resetAttribs();
+			his.resetAttribs();
 
 			if (applyEot(POST_ATTACK, current, is[0])) return;
 			if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
@@ -842,6 +843,7 @@ public class Shoukan extends GlobalGame {
 		if (his.getBonus().getSpecialData().remove("skipCombat") != null) {
 			yours.setAvailable(false);
 			yours.resetAttribs();
+			his.resetAttribs();
 
 			if (applyEot(POST_DEFENSE, next, is[1])) return;
 			if (applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
@@ -950,6 +952,7 @@ public class Shoukan extends GlobalGame {
 				}
 			} else if (yPower < hPower || hisDodge) {
 				yours.setAvailable(false);
+				yours.resetAttribs();
 				his.resetAttribs();
 
 				if (applyEot(ON_SUICIDE, current, is[0])) return;
@@ -978,6 +981,8 @@ public class Shoukan extends GlobalGame {
 				}
 			} else {
 				yours.setAvailable(false);
+				yours.resetAttribs();
+				his.resetAttribs();
 
 				if (applyEot(ON_SUICIDE, current, is[0])) return;
 				if (applyEffect(ON_SUICIDE, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
