@@ -1963,6 +1963,20 @@ public class Helper {
 		else return null;
 	}
 
+	public static List<String> extractGroups(String text, @Language("RegExp") String regex) {
+		String[] out;
+		Matcher m = Pattern.compile(regex).matcher(text);
+		if (m.find()) out = new String[m.groupCount()];
+		else out = new String[0];
+
+		if (out.length > 1) out[0] = m.group();
+		for (int i = 1; i < out.length; i++) {
+			out[i] = m.group(i);
+		}
+
+		return List.of(out);
+	}
+
 	public static String extract(String text, @Language("RegExp") String regex, String group) {
 		Matcher m = Pattern.compile(regex).matcher(text);
 		if (m.find()) return m.group(group);
