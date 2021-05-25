@@ -238,9 +238,9 @@ public class Deck {
 		List<String> field = CardDAO.getFieldMeta();
 
 		return new double[]{
-				1 - Helper.prcnt(champions.stream().map(c -> c.getCard().getId()).filter(champ::contains).count(), champions.size()),
-				1 - Helper.prcnt(equipments.stream().map(c -> c.getCard().getId()).filter(equip::contains).count(), equipments.size()),
-				1 - Helper.prcnt(fields.stream().map(c -> c.getCard().getId()).filter(field::contains).count(), fields.size()),
+				champions.size() == 0 ? 0 : 1 - Helper.prcnt(champions.stream().map(c -> c.getCard().getId()).filter(champ::contains).count(), champions.size()),
+				equipments.size() == 0 ? 0 : 1 - Helper.prcnt(equipments.stream().map(c -> c.getCard().getId()).filter(equip::contains).count(), equipments.size()),
+				fields.size() == 0 ? 0 : 1 - Helper.prcnt(fields.stream().map(c -> c.getCard().getId()).filter(field::contains).count(), fields.size()),
 		};
 	}
 
