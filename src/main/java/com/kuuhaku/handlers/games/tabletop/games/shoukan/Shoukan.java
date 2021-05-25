@@ -447,7 +447,10 @@ public class Shoukan extends GlobalGame {
 						d.setAvailable(false);
 						h.removeMana(e.getMana());
 						e.activate(h, hands.get(next), this, allyPos == null ? -1 : allyPos.getRight(), enemyPos == null ? -1 : enemyPos.getRight());
-						arena.getGraveyard().get(current).add(e.copy());
+						if (e.getTier() == 4)
+							arena.getBanished().add(e.copy());
+						else
+							arena.getGraveyard().get(current).add(e.copy());
 
 						if (makeFusion(h)) return;
 
