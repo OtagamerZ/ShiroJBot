@@ -61,7 +61,7 @@ public class AddEmoteCommand implements Executable {
 		Set<Emote> emts = new HashSet<>();
 		for (String arg : args) {
 			if (Helper.regex(arg, "\\{a?&\\w+&\\d{10,}}")) {
-				Emote e = Main.getShiroShards().getEmoteById(Helper.getOr(Helper.extract(arg, "(?<=&)\\d+(?=})"), "1"));
+				Emote e = Main.getShiroShards().getEmoteById(Helper.getOr(Helper.extract(arg, "\\{a?&\\w+&(\\d+)}", 1), "1"));
 				if (e == null) {
 					channel.sendMessage("❌ | Emote `" + arg + "` não encontrado, verifique se digitou a menção correta no formato usado por mim no `" + prefix + "semotes`.").queue();
 					return;

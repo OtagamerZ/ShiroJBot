@@ -1957,6 +1957,18 @@ public class Helper {
 		else return null;
 	}
 
+	public static String extract(String text, @Language("RegExp") String regex, int group) {
+		Matcher m = Pattern.compile(regex).matcher(text);
+		if (m.find()) return m.group(group);
+		else return null;
+	}
+
+	public static String extract(String text, @Language("RegExp") String regex, String group) {
+		Matcher m = Pattern.compile(regex).matcher(text);
+		if (m.find()) return m.group(group);
+		else return null;
+	}
+
 	public static void broadcast(String message, TextChannel channel, User author) {
 		Map<String, Boolean> result = new HashMap<>();
 		StringBuilder sb = new StringBuilder();
