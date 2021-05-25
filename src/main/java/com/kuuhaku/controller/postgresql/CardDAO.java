@@ -665,6 +665,22 @@ public class CardDAO {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<Equipment> getEquipments(List<String> ids) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT e FROM Equipment e WHERE card.id IN :ids", Equipment.class);
+		q.setParameter("ids", ids);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static Equipment getEquipment(Card c) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -740,6 +756,22 @@ public class CardDAO {
 			return (Equipment) q.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Field> getFields(List<String> ids) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT f FROM Field f WHERE card.id IN :ids", Field.class);
+		q.setParameter("ids", ids);
+
+		try {
+			return q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
 		} finally {
 			em.close();
 		}
@@ -877,27 +909,15 @@ public class CardDAO {
 	public static Deck getMetaDeck() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query champs = em.createNativeQuery("""
-				SELECT c
-				FROM "GetChampionMeta" gcm
-				INNER JOIN champion c ON gcm.card_id = c.card_id
-				""", Champion.class);
-		Query evos = em.createNativeQuery("""
-				SELECT e
-				FROM "GetEvogearMeta" gem
-				INNER JOIN equipment e ON gem.card_id = e.card_id
-				""", Equipment.class);
-		Query fields = em.createNativeQuery("""
-				SELECT f
-				FROM "GetFieldMeta" gfm
-				INNER JOIN field f ON gfm.card_id = f.card_id
-				""", Field.class);
+		Query champs = em.createNativeQuery("SELECT card_id FROM \"GetChampionMeta\"");
+		Query evos = em.createNativeQuery("SELECT card_id FROM \"GetEvogearMeta\"");
+		Query fields = em.createNativeQuery("SELECT card_id FROM \"GetFieldMeta\"");
 
 		try {
 			return new Deck(
-					(List<Champion>) champs.getResultList(),
-					(List<Equipment>) evos.getResultList(),
-					(List<Field>) fields.getResultList()
+					getChampions(champs.getResultList()),
+					getEquipments(evos.getResultList()),
+					getFields(fields.getResultList())
 			);
 		} finally {
 			em.close();
