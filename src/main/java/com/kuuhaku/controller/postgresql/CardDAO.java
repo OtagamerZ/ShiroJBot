@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CardDAO {
 	public static long getTotalCards() {
@@ -909,15 +910,20 @@ public class CardDAO {
 	public static Deck getMetaDeck() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query champs = em.createNativeQuery("SELECT card FROM \"GetChampionMeta\"", Champion.class);
-		Query evos = em.createNativeQuery("SELECT card FROM \"GetEvogearMeta\"", Equipment.class);
-		Query fields = em.createNativeQuery("SELECT card FROM \"GetFieldMeta\"", Field.class);
+		Query champs = em.createNativeQuery("SELECT card_id FROM \"GetChampionMeta\"");
+		Query evos = em.createNativeQuery("SELECT card_id FROM \"GetEvogearMeta\"");
+		Query fields = em.createNativeQuery("SELECT card_id FROM \"GetFieldMeta\"");
 
 		try {
 			return new Deck(
-					(List<Champion>) champs.getResultList(),
-					(List<Equipment>) evos.getResultList(),
-					(List<Field>) fields.getResultList()
+					((List<String>) champs.getResultList()).stream()
+							.map(CardDAO::getChampion)
+							.collect(Collectors.toList()),
+					((List<String>) evos.getResultList()).stream()
+							.map(CardDAO::getEquipment)
+							.collect(Collectors.toList()),
+					((List<String>) fields.getResultList()).stream()
+							.map(CardDAO::getField).collect(Collectors.toList())
 			);
 		} finally {
 			em.close();
