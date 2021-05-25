@@ -875,10 +875,9 @@ public class Shoukan extends GlobalGame {
 			boolean yourDodge = yours.getDodge() > 0 && Helper.chance(yours.getDodge());
 			boolean hisDodge = his.getDodge() > 0 && Helper.chance(his.getDodge());
 
+			yours.setAvailable(false);
+			yours.resetAttribs();
 			if (yPower > hPower || (yPower == hPower && yourDodge)) {
-				yours.setAvailable(false);
-				yours.resetAttribs();
-
 				if (hisDodge) {
 					his.resetAttribs();
 
@@ -950,63 +949,56 @@ public class Shoukan extends GlobalGame {
 						reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 					}
 				}
-			} else if (yPower < hPower || hisDodge) {
-				yours.setAvailable(false);
-				yours.resetAttribs();
-				his.resetAttribs();
-
-				if (applyEot(ON_SUICIDE, current, is[0])) return;
-				if (applyEffect(ON_SUICIDE, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-
-				if (applyEot(POST_DEFENSE, next, is[1])) return;
-				if (applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
-
-				if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-					if (yours.getBonus().getSpecialData().remove("noDamage") == null && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
-						Hand you = hands.get(current);
-						you.removeHp(hPower - yPower);
-					}
-				}
-
-				if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-					killCard(current, is[0]);
-					if (!postCombat()) {
-						reportEvent(null, yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")", true, false);
-					} else return;
-				} else if (his.getCard().getId().equals("DECOY")) {
-					killCard(current, is[0]);
-					reportEvent(null, yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
-				} else {
-					reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
-				}
 			} else {
-				yours.setAvailable(false);
-				yours.resetAttribs();
 				his.resetAttribs();
 
 				if (applyEot(ON_SUICIDE, current, is[0])) return;
 				if (applyEffect(ON_SUICIDE, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-				if (applyEot(ON_DEATH, next, is[1])) return;
-				if (applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
+				if (yPower < hPower || hisDodge) {
+					if (applyEot(POST_DEFENSE, next, is[1])) return;
+					if (applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-				if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-					killCard(next, is[1]);
-					killCard(current, is[0]);
+					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+						if (yours.getBonus().getSpecialData().remove("noDamage") == null && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+							Hand you = hands.get(current);
+							you.removeHp(hPower - yPower);
+						}
+					}
 
-					if (!postCombat()) {
-						reportEvent(null, "As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")", true, false);
-					} else return;
-				} else if (Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-					killCard(next, is[1]);
-					killCard(current, is[0]);
-					reportEvent(null, "As duas cartas na verdade eram iscas! (" + yPower + " = " + hPower + ")", true, false);
-				} else if (his.getCard().getId().equals("DECOY")) {
-					killCard(next, is[1]);
-					reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")", true, false);
+					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+						killCard(current, is[0]);
+						if (!postCombat()) {
+							reportEvent(null, yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")", true, false);
+						} else return;
+					} else if (his.getCard().getId().equals("DECOY")) {
+						killCard(current, is[0]);
+						reportEvent(null, yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
+					} else {
+						reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
+					}
 				} else {
-					killCard(current, is[0]);
-					reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")", true, false);
+					if (applyEot(ON_DEATH, next, is[1])) return;
+					if (applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
+
+					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+						killCard(next, is[1]);
+						killCard(current, is[0]);
+
+						if (!postCombat()) {
+							reportEvent(null, "As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")", true, false);
+						} else return;
+					} else if (Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
+						killCard(next, is[1]);
+						killCard(current, is[0]);
+						reportEvent(null, "As duas cartas na verdade eram iscas! (" + yPower + " = " + hPower + ")", true, false);
+					} else if (his.getCard().getId().equals("DECOY")) {
+						killCard(next, is[1]);
+						reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")", true, false);
+					} else {
+						killCard(current, is[0]);
+						reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")", true, false);
+					}
 				}
 			}
 		}
