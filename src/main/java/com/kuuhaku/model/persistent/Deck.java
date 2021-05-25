@@ -70,6 +70,12 @@ public class Deck {
 	public Deck() {
 	}
 
+	public Deck(List<Champion> champions, List<Equipment> equipments, List<Field> fields) {
+		this.champions = champions;
+		this.equipments = equipments;
+		this.fields = fields;
+	}
+
 	public int getId() {
 		return id;
 	}

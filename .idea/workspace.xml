@@ -14,9 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/MyBuffsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Field.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Deck.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +134,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="terminal" />
+    <property name="settings.editor.selected.configurable" value="database.main" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -1195,14 +1195,8 @@
       <workItem from="1621716557525" duration="59000" />
       <workItem from="1621725106421" duration="739000" />
       <workItem from="1621864928006" duration="3515000" />
-      <workItem from="1621875529566" duration="7340000" />
-    </task>
-    <task id="LOCAL-04478" summary="Criação da arena Daten City">
-      <created>1621543350062</created>
-      <option name="number" value="04478" />
-      <option name="presentableId" value="LOCAL-04478" />
-      <option name="project" value="LOCAL" />
-      <updated>1621543350063</updated>
+      <workItem from="1621875529566" duration="8054000" />
+      <workItem from="1621944809307" duration="9292000" />
     </task>
     <task id="LOCAL-04479" summary="Correções menores">
       <created>1621556809947</created>
@@ -1540,7 +1534,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621887017958</updated>
     </task>
-    <option name="localTasksCounter" value="4527" />
+    <task id="LOCAL-04527" summary="Correções menores">
+      <created>1621887335065</created>
+      <option name="number" value="04527" />
+      <option name="presentableId" value="LOCAL-04527" />
+      <option name="project" value="LOCAL" />
+      <updated>1621887335065</updated>
+    </task>
+    <option name="localTasksCounter" value="4528" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.annotations.Command;
@@ -41,7 +42,7 @@ import java.io.IOException;
 
 @Command(
 		name = "deck",
-		usage = "req_daily-deck-p-c",
+		usage = "req_daily-meta-deck-p-c",
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS})
@@ -61,8 +62,27 @@ public class ShoukanDeckCommand implements Executable {
 					BufferedImage cards = kb.view(dk);
 
 					EmbedBuilder eb = new ColorlessEmbedBuilder()
-							.setTitle(":date: | Deck de Diário")
+							.setTitle(":date: | Deck diário")
 							.setDescription("O deck diário será o mesmo para todos os jogadores até amanhã, e permite que usuários que não possuam 30 cartas Senshi joguem. Ganhar usando ele premiará seu Exceed com 5x mais pontos de influência (PDI).")
+							.setImage("attachment://deck.jpg");
+
+					m.delete().queue();
+					channel.sendMessage(eb.build()).addFile(Helper.writeAndGet(cards, "deck", "jpg")).queue();
+				} catch (IOException e) {
+					m.editMessage(I18n.getString("err_deck-generation-error")).queue();
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
+			}
+			if (Helper.containsAny(args, "meta")) {
+				try {
+					Deck dk = CardDAO.getMetaDeck();
+
+					ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+					BufferedImage cards = kb.view(dk);
+
+					EmbedBuilder eb = new ColorlessEmbedBuilder()
+							.setTitle(":date: | Deck meta")
+							.setDescription("O deck meta reflete as cartas mais utilizadas pela comunidade (não necessáriamente sendo a melhor combinação possível).")
 							.setImage("attachment://deck.jpg");
 
 					m.delete().queue();
