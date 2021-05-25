@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Deck;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -867,6 +868,37 @@ public class CardDAO {
 
 		try {
 			return (List<String>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings({"SqlResolve", "unchecked"})
+	public static Deck getMetaDeck() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query champs = em.createNativeQuery("""
+				SELECT c
+				FROM champion c
+				INNER JOIN "GetChampionMeta" gcm ON c.card_id = gcm.card_id
+				""", Champion.class);
+		Query evos = em.createNativeQuery("""
+				SELECT e
+				FROM equipment e
+				INNER JOIN "GetEvogearMeta" gem ON e.card_id = gem.card_id
+				""", Equipment.class);
+		Query fields = em.createNativeQuery("""
+				SELECT f
+				FROM field f
+				INNER JOIN "GetFieldMeta" gfm ON f.card_id = gfm.card_id
+				""");
+
+		try {
+			return new Deck(
+					(List<Champion>) champs.getResultList(),
+					(List<Equipment>) evos.getResultList(),
+					(List<Field>) fields.getResultList()
+			);
 		} finally {
 			em.close();
 		}
