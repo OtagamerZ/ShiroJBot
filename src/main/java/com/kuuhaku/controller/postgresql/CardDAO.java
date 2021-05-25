@@ -879,17 +879,17 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query champs = em.createNativeQuery("""
-				SELECT *
+				SELECT c.*
 				FROM champion c
 				INNER JOIN "GetChampionMeta" gcm ON c.card_id = gcm.card_id
 				""");
 		Query evos = em.createNativeQuery("""
-				SELECT *
+				SELECT e.*
 				FROM equipment e
 				INNER JOIN "GetEvogearMeta" gem ON e.card_id = gem.card_id
 				""");
 		Query fields = em.createNativeQuery("""
-				SELECT *
+				SELECT f.*
 				FROM field f
 				INNER JOIN "GetFieldMeta" gfm ON f.card_id = gfm.card_id
 				""");
