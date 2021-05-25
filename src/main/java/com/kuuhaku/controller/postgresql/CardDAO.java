@@ -909,9 +909,9 @@ public class CardDAO {
 	public static Deck getMetaDeck() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query champs = em.createQuery("SELECT card FROM \"GetChampionMeta\"", Champion.class);
-		Query evos = em.createQuery("SELECT card FROM \"GetEvogearMeta\"", Equipment.class);
-		Query fields = em.createQuery("SELECT card FROM \"GetFieldMeta\"", Field.class);
+		Query champs = em.createNativeQuery("SELECT card FROM \"GetChampionMeta\"", Champion.class);
+		Query evos = em.createNativeQuery("SELECT card FROM \"GetEvogearMeta\"", Equipment.class);
+		Query fields = em.createNativeQuery("SELECT card FROM \"GetFieldMeta\"", Field.class);
 
 		try {
 			return new Deck(
