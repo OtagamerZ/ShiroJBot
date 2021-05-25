@@ -55,6 +55,16 @@ public class Field implements Drawable, Cloneable {
 	private transient Clan clan = null;
 	private transient boolean available = true;
 
+	public Field(int id, Card card, String modifiers, boolean effectOnly) {
+		this.id = id;
+		this.card = card;
+		this.modifiers = modifiers;
+		this.effectOnly = effectOnly;
+	}
+
+	public Field() {
+	}
+
 	@Override
 	public BufferedImage drawCard(boolean flipped) {
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);

@@ -116,6 +116,21 @@ public class Champion implements Drawable, Cloneable {
 	private transient double mDodge = 0;
 	private transient boolean gravelocked = false;
 
+	public Champion(int id, Card card, Race race, int mana, int blood, int atk, int def, String description, String effect, Class category, Set<String> requiredCards, boolean fusion) {
+		this.id = id;
+		this.card = card;
+		this.race = race;
+		this.mana = mana;
+		this.blood = blood;
+		this.atk = atk;
+		this.def = def;
+		this.description = description;
+		this.effect = effect;
+		this.category = category;
+		this.requiredCards = requiredCards;
+		this.fusion = fusion;
+	}
+
 	public Champion(Card card, Race race, int mana, int atk, int def, String description, String effect) {
 		this.card = card;
 		this.race = race;
