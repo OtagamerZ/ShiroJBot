@@ -28,7 +28,6 @@ import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Deck;
-import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -879,26 +878,26 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query champs = em.createNativeQuery("""
-				SELECT c.*
-				FROM champion c
-				INNER JOIN "GetChampionMeta" gcm ON c.card_id = gcm.card_id
-				""");
+				SELECT c
+				FROM "GetChampionMeta" gcm
+				INNER JOIN champion c ON gcm.card_id = c.card_id
+				""", Champion.class);
 		Query evos = em.createNativeQuery("""
-				SELECT e.*
-				FROM equipment e
-				INNER JOIN "GetEvogearMeta" gem ON e.card_id = gem.card_id
-				""");
+				SELECT e
+				FROM "GetEvogearMeta" gem
+				INNER JOIN equipment e ON gem.card_id = e.card_id
+				""", Equipment.class);
 		Query fields = em.createNativeQuery("""
-				SELECT f.*
-				FROM field f
-				INNER JOIN "GetFieldMeta" gfm ON f.card_id = gfm.card_id
-				""");
+				SELECT f
+				FROM "GetFieldMeta" gfm
+				INNER JOIN field f ON gfm.card_id = f.card_id
+				""", Field.class);
 
 		try {
 			return new Deck(
-					Helper.map(Champion.class, champs.getResultList()),
-					Helper.map(Equipment.class, evos.getResultList()),
-					Helper.map(Field.class, fields.getResultList())
+					(List<Champion>) champs.getResultList(),
+					(List<Equipment>) evos.getResultList(),
+					(List<Field>) fields.getResultList()
 			);
 		} finally {
 			em.close();
