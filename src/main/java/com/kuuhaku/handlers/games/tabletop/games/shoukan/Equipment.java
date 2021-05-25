@@ -85,6 +85,22 @@ public class Equipment implements Drawable, Cloneable {
 	private transient int altAtk = -1;
 	private transient int altDef = -1;
 
+	public Equipment(int id, Card card, int atk, int def, int mana, String description, String effect, int tier, Charm charm, Arguments argType) {
+		this.id = id;
+		this.card = card;
+		this.atk = atk;
+		this.def = def;
+		this.mana = mana;
+		this.description = description;
+		this.effect = effect;
+		this.tier = tier;
+		this.charm = charm;
+		this.argType = argType;
+	}
+
+	public Equipment() {
+	}
+
 	@Override
 	public BufferedImage drawCard(boolean flipped) {
 		boolean useFoil = acc.isUsingFoil() && CardDAO.hasCompleted(acc.getUid(), card.getAnime().getName(), true);
