@@ -42,7 +42,7 @@ import java.io.IOException;
 
 @Command(
 		name = "deck",
-		usage = "req_daily-meta-deck-p-c",
+		usage = "req_daily-meta-p-c",
 		category = Category.INFO
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS})
