@@ -715,16 +715,22 @@ public class Champion implements Drawable, Cloneable {
 		Map<String, Integer> out = new HashMap<>();
 		for (String req : requiredCards) {
 			if (req.contains(",")) {
-				String[] opts = req.split(",");
-				boolean valid = false;
+				String[] optArgs = req.split(";");
+				int reqCombo = Integer.parseInt(optArgs[0]);
+				String[] opts = optArgs[1].split(",");
+
+				Set<String> found = new HashSet<>();
 				for (String opt : opts) {
 					if (cards.contains(opt)) {
-						out.put(opt, cards.indexOf(opt));
-						valid = true;
+						if (found.add(opt)) {
+							out.put(opt, cards.indexOf(opt));
+
+							if (found.size() == reqCombo) break;
+						}
 					}
 				}
 
-				if (!valid) return Map.of();
+				if (found.size() != reqCombo) return Map.of();
 			} else {
 				if (cards.contains(req))
 					out.put(req, cards.indexOf(req));
