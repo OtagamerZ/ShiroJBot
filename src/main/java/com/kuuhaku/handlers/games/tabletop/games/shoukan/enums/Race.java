@@ -36,7 +36,7 @@ public enum Race {
 			"Apesar da maioria não possuir afinidade para magia, são numerosos e astutos o suficiente para derrotarem até o maior dos exércitos com sua rápida aprendizagem e vasta tecnologia."
 	),
 	ELF("Elfo",
-			"+1 Mana",
+			"+1 Mana, campos possuem efeitos negativos reduzidos em 50% e positivos aumentados em 25% nas suas cartas.",
 			"+1 Mana a cada 3 turnos",
 			"Vivendo em meio a selvas e bosques, possuem a maior afinidade mágica dentre os mortais. Seus aguçados sentidos e agilidade torna-os altamente mortais no campo de batalha."
 	),
