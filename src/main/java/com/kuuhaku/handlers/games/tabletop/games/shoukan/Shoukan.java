@@ -1061,7 +1061,7 @@ public class Shoukan extends GlobalGame {
 				.stream()
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
-						allCards.containsAll(f.getRequiredCards()) &&
+						!f.canFuse(allCards).isEmpty() &&
 						(h.isNullMode() || h.getMana() >= f.getMana()) &&
 						h.getHp() > f.getBlood()
 				)
@@ -1072,16 +1072,15 @@ public class Shoukan extends GlobalGame {
 		if (aFusion != null) {
 			List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(current);
 
-			for (String requiredCard : aFusion.getRequiredCards()) {
-				for (int i = 0; i < slts.size(); i++) {
-					SlotColumn<Champion, Equipment> column = slts.get(i);
-					if (column.getTop() != null && column.getTop().getCard().getId().equals(requiredCard)) {
-						banishCard(current, i, false);
-						break;
-					} else if (column.getBottom() != null && column.getBottom().getCard().getId().equals(requiredCard)) {
-						banishCard(current, i, true);
-						break;
-					}
+			for (Map.Entry<String, Integer> material : aFusion.canFuse(allCards).entrySet()) {
+				int i = material.getValue();
+				SlotColumn<Champion, Equipment> column = slts.get(i);
+				if (column.getTop() != null && column.getTop().getCard().getId().equals(material.getKey())) {
+					banishCard(current, i, false);
+					break;
+				} else if (column.getBottom() != null && column.getBottom().getCard().getId().equals(material.getKey())) {
+					banishCard(current, i, true);
+					break;
 				}
 			}
 
