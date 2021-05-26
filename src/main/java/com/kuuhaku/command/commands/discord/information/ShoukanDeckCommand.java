@@ -72,8 +72,7 @@ public class ShoukanDeckCommand implements Executable {
 					m.editMessage(I18n.getString("err_deck-generation-error")).queue();
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
-			}
-			if (Helper.containsAny(args, "meta")) {
+			} else if (Helper.containsAny(args, "meta")) {
 				try {
 					Deck dk = CardDAO.getMetaDeck();
 
