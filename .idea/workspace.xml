@@ -16,7 +16,6 @@
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,6 +198,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1198,14 +1208,7 @@
       <workItem from="1621875529566" duration="8054000" />
       <workItem from="1621944809307" duration="17648000" />
       <workItem from="1622030576808" duration="717000" />
-      <workItem from="1622031540198" duration="5815000" />
-    </task>
-    <task id="LOCAL-04499" summary="Melhoria no comando de venda de cartas">
-      <created>1621627049343</created>
-      <option name="number" value="04499" />
-      <option name="presentableId" value="LOCAL-04499" />
-      <option name="project" value="LOCAL" />
-      <updated>1621627049343</updated>
+      <workItem from="1622031540198" duration="9554000" />
     </task>
     <task id="LOCAL-04500" summary="Melhoria no comando de venda de cartas">
       <created>1621627206903</created>
@@ -1543,7 +1546,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622033046430</updated>
     </task>
-    <option name="localTasksCounter" value="4548" />
+    <task id="LOCAL-04548" summary="Correções menores">
+      <created>1622041260823</created>
+      <option name="number" value="04548" />
+      <option name="presentableId" value="LOCAL-04548" />
+      <option name="project" value="LOCAL" />
+      <updated>1622041260823</updated>
+    </task>
+    <option name="localTasksCounter" value="4549" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
