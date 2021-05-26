@@ -127,7 +127,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="{a&amp;blabla&amp;1234}" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../Program Files/Git/bin/bash.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shoukan/gifs" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -1208,14 +1208,7 @@
       <workItem from="1621875529566" duration="8054000" />
       <workItem from="1621944809307" duration="17648000" />
       <workItem from="1622030576808" duration="717000" />
-      <workItem from="1622031540198" duration="9554000" />
-    </task>
-    <task id="LOCAL-04500" summary="Melhoria no comando de venda de cartas">
-      <created>1621627206903</created>
-      <option name="number" value="04500" />
-      <option name="presentableId" value="LOCAL-04500" />
-      <option name="project" value="LOCAL" />
-      <updated>1621627206904</updated>
+      <workItem from="1622031540198" duration="10574000" />
     </task>
     <task id="LOCAL-04501" summary="Melhoria no comando de venda de cartas">
       <created>1621627217743</created>
@@ -1553,7 +1546,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622041260823</updated>
     </task>
-    <option name="localTasksCounter" value="4549" />
+    <task id="LOCAL-04549" summary="Correções menores">
+      <created>1622048923254</created>
+      <option name="number" value="04549" />
+      <option name="presentableId" value="LOCAL-04549" />
+      <option name="project" value="LOCAL" />
+      <updated>1622048923255</updated>
+    </task>
+    <option name="localTasksCounter" value="4550" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
