@@ -111,7 +111,7 @@ public class CardDAO {
 
 		long total = totalCards(anime);
 		try {
-			return total > 0 && ((Number) q.getSingleResult()).intValue() == total;
+			return total > 0 && ((Number) q.getSingleResult()).intValue() >= total;
 		} catch (NoResultException e) {
 			return false;
 		} finally {

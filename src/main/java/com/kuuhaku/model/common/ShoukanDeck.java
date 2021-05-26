@@ -31,13 +31,11 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ShoukanDeck {
@@ -91,7 +89,7 @@ public class ShoukanDeck {
 			Profile.printCenteredString(StringUtils.abbreviate(c.getCard().getName(), 15), 225, 95 + 279 * (i - SENSHI_COLUMNS * y), 739 + 419 * y, g2d);
 		}
 
-		BufferedImage slotLock = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/slot_lock.png")));
+		BufferedImage slotLock = Helper.getResourceAsImage(this.getClass(), "shoukan/slot_lock.png");
 		for (int i = 0, y = 0; i < equips.size(); i++, y = i / EVOGEAR_COLUMNS) {
 			Equipment e = equips.get(i);
 			if (e.getTier() == 0)
