@@ -2656,7 +2656,11 @@ public class Helper {
 							gim.getHeight(),
 							meta.getLeftPosition(),
 							meta.getTopPosition(),
-							meta.getDelay()
+							meta.getDelay() < 50 ?
+									i > 0 ?
+											Math.max(50, out.get(i - 1).getDelay())
+											: 50
+									: meta.getDelay()
 					)
 			);
 		}
