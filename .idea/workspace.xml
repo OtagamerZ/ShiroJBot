@@ -197,6 +197,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1197,14 +1208,7 @@
       <workItem from="1621944809307" duration="17648000" />
       <workItem from="1622030576808" duration="717000" />
       <workItem from="1622031540198" duration="11067000" />
-      <workItem from="1622122123741" duration="1669000" />
-    </task>
-    <task id="LOCAL-04505" summary="Correções menores">
-      <created>1621633112880</created>
-      <option name="number" value="04505" />
-      <option name="presentableId" value="LOCAL-04505" />
-      <option name="project" value="LOCAL" />
-      <updated>1621633112895</updated>
+      <workItem from="1622122123741" duration="3085000" />
     </task>
     <task id="LOCAL-04506" summary="Correções menores">
       <created>1621652857174</created>
@@ -1542,7 +1546,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622123069041</updated>
     </task>
-    <option name="localTasksCounter" value="4554" />
+    <task id="LOCAL-04554" summary="Correções menores">
+      <created>1622124190894</created>
+      <option name="number" value="04554" />
+      <option name="presentableId" value="LOCAL-04554" />
+      <option name="project" value="LOCAL" />
+      <updated>1622124190894</updated>
+    </task>
+    <option name="localTasksCounter" value="4555" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
