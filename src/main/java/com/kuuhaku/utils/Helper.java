@@ -2669,25 +2669,42 @@ public class Helper {
 
 		GifImageParser gip = new GifImageParser();
 		GifImageMetadata gim = (GifImageMetadata) gip.getMetadata(bsis);
+		List<GifImageMetadataItem> metas = gim.getItems();
 
 		List<BufferedImage> frames = gip.getAllBufferedImages(bsis);
 		if (uncompress) {
 			List<BufferedImage> source = List.copyOf(frames);
 			BufferedImage bi = source.get(0);
 
+			BufferedImage finalBi = bi;
 			frames = new ArrayList<>() {{
-				add(deepCopy(bi));
+				add(deepCopy(finalBi));
 			}};
 			Graphics2D g = bi.createGraphics();
 			for (int i = 1; i < source.size(); i++) {
-				BufferedImage frame = source.get(i);
-				g.drawImage(frame, 0, 0, null);
-				frames.add(Helper.deepCopy(bi));
+				GifImageMetadataItem meta = metas.get(i);
+
+				switch (meta.getDisposalMethod()) {
+					case UNSPECIFIED, RESTORE_TO_BACKGROUND, DO_NOT_DISPOSE -> {
+						BufferedImage frame = source.get(i);
+						g.drawImage(frame, 0, 0, null);
+						frames.add(Helper.deepCopy(bi));
+					}
+					case RESTORE_TO_PREVIOUS -> {
+						g.dispose();
+						bi = frames.get(Math.max(0, i - 1));
+						g = bi.createGraphics();
+
+						BufferedImage frame = source.get(i);
+						g.drawImage(frame, 0, 0, null);
+						frames.add(Helper.deepCopy(bi));
+					}
+				}
 			}
+
 			g.dispose();
 		}
 
-		List<GifImageMetadataItem> metas = gim.getItems();
 		List<GifFrame> out = new ArrayList<>();
 
 		for (int i = 0; i < Math.min(frames.size(), metas.size()); i++) {
