@@ -717,7 +717,7 @@ public class Champion implements Drawable, Cloneable {
 		Set<String> rem = new HashSet<>(requiredCards);
 		Map<String, Pair<Integer, Boolean>> out = new HashMap<>();
 
-		for (String req : rem) {
+		for (String req : requiredCards) {
 			if (req.contains(",")) {
 				String[] optArgs = req.split(";");
 				int reqCombo = Integer.parseInt(optArgs[0]);
