@@ -120,7 +120,7 @@ public class MatchMakingRating {
 	public void increaseRankPoints(long opMMR) {
 		if (tier.getTier() >= RankedTier.ADEPT_IV.getTier())
 			banked = Math.min(banked + 7 - (tier.getTier() - 4), 28);
-		double mmrModif = Helper.prcnt(mmr, Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) opMMR, mmr);
+		double mmrModif = Helper.prcnt(mmr, Helper.average((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier))) * Helper.prcnt((double) opMMR, mmr);
 		int rpValue = Helper.clamp((int) Math.round(mmrModif * 15), 5, 30);
 		if (tier == RankedTier.UNRANKED) {
 			promWins++;
@@ -180,7 +180,7 @@ public class MatchMakingRating {
 	public void decreaseRankPoints(long opMMR) {
 		if (tier.getTier() >= RankedTier.ADEPT_IV.getTier())
 			banked = Math.min(banked + 7 - (tier.getTier() - 4), 28);
-		double mmrModif = Helper.prcnt(Helper.avg((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) opMMR);
+		double mmrModif = Helper.prcnt(Helper.average((1250 * tier.ordinal()), MatchMakingRatingDAO.getAverageMMR(tier)), mmr) * Helper.prcnt(mmr, (double) opMMR);
 		int rpValue = Helper.clamp((int) Math.round(mmrModif * 15), 5, 30);
 
 		if (tier == RankedTier.UNRANKED) {

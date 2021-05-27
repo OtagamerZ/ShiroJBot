@@ -114,12 +114,16 @@ public class ImageFilters {
 			int x = coords[0];
 			int y = coords[1];
 
+			int alpha = -1;
 			int[] color = new int[3];
 			for (int k = 0; k < layers.length; k++) {
-				color[k] = (layers[k].getRGB(x, y) >> (16 - k * 8)) & 0xFF;
+				int c = layers[k].getRGB(x, y);
+				color[k] = (c >> (16 - k * 8)) & 0xFF;
+				if (alpha == -1) alpha = (c >> 24) & 0xFF;
+				else alpha = Helper.average(alpha, (c >> 24) & 0xFF);
 			}
 
-			out.setRGB(x, y, 0xFF << 24 | color[0] << 16 | color[1] << 8 | color[2]);
+			out.setRGB(x, y, alpha << 24 | color[0] << 16 | color[1] << 8 | color[2]);
 		});
 
 		return out;
