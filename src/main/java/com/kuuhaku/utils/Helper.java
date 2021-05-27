@@ -2687,11 +2687,6 @@ public class Helper {
 				GifImageMetadataItem meta = metas.get(i);
 
 				switch (method) {
-					case UNSPECIFIED, DO_NOT_DISPOSE -> {
-						BufferedImage frame = source.get(i);
-						g.drawImage(frame, 0, 0, null);
-						frames.add(Helper.deepCopy(bi));
-					}
 					case RESTORE_TO_BACKGROUND -> {
 						g.dispose();
 						bi = deepCopy(source.get(0));
@@ -2710,7 +2705,11 @@ public class Helper {
 						g.drawImage(frame, 0, 0, null);
 						frames.add(Helper.deepCopy(bi));
 					}
-					default -> frames.add(Helper.deepCopy(bi));
+					default -> {
+						BufferedImage frame = source.get(i);
+						g.drawImage(frame, 0, 0, null);
+						frames.add(Helper.deepCopy(bi));
+					}
 				}
 
 				method = meta.getDisposalMethod();
