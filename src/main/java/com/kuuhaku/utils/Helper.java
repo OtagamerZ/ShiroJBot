@@ -2656,11 +2656,7 @@ public class Helper {
 							gim.getHeight(),
 							meta.getLeftPosition(),
 							meta.getTopPosition(),
-							meta.getDelay() < 50 ?
-									i > 0 ?
-											Math.max(50, out.get(i - 1).getDelay())
-											: 50
-									: meta.getDelay()
+							meta.getDelay() * 10
 					)
 			);
 		}
@@ -2678,32 +2674,46 @@ public class Helper {
 		List<BufferedImage> frames = gip.getAllBufferedImages(bsis);
 		if (uncompress) {
 			List<BufferedImage> source = List.copyOf(frames);
-			BufferedImage bi = source.get(0);
+			BufferedImage bi = deepCopy(source.get(0));
 
 			BufferedImage finalBi = bi;
 			frames = new ArrayList<>() {{
 				add(deepCopy(finalBi));
 			}};
 			Graphics2D g = bi.createGraphics();
+			DisposalMethod method = DisposalMethod.UNSPECIFIED;
+
 			for (int i = 1; i < source.size(); i++) {
 				GifImageMetadataItem meta = metas.get(i);
 
-				switch (meta.getDisposalMethod()) {
-					case UNSPECIFIED, RESTORE_TO_BACKGROUND, DO_NOT_DISPOSE -> {
+				switch (method) {
+					case UNSPECIFIED, DO_NOT_DISPOSE -> {
 						BufferedImage frame = source.get(i);
 						g.drawImage(frame, 0, 0, null);
 						frames.add(Helper.deepCopy(bi));
 					}
-					case RESTORE_TO_PREVIOUS -> {
+					case RESTORE_TO_BACKGROUND -> {
 						g.dispose();
-						bi = frames.get(Math.max(0, i - 1));
+						bi = deepCopy(source.get(0));
 						g = bi.createGraphics();
 
 						BufferedImage frame = source.get(i);
 						g.drawImage(frame, 0, 0, null);
 						frames.add(Helper.deepCopy(bi));
 					}
+					case RESTORE_TO_PREVIOUS -> {
+						g.dispose();
+						bi = deepCopy(frames.get(Math.max(0, i - 1)));
+						g = bi.createGraphics();
+
+						BufferedImage frame = source.get(i);
+						g.drawImage(frame, 0, 0, null);
+						frames.add(Helper.deepCopy(bi));
+					}
+					default -> frames.add(Helper.deepCopy(bi));
 				}
+
+				method = meta.getDisposalMethod();
 			}
 
 			g.dispose();
@@ -2722,11 +2732,7 @@ public class Helper {
 							gim.getHeight(),
 							meta.getLeftPosition(),
 							meta.getTopPosition(),
-							meta.getDelay() < 50 ?
-									i > 0 ?
-											Math.max(50, out.get(i - 1).getDelay())
-											: 50
-									: meta.getDelay()
+							meta.getDelay() * 10
 					)
 			);
 		}
@@ -2754,6 +2760,8 @@ public class Helper {
 			gif.setRepeat(repeat);
 			gif.start(fos);
 			for (GifFrame frame : frames) {
+				gif.setBackground(Color.magenta);
+				gif.setTransparent(Color.magenta);
 				gif.setDispose(frame.getDisposal().ordinal());
 				gif.setDelay(frame.getDelay());
 				gif.addFrame(frame.getAdjustedFrame());
@@ -2768,6 +2776,8 @@ public class Helper {
 			gif.setRepeat(repeat);
 			gif.start(fos);
 			for (GifFrame frame : frames) {
+				gif.setBackground(Color.magenta);
+				gif.setTransparent(Color.magenta);
 				gif.setDispose(frame.getDisposal().ordinal());
 				gif.setDelay(delay);
 				gif.addFrame(frame.getAdjustedFrame());
