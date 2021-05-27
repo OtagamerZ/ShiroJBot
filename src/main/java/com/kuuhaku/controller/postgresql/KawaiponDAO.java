@@ -19,6 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Kawaipon;
+import org.hibernate.exception.ConstraintViolationException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -47,9 +48,12 @@ public class KawaiponDAO {
 	public static void saveKawaipon(Kawaipon k) {
 		EntityManager em = Manager.getEntityManager();
 
-		em.getTransaction().begin();
-		em.merge(k);
-		em.getTransaction().commit();
+		try {
+			em.getTransaction().begin();
+			em.merge(k);
+			em.getTransaction().commit();
+		} catch (ConstraintViolationException ignore) {
+		}
 
 		em.close();
 	}
