@@ -89,7 +89,7 @@ public class ShiftCommand implements Executable {
 							f = File.createTempFile("shifted", ".gif");
 							List<GifFrame> frames = Helper.readGif(url, true);
 							frames.replaceAll(frame -> new GifFrame(
-									ImageFilters.glitch(frame.getAdjustedFrame(), finalPow),
+									ImageFilters.shift(frame.getAdjustedFrame(), finalPow),
 									frame.getDisposal(),
 									frame.getWidth(),
 									frame.getHeight(),
