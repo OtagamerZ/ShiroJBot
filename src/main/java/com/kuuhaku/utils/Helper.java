@@ -29,21 +29,18 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.github.ygimenez.type.PageType;
-import com.google.gson.Gson;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.SimpleMessageListener;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.ColorlessWebhookEmbedBuilder;
-import com.kuuhaku.model.common.Extensions;
-import com.kuuhaku.model.common.MatchInfo;
+import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.common.drop.*;
 import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildBuff;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.ServerBuff;
+import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -56,6 +53,12 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.imaging.ImageReadException;
+import org.apache.commons.imaging.common.bytesource.ByteSourceInputStream;
+import org.apache.commons.imaging.formats.gif.DisposalMethod;
+import org.apache.commons.imaging.formats.gif.GifImageMetadata;
+import org.apache.commons.imaging.formats.gif.GifImageMetadataItem;
+import org.apache.commons.imaging.formats.gif.GifImageParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -78,13 +81,17 @@ import org.knowm.xchart.style.Styler;
 import javax.annotation.Nonnull;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import javax.imageio.*;
-import javax.imageio.stream.ImageInputStream;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
@@ -106,7 +113,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -167,10 +176,6 @@ public class Helper {
 		if (places < 0) throw new IllegalArgumentException();
 
 		return new DecimalFormat("#,##0" + (places > 0 ? "." : "") + StringUtils.repeat("#", places)).format(value);
-	}
-
-	public static double avg(double... values) {
-		return Arrays.stream(values).average().orElse(0);
 	}
 
 	public static double clamp(double val, double min, double max) {
@@ -1746,72 +1751,6 @@ public class Helper {
 		return bi;
 	}
 
-	public static List<Triple<Integer, Integer, BufferedImage>> readGIF(String url) throws IOException {
-		List<Triple<Integer, Integer, BufferedImage>> frms = new ArrayList<>();
-		ImageReader ir = ImageIO.getImageReadersByFormatName("gif").next();
-		ImageInputStream iis = ImageIO.createImageInputStream(getImage(url));
-		ir.setInput(iis);
-
-		int w = 0;
-		int h = 0;
-		int i = 0;
-		while (true) {
-			try {
-				BufferedImage image = ir.read(i);
-				if (i == 0) {
-					w = image.getWidth();
-					h = image.getHeight();
-				}
-				JSONObject metadata = new JSONObject(new Gson().toJson(ir.getImageMetadata(i)));
-
-				BufferedImage master = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g2d = master.createGraphics();
-				g2d.drawImage(image, metadata.getInt("imageLeftPosition"), metadata.getInt("imageTopPosition"), null);
-
-				g2d.dispose();
-				frms.add(Triple.of(metadata.getInt("disposalMethod"), metadata.getInt("delayTime"), master));
-				i++;
-			} catch (IndexOutOfBoundsException e) {
-				break;
-			}
-		}
-
-		return frms;
-	}
-
-	public static List<Triple<Integer, Integer, BufferedImage>> readGIF(String url, int width, int height) throws IOException {
-		List<Triple<Integer, Integer, BufferedImage>> frms = new ArrayList<>();
-		ImageReader ir = ImageIO.getImageReadersByFormatName("gif").next();
-		ImageInputStream iis = ImageIO.createImageInputStream(getImage(url));
-		ir.setInput(iis);
-
-		int w = 0;
-		int h = 0;
-		int i = 0;
-		while (true) {
-			try {
-				BufferedImage image = ir.read(i);
-				if (i == 0) {
-					w = image.getWidth();
-					h = image.getHeight();
-				}
-				JSONObject metadata = new JSONObject(new Gson().toJson(ir.getImageMetadata(i)));
-
-				BufferedImage master = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g2d = master.createGraphics();
-				g2d.drawImage(image, metadata.getInt("imageLeftPosition"), metadata.getInt("imageTopPosition"), null);
-
-				g2d.dispose();
-				frms.add(Triple.of(metadata.getInt("disposalMethod"), metadata.getInt("delayTime"), scaleAndCenterImage(master, width, height)));
-				i++;
-			} catch (IndexOutOfBoundsException e) {
-				break;
-			}
-		}
-
-		return frms;
-	}
-
 	public static String getFileType(String url) throws IOException {
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 		con.setRequestMethod("HEAD");
@@ -2567,8 +2506,8 @@ public class Helper {
 	}
 
 	public static void forEachPixel(BufferedImage bi, BiConsumer<int[], Integer> act) {
-		int x = 0;
-		int y = 0;
+		int x;
+		int y;
 		int i = 0;
 		while (true) {
 			x = i % bi.getWidth();
@@ -2579,6 +2518,35 @@ public class Helper {
 			act.accept(new int[]{x, y}, bi.getRGB(x, y));
 			i++;
 		}
+	}
+
+	public static void forEachFrame(List<BufferedImage> frames, Consumer<Graphics2D> act) {
+		for (BufferedImage frame : frames) {
+			Graphics2D g2d = frame.createGraphics();
+			act.accept(g2d);
+			g2d.dispose();
+		}
+	}
+
+	public static CompletableFuture<Void> forEachFrame(List<BufferedImage> frames, ExecutorService exec, Consumer<Graphics2D> act) {
+		NContract<Void> con = new NContract<>(frames.size());
+		for (BufferedImage frame : frames) {
+			exec.execute(() -> {
+				Graphics2D g2d = frame.createGraphics();
+				act.accept(g2d);
+				g2d.dispose();
+
+				con.addSignature(0, null);
+			});
+		}
+
+		return con;
+	}
+
+	public static void applyOverlay(BufferedImage in, BufferedImage overlay) {
+		Graphics2D g2d = in.createGraphics();
+		g2d.drawImage(overlay, 0, 0, null);
+		g2d.dispose();
 	}
 
 	public static int hip(int cat1, int cat2) {
@@ -2666,5 +2634,127 @@ public class Helper {
 			result.add(map(type, record));
 		}
 		return result;
+	}
+
+	public static List<GifFrame> readGif(String url) throws IOException, ImageReadException {
+		ByteSourceInputStream bsis = new ByteSourceInputStream(getImage(url), "temp");
+
+		GifImageParser gip = new GifImageParser();
+		GifImageMetadata gim = (GifImageMetadata) gip.getMetadata(bsis);
+		List<BufferedImage> frames = gip.getAllBufferedImages(bsis);
+		List<GifImageMetadataItem> metas = gim.getItems();
+		List<GifFrame> out = new ArrayList<>();
+
+		for (int i = 0; i < Math.min(frames.size(), metas.size()); i++) {
+			BufferedImage frame = frames.get(i);
+			GifImageMetadataItem meta = metas.get(i);
+
+			out.add(new GifFrame(
+							frame,
+							meta.getDisposalMethod(),
+							gim.getWidth(),
+							gim.getHeight(),
+							meta.getLeftPosition(),
+							meta.getTopPosition(),
+							meta.getDelay()
+					)
+			);
+		}
+
+		return out;
+	}
+
+	public static List<GifFrame> readGif(String url, boolean uncompress) throws IOException, ImageReadException {
+		ByteSourceInputStream bsis = new ByteSourceInputStream(getImage(url), "temp");
+
+		GifImageParser gip = new GifImageParser();
+		GifImageMetadata gim = (GifImageMetadata) gip.getMetadata(bsis);
+
+		List<BufferedImage> frames = gip.getAllBufferedImages(bsis);
+		if (uncompress) {
+			List<BufferedImage> source = List.copyOf(frames);
+			BufferedImage bi = source.get(0);
+
+			frames = new ArrayList<>() {{
+				add(deepCopy(bi));
+			}};
+			Graphics2D g = bi.createGraphics();
+			for (int i = 1; i < source.size(); i++) {
+				BufferedImage frame = source.get(i);
+				g.drawImage(frame, 0, 0, null);
+				frames.add(Helper.deepCopy(bi));
+			}
+			g.dispose();
+		}
+
+		List<GifImageMetadataItem> metas = gim.getItems();
+		List<GifFrame> out = new ArrayList<>();
+
+		for (int i = 0; i < Math.min(frames.size(), metas.size()); i++) {
+			BufferedImage frame = frames.get(i);
+			GifImageMetadataItem meta = metas.get(i);
+
+			out.add(new GifFrame(
+							frame,
+							uncompress ? DisposalMethod.RESTORE_TO_BACKGROUND : meta.getDisposalMethod(),
+							gim.getWidth(),
+							gim.getHeight(),
+							meta.getLeftPosition(),
+							meta.getTopPosition(),
+							meta.getDelay()
+					)
+			);
+		}
+
+		return out;
+	}
+
+	public static void makeGIF(File f, List<GifFrame> frames) throws IOException {
+		try (FileOutputStream fos = new FileOutputStream(f)) {
+			AnimatedGifEncoder gif = new AnimatedGifEncoder();
+			gif.setRepeat(0);
+			gif.start(fos);
+			for (GifFrame frame : frames) {
+				gif.setDispose(frame.getDisposal().ordinal());
+				gif.setDelay(frame.getDelay());
+				gif.addFrame(frame.getAdjustedFrame());
+			}
+			gif.finish();
+		}
+	}
+
+	public static void makeGIF(File f, List<GifFrame> frames, int repeat) throws IOException {
+		try (FileOutputStream fos = new FileOutputStream(f)) {
+			AnimatedGifEncoder gif = new AnimatedGifEncoder();
+			gif.setRepeat(repeat);
+			gif.start(fos);
+			for (GifFrame frame : frames) {
+				gif.setDispose(frame.getDisposal().ordinal());
+				gif.setDelay(frame.getDelay());
+				gif.addFrame(frame.getAdjustedFrame());
+			}
+			gif.finish();
+		}
+	}
+
+	public static void makeGIF(File f, List<GifFrame> frames, int repeat, int delay) throws IOException {
+		try (FileOutputStream fos = new FileOutputStream(f)) {
+			AnimatedGifEncoder gif = new AnimatedGifEncoder();
+			gif.setRepeat(repeat);
+			gif.start(fos);
+			for (GifFrame frame : frames) {
+				gif.setDispose(frame.getDisposal().ordinal());
+				gif.setDelay(delay);
+				gif.addFrame(frame.getAdjustedFrame());
+			}
+			gif.finish();
+		}
+	}
+
+	public static BufferedImage deepCopy(BufferedImage bi) {
+		ColorModel cm = bi.getColorModel();
+		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+		WritableRaster raster = bi.copyData(bi.getRaster().createCompatibleWritableRaster());
+		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 }
