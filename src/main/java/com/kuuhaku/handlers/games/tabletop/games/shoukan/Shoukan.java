@@ -59,7 +59,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger.*;
 
@@ -1053,34 +1052,27 @@ public class Shoukan extends GlobalGame {
 
 	private boolean makeFusion(Hand h) {
 		if (fusionLock > 0) return false;
-		List<Champion> champsInField = arena.getSlots().get(current)
+		List<String> champsInField = arena.getSlots().get(current)
 				.stream()
 				.map(SlotColumn::getTop)
 				.filter(c -> c != null && !c.isSealed())
+				.map(dr -> dr.getCard().getId())
 				.collect(Collectors.toList());
 
-		List<Equipment> equipsInField = arena.getSlots().get(current)
+		List<String> equipsInField = arena.getSlots().get(current)
 				.stream()
 				.map(SlotColumn::getBottom)
 				.filter(Objects::nonNull)
+				.map(dr -> dr.getCard().getId())
 				.collect(Collectors.toList());
 
-		List<String> allCards = new ArrayList<>() {{
-			addAll(Stream.of(champsInField, equipsInField)
-					.flatMap(List::stream)
-					.map(dr -> dr.getCard().getId())
-					.collect(Collectors.toList())
-			);
-
-			if (getArena().getField() != null)
-				add(getArena().getField().getCard().getId());
-		}};
+		String field = getArena().getField() != null ? getArena().getField().getCard().getId() : null;
 
 		Champion aFusion = fusions
 				.stream()
 				.filter(f ->
 						f.getRequiredCards().size() > 0 &&
-						!f.canFuse(allCards).isEmpty() &&
+						!f.canFuse(champsInField, equipsInField, field).isEmpty() &&
 						(h.isNullMode() || h.getMana() >= f.getMana()) &&
 						h.getHp() > f.getBlood()
 				)
@@ -1091,16 +1083,9 @@ public class Shoukan extends GlobalGame {
 		if (aFusion != null) {
 			List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(current);
 
-			for (Map.Entry<String, Integer> material : aFusion.canFuse(allCards).entrySet()) {
-				int i = material.getValue();
-				SlotColumn<Champion, Equipment> column = slts.get(i);
-				if (column.getTop() != null && column.getTop().getCard().getId().equals(material.getKey())) {
-					banishCard(current, i, false);
-					break;
-				} else if (column.getBottom() != null && column.getBottom().getCard().getId().equals(material.getKey())) {
-					banishCard(current, i, true);
-					break;
-				}
+			for (Map.Entry<String, Pair<Integer, Boolean>> material : aFusion.canFuse(champsInField, equipsInField, field).entrySet()) {
+				Pair<Integer, Boolean> p = material.getValue();
+				banishCard(current, p.getLeft(), p.getRight());
 			}
 
 			for (int i = 0; i < slts.size(); i++) {
