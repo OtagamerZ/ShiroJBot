@@ -30,6 +30,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import org.apache.commons.imaging.ImageReadException;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +65,7 @@ public class ProfileCommand implements Executable {
 							.addFile(Helper.writeAndGet(Profile.makeProfile(mb, mb.getGuild()), "perfil", "png"))
 							.flatMap(s -> m.delete())
 							.queue(null, t -> m.editMessage(I18n.getString("err_profile-too-big")).queue());
-			} catch (IOException | NullPointerException e) {
+			} catch (IOException | NullPointerException | ImageReadException e) {
 				m.editMessage(I18n.getString("err_profile-generation-error")).queue();
 			} catch (InsufficientPermissionException e) {
 				m.editMessage(I18n.getString("err_no-attach-files-permission")).queue();

@@ -27,14 +27,11 @@ import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.model.persistent.Member;
-import com.kuuhaku.utils.GifSequenceWriter;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
-import org.apache.commons.lang3.tuple.Triple;
+import org.apache.commons.imaging.ImageReadException;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageOutputStream;
-import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
@@ -49,6 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Profile {
 	public static final int WIDTH = 944;
@@ -247,36 +245,14 @@ public class Profile {
 		}
 	}
 
-	public static File applyAnimatedBackground(Account acc, BufferedImage overlay) throws IOException {
+	public static File applyAnimatedBackground(Account acc, BufferedImage overlay) throws IOException, ImageReadException {
 		File out = File.createTempFile("profile_", ".gif");
-		try (ImageOutputStream ios = new FileImageOutputStream(out)) {
-			List<Triple<Integer, Integer, BufferedImage>> frames = Helper.readGIF(acc.getBg(), WIDTH, HEIGHT);
-			List<Triple<Integer, Integer, BufferedImage>> toDraw = new ArrayList<>();
+		List<GifFrame> frames = Helper.readGif(acc.getBg(), true).stream()
+				.peek(frame -> frame.rescaleFrame(WIDTH, HEIGHT))
+				.peek(frame -> frame.applyOverlay(overlay))
+				.collect(Collectors.toList());
 
-			for (Triple<Integer, Integer, BufferedImage> frame : frames) {
-				BufferedImage canvas = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g2d = canvas.createGraphics();
-
-				g2d.drawImage(clipRoundEdges(frame.getRight()), 0, 0, null);
-				g2d.drawImage(overlay, 0, 0, null);
-
-				g2d.dispose();
-
-				toDraw.add(Triple.of(frame.getLeft(), frame.getMiddle(), canvas));
-			}
-
-			GifSequenceWriter writer = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
-			for (Triple<Integer, Integer, BufferedImage> p : toDraw) {
-				try {
-					writer.writeToSequence(p.getRight(), p.getLeft(), p.getMiddle(), true);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-			writer.close();
-		}
-
+		Helper.makeGIF(out, frames);
 		return out;
 	}
 
