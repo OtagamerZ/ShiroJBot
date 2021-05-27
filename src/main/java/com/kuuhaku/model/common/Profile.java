@@ -214,6 +214,17 @@ public class Profile {
 		return bi;
 	}
 
+	public static BufferedImage clipRoundEdges(BufferedImage image, float percent) {
+		BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+
+		g2d.setClip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), bi.getWidth() * percent, bi.getWidth() * percent));
+		g2d.drawImage(image, null, 0, 0);
+		g2d.dispose();
+
+		return bi;
+	}
+
 	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Member mb, Graphics2D g2d) throws IOException {
 		List<BufferedImage> badges = new ArrayList<>() {{
 			String exceed = ExceedDAO.getExceed(m.getId());
@@ -250,6 +261,7 @@ public class Profile {
 		List<GifFrame> frames = Helper.readGif(acc.getBg(), true).stream()
 				.peek(frame -> frame.rescaleFrame(WIDTH, HEIGHT))
 				.peek(frame -> frame.applyOverlay(overlay))
+				.peek(frame -> frame.roundEdges(0.1f))
 				.collect(Collectors.toList());
 
 		Helper.makeGIF(out, frames);
