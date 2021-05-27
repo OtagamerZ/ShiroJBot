@@ -13,13 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GlitchCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GlitchCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/MirrorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/MirrorCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NegativeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NegativeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NoiseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NoiseCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShiftCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShiftCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Filtros de imagem agora também criam gifs">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1204,14 +1199,7 @@
       <workItem from="1622031540198" duration="11067000" />
       <workItem from="1622122123741" duration="3656000" />
       <workItem from="1622132590751" duration="354000" />
-      <workItem from="1622133380180" duration="709000" />
-    </task>
-    <task id="LOCAL-04507" summary="Correções menores">
-      <created>1621655449111</created>
-      <option name="number" value="04507" />
-      <option name="presentableId" value="LOCAL-04507" />
-      <option name="project" value="LOCAL" />
-      <updated>1621655449111</updated>
+      <workItem from="1622133380180" duration="1082000" />
     </task>
     <task id="LOCAL-04508" summary="Correções menores">
       <created>1621656330431</created>
@@ -1549,7 +1537,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622127291277</updated>
     </task>
-    <option name="localTasksCounter" value="4556" />
+    <task id="LOCAL-04556" summary="Filtros de imagem agora também criam gifs">
+      <created>1622134114746</created>
+      <option name="number" value="04556" />
+      <option name="presentableId" value="LOCAL-04556" />
+      <option name="project" value="LOCAL" />
+      <updated>1622134114747</updated>
+    </task>
+    <option name="localTasksCounter" value="4557" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1636,7 +1631,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Nova tag: Investidor" />
     <MESSAGE value="Remoção completa do s!settings" />
     <MESSAGE value="Adição de cargos pagos" />
     <MESSAGE value="Melhoria na listagem de imagens das cartas" />
@@ -1661,7 +1655,8 @@
     <MESSAGE value="Criação da arena Daten City" />
     <MESSAGE value="Melhoria no comando de venda de cartas" />
     <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Filtros de imagem agora também criam gifs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Filtros de imagem agora também criam gifs" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
