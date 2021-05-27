@@ -409,14 +409,21 @@ public class Champion implements Drawable, Cloneable {
 		float cBonus = 1;
 
 		if (game != null) {
-			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().opt("charm") == Charm.SOULLINK)) {
-				Field f = game.getArena().getField();
-				if (f != null)
-					fBonus = f.getModifiers().optFloat(getRace().name(), 1);
-			}
-
 			Side s = game.getSideById(acc.getUid());
 			Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
+
+			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().opt("charm") == Charm.SOULLINK)) {
+				Field f = game.getArena().getField();
+				if (f != null) {
+					fBonus = f.getModifiers().optFloat(getRace().name(), 1);
+
+					if (combos.getLeft() == Race.ELF) {
+						if (fBonus < 1) fBonus /= 2;
+						else if (fBonus > 1) fBonus *= 1.25;
+					}
+				}
+			}
+
 			if (combos.getLeft() == Race.UNDEAD) {
 				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
 			} else if (combos.getRight() == Race.UNDEAD)
