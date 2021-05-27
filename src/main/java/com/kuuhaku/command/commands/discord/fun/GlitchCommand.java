@@ -22,15 +22,21 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
+import com.kuuhaku.utils.GifSequenceWriter;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ImageFilters;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.tuple.Triple;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Command(
@@ -67,7 +73,9 @@ public class GlitchCommand implements Executable {
 					}
 
 					try {
-						BufferedImage bi = ImageIO.read(Helper.getImage(Helper.getImageFrom(msg)));
+						String url = Helper.getImageFrom(msg);
+						File f;
+
 						int pow = 4;
 						if (args.length > 0) {
 							pow = Integer.parseInt(args[0]);
@@ -78,9 +86,34 @@ public class GlitchCommand implements Executable {
 							}
 						}
 
+						if (url.contains(".gif")) {
+							f = File.createTempFile("glitched", ".gif");
+							try (ImageOutputStream ios = new FileImageOutputStream(f)) {
+								List<Triple<Integer, Integer, BufferedImage>> frames = Helper.readGIF(url);
+
+								int finalPow = pow;
+								frames.replaceAll(frame -> Triple.of(frame.getLeft(), frame.getMiddle(), ImageFilters.glitch(frame.getRight(), finalPow)));
+
+								GifSequenceWriter writer = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
+								for (Triple<Integer, Integer, BufferedImage> p : frames) {
+									try {
+										writer.writeToSequence(p.getRight(), p.getLeft(), p.getMiddle(), true);
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+								}
+
+								writer.close();
+							}
+						} else {
+							BufferedImage bi = ImageIO.read(Helper.getImage(url));
+
+							f = Helper.writeAndGet(ImageFilters.glitch(bi, pow), "glitched", "png");
+						}
+
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Aqui está sua imagem!")
-								.addFile(Helper.writeAndGet(ImageFilters.glitch(bi, pow), "glitched", "png"))
+								.addFile(f)
 								.queue();
 					} catch (IOException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
