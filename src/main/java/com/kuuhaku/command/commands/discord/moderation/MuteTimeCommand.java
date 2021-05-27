@@ -51,7 +51,7 @@ public class MuteTimeCommand implements Executable {
 
 			gc.setMuteTime(time);
 			channel.sendMessage("✅ | Tempo de mute definido como " + time + " minutos com sucesso!").queue();
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage(I18n.getString("err_invalid-time")).queue();
 		}
 
