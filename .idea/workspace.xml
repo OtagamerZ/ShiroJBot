@@ -14,8 +14,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShiftCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShiftCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1214,14 +1212,7 @@
       <workItem from="1622132590751" duration="354000" />
       <workItem from="1622133380180" duration="2299000" />
       <workItem from="1622139177011" duration="21000" />
-      <workItem from="1622139415312" duration="5467000" />
-    </task>
-    <task id="LOCAL-04512" summary="Correções menores">
-      <created>1621716261569</created>
-      <option name="number" value="04512" />
-      <option name="presentableId" value="LOCAL-04512" />
-      <option name="project" value="LOCAL" />
-      <updated>1621716261569</updated>
+      <workItem from="1622139415312" duration="5787000" />
     </task>
     <task id="LOCAL-04513" summary="Correções menores">
       <created>1621862387623</created>
@@ -1559,7 +1550,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622144020638</updated>
     </task>
-    <option name="localTasksCounter" value="4561" />
+    <task id="LOCAL-04561" summary="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
+      <created>1622144946203</created>
+      <option name="number" value="04561" />
+      <option name="presentableId" value="LOCAL-04561" />
+      <option name="project" value="LOCAL" />
+      <updated>1622144946204</updated>
+    </task>
+    <option name="localTasksCounter" value="4562" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
