@@ -22,16 +22,14 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.utils.GifSequenceWriter;
+import com.kuuhaku.model.common.GifFrame;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ImageFilters;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.tuple.Triple;
+import org.apache.commons.imaging.ImageReadException;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageOutputStream;
-import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -77,22 +75,18 @@ public class NegativeCommand implements Executable {
 
 						if (url.contains(".gif")) {
 							f = File.createTempFile("inverted", ".gif");
-							try (ImageOutputStream ios = new FileImageOutputStream(f)) {
-								List<Triple<Integer, Integer, BufferedImage>> frames = Helper.readGIF(url);
+							List<GifFrame> frames = Helper.readGif(url, true);
+							frames.replaceAll(frame -> new GifFrame(
+									ImageFilters.invert(frame.getAdjustedFrame()),
+									frame.getDisposal(),
+									frame.getWidth(),
+									frame.getHeight(),
+									frame.getOffsetX(),
+									frame.getOffsetY(),
+									frame.getDelay()
+							));
 
-								frames.replaceAll(frame -> Triple.of(frame.getLeft(), frame.getMiddle(), ImageFilters.invert(frame.getRight())));
-
-								GifSequenceWriter writer = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
-								for (Triple<Integer, Integer, BufferedImage> p : frames) {
-									try {
-										writer.writeToSequence(p.getRight(), p.getLeft(), p.getMiddle(), true);
-									} catch (IOException e) {
-										e.printStackTrace();
-									}
-								}
-
-								writer.close();
-							}
+							Helper.makeGIF(f, frames);
 						} else {
 							BufferedImage bi = ImageIO.read(Helper.getImage(url));
 
@@ -103,7 +97,7 @@ public class NegativeCommand implements Executable {
 						channel.sendMessage("Aqui está sua imagem!")
 								.addFile(f)
 								.queue();
-					} catch (IOException e) {
+					} catch (IOException | ImageReadException e) {
 						ms.get().delete().queue(null, Helper::doNothing);
 						channel.sendMessage("❌ | Deu erro ao baixar a imagem, tente com outra.").queue();
 					}
