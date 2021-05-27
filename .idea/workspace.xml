@@ -13,24 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Filtros de imagem agora também criam gifs">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/GifFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GlitchCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/GlitchCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/MirrorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/MirrorCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NegativeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NegativeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NoiseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NoiseCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShiftCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/ShiftCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ProfileCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MatchMakingRating.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/GifSequenceWriter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ImageFilters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ImageFilters.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1227,14 +1210,7 @@
       <workItem from="1622132590751" duration="354000" />
       <workItem from="1622133380180" duration="2299000" />
       <workItem from="1622139177011" duration="21000" />
-      <workItem from="1622139415312" duration="3946000" />
-    </task>
-    <task id="LOCAL-04509" summary="Correções menores">
-      <created>1621656563756</created>
-      <option name="number" value="04509" />
-      <option name="presentableId" value="LOCAL-04509" />
-      <option name="project" value="LOCAL" />
-      <updated>1621656563756</updated>
+      <workItem from="1622139415312" duration="4268000" />
     </task>
     <task id="LOCAL-04510" summary="Correções menores">
       <created>1621656737420</created>
@@ -1572,7 +1548,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622134482312</updated>
     </task>
-    <option name="localTasksCounter" value="4558" />
+    <task id="LOCAL-04558" summary="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
+      <created>1622143451949</created>
+      <option name="number" value="04558" />
+      <option name="presentableId" value="LOCAL-04558" />
+      <option name="project" value="LOCAL" />
+      <updated>1622143451949</updated>
+    </task>
+    <option name="localTasksCounter" value="4559" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1659,7 +1642,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Remoção completa do s!settings" />
     <MESSAGE value="Adição de cargos pagos" />
     <MESSAGE value="Melhoria na listagem de imagens das cartas" />
     <MESSAGE value="Adição de comandos de filtros de imagem." />
@@ -1684,7 +1666,8 @@
     <MESSAGE value="Melhoria no comando de venda de cartas" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Filtros de imagem agora também criam gifs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Filtros de imagem agora também criam gifs" />
+    <MESSAGE value="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
