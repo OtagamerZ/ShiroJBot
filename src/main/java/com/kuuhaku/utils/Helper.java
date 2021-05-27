@@ -2745,6 +2745,8 @@ public class Helper {
 			gif.setRepeat(0);
 			gif.start(fos);
 			for (GifFrame frame : frames) {
+				gif.setBackground(Color.magenta);
+				gif.setTransparent(Color.magenta);
 				gif.setDispose(frame.getDisposal().ordinal());
 				gif.setDelay(frame.getDelay());
 				gif.addFrame(frame.getAdjustedFrame());
