@@ -1509,7 +1509,7 @@ public class Shoukan extends GlobalGame {
 		for (Map.Entry<Side, Hand> entry : hands.entrySet()) {
 			Hand h = entry.getValue();
 			Hand op = hands.get(h.getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
-			if (h.getHp() == 0) {
+			if (h.getHp() <= 0) {
 				if (getCustom() == null) {
 					getHistory().setWinner(op.getSide());
 					getBoard().awardWinner(this, daily, op.getUser().getId());
