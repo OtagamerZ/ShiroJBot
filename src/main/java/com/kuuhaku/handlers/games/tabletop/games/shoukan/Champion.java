@@ -713,9 +713,11 @@ public class Champion implements Drawable, Cloneable {
 		return requiredCards;
 	}
 
-	public Map<String, Integer> canFuse(List<String> cards) {
-		Map<String, Integer> out = new HashMap<>();
-		for (String req : requiredCards) {
+	public Map<String, Pair<Integer, Boolean>> canFuse(List<String> champ, List<String> equip, String field) {
+		Set<String> rem = new HashSet<>(requiredCards);
+		Map<String, Pair<Integer, Boolean>> out = new HashMap<>();
+
+		for (String req : rem) {
 			if (req.contains(",")) {
 				String[] optArgs = req.split(";");
 				int reqCombo = Integer.parseInt(optArgs[0]);
@@ -723,9 +725,15 @@ public class Champion implements Drawable, Cloneable {
 
 				Set<String> found = new HashSet<>();
 				for (String opt : opts) {
-					if (cards.contains(opt)) {
+					if (champ.contains(opt)) {
 						if (found.add(opt)) {
-							out.put(opt, cards.indexOf(opt));
+							out.put(opt, Pair.of(champ.indexOf(opt), false));
+
+							if (found.size() == reqCombo) break;
+						}
+					} else if (equip.contains(opt)) {
+						if (found.add(opt)) {
+							out.put(opt, Pair.of(equip.indexOf(opt), true));
 
 							if (found.size() == reqCombo) break;
 						}
@@ -733,15 +741,22 @@ public class Champion implements Drawable, Cloneable {
 				}
 
 				if (found.size() != reqCombo) return Map.of();
+				else rem.remove(req);
 			} else {
-				if (cards.contains(req))
-					out.put(req, cards.indexOf(req));
-				else
-					return Map.of();
+				if (champ.contains(req)) {
+					out.put(req, Pair.of(champ.indexOf(req), false));
+					rem.remove(req);
+				} else if (equip.contains(req)) {
+					out.put(req, Pair.of(equip.indexOf(req), true));
+					rem.remove(req);
+				} else return Map.of();
 			}
 		}
 
-		return out;
+		if (!rem.isEmpty()) {
+			if (rem.remove(field) && rem.isEmpty()) return out;
+			else return Map.of();
+		} else return out;
 	}
 
 	public void setRequiredCards(Set<String> requiredCards) {
