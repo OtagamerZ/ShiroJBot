@@ -65,6 +65,11 @@ public class GifFrame {
 		return adjustedFrame;
 	}
 
+	public BufferedImage roundEdges(float percent) {
+		adjustedFrame = Profile.clipRoundEdges(getAdjustedFrame(), percent);
+		return adjustedFrame;
+	}
+
 	public void applyOverlay(BufferedImage overlay) {
 		Graphics2D g2d = getAdjustedFrame().createGraphics();
 		g2d.drawImage(overlay, 0, 0, null);
