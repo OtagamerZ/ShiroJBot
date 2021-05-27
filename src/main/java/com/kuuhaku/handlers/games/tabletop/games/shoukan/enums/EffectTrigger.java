@@ -21,7 +21,8 @@ package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 public enum EffectTrigger {
 	NONE,
 	ON_FLIP,
-	ON_DEATH,
+	BEFORE_DEATH,
+	AFTER_DEATH,
 	ON_ATTACK,
 	ON_SUMMON,
 	BEFORE_TURN,
@@ -38,5 +39,5 @@ public enum EffectTrigger {
 	POST_ATTACK_ASSIST,
 	ON_DODGE,
 	ON_MISS,
-	ON_RENDER
+	GAME_TICK
 }

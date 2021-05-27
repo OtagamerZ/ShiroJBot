@@ -768,6 +768,17 @@ public class Shoukan extends GlobalGame {
 	}
 
 	private void reportEvent(Hand h, String msg, boolean resetTimer, boolean changeTurn) {
+		for (Side s : Side.values()) {
+			List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(s);
+			for (int i = 0; i < slts.size(); i++) {
+				SlotColumn<Champion, Equipment> slot = slts.get(i);
+				if (slot.getTop() == null) continue;
+
+				Champion c = slot.getTop();
+				if (applyEffect(GAME_TICK, c, i, s, Pair.of(c, i), null)) return;
+			}
+		}
+
 		if (resetTimer) resetTimerKeepTurn();
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		moveLock = true;
@@ -893,8 +904,8 @@ public class Shoukan extends GlobalGame {
 					if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
 						return;
 
-					if (applyEot(ON_DEATH, next, is[1])) return;
-					if (applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
+					if (applyEot(BEFORE_DEATH, next, is[1])) return;
+					if (applyEffect(BEFORE_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
 					float demonFac = 1;
 
@@ -930,6 +941,10 @@ public class Shoukan extends GlobalGame {
 
 					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 						killCard(next, is[1]);
+
+						if (applyEot(AFTER_DEATH, next, is[1])) return;
+						if (applyEffect(AFTER_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1])))
+							return;
 						if (!postCombat()) {
 							String msg = "%s derrotou %s! (%d > %d)%s%s".formatted(
 									yours.getName(),
@@ -978,12 +993,16 @@ public class Shoukan extends GlobalGame {
 						reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
 					}
 				} else {
-					if (applyEot(ON_DEATH, next, is[1])) return;
-					if (applyEffect(ON_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
+					if (applyEot(BEFORE_DEATH, next, is[1])) return;
+					if (applyEffect(BEFORE_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
 					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 						killCard(next, is[1]);
 						killCard(current, is[0]);
+
+						if (applyEot(AFTER_DEATH, next, is[1])) return;
+						if (applyEffect(AFTER_DEATH, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1])))
+							return;
 
 						if (!postCombat()) {
 							reportEvent(null, "As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")", true, false);
