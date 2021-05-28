@@ -2460,7 +2460,7 @@ public class Helper {
 			if (is == null) return new byte[0];
 			else {
 				try {
-					return Helper.getBytes(ImageIO.read(is), path.split("\\.")[1]);
+					return getBytes(ImageIO.read(is), path.split("\\.")[1]);
 				} catch (IOException e) {
 					return new byte[0];
 				}
@@ -2694,7 +2694,7 @@ public class Helper {
 
 						BufferedImage frame = source.get(i);
 						g.drawImage(frame, 0, 0, null);
-						frames.add(Helper.deepCopy(bi));
+						frames.add(deepCopy(bi));
 					}
 					case RESTORE_TO_PREVIOUS -> {
 						g.dispose();
@@ -2703,12 +2703,12 @@ public class Helper {
 
 						BufferedImage frame = source.get(i);
 						g.drawImage(frame, 0, 0, null);
-						frames.add(Helper.deepCopy(bi));
+						frames.add(deepCopy(bi));
 					}
 					default -> {
 						BufferedImage frame = source.get(i);
 						g.drawImage(frame, 0, 0, null);
-						frames.add(Helper.deepCopy(bi));
+						frames.add(deepCopy(bi));
 					}
 				}
 
@@ -2742,11 +2742,16 @@ public class Helper {
 	public static void makeGIF(File f, List<GifFrame> frames) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(f)) {
 			AnimatedGifEncoder gif = new AnimatedGifEncoder();
+			if (hasTransparency(frames)) {
+				Color trans = new Color(getTransparencyColor(frames));
+				gif.setBackground(trans);
+				gif.setTransparent(trans, true);
+			}
+
 			gif.setRepeat(0);
+			gif.setQuality(1);
 			gif.start(fos);
 			for (GifFrame frame : frames) {
-				gif.setBackground(Color.magenta);
-				gif.setTransparent(Color.magenta);
 				gif.setDispose(frame.getDisposal().ordinal());
 				gif.setDelay(frame.getDelay());
 				gif.addFrame(frame.getAdjustedFrame());
@@ -2758,11 +2763,16 @@ public class Helper {
 	public static void makeGIF(File f, List<GifFrame> frames, int repeat) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(f)) {
 			AnimatedGifEncoder gif = new AnimatedGifEncoder();
+			if (hasTransparency(frames)) {
+				Color trans = new Color(getTransparencyColor(frames));
+				gif.setBackground(trans);
+				gif.setTransparent(trans, true);
+			}
+
 			gif.setRepeat(repeat);
+			gif.setQuality(1);
 			gif.start(fos);
 			for (GifFrame frame : frames) {
-				gif.setBackground(Color.magenta);
-				gif.setTransparent(Color.magenta);
 				gif.setDispose(frame.getDisposal().ordinal());
 				gif.setDelay(frame.getDelay());
 				gif.addFrame(frame.getAdjustedFrame());
@@ -2774,13 +2784,40 @@ public class Helper {
 	public static void makeGIF(File f, List<GifFrame> frames, int repeat, int delay) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(f)) {
 			AnimatedGifEncoder gif = new AnimatedGifEncoder();
+			if (hasTransparency(frames)) {
+				Color trans = new Color(getTransparencyColor(frames));
+				gif.setBackground(trans);
+				gif.setTransparent(trans, true);
+			}
+
 			gif.setRepeat(repeat);
+			gif.setQuality(1);
 			gif.start(fos);
 			for (GifFrame frame : frames) {
-				gif.setBackground(Color.magenta);
-				gif.setTransparent(Color.magenta);
 				gif.setDispose(frame.getDisposal().ordinal());
-				gif.setDelay(delay);
+				gif.setDelay(delay == -1 ? frame.getDelay() : delay);
+				gif.addFrame(frame.getAdjustedFrame());
+			}
+			gif.finish();
+		}
+	}
+
+	public static void makeGIF(File f, List<GifFrame> frames, int repeat, int delay, int quality) throws IOException {
+		try (FileOutputStream fos = new FileOutputStream(f)) {
+
+			AnimatedGifEncoder gif = new AnimatedGifEncoder();
+			if (hasTransparency(frames)) {
+				Color trans = new Color(getTransparencyColor(frames));
+				gif.setBackground(trans);
+				gif.setTransparent(trans, true);
+			}
+
+			gif.setRepeat(repeat);
+			gif.setQuality(quality);
+			gif.start(fos);
+			for (GifFrame frame : frames) {
+				gif.setDispose(frame.getDisposal().ordinal());
+				gif.setDelay(delay == -1 ? frame.getDelay() : delay);
 				gif.addFrame(frame.getAdjustedFrame());
 			}
 			gif.finish();
@@ -2792,5 +2829,30 @@ public class Helper {
 		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
 		WritableRaster raster = bi.copyData(bi.getRaster().createCompatibleWritableRaster());
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+	}
+
+	public static boolean hasTransparency(List<GifFrame> frames) {
+		for (GifFrame frame : frames) {
+			if (!frame.getFrame().getColorModel().hasAlpha()) continue;
+
+			for (int y = 0; y < frame.getHeight(); y++) {
+				for (int x = 0; x < frame.getWidth(); x++) {
+					int[] rgb = unpackRGB(frame.getFrame().getRGB(x, y));
+
+					if (rgb[0] == 0) return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public static int getTransparencyColor(List<GifFrame> frames) {
+		Set<Integer> tones = new HashSet<>(Set.of(0xFF0000, 0xFF00, 0xFF, 0xFFFF00, 0xFF00FF, 0xFFFF));
+		for (GifFrame frame : frames) {
+			forEachPixel(frame.getAdjustedFrame(), (coords, rgb) -> tones.remove(rgb));
+		}
+
+		return tones.stream().findFirst().orElse(0);
 	}
 }
