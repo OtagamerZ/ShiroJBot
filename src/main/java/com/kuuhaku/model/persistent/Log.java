@@ -54,7 +54,7 @@ public class Log {
 	public Log(Guild guild, User user, String command) {
 		this.guildId = guild.getId();
 		this.guild = guild.getName();
-		this.usr = user.getAsMention();
+		this.usr = user.getAsTag();
 		this.uid = user.getId();
 		this.command = command;
 		this.timestamp = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.fullDateFormat);
