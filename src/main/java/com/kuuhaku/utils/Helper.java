@@ -2743,15 +2743,16 @@ public class Helper {
 	public static void makeGIF(File f, List<GifFrame> frames) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(f)) {
 			AnimatedGifEncoder gif = new AnimatedGifEncoder();
+			gif.setRepeat(0);
+			gif.setQuality(1);
+			gif.start(fos);
+
 			if (hasTransparency(frames)) {
 				Color trans = new Color(getTransparencyColor(frames));
 				gif.setBackground(trans);
 				gif.setTransparent(trans, true);
 			}
 
-			gif.setRepeat(0);
-			gif.setQuality(1);
-			gif.start(fos);
 			for (GifFrame frame : frames) {
 				gif.setDispose(frame.getDisposal().ordinal());
 				gif.setDelay(frame.getDelay());
@@ -2764,15 +2765,16 @@ public class Helper {
 	public static void makeGIF(File f, List<GifFrame> frames, int repeat) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(f)) {
 			AnimatedGifEncoder gif = new AnimatedGifEncoder();
+			gif.setRepeat(repeat);
+			gif.setQuality(1);
+			gif.start(fos);
+
 			if (hasTransparency(frames)) {
 				Color trans = new Color(getTransparencyColor(frames));
 				gif.setBackground(trans);
 				gif.setTransparent(trans, true);
 			}
 
-			gif.setRepeat(repeat);
-			gif.setQuality(1);
-			gif.start(fos);
 			for (GifFrame frame : frames) {
 				gif.setDispose(frame.getDisposal().ordinal());
 				gif.setDelay(frame.getDelay());
@@ -2785,15 +2787,16 @@ public class Helper {
 	public static void makeGIF(File f, List<GifFrame> frames, int repeat, int delay) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(f)) {
 			AnimatedGifEncoder gif = new AnimatedGifEncoder();
+			gif.setRepeat(repeat);
+			gif.setQuality(1);
+			gif.start(fos);
+
 			if (hasTransparency(frames)) {
 				Color trans = new Color(getTransparencyColor(frames));
 				gif.setBackground(trans);
 				gif.setTransparent(trans, true);
 			}
 
-			gif.setRepeat(repeat);
-			gif.setQuality(1);
-			gif.start(fos);
 			for (GifFrame frame : frames) {
 				gif.setDispose(frame.getDisposal().ordinal());
 				gif.setDelay(delay == -1 ? frame.getDelay() : delay);
@@ -2805,17 +2808,17 @@ public class Helper {
 
 	public static void makeGIF(File f, List<GifFrame> frames, int repeat, int delay, int quality) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(f)) {
-
 			AnimatedGifEncoder gif = new AnimatedGifEncoder();
+			gif.setRepeat(repeat);
+			gif.setQuality(quality);
+			gif.start(fos);
+
 			if (hasTransparency(frames)) {
 				Color trans = new Color(getTransparencyColor(frames));
 				gif.setBackground(trans);
 				gif.setTransparent(trans, true);
 			}
 
-			gif.setRepeat(repeat);
-			gif.setQuality(quality);
-			gif.start(fos);
 			for (GifFrame frame : frames) {
 				gif.setDispose(frame.getDisposal().ordinal());
 				gif.setDelay(delay == -1 ? frame.getDelay() : delay);
