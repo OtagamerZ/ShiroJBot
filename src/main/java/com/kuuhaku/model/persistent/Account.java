@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.google.gson.JsonElement;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.api.endpoint.DiscordBotsListHandler;
@@ -524,7 +525,8 @@ public class Account {
 		}
 
 		JSONObject prog = new JSONObject(dailyProgress);
-		int date = (int) Helper.getOr(prog.remove("DATE").getAsInt(), -1);
+		JsonElement je = prog.remove("DATE");
+		int date = je == null ? -1 : je.getAsInt();
 		Map<DailyTask, Integer> tasks = prog.toMap().entrySet().stream()
 				.filter(e -> Arrays.stream(DailyTask.values()).anyMatch(dt -> dt.name().equals(e.getKey())))
 				.map(e -> Pair.of(DailyTask.valueOf(e.getKey()), NumberUtils.toInt(String.valueOf(e.getValue()))))
