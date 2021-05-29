@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.google.gson.JsonElement;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
@@ -334,10 +335,10 @@ public class MatchMakingRating {
 				for (MatchRound round : rounds) {
 					JSONObject jo = round.getScript().getJSONObject(s.name().toLowerCase(Locale.ROOT));
 
-					for (Map.Entry<String, Object> entry : jo.toMap().entrySet()) {
+					for (Map.Entry<String, JsonElement> entry : jo.toMap().entrySet()) {
 						String key = entry.getKey();
 						if (!key.equals("id")) {
-							int val = (int) entry.getValue();
+							int val = (int) entry.getValue().getAsInt();
 							info.getInfo().merge(key, val, Helper::subtract);
 						}
 					}
