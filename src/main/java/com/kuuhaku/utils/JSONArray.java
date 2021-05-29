@@ -58,7 +58,11 @@ public class JSONArray implements Iterable<JsonElement> {
 	}
 
 	public JsonElement get(int index, JsonElement or) {
-		return Helper.getOr(get(index), or);
+		try {
+			return Helper.getOr(get(index), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, int index) {
@@ -82,7 +86,11 @@ public class JSONArray implements Iterable<JsonElement> {
 	}
 
 	public boolean getBoolean(int index, boolean or) {
-		return Helper.getOr(get(index).getAsBoolean(), false) || or;
+		try {
+			return Helper.getOr(get(index).getAsBoolean(), false) || or;
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public BigInteger getBigInteger(int index) {
@@ -90,7 +98,11 @@ public class JSONArray implements Iterable<JsonElement> {
 	}
 
 	public BigInteger getBigInteger(int index, BigInteger or) {
-		return Helper.getOr(get(index).getAsBigInteger(), or);
+		try {
+			return Helper.getOr(get(index).getAsBigInteger(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public BigDecimal getBigDecimal(int index) {
@@ -98,7 +110,11 @@ public class JSONArray implements Iterable<JsonElement> {
 	}
 
 	public BigDecimal getBigDecimal(int index, BigDecimal or) {
-		return Helper.getOr(get(index).getAsBigDecimal(), or);
+		try {
+			return Helper.getOr(get(index).getAsBigDecimal(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public double getDouble(int index) {
@@ -106,7 +122,11 @@ public class JSONArray implements Iterable<JsonElement> {
 	}
 
 	public double getDouble(int index, double or) {
-		return Helper.getOr(get(index).getAsDouble(), or);
+		try {
+			return Helper.getOr(get(index).getAsDouble(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public float getFloat(int index) {
@@ -114,7 +134,11 @@ public class JSONArray implements Iterable<JsonElement> {
 	}
 
 	public float getFloat(int index, float or) {
-		return Helper.getOr(get(index).getAsFloat(), or);
+		try {
+			return Helper.getOr(get(index).getAsFloat(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public Number getNumber(int index) {
@@ -122,7 +146,11 @@ public class JSONArray implements Iterable<JsonElement> {
 	}
 
 	public Number getNumber(int index, Number or) {
-		return Helper.getOr(get(index).getAsNumber(), or);
+		try {
+			return Helper.getOr(get(index).getAsNumber(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public int getInt(int index) {
@@ -130,7 +158,11 @@ public class JSONArray implements Iterable<JsonElement> {
 	}
 
 	public int getInt(int index, int or) {
-		return Helper.getOr(get(index).getAsInt(), or);
+		try {
+			return Helper.getOr(get(index).getAsInt(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public JSONArray getJSONArray(int index) {
@@ -156,7 +188,11 @@ public class JSONArray implements Iterable<JsonElement> {
 	}
 
 	public long getLong(int index, long or) {
-		return Helper.getOr(get(index).getAsLong(), or);
+		try {
+			return Helper.getOr(get(index).getAsLong(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public String getString(int index) {
@@ -164,7 +200,11 @@ public class JSONArray implements Iterable<JsonElement> {
 	}
 
 	public String getString(int index, String or) {
-		return Helper.getOr(get(index).getAsString(), or);
+		try {
+			return Helper.getOr(get(index).getAsString(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public boolean isNull(int index) {
