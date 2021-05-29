@@ -25,10 +25,10 @@ import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
-import org.json.JSONObject;
 
 import java.awt.*;
 import java.net.InetSocketAddress;
@@ -68,7 +68,7 @@ public class CanvasSocket extends WebSocketServer {
 		switch (jo.getString("type")) {
 			case "canvas" -> {
 				JSONObject pixel = jo.getJSONObject("content").getJSONObject("pixel");
-				int size = jo.getJSONObject("info").optInt("size", 0);
+				int size = jo.getJSONObject("info").getInt("size", 0);
 				Token t = TokenDAO.getToken(jo.getString("token"));
 				if (t == null || size != Helper.CANVAS_SIZE) return;
 

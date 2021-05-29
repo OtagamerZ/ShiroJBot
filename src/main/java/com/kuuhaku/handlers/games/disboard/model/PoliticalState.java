@@ -18,9 +18,10 @@
 
 package com.kuuhaku.handlers.games.disboard.model;
 
+import com.google.gson.JsonElement;
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.model.enums.ExceedEnum;
-import org.json.JSONArray;
+import com.kuuhaku.utils.JSONArray;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class PoliticalState {
 		return exceed;
 	}
 
-	public List<Object> getCountries() {
+	public List<JsonElement> getCountries() {
 		return new JSONArray(countries).toList();
 	}
 

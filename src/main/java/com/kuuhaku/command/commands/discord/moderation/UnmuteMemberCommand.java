@@ -61,7 +61,10 @@ public class UnmuteMemberCommand implements Executable {
 		Member mb = message.getMentionedMembers().get(0);
 
 		MutedMember m = MemberDAO.getMutedMemberById(mb.getId());
-		List<Role> roles = m.getRoles().toList().stream().map(rol -> guild.getRoleById((String) rol)).filter(Objects::nonNull).collect(Collectors.toList());
+		List<Role> roles = m.getRoles().toList().stream()
+				.map(rol -> guild.getRoleById(rol.getAsString()))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
 		guild.modifyMemberRoles(mb, roles)
 				.flatMap(s -> channel.sendMessage("✅ | Usuário dessilenciado com sucesso!"))
 				.queue(s -> {

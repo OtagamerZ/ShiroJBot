@@ -29,8 +29,8 @@ import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.entities.User;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;

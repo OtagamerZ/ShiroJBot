@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
-import org.json.JSONArray;
+import com.kuuhaku.utils.JSONArray;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

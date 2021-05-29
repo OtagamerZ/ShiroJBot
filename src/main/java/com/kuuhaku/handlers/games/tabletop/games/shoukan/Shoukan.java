@@ -39,6 +39,7 @@ import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
@@ -48,7 +49,6 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 import org.springframework.util.CollectionUtils;
 
 import java.time.temporal.ChronoUnit;
@@ -928,7 +928,7 @@ public class Shoukan extends GlobalGame {
 								Hand enemy = hands.get(next);
 								enemy.removeHp(apDamage);
 							}
-						} else if (getCustom() == null || !getCustom().optBoolean("semdano")) {
+						} else if (getCustom() == null || !getCustom().getBoolean("semdano")) {
 							Hand enemy = hands.get(next);
 							if (yours.getBonus().getSpecialData().has("totalDamage"))
 								enemy.removeHp(Math.round(yPower * demonFac));
@@ -974,7 +974,7 @@ public class Shoukan extends GlobalGame {
 					if (applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
 					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
-						if (yours.getBonus().getSpecialData().remove("noDamage") == null && (getCustom() == null || !getCustom().optBoolean("semdano"))) {
+						if (yours.getBonus().getSpecialData().remove("noDamage") == null && (getCustom() == null || !getCustom().getBoolean("semdano"))) {
 							Hand you = hands.get(current);
 							you.removeHp(hPower - yPower);
 						}
@@ -1108,7 +1108,7 @@ public class Shoukan extends GlobalGame {
 
 	public void killCard(Side to, int index) {
 		Champion ch = getArena().getSlots().get(to).get(index).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventDeath")) return;
+		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventDeath")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 
 		slts.get(index).setTop(null);
@@ -1139,10 +1139,10 @@ public class Shoukan extends GlobalGame {
 			for (int i = 0; i < slts.size(); i++) {
 				Equipment eq = slts.get(i).getBottom();
 				if (eq != null && eq.getLinkedTo().getLeft() == target) {
-					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
 						unequipCard(to, i, slts);
 						return;
-					} else if ((eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLMIRROR) && chi != null) {
+					} else if ((eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLMIRROR) && chi != null) {
 						destroyCard(from, source, to, target);
 						unequipCard(to, i, slts);
 						return;
@@ -1174,7 +1174,7 @@ public class Shoukan extends GlobalGame {
 		for (int i = 0; i < slts.size(); i++) {
 			Equipment eq = slts.get(i).getBottom();
 			if (eq != null && eq.getLinkedTo().getLeft() == target) {
-				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
 					unequipCard(to, i, slts);
 					return;
 				}
@@ -1209,10 +1209,10 @@ public class Shoukan extends GlobalGame {
 			for (int i = 0; i < slts.size(); i++) {
 				Equipment eq = slts.get(i).getBottom();
 				if (eq != null && eq.getLinkedTo().getLeft() == target) {
-					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
 						unequipCard(to, i, slts);
 						return;
-					} else if ((eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLMIRROR)) {
+					} else if ((eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLMIRROR)) {
 						captureCard(from, source, to, target, withFusion);
 						unequipCard(to, i, slts);
 						return;
@@ -1244,7 +1244,7 @@ public class Shoukan extends GlobalGame {
 		for (int i = 0; i < slts.size(); i++) {
 			Equipment eq = slts.get(i).getBottom();
 			if (eq != null && eq.getLinkedTo().getLeft() == target) {
-				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
 					unequipCard(to, i, slts);
 					return;
 				}
@@ -1341,7 +1341,7 @@ public class Shoukan extends GlobalGame {
 
 	public void convertCard(Side to, int target, Side from, int source) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
+		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
@@ -1352,10 +1352,10 @@ public class Shoukan extends GlobalGame {
 			for (int i = 0; i < slts.size(); i++) {
 				Equipment eq = slts.get(i).getBottom();
 				if (eq != null && eq.getLinkedTo().getLeft() == target) {
-					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
 						unequipCard(to, i, slts);
 						return;
-					} else if (eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLMIRROR) {
+					} else if (eq.getCharm() == Charm.SPELLMIRROR || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLMIRROR) {
 						convertCard(from, source, to, target);
 						unequipCard(to, i, slts);
 						return;
@@ -1385,13 +1385,13 @@ public class Shoukan extends GlobalGame {
 	public void convertCard(Side to, int target) {
 		Side from = to == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
+		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 
 		for (int i = 0; i < slts.size(); i++) {
 			Equipment eq = slts.get(i).getBottom();
 			if (eq != null && eq.getLinkedTo().getLeft() == target) {
-				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
 					unequipCard(to, i, slts);
 					return;
 				}
@@ -1418,7 +1418,7 @@ public class Shoukan extends GlobalGame {
 
 	public void switchCards(Side to, int target, Side from, int source) {
 		Champion ch = getArena().getSlots().get(to).get(target).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
+		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(to);
 
 		Champion chi = getArena().getSlots().get(from).get(source).getTop();
@@ -1429,7 +1429,7 @@ public class Shoukan extends GlobalGame {
 			for (int i = 0; i < slts.size(); i++) {
 				Equipment eq = slts.get(i).getBottom();
 				if (eq != null && eq.getLinkedTo().getLeft() == target) {
-					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+					if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
 						unequipCard(to, i, slts);
 						return;
 					}
@@ -1473,13 +1473,13 @@ public class Shoukan extends GlobalGame {
 	public void convertEquipments(Champion target, int pos, Side to, int index) {
 		Side his = to == Side.TOP ? Side.BOTTOM : Side.TOP;
 		Champion ch = getArena().getSlots().get(his).get(index).getTop();
-		if (ch == null || ch.getBonus().getSpecialData().optBoolean("preventConvert")) return;
+		if (ch == null || ch.getBonus().getSpecialData().getBoolean("preventConvert")) return;
 		List<SlotColumn<Champion, Equipment>> slts = getArena().getSlots().get(his);
 
 		for (int i = 0; i < slts.size(); i++) {
 			Equipment eq = slts.get(i).getBottom();
 			if (eq != null && eq.getLinkedTo().getLeft() == index) {
-				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().opt("charm") == Charm.SPELLSHIELD) {
+				if (eq.getCharm() == Charm.SPELLSHIELD || ch.getBonus().getSpecialData().getEnum(Charm.class, "charm") == Charm.SPELLSHIELD) {
 					unequipCard(his, i, slts);
 					return;
 				}

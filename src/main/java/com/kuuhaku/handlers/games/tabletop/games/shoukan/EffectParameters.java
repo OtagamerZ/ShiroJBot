@@ -50,7 +50,7 @@ public class EffectParameters {
 			import com.kuuhaku.model.persistent.Account;
 			import org.apache.commons.lang3.tuple.Pair;
 			import com.kuuhaku.utils.Helper;
-			import org.json.JSONArray;
+			import com.kuuhaku.utils.JSONArray;
 						
 			""";
 
@@ -92,6 +92,10 @@ public class EffectParameters {
 
 	public Side getSide() {
 		return side;
+	}
+
+	public Side getOtherSide() {
+		return side == Side.TOP ? Side.BOTTOM : Side.TOP;
 	}
 
 	public Map<Side, Hand> getHands() {

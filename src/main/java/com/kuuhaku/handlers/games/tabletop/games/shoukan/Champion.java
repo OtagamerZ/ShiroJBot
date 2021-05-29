@@ -32,9 +32,9 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -180,7 +180,7 @@ public class Champion implements Drawable, Cloneable {
 					Profile.drawOutlinedText(String.valueOf(getBlood()), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(getBlood())), 67 + (drawnMana ? 22 : 0), g2d);
 			}
 
-			String data = bonus.getSpecialData().optString("write");
+			String data = bonus.getSpecialData().getString("write");
 			if (!data.isBlank()) {
 				g2d.setColor(Color.yellow);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 16));
@@ -412,10 +412,10 @@ public class Champion implements Drawable, Cloneable {
 			Side s = game.getSideById(acc.getUid());
 			Pair<Race, Race> combos = game.getCombos().getOrDefault(s, Pair.of(Race.NONE, Race.NONE));
 
-			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().opt("charm") == Charm.SOULLINK)) {
+			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK)) {
 				Field f = game.getArena().getField();
 				if (f != null) {
-					fBonus = f.getModifiers().optFloat(getRace().name(), 1);
+					fBonus = f.getModifiers().getFloat(getRace().name(), 1);
 
 					if (combos.getLeft() == Race.ELF) {
 						if (fBonus < 1) fBonus /= 2;
@@ -439,10 +439,10 @@ public class Champion implements Drawable, Cloneable {
 		float cBonus = 1;
 
 		if (game != null) {
-			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().opt("charm") == Charm.SOULLINK)) {
+			if (linkedTo.stream().noneMatch(e -> e.getCharm() == Charm.SOULLINK || bonus.getSpecialData().getEnum(Charm.class, "charm") == Charm.SOULLINK)) {
 				Field f = game.getArena().getField();
 				if (f != null)
-					fBonus = f.getModifiers().optFloat(getRace().name(), 1);
+					fBonus = f.getModifiers().getFloat(getRace().name(), 1);
 			}
 
 			Side s = game.getSideById(acc.getUid());
@@ -818,7 +818,7 @@ public class Champion implements Drawable, Cloneable {
 		if (game == null) return false;
 		Field f = game.getArena().getField();
 		if (f != null)
-			return f.getModifiers().optFloat(getRace().name(), 1) > 1;
+			return f.getModifiers().getFloat(getRace().name(), 1) > 1;
 
 		return false;
 	}
@@ -827,7 +827,7 @@ public class Champion implements Drawable, Cloneable {
 		if (game == null) return false;
 		Field f = game.getArena().getField();
 		if (f != null)
-			return f.getModifiers().optFloat(getRace().name(), 1) < 1;
+			return f.getModifiers().getFloat(getRace().name(), 1) < 1;
 
 		return false;
 	}

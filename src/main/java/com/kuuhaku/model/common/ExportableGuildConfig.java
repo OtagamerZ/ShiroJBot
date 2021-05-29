@@ -21,10 +21,10 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.LevelRole;
+import com.kuuhaku.utils.JSONArray;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class ExportableGuildConfig {
 	private final JSONObject gc = new JSONObject();

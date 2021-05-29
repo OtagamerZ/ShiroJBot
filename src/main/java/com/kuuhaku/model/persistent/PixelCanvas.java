@@ -22,11 +22,11 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONArray;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.hibernate.annotations.DynamicUpdate;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
