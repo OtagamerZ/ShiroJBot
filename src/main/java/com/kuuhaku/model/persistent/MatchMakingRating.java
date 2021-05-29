@@ -338,7 +338,7 @@ public class MatchMakingRating {
 					for (Map.Entry<String, JsonElement> entry : jo.toMap().entrySet()) {
 						String key = entry.getKey();
 						if (!key.equals("id")) {
-							int val = (int) entry.getValue().getAsInt();
+							int val = entry.getValue().getAsInt();
 							info.getInfo().merge(key, val, Helper::subtract);
 						}
 					}
