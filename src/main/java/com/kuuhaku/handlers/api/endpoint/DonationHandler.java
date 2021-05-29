@@ -27,10 +27,10 @@ import com.kuuhaku.model.enums.DonationBundle;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Donation;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
@@ -44,9 +44,9 @@ public class DonationHandler {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 
 		JSONObject data = new JSONObject(payload);
-		Account acc = AccountDAO.getAccount(data.optString("raw_buyer_id"));
+		Account acc = AccountDAO.getAccount(data.getString("raw_buyer_id"));
 		User u = Main.getInfo().getUserByID(acc.getUid());
-		DonationBundle db = DonationBundle.getById(data.optString("product_id", "null"));
+		DonationBundle db = DonationBundle.getById(data.getString("product_id", "null"));
 
 		EmbedBuilder eb = new EmbedBuilder();
 
@@ -56,7 +56,7 @@ public class DonationHandler {
 			if (u == null) {
 				reason = "Usuário com ID " + acc.getUid() + " não foi encontrado.";
 			} else {
-				reason = "Pacote de doação `" + data.optString("product_id", "null") + "` não foi encontrado.";
+				reason = "Pacote de doação `" + data.getString("product_id", "null") + "` não foi encontrado.";
 			}
 
 			eb.setColor(Color.red)
@@ -74,11 +74,11 @@ public class DonationHandler {
 		}
 
 		Donation d = new Donation(
-				data.optString("txn_id"),
-				data.optString("raw_buyer_id"),
+				data.getString("txn_id"),
+				data.getString("raw_buyer_id"),
 				db,
-				data.optFloat("price"),
-				data.optString("status")
+				data.getFloat("price"),
+				data.getString("status")
 		);
 		int amount = db.isCumulative() ? Math.round(db.getCredits() * d.getValue()) : db.getCredits();
 		switch (d.getStatus()) {

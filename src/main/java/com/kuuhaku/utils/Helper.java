@@ -74,7 +74,6 @@ import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 
@@ -123,7 +122,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -547,7 +545,9 @@ public class Helper {
 
 	public static <T> T getOr(T get, T or) {
 		try {
-			return get == null || (get instanceof String && ((String) get).isBlank()) ? or : get;
+			if (get == null) return or;
+			else if (get instanceof String && ((String) get).isBlank()) return or;
+			else return get;
 		} catch (Exception e) {
 			return or;
 		}
@@ -724,7 +724,7 @@ public class Helper {
 		List<String> sortedKeys = new ArrayList<>();
 
 		for (String k : keys) {
-			sortedKeys.add(btns.optInt("index", 0), k);
+			sortedKeys.add(btns.getInt("index", 0), k);
 		}
 
 		for (String b : sortedKeys) {
@@ -808,7 +808,7 @@ public class Helper {
 				msg = root.getJSONObject(msgId);
 			}
 
-			btn.put("index", msg.getJSONObject("buttons").length());
+			btn.put("index", msg.getJSONObject("buttons").size());
 			msg.getJSONObject("buttons").put(args[1], btn);
 
 			if (gatekeeper) root.put("gatekeeper", msg);
@@ -1833,17 +1833,7 @@ public class Helper {
 	}
 
 	public static JSONObject findJson(String text) {
-		Matcher m = Pattern.compile("\\{.*}").matcher(text);
-		List<MatchResult> results = m.results().collect(Collectors.toList());
-
-		for (MatchResult mr : results) {
-			try {
-				return new JSONObject(mr.group());
-			} catch (JSONException ignore) {
-			}
-		}
-
-		return null;
+		return new JSONObject(extract(text, "\\{.*}"));
 	}
 
 	public static String noCopyPaste(String input) {

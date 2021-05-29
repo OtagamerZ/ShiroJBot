@@ -25,10 +25,10 @@ import com.kuuhaku.model.enums.BuffType;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.TrophyType;
 import com.kuuhaku.model.persistent.guild.GuildBuff;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.DynamicUpdate;
-import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.util.ArrayList;

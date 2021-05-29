@@ -29,11 +29,11 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.awt.*;
@@ -95,14 +95,14 @@ public class PollCommand implements Executable {
 		eb.setColor(Color.decode("#2195f2"));
 
 		Function<Message, Map<String, ThrowingBiConsumer<Member, Message>>> opts = null;
-		if (options != null && options.length() > 10) {
+		if (options != null && options.size() > 10) {
 			channel.sendMessage(I18n.getString("err_poll-too-many-options")).queue();
 			return;
 		} else if (options != null) {
 			JSONArray finalOptions = options;
 			opts = m -> {
 				Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
-				for (int i = 0; i < finalOptions.length(); i++) {
+				for (int i = 0; i < finalOptions.size(); i++) {
 					String emote = Helper.getRegionalIndicator(i);
 					buttons.put(emote, (mb, msg) -> {
 						if (ShiroInfo.getPolls().get(m.getId()).containsKey(mb.getId())) return;
@@ -120,7 +120,7 @@ public class PollCommand implements Executable {
 		}
 
 		if (options != null) {
-			for (int i = 0; i < options.length(); i++)
+			for (int i = 0; i < options.size(); i++)
 				eb.addField(Helper.getRegionalIndicator(i) + " | " + options.getString(i), Helper.VOID, true);
 
 			for (int i = 0; i < 3 - eb.getFields().size() % 3; i++)

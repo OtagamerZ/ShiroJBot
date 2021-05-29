@@ -19,7 +19,7 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.utils.Helper;
-import org.json.JSONObject;
+import com.kuuhaku.utils.JSONObject;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

@@ -31,9 +31,9 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;

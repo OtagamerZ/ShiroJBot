@@ -20,12 +20,12 @@ package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.awt.*;

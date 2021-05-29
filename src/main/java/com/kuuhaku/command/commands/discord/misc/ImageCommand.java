@@ -20,11 +20,11 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONArray;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -72,7 +72,7 @@ public class ImageCommand implements Executable {
 				Helper.logger(this.getClass()).debug(resposta.toString());
 				JSONObject jo = new JSONObject(resposta.toString());
 				JSONArray items = jo.getJSONArray("items");
-				JSONObject item = items.getJSONObject(Helper.rng(items.length(), true));
+				JSONObject item = items.getJSONObject(Helper.rng(items.size(), true));
 				JSONObject image = item.getJSONObject("image");
 
 				EmbedBuilder eb = new EmbedBuilder();

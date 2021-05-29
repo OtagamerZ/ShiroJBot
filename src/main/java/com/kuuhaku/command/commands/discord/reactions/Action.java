@@ -21,11 +21,11 @@ package com.kuuhaku.command.commands.discord.reactions;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.Collections;
