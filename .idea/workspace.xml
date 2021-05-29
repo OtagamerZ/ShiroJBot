@@ -14,8 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Migração da biblioteca de conversão de JSON">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONArray.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/Action.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Anime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Anime.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1218,14 +1218,7 @@
       <workItem from="1622139415312" duration="7957000" />
       <workItem from="1622203272945" duration="595000" />
       <workItem from="1622209796611" duration="197000" />
-      <workItem from="1622255515377" duration="7146000" />
-    </task>
-    <task id="LOCAL-04523" summary="Correções menores">
-      <created>1621885205395</created>
-      <option name="number" value="04523" />
-      <option name="presentableId" value="LOCAL-04523" />
-      <option name="project" value="LOCAL" />
-      <updated>1621885205396</updated>
+      <workItem from="1622255515377" duration="7446000" />
     </task>
     <task id="LOCAL-04524" summary="Correções menores">
       <created>1621885223231</created>
@@ -1563,7 +1556,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622262233814</updated>
     </task>
-    <option name="localTasksCounter" value="4572" />
+    <task id="LOCAL-04572" summary="Migração da biblioteca de conversão de JSON">
+      <created>1622262747589</created>
+      <option name="number" value="04572" />
+      <option name="presentableId" value="LOCAL-04572" />
+      <option name="project" value="LOCAL" />
+      <updated>1622262747589</updated>
+    </task>
+    <option name="localTasksCounter" value="4573" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
