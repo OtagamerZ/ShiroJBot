@@ -240,7 +240,7 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 		try {
 			return get(key).getAsString();
 		} catch (NullPointerException e) {
-			return null;
+			return "";
 		}
 	}
 
