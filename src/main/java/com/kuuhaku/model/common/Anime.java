@@ -114,7 +114,7 @@ public class Anime {
 		status = media.getString("status").equals("FINISHED") ? "Completo" : "Transmitindo";
 		String durationTemp;
 		try {
-			durationTemp = String.valueOf(String.valueOf(media.get("episodes")).equals("null") ? Integer.toString(media.getJSONObject("nextAiringEpisode").getInt("episode")) : media.get("episodes"));
+			durationTemp = String.valueOf(media.getString("episodes").equals("null") ? Integer.toString(media.getJSONObject("nextAiringEpisode").getInt("episode")) : media.get("episodes"));
 		} catch (JSONException e) {
 			durationTemp = "Desconhecido";
 		}
