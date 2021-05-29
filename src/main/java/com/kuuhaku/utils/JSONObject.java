@@ -272,7 +272,7 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 		return this;
 	}
 
-	public Object remove(String key) {
+	public JsonElement remove(String key) {
 		return obj.remove(key);
 	}
 
