@@ -59,11 +59,7 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public JsonElement get(String key, JsonElement or) {
-		try {
-			return Helper.getOr(get(key), or);
-		} catch (NullPointerException e) {
-			return or;
-		}
+		return Helper.getOr(get(key), or);
 	}
 
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, String key) {
@@ -83,7 +79,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public boolean getBoolean(String key) {
-		return get(key).getAsBoolean();
+		try {
+			return get(key).getAsBoolean();
+		} catch (NullPointerException e) {
+			return false;
+		}
 	}
 
 	public boolean getBoolean(String key, boolean or) {
@@ -95,7 +95,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public BigInteger getBigInteger(String key) {
-		return get(key).getAsBigInteger();
+		try {
+			return get(key).getAsBigInteger();
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	public BigInteger getBigInteger(String key, BigInteger or) {
@@ -107,7 +111,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public BigDecimal getBigDecimal(String key) {
-		return get(key).getAsBigDecimal();
+		try {
+			return get(key).getAsBigDecimal();
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	public BigDecimal getBigDecimal(String key, BigDecimal or) {
@@ -119,7 +127,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public double getDouble(String key) {
-		return get(key).getAsDouble();
+		try {
+			return get(key).getAsDouble();
+		} catch (NullPointerException e) {
+			return 0;
+		}
 	}
 
 	public double getDouble(String key, double or) {
@@ -131,7 +143,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public float getFloat(String key) {
-		return get(key).getAsFloat();
+		try {
+			return get(key).getAsFloat();
+		} catch (NullPointerException e) {
+			return 0;
+		}
 	}
 
 	public float getFloat(String key, float or) {
@@ -143,7 +159,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public Number getNumber(String key) {
-		return get(key).getAsNumber();
+		try {
+			return get(key).getAsNumber();
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	public Number getNumber(String key, Number or) {
@@ -155,7 +175,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public int getInt(String key) {
-		return get(key).getAsInt();
+		try {
+			return get(key).getAsInt();
+		} catch (NullPointerException e) {
+			return 0;
+		}
 	}
 
 	public int getInt(String key, int or) {
@@ -167,7 +191,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public JSONArray getJSONArray(String key) {
-		return new JSONArray(get(key).getAsJsonArray());
+		try {
+			return new JSONArray(get(key).getAsJsonArray());
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	public JSONArray getJSONArray(String key, JSONArray or) {
@@ -176,16 +204,28 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public JSONObject getJSONObject(String key) {
-		return new JSONObject(get(key).getAsJsonObject());
+		try {
+			return new JSONObject(get(key).getAsJsonObject());
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	public JSONObject getJSONObject(String key, JSONObject or) {
-		JsonObject jo = get(key).getAsJsonObject();
-		return jo == null ? or : new JSONObject(jo);
+		try {
+			JsonObject jo = get(key).getAsJsonObject();
+			return jo == null ? or : new JSONObject(jo);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public long getLong(String key) {
-		return get(key).getAsLong();
+		try {
+			return get(key).getAsLong();
+		} catch (NullPointerException e) {
+			return 0;
+		}
 	}
 
 	public long getLong(String key, long or) {
@@ -197,7 +237,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public String getString(String key) {
-		return get(key).getAsString();
+		try {
+			return get(key).getAsString();
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	public String getString(String key, String or) {
@@ -214,6 +258,8 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 
 	public JSONObject increment(String key) {
 		JsonElement je = get(key);
+		if (je == null) return this;
+
 		if (je.isJsonPrimitive() && je.getAsJsonPrimitive().isNumber()) {
 			int n = je.getAsInt() + 1;
 			obj.addProperty(key, n);
@@ -223,7 +269,7 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public boolean isNull(String key) {
-		return get(key).isJsonNull();
+		return get(key) == null;
 	}
 
 	public Iterator<String> keys() {
