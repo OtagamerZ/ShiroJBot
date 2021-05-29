@@ -59,7 +59,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public JsonElement get(String key, JsonElement or) {
-		return Helper.getOr(get(key), or);
+		try {
+			return Helper.getOr(get(key), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, String key) {
@@ -83,7 +87,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public boolean getBoolean(String key, boolean or) {
-		return Helper.getOr(get(key).getAsBoolean(), false) || or;
+		try {
+			return Helper.getOr(get(key).getAsBoolean(), false) || or;
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public BigInteger getBigInteger(String key) {
@@ -91,7 +99,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public BigInteger getBigInteger(String key, BigInteger or) {
-		return Helper.getOr(get(key).getAsBigInteger(), or);
+		try {
+			return Helper.getOr(get(key).getAsBigInteger(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public BigDecimal getBigDecimal(String key) {
@@ -99,7 +111,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public BigDecimal getBigDecimal(String key, BigDecimal or) {
-		return Helper.getOr(get(key).getAsBigDecimal(), or);
+		try {
+			return Helper.getOr(get(key).getAsBigDecimal(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public double getDouble(String key) {
@@ -107,7 +123,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public double getDouble(String key, double or) {
-		return Helper.getOr(get(key).getAsDouble(), or);
+		try {
+			return Helper.getOr(get(key).getAsDouble(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public float getFloat(String key) {
@@ -115,7 +135,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public float getFloat(String key, float or) {
-		return Helper.getOr(get(key).getAsFloat(), or);
+		try {
+			return Helper.getOr(get(key).getAsFloat(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public Number getNumber(String key) {
@@ -123,7 +147,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public Number getNumber(String key, Number or) {
-		return Helper.getOr(get(key).getAsNumber(), or);
+		try {
+			return Helper.getOr(get(key).getAsNumber(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public int getInt(String key) {
@@ -131,7 +159,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public int getInt(String key, int or) {
-		return Helper.getOr(get(key).getAsInt(), or);
+		try {
+			return Helper.getOr(get(key).getAsInt(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public JSONArray getJSONArray(String key) {
@@ -157,7 +189,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public long getLong(String key, long or) {
-		return Helper.getOr(get(key).getAsLong(), or);
+		try {
+			return Helper.getOr(get(key).getAsLong(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public String getString(String key) {
@@ -165,7 +201,11 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 	}
 
 	public String getString(String key, String or) {
-		return Helper.getOr(get(key).getAsString(), or);
+		try {
+			return Helper.getOr(get(key).getAsString(), or);
+		} catch (NullPointerException e) {
+			return or;
+		}
 	}
 
 	public boolean has(String key) {
