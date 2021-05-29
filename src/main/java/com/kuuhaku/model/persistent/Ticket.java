@@ -22,6 +22,7 @@ import com.kuuhaku.utils.JSONObject;
 
 import javax.persistence.*;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "ticket")
@@ -66,10 +67,11 @@ public class Ticket {
 		this.msgId = new JSONObject(msgIds).toString();
 	}
 
-	public Map<String, Object> getMsgIds() {
+	public Map<String, String> getMsgIds() {
 		JSONObject ja = new JSONObject(msgId);
 
-		return ja.toMap();
+		return ja.toMap().entrySet().stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getAsString()));
 	}
 
 	public boolean isSolved() {

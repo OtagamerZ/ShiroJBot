@@ -13,7 +13,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Migração da biblioteca de conversão de JSON" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Migração da biblioteca de conversão de JSON">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObject.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1203,13 +1208,9 @@
       <workItem from="1622203272945" duration="595000" />
       <workItem from="1622209796611" duration="197000" />
       <workItem from="1622255515377" duration="7482000" />
-    </task>
-    <task id="LOCAL-04525" summary="Correções menores">
-      <created>1621885256288</created>
-      <option name="number" value="04525" />
-      <option name="presentableId" value="LOCAL-04525" />
-      <option name="project" value="LOCAL" />
-      <updated>1621885256288</updated>
+      <workItem from="1622309460114" duration="235000" />
+      <workItem from="1622309786145" duration="503000" />
+      <workItem from="1622317060269" duration="2244000" />
     </task>
     <task id="LOCAL-04526" summary="Correções menores">
       <created>1621887017958</created>
@@ -1547,7 +1548,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622263050446</updated>
     </task>
-    <option name="localTasksCounter" value="4574" />
+    <task id="LOCAL-04574" summary="Migração da biblioteca de conversão de JSON">
+      <created>1622309642882</created>
+      <option name="number" value="04574" />
+      <option name="presentableId" value="LOCAL-04574" />
+      <option name="project" value="LOCAL" />
+      <updated>1622309642882</updated>
+    </task>
+    <option name="localTasksCounter" value="4575" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
