@@ -63,7 +63,7 @@ public abstract class Action {
 
 			Helper.logger(this.getClass()).debug(resposta);
 
-			String url = resposta.get("url").toString();
+			String url = resposta.getString("url");
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setImage(url);
@@ -72,8 +72,8 @@ public abstract class Action {
 				channel.sendMessage(message)
 						.embed(eb.build())
 						.queue(s -> Pages.buttonize(s, Collections.singletonMap("↪", (mb, ms) -> {
-									if (mb.getId().equals(target.getId())) {
-										answer(channel);
+							if (mb.getId().equals(target.getId())) {
+								answer(channel);
 										s.clearReactions().queue();
 									}
 								}), false, 1, TimeUnit.MINUTES, u -> u.getId().equals(target.getId()))
