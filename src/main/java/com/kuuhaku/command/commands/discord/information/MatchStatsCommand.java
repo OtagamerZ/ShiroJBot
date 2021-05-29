@@ -33,11 +33,11 @@ import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -259,7 +259,7 @@ public class MatchStatsCommand implements Executable {
 					double expEff = 5000d / yourResult.size();
 					double sustainEff = 1 + yourResult.get("hp") / 5000f;
 
-					JSONObject data = Helper.getOr(out.optJSONObject(s.name()), new JSONObject());
+					JSONObject data = Helper.getOr(out.getJSONObject(s.name()), new JSONObject());
 
 					data.put(info.getId(), new JSONObject() {{
 						put("manaEff", manaEff);
@@ -274,7 +274,7 @@ public class MatchStatsCommand implements Executable {
 					double expEff = 5000d / yourResult.size();
 					double sustainEff = 1 + yourResult.get("hp") / 5000d;
 
-					JSONObject data = Helper.getOr(out.optJSONObject(s.name()), new JSONObject());
+					JSONObject data = Helper.getOr(out.getJSONObject(s.name()), new JSONObject());
 
 					data.put(info.getId(), new JSONObject() {{
 						put("manaEff", manaEff);

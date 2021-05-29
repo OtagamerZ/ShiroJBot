@@ -69,12 +69,12 @@ public class TeamHand extends Hand {
 			this.users.add(user.getId());
 
 			if (game.getCustom() != null) {
-				if (game.getCustom().optBoolean("semequip"))
+				if (game.getCustom().getBoolean("semequip"))
 					deque.removeIf(d -> d instanceof Equipment);
-				if (game.getCustom().optBoolean("semfield"))
+				if (game.getCustom().getBoolean("semfield"))
 					deque.removeIf(d -> d instanceof Field);
 
-				switch (game.getCustom().optString("arcade")) {
+				switch (game.getCustom().getString("arcade")) {
 					case "roleta" -> {
 						for (Drawable d : deque) {
 							if (d instanceof Champion) {
@@ -168,12 +168,12 @@ public class TeamHand extends Hand {
 		int baseManaPerTurn;
 		int maxCards;
 		if (game.getCustom() != null) {
-			setMana(Helper.clamp(game.getCustom().optInt("mana", 0), 0, 20));
-			baseHp = Helper.clamp(game.getCustom().optInt("hp", 5000), 500, 25000);
-			maxCards = Helper.clamp(game.getCustom().optInt("cartasmax", 5), 1, 10);
-			baseManaPerTurn = Helper.clamp(game.getCustom().optInt("manapt", 5), 1, 20);
+			setMana(Helper.clamp(game.getCustom().getInt("mana", 0), 0, 20));
+			baseHp = Helper.clamp(game.getCustom().getInt("hp", 5000), 500, 25000);
+			maxCards = Helper.clamp(game.getCustom().getInt("cartasmax", 5), 1, 10);
+			baseManaPerTurn = Helper.clamp(game.getCustom().getInt("manapt", 5), 1, 20);
 
-			if (game.getCustom().optString("arcade").equals("instakill")) {
+			if (game.getCustom().getString("arcade").equals("instakill")) {
 				baseHp = 1;
 			}
 		} else {

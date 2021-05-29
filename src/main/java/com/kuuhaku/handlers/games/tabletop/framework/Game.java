@@ -21,13 +21,13 @@ package com.kuuhaku.handlers.games.tabletop.framework;
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchRound;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
-import org.json.JSONObject;
 
 import java.util.Map;
 import java.util.Objects;

@@ -19,7 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
-import org.json.JSONObject;
+import com.kuuhaku.utils.JSONObject;
 
 import javax.persistence.*;
 

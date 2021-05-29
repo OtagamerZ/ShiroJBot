@@ -21,8 +21,8 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;

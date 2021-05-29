@@ -20,8 +20,8 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
-import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.time.ZoneId;

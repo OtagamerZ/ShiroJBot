@@ -18,15 +18,17 @@
 
 package com.kuuhaku.model.common;
 
-import org.json.JSONArray;
+import com.google.gson.JsonElement;
+import com.kuuhaku.utils.JSONArray;
+import com.kuuhaku.utils.JSONObject;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class Anime {
 	private final int idMal;
@@ -73,7 +75,7 @@ public class Anime {
 			JSONObject staff = media.getJSONObject("staff");
 			JSONArray edges = staff.getJSONArray("edges");
 			JSONObject eCreator = null;
-			for (int i = 0; i < edges.length(); i++) {
+			for (int i = 0; i < edges.size(); i++) {
 				if (edges.getJSONObject(i).getString("role").toLowerCase(Locale.ROOT).contains("original")) {
 					eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
 					break;
@@ -117,7 +119,7 @@ public class Anime {
 			durationTemp = "Desconhecido";
 		}
 		duration = durationTemp;
-		genres = media.getJSONArray("genres").toList();
+		genres = media.getJSONArray("genres").toList().stream().map(JsonElement::getAsString).collect(Collectors.toList());
 		if (media.has("averageScore")) score = media.getInt("averageScore");
 		else score = -1;
 		popularity = media.getInt("popularity");

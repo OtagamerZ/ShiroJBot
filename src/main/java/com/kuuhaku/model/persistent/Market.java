@@ -107,6 +107,7 @@ public class Market implements com.kuuhaku.model.common.Market {
 		this.buyer = buyer;
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T getCard() {
 		return (T) switch (type) {
 			case EVOGEAR -> CardDAO.getEquipment(card);

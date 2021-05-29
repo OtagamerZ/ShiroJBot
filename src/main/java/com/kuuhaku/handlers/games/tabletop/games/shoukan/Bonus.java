@@ -18,7 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import org.json.JSONObject;
+import com.kuuhaku.utils.JSONObject;
 
 public class Bonus implements Cloneable {
 	private int atk = 0;

@@ -28,11 +28,11 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.awt.*;
 import java.util.Map;
@@ -70,7 +70,7 @@ public class EmbedCommand implements Executable {
 				if (json.has("color")) eb.setColor(Color.decode(json.getString("color")));
 				if (json.has("thumbnail")) eb.setThumbnail(json.getString("thumbnail"));
 				if (json.has("image")) eb.setImage(json.getString("image"));
-				eb.setDescription(json.optString("body", Helper.VOID));
+				eb.setDescription(json.getString("body", Helper.VOID));
 
 				if (json.has("fields")) {
 					for (Object j : json.getJSONArray("fields")) {
