@@ -16,30 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.api.endpoint.payload;
+package com.kuuhaku.model.enums;
 
-import com.kuuhaku.utils.JSONObject;
-
-public class ReadyData {
-	private final JSONObject data;
-	private final String sessionId;
-	private final long createdAt;
-
-	public ReadyData(JSONObject data, String sessionId) {
-		this.data = data;
-		this.sessionId = sessionId;
-		this.createdAt = System.currentTimeMillis();
-	}
-
-	public JSONObject getData() {
-		return data;
-	}
-
-	public String getSessionId() {
-		return sessionId;
-	}
-
-	public long getCreatedAt() {
-		return createdAt;
-	}
+public enum JsonType {
+	OBJECT, ARRAY;
 }

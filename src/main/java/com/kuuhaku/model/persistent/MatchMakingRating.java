@@ -26,10 +26,10 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.time.ZoneId;

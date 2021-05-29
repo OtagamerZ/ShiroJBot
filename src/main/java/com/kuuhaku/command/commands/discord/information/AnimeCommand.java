@@ -26,13 +26,13 @@ import com.kuuhaku.model.annotations.Requires;
 import com.kuuhaku.model.common.Anime;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

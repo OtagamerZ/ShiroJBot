@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
-import org.json.JSONObject;
+import com.kuuhaku.utils.JSONObject;
 
 import javax.persistence.*;
 import java.util.Map;

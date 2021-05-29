@@ -26,8 +26,8 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -93,7 +93,7 @@ public class Field implements Drawable, Cloneable {
 				assert icon != null;
 				g2d.setColor(colors[i]);
 				g2d.drawImage(icon, 20, 59 + (26 * i), 23, 23, null);
-				float modif = getModifiers().optFloat(r.name(), 1f) - 1;
+				float modif = getModifiers().getFloat(r.name(), 1f) - 1;
 				Profile.drawOutlinedText((modif > 0 ? "+" : "") + Helper.roundToString(modif * 100, 0), 45, 80 + (26 * i), g2d);
 				i++;
 			}

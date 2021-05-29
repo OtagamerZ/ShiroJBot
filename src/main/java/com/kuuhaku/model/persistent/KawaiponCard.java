@@ -19,7 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.utils.Helper;
-import org.json.JSONObject;
+import com.kuuhaku.utils.JSONObject;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;

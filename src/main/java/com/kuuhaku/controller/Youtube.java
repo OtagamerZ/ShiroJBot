@@ -21,11 +21,11 @@ package com.kuuhaku.controller;
 import com.google.api.services.youtube.YouTube;
 import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONArray;
+import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

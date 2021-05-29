@@ -38,11 +38,11 @@ import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
