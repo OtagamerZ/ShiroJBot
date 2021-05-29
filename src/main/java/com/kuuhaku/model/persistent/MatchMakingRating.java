@@ -325,9 +325,10 @@ public class MatchMakingRating {
 			Set<String> ids = new HashSet<>();
 			for (MatchRound round : rounds) {
 				ids.add(round.getScript()
-						.getJSONObject(s.name().toLowerCase(Locale.ROOT))
+						.getJSONObject(s.name().toLowerCase(Locale.ROOT), new JSONObject())
 						.getString("id"));
 			}
+			ids.removeIf(String::isBlank);
 
 			for (String id : ids) {
 				MatchInfo info = new MatchInfo(id);
