@@ -19,6 +19,7 @@
 package com.kuuhaku.controller;
 
 import com.google.api.services.youtube.YouTube;
+import com.google.gson.JsonElement;
 import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONArray;
@@ -41,9 +42,10 @@ public class Youtube {
 		JSONArray ja = requestVideoData(url);
 		List<YoutubeVideo> videos = new ArrayList<>();
 		try {
-			for (Object j : ja) {
-				JSONObject jid = ((JSONObject) j).getJSONObject("id");
-				JSONObject jsnippet = ((JSONObject) j).getJSONObject("snippet");
+			for (JsonElement j : ja) {
+				JSONObject root = new JSONObject(j.getAsJsonObject());
+				JSONObject jid = root.getJSONObject("id");
+				JSONObject jsnippet = root.getJSONObject("snippet");
 
 				String id = jid.getString(jid.has("videoId") ? "videoId" : "playlistId");
 				String title = jsnippet.getString("title");
