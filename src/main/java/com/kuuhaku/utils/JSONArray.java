@@ -239,7 +239,7 @@ public class JSONArray implements Iterable<JsonElement> {
 		try {
 			return get(index).getAsString();
 		} catch (NullPointerException e) {
-			return null;
+			return "";
 		}
 	}
 
