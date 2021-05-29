@@ -1833,7 +1833,10 @@ public class Helper {
 	}
 
 	public static JSONObject findJson(String text) {
-		return new JSONObject(extract(text, "\\{.*}"));
+		String json = extract(text, "\\{.*}");
+
+		if (json == null) return null;
+		else return new JSONObject(json);
 	}
 
 	public static String noCopyPaste(String input) {
