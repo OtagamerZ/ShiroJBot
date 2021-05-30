@@ -22,14 +22,19 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
-public class JSONArraySerializer implements JsonDeserializer<JSONArray>, JsonSerializer<JSONArray> {
+public class JSONObjectAdapter implements InstanceCreator<JSONObject>, JsonSerializer<JSONObject>, JsonDeserializer<JSONObject> {
 	@Override
-	public JsonElement serialize(JSONArray src, Type typeOfSrc, JsonSerializationContext context) {
-		return src.getArr();
+	public JSONObject createInstance(Type type) {
+		return new JSONObject();
 	}
 
 	@Override
-	public JSONArray deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		return new JSONArray(json);
+	public JsonElement serialize(JSONObject src, Type typeOfSrc, JsonSerializationContext context) {
+		return src.getObj();
+	}
+
+	@Override
+	public JSONObject deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+		return new JSONObject(json);
 	}
 }
