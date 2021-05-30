@@ -57,34 +57,58 @@ public class PurchaseBuffCommand implements Executable {
 			eb.setTitle(":level_slider: | Melhorias de servidor");
 			eb.setDescription("Melhorias são aplicadas a todos os membros do servidor por um certo período, use-as para oferecer vantagens aos seus membros.");
 			eb.addField("Melhoria de XP (`" + prefix + "up xp TIER`)", """
-							**Tier 1** (2500 créditos): `+30% XP ganho` (15 dias)
-							**Tier 2** (5000 créditos): `+60% XP ganho` (11 dias)
-							**Tier 3** (7500 créditos): `+90% XP ganho` (7 dias)
+							**Tier 1** (%s créditos): `+30%% XP ganho` (15 dias)
+							**Tier 2** (%s créditos): `+60%% XP ganho` (11 dias)
+							**Tier 3** (%s créditos): `+90%% XP ganho` (7 dias)
 							"""
+							.formatted(
+									new ServerBuff(BuffType.XP, 1),
+									new ServerBuff(BuffType.XP, 2),
+									new ServerBuff(BuffType.XP, 3),
+									new ServerBuff(BuffType.XP, 4)
+							)
 					, false);
 			eb.addBlankField(false);
 			eb.addField("Melhoria de cartas (`" + prefix + "up carta TIER`)", """
-							**Tier 1** (2000 créditos): `+20% chance de aparecer cartas` (15 dias)
-							**Tier 2** (4000 créditos): `+30% chance de aparecer cartas` (11 dias)
-							**Tier 3** (6000 créditos): `+40% chance de aparecer cartas` (7 dias)
+							**Tier 1** (%s créditos): `+20%% chance de aparecer cartas` (15 dias)
+							**Tier 2** (%s créditos): `+30%% chance de aparecer cartas` (11 dias)
+							**Tier 3** (%s créditos): `+40%% chance de aparecer cartas` (7 dias)
 							**:warning: Tier Ultimate** (60000 créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer cartas`
 							"""
+							.formatted(
+									new ServerBuff(BuffType.CARD, 1),
+									new ServerBuff(BuffType.CARD, 2),
+									new ServerBuff(BuffType.CARD, 3),
+									new ServerBuff(BuffType.CARD, 4)
+							)
 					, false);
 			eb.addBlankField(false);
 			eb.addField("Melhoria de drops (`" + prefix + "up drop TIER`)", """
-							**Tier 1** (1400 créditos): `+20% chance de aparecer drops` (15 dias)
-							**Tier 2** (2800 créditos): `+30% chance de aparecer drops` (11 dias)
-							**Tier 3** (4200 créditos): `+40% chance de aparecer drops` (7 dias)
+							**Tier 1** (%s créditos): `+20%% chance de aparecer drops` (15 dias)
+							**Tier 2** (%s créditos): `+30%% chance de aparecer drops` (11 dias)
+							**Tier 3** (%s créditos): `+40%% chance de aparecer drops` (7 dias)
 							**:warning: Tier Ultimate** (42000 créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer drops`
 							"""
+							.formatted(
+									new ServerBuff(BuffType.DROP, 1),
+									new ServerBuff(BuffType.DROP, 2),
+									new ServerBuff(BuffType.DROP, 3),
+									new ServerBuff(BuffType.DROP, 4)
+							)
 					, false);
 			eb.addBlankField(false);
 			eb.addField("Melhoria de cartas cromadas (`" + prefix + "up cromada TIER`)", """
-							**Tier 1** (4000 créditos): `+25% chance de aparecer cartas cromadas` (15 dias)
-							**Tier 2** (8000 créditos): `+50% chance de aparecer cartas cromadas` (11 dias)
-							**Tier 3** (12000 créditos): `+75% chance de aparecer cartas cromadas` (7 dias)
+							**Tier 1** (%s créditos): `+25%% chance de aparecer cartas cromadas` (15 dias)
+							**Tier 2** (%s créditos): `+50%% chance de aparecer cartas cromadas` (11 dias)
+							**Tier 3** (%s créditos): `+75%% chance de aparecer cartas cromadas` (7 dias)
 							**:warning: Tier Ultimate** (120000 créditos): `Uma completa loucura, por 1 minuto TODAS as cartas que aparecerem serão cromadas`
 							"""
+							.formatted(
+									new ServerBuff(BuffType.FOIL, 1),
+									new ServerBuff(BuffType.FOIL, 2),
+									new ServerBuff(BuffType.FOIL, 3),
+									new ServerBuff(BuffType.FOIL, 4)
+							)
 					, false);
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
