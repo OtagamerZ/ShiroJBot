@@ -32,7 +32,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -128,7 +127,7 @@ public class AnimeCommand implements Executable {
 
 					m.delete().queue();
 					channel.sendMessage(eb.build()).queue();
-				} catch (JSONException e) {
+				} catch (IllegalStateException e) {
 					m.editMessage(I18n.getString("err_anime-not-found")).queue();
 					Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 					Helper.logger(this.getClass()).warn(data.toString());

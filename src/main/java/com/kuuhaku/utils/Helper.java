@@ -72,7 +72,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 
@@ -709,7 +708,7 @@ public class Helper {
 						gc.setButtonConfigs(newJa);
 						GuildDAO.updateGuildSettings(gc);
 					}
-				} catch (JSONException e) {
+				} catch (IllegalStateException e) {
 					logger(Helper.class).error("Error in buttons JSON: " + source + "\nReason: " + e.getMessage());
 					gc.setButtonConfigs(new JSONObject());
 					GuildDAO.updateGuildSettings(gc);
@@ -1073,7 +1072,7 @@ public class Helper {
 					.send(payload.toString());
 
 			return new JSONObject(req.body());
-		} catch (JSONException e) {
+		} catch (IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1085,7 +1084,7 @@ public class Helper {
 					.send(payload.toString());
 
 			return new JSONObject(req.body());
-		} catch (JSONException e) {
+		} catch (IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1098,7 +1097,7 @@ public class Helper {
 					.send(payload.toString());
 
 			return new JSONObject(req.body());
-		} catch (JSONException e) {
+		} catch (IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1111,7 +1110,7 @@ public class Helper {
 					.send(payload);
 
 			return new JSONObject(req.body());
-		} catch (JSONException e) {
+		} catch (IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1128,7 +1127,7 @@ public class Helper {
 					.header("Authorization", token);
 
 			return new JSONObject(req.body());
-		} catch (JSONException e) {
+		} catch (IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1143,7 +1142,7 @@ public class Helper {
 					.header("Authorization", token);
 
 			return new JSONObject(req.body());
-		} catch (JSONException e) {
+		} catch (IllegalStateException e) {
 			return new JSONObject();
 		}
 	}

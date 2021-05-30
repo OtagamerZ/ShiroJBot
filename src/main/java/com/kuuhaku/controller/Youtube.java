@@ -26,7 +26,6 @@ import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -55,7 +54,7 @@ public class Youtube {
 				videos.add(new YoutubeVideo(id, title, desc, thumb, channel, jid.has("playlistId")));
 			}
 			return videos;
-		} catch (JSONException e) {
+		} catch (IllegalStateException e) {
 			Helper.logger(Youtube.class).error("Erro ao recuperar vídeo. Payload de dados: " + ja);
 			throw new IOException();
 		}

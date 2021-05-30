@@ -14,7 +14,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EmbedCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EmbedCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ImageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ImageCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PollCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PollCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Youtube.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Youtube.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Anime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Anime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONArray.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObject.java" afterDir="false" />
     </list>
@@ -199,6 +205,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1212,13 +1229,6 @@
       <workItem from="1622317060269" duration="4592000" />
       <workItem from="1622333561007" duration="2656000" />
     </task>
-    <task id="LOCAL-04531" summary="Correções menores">
-      <created>1621954886895</created>
-      <option name="number" value="04531" />
-      <option name="presentableId" value="LOCAL-04531" />
-      <option name="project" value="LOCAL" />
-      <updated>1621954886895</updated>
-    </task>
     <task id="LOCAL-04532" summary="Correções menores">
       <created>1621954900425</created>
       <option name="number" value="04532" />
@@ -1555,7 +1565,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622326019927</updated>
     </task>
-    <option name="localTasksCounter" value="4580" />
+    <task id="LOCAL-04580" summary="Correções menores">
+      <created>1622386361199</created>
+      <option name="number" value="04580" />
+      <option name="presentableId" value="LOCAL-04580" />
+      <option name="project" value="LOCAL" />
+      <updated>1622386361199</updated>
+    </task>
+    <option name="localTasksCounter" value="4581" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1663,11 +1680,11 @@
     <MESSAGE value="Remoção da Jibril" />
     <MESSAGE value="Criação da arena Daten City" />
     <MESSAGE value="Melhoria no comando de venda de cartas" />
-    <MESSAGE value="Correções menores" />
     <MESSAGE value="Filtros de imagem agora também criam gifs" />
     <MESSAGE value="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;" />
     <MESSAGE value="Migração da biblioteca de conversão de JSON" />
-    <option name="LAST_COMMIT_MESSAGE" value="Migração da biblioteca de conversão de JSON" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
