@@ -22,13 +22,11 @@ import com.google.gson.*;
 import com.kuuhaku.model.enums.JsonType;
 
 public class JSONUtils {
-	private static final Gson gson = new Gson();
+	private static final Gson gson = new GsonBuilder()
+			.registerTypeAdapter(JSONWrapper.class, new JSONAdapter())
+			.create();
 
 	public static String toJSON(Object o) {
-		if (o instanceof JSONObject || o instanceof JSONArray) {
-			return gson.toJson(((JSONWrapper) o).getContent());
-		}
-
 		return gson.toJson(o);
 	}
 
