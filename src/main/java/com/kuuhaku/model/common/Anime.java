@@ -19,13 +19,15 @@
 package com.kuuhaku.model.common;
 
 import com.google.gson.JsonElement;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import org.json.JSONException;
 
 import java.awt.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -103,8 +105,8 @@ public class Anime {
 
 		try {
 			JSONObject nae = media.getJSONObject("nextAiringEpisode");
-			Date naeD = new Date(nae.getLong("airingAt") * 1000);
-			naeAiringAt = new SimpleDateFormat("dd/MM/yyyy").format(naeD);
+			ZonedDateTime naeD = Instant.ofEpochSecond(nae.getLong("airingAt")).atZone(ZoneId.of("GMT-3"));
+			naeAiringAt = Helper.dateFormat.format(naeD);
 		} catch (JSONException e) {
 			naeAiringAt = null;
 			naeEpisode = null;
