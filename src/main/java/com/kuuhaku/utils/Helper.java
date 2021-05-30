@@ -40,7 +40,6 @@ import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildBuff;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.ServerBuff;
-import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -84,6 +83,7 @@ import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.persistence.NoResultException;
 import java.awt.*;
@@ -2741,90 +2741,68 @@ public class Helper {
 	}
 
 	public static void makeGIF(File f, List<GifFrame> frames) throws IOException {
-		try (FileOutputStream fos = new FileOutputStream(f)) {
-			AnimatedGifEncoder gif = new AnimatedGifEncoder();
-			gif.setRepeat(0);
-			gif.setQuality(1);
-			gif.start(fos);
-
-			if (hasTransparency(frames)) {
-				Color trans = new Color(getTransparencyColor(frames));
-				gif.setBackground(trans);
-				gif.setTransparent(trans, true);
-			}
-
+		try (ImageOutputStream ios = new FileImageOutputStream(f)) {
+			GifSequenceWriter gif = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
 			for (GifFrame frame : frames) {
-				gif.setDispose(frame.getDisposal().ordinal());
-				gif.setDelay(frame.getDelay());
-				gif.addFrame(frame.getAdjustedFrame());
+				gif.writeToSequence(
+						frame.getAdjustedFrame(),
+						frame.getDisposal().ordinal(),
+						frame.getDelay(),
+						0
+				);
 			}
 			gif.finish();
 		}
 	}
 
 	public static void makeGIF(File f, List<GifFrame> frames, int repeat) throws IOException {
-		try (FileOutputStream fos = new FileOutputStream(f)) {
-			AnimatedGifEncoder gif = new AnimatedGifEncoder();
-			gif.setRepeat(repeat);
-			gif.setQuality(1);
-			gif.start(fos);
-
-			if (hasTransparency(frames)) {
-				Color trans = new Color(getTransparencyColor(frames));
-				gif.setBackground(trans);
-				gif.setTransparent(trans, true);
-			}
-
+		try (ImageOutputStream ios = new FileImageOutputStream(f)) {
+			GifSequenceWriter gif = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
 			for (GifFrame frame : frames) {
-				gif.setDispose(frame.getDisposal().ordinal());
-				gif.setDelay(frame.getDelay());
-				gif.addFrame(frame.getAdjustedFrame());
+				gif.writeToSequence(
+						frame.getAdjustedFrame(),
+						frame.getDisposal().ordinal(),
+						frame.getDelay(),
+						repeat
+				);
 			}
 			gif.finish();
 		}
 	}
 
 	public static void makeGIF(File f, List<GifFrame> frames, int repeat, int delay) throws IOException {
-		try (FileOutputStream fos = new FileOutputStream(f)) {
-			AnimatedGifEncoder gif = new AnimatedGifEncoder();
-			gif.setRepeat(repeat);
-			gif.setQuality(1);
-			gif.start(fos);
-
-			if (hasTransparency(frames)) {
-				Color trans = new Color(getTransparencyColor(frames));
-				gif.setBackground(trans);
-				gif.setTransparent(trans, true);
-			}
-
+		try (ImageOutputStream ios = new FileImageOutputStream(f)) {
+			GifSequenceWriter gif = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
 			for (GifFrame frame : frames) {
-				gif.setDispose(frame.getDisposal().ordinal());
-				gif.setDelay(delay == -1 ? frame.getDelay() : delay);
-				gif.addFrame(frame.getAdjustedFrame());
+				gif.writeToSequence(
+						frame.getAdjustedFrame(),
+						frame.getDisposal().ordinal(),
+						delay == -1 ? frame.getDelay() : delay,
+						repeat
+				);
 			}
 			gif.finish();
 		}
 	}
 
 	public static void makeGIF(File f, List<GifFrame> frames, int repeat, int delay, int quality) throws IOException {
-		try (FileOutputStream fos = new FileOutputStream(f)) {
-			AnimatedGifEncoder gif = new AnimatedGifEncoder();
-			gif.setRepeat(repeat);
-			gif.setQuality(quality);
-			gif.start(fos);
-
-			if (hasTransparency(frames)) {
-				Color trans = new Color(getTransparencyColor(frames));
-				gif.setBackground(trans);
-				gif.setTransparent(trans, true);
-			}
-
+		try (ImageOutputStream ios = new FileImageOutputStream(f)) {
+			GifSequenceWriter gif = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
 			for (GifFrame frame : frames) {
-				gif.setDispose(frame.getDisposal().ordinal());
-				gif.setDelay(delay == -1 ? frame.getDelay() : delay);
-				gif.addFrame(frame.getAdjustedFrame());
+				gif.writeToSequence(
+						frame.getAdjustedFrame(),
+						frame.getDisposal().ordinal(),
+						delay == -1 ? frame.getDelay() : delay,
+						repeat
+				);
 			}
 			gif.finish();
+		}
+
+		try {
+			Process p = Runtime.getRuntime().exec("mogrify -layers 'optimize' -fuzz " + quality + "% " + f.getAbsolutePath());
+			p.waitFor();
+		} catch (InterruptedException ignore) {
 		}
 	}
 
