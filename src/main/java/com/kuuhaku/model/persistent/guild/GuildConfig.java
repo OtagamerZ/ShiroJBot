@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
@@ -88,9 +89,6 @@ public class GuildConfig {
 	private String byeMessage = "Ahh...%user% deixou este servidor!";
 
 	@Column(columnDefinition = "TEXT")
-	private String buttonConfigs = "{}";
-
-	@Column(columnDefinition = "TEXT")
 	private String embedTemplate = "{}";
 
 	@Column(columnDefinition = "TEXT")
@@ -153,6 +151,11 @@ public class GuildConfig {
 	@JoinColumn(name = "guildconfig_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<PaidRole> paidRoles = new HashSet<>();
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "guildconfig_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Set<ButtonChannel> buttonConfigs = new HashSet<>();
 
 	//CHANNELS
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -304,12 +307,12 @@ public class GuildConfig {
 		this.byeMessage = Helper.getOr(byeMessage, "Ahh...%user% deixou este servidor!");
 	}
 
-	public JSONObject getButtonConfigs() {
-		return new JSONObject(buttonConfigs);
+	public Set<ButtonChannel> getButtonConfigs() {
+		return buttonConfigs;
 	}
 
-	public void setButtonConfigs(JSONObject buttonConfigs) {
-		this.buttonConfigs = buttonConfigs.toString();
+	public void setButtonConfigs(Set<ButtonChannel> buttonConfigs) {
+		this.buttonConfigs = buttonConfigs;
 	}
 
 	public JSONObject getEmbedTemplate() {
