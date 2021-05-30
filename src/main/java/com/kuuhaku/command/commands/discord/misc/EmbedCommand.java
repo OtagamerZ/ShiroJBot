@@ -32,7 +32,6 @@ import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.json.JSONException;
 
 import java.awt.*;
 import java.util.Map;
@@ -106,7 +105,7 @@ public class EmbedCommand implements Executable {
 							);
 				else
 					channel.sendMessage(eb.build()).queue();
-			} catch (JSONException ex) {
+			} catch (IllegalStateException ex) {
 				m.editMessage("❌ | JSON em formato inválido, recomendo utilizar este site para checar se está tudo correto: https://jsonlint.com/.").queue();
 			} catch (Exception e) {
 				m.editMessage("❌ | Erro ao construir embed, talvez você não tenha passado nenhum argumento.").queue();
