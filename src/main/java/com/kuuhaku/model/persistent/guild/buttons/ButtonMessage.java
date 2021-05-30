@@ -52,7 +52,8 @@ public class ButtonMessage {
 	public ButtonMessage() {
 	}
 
-	public ButtonMessage(String author, boolean gatekeeper, String role) {
+	public ButtonMessage(String id, String author, boolean gatekeeper, String role) {
+		this.id = id;
 		this.author = author;
 		this.gatekeeper = gatekeeper;
 		this.role = role;

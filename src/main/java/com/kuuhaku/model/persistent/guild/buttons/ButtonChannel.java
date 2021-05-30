@@ -38,6 +38,13 @@ public class ButtonChannel {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<ButtonMessage> messages = new HashSet<>();
 
+	public ButtonChannel() {
+	}
+
+	public ButtonChannel(String id) {
+		this.id = id;
+	}
+
 	public String getId() {
 		return id;
 	}
