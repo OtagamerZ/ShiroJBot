@@ -772,6 +772,7 @@ public class Helper {
 		if (bm == null) {
 			bm = new ButtonMessage(
 					message.getId(),
+					bc,
 					message.getAuthor().getId(),
 					gatekeeper,
 					gatekeeper ? r.getId() : null
@@ -789,7 +790,7 @@ public class Helper {
 				else id = e.getId();
 			}
 
-			bm.getButtons().add(new Button(r.getId(), id));
+			bm.getButtons().add(new Button(bm, r.getId(), id));
 		}
 
 		GuildDAO.updateGuildSettings(gc);
