@@ -19,15 +19,13 @@
 package com.kuuhaku.utils;
 
 import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 
-public class JSONObjectAdapter implements InstanceCreator<JSONObject>, JsonSerializer<JSONObject>, JsonDeserializer<JSONObject> {
-	@Override
-	public JSONObject createInstance(Type type) {
-		return new JSONObject();
-	}
-
+public class JSONObjectAdapter extends TypeAdapter<JSONObject> implements JsonSerializer<JSONObject>, JsonDeserializer<JSONObject> {
 	@Override
 	public JsonElement serialize(JSONObject src, Type typeOfSrc, JsonSerializationContext context) {
 		return src.getObj();
@@ -36,5 +34,15 @@ public class JSONObjectAdapter implements InstanceCreator<JSONObject>, JsonSeria
 	@Override
 	public JSONObject deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		return new JSONObject(json);
+	}
+
+	@Override
+	public void write(JsonWriter out, JSONObject value) throws IOException {
+
+	}
+
+	@Override
+	public JSONObject read(JsonReader in) throws IOException {
+		return new JSONObject();
 	}
 }
