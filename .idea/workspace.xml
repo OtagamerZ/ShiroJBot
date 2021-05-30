@@ -14,7 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/schema.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/schema.graphql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1221,27 +1223,6 @@
       <workItem from="1622317060269" duration="4592000" />
       <workItem from="1622333561007" duration="2656000" />
     </task>
-    <task id="LOCAL-04565" summary="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
-      <created>1622148502952</created>
-      <option name="number" value="04565" />
-      <option name="presentableId" value="LOCAL-04565" />
-      <option name="project" value="LOCAL" />
-      <updated>1622148502952</updated>
-    </task>
-    <task id="LOCAL-04566" summary="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
-      <created>1622148596618</created>
-      <option name="number" value="04566" />
-      <option name="presentableId" value="LOCAL-04566" />
-      <option name="project" value="LOCAL" />
-      <updated>1622148596618</updated>
-    </task>
-    <task id="LOCAL-04567" summary="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
-      <created>1622148888913</created>
-      <option name="number" value="04567" />
-      <option name="presentableId" value="LOCAL-04567" />
-      <option name="project" value="LOCAL" />
-      <updated>1622148888913</updated>
-    </task>
     <task id="LOCAL-04568" summary="Migração da biblioteca de conversão de JSON">
       <created>1622261088402</created>
       <option name="number" value="04568" />
@@ -1564,7 +1545,28 @@
       <option name="project" value="LOCAL" />
       <updated>1622399490991</updated>
     </task>
-    <option name="localTasksCounter" value="4614" />
+    <task id="LOCAL-04614" summary="Correções menores">
+      <created>1622399708372</created>
+      <option name="number" value="04614" />
+      <option name="presentableId" value="LOCAL-04614" />
+      <option name="project" value="LOCAL" />
+      <updated>1622399708372</updated>
+    </task>
+    <task id="LOCAL-04615" summary="Correções menores">
+      <created>1622399893151</created>
+      <option name="number" value="04615" />
+      <option name="presentableId" value="LOCAL-04615" />
+      <option name="project" value="LOCAL" />
+      <updated>1622399893151</updated>
+    </task>
+    <task id="LOCAL-04616" summary="Correções menores">
+      <created>1622399960096</created>
+      <option name="number" value="04616" />
+      <option name="presentableId" value="LOCAL-04616" />
+      <option name="project" value="LOCAL" />
+      <updated>1622399960096</updated>
+    </task>
+    <option name="localTasksCounter" value="4617" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
