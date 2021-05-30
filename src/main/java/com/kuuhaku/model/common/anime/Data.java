@@ -18,14 +18,14 @@
 
 package com.kuuhaku.model.common.anime;
 
-public class Anime {
-	private Data data;
+public class Data {
+	private Media media;
 
-	public Data getData() {
-		return data;
+	public Media getMedia() {
+		return media;
 	}
 
-	public void setData(Data data) {
-		this.data = data;
+	public void setMedia(Media value) {
+		this.media = value;
 	}
 }
