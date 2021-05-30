@@ -107,7 +107,7 @@ public class AnimeCommand implements Executable {
 							.setImage(media.getCoverImage().getExtraLarge())
 							.addField("Estúdio:", media.getStudios().getMajor(), true)
 							.addField("Criado por:", media.getStaff().getCreator(), true)
-							.addField("Ano:", Helper.dateFormat.format(media.getStartDate().getDate()), true)
+							.addField("Ano:", String.valueOf(media.getStartDate().getYear()), true)
 							.addField("Estado:", media.getStatus().equals("FINISHED") ? "Finalizado" : "Em lançamento", true)
 							.addField("Episódios:", String.valueOf(media.getEpisodes()), true);
 
