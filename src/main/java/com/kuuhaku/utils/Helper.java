@@ -759,7 +759,7 @@ public class Helper {
 				.orElse(null);
 
 		if (bc == null) {
-			bc = new ButtonChannel();
+			bc = new ButtonChannel(channel.getId());
 			gc.getButtonConfigs().add(bc);
 		}
 
@@ -771,6 +771,7 @@ public class Helper {
 
 		if (bm == null) {
 			bm = new ButtonMessage(
+					message.getId(),
 					message.getAuthor().getId(),
 					gatekeeper,
 					gatekeeper ? r.getId() : null
