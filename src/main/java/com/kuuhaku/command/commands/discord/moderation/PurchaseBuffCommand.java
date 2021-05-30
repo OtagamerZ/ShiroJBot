@@ -62,9 +62,9 @@ public class PurchaseBuffCommand implements Executable {
 							**Tier 3** (%s créditos): `+90%% XP ganho` (7 dias)
 							"""
 							.formatted(
-									new ServerBuff(BuffType.XP, 1).getPrice(),
-									new ServerBuff(BuffType.XP, 2).getPrice(),
-									new ServerBuff(BuffType.XP, 3).getPrice()
+									Helper.separate(new ServerBuff(BuffType.XP, 1).getPrice()),
+									Helper.separate(new ServerBuff(BuffType.XP, 2).getPrice()),
+									Helper.separate(new ServerBuff(BuffType.XP, 3).getPrice())
 							)
 					, false);
 			eb.addBlankField(false);
@@ -75,10 +75,10 @@ public class PurchaseBuffCommand implements Executable {
 							**:warning: Tier Ultimate** (%s créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer cartas`
 							"""
 							.formatted(
-									new ServerBuff(BuffType.CARD, 1).getPrice(),
-									new ServerBuff(BuffType.CARD, 2).getPrice(),
-									new ServerBuff(BuffType.CARD, 3).getPrice(),
-									new ServerBuff(BuffType.CARD, 4).getPrice()
+									Helper.separate(new ServerBuff(BuffType.CARD, 1).getPrice()),
+									Helper.separate(new ServerBuff(BuffType.CARD, 2).getPrice()),
+									Helper.separate(new ServerBuff(BuffType.CARD, 3).getPrice()),
+									Helper.separate(new ServerBuff(BuffType.CARD, 4).getPrice())
 							)
 					, false);
 			eb.addBlankField(false);
@@ -89,10 +89,10 @@ public class PurchaseBuffCommand implements Executable {
 							**:warning: Tier Ultimate** (%s créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer drops`
 							"""
 							.formatted(
-									new ServerBuff(BuffType.DROP, 1).getPrice(),
-									new ServerBuff(BuffType.DROP, 2).getPrice(),
-									new ServerBuff(BuffType.DROP, 3).getPrice(),
-									new ServerBuff(BuffType.DROP, 4).getPrice()
+									Helper.separate(new ServerBuff(BuffType.DROP, 1).getPrice()),
+									Helper.separate(new ServerBuff(BuffType.DROP, 2).getPrice()),
+									Helper.separate(new ServerBuff(BuffType.DROP, 3).getPrice()),
+									Helper.separate(new ServerBuff(BuffType.DROP, 4).getPrice())
 							)
 					, false);
 			eb.addBlankField(false);
@@ -103,10 +103,10 @@ public class PurchaseBuffCommand implements Executable {
 							**:warning: Tier Ultimate** (%s créditos): `Uma completa loucura, por 1 minuto TODAS as cartas que aparecerem serão cromadas`
 							"""
 							.formatted(
-									new ServerBuff(BuffType.FOIL, 1).getPrice(),
-									new ServerBuff(BuffType.FOIL, 2).getPrice(),
-									new ServerBuff(BuffType.FOIL, 3).getPrice(),
-									new ServerBuff(BuffType.FOIL, 4).getPrice()
+									Helper.separate(new ServerBuff(BuffType.FOIL, 1).getPrice()),
+									Helper.separate(new ServerBuff(BuffType.FOIL, 2).getPrice()),
+									Helper.separate(new ServerBuff(BuffType.FOIL, 3).getPrice()),
+									Helper.separate(new ServerBuff(BuffType.FOIL, 4).getPrice())
 							)
 					, false);
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
