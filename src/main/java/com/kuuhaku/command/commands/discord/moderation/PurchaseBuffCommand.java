@@ -64,8 +64,7 @@ public class PurchaseBuffCommand implements Executable {
 							.formatted(
 									new ServerBuff(BuffType.XP, 1),
 									new ServerBuff(BuffType.XP, 2),
-									new ServerBuff(BuffType.XP, 3),
-									new ServerBuff(BuffType.XP, 4)
+									new ServerBuff(BuffType.XP, 3)
 							)
 					, false);
 			eb.addBlankField(false);
@@ -73,7 +72,7 @@ public class PurchaseBuffCommand implements Executable {
 							**Tier 1** (%s créditos): `+20%% chance de aparecer cartas` (15 dias)
 							**Tier 2** (%s créditos): `+30%% chance de aparecer cartas` (11 dias)
 							**Tier 3** (%s créditos): `+40%% chance de aparecer cartas` (7 dias)
-							**:warning: Tier Ultimate** (60000 créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer cartas`
+							**:warning: Tier Ultimate** (%s créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer cartas`
 							"""
 							.formatted(
 									new ServerBuff(BuffType.CARD, 1),
@@ -87,7 +86,7 @@ public class PurchaseBuffCommand implements Executable {
 							**Tier 1** (%s créditos): `+20%% chance de aparecer drops` (15 dias)
 							**Tier 2** (%s créditos): `+30%% chance de aparecer drops` (11 dias)
 							**Tier 3** (%s créditos): `+40%% chance de aparecer drops` (7 dias)
-							**:warning: Tier Ultimate** (42000 créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer drops`
+							**:warning: Tier Ultimate** (%s créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer drops`
 							"""
 							.formatted(
 									new ServerBuff(BuffType.DROP, 1),
@@ -101,7 +100,7 @@ public class PurchaseBuffCommand implements Executable {
 							**Tier 1** (%s créditos): `+25%% chance de aparecer cartas cromadas` (15 dias)
 							**Tier 2** (%s créditos): `+50%% chance de aparecer cartas cromadas` (11 dias)
 							**Tier 3** (%s créditos): `+75%% chance de aparecer cartas cromadas` (7 dias)
-							**:warning: Tier Ultimate** (120000 créditos): `Uma completa loucura, por 1 minuto TODAS as cartas que aparecerem serão cromadas`
+							**:warning: Tier Ultimate** (%s créditos): `Uma completa loucura, por 1 minuto TODAS as cartas que aparecerem serão cromadas`
 							"""
 							.formatted(
 									new ServerBuff(BuffType.FOIL, 1),
