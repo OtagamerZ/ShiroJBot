@@ -19,39 +19,35 @@
 package com.kuuhaku.utils;
 
 import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Iterator;
 
-public class JSONObjectAdapter extends TypeAdapter<JSONObject> implements JsonSerializer<JSONObject>, JsonDeserializer<JSONObject> {
+public class JSONObjectAdapter implements JsonSerializer<JSONObject>, JsonDeserializer<JSONObject> {
 	@Override
 	public JsonElement serialize(JSONObject src, Type typeOfSrc, JsonSerializationContext context) {
-		return src.getObj();
+		if (src == null) {
+			return null;
+		}
+
+		JsonObject jo = new JsonObject();
+		Iterator<String> keys = src.keys();
+		while (keys.hasNext()) {
+			String key = keys.next();
+			JsonElement value = src.get(key);
+
+			jo.add(key, value);
+		}
+
+		return jo;
 	}
 
 	@Override
 	public JSONObject deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		return new JSONObject(json);
-	}
+		if (json == null) {
+			return null;
+		}
 
-	@Override
-	public void write(JsonWriter out, JSONObject value) throws IOException {
-		out.beginObject();
-		out.name("obj");
-		out.value(value.toString());
-		out.endObject();
-	}
-
-	@Override
-	public JSONObject read(JsonReader in) throws IOException {
-		JSONObject jo;
-
-		in.beginObject();
-		jo = new JSONObject(in.nextString());
-		in.endObject();
-
-		return jo;
+		return new JSONObject(json.toString());
 	}
 }
