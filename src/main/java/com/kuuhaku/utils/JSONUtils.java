@@ -27,6 +27,10 @@ public class JSONUtils {
 			.create();
 
 	public static String toJSON(Object o) {
+		if (o instanceof JSONWrapper) {
+			return gson.toJson(o, JSONWrapper.class);
+		}
+
 		return gson.toJson(o);
 	}
 
