@@ -26,14 +26,15 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-public class JSONArray extends JsonElement implements Iterable<JsonElement>, Cloneable {
+public class JSONArray implements Iterable<JsonElement> {
+	private final JsonArray arr;
+
 	public JSONArray() {
+		arr = new JsonArray();
 	}
 
 	public JSONArray(JsonArray array) {
-		for (JsonElement el : array) {
-			this.put(el);
-		}
+		arr = array;
 	}
 
 	public JSONArray(String source) {
@@ -49,11 +50,11 @@ public class JSONArray extends JsonElement implements Iterable<JsonElement>, Clo
 	}
 
 	public Iterator<JsonElement> iterator() {
-		return self().iterator();
+		return arr.iterator();
 	}
 
 	public JsonElement get(int index) {
-		return self().get(index);
+		return arr.get(index);
 	}
 
 	public JsonElement get(int index, JsonElement or) {
@@ -256,7 +257,7 @@ public class JSONArray extends JsonElement implements Iterable<JsonElement>, Clo
 
 	public String join(String separator) {
 		List<String> out = new ArrayList<>();
-		for (JsonElement elem : this) {
+		for (JsonElement elem : arr) {
 			out.add(elem.toString());
 		}
 
@@ -264,65 +265,65 @@ public class JSONArray extends JsonElement implements Iterable<JsonElement>, Clo
 	}
 
 	public int size() {
-		return self().size();
+		return arr.size();
 	}
 
 	public JSONArray put(boolean value) {
-		self().add(value);
+		arr.add(value);
 
 		return this;
 	}
 
 	public JSONArray put(Collection<?> value) {
-		self().add(JSONUtils.parseJSONArray(value));
+		arr.add(JSONUtils.parseJSONArray(value));
 
 		return this;
 	}
 
 	public JSONArray put(double value) {
-		self().add(value);
+		arr.add(value);
 
 		return this;
 	}
 
 	public JSONArray put(float value) {
-		self().add(value);
+		arr.add(value);
 
 		return this;
 	}
 
 	public JSONArray put(int value) {
-		self().add(value);
+		arr.add(value);
 
 		return this;
 	}
 
 	public JSONArray put(long value) {
-		self().add(value);
+		arr.add(value);
 
 		return this;
 	}
 
 	public JSONArray put(Map<?, ?> value) {
-		self().add(JSONUtils.parseJSONObject(value));
+		arr.add(JSONUtils.parseJSONObject(value));
 
 		return this;
 	}
 
 	public JSONArray put(Object value) {
-		self().add(JSONUtils.parseJSONElement(value));
+		arr.add(JSONUtils.parseJSONElement(value));
 
 		return this;
 	}
 
 	public JsonElement remove(int index) {
-		return self().remove(index);
+		return arr.remove(index);
 	}
 
 	public JSONObject toJSONObject(JSONArray names) {
 		JSONObject out = new JSONObject();
 		for (int i = 0; i < names.size(); i++) {
-			out.put(names.getString(i), self().get(i));
+			out.put(names.getString(i), arr.get(i));
 		}
 
 		return out;
@@ -330,7 +331,7 @@ public class JSONArray extends JsonElement implements Iterable<JsonElement>, Clo
 
 	public List<JsonElement> toList() {
 		List<JsonElement> out = new ArrayList<>();
-		for (JsonElement elem : this) {
+		for (JsonElement elem : arr) {
 			out.add(elem);
 		}
 
@@ -341,21 +342,8 @@ public class JSONArray extends JsonElement implements Iterable<JsonElement>, Clo
 		return size() == 0;
 	}
 
-	private JsonArray self() {
-		return this.getAsJsonArray();
-	}
-
-	@Override
-	public JsonElement deepCopy() {
-		try {
-			return (JsonElement) clone();
-		} catch (CloneNotSupportedException e) {
-			return null;
-		}
-	}
-
 	@Override
 	public String toString() {
-		return JSONUtils.toJSON(this);
+		return JSONUtils.toJSON(arr);
 	}
 }
