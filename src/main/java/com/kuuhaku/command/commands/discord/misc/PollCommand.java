@@ -34,7 +34,6 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.json.JSONException;
 
 import java.awt.*;
 import java.util.List;
@@ -82,7 +81,7 @@ public class PollCommand implements Executable {
 			try {
 				options = new JSONArray(s[1]);
 				text = s[0];
-			} catch (JSONException ignore) {
+			} catch (IllegalStateException ignore) {
 			}
 		}
 

@@ -24,7 +24,6 @@ import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import org.json.JSONException;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -86,7 +85,7 @@ public class ImageCommand implements Executable {
 
 				m.delete().queue();
 				channel.sendMessage(eb.build()).queue();
-			} catch (IOException | JSONException e) {
+			} catch (IOException | IllegalStateException e) {
 				m.editMessage("❌ | Humm...não achei nenhuma imagem com esses termos, talvez você tenha escrito algo errado?").queue();
 			}
 		});
