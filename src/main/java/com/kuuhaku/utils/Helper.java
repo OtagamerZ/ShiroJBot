@@ -676,9 +676,7 @@ public class Helper {
 							} else {
 								buttons.put(CANCEL, (m, ms) -> {
 									if (m.getUser().getId().equals(message.getAuthor())) {
-										for (ButtonChannel bc : gc.getButtonConfigs()) {
-											if (bc.getMessages().remove(message)) break;
-										}
+										message.getParent().getMessages().remove(message);
 
 										GuildDAO.updateGuildSettings(gc);
 										ms.clearReactions().queue();
@@ -715,17 +713,7 @@ public class Helper {
 						ms.getChannel().sendMessage(":warning: | Botão removido devido a cargo inexistente.").queue();
 						GuildConfig gc = GuildDAO.getGuildById(g.getId());
 
-						boolean removed = false;
-						for (ButtonChannel channel : gc.getButtonConfigs()) {
-							for (ButtonMessage message : channel.getMessages()) {
-								if (message.getButtons().remove(b)) {
-									removed = true;
-									break;
-								}
-							}
-
-							if (removed) break;
-						}
+						b.getParent().getButtons().remove(b);
 
 						GuildDAO.updateGuildSettings(gc);
 					});
