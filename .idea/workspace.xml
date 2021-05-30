@@ -15,8 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONArrayAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONArrayAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObjectAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObjectAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONArrayAdapter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObjectAdapter.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1224,20 +1224,6 @@
       <workItem from="1622317060269" duration="4592000" />
       <workItem from="1622333561007" duration="2656000" />
     </task>
-    <task id="LOCAL-04554" summary="Correções menores">
-      <created>1622124190894</created>
-      <option name="number" value="04554" />
-      <option name="presentableId" value="LOCAL-04554" />
-      <option name="project" value="LOCAL" />
-      <updated>1622124190894</updated>
-    </task>
-    <task id="LOCAL-04555" summary="Correções menores">
-      <created>1622127291277</created>
-      <option name="number" value="04555" />
-      <option name="presentableId" value="LOCAL-04555" />
-      <option name="project" value="LOCAL" />
-      <updated>1622127291277</updated>
-    </task>
     <task id="LOCAL-04556" summary="Filtros de imagem agora também criam gifs">
       <created>1622134114746</created>
       <option name="number" value="04556" />
@@ -1567,7 +1553,21 @@
       <option name="project" value="LOCAL" />
       <updated>1622395283357</updated>
     </task>
-    <option name="localTasksCounter" value="4603" />
+    <task id="LOCAL-04603" summary="Correções menores">
+      <created>1622395715944</created>
+      <option name="number" value="04603" />
+      <option name="presentableId" value="LOCAL-04603" />
+      <option name="project" value="LOCAL" />
+      <updated>1622395715944</updated>
+    </task>
+    <task id="LOCAL-04604" summary="Correções menores">
+      <created>1622395865742</created>
+      <option name="number" value="04604" />
+      <option name="presentableId" value="LOCAL-04604" />
+      <option name="project" value="LOCAL" />
+      <updated>1622395865742</updated>
+    </task>
+    <option name="localTasksCounter" value="4605" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

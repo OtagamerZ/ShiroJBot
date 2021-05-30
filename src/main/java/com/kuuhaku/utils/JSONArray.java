@@ -26,7 +26,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-public class JSONArray implements Iterable<JsonElement> {
+public class JSONArray implements JSONWrapper, Iterable<JsonElement> {
 	private final JsonArray arr;
 
 	public JSONArray() {
@@ -342,7 +342,8 @@ public class JSONArray implements Iterable<JsonElement> {
 		return size() == 0;
 	}
 
-	public JsonArray getArr() {
+	@Override
+	public JsonElement getContent() {
 		return arr;
 	}
 
