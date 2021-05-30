@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria nas requisições de anime">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1221,13 +1221,6 @@
       <workItem from="1622317060269" duration="4592000" />
       <workItem from="1622333561007" duration="2656000" />
     </task>
-    <task id="LOCAL-04574" summary="Migração da biblioteca de conversão de JSON">
-      <created>1622309642882</created>
-      <option name="number" value="04574" />
-      <option name="presentableId" value="LOCAL-04574" />
-      <option name="project" value="LOCAL" />
-      <updated>1622309642882</updated>
-    </task>
     <task id="LOCAL-04575" summary="Migração da biblioteca de conversão de JSON">
       <created>1622320626960</created>
       <option name="number" value="04575" />
@@ -1564,7 +1557,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622406953243</updated>
     </task>
-    <option name="localTasksCounter" value="4623" />
+    <task id="LOCAL-04623" summary="Melhoria nas requisições de anime">
+      <created>1622407190506</created>
+      <option name="number" value="04623" />
+      <option name="presentableId" value="LOCAL-04623" />
+      <option name="project" value="LOCAL" />
+      <updated>1622407190506</updated>
+    </task>
+    <option name="localTasksCounter" value="4624" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
