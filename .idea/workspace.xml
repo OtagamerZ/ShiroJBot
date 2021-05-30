@@ -1219,20 +1219,6 @@
       <workItem from="1622317060269" duration="4592000" />
       <workItem from="1622333561007" duration="2656000" />
     </task>
-    <task id="LOCAL-04570" summary="Migração da biblioteca de conversão de JSON">
-      <created>1622261859948</created>
-      <option name="number" value="04570" />
-      <option name="presentableId" value="LOCAL-04570" />
-      <option name="project" value="LOCAL" />
-      <updated>1622261859948</updated>
-    </task>
-    <task id="LOCAL-04571" summary="Migração da biblioteca de conversão de JSON">
-      <created>1622262233814</created>
-      <option name="number" value="04571" />
-      <option name="presentableId" value="LOCAL-04571" />
-      <option name="project" value="LOCAL" />
-      <updated>1622262233814</updated>
-    </task>
     <task id="LOCAL-04572" summary="Migração da biblioteca de conversão de JSON">
       <created>1622262747589</created>
       <option name="number" value="04572" />
@@ -1562,7 +1548,21 @@
       <option name="project" value="LOCAL" />
       <updated>1622406174214</updated>
     </task>
-    <option name="localTasksCounter" value="4619" />
+    <task id="LOCAL-04619" summary="Melhoria nas requisições de anime">
+      <created>1622406339462</created>
+      <option name="number" value="04619" />
+      <option name="presentableId" value="LOCAL-04619" />
+      <option name="project" value="LOCAL" />
+      <updated>1622406339462</updated>
+    </task>
+    <task id="LOCAL-04620" summary="Melhoria nas requisições de anime">
+      <created>1622406524730</created>
+      <option name="number" value="04620" />
+      <option name="presentableId" value="LOCAL-04620" />
+      <option name="project" value="LOCAL" />
+      <updated>1622406524730</updated>
+    </task>
+    <option name="localTasksCounter" value="4621" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

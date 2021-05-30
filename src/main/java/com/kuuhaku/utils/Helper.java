@@ -2752,7 +2752,7 @@ public class Helper {
 		}
 	}
 
-	public static void makeGIF(File f, List<GifFrame> frames, int repeat, int delay, int quality) throws IOException {
+	public static void makeGIF(File f, List<GifFrame> frames, int repeat, int delay, int compress) throws IOException {
 		try (ImageOutputStream ios = new FileImageOutputStream(f)) {
 			GifSequenceWriter gif = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
 			for (GifFrame frame : frames) {
@@ -2767,7 +2767,7 @@ public class Helper {
 		}
 
 		try {
-			Process p = Runtime.getRuntime().exec("mogrify -layers 'optimize' -fuzz " + quality + "% " + f.getAbsolutePath());
+			Process p = Runtime.getRuntime().exec("mogrify -layers 'optimize' -fuzz " + compress + "% " + f.getAbsolutePath());
 			p.waitFor();
 		} catch (InterruptedException ignore) {
 		}
