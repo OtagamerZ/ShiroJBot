@@ -22,7 +22,6 @@ import com.google.gson.JsonElement;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.JSONObject;
-import org.json.JSONException;
 
 import java.awt.*;
 import java.time.Instant;
@@ -107,7 +106,7 @@ public class Anime {
 			JSONObject nae = media.getJSONObject("nextAiringEpisode");
 			ZonedDateTime naeD = Instant.ofEpochSecond(nae.getLong("airingAt")).atZone(ZoneId.of("GMT-3"));
 			naeAiringAt = Helper.dateFormat.format(naeD);
-		} catch (JSONException e) {
+		} catch (IllegalStateException e) {
 			naeAiringAt = null;
 			naeEpisode = null;
 		}
@@ -117,7 +116,7 @@ public class Anime {
 		String durationTemp;
 		try {
 			durationTemp = String.valueOf(media.getString("episodes").equals("null") ? Integer.toString(media.getJSONObject("nextAiringEpisode").getInt("episode")) : media.get("episodes"));
-		} catch (JSONException e) {
+		} catch (IllegalStateException e) {
 			durationTemp = "Desconhecido";
 		}
 		duration = durationTemp;
