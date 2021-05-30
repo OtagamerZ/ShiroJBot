@@ -34,6 +34,7 @@ public class AnimeRequest {
 				put("anime", anime);
 			}});
 		}};
+		System.out.println(json);
 
 		return Helper.post("https://graphql.anilist.co", json, Map.of(
 				"Content-Type", "application/json; charset=UTF-8",
