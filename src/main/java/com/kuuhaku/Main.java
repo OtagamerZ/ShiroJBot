@@ -25,6 +25,7 @@ import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Paginator;
 import com.github.ygimenez.model.PaginatorBuilder;
+import com.google.gson.GsonBuilder;
 import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
@@ -37,8 +38,7 @@ import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.managers.TwitchCommandManager;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.*;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.api.JDA;
@@ -84,6 +84,10 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		info = new ShiroInfo();
 		cmdManager = new CommandManager();
 		tCmdManager = new TwitchCommandManager();
+		JSONUtils.gson = new GsonBuilder()
+				.registerTypeAdapter(JSONObject.class, JSONObjectSerializer.class)
+				.registerTypeAdapter(JSONArray.class, JSONArraySerializer.class)
+				.create();
 
 		EnumSet<GatewayIntent> intents = EnumSet.allOf(GatewayIntent.class);
 
