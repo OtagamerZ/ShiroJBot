@@ -1051,7 +1051,6 @@ public class Helper {
 					.headers(headers)
 					.send(payload.toString());
 
-			System.out.println(req.body());
 			return new JSONObject(req.body());
 		} catch (IllegalStateException e) {
 			return new JSONObject();
