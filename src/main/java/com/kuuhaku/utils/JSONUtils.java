@@ -22,7 +22,7 @@ import com.google.gson.*;
 import com.kuuhaku.model.enums.JsonType;
 
 public class JSONUtils {
-	public static Gson gson = null;
+	public static Gson gson = new Gson();
 
 	public static String toJSON(Object o) {
 		return gson.toJson(o);
