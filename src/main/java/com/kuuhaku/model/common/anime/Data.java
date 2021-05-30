@@ -19,7 +19,7 @@
 package com.kuuhaku.model.common.anime;
 
 public class Data {
-	private Media media;
+	private Media Media;
 
 	public Media getMedia() {
 		return media;
