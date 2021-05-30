@@ -264,7 +264,7 @@ public class Profile {
 				.peek(frame -> frame.applyOverlay(overlay))
 				.collect(Collectors.toList());
 
-		Helper.makeGIF(out, frames);
+		Helper.makeGIF(out, frames, 0, -1, 7);
 		return out;
 	}
 
