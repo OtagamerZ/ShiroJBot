@@ -35,6 +35,11 @@ public class ButtonMessage {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
 	private String id;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "parent_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private ButtonChannel parent;
+
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
 	private String author;
 
@@ -44,8 +49,7 @@ public class ButtonMessage {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
 	private String role;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "message_id")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "parent")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Button> buttons = new ArrayList<>();
 
@@ -59,8 +63,20 @@ public class ButtonMessage {
 		this.role = role;
 	}
 
+	public ButtonMessage(String id, ButtonChannel parent, String author, boolean gatekeeper, String role) {
+		this.id = id;
+		this.parent = parent;
+		this.author = author;
+		this.gatekeeper = gatekeeper;
+		this.role = role;
+	}
+
 	public String getId() {
 		return id;
+	}
+
+	public ButtonChannel getParent() {
+		return parent;
 	}
 
 	public String getAuthor() {
