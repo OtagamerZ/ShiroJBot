@@ -44,6 +44,7 @@ import com.kuuhaku.model.persistent.guild.buttons.Button;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonMessage;
 import de.androidpit.colorthief.ColorThief;
+import io.github.furstenheim.CopyDown;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -137,6 +138,7 @@ public class Helper {
 	public static final int CANVAS_SIZE = 2049;
 	public static final DateTimeFormatter fullDateFormat = DateTimeFormatter.ofPattern(I18n.getString("full-date-format"));
 	public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(I18n.getString("date-format"));
+	public static final CopyDown htmlConverter = new CopyDown();
 	public static final String HOME = "674261700366827539";
 	public static final int BASE_CARD_PRICE = 400;
 	public static final int BASE_EQUIPMENT_PRICE = 2500;
