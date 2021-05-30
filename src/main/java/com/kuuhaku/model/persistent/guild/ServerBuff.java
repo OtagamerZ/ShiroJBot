@@ -91,12 +91,12 @@ public class ServerBuff {
 	}
 
 	public int getPrice() {
-		return switch (type) {
-			case XP -> 20000;
-			case CARD -> 18000;
-			case DROP -> 14000;
-			case FOIL -> 35000;
-		} * tier * (tier == 4 ? 10 : 1);
+		return (int) (switch (type) {
+			case XP -> 5000;
+			case CARD -> 4000;
+			case DROP -> 3250;
+			case FOIL -> 7500;
+		} * Math.pow(2, tier - 1) * (tier == 4 ? 10 : 1));
 	}
 
 	public double getMult() {
