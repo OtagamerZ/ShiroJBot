@@ -765,18 +765,22 @@ public class Helper {
 
 		Set<ButtonMessage> messages = bc.getMessages();
 		ButtonMessage bm = messages.stream()
-				.filter(msg -> msg.getId().equals(message.getId()))
+				.filter(msg -> msg.getId().equals(args[0]))
 				.findFirst()
 				.orElse(null);
 
 		if (bm == null) {
 			bm = new ButtonMessage(
-					message.getId(),
+					args[0],
 					bc,
 					message.getAuthor().getId(),
 					gatekeeper,
 					gatekeeper ? r.getId() : null
 			);
+
+			if (gatekeeper && bc.getMessages().stream().anyMatch(ButtonMessage::isGatekeeper))
+				bc.getMessages().removeIf(ButtonMessage::isGatekeeper);
+
 			bc.getMessages().add(bm);
 		}
 
