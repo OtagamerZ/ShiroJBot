@@ -54,7 +54,7 @@ public class AnimeRequest {
 					System.getenv("NOWANIMES_TOKEN")
 			);
 		} else {
-			return new JSONObject();
+			return null;
 		}
 
 		Helper.logger(AnimeRequest.class).debug(resposta);
@@ -72,7 +72,7 @@ public class AnimeRequest {
 					System.getenv("MEGAHENTAIS_TOKEN")
 			);
 		} else {
-			return new JSONObject();
+			return null;
 		}
 
 		Helper.logger(AnimeRequest.class).debug(resposta);
