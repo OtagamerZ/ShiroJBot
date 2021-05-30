@@ -47,7 +47,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url "https://jitpack.io" }
-    maven { url 'https://m2.dv8tion.net/releases' }
+    maven { url "https://m2.dv8tion.net/releases" }
 }
 
 task stage(dependsOn: ["build", "clean"])
@@ -99,9 +99,9 @@ dependencies {
 
     //Wrappers
     implementation group: "com.graphql-java", name: "graphql-java", version: "2019-05-08T02-56-27-cca4316"
-    implementation group: 'at.stefangeyer.challonge', name: 'core', version: '2.1.0'
-    implementation group: 'at.stefangeyer.challonge.serializer', name: 'gson', version: '2.1.0'
-    implementation group: 'at.stefangeyer.challonge.rest', name: 'retrofit', version: '2.1.0'
+    implementation group: "at.stefangeyer.challonge", name: "core", version: "2.1.0"
+    implementation group: "at.stefangeyer.challonge.serializer", name: "gson", version: "2.1.0"
+    implementation group: "at.stefangeyer.challonge.rest", name: "retrofit", version: "2.1.0"
     implementation group: "com.github.twitch4j", name: "twitch4j", version: "1.1.0"
     implementation group: "com.github.philippheuer.events4j", name: "events4j", version: "0.6.0"
     implementation group: "com.google.apis", name: "google-api-services-youtube", version: "v3-rev212-1.25.0"
@@ -111,7 +111,7 @@ dependencies {
     implementation group: "org.apache.commons", name: "commons-lang3", version: "3.8.1"
     implementation group: "org.apache.commons", name: "commons-text", version: "1.9"
     implementation group: "org.apache.commons", name: "commons-math3", version: "3.6.1"
-    implementation group: 'org.apache.commons', name: 'commons-imaging', version: '1.0-alpha2'
+    implementation group: "org.apache.commons", name: "commons-imaging", version: "1.0-alpha2"
 
     //Logger
     implementation group: "org.slf4j", name: "slf4j-api", version: "1.7.25"
@@ -134,7 +134,8 @@ dependencies {
     implementation group: "org.jetbrains.kotlin", name: "kotlin-stdlib", version: "1.4.0-rc"
     implementation group: "org.knowm.xchart", name: "xchart", version: "3.6.5"
     implementation group: "net.oneandone.reflections8", name: "reflections8", version: "0.11.7"
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.7'
+    implementation group: "com.google.code.gson", name: "gson", version: "2.8.7"
+    implementation group: "io.github.furstenheim", name: "copy_down", version: "1.0"
 }
 
 apply plugin: "org.springframework.boot"

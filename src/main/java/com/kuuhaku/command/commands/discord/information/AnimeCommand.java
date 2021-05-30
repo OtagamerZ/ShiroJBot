@@ -23,10 +23,13 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.AnimeRequest;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.common.Anime;
+import com.kuuhaku.model.common.anime.Anime;
+import com.kuuhaku.model.common.anime.Media;
+import com.kuuhaku.model.common.anime.NAMHData;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.JSONUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -35,8 +38,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "anime",
@@ -62,27 +65,32 @@ public class AnimeCommand implements Executable {
 				String query = IOUtils.toString(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("anilist.graphql")), StandardCharsets.UTF_8);
 				JSONObject data = AnimeRequest.getData(argsAsText, query);
 				try {
-					Anime anime = new Anime(data);
+					Anime anime = JSONUtils.fromJSON(data.toString(), Anime.class);
+					Media media = anime.getMedia();
 
 					EmbedBuilder eb = new EmbedBuilder();
-					boolean hentai = anime.getGenres().toLowerCase(Locale.ROOT).contains("hentai");
+					boolean hentai = media.getGenres().stream().anyMatch("hentai"::equalsIgnoreCase);
 					if (hentai && !message.getTextChannel().isNSFW()) {
 						m.editMessage("Humm safadinho, eu não posso postar sobre Hentais neste canal!").queue();
 						return;
 					}
 
-					JSONObject jo = hentai ? AnimeRequest.getMHData(anime.gettRomaji()) : AnimeRequest.getNAData(anime.gettRomaji());
+					NAMHData namh;
+					if (hentai)
+						namh = JSONUtils.fromJSON(AnimeRequest.getMHData(media.getTitle().getRomaji()).toString(), NAMHData.class);
+					else
+						namh = JSONUtils.fromJSON(AnimeRequest.getNAData(media.getTitle().getRomaji()).toString(), NAMHData.class);
 
 					String link;
-					if (jo.has("desc")) {
+					if (namh != null) {
 						if (hentai) {
 							link = "[Mega Hentais](https://www.megahentais.com/?page_id=%s&ref=%s)".formatted(
-									jo.getInt("id"),
+									namh.getId(),
 									Helper.hash(System.getenv("MEGAHENTAIS_TOKEN").getBytes(StandardCharsets.UTF_8), "SHA-1")
 							);
 						} else {
 							link = "[Now Animes](https://www.nowanimes.com/?page_id=%s&ref=%s)".formatted(
-									jo.getInt("id"),
+									namh.getId(),
 									Helper.hash(System.getenv("NOWANIMES_TOKEN").getBytes(StandardCharsets.UTF_8), "SHA-1")
 							);
 						}
@@ -90,40 +98,34 @@ public class AnimeCommand implements Executable {
 						link = "Link indisponível";
 					}
 
-					eb.setColor(anime.getcColor());
-					if (hentai) eb.setAuthor("Bem, aqui está um novo hentai para você assistir! ( ͡° ͜ʖ ͡°)\n");
-					else eb.setAuthor("Bem, aqui está um novo anime para você assistir!\n");
+					eb.setColor(media.getCoverImage().getParsedColor());
+					if (hentai) eb.setAuthor("Bem, aqui está um novo hentai para você assistir! ( ͡° ͜ʖ ͡°)");
+					else eb.setAuthor("Bem, aqui está um novo anime para você assistir!");
 
-					eb.setTitle(anime.gettRomaji() + (!anime.gettRomaji().equals(anime.gettEnglish()) ? " (" + anime.gettEnglish() + ")" : ""))
-							.setImage(anime.getcImage())
-							.addField("Estúdio:", anime.getStudio(), true)
-							.addField("Criado por:", anime.getCreator(), true)
-							.addField("Ano:", anime.getsDate(), true)
-							.addField("Estado:", anime.getStatus(), true)
-							.addField("Episódios:", anime.getDuration(), true);
+					eb.setTitle(media.getTitle().getRomaji() + (media.getTitle().getRomaji().equals(media.getTitle().getEnglish()) ? "" : " (" + media.getTitle().getEnglish() + ")"))
+							.setImage(media.getCoverImage().getExtraLarge())
+							.addField("Estúdio:", media.getStudios().getMajor(), true)
+							.addField("Criado por:", media.getStaff().getCreator(), true)
+							.addField("Ano:", Helper.dateFormat.format(media.getStartDate().getDate()), true)
+							.addField("Estado:", media.getStatus().equals("FINISHED") ? "Finalizado" : "Em lançamento", true)
+							.addField("Episódios:", String.valueOf(media.getEpisodes()), true);
 
-					if (anime.getNaeAiringAt() != null)
-						eb.addField("Próximo episódio:", anime.getNaeAiringAt(), true);
+					if (media.getNextAiringEpisode() != null) {
+						eb.addField("Próximo episódio (ep. " + media.getNextAiringEpisode().getEpisode() + "):", Helper.fullDateFormat.format(media.getNextAiringEpisode().getAiringAtDate()), true);
+					}
 
-					eb.addField("Nota:", anime.getScore() == -1 ? "Nenhuma" : Float.toString(anime.getScore() / 10), true)
-							.addField("Popularidade:", Integer.toString(anime.getPopularity()), true)
+					eb.addField("Nota:", media.getAverageScore() == 0 ? "Nenhuma" : String.valueOf(media.getAverageScore()), true)
+							.addField("Popularidade:", String.valueOf(media.getPopularity()), true)
 							.addField("Assista em:", link, true);
 
 					if (!link.equalsIgnoreCase("Link indisponível")) {
-						eb.setDescription(StringUtils.abbreviate(jo.getString("desc"), 2048));
+						eb.setDescription(StringUtils.abbreviate(namh.getDesc(), 2048));
 					} else {
 						eb.setDescription(
-								StringUtils.abbreviate(
-										anime.getDescription()
-												.replace("<br>", "\n")
-												.replaceAll("(<i>|</i>)", "_")
-												.replaceAll("(<b>|</b>)", "**")
-												.replaceAll("(<u>|</u>)", "__")
-												.replaceAll("(<p>|</p>)", "")
-										, 2048)
+								StringUtils.abbreviate(Helper.htmlConverter.convert(media.getDescription()), 2048)
 						);
 					}
-					eb.addField("Gêneros:", anime.getGenres(), false);
+					eb.addField("Gêneros:", media.getGenres().stream().map(s -> "`" + s + "`").collect(Collectors.joining(", ")), false);
 
 					m.delete().queue();
 					channel.sendMessage(eb.build()).queue();
