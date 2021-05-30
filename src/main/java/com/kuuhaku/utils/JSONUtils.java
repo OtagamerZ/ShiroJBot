@@ -28,7 +28,7 @@ public class JSONUtils {
 			.create();
 
 	public static String toJSON(Object o) {
-		return gson.toJson(o, o.getClass());
+		return gson.toJson(o);
 	}
 
 	public static <T> T fromJSON(String json, Class<T> klass) {

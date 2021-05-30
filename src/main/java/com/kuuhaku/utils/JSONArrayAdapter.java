@@ -19,39 +19,30 @@
 package com.kuuhaku.utils;
 
 import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 
-public class JSONArrayAdapter extends TypeAdapter<JSONArray> implements JsonSerializer<JSONArray>, JsonDeserializer<JSONArray> {
+public class JSONArrayAdapter implements JsonSerializer<JSONArray>, JsonDeserializer<JSONArray> {
 	@Override
 	public JsonElement serialize(JSONArray src, Type typeOfSrc, JsonSerializationContext context) {
-		return src.getArr();
+		if (src == null) {
+			return null;
+		}
+
+		JsonArray jsonArray = new JsonArray();
+		for (int i = 0; i < src.size(); i++) {
+			jsonArray.add(src.get(i));
+		}
+
+		return jsonArray;
 	}
 
 	@Override
 	public JSONArray deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		return new JSONArray(json);
-	}
+		if (json == null) {
+			return null;
+		}
 
-	@Override
-	public void write(JsonWriter out, JSONArray value) throws IOException {
-		out.endArray();
-		out.name("arr");
-		out.value(value.toString());
-		out.endArray();
-	}
-
-	@Override
-	public JSONArray read(JsonReader in) throws IOException {
-		JSONArray jo;
-
-		in.beginArray();
-		jo = new JSONArray(in.nextString());
-		in.endArray();
-
-		return jo;
+		return new JSONArray(json.toString());
 	}
 }
