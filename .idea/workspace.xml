@@ -13,12 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/Button.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/Button.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonChannel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/buttons/ButtonMessage.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1224,13 +1219,6 @@
       <workItem from="1622317060269" duration="4592000" />
       <workItem from="1622333561007" duration="2656000" />
     </task>
-    <task id="LOCAL-04562" summary="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
-      <created>1622145378444</created>
-      <option name="number" value="04562" />
-      <option name="presentableId" value="LOCAL-04562" />
-      <option name="project" value="LOCAL" />
-      <updated>1622145378444</updated>
-    </task>
     <task id="LOCAL-04563" summary="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
       <created>1622145396643</created>
       <option name="number" value="04563" />
@@ -1567,7 +1555,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622397615804</updated>
     </task>
-    <option name="localTasksCounter" value="4611" />
+    <task id="LOCAL-04611" summary="Correções menores">
+      <created>1622398849777</created>
+      <option name="number" value="04611" />
+      <option name="presentableId" value="LOCAL-04611" />
+      <option name="project" value="LOCAL" />
+      <updated>1622398849777</updated>
+    </task>
+    <option name="localTasksCounter" value="4612" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
