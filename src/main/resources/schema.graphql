@@ -187,7 +187,7 @@ type AiringProgression {
     watching: Int
 }
 
-"Media Airing Schedule"
+"Media Airing Schedule. NOTE: We only aim to guarantee that FUTURE airing data is present and accurate."
 type AiringSchedule {
     "The time the episode airs at"
     airingAt: Int!
@@ -225,6 +225,10 @@ type AniChartUser {
 
 "A character that features in an anime or manga"
 type Character {
+    "The character's age. Note this is a string, not an int, it may contain further text and additional ages."
+    age: String
+    "The character's birth date"
+    dateOfBirth: FuzzyDate
     "A general description of the character"
     description(
         "Return the string in pre-parsed html instead of markdown"
@@ -232,14 +236,19 @@ type Character {
     ): String
     "The amount of user's who have favourited the character"
     favourites: Int
+    "The character's gender. Usually Male, Female, or Non-binary but can be any string."
+    gender: String
     "The id of the character"
     id: Int!
     "Character images"
     image: CharacterImage
     "If the character is marked as favourite by the currently authenticated user"
     isFavourite: Boolean!
+    "If the character is blocked from being added to favourites"
+    isFavouriteBlocked: Boolean!
     "Media that includes the character"
     media(
+        onList: Boolean,
         "The page"
         page: Int,
         "The amount of entries per page, max 25"
@@ -271,9 +280,13 @@ type CharacterEdge {
     id: Int
     "The media the character is in"
     media: [Media]
+    "Media specific character name"
+    name: String
     node: Character
     "The characters role in the media"
     role: CharacterRole
+    "The voice actors of the character with role date"
+    voiceActorRoles(language: StaffLanguage, sort: [StaffSort]): [StaffRoleType]
     "The voice actors of the character"
     voiceActors(language: StaffLanguage, sort: [StaffSort]): [Staff]
 }
@@ -289,12 +302,16 @@ type CharacterImage {
 type CharacterName {
     "Other names the character might be referred to as"
     alternative: [String]
+    "Other names the character might be referred to as but are spoilers"
+    alternativeSpoiler: [String]
     "The character's given name"
     first: String
-    "The character's full name"
+    "The character's first and last name"
     full: String
     "The character's surname"
     last: String
+    "The character's middle name"
+    middle: String
     "The character's full name in their native language"
     native: String
 }
@@ -543,6 +560,8 @@ type InternalPage {
         id_not: Int,
         "Filter by character id"
         id_not_in: [Int],
+        "Filter by character by if its their birthday today"
+        isBirthday: Boolean,
         "Filter by search query"
         search: String,
         "The order the results will be returned in"
@@ -855,7 +874,7 @@ type InternalPage {
         mediaType: MediaType,
         "The order the results will be returned in"
         sort: [ReviewSort],
-        "Filter by media id"
+        "Filter by user id"
         userId: Int
     ): [Review]
     revisionHistory(
@@ -879,6 +898,8 @@ type InternalPage {
         id_not: Int,
         "Filter by the staff id"
         id_not_in: [Int],
+        "Filter by staff by if its their birthday today"
+        isBirthday: Boolean,
         "Filter by search query"
         search: String,
         "The order the results will be returned in"
@@ -940,6 +961,8 @@ type InternalPage {
     users(
         "Filter by the user id"
         id: Int,
+        "Filter to moderators only if true"
+        isModerator: Boolean,
         "Filter by the name of the user"
         name: String,
         "Filter by search query"
@@ -1114,7 +1137,10 @@ type Media {
     startDate: FuzzyDate
     stats: MediaStats
     "The current releasing status of the media"
-    status: MediaStatus
+    status(
+        "Provide 2 to use new version 2 of sources enum"
+        version: Int
+    ): MediaStatus
     "Data and links to legal streaming episodes on external sites"
     streamingEpisodes: [MediaStreamingEpisode]
     "The companies who produced the media"
@@ -1151,10 +1177,14 @@ type Media {
 type MediaCharacter {
     "The characters in the media voiced by the parent actor"
     character: Character
+    "Media specific character name"
+    characterName: String
+    dubGroup: String
     "The id of the connection"
     id: Int
     "The characters role in the media"
     role: CharacterRole
+    roleNotes: String
     "The voice actor of the character"
     voiceActor: Staff
 }
@@ -1179,10 +1209,14 @@ type MediaCoverImage {
 
 "Media connection edge"
 type MediaEdge {
+    "Media specific character name"
+    characterName: String
     "The characters role in the media"
     characterRole: CharacterRole
     "The characters in the media voiced by the parent actor"
     characters: [Character]
+    "Used for grouping roles where multiple dubs exist for the same language. Either dubbing company name or language variant."
+    dubGroup: String
     "The order the media should be displayed from the users favourites"
     favouriteOrder: Int
     "The id of the connection"
@@ -1195,8 +1229,12 @@ type MediaEdge {
         "Provide 2 to use new version 2 of relation enum"
         version: Int
     ): MediaRelation
+    "Notes regarding the VA's role for the character"
+    roleNotes: String
     "The role of the staff member in the production of the media"
     staffRole: String
+    "The voice actors of the character with role date"
+    voiceActorRoles(language: StaffLanguage, sort: [StaffSort]): [StaffRoleType]
     "The voice actors of the character"
     voiceActors(language: StaffLanguage, sort: [StaffSort]): [Staff]
 }
@@ -1297,8 +1335,7 @@ type MediaListOptions {
     sharedTheme: Json @deprecated(reason : "No longer used")
     "If the shared theme should be used instead of the individual list themes"
     sharedThemeEnabled: Boolean @deprecated(reason : "No longer used")
-    "(Site only) If the user should be using legacy css-supporting list versions"
-    useLegacyLists: Boolean
+    useLegacyLists: Boolean @deprecated(reason : "No longer used")
 }
 
 "A user's list options for anime or manga lists"
@@ -1388,12 +1425,15 @@ type MediaSubmissionComparison {
 
 type MediaSubmissionEdge {
     character: Character
+    characterName: String
     characterRole: CharacterRole
     characterSubmission: Character
+    dubGroup: String
     "The id of the direct submission"
     id: Int
     isMain: Boolean
     media: Media
+    roleNotes: String
     staff: Staff
     staffRole: String
     staffSubmission: Staff
@@ -1814,6 +1854,8 @@ type Mutation {
     UpdateUser(
         "User's about/bio text"
         about: String,
+        "Minutes between activity for them to be merged together. 0 is Never, Above 2 weeks (20160 mins) is Always."
+        activityMergeTime: Int,
         "If the user should get notifications when a show they are watching aires"
         airingNotifications: Boolean,
         "The user's anime list options"
@@ -1832,6 +1874,8 @@ type Mutation {
         rowOrder: String,
         "The user's list scoring system"
         scoreFormat: ScoreFormat,
+        "Timezone offset format: -?HH:MM"
+        timezone: String,
         "User's title language"
         titleLanguage: UserTitleLanguage
     ): User
@@ -1958,6 +2002,8 @@ type Page {
         id_not: Int,
         "Filter by character id"
         id_not_in: [Int],
+        "Filter by character by if its their birthday today"
+        isBirthday: Boolean,
         "Filter by search query"
         search: String,
         "The order the results will be returned in"
@@ -2258,7 +2304,7 @@ type Page {
         mediaType: MediaType,
         "The order the results will be returned in"
         sort: [ReviewSort],
-        "Filter by media id"
+        "Filter by user id"
         userId: Int
     ): [Review]
     staff(
@@ -2270,6 +2316,8 @@ type Page {
         id_not: Int,
         "Filter by the staff id"
         id_not_in: [Int],
+        "Filter by staff by if its their birthday today"
+        isBirthday: Boolean,
         "Filter by search query"
         search: String,
         "The order the results will be returned in"
@@ -2322,6 +2370,8 @@ type Page {
     users(
         "Filter by the user id"
         id: Int,
+        "Filter to moderators only if true"
+        isModerator: Boolean,
         "Filter by the name of the user"
         name: String,
         "Filter by search query"
@@ -2467,6 +2517,8 @@ type Query {
         id_not: Int,
         "Filter by character id"
         id_not_in: [Int],
+        "Filter by character by if its their birthday today"
+        isBirthday: Boolean,
         "Filter by search query"
         search: String,
         "The order the results will be returned in"
@@ -2837,7 +2889,7 @@ type Query {
         mediaType: MediaType,
         "The order the results will be returned in"
         sort: [ReviewSort],
-        "Filter by media id"
+        "Filter by user id"
         userId: Int
     ): Review
     "Site statistics query"
@@ -2852,6 +2904,8 @@ type Query {
         id_not: Int,
         "Filter by the staff id"
         id_not_in: [Int],
+        "Filter by staff by if its their birthday today"
+        isBirthday: Boolean,
         "Filter by search query"
         search: String,
         "The order the results will be returned in"
@@ -2908,6 +2962,8 @@ type Query {
     User(
         "Filter by the user id"
         id: Int,
+        "Filter to moderators only if true"
+        isModerator: Boolean,
         "Filter by the name of the user"
         name: String,
         "Filter by search query"
@@ -3127,6 +3183,17 @@ type SiteTrendEdge {
 
 "Voice actors or production staff"
 type Staff {
+    "The person's age in years"
+    age: Int
+    "Media the actor voiced characters in. (Same data as characters with media as node instead of characters)"
+    characterMedia(
+        onList: Boolean,
+        "The page"
+        page: Int,
+        "The amount of entries per page, max 25"
+        perPage: Int,
+        sort: [MediaSort]
+    ): MediaConnection
     "Characters voiced by the actor"
     characters(
         "The page"
@@ -3135,6 +3202,8 @@ type Staff {
         perPage: Int,
         sort: [CharacterSort]
     ): CharacterConnection
+    dateOfBirth: FuzzyDate
+    dateOfDeath: FuzzyDate
     "A general description of the staff member"
     description(
         "Return the string in pre-parsed html instead of markdown"
@@ -3142,24 +3211,35 @@ type Staff {
     ): String
     "The amount of user's who have favourited the staff member"
     favourites: Int
+    "The staff's gender. Usually Male, Female, or Non-binary but can be any string."
+    gender: String
+    "The persons birthplace or hometown"
+    homeTown: String
     "The id of the staff member"
     id: Int!
     "The staff images"
     image: StaffImage
     "If the staff member is marked as favourite by the currently authenticated user"
     isFavourite: Boolean!
-    "The primary language of the staff member"
-    language: StaffLanguage
+    "If the staff member is blocked from being added to favourites"
+    isFavouriteBlocked: Boolean!
+    "The primary language the staff member dub's in"
+    language: StaffLanguage @deprecated(reason : "Replaced with languageV2")
+    "The primary language of the staff member. Current values: Japanese, English, Korean, Italian, Spanish, Portuguese, French, German, Hebrew, Hungarian, Chinese, Arabic, Filipino, Catalan"
+    languageV2: String
     "Notes for site moderators"
     modNotes: String
     "The names of the staff member"
     name: StaffName
+    "The person's primary occupations"
+    primaryOccupations: [String]
     "The url for the staff page on the AniList website"
     siteUrl: String
     "Staff member that the submission is referencing"
     staff: Staff
     "Media where the staff member has a production role"
     staffMedia(
+        onList: Boolean,
         "The page"
         page: Int,
         "The amount of entries per page, max 25"
@@ -3174,6 +3254,8 @@ type Staff {
     "Submitter for the submission"
     submitter: User
     updatedAt: Int @deprecated(reason : "No data available")
+    "[startYear, endYear] (If the 2nd value is not present staff is still active)"
+    yearsActive: [Int]
 }
 
 type StaffConnection {
@@ -3207,12 +3289,24 @@ type StaffName {
     alternative: [String]
     "The person's given name"
     first: String
-    "The person's full name"
+    "The person's first and last name"
     full: String
     "The person's surname"
     last: String
+    "The person's middle name"
+    middle: String
     "The person's full name in their native language"
     native: String
+}
+
+"Voice actor role for a character"
+type StaffRoleType {
+    "Used for grouping roles where multiple dubs exist for the same language. Either dubbing company name or language variant."
+    dubGroup: String
+    "Notes regarding the VA's role for the character"
+    roleNotes: String
+    "The voice actors of the character"
+    voiceActor: Staff
 }
 
 "User's staff statistics"
@@ -3264,6 +3358,7 @@ type Studio {
     media(
         "If the studio was the primary animation studio of the media"
         isMain: Boolean,
+        onList: Boolean,
         "The page"
         page: Int,
         "The amount of entries per page, max 25"
@@ -3562,6 +3657,8 @@ type User {
     "The user's banner images"
     bannerImage: String
     bans: Json
+    "When the user's account was created. (Does not exist for accounts created before 2020)"
+    createdAt: Int
     "Custom donation badge text"
     donatorBadge: String
     "The donation tier of the user"
@@ -3581,8 +3678,10 @@ type User {
     isFollowing: Boolean
     "The user's media list options"
     mediaListOptions: MediaListOptions
+    "The user's moderator roles if they are a site moderator"
+    moderatorRoles: [ModRole]
     "If the user is a moderator or data moderator"
-    moderatorStatus: String
+    moderatorStatus: String @deprecated(reason : "Deprecated. Replaced with moderatorRoles field.")
     "The name of the user"
     name: String!
     "The user's general options"
@@ -3658,11 +3757,14 @@ type UserModData {
     alts: [User]
     bans: Json
     counts: Json
+    email: String
     ip: Json
 }
 
 "A user's general options"
 type UserOptions {
+    "Minutes between activity for them to be merged together. 0 is Never, Above 2 weeks (20160 mins) is Always."
+    activityMergeTime: Int
     "Whether the user receives notifications when a show they are watching aires"
     airingNotifications: Boolean
     "Whether the user has enabled viewing of 18+ content"
@@ -3671,6 +3773,8 @@ type UserOptions {
     notificationOptions: [NotificationOption]
     "Profile highlight color (blue, purple, pink, orange, red, green, gray)"
     profileColor: String
+    "The user's timezone offset (Auth user only)"
+    timezone: String
     "The language the user wants to see media titles in"
     titleLanguage: UserTitleLanguage
 }
@@ -3853,6 +3957,8 @@ enum CharacterSort {
     FAVOURITES_DESC
     ID
     ID_DESC
+    "Order manually decided by moderators"
+    RELEVANCE
     ROLE
     ROLE_DESC
     SEARCH_MATCH
@@ -4058,6 +4164,8 @@ enum MediaStatus {
     CANCELLED
     "Has completed and is no longer being released"
     FINISHED
+    "Version 2 only. Is currently paused from releasing and will resume at a later date"
+    HIATUS
     "To be released at a later date"
     NOT_YET_RELEASED
     "Currently releasing"
@@ -4099,6 +4207,36 @@ enum ModActionType {
     NOTE
     REPORT
     RESET
+}
+
+"Mod role enums"
+enum ModRole {
+    "An AniList administrator"
+    ADMIN
+    "An anime data moderator"
+    ANIME_DATA
+    "A community moderator"
+    COMMUNITY
+    "An AniList developer"
+    DEVELOPER
+    "A discord community moderator"
+    DISCORD_COMMUNITY
+    "A lead anime data moderator"
+    LEAD_ANIME_DATA
+    "A lead community moderator"
+    LEAD_COMMUNITY
+    "A head developer of AniList"
+    LEAD_DEVELOPER
+    "A lead manga data moderator"
+    LEAD_MANGA_DATA
+    "A lead social media moderator"
+    LEAD_SOCIAL_MEDIA
+    "A manga data moderator"
+    MANGA_DATA
+    "A retired moderator"
+    RETIRED
+    "A social media moderator"
+    SOCIAL_MEDIA
 }
 
 "Notification type enum"
@@ -4231,6 +4369,8 @@ enum StaffSort {
     ID_DESC
     LANGUAGE
     LANGUAGE_DESC
+    "Order manually decided by moderators"
+    RELEVANCE
     ROLE
     ROLE_DESC
     SEARCH_MATCH
@@ -4343,10 +4483,14 @@ input AniChartHighlightInput {
 input CharacterNameInput {
     "Other names the character might be referred by"
     alternative: [String]
+    "Other names the character might be referred to as but are spoilers"
+    alternativeSpoiler: [String]
     "The character's given name"
     first: String
     "The character's surname"
     last: String
+    "The character's middle name"
+    middle: String
     "The character's full name in their native language"
     native: String
 }
@@ -4413,6 +4557,8 @@ input StaffNameInput {
     first: String
     "The person's surname"
     last: String
+    "The person's middle name"
+    middle: String
     "The person's full name in their native language"
     native: String
 }
