@@ -25,7 +25,7 @@ import org.jsoup.internal.StringUtil;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "buttonmessage")
+@Table(name = "button")
 public class Button {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
