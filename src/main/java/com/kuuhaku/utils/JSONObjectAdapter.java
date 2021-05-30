@@ -21,7 +21,6 @@ package com.kuuhaku.utils;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
-import java.util.Iterator;
 
 public class JSONObjectAdapter implements JsonSerializer<JSONObject>, JsonDeserializer<JSONObject> {
 	@Override
@@ -30,16 +29,7 @@ public class JSONObjectAdapter implements JsonSerializer<JSONObject>, JsonDeseri
 			return null;
 		}
 
-		JsonObject jo = new JsonObject();
-		Iterator<String> keys = src.keys();
-		while (keys.hasNext()) {
-			String key = keys.next();
-			JsonElement value = src.get(key);
-
-			jo.add(key, value);
-		}
-
-		return jo;
+		return JSONUtils.parseJSONElement(src.toString());
 	}
 
 	@Override
