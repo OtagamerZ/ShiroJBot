@@ -27,7 +27,7 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
+public class JSONObject implements JSONWrapper, Iterable<Map.Entry<String, JsonElement>> {
 	private final JsonObject obj;
 
 	public JSONObject() {
@@ -367,7 +367,8 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 
-	public JsonObject getObj() {
+	@Override
+	public JsonElement getContent() {
 		return obj;
 	}
 

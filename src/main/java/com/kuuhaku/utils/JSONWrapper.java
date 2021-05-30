@@ -18,26 +18,8 @@
 
 package com.kuuhaku.utils;
 
-import com.google.gson.*;
+import com.google.gson.JsonElement;
 
-import java.lang.reflect.Type;
-
-public class JSONObjectAdapter implements JsonSerializer<JSONObject>, JsonDeserializer<JSONObject> {
-	@Override
-	public JsonElement serialize(JSONObject src, Type typeOfSrc, JsonSerializationContext context) {
-		if (src == null) {
-			return null;
-		}
-
-		return JSONUtils.parseJSONElement(src.toString());
-	}
-
-	@Override
-	public JSONObject deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		if (json == null) {
-			return null;
-		}
-
-		return new JSONObject(json.toString());
-	}
+public interface JSONWrapper {
+	JsonElement getContent();
 }
