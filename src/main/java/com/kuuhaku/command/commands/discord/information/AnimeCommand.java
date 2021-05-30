@@ -66,7 +66,8 @@ public class AnimeCommand implements Executable {
 				JSONObject data = AnimeRequest.getData(argsAsText, query);
 				try {
 					Anime anime = JSONUtils.fromJSON(data.toString(), Anime.class);
-					Media media = anime.getMedia();
+					Media media = anime.getData().getMedia();
+					if (media == null) throw new IllegalArgumentException();
 
 					EmbedBuilder eb = new EmbedBuilder();
 					boolean hentai = media.getGenres().stream().anyMatch("hentai"::equalsIgnoreCase);
