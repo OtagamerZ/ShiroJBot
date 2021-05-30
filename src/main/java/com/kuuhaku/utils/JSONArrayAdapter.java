@@ -19,15 +19,13 @@
 package com.kuuhaku.utils;
 
 import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 
-public class JSONArrayAdapter implements InstanceCreator<JSONArray>, JsonSerializer<JSONArray>, JsonDeserializer<JSONArray> {
-	@Override
-	public JSONArray createInstance(Type type) {
-		return new JSONArray();
-	}
-
+public class JSONArrayAdapter extends TypeAdapter<JSONArray> implements JsonSerializer<JSONArray>, JsonDeserializer<JSONArray> {
 	@Override
 	public JsonElement serialize(JSONArray src, Type typeOfSrc, JsonSerializationContext context) {
 		return src.getArr();
@@ -36,5 +34,15 @@ public class JSONArrayAdapter implements InstanceCreator<JSONArray>, JsonSeriali
 	@Override
 	public JSONArray deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		return new JSONArray(json);
+	}
+
+	@Override
+	public void write(JsonWriter out, JSONArray value) throws IOException {
+
+	}
+
+	@Override
+	public JSONArray read(JsonReader in) throws IOException {
+		return new JSONArray();
 	}
 }
