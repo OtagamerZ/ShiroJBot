@@ -13,28 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/Anime.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/CoverImage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/Media.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/NAMHData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/Name.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/NameNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/NextAiringEpisode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/Staff.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/StaffEdge.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/StartDate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/Studios.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/StudiosEdge.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/StudiosNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/Title.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/Trailer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/AnimeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/AnimeRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Anime.java" beforeDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria nas requisições de anime" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1240,13 +1219,6 @@
       <workItem from="1622317060269" duration="4592000" />
       <workItem from="1622333561007" duration="2656000" />
     </task>
-    <task id="LOCAL-04569" summary="Migração da biblioteca de conversão de JSON">
-      <created>1622261578728</created>
-      <option name="number" value="04569" />
-      <option name="presentableId" value="LOCAL-04569" />
-      <option name="project" value="LOCAL" />
-      <updated>1622261578728</updated>
-    </task>
     <task id="LOCAL-04570" summary="Migração da biblioteca de conversão de JSON">
       <created>1622261859948</created>
       <option name="number" value="04570" />
@@ -1583,7 +1555,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622402674435</updated>
     </task>
-    <option name="localTasksCounter" value="4618" />
+    <task id="LOCAL-04618" summary="Melhoria nas requisições de anime">
+      <created>1622406174214</created>
+      <option name="number" value="04618" />
+      <option name="presentableId" value="LOCAL-04618" />
+      <option name="project" value="LOCAL" />
+      <updated>1622406174214</updated>
+    </task>
+    <option name="localTasksCounter" value="4619" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1670,7 +1649,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhoria na listagem de imagens das cartas" />
     <MESSAGE value="Adição de comandos de filtros de imagem." />
     <MESSAGE value="Adicionadas bordas de efeito do campo" />
     <MESSAGE value="Adição de dano por carga" />
@@ -1695,7 +1673,8 @@
     <MESSAGE value="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;" />
     <MESSAGE value="Migração da biblioteca de conversão de JSON" />
     <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Melhoria nas requisições de anime" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria nas requisições de anime" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
