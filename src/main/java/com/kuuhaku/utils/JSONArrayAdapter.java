@@ -29,12 +29,7 @@ public class JSONArrayAdapter implements JsonSerializer<JSONArray>, JsonDeserial
 			return null;
 		}
 
-		JsonArray jsonArray = new JsonArray();
-		for (int i = 0; i < src.size(); i++) {
-			jsonArray.add(src.get(i));
-		}
-
-		return jsonArray;
+		return JSONUtils.parseJSONElement(src.toString());
 	}
 
 	@Override
