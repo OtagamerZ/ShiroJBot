@@ -92,10 +92,10 @@ public class ServerBuff {
 
 	public int getPrice() {
 		return switch (type) {
-			case XP -> 2500;
-			case CARD -> 2000;
-			case DROP -> 1400;
-			case FOIL -> 4000;
+			case XP -> 20000;
+			case CARD -> 18000;
+			case DROP -> 14000;
+			case FOIL -> 35000;
 		} * tier * (tier == 4 ? 10 : 1);
 	}
 
