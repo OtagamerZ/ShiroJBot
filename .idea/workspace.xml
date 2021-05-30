@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria nas requisições de anime">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/ServerBuff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/ServerBuff.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Aumento no custo dos upgrades de servidor" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1211,14 +1208,7 @@
       <workItem from="1622317060269" duration="4592000" />
       <workItem from="1622333561007" duration="2656000" />
       <workItem from="1622410150389" duration="221000" />
-      <workItem from="1622410481939" duration="1231000" />
-    </task>
-    <task id="LOCAL-04580" summary="Correções menores">
-      <created>1622386361199</created>
-      <option name="number" value="04580" />
-      <option name="presentableId" value="LOCAL-04580" />
-      <option name="project" value="LOCAL" />
-      <updated>1622386361199</updated>
+      <workItem from="1622410481939" duration="1412000" />
     </task>
     <task id="LOCAL-04581" summary="Correções menores">
       <created>1622386568261</created>
@@ -1556,7 +1546,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622410364529</updated>
     </task>
-    <option name="localTasksCounter" value="4629" />
+    <task id="LOCAL-04629" summary="Aumento no custo dos upgrades de servidor">
+      <created>1622411855565</created>
+      <option name="number" value="04629" />
+      <option name="presentableId" value="LOCAL-04629" />
+      <option name="project" value="LOCAL" />
+      <updated>1622411855566</updated>
+    </task>
+    <option name="localTasksCounter" value="4630" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1643,7 +1640,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de comandos de filtros de imagem." />
     <MESSAGE value="Adicionadas bordas de efeito do campo" />
     <MESSAGE value="Adição de dano por carga" />
     <MESSAGE value="Adição de penalidade por inatividade em rankings maiores que Adepto IV" />
@@ -1668,7 +1664,8 @@
     <MESSAGE value="Migração da biblioteca de conversão de JSON" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Melhoria nas requisições de anime" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria nas requisições de anime" />
+    <MESSAGE value="Aumento no custo dos upgrades de servidor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Aumento no custo dos upgrades de servidor" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
