@@ -670,7 +670,9 @@ public class Helper {
 							resolveButton(g, message.getButtons(), buttons);
 
 							if (message.isGatekeeper()) {
-								buttons.put("\uD83D\uDEAA", (m, v) -> m.kick("Não aceitou as regras.").queue(null, Helper::doNothing));
+								Role r = message.getRole(g);
+
+								gatekeep(msg, r);
 							} else {
 								buttons.put(CANCEL, (m, ms) -> {
 									if (m.getUser().getId().equals(message.getAuthor())) {

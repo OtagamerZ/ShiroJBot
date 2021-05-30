@@ -1221,13 +1221,6 @@
       <workItem from="1622317060269" duration="4592000" />
       <workItem from="1622333561007" duration="2656000" />
     </task>
-    <task id="LOCAL-04564" summary="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
-      <created>1622148459873</created>
-      <option name="number" value="04564" />
-      <option name="presentableId" value="LOCAL-04564" />
-      <option name="project" value="LOCAL" />
-      <updated>1622148459873</updated>
-    </task>
     <task id="LOCAL-04565" summary="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
       <created>1622148502952</created>
       <option name="number" value="04565" />
@@ -1564,7 +1557,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622398992861</updated>
     </task>
-    <option name="localTasksCounter" value="4613" />
+    <task id="LOCAL-04613" summary="Correções menores">
+      <created>1622399490991</created>
+      <option name="number" value="04613" />
+      <option name="presentableId" value="LOCAL-04613" />
+      <option name="project" value="LOCAL" />
+      <updated>1622399490991</updated>
+    </task>
+    <option name="localTasksCounter" value="4614" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
