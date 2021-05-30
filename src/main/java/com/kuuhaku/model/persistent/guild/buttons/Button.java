@@ -31,6 +31,10 @@ public class Button {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "parent_id")
+	private ButtonMessage parent;
+
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
 	private String role;
 
@@ -45,8 +49,18 @@ public class Button {
 		this.emote = emote;
 	}
 
+	public Button(ButtonMessage parent, String role, String emote) {
+		this.parent = parent;
+		this.role = role;
+		this.emote = emote;
+	}
+
 	public int getId() {
 		return id;
+	}
+
+	public ButtonMessage getParent() {
+		return parent;
 	}
 
 	public Role getRole(Guild g) {
