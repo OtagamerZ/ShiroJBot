@@ -23,10 +23,9 @@ import com.kuuhaku.model.enums.JsonType;
 
 public class JSONUtils {
 	private static final Gson gson = new GsonBuilder()
-			.registerTypeAdapter(JSONObject.class, new JSONObjectSerializer())
-			.registerTypeAdapter(JSONArray.class, new JSONArraySerializer())
+			.registerTypeAdapter(JSONObject.class, new JSONObjectAdapter())
+			.registerTypeAdapter(JSONArray.class, new JSONArrayAdapter())
 			.create();
-	;
 
 	public static String toJSON(Object o) {
 		return gson.toJson(o);
