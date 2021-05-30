@@ -48,6 +48,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
@@ -732,10 +733,13 @@ public class Helper {
 
 			buttons.put(btn.getString("emote"), (m, ms) -> {
 				if (role != null) {
-					if (m.getRoles().contains(role)) {
-						g.removeRoleFromMember(m, role).queue(null, Helper::doNothing);
-					} else {
-						g.addRoleToMember(m, role).queue(null, Helper::doNothing);
+					try {
+						if (m.getRoles().contains(role)) {
+							g.removeRoleFromMember(m, role).queue(null, Helper::doNothing);
+						} else {
+							g.addRoleToMember(m, role).queue(null, Helper::doNothing);
+						}
+					} catch (HierarchyException ignore) {
 					}
 				} else {
 					ms.clearReactions().queue(s -> {
@@ -807,6 +811,7 @@ public class Helper {
 				msg = root.getJSONObject(msgId);
 			}
 
+			System.out.println(root);
 			btn.put("index", msg.getJSONObject("buttons").size());
 			msg.getJSONObject("buttons").put(args[1], btn);
 
