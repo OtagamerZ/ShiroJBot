@@ -260,8 +260,8 @@ public class Profile {
 		File out = File.createTempFile("profile_", ".gif");
 		List<GifFrame> frames = Helper.readGif(acc.getBg(), true).stream()
 				.peek(frame -> frame.rescaleFrame(WIDTH, HEIGHT))
-				.peek(frame -> frame.applyOverlay(overlay))
 				.peek(frame -> frame.roundEdges(0.1f))
+				.peek(frame -> frame.applyOverlay(overlay))
 				.collect(Collectors.toList());
 
 		Helper.makeGIF(out, frames);
