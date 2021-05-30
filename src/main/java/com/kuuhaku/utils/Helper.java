@@ -40,6 +40,9 @@ import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.model.persistent.guild.GuildBuff;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.ServerBuff;
+import com.kuuhaku.model.persistent.guild.buttons.Button;
+import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
+import com.kuuhaku.model.persistent.guild.buttons.ButtonMessage;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -47,7 +50,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
@@ -649,89 +651,54 @@ public class Helper {
 	}
 
 	public static void refreshButtons(GuildConfig gc) {
-		JSONObject source = gc.getButtonConfigs();
-
-		if (source.isEmpty()) return;
+		Set<ButtonChannel> channels = gc.getButtonConfigs();
+		if (channels.isEmpty()) return;
 
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
 		if (g != null) {
-			for (String k : source.keySet()) {
-				try {
-					JSONObject jo = source.getJSONObject(k);
-					Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+			try {
+				for (ButtonChannel channel : channels) {
+					TextChannel chn = g.getTextChannelById(channel.getId());
 
-					TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
-
-					if (channel == null) {
-						JSONObject newJa = new JSONObject(source.toString());
-						if (k.equals("gatekeeper")) {
-							newJa.put("gatekeeper", "");
-							newJa.remove("gatekeeper");
-						} else {
-							newJa.put(jo.getString("canalId"), "");
-							newJa.remove(jo.getString("canalId"));
-						}
-						gc.setButtonConfigs(newJa);
+					if (chn == null) {
+						gc.getButtonConfigs().remove(channel);
 						GuildDAO.updateGuildSettings(gc);
-					} else try {
-						Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
-						resolveButton(g, jo, buttons);
+					} else {
+						for (ButtonMessage message : channel.getMessages()) {
+							Map<String, ThrowingBiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+							Message msg = chn.retrieveMessageById(message.getId()).submit().get();
+							resolveButton(g, message.getButtons(), buttons);
 
-						if (k.equals("gatekeeper")) {
-							buttons.put("\uD83D\uDEAA", (m, v) -> m.kick("Não aceitou as regras.").queue(null, Helper::doNothing));
+							if (message.isGatekeeper()) {
+								buttons.put("\uD83D\uDEAA", (m, v) -> m.kick("Não aceitou as regras.").queue(null, Helper::doNothing));
+							} else {
+								buttons.put(CANCEL, (m, ms) -> {
+									if (m.getUser().getId().equals(message.getAuthor())) {
+										for (ButtonChannel bc : gc.getButtonConfigs()) {
+											if (bc.getMessages().remove(message)) break;
+										}
+
+										GuildDAO.updateGuildSettings(gc);
+										ms.clearReactions().queue();
+									}
+								});
+							}
 
 							msg.clearReactions().queue();
-							Pages.buttonize(msg, buttons, false);
-						} else {
-							buttons.put(CANCEL, (m, ms) -> {
-								if (m.getUser().getId().equals(jo.getString("author"))) {
-									JSONObject gcjo = gc.getButtonConfigs();
-									gcjo.put(jo.getString("msgId"), "");
-									gcjo.remove(jo.getString("msgId"));
-									gc.setButtonConfigs(gcjo);
-									GuildDAO.updateGuildSettings(gc);
-									ms.clearReactions().queue();
-								}
-							});
-
-							msg.clearReactions().queue();
-							Pages.buttonize(msg, buttons, true);
+							Pages.buttonize(msg, buttons, !message.isGatekeeper());
 						}
-					} catch (RuntimeException | InterruptedException | ExecutionException e) {
-						JSONObject newJa = new JSONObject(source.toString());
-						if (k.equals("gatekeeper")) {
-							newJa.put("gatekeeper", "");
-							newJa.remove("gatekeeper");
-						} else {
-							newJa.put(jo.getString("canalId"), "");
-							newJa.remove(jo.getString("canalId"));
-						}
-						gc.setButtonConfigs(newJa);
-						GuildDAO.updateGuildSettings(gc);
 					}
-				} catch (IllegalStateException | IllegalArgumentException e) {
-					logger(Helper.class).error("Error in buttons JSON: " + source + "\nReason: " + e.getMessage());
-					gc.setButtonConfigs(new JSONObject());
-					GuildDAO.updateGuildSettings(gc);
 				}
+			} catch (ExecutionException | InterruptedException ignore) {
 			}
 		}
 	}
 
-	public static void resolveButton(Guild g, JSONObject jo, Map<String, ThrowingBiConsumer<Member, Message>> buttons) {
-		JSONObject btns = jo.getJSONObject("buttons");
-		Set<String> keys = btns.keySet();
-		List<String> sortedKeys = new ArrayList<>();
+	public static void resolveButton(Guild g, List<Button> jo, Map<String, ThrowingBiConsumer<Member, Message>> buttons) {
+		for (Button b : jo) {
+			Role role = b.getRole(g);
 
-		for (String k : keys) {
-			sortedKeys.add(btns.getInt("index", 0), k);
-		}
-
-		for (String b : sortedKeys) {
-			JSONObject btn = btns.getJSONObject(b);
-			Role role = g.getRoleById(btn.getString("role"));
-
-			buttons.put(btn.getString("emote"), (m, ms) -> {
+			buttons.put(b.getEmote(), (m, ms) -> {
 				if (role != null) {
 					try {
 						if (m.getRoles().contains(role)) {
@@ -743,12 +710,21 @@ public class Helper {
 					}
 				} else {
 					ms.clearReactions().queue(s -> {
-						ms.getChannel().sendMessage(":warning: | Botões removidos devido a cargo inexistente.").queue();
+						ms.getChannel().sendMessage(":warning: | Botão removido devido a cargo inexistente.").queue();
 						GuildConfig gc = GuildDAO.getGuildById(g.getId());
-						JSONObject bt = jo.getJSONObject("buttons");
-						bt.remove(b);
-						jo.put("buttons", bt);
-						gc.setButtonConfigs(jo);
+
+						boolean removed = false;
+						for (ButtonChannel channel : gc.getButtonConfigs()) {
+							for (ButtonMessage message : channel.getMessages()) {
+								if (message.getButtons().remove(b)) {
+									removed = true;
+									break;
+								}
+							}
+
+							if (removed) break;
+						}
+
 						GuildDAO.updateGuildSettings(gc);
 					});
 				}
@@ -756,77 +732,66 @@ public class Helper {
 		}
 	}
 
-	public static void gatekeep(GuildConfig gc) {
-		JSONObject ja = gc.getButtonConfigs();
-
-		if (ja.isEmpty()) return;
-
-		Guild g = Main.getInfo().getGuildByID(gc.getGuildId());
-
-		for (String k : ja.keySet()) {
-			JSONObject jo = ja.getJSONObject(k);
-			Map<String, ThrowingBiConsumer<Member, Message>> buttons = new HashMap<>();
-
-			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
-			if (channel != null) channel.retrieveMessageById(jo.getString("msgId")).queue(msg -> {
-				resolveButton(g, jo, buttons);
-
-				buttons.put("\uD83D\uDEAA", (m, v) -> {
+	public static void gatekeep(Message m, Role r) {
+		Pages.buttonize(m, Map.of(
+				"☑", (mb, ms) -> {
 					try {
-						m.kick("Não aceitou as regras.").queue();
+						mb.getGuild().addRoleToMember(mb, r).queue();
 					} catch (InsufficientPermissionException ignore) {
 					}
-				});
-
-				Pages.buttonize(msg, buttons, false);
-			}, Helper::doNothing);
-		}
+				},
+				"\uD83D\uDEAA", (mb, ms) -> {
+					try {
+						mb.kick("Não aceitou as regras.").queue();
+					} catch (InsufficientPermissionException ignore) {
+					}
+				}
+		), false);
 	}
 
 	public static void addButton(String[] args, Message message, MessageChannel channel, GuildConfig gc, String s2, boolean gatekeeper) {
-		try {
-			JSONObject root = gc.getButtonConfigs();
-			String msgId = channel.retrieveMessageById(args[0]).complete().getId();
+		Role r = message.getMentionedRoles().get(0);
 
+		Set<ButtonChannel> channels = gc.getButtonConfigs();
+		ButtonChannel bc = channels.stream()
+				.filter(chn -> chn.getId().equals(channel.getId()))
+				.findFirst()
+				.orElse(null);
+
+		if (bc == null) {
+			bc = new ButtonChannel();
+			gc.getButtonConfigs().add(bc);
+		}
+
+		Set<ButtonMessage> messages = bc.getMessages();
+		ButtonMessage bm = messages.stream()
+				.filter(msg -> msg.getId().equals(message.getId()))
+				.findFirst()
+				.orElse(null);
+
+		if (bm == null) {
+			bm = new ButtonMessage(
+					message.getAuthor().getId(),
+					gatekeeper,
+					gatekeeper ? r.getId() : null
+			);
+			bc.getMessages().add(bm);
+		}
+
+		if (!gatekeeper) {
 			String id;
-			if (EmojiUtils.containsEmoji(s2)) id = s2;
-			else {
+			if (EmojiUtils.containsEmoji(s2)) {
+				id = s2;
+			} else {
 				Emote e = Main.getShiroShards().getEmoteById(s2);
 				if (e == null) throw new IllegalArgumentException();
 				else id = e.getId();
 			}
 
-			JSONObject msg = new JSONObject();
-			JSONObject btn = new JSONObject() {{
-				put("emote", id);
-				put("role", message.getMentionedRoles().get(0).getId());
-			}};
-
-			if (!root.has(msgId)) {
-				msg.put("msgId", msgId);
-				msg.put("canalId", channel.getId());
-				msg.put("buttons", new JSONObject());
-				msg.put("author", message.getAuthor().getId());
-			} else {
-				msg = root.getJSONObject(msgId);
-			}
-
-			System.out.println(root);
-			btn.put("index", msg.getJSONObject("buttons").size());
-			msg.getJSONObject("buttons").put(args[1], btn);
-
-			if (gatekeeper) root.put("gatekeeper", msg);
-			else root.put(msgId, msg);
-
-			gc.setButtonConfigs(root);
-			GuildDAO.updateGuildSettings(gc);
-		} catch (ErrorResponseException | IllegalArgumentException e) {
-			JSONObject jo = gc.getButtonConfigs();
-			if (gatekeeper) jo.remove("gatekeeper");
-			else jo.remove(message.getId());
-			gc.setButtonConfigs(jo);
-			GuildDAO.updateGuildSettings(gc);
+			bm.getButtons().add(new Button(r.getId(), id));
 		}
+
+		GuildDAO.updateGuildSettings(gc);
 	}
 
 	public static String getSponsors() {

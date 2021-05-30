@@ -74,7 +74,7 @@ public class RoleButtonCommand implements Executable {
 
 			channel.sendMessage("✅ | Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc));
 		} catch (IllegalArgumentException e) {
-			channel.sendMessage(I18n.getString("err_role-chooser-argument-error", e)).queue();
+			channel.sendMessage("❌ | Você não pode usar um Emote de um servidor que eu não conheça.").queue();
 		} catch (ErrorResponseException e) {
 			channel.sendMessage(I18n.getString("err_role-chooser-invalid-channel")).queue();
 		}
