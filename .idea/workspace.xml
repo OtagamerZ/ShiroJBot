@@ -13,10 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObjectAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONUtils.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1222,20 +1219,6 @@
       <workItem from="1622317060269" duration="4592000" />
       <workItem from="1622333561007" duration="2656000" />
     </task>
-    <task id="LOCAL-04557" summary="Filtros de imagem agora também criam gifs">
-      <created>1622134482312</created>
-      <option name="number" value="04557" />
-      <option name="presentableId" value="LOCAL-04557" />
-      <option name="project" value="LOCAL" />
-      <updated>1622134482312</updated>
-    </task>
-    <task id="LOCAL-04558" summary="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
-      <created>1622143451949</created>
-      <option name="number" value="04558" />
-      <option name="presentableId" value="LOCAL-04558" />
-      <option name="project" value="LOCAL" />
-      <updated>1622143451949</updated>
-    </task>
     <task id="LOCAL-04559" summary="Remoção da biblioteca Gson;&#10;Melhoria no manipulador de GIFs;">
       <created>1622143794073</created>
       <option name="number" value="04559" />
@@ -1565,7 +1548,21 @@
       <option name="project" value="LOCAL" />
       <updated>1622396582784</updated>
     </task>
-    <option name="localTasksCounter" value="4606" />
+    <task id="LOCAL-04606" summary="Correções menores">
+      <created>1622396828784</created>
+      <option name="number" value="04606" />
+      <option name="presentableId" value="LOCAL-04606" />
+      <option name="project" value="LOCAL" />
+      <updated>1622396828784</updated>
+    </task>
+    <task id="LOCAL-04607" summary="Correções menores">
+      <created>1622396985700</created>
+      <option name="number" value="04607" />
+      <option name="presentableId" value="LOCAL-04607" />
+      <option name="project" value="LOCAL" />
+      <updated>1622396985700</updated>
+    </task>
+    <option name="localTasksCounter" value="4608" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
