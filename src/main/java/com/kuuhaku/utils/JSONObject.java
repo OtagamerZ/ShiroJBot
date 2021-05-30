@@ -27,12 +27,15 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class JSONObject extends JsonElement implements Iterable<Map.Entry<String, JsonElement>>, Cloneable {
+public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
+	private final JsonObject obj;
+
 	public JSONObject() {
+		obj = new JsonObject();
 	}
 
 	public JSONObject(JsonObject json) {
-		entrySet().addAll(json.entrySet());
+		obj = json;
 	}
 
 	public JSONObject(String source) {
@@ -48,11 +51,11 @@ public class JSONObject extends JsonElement implements Iterable<Map.Entry<String
 	}
 
 	public Iterator<Map.Entry<String, JsonElement>> iterator() {
-		return entrySet().iterator();
+		return obj.entrySet().iterator();
 	}
 
 	public JsonElement get(String key) {
-		return self().get(key);
+		return obj.get(key);
 	}
 
 	public JsonElement get(String key, JsonElement or) {
@@ -250,7 +253,7 @@ public class JSONObject extends JsonElement implements Iterable<Map.Entry<String
 	}
 
 	public boolean has(String key) {
-		return self().has(key);
+		return obj.has(key);
 	}
 
 	public JSONObject increment(String key) {
@@ -259,7 +262,7 @@ public class JSONObject extends JsonElement implements Iterable<Map.Entry<String
 
 		if (je.isJsonPrimitive() && je.getAsJsonPrimitive().isNumber()) {
 			int n = je.getAsInt() + 1;
-			self().addProperty(key, n);
+			obj.addProperty(key, n);
 		}
 
 		return this;
@@ -270,19 +273,19 @@ public class JSONObject extends JsonElement implements Iterable<Map.Entry<String
 	}
 
 	public Iterator<String> keys() {
-		return self().keySet().iterator();
+		return obj.keySet().iterator();
 	}
 
 	public Set<String> keySet() {
-		return self().keySet();
+		return obj.keySet();
 	}
 
 	protected Set<Map.Entry<String, JsonElement>> entrySet() {
-		return self().entrySet();
+		return obj.entrySet();
 	}
 
 	public int size() {
-		return self().size();
+		return obj.size();
 	}
 
 	public boolean isEmpty() {
@@ -290,95 +293,82 @@ public class JSONObject extends JsonElement implements Iterable<Map.Entry<String
 	}
 
 	public JSONArray names() {
-		return new JSONArray(self().keySet());
+		return new JSONArray(obj.keySet());
 	}
 
 	public JSONObject put(String key, boolean value) {
-		self().addProperty(key, value);
+		obj.addProperty(key, value);
 
 		return this;
 	}
 
 	public JSONObject put(String key, Collection<?> value) {
-		self().add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
+		obj.add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
 
 		return this;
 	}
 
 	public JSONObject put(String key, double value) {
-		self().addProperty(key, value);
+		obj.addProperty(key, value);
 
 		return this;
 	}
 
 	public JSONObject put(String key, float value) {
-		self().addProperty(key, value);
+		obj.addProperty(key, value);
 
 		return this;
 	}
 
 	public JSONObject put(String key, int value) {
-		self().addProperty(key, value);
+		obj.addProperty(key, value);
 
 		return this;
 	}
 
 	public JSONObject put(String key, long value) {
-		self().addProperty(key, value);
+		obj.addProperty(key, value);
 
 		return this;
 	}
 
 	public JSONObject put(String key, Map<?, ?> value) {
-		self().add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
+		obj.add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
 
 		return this;
 	}
 
 	public JSONObject put(String key, Object value) {
-		self().add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
+		obj.add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
 
 		return this;
 	}
 
 	public JSONObject putOnce(String key, Object value) {
-		if (!self().has(key))
-			self().add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
+		if (!obj.has(key))
+			obj.add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
 
 		return this;
 	}
 
 	public JSONObject putOpt(String key, Object value) {
-		if (self().has(key) && !get(key).isJsonNull() && value != null)
-			self().add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
+		if (obj.has(key) && !get(key).isJsonNull() && value != null)
+			obj.add(key, JSONUtils.parseJSONElement(JSONUtils.toJSON(value)));
 
 		return this;
 	}
 
 	public JsonElement remove(String key) {
-		return self().remove(key);
+		return obj.remove(key);
 	}
 
 	public Map<String, JsonElement> toMap() {
-		return self().entrySet().stream()
+		return obj.entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-	}
-
-	private JsonObject self() {
-		return this.getAsJsonObject();
-	}
-
-	@Override
-	public JsonElement deepCopy() {
-		try {
-			return (JsonElement) clone();
-		} catch (CloneNotSupportedException e) {
-			return null;
-		}
 	}
 
 	@Override
 	public String toString() {
-		return JSONUtils.toJSON(this);
+		return JSONUtils.toJSON(obj);
 	}
 }
