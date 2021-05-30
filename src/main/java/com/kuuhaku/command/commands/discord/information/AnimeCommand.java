@@ -60,7 +60,7 @@ public class AnimeCommand implements Executable {
 		channel.sendMessage("<a:loading:697879726630502401> Buscando anime...").queue(m -> {
 			try {
 				String query = IOUtils.toString(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("anilist.graphql")), StandardCharsets.UTF_8);
-				JSONObject data = AnimeRequest.getData(String.join(" ", args), query);
+				JSONObject data = AnimeRequest.getData(argsAsText, query);
 				try {
 					Anime anime = new Anime(data);
 
