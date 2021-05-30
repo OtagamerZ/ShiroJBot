@@ -22,10 +22,10 @@ public class Data {
 	private Media Media;
 
 	public Media getMedia() {
-		return media;
+		return Media;
 	}
 
 	public void setMedia(Media value) {
-		this.media = value;
+		this.Media = value;
 	}
 }
