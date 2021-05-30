@@ -723,20 +723,20 @@ public class Helper {
 	}
 
 	public static void gatekeep(Message m, Role r) {
-		Pages.buttonize(m, Map.of(
-				"☑", (mb, ms) -> {
-					try {
-						mb.getGuild().addRoleToMember(mb, r).queue();
-					} catch (InsufficientPermissionException ignore) {
-					}
-				},
-				"\uD83D\uDEAA", (mb, ms) -> {
-					try {
-						mb.kick("Não aceitou as regras.").queue();
-					} catch (InsufficientPermissionException ignore) {
-					}
+		Pages.buttonize(m, new LinkedHashMap<>() {{
+			put("☑", (mb, ms) -> {
+				try {
+					mb.getGuild().addRoleToMember(mb, r).queue();
+				} catch (InsufficientPermissionException ignore) {
 				}
-		), false);
+			});
+			put("\uD83D\uDEAA", (mb, ms) -> {
+				try {
+					mb.kick("Não aceitou as regras.").queue();
+				} catch (InsufficientPermissionException ignore) {
+				}
+			});
+		}}, false);
 	}
 
 	public static void addButton(String[] args, Message message, MessageChannel channel, GuildConfig gc, String s2, boolean gatekeeper) {
