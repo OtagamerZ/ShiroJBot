@@ -13,14 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Migração da biblioteca de conversão de JSON">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/GifSequenceWriter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/backup/GuildCategory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/backup/GuildChannel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/backup/GuildData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/backup/GuildRole.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Anime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Anime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONArray.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/JSONObject.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -179,11 +175,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.dev" />
       <recent name="com.kuuhaku.model.common" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
       <recent name="com.kuuhaku.command.commands.discord.information" />
       <recent name="com.kuuhaku.command.commands.discord.fun" />
-      <recent name="com.kuuhaku.controller.postgresql" />
     </key>
   </component>
   <component name="RunAnythingCache">
