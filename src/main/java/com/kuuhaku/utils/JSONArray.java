@@ -342,6 +342,10 @@ public class JSONArray implements Iterable<JsonElement> {
 		return size() == 0;
 	}
 
+	public JsonArray getArr() {
+		return arr;
+	}
+
 	@Override
 	public String toString() {
 		return JSONUtils.toJSON(arr);
