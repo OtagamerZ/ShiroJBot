@@ -71,9 +71,14 @@ public class GifFrame {
 	}
 
 	public void applyOverlay(BufferedImage overlay) {
-		Graphics2D g2d = getAdjustedFrame().createGraphics();
+		BufferedImage source = getAdjustedFrame();
+		BufferedImage bi = new BufferedImage(Math.max(source.getWidth(), overlay.getWidth()), Math.max(source.getHeight(), overlay.getHeight()), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.drawImage(source, 0, 0, null);
 		g2d.drawImage(overlay, 0, 0, null);
 		g2d.dispose();
+
+		adjustedFrame = bi;
 	}
 
 	public DisposalMethod getDisposal() {
