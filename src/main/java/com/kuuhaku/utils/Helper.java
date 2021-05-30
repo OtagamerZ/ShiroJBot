@@ -709,7 +709,7 @@ public class Helper {
 						gc.setButtonConfigs(newJa);
 						GuildDAO.updateGuildSettings(gc);
 					}
-				} catch (IllegalStateException e) {
+				} catch (IllegalStateException | IllegalArgumentException e) {
 					logger(Helper.class).error("Error in buttons JSON: " + source + "\nReason: " + e.getMessage());
 					gc.setButtonConfigs(new JSONObject());
 					GuildDAO.updateGuildSettings(gc);
