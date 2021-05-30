@@ -43,10 +43,10 @@ public class ButtonMessage {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
 	private String author;
 
-	@Column(columnDefinition = "BOOLEAN NOT NULL")
-	private boolean gatekeeper;
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean gatekeeper = false;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(191)")
 	private String role;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "parent")
