@@ -367,6 +367,10 @@ public class JSONObject implements Iterable<Map.Entry<String, JsonElement>> {
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 
+	public JsonObject getObj() {
+		return obj;
+	}
+
 	@Override
 	public String toString() {
 		return JSONUtils.toJSON(obj);
