@@ -38,11 +38,20 @@ public class JSONArrayAdapter extends TypeAdapter<JSONArray> implements JsonSeri
 
 	@Override
 	public void write(JsonWriter out, JSONArray value) throws IOException {
-
+		out.endArray();
+		out.name("arr");
+		out.value(value.toString());
+		out.endArray();
 	}
 
 	@Override
 	public JSONArray read(JsonReader in) throws IOException {
-		return new JSONArray();
+		JSONArray jo;
+
+		in.beginArray();
+		jo = new JSONArray(in.nextString());
+		in.endArray();
+
+		return jo;
 	}
 }

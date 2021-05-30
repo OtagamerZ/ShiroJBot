@@ -38,11 +38,20 @@ public class JSONObjectAdapter extends TypeAdapter<JSONObject> implements JsonSe
 
 	@Override
 	public void write(JsonWriter out, JSONObject value) throws IOException {
-
+		out.beginObject();
+		out.name("obj");
+		out.value(value.toString());
+		out.endObject();
 	}
 
 	@Override
 	public JSONObject read(JsonReader in) throws IOException {
-		return new JSONObject();
+		JSONObject jo;
+
+		in.beginObject();
+		jo = new JSONObject(in.nextString());
+		in.endObject();
+
+		return jo;
 	}
 }
