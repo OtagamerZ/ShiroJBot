@@ -16,5 +16,5 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-rootProject.name = 'shiro-j-bot'
+rootProject.name = "shiro-j-bot"
 
