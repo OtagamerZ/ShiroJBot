@@ -109,8 +109,8 @@ public class Champion implements Drawable, Cloneable {
 	private transient int redDef = 0;
 	private transient int efctMana = 0;
 	private transient int efctBlood = 0;
-	private transient int efctAtk = 0;
-	private transient int efctDef = 0;
+	private transient int[] efctAtk = new int[5];
+	private transient int[] efctDef = new int[5];
 	private transient int stasis = 0;
 	private transient int stun = 0;
 	private transient int sleep = 0;
@@ -434,7 +434,7 @@ public class Champion implements Drawable, Cloneable {
 				cBonus += game.getArena().getGraveyard().get(s).size() / 200f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altAtk - redAtk + efctAtk) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null && !fusion ? 1.1f : 1))), 25);
+		return Helper.roundTrunc(Math.max(0, Math.round((altAtk - redAtk + getEfctAtk()) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null && !fusion ? 1.1f : 1))), 25);
 	}
 
 	public int getDef() {
@@ -457,7 +457,7 @@ public class Champion implements Drawable, Cloneable {
 				cBonus += game.getArena().getGraveyard().get(s).size() / 100f;
 		}
 
-		return Helper.roundTrunc(Math.max(0, Math.round((altDef - redDef + efctDef) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null && !fusion ? 1.1f : 1))), 25);
+		return Helper.roundTrunc(Math.max(0, Math.round((altDef - redDef + getEfctDef()) * fBonus * cBonus * (Helper.getOr(altEffect, effect) == null && !fusion ? 1.1f : 1))), 25);
 	}
 
 	public int getAltAtk() {
@@ -532,28 +532,36 @@ public class Champion implements Drawable, Cloneable {
 		this.redDef -= redDef;
 	}
 
-	public void setEfctAtk(int efctAtk) {
-		this.efctAtk = efctAtk;
+	public int getEfctAtk() {
+		return Arrays.stream(efctAtk).sum();
 	}
 
-	public void addEfctAtk(int efctAtk) {
-		this.efctAtk += efctAtk;
+	public void setEfctAtk(int index, int efctAtk) {
+		this.efctAtk[index] = efctAtk;
 	}
 
-	public void removeEfctAtk(int efctAtk) {
-		this.efctAtk -= efctAtk;
+	public void addEfctAtk(int index, int efctAtk) {
+		this.efctAtk[index] += efctAtk;
 	}
 
-	public void setEfctDef(int efctDef) {
-		this.efctDef = efctDef;
+	public void removeEfctAtk(int index, int efctAtk) {
+		this.efctAtk[index] -= efctAtk;
 	}
 
-	public void addEfctDef(int efctDef) {
-		this.efctDef += efctDef;
+	public int getEfctDef() {
+		return Arrays.stream(efctDef).sum();
 	}
 
-	public void removeEfctDef(int efctDef) {
-		this.efctDef -= efctDef;
+	public void setEfctDef(int index, int efctDef) {
+		this.efctDef[index] = efctDef;
+	}
+
+	public void addEfctDef(int index, int efctDef) {
+		this.efctDef[index] += efctDef;
+	}
+
+	public void removeEfctDef(int index, int efctDef) {
+		this.efctDef[index] -= efctDef;
 	}
 
 	public int getEffAtk() {
@@ -705,8 +713,8 @@ public class Champion implements Drawable, Cloneable {
 		redAtk = 0;
 		redDef = 0;
 		efctMana = 0;
-		efctAtk = 0;
-		efctDef = 0;
+		efctAtk = new int[5];
+		efctDef = new int[5];
 		stasis = 0;
 		stun = 0;
 		sleep = 0;
