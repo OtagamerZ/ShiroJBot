@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 public class Clan {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String id;
+	private int id;
 
 	@Column(columnDefinition = "VARCHAR(20) NOT NULL")
 	private String name;
@@ -93,7 +93,7 @@ public class Clan {
 	public Clan() {
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
