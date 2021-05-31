@@ -14,9 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de punição por não gastar créditos">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,6 +198,17 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1214,14 +1224,7 @@
       <workItem from="1622410150389" duration="221000" />
       <workItem from="1622410481939" duration="1412000" />
       <workItem from="1622412361030" duration="1057000" />
-      <workItem from="1622462991059" duration="6062000" />
-    </task>
-    <task id="LOCAL-04588" summary="Correções menores">
-      <created>1622391290748</created>
-      <option name="number" value="04588" />
-      <option name="presentableId" value="LOCAL-04588" />
-      <option name="project" value="LOCAL" />
-      <updated>1622391290748</updated>
+      <workItem from="1622462991059" duration="7515000" />
     </task>
     <task id="LOCAL-04589" summary="Correções menores">
       <created>1622391476294</created>
@@ -1559,7 +1562,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622469859550</updated>
     </task>
-    <option name="localTasksCounter" value="4637" />
+    <task id="LOCAL-04637" summary="Adição de punição por não gastar créditos">
+      <created>1622470044923</created>
+      <option name="number" value="04637" />
+      <option name="presentableId" value="LOCAL-04637" />
+      <option name="project" value="LOCAL" />
+      <updated>1622470044923</updated>
+    </task>
+    <option name="localTasksCounter" value="4638" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
