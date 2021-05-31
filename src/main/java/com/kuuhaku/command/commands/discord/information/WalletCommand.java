@@ -46,7 +46,7 @@ public class WalletCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(I18n.getString("str_balance-title", author.getName()))
 				.addField(
-						I18n.getString("str_balance-field-title", Helper.separate(acc.getBalance())),
+						I18n.getString("str_balance-field-title", Helper.separate(acc.getBalance()), Helper.prcntToInt(acc.getSpent(), acc.getBalance() + acc.getSpent())),
 						I18n.getString("str_balance-loan-bugs",
 								Helper.separate(acc.getVBalance()),
 								Helper.separate(acc.getLoan()),
@@ -55,7 +55,7 @@ public class WalletCommand implements Executable {
 				)
 				.addField(
 						I18n.getString("str_balance-last-voted"),
-						acc.getLastVoted(),
+						acc.getLastVoted() == null ? "Nunca" : Helper.fullDateFormat.format(acc.getLastVoted()),
 						true
 				)
 				.setThumbnail("https://i.imgur.com/nhWckfq.png");

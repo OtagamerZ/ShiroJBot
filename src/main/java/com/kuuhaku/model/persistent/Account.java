@@ -67,6 +67,9 @@ public class Account {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long stocksProfit = 0;
 
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long spent = 0;
+
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int gems = 0;
 
@@ -100,9 +103,6 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean useFoil = false;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'Nunca'")
-	private String lastVoted = "Nunca";
-
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String ultimate = "";
 
@@ -123,6 +123,9 @@ public class Account {
 
 	@Enumerated(value = EnumType.STRING)
 	private FrameColor frame = FrameColor.PINK;
+
+	@Column(columnDefinition = "TIMESTAMP")
+	private ZonedDateTime lastVoted = null;
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private ZonedDateTime lastDaily = null;
@@ -153,6 +156,10 @@ public class Account {
 
 	public long getTotalBalance() {
 		return balance + vBalance;
+	}
+
+	public long getSpent() {
+		return spent;
 	}
 
 	public long getLoan() {
@@ -210,6 +217,7 @@ public class Account {
 
 	public void removeCredit(long credit, Class<?> from) {
 		this.balance -= credit;
+		this.spent += credit;
 		if (credit != 0) TransactionDAO.register(uid, from, -credit);
 	}
 
@@ -219,6 +227,7 @@ public class Account {
 		if (remaining < 0) {
 			this.vBalance = 0;
 			this.balance -= Math.abs(remaining);
+			this.spent += Math.abs(remaining);
 		} else {
 			this.vBalance -= credit;
 		}
@@ -247,7 +256,7 @@ public class Account {
 		this.stocksProfit -= value;
 	}
 
-	public String getLastVoted() {
+	public ZonedDateTime getLastVoted() {
 		return lastVoted;
 	}
 
@@ -268,23 +277,22 @@ public class Account {
 
 	public void voted() {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
-		try {
-			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.fullDateFormat);
-
+		if (lastVoted == null) streak = 1;
+		else try {
 			Helper.logger(this.getClass()).info("""
 															
 					Voto anterior: %s
 					Hoje: %s
 					Acumula? %s
-					""".formatted(lastVote.format(Helper.fullDateFormat), today.format(Helper.fullDateFormat), today.isBefore(lastVote.plusHours(24)))
+					""".formatted(Helper.fullDateFormat.format(lastVoted), today.format(Helper.fullDateFormat), today.isBefore(lastVoted.plusHours(24)))
 			);
 
-			if (today.isBefore(lastVote.plusHours(24)) || streak == 0) streak = Helper.clamp(streak + 1, 0, 7);
+			if (today.isBefore(lastVoted.plusHours(24)) || streak == 0) streak = Helper.clamp(streak + 1, 0, 7);
 			else streak = 0;
 		} catch (DateTimeParseException ignore) {
 		}
 
-		lastVoted = today.format(Helper.fullDateFormat);
+		lastVoted = today;
 		notified = false;
 		voted = true;
 		AccountDAO.saveAccount(this);
@@ -294,9 +302,7 @@ public class Account {
 		ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		try {
 			try {
-				ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.fullDateFormat);
-
-				if (today.isBefore(lastVote.plusHours(12)) && voted) {
+				if (today.isBefore(lastVoted.plusHours(12)) && voted) {
 					return true;
 				} else {
 					if (thenApply) {
@@ -335,11 +341,10 @@ public class Account {
 	}
 
 	public void notifyVote() {
-		if (!notified && !lastVoted.equalsIgnoreCase("Nunca")) {
+		if (!notified && lastVoted != null) {
 			ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
-			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.fullDateFormat);
 
-			if (today.isAfter(lastVote.plusHours(12))) {
+			if (today.isAfter(lastVoted.plusHours(12))) {
 				try {
 					EmbedBuilder eb = new ColorlessEmbedBuilder();
 					eb.setTitle("Opa, você já pode votar novamente!");
@@ -369,9 +374,8 @@ public class Account {
 	public int getStreak() {
 		try {
 			ZonedDateTime today = ZonedDateTime.now(ZoneId.of("GMT-3"));
-			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.fullDateFormat);
 
-			if (today.isAfter(lastVote.plusHours(24))) streak = 0;
+			if (lastVoted != null && today.isAfter(lastVoted.plusHours(24))) streak = 0;
 		} catch (DateTimeParseException ignore) {
 		}
 
