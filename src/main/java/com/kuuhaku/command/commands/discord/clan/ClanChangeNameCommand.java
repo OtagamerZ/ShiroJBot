@@ -22,11 +22,9 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
@@ -37,29 +35,25 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Command(
-		name = "criar",
-		aliases = {"create"},
+		name = "nomedocla",
+		aliases = {"clanname"},
 		usage = "req_name",
 		category = Category.CLAN
 )
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
-public class CreateClanCommand implements Executable {
+public class ClanChangeNameCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		if (ClanDAO.isMember(author.getId())) {
-			channel.sendMessage("❌ | Você já possui um clã.").queue();
+		Clan c = ClanDAO.getUserClan(author.getId());
+		if (c == null) {
+			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
-		}
-
-		if (args.length == 0) {
-			channel.sendMessage("❌ | Você precisa informar um nome para o clã.").queue();
+		} else if (c.getMembers().get(author.getId()).ordinal() != 0) {
+			channel.sendMessage("❌ | Apenas o líder pode mudar o nome do clã.").queue();
 			return;
-		}
-
-		Account acc = AccountDAO.getAccount(author.getId());
-		if (acc.getBalance() + acc.getVBalance() < 10000) {
-			channel.sendMessage("❌ | Você precisa de 10.000 créditos para poder criar um clã.").queue();
+		} else if (c.getVault() < 100000) {
+			channel.sendMessage("❌ | O cofre do clã não possui créditos suficientes.").queue();
 			return;
 		}
 
@@ -76,17 +70,14 @@ public class CreateClanCommand implements Executable {
 		}
 
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja criar o clã " + name + " por 10.000 créditos?")
+		channel.sendMessage("Tem certeza que deseja mudar o nome do clã de `" + c.getName() + "` para `" + name + "` por 100.000 créditos?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
-							Clan c = new Clan(name, author.getId());
-							acc.consumeCredit(10000, CreateClanCommand.class);
-
+							c.changeName(author, name);
 							ClanDAO.saveClan(c);
-							AccountDAO.saveAccount(acc);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Clã " + name + " criado com sucesso.")).queue();
+							s.delete().flatMap(d -> channel.sendMessage("✅ | Nome alterado com sucesso.")).queue();
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

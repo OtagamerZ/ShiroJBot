@@ -29,7 +29,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.awt.image.BufferedImage;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,6 +38,9 @@ public class Clan {
 	@Id
 	@Column(columnDefinition = "CHAR(64) NOT NULL")
 	private String hash;
+
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private String id;
 
 	@Column(columnDefinition = "VARCHAR(20) NOT NULL")
 	private String name;
@@ -81,12 +83,15 @@ public class Clan {
 	}};
 
 	public Clan(String name, String leader) {
-		this.hash = Helper.hash(name.toLowerCase(Locale.ROOT).getBytes(StandardCharsets.UTF_8), "SHA-256");
 		this.name = name;
 		this.members.put(leader, ClanHierarchy.LEADER);
 	}
 
 	public Clan() {
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public String getHash() {
@@ -260,6 +265,12 @@ public class Clan {
 		this.vault -= tier.getRent();
 		this.paidRent = Calendar.getInstance();
 		transactions.add("Aluguel pago de " + Helper.separate(tier.getRent()) + " créditos pago automaticamente.");
+	}
+
+	public void changeName(User u, String name) {
+		this.vault -= 100000;
+		this.name = name;
+		transactions.add(u.getAsTag() + " trocou o nome do clã por 100.000 créditos.");
 	}
 
 	public Deck getDeck() {
