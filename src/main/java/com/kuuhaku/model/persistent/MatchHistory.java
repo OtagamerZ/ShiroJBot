@@ -37,6 +37,7 @@ public class MatchHistory {
 
 	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
+	@JoinColumn(name = "matchhistory_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<String, Side> players = new HashMap<>();
 
