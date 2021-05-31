@@ -71,7 +71,8 @@ public class ClanCommand implements Executable {
 				.setThumbnail("attachment://icon.png")
 				.setImage("attachment://banner.png")
 				.setDescription(c.getMotd())
-				.addField("Cofre", ":coin: | %s%s créditos".formatted(Helper.separate(c.getVault()), c.getTier() != ClanTier.DYNASTY ? "/" + Helper.separate(c.getTier().getVaultSize()) : ""), false);
+				.addField("Cofre", ":coin: | %s%s créditos".formatted(Helper.separate(c.getVault()), c.getTier() != ClanTier.DYNASTY ? "/" + Helper.separate(c.getTier().getVaultSize()) : ""), false)
+				.addField("Aluguel", ":receipt: | %s créditos/mês (%s)".formatted(Helper.separate(c.getTier().getRent()), c.hasPaidRent() ? "PAGO" : "PENDENTE"), false);
 
 		if (c.getTier() != ClanTier.DYNASTY)
 			eb.addField("Metas para promoção", """
