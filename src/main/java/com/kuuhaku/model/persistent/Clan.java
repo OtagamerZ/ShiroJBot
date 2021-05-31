@@ -75,6 +75,7 @@ public class Clan {
 	private Map<String, ClanHierarchy> members = new HashMap<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
+	@JoinColumn(name = "clan_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<ClanHierarchy, Integer> permissions = new HashMap<>() {{
 		put(ClanHierarchy.LEADER, 0xf);
