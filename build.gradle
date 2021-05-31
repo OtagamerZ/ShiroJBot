@@ -148,3 +148,14 @@ idea {
         downloadSources = true
     }
 }
+
+applicationDefaultJvmArgs = [
+        "-Xms2G",
+        "-Xmx10G",
+        "-XX:+UseG1GC",
+        "-XX:+UseStringDeduplication",
+        "-XX:+HeapDumpOnOutOfMemoryError",
+        "-XX:HeapDumpPath=/shiro/ShiroJBot/logs/memdump.hprof",
+        "-Dfile.encoding=UTF-8",
+        "-Duser.timezone=America/Sao_Paulo"
+]
