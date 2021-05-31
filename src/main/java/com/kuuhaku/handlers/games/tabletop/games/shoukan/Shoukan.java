@@ -774,9 +774,9 @@ public class Shoukan extends GlobalGame {
 				if (slot.getTop() == null) continue;
 
 				Champion c = slot.getTop();
-				if (applyEffect(GAME_TICK, c, i, s, Pair.of(c, i), null)) return;
 				c.setEfctAtk(i, 0);
 				c.setEfctDef(i, 0);
+				if (applyEffect(GAME_TICK, c, i, s, Pair.of(c, i), null)) return;
 			}
 		}
 
