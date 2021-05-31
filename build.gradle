@@ -148,5 +148,3 @@ idea {
         downloadSources = true
     }
 }
-
-compileJava.options.encoding = "UTF-8"
