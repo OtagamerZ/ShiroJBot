@@ -88,19 +88,19 @@ public class ClanCommand implements Executable {
 						case PARTY -> """
 								Título de facção
 								Capacidade de membros (~~10~~ -> 50)
-								Capacidade do cofre (~~100.000~~ -> 500.000)
+								Capacidade do cofre (~~50.000~~ -> 250.000)
 								Mensagem do dia
 								""";
 						case FACTION -> """
 								Título de guilda
 								Capacidade de membros (~~50~~ -> 100)
-								Capacidade do cofre (~~500.000~~ -> 2.000.000)
+								Capacidade do cofre (~~250.000~~ -> 1.500.000)
 								Emblema
 								""";
 						case GUILD -> """
 								Título de dinastia
 								Capacidade de membros (~~100~~ -> 500)
-								Capacidade do cofre (~~2.000.000~~ -> ilimitado)
+								Capacidade do cofre (~~1.500.000~~ -> ilimitado)
 								Banner
 								""";
 						default -> "";
