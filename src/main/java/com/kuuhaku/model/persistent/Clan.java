@@ -70,7 +70,7 @@ public class Clan {
 
 	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinColumn("clan_id")
+	@JoinColumn(name = "clan_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<String, ClanHierarchy> members = new HashMap<>();
 
