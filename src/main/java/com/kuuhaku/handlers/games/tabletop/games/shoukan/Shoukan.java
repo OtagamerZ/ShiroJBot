@@ -769,14 +769,6 @@ public class Shoukan extends GlobalGame {
 	private void reportEvent(Hand h, String msg, boolean resetTimer, boolean changeTurn) {
 		for (Side s : Side.values()) {
 			List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(s);
-			for (int i = 0; i < slts.size(); i++) {
-				SlotColumn<Champion, Equipment> slot = slts.get(i);
-				if (slot.getTop() == null) continue;
-
-				Champion c = slot.getTop();
-				c.setEfctAtk(i, 0);
-				c.setEfctDef(i, 0);
-			}
 
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn<Champion, Equipment> slot = slts.get(i);
@@ -1130,6 +1122,14 @@ public class Shoukan extends GlobalGame {
 				unequipCard(to, i, slts);
 		}
 
+		for (SlotColumn<Champion, Equipment> slot : slts) {
+			if (slot.getTop() == null) continue;
+
+			Champion c = slot.getTop();
+			c.setEfctAtk(index, 0);
+			c.setEfctDef(index, 0);
+		}
+
 		ch.reset();
 		if (!ch.isGravelocked())
 			arena.getGraveyard().get(to).add(ch.copy());
@@ -1169,6 +1169,14 @@ public class Shoukan extends GlobalGame {
 					unequipCard(to, i, slts);
 			}
 
+			for (SlotColumn<Champion, Equipment> slot : slts) {
+				if (slot.getTop() == null) continue;
+
+				Champion c = slot.getTop();
+				c.setEfctAtk(target, 0);
+				c.setEfctDef(target, 0);
+			}
+
 			ch.reset();
 			if (!ch.isGravelocked())
 				arena.getGraveyard().get(to).add(ch.copy());
@@ -1198,6 +1206,14 @@ public class Shoukan extends GlobalGame {
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 				unequipCard(to, i, slts);
+		}
+
+		for (SlotColumn<Champion, Equipment> slot : slts) {
+			if (slot.getTop() == null) continue;
+
+			Champion c = slot.getTop();
+			c.setEfctAtk(target, 0);
+			c.setEfctDef(target, 0);
 		}
 
 		ch.reset();
@@ -1239,6 +1255,14 @@ public class Shoukan extends GlobalGame {
 					unequipCard(to, i, slts);
 			}
 
+			for (SlotColumn<Champion, Equipment> slot : slts) {
+				if (slot.getTop() == null) continue;
+
+				Champion c = slot.getTop();
+				c.setEfctAtk(target, 0);
+				c.setEfctDef(target, 0);
+			}
+
 			ch.reset();
 			if (!ch.isFusion() || withFusion)
 				hands.get(to == Side.TOP ? Side.BOTTOM : Side.TOP).getCards().add(ch);
@@ -1268,6 +1292,14 @@ public class Shoukan extends GlobalGame {
 
 			if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 				unequipCard(to, i, slts);
+		}
+
+		for (SlotColumn<Champion, Equipment> slot : slts) {
+			if (slot.getTop() == null) continue;
+
+			Champion c = slot.getTop();
+			c.setEfctAtk(target, 0);
+			c.setEfctDef(target, 0);
 		}
 
 		ch.reset();
@@ -1300,6 +1332,14 @@ public class Shoukan extends GlobalGame {
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == index)
 					banishCard(side, i, true);
+			}
+
+			for (SlotColumn<Champion, Equipment> slot : slts) {
+				if (slot.getTop() == null) continue;
+
+				Champion c = slot.getTop();
+				c.setEfctAtk(index, 0);
+				c.setEfctDef(index, 0);
 			}
 
 			ch.reset();
@@ -1387,6 +1427,14 @@ public class Shoukan extends GlobalGame {
 					if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 						unequipCard(to, i, slts);
 				}
+
+				for (SlotColumn<Champion, Equipment> slot : slts) {
+					if (slot.getTop() == null) continue;
+
+					Champion c = slot.getTop();
+					c.setEfctAtk(target, 0);
+					c.setEfctDef(target, 0);
+				}
 			}
 		}
 	}
@@ -1421,6 +1469,14 @@ public class Shoukan extends GlobalGame {
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 					unequipCard(to, i, slts);
+			}
+
+			for (SlotColumn<Champion, Equipment> slot : slts) {
+				if (slot.getTop() == null) continue;
+
+				Champion c = slot.getTop();
+				c.setEfctAtk(target, 0);
+				c.setEfctDef(target, 0);
 			}
 		}
 	}
@@ -1458,6 +1514,14 @@ public class Shoukan extends GlobalGame {
 					unequipCard(to, i, slts);
 			}
 
+			for (SlotColumn<Champion, Equipment> slot : slts) {
+				if (slot.getTop() == null) continue;
+
+				Champion c = slot.getTop();
+				c.setEfctAtk(target, 0);
+				c.setEfctDef(target, 0);
+			}
+
 			if (chi == null) return;
 			List<SlotColumn<Champion, Equipment>> slots = getArena().getSlots().get(from);
 
@@ -1472,6 +1536,14 @@ public class Shoukan extends GlobalGame {
 
 				if (sd.getBottom() != null && sd.getBottom().getLinkedTo().getLeft() == target)
 					unequipCard(from, i, slots);
+			}
+
+			for (SlotColumn<Champion, Equipment> slot : slts) {
+				if (slot.getTop() == null) continue;
+
+				Champion c = slot.getTop();
+				c.setEfctAtk(source, 0);
+				c.setEfctDef(source, 0);
 			}
 
 			slts.get(target).setTop(chi);
