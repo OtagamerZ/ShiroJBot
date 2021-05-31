@@ -34,6 +34,7 @@ public class Trophy {
 
 	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
+	@JoinColumn(name = "trophy_uid")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<TrophyType> trophies = EnumSet.noneOf(TrophyType.class);
 
