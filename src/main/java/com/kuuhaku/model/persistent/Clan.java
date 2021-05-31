@@ -58,6 +58,9 @@ public class Clan {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long vault = 0;
 
+	@Temporal(TemporalType.DATE)
+	private Calendar paidRent = Calendar.getInstance();
+
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Deck clanDeck = new Deck();
@@ -240,6 +243,23 @@ public class Clan {
 		this.vault -= tier.getCost();
 		this.tier = this.tier.getNext();
 		transactions.add(u.getAsTag() + " evoluiu o tier do clã por " + Helper.separate(tier) + " créditos.");
+	}
+
+	public boolean hasPaidRent() {
+		Calendar c = Calendar.getInstance();
+		return paidRent.get(Calendar.MONTH) == c.get(Calendar.MONTH);
+	}
+
+	public void payRent(User u) {
+		this.vault -= tier.getRent();
+		this.paidRent = Calendar.getInstance();
+		transactions.add(u.getAsTag() + " pagou o aluguel de " + Helper.separate(tier.getRent()) + " créditos.");
+	}
+
+	public void payRent() {
+		this.vault -= tier.getRent();
+		this.paidRent = Calendar.getInstance();
+		transactions.add("Aluguel pago de " + Helper.separate(tier.getRent()) + " créditos pago automaticamente.");
 	}
 
 	public Deck getDeck() {

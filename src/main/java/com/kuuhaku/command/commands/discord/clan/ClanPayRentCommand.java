@@ -25,7 +25,6 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.enums.ClanTier;
 import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
@@ -35,12 +34,12 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Command(
-		name = "evoluir",
-		aliases = {"evolve"},
+		name = "aluguel",
+		aliases = {"rent"},
 		category = Category.CLAN
 )
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
-public class ClanUpgradeCommand implements Executable {
+public class ClanPayRentCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
@@ -49,27 +48,25 @@ public class ClanUpgradeCommand implements Executable {
 			channel.sendMessage("❌ | Você não possui um clã.").queue();
 			return;
 		} else if (c.getMembers().get(author.getId()).ordinal() != 0) {
-			channel.sendMessage("❌ | Apenas o líder pode evoluir o tier do clã.").queue();
+			channel.sendMessage("❌ | Apenas o líder pode pagar o aluguel do clã.").queue();
 			return;
-		} else if (c.getTier() == ClanTier.DYNASTY) {
-			channel.sendMessage("❌ | Seu clã já está no tier máximo.").queue();
+		} else if (c.getVault() < c.getTier().getRent()) {
+			channel.sendMessage("❌ | O cofre do clã não possui créditos suficientes.").queue();
 			return;
-		} else if (c.getVault() < c.getTier().getNext().getCost() || c.getMembers().size() < c.getTier().getCapacity() / 2) {
-			channel.sendMessage("❌ | Seu clã ainda não cumpriu os requisitos para evolução.").queue();
+		} else if (c.hasPaidRent()) {
+			channel.sendMessage("❌ | O aluguel deste mês já foi pago.").queue();
 			return;
 		}
 
-		ClanTier next = Helper.getNext(c.getTier(), ClanTier.PARTY, ClanTier.FACTION, ClanTier.GUILD, ClanTier.DYNASTY);
-		assert next != null;
 		Main.getInfo().getConfirmationPending().put(author.getId(), true);
-		channel.sendMessage("Tem certeza que deseja evoluir o tier do clã para " + next.getName() + "?")
+		channel.sendMessage("Tem certeza que deseja pagar o aluguel de " + Helper.separate(c.getTier().getRent()) + "?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 							Main.getInfo().getConfirmationPending().remove(author.getId());
 
-							c.upgrade(author);
+							c.payRent(author);
 							ClanDAO.saveClan(c);
 
-							s.delete().flatMap(d -> channel.sendMessage("✅ | Tier evoluído com sucesso.")).queue();
+							s.delete().flatMap(d -> channel.sendMessage("✅ | Aluguel pago com sucesso.")).queue();
 						}), true, 1, TimeUnit.MINUTES,
 						u -> u.getId().equals(author.getId()),
 						ms -> Main.getInfo().getConfirmationPending().remove(author.getId())

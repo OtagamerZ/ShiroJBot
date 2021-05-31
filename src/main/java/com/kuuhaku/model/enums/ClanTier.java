@@ -21,10 +21,10 @@ package com.kuuhaku.model.enums;
 import com.kuuhaku.utils.Helper;
 
 public enum ClanTier {
-	PARTY("Grupo", 10, 100000, 50000),
-	FACTION("Facção", 50, 500000, 125000),
-	GUILD("Guilda", 100, 2000000, 1000000),
-	DYNASTY("Dinastia", 500, 0, 0);
+	PARTY("Grupo", 10, 50_000, 10_000),
+	FACTION("Facção", 50, 250_000, 35_000),
+	GUILD("Guilda", 100, 1_500_000, 150_000),
+	DYNASTY("Dinastia", 500, 0, 1_000_000);
 
 	private final String name;
 	private final int capacity;
@@ -52,6 +52,10 @@ public enum ClanTier {
 
 	public long getCost() {
 		return cost;
+	}
+
+	public long getRent() {
+		return cost / 4;
 	}
 
 	public ClanTier getNext() {
