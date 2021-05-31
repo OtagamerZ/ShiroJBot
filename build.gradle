@@ -150,7 +150,7 @@ idea {
 }
 
 applicationDefaultJvmArgs = [
-        "-Xms2G",
+        "-Xms512M",
         "-Xmx10G",
         "-XX:+UseG1GC",
         "-XX:+UseStringDeduplication",
