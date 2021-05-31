@@ -806,7 +806,7 @@ public class Shoukan extends GlobalGame {
 		Champion his = getArena().getSlots().get(next).get(is[1]).getTop();
 
 		if (his.isStasis()) {
-			reportEvent(null, "❌ | Você não pode atacar cartas inalvejáveis.", false, false);
+			channel.sendMessage("❌ | Você não pode atacar cartas inalvejáveis.").queue();
 			return;
 		}
 
