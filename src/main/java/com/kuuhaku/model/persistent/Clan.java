@@ -36,9 +36,6 @@ import java.util.stream.Collectors;
 @Table(name = "clan")
 public class Clan {
 	@Id
-	@Column(columnDefinition = "CHAR(64) NOT NULL")
-	private String hash;
-
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String id;
 
@@ -68,13 +65,16 @@ public class Clan {
 	private Deck clanDeck = new Deck();
 
 	@ElementCollection(fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<String> transactions = new ArrayList<>();
 
 	@Enumerated(value = EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<String, ClanHierarchy> members = new HashMap<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Map<ClanHierarchy, Integer> permissions = new HashMap<>() {{
 		put(ClanHierarchy.LEADER, 0xf);
 		put(ClanHierarchy.SUBLEADER, 0xf);
@@ -92,10 +92,6 @@ public class Clan {
 
 	public String getId() {
 		return id;
-	}
-
-	public String getHash() {
-		return hash;
 	}
 
 	public String getName() {
