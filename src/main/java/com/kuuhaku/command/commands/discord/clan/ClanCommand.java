@@ -83,7 +83,7 @@ public class ClanCommand implements Executable {
 					%s
 					""".formatted(
 					c.getMembers().size(), c.getTier().getCapacity() / 2,
-					Helper.separate(c.getVault()), Helper.separate(c.getTier().getCost()),
+					Helper.separate(c.getVault()), Helper.separate(c.getTier().getNext().getCost()),
 					switch (c.getTier()) {
 						case PARTY -> """
 								Título de facção
