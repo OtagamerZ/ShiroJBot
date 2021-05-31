@@ -70,7 +70,7 @@ public class ClanDepositCommand implements Executable {
 		} else if (acc.getLoan() > 0) {
 			channel.sendMessage("❌ | Você não pode depositar se possuir dívida ativa.").queue();
 			return;
-		} else if (c.getTier() != ClanTier.DYNASTY && c.getVault() + amount >= c.getTier().getVaultSize()) {
+		} else if (c.getTier() != ClanTier.DYNASTY && c.getVault() + amount > c.getTier().getVaultSize()) {
 			channel.sendMessage("❌ | Depositar essa quantidade ultrapassa a capacidade do cofre do clã.").queue();
 			return;
 		}
