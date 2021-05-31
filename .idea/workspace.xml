@@ -13,7 +13,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de punição por não gastar créditos" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de punição por não gastar créditos">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanPayRentCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanUpgradeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/clan/ClanUpgradeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ClanDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ClanDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/DailyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/DailyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/ClanTier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/enums/ClanTier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Clan.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -171,11 +179,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.discord.clan" />
       <recent name="com.kuuhaku.utils" />
       <recent name="com.kuuhaku.model.persistent.guild.buttons" />
       <recent name="com.kuuhaku.command.commands.discord.dev" />
       <recent name="com.kuuhaku.model.common" />
-      <recent name="com.kuuhaku.command.commands.discord.misc" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -1223,13 +1231,6 @@
       <workItem from="1622412361030" duration="1057000" />
       <workItem from="1622462991059" duration="7515000" />
     </task>
-    <task id="LOCAL-04589" summary="Correções menores">
-      <created>1622391476294</created>
-      <option name="number" value="04589" />
-      <option name="presentableId" value="LOCAL-04589" />
-      <option name="project" value="LOCAL" />
-      <updated>1622391476294</updated>
-    </task>
     <task id="LOCAL-04590" summary="Correções menores">
       <created>1622392684803</created>
       <option name="number" value="04590" />
@@ -1566,7 +1567,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622470044923</updated>
     </task>
-    <option name="localTasksCounter" value="4638" />
+    <task id="LOCAL-04638" summary="Adição de punição por não gastar créditos">
+      <created>1622472203123</created>
+      <option name="number" value="04638" />
+      <option name="presentableId" value="LOCAL-04638" />
+      <option name="project" value="LOCAL" />
+      <updated>1622472203123</updated>
+    </task>
+    <option name="localTasksCounter" value="4639" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
