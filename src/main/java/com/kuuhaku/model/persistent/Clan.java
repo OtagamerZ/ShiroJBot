@@ -65,6 +65,7 @@ public class Clan {
 	private Deck clanDeck = new Deck();
 
 	@ElementCollection(fetch = FetchType.LAZY)
+	@JoinColumn(name = "clan_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<String> transactions = new ArrayList<>();
 
