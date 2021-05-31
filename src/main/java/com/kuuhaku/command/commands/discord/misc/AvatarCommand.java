@@ -31,7 +31,7 @@ import net.dv8tion.jda.api.entities.*;
 
 @Command(
 		name = "avatar",
-		aliases = {"icon", "icone", "pfp"},
+		aliases = {"pfp"},
 		usage = "req_mention-guild",
 		category = Category.MISC
 )
