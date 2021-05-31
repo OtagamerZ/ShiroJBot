@@ -39,8 +39,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Command(
-		name = "limpar",
-		aliases = {"sweep", "clear"},
+		name = "sweep",
 		category = Category.DEV
 )
 @Requires({Permission.MESSAGE_EXT_EMOJI})

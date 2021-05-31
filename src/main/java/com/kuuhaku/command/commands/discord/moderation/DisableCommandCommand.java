@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 @Command(
 		name = "desativar",
-		aliases = {"desligar", "disable", "deactivate"},
+		aliases = {"disable", "deactivate"},
 		usage = "req_commands",
 		category = Category.MODERATION
 )
