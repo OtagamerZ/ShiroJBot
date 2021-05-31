@@ -36,6 +36,23 @@ public class CommandManager {
 	private final Reflections refl = new Reflections("com.kuuhaku.command.commands");
 	private final Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
 
+	public CommandManager() {
+		Set<String> names = new HashSet<>();
+
+		for (Class<?> cmd : cmds) {
+			Command params = cmd.getDeclaredAnnotation(Command.class);
+			if (!names.add(params.name())) {
+				Helper.logger(this.getClass()).warn("Detectado comando com nome existente: " + params.name());
+			}
+
+			for (String alias : params.aliases()) {
+				if (!names.add(alias)) {
+					Helper.logger(this.getClass()).warn("Detectado comando com alias existente: " + alias);
+				}
+			}
+		}
+	}
+
 	public Set<PreparedCommand> getCommands() {
 		Set<PreparedCommand> commands = new HashSet<>();
 
