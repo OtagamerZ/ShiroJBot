@@ -39,6 +39,10 @@ public class DailyEvent implements Job {
 	@Override
 	public void execute(JobExecutionContext context) {
 		Calendar c = Calendar.getInstance();
+		if (c.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+			AccountDAO.punishHoarders();
+		}
+
 		if (c.get(Calendar.MONTH) == Calendar.JANUARY && c.get(Calendar.DAY_OF_MONTH) == 11) {
 			MatchMakingRatingDAO.resetRanks();
 		} else if (c.get(Calendar.MONTH) == Calendar.DECEMBER && c.get(Calendar.DAY_OF_MONTH) == 21) {

@@ -156,4 +156,21 @@ public class AccountDAO {
 			em.close();
 		}
 	}
+
+	public static void punishHoarders() {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.createQuery("""
+				UPDATE Account a
+				SET vBalance = balance / 2
+				  , balance  = balance / 2
+				  , spent    = 0
+				WHERE a.balance > 100000
+				  AND a.spent / (a.spent + 100) < 0.1
+				""").executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
+	}
 }
