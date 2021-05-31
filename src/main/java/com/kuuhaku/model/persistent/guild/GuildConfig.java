@@ -159,24 +159,29 @@ public class GuildConfig {
 
 	//CHANNELS
 	@ElementCollection(fetch = FetchType.EAGER)
+	@JoinColumn(name = "guildconfig_guildid")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String> noLinkChannels = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
+	@JoinColumn(name = "guildconfig_guildid")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String> noSpamChannels = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
+	@JoinColumn(name = "guildconfig_guildid")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String> noCommandChannels = new HashSet<>();
 
 	//CONFIGS
 	@ElementCollection(fetch = FetchType.EAGER)
+	@JoinColumn(name = "guildconfig_guildid")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String> disabledCommands = new HashSet<>();
 
 	//LAZY
 	@ElementCollection(fetch = FetchType.LAZY)
+	@JoinColumn(name = "guildconfig_guildid")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<String> rules = new ArrayList<>();
 
