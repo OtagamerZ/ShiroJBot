@@ -19,12 +19,10 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Clan;
-import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,8 +30,13 @@ public class ClanDAO {
 	public static Clan getClan(String name) {
 		EntityManager em = Manager.getEntityManager();
 
+		Query q = em.createQuery("SELECT c FROM Clan c WHERE LOWER(c.name) = :name", Clan.class);
+		q.setParameter("name", name.toLowerCase(Locale.ROOT));
+
 		try {
-			return em.find(Clan.class, Helper.hash(name.toLowerCase(Locale.ROOT).getBytes(StandardCharsets.UTF_8), "SHA-256"));
+			return (Clan) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
 		} finally {
 			em.close();
 		}
