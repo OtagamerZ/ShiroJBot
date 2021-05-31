@@ -25,6 +25,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Locale;
 
 public class ClanDAO {
@@ -87,5 +88,18 @@ public class ClanDAO {
 		em.getTransaction().commit();
 
 		em.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Clan> getUnpaidClans() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Clan c WHERE EXTRACT(MONTH FROM c.paidRent) <> EXTRACT(MONTH FROM CURRENT_DATE)", Clan.class);
+
+		try {
+			return (List<Clan>) q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 }
