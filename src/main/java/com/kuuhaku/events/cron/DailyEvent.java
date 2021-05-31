@@ -20,11 +20,14 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ClanDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
 import com.kuuhaku.model.enums.RankedTier;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Clan;
 import com.kuuhaku.model.persistent.MatchMakingRating;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.entities.User;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -41,6 +44,25 @@ public class DailyEvent implements Job {
 		Calendar c = Calendar.getInstance();
 		if (c.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
 			AccountDAO.punishHoarders();
+		}
+
+		if (c.get(Calendar.DAY_OF_MONTH) == 1) {
+			List<Clan> unpaid = ClanDAO.getUnpaidClans();
+			for (Clan clan : unpaid) {
+				if (clan.getVault() < clan.getTier().getRent()) {
+					User u = Main.getInfo().getUserByID(clan.getLeader());
+
+					u.openPrivateChannel().queue(s -> s.sendMessage(":warning: | Alerta: Não há saldo suficiente no cofre do clã " + clan.getName() + " para pagamento do aluguel. Por favor deposite créditos e pague manualmente usando o comando `s!aluguel`.\n**Você tem até dia 8 ou o clã será desfeito.**").queue(null, Helper::doNothing), Helper::doNothing);
+				} else {
+					clan.payRent();
+					ClanDAO.saveClan(clan);
+				}
+			}
+		} else if (c.get(Calendar.DAY_OF_MONTH) == 8) {
+			List<Clan> unpaid = ClanDAO.getUnpaidClans();
+			for (Clan clan : unpaid) {
+				ClanDAO.removeClan(clan);
+			}
 		}
 
 		if (c.get(Calendar.MONTH) == Calendar.JANUARY && c.get(Calendar.DAY_OF_MONTH) == 11) {
