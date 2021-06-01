@@ -23,6 +23,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
@@ -34,6 +35,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.GlobalGame;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.RankedQueue;
@@ -41,6 +43,7 @@ import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -51,7 +54,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.CollectionUtils;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -237,10 +244,19 @@ public class Shoukan extends GlobalGame {
 		if (combos.get(current).getRight() == Race.BESTIAL)
 			h.addMana(1);
 
+		BufferedImage bi = arena.render(this, hands);
+		Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+		File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
+		EmbedBuilder eb = new EmbedBuilder()
+				.setColor(h.getAcc().getFrame().getColor())
+				.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
+				.setImage("attachments://" + f.getName());
+
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		AtomicReference<String> previous = new AtomicReference<>("");
 		channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)")
-				.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+				.embed(eb.build())
+				.addFile(f)
 				.queue(s -> {
 					this.message.put(s.getChannel().getId(), s);
 					if (!s.getGuild().getId().equals(previous.get())) {
@@ -782,8 +798,18 @@ public class Shoukan extends GlobalGame {
 		if (resetTimer) resetTimerKeepTurn();
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		moveLock = true;
+
+		BufferedImage bi = arena.render(this, hands);
+		Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+		File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
+		EmbedBuilder eb = new EmbedBuilder()
+				.setColor(h.getAcc().getFrame().getColor())
+				.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
+				.setImage("attachments://" + f.getName());
+
 		channel.sendMessage(msg)
-				.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+				.embed(eb.build())
+				.addFile(f)
 				.queue(s -> {
 					this.message.compute(s.getChannel().getId(), (id, m) -> {
 						if (m != null)
@@ -1091,7 +1117,7 @@ public class Shoukan extends GlobalGame {
 				SlotColumn<Champion, Equipment> slt = slts.get(i);
 				if (slt.getTop() == null) {
 					aFusion.setGame(this);
-					aFusion.setAcc(AccountDAO.getAccount(h.getUser().getId()));
+					aFusion.setAcc(h.getAcc());
 					slt.setTop(aFusion);
 					if (applyEot(ON_SUMMON, current, i)) return true;
 					if (applyEffect(ON_SUMMON, aFusion, i, current, Pair.of(aFusion, i), null)) return true;
@@ -1416,7 +1442,7 @@ public class Shoukan extends GlobalGame {
 			if (sc != null) {
 				ch.clearLinkedTo();
 				ch.setGame(this);
-				ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
+				ch.setAcc(hands.get(from).getAcc());
 				sc.setTop(ch);
 				slts.get(target).setTop(null);
 				for (int i = 0; i < slts.size(); i++) {
@@ -1459,7 +1485,7 @@ public class Shoukan extends GlobalGame {
 		if (sc != null) {
 			ch.clearLinkedTo();
 			ch.setGame(this);
-			ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
+			ch.setAcc(hands.get(from).getAcc());
 			sc.setTop(ch);
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
@@ -1503,7 +1529,7 @@ public class Shoukan extends GlobalGame {
 
 			ch.clearLinkedTo();
 			ch.setGame(this);
-			ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
+			ch.setAcc(hands.get(from).getAcc());
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn<Champion, Equipment> sd = slts.get(i);
@@ -1527,7 +1553,7 @@ public class Shoukan extends GlobalGame {
 
 			chi.clearLinkedTo();
 			chi.setGame(this);
-			chi.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
+			chi.setAcc(hands.get(to).getAcc());
 			slots.get(source).setTop(null);
 			for (int i = 0; i < slots.size(); i++) {
 				SlotColumn<Champion, Equipment> sd = slots.get(i);
@@ -1578,7 +1604,7 @@ public class Shoukan extends GlobalGame {
 					target.addLinkedTo(eq);
 					eq.setLinkedTo(Pair.of(pos, target));
 					eq.setGame(this);
-					eq.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
+					eq.setAcc(hands.get(to).getAcc());
 					sc.setBottom(eq);
 				} else return;
 			}
@@ -1602,10 +1628,19 @@ public class Shoukan extends GlobalGame {
 				else
 					msg = op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)";
 
+				BufferedImage bi = arena.render(this, hands);
+				Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+				File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
+				EmbedBuilder eb = new EmbedBuilder()
+						.setColor(op.getAcc().getFrame().getColor())
+						.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
+						.setImage("attachments://" + f.getName());
+
 				close();
 				finished = true;
 				channel.sendMessage(msg)
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+						.embed(eb.build())
+						.addFile(f)
 						.queue(ms ->
 								this.message.compute(ms.getChannel().getId(), (id, m) -> {
 									if (m != null)
@@ -1727,9 +1762,18 @@ public class Shoukan extends GlobalGame {
 					else
 						msg = getCurrent().getAsMention() + " não possui mais cartas no deck, " + hands.get(next).getUser().getAsMention() + " venceu! (" + getRound() + " turnos)";
 
+					BufferedImage bi = arena.render(this, hands);
+					Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+					File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
+					EmbedBuilder eb = new EmbedBuilder()
+							.setColor(hands.get(next).getAcc().getFrame().getColor())
+							.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
+							.setImage("attachments://" + f.getName());
+
 					close();
 					channel.sendMessage(msg)
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+							.embed(eb.build())
+							.addFile(f)
 							.queue(mm ->
 									this.message.compute(mm.getChannel().getId(), (id, m) -> {
 										if (m != null)
@@ -1778,9 +1822,17 @@ public class Shoukan extends GlobalGame {
 				if (draw) {
 					String msg = "Por acordo mútuo, declaro empate! (" + getRound() + " turnos)";
 
+					BufferedImage bi = arena.render(this, hands);
+					Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+					File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
+					EmbedBuilder eb = new ColorlessEmbedBuilder()
+							.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
+							.setImage("attachments://" + f.getName());
+
 					close();
 					channel.sendMessage(msg)
-							.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+							.embed(eb.build())
+							.addFile(f)
 							.queue(mm ->
 									this.message.compute(mm.getChannel().getId(), (id, m) -> {
 										if (m != null)
@@ -1862,9 +1914,18 @@ public class Shoukan extends GlobalGame {
 
 				String msg = getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)";
 
+				BufferedImage bi = arena.render(this, hands);
+				Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+				File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
+				EmbedBuilder eb = new EmbedBuilder()
+						.setColor(Color.white)
+						.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
+						.setImage("attachments://" + f.getName());
+
 				close();
 				channel.sendMessage(msg)
-						.addFile(Helper.writeAndGet(arena.render(this, hands), String.valueOf(this.hashCode()), "jpg"))
+						.embed(eb.build())
+						.addFile(f)
 						.queue(mm ->
 								this.message.compute(mm.getChannel().getId(), (id, m) -> {
 									if (m != null)
@@ -2133,7 +2194,7 @@ public class Shoukan extends GlobalGame {
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder()
 						.setContent(message)
-						.setAvatarUrl("https://api.%s/card?name=%s&anime=%s".formatted(System.getenv("SERVER_URL"), c.getId(), c.getAnime().getName()))
+						.setAvatarUrl(ShiroInfo.API_ROOT + "/card?name=%s&anime=%s".formatted(c.getId(), c.getAnime().getName()))
 						.setUsername(c.getName());
 
 				if (gif != null) {

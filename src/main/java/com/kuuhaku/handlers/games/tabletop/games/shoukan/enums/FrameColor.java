@@ -43,6 +43,19 @@ public enum FrameColor {
 		this.description = description;
 	}
 
+	public Color getColor() {
+		return switch (this) {
+			case PINK -> new Color(232, 116, 188);
+			case PURPLE -> new Color(174, 116, 232);
+			case BLUE -> new Color(116, 126, 232);
+			case CYAN -> new Color(116, 197, 232);
+			case GREEN -> new Color(139, 232, 116);
+			case YELLOW -> new Color(232, 222, 116);
+			case RED -> new Color(232, 116, 116);
+			case GREY -> new Color(232, 232, 232);
+		};
+	}
+
 	public BufferedImage getFront() {
 		return Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_front_" + name().toLowerCase(Locale.ROOT) + ".png");
 	}
@@ -50,6 +63,7 @@ public enum FrameColor {
 	public BufferedImage getBack(Account acc) {
 		boolean withUlt = !acc.getUltimate().isBlank() && CardDAO.hasCompleted(acc.getUid(), acc.getUltimate(), false);
 		BufferedImage cover = Helper.getResourceAsImage(this.getClass(), "shoukan/frames/card_back_" + name().toLowerCase(Locale.ROOT) + (withUlt ? "_t" : "") + ".png");
+		assert cover != null;
 		BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = canvas.createGraphics();
 

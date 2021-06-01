@@ -37,6 +37,7 @@ import com.kuuhaku.model.persistent.AddedAnime;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -199,7 +200,7 @@ public class KawaiponsCommand implements Executable {
         int foil = (int) collection.stream().filter(KawaiponCard::isFoil).count();
         int common = collection.size() - foil;
 
-        String url = "https://api." + System.getenv("SERVER_URL") + "/collection?id=" + hash;
+        String url = ShiroInfo.COLLECTION_ENDPOINT.formatted(hash);
         eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + s + ")")
                 .setDescription("[Clique para abrir a imagem no navegador](" + url + ")")
                 .addField(":red_envelope: | Cartas normais:", common + " de " + l + " (" + Helper.prcntToInt(common, l) + "%)", true)
@@ -218,7 +219,7 @@ public class KawaiponsCommand implements Executable {
 
         EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-        String url = "https://api." + System.getenv("SERVER_URL") + "/collection?id=" + hash;
+        String url = ShiroInfo.COLLECTION_ENDPOINT.formatted(hash);
         eb.setTitle("\uD83C\uDFB4 | Cartas Senshi (" + s + ")")
                 .setDescription((c == null ? "" : c.getDescription() + "\n\n") + "[Clique para abrir a imagem no navegador](" + url + ")")
                 .setImage(url);
@@ -234,7 +235,7 @@ public class KawaiponsCommand implements Executable {
 
         EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-        String url = "https://api." + System.getenv("SERVER_URL") + "/collection?id=" + hash;
+        String url = ShiroInfo.COLLECTION_ENDPOINT.formatted(hash);
         eb.setTitle("\uD83C\uDFB4 | Cartas Senshi (" + s + ")")
                 .setDescription((r == null ? "" : r.getDescription() + "\n\n") + "[Clique para abrir a imagem no navegador](" + url + ")")
                 .setImage(url);

@@ -1697,8 +1697,21 @@ public class Helper {
 		}
 
 		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics2D = newImage.createGraphics();
-		graphics2D.drawImage(image, 0, 0, w, h, null);
+		Graphics2D g2d = newImage.createGraphics();
+		g2d.drawImage(image, 0, 0, w, h, null);
+		g2d.dispose();
+
+		return newImage;
+	}
+
+	public static BufferedImage scaleImage(BufferedImage image, int prcnt) {
+		int w = image.getWidth() / prcnt;
+		int h = image.getHeight() / prcnt;
+
+		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = newImage.createGraphics();
+		g2d.drawImage(image, 0, 0, w, h, null);
+		g2d.dispose();
 
 		return newImage;
 	}
@@ -1710,8 +1723,9 @@ public class Helper {
 		int offY = Math.min((image.getHeight() - h) / -2, 0);
 
 		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics2D = newImage.createGraphics();
-		graphics2D.drawImage(image, offX, offY, null);
+		Graphics2D g2d = newImage.createGraphics();
+		g2d.drawImage(image, offX, offY, null);
+		g2d.dispose();
 
 		return newImage;
 	}
@@ -2187,7 +2201,7 @@ public class Helper {
 		try {
 			f.createNewFile();
 			FileUtils.writeByteArrayToFile(f, bytes);
-			return "https://api." + System.getenv("SERVER_URL") + "/image?id=" + hash;
+			return ShiroInfo.IMAGE_ENDPOINT.formatted(hash);
 		} catch (IOException e) {
 			return null;
 		}
@@ -2200,7 +2214,7 @@ public class Helper {
 		try {
 			f.createNewFile();
 			FileUtils.writeByteArrayToFile(f, bytes);
-			return "https://api." + System.getenv("SERVER_URL") + "/image?id=" + hash;
+			return ShiroInfo.IMAGE_ENDPOINT.formatted(hash);
 		} catch (IOException e) {
 			return null;
 		}
