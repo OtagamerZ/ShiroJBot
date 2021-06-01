@@ -187,7 +187,6 @@ public class CommonHandler {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8));
-		headers.setContentLength(embedJson.length());
 
 		return new HttpEntity<>(embedJson, headers);
 	}
