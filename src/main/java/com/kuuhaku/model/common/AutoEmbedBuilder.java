@@ -48,7 +48,7 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 		setColor(e.getParsedColor());
 		setDescription(StringUtils.abbreviate(e.getBody(), MessageEmbed.TEXT_MAX_LENGTH));
 		setThumbnail(e.getThumbnail());
-		setImage(e.getImage());
+		setImage(e.getImage().getImage());
 		setTimestamp(LocalDateTime.now());
 
 		setFooter(
