@@ -809,7 +809,7 @@ public class Shoukan extends GlobalGame {
 
 		if (record) {
 			BufferedImage frame = Helper.scaleImage(bi, 784, 610);
-			getFrames().add(new GifFrame(frame, DisposalMethod.RESTORE_TO_BACKGROUND, 784, 610, 0, 0, 0));
+			getFrames().add(new GifFrame(frame, DisposalMethod.DO_NOT_DISPOSE, 784, 610, 0, 0, 0));
 		}
 	}
 
@@ -2183,7 +2183,7 @@ public class Shoukan extends GlobalGame {
 
 		if (!getFrames().isEmpty()) {
 			BufferedImage frame = Helper.scaleImage(arena.render(this, hands), 784, 610);
-			getFrames().add(new GifFrame(frame, DisposalMethod.RESTORE_TO_BACKGROUND, 784, 610, 0, 0, 0));
+			getFrames().add(new GifFrame(frame, DisposalMethod.DO_NOT_DISPOSE, 784, 610, 0, 0, 0));
 		}
 
 		listener.close();
