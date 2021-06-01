@@ -817,12 +817,53 @@ public class Shoukan extends GlobalGame {
 					});
 					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
 					moveLock = false;
-					if (!shownHand.get() && h != null) {
+					if (!shownHand.get()) {
 						shownHand.set(true);
 						h.showHand();
 					}
 
 					if (changeTurn)
+						for (int i = 0; i < 5; i++) changed[i] = false;
+				});
+	}
+
+	private void reportEvent(Side side, String msg) {
+		for (Side s : Side.values()) {
+			List<SlotColumn<Champion, Equipment>> slts = arena.getSlots().get(s);
+
+			for (int i = 0; i < slts.size(); i++) {
+				SlotColumn<Champion, Equipment> slot = slts.get(i);
+				if (slot.getTop() == null) continue;
+
+				Champion c = slot.getTop();
+				if (applyEffect(GAME_TICK, c, i, s, Pair.of(c, i), null)) return;
+			}
+		}
+
+		moveLock = true;
+
+		BufferedImage bi = arena.render(this, hands);
+		Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg");
+		File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setAuthor("Clique aqui para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "/shoukan/shoukan.png")
+				.setImage("attachment://" + f.getName());
+
+		if (side != null) eb.setColor(getHands().get(side).getAcc().getFrame().getColor());
+
+		channel.sendMessage(msg)
+				.embed(eb.build())
+				.addFile(f)
+				.queue(s -> {
+					this.message.compute(s.getChannel().getId(), (id, m) -> {
+						if (m != null)
+							m.delete().queue(null, Helper::doNothing);
+						return s;
+					});
+					Pages.buttonize(s, getButtons(), false, 3, TimeUnit.MINUTES, us -> us.getId().equals(getCurrent().getId()));
+					moveLock = false;
+
+					if (false)
 						for (int i = 0; i < 5; i++) changed[i] = false;
 				});
 	}
@@ -859,7 +900,7 @@ public class Shoukan extends GlobalGame {
 			if (applyEot(POST_ATTACK, current, is[0])) return;
 			if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-			reportEvent(null, "Cálculo de combate ignorado por efeito do atacante!", true, false);
+			reportEvent(current, "Cálculo de combate ignorado por efeito do atacante!");
 			return;
 		}
 
@@ -884,7 +925,7 @@ public class Shoukan extends GlobalGame {
 			if (applyEot(POST_DEFENSE, next, is[1])) return;
 			if (applyEffect(POST_DEFENSE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-			reportEvent(null, "Cálculo de combate ignorado por efeito do defensor!", true, false);
+			reportEvent(next, "Cálculo de combate ignorado por efeito do defensor!");
 		} else {
 			int yPower;
 			if (!yours.getCard().getId().equals("DECOY")) {
@@ -923,7 +964,7 @@ public class Shoukan extends GlobalGame {
 					if (applyEot(ON_DODGE, next, is[1])) return;
 					if (applyEffect(ON_DODGE, his, is[1], next, Pair.of(yours, is[0]), Pair.of(his, is[1]))) return;
 
-					reportEvent(null, his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)", true, false);
+					reportEvent(next, his.getName() + " esquivou do ataque de " + yours.getName() + "! (" + Helper.roundToString(his.getDodge(), 1) + "%)");
 				} else {
 					if (applyEot(POST_ATTACK, current, is[0])) return;
 					if (applyEffect(POST_ATTACK, yours, is[0], current, Pair.of(yours, is[0]), Pair.of(his, is[1])))
@@ -980,13 +1021,13 @@ public class Shoukan extends GlobalGame {
 									sleeping ? " (alvo dormindo: +25%)" : ""
 							);
 
-							reportEvent(null, msg, true, false);
+							reportEvent(current, msg);
 						} else return;
 					} else if (yours.getCard().getId().equals("DECOY")) {
-						reportEvent(null, yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
+						reportEvent(current, yours.getName() + " derrotou " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")");
 					} else {
 						killCard(next, is[1]);
-						reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
+						reportEvent(next, "Essa carta era na verdade uma isca!");
 					}
 				}
 			} else {
@@ -1009,13 +1050,13 @@ public class Shoukan extends GlobalGame {
 					if (!Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 						killCard(current, is[0]);
 						if (!postCombat()) {
-							reportEvent(null, yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")", true, false);
+							reportEvent(next, yours.getCard().getName() + " não conseguiu derrotar " + his.getName() + "! (" + yPower + " < " + hPower + ")");
 						} else return;
 					} else if (his.getCard().getId().equals("DECOY")) {
 						killCard(current, is[0]);
-						reportEvent(null, yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")", true, false);
+						reportEvent(current, yours.getName() + " não conseguiu derrotar " + his.getCard().getName() + "? (" + yPower + " > " + hPower + ")");
 					} else {
-						reportEvent(null, "Essa carta era na verdade uma isca!", true, false);
+						reportEvent(next, "Essa carta era na verdade uma isca!");
 					}
 				} else {
 					if (applyEot(BEFORE_DEATH, next, is[1])) return;
@@ -1030,18 +1071,18 @@ public class Shoukan extends GlobalGame {
 							return;
 
 						if (!postCombat()) {
-							reportEvent(null, "As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")", true, false);
+							reportEvent(null, "As duas cartas foram destruidas! (" + yPower + " = " + hPower + ")");
 						} else return;
 					} else if (Helper.equalsAny("DECOY", yours.getCard().getId(), his.getCard().getId())) {
 						killCard(next, is[1]);
 						killCard(current, is[0]);
-						reportEvent(null, "As duas cartas na verdade eram iscas! (" + yPower + " = " + hPower + ")", true, false);
+						reportEvent(null, "As duas cartas na verdade eram iscas! (" + yPower + " = " + hPower + ")");
 					} else if (his.getCard().getId().equals("DECOY")) {
 						killCard(next, is[1]);
-						reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")", true, false);
+						reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")");
 					} else {
 						killCard(current, is[0]);
-						reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")", true, false);
+						reportEvent(null, "As duas cartas foram destruidas? (" + yPower + " = " + hPower + ")");
 					}
 				}
 			}
@@ -1732,7 +1773,7 @@ public class Shoukan extends GlobalGame {
 				phase = Phase.ATTACK;
 				draw = false;
 				reroll = false;
-				reportEvent(null, "**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate", true, false);
+				reportEvent(current, "**FASE DE ATAQUE:** Escolha uma carta do seu lado e uma carta do lado inimigo para iniciar combate");
 			});
 		if (phase == Phase.PLAN)
 			buttons.put("\uD83D\uDCE4", (mb, ms) -> {
