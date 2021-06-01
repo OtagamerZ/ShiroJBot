@@ -1503,7 +1503,7 @@ public class Shoukan extends GlobalGame {
 
 			ch.clearLinkedTo();
 			ch.setGame(this);
-			ch.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
+			ch.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
 			slts.get(target).setTop(null);
 			for (int i = 0; i < slts.size(); i++) {
 				SlotColumn<Champion, Equipment> sd = slts.get(i);
@@ -1527,7 +1527,7 @@ public class Shoukan extends GlobalGame {
 
 			chi.clearLinkedTo();
 			chi.setGame(this);
-			chi.setAcc(AccountDAO.getAccount(hands.get(from).getUser().getId()));
+			chi.setAcc(AccountDAO.getAccount(hands.get(to).getUser().getId()));
 			slots.get(source).setTop(null);
 			for (int i = 0; i < slots.size(); i++) {
 				SlotColumn<Champion, Equipment> sd = slots.get(i);
