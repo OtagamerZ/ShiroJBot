@@ -807,8 +807,10 @@ public class Shoukan extends GlobalGame {
 						for (int i = 0; i < 5; i++) changed[i] = false;
 				});
 
-		if (record)
-			getFrames().add(new GifFrame(bi, DisposalMethod.RESTORE_TO_BACKGROUND, bi.getWidth(), bi.getHeight(), 0, 0, 0));
+		if (record) {
+			BufferedImage frame = Helper.scaleImage(bi, 784, 610);
+			getFrames().add(new GifFrame(frame, DisposalMethod.RESTORE_TO_BACKGROUND, 784, 610, 0, 0, 0));
+		}
 	}
 
 	public void attack(Side current, Side next, int[] is) {
@@ -2180,8 +2182,8 @@ public class Shoukan extends GlobalGame {
 		}
 
 		if (!getFrames().isEmpty()) {
-			BufferedImage last = arena.render(this, hands);
-			getFrames().add(new GifFrame(last, DisposalMethod.RESTORE_TO_BACKGROUND, last.getWidth(), last.getHeight(), 0, 0, 0));
+			BufferedImage frame = Helper.scaleImage(arena.render(this, hands), 784, 610);
+			getFrames().add(new GifFrame(frame, DisposalMethod.RESTORE_TO_BACKGROUND, 784, 610, 0, 0, 0));
 		}
 
 		listener.close();
