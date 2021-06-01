@@ -250,6 +250,7 @@ public class Shoukan extends GlobalGame {
 				.setColor(h.getAcc().getFrame().getColor())
 				.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
 				.setImage("attachment://" + f.getName());
+		System.out.println(f.getAbsolutePath());
 
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		AtomicReference<String> previous = new AtomicReference<>("");
@@ -1916,7 +1917,6 @@ public class Shoukan extends GlobalGame {
 				BufferedImage bi = arena.render(this, hands);
 				Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg");
 				File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
-				System.out.println(f.getAbsolutePath());
 				EmbedBuilder eb = new EmbedBuilder()
 						.setColor(Color.white)
 						.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
