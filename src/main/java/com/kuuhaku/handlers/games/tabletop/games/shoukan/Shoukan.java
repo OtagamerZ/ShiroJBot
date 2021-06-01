@@ -250,7 +250,6 @@ public class Shoukan extends GlobalGame {
 				.setColor(h.getAcc().getFrame().getColor())
 				.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
 				.setImage("attachment://" + f.getName());
-		System.out.println(f.getAbsolutePath());
 
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		AtomicReference<String> previous = new AtomicReference<>("");
