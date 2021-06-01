@@ -14,7 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria nos embeds customizados">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/AutoEmbedBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/AutoEmbedBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/embed/Embed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/embed/Embed.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1225,20 +1226,6 @@
       <workItem from="1622412361030" duration="1057000" />
       <workItem from="1622462991059" duration="7515000" />
     </task>
-    <task id="LOCAL-04620" summary="Melhoria nas requisições de anime">
-      <created>1622406524730</created>
-      <option name="number" value="04620" />
-      <option name="presentableId" value="LOCAL-04620" />
-      <option name="project" value="LOCAL" />
-      <updated>1622406524730</updated>
-    </task>
-    <task id="LOCAL-04621" summary="Melhoria nas requisições de anime">
-      <created>1622406726292</created>
-      <option name="number" value="04621" />
-      <option name="presentableId" value="LOCAL-04621" />
-      <option name="project" value="LOCAL" />
-      <updated>1622406726292</updated>
-    </task>
     <task id="LOCAL-04622" summary="Melhoria nas requisições de anime">
       <created>1622406953243</created>
       <option name="number" value="04622" />
@@ -1568,7 +1555,21 @@
       <option name="project" value="LOCAL" />
       <updated>1622576338503</updated>
     </task>
-    <option name="localTasksCounter" value="4669" />
+    <task id="LOCAL-04669" summary="Melhoria nos embeds customizados">
+      <created>1622576932538</created>
+      <option name="number" value="04669" />
+      <option name="presentableId" value="LOCAL-04669" />
+      <option name="project" value="LOCAL" />
+      <updated>1622576932538</updated>
+    </task>
+    <task id="LOCAL-04670" summary="Melhoria nos embeds customizados">
+      <created>1622577111070</created>
+      <option name="number" value="04670" />
+      <option name="presentableId" value="LOCAL-04670" />
+      <option name="project" value="LOCAL" />
+      <updated>1622577111070</updated>
+    </task>
+    <option name="localTasksCounter" value="4671" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
