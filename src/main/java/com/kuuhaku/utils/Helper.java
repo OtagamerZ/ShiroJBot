@@ -1696,7 +1696,7 @@ public class Helper {
 			w = (int) (h * aspectRatio);
 		}
 
-		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage newImage = new BufferedImage(w, h, image.getType());
 		Graphics2D g2d = newImage.createGraphics();
 		g2d.drawImage(image, 0, 0, w, h, null);
 		g2d.dispose();
@@ -1708,7 +1708,7 @@ public class Helper {
 		int w = image.getWidth() / prcnt;
 		int h = image.getHeight() / prcnt;
 
-		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage newImage = new BufferedImage(w, h, image.getType());
 		Graphics2D g2d = newImage.createGraphics();
 		g2d.drawImage(image, 0, 0, w, h, null);
 		g2d.dispose();
@@ -1722,7 +1722,7 @@ public class Helper {
 		int offX = Math.min((image.getWidth() - w) / -2, 0);
 		int offY = Math.min((image.getHeight() - h) / -2, 0);
 
-		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage newImage = new BufferedImage(w, h, image.getType());
 		Graphics2D g2d = newImage.createGraphics();
 		g2d.drawImage(image, offX, offY, null);
 		g2d.dispose();
