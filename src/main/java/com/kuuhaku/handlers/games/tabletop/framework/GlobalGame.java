@@ -29,7 +29,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.common.DailyQuest;
 import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.enums.DailyTask;
-import com.kuuhaku.model.enums.RankedQueue;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.MatchHistory;
 import com.kuuhaku.model.persistent.MatchMakingRating;
@@ -79,15 +78,6 @@ public abstract class GlobalGame {
 	}
 
 	public GlobalGame(ShardManager handler, Board board, GameChannel channel, boolean ranked, JSONObject custom) {
-		this.handler = handler;
-		this.board = board;
-		this.channel = channel;
-		this.current = handler.getUserById(board.getPlayers().getCurrent().getId());
-		this.ranked = ranked;
-		this.custom = custom;
-	}
-
-	public GlobalGame(ShardManager handler, Board board, GameChannel channel, boolean ranked, JSONObject custom, RankedQueue queue) {
 		this.handler = handler;
 		this.board = board;
 		this.channel = channel;
