@@ -90,7 +90,7 @@ public class Embed {
 		this.image = value;
 	}
 
-	public boolean showDate() {
+	public boolean getShowDate() {
 		return showDate;
 	}
 
