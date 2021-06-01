@@ -1,50 +1,51 @@
-"title": {
-"name": "Texto do título",
-"url": "O link a ser acessado ao clicar no título"
-},
-"author": {
-"name": "Texto do mini-título",
-"url": "O link a ser acessado ao clicar no mini-título",
-"icon": "Ícone a ser exibido à esquerda do mini-título"
-},
-"color": "Cor da faixa à esquerda do embed (deve estar em formato hexadecimal - #RRGGBB)",
-"body": "Texto do corpo do embed",
-"thumbnail": "Ícone no canto superior direito do embed",
-"image": {
-"image": "Imagem exibida na parte inferior do embed",
-"join": "Imagem exibida na parte inferior do embed quando um membro entrar no servidor",
-"leave": "Imagem exibida na parte inferior do embed quando um membro sair do servidor"
-},
-"showDate": "true ou false - Exibe o marcador de quando o embed foi enviado",
-"footer": {
-"name": "Texto do rodapé",
-"icon": "Ícone a ser exibido à esquerda do rodapé"
-},
-"fields": [
 {
-"name": "Nome do campo 1",
-"value": "Texto do campo 1",
-"inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
-},
-{
-"name": "Nome do campo 2",
-"value": "Texto do campo 2",
-"inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
-},
-{
-"name": "Nome do campo 3",
-"value": "Texto do campo 3",
-"inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
-},
-{
-"name": "Nome do campo 4",
-"value": "Texto do campo 4",
-"inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
-},
-{
-"name": "Nome do campo 5",
-"value": "Texto do campo 5",
-"inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
-}
-]
+  "title": {
+    "name": "Texto do título",
+    "url": "O link a ser acessado ao clicar no título"
+  },
+  "author": {
+    "name": "Texto do mini-título",
+    "url": "O link a ser acessado ao clicar no mini-título",
+    "icon": "Ícone a ser exibido à esquerda do mini-título"
+  },
+  "color": "Cor da faixa à esquerda do embed (deve estar em formato hexadecimal - #RRGGBB)",
+  "body": "Texto do corpo do embed",
+  "thumbnail": "Ícone no canto superior direito do embed",
+  "image": {
+    "image": "Imagem exibida na parte inferior do embed",
+    "join": "Imagem exibida na parte inferior do embed quando um membro entrar no servidor",
+    "leave": "Imagem exibida na parte inferior do embed quando um membro sair do servidor"
+  },
+  "showDate": "true ou false - Exibe o marcador de quando o embed foi enviado",
+  "footer": {
+    "name": "Texto do rodapé",
+    "icon": "Ícone a ser exibido à esquerda do rodapé"
+  },
+  "fields": [
+    {
+      "name": "Nome do campo 1",
+      "value": "Texto do campo 1",
+      "inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
+    },
+    {
+      "name": "Nome do campo 2",
+      "value": "Texto do campo 2",
+      "inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
+    },
+    {
+      "name": "Nome do campo 3",
+      "value": "Texto do campo 3",
+      "inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
+    },
+    {
+      "name": "Nome do campo 4",
+      "value": "Texto do campo 4",
+      "inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
+    },
+    {
+      "name": "Nome do campo 5",
+      "value": "Texto do campo 5",
+      "inline": "true ou false - Exibe o campo na mesma fileira que outros campos ou sozinho"
+    }
+  ]
 }
