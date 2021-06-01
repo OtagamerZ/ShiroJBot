@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.User;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +48,7 @@ public class DashboardHandler {
 	@RequestMapping(value = "/auth", method = RequestMethod.GET)
 	public void validateAccount(HttpServletResponse http, @RequestParam(value = "code", defaultValue = "") String code, @RequestParam(value = "error", defaultValue = "") String error) throws InterruptedException {
 		if (!error.isBlank()) {
-			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/");
+			http.setHeader("Location", ShiroInfo.SITE_ROOT);
 			http.setStatus(HttpServletResponse.SC_FOUND);
 			return;
 		}
@@ -58,7 +59,7 @@ public class DashboardHandler {
 		jo.put("client_secret", System.getenv("BOT_SECRET"));
 		jo.put("grant_type", "authorization_code");
 		jo.put("code", code);
-		jo.put("redirect_uri", "https://api." + System.getenv("SERVER_URL") + "/auth");
+		jo.put("redirect_uri", ShiroInfo.API_ROOT + "/auth");
 		jo.put("scope", "identify");
 
 		JSONObject token = null;
@@ -78,18 +79,18 @@ public class DashboardHandler {
 			String session = URLEncoder.encode(Helper.generateToken(u.getId(), 16), StandardCharsets.UTF_8);
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
-				http.setHeader("Location", "https://" + System.getenv("SERVER_URL") + "/Unauthorized");
+				http.setHeader("Location", ShiroInfo.SITE_ROOT + "/Unauthorized");
 				http.setStatus(HttpServletResponse.SC_FOUND);
 				return;
 			}
-			http.setHeader("Location", "https://" + System.getenv("SERVER_URL") + "/Loading?s=" + session);
+			http.setHeader("Location", ShiroInfo.SITE_ROOT + "/Loading?s=" + session);
 			http.setStatus(HttpServletResponse.SC_FOUND);
 
 			user.put("token", t);
 			Main.getInfo().getSockets().getDashboard().addReadyData(new ReadyData(user, session), session);
 			Helper.logger(this.getClass()).debug("Received partial login request from session " + session + " (Discord oAuth2)");
 		} else {
-			http.setHeader("Location", "https://" + System.getenv("SERVER_URL") + "/Unauthorized");
+			http.setHeader("Location", ShiroInfo.SITE_ROOT + "/Unauthorized");
 			http.setStatus(HttpServletResponse.SC_FOUND);
 		}
 	}
