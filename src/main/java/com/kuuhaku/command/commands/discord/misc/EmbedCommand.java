@@ -24,16 +24,14 @@ import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.model.annotations.Command;
 import com.kuuhaku.model.annotations.Requires;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.AutoEmbedBuilder;
+import com.kuuhaku.model.common.embed.Embed;
 import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
-import java.awt.*;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -50,7 +48,7 @@ public class EmbedCommand implements Executable {
 		channel.sendMessage("<a:loading:697879726630502401> Construindo embed...").queue(m -> {
 			if (Helper.hasPermission(member, PrivilegeLevel.MOD) && args.length > 0 && Helper.equalsAny(args[0], "reset", "resetar")) {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-				gc.setEmbedTemplate(new JSONObject());
+				gc.setEmbedTemplate(new Embed());
 				GuildDAO.updateGuildSettings(gc);
 
 				m.delete().queue(null, Helper::doNothing);
@@ -59,29 +57,7 @@ public class EmbedCommand implements Executable {
 			}
 
 			try {
-				JSONObject json = new JSONObject(String.join(" ", args));
-
-				EmbedBuilder eb;
-				if (json.has("color")) eb = new EmbedBuilder();
-				else eb = new ColorlessEmbedBuilder();
-
-				if (json.has("title")) eb.setTitle(json.getString("title"));
-				if (json.has("color")) eb.setColor(Color.decode(json.getString("color")));
-				if (json.has("thumbnail")) eb.setThumbnail(json.getString("thumbnail"));
-				if (json.has("image")) eb.setImage(json.getString("image"));
-				eb.setDescription(json.getString("body", Helper.VOID));
-
-				if (json.has("fields")) {
-					for (Object j : json.getJSONArray("fields")) {
-						try {
-							JSONObject jo = (JSONObject) j;
-							eb.addField(jo.getString("name"), jo.getString("value"), true);
-						} catch (Exception ignore) {
-						}
-					}
-				}
-
-				if (json.has("footer")) eb.setFooter(json.getString("footer"), null);
+				AutoEmbedBuilder eb = new AutoEmbedBuilder(argsAsText);
 
 				m.delete().queue(null, Helper::doNothing);
 				if (Helper.hasPermission(member, PrivilegeLevel.MOD))
@@ -90,7 +66,7 @@ public class EmbedCommand implements Executable {
 							.queue(s ->
 									Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 												GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-												gc.setEmbedTemplate(json);
+												gc.setEmbedTemplate(eb.getEmbed());
 												GuildDAO.updateGuildSettings(gc);
 
 												s.delete().queue(null, Helper::doNothing);
@@ -106,7 +82,7 @@ public class EmbedCommand implements Executable {
 				else
 					channel.sendMessage(eb.build()).queue();
 			} catch (IllegalStateException ex) {
-				m.editMessage("❌ | JSON em formato inválido, recomendo utilizar este site para checar se está tudo correto: https://jsonlint.com/.").queue();
+				m.editMessage("❌ | JSON em formato inválido, um exemplo da estrutura do embed pode ser encontrado em https://api.shirojbot.site/embedjson").queue();
 			} catch (Exception e) {
 				m.editMessage("❌ | Erro ao construir embed, talvez você não tenha passado nenhum argumento.").queue();
 			}
