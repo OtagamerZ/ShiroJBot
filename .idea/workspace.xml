@@ -13,21 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <change afterPath="$PROJECT_DIR$/embed_example.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/embed/Author.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/embed/Embed.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/embed/Field.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/embed/Footer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/embed/Image.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/embed/Title.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EmbedCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EmbedCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/AutoEmbedBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/AutoEmbedBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/guild/GuildConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/cmd/locale_pt.properties" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria nos embeds customizados">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1238,13 +1225,6 @@
       <workItem from="1622412361030" duration="1057000" />
       <workItem from="1622462991059" duration="7515000" />
     </task>
-    <task id="LOCAL-04615" summary="Correções menores">
-      <created>1622399893151</created>
-      <option name="number" value="04615" />
-      <option name="presentableId" value="LOCAL-04615" />
-      <option name="project" value="LOCAL" />
-      <updated>1622399893151</updated>
-    </task>
     <task id="LOCAL-04616" summary="Correções menores">
       <created>1622399960096</created>
       <option name="number" value="04616" />
@@ -1581,7 +1561,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622570589074</updated>
     </task>
-    <option name="localTasksCounter" value="4664" />
+    <task id="LOCAL-04664" summary="Melhoria nos embeds customizados">
+      <created>1622575305513</created>
+      <option name="number" value="04664" />
+      <option name="presentableId" value="LOCAL-04664" />
+      <option name="project" value="LOCAL" />
+      <updated>1622575305513</updated>
+    </task>
+    <option name="localTasksCounter" value="4665" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1668,7 +1655,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de penalidade por inatividade em rankings maiores que Adepto IV" />
     <MESSAGE value="Correção no comando prune" />
     <MESSAGE value="Implementação de novos métodos" />
     <MESSAGE value="Implementação de novos métodos nos equipamentos" />
@@ -1693,7 +1679,8 @@
     <MESSAGE value="Aumento no custo dos upgrades de servidor" />
     <MESSAGE value="Adição de punição por não gastar créditos" />
     <MESSAGE value="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;" />
+    <MESSAGE value="Melhoria nos embeds customizados" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhoria nos embeds customizados" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
