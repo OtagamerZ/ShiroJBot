@@ -57,7 +57,7 @@ public class Embed {
 
 	public Color getParsedColor() {
 		try {
-			return Color.decode(color);
+			return Color.decode(Helper.getOr(color, ""));
 		} catch (NumberFormatException e) {
 			return null;
 		}
