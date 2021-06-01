@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.framework;
 
 import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
@@ -27,6 +28,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.common.DailyQuest;
+import com.kuuhaku.model.common.GifFrame;
 import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
@@ -41,10 +43,9 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -60,6 +61,7 @@ public abstract class GlobalGame {
 	private final MatchHistory history = new MatchHistory();
 	private final Map<String, Double> divergence = new HashMap<>();
 	private final boolean ranked;
+	private final List<GifFrame> frames = new ArrayList<>();
 	private Consumer<Message> onExpiration;
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
@@ -261,6 +263,14 @@ public abstract class GlobalGame {
 		return divergence;
 	}
 
+	public boolean isRanked() {
+		return ranked;
+	}
+
+	public List<GifFrame> getFrames() {
+		return frames;
+	}
+
 	public abstract Map<String, ThrowingBiConsumer<Member, Message>> getButtons();
 
 	public GameChannel getChannel() {
@@ -339,6 +349,17 @@ public abstract class GlobalGame {
 
 					MatchMakingRatingDAO.saveMMR(yourMMR);
 				}
+			}
+		}
+
+		if (!frames.isEmpty()) {
+			try {
+				File f = File.createTempFile(String.valueOf(this.hashCode()), "gif", Main.getInfo().getTemporaryFolder());
+				Helper.makeGIF(f, getFrames(), 0, 1000, 7);
+
+				channel.sendFile(f).queue();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}

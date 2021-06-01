@@ -23,7 +23,6 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ThrowingBiConsumer;
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
@@ -54,8 +53,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.util.CollectionUtils;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -90,7 +87,6 @@ public class Shoukan extends GlobalGame {
 			Side.BOTTOM, new HashMap<>()
 	);
 	private final List<EffectOverTime> eot = new ArrayList<>();
-	private final List<GifFrame> frames = new ArrayList<>();
 
 	private Phase phase = Phase.PLAN;
 	private boolean draw = false;
@@ -812,7 +808,7 @@ public class Shoukan extends GlobalGame {
 				});
 
 		if (record)
-			frames.add(new GifFrame(bi, DisposalMethod.RESTORE_TO_BACKGROUND, bi.getWidth(), bi.getHeight(), 0, 0, 0));
+			getFrames().add(new GifFrame(bi, DisposalMethod.RESTORE_TO_BACKGROUND, bi.getWidth(), bi.getHeight(), 0, 0, 0));
 	}
 
 	public void attack(Side current, Side next, int[] is) {
@@ -2183,15 +2179,9 @@ public class Shoukan extends GlobalGame {
 			}
 		}
 
-		if (!frames.isEmpty()) {
-			try {
-				File f = File.createTempFile(String.valueOf(this.hashCode()), "gif", Main.getInfo().getTemporaryFolder());
-				Helper.makeGIF(f, frames, 0, 1000, 7);
-
-				channel.sendFile(f).queue();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if (!getFrames().isEmpty()) {
+			BufferedImage last = arena.render(this, hands);
+			getFrames().add(new GifFrame(last, DisposalMethod.RESTORE_TO_BACKGROUND, last.getWidth(), last.getHeight(), 0, 0, 0));
 		}
 
 		listener.close();
