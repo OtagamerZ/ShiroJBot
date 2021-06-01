@@ -357,7 +357,7 @@ public abstract class GlobalGame {
 				File f = File.createTempFile(String.valueOf(this.hashCode()), ".gif", Main.getInfo().getTemporaryFolder());
 				Helper.makeGIF(f, getFrames(), 0, 1000, 7);
 
-				channel.sendFile(f).queue();
+				channel.sendFile(f).queue(null, Helper::doNothing);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
