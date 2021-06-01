@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de replay no Shoukan">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1225,20 +1225,6 @@
       <workItem from="1622412361030" duration="1057000" />
       <workItem from="1622462991059" duration="7515000" />
     </task>
-    <task id="LOCAL-04628" summary="Melhoria nas requisições de anime">
-      <created>1622410364529</created>
-      <option name="number" value="04628" />
-      <option name="presentableId" value="LOCAL-04628" />
-      <option name="project" value="LOCAL" />
-      <updated>1622410364529</updated>
-    </task>
-    <task id="LOCAL-04629" summary="Aumento no custo dos upgrades de servidor">
-      <created>1622411855565</created>
-      <option name="number" value="04629" />
-      <option name="presentableId" value="LOCAL-04629" />
-      <option name="project" value="LOCAL" />
-      <updated>1622411855566</updated>
-    </task>
     <task id="LOCAL-04630" summary="Aumento no custo dos upgrades de servidor">
       <created>1622412549092</created>
       <option name="number" value="04630" />
@@ -1568,7 +1554,21 @@
       <option name="project" value="LOCAL" />
       <updated>1622580691304</updated>
     </task>
-    <option name="localTasksCounter" value="4677" />
+    <task id="LOCAL-04677" summary="Adição de replay no Shoukan">
+      <created>1622580942788</created>
+      <option name="number" value="04677" />
+      <option name="presentableId" value="LOCAL-04677" />
+      <option name="project" value="LOCAL" />
+      <updated>1622580942788</updated>
+    </task>
+    <task id="LOCAL-04678" summary="Adição de replay no Shoukan">
+      <created>1622580983122</created>
+      <option name="number" value="04678" />
+      <option name="presentableId" value="LOCAL-04678" />
+      <option name="project" value="LOCAL" />
+      <updated>1622580983122</updated>
+    </task>
+    <option name="localTasksCounter" value="4679" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
