@@ -47,6 +47,7 @@ import java.util.stream.Stream;
 public class TeamHand extends Hand {
 	private final Pair<Race, Race> combo;
 	private final InfiniteList<String> users = new InfiniteList<>();
+	private final InfiniteList<Account> accs = new InfiniteList<>();
 	private final InfiniteList<LinkedList<Drawable>> deques = new InfiniteList<>();
 	private final InfiniteList<List<Drawable>> cards = new InfiniteList<>();
 	private final InfiniteList<List<Drawable>> destinyDecks = new InfiniteList<>();
@@ -66,7 +67,9 @@ public class TeamHand extends Hand {
 
 			List<Drawable> destinyDeck = new ArrayList<>();
 
+			Account acc = AccountDAO.getAccount(user.getId());
 			this.users.add(user.getId());
+			this.accs.add(acc);
 
 			if (game.getCustom() != null) {
 				if (game.getCustom().getBoolean("semequip"))
@@ -99,7 +102,7 @@ public class TeamHand extends Hand {
 						Field f = CardDAO.getField("OTHERWORLD");
 						assert f != null;
 						f.setGame(game);
-						f.setAcc(AccountDAO.getAccount(user.getId()));
+						f.setAcc(acc);
 						game.getArena().setField(f);
 						deque.removeIf(d -> d instanceof Champion || d instanceof Field);
 						for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
@@ -131,7 +134,6 @@ public class TeamHand extends Hand {
 				deque.remove(drawable);
 			}
 
-			Account acc = AccountDAO.getAccount(user.getId());
 			for (Drawable d : deque) {
 				d.setGame(game);
 				d.setAcc(acc);
@@ -475,10 +477,18 @@ public class TeamHand extends Hand {
 		return Main.getInfo().getUserByID(users.getCurrent());
 	}
 
+	public Account getAcc() {
+		return accs.getCurrent();
+	}
+
 	public InfiniteList<User> getUsers() {
 		return users.stream()
 				.map(Main.getInfo()::getUserByID)
 				.collect(Collectors.toCollection(InfiniteList::new));
+	}
+
+	public InfiniteList<Account> getAccs() {
+		return accs;
 	}
 
 	public Pair<Race, Race> getCombo() {

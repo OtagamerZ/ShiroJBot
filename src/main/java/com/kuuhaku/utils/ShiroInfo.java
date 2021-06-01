@@ -59,6 +59,11 @@ public class ShiroInfo {
 	public static final String NERO_AVATAR = RESOURCES_URL + "/avatar/nero/%s.png";
 	public static final String USATAN_AVATAR = RESOURCES_URL + "/avatar/usa-tan/%s.png";
 
+	public static final String SITE_ROOT = "https://" + System.getenv("SERVER_URL");
+	public static final String API_ROOT = "https://api." + System.getenv("SERVER_URL");
+	public static final String IMAGE_ENDPOINT = API_ROOT + "/image?id=%s";
+	public static final String COLLECTION_ENDPOINT = API_ROOT + "/collection?id=%s";
+
 	//PRIVATE CONSTANTS
 	private static final OperatingSystemMXBean systemInfo = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean());
 	private static final ThreadPoolExecutor compilationPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
