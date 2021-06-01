@@ -170,9 +170,14 @@ public class BuyCardCommand implements Executable {
 						case FIELD -> m.getRawCard().getName();
 						default -> ((KawaiponCard) m.getCard()).getName();
 					};
+					String rarity = switch (m.getType()) {
+						case EVOGEAR -> "Equipamento";
+						case FIELD -> "Campo";
+						default -> m.getRawCard().getRarity().toString();
+					};
 
 					eb.addField(
-							"`ID: " + m.getId() + "` | " + name + " (" + m.getRawCard().getRarity().toString() + ")",
+							"`ID: " + m.getId() + "` | " + name + " (" + rarity + ")",
 							blackfriday ?
 									"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: " + (m.getPrice() > m.getPriceLimit() ? "**`valor muito alto`**" : "~~" + Helper.separate(m.getPrice()) + "~~ **" + Helper.separate(Math.round(m.getPrice() * 0.75)) + "** créditos")
 									:
