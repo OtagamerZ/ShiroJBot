@@ -176,4 +176,19 @@ public class CommonHandler {
 
 		return new HttpEntity<>(readme, headers);
 	}
+
+	@RequestMapping(value = "/embedjson", method = RequestMethod.GET)
+	public @ResponseBody
+	HttpEntity<String> serveEmbedJson() throws IOException {
+		File f = new File("embed_example.json");
+		if (!f.exists()) throw new FileNotFoundException();
+
+		String embedJson = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8));
+		headers.setContentLength(embedJson.length());
+
+		return new HttpEntity<>(embedJson, headers);
+	}
 }

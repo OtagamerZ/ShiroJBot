@@ -26,8 +26,10 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.DailyQuest;
+import com.kuuhaku.model.common.embed.Embed;
 import com.kuuhaku.model.enums.BotExchange;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.enums.I18n;
@@ -37,7 +39,6 @@ import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.guild.LevelRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONArray;
-import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -540,10 +541,10 @@ public class ShiroEvents extends ListenerAdapter {
 				BufferedImage image = ImageIO.read(con.getInputStream());
 
 				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
-				JSONObject template = temp.isBlank() ? new JSONObject() : new JSONObject(temp);
 				EmbedBuilder eb;
-				if (!template.isEmpty()) {
-					eb = new EmbedBuilder()
+				if (!temp.isEmpty()) {
+					Embed e = gc.getEmbedTemplate();
+					eb = new AutoEmbedBuilder(e)
 							.setTitle(
 									switch (Helper.rng(5, true)) {
 										case 0 -> "Opa, parece que temos um novo membro?";
@@ -552,32 +553,23 @@ public class ShiroEvents extends ListenerAdapter {
 										case 3 -> "Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!";
 										case 4 -> "Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!";
 										default -> "";
-									}
+									},
+									e.getTitle().getUrl()
 							);
 
-					if (template.has("color")) eb.setColor(Color.decode(template.getString("color")));
+					if (e.getColor() != null) eb.setColor(e.getParsedColor());
 					else eb.setColor(Helper.colorThief(image));
 
-					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
+					if (e.getThumbnail() != null) eb.setThumbnail(e.getThumbnail());
 					else eb.setThumbnail(author.getEffectiveAvatarUrl());
 
-					if (template.has("joinImage")) eb.setImage(template.getString("joinImage"));
-					else if (template.has("image")) eb.setImage(template.getString("image"));
+					if (e.getImage().getJoin() != null) eb.setImage(e.getImage().getJoin());
 
 					eb.setDescription(Helper.replaceTags(gc.getWelcomeMessage(), author, guild));
 
-					if (template.has("fields")) {
-						for (Object j : template.getJSONArray("fields")) {
-							try {
-								JSONObject jo = (JSONObject) j;
-								eb.addField(jo.getString("name"), jo.getString("value"), true);
-							} catch (Exception ignore) {
-							}
-						}
-					}
-
-					if (template.has("footer")) eb.setFooter(template.getString("footer"), null);
-					else eb.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
+					if (e.getFooter().getName() != null) eb.setFooter(e.getFooter().getName(), e.getFooter().getIcon());
+					else
+						eb.setFooter("ID do usuário: " + author.getId(), Helper.getOr(e.getFooter().getIcon(), guild.getIconUrl()));
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(
@@ -627,10 +619,10 @@ public class ShiroEvents extends ListenerAdapter {
 				BufferedImage image = ImageIO.read(con.getInputStream());
 
 				String temp = Helper.replaceTags(gc.getEmbedTemplateRaw(), author, guild);
-				JSONObject template = temp.isBlank() ? new JSONObject() : new JSONObject(temp);
 				EmbedBuilder eb;
-				if (!template.isEmpty()) {
-					eb = new EmbedBuilder()
+				if (!temp.isEmpty()) {
+					Embed e = gc.getEmbedTemplate();
+					eb = new AutoEmbedBuilder(e)
 							.setTitle(
 									switch (Helper.rng(5, true)) {
 										case 0 -> "Nãããoo...um membro deixou este servidor!";
@@ -639,32 +631,23 @@ public class ShiroEvents extends ListenerAdapter {
 										case 3 -> "Bem, alguém não está mais neste servidor, que pena!";
 										case 4 -> "Saíram do servidor bem no meio de uma teamfight, da pra acreditar?";
 										default -> "";
-									}
+									},
+									e.getTitle().getUrl()
 							);
 
-					if (template.has("color")) eb.setColor(Color.decode(template.getString("color")));
+					if (e.getColor() != null) eb.setColor(e.getParsedColor());
 					else eb.setColor(Helper.colorThief(image));
 
-					if (template.has("thumbnail")) eb.setThumbnail(template.getString("thumbnail"));
+					if (e.getThumbnail() != null) eb.setThumbnail(e.getThumbnail());
 					else eb.setThumbnail(author.getEffectiveAvatarUrl());
 
-					if (template.has("leaveImage")) eb.setImage(template.getString("leaveImage"));
-					else if (template.has("image")) eb.setImage(template.getString("image"));
+					if (e.getImage().getLeave() != null) eb.setImage(e.getImage().getLeave());
 
 					eb.setDescription(Helper.replaceTags(gc.getByeMessage(), author, guild));
 
-					if (template.has("fields")) {
-						for (Object j : template.getJSONArray("fields")) {
-							try {
-								JSONObject jo = (JSONObject) j;
-								eb.addField(jo.getString("name"), jo.getString("value"), true);
-							} catch (Exception ignore) {
-							}
-						}
-					}
-
-					if (template.has("footer")) eb.setFooter(template.getString("footer"), null);
-					else eb.setFooter("ID do usuário: " + author.getId(), guild.getIconUrl());
+					if (e.getFooter().getName() != null) eb.setFooter(e.getFooter().getName(), e.getFooter().getIcon());
+					else
+						eb.setFooter("ID do usuário: " + author.getId(), Helper.getOr(e.getFooter().getIcon(), guild.getIconUrl()));
 				} else {
 					eb = new EmbedBuilder()
 							.setTitle(
