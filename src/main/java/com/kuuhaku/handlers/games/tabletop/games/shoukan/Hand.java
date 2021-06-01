@@ -45,13 +45,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Hand {
-	private Shoukan game;
-	private String user;
-	private Pair<Race, Race> combo;
+	private final Shoukan game;
+	private final Account acc;
+	private final Side side;
+	private final String user;
 	private final LinkedList<Drawable> deque = new LinkedList<>();
 	private final List<Drawable> cards = new ArrayList<>();
 	private final List<Drawable> destinyDeck = new ArrayList<>();
-	private Side side;
+	private Pair<Race, Race> combo;
 	private int baseHp;
 	private int baseManaPerTurn;
 	private int maxCards = 0;
@@ -64,36 +65,34 @@ public class Hand {
 	private int nullTime = 0;
 
 	public Hand(Shoukan game, User user, Deck dk, Side side, Clan clan) {
+		this.game = game;
+		this.side = side;
 		if (user == null) {
-			this.game = game;
-			this.side = side;
+			this.user = null;
+			this.acc = null;
 			return;
 		}
+
+		this.user = user.getId();
+		this.acc = AccountDAO.getAccount(user.getId());
 
 		game.getDivergence().put(user.getId(), dk.getAverageDivergence());
 
 		setData(
-				game,
-				user,
 				dk.getChampions(),
 				dk.getEquipments(),
 				dk.getFields(),
 				dk.getDestinyDraw(),
-				side,
 				clan
 		);
 	}
 
-	private void setData(Shoukan game, User user, List<Champion> champs, List<Equipment> equips, List<Field> fields, List<Integer> destinyDraw, Side side, Clan cl) {
+	private void setData(List<Champion> champs, List<Equipment> equips, List<Field> fields, List<Integer> destinyDraw, Clan cl) {
 		deque.addAll(
 				Stream.of(champs, equips, fields)
 						.flatMap(List::stream)
 						.collect(Collectors.toList())
 		);
-
-		this.user = user.getId();
-		this.side = side;
-		this.game = game;
 
 		int baseHp;
 		int baseManaPerTurn;
@@ -133,7 +132,7 @@ public class Hand {
 				case "blackrock" -> {
 					Field f = CardDAO.getField("OTHERWORLD");
 					assert f != null;
-					f.setAcc(AccountDAO.getAccount(user.getId()));
+					f.setAcc(acc);
 					game.getArena().setField(f);
 					deque.removeIf(d -> d instanceof Champion || d instanceof Field);
 					for (String name : new String[]{"MATO_KUROI", "SAYA_IRINO", "YOMI_TAKANASHI", "YUU_KOUTARI", "TAKU_KATSUCHI", "KAGARI_IZURIHA"}) {
@@ -188,7 +187,6 @@ public class Hand {
 			deque.remove(drawable);
 		}
 
-		Account acc = AccountDAO.getAccount(user.getId());
 		for (Drawable d : deque) {
 			d.setGame(game);
 			d.setAcc(acc);
@@ -385,6 +383,10 @@ public class Hand {
 
 	public Shoukan getGame() {
 		return game;
+	}
+
+	public Account getAcc() {
+		return acc;
 	}
 
 	public User getUser() {
