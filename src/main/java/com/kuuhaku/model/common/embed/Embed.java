@@ -21,7 +21,6 @@ package com.kuuhaku.model.common.embed;
 import com.kuuhaku.utils.Helper;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Embed {
@@ -108,7 +107,7 @@ public class Embed {
 	}
 
 	public List<Field> getFields() {
-		return Helper.getOr(fields, new ArrayList<Field>()).subList(0, 25);
+		return Helper.getOr(fields, List.of());
 	}
 
 	public void setFields(List<Field> value) {
