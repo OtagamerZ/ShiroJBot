@@ -18,10 +18,59 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.model.common.embed.Embed;
+import com.kuuhaku.model.common.embed.Field;
+import com.kuuhaku.utils.JSONUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.apache.commons.lang3.StringUtils;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class AutoEmbedBuilder extends EmbedBuilder {
-	public AutoEmbedBuilder(String json) {
+	private final Embed e;
 
+	public AutoEmbedBuilder(Embed embed) {
+		e = embed;
+
+		setTitle(
+				StringUtils.abbreviate(e.getTitle().getName(), MessageEmbed.TITLE_MAX_LENGTH),
+				e.getTitle().getUrl()
+		);
+
+		setAuthor(
+				StringUtils.abbreviate(e.getAuthor().getName(), MessageEmbed.AUTHOR_MAX_LENGTH),
+				e.getAuthor().getUrl(),
+				e.getAuthor().getIcon()
+		);
+
+		setColor(e.getParsedColor());
+		setDescription(StringUtils.abbreviate(e.getBody(), MessageEmbed.TEXT_MAX_LENGTH));
+		setThumbnail(e.getThumbnail());
+		setImage(e.getImage());
+		setTimestamp(LocalDateTime.now());
+
+		setFooter(
+				StringUtils.abbreviate(e.getFooter().getName(), MessageEmbed.TEXT_MAX_LENGTH),
+				e.getFooter().getIcon()
+		);
+
+		List<Field> fields = e.getFields();
+		for (Field field : fields) {
+			addField(
+					StringUtils.abbreviate(field.getName(), MessageEmbed.TITLE_MAX_LENGTH),
+					StringUtils.abbreviate(field.getValue(), MessageEmbed.VALUE_MAX_LENGTH),
+					field.getInline()
+			);
+		}
+	}
+
+	public AutoEmbedBuilder(String json) {
+		this(JSONUtils.fromJSON(json, Embed.class));
+	}
+
+	public Embed getEmbed() {
+		return e;
 	}
 }
