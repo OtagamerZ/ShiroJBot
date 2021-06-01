@@ -2780,8 +2780,35 @@ public class Helper {
 			gif.finish();
 		}
 
-		try {
+		if (compress > 0) try {
 			Process p = Runtime.getRuntime().exec("mogrify -layers 'optimize' -fuzz " + compress + "% " + f.getAbsolutePath());
+			p.waitFor();
+		} catch (InterruptedException ignore) {
+		}
+	}
+
+	public static void makeGIF(File f, List<GifFrame> frames, int repeat, int delay, int compress, int colors) throws IOException {
+		try (ImageOutputStream ios = new FileImageOutputStream(f)) {
+			GifSequenceWriter gif = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
+			for (GifFrame frame : frames) {
+				gif.writeToSequence(
+						frame.getAdjustedFrame(),
+						frame.getDisposal().ordinal(),
+						delay == -1 ? frame.getDelay() : delay,
+						repeat
+				);
+			}
+			gif.finish();
+		}
+
+		if (compress > 0) try {
+			Process p = Runtime.getRuntime().exec("mogrify -layers 'optimize' -fuzz " + compress + "% " + f.getAbsolutePath());
+			p.waitFor();
+		} catch (InterruptedException ignore) {
+		}
+
+		if (colors > 0) try {
+			Process p = Runtime.getRuntime().exec("gifsicle -O3 --colors " + colors + " --lossy=30 " + f.getAbsolutePath());
 			p.waitFor();
 		} catch (InterruptedException ignore) {
 		}
