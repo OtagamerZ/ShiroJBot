@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria nos embeds customizados">
-      <change beforePath="$PROJECT_DIR$/embed_example.json" beforeDir="false" afterPath="$PROJECT_DIR$/embed_example.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1225,13 +1225,6 @@
       <workItem from="1622412361030" duration="1057000" />
       <workItem from="1622462991059" duration="7515000" />
     </task>
-    <task id="LOCAL-04619" summary="Melhoria nas requisições de anime">
-      <created>1622406339462</created>
-      <option name="number" value="04619" />
-      <option name="presentableId" value="LOCAL-04619" />
-      <option name="project" value="LOCAL" />
-      <updated>1622406339462</updated>
-    </task>
     <task id="LOCAL-04620" summary="Melhoria nas requisições de anime">
       <created>1622406524730</created>
       <option name="number" value="04620" />
@@ -1568,7 +1561,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622576228632</updated>
     </task>
-    <option name="localTasksCounter" value="4668" />
+    <task id="LOCAL-04668" summary="Melhoria nos embeds customizados">
+      <created>1622576338503</created>
+      <option name="number" value="04668" />
+      <option name="presentableId" value="LOCAL-04668" />
+      <option name="project" value="LOCAL" />
+      <updated>1622576338503</updated>
+    </task>
+    <option name="localTasksCounter" value="4669" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
