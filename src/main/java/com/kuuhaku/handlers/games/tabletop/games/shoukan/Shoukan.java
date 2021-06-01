@@ -23,7 +23,6 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ThrowingBiConsumer;
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
@@ -245,7 +244,7 @@ public class Shoukan extends GlobalGame {
 			h.addMana(1);
 
 		BufferedImage bi = arena.render(this, hands);
-		Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+		Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg");
 		File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(h.getAcc().getFrame().getColor())
@@ -800,7 +799,7 @@ public class Shoukan extends GlobalGame {
 		moveLock = true;
 
 		BufferedImage bi = arena.render(this, hands);
-		Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+		Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg");
 		File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(h.getAcc().getFrame().getColor())
@@ -1629,7 +1628,7 @@ public class Shoukan extends GlobalGame {
 					msg = op.getUser().getAsMention() + " zerou os pontos de vida de " + h.getUser().getAsMention() + ", temos um vencedor! (" + getRound() + " turnos)";
 
 				BufferedImage bi = arena.render(this, hands);
-				Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+				Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg");
 				File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
 				EmbedBuilder eb = new EmbedBuilder()
 						.setColor(op.getAcc().getFrame().getColor())
@@ -1763,7 +1762,7 @@ public class Shoukan extends GlobalGame {
 						msg = getCurrent().getAsMention() + " não possui mais cartas no deck, " + hands.get(next).getUser().getAsMention() + " venceu! (" + getRound() + " turnos)";
 
 					BufferedImage bi = arena.render(this, hands);
-					Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+					Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg");
 					File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
 					EmbedBuilder eb = new EmbedBuilder()
 							.setColor(hands.get(next).getAcc().getFrame().getColor())
@@ -1823,7 +1822,7 @@ public class Shoukan extends GlobalGame {
 					String msg = "Por acordo mútuo, declaro empate! (" + getRound() + " turnos)";
 
 					BufferedImage bi = arena.render(this, hands);
-					Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+					Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg");
 					File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
 					EmbedBuilder eb = new ColorlessEmbedBuilder()
 							.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
@@ -1915,8 +1914,9 @@ public class Shoukan extends GlobalGame {
 				String msg = getCurrent().getAsMention() + " desistiu! (" + getRound() + " turnos)";
 
 				BufferedImage bi = arena.render(this, hands);
-				Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg", Main.getInfo().getTemporaryFolder());
+				Helper.writeAndGet(bi, this.hashCode() + "_full", "jpg");
 				File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
+				System.out.println(f.getAbsolutePath());
 				EmbedBuilder eb = new EmbedBuilder()
 						.setColor(Color.white)
 						.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")

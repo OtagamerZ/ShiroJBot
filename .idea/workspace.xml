@@ -13,7 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/AutoEmbedBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -171,11 +175,11 @@
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.model.common" />
       <recent name="com.kuuhaku.command.commands.discord.clan" />
       <recent name="com.kuuhaku.utils" />
       <recent name="com.kuuhaku.model.persistent.guild.buttons" />
       <recent name="com.kuuhaku.command.commands.discord.dev" />
-      <recent name="com.kuuhaku.model.common" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -1223,13 +1227,6 @@
       <workItem from="1622412361030" duration="1057000" />
       <workItem from="1622462991059" duration="7515000" />
     </task>
-    <task id="LOCAL-04608" summary="Correções menores">
-      <created>1622397109790</created>
-      <option name="number" value="04608" />
-      <option name="presentableId" value="LOCAL-04608" />
-      <option name="project" value="LOCAL" />
-      <updated>1622397109790</updated>
-    </task>
     <task id="LOCAL-04609" summary="Correções menores">
       <created>1622397224237</created>
       <option name="number" value="04609" />
@@ -1566,7 +1563,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622568932857</updated>
     </task>
-    <option name="localTasksCounter" value="4657" />
+    <task id="LOCAL-04657" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
+      <created>1622569191148</created>
+      <option name="number" value="04657" />
+      <option name="presentableId" value="LOCAL-04657" />
+      <option name="project" value="LOCAL" />
+      <updated>1622569191152</updated>
+    </task>
+    <option name="localTasksCounter" value="4658" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
