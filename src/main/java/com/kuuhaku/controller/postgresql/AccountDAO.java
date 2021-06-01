@@ -167,7 +167,7 @@ public class AccountDAO {
 				  , balance  = balance / 2
 				  , spent    = 0
 				WHERE a.balance > 100000
-				  AND a.spent / (a.spent + 100) < 0.1
+				  AND CAST(a.spent AS FLOAT) / (a.spent + 100) < 0.05
 				""").executeUpdate();
 		em.getTransaction().commit();
 
