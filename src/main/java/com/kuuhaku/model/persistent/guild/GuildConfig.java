@@ -19,9 +19,10 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.model.common.embed.Embed;
 import com.kuuhaku.model.persistent.guild.buttons.ButtonChannel;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.JSONUtils;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -325,16 +326,16 @@ public class GuildConfig {
 		this.buttonConfigs = buttonConfigs;
 	}
 
-	public JSONObject getEmbedTemplate() {
-		return new JSONObject(embedTemplate);
+	public Embed getEmbedTemplate() {
+		return JSONUtils.fromJSON(Helper.getOr(embedTemplate, "{}"), Embed.class);
 	}
 
-	public void setEmbedTemplate(JSONObject embedTemplate) {
-		this.embedTemplate = embedTemplate.toString();
+	public void setEmbedTemplate(Embed template) {
+		this.embedTemplate = JSONUtils.toJSON(template);
 	}
 
 	public String getEmbedTemplateRaw() {
-		return embedTemplate;
+		return Helper.getOr(embedTemplate, "");
 	}
 
 	public String getGeneralTopic() {
