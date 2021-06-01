@@ -250,7 +250,7 @@ public class Shoukan extends GlobalGame {
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(h.getAcc().getFrame().getColor())
 				.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
-				.setImage("attachments://" + f.getName());
+				.setImage("attachment://" + f.getName());
 
 		AtomicBoolean shownHand = new AtomicBoolean(false);
 		AtomicReference<String> previous = new AtomicReference<>("");
@@ -805,7 +805,7 @@ public class Shoukan extends GlobalGame {
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(h.getAcc().getFrame().getColor())
 				.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
-				.setImage("attachments://" + f.getName());
+				.setImage("attachment://" + f.getName());
 
 		channel.sendMessage(msg)
 				.embed(eb.build())
@@ -1634,7 +1634,7 @@ public class Shoukan extends GlobalGame {
 				EmbedBuilder eb = new EmbedBuilder()
 						.setColor(op.getAcc().getFrame().getColor())
 						.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
-						.setImage("attachments://" + f.getName());
+						.setImage("attachment://" + f.getName());
 
 				close();
 				finished = true;
@@ -1768,7 +1768,7 @@ public class Shoukan extends GlobalGame {
 					EmbedBuilder eb = new EmbedBuilder()
 							.setColor(hands.get(next).getAcc().getFrame().getColor())
 							.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
-							.setImage("attachments://" + f.getName());
+							.setImage("attachment://" + f.getName());
 
 					close();
 					channel.sendMessage(msg)
@@ -1827,7 +1827,7 @@ public class Shoukan extends GlobalGame {
 					File f = Helper.writeAndGet(Helper.scaleImage(bi, 784, 610), String.valueOf(this.hashCode()), "jpg");
 					EmbedBuilder eb = new ColorlessEmbedBuilder()
 							.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
-							.setImage("attachments://" + f.getName());
+							.setImage("attachment://" + f.getName());
 
 					close();
 					channel.sendMessage(msg)
@@ -1920,7 +1920,7 @@ public class Shoukan extends GlobalGame {
 				EmbedBuilder eb = new EmbedBuilder()
 						.setColor(Color.white)
 						.setAuthor("Clique para ver a imagem completa", ShiroInfo.IMAGE_ENDPOINT.formatted(this.hashCode() + "_full"), ShiroInfo.RESOURCES_URL + "shoukan/shoukan.png")
-						.setImage("attachments://" + f.getName());
+						.setImage("attachment://" + f.getName());
 
 				close();
 				channel.sendMessage(msg)
