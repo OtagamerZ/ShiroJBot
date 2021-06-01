@@ -49,7 +49,7 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 		setDescription(StringUtils.abbreviate(e.getBody(), MessageEmbed.TEXT_MAX_LENGTH));
 		setThumbnail(e.getThumbnail());
 		setImage(e.getImage().getImage());
-		if (e.showDate()) setTimestamp(LocalDateTime.now());
+		if (e.getShowDate()) setTimestamp(LocalDateTime.now());
 
 		setFooter(
 				StringUtils.abbreviate(e.getFooter().getName(), MessageEmbed.TEXT_MAX_LENGTH),
