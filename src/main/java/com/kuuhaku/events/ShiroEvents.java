@@ -534,7 +534,7 @@ public class ShiroEvents extends ListenerAdapter {
 				return;
 			}
 
-			if (gc.isMakeMentionable() && !Helper.regex(member.getEffectiveName(), "[A-z0-9]{4}")) {
+			if (gc.isMakeMentionable() && !Helper.regex(member.getEffectiveName(), "[A-z0-9]{4}").find()) {
 				String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
 				member.modifyNickname(names[Helper.rng(names.length, true)]).queue(null, Helper::doNothing);
 			} else if (gc.isAntiHoist() && member.getEffectiveName().charAt(0) < 65) {

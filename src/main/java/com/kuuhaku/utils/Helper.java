@@ -1869,8 +1869,8 @@ public class Helper {
 		return reduced + StringUtils.repeat("k", times);
 	}
 
-	public static boolean regex(String text, @Language("RegExp") String regex) {
-		return Pattern.compile(regex).matcher(text).matches();
+	public static Matcher regex(String text, @Language("RegExp") String regex) {
+		return Pattern.compile(regex).matcher(text);
 	}
 
 	public static String extract(String text, @Language("RegExp") String regex) {
@@ -2108,7 +2108,7 @@ public class Helper {
 	}
 
 	public static boolean isPureMention(String msg) {
-		return regex(msg, "<(@|@!)\\d+>");
+		return msg.matches("<(@|@!)\\d+>");
 	}
 
 	public static boolean isPinging(Message msg, String id) {
