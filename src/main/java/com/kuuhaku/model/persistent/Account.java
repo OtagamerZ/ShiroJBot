@@ -320,7 +320,7 @@ public class Account {
 
 					return false;
 				}
-			} catch (DateTimeParseException e) {
+			} catch (DateTimeParseException | NullPointerException e) {
 				if (thenApply) {
 					CompletableFuture<Boolean> voteCheck = new CompletableFuture<>();
 					Main.getInfo().getDblApi().hasVoted(uid).thenAccept(voted -> {
