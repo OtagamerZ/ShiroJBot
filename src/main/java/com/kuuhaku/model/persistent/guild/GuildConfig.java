@@ -136,6 +136,12 @@ public class GuildConfig {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean smallCards = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean antiHoist = false;
+
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean makeMentionable = false;
+
 	//COLLECTIONS
 	//ROLES
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -484,6 +490,30 @@ public class GuildConfig {
 
 	public void toggleSmallCards() {
 		this.smallCards = !smallCards;
+	}
+
+	public boolean isAntiHoist() {
+		return antiHoist;
+	}
+
+	public void setAntiHoist(boolean antiHoist) {
+		this.antiHoist = antiHoist;
+	}
+
+	public void toggleAntiHoist() {
+		this.antiHoist = !antiHoist;
+	}
+
+	public boolean isMakeMentionable() {
+		return makeMentionable;
+	}
+
+	public void setMakeMentionable(boolean makeMentionable) {
+		this.makeMentionable = makeMentionable;
+	}
+
+	public void toggleMakeMentionable() {
+		this.makeMentionable = !makeMentionable;
 	}
 
 	public Set<LevelRole> getLevelRoles() {
