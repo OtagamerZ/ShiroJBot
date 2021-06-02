@@ -19,7 +19,6 @@
 package com.kuuhaku.handlers.games.tabletop.framework;
 
 import com.github.ygimenez.model.ThrowingBiConsumer;
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.MatchDAO;
 import com.kuuhaku.controller.postgresql.MatchMakingRatingDAO;
@@ -43,8 +42,6 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -352,6 +349,7 @@ public abstract class GlobalGame {
 			}
 		}
 
+		/*
 		if (!frames.isEmpty()) {
 			try {
 				File f = File.createTempFile(String.valueOf(this.hashCode()), ".gif", Main.getInfo().getTemporaryFolder());
@@ -362,5 +360,6 @@ public abstract class GlobalGame {
 				e.printStackTrace();
 			}
 		}
+		 */
 	}
 }
