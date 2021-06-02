@@ -109,8 +109,8 @@ public class Champion implements Drawable, Cloneable {
 	private transient int redDef = 0;
 	private transient int efctMana = 0;
 	private transient int efctBlood = 0;
-	private transient int[] efctAtk = new int[5];
-	private transient int[] efctDef = new int[5];
+	private transient int[] efctAtk = new int[6];
+	private transient int[] efctDef = new int[6];
 	private transient int stasis = 0;
 	private transient int stun = 0;
 	private transient int sleep = 0;
@@ -536,6 +536,14 @@ public class Champion implements Drawable, Cloneable {
 		return Arrays.stream(efctAtk).sum();
 	}
 
+	public void addEfctAtk(int efctAtk) {
+		this.efctAtk[5] += efctAtk;
+	}
+
+	public void removeEfctAtk(int efctAtk) {
+		this.efctAtk[5] -= efctAtk;
+	}
+
 	public void setEfctAtk(int index, int efctAtk) {
 		this.efctAtk[index] = efctAtk;
 	}
@@ -550,6 +558,14 @@ public class Champion implements Drawable, Cloneable {
 
 	public int getEfctDef() {
 		return Arrays.stream(efctDef).sum();
+	}
+
+	public void addEfctDef(int efctDef) {
+		this.efctDef[5] += efctDef;
+	}
+
+	public void removeEfctDef(int efctDef) {
+		this.efctDef[5] -= efctDef;
 	}
 
 	public void setEfctDef(int index, int efctDef) {
@@ -713,8 +729,8 @@ public class Champion implements Drawable, Cloneable {
 		redAtk = 0;
 		redDef = 0;
 		efctMana = 0;
-		efctAtk = new int[5];
-		efctDef = new int[5];
+		efctAtk = new int[6];
+		efctDef = new int[6];
 		stasis = 0;
 		stun = 0;
 		sleep = 0;
