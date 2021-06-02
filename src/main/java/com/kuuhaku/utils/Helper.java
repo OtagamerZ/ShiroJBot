@@ -134,7 +134,7 @@ public class Helper {
 	public static final String VOID = "\u200B";
 	public static final String CANCEL = "❎";
 	public static final String ACCEPT = "✅";
-	public static final String ANTICOPY = "͏"; //U+034F
+	public static final String ANTICOPY = "\uFFF8"; //or U+034F
 	public static final String MENTION = "<@\\d+>|<@!\\d+>";
 	public static final int CANVAS_SIZE = 2049;
 	public static final DateTimeFormatter fullDateFormat = DateTimeFormatter.ofPattern(I18n.getString("full-date-format"));
