@@ -38,9 +38,9 @@ public class AntiHoistCommand implements Executable {
 
 		gc.toggleAntiHoist();
 		if (!gc.isAntiHoist())
-			channel.sendMessage("✅ | Nomes que iniciem com caractéres que façam o nome subir na lista serão renomeados.").queue();
-		else
 			channel.sendMessage("✅ | Nomes que iniciem com caractéres que façam o nome subir na lista serão permitidos.").queue();
+		else
+			channel.sendMessage("✅ | Nomes que iniciem com caractéres que façam o nome subir na lista serão renomeados.").queue();
 
 		GuildDAO.updateGuildSettings(gc);
 	}
