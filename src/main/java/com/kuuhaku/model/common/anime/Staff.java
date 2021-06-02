@@ -32,6 +32,6 @@ public class Staff {
 	}
 
 	public String getCreator() {
-		return edges.get(0).getNode().toString();
+		return edges == null || edges.isEmpty() ? "Desconhecido" : edges.get(0).getNode().toString();
 	}
 }

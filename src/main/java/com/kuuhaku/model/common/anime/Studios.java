@@ -33,7 +33,7 @@ public class Studios {
 	}
 
 	public String getMajor() {
-		return edges.get(0).getNode().getName();
+		return edges == null || edges.isEmpty() ? "Desconhecido" : edges.get(0).getNode().getName();
 	}
 
 	public List<String> getNames() {
