@@ -13,7 +13,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddEmoteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/AddEmoteCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/ShiroEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1212,14 +1217,8 @@
       <workItem from="1622412361030" duration="1057000" />
       <workItem from="1622462991059" duration="7515000" />
       <workItem from="1622597903002" duration="2036000" />
-      <workItem from="1622600366718" duration="2593000" />
-    </task>
-    <task id="LOCAL-04635" summary="Adição de punição por não gastar créditos">
-      <created>1622468355371</created>
-      <option name="number" value="04635" />
-      <option name="presentableId" value="LOCAL-04635" />
-      <option name="project" value="LOCAL" />
-      <updated>1622468355371</updated>
+      <workItem from="1622600366718" duration="2868000" />
+      <workItem from="1622604620245" duration="372000" />
     </task>
     <task id="LOCAL-04636" summary="Adição de punição por não gastar créditos">
       <created>1622469859550</created>
@@ -1557,7 +1556,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622603134635</updated>
     </task>
-    <option name="localTasksCounter" value="4684" />
+    <task id="LOCAL-04684" summary="Correções menores">
+      <created>1622603269303</created>
+      <option name="number" value="04684" />
+      <option name="presentableId" value="LOCAL-04684" />
+      <option name="project" value="LOCAL" />
+      <updated>1622603269303</updated>
+    </task>
+    <option name="localTasksCounter" value="4685" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
