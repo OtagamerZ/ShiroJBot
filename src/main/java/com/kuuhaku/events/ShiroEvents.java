@@ -534,6 +534,17 @@ public class ShiroEvents extends ListenerAdapter {
 				return;
 			}
 
+			if (gc.isMakeMentionable()) {
+				String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
+				if (!Helper.regex(member.getEffectiveName(), "[A-z0-9]{4}"))
+					member.modifyNickname(names[Helper.rng(names.length, true)]).queue(null, Helper::doNothing);
+			}
+
+			if (gc.isAntiHoist()) {
+				if (member.getEffectiveName().charAt(0) < 65)
+					member.modifyNickname(StringUtils.abbreviate("￭ " + member.getEffectiveName().substring(1), 32)).queue(null, Helper::doNothing);
+			}
+
 			if (!gc.getWelcomeMessage().isBlank()) {
 				URL url = new URL(author.getEffectiveAvatarUrl());
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
