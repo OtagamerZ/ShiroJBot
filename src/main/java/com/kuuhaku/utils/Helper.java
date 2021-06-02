@@ -29,6 +29,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.github.ygimenez.type.PageType;
+import com.google.gson.JsonSyntaxException;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.*;
@@ -1040,7 +1041,7 @@ public class Helper {
 					.send(payload.toString());
 
 			return new JSONObject(req.body());
-		} catch (IllegalStateException e) {
+		} catch (JsonSyntaxException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1052,7 +1053,7 @@ public class Helper {
 					.send(payload.toString());
 
 			return new JSONObject(req.body());
-		} catch (IllegalStateException e) {
+		} catch (JsonSyntaxException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1065,7 +1066,7 @@ public class Helper {
 					.send(payload.toString());
 
 			return new JSONObject(req.body());
-		} catch (IllegalStateException e) {
+		} catch (JsonSyntaxException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1078,7 +1079,7 @@ public class Helper {
 					.send(payload);
 
 			return new JSONObject(req.body());
-		} catch (IllegalStateException e) {
+		} catch (JsonSyntaxException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1095,7 +1096,7 @@ public class Helper {
 					.header("Authorization", token);
 
 			return new JSONObject(req.body());
-		} catch (IllegalStateException e) {
+		} catch (JsonSyntaxException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
@@ -1110,7 +1111,7 @@ public class Helper {
 					.header("Authorization", token);
 
 			return new JSONObject(req.body());
-		} catch (IllegalStateException e) {
+		} catch (JsonSyntaxException | IllegalStateException e) {
 			return new JSONObject();
 		}
 	}
