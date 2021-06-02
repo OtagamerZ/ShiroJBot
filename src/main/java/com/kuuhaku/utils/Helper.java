@@ -685,9 +685,10 @@ public class Helper {
 										ms.clearReactions().queue();
 									}
 								});
+
+								msg.clearReactions().queue();
 							}
 
-							msg.clearReactions().queue();
 							Pages.buttonize(msg, buttons, !message.isGatekeeper());
 						}
 					}
