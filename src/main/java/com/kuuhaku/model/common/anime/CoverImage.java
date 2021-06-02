@@ -59,6 +59,6 @@ public class CoverImage {
 	}
 
 	public Color getParsedColor() {
-		return Color.decode(color);
+		return color == null ? null : Color.decode(color);
 	}
 }
