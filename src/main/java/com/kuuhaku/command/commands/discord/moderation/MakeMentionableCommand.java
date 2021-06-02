@@ -38,9 +38,9 @@ public class MakeMentionableCommand implements Executable {
 
 		gc.toggleMakeMentionable();
 		if (!gc.isMakeMentionable())
-			channel.sendMessage("✅ | Nomes não-mencionáveis serão renomeados.").queue();
-		else
 			channel.sendMessage("✅ | Nomes não-mencionáveis serão permitidos.").queue();
+		else
+			channel.sendMessage("✅ | Nomes não-mencionáveis serão renomeados.").queue();
 
 		GuildDAO.updateGuildSettings(gc);
 	}
