@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
 import com.kuuhaku.events.ShiroEvents;
+import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.music.GuildMusicManager;
@@ -39,9 +40,11 @@ import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
+import org.java_websocket.client.WebSocketClient;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Pattern;
@@ -61,6 +64,7 @@ public class ShiroInfo {
 
 	public static final String SITE_ROOT = "https://" + System.getenv("SERVER_URL");
 	public static final String API_ROOT = "https://api." + System.getenv("SERVER_URL");
+	public static final String SOCKET_ROOT = "https://socket." + System.getenv("SERVER_URL");
 	public static final String IMAGE_ENDPOINT = API_ROOT + "/image?id=%s";
 	public static final String COLLECTION_ENDPOINT = API_ROOT + "/collection?id=%s";
 
@@ -133,6 +137,7 @@ public class ShiroInfo {
 	private final MatchMaking matchMaking = new MatchMaking();
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private final File temporaryFolder = new File(System.getenv("TEMPORARY_PATH"));
+	private final EncoderClient encoderClient;
 
 	//CACHES
 	private final TempCache<String, Boolean> ratelimit = new TempCache<>(3, TimeUnit.SECONDS);
@@ -144,6 +149,18 @@ public class ShiroInfo {
 	private final TempCache<String, byte[]> resourceCache = new TempCache<>(30, TimeUnit.MINUTES);
 
 	private boolean isLive = false;
+
+	public ShiroInfo() {
+		WebSocketClient tmp;
+
+		try {
+			tmp = new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder");
+		} catch (URISyntaxException e) {
+			tmp = null;
+		}
+
+		encoderClient = tmp;
+	}
 
 	//CONSTANTS
 	//STATIC
@@ -296,6 +313,10 @@ public class ShiroInfo {
 		if (!temporaryFolder.exists())
 			temporaryFolder.mkdir();
 		return temporaryFolder;
+	}
+
+	public EncoderClient getEncoderClient() {
+		return encoderClient;
 	}
 
 	public MatchMaking getMatchMaking() {
