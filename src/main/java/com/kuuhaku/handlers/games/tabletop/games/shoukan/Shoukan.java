@@ -23,6 +23,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
@@ -35,25 +36,26 @@ import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.DailyQuest;
-import com.kuuhaku.model.common.GifFrame;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.sharding.ShardManager;
-import org.apache.commons.imaging.formats.gif.DisposalMethod;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.CollectionUtils;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -808,8 +810,7 @@ public class Shoukan extends GlobalGame {
 				});
 
 		if (record) {
-			BufferedImage frame = Helper.scaleImage(bi, 784, 610);
-			getFrames().add(new GifFrame(frame, DisposalMethod.DO_NOT_DISPOSE, 784, 610, 0, 0, 0));
+			getFrames().add(Helper.atob(bi, "jpg"));
 		}
 	}
 
@@ -2182,8 +2183,33 @@ public class Shoukan extends GlobalGame {
 		}
 
 		if (!getFrames().isEmpty()) {
-			BufferedImage frame = Helper.scaleImage(arena.render(this, hands), 784, 610);
-			getFrames().add(new GifFrame(frame, DisposalMethod.DO_NOT_DISPOSE, 784, 610, 0, 0, 0));
+			getFrames().add(Helper.atob(arena.render(this, hands), "jpg"));
+			channel.sendMessage("Deseja baixar o replay desta partida?")
+					.queue(s -> Pages.buttonize(s, Map.of(
+							Helper.ACCEPT, (mb, ms) -> {
+								ms.delete().queue(null, Helper::doNothing);
+								ms.getChannel().sendMessage("<a:loading:697879726630502401> Processando replay...").queue(m -> {
+									EmbedBuilder eb = new EmbedBuilder();
+									try {
+										String url = Main.getInfo().getEncoderClient().requestEncoding(String.valueOf(hashCode()), getFrames()).get();
+
+										eb.setColor(Color.green)
+												.setTitle("Replay pronto!")
+												.setDescription("[Clique aqui](" + url + ") para baixar o replay desta partida (o replay poderá ser baixado durante os próximos 30 minutos).");
+									} catch (Exception e) {
+										Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+										eb.setColor(Color.red)
+												.setTitle("Erro!")
+												.setDescription("Houve um erro ao processar o replay, meus desenvolvedores já foram notificados.");
+									}
+
+									m.editMessage(Helper.VOID)
+											.embed(eb.build())
+											.queue(null, Helper::doNothing);
+								});
+							}), true, 1, TimeUnit.MINUTES,
+							u -> hands.values().stream().anyMatch(h -> h.getUser().getId().equals(u.getId()))
+					));
 		}
 
 		listener.close();
