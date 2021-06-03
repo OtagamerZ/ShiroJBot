@@ -41,7 +41,9 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
 
+import javax.websocket.DeploymentException;
 import java.io.File;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -152,7 +154,7 @@ public class ShiroInfo {
 	public ShiroInfo() {
 		try {
 			encoderClient = new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder");
-		} catch (URISyntaxException e) {
+		} catch (URISyntaxException | DeploymentException | IOException e) {
 			encoderClient = null;
 		}
 	}

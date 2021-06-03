@@ -23,11 +23,11 @@ import com.kuuhaku.model.common.TempCache;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
 import org.springframework.http.HttpStatus;
 
+import javax.websocket.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -36,21 +36,24 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class EncoderClient extends WebSocketClient {
+@ClientEndpoint
+public class EncoderClient {
 	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
 	private static final TempCache<String, CompletableFuture<String>> completed = new TempCache<>(10, TimeUnit.MINUTES);
+	private Session session = null;
 
-	public EncoderClient(String serverUri) throws URISyntaxException {
-		super(new URI(serverUri));
-		connect();
+	public EncoderClient(String url) throws URISyntaxException, DeploymentException, IOException {
+		WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+		container.connectToServer(this, new URI(url));
 	}
 
-	@Override
-	public void onOpen(ServerHandshake handshakedata) {
+	@OnOpen
+	public void onOpen(Session session) {
+		this.session = session;
 		Helper.logger(this.getClass()).info("Conectado ao webSocket \"encoder\" com sucesso");
 	}
 
-	@Override
+	@OnMessage
 	public void onMessage(String message) {
 		JSONObject res = new JSONObject(message);
 
@@ -59,22 +62,18 @@ public class EncoderClient extends WebSocketClient {
 		}
 	}
 
-	@Override
-	public void onClose(int code, String reason, boolean remote) {
+	@OnClose
+	public void onClose(Session session, CloseReason reason) {
 		Helper.logger(this.getClass()).info("Desconectado do webSocket \"encoder\", tentando reconexão...");
+		this.session = null;
 		try {
-			if (reconnectBlocking()) {
-				Helper.logger(this.getClass()).info("Reconectado ao webSocket \"encoder\" com sucesso");
-			} else {
-				Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
-			}
-		} catch (InterruptedException | URISyntaxException ignore) {
+			Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
+		} catch (URISyntaxException | DeploymentException | IOException ignore) {
 		}
 	}
 
-	@Override
-	public void onError(Exception ex) {
-
+	public Session getSession() {
+		return session;
 	}
 
 	public CompletableFuture<String> requestEncoding(String hash, List<String> frames) {
@@ -84,7 +83,7 @@ public class EncoderClient extends WebSocketClient {
 		exec.execute(() -> {
 			BufferedImage bi = Helper.btoa(frames.get(0));
 			assert bi != null;
-			getConnection().send(new JSONObject() {{
+			send(new JSONObject() {{
 				put("hash", hash);
 				put("type", "BEGIN");
 				put("size", frames.size());
@@ -93,19 +92,23 @@ public class EncoderClient extends WebSocketClient {
 			}}.toString());
 
 			for (String frame : frames) {
-				getConnection().send(new JSONObject() {{
+				send(new JSONObject() {{
 					put("hash", hash);
 					put("type", "NEXT");
 					put("data", frame);
 				}}.toString());
 			}
 
-			getConnection().send(new JSONObject() {{
+			send(new JSONObject() {{
 				put("hash", hash);
 				put("type", "END");
 			}}.toString());
 		});
 
 		return out;
+	}
+
+	public void send(String msg) {
+		session.getAsyncRemote().sendText(msg);
 	}
 }
