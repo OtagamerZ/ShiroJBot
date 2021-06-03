@@ -27,7 +27,6 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.model.common.DailyQuest;
-import com.kuuhaku.model.common.GifFrame;
 import com.kuuhaku.model.common.MatchInfo;
 import com.kuuhaku.model.enums.DailyTask;
 import com.kuuhaku.model.persistent.Account;
@@ -58,7 +57,7 @@ public abstract class GlobalGame {
 	private final MatchHistory history = new MatchHistory();
 	private final Map<String, Double> divergence = new HashMap<>();
 	private final boolean ranked;
-	private final List<GifFrame> frames = new ArrayList<>();
+	private final List<String> frames = new ArrayList<>();
 	private Consumer<Message> onExpiration;
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
@@ -264,7 +263,7 @@ public abstract class GlobalGame {
 		return ranked;
 	}
 
-	public List<GifFrame> getFrames() {
+	public List<String> getFrames() {
 		return frames;
 	}
 
@@ -348,18 +347,5 @@ public abstract class GlobalGame {
 				}
 			}
 		}
-
-		/*
-		if (!frames.isEmpty()) {
-			try {
-				File f = File.createTempFile(String.valueOf(this.hashCode()), ".gif", Main.getInfo().getTemporaryFolder());
-				Helper.makeGIF(f, getFrames(), 0, 1000, 7);
-
-				channel.sendFile(f).queue(null, Helper::doNothing);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		 */
 	}
 }
