@@ -40,7 +40,6 @@ import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
-import org.java_websocket.client.WebSocketClient;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
@@ -151,7 +150,7 @@ public class ShiroInfo {
 	private boolean isLive = false;
 
 	public ShiroInfo() {
-		WebSocketClient tmp;
+		EncoderClient tmp;
 
 		try {
 			tmp = new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder");
