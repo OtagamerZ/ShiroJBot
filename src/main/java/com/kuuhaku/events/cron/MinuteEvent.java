@@ -22,8 +22,10 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.BotStatsDAO;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -33,6 +35,7 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -43,6 +46,15 @@ public class MinuteEvent implements Job {
 	@Override
 	public void execute(JobExecutionContext context) {
 		BotStatsDAO.register();
+
+		if (Main.getInfo().getEncoderClient().isClosed()) {
+			try {
+				if (!Main.getInfo().getEncoderClient().reconnectBlocking()) {
+					Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
+				}
+			} catch (InterruptedException | URISyntaxException ignore) {
+			}
+		}
 
 		for (MutedMember m : MemberDAO.getMutedMembers()) {
 			Guild g = Main.getInfo().getGuildByID(m.getGuild());
