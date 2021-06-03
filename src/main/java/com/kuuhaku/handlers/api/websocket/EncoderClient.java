@@ -18,9 +18,11 @@
 
 package com.kuuhaku.handlers.api.websocket;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.model.common.TempCache;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
+import com.kuuhaku.utils.ShiroInfo;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.springframework.http.HttpStatus;
@@ -35,8 +37,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class EncoderClient extends WebSocketClient {
-	private final ExecutorService exec = Executors.newSingleThreadExecutor();
-	private final TempCache<String, CompletableFuture<String>> completed = new TempCache<>(10, TimeUnit.MINUTES);
+	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
+	private static final TempCache<String, CompletableFuture<String>> completed = new TempCache<>(10, TimeUnit.MINUTES);
 
 	public EncoderClient(String serverUri) throws URISyntaxException {
 		super(new URI(serverUri));
@@ -58,7 +60,15 @@ public class EncoderClient extends WebSocketClient {
 
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
-
+		Helper.logger(this.getClass()).info("Desconectado do webSocket \"encoder\", tentando reconexão...");
+		try {
+			if (reconnectBlocking()) {
+				Helper.logger(this.getClass()).info("Reconectado ao webSocket \"encoder\" com sucesso");
+			} else {
+				Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
+			}
+		} catch (InterruptedException | URISyntaxException ignore) {
+		}
 	}
 
 	@Override

@@ -125,6 +125,7 @@ public class ShiroInfo {
 	private long startTime = 0;
 	private String winner = "";
 	private WebSocketConfig sockets;
+	private EncoderClient encoderClient;
 	private final DiscordBotListAPI dblApi = dblToken == null ? null : new DiscordBotListAPI.Builder()
 			.token(dblToken)
 			.botId("572413282653306901")
@@ -136,7 +137,6 @@ public class ShiroInfo {
 	private final MatchMaking matchMaking = new MatchMaking();
 	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private final File temporaryFolder = new File(System.getenv("TEMPORARY_PATH"));
-	private final EncoderClient encoderClient;
 
 	//CACHES
 	private final TempCache<String, Boolean> ratelimit = new TempCache<>(3, TimeUnit.SECONDS);
@@ -150,15 +150,11 @@ public class ShiroInfo {
 	private boolean isLive = false;
 
 	public ShiroInfo() {
-		EncoderClient tmp;
-
 		try {
-			tmp = new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder");
+			encoderClient = new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder");
 		} catch (URISyntaxException e) {
-			tmp = null;
+			encoderClient = null;
 		}
-
-		encoderClient = tmp;
 	}
 
 	//CONSTANTS
@@ -314,10 +310,6 @@ public class ShiroInfo {
 		return temporaryFolder;
 	}
 
-	public EncoderClient getEncoderClient() {
-		return encoderClient;
-	}
-
 	public MatchMaking getMatchMaking() {
 		return matchMaking;
 	}
@@ -371,6 +363,14 @@ public class ShiroInfo {
 
 	public void setSockets(WebSocketConfig server) {
 		this.sockets = server;
+	}
+
+	public EncoderClient getEncoderClient() {
+		return encoderClient;
+	}
+
+	public void setEncoderClient(EncoderClient encoderClient) {
+		this.encoderClient = encoderClient;
 	}
 
 	public void cache(Guild guild, Message message) {
