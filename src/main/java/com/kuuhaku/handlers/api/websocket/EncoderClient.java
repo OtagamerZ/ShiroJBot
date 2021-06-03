@@ -42,6 +42,7 @@ public class EncoderClient extends WebSocketClient {
 
 	public EncoderClient(String serverUri) throws URISyntaxException {
 		super(new URI(serverUri));
+		connect();
 	}
 
 	@Override
