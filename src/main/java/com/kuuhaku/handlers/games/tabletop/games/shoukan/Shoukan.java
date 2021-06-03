@@ -2182,7 +2182,7 @@ public class Shoukan extends GlobalGame {
 			}
 		}
 
-		if (!getFrames().isEmpty()) {
+		if (!getFrames().isEmpty() && Main.getInfo().getEncoderClient() != null) {
 			getFrames().add(Helper.atob(arena.render(this, hands), "jpg"));
 			channel.sendMessage("Deseja baixar o replay desta partida?")
 					.queue(s -> Pages.buttonize(s, Map.of(
