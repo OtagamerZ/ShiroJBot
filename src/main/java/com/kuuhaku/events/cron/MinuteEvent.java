@@ -35,6 +35,8 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
+import javax.websocket.DeploymentException;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
@@ -47,12 +49,10 @@ public class MinuteEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		BotStatsDAO.register();
 
-		if (Main.getInfo().getEncoderClient().isClosed()) {
+		if (Main.getInfo().getEncoderClient().getSession() == null) {
 			try {
-				if (!Main.getInfo().getEncoderClient().reconnectBlocking()) {
-					Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
-				}
-			} catch (InterruptedException | URISyntaxException ignore) {
+				Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
+			} catch (URISyntaxException | DeploymentException | IOException ignore) {
 			}
 		}
 

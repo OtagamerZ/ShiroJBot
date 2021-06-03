@@ -14,7 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Criação de client da API de encoding da Shiro">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/EncoderClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/EncoderClient.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1217,21 +1218,7 @@
       <workItem from="1622600366718" duration="2868000" />
       <workItem from="1622604620245" duration="372000" />
       <workItem from="1622696753343" duration="169000" />
-      <workItem from="1622752074534" duration="1665000" />
-    </task>
-    <task id="LOCAL-04639" summary="Adição de punição por não gastar créditos">
-      <created>1622477911377</created>
-      <option name="number" value="04639" />
-      <option name="presentableId" value="LOCAL-04639" />
-      <option name="project" value="LOCAL" />
-      <updated>1622477911377</updated>
-    </task>
-    <task id="LOCAL-04640" summary="Adição de punição por não gastar créditos">
-      <created>1622478299157</created>
-      <option name="number" value="04640" />
-      <option name="presentableId" value="LOCAL-04640" />
-      <option name="project" value="LOCAL" />
-      <updated>1622478299157</updated>
+      <workItem from="1622752074534" duration="2403000" />
     </task>
     <task id="LOCAL-04641" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
       <created>1622479083476</created>
@@ -1562,7 +1549,21 @@
       <option name="project" value="LOCAL" />
       <updated>1622753602289</updated>
     </task>
-    <option name="localTasksCounter" value="4688" />
+    <task id="LOCAL-04688" summary="Criação de client da API de encoding da Shiro">
+      <created>1622753757461</created>
+      <option name="number" value="04688" />
+      <option name="presentableId" value="LOCAL-04688" />
+      <option name="project" value="LOCAL" />
+      <updated>1622753757461</updated>
+    </task>
+    <task id="LOCAL-04689" summary="Criação de client da API de encoding da Shiro">
+      <created>1622753800166</created>
+      <option name="number" value="04689" />
+      <option name="presentableId" value="LOCAL-04689" />
+      <option name="project" value="LOCAL" />
+      <updated>1622753800166</updated>
+    </task>
+    <option name="localTasksCounter" value="4690" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
