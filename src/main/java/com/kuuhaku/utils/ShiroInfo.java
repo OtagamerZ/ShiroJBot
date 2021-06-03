@@ -63,7 +63,7 @@ public class ShiroInfo {
 
 	public static final String SITE_ROOT = "https://" + System.getenv("SERVER_URL");
 	public static final String API_ROOT = "https://api." + System.getenv("SERVER_URL");
-	public static final String SOCKET_ROOT = "https://socket." + System.getenv("SERVER_URL");
+	public static final String SOCKET_ROOT = "wss://socket." + System.getenv("SERVER_URL");
 	public static final String IMAGE_ENDPOINT = API_ROOT + "/image?id=%s";
 	public static final String COLLECTION_ENDPOINT = API_ROOT + "/collection?id=%s";
 
