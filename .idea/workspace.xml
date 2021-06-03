@@ -13,13 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/EncoderClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/GlobalGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Criação de client da API de encoding da Shiro" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -201,17 +195,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Remote Debug" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1232,13 +1215,6 @@
       <workItem from="1622600366718" duration="2868000" />
       <workItem from="1622604620245" duration="372000" />
     </task>
-    <task id="LOCAL-04636" summary="Adição de punição por não gastar créditos">
-      <created>1622469859550</created>
-      <option name="number" value="04636" />
-      <option name="presentableId" value="LOCAL-04636" />
-      <option name="project" value="LOCAL" />
-      <updated>1622469859550</updated>
-    </task>
     <task id="LOCAL-04637" summary="Adição de punição por não gastar créditos">
       <created>1622470044923</created>
       <option name="number" value="04637" />
@@ -1575,7 +1551,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622603269303</updated>
     </task>
-    <option name="localTasksCounter" value="4685" />
+    <task id="LOCAL-04685" summary="Criação de client da API de encoding da Shiro">
+      <created>1622696635672</created>
+      <option name="number" value="04685" />
+      <option name="presentableId" value="LOCAL-04685" />
+      <option name="project" value="LOCAL" />
+      <updated>1622696635672</updated>
+    </task>
+    <option name="localTasksCounter" value="4686" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1662,7 +1645,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Implementação de novos métodos" />
     <MESSAGE value="Implementação de novos métodos nos equipamentos" />
     <MESSAGE value="Adição de versões DUO para os efeitos das raças humano e bestial" />
     <MESSAGE value="Correção na renderização dos tabuleiros" />
@@ -1687,7 +1669,8 @@
     <MESSAGE value="Adição de replay no Shoukan" />
     <MESSAGE value="Aumento no custo dos upgrades de servidor" />
     <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Criação de client da API de encoding da Shiro" />
+    <option name="LAST_COMMIT_MESSAGE" value="Criação de client da API de encoding da Shiro" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
