@@ -159,6 +159,8 @@ public class ShiroInfo {
 		}
 
 		encoderClient = tmp;
+		if (encoderClient != null) 
+			encoderClient.connect();
 	}
 
 	//CONSTANTS
