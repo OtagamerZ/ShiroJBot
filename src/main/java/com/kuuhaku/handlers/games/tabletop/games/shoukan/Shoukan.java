@@ -2196,25 +2196,36 @@ public class Shoukan extends GlobalGame {
 					.queue(s -> Pages.buttonize(s, Map.of(
 							Helper.ACCEPT, (mb, ms) -> {
 								ms.delete().queue(null, Helper::doNothing);
-								ms.getChannel().sendMessage("<a:loading:697879726630502401> Processando replay...").queue(m -> {
-									EmbedBuilder eb = new EmbedBuilder();
-									try {
-										String url = Main.getInfo().getEncoderClient().requestEncoding(String.valueOf(hashCode()), getFrames()).get();
+								ms.getChannel().sendMessage("<a:loading:697879726630502401> Aguardando conexão com API...")
+										.flatMap(m -> {
+											while (!Main.getInfo().isEncoderConnected()) {
+												try {
+													Thread.sleep(60000);
+												} catch (InterruptedException ignore) {
+												}
+											}
 
-										eb.setColor(Color.green)
-												.setTitle("Replay pronto!")
-												.setDescription("[Clique aqui](" + url + ") para baixar o replay desta partida (o replay poderá ser baixado durante os próximos 30 minutos).");
-									} catch (Exception e) {
-										Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-										eb.setColor(Color.red)
-												.setTitle("Erro!")
-												.setDescription("Houve um erro ao processar o replay, meus desenvolvedores já foram notificados.");
-									}
+											return m.editMessage("<a:loading:697879726630502401> Processando replay...");
+										})
+										.queue(m -> {
+											EmbedBuilder eb = new EmbedBuilder();
+											try {
+												String url = Main.getInfo().getEncoderClient().requestEncoding(String.valueOf(hashCode()), getFrames()).get();
 
-									m.editMessage(Helper.VOID)
-											.embed(eb.build())
-											.queue(null, Helper::doNothing);
-								});
+												eb.setColor(Color.green)
+														.setTitle("Replay pronto!")
+														.setDescription("[Clique aqui](" + url + ") para baixar o replay desta partida (o replay poderá ser baixado durante os próximos 30 minutos).");
+											} catch (Exception e) {
+												Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+												eb.setColor(Color.red)
+														.setTitle("Erro!")
+														.setDescription("Houve um erro ao processar o replay, meus desenvolvedores já foram notificados.");
+											}
+
+											m.editMessage(Helper.VOID)
+													.embed(eb.build())
+													.queue(null, Helper::doNothing);
+										});
 							}), true, 1, TimeUnit.MINUTES,
 							u -> hands.values().stream().anyMatch(h -> h.getUser().getId().equals(u.getId()))
 					));
