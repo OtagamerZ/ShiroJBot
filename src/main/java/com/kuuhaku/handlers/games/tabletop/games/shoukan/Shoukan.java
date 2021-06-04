@@ -54,6 +54,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
@@ -810,7 +811,10 @@ public class Shoukan extends GlobalGame {
 				});
 
 		if (record) {
-			getFrames().add(Helper.atob(bi, "jpg"));
+			try {
+				getFrames().add(Helper.compress(Helper.atob(bi, "jpg")));
+			} catch (IOException ignore) {
+			}
 		}
 	}
 
@@ -2183,7 +2187,11 @@ public class Shoukan extends GlobalGame {
 		}
 
 		if (!getFrames().isEmpty() && Main.getInfo().getEncoderClient() != null) {
-			getFrames().add(Helper.atob(arena.render(this, hands), "jpg"));
+			try {
+				getFrames().add(Helper.compress(Helper.atob(arena.render(this, hands), "jpg")));
+			} catch (IOException ignore) {
+			}
+
 			channel.sendMessage("Deseja baixar o replay desta partida?")
 					.queue(s -> Pages.buttonize(s, Map.of(
 							Helper.ACCEPT, (mb, ms) -> {
