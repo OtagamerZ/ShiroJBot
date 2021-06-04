@@ -40,6 +40,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Command(
 		name = "negativo",
 		aliases = {"negative"},
+		usage = "req_mode",
 		category = Category.FUN
 )
 @Requires({Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_HISTORY})
