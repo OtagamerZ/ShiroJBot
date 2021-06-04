@@ -15,7 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NegativeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NegativeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NoiseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NoiseCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ImageFilters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ImageFilters.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +129,7 @@
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
     <property name="last.edited.regexp" value="{a&amp;blabla&amp;1234}" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/kawaipon/frames/old" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -143,11 +145,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames\old" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot" />
       <recent name="C:\Users\yagog\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\model\common\anime" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\gifs" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames\new" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames\old" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.utils.Helper" />
@@ -1233,28 +1235,7 @@
       <workItem from="1622776103072" duration="904000" />
       <workItem from="1622815333387" duration="64000" />
       <workItem from="1622815453974" duration="48000" />
-      <workItem from="1622816537385" duration="5339000" />
-    </task>
-    <task id="LOCAL-04659" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <created>1622569738224</created>
-      <option name="number" value="04659" />
-      <option name="presentableId" value="LOCAL-04659" />
-      <option name="project" value="LOCAL" />
-      <updated>1622569738224</updated>
-    </task>
-    <task id="LOCAL-04660" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <created>1622569942302</created>
-      <option name="number" value="04660" />
-      <option name="presentableId" value="LOCAL-04660" />
-      <option name="project" value="LOCAL" />
-      <updated>1622569942302</updated>
-    </task>
-    <task id="LOCAL-04661" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <created>1622570101652</created>
-      <option name="number" value="04661" />
-      <option name="presentableId" value="LOCAL-04661" />
-      <option name="project" value="LOCAL" />
-      <updated>1622570101652</updated>
+      <workItem from="1622816537385" duration="7988000" />
     </task>
     <task id="LOCAL-04662" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
       <created>1622570119209</created>
@@ -1578,7 +1559,28 @@
       <option name="project" value="LOCAL" />
       <updated>1622824968978</updated>
     </task>
-    <option name="localTasksCounter" value="4708" />
+    <task id="LOCAL-04708" summary="Correções menores">
+      <created>1622829223759</created>
+      <option name="number" value="04708" />
+      <option name="presentableId" value="LOCAL-04708" />
+      <option name="project" value="LOCAL" />
+      <updated>1622829223759</updated>
+    </task>
+    <task id="LOCAL-04709" summary="Correções menores">
+      <created>1622829378414</created>
+      <option name="number" value="04709" />
+      <option name="presentableId" value="LOCAL-04709" />
+      <option name="project" value="LOCAL" />
+      <updated>1622829378414</updated>
+    </task>
+    <task id="LOCAL-04710" summary="Correções menores">
+      <created>1622829404745</created>
+      <option name="number" value="04710" />
+      <option name="presentableId" value="LOCAL-04710" />
+      <option name="project" value="LOCAL" />
+      <updated>1622829404745</updated>
+    </task>
+    <option name="localTasksCounter" value="4711" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

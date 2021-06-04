@@ -73,11 +73,22 @@ public class NegativeCommand implements Executable {
 						String url = Helper.getImageFrom(msg);
 						File f;
 
+						int mode = 0;
+						if (args.length > 0) {
+							mode = Integer.parseInt(args[0]);
+							if (!Helper.between(mode, 0, 4)) {
+								ms.get().delete().queue(null, Helper::doNothing);
+								channel.sendMessage("❌ | O tipo deve ser 0 (inverter tudo) ou 3 (inverter apenas cores).").queue();
+								return;
+							}
+						}
+
 						if (url.contains(".gif")) {
+							int finalMode = mode;
 							f = File.createTempFile("inverted", ".gif");
 							List<GifFrame> frames = Helper.readGif(url, true);
 							frames.replaceAll(frame -> new GifFrame(
-									ImageFilters.invert(frame.getAdjustedFrame()),
+									ImageFilters.invert(frame.getAdjustedFrame(), finalMode == 1),
 									frame.getDisposal(),
 									frame.getWidth(),
 									frame.getHeight(),
@@ -90,7 +101,7 @@ public class NegativeCommand implements Executable {
 						} else {
 							BufferedImage bi = ImageIO.read(Helper.getImage(url));
 
-							f = Helper.writeAndGet(ImageFilters.invert(bi), "inverted", "png");
+							f = Helper.writeAndGet(ImageFilters.invert(bi, mode == 1), "inverted", "png");
 						}
 
 						ms.get().delete().queue(null, Helper::doNothing);
