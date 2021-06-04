@@ -87,7 +87,7 @@ public class EncoderClient {
 				put("type", "BEGIN");
 				put("size", frames.size());
 				put("width", bi.getWidth());
-				put("heigth", bi.getHeight());
+				put("height", bi.getHeight());
 			}}.toString());
 
 			for (String frame : frames) {
