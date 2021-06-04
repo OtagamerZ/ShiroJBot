@@ -57,7 +57,7 @@ public abstract class GlobalGame {
 	private final MatchHistory history = new MatchHistory();
 	private final Map<String, Double> divergence = new HashMap<>();
 	private final boolean ranked;
-	private final List<String> frames = new ArrayList<>();
+	private final List<byte[]> frames = new ArrayList<>();
 	private Consumer<Message> onExpiration;
 	private Consumer<Message> onWO;
 	private Future<?> timeout;
@@ -263,7 +263,7 @@ public abstract class GlobalGame {
 		return ranked;
 	}
 
-	public List<String> getFrames() {
+	public List<byte[]> getFrames() {
 		return frames;
 	}
 
