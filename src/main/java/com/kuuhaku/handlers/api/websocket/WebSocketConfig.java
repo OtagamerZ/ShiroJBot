@@ -28,6 +28,9 @@ public class WebSocketConfig {
 		dashboard = new DashboardSocket(new InetSocketAddress(8001));
 		canvas = new CanvasSocket(new InetSocketAddress(8002));
 
+		dashboard.setReuseAddr(true);
+		canvas.setReuseAddr(true);
+
 		dashboard.start();
 		canvas.start();
 	}

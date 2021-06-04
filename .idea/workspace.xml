@@ -14,8 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/ClientConfigurator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/EncoderClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/EncoderClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/WebSocketConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/WebSocketConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1222,28 +1222,7 @@
       <workItem from="1622776103072" duration="904000" />
       <workItem from="1622815333387" duration="64000" />
       <workItem from="1622815453974" duration="48000" />
-      <workItem from="1622816537385" duration="1338000" />
-    </task>
-    <task id="LOCAL-04650" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <created>1622481963370</created>
-      <option name="number" value="04650" />
-      <option name="presentableId" value="LOCAL-04650" />
-      <option name="project" value="LOCAL" />
-      <updated>1622481963370</updated>
-    </task>
-    <task id="LOCAL-04651" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <created>1622482081448</created>
-      <option name="number" value="04651" />
-      <option name="presentableId" value="LOCAL-04651" />
-      <option name="project" value="LOCAL" />
-      <updated>1622482081449</updated>
-    </task>
-    <task id="LOCAL-04652" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <created>1622482260900</created>
-      <option name="number" value="04652" />
-      <option name="presentableId" value="LOCAL-04652" />
-      <option name="project" value="LOCAL" />
-      <updated>1622482260900</updated>
+      <workItem from="1622816537385" duration="1992000" />
     </task>
     <task id="LOCAL-04653" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
       <created>1622484980060</created>
@@ -1567,7 +1546,28 @@
       <option name="project" value="LOCAL" />
       <updated>1622817983997</updated>
     </task>
-    <option name="localTasksCounter" value="4699" />
+    <task id="LOCAL-04699" summary="Correções menores">
+      <created>1622818559768</created>
+      <option name="number" value="04699" />
+      <option name="presentableId" value="LOCAL-04699" />
+      <option name="project" value="LOCAL" />
+      <updated>1622818559768</updated>
+    </task>
+    <task id="LOCAL-04700" summary="Correções menores">
+      <created>1622818565348</created>
+      <option name="number" value="04700" />
+      <option name="presentableId" value="LOCAL-04700" />
+      <option name="project" value="LOCAL" />
+      <updated>1622818565348</updated>
+    </task>
+    <task id="LOCAL-04701" summary="Correções menores">
+      <created>1622818613509</created>
+      <option name="number" value="04701" />
+      <option name="presentableId" value="LOCAL-04701" />
+      <option name="project" value="LOCAL" />
+      <updated>1622818613509</updated>
+    </task>
+    <option name="localTasksCounter" value="4702" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

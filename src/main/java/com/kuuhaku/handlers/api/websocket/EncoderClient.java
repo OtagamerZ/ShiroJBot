@@ -65,22 +65,21 @@ public class EncoderClient extends Endpoint {
 		Helper.logger(this.getClass()).info("Conectado ao webSocket \"encoder\" com sucesso");
 	}
 
+	@Override
+	public void onClose(Session session, CloseReason closeReason) {
+		Helper.logger(this.getClass()).info("Desconectado do webSocket \"encoder\", tentando reconexão...");
+		try {
+			Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
+		} catch (URISyntaxException | DeploymentException | IOException ignore) {
+		}
+	}
+
 	@OnMessage
 	public void onMessage(String message) {
 		JSONObject res = new JSONObject(message);
 
 		if (res.getInt("code") == HttpStatus.OK.value()) {
 			completed.get(res.getString("hash")).complete(res.getString("url"));
-		}
-	}
-
-	@OnClose
-	public void onClose(Session session, CloseReason reason) {
-		Helper.logger(this.getClass()).info("Desconectado do webSocket \"encoder\", tentando reconexão...");
-		session = null;
-		try {
-			Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
-		} catch (URISyntaxException | DeploymentException | IOException ignore) {
 		}
 	}
 
