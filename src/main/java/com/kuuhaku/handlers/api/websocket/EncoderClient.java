@@ -30,14 +30,16 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @ClientEndpoint
-public class EncoderClient {
+public class EncoderClient extends ClientEndpointConfig.Configurator {
 	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
 	private static final TempCache<String, CompletableFuture<String>> completed = new TempCache<>(10, TimeUnit.MINUTES);
 	private Session session = null;
@@ -45,6 +47,11 @@ public class EncoderClient {
 	public EncoderClient(String url) throws URISyntaxException, DeploymentException, IOException {
 		WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 		container.connectToServer(this, new URI(url));
+	}
+
+	@Override
+	public void beforeRequest(Map<String, List<String>> headers) {
+		headers.put("Authentication", List.of(Helper.hash(ShiroInfo.getBotToken().getBytes(StandardCharsets.UTF_8), "SHA-256")));
 	}
 
 	@OnOpen
