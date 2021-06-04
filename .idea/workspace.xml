@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ImageFilters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ImageFilters.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1232,14 +1230,7 @@
       <workItem from="1622776103072" duration="904000" />
       <workItem from="1622815333387" duration="64000" />
       <workItem from="1622815453974" duration="48000" />
-      <workItem from="1622816537385" duration="8690000" />
-    </task>
-    <task id="LOCAL-04666" summary="Melhoria nos embeds customizados">
-      <created>1622576041548</created>
-      <option name="number" value="04666" />
-      <option name="presentableId" value="LOCAL-04666" />
-      <option name="project" value="LOCAL" />
-      <updated>1622576041548</updated>
+      <workItem from="1622816537385" duration="9004000" />
     </task>
     <task id="LOCAL-04667" summary="Melhoria nos embeds customizados">
       <created>1622576228632</created>
@@ -1577,7 +1568,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622836445047</updated>
     </task>
-    <option name="localTasksCounter" value="4715" />
+    <task id="LOCAL-04715" summary="Correções menores">
+      <created>1622836881370</created>
+      <option name="number" value="04715" />
+      <option name="presentableId" value="LOCAL-04715" />
+      <option name="project" value="LOCAL" />
+      <updated>1622836881370</updated>
+    </task>
+    <option name="localTasksCounter" value="4716" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
