@@ -133,23 +133,23 @@ public class ImageFilters {
 		Helper.forEachPixel(source, (coords, rgb) -> {
 			int x = coords[0];
 			int y = coords[1];
-			int[] colors = Helper.unpackRGB(rgb);
+			int[] color = Helper.unpackRGB(rgb);
 
 			if (onlyHue) {
 				float[] hsv;
-				hsv = Color.RGBtoHSB(colors[1], colors[2], colors[3], null);
+				hsv = Color.RGBtoHSB(color[1], color[2], color[3], null);
 				hsv[0] = ((hsv[0] * 360 + 180) % 360) / 360;
 				int[] tmp = Helper.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-				colors[1] = tmp[0];
-				colors[2] = tmp[1];
-				colors[3] = tmp[2];
+				color[1] = tmp[1];
+				color[2] = tmp[2];
+				color[3] = tmp[3];
 			} else {
-				for (int i = 1; i < colors.length; i++) {
-					colors[i] = ~colors[i] & 0xFF;
+				for (int i = 1; i < color.length; i++) {
+					color[i] = ~color[i] & 0xFF;
 				}
 			}
 
-			out.setRGB(x, y, colors[0] << 24 | colors[1] << 16 | colors[2] << 8 | colors[3]);
+			out.setRGB(x, y, color[0] << 24 | color[1] << 16 | color[2] << 8 | color[3]);
 		});
 
 		return out;
