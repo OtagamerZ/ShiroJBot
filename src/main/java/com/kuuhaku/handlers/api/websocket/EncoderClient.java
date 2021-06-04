@@ -79,6 +79,7 @@ public class EncoderClient {
 		CompletableFuture<String> out = new CompletableFuture<>();
 		completed.put(hash, out);
 
+		System.out.println("Adding send request to queue");
 		exec.execute(() -> {
 			BufferedImage bi = Helper.btoa(frames.get(0));
 			assert bi != null;
@@ -89,6 +90,7 @@ public class EncoderClient {
 				put("width", bi.getWidth());
 				put("heigth", bi.getHeight());
 			}}.toString());
+			System.out.println("Sent header");
 
 			for (String frame : frames) {
 				send(new JSONObject() {{
@@ -96,13 +98,16 @@ public class EncoderClient {
 					put("type", "NEXT");
 					put("data", frame);
 				}}.toString());
+				System.out.println("Sent packet");
 			}
 
 			send(new JSONObject() {{
 				put("hash", hash);
 				put("type", "END");
 			}}.toString());
+			System.out.println("Sent trailer");
 		});
+		System.out.println("Request added");
 
 		return out;
 	}
