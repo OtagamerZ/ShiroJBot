@@ -204,6 +204,8 @@ public class SellCardCommand implements Executable {
 					));
 		} catch (InterruptedException | ExecutionException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		} catch (NumberFormatException e) {
+			channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
 		}
 	}
 

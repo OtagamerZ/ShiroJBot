@@ -281,7 +281,7 @@ public class AuctionCommand implements Executable {
 							ms -> Main.getInfo().getConfirmationPending().remove(author.getId())
 					));
 		} catch (NumberFormatException e) {
-			channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
+			channel.sendMessage("❌ | O valor máximo é " + Helper.separate(Integer.MAX_VALUE) + " créditos!").queue();
 		}
 	}
 }
