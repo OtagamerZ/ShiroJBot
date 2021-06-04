@@ -76,7 +76,7 @@ public class NegativeCommand implements Executable {
 						int mode = 0;
 						if (args.length > 0) {
 							mode = Integer.parseInt(args[0]);
-							if (!Helper.between(mode, 0, 4)) {
+							if (!Helper.between(mode, 0, 2)) {
 								ms.get().delete().queue(null, Helper::doNothing);
 								channel.sendMessage("❌ | O tipo deve ser 0 (inverter tudo) ou 3 (inverter apenas cores).").queue();
 								return;
