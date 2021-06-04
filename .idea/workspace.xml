@@ -14,8 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AuctionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AuctionCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +122,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="CSS&#10;JavaScript&#10;JAVA&#10;GenericSQL" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT&#10;CSS&#10;JavaScript&#10;JAVA" />
     <property name="database.data.extractors.current.export.id" value="Comma-separated (CSV)_id" />
     <property name="extract.method.default.visibility" value="public" />
     <property name="grid.search.filter.rows" value="true" />
@@ -1233,21 +1233,7 @@
       <workItem from="1622776103072" duration="904000" />
       <workItem from="1622815333387" duration="64000" />
       <workItem from="1622815453974" duration="48000" />
-      <workItem from="1622816537385" duration="3325000" />
-    </task>
-    <task id="LOCAL-04657" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <created>1622569191148</created>
-      <option name="number" value="04657" />
-      <option name="presentableId" value="LOCAL-04657" />
-      <option name="project" value="LOCAL" />
-      <updated>1622569191152</updated>
-    </task>
-    <task id="LOCAL-04658" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <created>1622569630222</created>
-      <option name="number" value="04658" />
-      <option name="presentableId" value="LOCAL-04658" />
-      <option name="project" value="LOCAL" />
-      <updated>1622569630222</updated>
+      <workItem from="1622816537385" duration="5339000" />
     </task>
     <task id="LOCAL-04659" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
       <created>1622569738224</created>
@@ -1578,7 +1564,21 @@
       <option name="project" value="LOCAL" />
       <updated>1622824775018</updated>
     </task>
-    <option name="localTasksCounter" value="4706" />
+    <task id="LOCAL-04706" summary="Correções menores">
+      <created>1622824872386</created>
+      <option name="number" value="04706" />
+      <option name="presentableId" value="LOCAL-04706" />
+      <option name="project" value="LOCAL" />
+      <updated>1622824872386</updated>
+    </task>
+    <task id="LOCAL-04707" summary="Correções menores">
+      <created>1622824968978</created>
+      <option name="number" value="04707" />
+      <option name="presentableId" value="LOCAL-04707" />
+      <option name="project" value="LOCAL" />
+      <updated>1622824968978</updated>
+    </task>
+    <option name="localTasksCounter" value="4708" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

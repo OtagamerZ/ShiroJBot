@@ -2825,31 +2825,6 @@ public class Helper {
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 
-	public static boolean hasTransparency(List<GifFrame> frames) {
-		for (GifFrame frame : frames) {
-			if (!frame.getFrame().getColorModel().hasAlpha()) continue;
-
-			for (int y = 0; y < frame.getHeight(); y++) {
-				for (int x = 0; x < frame.getWidth(); x++) {
-					int[] rgb = unpackRGB(frame.getFrame().getRGB(x, y));
-
-					if (rgb[0] == 0) return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	public static int getTransparencyColor(List<GifFrame> frames) {
-		Set<Integer> tones = new HashSet<>(Set.of(0xFF0000, 0xFF00, 0xFF, 0xFFFF00, 0xFF00FF, 0xFFFF));
-		for (GifFrame frame : frames) {
-			forEachPixel(frame.getAdjustedFrame(), (coords, rgb) -> tones.remove(rgb));
-		}
-
-		return tones.stream().findFirst().orElse(0);
-	}
-
 	public static byte[] compress(String data) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(data.length());
 		GZIPOutputStream gzip = new GZIPOutputStream(bos);
