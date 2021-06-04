@@ -129,6 +129,8 @@ import java.util.function.ToIntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class Helper {
 	public static final String VOID = "\u200B";
@@ -2846,5 +2848,22 @@ public class Helper {
 		}
 
 		return tones.stream().findFirst().orElse(0);
+	}
+
+	public static byte[] compress(String data) throws IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(data.length());
+		GZIPOutputStream gzip = new GZIPOutputStream(bos);
+		gzip.write(data.getBytes(StandardCharsets.UTF_8));
+		gzip.close();
+		byte[] compressed = bos.toByteArray();
+		bos.close();
+		return compressed;
+	}
+
+	public static String uncompress(byte[] compressed) throws IOException {
+		ByteArrayInputStream bis = new ByteArrayInputStream(compressed);
+		GZIPInputStream gis = new GZIPInputStream(bis);
+		byte[] bytes = IOUtils.toByteArray(gis);
+		return new String(bytes, StandardCharsets.UTF_8);
 	}
 }
