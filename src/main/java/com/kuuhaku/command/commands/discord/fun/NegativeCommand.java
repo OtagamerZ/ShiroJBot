@@ -79,7 +79,7 @@ public class NegativeCommand implements Executable {
 							mode = Integer.parseInt(args[0]);
 							if (!Helper.between(mode, 0, 2)) {
 								ms.get().delete().queue(null, Helper::doNothing);
-								channel.sendMessage("❌ | O tipo deve ser 0 (inverter tudo) ou 3 (inverter apenas cores).").queue();
+								channel.sendMessage("❌ | O tipo deve ser 0 (inverter tudo) ou 1 (inverter apenas cores).").queue();
 								return;
 							}
 						}
