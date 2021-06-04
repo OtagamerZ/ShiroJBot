@@ -72,6 +72,7 @@ public class EncoderClient extends ClientEndpointConfig.Configurator {
 	@OnClose
 	public void onClose(Session session, CloseReason reason) {
 		Helper.logger(this.getClass()).info("Desconectado do webSocket \"encoder\", tentando reconexão...");
+		session = null;
 		try {
 			Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
 		} catch (URISyntaxException | DeploymentException | IOException ignore) {
