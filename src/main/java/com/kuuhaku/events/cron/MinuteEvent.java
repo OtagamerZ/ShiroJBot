@@ -49,7 +49,7 @@ public class MinuteEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		BotStatsDAO.register();
 
-		if (Main.getInfo().getEncoderClient() == null || Main.getInfo().getEncoderClient().getSession() == null) {
+		if (Main.getInfo().isEncoderConnected()) {
 			try {
 				Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
 			} catch (URISyntaxException | DeploymentException | IOException ignore) {

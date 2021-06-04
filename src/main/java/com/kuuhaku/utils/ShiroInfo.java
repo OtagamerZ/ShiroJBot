@@ -371,6 +371,10 @@ public class ShiroInfo {
 		return encoderClient;
 	}
 
+	public boolean isEncoderConnected() {
+		return encoderClient != null && encoderClient.getSession() != null && encoderClient.getSession().isOpen();
+	}
+
 	public void setEncoderClient(EncoderClient encoderClient) {
 		this.encoderClient = encoderClient;
 	}
