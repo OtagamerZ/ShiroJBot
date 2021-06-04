@@ -14,10 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções menores">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NegativeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NegativeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NoiseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/NoiseCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ImageFilters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ImageFilters.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1235,28 +1232,7 @@
       <workItem from="1622776103072" duration="904000" />
       <workItem from="1622815333387" duration="64000" />
       <workItem from="1622815453974" duration="48000" />
-      <workItem from="1622816537385" duration="7988000" />
-    </task>
-    <task id="LOCAL-04662" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <created>1622570119209</created>
-      <option name="number" value="04662" />
-      <option name="presentableId" value="LOCAL-04662" />
-      <option name="project" value="LOCAL" />
-      <updated>1622570119209</updated>
-    </task>
-    <task id="LOCAL-04663" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <created>1622570589073</created>
-      <option name="number" value="04663" />
-      <option name="presentableId" value="LOCAL-04663" />
-      <option name="project" value="LOCAL" />
-      <updated>1622570589074</updated>
-    </task>
-    <task id="LOCAL-04664" summary="Melhoria nos embeds customizados">
-      <created>1622575305513</created>
-      <option name="number" value="04664" />
-      <option name="presentableId" value="LOCAL-04664" />
-      <option name="project" value="LOCAL" />
-      <updated>1622575305513</updated>
+      <workItem from="1622816537385" duration="8287000" />
     </task>
     <task id="LOCAL-04665" summary="Melhoria nos embeds customizados">
       <created>1622575933803</created>
@@ -1580,7 +1556,28 @@
       <option name="project" value="LOCAL" />
       <updated>1622829404745</updated>
     </task>
-    <option name="localTasksCounter" value="4711" />
+    <task id="LOCAL-04711" summary="Correções menores">
+      <created>1622836143119</created>
+      <option name="number" value="04711" />
+      <option name="presentableId" value="LOCAL-04711" />
+      <option name="project" value="LOCAL" />
+      <updated>1622836143119</updated>
+    </task>
+    <task id="LOCAL-04712" summary="Correções menores">
+      <created>1622836158363</created>
+      <option name="number" value="04712" />
+      <option name="presentableId" value="LOCAL-04712" />
+      <option name="project" value="LOCAL" />
+      <updated>1622836158363</updated>
+    </task>
+    <task id="LOCAL-04713" summary="Correções menores">
+      <created>1622836306084</created>
+      <option name="number" value="04713" />
+      <option name="presentableId" value="LOCAL-04713" />
+      <option name="project" value="LOCAL" />
+      <updated>1622836306084</updated>
+    </task>
+    <option name="localTasksCounter" value="4714" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
