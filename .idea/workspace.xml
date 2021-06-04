@@ -15,8 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Criação de client da API de encoding da Shiro">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/EncoderClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/EncoderClient.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1219,14 +1217,8 @@
       <workItem from="1622600366718" duration="2868000" />
       <workItem from="1622604620245" duration="372000" />
       <workItem from="1622696753343" duration="169000" />
-      <workItem from="1622752074534" duration="8009000" />
-    </task>
-    <task id="LOCAL-04643" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
-      <created>1622481560881</created>
-      <option name="number" value="04643" />
-      <option name="presentableId" value="LOCAL-04643" />
-      <option name="project" value="LOCAL" />
-      <updated>1622481560881</updated>
+      <workItem from="1622752074534" duration="8757000" />
+      <workItem from="1622776103072" duration="725000" />
     </task>
     <task id="LOCAL-04644" summary="Nomes de clãs agora podem ser alterados;&#10;Adicionado aluguel para os clãs;">
       <created>1622481663881</created>
@@ -1564,7 +1556,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622755513778</updated>
     </task>
-    <option name="localTasksCounter" value="4692" />
+    <task id="LOCAL-04692" summary="Criação de client da API de encoding da Shiro">
+      <created>1622766803053</created>
+      <option name="number" value="04692" />
+      <option name="presentableId" value="LOCAL-04692" />
+      <option name="project" value="LOCAL" />
+      <updated>1622766803053</updated>
+    </task>
+    <option name="localTasksCounter" value="4693" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
