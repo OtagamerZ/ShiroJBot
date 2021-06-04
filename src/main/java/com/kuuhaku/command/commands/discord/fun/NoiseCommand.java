@@ -77,7 +77,7 @@ public class NoiseCommand implements Executable {
 							f = File.createTempFile("noised", ".gif");
 							List<GifFrame> frames = Helper.readGif(url, true);
 							frames.replaceAll(frame -> new GifFrame(
-									ImageFilters.invert(frame.getAdjustedFrame()),
+									ImageFilters.noise(frame.getAdjustedFrame()),
 									frame.getDisposal(),
 									frame.getWidth(),
 									frame.getHeight(),
