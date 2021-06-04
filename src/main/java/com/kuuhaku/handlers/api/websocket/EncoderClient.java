@@ -32,10 +32,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @ClientEndpoint
 public class EncoderClient {
+	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
 	private static final TempCache<String, CompletableFuture<String>> completed = new TempCache<>(10, TimeUnit.MINUTES);
 	private Session session = null;
 
@@ -62,7 +65,6 @@ public class EncoderClient {
 	@OnClose
 	public void onClose(Session session, CloseReason reason) {
 		Helper.logger(this.getClass()).info("Desconectado do webSocket \"encoder\", tentando reconexão...");
-		this.session = null;
 		try {
 			Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
 		} catch (URISyntaxException | DeploymentException | IOException ignore) {
@@ -77,33 +79,39 @@ public class EncoderClient {
 		CompletableFuture<String> out = new CompletableFuture<>();
 		completed.put(hash, out);
 
-		BufferedImage bi = Helper.btoa(frames.get(0));
-		assert bi != null;
-		send(new JSONObject() {{
-			put("hash", hash);
-			put("type", "BEGIN");
-			put("size", frames.size());
-			put("width", bi.getWidth());
-			put("heigth", bi.getHeight());
-		}}.toString());
-
-		for (String frame : frames) {
+		exec.execute(() -> {
+			BufferedImage bi = Helper.btoa(frames.get(0));
+			assert bi != null;
 			send(new JSONObject() {{
 				put("hash", hash);
-				put("type", "NEXT");
-				put("data", frame);
+				put("type", "BEGIN");
+				put("size", frames.size());
+				put("width", bi.getWidth());
+				put("heigth", bi.getHeight());
 			}}.toString());
-		}
 
-		send(new JSONObject() {{
-			put("hash", hash);
-			put("type", "END");
-		}}.toString());
+			for (String frame : frames) {
+				send(new JSONObject() {{
+					put("hash", hash);
+					put("type", "NEXT");
+					put("data", frame);
+				}}.toString());
+			}
+
+			send(new JSONObject() {{
+				put("hash", hash);
+				put("type", "END");
+			}}.toString());
+		});
 
 		return out;
 	}
 
 	public void send(String msg) {
-		session.getAsyncRemote().sendText(msg);
+		try {
+			session.getBasicRemote().sendText(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
