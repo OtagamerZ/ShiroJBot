@@ -87,33 +87,36 @@ public class EncoderClient extends Endpoint {
 		return session;
 	}
 
-	public CompletableFuture<String> requestEncoding(String hash, List<String> frames) {
+	public CompletableFuture<String> requestEncoding(String hash, List<byte[]> frames) {
 		CompletableFuture<String> out = new CompletableFuture<>();
 		completed.put(hash, out);
 
 		exec.execute(() -> {
-			BufferedImage bi = Helper.btoa(frames.get(0));
-			assert bi != null;
-			send(new JSONObject() {{
-				put("hash", hash);
-				put("type", "BEGIN");
-				put("size", frames.size());
-				put("width", bi.getWidth());
-				put("height", bi.getHeight());
-			}}.toString());
-
-			for (String frame : frames) {
+			try {
+				BufferedImage bi = Helper.btoa(Helper.uncompress(frames.get(0)));
+				assert bi != null;
 				send(new JSONObject() {{
 					put("hash", hash);
-					put("type", "NEXT");
-					put("data", frame);
+					put("type", "BEGIN");
+					put("size", frames.size());
+					put("width", bi.getWidth());
+					put("height", bi.getHeight());
 				}}.toString());
-			}
 
-			send(new JSONObject() {{
-				put("hash", hash);
-				put("type", "END");
-			}}.toString());
+				for (byte[] frame : frames) {
+					send(new JSONObject() {{
+						put("hash", hash);
+						put("type", "NEXT");
+						put("data", frame);
+					}}.toString());
+				}
+
+				send(new JSONObject() {{
+					put("hash", hash);
+					put("type", "END");
+				}}.toString());
+			} catch (IOException ignore) {
+			}
 		});
 
 		return out;
