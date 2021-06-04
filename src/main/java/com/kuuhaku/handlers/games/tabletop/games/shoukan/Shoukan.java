@@ -2200,7 +2200,7 @@ public class Shoukan extends GlobalGame {
 										.flatMap(m -> {
 											while (!Main.getInfo().isEncoderConnected()) {
 												try {
-													Thread.sleep(60000);
+													Thread.sleep(2000);
 												} catch (InterruptedException ignore) {
 												}
 											}
