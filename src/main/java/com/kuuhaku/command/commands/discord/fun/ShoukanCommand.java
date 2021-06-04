@@ -65,7 +65,6 @@ public class ShoukanCommand implements Executable {
 	public void execute(User author, Member member, String command, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
 		boolean practice = args.length > 0 && Helper.equalsAny(args[0], "practice", "treino");
 		boolean ranked = args.length > 0 && Helper.equalsAny(args[0], "ranqueada", "ranked");
-		boolean record = args.length > 0 && Helper.equalsAny("replay", args);
 
 		if (practice) {
 			JSONObject custom = Helper.getOr(Helper.findJson(argsAsText), new JSONObject());
@@ -83,7 +82,7 @@ public class ShoukanCommand implements Executable {
 				return;
 			}
 
-			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, custom, daily, false, record, author, author);
+			GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), 0, custom, daily, false, false, author, author);
 			t.start();
 		} else if (ranked) {
 			MatchMaking mm = Main.getInfo().getMatchMaking();
@@ -312,7 +311,7 @@ public class ShoukanCommand implements Executable {
 				for (User player : players) {
 					Main.getInfo().getConfirmationPending().put(player.getId(), true);
 				}
-				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, record, players.toArray(User[]::new));
+				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, true, players.toArray(User[]::new));
 				channel.sendMessage(users.stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.collectingAndThen(Collectors.toList(), Helper.properlyJoin())) + " vocês foram desafiados a uma partida de Shoukan, desejam aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (players.contains(mb.getUser())) {
@@ -346,7 +345,7 @@ public class ShoukanCommand implements Executable {
 						));
 			} else if (clan) {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, false, false, record, List.of(c, other), author, message.getMentionedUsers().get(0));
+				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, false, false, true, List.of(c, other), author, message.getMentionedUsers().get(0));
 				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " seu clã foi desafiado a uma partida de Shoukan, deseja aceitar?" + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
@@ -369,7 +368,7 @@ public class ShoukanCommand implements Executable {
 						));
 			} else {
 				Main.getInfo().getConfirmationPending().put(author.getId(), true);
-				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, record, author, message.getMentionedUsers().get(0));
+				GlobalGame t = new Shoukan(Main.getShiroShards(), new GameChannel(channel), bet, custom, daily, false, true, author, message.getMentionedUsers().get(0));
 				channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Shoukan, deseja aceitar?" + (daily ? " (desafio diário)" : "") + (custom != null ? " (contém regras personalizadas)" : bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 						.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 									if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
