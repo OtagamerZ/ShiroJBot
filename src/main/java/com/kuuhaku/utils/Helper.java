@@ -674,6 +674,7 @@ public class Helper {
 							Message msg = chn.retrieveMessageById(message.getId()).submit().get();
 							resolveButton(g, message.getButtons(), buttons);
 
+							msg.clearReactions().queue();
 							if (message.isGatekeeper()) {
 								Role r = message.getRole(g);
 
@@ -688,7 +689,6 @@ public class Helper {
 									}
 								});
 
-								msg.clearReactions().queue();
 								Pages.buttonize(msg, buttons, true);
 							}
 						}
