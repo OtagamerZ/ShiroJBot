@@ -15,9 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Criação de client da API de encoding da Shiro">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/AnimeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/Media.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/NextAiringEpisode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/anime/NextAiringEpisode.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1226,13 +1223,6 @@
       <workItem from="1622815453974" duration="48000" />
       <workItem from="1622816537385" duration="9004000" />
     </task>
-    <task id="LOCAL-04667" summary="Melhoria nos embeds customizados">
-      <created>1622576228632</created>
-      <option name="number" value="04667" />
-      <option name="presentableId" value="LOCAL-04667" />
-      <option name="project" value="LOCAL" />
-      <updated>1622576228632</updated>
-    </task>
     <task id="LOCAL-04668" summary="Melhoria nos embeds customizados">
       <created>1622576338503</created>
       <option name="number" value="04668" />
@@ -1569,7 +1559,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622836881370</updated>
     </task>
-    <option name="localTasksCounter" value="4716" />
+    <task id="LOCAL-04716" summary="Criação de client da API de encoding da Shiro">
+      <created>1622845861117</created>
+      <option name="number" value="04716" />
+      <option name="presentableId" value="LOCAL-04716" />
+      <option name="project" value="LOCAL" />
+      <updated>1622845861118</updated>
+    </task>
+    <option name="localTasksCounter" value="4717" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1679,9 +1676,9 @@
     <MESSAGE value="Melhoria nos embeds customizados" />
     <MESSAGE value="Adição de replay no Shoukan" />
     <MESSAGE value="Aumento no custo dos upgrades de servidor" />
-    <MESSAGE value="Criação de client da API de encoding da Shiro" />
     <MESSAGE value="Correções menores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
+    <MESSAGE value="Criação de client da API de encoding da Shiro" />
+    <option name="LAST_COMMIT_MESSAGE" value="Criação de client da API de encoding da Shiro" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
