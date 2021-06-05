@@ -1220,21 +1220,7 @@
       <workItem from="1622815333387" duration="64000" />
       <workItem from="1622815453974" duration="48000" />
       <workItem from="1622816537385" duration="9004000" />
-      <workItem from="1622860786448" duration="1617000" />
-    </task>
-    <task id="LOCAL-04670" summary="Melhoria nos embeds customizados">
-      <created>1622577111070</created>
-      <option name="number" value="04670" />
-      <option name="presentableId" value="LOCAL-04670" />
-      <option name="project" value="LOCAL" />
-      <updated>1622577111070</updated>
-    </task>
-    <task id="LOCAL-04671" summary="Melhoria nos embeds customizados">
-      <created>1622577244351</created>
-      <option name="number" value="04671" />
-      <option name="presentableId" value="LOCAL-04671" />
-      <option name="project" value="LOCAL" />
-      <updated>1622577244351</updated>
+      <workItem from="1622860786448" duration="1941000" />
     </task>
     <task id="LOCAL-04672" summary="Melhoria nos embeds customizados">
       <created>1622577267623</created>
@@ -1565,7 +1551,21 @@
       <option name="project" value="LOCAL" />
       <updated>1622862450010</updated>
     </task>
-    <option name="localTasksCounter" value="4719" />
+    <task id="LOCAL-04719" summary="Criação de client da API de encoding da Shiro">
+      <created>1622862718434</created>
+      <option name="number" value="04719" />
+      <option name="presentableId" value="LOCAL-04719" />
+      <option name="project" value="LOCAL" />
+      <updated>1622862718434</updated>
+    </task>
+    <task id="LOCAL-04720" summary="Criação de client da API de encoding da Shiro">
+      <created>1622862859367</created>
+      <option name="number" value="04720" />
+      <option name="presentableId" value="LOCAL-04720" />
+      <option name="project" value="LOCAL" />
+      <updated>1622862859367</updated>
+    </task>
+    <option name="localTasksCounter" value="4721" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
