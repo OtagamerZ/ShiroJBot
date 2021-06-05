@@ -76,6 +76,7 @@ public class EncoderClient extends Endpoint {
 
 	@OnMessage
 	public void onMessage(String message) {
+		System.out.println(message);
 		JSONObject res = new JSONObject(message);
 
 		if (res.getInt("code") == HttpStatus.OK.value()) {
