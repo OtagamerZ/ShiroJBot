@@ -2222,7 +2222,7 @@ public class Shoukan extends GlobalGame {
 														.setDescription("Houve um erro ao processar o replay, meus desenvolvedores já foram notificados.");
 											}
 
-											m.editMessage(Helper.VOID)
+											m.editMessage(mb.getUser().getAsMention())
 													.embed(eb.build())
 													.queue(null, Helper::doNothing);
 										});
