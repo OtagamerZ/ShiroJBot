@@ -69,7 +69,7 @@ public class EncoderClient extends Endpoint {
 	@Override
 	public void onOpen(Session session, EndpointConfig config) {
 		this.session = session;
-		//this.session.addMessageHandler(handler);
+		this.session.addMessageHandler(String.class, handler);
 		Helper.logger(this.getClass()).debug("Conectado ao webSocket \"encoder\" com sucesso");
 	}
 
