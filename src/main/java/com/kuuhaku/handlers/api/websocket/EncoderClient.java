@@ -42,6 +42,13 @@ import java.util.concurrent.TimeUnit;
 public class EncoderClient extends Endpoint {
 	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
 	private static final TempCache<String, CompletableFuture<String>> completed = new TempCache<>(10, TimeUnit.MINUTES);
+	private final MessageHandler.Whole<String> handler = message -> {
+		JSONObject res = new JSONObject(message);
+
+		if (res.getInt("code") == HttpStatus.OK.value()) {
+			completed.get(res.getString("hash")).complete(res.getString("url"));
+		}
+	};
 	private Session session = null;
 
 	public EncoderClient(String url) throws URISyntaxException, DeploymentException, IOException {
@@ -62,13 +69,7 @@ public class EncoderClient extends Endpoint {
 	@Override
 	public void onOpen(Session session, EndpointConfig config) {
 		this.session = session;
-		this.session.addMessageHandler((MessageHandler.Whole<String>) message -> {
-			JSONObject res = new JSONObject(message);
-
-			if (res.getInt("code") == HttpStatus.OK.value()) {
-				completed.get(res.getString("hash")).complete(res.getString("url"));
-			}
-		});
+		this.session.addMessageHandler(handler);
 		Helper.logger(this.getClass()).debug("Conectado ao webSocket \"encoder\" com sucesso");
 	}
 
