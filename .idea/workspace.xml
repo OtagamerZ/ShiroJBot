@@ -1222,13 +1222,7 @@
       <workItem from="1622815333387" duration="64000" />
       <workItem from="1622815453974" duration="48000" />
       <workItem from="1622816537385" duration="9004000" />
-    </task>
-    <task id="LOCAL-04668" summary="Melhoria nos embeds customizados">
-      <created>1622576338503</created>
-      <option name="number" value="04668" />
-      <option name="presentableId" value="LOCAL-04668" />
-      <option name="project" value="LOCAL" />
-      <updated>1622576338503</updated>
+      <workItem from="1622860786448" duration="1200000" />
     </task>
     <task id="LOCAL-04669" summary="Melhoria nos embeds customizados">
       <created>1622576932538</created>
@@ -1566,7 +1560,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622845861118</updated>
     </task>
-    <option name="localTasksCounter" value="4717" />
+    <task id="LOCAL-04717" summary="Criação de client da API de encoding da Shiro">
+      <created>1622860932667</created>
+      <option name="number" value="04717" />
+      <option name="presentableId" value="LOCAL-04717" />
+      <option name="project" value="LOCAL" />
+      <updated>1622860932667</updated>
+    </task>
+    <option name="localTasksCounter" value="4718" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
