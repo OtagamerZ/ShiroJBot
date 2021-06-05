@@ -42,6 +42,13 @@ import java.util.concurrent.TimeUnit;
 public class EncoderClient extends Endpoint {
 	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
 	private static final TempCache<String, CompletableFuture<String>> completed = new TempCache<>(10, TimeUnit.MINUTES);
+	private final MessageHandler handler = (MessageHandler.Whole<String>) message -> {
+		JSONObject res = new JSONObject(message);
+
+		if (res.getInt("code") == HttpStatus.OK.value()) {
+			completed.get(res.getString("hash")).complete(res.getString("url"));
+		}
+	};
 	private Session session = null;
 
 	public EncoderClient(String url) throws URISyntaxException, DeploymentException, IOException {
@@ -62,6 +69,7 @@ public class EncoderClient extends Endpoint {
 	@Override
 	public void onOpen(Session session, EndpointConfig config) {
 		this.session = session;
+		this.session.addMessageHandler(handler);
 		Helper.logger(this.getClass()).debug("Conectado ao webSocket \"encoder\" com sucesso");
 	}
 
@@ -71,16 +79,6 @@ public class EncoderClient extends Endpoint {
 		try {
 			Main.getInfo().setEncoderClient(new EncoderClient(ShiroInfo.SOCKET_ROOT + "/encoder"));
 		} catch (URISyntaxException | DeploymentException | IOException ignore) {
-		}
-	}
-
-	@OnMessage
-	public void onMessage(String message) {
-		System.out.println(message);
-		JSONObject res = new JSONObject(message);
-
-		if (res.getInt("code") == HttpStatus.OK.value()) {
-			completed.get(res.getString("hash")).complete(res.getString("url"));
 		}
 	}
 
