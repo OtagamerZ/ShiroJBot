@@ -25,6 +25,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.BlacklistDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.annotations.Command;
@@ -260,6 +261,7 @@ public class RankCommand implements Executable {
 
 	private static String checkUser(com.kuuhaku.model.persistent.Member m) {
 		try {
+			if (BlacklistDAO.isBlacklisted(m.getUid())) return "";
 			return Main.getInfo().getUserByID(m.getUid()).getName();
 		} catch (Exception e) {
 			return "";
@@ -268,6 +270,7 @@ public class RankCommand implements Executable {
 
 	private static String checkUser(Object[] kp) {
 		try {
+			if (BlacklistDAO.isBlacklisted(String.valueOf(kp[0]))) return "";
 			return Main.getInfo().getUserByID(String.valueOf(kp[0])).getName();
 		} catch (Exception e) {
 			return "";
@@ -276,6 +279,7 @@ public class RankCommand implements Executable {
 
 	private static String checkUser(Account acc) {
 		try {
+			if (BlacklistDAO.isBlacklisted(acc.getUid())) return "";
 			return Main.getInfo().getUserByID(acc.getUid()).getName();
 		} catch (Exception e) {
 			return "";

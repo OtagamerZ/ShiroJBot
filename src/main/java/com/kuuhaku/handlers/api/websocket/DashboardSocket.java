@@ -25,13 +25,13 @@ import com.kuuhaku.handlers.api.endpoint.payload.ReadyData;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.Field;
-import com.kuuhaku.model.common.TempCache;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
+import net.jodah.expiringmap.ExpiringMap;
 import org.java_websocket.WebSocket;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ClientHandshake;
@@ -50,7 +50,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class DashboardSocket extends WebSocketServer {
-	private final TempCache<String, BiContract<WebSocket, ReadyData>> requests = new TempCache<>(5, TimeUnit.MINUTES);
+	private final ExpiringMap<String, BiContract<WebSocket, ReadyData>> requests = ExpiringMap.builder().expiration(5, TimeUnit.MINUTES).build();
 
 	public DashboardSocket(InetSocketAddress address) {
 		super(address);
@@ -436,7 +436,7 @@ public class DashboardSocket extends WebSocketServer {
 		Helper.logger(this.getClass()).debug("Received partial login request from session " + session + " (Websocket)");
 	}
 
-	public TempCache<String, BiContract<WebSocket, ReadyData>> getRequests() {
+	public ExpiringMap<String, BiContract<WebSocket, ReadyData>> getRequests() {
 		return requests;
 	}
 

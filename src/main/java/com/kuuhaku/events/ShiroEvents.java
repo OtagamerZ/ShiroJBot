@@ -276,7 +276,7 @@ public class ShiroEvents extends ListenerAdapter {
 						return;
 					} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
 						channel.sendMessage(I18n.getString("err_user-ratelimited")).queue();
-						Main.getInfo().getRatelimit().put(author.getId(), true);
+						Main.getInfo().getRatelimit().put(author.getId(), true, 3 + Helper.rng(4, false), TimeUnit.SECONDS);
 						return;
 					} else if (command.getMissingPerms(channel).length > 0) {
 						channel.sendMessage("❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
@@ -288,7 +288,7 @@ public class ShiroEvents extends ListenerAdapter {
 					}
 
 					if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
-						Main.getInfo().getRatelimit().put(author.getId(), true);
+						Main.getInfo().getRatelimit().put(author.getId(), true, 2 + Helper.rng(3, false), TimeUnit.SECONDS);
 
 					command.execute(author, member, commandName, argsAsText, args, message, channel, guild, prefix);
 					Helper.spawnAd(channel);
