@@ -18,7 +18,7 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.PermaBlock;
+import com.kuuhaku.model.persistent.Block;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -26,8 +26,8 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RelayDAO {
-	public static void permaBlock(PermaBlock p) {
+public class BlockDAO {
+	public static void block(Block p) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
@@ -42,7 +42,7 @@ public class RelayDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			Query q = em.createQuery("SELECT p.id FROM PermaBlock p", String.class);
+			Query q = em.createQuery("SELECT p.id FROM Block p", String.class);
 			List<String> blocks = q.getResultList();
 			em.close();
 			return blocks;

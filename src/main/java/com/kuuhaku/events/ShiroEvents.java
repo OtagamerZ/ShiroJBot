@@ -741,7 +741,7 @@ public class ShiroEvents extends ListenerAdapter {
 									.setThumbnail("https://cdn.icon-icons.com/icons2/1380/PNG/512/vcsconflicting_93497.png")
 									.setTimestamp(Instant.now());
 
-							RelayDAO.permaBlock(new PermaBlock(args[1]));
+							BlockDAO.block(new Block(args[1]));
 							u.openPrivateChannel().queue(c ->
 									c.sendMessage(eb.build()).queue(null, Helper::doNothing));
 							for (String d : staffIds) {
@@ -806,7 +806,7 @@ public class ShiroEvents extends ListenerAdapter {
 				}
 
 				event.getAuthor().openPrivateChannel().queue(c -> {
-					if (!RelayDAO.blockedList().contains(event.getAuthor().getId())) {
+					if (!BlockDAO.blockedList().contains(event.getAuthor().getId())) {
 						c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
 								.queue(s -> {
 									EmbedBuilder eb = new ColorlessEmbedBuilder()
