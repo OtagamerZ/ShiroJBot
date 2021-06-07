@@ -27,7 +27,6 @@ import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.common.MatchMaking;
-import com.kuuhaku.model.common.TempCache;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.SupportTier;
@@ -38,6 +37,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.entities.*;
+import net.jodah.expiringmap.ExpiringMap;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
 
@@ -132,7 +132,7 @@ public class ShiroInfo {
 			.token(dblToken)
 			.botId("572413282653306901")
 			.build();
-	private final ConcurrentMap<String, TempCache<String, Message>> messageCache = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, ExpiringMap<String, Message>> messageCache = new ConcurrentHashMap<>();
 	private final Map<String, Game> games = new HashMap<>();
 	private final Map<String, Invite> requests = new HashMap<>();
 	private final Set<String> gameLock = new HashSet<>();
@@ -141,13 +141,13 @@ public class ShiroInfo {
 	private final File temporaryFolder = new File(System.getenv("TEMPORARY_PATH"));
 
 	//CACHES
-	private final TempCache<String, Boolean> ratelimit = new TempCache<>(3, TimeUnit.SECONDS);
-	private final TempCache<String, Boolean> confirmationPending = new TempCache<>(1, TimeUnit.MINUTES);
-	private final TempCache<String, Boolean> specialEvent = new TempCache<>(30, TimeUnit.MINUTES);
-	private final TempCache<String, KawaiponCard> currentCard = new TempCache<>(1, TimeUnit.MINUTES);
-	private final TempCache<String, Prize<?>> currentDrop = new TempCache<>(1, TimeUnit.MINUTES);
-	private final TempCache<String, byte[]> cardCache = new TempCache<>(30, TimeUnit.MINUTES);
-	private final TempCache<String, byte[]> resourceCache = new TempCache<>(30, TimeUnit.MINUTES);
+	private final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
+	private final ExpiringMap<String, Boolean> confirmationPending = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
+	private final ExpiringMap<String, Boolean> specialEvent = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
+	private final ExpiringMap<String, KawaiponCard> currentCard = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
+	private final ExpiringMap<String, Prize<?>> currentDrop = ExpiringMap.builder().expiration(1, TimeUnit.MINUTES).build();
+	private final ExpiringMap<String, byte[]> cardCache = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
+	private final ExpiringMap<String, byte[]> resourceCache = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
 
 	private boolean isLive = false;
 
@@ -380,21 +380,31 @@ public class ShiroInfo {
 	}
 
 	public void cache(Guild guild, Message message) {
-		messageCache.computeIfAbsent(guild.getId(), k -> new TempCache<>(64, 1, TimeUnit.DAYS))
+		messageCache.computeIfAbsent(guild.getId(), k -> ExpiringMap.builder()
+				.maxSize(64)
+				.expiration(1, TimeUnit.DAYS)
+				.build()
+		)
 				.put(message.getId(), message);
 	}
 
 	public Message retrieveCachedMessage(Guild guild, String id) {
 		return messageCache.getOrDefault(
 				guild.getId(),
-				new TempCache<>(64, 1, TimeUnit.DAYS)
+				ExpiringMap.builder()
+						.maxSize(64)
+						.expiration(1, TimeUnit.DAYS)
+						.build()
 		).get(id);
 	}
 
-	public TempCache<String, Message> retrieveCache(Guild guild) {
+	public ExpiringMap<String, Message> retrieveCache(Guild guild) {
 		return messageCache.getOrDefault(
 				guild.getId(),
-				new TempCache<>(64, 1, TimeUnit.DAYS)
+				ExpiringMap.builder()
+						.maxSize(64)
+						.expiration(1, TimeUnit.DAYS)
+						.build()
 		);
 	}
 
@@ -402,31 +412,31 @@ public class ShiroInfo {
 		return requests;
 	}
 
-	public TempCache<String, KawaiponCard> getCurrentCard() {
+	public ExpiringMap<String, KawaiponCard> getCurrentCard() {
 		return currentCard;
 	}
 
-	public TempCache<String, Prize<?>> getCurrentDrop() {
+	public ExpiringMap<String, Prize<?>> getCurrentDrop() {
 		return currentDrop;
 	}
 
-	public TempCache<String, byte[]> getCardCache() {
+	public ExpiringMap<String, byte[]> getCardCache() {
 		return cardCache;
 	}
 
-	public TempCache<String, byte[]> getResourceCache() {
+	public ExpiringMap<String, byte[]> getResourceCache() {
 		return resourceCache;
 	}
 
-	public TempCache<String, Boolean> getRatelimit() {
+	public ExpiringMap<String, Boolean> getRatelimit() {
 		return ratelimit;
 	}
 
-	public TempCache<String, Boolean> getSpecialEvent() {
+	public ExpiringMap<String, Boolean> getSpecialEvent() {
 		return specialEvent;
 	}
 
-	public TempCache<String, Boolean> getConfirmationPending() {
+	public ExpiringMap<String, Boolean> getConfirmationPending() {
 		return confirmationPending;
 	}
 

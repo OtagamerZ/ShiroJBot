@@ -24,7 +24,6 @@ import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.endpoint.payload.ReadyData;
 import com.kuuhaku.handlers.api.exception.RatelimitException;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
-import com.kuuhaku.model.common.TempCache;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
@@ -32,6 +31,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.User;
+import net.jodah.expiringmap.ExpiringMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 public class DashboardHandler {
-	private final TempCache<String, Boolean> ratelimit = new TempCache<>(5, TimeUnit.SECONDS);
+	private final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().expiration(5, TimeUnit.SECONDS).build();
 
 	@RequestMapping(value = "/auth", method = RequestMethod.GET)
 	public void validateAccount(HttpServletResponse http, @RequestParam(value = "code", defaultValue = "") String code, @RequestParam(value = "error", defaultValue = "") String error) throws InterruptedException {
