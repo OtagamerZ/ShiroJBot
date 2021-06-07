@@ -19,10 +19,10 @@
 package com.kuuhaku.handlers.api.websocket;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.model.common.TempCache;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONObject;
 import com.kuuhaku.utils.ShiroInfo;
+import net.jodah.expiringmap.ExpiringMap;
 import org.springframework.http.HttpStatus;
 
 import javax.websocket.*;
@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 @ClientEndpoint
 public class EncoderClient extends Endpoint {
 	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
-	private static final TempCache<String, CompletableFuture<String>> completed = new TempCache<>(10, TimeUnit.MINUTES);
+	private static final ExpiringMap<String, CompletableFuture<String>> completed = ExpiringMap.builder().expiration(10, TimeUnit.MINUTES).build();
 	private final MessageHandler.Whole<String> handler = message -> {
 		JSONObject res = new JSONObject(message);
 
