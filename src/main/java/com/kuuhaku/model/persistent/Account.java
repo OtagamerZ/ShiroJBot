@@ -65,9 +65,6 @@ public class Account {
 	private long loan = 0;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long stocksProfit = 0;
-
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long spent = 0;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
@@ -242,18 +239,6 @@ public class Account {
 	public void addLoan(long loan) {
 		this.loan += loan;
 		AccountDAO.saveAccount(this);
-	}
-
-	public long getStocksProfit() {
-		return stocksProfit;
-	}
-
-	public void addProfit(long value) {
-		this.stocksProfit += value;
-	}
-
-	public void removeProfit(long value) {
-		this.stocksProfit -= value;
 	}
 
 	public ZonedDateTime getLastVoted() {
