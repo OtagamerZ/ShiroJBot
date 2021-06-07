@@ -24,16 +24,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "permablock")
-public class PermaBlock {
+@Table(name = "block")
+public class Block {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
 	private String uid;
 
-	public PermaBlock(String uid) {
+	public Block(String uid) {
 		this.uid = uid;
 	}
 
-	public PermaBlock() {
+	public Block() {
 	}
 }
