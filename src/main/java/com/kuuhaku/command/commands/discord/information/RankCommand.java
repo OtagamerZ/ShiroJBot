@@ -78,8 +78,6 @@ public class RankCommand implements Executable {
 				getCardRanking(pages);
 			else if (Helper.findParam(args, "call", "voice", "voz"))
 				getVoiceRanking(pages, guild);
-			else if (Helper.findParam(args, "stocks", "bolsa", "acoes"))
-				getStocksRanking(pages);
 			else
 				getLevelRanking(pages, guild, false);
 
