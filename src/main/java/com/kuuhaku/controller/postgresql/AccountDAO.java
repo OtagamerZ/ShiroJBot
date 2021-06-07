@@ -165,10 +165,10 @@ public class AccountDAO {
 				UPDATE Account a
 				SET vBalance = balance / 2
 				  , balance  = balance / 2
-				  , spent    = 0
 				WHERE a.balance > 100000
-				  AND CAST(a.spent AS FLOAT) / (a.spent + 100) < 0.05
+				  AND (a.spent * 1.0) / (a.spent + a.balance) < 0.1
 				""").executeUpdate();
+		em.createQuery("UPDATE Account a SET spent = 0").executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();

@@ -232,7 +232,7 @@ public class Profile {
 				add(ImageIO.read(Helper.getImage(Objects.requireNonNull(Main.getShiroShards().getEmoteById(TagIcons.getExceedId(ExceedEnum.getByName(exceed)))).getImageUrl())));
 			}
 
-			Set<Tag> tags = Tag.getTags(m.getUser(), m);
+			Set<Tag> tags = Tag.getTags(m);
 			for (Tag t : tags) {
 				try {
 					add(ImageIO.read(t.getPath(mb)));

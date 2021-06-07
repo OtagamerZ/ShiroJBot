@@ -65,7 +65,7 @@ public class MyStatsCommand implements Executable {
 		MatchMakingRating mmr = MatchMakingRatingDAO.getMMR(author.getId());
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		String exceed = ExceedDAO.getExceed(author.getId());
-		Set<Tag> tags = Tag.getTags(author, member);
+		Set<Tag> tags = Tag.getTags(member);
 		Map<String, Page> categories = new LinkedHashMap<>();
 
 		{

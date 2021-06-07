@@ -175,24 +175,25 @@ public class SellCardCommand implements Executable {
 								Kawaipon finalKp = KawaiponDAO.getKawaipon(author.getId());
 								Deck fDk = finalKp.getDeck();
 
-								Market m = null;
-								switch (off.getMiddle()) {
+								Market m = switch (off.getMiddle()) {
 									case EVOGEAR -> {
 										Equipment e = CardDAO.getEquipment(off.getLeft());
 										fDk.removeEquipment(e);
-										m = new Market(author.getId(), e, price);
+										assert e != null;
+										yield new Market(author.getId(), e, price);
 									}
 									case FIELD -> {
 										Field f = CardDAO.getField(off.getLeft());
 										fDk.removeField(f);
-										m = new Market(author.getId(), f, price);
+										assert f != null;
+										yield new Market(author.getId(), f, price);
 									}
 									default -> {
 										KawaiponCard kc = new KawaiponCard(off.getLeft(), off.getRight());
 										finalKp.removeCard(kc);
-										m = new Market(author.getId(), kc, price);
+										yield new Market(author.getId(), kc, price);
 									}
-								}
+								};
 
 								MarketDAO.saveCard(m);
 								KawaiponDAO.saveKawaipon(finalKp);
