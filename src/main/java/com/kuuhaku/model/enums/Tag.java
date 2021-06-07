@@ -122,10 +122,10 @@ public enum Tag {
 		return description;
 	}
 
-	public static Set<Tag> getTags(User u, Member m) {
+	public static Set<Tag> getTags(Member m) {
 		Set<Tag> tags = new TreeSet<>(Comparator.comparing(Tag::toString));
 		for (Tag t : values()) {
-			if (t.condition.apply(u, m)) tags.add(t);
+			if (t.condition.apply(m.getUser(), m)) tags.add(t);
 		}
 		return tags;
 	}

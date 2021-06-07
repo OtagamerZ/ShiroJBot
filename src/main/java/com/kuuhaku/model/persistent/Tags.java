@@ -24,6 +24,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.enums.Tag;
 import com.kuuhaku.model.enums.TagIcons;
+import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -58,23 +59,28 @@ public class Tags {
     public static List<String> getUserBadges(String id) {
         String pattern = "https://cdn.discordapp.com/emojis/%s.png?v=1";
         String exceed = ExceedDAO.getExceed(id);
-        Member mb = MemberDAO.getMemberByMid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).stream().findFirst().orElse(null);
+		Member mb = MemberDAO.getMemberByMid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).stream().findFirst().orElse(null);
 
-        if (mb == null) return new ArrayList<>();
+		if (mb == null) return new ArrayList<>();
 
-        List<String> badges = new ArrayList<>();
+		List<String> badges = new ArrayList<>();
 
-        if (!exceed.isEmpty()) {
-            badges.add(pattern.formatted(TagIcons.getExceedId(ExceedEnum.getByName(exceed))));
-        }
+		if (!exceed.isEmpty()) {
+			badges.add(pattern.formatted(TagIcons.getExceedId(ExceedEnum.getByName(exceed))));
+		}
 
-        Set<Tag> tags = Tag.getTags(Main.getInfo().getUserByID(mb.getUid()), Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getUid()));
-        for (Tag t : tags) {
-            badges.add(t.getEmote(mb) == null ? "" : pattern.replace("{id}", Objects.requireNonNull(t.getEmote(mb)).getId(mb.getLevel())));
-        }
+		Guild g = Main.getInfo().getGuildByID(mb.getSid());
 
-        return badges;
-    }
+		Set<Tag> tags;
+		if (g == null) tags = Set.of();
+		else tags = Tag.getTags(g.getMemberById(mb.getUid()));
+
+		for (Tag t : tags) {
+			badges.add(t.getEmote(mb) == null ? "" : pattern.replace("{id}", Objects.requireNonNull(t.getEmote(mb)).getId(mb.getLevel())));
+		}
+
+		return badges;
+	}
 
     public String getUid() {
         return uid;
