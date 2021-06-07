@@ -252,44 +252,6 @@ public class RankCommand implements Executable {
 		}
 	}
 
-	private void getStocksRanking(List<Page> pages) {
-		List<Account> accs = AccountDAO.getAccountRank();
-		accs.removeIf(acc -> checkUser(acc).isBlank());
-
-		String champ = "1 - %s %s".formatted(
-				checkUser(accs.get(0)),
-				I18n.getString(STR_PROFIT, Helper.separate(accs.get(0).getStocksProfit()))
-		);
-		List<Account> sub9 = accs.subList(1, Math.min(accs.size(), 10));
-		StringBuilder sub9Formatted = new StringBuilder();
-		for (int i = 0; i < sub9.size(); i++) {
-			sub9Formatted.append("%s - %s %s\n".formatted(
-					i + 2,
-					checkUser(sub9.get(i)),
-					I18n.getString(STR_PROFIT, Helper.separate(sub9.get(i).getStocksProfit()))
-			));
-		}
-
-		StringBuilder next10 = new StringBuilder();
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		makeEmbed(true, pages, sub9Formatted, eb, champ);
-
-		for (int x = 1; x < Math.ceil(accs.size() / 10f); x++) {
-			eb.clear();
-			next10.setLength(0);
-			for (int i = 10 * x; i < accs.size() && i < (10 * x) + 10; i++) {
-				next10.append("%s - %s %s\n".formatted(
-						i + 1,
-						checkUser(accs.get(i)),
-						I18n.getString(STR_PROFIT, accs.get(i).getStocksProfit())
-				));
-			}
-
-			makeEmbed(true, pages, next10, eb, Helper.VOID);
-		}
-	}
-
 	private void makeEmbed(boolean global, List<Page> pages, StringBuilder next10, EmbedBuilder eb, String aVoid) {
 		eb.setTitle(I18n.getString(SRT_USER_RANKING_TITLE, global ? I18n.getString(STR_GLOBAL) : I18n.getString(STR_LOCAL)));
 		eb.addField(aVoid, next10.toString(), false);
