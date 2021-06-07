@@ -2210,7 +2210,7 @@ public class Shoukan extends GlobalGame {
 										.queue(m -> {
 											EmbedBuilder eb = new EmbedBuilder();
 											try {
-												String url = Main.getInfo().getEncoderClient().requestEncoding(String.valueOf(hashCode()), getFrames()).get();
+												String url = Main.getInfo().getEncoderClient().requestEncoding(String.valueOf(hashCode()), getFrames()).get(1500L * getFrames().size(), TimeUnit.MILLISECONDS);
 
 												eb.setColor(Color.green)
 														.setTitle("Replay pronto!")
