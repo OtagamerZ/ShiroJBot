@@ -87,10 +87,7 @@ public enum Tag {
 			(user, member) -> ExceedDAO.hasExceed(user.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(user.getId()))),
 
 	BUG_HUNTER(TagIcons.BUGHUNTER, "Você ajudou a corrigir muitos bugs na Shiro.",
-			(user, member) -> AccountDAO.getAccount(user.getId()).getBugs() > 25),
-
-	INVESTIDOR(TagIcons.INVESTOR, "Você lucrou muito comprando e vendendo ações.",
-			(user, member) -> AccountDAO.getAccount(user.getId()).getStocksProfit() > 5000000);
+			(user, member) -> AccountDAO.getAccount(user.getId()).getBugs() > 25);
 
 	private final TagIcons emote;
 	private final String description;
