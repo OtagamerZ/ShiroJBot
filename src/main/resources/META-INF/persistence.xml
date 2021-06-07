@@ -32,7 +32,7 @@
         <class>com.kuuhaku.model.persistent.Member</class>
         <class>com.kuuhaku.model.persistent.CustomAnswer</class>
         <class>com.kuuhaku.model.persistent.Tags</class>
-        <class>com.kuuhaku.model.persistent.PermaBlock</class>
+        <class>com.kuuhaku.model.persistent.Block</class>
         <class>com.kuuhaku.model.persistent.MonthWinner</class>
         <class>com.kuuhaku.model.persistent.PixelCanvas</class>
         <class>com.kuuhaku.model.persistent.Log</class>
