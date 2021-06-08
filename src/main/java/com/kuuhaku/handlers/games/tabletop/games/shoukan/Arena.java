@@ -29,10 +29,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Arena {
@@ -101,7 +99,6 @@ public class Arena {
 				List<SlotColumn<Champion, Equipment>> value = entry.getValue();
 				Hand h = hands.get(key);
 				LinkedList<Drawable> grv = graveyard.get(key);
-				g2d.setColor(Color.white);
 				g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 75));
 
 				String name;
@@ -115,6 +112,8 @@ public class Arena {
 					}
 				}
 
+				name = ">>> " + name + " <<<";
+				g2d.setColor(key == game.getCurrentSide() ? h.getAcc().getFrame().getColor() : Color.white);
 				if (key == Side.TOP)
 					Profile.printCenteredString(name, 1253, 499, 822, g2d);
 				else
@@ -257,5 +256,22 @@ public class Arena {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
+	}
+
+	public BufferedImage addHands(BufferedImage arena, Collection<Hand> hands) {
+		List<Hand> hs = new ArrayList<>(hands);
+		hs.sort(Comparator.comparingInt(h -> h.getSide() == Side.TOP ? 1 : 0));
+		BufferedImage bi = new BufferedImage(arena.getWidth(), arena.getHeight() + 920, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = arena.createGraphics();
+		g2d.setColor(Color.black);
+		g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+		g2d.drawImage(arena, 0, 460, null);
+		for (int i = 0; i < hs.size(); i++) {
+			BufferedImage h = hs.get(i).render();
+			g2d.drawImage(h, bi.getWidth() / 2 - h.getWidth() / 2, i == 0 ? 5 : 465 + bi.getHeight(), null);
+		}
+		g2d.dispose();
+
+		return bi;
 	}
 }
