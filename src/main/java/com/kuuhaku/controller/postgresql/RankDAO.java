@@ -34,7 +34,7 @@ public class RankDAO {
 					SELECT x.v
 					FROM (
 						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ' - ' || gc.name || ')' AS v
-						     , mb.level
+						     , mb.xp
 						FROM member mb
 						         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 						                     FROM logs l
@@ -51,7 +51,7 @@ public class RankDAO {
 					SELECT x.v
 					FROM (
 						SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ')' AS v
-						     , mb.level
+						     , mb.xp
 						FROM member mb
 						         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 						                     FROM logs l
