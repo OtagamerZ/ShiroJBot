@@ -40,6 +40,7 @@ import com.kuuhaku.model.persistent.guild.LevelRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.JSONArray;
 import com.kuuhaku.utils.ShiroInfo;
+import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -534,11 +535,20 @@ public class ShiroEvents extends ListenerAdapter {
 				return;
 			}
 
+			String name = member.getEffectiveName();
 			if (gc.isMakeMentionable() && !Helper.regex(member.getEffectiveName(), "[A-z0-9]{4}").find()) {
-				String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
-				member.modifyNickname(names[Helper.rng(names.length, true)]).queue(null, Helper::doNothing);
-			} else if (gc.isAntiHoist() && member.getEffectiveName().charAt(0) < 65) {
-				member.modifyNickname(StringUtils.abbreviate("￭ " + member.getEffectiveName().substring(1), 32)).queue(null, Helper::doNothing);
+				name = Unidecode.decode(name);
+			} else if (gc.isAntiHoist() && name.charAt(0) < 65) {
+				name = "￭ " + name.substring(1);
+			}
+
+			if (!name.equals(member.getEffectiveName())) {
+				if (name.length() < 2) {
+					String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
+					name = names[Helper.rng(names.length, true)];
+				}
+
+				member.modifyNickname(name).queue(null, Helper::doNothing);
 			}
 
 			if (!gc.getWelcomeMessage().isBlank()) {
