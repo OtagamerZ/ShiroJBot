@@ -85,7 +85,7 @@ public class RankCommand implements Executable {
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle("Ranking de usuários (" + switch (type) {
-						default -> "Leve - LOCAL";
+						default -> "Level - LOCAL";
 						case 0 -> "Level - GLOBAL";
 						case 1 -> "Créditos";
 						case 2 -> "Cartas";
