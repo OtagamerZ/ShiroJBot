@@ -32,25 +32,31 @@ public class RankDAO {
 		if (guild == null) {
 			q = em.createNativeQuery("""
 					SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ' - ' || gc.name || ')'
+					     , mb.level
 					FROM member mb
 					         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 					                     FROM logs l
 					                     WHERE l.uid <> '') l ON l.uid = mb.uid
 					         INNER JOIN guildconfig gc ON gc.guildid = mb.sid
-					WHERE is_blacklisted(mb.uid) IS NULL
-					ORDER BY mb.xp DESC
+					    EXCEPT ALL
+					SELECT b.uid, 0
+					FROM blacklist b
+					ORDER BY 2 DESC
 					""");
 		} else {
 			q = em.createNativeQuery("""
 					SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ')'
+					     , mb.level
 					FROM member mb
 					         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 					                     FROM logs l
 					                     WHERE l.uid <> '') l ON l.uid = mb.uid
 					         INNER JOIN guildconfig gc ON gc.guildid = mb.sid
 					WHERE gc.guildid = :guild
-					  AND is_blacklisted(mb.uid) IS NULL
-					ORDER BY mb.xp DESC
+					    EXCEPT ALL
+					SELECT b.uid, 0
+					FROM blacklist b
+					ORDER BY 2 DESC
 					""");
 			q.setParameter("guild", guild);
 		}
@@ -68,12 +74,15 @@ public class RankDAO {
 
 		Query q = em.createNativeQuery("""
 				SELECT row_number() OVER (ORDER BY a.balance DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_char(a.balance, 'FM9,999,999,999') || ' CR)'
+				     , a.balance
 				FROM account a
-				             INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
-				                         FROM logs l
-				                         WHERE l.uid <> '') l ON l.uid = a.uid
-				WHERE is_blacklisted(a.uid) IS NULL
-				ORDER BY a.balance DESC
+				         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
+				                     FROM logs l
+				                     WHERE l.uid <> '') l ON l.uid = a.uid
+				    EXCEPT ALL
+				SELECT b.uid, 0
+				FROM blacklist b
+				ORDER BY 2 DESC
 				""");
 
 		try {
@@ -89,6 +98,9 @@ public class RankDAO {
 
 		Query q = em.createNativeQuery("""
 				SELECT row_number() OVER (ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || kc.foil ||' cromadas e ' || kc.normal || ' normais)'
+				     , kc.foil + kc.normal
+				     , kc.foil
+				     , kc.normal
 				FROM kawaipon k
 				             INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 				                         FROM logs l
@@ -98,8 +110,10 @@ public class RankDAO {
 				                              , count(1) FILTER (WHERE kc.foil)     AS foil
 				                         FROM kawaiponcard kc
 				                         GROUP BY kc.kawaipon_id) kc on k.id = kc.kawaipon_id
-				WHERE is_blacklisted(k.uid) IS NULL
-				ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC
+				    EXCEPT ALL
+				SELECT b.uid, 0, 0, 0
+				FROM blacklist b
+				ORDER BY 2 DESC, 3 DESC, 4 DESC
 				""");
 
 		try {
@@ -115,14 +129,17 @@ public class RankDAO {
 
 		Query q = em.createNativeQuery("""
 				SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || to_duration(mb.voicetime) ||')'
+				     , mb.voicetime
 				FROM member mb
 				             INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 				                         FROM logs l
 				                         WHERE l.uid <> '') l ON l.uid = mb.uid
 				             INNER JOIN guildconfig gc ON gc.guildid = mb.sid
 				WHERE gc.guildid = :guild
-				  AND is_blacklisted(mb.uid) IS NULL
-				ORDER BY mb.xp DESC
+				    EXCEPT ALL
+				SELECT b.uid, 0
+				FROM blacklist b
+				ORDER BY 2 DESC
 				""");
 		q.setParameter("guild", guild);
 
