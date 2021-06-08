@@ -13,7 +13,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Balanceamento do efeito nulificador" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Balanceamento do efeito nulificador">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/XStringBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/XStringBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/str/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/str/locale_pt.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1225,14 +1231,7 @@
       <workItem from="1623092286858" duration="13000" />
       <workItem from="1623092785974" duration="3291000" />
       <workItem from="1623096233083" duration="3161000" />
-      <workItem from="1623117825167" duration="662000" />
-    </task>
-    <task id="LOCAL-04679" summary="Aumento no custo dos upgrades de servidor">
-      <created>1622598283089</created>
-      <option name="number" value="04679" />
-      <option name="presentableId" value="LOCAL-04679" />
-      <option name="project" value="LOCAL" />
-      <updated>1622598283089</updated>
+      <workItem from="1623117825167" duration="7263000" />
     </task>
     <task id="LOCAL-04680" summary="Correções menores">
       <created>1622598775105</created>
@@ -1570,7 +1569,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623118193986</updated>
     </task>
-    <option name="localTasksCounter" value="4728" />
+    <task id="LOCAL-04728" summary="Balanceamento do efeito nulificador">
+      <created>1623118727030</created>
+      <option name="number" value="04728" />
+      <option name="presentableId" value="LOCAL-04728" />
+      <option name="project" value="LOCAL" />
+      <updated>1623118727030</updated>
+    </task>
+    <option name="localTasksCounter" value="4729" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
