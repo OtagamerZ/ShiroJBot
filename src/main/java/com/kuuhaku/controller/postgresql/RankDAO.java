@@ -88,7 +88,7 @@ public class RankDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("""
-				SELECT row_number() OVER (ORDER BY kc.foil DESC, kc.normal DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || kc.foil ||' cromadas e ' || kc.normal || ' normais)'
+				SELECT row_number() OVER (ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || kc.foil ||' cromadas e ' || kc.normal || ' normais)'
 				FROM kawaipon k
 				             INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 				                         FROM logs l
@@ -99,7 +99,7 @@ public class RankDAO {
 				                         FROM kawaiponcard kc
 				                         GROUP BY kc.kawaipon_id) kc on k.id = kc.kawaipon_id
 				WHERE is_blacklisted(k.uid) IS NULL
-				ORDER BY kc.foil DESC, kc.normal DESC
+				ORDER BY kc.foil + kc.normal DESC, kc.foil DESC, kc.normal DESC
 				""", String.class);
 
 		try {
