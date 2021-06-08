@@ -542,7 +542,7 @@ public class Hand {
 	}
 
 	public void removeMana(int value) {
-		mana = Math.max(0, (isNullMode() ? mana : mana - value));
+		mana = Math.max(0, mana - value);
 	}
 
 	public int getBaseHp() {
