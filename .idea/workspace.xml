@@ -13,11 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de ratelimit variável">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionadas mãos no replay">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1232,13 +1231,6 @@
       <workItem from="1623096233083" duration="3161000" />
       <workItem from="1623117825167" duration="7602000" />
     </task>
-    <task id="LOCAL-04687" summary="Criação de client da API de encoding da Shiro">
-      <created>1622753602288</created>
-      <option name="number" value="04687" />
-      <option name="presentableId" value="LOCAL-04687" />
-      <option name="project" value="LOCAL" />
-      <updated>1622753602289</updated>
-    </task>
     <task id="LOCAL-04688" summary="Criação de client da API de encoding da Shiro">
       <created>1622753757461</created>
       <option name="number" value="04688" />
@@ -1575,7 +1567,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623158804477</updated>
     </task>
-    <option name="localTasksCounter" value="4736" />
+    <task id="LOCAL-04736" summary="Adicionadas mãos no replay">
+      <created>1623168759383</created>
+      <option name="number" value="04736" />
+      <option name="presentableId" value="LOCAL-04736" />
+      <option name="project" value="LOCAL" />
+      <updated>1623168759383</updated>
+    </task>
+    <option name="localTasksCounter" value="4737" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1662,7 +1661,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Atualização da biblioteca JDA" />
     <MESSAGE value="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE." />
     <MESSAGE value="Correções gerais e melhoria nas bordas das raridades" />
     <MESSAGE value="Melhoria no efeito da raça demônio" />
@@ -1687,7 +1685,8 @@
     <MESSAGE value="Balanceamento do efeito nulificador" />
     <MESSAGE value="Correções no comando de ranking de usuários" />
     <MESSAGE value="Adição de ratelimit variável" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de ratelimit variável" />
+    <MESSAGE value="Adicionadas mãos no replay" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionadas mãos no replay" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
