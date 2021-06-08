@@ -13,12 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Balanceamento do efeito nulificador">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções no comando de ranking de usuários">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RankCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/RankDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/XStringBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/XStringBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/i18n/str/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/i18n/str/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1231,28 +1227,7 @@
       <workItem from="1623092286858" duration="13000" />
       <workItem from="1623092785974" duration="3291000" />
       <workItem from="1623096233083" duration="3161000" />
-      <workItem from="1623117825167" duration="7263000" />
-    </task>
-    <task id="LOCAL-04680" summary="Correções menores">
-      <created>1622598775105</created>
-      <option name="number" value="04680" />
-      <option name="presentableId" value="LOCAL-04680" />
-      <option name="project" value="LOCAL" />
-      <updated>1622598775105</updated>
-    </task>
-    <task id="LOCAL-04681" summary="Correções menores">
-      <created>1622599011736</created>
-      <option name="number" value="04681" />
-      <option name="presentableId" value="LOCAL-04681" />
-      <option name="project" value="LOCAL" />
-      <updated>1622599011736</updated>
-    </task>
-    <task id="LOCAL-04682" summary="Correções menores">
-      <created>1622599597103</created>
-      <option name="number" value="04682" />
-      <option name="presentableId" value="LOCAL-04682" />
-      <option name="project" value="LOCAL" />
-      <updated>1622599597103</updated>
+      <workItem from="1623117825167" duration="7602000" />
     </task>
     <task id="LOCAL-04683" summary="Correções menores">
       <created>1622603134635</created>
@@ -1576,7 +1551,28 @@
       <option name="project" value="LOCAL" />
       <updated>1623118727030</updated>
     </task>
-    <option name="localTasksCounter" value="4729" />
+    <task id="LOCAL-04729" summary="Correções no comando de ranking de usuários">
+      <created>1623125172441</created>
+      <option name="number" value="04729" />
+      <option name="presentableId" value="LOCAL-04729" />
+      <option name="project" value="LOCAL" />
+      <updated>1623125172441</updated>
+    </task>
+    <task id="LOCAL-04730" summary="Correções no comando de ranking de usuários">
+      <created>1623125254264</created>
+      <option name="number" value="04730" />
+      <option name="presentableId" value="LOCAL-04730" />
+      <option name="project" value="LOCAL" />
+      <updated>1623125254264</updated>
+    </task>
+    <task id="LOCAL-04731" summary="Correções no comando de ranking de usuários">
+      <created>1623125360642</created>
+      <option name="number" value="04731" />
+      <option name="presentableId" value="LOCAL-04731" />
+      <option name="project" value="LOCAL" />
+      <updated>1623125360642</updated>
+    </task>
+    <option name="localTasksCounter" value="4732" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1663,7 +1659,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correções gerais" />
     <MESSAGE value="Atualização da biblioteca JDA" />
     <MESSAGE value="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE." />
     <MESSAGE value="Correções gerais e melhoria nas bordas das raridades" />
@@ -1688,7 +1683,8 @@
     <MESSAGE value="Adição de ratelimit variável" />
     <MESSAGE value="Remoção do botzera da staff de suporte" />
     <MESSAGE value="Balanceamento do efeito nulificador" />
-    <option name="LAST_COMMIT_MESSAGE" value="Balanceamento do efeito nulificador" />
+    <MESSAGE value="Correções no comando de ranking de usuários" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções no comando de ranking de usuários" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
