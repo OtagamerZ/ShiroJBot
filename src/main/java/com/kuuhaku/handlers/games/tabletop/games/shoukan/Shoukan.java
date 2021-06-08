@@ -817,7 +817,7 @@ public class Shoukan extends GlobalGame {
 
 		if (record) {
 			try {
-				getFrames().add(Helper.compress(Helper.atob(bi, "jpg")));
+				getFrames().add(Helper.compress(Helper.atob(getArena().addHands(bi, hands.values()), "jpg")));
 			} catch (IOException ignore) {
 			}
 		}
@@ -2198,7 +2198,7 @@ public class Shoukan extends GlobalGame {
 
 		if (!getFrames().isEmpty() && Main.getInfo().getEncoderClient() != null) {
 			try {
-				getFrames().add(Helper.compress(Helper.atob(arena.render(this, hands), "jpg")));
+				getFrames().add(Helper.compress(Helper.atob(getArena().addHands(arena.render(this, hands), hands.values()), "jpg")));
 			} catch (IOException ignore) {
 			}
 
@@ -2244,6 +2244,10 @@ public class Shoukan extends GlobalGame {
 		listener.close();
 		recordLast();
 		super.close();
+	}
+
+	public Side getCurrentSide() {
+		return current;
 	}
 
 	@Override

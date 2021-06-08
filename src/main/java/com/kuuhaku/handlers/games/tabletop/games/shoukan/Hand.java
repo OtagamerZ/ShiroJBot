@@ -423,6 +423,20 @@ public class Hand {
 		return side;
 	}
 
+	public BufferedImage render() {
+		BufferedImage bi = new BufferedImage(Math.max(5, cards.size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
+		for (int i = 0; i < cards.size(); i++) {
+			g2d.drawImage(cards.get(i).drawCard(false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
+		}
+
+		g2d.dispose();
+
+		return bi;
+	}
+
 	public void showHand() {
 		BufferedImage bi = new BufferedImage(Math.max(5, cards.size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
