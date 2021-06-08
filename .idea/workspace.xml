@@ -13,12 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Remoção do botzera da staff de suporte">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Balanceamento do efeito nulificador" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1230,14 +1225,7 @@
       <workItem from="1623092286858" duration="13000" />
       <workItem from="1623092785974" duration="3291000" />
       <workItem from="1623096233083" duration="3161000" />
-      <workItem from="1623117825167" duration="341000" />
-    </task>
-    <task id="LOCAL-04678" summary="Adição de replay no Shoukan">
-      <created>1622580983122</created>
-      <option name="number" value="04678" />
-      <option name="presentableId" value="LOCAL-04678" />
-      <option name="project" value="LOCAL" />
-      <updated>1622580983122</updated>
+      <workItem from="1623117825167" duration="662000" />
     </task>
     <task id="LOCAL-04679" summary="Aumento no custo dos upgrades de servidor">
       <created>1622598283089</created>
@@ -1575,7 +1563,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623111963033</updated>
     </task>
-    <option name="localTasksCounter" value="4727" />
+    <task id="LOCAL-04727" summary="Balanceamento do efeito nulificador">
+      <created>1623118193986</created>
+      <option name="number" value="04727" />
+      <option name="presentableId" value="LOCAL-04727" />
+      <option name="project" value="LOCAL" />
+      <updated>1623118193986</updated>
+    </task>
+    <option name="localTasksCounter" value="4728" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1662,7 +1657,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Comando de adicionar Emotes agora aceita menções" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Atualização da biblioteca JDA" />
     <MESSAGE value="Novo minigame: Faceoff;&#10;Criação de placares para os minigames PvE." />
@@ -1687,7 +1681,8 @@
     <MESSAGE value="Remoção do mercado de ações" />
     <MESSAGE value="Adição de ratelimit variável" />
     <MESSAGE value="Remoção do botzera da staff de suporte" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remoção do botzera da staff de suporte" />
+    <MESSAGE value="Balanceamento do efeito nulificador" />
+    <option name="LAST_COMMIT_MESSAGE" value="Balanceamento do efeito nulificador" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

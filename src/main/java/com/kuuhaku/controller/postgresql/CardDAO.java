@@ -762,6 +762,26 @@ public class CardDAO {
 		}
 	}
 
+	public static Equipment getRandomEquipment(boolean spell, int tier) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q;
+		if (spell)
+			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') = 'SPELL' AND e.tier = :tier ORDER BY RANDOM()", Equipment.class);
+		else
+			q = em.createQuery("SELECT e FROM Equipment e WHERE COALESCE(e.charm,'') <> 'SPELL' AND e.tier = :tier ORDER BY RANDOM()", Equipment.class);
+		q.setParameter("tier", tier);
+		q.setMaxResults(1);
+
+		try {
+			return (Equipment) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static List<Field> getFields(List<String> ids) {
 		EntityManager em = Manager.getEntityManager();
