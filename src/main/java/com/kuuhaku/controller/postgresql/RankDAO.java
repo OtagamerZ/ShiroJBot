@@ -31,7 +31,7 @@ public class RankDAO {
 		Query q;
 		if (guild == null) {
 			q = em.createNativeQuery("""
-					SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (' || gc.name || ')'
+					SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ' - ' || gc.name || ')'
 					FROM member mb
 					         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 					                     FROM logs l
@@ -42,7 +42,7 @@ public class RankDAO {
 					""");
 		} else {
 			q = em.createNativeQuery("""
-					SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1)
+					SELECT row_number() OVER (ORDER BY mb.xp DESC) || ' - ' || split_part(l.usr, '#', 1) || ' (Level ' || mb.level || ')'
 					FROM member mb
 					         INNER JOIN (SELECT DISTINCT ON (uid) l.uid, l.usr
 					                     FROM logs l
